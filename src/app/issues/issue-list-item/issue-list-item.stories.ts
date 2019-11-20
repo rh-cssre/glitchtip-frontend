@@ -1,14 +1,24 @@
 import { IssueListItemComponent } from "./issue-list-item.component";
-import { sampleEvent } from './sample-data';
+import { sampleEvent } from "./sample-data";
+import { MatCardModule } from "@angular/material/card";
+import { moduleMetadata } from "@storybook/angular";
+import { withKnobs } from "@storybook/addon-knobs";
 
 export default {
-  title: "Issues"
+  title: "Issues",
+  decorators: [
+    moduleMetadata({
+      imports: [MatCardModule]
+    }),
+    withKnobs
+  ]
 };
 
 export const issueListItem = () => ({
   component: IssueListItemComponent,
   props: {
-    eventId: sampleEvent.event_id
+    title: sampleEvent.event.exception.values[0].type,
+    eventId: sampleEvent.event.event_id
   }
 });
 

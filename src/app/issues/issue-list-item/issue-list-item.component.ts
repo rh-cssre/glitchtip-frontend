@@ -6,5 +6,6 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./issue-list-item.component.scss"]
 })
 export class IssueListItemComponent {
+  @Input() title: string;
   @Input() eventId: number;
 }
