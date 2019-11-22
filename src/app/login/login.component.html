@@ -1,22 +1,28 @@
 <mat-card>
   <h1>Login</h1>
-  <form class="example-form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <p>
       <mat-form-field class="example-full-width">
-        <input matInput type="email" placeholder="Username" />
+        <input
+          matInput
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+        />
       </mat-form-field>
       <mat-form-field class="example-full-width">
-        <input matInput type="password" placeholder="Password" />
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        />
       </mat-form-field>
       <mat-checkbox class="example-full-width">Keep me logged in</mat-checkbox>
-      <button
-        (click)="onSubmit()"
-        class="example-full-width"
-        mat-flat-button
-        color="primary"
-      >
+      <button class="example-full-width" mat-flat-button color="primary">
         Primary
       </button>
+      {{ error }}
     </p>
   </form>
   <a class="example-full-width" mat-button routerLink=".">Forgot?</a>
