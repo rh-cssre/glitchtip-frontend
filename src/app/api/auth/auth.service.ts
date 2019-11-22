@@ -2,15 +2,15 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
-interface AuthState {
-  token: string | null;
+export interface AuthState {
+  key: string | null;
   email?: string | null;
   first_name?: string | null;
   last_name?: string | null;
 }
 
 const initialState: AuthState = {
-  token: null,
+  key: null,
   email: null,
   first_name: null,
   last_name: null
@@ -22,8 +22,8 @@ const initialState: AuthState = {
 export class AuthService {
   private authData = new BehaviorSubject<AuthState>(initialState);
   data = this.authData.asObservable();
-  isLoggedIn = this.data.pipe(map(data => Boolean(data.token)));
-  getAuthToken = this.authData.pipe(map(auth => auth.token));
+  isLoggedIn = this.data.pipe(map(data => Boolean(data.key)));
+  getAuthToken = this.authData.pipe(map(auth => auth.key));
 
   constructor() {
     const authData = localStorage.getItem("auth");
@@ -31,7 +31,7 @@ export class AuthService {
       const auth = JSON.parse(authData);
       if (auth.token) {
         this.setAuth({
-          token: auth.token
+          key: auth.key
         });
       }
     }
