@@ -7,5 +7,6 @@ import { Component, OnInit, Input } from "@angular/core";
 })
 export class IssueListItemComponent {
   @Input() title: string;
+  @Input() subtitle: string;
   @Input() eventId: number;
 }
