@@ -7,7 +7,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MatInputModule } from "@angular/material/input";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { EMPTY } from "rxjs";
-import { AuthService } from "../api/auth/auth.service";
+import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
 
 const authServiceSpy = jasmine.createSpyObj("LoginService", ["login"]);
@@ -28,7 +28,7 @@ describe("LoginComponent", () => {
         MatCardModule,
         RouterTestingModule
       ],
-      providers: [{ provide: AuthService, useValue: authServiceSpy }]
+      providers: [{ provide: LoginService, useValue: authServiceSpy }]
     }).compileComponents();
   }));
 

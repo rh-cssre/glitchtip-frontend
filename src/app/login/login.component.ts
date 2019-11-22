@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { AuthService } from "../api/auth/auth.service";
+import { LoginService } from "./login.service";
 
 @Component({
   selector: "app-login",
@@ -19,12 +19,12 @@ export class LoginComponent {
     ])
   });
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
-      this.authService
+      this.loginService
         .login(this.form.value.email, this.form.value.password)
         .subscribe(
           () => this.router.navigate([""]),
