@@ -27,10 +27,9 @@ export class LoginComponent {
       this.authService
         .login(this.form.value.email, this.form.value.password)
         .subscribe(
-          data => this.router.navigate([""]),
+          () => this.router.navigate([""]),
           err => {
             this.loading = false;
-            console.log(err);
             if (err.status === 400 && err.error.non_field_errors) {
               this.error = err.error.non_field_errors;
             } else {
