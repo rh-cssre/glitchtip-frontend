@@ -37,13 +37,15 @@ export interface IEvent {
     url: string;
     headers: {
       "User-Agent": string;
-    }
-  },
+    };
+  };
   breadcrumbs: any;
   received_at: string;
-};
+}
 
-export interface IIssue {
+export interface Issue {
   id: number;
+  title: string;
+  location: string;
   event: IEvent[];
 }

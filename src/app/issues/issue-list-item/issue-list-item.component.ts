@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
   selector: "app-issue-list-item",
@@ -7,6 +7,6 @@ import { Component, OnInit, Input } from "@angular/core";
 })
 export class IssueListItemComponent {
   @Input() title: string;
-  @Input() subtitle: string;
+  @Input() location: string;
   @Input() eventId: number;
 }

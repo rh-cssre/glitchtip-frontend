@@ -29,7 +29,7 @@ export class AuthService {
     const authData = localStorage.getItem("auth");
     if (authData) {
       const auth = JSON.parse(authData);
-      if (auth.token) {
+      if (auth.key) {
         this.setAuth({
           key: auth.key
         });

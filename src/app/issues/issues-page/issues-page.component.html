@@ -1,1 +1,6 @@
 <p>issues-page works!</p>
+<app-issue-list-item
+  *ngFor="let issue of issues"
+  [title]="issue.title"
+  [location]="issue.location"
+></app-issue-list-item>
