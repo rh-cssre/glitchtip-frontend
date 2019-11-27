@@ -15,6 +15,15 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
+    customLaunchers: {
+      Chromium_CI: {
+        base: "Chromium",
+        flags: [
+          "--no-sandbox",
+          "--disable-dev-shm-usage"
+        ]
+      }
+    },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/glitchtip-frontend'),
       reports: ['html', 'lcovonly', 'text-summary'],
