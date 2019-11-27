@@ -10,9 +10,9 @@ stages:
 
 test:
   stage: test
+  image: registry.gitlab.com/dasch8/angular-ci:latest
   allow_failure: true
   script:
-    - apk add --update --no-cache chromium-chromedriver chromium
     - npm ci
     - npm run lint
     - npm run test -- --progress false --watch=false --browsers=Chromium_CI

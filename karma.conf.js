@@ -20,7 +20,9 @@ module.exports = function (config) {
         base: "Chromium",
         flags: [
           "--no-sandbox",
-          "--disable-dev-shm-usage"
+          "--headless",
+          "--disable-gpu",
+          "--remote-debugging-port=9222"
         ]
       }
     },
