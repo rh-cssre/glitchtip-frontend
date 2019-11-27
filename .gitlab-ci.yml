@@ -1,0 +1,50 @@
+image: node:12
+
+variables:
+  CHROME_BIN: chromium-browser
+  npm_config_cache: $CI_PROJECT_DIR/.npm
+
+stages:
+  - test
+  - docker
+
+test:
+  stage: test
+  script:
+    - RUN apk add --update --no-cache chromium-chromedriver chromium
+    - npm ci
+    - npm run lint
+    - npm run test -- --process false --watch=false --browsers=Chromium_CI
+
+build-assets:
+  stage: test
+  cache:
+    paths:
+      - .npm/
+  script:
+    - npm ci
+    - node --max_old_space_size=6000 node_modules/@angular/cli/bin/ng build --prod --progress false
+  artifacts:
+    paths:
+      - dist/
+
+build-docker:
+  stage: docker
+  image: docker:stable
+  services:
+    - docker:dind
+  dependencies:
+    - build-assets
+  only:
+    - master
+    - staging
+    - dev
+  script:
+    - echo "Start build docker step $CI_REGISTRY_IMAGE commit ref $CI_COMMIT_REF_NAME"
+    - trap '' PIPE
+    - VERSION=$(awk '/version/{gsub(/("|",)/,"",$2);print $2};' package.json | head -n 1)
+    - echo "Build version $VERSION ci registry image $CI_REGISTRY_IMAGE commit ref $CI_COMMIT_REF_NAME"
+    - docker build -f Dockerfile.prod -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} --build-arg GLITCHTIP_VERSION=$VERSION .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+
