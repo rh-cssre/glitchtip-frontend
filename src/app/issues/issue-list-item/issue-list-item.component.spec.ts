@@ -1,16 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatCardModule } from "@angular/material/card";
 
-import { IssueListItemComponent } from './issue-list-item.component';
+import { IssueListItemComponent } from "./issue-list-item.component";
 
-describe('IssueListItemComponent', () => {
+describe("IssueListItemComponent", () => {
   let component: IssueListItemComponent;
   let fixture: ComponentFixture<IssueListItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IssueListItemComponent ]
-    })
-    .compileComponents();
+      declarations: [IssueListItemComponent],
+      imports: [MatCardModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('IssueListItemComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

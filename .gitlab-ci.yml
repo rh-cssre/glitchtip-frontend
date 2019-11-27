@@ -1,4 +1,4 @@
-image: node:12
+image: node:12-alpine
 
 variables:
   CHROME_BIN: chromium-browser
@@ -11,7 +11,7 @@ stages:
 test:
   stage: test
   script:
-    - RUN apk add --update --no-cache chromium-chromedriver chromium
+    - apk add --update --no-cache chromium-chromedriver chromium
     - npm ci
     - npm run lint
     - npm run test -- --process false --watch=false --browsers=Chromium_CI

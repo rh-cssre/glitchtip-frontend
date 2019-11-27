@@ -1,16 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MatCardModule } from "@angular/material/card";
 
-import { IssuesPageComponent } from './issues-page.component';
+import { IssuesPageComponent } from "./issues-page.component";
+import { IssueListItemComponent } from "../issue-list-item/issue-list-item.component";
 
-describe('IssuesPageComponent', () => {
+describe("IssuesPageComponent", () => {
   let component: IssuesPageComponent;
   let fixture: ComponentFixture<IssuesPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IssuesPageComponent ]
-    })
-    .compileComponents();
+      declarations: [IssuesPageComponent, IssueListItemComponent],
+      imports: [MatCardModule, HttpClientTestingModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +22,7 @@ describe('IssuesPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

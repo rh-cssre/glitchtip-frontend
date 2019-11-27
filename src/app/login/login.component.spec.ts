@@ -44,10 +44,8 @@ describe("LoginComponent", () => {
 
   it("should login", () => {
     authServiceSpy.login.and.returnValue(EMPTY);
-    fixture.componentInstance.form.controls["email"].setValue(
-      "lol@example.com"
-    );
-    fixture.componentInstance.form.controls["password"].setValue("hunter1234");
+    fixture.componentInstance.form.controls.email.setValue("lol@example.com");
+    fixture.componentInstance.form.controls.password.setValue("hunter1234");
     const button = fixture.debugElement.nativeElement.querySelector("#submit");
     button.click();
     expect(authServiceSpy.login).toHaveBeenCalled();
