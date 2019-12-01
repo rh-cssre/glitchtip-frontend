@@ -1,0 +1,13 @@
+<p>Create a new project</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Name" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="platform" placeholder="Platform" />
+  </mat-form-field>
+  <button mat-flat-button color="primary">
+    Create Project
+  </button>
+  {{ error }}
+</form>

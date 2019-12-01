@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
-import { Issue } from "./interfaces";
 import { tap } from "rxjs/operators";
-
-const baseUrl = "/api";
+import { Issue } from "./interfaces";
+import { baseUrl } from "../constants";
 
 @Injectable({
   providedIn: "root"
@@ -22,7 +21,6 @@ export class IssuesService {
   }
 
   setIssues(issues: Issue[]) {
-    console.log("set it", issues);
     this.issues.next(issues);
   }
 }
