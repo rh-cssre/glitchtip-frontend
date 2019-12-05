@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from "@angular/core";
+import { ProjectsService } from "../../../api/projects/projects.service";
 
 @Component({
-  selector: 'app-project-detail',
-  templateUrl: './project-detail.component.html',
-  styleUrls: ['./project-detail.component.scss']
+  selector: "app-project-detail",
+  templateUrl: "./project-detail.component.html",
+  styleUrls: ["./project-detail.component.scss"]
 })
 export class ProjectDetailComponent implements OnInit {
-
-  constructor() { }
+  project: any;
+  constructor(private projectsService: ProjectsService) {}
 
   ngOnInit() {
+    this.projectsService.retrieveProjectDetail(1).subscribe(project => {
+      this.project = project;
+    });
+    console.log(this.project);
   }
-
 }

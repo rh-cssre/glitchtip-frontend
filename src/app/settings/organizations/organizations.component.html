@@ -1,2 +1,9 @@
 <p>organizations works!</p>
 {{ organizations | json }}
+
+<ul>
+  <li *ngFor="let organization of organizations">
+    <h2>Name: {{ organization.name }}</h2>
+    <button [routerLink]="organization.slug">Organization Details</button>
+  </li>
+</ul>

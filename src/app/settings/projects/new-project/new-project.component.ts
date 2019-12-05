@@ -4,9 +4,9 @@ import { Router } from "@angular/router";
 import { ProjectsService } from "../../../api/projects/projects.service";
 
 @Component({
-  selector: "app-new",
-  templateUrl: "./new.component.html",
-  styleUrls: ["./new.component.scss"]
+  selector: "app-new-project",
+  templateUrl: "./new-project.component.html",
+  styleUrls: ["./new-project.component.scss"]
 })
 export class NewProjectComponent implements OnInit {
   loading = false;
