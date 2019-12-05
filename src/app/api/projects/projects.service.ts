@@ -28,7 +28,7 @@ export class ProjectsService {
   }
 
   retrieveProjectDetail(id: number) {
-    const url = `${this.url}/${id}/`;
+    const url = `${this.url}${id}/`;
     return this.http.get<Project>(url);
   }
 

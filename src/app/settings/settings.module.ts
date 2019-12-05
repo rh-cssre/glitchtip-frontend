@@ -8,12 +8,14 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { ProjectsComponent } from "./projects/projects.component";
 import { NewProjectComponent } from "./projects/new/new.component";
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
+import { OrganizationsComponent } from "./organizations/organizations.component";
 
 @NgModule({
   declarations: [
     ProjectsComponent,
     NewProjectComponent,
-    ProjectDetailComponent
+    ProjectDetailComponent,
+    OrganizationsComponent
   ],
   imports: [
     CommonModule,
