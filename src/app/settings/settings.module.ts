@@ -10,6 +10,8 @@ import { NewProjectComponent } from "./projects/new-project/new-project.componen
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
+import { NewOrganizationsComponent } from "./organizations/new-organizations/new-organizations.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -17,14 +19,16 @@ import { OrganizationDetailComponent } from "./organizations/organization-detail
     NewProjectComponent,
     ProjectDetailComponent,
     OrganizationsComponent,
-    OrganizationDetailComponent
+    OrganizationDetailComponent,
+    NewOrganizationsComponent
   ],
   imports: [
     CommonModule,
     SettingsRoutingModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule
   ]
 })
 export class SettingsModule {}

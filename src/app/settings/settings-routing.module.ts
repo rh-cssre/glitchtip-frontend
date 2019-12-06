@@ -5,6 +5,7 @@ import { NewProjectComponent } from "./projects/new-project/new-project.componen
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
+import { NewOrganizationsComponent } from "./organizations/new-organizations/new-organizations.component";
 
 const routes: Routes = [
   { path: "projects", component: ProjectsComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: "projects/:slug", component: ProjectDetailComponent },
 
   { path: "organizations", component: OrganizationsComponent },
+  { path: "organizations/new", component: NewOrganizationsComponent },
   { path: "organizations/:slug", component: OrganizationDetailComponent }
 ];
 

@@ -1,0 +1,16 @@
+<p>Add a new organization</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Name" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="slug" placeholder="Slug" />
+  </mat-form-field>
+  <mat-checkbox class="example-full-width" formControlName="agreeTerms"
+    >Agree to the terms and conditions</mat-checkbox
+  >
+  <button mat-flat-button color="primary">
+    Create Project
+  </button>
+  {{ error }}
+</form>
