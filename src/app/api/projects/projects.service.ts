@@ -27,8 +27,8 @@ export class ProjectsService {
       .pipe(tap(projects => this.setProjects(projects)));
   }
 
-  retrieveProjectDetail(id: number) {
-    const url = `${this.url}${id}/`;
+  retrieveProjectDetail(slug: string) {
+    const url = `${this.url}${slug}/`;
     return this.http.get<Project>(url);
   }
 
