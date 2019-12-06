@@ -8,6 +8,17 @@
     <p></p>
   </mat-card-content>
   <mat-card-actions>
-    actions
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-label>Status</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let status of statusOptions" [value]="form.status">
+          {{ status }}
+        </mat-option>
+      </mat-select>
+      <!-- <mat-error *ngIf="error">{{ error }}</mat-error> -->
+      <button mat-flat-button color="primary">
+        Submit
+      </button>
+    </form>
   </mat-card-actions>
 </mat-card>
