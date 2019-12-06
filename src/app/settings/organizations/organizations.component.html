@@ -1,14 +1,23 @@
-<p>organizations works!</p>
-{{ organizations | json }}
-
-<ul>
-  <li *ngFor="let organization of organizations">
-    <h2>Name: {{ organization.name }}</h2>
-    <button [routerLink]="['/settings/organizations', organization.slug]">
-      Organization Details
-    </button>
-    <button (click)="removeOrganization(organization.slug)">
-      Remove Organization
-    </button>
-  </li>
-</ul>
+<h1>Organizations</h1>
+<section>
+  <mat-card *ngFor="let organization of organizations">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ organization.name }}</mat-card-title>
+      <mat-card-subtitle
+        >Created on {{ organization.dateCreated | date }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-actions>
+      <button
+        mat-button
+        [routerLink]="['/settings/organizations', organization.slug]"
+      >
+        Organization Details
+      </button>
+      <button mat-button (click)="removeOrganization(organization.slug)">
+        Remove Organization
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

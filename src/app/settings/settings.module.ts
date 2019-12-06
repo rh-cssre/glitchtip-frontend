@@ -12,6 +12,7 @@ import { OrganizationsComponent } from "./organizations/organizations.component"
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { NewOrganizationsComponent } from "./organizations/new-organizations/new-organizations.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatCardModule
   ]
 })
 export class SettingsModule {}

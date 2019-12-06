@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +17,8 @@ import { AppComponent } from "./app.component";
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN"
-    })
+    }),
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

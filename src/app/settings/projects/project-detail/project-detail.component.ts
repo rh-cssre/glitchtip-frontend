@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { Router, ActivatedRoute, ParamMap } from "@angular/router";
+import { switchMap } from "rxjs/operators";
+import { of } from "rxjs";
 import { ProjectsService } from "../../../api/projects/projects.service";
 
 @Component({
@@ -8,12 +11,25 @@ import { ProjectsService } from "../../../api/projects/projects.service";
 })
 export class ProjectDetailComponent implements OnInit {
   project: any;
-  constructor(private projectsService: ProjectsService) {}
+  organizationSlug: string;
+  projectSlug: string;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private projectsService: ProjectsService
+  ) {}
 
   ngOnInit() {
-    this.projectsService.retrieveProjectDetail("project").subscribe(project => {
-      this.project = project;
-    });
+    this.route.paramMap
+      .pipe(switchMap((params: ParamMap) => of(params.get("slug"))))
+      .subscribe(slug => (this.projectSlug = slug));
+
+    this.projectsService
+      .retrieveProjectDetail("test-org", this.projectSlug)
+      .subscribe(project => {
+        this.project = project;
+      });
     console.log(this.project);
   }
 }
