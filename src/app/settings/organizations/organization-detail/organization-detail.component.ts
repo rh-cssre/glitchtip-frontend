@@ -34,4 +34,9 @@ export class OrganizationDetailComponent implements OnInit {
   goToOrganizations() {
     this.router.navigate(["/settings/organizations"]);
   }
+
+  removeOrganization() {
+    this.organizationsService.deleteOrganization(this.organization.slug);
+    this.goToOrganizations();
+  }
 }

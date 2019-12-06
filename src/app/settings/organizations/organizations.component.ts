@@ -17,4 +17,8 @@ export class OrganizationsComponent implements OnInit {
         this.organizations = organizations;
       });
   }
+
+  removeOrganization(slug: string) {
+    this.organizationsService.deleteOrganization(slug);
+  }
 }
