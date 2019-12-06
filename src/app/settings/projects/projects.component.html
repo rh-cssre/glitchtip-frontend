@@ -1,4 +1,13 @@
-<h1>Projects</h1>
+<div>
+  <h1>Projects</h1>
+  <button
+    mat-flat-button
+    [routerLink]="['/settings/projects', 'new']"
+    color="accent"
+  >
+    Create New Project
+  </button>
+</div>
 <section>
   <mat-card *ngFor="let project of projects">
     <mat-card-header>

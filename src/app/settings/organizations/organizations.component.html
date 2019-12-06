@@ -1,4 +1,13 @@
-<h1>Organizations</h1>
+<div>
+  <h1>Organizations</h1>
+  <button
+    mat-flat-button
+    [routerLink]="['/settings/organizations', 'new']"
+    color="accent"
+  >
+    Create New Organziation
+  </button>
+</div>
 <section>
   <mat-card *ngFor="let organization of organizations">
     <mat-card-header>
