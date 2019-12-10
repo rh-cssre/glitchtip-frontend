@@ -1,4 +1,4 @@
-export const issues = [
+export const issueList = [
   {
     id: 1,
     title: "NameError: name 'dsfsddsf' is not defined",

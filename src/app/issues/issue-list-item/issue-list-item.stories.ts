@@ -5,7 +5,7 @@ import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
 
 export default {
-  title: "Issues",
+  title: "Issues List",
   decorators: [
     moduleMetadata({
       imports: [MatCardModule]
