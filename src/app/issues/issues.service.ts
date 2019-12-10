@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { tap } from "rxjs/operators";
-import { Issue } from "./interfaces";
+import { Issue, IStatus } from "./interfaces";
 import { baseUrl } from "../constants";
 
 @Injectable({
@@ -21,9 +21,10 @@ export class IssuesService {
       .pipe(tap(issues => this.setIssues(issues)));
   }
 
-  updateIssue(status: string, issueId: string, issue: Issue) {
-    const url = `${this.url}${issueId}/`;
-    return this.http.put<any>(url, issue);
+  updateStatus(id: number, status: IStatus) {
+    const url = `${this.url}${id}`;
+    console.log("update the following url: ", url, " to ", status);
+    return this.http.put<any>(url, status);
   }
 
   setIssues(issues: Issue[]) {

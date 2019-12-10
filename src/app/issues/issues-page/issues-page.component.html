@@ -1,15 +1,27 @@
-<h1>Issues</h1>
+<section>
+  <h1>Issues</h1>
 
-<mat-form-field>
-  <input
-    matInput
-    (keyup)="applyFilter($event.target.value)"
-    placeholder="Filter"
-  />
-</mat-form-field>
-
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
+  <button mat-flat-button color="primary" (click)="onSubmit('resloved')">
+    Mark as resolved
+  </button>
+  <button
+    style="margin-left: 10px;"
+    mat-flat-button
+    color="accent"
+    (click)="onSubmit('unresovled')"
+  >
+    Reopen issue
+  </button>
+  <button
+    style="margin-left: 10px;"
+    mat-flat-button
+    color="warn"
+    (click)="onSubmit('ignored')"
+  >
+    Ignore issue
+  </button>
+  <mat-error *ngIf="error">{{ error }}</mat-error>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -20,25 +32,33 @@
         >
         </mat-checkbox>
       </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox
-          (click)="$event.stopPropagation()"
-          (change)="$event ? selection.toggle(row) : null"
-          [checked]="selection.isSelected(row)"
-          [aria-label]="checkboxLabel(row)"
-        >
-        </mat-checkbox>
+      <td class="select-cell" mat-cell *matCellDef="let row">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+            [aria-label]="checkboxLabel(row)"
+            formControlName="status"
+          >
+          </mat-checkbox>
+        </form>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-      <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+      <td
+        mat-cell
+        *matCellDef="let element; let i = index"
+        [class.resolved]="element.status === 'resolved'"
+        [class.ignored]="element.status === 'ignored'"
+      >
+        {{ element.title }}
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-</div>
+</section>

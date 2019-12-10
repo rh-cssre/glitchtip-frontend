@@ -7,6 +7,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatButtonModule, MatButton } from "@angular/material/button";
 
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
@@ -28,6 +29,7 @@ import { EventDetailComponent } from "./event-detail/event-detail.component";
     MatPaginatorModule,
     MatTableModule,
     MatCheckboxModule,
+    MatButtonModule,
     ReactiveFormsModule
   ]
 })

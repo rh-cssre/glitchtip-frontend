@@ -1,4 +1,4 @@
-.mat-elevation-z8 {
+section {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
@@ -8,16 +8,24 @@ h1 {
   text-align: center;
 }
 
-mat-form-field {
-  font-size: 14px;
-  width: 80%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+button {
   margin-bottom: 20px;
 }
 
-td,
-th {
-  width: 40%;
+.resolved {
+  background: lightgreen;
+}
+
+.ignored {
+  background: lightgray;
+  text-decoration: line-through;
+}
+
+mat-error {
+  display: block;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
 }
