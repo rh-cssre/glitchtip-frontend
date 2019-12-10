@@ -33,7 +33,7 @@
         </mat-checkbox>
       </th>
       <td class="select-cell" mat-cell *matCellDef="let row">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form">
           <mat-checkbox
             (click)="$event.stopPropagation()"
             (change)="$event ? selection.toggle(row) : null"
