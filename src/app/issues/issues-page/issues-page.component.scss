@@ -1,0 +1,31 @@
+section {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+button {
+  margin-bottom: 20px;
+}
+
+.resolved {
+  background: lightgreen;
+}
+
+.ignored {
+  background: lightgray;
+  text-decoration: line-through;
+}
+
+mat-error {
+  display: block;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+}

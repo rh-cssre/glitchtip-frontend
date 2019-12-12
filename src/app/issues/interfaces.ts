@@ -49,3 +49,7 @@ export interface Issue {
   location: string;
   event: IEvent[];
 }
+
+export interface IStatus {
+  status: string;
+}
