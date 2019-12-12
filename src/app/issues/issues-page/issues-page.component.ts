@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-// import { IssuesService } from "../issues.service";
-import { issueList } from "./issues-test-data";
+import { IssuesService } from "../issues.service";
+// import { issueList } from "./issues-test-data";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
@@ -12,7 +12,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 })
 export class IssuesPageComponent {
   resolved: boolean;
-  displayedColumns: string[] = ["select", "title"];
+  displayedColumns: string[] = ["select", "title", "status"];
   dataSource: MatTableDataSource<any>;
   selection = new SelectionModel<any>(true, []);
   error: string;
@@ -20,24 +20,26 @@ export class IssuesPageComponent {
     status: new FormControl("", [Validators.required])
   });
 
-  // constructor(private issuesService: IssuesService) {
-  //   this.issuesService.retrieveIssues().subscribe();
-  //   this.issuesService.getIssues.subscribe(
-  //     issueList => (this.dataSource = new MatTableDataSource(issueList))
-  //   );
-  // }
-
-  constructor() {
-    this.dataSource = new MatTableDataSource(issueList);
+  constructor(private issuesService: IssuesService) {
+    this.issuesService.retrieveIssues().subscribe();
+    this.issuesService.getIssues.subscribe(
+      issueList => (this.dataSource = new MatTableDataSource(issueList))
+    );
   }
+
+  // constructor() {
+  //   this.dataSource = new MatTableDataSource(issueList);
+  // }
 
   onSubmit(status: string) {
     if (this.form.valid) {
-      // this.selection.selected.forEach(selectedId => {
-      //   this.issuesService.updateStatus(selectedId.id, {
-      //     status: this.form.value.status = status
-      //   });
-      // });
+      this.selection.selected.forEach(selectedId => {
+        this.issuesService
+          .updateStatus(selectedId.id, {
+            status: this.form.value.status = status
+          })
+          .subscribe();
+      });
     } else {
       console.log("dis form ain't valid, yo");
       this.error = "Error";
