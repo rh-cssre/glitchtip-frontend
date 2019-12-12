@@ -1,11 +1,9 @@
-<section>
-  <ul>
-    <li><a mat-button routerLink="/settings">Settings</a></li>
-    <li>
-      <a mat-button routerLink="/settings/organizations">Organization List</a>
-    </li>
-    <li><a mat-button routerLink="/settings/projects">Projects List</a></li>
-    <li><a mat-button routerLink="/issues">Issues</a></li>
-  </ul>
-</section>
-<router-outlet>GlitchTip</router-outlet>
+<header>
+  <nav>
+    <a mat-button routerLink="/settings">Settings</a>
+    <a mat-button routerLink="/settings/organizations">Organization List</a>
+    <a mat-button routerLink="/settings/projects">Projects List</a>
+    <a mat-button routerLink="/issues">Issues</a>
+  </nav>
+</header>
+<router-outlet></router-outlet>

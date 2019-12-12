@@ -1,2 +1,38 @@
-<p>project-detail works!</p>
-<h1>{{ project | json }}</h1>
+<h1>Project Detail</h1>
+
+<mat-card *ngIf="project">
+  <mat-card-header
+    ><mat-card-title>Update Project</mat-card-title></mat-card-header
+  >
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-error *ngIf="error">{{ error }}</mat-error>
+      <mat-form-field>
+        <input
+          matInput
+          [value]="project.name"
+          formControlName="name"
+          placeholder="Name"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          [value]="project.platform"
+          formControlName="platform"
+          placeholder="Platform"
+        />
+      </mat-form-field>
+      <button mat-flat-button color="primary">
+        Update Project
+      </button>
+    </form>
+    <button
+      (click)="onDelete(project.organization.slug, project.slug)"
+      mat-button
+      color="primary"
+    >
+      Delete Project
+    </button></mat-card-content
+  >
+</mat-card>

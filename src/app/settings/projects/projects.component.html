@@ -21,8 +21,11 @@
       <button mat-button [routerLink]="project.slug">
         Project Details
       </button>
-      <button mat-button>
-        Remove Organization
+      <button
+        (click)="onDelete(project.organization.slug, project.slug)"
+        mat-button
+      >
+        Remove Project
       </button>
     </mat-card-actions>
   </mat-card>
