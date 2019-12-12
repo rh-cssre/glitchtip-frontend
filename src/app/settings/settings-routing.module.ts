@@ -6,8 +6,11 @@ import { ProjectDetailComponent } from "./projects/project-detail/project-detail
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { NewOrganizationsComponent } from "./organizations/new-organizations/new-organizations.component";
+import { SettingsComponent } from "./settings/settings.component";
 
 const routes: Routes = [
+  { path: "", component: SettingsComponent },
+
   { path: "projects", component: ProjectsComponent },
   { path: "projects/new", component: NewProjectComponent },
   { path: "projects/:slug", component: ProjectDetailComponent },
