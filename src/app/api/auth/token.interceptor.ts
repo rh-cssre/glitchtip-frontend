@@ -2,8 +2,11 @@ import { Injectable } from "@angular/core";
 import {
   HttpRequest,
   HttpHandler,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpErrorResponse
 } from "@angular/common/http";
+import { throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { AuthService } from "./auth.service";
 
 @Injectable()
@@ -24,6 +27,14 @@ export class TokenInterceptor implements HttpInterceptor {
         }
       });
     }
-    return next.handle(req);
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 403) {
+          this.auth.logout();
+          return throwError(error);
+        }
+        return throwError(error);
+      })
+    );
   }
 }

@@ -14,7 +14,7 @@ export class ProjectsComponent implements OnInit {
   constructor(private projectsService: ProjectsService) {}
 
   ngOnInit() {
-    this.projectsService.retrieveProjects().toPromise();
+    this.projectsService.retrieveProjects();
   }
 
   onDelete(organizationSlug: string, projectSlug: string) {

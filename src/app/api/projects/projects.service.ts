@@ -24,7 +24,8 @@ export class ProjectsService {
   retrieveProjects() {
     return this.http
       .get<Project[]>(this.url)
-      .pipe(tap(projects => this.setProjects(projects)));
+      .pipe(tap(projects => this.setProjects(projects)))
+      .subscribe();
   }
 
   retrieveProjectDetail(organizationSlug: string, projectSlug: string) {
