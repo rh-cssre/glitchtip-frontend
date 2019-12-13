@@ -9,7 +9,7 @@
   </button>
 </div>
 <section>
-  <mat-card *ngFor="let project of projects">
+  <mat-card *ngFor="let project of projects$ | async">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{ project.name }}</mat-card-title>

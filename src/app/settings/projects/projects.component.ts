@@ -1,28 +1,31 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { catchError } from "rxjs/operators";
+import { of } from "rxjs";
 import { ProjectsService } from "../../api/projects/projects.service";
 
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",
-  styleUrls: ["./projects.component.scss"]
+  styleUrls: ["./projects.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsComponent implements OnInit {
-  projects: any;
+  projects$ = this.projectsService.getProjects;
   constructor(private projectsService: ProjectsService) {}
 
-  loadProjects() {
-    this.projectsService.retrieveProjects().subscribe(projects => {
-      this.projects = projects;
-    });
-  }
-
   ngOnInit() {
-    this.loadProjects();
+    this.projectsService.retrieveProjects().toPromise();
   }
 
   onDelete(organizationSlug: string, projectSlug: string) {
     this.projectsService
       .deleteProject(organizationSlug, projectSlug)
-      .subscribe(err => console.log("error:", err));
+      .pipe(
+        catchError(err => {
+          console.log("error:", err);
+          return of(null);
+        })
+      )
+      .subscribe();
   }
 }
