@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-marketing": "ng serve marketing",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,6 +23,7 @@
     "@angular/material": "^8.2.3",
     "@angular/platform-browser": "~8.2.8",
     "@angular/platform-browser-dynamic": "~8.2.8",
+    "@angular/platform-server": "~8.2.8",
     "@angular/router": "~8.2.8",
     "@storybook/addon-knobs": "^5.2.6",
     "rxjs": "~6.4.0",
@@ -42,6 +44,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
+    "angular-prerender": "^4.2.11",
     "babel-loader": "^8.0.6",
     "codelyzer": "^5.0.0",
     "jasmine-core": "~3.4.0",

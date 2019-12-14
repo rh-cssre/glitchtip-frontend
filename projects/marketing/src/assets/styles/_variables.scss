@@ -1,0 +1,75 @@
+@import "~@angular/material/theming";
+
+$amaranth: #e94056;
+
+$amaranth-palette: (
+  50: #fce8ed,
+  100: #f8c6d3,
+  200: #f4a0b6,
+  300: #f07999,
+  400: #ec5d83,
+  500: #e9406d,
+  600: #e63a65,
+  700: #e3325a,
+  800: #df2a50,
+  900: #d91c3e,
+  A100: #ffffff,
+  A200: #ffdbe1,
+  A400: #ffa8b6,
+  A700: #ff8fa0,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$candy-app-primary: mat-palette($amaranth-palette);
+$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$candy-app-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$candy-app-theme: mat-light-theme(
+  $candy-app-primary,
+  $candy-app-accent,
+  $candy-app-warn
+);
+
+// Define a custom typography config that overrides the font-family as well as specific levels
+// See for defaults:
+// https://github.com/angular/components/blob/d9977bdb1101e107312580c124acf0a9f410452e/src/material/core/typography/_typography.scss
+// See for intended use cases
+// https://material.angular.io/guide/typography#what-is-typography-
+$custom-typography: mat-typography-config(
+  $font-family: "Plex Sans",
+  $display-4: mat-typography-level(112px, 112px, 300, "Plex Serif", -0.05em),
+  $display-3: mat-typography-level(56px, 65px, 400, "Plex Serif", -0.02em),
+  $display-2: mat-typography-level(45px, 55px, 400, "Plex Serif", -0.005em),
+  $display-1: mat-typography-level(34px, 40px, 400, "Plex Serif"),
+  $body-2: mat-typography-level(16px, 28px, 500),
+  $body-1: mat-typography-level(16px, 24px, 400)
+);
+
+$mobile-typography: mat-typography-config(
+  $font-family: "Plex Sans",
+  $display-4: mat-typography-level(90px, 102px, 300, "Plex Serif", -0.05em),
+  $display-3: mat-typography-level(45px, 55px, 400, "Plex Serif", -0.02em),
+  $display-2: mat-typography-level(36px, 46px, 400, "Plex Serif", -0.005em),
+  $display-1: mat-typography-level(28px, 33px, 400, "Plex Serif")
+);

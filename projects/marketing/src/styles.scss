@@ -1,0 +1,26 @@
+@import "~@angular/material/theming";
+@import "./assets/styles/font-files";
+@import "./assets/styles/variables";
+@import "./assets/styles/resets";
+
+// Common styles for Angular Material. Included so that we only have to load a
+// single CSS file for Angular Material in our app.
+// Don't include this anywhere else!
+@include mat-core();
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($candy-app-theme);
+
+@include mat-base-typography($custom-typography);
+
+// Responsive type maybe?
+@media screen and (max-width: 767px) {
+  @include mat-base-typography($mobile-typography);
+}
+
+a {
+  color: $amaranth;
+  font-weight: 500;
+}
