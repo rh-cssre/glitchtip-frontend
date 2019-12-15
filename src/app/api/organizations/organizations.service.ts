@@ -15,9 +15,12 @@ export class OrganizationsService {
 
   constructor(private http: HttpClient) {}
 
-  createOrganization(organization: OrganizationNew) {
+  createOrganization(name: string) {
+    const data = {
+      name
+    };
     return this.http
-      .post<Organization>(this.url, organization)
+      .post<Organization>(this.url, data)
       .pipe(tap(newOrganziaton => this.addOneOrganization(newOrganziaton)));
   }
 

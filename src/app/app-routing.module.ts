@@ -19,6 +19,13 @@ const routes: Routes = [
     loadChildren: () =>
       import("./settings/settings.module").then(m => m.SettingsModule),
     canActivate: [IsLoggedInGuard]
+  },
+  {
+    path: "organizations/new",
+    loadChildren: () =>
+      import("./new-organization/new-organization.module").then(
+        m => m.NewOrganizationModule
+      )
   }
 ];
 

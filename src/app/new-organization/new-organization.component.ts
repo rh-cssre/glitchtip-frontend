@@ -1,20 +1,18 @@
 import { Component } from "@angular/core";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-new-organizations",
-  templateUrl: "./new-organizations.component.html",
-  styleUrls: ["./new-organizations.component.scss"]
+  templateUrl: "./new-organization.component.html",
+  styleUrls: ["./new-organization.component.scss"]
 })
 export class NewOrganizationsComponent {
   loading = false;
   error: string;
   form = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    slug: new FormControl(""),
-    agreeTerms: new FormControl("True", [Validators.required])
+    name: new FormControl("", [Validators.required])
   });
   constructor(
     private organizationsService: OrganizationsService,
@@ -25,11 +23,7 @@ export class NewOrganizationsComponent {
     if (this.form.valid) {
       this.loading = true;
       this.organizationsService
-        .createOrganization({
-          name: this.form.value.name,
-          slug: this.form.value.slug,
-          agreeTerms: this.form.value.agreeTerms
-        })
+        .createOrganization(this.form.value.name)
         .subscribe(
           organization =>
             this.router.navigate([

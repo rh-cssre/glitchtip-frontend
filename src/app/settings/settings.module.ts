@@ -10,7 +10,6 @@ import { NewProjectComponent } from "./projects/new-project/new-project.componen
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
-import { NewOrganizationsComponent } from "./organizations/new-organizations/new-organizations.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { SettingsComponent } from "./settings/settings.component";
@@ -22,7 +21,6 @@ import { SettingsComponent } from "./settings/settings.component";
     ProjectDetailComponent,
     OrganizationsComponent,
     OrganizationDetailComponent,
-    NewOrganizationsComponent,
     SettingsComponent
   ],
   imports: [
