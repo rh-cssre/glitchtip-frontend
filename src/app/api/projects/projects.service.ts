@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { BehaviorSubject, of } from "rxjs";
+import { tap, catchError, map, exhaustMap } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { ProjectNew, Project } from "./projects.interfaces";
 
@@ -45,21 +45,32 @@ export class ProjectsService {
     );
   }
 
-  deleteProject(organizationSlug: string, projectSlug: string) {
-    const url = `${this.url}${organizationSlug}/${projectSlug}/`;
-    console.log("delete me at: ", url);
-    return this.http.delete(url).pipe(
-      tap(_ => console.log("Post Status", _)),
-      catchError(err => "error alert")
+  deleteProject(projectId: number) {
+    return this.projects.pipe(
+      map(projects => projects.find(project => project.id === projectId)),
+      exhaustMap(project =>
+        this.http
+          .delete(`${this.url}${project.organization.slug}/${project.slug}/`)
+          .pipe(
+            map(() => this.removeOneProject(projectId)),
+            catchError((err: HttpErrorResponse) => of(err))
+          )
+      )
     );
   }
 
-  setProjects(projects: Project[]) {
+  private setProjects(projects: Project[]) {
     this.projects.next(projects);
   }
 
   private addOneProject(project: Project) {
     const newProjects = this.projects.getValue().concat([project]);
     this.projects.next(newProjects);
+  }
+
+  private removeOneProject(projectId: number) {
+    this.projects.next(
+      this.projects.getValue().filter(project => project.id !== projectId)
+    );
   }
 }

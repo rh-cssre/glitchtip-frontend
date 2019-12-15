@@ -1,6 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { catchError } from "rxjs/operators";
-import { of } from "rxjs";
 import { ProjectsService } from "../../api/projects/projects.service";
 
 @Component({
@@ -17,15 +15,7 @@ export class ProjectsComponent implements OnInit {
     this.projectsService.retrieveProjects();
   }
 
-  onDelete(organizationSlug: string, projectSlug: string) {
-    this.projectsService
-      .deleteProject(organizationSlug, projectSlug)
-      .pipe(
-        catchError(err => {
-          console.log("error:", err);
-          return of(null);
-        })
-      )
-      .subscribe();
+  onDelete(projectId: number) {
+    this.projectsService.deleteProject(projectId).toPromise();
   }
 }

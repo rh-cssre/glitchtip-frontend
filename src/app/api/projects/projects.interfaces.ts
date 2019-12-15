@@ -1,3 +1,5 @@
+import { Organization } from "../organizations/organizations.interface";
+
 interface ProjectKey {
   label: string;
   public_key: string;
@@ -11,7 +13,9 @@ export interface ProjectNew {
 }
 
 export interface Project extends ProjectNew {
+  id: number;
   slug: string;
-  date_added: string;
-  projectkey_set: ProjectKey[];
+  firstEvent: string;
+  dateCreated: string;
+  organization: Organization;
 }

@@ -45,15 +45,10 @@ export class ProjectDetailComponent implements OnInit {
         this.project = project;
         this.loadValues();
       });
-
-    console.log(this.project);
   }
 
-  onDelete(organizationSlug: string, projectSlug: string) {
-    this.projectsService.deleteProject(organizationSlug, projectSlug).subscribe(
-      () => this.router.navigate(["/settings/projects"]),
-      err => console.log("error:", err)
-    );
+  onDelete(projectId: number) {
+    this.projectsService.deleteProject(projectId);
   }
 
   onSubmit() {
