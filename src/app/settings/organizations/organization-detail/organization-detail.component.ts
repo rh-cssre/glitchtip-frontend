@@ -10,7 +10,7 @@ import { of } from "rxjs";
   styleUrls: ["./organization-detail.component.scss"]
 })
 export class OrganizationDetailComponent implements OnInit {
-  organization: any;
+  selectedOrganization$ = this.organizationsService.getOrganizations;
   slug: string;
 
   constructor(
@@ -24,19 +24,11 @@ export class OrganizationDetailComponent implements OnInit {
       .pipe(switchMap((params: ParamMap) => of(params.get("slug"))))
       .subscribe(slug => (this.slug = slug));
 
-    this.organizationsService
-      .retrieveOrganizationDetail(this.slug)
-      .subscribe(organization => {
-        this.organization = organization;
-      });
-  }
-
-  goToOrganizations() {
-    this.router.navigate(["/settings/organizations"]);
+    this.organizationsService.retrieveOrganizationDetail(this.slug);
   }
 
   removeOrganization() {
-    this.organizationsService.deleteOrganization(this.organization.slug);
-    this.goToOrganizations();
+    // this.organizationsService.deleteOrganization(this.organization.slug);
+    // show first org in list or if none, empty screen
   }
 }

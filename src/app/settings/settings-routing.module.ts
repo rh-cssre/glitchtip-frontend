@@ -3,9 +3,9 @@ import { Routes, RouterModule } from "@angular/router";
 import { ProjectsComponent } from "./projects/projects.component";
 import { NewProjectComponent } from "./projects/new-project/new-project.component";
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
-import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
+import { OrganizationShellComponent } from "./organizations/organization-shell/organization-shell.component";
 
 const routes: Routes = [
   { path: "", component: SettingsComponent },
@@ -14,8 +14,7 @@ const routes: Routes = [
   { path: "projects/new", component: NewProjectComponent },
   { path: "projects/:slug", component: ProjectDetailComponent },
 
-  { path: "organizations", component: OrganizationsComponent },
-  { path: "organizations/:slug", component: OrganizationDetailComponent }
+  { path: ":slug", component: OrganizationShellComponent }
 ];
 
 @NgModule({

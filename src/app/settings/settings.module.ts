@@ -13,6 +13,7 @@ import { OrganizationDetailComponent } from "./organizations/organization-detail
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { SettingsComponent } from "./settings/settings.component";
+import { OrganizationShellComponent } from './organizations/organization-shell/organization-shell.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SettingsComponent } from "./settings/settings.component";
     ProjectDetailComponent,
     OrganizationsComponent,
     OrganizationDetailComponent,
-    SettingsComponent
+    SettingsComponent,
+    OrganizationShellComponent
   ],
   imports: [
     CommonModule,

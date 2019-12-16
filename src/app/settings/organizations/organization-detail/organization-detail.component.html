@@ -1,4 +1,47 @@
-<p>organization-detail works!</p>
-<p>organization: {{ organization | json }}</p>
-<button (click)="removeOrganization()">Delete this Organization</button>
-<button (click)="goToOrganizations()">view all organizations</button>
+<section>
+  <header>
+    <h2>Organization Detail</h2>
+    <!-- <button (click)="goToOrganizations()" mat-flat-button color="accent">
+      view all organizations
+    </button> -->
+  </header>
+  <p>selected org detail here</p>
+
+  <!-- <mat-card>
+    <mat-card-header><mat-card-title>General</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-error *ngIf="error">{{ error }}</mat-error>
+        <mat-form-field>
+          <input
+            matInput
+            [value]="form.value.name"
+            formControlName="name"
+            placeholder="Name"
+          />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button color="primary">
+        Update Organization
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card
+    ><mat-card-header
+      ><mat-card-title>Remove Organization</mat-card-title></mat-card-header
+    >
+    <mat-card-content>
+      <mat-card-title>Remove Organization</mat-card-title>
+      <mat-card-subtitle
+        >Removing this organization will delete all data including projects and
+        their associated events.</mat-card-subtitle
+      > </mat-card-content
+    ><mat-card-actions
+      ><button (click)="removeOrganization()" mat-flat-button color="warn">
+        Remove Organization
+      </button></mat-card-actions
+    ></mat-card
+  > -->
+</section>

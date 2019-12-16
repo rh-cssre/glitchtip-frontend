@@ -1,32 +1,14 @@
-<div>
-  <h1>Organizations</h1>
-  <button
-    mat-flat-button
-    [routerLink]="['/settings/organizations', 'new']"
-    color="accent"
-  >
-    Create New Organziation
-  </button>
-</div>
 <section>
-  <mat-card *ngFor="let organization of organizations">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{ organization.name }}</mat-card-title>
-      <mat-card-subtitle
-        >Created on {{ organization.dateCreated | date }}</mat-card-subtitle
-      >
-    </mat-card-header>
-    <mat-card-actions>
-      <button
-        mat-button
-        [routerLink]="['/settings/organizations', organization.slug]"
-      >
-        Organization Details
-      </button>
-      <button mat-button (click)="removeOrganization(organization.slug)">
-        Remove Organization
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <h1>Organizations</h1>
+  <div>
+    <p>Select organization to edit</p>
+    <a
+      *ngFor="let organization of organizations$ | async"
+      (click)="onSelected(organization.slug)"
+      mat-button
+      >{{ organization.name }}</a
+    >
+  </div>
 </section>
+
+<ng-content></ng-content>
