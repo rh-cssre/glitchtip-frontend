@@ -1,31 +1,24 @@
-import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute, ParamMap } from "@angular/router";
-import { switchMap } from "rxjs/operators";
-import { OrganizationsService } from "../../../api/organizations/organizations.service";
-import { of } from "rxjs";
+import { Component } from "@angular/core";
+import { combineLatest, of, Subject, Observable } from "rxjs";
+import { catchError, map, filter } from "rxjs/operators";
+import { Organization } from "src/app/api/organizations/organizations.interface";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-organization-detail",
   templateUrl: "./organization-detail.component.html",
   styleUrls: ["./organization-detail.component.scss"]
 })
-export class OrganizationDetailComponent implements OnInit {
-  selectedOrganization$ = this.organizationsService.getOrganizations;
-  slug: string;
+export class OrganizationDetailComponent {
+  organization$: Observable<
+    Organization
+  > = this.organizationService.selectedOrganization$.pipe(
+    catchError(error => {
+      return of(null);
+    })
+  );
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private organizationsService: OrganizationsService
-  ) {}
-
-  ngOnInit() {
-    this.route.paramMap
-      .pipe(switchMap((params: ParamMap) => of(params.get("slug"))))
-      .subscribe(slug => (this.slug = slug));
-
-    this.organizationsService.retrieveOrganizationDetail(this.slug);
-  }
+  constructor(private organizationService: OrganizationsService) {}
 
   removeOrganization() {
     // this.organizationsService.deleteOrganization(this.organization.slug);

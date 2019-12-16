@@ -3,7 +3,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { ProjectsComponent } from "./projects/projects.component";
 import { NewProjectComponent } from "./projects/new-project/new-project.component";
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
-import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { OrganizationShellComponent } from "./organizations/organization-shell/organization-shell.component";
 
