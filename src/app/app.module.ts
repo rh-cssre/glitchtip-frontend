@@ -1,17 +1,24 @@
-import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   HttpClientModule,
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS
 } from "@angular/common/http";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
-import { AuthModule } from "./api/auth/auth.module";
+
+// Material
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatButtonModule } from "@angular/material/button";
+import { MatToolbarModule } from "@angular/material/toolbar";
+
+// Modules
+import { AppRoutingModule } from "./app-routing.module";
+import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
@@ -26,7 +33,10 @@ import { SharedModule } from "./shared/shared.module";
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN"
     }),
-    SharedModule
+    SharedModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatToolbarModule
   ],
   providers: [
     {

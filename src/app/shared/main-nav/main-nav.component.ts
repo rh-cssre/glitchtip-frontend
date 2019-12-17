@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { Observable, of, Subject } from "rxjs";
 import { catchError } from "rxjs/operators";
@@ -10,7 +10,7 @@ import { Organization } from "src/app/api/organizations/organizations.interface"
   styleUrls: ["./main-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MainNavComponent implements OnInit {
+export class MainNavComponent {
   error$ = new Subject<string>();
 
   selectedOrganization$: Observable<
@@ -32,8 +32,6 @@ export class MainNavComponent implements OnInit {
   );
 
   constructor(private organizationsService: OrganizationsService) {}
-
-  ngOnInit() {}
 
   setOrganization(orgSlug: string) {
     this.organizationsService.changeSelectedOrganization(orgSlug);

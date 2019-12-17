@@ -1,5 +1,15 @@
-<h1>Settings</h1>
-<nav>
-  <a mat-button routerLink="">General Settings</a>
-  <a mat-button routerLink="projects">Projects</a>
-</nav>
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened
+    ><nav>
+      <p>Organization</p>
+      <button mat-button routerLink="/settings/organizations">
+        General Settings
+      </button>
+      <button mat-button routerLink="/settings/projects">Projects</button>
+    </nav>
+  </mat-drawer>
+  <mat-drawer-content
+    ><h1>Settings</h1>
+    <ng-content></ng-content
+  ></mat-drawer-content>
+</mat-drawer-container>

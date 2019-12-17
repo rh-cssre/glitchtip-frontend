@@ -1,8 +1,12 @@
-a {
-  display: inline-block;
-  margin: 20px 10px;
+button {
+  display: block;
+  margin: 20px;
 }
 
-nav {
-  background: whitesmoke;
+mat-drawer-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

@@ -1,26 +1,33 @@
 <nav>
-  <button mat-button [matMenuTriggerFor]="menu">
-    <span>Organization: </span>
-    <span *ngIf="selectedOrganization$ | async as selectedOrganization">
-      {{ selectedOrganization.name }}
-    </span>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button
-      *ngFor="let organization of organizations$ | async"
-      (click)="setOrganization(organization.slug)"
-      mat-menu-item
+  <mat-nav-list>
+    <a
+      mat-list-item
+      class="organization"
+      color="accent"
+      [matMenuTriggerFor]="menu"
     >
-      {{ organization.name }}
-    </button>
-    <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/organizations/new">
-      Create New Organization
-    </button>
-  </mat-menu>
+      <span>Select Organization</span>
+      <span *ngIf="selectedOrganization$ | async as selectedOrganization">
+        {{ selectedOrganization.name }}
+      </span>
+    </a>
+    <mat-menu #menu="matMenu">
+      <button
+        *ngFor="let organization of organizations$ | async"
+        (click)="setOrganization(organization.slug)"
+        mat-menu-item
+      >
+        {{ organization.name }}
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item routerLink="/organizations/new">
+        Create New Organization
+      </button>
+    </mat-menu>
 
-  <button mat-button routerLink="/settings/organizations">Organizations</button>
-  <button mat-button routerLink="/settings/projects">Projects List</button>
-  <button mat-button routerLink="/issues">Issues</button>
-  <button mat-button routerLink="/settings">Settings</button>
+    <!-- <a mat-list-item routerLink=".">Projects</a> -->
+    <a mat-list-item routerLink="/issues">Issues</a>
+    <!-- <a mat-list-item routerLink=".">Events</a> -->
+    <a mat-list-item routerLink="/settings">Settings</a>
+  </mat-nav-list>
 </nav>

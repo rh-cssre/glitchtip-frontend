@@ -1,14 +1,15 @@
-<section>
-  <h1>Organizations</h1>
-  <div>
-    <p>Select organization to edit</p>
-    <a
-      *ngFor="let organization of organizations$ | async"
-      (click)="onSelected(organization.slug)"
-      mat-button
-      >{{ organization.name }}</a
-    >
-  </div>
-</section>
-
-<ng-content></ng-content>
+<app-settings
+  ><section>
+    <h1>Organizations</h1>
+    <div>
+      <p>Select organization to edit</p>
+      <a
+        *ngFor="let organization of organizations$ | async"
+        (click)="onSelected(organization.slug)"
+        mat-button
+        >{{ organization.name }}</a
+      >
+    </div>
+  </section>
+  <ng-content></ng-content>
+</app-settings>

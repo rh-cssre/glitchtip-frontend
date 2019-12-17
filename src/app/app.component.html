@@ -1,4 +1,7 @@
-<header>
-  <app-main-nav></app-main-nav>
-</header>
-<main><router-outlet></router-outlet></main>
+<mat-drawer-container autosize>
+  <mat-drawer #drawer opened mode="side">
+    <mat-toolbar color="primary"><a routerLink=".">GlitchTip</a></mat-toolbar>
+    <app-main-nav></app-main-nav>
+  </mat-drawer>
+  <router-outlet></router-outlet>
+</mat-drawer-container>
