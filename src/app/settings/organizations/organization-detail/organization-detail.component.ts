@@ -10,10 +10,13 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
   styleUrls: ["./organization-detail.component.scss"]
 })
 export class OrganizationDetailComponent {
+  error$ = new Subject<string>();
+
   organization$: Observable<
     Organization
   > = this.organizationService.selectedOrganization$.pipe(
     catchError(error => {
+      this.error$.next(error);
       return of(null);
     })
   );

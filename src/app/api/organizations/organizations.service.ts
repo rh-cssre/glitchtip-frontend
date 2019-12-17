@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, combineLatest } from "rxjs";
+import { BehaviorSubject, combineLatest, throwError } from "rxjs";
 import { tap, shareReplay, catchError, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization } from "./organizations.interface";
@@ -19,7 +19,7 @@ export class OrganizationsService {
   organizations$ = this.http.get<Organization[]>(this.url).pipe(
     tap(data => console.log("getOrganizations: ", JSON.stringify(data))),
     shareReplay(),
-    catchError(err => "Error Alert")
+    catchError(this.handleError)
   );
 
   selectedOrganization$ = combineLatest([
@@ -33,7 +33,7 @@ export class OrganizationsService {
     ),
     tap(product => console.log("selectedProduct", product)),
     shareReplay(1),
-    catchError(err => "oops")
+    catchError(this.handleError)
   );
 
   constructor(private http: HttpClient) {}
@@ -54,7 +54,6 @@ export class OrganizationsService {
 
   changeSelectedOrganization(slug: string | null): void {
     this.organizationSelectedAction.next(slug);
-    console.log("slug: ", slug);
   }
 
   deleteOrganization(slug: string) {
@@ -71,5 +70,10 @@ export class OrganizationsService {
       .getValue()
       .concat([organization]);
     this.organizations.next(newOrganizations);
+  }
+
+  private handleError(err) {
+    console.error(err);
+    return throwError("There was an error: ", err);
   }
 }
