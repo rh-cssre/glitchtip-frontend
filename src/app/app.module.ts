@@ -6,13 +6,13 @@ import {
   HTTP_INTERCEPTORS
 } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatButtonModule } from "@angular/material/button";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
 import { AuthModule } from "./api/auth/auth.module";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +26,7 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN"
     }),
-    MatButtonModule
+    SharedModule
   ],
   providers: [
     {

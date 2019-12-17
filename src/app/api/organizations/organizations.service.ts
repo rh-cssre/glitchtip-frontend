@@ -31,7 +31,7 @@ export class OrganizationsService {
         organization => organization.slug === selectedOrganizationSlug
       )
     ),
-    tap(product => console.log("selectedProduct", product)),
+    tap(organization => console.log("selectedOrg", organization)),
     shareReplay(1),
     catchError(this.handleError)
   );
