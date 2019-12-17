@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
-import { tap } from "rxjs/operators";
+import { BehaviorSubject, combineLatest, throwError } from "rxjs";
+import { tap, shareReplay, catchError, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
-import { Organization, OrganizationNew } from "./organizations.interface";
+import { Organization } from "./organizations.interface";
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +11,30 @@ import { Organization, OrganizationNew } from "./organizations.interface";
 export class OrganizationsService {
   private organizations = new BehaviorSubject<Organization[]>([]);
   getOrganizations = this.organizations.asObservable();
+
+  private organizationSelectedAction = new BehaviorSubject<string>("");
+
   url = baseUrl + "/organizations/";
+
+  organizations$ = this.http.get<Organization[]>(this.url).pipe(
+    tap(data => console.log("getOrganizations: ", JSON.stringify(data))),
+    shareReplay(),
+    catchError(this.handleError)
+  );
+
+  selectedOrganization$ = combineLatest([
+    this.organizationSelectedAction,
+    this.organizations$
+  ]).pipe(
+    map(([selectedOrganizationSlug, organizations]) =>
+      organizations.find(
+        organization => organization.slug === selectedOrganizationSlug
+      )
+    ),
+    tap(product => console.log("selectedProduct", product)),
+    shareReplay(1),
+    catchError(this.handleError)
+  );
 
   constructor(private http: HttpClient) {}
 
@@ -24,15 +47,13 @@ export class OrganizationsService {
       .pipe(tap(newOrganziaton => this.addOneOrganization(newOrganziaton)));
   }
 
-  retrieveOrganizations() {
-    return this.http
-      .get<Organization[]>(this.url)
-      .pipe(tap(organizations => this.setOrganizations(organizations)));
-  }
-
   retrieveOrganizationDetail(slug: string) {
     const url = `${this.url}${slug}/`;
     return this.http.get<Organization>(url);
+  }
+
+  changeSelectedOrganization(slug: string | null): void {
+    this.organizationSelectedAction.next(slug);
   }
 
   deleteOrganization(slug: string) {
@@ -49,5 +70,10 @@ export class OrganizationsService {
       .getValue()
       .concat([organization]);
     this.organizations.next(newOrganizations);
+  }
+
+  private handleError(err) {
+    console.error(err);
+    return throwError("There was an error: ", err);
   }
 }
