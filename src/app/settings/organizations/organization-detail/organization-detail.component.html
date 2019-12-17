@@ -1,15 +1,14 @@
-<app-organizations>
-  <section>
-    <header>
-      <h2>Organization Detail</h2>
-      <!-- <button (click)="goToOrganizations()" mat-flat-button color="accent">
+<section>
+  <header>
+    <h2>Organization Detail</h2>
+    <!-- <button (click)="goToOrganizations()" mat-flat-button color="accent">
       view all organizations
     </button> -->
-    </header>
-    <p>{{ organization$ | async | json }}</p>
-    <p>{{ error$ | async }}</p>
+  </header>
+  <p>{{ organization$ | async | json }}</p>
+  <p>{{ error$ | async }}</p>
 
-    <!-- <mat-card>
+  <!-- <mat-card>
     <mat-card-header><mat-card-title>General</mat-card-title></mat-card-header>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -46,5 +45,4 @@
       </button></mat-card-actions
     ></mat-card
   > -->
-  </section>
-</app-organizations>
+</section>

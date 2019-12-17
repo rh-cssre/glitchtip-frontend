@@ -10,6 +10,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
 
 // Components
 import { ProjectsComponent } from "./projects/projects.component";
@@ -18,7 +19,6 @@ import { ProjectDetailComponent } from "./projects/project-detail/project-detail
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
-import { OrganizationShellComponent } from "./organizations/organization-shell/organization-shell.component";
 
 @NgModule({
   imports: [
@@ -29,7 +29,8 @@ import { OrganizationShellComponent } from "./organizations/organization-shell/o
     MatButtonModule,
     MatCheckboxModule,
     MatCardModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatListModule
   ],
   declarations: [
     ProjectsComponent,
@@ -37,8 +38,7 @@ import { OrganizationShellComponent } from "./organizations/organization-shell/o
     ProjectDetailComponent,
     OrganizationsComponent,
     OrganizationDetailComponent,
-    SettingsComponent,
-    OrganizationShellComponent
+    SettingsComponent
   ]
 })
 export class SettingsModule {}

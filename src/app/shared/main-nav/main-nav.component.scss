@@ -1,5 +1,11 @@
-.mat-list-item {
+.mat-list-item,
+.mat-subheader {
   color: white;
+}
+
+mat-divider {
+  margin: 10px 0;
+  border-top-color: #916dd1;
 }
 
 .organization {

@@ -1,12 +1,8 @@
 <nav>
   <mat-nav-list>
-    <a
-      mat-list-item
-      class="organization"
-      color="accent"
-      [matMenuTriggerFor]="menu"
-    >
-      <span>Select Organization</span>
+    <h3 mat-subheader>Select Organization</h3>
+    <a mat-list-item color="accent" [matMenuTriggerFor]="menu">
+      <span>&gt;</span>
       <span *ngIf="selectedOrganization$ | async as selectedOrganization">
         {{ selectedOrganization.name }}
       </span>
@@ -24,7 +20,7 @@
         Create New Organization
       </button>
     </mat-menu>
-
+    <mat-divider></mat-divider>
     <!-- <a mat-list-item routerLink=".">Projects</a> -->
     <a mat-list-item routerLink="/issues" routerLinkActive="active-route"
       >Issues</a
