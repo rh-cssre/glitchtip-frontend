@@ -17,18 +17,12 @@ describe("AppComponent (Marketing)", () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'marketing'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual("marketing");
-  });
-
   it("should render title", () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector(".content span").textContent).toContain(
-      "marketing app is running!"
+    expect(compiled.querySelector(".content p").textContent).toContain(
+      "We want a quality open source product"
     );
   });
 });
