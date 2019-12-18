@@ -1,11 +1,15 @@
 import { TestBed } from "@angular/core/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 
 import { LoginService } from "./login.service";
+import { AuthModule } from "../api/auth/auth.module";
 
-describe("AuthService", () => {
+describe("Auth Login Service", () => {
   beforeEach(() =>
-    TestBed.configureTestingModule({ imports: [HttpClientTestingModule] })
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule, AuthModule]
+    })
   );
 
   it("should be created", () => {

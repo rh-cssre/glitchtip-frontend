@@ -1,6 +1,13 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
 import { ProjectsComponent } from "./projects.component";
+import { SettingsComponent } from "../settings/settings.component";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ProjectsComponent", () => {
   let component: ProjectsComponent;
@@ -8,7 +15,16 @@ describe("ProjectsComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent]
+      declarations: [ProjectsComponent, SettingsComponent],
+      imports: [
+        MatButtonModule,
+        MatCardModule,
+        NoopAnimationsModule,
+        RouterTestingModule,
+        MatSidenavModule,
+        MatListModule,
+        HttpClientTestingModule
+      ]
     }).compileComponents();
   }));
 

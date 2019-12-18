@@ -1,10 +1,13 @@
 import { TestBed, async } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatCardModule } from "@angular/material/card";
 
-describe("AppComponent", () => {
+describe("AppComponent (Marketing)", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent]
+      declarations: [AppComponent],
+      imports: [MatToolbarModule, MatCardModule]
     }).compileComponents();
   }));
 

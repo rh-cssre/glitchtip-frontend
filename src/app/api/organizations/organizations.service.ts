@@ -5,10 +5,25 @@ import { tap, shareReplay, catchError, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization } from "./organizations.interface";
 
+interface OrganizationsState {
+  organizations: Organization[];
+  activeOrganizationId: number | null;
+}
+
+const initialState: OrganizationsState = {
+  organizations: [],
+  activeOrganizationId: null
+};
+
 @Injectable({
   providedIn: "root"
 })
 export class OrganizationsService {
+  // private organizationsData = new BehaviorSubject<OrganizationsState>(initialState);
+  // data = this.organizationsData.asObservable();
+  // organizations = this.data.pipe(map(data => data.organizations));
+  // activeOrganizationId = this.data.pipe(map(data => data.activeOrganizationId));
+
   private organizations = new BehaviorSubject<Organization[]>([]);
   getOrganizations = this.organizations.asObservable();
 
