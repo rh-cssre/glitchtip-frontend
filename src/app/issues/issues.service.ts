@@ -1,17 +1,46 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
+import { BehaviorSubject, Subject } from "rxjs";
+import { tap, catchError, map } from "rxjs/operators";
 import { Issue, IStatus } from "./interfaces";
 import { baseUrl } from "../constants";
+
+interface IssuesState {
+  issues: Issue[];
+  selectedIssues: number[];
+  issueCount: number | null;
+  page: number | null;
+  nextPage: string | null;
+  previousPage: string | null;
+}
+
+const initialState: IssuesState = {
+  issues: [],
+  selectedIssues: [],
+  issueCount: null,
+  page: null,
+  nextPage: null,
+  previousPage: null
+};
 
 @Injectable({
   providedIn: "root"
 })
 export class IssuesService {
-  private issues = new BehaviorSubject<Issue[]>([]);
-  getIssues = this.issues.asObservable();
-  url = baseUrl + "/issues/";
+  private issuesState = new BehaviorSubject<IssuesState>(initialState);
+  private getState$ = this.issuesState.asObservable();
+  private url = baseUrl + "/issues/";
+
+  issues$ = this.getState$.pipe(map(state => state.issues));
+  issueCount$ = this.getState$.pipe(map(state => state.issueCount));
+  hasNextPage$ = this.getState$.pipe(map(state => state.nextPage !== null));
+  hasPreviousPage$ = this.getState$.pipe(
+    map(state => state.previousPage !== null)
+  );
+
+  getNextPage = new Subject();
+  getPreviousPage = new Subject();
+  getFirstPage = new Subject();
 
   constructor(private http: HttpClient) {}
 
@@ -30,7 +59,7 @@ export class IssuesService {
     );
   }
 
-  setIssues(issues: Issue[]) {
-    this.issues.next(issues);
+  private setIssues(issues: Issue[]) {
+    this.issuesState.next({ ...this.issuesState.getValue(), issues });
   }
 }

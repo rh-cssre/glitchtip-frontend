@@ -21,16 +21,10 @@
     Ignore issue
   </button>
   <mat-error *ngIf="error">{{ error }}</mat-error>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table mat-table [dataSource]="issues$" class="mat-elevation-z8">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox
-          (change)="$event ? masterToggle() : null"
-          [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()"
-          [aria-label]="checkboxLabel()"
-        >
-        </mat-checkbox>
+        <mat-checkbox> </mat-checkbox>
       </th>
       <td class="select-cell" mat-cell *matCellDef="let row">
         <form [formGroup]="form">
@@ -38,7 +32,6 @@
             (click)="$event.stopPropagation()"
             (change)="$event ? selection.toggle(row) : null"
             [checked]="selection.isSelected(row)"
-            [aria-label]="checkboxLabel(row)"
             formControlName="status"
           >
           </mat-checkbox>
@@ -73,4 +66,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+
+  {{ hasNextPage$ | async }}
+  <button (click)="getNextPage()">Next</button>
 </section>
