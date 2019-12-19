@@ -25,12 +25,7 @@ export class NewOrganizationsComponent {
       this.organizationsService
         .createOrganization(this.form.value.name)
         .subscribe(
-          organization =>
-            this.router.navigate([
-              "settings",
-              "organizations",
-              organization.slug
-            ]),
+          organization => this.router.navigate(["settings", organization.slug]),
           err => {
             this.loading = false;
             this.error = "Error";

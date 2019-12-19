@@ -1,8 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { Observable, of, Subject } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { Organization } from "src/app/api/organizations/organizations.interface";
 
 @Component({
   selector: "app-main-nav",
@@ -11,29 +8,15 @@ import { Organization } from "src/app/api/organizations/organizations.interface"
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainNavComponent {
-  error$ = new Subject<string>();
+  activeOrganizationDetail$ = this.organizationsService
+    .activeOrganizationDetail$;
+  organizations$ = this.organizationsService.organziations$;
 
-  selectedOrganization$: Observable<
-    Organization
-  > = this.organizationsService.selectedOrganization$.pipe(
-    catchError(error => {
-      this.error$.next(error);
-      return of(null);
-    })
-  );
+  constructor(private organizationsService: OrganizationsService) {
+    this.organizationsService.retrieveOrganizations().subscribe();
+  }
 
-  organizations$: Observable<
-    Organization[]
-  > = this.organizationsService.organizations$.pipe(
-    catchError(error => {
-      this.error$.next(error);
-      return of(null);
-    })
-  );
-
-  constructor(private organizationsService: OrganizationsService) {}
-
-  setOrganization(orgSlug: string) {
-    this.organizationsService.changeSelectedOrganization(orgSlug);
+  setOrganization(id: number) {
+    this.organizationsService.retrieveOrganizationDetail(id);
   }
 }

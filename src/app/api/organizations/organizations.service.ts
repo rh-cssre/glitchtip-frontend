@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, combineLatest, throwError } from "rxjs";
+import { BehaviorSubject, combineLatest, throwError, Subject } from "rxjs";
 import { tap, shareReplay, catchError, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization } from "./organizations.interface";
@@ -19,36 +19,29 @@ const initialState: OrganizationsState = {
   providedIn: "root"
 })
 export class OrganizationsService {
-  // private organizationsData = new BehaviorSubject<OrganizationsState>(initialState);
-  // data = this.organizationsData.asObservable();
-  // organizations = this.data.pipe(map(data => data.organizations));
-  // activeOrganizationId = this.data.pipe(map(data => data.activeOrganizationId));
-
-  private organizations = new BehaviorSubject<Organization[]>([]);
-  getOrganizations = this.organizations.asObservable();
-
-  private organizationSelectedAction = new BehaviorSubject<string>("");
-
-  url = baseUrl + "/organizations/";
-
-  organizations$ = this.http.get<Organization[]>(this.url).pipe(
-    tap(data => console.log("getOrganizations: ", JSON.stringify(data))),
-    shareReplay(),
-    catchError(this.handleError)
+  private organizationsState = new BehaviorSubject<OrganizationsState>(
+    initialState
   );
+  private getState$ = this.organizationsState.asObservable();
+  private url = baseUrl + "/organizations/";
 
-  selectedOrganization$ = combineLatest([
-    this.organizationSelectedAction,
-    this.organizations$
+  organziations$ = this.getState$.pipe(map(data => data.organizations));
+  activeOrganization$ = this.getState$.pipe(
+    map(data => data.activeOrganizationId),
+    tap(organization =>
+      console.log("active organization number: ", organization)
+    )
+  );
+  activeOrganizationDetail$ = combineLatest([
+    this.organziations$,
+    this.activeOrganization$
   ]).pipe(
-    map(([selectedOrganizationSlug, organizations]) =>
-      organizations.find(
-        organization => organization.slug === selectedOrganizationSlug
-      )
+    map(([organizations, activeOrganization]) =>
+      organizations.find(organization => organization.id === activeOrganization)
     ),
-    tap(organization => console.log("selectedOrg", organization)),
-    shareReplay(1),
-    catchError(this.handleError)
+    tap(organization =>
+      console.log("active organization deets: ", organization)
+    )
   );
 
   constructor(private http: HttpClient) {}
@@ -57,18 +50,24 @@ export class OrganizationsService {
     const data = {
       name
     };
-    return this.http
-      .post<Organization>(this.url, data)
-      .pipe(tap(newOrganziaton => this.addOneOrganization(newOrganziaton)));
+    return this.http.post<Organization>(this.url, data);
   }
 
-  retrieveOrganizationDetail(slug: string) {
-    const url = `${this.url}${slug}/`;
-    return this.http.get<Organization>(url);
+  retrieveOrganizations() {
+    return this.http.get<Organization[]>(this.url).pipe(
+      tap(organizations => {
+        this.setOrganizations(organizations),
+          console.log("retrieveOrganizations: ", organizations);
+      })
+    );
   }
 
-  changeSelectedOrganization(slug: string | null): void {
-    this.organizationSelectedAction.next(slug);
+  retrieveOrganizationDetail(activeOrganizationId: number | null) {
+    this.setActiveOrganizationId(activeOrganizationId);
+  }
+
+  updateOrganization() {
+    console.log("TODO: update org");
   }
 
   deleteOrganization(slug: string) {
@@ -76,19 +75,18 @@ export class OrganizationsService {
     return this.http.delete(url);
   }
 
-  setOrganizations(organizations: Organization[]) {
-    this.organizations.next(organizations);
+  private setOrganizations(organizations: Organization[]) {
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      organizations
+    });
   }
 
-  private addOneOrganization(organization: Organization) {
-    const newOrganizations = this.organizations
-      .getValue()
-      .concat([organization]);
-    this.organizations.next(newOrganizations);
-  }
-
-  private handleError(err) {
-    console.error(err);
-    return throwError("There was an error: ", err);
+  private setActiveOrganizationId(activeOrganizationId: number | null) {
+    console.log("setActiveOrganizationId ", activeOrganizationId);
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      activeOrganizationId
+    });
   }
 }

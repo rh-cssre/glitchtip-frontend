@@ -5,8 +5,9 @@
       view all organizations
     </button> -->
   </header>
-  <p>{{ organization$ | async | json }}</p>
-  <p>{{ error$ | async }}</p>
+  <div *ngIf="activeOrganizationDetail$ | async as orgDetails">
+    Name: {{ orgDetails.name }}
+  </div>
 
   <!-- <mat-card>
     <mat-card-header><mat-card-title>General</mat-card-title></mat-card-header>

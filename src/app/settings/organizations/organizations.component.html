@@ -3,12 +3,13 @@
     <h1>Organizations</h1>
     <div>
       <p>Select organization to edit</p>
-      <a
+      <button
         *ngFor="let organization of organizations$ | async"
-        (click)="onSelected(organization.slug)"
+        (click)="onSelected(organization.id)"
         mat-button
-        >{{ organization.name }}</a
       >
+        {{ organization.name }}
+      </button>
     </div>
   </section>
   <section>

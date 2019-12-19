@@ -2,15 +2,14 @@
   <mat-nav-list>
     <h3 mat-subheader>Select Organization</h3>
     <a mat-list-item color="accent" [matMenuTriggerFor]="menu">
-      <span>&gt;</span>
-      <span *ngIf="selectedOrganization$ | async as selectedOrganization">
-        {{ selectedOrganization.name }}
+      <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
+        {{ orgDetails.name }}
       </span>
     </a>
     <mat-menu #menu="matMenu">
       <button
         *ngFor="let organization of organizations$ | async"
-        (click)="setOrganization(organization.slug)"
+        (click)="setOrganization(organization.id)"
         mat-menu-item
       >
         {{ organization.name }}

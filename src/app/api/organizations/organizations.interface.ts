@@ -5,5 +5,6 @@ export interface OrganizationNew {
 }
 
 export interface Organization extends OrganizationNew {
+  id: number;
   dateCreated: string;
 }
