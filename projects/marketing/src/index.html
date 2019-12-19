@@ -4,7 +4,19 @@
     <meta charset="utf-8" />
     <title>GlitchTip</title>
     <base href="/" />
+    <link rel="canonical" href="https://glitchtip.com/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- OpenGraph -->
+    <meta property="og:site_name" content="GlitchTip" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GlitchTip" />
+    <meta
+      property="og:description"
+      content="GlitchTip is an open source, Sentry API compatible error tracking platform."
+    />
+    <meta property="og:url" content="https://glitchtip.com" />
+    <!--meta property="og:image" content="">-->
   </head>
   <body>
     <app-root></app-root>
@@ -52,5 +64,13 @@
       })();
     </script>
     <!-- End Matomo Code -->
+
+    <script>
+      var currentUrl = window.location.toString();
+      var www = "www.";
+      if (currentUrl.includes(www)) {
+        window.location.replace(currentUrl.replace(www, ""));
+      }
+    </script>
   </body>
 </html>
