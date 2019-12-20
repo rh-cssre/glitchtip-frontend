@@ -1,4 +1,4 @@
-@import "../assets/styles/variables";
+@import "../../../../src/assets/styles/variables";
 
 .logo-test {
   font-family: mat-font-family($custom-typography);
@@ -76,6 +76,7 @@
   background: -webkit-linear-gradient(to left, #8a2387, #e94057, #f27121);
   background: linear-gradient(to left, #8a2387, #e94057, #f27121);
   background-clip: border-box;
+  font-style: italic;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   box-decoration-break: clone;

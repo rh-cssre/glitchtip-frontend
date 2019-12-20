@@ -1,0 +1,49 @@
+@font-face {
+  font-family: "Plex Sans";
+  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
+      format("woff2"),
+    url("#{$font-path}/plex-sans/woff/IBMPlexSans-Regular-Latin1.woff")
+      format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plex Sans";
+  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
+      format("woff2"),
+    url("#{$font-path}/plex-sans/woff/IBMPlexSans-Medium-Latin1.woff")
+      format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Plex Sans";
+  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
+      format("woff2"),
+    url("#{$font-path}/plex-sans/woff/IBMPlexSans-BoldItalic-Latin1.woff")
+      format("woff");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Plex Serif";
+  src: url("#{$font-path}/plex-serif/woff2/IBMPlexSerif-Bold-Latin1.woff2")
+      format("woff2"),
+    url("#{$font-path}/plex-serif/woff/IBMPlexSerif-Bold-Latin1.woff")
+      format("woff");
+  font-weight: 700;
+  font-style: regular;
+}
+
+@font-face {
+  font-family: "Plex Serif";
+  src: url("#{$font-path}/plex-serif/woff2/IBMPlexSerif-BoldItalic-Latin1.woff2")
+      format("woff2"),
+    url("#{$font-path}/plex-serif/woff/IBMPlexSerif-BoldItalic-Latin1.woff")
+      format("woff");
+  font-weight: 700;
+  font-style: italic;
+}
