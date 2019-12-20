@@ -10,11 +10,12 @@ import {
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
 
-// Material
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { MatButtonModule } from "@angular/material/button";
-import { MatToolbarModule } from "@angular/material/toolbar";
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSidenavModule,
+  MatButtonModule,
+  MatToolbarModule
+} from "@angular/material";
 
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
