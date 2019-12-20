@@ -7,14 +7,12 @@ $font-path: "../../../src/assets/fonts";
 // Common styles for Angular Material. Included so that we only have to load a
 // single CSS file for Angular Material in our app.
 // Don't include this anywhere else!
-@include mat-core();
+@include mat-core($custom-typography);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($candy-app-theme);
-
-@include mat-base-typography($custom-typography);
 
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
