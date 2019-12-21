@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
 import { Issue, IStatus } from "./interfaces";
 import { baseUrl } from "../constants";
@@ -38,16 +38,29 @@ export class IssuesService {
     map(state => state.previousPage !== null)
   );
 
-  getNextPage = new Subject();
-  getPreviousPage = new Subject();
-  getFirstPage = new Subject();
-
   constructor(private http: HttpClient) {}
 
-  retrieveIssues() {
+  getNextPage() {
+    this.retrieveIssues(this.issuesState.getValue().nextPage).toPromise();
+  }
+
+  getPreviousPage() {
+    this.retrieveIssues(this.issuesState.getValue().previousPage).toPromise();
+  }
+
+  retrieveInitialIssues() {
+    return this.retrieveIssues(this.url);
+  }
+
+  private retrieveIssues(url: string) {
     return this.http
-      .get<Issue[]>(this.url)
-      .pipe(tap(issues => this.setIssues(issues)));
+      .get<Issue[]>(url, { observe: "response" })
+      .pipe(
+        tap(resp => {
+          this.setIssues(resp.body);
+          this.setPagination(resp.headers.get("link"));
+        })
+      );
   }
 
   updateStatus(id: number, status: IStatus) {
@@ -61,5 +74,22 @@ export class IssuesService {
 
   private setIssues(issues: Issue[]) {
     this.issuesState.next({ ...this.issuesState.getValue(), issues });
+  }
+
+  private setPagination(linkHeader: string) {
+    let parts: { [key: string]: string } = linkHeader
+      .split(",")
+      .reduce((acc, link) => {
+        let match = link.match(/<(.*)>; rel="(\w*)"/);
+        let url = match[1];
+        let rel = match[2];
+        acc[rel] = url;
+        return acc;
+      }, {});
+    this.issuesState.next({
+      ...this.issuesState.getValue(),
+      nextPage: parts.next ? parts.next : null,
+      previousPage: parts.prev ? parts.prev : null
+    });
   }
 }

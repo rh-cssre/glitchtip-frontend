@@ -67,6 +67,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
+  <!-- Maybe include conditional class/styling on buttons -->
+  {{ hasPreviousPage$ | async }}
+  <button (click)="getPreviousPage()">Previous</button>
   {{ hasNextPage$ | async }}
   <button (click)="getNextPage()">Next</button>
 </section>

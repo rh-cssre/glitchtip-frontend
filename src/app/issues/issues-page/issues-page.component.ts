@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { IssuesService } from "../issues.service";
@@ -23,15 +22,15 @@ export class IssuesPageComponent {
   hasPreviousPage$ = this.issuesService.hasPreviousPage$;
 
   constructor(private issuesService: IssuesService) {
-    this.issuesService.retrieveIssues().subscribe();
+    this.issuesService.retrieveInitialIssues().subscribe();
   }
 
   getNextPage() {
-    this.issuesService.getNextPage.next();
+    this.issuesService.getNextPage();
   }
 
   getPreviousPage() {
-    this.issuesService.getPreviousPage.next();
+    this.issuesService.getPreviousPage();
   }
 
   onSubmit(status: string) {
