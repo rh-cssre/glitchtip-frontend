@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
-import { Issue, IStatus } from "./interfaces";
+import { Issue, IStatus, IssueWithSelected, IssueStatus } from "./interfaces";
 import { baseUrl } from "../constants";
 
 interface IssuesState {
@@ -32,6 +32,21 @@ export class IssuesService {
   private url = baseUrl + "/issues/";
 
   issues$ = this.getState$.pipe(map(state => state.issues));
+  selectedIssues$ = this.getState$.pipe(map(state => state.selectedIssues));
+  issuesWithSelected$: Observable<IssueWithSelected[]> = combineLatest(
+    this.issues$,
+    this.selectedIssues$,
+    (issues, selectedIssues) =>
+      issues.map(issue => ({
+        ...issue,
+        isSelected: selectedIssues.includes(issue.id) ? true : false
+      }))
+  );
+  areAllSelected$ = combineLatest(
+    this.issues$,
+    this.selectedIssues$,
+    (issues, selectedIssues) => issues.length === selectedIssues.length
+  );
   issueCount$ = this.getState$.pipe(map(state => state.issueCount));
   hasNextPage$ = this.getState$.pipe(map(state => state.nextPage !== null));
   hasPreviousPage$ = this.getState$.pipe(
@@ -52,6 +67,37 @@ export class IssuesService {
     return this.retrieveIssues(this.url);
   }
 
+  toggleSelected(issueId: number) {
+    const state = this.issuesState.getValue();
+    let selectedIssues: number[];
+    if (state.selectedIssues.includes(issueId)) {
+      selectedIssues = state.selectedIssues.filter(issue => issue !== issueId);
+    } else {
+      selectedIssues = state.selectedIssues.concat([issueId]);
+    }
+    this.issuesState.next({ ...state, selectedIssues });
+  }
+
+  toggleSelectAll() {
+    const state = this.issuesState.getValue();
+    if (state.issues.length === state.selectedIssues.length) {
+      this.issuesState.next({
+        ...state,
+        selectedIssues: []
+      });
+    } else {
+      this.issuesState.next({
+        ...state,
+        selectedIssues: state.issues.map(issue => issue.id)
+      });
+    }
+  }
+
+  bulkSetStatus(status: IssueStatus) {
+    const selectedIssues = this.issuesState.getValue().selectedIssues;
+    return this.updateStatus(selectedIssues, status).toPromise();
+  }
+
   private retrieveIssues(url: string) {
     return this.http
       .get<Issue[]>(url, { observe: "response" })
@@ -63,10 +109,14 @@ export class IssuesService {
       );
   }
 
-  updateStatus(id: number, status: IStatus) {
-    const url = `${this.url}${id}/`;
-    console.log("update the following url: ", url, " to ", status);
-    return this.http.put<any>(url, status).pipe(
+  private updateStatus(ids: number[], status: IssueStatus) {
+    const params = {
+      id: ids.map(id => id.toString())
+    };
+    const data = {
+      status: status
+    };
+    return this.http.put(this.url, data, { params }).pipe(
       tap(_ => console.log("updateStatus status: ", _)),
       catchError(err => "error alert")
     );

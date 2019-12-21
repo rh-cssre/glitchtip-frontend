@@ -1,41 +1,32 @@
 <section>
   <h1>Issues</h1>
 
-  <button mat-flat-button color="primary" (click)="onSubmit('resloved')">
+  <button mat-flat-button color="primary" (click)="bulkMarkResolved()">
     Mark as resolved
   </button>
   <button
     style="margin-left: 10px;"
     mat-flat-button
     color="accent"
-    (click)="onSubmit('unresovled')"
+    (click)="bulkMarkResolved()"
   >
     Reopen issue
   </button>
-  <button
-    style="margin-left: 10px;"
-    mat-flat-button
-    color="warn"
-    (click)="onSubmit('ignored')"
-  >
+  <button style="margin-left: 10px;" mat-flat-button color="warn">
     Ignore issue
   </button>
-  <mat-error *ngIf="error">{{ error }}</mat-error>
   <table mat-table [dataSource]="issues$" class="mat-elevation-z8">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox> </mat-checkbox>
+        <mat-checkbox
+          (change)="toggleSelectAll()"
+          [checked]="areAllSelected$ | async"
+        >
+        </mat-checkbox>
       </th>
       <td class="select-cell" mat-cell *matCellDef="let row">
-        <form [formGroup]="form">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="$event ? selection.toggle(row) : null"
-            [checked]="selection.isSelected(row)"
-            formControlName="status"
-          >
-          </mat-checkbox>
-        </form>
+        <mat-checkbox (change)="toggleCheck(row.id)" [checked]="row.isSelected">
+        </mat-checkbox>
       </td>
     </ng-container>
 
