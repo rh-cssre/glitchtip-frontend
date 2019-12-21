@@ -76,6 +76,11 @@ export class IssuesService {
     this.issuesState.next({ ...this.issuesState.getValue(), issues });
   }
 
+  /**
+   * Pagination info exists in a header, parse it out and store it.
+   * Anything with an actual link indicates it has results. This differs just
+   * very slightly from sentry open source.
+   */
   private setPagination(linkHeader: string) {
     let parts: { [key: string]: string } = linkHeader
       .split(",")
