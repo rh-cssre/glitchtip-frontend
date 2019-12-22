@@ -43,13 +43,15 @@ export interface IEvent {
   received_at: string;
 }
 
+export type IssueStatus = "resolved" | "unresolved";
+
 export interface Issue {
   id: number;
   title: string;
   location: string;
-  event: IEvent[];
+  status: IssueStatus;
 }
 
-export interface IStatus {
-  status: string;
+export interface IssueWithSelected extends Issue {
+  isSelected: boolean;
 }
