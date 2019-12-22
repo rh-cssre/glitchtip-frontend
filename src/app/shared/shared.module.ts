@@ -1,27 +1,10 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
-import {
-  MatButtonModule,
-  MatMenuModule,
-  MatDividerModule,
-  MatListModule
-} from "@angular/material";
 
-// Components
-import { MainNavComponent } from "./main-nav/main-nav.component";
-
-export const COMPONENTS = [MainNavComponent];
+export const COMPONENTS = [];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatDividerModule,
-    MatListModule
-  ],
+  imports: [CommonModule],
   declarations: COMPONENTS,
   exports: COMPONENTS
 })
