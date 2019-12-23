@@ -6,9 +6,7 @@ const routes: Routes = [
   {
     path: "",
     loadChildren: () =>
-      import("./main-nav/main-nav-routing.module").then(
-        m => m.MainNavRoutingModule
-      ),
+      import("./main-nav/main-nav.module").then(m => m.MainNavModule),
     canActivate: [IsLoggedInGuard]
   },
   {
