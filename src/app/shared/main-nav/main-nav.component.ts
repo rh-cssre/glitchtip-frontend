@@ -17,6 +17,6 @@ export class MainNavComponent {
   }
 
   setOrganization(id: number) {
-    this.organizationsService.retrieveOrganizationDetail(id);
+    this.organizationsService.changeActiveOrganization(id);
   }
 }

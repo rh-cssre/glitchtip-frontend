@@ -5,7 +5,7 @@ import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 const routes: Routes = [
   { path: "", redirectTo: "settings", pathMatch: "full" },
   {
-    path: "issues",
+    path: "organizations/:slug/issues",
     loadChildren: () =>
       import("./issues/issues.module").then(m => m.IssuesModule),
     canActivate: [IsLoggedInGuard]

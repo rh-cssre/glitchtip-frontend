@@ -14,8 +14,7 @@ export class OrganizationsComponent {
   }
 
   onSelected(orgId: number) {
-    this.organizationsService.retrieveOrganizationDetail(orgId);
-    // this.router.navigate(["./settings", orgSlug]);
+    this.organizationsService.changeActiveOrganization(orgId);
   }
 
   removeOrganization(slug: string) {
