@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, combineLatest, throwError, Subject } from "rxjs";
-import { tap, shareReplay, catchError, map } from "rxjs/operators";
+import { BehaviorSubject, combineLatest } from "rxjs";
+import { tap, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization } from "./organizations.interface";
 
@@ -25,7 +25,7 @@ export class OrganizationsService {
   private getState$ = this.organizationsState.asObservable();
   private url = baseUrl + "/organizations/";
 
-  organziations$ = this.getState$.pipe(map(data => data.organizations));
+  organizations$ = this.getState$.pipe(map(data => data.organizations));
   activeOrganization$ = this.getState$.pipe(
     map(data => data.activeOrganizationId),
     tap(organization =>
@@ -33,7 +33,7 @@ export class OrganizationsService {
     )
   );
   activeOrganizationDetail$ = combineLatest([
-    this.organziations$,
+    this.organizations$,
     this.activeOrganization$
   ]).pipe(
     map(([organizations, activeOrganization]) =>

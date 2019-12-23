@@ -1,6 +1,4 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { SelectionModel } from "@angular/cdk/collections";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { IssuesService } from "../issues.service";
 
 @Component({
