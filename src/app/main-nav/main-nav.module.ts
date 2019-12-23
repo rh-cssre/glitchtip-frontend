@@ -1,21 +1,11 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Routes, RouterModule } from "@angular/router";
-
 import { MainNavComponent } from "../main-nav/main-nav/main-nav.component";
 import { MaterialModule } from "../shared/material.module";
-
-const routes: Routes = [
-  {
-    path: "",
-    component: MainNavComponent
-    // children: [{ path: "", component:  }]
-  },
-  { path: "**", redirectTo: "" }
-];
+import { MainNavRoutingModule } from "./main-nav-routing.module";
 
 @NgModule({
-  imports: [CommonModule, MaterialModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, MaterialModule, MainNavRoutingModule],
   declarations: [MainNavComponent],
   exports: [MainNavComponent]
 })

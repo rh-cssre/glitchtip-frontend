@@ -1,12 +1,9 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  NgZone,
   HostListener
 } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
-
-const SMALL_WIDTH_BREAKPOINT = 720;
 
 @Component({
   selector: "app-main-nav",
@@ -21,10 +18,6 @@ export class MainNavComponent {
   activeOrganizationDetail$ = this.organizationsService
     .activeOrganizationDetail$;
   organizations$ = this.organizationsService.organziations$;
-
-  private mediaMatcher: MediaQueryList = matchMedia(
-    `(max-width: ${SMALL_WIDTH_BREAKPOINT}px)`
-  );
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
-import { Issue, IStatus, IssueWithSelected, IssueStatus } from "./interfaces";
+import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
 import { baseUrl } from "../constants";
 
 interface IssuesState {

@@ -1,7 +1,7 @@
-import { Issue } from "../interfaces";
+// import { Issue } from "../interfaces";
 
-export const sampleIssue: Issue = {
-  id: 1,
-  title: "title",
-  location: "location"
-};
+// export const sampleIssue: Issue = {
+//   id: 1,
+//   title: "title",
+//   location: "location"
+// };

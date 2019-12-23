@@ -3,34 +3,17 @@ import { Routes, RouterModule } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 
 const routes: Routes = [
-  // { path: "", redirectTo: "settings", pathMatch: "full" },
   {
     path: "",
-    loadChildren: "./main-nav/main-nav.module#MainNavModule",
-    canActivate: [IsLoggedInGuard]
-  },
-  {
-    path: "issues",
     loadChildren: () =>
-      import("./issues/issues.module").then(m => m.IssuesModule),
+      import("./main-nav/main-nav-routing.module").then(
+        m => m.MainNavRoutingModule
+      ),
     canActivate: [IsLoggedInGuard]
   },
   {
     path: "login",
     loadChildren: () => import("./login/login.module").then(m => m.LoginModule)
-  },
-  {
-    path: "settings",
-    loadChildren: () =>
-      import("./settings/settings.module").then(m => m.SettingsModule),
-    canActivate: [IsLoggedInGuard]
-  },
-  {
-    path: "organizations/new",
-    loadChildren: () =>
-      import("./new-organization/new-organization.module").then(
-        m => m.NewOrganizationModule
-      )
   }
 ];
 
