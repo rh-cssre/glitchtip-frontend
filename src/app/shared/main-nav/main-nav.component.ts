@@ -12,9 +12,7 @@ export class MainNavComponent {
     .activeOrganizationDetail$;
   organizations$ = this.organizationsService.organizations$;
 
-  constructor(private organizationsService: OrganizationsService) {
-    this.organizationsService.retrieveOrganizations().subscribe();
-  }
+  constructor(private organizationsService: OrganizationsService) {}
 
   setOrganization(id: number) {
     this.organizationsService.changeActiveOrganization(id);

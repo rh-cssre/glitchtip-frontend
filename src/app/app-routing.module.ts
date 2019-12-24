@@ -3,7 +3,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 
 const routes: Routes = [
-  { path: "", redirectTo: "settings", pathMatch: "full" },
   {
     path: "organizations/:slug/issues",
     loadChildren: () =>

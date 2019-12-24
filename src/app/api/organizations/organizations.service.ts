@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { tap, map } from "rxjs/operators";
+import { tap, map, withLatestFrom } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization, OrganizationDetail } from "./organizations.interface";
 import { Router } from "@angular/router";
@@ -30,10 +30,7 @@ export class OrganizationsService {
 
   organizations$ = this.getState$.pipe(map(data => data.organizations));
   activeOrganization$ = this.getState$.pipe(
-    map(data => data.activeOrganizationId),
-    tap(organization =>
-      console.log("active organization number: ", organization)
-    )
+    map(data => data.activeOrganizationId)
   );
   activeOrganizationDetail$ = combineLatest([
     this.organizations$,
@@ -55,9 +52,13 @@ export class OrganizationsService {
 
   retrieveOrganizations() {
     return this.http.get<Organization[]>(this.url).pipe(
-      tap(organizations => {
-        this.setOrganizations(organizations),
-          console.log("retrieveOrganizations: ", organizations);
+      tap(organizations => this.setOrganizations(organizations)),
+      withLatestFrom(this.activeOrganization$),
+      tap(([organizations, activeOrgId]) => {
+        if (activeOrgId === null && organizations.length) {
+          // Set default org
+          this.changeActiveOrganization(organizations[0].id);
+        }
       })
     );
   }

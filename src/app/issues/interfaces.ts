@@ -52,6 +52,8 @@ export interface Issue {
   status: IssueStatus;
 }
 
+export interface IssueDetail extends Issue {}
+
 export interface IssueWithSelected extends Issue {
   isSelected: boolean;
 }
