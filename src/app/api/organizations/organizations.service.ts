@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { Router, RoutesRecognized, Params } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { tap, map, withLatestFrom } from "rxjs/operators";
 import { baseUrl } from "../../constants";
@@ -27,6 +27,7 @@ export class OrganizationsService {
   );
   private readonly getState$ = this.organizationsState.asObservable();
   private readonly url = baseUrl + "/organizations/";
+  private routeParams: Params;
 
   organizations$ = this.getState$.pipe(map(data => data.organizations));
   activeOrganization$ = this.getState$.pipe(
@@ -41,7 +42,13 @@ export class OrganizationsService {
     )
   );
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.router.events.subscribe(val => {
+      if (val instanceof RoutesRecognized && val.state.root.firstChild) {
+        this.routeParams = val.state.root.firstChild.params;
+      }
+    });
+  }
 
   createOrganization(name: string) {
     const data = {
@@ -56,8 +63,15 @@ export class OrganizationsService {
       withLatestFrom(this.activeOrganization$),
       tap(([organizations, activeOrgId]) => {
         if (activeOrgId === null && organizations.length) {
-          // Set default org
-          this.changeActiveOrganization(organizations[0].id);
+          const activeOrg = organizations.find(
+            org => org.slug === this.routeParams["org-slug"]
+          );
+          if (activeOrg) {
+            this.changeActiveOrganization(activeOrg.id);
+          } else {
+            // Set default org
+            this.changeActiveOrganization(organizations[0].id);
+          }
         }
       })
     );
@@ -69,13 +83,7 @@ export class OrganizationsService {
       .getValue()
       .organizations.find(org => org.id === activeOrganizationId);
     if (organization) {
-      this.getOrganizationDetail(organization.slug)
-        .pipe(
-          tap(org =>
-            this.router.navigate(["organizations", org.slug, "issues"])
-          )
-        )
-        .toPromise();
+      this.getOrganizationDetail(organization.slug).toPromise();
     }
   }
 

@@ -4,7 +4,13 @@ import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 
 const routes: Routes = [
   {
-    path: "organizations/:slug/issues",
+    path: "",
+    loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
+    canActivate: [IsLoggedInGuard],
+    pathMatch: "full"
+  },
+  {
+    path: "organizations/:org-slug/issues",
     loadChildren: () =>
       import("./issues/issues.module").then(m => m.IssuesModule),
     canActivate: [IsLoggedInGuard]
@@ -25,6 +31,11 @@ const routes: Routes = [
       import("./new-organization/new-organization.module").then(
         m => m.NewOrganizationModule
       )
+  },
+  {
+    path: "**",
+    redirectTo: "",
+    pathMatch: "full"
   }
 ];
 
