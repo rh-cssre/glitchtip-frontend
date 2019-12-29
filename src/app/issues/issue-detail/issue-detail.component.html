@@ -1,3 +1,9 @@
 <div *ngIf="issue$ | async as issue">
-  {{ issue.title }}
+  {{ issue?.title }}
+
+  <div *ngIf="event$ | async as event">
+    {{ event?.eventId }}
+    <a href="">Older</a> {{ nextEvent$ | async }} <a href="">Newer</a>
+    {{ previousEvent$ | async }}
+  </div>
 </div>

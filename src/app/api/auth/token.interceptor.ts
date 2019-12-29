@@ -11,7 +11,7 @@ import { AuthService } from "./auth.service";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  key: string;
+  key: string | null;
 
   constructor(public auth: AuthService) {
     this.auth.data.subscribe(data => {

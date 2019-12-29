@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { tap, map, withLatestFrom } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization, OrganizationDetail } from "./organizations.interface";
-import { Router } from "@angular/router";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -68,11 +68,15 @@ export class OrganizationsService {
     const organization = this.organizationsState
       .getValue()
       .organizations.find(org => org.id === activeOrganizationId);
-    this.getOrganizationDetail(organization.slug)
-      .pipe(
-        tap(org => this.router.navigate(["organizations", org.slug, "issues"]))
-      )
-      .toPromise();
+    if (organization) {
+      this.getOrganizationDetail(organization.slug)
+        .pipe(
+          tap(org =>
+            this.router.navigate(["organizations", org.slug, "issues"])
+          )
+        )
+        .toPromise();
+    }
   }
 
   updateOrganization() {

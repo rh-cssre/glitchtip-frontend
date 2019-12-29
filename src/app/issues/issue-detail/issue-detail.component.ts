@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { IssueDetailService } from "./issue-detail.service";
 import { ActivatedRoute } from "@angular/router";
 import { map, exhaustMap, tap } from "rxjs/operators";
+import { EMPTY } from "rxjs";
+import { IssueDetailService } from "./issue-detail.service";
 
 @Component({
   selector: "app-issue-detail",
@@ -11,6 +12,10 @@ import { map, exhaustMap, tap } from "rxjs/operators";
 })
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
+  event$ = this.issueService.event$;
+  nextEvent$ = this.issueService.hasNextEvent$;
+  previousEvent$ = this.issueService.hasPreviousEvent$;
+
   constructor(
     private issueService: IssueDetailService,
     private route: ActivatedRoute
@@ -21,8 +26,21 @@ export class IssueDetailComponent implements OnInit {
       .pipe(
         map(params => params.get("issue-id")),
         tap(() => this.issueService.clearState()),
-        exhaustMap(issueId => this.issueService.retrieveIssue(+issueId))
+        exhaustMap(issueId => {
+          if (issueId) {
+            return this.issueService.retrieveIssue(+issueId);
+          }
+          return EMPTY;
+        })
       )
       .subscribe();
+  }
+
+  getNextEvent() {
+    this.issueService.getNextEvent();
+  }
+
+  getPreviousEvent() {
+    this.issueService.getPreviousEvent();
   }
 }

@@ -1,5 +1,5 @@
-export interface IEvent {
-  event_id: string;
+export interface Event {
+  eventId: string;
   exception: {
     values: [
       {
@@ -41,6 +41,11 @@ export interface IEvent {
   };
   breadcrumbs: any;
   received_at: string;
+}
+
+export interface EventDetail extends Event {
+  nextEventID: string | null;
+  previousEventID: string | null;
 }
 
 export type IssueStatus = "resolved" | "unresolved";

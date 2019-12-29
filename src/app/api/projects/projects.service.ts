@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { BehaviorSubject, of } from "rxjs";
+import { BehaviorSubject, of, EMPTY } from "rxjs";
 import { tap, catchError, map, exhaustMap } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { ProjectNew, Project } from "./projects.interfaces";
@@ -48,14 +48,17 @@ export class ProjectsService {
   deleteProject(projectId: number) {
     return this.projects.pipe(
       map(projects => projects.find(project => project.id === projectId)),
-      exhaustMap(project =>
-        this.http
-          .delete(`${this.url}${project.organization.slug}/${project.slug}/`)
-          .pipe(
-            map(() => this.removeOneProject(projectId)),
-            catchError((err: HttpErrorResponse) => of(err))
-          )
-      )
+      exhaustMap(project => {
+        if (project) {
+          return this.http
+            .delete(`${this.url}${project.organization.slug}/${project.slug}/`)
+            .pipe(
+              map(() => this.removeOneProject(projectId)),
+              catchError((err: HttpErrorResponse) => of(err))
+            );
+        }
+        return EMPTY;
+      })
     );
   }
 
