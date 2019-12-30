@@ -37,6 +37,11 @@ const routes: Routes = [
         canActivate: [IsLoggedInGuard]
       }
     ]
+  },
+  {
+    path: "**",
+    redirectTo: "",
+    pathMatch: "full"
   }
 ];
 
