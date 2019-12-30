@@ -8,7 +8,7 @@
     <mat-toolbar routerLink="." color="primary">
       GlitchTip
     </mat-toolbar>
-    <mat-list>
+    <mat-nav-list>
       <h3 mat-subheader>Select Organization</h3>
       <mat-list-item color="accent" [matMenuTriggerFor]="menu">
         <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
@@ -24,7 +24,7 @@
           {{ organization.name }}
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item routerLink="organizations/new">
+        <button mat-menu-item routerLink="/organizations/new">
           Create New Organization
         </button>
       </mat-menu>
@@ -48,7 +48,7 @@
           >Settings</a
         >
       </ng-container>
-    </mat-list>
+    </mat-nav-list>
   </mat-sidenav>
 
   <div class="app-sidenav-content">
