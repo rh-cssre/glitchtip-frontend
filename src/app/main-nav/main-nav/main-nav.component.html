@@ -32,12 +32,12 @@
       <ng-container *ngIf="activeOrganizationDetail$ | async as orgDetails">
         <a
           mat-list-item
-          [routerLink]="['/organizations', orgDetails?.slug, '/projects']"
+          [routerLink]="['/organizations', orgDetails?.slug, 'projects']"
           >Projects</a
         >
         <a
           mat-list-item
-          [routerLink]="['/organizations', orgDetails?.slug, '/issues']"
+          [routerLink]="['/organizations', orgDetails?.slug, 'issues']"
           routerLinkActive="active-route"
           >Issues</a
         >
