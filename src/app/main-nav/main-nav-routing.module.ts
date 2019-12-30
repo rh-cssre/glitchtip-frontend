@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { MainNavComponent } from "./main-nav/main-nav.component";
-import { IsLoggedInGuard } from "../guards/is-logged-in.guard";
 
 const routes: Routes = [
   {
@@ -9,24 +8,27 @@ const routes: Routes = [
     component: MainNavComponent,
     children: [
       {
-        path: "settings",
+        path: "",
         loadChildren: () =>
-          import("../settings/settings.module").then(m => m.SettingsModule),
-        canActivate: [IsLoggedInGuard]
+          import("../home/home.module").then(m => m.HomeModule),
+        pathMatch: "full"
       },
       {
-        path: "issues",
+        path: "settings",
         loadChildren: () =>
-          import("../issues/issues.module").then(m => m.IssuesModule),
-        canActivate: [IsLoggedInGuard]
+          import("../settings/settings.module").then(m => m.SettingsModule)
+      },
+      {
+        path: "organizations/:org-slug/issues",
+        loadChildren: () =>
+          import("../issues/issues.module").then(m => m.IssuesModule)
       },
       {
         path: "organizations/new",
         loadChildren: () =>
           import("../new-organization/new-organization.module").then(
             m => m.NewOrganizationModule
-          ),
-        canActivate: [IsLoggedInGuard]
+          )
       }
     ]
   }
