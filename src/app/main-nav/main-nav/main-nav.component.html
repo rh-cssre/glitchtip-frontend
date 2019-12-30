@@ -1,0 +1,69 @@
+<mat-sidenav-container>
+  <mat-sidenav
+    #sidenav
+    class="mat-elevation-z10"
+    [opened]="!isScreenSmall()"
+    [mode]="isScreenSmall() ? 'over' : 'side'"
+  >
+    <mat-toolbar routerLink="." color="primary">
+      GlitchTip
+    </mat-toolbar>
+    <mat-list>
+      <h3 mat-subheader>Select Organization</h3>
+      <mat-list-item color="accent" [matMenuTriggerFor]="menu">
+        <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
+          {{ orgDetails?.name }}
+        </span>
+      </mat-list-item>
+      <mat-menu #menu="matMenu">
+        <button
+          *ngFor="let organization of organizations$ | async"
+          (click)="setOrganization(organization.id)"
+          mat-menu-item
+        >
+          {{ organization.name }}
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="organizations/new">
+          Create New Organization
+        </button>
+      </mat-menu>
+      <mat-divider></mat-divider>
+      <ng-container *ngIf="activeOrganizationDetail$ | async as orgDetails">
+        <a
+          mat-list-item
+          [routerLink]="['organizations', orgDetails?.slug, 'projects']"
+          >Projects</a
+        >
+        <a
+          mat-list-item
+          [routerLink]="['organizations', orgDetails?.slug, 'issues']"
+          routerLinkActive="active-route"
+          >Issues</a
+        >
+        <a
+          mat-list-item
+          [routerLink]="['settings/', orgDetails?.slug]"
+          routerLinkActive="active-route"
+          >Settings</a
+        >
+      </ng-container>
+    </mat-list>
+  </mat-sidenav>
+
+  <div class="app-sidenav-content">
+    <mat-toolbar color="primary">
+      <button mat-button class="sidenav-toggle" (click)="sidenav.toggle()">
+        <!-- <mat-icon>menu</mat-icon> -->
+        Toggle Menu
+      </button>
+
+      <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
+        {{ orgDetails?.name }}
+      </span>
+    </mat-toolbar>
+    <div class="wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</mat-sidenav-container>
