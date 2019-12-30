@@ -7,7 +7,21 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "lintFix": true
+        },
+        "@schematics/angular:class": {
+          "lintFix": true
+        },
+        "@schematics/angular:module": {
+          "lintFix": true
+        },
+        "@schematics/angular:service": {
+          "lintFix": true
+        },
+        "@schematics/angular:directive": {
+          "lintFix": true,
+          "prefix": "app"
         }
       },
       "root": "",
@@ -23,8 +37,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -84,16 +103,26 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
@@ -134,7 +163,9 @@
               "projects/marketing/src/favicon.ico",
               "projects/marketing/src/assets"
             ],
-            "styles": ["projects/marketing/src/styles.scss"],
+            "styles": [
+              "projects/marketing/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -197,7 +228,9 @@
               "projects/marketing/src/favicon.ico",
               "projects/marketing/src/assets"
             ],
-            "styles": ["projects/marketing/src/styles.scss"],
+            "styles": [
+              "projects/marketing/src/styles.scss"
+            ],
             "scripts": []
           }
         },
@@ -209,7 +242,9 @@
               "projects/marketing/tsconfig.spec.json",
               "projects/marketing/e2e/tsconfig.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
