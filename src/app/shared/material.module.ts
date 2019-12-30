@@ -12,7 +12,8 @@ import {
   MatListModule,
   MatMenuModule,
   MatSelectModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatSnackBarModule
 } from "@angular/material";
 
 export const COMPONENTS = [
@@ -24,7 +25,8 @@ export const COMPONENTS = [
   MatListModule,
   MatMenuModule,
   MatSelectModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatSnackBarModule
 ];
 
 @NgModule({

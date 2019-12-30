@@ -1,14 +1,12 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { MatCardModule } from "@angular/material/card";
-import { MatInputModule } from "@angular/material/input";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatTableModule } from "@angular/material/table";
+import { RouterTestingModule } from "@angular/router/testing";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatSelectModule } from "@angular/material/select";
+import { MatTableModule } from "@angular/material";
 
 import { IssuesPageComponent } from "./issues-page.component";
 import { IssueListItemComponent } from "../issue-list-item/issue-list-item.component";
+import { MaterialModule } from "src/app/shared/material.module";
 
 describe("IssuesPageComponent", () => {
   let component: IssuesPageComponent;
@@ -18,13 +16,11 @@ describe("IssuesPageComponent", () => {
     TestBed.configureTestingModule({
       declarations: [IssuesPageComponent, IssueListItemComponent],
       imports: [
-        MatCardModule,
+        MaterialModule,
         HttpClientTestingModule,
-        MatInputModule,
-        MatCheckboxModule,
-        MatTableModule,
+        RouterTestingModule,
         ReactiveFormsModule,
-        MatSelectModule
+        MatTableModule
       ]
     }).compileComponents();
   }));
