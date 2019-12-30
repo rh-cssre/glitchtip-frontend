@@ -1,6 +1,6 @@
 import { Organization } from "../organizations/organizations.interface";
 
-interface ProjectKey {
+export interface ProjectKey {
   label: string;
   public_key: string;
   date_added: string;

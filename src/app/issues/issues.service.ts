@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
-import { Issue, IStatus, IssueWithSelected, IssueStatus } from "./interfaces";
+import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
 import { baseUrl } from "../constants";
 
 interface IssuesState {
@@ -56,11 +56,17 @@ export class IssuesService {
   constructor(private http: HttpClient) {}
 
   getNextPage() {
-    this.retrieveIssues(this.issuesState.getValue().nextPage).toPromise();
+    const nextPage = this.issuesState.getValue().nextPage;
+    if (nextPage) {
+      this.retrieveIssues(nextPage).toPromise();
+    }
   }
 
   getPreviousPage() {
-    this.retrieveIssues(this.issuesState.getValue().previousPage).toPromise();
+    const previousPage = this.issuesState.getValue().previousPage;
+    if (previousPage) {
+      this.retrieveIssues(previousPage).toPromise();
+    }
   }
 
   retrieveInitialIssues() {
@@ -103,8 +109,11 @@ export class IssuesService {
       .get<Issue[]>(url, { observe: "response" })
       .pipe(
         tap(resp => {
-          this.setIssues(resp.body);
-          this.setPagination(resp.headers.get("link"));
+          const linkHeader = resp.headers.get("link");
+          if (resp.body && linkHeader) {
+            this.setIssues(resp.body);
+            this.setPagination(linkHeader);
+          }
         })
       );
   }
@@ -114,7 +123,7 @@ export class IssuesService {
       id: ids.map(id => id.toString())
     };
     const data = {
-      status: status
+      status
     };
     return this.http.put(this.url, data, { params }).pipe(
       tap(_ => console.log("updateStatus status: ", _)),
@@ -132,14 +141,17 @@ export class IssuesService {
    * very slightly from sentry open source.
    */
   private setPagination(linkHeader: string) {
-    let parts: { [key: string]: string } = linkHeader
+    const parts: { [key: string]: string } = linkHeader
       .split(",")
       .reduce((acc, link) => {
-        let match = link.match(/<(.*)>; rel="(\w*)"/);
-        let url = match[1];
-        let rel = match[2];
-        acc[rel] = url;
-        return acc;
+        const match = link.match(/<(.*)>; rel="(\w*)"/);
+        if (match) {
+          const url = match[1];
+          const rel = match[2];
+          acc[rel] = url;
+          return acc;
+        }
+        return "";
       }, {});
     this.issuesState.next({
       ...this.issuesState.getValue(),

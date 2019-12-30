@@ -1,50 +1,54 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, combineLatest, throwError, Subject } from "rxjs";
-import { tap, shareReplay, catchError, map } from "rxjs/operators";
+import { Router, RoutesRecognized, Params } from "@angular/router";
+import { BehaviorSubject, combineLatest } from "rxjs";
+import { tap, map, withLatestFrom } from "rxjs/operators";
 import { baseUrl } from "../../constants";
-import { Organization } from "./organizations.interface";
+import { Organization, OrganizationDetail } from "./organizations.interface";
 
 interface OrganizationsState {
   organizations: Organization[];
   activeOrganizationId: number | null;
+  activeOrganization: OrganizationDetail | null;
 }
 
 const initialState: OrganizationsState = {
   organizations: [],
-  activeOrganizationId: null
+  activeOrganizationId: null,
+  activeOrganization: null
 };
 
 @Injectable({
   providedIn: "root"
 })
 export class OrganizationsService {
-  private organizationsState = new BehaviorSubject<OrganizationsState>(
+  private readonly organizationsState = new BehaviorSubject<OrganizationsState>(
     initialState
   );
-  private getState$ = this.organizationsState.asObservable();
-  private url = baseUrl + "/organizations/";
+  private readonly getState$ = this.organizationsState.asObservable();
+  private readonly url = baseUrl + "/organizations/";
+  private routeParams: Params;
 
-  organziations$ = this.getState$.pipe(map(data => data.organizations));
+  organizations$ = this.getState$.pipe(map(data => data.organizations));
   activeOrganization$ = this.getState$.pipe(
-    map(data => data.activeOrganizationId),
-    tap(organization =>
-      console.log("active organization number: ", organization)
-    )
+    map(data => data.activeOrganizationId)
   );
   activeOrganizationDetail$ = combineLatest([
-    this.organziations$,
+    this.organizations$,
     this.activeOrganization$
   ]).pipe(
     map(([organizations, activeOrganization]) =>
       organizations.find(organization => organization.id === activeOrganization)
-    ),
-    tap(organization =>
-      console.log("active organization deets: ", organization)
     )
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.router.events.subscribe(val => {
+      if (val instanceof RoutesRecognized && val.state.root.firstChild) {
+        this.routeParams = val.state.root.firstChild.params;
+      }
+    });
+  }
 
   createOrganization(name: string) {
     const data = {
@@ -55,15 +59,32 @@ export class OrganizationsService {
 
   retrieveOrganizations() {
     return this.http.get<Organization[]>(this.url).pipe(
-      tap(organizations => {
-        this.setOrganizations(organizations),
-          console.log("retrieveOrganizations: ", organizations);
+      tap(organizations => this.setOrganizations(organizations)),
+      withLatestFrom(this.activeOrganization$),
+      tap(([organizations, activeOrgId]) => {
+        if (activeOrgId === null && organizations.length) {
+          const activeOrg = organizations.find(
+            org => org.slug === this.routeParams["org-slug"]
+          );
+          if (activeOrg) {
+            this.changeActiveOrganization(activeOrg.id);
+          } else {
+            // Set default org
+            this.changeActiveOrganization(organizations[0].id);
+          }
+        }
       })
     );
   }
 
-  retrieveOrganizationDetail(activeOrganizationId: number | null) {
+  changeActiveOrganization(activeOrganizationId: number) {
     this.setActiveOrganizationId(activeOrganizationId);
+    const organization = this.organizationsState
+      .getValue()
+      .organizations.find(org => org.id === activeOrganizationId);
+    if (organization) {
+      this.getOrganizationDetail(organization.slug).toPromise();
+    }
   }
 
   updateOrganization() {
@@ -82,11 +103,23 @@ export class OrganizationsService {
     });
   }
 
-  private setActiveOrganizationId(activeOrganizationId: number | null) {
-    console.log("setActiveOrganizationId ", activeOrganizationId);
+  private setActiveOrganizationId(activeOrganizationId: number) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       activeOrganizationId
     });
+  }
+
+  private setActiveOrganization(organization: OrganizationDetail) {
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      activeOrganization: organization
+    });
+  }
+
+  private getOrganizationDetail(slug: string) {
+    return this.http
+      .get<OrganizationDetail>(`${this.url}${slug}/`)
+      .pipe(tap(organization => this.setActiveOrganization(organization)));
   }
 }

@@ -12,6 +12,8 @@ export interface Organization extends OrganizationNew {
   require2FA: boolean;
 }
 
+export interface OrganizationDetail extends Organization {}
+
 interface IStatus {
   id: string;
   name: string;

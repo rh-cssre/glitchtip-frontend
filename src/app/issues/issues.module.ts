@@ -15,7 +15,7 @@ import {
 // Components
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
 import { IssueListItemComponent } from "./issue-list-item/issue-list-item.component";
-import { EventDetailComponent } from "./event-detail/event-detail.component";
+import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 
 @NgModule({
   imports: [
@@ -32,7 +32,7 @@ import { EventDetailComponent } from "./event-detail/event-detail.component";
   declarations: [
     IssuesPageComponent,
     IssueListItemComponent,
-    EventDetailComponent
+    IssueDetailComponent
   ]
 })
 export class IssuesModule {}

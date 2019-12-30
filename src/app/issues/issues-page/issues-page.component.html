@@ -38,7 +38,7 @@
         [class.resolved]="element.status === 'resolved'"
         [class.ignored]="element.status === 'ignored'"
       >
-        {{ element.title }}
+        <a [routerLink]="element.id">{{ element.title }}</a>
       </td>
     </ng-container>
 

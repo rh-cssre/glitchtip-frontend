@@ -3,7 +3,7 @@
     <h3 mat-subheader>Select Organization</h3>
     <a mat-list-item color="accent" [matMenuTriggerFor]="menu">
       <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
-        {{ orgDetails.name }}
+        {{ orgDetails?.name }}
       </span>
     </a>
     <mat-menu #menu="matMenu">
@@ -20,16 +20,24 @@
       </button>
     </mat-menu>
     <mat-divider></mat-divider>
-    <!-- <a mat-list-item routerLink=".">Projects</a> -->
-    <a mat-list-item routerLink="/issues" routerLinkActive="active-route"
-      >Issues</a
-    >
-    <!-- <a mat-list-item routerLink=".">Events</a> -->
-    <a
-      mat-list-item
-      routerLink="/settings/organizations"
-      routerLinkActive="active-route"
-      >Settings</a
-    >
+    <ng-container *ngIf="activeOrganizationDetail$ | async as orgDetails">
+      <a
+        mat-list-item
+        [routerLink]="['organizations', orgDetails?.slug, 'projects']"
+        >Projects</a
+      >
+      <a
+        mat-list-item
+        [routerLink]="['organizations', orgDetails?.slug, 'issues']"
+        routerLinkActive="active-route"
+        >Issues</a
+      >
+      <a
+        mat-list-item
+        [routerLink]="['settings', orgDetails?.slug]"
+        routerLinkActive="active-route"
+        >Settings</a
+      >
+    </ng-container>
   </mat-nav-list>
 </nav>

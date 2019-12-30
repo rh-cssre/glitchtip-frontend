@@ -10,13 +10,11 @@ import { OrganizationsService } from "../../api/organizations/organizations.serv
 export class MainNavComponent {
   activeOrganizationDetail$ = this.organizationsService
     .activeOrganizationDetail$;
-  organizations$ = this.organizationsService.organziations$;
+  organizations$ = this.organizationsService.organizations$;
 
-  constructor(private organizationsService: OrganizationsService) {
-    this.organizationsService.retrieveOrganizations().subscribe();
-  }
+  constructor(private organizationsService: OrganizationsService) {}
 
   setOrganization(id: number) {
-    this.organizationsService.retrieveOrganizationDetail(id);
+    this.organizationsService.changeActiveOrganization(id);
   }
 }

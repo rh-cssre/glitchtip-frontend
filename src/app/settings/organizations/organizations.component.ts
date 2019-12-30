@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-organizations",
@@ -8,18 +7,14 @@ import { Router } from "@angular/router";
   styleUrls: ["./organizations.component.scss"]
 })
 export class OrganizationsComponent {
-  organizations$ = this.organizationsService.organziations$;
+  organizations$ = this.organizationsService.organizations$;
 
-  constructor(
-    private organizationsService: OrganizationsService,
-    private router: Router
-  ) {
+  constructor(private organizationsService: OrganizationsService) {
     this.organizationsService.retrieveOrganizations().subscribe();
   }
 
   onSelected(orgId: number) {
-    this.organizationsService.retrieveOrganizationDetail(orgId);
-    // this.router.navigate(["./settings", orgSlug]);
+    this.organizationsService.changeActiveOrganization(orgId);
   }
 
   removeOrganization(slug: string) {

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { ProjectsService } from "../../../api/projects/projects.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-project-detail",
@@ -13,7 +13,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 export class ProjectDetailComponent implements OnInit {
   project: any;
   organizationSlug: string;
-  projectSlug: string;
+  projectSlug: string | null;
   error: string;
 
   form = new FormGroup({
@@ -39,12 +39,14 @@ export class ProjectDetailComponent implements OnInit {
       .pipe(switchMap((params: ParamMap) => of(params.get("slug"))))
       .subscribe(slug => (this.projectSlug = slug));
 
-    this.projectsService
-      .retrieveProjectDetail("test-org", this.projectSlug)
-      .subscribe(project => {
-        this.project = project;
-        this.loadValues();
-      });
+    if (this.projectSlug) {
+      this.projectsService
+        .retrieveProjectDetail("test-org", this.projectSlug)
+        .subscribe(project => {
+          this.project = project;
+          this.loadValues();
+        });
+    }
   }
 
   onDelete(projectId: number) {
