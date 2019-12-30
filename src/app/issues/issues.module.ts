@@ -3,14 +3,13 @@ import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { IssuesRoutingModule } from "./issues-routing.module";
 
+// Need these for issues-page, which is not lazy loaded
 import {
-  MatCardModule,
-  MatInputModule,
-  MatSelectModule,
   MatTableModule,
   MatCheckboxModule,
   MatButtonModule
 } from "@angular/material";
+import { MaterialModule } from "../shared/material.module";
 
 // Components
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
@@ -22,12 +21,10 @@ import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
     CommonModule,
     ReactiveFormsModule,
     IssuesRoutingModule,
-    MatCardModule,
-    MatSelectModule,
-    MatInputModule,
     MatTableModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
+    MaterialModule
   ],
   declarations: [
     IssuesPageComponent,

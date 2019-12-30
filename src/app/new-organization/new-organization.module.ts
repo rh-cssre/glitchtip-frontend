@@ -1,9 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatCardModule } from "@angular/material/card";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
+import { MaterialModule } from "../shared/material.module";
 
 import { NewOrganizationRoutingModule } from "./new-organization-routing.module";
 import { NewOrganizationsComponent } from "./new-organization.component";
@@ -13,9 +11,7 @@ import { NewOrganizationsComponent } from "./new-organization.component";
   imports: [
     CommonModule,
     NewOrganizationRoutingModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
+    MaterialModule,
     ReactiveFormsModule
   ]
 })

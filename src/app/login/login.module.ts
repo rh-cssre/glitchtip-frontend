@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
-import { MatCardModule } from "@angular/material/card";
+// Not lazy loaded, so material imports included here
 import {
+  MatCardModule,
   MatInputModule,
   MatCheckboxModule,
   MatButtonModule

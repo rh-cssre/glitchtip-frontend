@@ -2,15 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SettingsRoutingModule } from "./settings-routing.module";
-
-import {
-  MatCheckboxModule,
-  MatCardModule,
-  MatInputModule,
-  MatButtonModule,
-  MatSidenavModule,
-  MatListModule
-} from "@angular/material";
+import { MaterialModule } from "../shared/material.module";
 
 // Components
 import { ProjectsComponent } from "./projects/projects.component";
@@ -25,12 +17,7 @@ import { SettingsComponent } from "./settings/settings.component";
     CommonModule,
     ReactiveFormsModule,
     SettingsRoutingModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatSidenavModule,
-    MatListModule
+    MaterialModule
   ],
   declarations: [
     ProjectsComponent,
