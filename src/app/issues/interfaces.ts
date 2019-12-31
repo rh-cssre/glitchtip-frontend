@@ -57,6 +57,7 @@ export interface Issue {
   status: IssueStatus;
 }
 
+// tslint:disable-next-line:no-empty-interface
 export interface IssueDetail extends Issue {}
 
 export interface IssueWithSelected extends Issue {
