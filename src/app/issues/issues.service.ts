@@ -35,17 +35,17 @@ export class IssuesService {
   selectedIssues$ = this.getState$.pipe(map(state => state.selectedIssues));
   issuesWithSelected$: Observable<IssueWithSelected[]> = combineLatest(
     this.issues$,
-    this.selectedIssues$,
-    (issues, selectedIssues) =>
+    this.selectedIssues$
+  ).pipe(
+    map(([issues, selectedIssues]) =>
       issues.map(issue => ({
         ...issue,
         isSelected: selectedIssues.includes(issue.id) ? true : false
       }))
+    )
   );
-  areAllSelected$ = combineLatest(
-    this.issues$,
-    this.selectedIssues$,
-    (issues, selectedIssues) => issues.length === selectedIssues.length
+  areAllSelected$ = combineLatest(this.issues$, this.selectedIssues$).pipe(
+    map(([issues, selectedIssues]) => issues.length === selectedIssues.length)
   );
   issueCount$ = this.getState$.pipe(map(state => state.issueCount));
   hasNextPage$ = this.getState$.pipe(map(state => state.nextPage !== null));

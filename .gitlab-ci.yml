@@ -11,7 +11,6 @@ stages:
 test:
   stage: test
   image: registry.gitlab.com/dasch8/angular-ci:latest
-  allow_failure: true
   script:
     - npm ci
     - npm run lint

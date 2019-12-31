@@ -12,6 +12,7 @@ export interface Organization extends OrganizationNew {
   require2FA: boolean;
 }
 
+// tslint:disable-next-line:no-empty-interface
 export interface OrganizationDetail extends Organization {}
 
 interface IStatus {
