@@ -9,7 +9,7 @@ import { IssuesService } from "../issues.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IssuesPageComponent {
-  displayedColumns: string[] = ["select", "title", "status"];
+  displayedColumns: string[] = ["select", "status", "title"];
   issues$ = this.issuesService.issuesWithSelected$;
   areAllSelected$ = this.issuesService.areAllSelected$;
   hasNextPage$ = this.issuesService.hasNextPage$;

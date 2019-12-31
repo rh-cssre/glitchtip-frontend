@@ -10,12 +10,7 @@ import {
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
 
-import {
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
-  MatSidenavModule,
-  MatButtonModule,
-  MatToolbarModule
-} from "@angular/material";
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material";
 
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
@@ -34,10 +29,7 @@ import { SharedModule } from "./shared/shared.module";
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN"
     }),
-    SharedModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatToolbarModule
+    SharedModule
   ],
   providers: [
     {

@@ -1,36 +1,43 @@
+$iconWidth: 56px;
+
 section {
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-h1 {
-  text-align: center;
-}
-
-button {
-  margin-bottom: 20px;
-}
-
-.resolved {
-  background: lightgreen;
-}
-
-.ignored {
-  background: lightgray;
-  text-decoration: line-through;
-}
-
-mat-error {
-  display: block;
-  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 table {
   width: 100%;
+  margin-bottom: 40px;
 }
 
 .table-actions {
   display: flex;
   justify-content: space-between;
+}
+
+.mat-column-title {
+  max-width: 500px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.footer {
+  text-align: right;
+
+  mat-icon {
+    font-size: 35px;
+    height: $iconWidth;
+    width: $iconWidth;
+    line-height: $iconWidth;
+  }
+}
+
+.resolved {
+  background: #f8c6d3;
+}
+
+.ignored {
+  background: lightgray;
+  text-decoration: line-through;
 }
