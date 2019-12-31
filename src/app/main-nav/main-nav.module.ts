@@ -5,6 +5,8 @@ import { MainNavRoutingModule } from "./main-nav-routing.module";
 
 // Not lazy loaded
 import {
+  MatButtonModule,
+  MatIconModule,
   MatListModule,
   MatMenuModule,
   MatSidenavModule,
@@ -16,6 +18,8 @@ import {
   imports: [
     CommonModule,
     MainNavRoutingModule,
+    MatButtonModule,
+    MatIconModule,
     MatListModule,
     MatMenuModule,
     MatSidenavModule,

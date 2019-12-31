@@ -1,20 +1,35 @@
 <section>
   <h1>Issues</h1>
-
-  <button mat-flat-button color="primary" (click)="bulkMarkResolved()">
-    Mark as resolved
-  </button>
-  <button
-    style="margin-left: 10px;"
-    mat-flat-button
-    color="accent"
-    (click)="bulkMarkResolved()"
-  >
-    Reopen issue
-  </button>
-  <button style="margin-left: 10px;" mat-flat-button color="warn">
-    Ignore issue
-  </button>
+  <div class="table-actions">
+    <div>
+      <button mat-flat-button color="primary" (click)="bulkMarkResolved()">
+        Mark as resolved
+      </button>
+      <button
+        style="margin-left: 10px;"
+        mat-flat-button
+        color="accent"
+        (click)="bulkMarkResolved()"
+      >
+        Reopen issue
+      </button>
+      <button style="margin-left: 10px;" mat-flat-button color="warn">
+        Ignore issue
+      </button>
+    </div>
+    <div>
+      <button
+        mat-button
+        [disabled]="!hasPreviousPage"
+        (click)="getPreviousPage()"
+      >
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <button mat-button *ngIf="hasNextPage" (click)="getNextPage()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+  </div>
   <table mat-table [dataSource]="issues$" class="mat-elevation-z8">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -58,9 +73,10 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <!-- Maybe include conditional class/styling on buttons -->
-  {{ hasPreviousPage$ | async }}
-  <button (click)="getPreviousPage()">Previous</button>
-  {{ hasNextPage$ | async }}
-  <button (click)="getNextPage()">Next</button>
+  <button mat-button [disabled]="!hasPreviousPage" (click)="getPreviousPage()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </button>
+  <button mat-button *ngIf="hasNextPage" (click)="getNextPage()">
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </button>
 </section>

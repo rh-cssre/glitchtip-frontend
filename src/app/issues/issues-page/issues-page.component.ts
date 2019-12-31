@@ -11,11 +11,17 @@ export class IssuesPageComponent {
   displayedColumns: string[] = ["select", "title", "status"];
   issues$ = this.issuesService.issuesWithSelected$;
   areAllSelected$ = this.issuesService.areAllSelected$;
-  hasNextPage$ = this.issuesService.hasNextPage$;
-  hasPreviousPage$ = this.issuesService.hasPreviousPage$;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 
   constructor(private issuesService: IssuesService) {
     this.issuesService.retrieveInitialIssues().subscribe();
+    this.issuesService.hasPreviousPage$.subscribe(
+      previous => (this.hasPreviousPage = previous)
+    );
+    this.issuesService.hasNextPage$.subscribe(
+      next => (this.hasNextPage = next)
+    );
   }
 
   getNextPage() {

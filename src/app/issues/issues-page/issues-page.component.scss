@@ -29,3 +29,8 @@ mat-error {
 table {
   width: 100%;
 }
+
+.table-actions {
+  display: flex;
+  justify-content: space-between;
+}

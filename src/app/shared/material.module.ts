@@ -8,12 +8,14 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatDividerModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTableModule
 } from "@angular/material";
 
 export const COMPONENTS = [
@@ -21,12 +23,14 @@ export const COMPONENTS = [
   MatCardModule,
   MatCheckboxModule,
   MatDividerModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTableModule
 ];
 
 @NgModule({
