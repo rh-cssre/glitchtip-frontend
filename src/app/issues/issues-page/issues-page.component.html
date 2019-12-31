@@ -18,16 +18,24 @@
       </button>
     </div>
     <div>
-      <button
+      <a
         mat-button
-        [disabled]="!hasPreviousPage"
+        [routerLink]=""
+        [queryParams]="previousParams$ | async"
+        [disabled]="!(hasPreviousPage$ | async)"
         (click)="getPreviousPage()"
       >
         <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
-      <button mat-button *ngIf="hasNextPage" (click)="getNextPage()">
+      </a>
+      <a
+        mat-button
+        [routerLink]=""
+        [queryParams]="nextParams$ | async"
+        *ngIf="hasNextPage$ | async"
+        (click)="getNextPage()"
+      >
         <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
+      </a>
     </div>
   </div>
   <table mat-table [dataSource]="issues$" class="mat-elevation-z8">
@@ -73,10 +81,22 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <button mat-button [disabled]="!hasPreviousPage" (click)="getPreviousPage()">
+  <a
+    [routerLink]=""
+    [queryParams]="previousParams$ | async"
+    mat-button
+    [disabled]="!(hasPreviousPage$ | async)"
+    (click)="getPreviousPage()"
+  >
     <mat-icon>keyboard_arrow_left</mat-icon>
-  </button>
-  <button mat-button *ngIf="hasNextPage" (click)="getNextPage()">
+  </a>
+  <a
+    [routerLink]=""
+    [queryParams]="nextParams$ | async"
+    mat-button
+    *ngIf="hasNextPage$ | async"
+    (click)="getNextPage()"
+  >
     <mat-icon>keyboard_arrow_right</mat-icon>
-  </button>
+  </a>
 </section>

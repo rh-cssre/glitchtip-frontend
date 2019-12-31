@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { ParamMap } from "@angular/router";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
 import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
@@ -52,8 +53,30 @@ export class IssuesService {
   hasPreviousPage$ = this.getState$.pipe(
     map(state => state.previousPage !== null)
   );
+  nextPageParams$ = this.getState$.pipe(
+    map(state => this.urlParamsToObject(state.nextPage))
+  );
+  previousPageParams$ = this.getState$.pipe(
+    map(state => this.urlParamsToObject(state.previousPage))
+  );
 
   constructor(private http: HttpClient) {}
+
+  urlParamsToObject(url: string | null) {
+    return url
+      ? this.paramsToObject(new URLSearchParams(url.split("?")[1]))
+      : null;
+  }
+
+  paramsToObject(entries) {
+    const result = {};
+    for (const entry of entries) {
+      // each 'entry' is a [key, value] tuple
+      const [key, value] = entry;
+      result[key] = value;
+    }
+    return result;
+  }
 
   getNextPage() {
     const nextPage = this.issuesState.getValue().nextPage;
@@ -69,8 +92,8 @@ export class IssuesService {
     }
   }
 
-  retrieveInitialIssues() {
-    return this.retrieveIssues(this.url);
+  retrieveInitialIssues(params: ParamMap) {
+    return this.retrieveIssues(this.url, params);
   }
 
   toggleSelected(issueId: number) {
@@ -104,9 +127,16 @@ export class IssuesService {
     return this.updateStatus(selectedIssues, status).toPromise();
   }
 
-  private retrieveIssues(url: string) {
+  private retrieveIssues(url: string, paramMap?: ParamMap) {
+    let params = new HttpParams();
+    if (paramMap) {
+      const cursor = paramMap.get("cursor");
+      if (cursor) {
+        params = params.append("cursor", cursor);
+      }
+    }
     return this.http
-      .get<Issue[]>(url, { observe: "response" })
+      .get<Issue[]>(url, { observe: "response", params })
       .pipe(
         tap(resp => {
           const linkHeader = resp.headers.get("link");

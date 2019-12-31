@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { IssuesService } from "../issues.service";
 
 @Component({
@@ -11,17 +12,18 @@ export class IssuesPageComponent {
   displayedColumns: string[] = ["select", "title", "status"];
   issues$ = this.issuesService.issuesWithSelected$;
   areAllSelected$ = this.issuesService.areAllSelected$;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+  hasNextPage$ = this.issuesService.hasNextPage$;
+  hasPreviousPage$ = this.issuesService.hasPreviousPage$;
+  nextParams$ = this.issuesService.nextPageParams$;
+  previousParams$ = this.issuesService.previousPageParams$;
 
-  constructor(private issuesService: IssuesService) {
-    this.issuesService.retrieveInitialIssues().subscribe();
-    this.issuesService.hasPreviousPage$.subscribe(
-      previous => (this.hasPreviousPage = previous)
-    );
-    this.issuesService.hasNextPage$.subscribe(
-      next => (this.hasNextPage = next)
-    );
+  constructor(
+    private issuesService: IssuesService,
+    private route: ActivatedRoute
+  ) {
+    this.issuesService
+      .retrieveInitialIssues(this.route.snapshot.queryParamMap)
+      .subscribe();
   }
 
   getNextPage() {
