@@ -1,6 +1,6 @@
 import { Organization } from "./organizations.interface";
 
-export const organizaions: Organization[] = [
+export const organizationList: Organization[] = [
   {
     id: 2,
     name: "test org",
