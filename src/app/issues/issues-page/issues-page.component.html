@@ -70,7 +70,7 @@
           [routerLink]=""
           [queryParams]="previousParams$ | async"
           mat-button
-          [disabled]="!(hasPreviousPage$ | async)"
+          [disabled]="(hasPreviousPage$ | async) === false"
           (click)="getPreviousPage()"
         >
           <mat-icon>keyboard_arrow_left</mat-icon>
