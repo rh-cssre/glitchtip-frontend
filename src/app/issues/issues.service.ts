@@ -127,7 +127,8 @@ export class IssuesService {
     return this.updateStatus(selectedIssues, status).toPromise();
   }
 
-  private retrieveIssues(url: string, paramMap?: ParamMap) {
+  // Not private for testing purposes
+  retrieveIssues(url: string, paramMap?: ParamMap) {
     let params = new HttpParams();
     if (paramMap) {
       const cursor = paramMap.get("cursor");
