@@ -6,13 +6,19 @@ import {
 import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail } from "../interfaces";
 import { sampleIssue } from "../issue-list-item/sample-data";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
   let service: IssueDetailService;
+  let mockOrgService: OrganizationsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
+    mockOrgService = jasmine.createSpyObj(["retrieveIssue"]);
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [{ provide: OrganizationsService, useValue: mockOrgService }]
+    });
     httpTestingController = TestBed.get(HttpTestingController);
     service = TestBed.get(IssueDetailService);
   });
