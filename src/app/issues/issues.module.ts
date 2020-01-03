@@ -8,6 +8,7 @@ import { MaterialModule } from "../shared/material.module";
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
 import { IssueListItemComponent } from "./issue-list-item/issue-list-item.component";
 import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
+import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
   declarations: [
     IssuesPageComponent,
     IssueListItemComponent,
-    IssueDetailComponent
+    IssueDetailComponent,
+    EventDetailComponent
   ]
 })
 export class IssuesModule {}

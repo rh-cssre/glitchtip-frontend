@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, combineLatest } from "rxjs";
-import { tap, map, exhaustMap } from "rxjs/operators";
+import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import { tap, map } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
 import { IssueDetail, EventDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -62,10 +62,9 @@ export class IssueDetailService {
   ) {}
 
   retrieveIssue(id: number) {
-    return this.http.get<IssueDetail>(`${this.url}${id}/`).pipe(
-      tap(issue => this.setIssue(issue)),
-      exhaustMap(issue => this.retrieveLatestEvent(issue.id))
-    );
+    return this.http
+      .get<IssueDetail>(`${this.url}${id}/`)
+      .pipe(tap(issue => this.setIssue(issue)));
   }
 
   getPreviousEvent() {
@@ -82,6 +81,22 @@ export class IssueDetailService {
     }
   }
 
+  getLatestEvent() {
+    const issue = this.state.getValue().issue;
+    if (issue) {
+      return this.retrieveLatestEvent(issue.id);
+    }
+    return EMPTY;
+  }
+
+  getEventByID(eventId: string) {
+    const issue = this.state.getValue().issue;
+    if (issue) {
+      return this.retrieveEvent(issue.id, eventId);
+    }
+    return EMPTY;
+  }
+
   private retrieveLatestEvent(issueId: number) {
     const url = `${this.url}${issueId}/events/latest/`;
     return this.http
@@ -90,7 +105,7 @@ export class IssueDetailService {
   }
 
   private retrieveEvent(issueId: number, eventId: string) {
-    const url = `${this.url}/${issueId}/events/${eventId}/`;
+    const url = `${this.url}${issueId}/events/${eventId}/`;
     return this.http
       .get<EventDetail>(url)
       .pipe(tap(event => this.setEvent(event)));

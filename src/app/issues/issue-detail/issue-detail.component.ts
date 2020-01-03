@@ -12,15 +12,7 @@ import { IssueDetailService } from "./issue-detail.service";
 })
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
-  event$ = this.issueService.event$;
-  nextEvent$ = this.issueService.hasNextEvent$;
-  previousEvent$ = this.issueService.hasPreviousEvent$;
-  nextEventUrl$ = this.issueService.nextEventUrl$;
-  previousEventUrl$ = this.issueService.previousEventUrl$;
 
-  eventIdParam$ = this.route.firstChild
-    ? this.route.firstChild.paramMap.pipe(map(params => params.get("event-id")))
-    : EMPTY;
   issueIdParam$ = this.route.paramMap.pipe(
     map(params => params.get("issue-id"))
   );
@@ -42,13 +34,5 @@ export class IssueDetailComponent implements OnInit {
         })
       )
       .subscribe();
-  }
-
-  getNewerEvent() {
-    this.issueService.getNextEvent();
-  }
-
-  getOlderEvent() {
-    this.issueService.getPreviousEvent();
   }
 }

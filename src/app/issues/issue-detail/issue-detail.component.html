@@ -1,11 +1,5 @@
 <div *ngIf="issue$ | async as issue">
   {{ issue?.title }}
 
-  <div *ngIf="event$ | async as event">
-    {{ event?.eventId }}
-    <a [routerLink]="previousEventUrl$ | async">Older</a>
-    {{ previousEvent$ | async }}
-    <a [routerLink]="nextEventUrl$ | async">Newer</a>
-    {{ nextEvent$ | async }}
-  </div>
+  <router-outlet></router-outlet>
 </div>
