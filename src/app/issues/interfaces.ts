@@ -63,3 +63,7 @@ export interface IssueDetail extends Issue {}
 export interface IssueWithSelected extends Issue {
   isSelected: boolean;
 }
+
+export interface UpdateStatusResponse {
+  status: IssueStatus;
+}

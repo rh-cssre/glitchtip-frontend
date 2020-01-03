@@ -3,6 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from "@angular/common/http/testing";
+import { MatSnackBarModule } from "@angular/material";
 
 import { IssuesService } from "./issues.service";
 import { Issue } from "./interfaces";
@@ -13,7 +14,9 @@ describe("IssuesService", () => {
   let service: IssuesService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, MatSnackBarModule]
+    });
     httpTestingController = TestBed.get(HttpTestingController);
     service = TestBed.get(IssuesService);
   });

@@ -1,9 +1,19 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpParams,
+  HttpErrorResponse
+} from "@angular/common/http";
 import { ParamMap } from "@angular/router";
-import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
-import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
+import {
+  Issue,
+  IssueWithSelected,
+  IssueStatus,
+  UpdateStatusResponse
+} from "./interfaces";
 import { baseUrl } from "../constants";
 
 interface IssuesState {
@@ -60,7 +70,7 @@ export class IssuesService {
     map(state => this.urlParamsToObject(state.previousPage))
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
 
   urlParamsToObject(url: string | null) {
     return url
@@ -156,10 +166,27 @@ export class IssuesService {
     const data = {
       status
     };
-    return this.http.put(this.url, data, { params }).pipe(
-      tap(_ => console.log("updateStatus status: ", _)),
-      catchError(err => "error alert")
-    );
+    return this.http
+      .put<UpdateStatusResponse>(this.url, data, { params })
+      .pipe(
+        tap(resp => this.setIssueStatuses(ids, resp.status)),
+        catchError((err: HttpErrorResponse) => {
+          console.log(err);
+          this.snackbar.open("Error, unable to update issue");
+          return EMPTY;
+        })
+      );
+  }
+
+  private setIssueStatuses(issueIds: number[], status: IssueStatus) {
+    const state = this.issuesState.getValue();
+    this.issuesState.next({
+      ...state,
+      issues: state.issues.map(issue =>
+        issueIds.includes(issue.id) ? { ...issue, status } : issue
+      ),
+      selectedIssues: []
+    });
   }
 
   private setIssues(issues: Issue[]) {
