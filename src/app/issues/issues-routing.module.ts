@@ -5,8 +5,11 @@ import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 
 const routes: Routes = [
   { path: "", component: IssuesPageComponent },
-  { path: ":issue-id", component: IssueDetailComponent },
-  { path: ":issue-id/events/:event-id", component: IssueDetailComponent }
+  {
+    path: ":issue-id",
+    component: IssueDetailComponent,
+    children: [{ path: "events/:event-id", component: IssueDetailComponent }]
+  }
 ];
 
 @NgModule({
