@@ -1,14 +1,15 @@
-import { IssueListItemComponent } from "./issue-list-item.component";
-import { sampleIssue } from "./sample-data";
-import { MatCardModule } from "@angular/material/card";
+import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
+import { IssueListItemComponent } from "./issue-list-item.component";
+import { sampleIssue } from "./sample-data";
+import { MaterialModule } from "src/app/shared/material.module";
 
 export default {
   title: "Issues List",
   decorators: [
     moduleMetadata({
-      imports: [MatCardModule]
+      imports: [MaterialModule, ReactiveFormsModule]
     }),
     withKnobs
   ]
@@ -17,9 +18,7 @@ export default {
 export const issueListItem = () => ({
   component: IssueListItemComponent,
   props: {
-    title: sampleIssue.event[0].exception.values[0].type,
-    subtitle: sampleIssue.event[0].exception.values[0].value,
-    eventId: sampleIssue.event[0].event_id
+    title: sampleIssue.title
   }
 });
 

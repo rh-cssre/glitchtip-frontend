@@ -1,31 +1,26 @@
+import { ReactiveFormsModule } from "@angular/forms";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
-
-import { MatSelectModule } from "@angular/material/select";
-import { MatTableModule } from "@angular/material/table";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatButtonModule } from "@angular/material/button";
-import { MatInputModule } from "@angular/material/input";
-import { HttpClientModule } from "@angular/common/http";
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
 
 import { IssuesPageComponent } from "./issues-page.component";
+import { MaterialModule } from "src/app/shared/material.module";
+import { IssuesService } from "../issues.service";
+import { sampleIssue } from "../issue-list-item/sample-data";
 
 export default {
   title: "Issues Page",
   decorators: [
     moduleMetadata({
       imports: [
-        MatSelectModule,
-        MatTableModule,
-        MatCheckboxModule,
-        MatButtonModule,
-        MatInputModule,
-        HttpClientModule,
+        MaterialModule,
+        HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule
-      ]
+      ],
+      providers: [IssuesService]
     }),
     withKnobs
   ]
@@ -33,7 +28,9 @@ export default {
 
 export const issueListItem = () => ({
   component: IssuesPageComponent,
-  props: {}
+  props: {
+    issues$: of([sampleIssue])
+  }
 });
 
 issueListItem.story = {
