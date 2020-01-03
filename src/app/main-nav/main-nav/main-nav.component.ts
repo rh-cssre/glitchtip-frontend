@@ -24,9 +24,7 @@ export class MainNavComponent {
     this.innerWidth = window.innerWidth;
   }
 
-  constructor(private organizationsService: OrganizationsService) {
-    this.organizationsService.retrieveOrganizations().subscribe();
-  }
+  constructor(private organizationsService: OrganizationsService) {}
 
   isScreenSmall() {
     return this.innerWidth < 720;

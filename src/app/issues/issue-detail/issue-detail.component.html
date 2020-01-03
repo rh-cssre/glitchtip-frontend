@@ -3,7 +3,9 @@
 
   <div *ngIf="event$ | async as event">
     {{ event?.eventId }}
-    <a href="">Older</a> {{ nextEvent$ | async }} <a href="">Newer</a>
+    <a [routerLink]="previousEventUrl$ | async">Older</a>
     {{ previousEvent$ | async }}
+    <a [routerLink]="nextEventUrl$ | async">Newer</a>
+    {{ nextEvent$ | async }}
   </div>
 </div>

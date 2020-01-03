@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, combineLatest } from "rxjs";
 import { tap, map, exhaustMap } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
 import { IssueDetail, EventDetail } from "../interfaces";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
@@ -30,8 +31,35 @@ export class IssueDetailService {
   readonly hasPreviousEvent$ = this.event$.pipe(
     map(event => event && event.previousEventID !== null)
   );
+  readonly nextEventUrl$ = combineLatest(
+    this.organization.activeOrganizationSlug$,
+    this.issue$,
+    this.event$
+  ).pipe(
+    map(([orgSlug, issue, event]) => {
+      if (event && event.nextEventID) {
+        return this.eventUrl(orgSlug, issue, event.nextEventID);
+      }
+      return null;
+    })
+  );
+  readonly previousEventUrl$ = combineLatest(
+    this.organization.activeOrganizationSlug$,
+    this.issue$,
+    this.event$
+  ).pipe(
+    map(([orgSlug, issue, event]) => {
+      if (event && event.previousEventID) {
+        return this.eventUrl(orgSlug, issue, event.previousEventID);
+      }
+      return null;
+    })
+  );
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private organization: OrganizationsService
+  ) {}
 
   retrieveIssue(id: number) {
     return this.http.get<IssueDetail>(`${this.url}${id}/`).pipe(
@@ -78,5 +106,17 @@ export class IssueDetailService {
 
   private setEvent(event: EventDetail) {
     this.state.next({ ...this.state.getValue(), event });
+  }
+
+  /** Build event detail url string */
+  private eventUrl(
+    orgSlug: string | null,
+    issue: IssueDetail | null,
+    eventId: string
+  ) {
+    if (orgSlug && issue) {
+      return `/organizations/${orgSlug}/issues/${issue.id}/events/${eventId}`;
+    }
+    return null;
   }
 }

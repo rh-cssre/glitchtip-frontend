@@ -15,6 +15,15 @@ export class IssueDetailComponent implements OnInit {
   event$ = this.issueService.event$;
   nextEvent$ = this.issueService.hasNextEvent$;
   previousEvent$ = this.issueService.hasPreviousEvent$;
+  nextEventUrl$ = this.issueService.nextEventUrl$;
+  previousEventUrl$ = this.issueService.previousEventUrl$;
+
+  eventIdParam$ = this.route.firstChild
+    ? this.route.firstChild.paramMap.pipe(map(params => params.get("event-id")))
+    : EMPTY;
+  issueIdParam$ = this.route.paramMap.pipe(
+    map(params => params.get("issue-id"))
+  );
 
   constructor(
     private issueService: IssueDetailService,
@@ -22,9 +31,8 @@ export class IssueDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap
+    this.issueIdParam$
       .pipe(
-        map(params => params.get("issue-id")),
         tap(() => this.issueService.clearState()),
         exhaustMap(issueId => {
           if (issueId) {
@@ -36,11 +44,11 @@ export class IssueDetailComponent implements OnInit {
       .subscribe();
   }
 
-  getNextEvent() {
+  getNewerEvent() {
     this.issueService.getNextEvent();
   }
 
-  getPreviousEvent() {
+  getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
 }

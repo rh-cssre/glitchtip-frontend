@@ -29,17 +29,22 @@ export class OrganizationsService {
   private readonly url = baseUrl + "/organizations/";
   private routeParams: Params;
 
-  organizations$ = this.getState$.pipe(map(data => data.organizations));
-  activeOrganization$ = this.getState$.pipe(
+  readonly organizations$ = this.getState$.pipe(
+    map(data => data.organizations)
+  );
+  readonly activeOrganization$ = this.getState$.pipe(
     map(data => data.activeOrganizationId)
   );
-  activeOrganizationDetail$ = combineLatest([
+  readonly activeOrganizationDetail$ = combineLatest([
     this.organizations$,
     this.activeOrganization$
   ]).pipe(
     map(([organizations, activeOrganization]) =>
       organizations.find(organization => organization.id === activeOrganization)
     )
+  );
+  readonly activeOrganizationSlug$ = this.activeOrganizationDetail$.pipe(
+    map(org => (org ? org.slug : null))
   );
 
   constructor(private http: HttpClient, private router: Router) {
@@ -63,9 +68,12 @@ export class OrganizationsService {
       withLatestFrom(this.activeOrganization$),
       tap(([organizations, activeOrgId]) => {
         if (activeOrgId === null && organizations.length) {
-          const activeOrg = organizations.find(
-            org => org.slug === this.routeParams["org-slug"]
-          );
+          let activeOrg: Organization | undefined;
+          if (this.routeParams) {
+            activeOrg = organizations.find(
+              org => org.slug === this.routeParams["org-slug"]
+            );
+          }
           if (activeOrg) {
             this.changeActiveOrganization(activeOrg.id);
           } else {
