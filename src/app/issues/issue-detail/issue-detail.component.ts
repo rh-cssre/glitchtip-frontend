@@ -15,6 +15,8 @@ export class IssueDetailComponent implements OnInit {
   event$ = this.issueService.event$;
   nextEvent$ = this.issueService.hasNextEvent$;
   previousEvent$ = this.issueService.hasPreviousEvent$;
+  nextEventUrl$ = this.issueService.nextEventUrl$;
+  previousEventUrl$ = this.issueService.previousEventUrl$;
 
   constructor(
     private issueService: IssueDetailService,
@@ -36,11 +38,11 @@ export class IssueDetailComponent implements OnInit {
       .subscribe();
   }
 
-  getNextEvent() {
+  getNewerEvent() {
     this.issueService.getNextEvent();
   }
 
-  getPreviousEvent() {
+  getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
 }
