@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   HostListener
 } from "@angular/core";
+import { MatSidenav } from "@angular/material";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 
@@ -14,6 +15,7 @@ import { AuthService } from "src/app/api/auth/auth.service";
 })
 export class MainNavComponent {
   innerWidth: number;
+  sidenav: MatSidenav;
   /* TODO: Add primary color to mat-sidenav
   https://stackoverflow.com/questions/54248944/angular-6-7-how-to-apply-default-theme-color-to-mat-sidenav-background */
   activeOrganizationDetail$ = this.organizationsService

@@ -53,7 +53,7 @@
   </mat-sidenav>
 
   <div class="app-sidenav-content">
-    <mat-toolbar color="primary">
+    <mat-toolbar *ngIf="isLoggedIn$ | async" color="primary">
       <button mat-button class="sidenav-toggle" (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
