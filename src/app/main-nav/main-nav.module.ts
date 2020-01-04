@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MainNavComponent } from "./main-nav/main-nav.component";
-import { MainNavRoutingModule } from "./main-nav-routing.module";
+import { RouterModule } from "@angular/router";
 
 // Not lazy loaded
 import {
@@ -13,17 +12,20 @@ import {
   MatToolbarModule
 } from "@angular/material";
 
+import { MainNavComponent } from "./main-nav/main-nav.component";
+
 @NgModule({
   declarations: [MainNavComponent],
   imports: [
     CommonModule,
-    MainNavRoutingModule,
+    RouterModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,
     MatSidenavModule,
     MatToolbarModule
-  ]
+  ],
+  exports: [MainNavComponent]
 })
 export class MainNavModule {}

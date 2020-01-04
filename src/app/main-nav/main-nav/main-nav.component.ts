@@ -4,6 +4,7 @@ import {
   HostListener
 } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
+import { AuthService } from "src/app/api/auth/auth.service";
 
 @Component({
   selector: "app-main-nav",
@@ -18,13 +19,17 @@ export class MainNavComponent {
   activeOrganizationDetail$ = this.organizationsService
     .activeOrganizationDetail$;
   organizations$ = this.organizationsService.organizations$;
+  isLoggedIn$ = this.auth.isLoggedIn;
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.innerWidth = window.innerWidth;
   }
 
-  constructor(private organizationsService: OrganizationsService) {}
+  constructor(
+    private organizationsService: OrganizationsService,
+    private auth: AuthService
+  ) {}
 
   isScreenSmall() {
     return this.innerWidth < 720;

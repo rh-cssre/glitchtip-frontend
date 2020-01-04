@@ -1,6 +1,7 @@
 <mat-sidenav-container>
   <mat-sidenav
     #sidenav
+    *ngIf="isLoggedIn$ | async"
     class="mat-elevation-z10"
     [opened]="!isScreenSmall()"
     [mode]="isScreenSmall() ? 'over' : 'side'"
@@ -62,7 +63,7 @@
       </span>
     </mat-toolbar>
     <div class="wrapper">
-      <router-outlet></router-outlet>
+      <ng-content></ng-content>
     </div>
   </div>
 </mat-sidenav-container>

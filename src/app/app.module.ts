@@ -16,6 +16,7 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material";
 import { AppRoutingModule } from "./app-routing.module";
 import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
+import { MainNavModule } from "./main-nav/main-nav.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,7 @@ import { SharedModule } from "./shared/shared.module";
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN"
     }),
+    MainNavModule,
     SharedModule
   ],
   providers: [
