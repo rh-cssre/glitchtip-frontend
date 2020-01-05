@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatTableModule } from "@angular/material";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 import { IssuesPageComponent } from "./issues-page.component";
 import { IssueListItemComponent } from "../issue-list-item/issue-list-item.component";
@@ -20,7 +21,8 @@ describe("IssuesPageComponent", () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        MatTableModule
+        MatTableModule,
+        NoopAnimationsModule
       ]
     }).compileComponents();
   }));

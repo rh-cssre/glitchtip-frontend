@@ -4,7 +4,6 @@ import {
   HttpParams,
   HttpErrorResponse
 } from "@angular/common/http";
-import { ParamMap } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
@@ -12,7 +11,8 @@ import {
   Issue,
   IssueWithSelected,
   IssueStatus,
-  UpdateStatusResponse
+  UpdateStatusResponse,
+  RetrieveIssuesParams
 } from "./interfaces";
 import { baseUrl } from "../constants";
 
@@ -102,7 +102,7 @@ export class IssuesService {
     }
   }
 
-  retrieveInitialIssues(params: ParamMap) {
+  getIssues(params: RetrieveIssuesParams) {
     return this.retrieveIssues(this.url, params);
   }
 
@@ -138,16 +138,15 @@ export class IssuesService {
   }
 
   // Not private for testing purposes
-  retrieveIssues(url: string, paramMap?: ParamMap) {
-    let params = new HttpParams();
-    if (paramMap) {
-      const cursor = paramMap.get("cursor");
-      if (cursor) {
-        params = params.append("cursor", cursor);
-      }
+  retrieveIssues(url: string, params?: RetrieveIssuesParams) {
+    let httpParams = new HttpParams();
+    if (params) {
+      Object.keys(params).forEach(key => {
+        httpParams = httpParams.append(key, params[key]);
+      });
     }
     return this.http
-      .get<Issue[]>(url, { observe: "response", params })
+      .get<Issue[]>(url, { observe: "response", params: httpParams })
       .pipe(
         tap(resp => {
           const linkHeader = resp.headers.get("link");
@@ -157,6 +156,10 @@ export class IssuesService {
           }
         })
       );
+  }
+
+  clearState() {
+    this.issuesState.next(initialState);
   }
 
   private updateStatus(ids: number[], status: IssueStatus) {

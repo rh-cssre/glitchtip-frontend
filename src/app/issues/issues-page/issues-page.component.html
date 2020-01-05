@@ -18,6 +18,16 @@
         <button style="margin-left: 10px;" mat-flat-button color="warn">
           Ignore issue
         </button>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field>
+            <input
+              matInput
+              type="search"
+              placeholder="Search"
+              formControlName="query"
+            />
+          </mat-form-field>
+        </form>
       </th>
     </ng-container>
 
@@ -69,6 +79,7 @@
         <a
           [routerLink]=""
           [queryParams]="previousParams$ | async"
+          queryParamsHandling="merge"
           mat-button
           [disabled]="(hasPreviousPage$ | async) === false"
           (click)="getPreviousPage()"
@@ -78,6 +89,7 @@
         <a
           [routerLink]=""
           [queryParams]="nextParams$ | async"
+          queryParamsHandling="merge"
           mat-button
           *ngIf="hasNextPage$ | async"
           (click)="getNextPage()"

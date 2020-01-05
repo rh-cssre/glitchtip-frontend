@@ -64,6 +64,12 @@ export interface IssueWithSelected extends Issue {
   isSelected: boolean;
 }
 
+export interface RetrieveIssuesParams {
+  cursor?: string;
+  query?: string;
+  project?: string;
+}
+
 export interface UpdateStatusResponse {
   status: IssueStatus;
 }
