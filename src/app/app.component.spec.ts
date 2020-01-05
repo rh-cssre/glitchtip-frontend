@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AppComponent } from "./app.component";
 import { SharedModule } from "./shared/shared.module";
 import { MaterialModule } from "./shared/material.module";
+import { MainNavModule } from "./main-nav/main-nav.module";
 
 describe("AppComponent", () => {
   beforeEach(async(() => {
@@ -14,7 +15,8 @@ describe("AppComponent", () => {
         MaterialModule,
         SharedModule,
         NoopAnimationsModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        MainNavModule
       ],
       declarations: [AppComponent]
     }).compileComponents();
