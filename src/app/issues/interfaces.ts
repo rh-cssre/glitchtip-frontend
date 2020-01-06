@@ -1,3 +1,5 @@
+import { ProjectIssueView } from "../api/projects/projects.interfaces";
+
 export interface Event {
   eventId: string;
   exception: {
@@ -51,14 +53,43 @@ export interface EventDetail extends Event {
 export type IssueStatus = "resolved" | "unresolved";
 
 export interface Issue {
+  annotations: string[];
+  assignedTo: string | null;
+  count: string;
+  culprit: string;
+  firstSeen: string;
+  hasSeen: boolean;
+  // id is a string in Sentry, but we would prefer a number if possible
   id: number;
-  title: string;
-  location: string;
+  isBookmarked: boolean;
+  isPublic: boolean;
+  isSubscribed: boolean;
+  lastSeen: string;
+  level: string;
+  logger: string | null;
+  metadata: IIssueMetadata;
+  numComments: number;
+  permalink: string;
+  project: ProjectIssueView;
+  shareId: string | null;
+  shortId: string;
+  stats: IStats;
   status: IssueStatus;
+  statusDetails: object;
+  subscriptionDetails: string | null;
+  title: string;
+  type: string;
+  userCount: number;
+
+  // missing from issue api
+  platform: string;
 }
 
 // tslint:disable-next-line:no-empty-interface
-export interface IssueDetail extends Issue {}
+export interface IssueDetail extends Issue {
+  // https://docs.sentry.io/api/events/get-group-details/
+  // https://docs.sentry.io/api/events/put-group-details/
+}
 
 export interface IssueWithSelected extends Issue {
   isSelected: boolean;
@@ -70,6 +101,18 @@ export interface RetrieveIssuesParams {
   project?: string;
 }
 
-export interface UpdateStatusResponse {
+export interface UpdateStatusResponse extends Issue {
   status: IssueStatus;
+}
+
+type StatsPeriod = "24h" | "14d" | "";
+
+type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
+
+interface IIssueMetadata {
+  filename: string;
+  type: string;
+  value: string;
+  // not in project issue list api
+  function: string;
 }

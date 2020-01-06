@@ -2,7 +2,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
 import { IssueListItemComponent } from "./issue-list-item.component";
-import { sampleIssue } from "./sample-data";
+import { issueList } from "../issues-list-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
 
 export default {
@@ -18,7 +18,7 @@ export default {
 export const issueListItem = () => ({
   component: IssueListItemComponent,
   props: {
-    title: sampleIssue.title
+    title: issueList[0].title
   }
 });
 

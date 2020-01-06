@@ -12,9 +12,12 @@ export interface ProjectNew {
   platform: string;
 }
 
-export interface Project extends ProjectNew {
+export interface ProjectIssueView extends ProjectNew {
   id: number;
   slug: string;
+}
+
+export interface Project extends ProjectIssueView {
   firstEvent: string;
   dateCreated: string;
   organization: Organization;
