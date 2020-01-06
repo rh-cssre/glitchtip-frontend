@@ -102,7 +102,8 @@ export interface UpdateStatusResponse extends Issue {
   status: IssueStatus;
 }
 
-export interface IssueWithStatusandPlatform extends UpdateStatusResponse {
+// not in issues api reference, but is in issue list data
+export interface IssueWithStatusAndPlatform extends UpdateStatusResponse {
   platform: string;
 }
 
@@ -110,10 +111,13 @@ type StatsPeriod = "24h" | "14d" | "";
 
 type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
 
-interface IIssueMetadata {
+// not in issues api reference, but is in issue list data
+interface IIssueMetadataWithFunction {
+  function: string;
+}
+
+interface IIssueMetadata extends IIssueMetadataWithFunction {
   filename: string;
   type: string;
   value: string;
-  // not in project issue list api
-  function: string;
 }
