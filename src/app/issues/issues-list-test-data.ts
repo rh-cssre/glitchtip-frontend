@@ -1,8 +1,8 @@
-import { UpdateStatusResponse } from "./interfaces";
+import { IssueWithStatusandPlatform } from "./interfaces";
 
 // import { Issue, UpdateStatusResponse } from "./interfaces";
 
-export const issueList: UpdateStatusResponse[] = [
+export const issueList: IssueWithStatusandPlatform[] = [
   {
     platform: "python",
     lastSeen: "2019-12-31T19:34:22.397462Z",

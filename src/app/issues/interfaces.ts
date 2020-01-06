@@ -80,9 +80,6 @@ export interface Issue {
   title: string;
   type: string;
   userCount: number;
-
-  // missing from issue api
-  platform: string;
 }
 
 // tslint:disable-next-line:no-empty-interface
@@ -103,6 +100,10 @@ export interface RetrieveIssuesParams {
 
 export interface UpdateStatusResponse extends Issue {
   status: IssueStatus;
+}
+
+export interface IssueWithStatusandPlatform extends UpdateStatusResponse {
+  platform: string;
 }
 
 type StatsPeriod = "24h" | "14d" | "";
