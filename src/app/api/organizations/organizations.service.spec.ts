@@ -40,15 +40,18 @@ describe("OrganizationsService", () => {
     });
   });
 
-  it("retrieve a list of organizations", () => {
+  it("retrieves a list of organizations, with the active org set to the first org id", () => {
     const testData: Organization[] = organizationList;
     service.retrieveOrganizations().toPromise();
     const req = httpTestingController.expectOne(`/api/0/organizations/`);
     req.flush(testData);
     service.organizations$.subscribe(orgs => expect(orgs).toEqual(testData));
+    service.activeOrganization$.subscribe(active =>
+      expect(active).toEqual(testData[0].id)
+    );
   });
 
-  it("change active organization", () => {
+  it("changes the active organization", () => {
     const testData = organizationList[1];
     service.changeActiveOrganization(1);
     service.activeOrganization$.subscribe(org => expect(org).toBe(testData.id));
