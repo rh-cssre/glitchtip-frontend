@@ -5,8 +5,8 @@ import {
 } from "@angular/common/http/testing";
 import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail } from "../interfaces";
-import { issueList } from "../issues-list-test-data";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { sampleIssueDetail } from "./issue-detail-test-data";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -28,7 +28,7 @@ describe("IssueDetailService", () => {
   });
 
   it("should retieve issue detail", () => {
-    const testData: IssueDetail = issueList[0];
+    const testData: IssueDetail = sampleIssueDetail;
     service.retrieveIssue(testData.id).toPromise();
     const req = httpTestingController.expectOne(
       `/api/0/issues/${testData.id}/`
