@@ -39,7 +39,6 @@ describe("IssuesPageComponent", () => {
   });
 
   it("should create", () => {
-    component.issues$.subscribe(vari => console.log("What's this", vari));
     expect(component).toBeTruthy();
   });
 });

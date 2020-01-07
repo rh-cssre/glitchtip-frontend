@@ -7,6 +7,7 @@ import { IssueDetailComponent } from "./issue-detail.component";
 import { of } from "rxjs";
 import { ComponentFixtureAutoDetect } from "@angular/core/testing";
 import { sampleIssueDetail } from "./issue-detail-test-data";
+import { MaterialModule } from "src/app/shared/material.module";
 
 describe("IssueDetailComponent", () => {
   let component: IssueDetailComponent;
@@ -17,7 +18,8 @@ describe("IssueDetailComponent", () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        MaterialModule
       ],
       declarations: [IssueDetailComponent],
       providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }]

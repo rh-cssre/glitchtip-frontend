@@ -36,4 +36,15 @@ describe("IssueDetailService", () => {
     req.flush(testData);
     service.issue$.subscribe(issue => expect(issue).toEqual(testData));
   });
+
+  it("should clear the issue state", () => {
+    const testData: IssueDetail = sampleIssueDetail;
+    // set issue state to have data
+    service.issue$.subscribe(issue => {
+      issue = testData;
+    });
+    // clear issue state data
+    service.clearState();
+    service.issue$.subscribe(issue => expect(issue).toBe(null));
+  });
 });
