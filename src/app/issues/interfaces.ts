@@ -95,8 +95,6 @@ export interface IssueDetail extends Issue {
   pluginContexts: string[];
   lastRelease: string | null;
   activity: IActivity[];
-  // https://docs.sentry.io/api/events/get-group-details/
-  // https://docs.sentry.io/api/events/put-group-details/
 }
 
 export interface RetrieveIssuesParams {
