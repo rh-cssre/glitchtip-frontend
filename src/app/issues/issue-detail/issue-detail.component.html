@@ -1,5 +1,24 @@
-<div *ngIf="issue$ | async as issue" id="issueTitle">
-  {{ issue?.title }}
+<div *ngIf="issue$ | async as issue">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ issue?.metadata.type }}</mat-card-title
+      ><mat-card-subtitle>
+        {{ issue?.culprit }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content
+      ><p>
+        {{ issue?.metadata.value }}
+      </p></mat-card-content
+    >
+  </mat-card>
+  <div>
+    <p>
+      Issue Title:
+    </p>
 
-  <router-outlet></router-outlet>
+    {{ issue?.title }}
+  </div>
+
+  <router-outlet>Event List</router-outlet>
 </div>

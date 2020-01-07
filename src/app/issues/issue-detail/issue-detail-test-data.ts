@@ -1,5 +1,6 @@
 import { IssueDetail } from "../interfaces";
 
+// data from api/0/issues/{{ issue number }}
 export const sampleIssueDetail: IssueDetail = {
   seenBy: [
     {

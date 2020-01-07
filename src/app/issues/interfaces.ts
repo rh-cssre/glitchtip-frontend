@@ -67,7 +67,7 @@ export interface Issue {
   lastSeen: string;
   level: string;
   logger: string | null;
-  metadata: IIssueMetadata | {};
+  metadata: IIssueMetadata | any;
   numComments: number;
   permalink: string;
   project: ProjectIssueView;
@@ -122,15 +122,11 @@ type StatsPeriod = "24h" | "14d" | "30d" | "";
 
 type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
 
-// not in issues api reference, but is in issue list data
-interface IIssueMetadataWithFunction {
-  function: string;
-}
-
-interface IIssueMetadata extends IIssueMetadataWithFunction {
+interface IIssueMetadata {
   filename: string;
   type: string;
   value: string;
+  function: string;
 }
 
 interface IFirstRelase {

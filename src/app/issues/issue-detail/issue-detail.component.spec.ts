@@ -27,6 +27,7 @@ describe("IssueDetailComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(IssueDetailComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it("should create", () => {
@@ -47,7 +48,7 @@ describe("IssueDetailComponent", () => {
   //   component.issue$ = of(sampleIssue);
   //   fixture.detectChanges();
   //   expect(
-  //     fixture.debugElement.nativeElement.querySelector("#issueTitle").innerText
+  //     fixture.debugElement.nativeElement.querySelector("div").innerText
   //   ).toContain(expectedTitle);
   // }));
 });
