@@ -43,14 +43,4 @@ describe("IssueDetailComponent", () => {
       expect(issue ? issue.title : null).toBe(expectedTitle)
     );
   });
-
-  /* The querySelector keeps coming out to null */
-  // fit("should set issue.title to the correct title", fakeAsync(() => {
-  //   const expectedTitle = sampleIssue.title;
-  //   component.issue$ = of(sampleIssue);
-  //   fixture.detectChanges();
-  //   expect(
-  //     fixture.debugElement.nativeElement.querySelector("div").innerText
-  //   ).toContain(expectedTitle);
-  // }));
 });

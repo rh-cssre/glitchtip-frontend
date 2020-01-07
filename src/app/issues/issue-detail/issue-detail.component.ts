@@ -12,6 +12,7 @@ import { IssueDetailService } from "./issue-detail.service";
 })
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
+
   issueIdParam$ = this.route.paramMap.pipe(
     map(params => params.get("issue-id"))
   );

@@ -105,16 +105,13 @@ export interface RetrieveIssuesParams {
   project?: string;
 }
 
-export interface UpdateStatusResponse extends Issue {
+export interface UpdateStatusResponse {
   status: IssueStatus;
 }
 
 // not in issues api reference, but is in issue list data
-export interface IssueWithStatusAndPlatform extends UpdateStatusResponse {
-  platform: string;
-}
 
-export interface IssueWithSelected extends IssueWithStatusAndPlatform {
+export interface IssueWithSelected extends UpdateStatusResponse {
   isSelected: boolean;
 }
 
