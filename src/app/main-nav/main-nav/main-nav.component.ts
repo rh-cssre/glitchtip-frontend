@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   HostListener
 } from "@angular/core";
-import { MatSidenav } from "@angular/material";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 
@@ -15,7 +14,7 @@ import { AuthService } from "src/app/api/auth/auth.service";
 })
 export class MainNavComponent {
   innerWidth: number;
-  sidenav: MatSidenav;
+  sideNavOpen = true;
   /* TODO: Add primary color to mat-sidenav
   https://stackoverflow.com/questions/54248944/angular-6-7-how-to-apply-default-theme-color-to-mat-sidenav-background */
   activeOrganizationDetail$ = this.organizationsService
@@ -26,15 +25,37 @@ export class MainNavComponent {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.innerWidth = window.innerWidth;
+    if (this.isScreenSmall()) {
+      this.hideSideNav();
+    } else {
+      this.showSideNav();
+    }
   }
 
   constructor(
     private organizationsService: OrganizationsService,
     private auth: AuthService
-  ) {}
+  ) {
+    this.innerWidth = window.innerWidth;
+    if (this.isScreenSmall()) {
+      this.hideSideNav();
+    }
+  }
 
   isScreenSmall() {
-    return this.innerWidth < 720;
+    return this.innerWidth < 768;
+  }
+
+  toggleSideNav() {
+    this.sideNavOpen = !this.sideNavOpen;
+  }
+
+  hideSideNav() {
+    this.sideNavOpen = false;
+  }
+
+  showSideNav() {
+    this.sideNavOpen = true;
   }
 
   setOrganization(id: number) {

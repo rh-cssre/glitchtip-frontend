@@ -1,9 +1,6 @@
-$iconWidth: 56px;
+@import "../../../assets/styles/variables";
 
-section {
-  margin-left: 20px;
-  margin-right: 20px;
-}
+$iconWidth: 56px;
 
 table {
   width: 100%;
@@ -13,6 +10,14 @@ table {
 .table-actions {
   display: flex;
   justify-content: space-between;
+}
+
+.primary-toolbar {
+  margin-bottom: 20px;
+
+  @media (max-width: $tablet - 1) {
+    padding-left: $iconWidth;
+  }
 }
 
 .mat-column-title {
