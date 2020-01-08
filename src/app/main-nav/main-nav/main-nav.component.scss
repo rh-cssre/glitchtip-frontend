@@ -1,45 +1,74 @@
+@import "../../../assets/styles/variables";
+
 $iconWidth: 56px;
 
 mat-sidenav-container {
-  flex: 1;
-  position: fixed;
-  width: 100%;
-  min-width: 100%;
-  height: 100%;
-  min-height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 mat-sidenav {
   width: 240px;
 }
 
-.app-sidenav-content {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
+.logo-toolbar {
+  background-color: transparent;
+
+  .main-logo {
+    width: 115px;
+  }
 }
 
 .sidenav-toggle {
   display: none;
   padding: 0;
-  margin: 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
   min-width: $iconWidth;
 
-  @media (max-width: 720px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  @media (max-width: $tablet - 1) {
+    display: block;
   }
 
   mat-icon {
-    font-size: 30px;
+    font-size: 25px;
     height: $iconWidth;
     width: $iconWidth;
     line-height: $iconWidth;
     color: white;
+
+    @media (min-width: $small) {
+      height: 64px;
+      line-height: 64px;
+    }
   }
 }
 
-.wrapper {
-  margin: 50px;
+.overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  // white-space: nowrap;
+  // max-height: 32px;
+  // line-height: 1;
+  max-height: 40px;
+  line-height: 1.11111;
+  font-size: 18px;
+  font-weight: 500;
 }
+
+.down-caret {
+  transform: scale(1, 0.5);
+}
+
+.org-details-divider {
+  margin: 10px 0;
+}
+
+// .wrapper {
+//   margin: 30px;
+// }
