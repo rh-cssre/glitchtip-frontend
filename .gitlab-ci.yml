@@ -50,7 +50,7 @@ build-docker:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
     - docker push ${CONTAINER_IMAGE}
-    - if [ $CI_COMMIT_REF_NAME = "master" ]; then docker push ${CI_REGISTRY_IMAGE}:latest}; fi
+    - if [ $CI_COMMIT_REF_NAME = "master" ]; then docker push ${CI_REGISTRY_IMAGE}:latest; fi
 
 pages:
   stage: deploy
