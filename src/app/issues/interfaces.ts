@@ -1,5 +1,5 @@
 export interface Event {
-  eventId: string;
+  eventID: string;
   exception: {
     values: [
       {
