@@ -2,19 +2,28 @@
   <mat-sidenav
     #sidenav
     *ngIf="isLoggedIn$ | async"
-    class="mat-elevation-z10"
-    [opened]="!isScreenSmall()"
+    class="mat-elevation-z2"
+    [opened]="sideNavOpen"
+    (closed)="hideSideNav()"
     [mode]="isScreenSmall() ? 'over' : 'side'"
   >
-    <mat-toolbar routerLink="." color="primary">
-      GlitchTip
+    <mat-toolbar class="logo-toolbar">
+      <img
+        class="main-logo"
+        routerLink="."
+        src="assets/images/glitchtip-logo-v1.svg"
+        alt="GlitchTip"
+      />
     </mat-toolbar>
     <mat-nav-list>
-      <h3 mat-subheader>Select Organization</h3>
       <mat-list-item color="accent" [matMenuTriggerFor]="menu">
-        <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
+        <span
+          *ngIf="activeOrganizationDetail$ | async as orgDetails"
+          class="overflow"
+        >
           {{ orgDetails?.name }}
         </span>
+        <span class="down-caret">▼</span>
       </mat-list-item>
       <mat-menu #menu="matMenu">
         <button
@@ -29,7 +38,7 @@
           Create New Organization
         </button>
       </mat-menu>
-      <mat-divider></mat-divider>
+      <mat-divider class="org-details-divider"></mat-divider>
       <ng-container *ngIf="activeOrganizationDetail$ | async as orgDetails">
         <a
           mat-list-item
@@ -52,18 +61,18 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <div class="app-sidenav-content">
-    <mat-toolbar *ngIf="isLoggedIn$ | async" color="primary">
-      <button mat-button class="sidenav-toggle" (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
+  <mat-sidenav-content>
+    <button
+      *ngIf="isLoggedIn$ | async"
+      mat-button
+      class="sidenav-toggle"
+      (click)="toggleSideNav()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
 
-      <span *ngIf="activeOrganizationDetail$ | async as orgDetails">
-        {{ orgDetails?.name }}
-      </span>
-    </mat-toolbar>
     <div class="wrapper">
       <ng-content></ng-content>
     </div>
-  </div>
+  </mat-sidenav-content>
 </mat-sidenav-container>

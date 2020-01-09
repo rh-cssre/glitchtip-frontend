@@ -73,3 +73,16 @@ $mobile-typography: mat-typography-config(
   $display-2: mat-typography-level(36px, 46px, 400, "Plex Serif", -0.005em),
   $display-1: mat-typography-level(28px, 33px, 400, "Plex Serif")
 );
+
+// Breakpoints
+
+// These are the material breakpoints. Unless you find a way to customize them,
+// you'll have to use them sometimes
+$extra-small: 0px;
+$small: 600px;
+$medium: 960px;
+$large: 1280px;
+$extra-large: 1920px;
+
+// Come up with a better name, I dare you
+$tablet: 768px;

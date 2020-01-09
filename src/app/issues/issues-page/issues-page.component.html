@@ -1,5 +1,5 @@
-<section class="mat-elevation-z8">
-  <mat-toolbar color="primary">Issues</mat-toolbar>
+<section class="mat-elevation-z0">
+  <mat-toolbar class="primary-toolbar" color="primary">Issues</mat-toolbar>
 
   <table mat-table [dataSource]="issues$">
     <ng-container matColumnDef="actions">
@@ -10,12 +10,11 @@
         <button
           style="margin-left: 10px;"
           mat-flat-button
-          color="accent"
           (click)="bulkMarkResolved()"
         >
           Reopen issue
         </button>
-        <button style="margin-left: 10px;" mat-flat-button color="warn">
+        <button style="margin-left: 10px;" mat-flat-button>
           Ignore issue
         </button>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
