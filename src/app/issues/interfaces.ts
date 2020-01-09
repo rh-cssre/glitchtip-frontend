@@ -1,49 +1,65 @@
 import { ProjectIssueView } from "../api/projects/projects.interfaces";
 
 export interface Event {
-  eventId: string;
-  exception: {
-    values: [
-      {
-        type: string; // "Error"
-        value: string;
-        stacktrace: {
-          frames: {
-            colno: number;
-            filename: string;
-            function: string;
-            in_app: boolean;
-            lineno: number;
-          }[];
-        };
-        mechanism: {
-          handled: boolean;
-          type: string; // "generic"
-        };
-      }
-    ];
-  };
-  level: string;
+  eventID: string;
+  tags: any[];
+  projectID: string;
+  dateCreated: string;
+  user: any;
+  message: string;
+  id: string;
+  culprit: string;
+  title: string;
+  location: string;
+  crashFile: string | null;
+  groupID: string;
+  "event.type": EventTypes;
   platform: string;
-  sdk: {
-    name: string;
-    version: string;
-    packages: {
-      name: string;
-      version: string;
-    }[];
-    integrations: string[];
-  };
-  release: string;
-  request: {
-    url: string;
-    headers: {
-      "User-Agent": string;
-    };
-  };
-  breadcrumbs: any;
-  received_at: string;
+
+  /* Before we delete this stuff, we should figure out where it came from. It didn't show up here by accident */
+  // exception: {
+  //   values: [
+  //     {
+  //       type: string; // "Error"
+  //       value: string;
+  //       stacktrace: {
+  //         frames: {
+  //           colno: number;
+  //           filename: string;
+  //           function: string;
+  //           in_app: boolean;
+  //           lineno: number;
+  //         }[];
+  //       };
+  //       mechanism: {
+  //         handled: boolean;
+  //         type: string; // "generic"
+  //       };
+  //     }
+  //   ];
+  // };
+  // level: string;
+  // sdk: {
+  //   name: string;
+  //   version: string;
+  //   packages: {
+  //     name: string;
+  //     version: string;
+  //   }[];
+  //   integrations: string[];
+  // };
+  // release: string;
+  // request: {
+  //   url: string;
+  //   headers: {
+  //     "User-Agent": string;
+  //   };
+  // };
+  // breadcrumbs: any;
+  // received_at: string;
 }
+
+export type EventTypes = "error" | "default";
 
 export interface EventDetail extends Event {
   nextEventID: string | null;

@@ -9,7 +9,7 @@ import { FormGroup, FormControl } from "@angular/forms";
 export class IssueListItemComponent {
   @Input() title: string;
   @Input() location: string;
-  @Input() eventId: number;
+  @Input() eventID: number;
 
   statusOptions = ["unresolved", "resolved", "ignored"];
 
