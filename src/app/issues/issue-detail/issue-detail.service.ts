@@ -89,10 +89,10 @@ export class IssueDetailService {
     return EMPTY;
   }
 
-  getEventByID(eventId: string) {
+  getEventByID(eventID: string) {
     const issue = this.state.getValue().issue;
     if (issue) {
-      return this.retrieveEvent(issue.id, eventId);
+      return this.retrieveEvent(issue.id, eventID);
     }
     return EMPTY;
   }
@@ -104,8 +104,8 @@ export class IssueDetailService {
       .pipe(tap(event => this.setEvent(event)));
   }
 
-  private retrieveEvent(issueId: number, eventId: string) {
-    const url = `${this.url}${issueId}/events/${eventId}/`;
+  private retrieveEvent(issueId: number, eventID: string) {
+    const url = `${this.url}${issueId}/events/${eventID}/`;
     return this.http
       .get<EventDetail>(url)
       .pipe(tap(event => this.setEvent(event)));
@@ -127,10 +127,10 @@ export class IssueDetailService {
   private eventUrl(
     orgSlug: string | null,
     issue: IssueDetail | null,
-    eventId: string
+    eventID: string
   ) {
     if (orgSlug && issue) {
-      return `/organizations/${orgSlug}/issues/${issue.id}/events/${eventId}`;
+      return `/organizations/${orgSlug}/issues/${issue.id}/events/${eventID}`;
     }
     return null;
   }
