@@ -104,7 +104,8 @@ export class IssueDetailService {
       .pipe(tap(event => this.setEvent(event)));
   }
 
-  private retrieveEvent(issueId: number, eventID: string) {
+  // private removed for testing
+  retrieveEvent(issueId: number, eventID: string) {
     const url = `${this.url}${issueId}/events/${eventID}/`;
     return this.http
       .get<EventDetail>(url)
@@ -115,7 +116,8 @@ export class IssueDetailService {
     this.state.next(initialState);
   }
 
-  private setIssue(issue: IssueDetail) {
+  // private removed for testing
+  setIssue(issue: IssueDetail) {
     this.state.next({ ...this.state.getValue(), issue });
   }
 
