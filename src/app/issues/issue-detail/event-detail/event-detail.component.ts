@@ -16,7 +16,7 @@ export class EventDetailComponent implements OnInit {
   nextEventUrl$ = this.issueService.nextEventUrl$;
   previousEventUrl$ = this.issueService.previousEventUrl$;
 
-  eventIdParam$ = this.route.paramMap.pipe(
+  eventIDParam$ = this.route.paramMap.pipe(
     map(params => params.get("event-id"))
   );
 
@@ -26,11 +26,11 @@ export class EventDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.eventIdParam$
+    this.eventIDParam$
       .pipe(
-        exhaustMap(eventId => {
-          if (eventId) {
-            return this.issueService.getEventByID(eventId);
+        exhaustMap(eventID => {
+          if (eventID) {
+            return this.issueService.getEventByID(eventID);
           }
           return this.issueService.getLatestEvent();
         })

@@ -7,6 +7,7 @@ import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
+import { EMPTY } from "rxjs";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -38,13 +39,38 @@ describe("IssueDetailService", () => {
   });
 
   it("should clear the issue state", () => {
-    const testData: IssueDetail = sampleIssueDetail;
-    // set issue state to have data
-    service.issue$.subscribe(issue => {
-      issue = testData;
+    const testData: any = sampleIssueDetail;
+    let issue: IssueDetail | null = null;
+
+    service.issue$.subscribe(issueFromSubscription => {
+      issue = issueFromSubscription;
     });
-    // clear issue state data
+
+    service.setIssue(testData);
+    expect(issue).toEqual(testData);
     service.clearState();
-    service.issue$.subscribe(issue => expect(issue).toBe(null));
+    expect(issue).toEqual(null);
+  });
+
+  it("getEventById should return an empty observable when issue state is null", () => {
+    const eventID = "a58902b72e3e45f58ab9ecfb08297fd1";
+    expect(service.getEventByID(eventID)).toBe(EMPTY);
+  });
+
+  it("getEventById should call retrieveEvent when issue state is not null", () => {
+    const eventID = "a58902b72e3e45f58ab9ecfb08297fd1";
+    const testData = sampleIssueDetail;
+    let issue: any = null;
+    spyOn(service, "retrieveEvent");
+
+    service.issue$.subscribe(subIssue => {
+      issue = subIssue;
+    });
+
+    service.setIssue(testData);
+    expect(issue).toBeTruthy();
+    service.getEventByID(eventID);
+    expect(issue).toBe(testData);
+    expect(service.retrieveEvent).toHaveBeenCalled();
   });
 });
