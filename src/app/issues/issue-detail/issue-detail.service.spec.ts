@@ -5,8 +5,9 @@ import {
 } from "@angular/common/http/testing";
 import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail } from "../interfaces";
-import { sampleIssue } from "../issue-list-item/sample-data";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { sampleIssueDetail } from "./issue-detail-test-data";
+import { EMPTY } from "rxjs";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -28,12 +29,48 @@ describe("IssueDetailService", () => {
   });
 
   it("should retieve issue detail", () => {
-    const testData: IssueDetail = sampleIssue;
+    const testData: IssueDetail = sampleIssueDetail;
     service.retrieveIssue(testData.id).toPromise();
     const req = httpTestingController.expectOne(
       `/api/0/issues/${testData.id}/`
     );
     req.flush(testData);
     service.issue$.subscribe(issue => expect(issue).toEqual(testData));
+  });
+
+  it("should clear the issue state", () => {
+    const testData: any = sampleIssueDetail;
+    let issue: IssueDetail | null = null;
+
+    service.issue$.subscribe(issueFromSubscription => {
+      issue = issueFromSubscription;
+    });
+
+    service.setIssue(testData);
+    expect(issue).toEqual(testData);
+    service.clearState();
+    expect(issue).toEqual(null);
+  });
+
+  it("getEventById should return an empty observable when issue state is null", () => {
+    const eventID = "a58902b72e3e45f58ab9ecfb08297fd1";
+    expect(service.getEventByID(eventID)).toBe(EMPTY);
+  });
+
+  it("getEventById should call retrieveEvent when issue state is not null", () => {
+    const eventID = "a58902b72e3e45f58ab9ecfb08297fd1";
+    const testData = sampleIssueDetail;
+    let issue: any = null;
+    spyOn(service, "retrieveEvent");
+
+    service.issue$.subscribe(subIssue => {
+      issue = subIssue;
+    });
+
+    service.setIssue(testData);
+    expect(issue).toBeTruthy();
+    service.getEventByID(eventID);
+    expect(issue).toBe(testData);
+    expect(service.retrieveEvent).toHaveBeenCalled();
   });
 });

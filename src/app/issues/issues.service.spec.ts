@@ -7,7 +7,7 @@ import { MatSnackBarModule } from "@angular/material";
 
 import { IssuesService } from "./issues.service";
 import { Issue } from "./interfaces";
-import { issueList } from "./issue-test-data";
+import { issueList } from "./issues-list-test-data";
 
 describe("IssuesService", () => {
   let httpTestingController: HttpTestingController;

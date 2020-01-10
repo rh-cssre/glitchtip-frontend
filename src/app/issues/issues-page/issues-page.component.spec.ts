@@ -8,10 +8,13 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { IssuesPageComponent } from "./issues-page.component";
 import { IssueListItemComponent } from "../issue-list-item/issue-list-item.component";
 import { MaterialModule } from "src/app/shared/material.module";
+import { issueList } from "../issues-list-test-data";
+import { of } from "rxjs";
 
 describe("IssuesPageComponent", () => {
   let component: IssuesPageComponent;
   let fixture: ComponentFixture<IssuesPageComponent>;
+  let ISSUES;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -28,9 +31,11 @@ describe("IssuesPageComponent", () => {
   }));
 
   beforeEach(() => {
+    ISSUES = of(issueList);
     fixture = TestBed.createComponent(IssuesPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.issues$ = ISSUES;
   });
 
   it("should create", () => {

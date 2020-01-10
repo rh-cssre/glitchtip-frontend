@@ -8,7 +8,8 @@ import { of } from "rxjs";
 import { IssuesPageComponent } from "./issues-page.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { IssuesService } from "../issues.service";
-import { sampleIssue } from "../issue-list-item/sample-data";
+import { issueList } from "../issues-list-test-data";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 export default {
   title: "Issues Page",
@@ -18,7 +19,8 @@ export default {
         MaterialModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        BrowserAnimationsModule
       ],
       providers: [IssuesService]
     }),
@@ -29,7 +31,7 @@ export default {
 export const issueListItem = () => ({
   component: IssuesPageComponent,
   props: {
-    issues$: of([sampleIssue])
+    issues$: of(issueList)
   }
 });
 

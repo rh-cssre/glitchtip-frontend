@@ -1,7 +1,6 @@
-// import { Issue } from "../interfaces";
+import { Issue } from "./interfaces";
 
-// export const issueList: Issue[] = [
-export const issueList = [
+export const issueList: Issue[] = [
   {
     platform: "python",
     lastSeen: "2019-12-31T19:34:22.397462Z",
@@ -64,7 +63,7 @@ export const issueList = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: "1851390",
+      id: 1851390,
       name: "django-app"
     },
     statusDetails: {}
@@ -104,7 +103,7 @@ export const issueList = [
     },
     culprit: "polls.urls in <module>",
     title: "IndentationError: unexpected indent (views.py, line 13)",
-    id: "1412895399",
+    id: 1412895399,
     assignedTo: null,
     logger: null,
     type: "error",
@@ -131,7 +130,7 @@ export const issueList = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: "1851390",
+      id: 1851390,
       name: "django-app"
     },
     statusDetails: {}
@@ -198,7 +197,7 @@ export const issueList = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: "1851390",
+      id: 1851390,
       name: "django-app"
     },
     statusDetails: {}
@@ -267,7 +266,7 @@ export const issueList = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: "1851390",
+      id: 1851390,
       name: "django-app"
     },
     statusDetails: {}
