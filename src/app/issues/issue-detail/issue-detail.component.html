@@ -1,24 +1,21 @@
-<div *ngIf="issue$ | async as issue">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ issue?.metadata.type }}</mat-card-title
-      ><mat-card-subtitle>
-        {{ issue?.culprit }}
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content
-      ><p>
-        {{ issue?.metadata.value }}
-      </p></mat-card-content
-    >
-  </mat-card>
+<section *ngIf="issue$ | async as issue">
   <div>
-    <p>
-      Issue Title:
-    </p>
-
-    {{ issue?.title }}
+    <h1 class="mat-headline">
+      <span class="mat-h1">{{ issue?.metadata.type }}</span
+      ><span class="mat-h3">{{ issue?.culprit }}</span>
+      <p class="mat-subheading-1">
+        {{ issue?.metadata.value }}
+      </p>
+    </h1>
+    <div class="button-row">
+      <button mat-flat-button color="primary">
+        <mat-icon aria-hidden="true">done</mat-icon>
+        Resolve
+      </button>
+      <button mat-flat-button>Ignore</button>
+      <button mat-icon-button><mat-icon>delete</mat-icon></button>
+    </div>
   </div>
 
   <router-outlet>Event List</router-outlet>
-</div>
+</section>
