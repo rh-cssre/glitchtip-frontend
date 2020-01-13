@@ -162,7 +162,7 @@ export const sampleIssueDetail: IssueDetail = {
   firstRelease: null,
   shortId: "DJANGO-APP-9",
   shareId: "e09c87178a8b4bf78e4548c1d9f817b1",
-  firstSeen: "2020-01-09T14:22:51.793749Z",
+  firstSeen: "2019-12-09T14:22:51.793749Z",
   count: "6",
   permalink:
     "https://sentry.io/organizations/burke-software-consulting/issues/1427810956/",

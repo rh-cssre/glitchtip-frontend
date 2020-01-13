@@ -21,3 +21,17 @@
     height: 24px;
   }
 }
+
+.right-col {
+  border-left: 1px solid;
+  border-left-color: rgba(0, 0, 0, 0.12);
+}
+
+mat-grid-list {
+  height: 90vh;
+}
+
+.tags {
+  display: flex;
+  justify-content: space-between;
+}

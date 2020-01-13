@@ -47,5 +47,60 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </article>
-  <router-outlet>Event List</router-outlet>
+  <mat-divider></mat-divider>
+  <mat-grid-list cols="4" rowHeight="1:5">
+    <mat-grid-tile colspan="3">
+      <router-outlet>Latest Event</router-outlet>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1" class="right-col"
+      ><aside>
+        <article hidden>
+          <h3 class="mat-body-strong mat-body-2">Ownership Rules</h3>
+          <p>TODO</p>
+        </article>
+        <article>
+          <h3 class="mat-body-strong mat-body-2">All Environments</h3>
+          <p>First Seen</p>
+          <dl>
+            <dt>When:</dt>
+            <dd *ngIf="issue">{{ issue?.firstSeen | daysAgo }} days ago</dd>
+            <br />
+            <dd>{{ issue?.firstSeen | date: "long" }}</dd>
+          </dl>
+          <p>Last Seen</p>
+          <dl>
+            <dt>When:</dt>
+            <dd *ngIf="issue">{{ issue?.lastSeen | daysAgo }} days ago</dd>
+            <br />
+            <dd>{{ issue?.lastSeen | date: "long" }}</dd>
+          </dl>
+        </article>
+        <article hidden>
+          <h3 class="mat-body-strong mat-body-2">Linked Issues</h3>
+          <p>TODO</p>
+        </article>
+        <article>
+          <h3 class="mat-body-strong mat-body-2">Tags</h3>
+          <div *ngFor="let tag of issue?.tags" class="tags">
+            <div>{{ tag.name }}</div>
+            <div>{{ tag.key }}</div>
+          </div>
+        </article>
+        <article>
+          <h3 class="mat-body-strong mat-body-2">
+            {{ issue?.participants.length }} Participant
+          </h3>
+          <!-- TODO: use participant.avatar instead -->
+
+          <div *ngFor="let participant of issue?.participants">
+            {{ participant.name }}
+          </div>
+        </article>
+        <article hidden>
+          <h3 class="mat-body-strong mat-body-2">Notificiations</h3>
+          <p>TODO</p>
+        </article>
+      </aside></mat-grid-tile
+    >
+  </mat-grid-list>
 </section>
