@@ -13,6 +13,7 @@ import { IssueDetailService } from "./issue-detail.service";
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
 
+  displayedColumns: string[] = ["issueNum", "events", "users", "assignee"];
   issueIdParam$ = this.route.paramMap.pipe(
     map(params => params.get("issue-id"))
   );

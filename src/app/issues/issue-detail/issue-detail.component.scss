@@ -1,0 +1,23 @@
+.mat-h1 {
+  padding-right: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  .button-row button {
+    margin-right: 8px;
+  }
+
+  th.mat-header-cell,
+  td.mat-cell {
+    border-bottom-color: rgba(0, 0, 0, 0);
+    padding-right: 32px;
+  }
+
+  tr.mat-row,
+  tr.mat-header-row {
+    height: 24px;
+  }
+}
