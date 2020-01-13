@@ -92,7 +92,7 @@ export interface Issue {
   stats: IStats;
   status: IssueStatus;
   statusDetails: object;
-  subscriptionDetails: string | null;
+  subscriptionDetails: object | null;
   title: string;
   type: string;
   userCount: number;
@@ -104,7 +104,7 @@ export interface IssueDetail extends Issue {
   seenBy: object[];
   pluginIssues: string[];
   userReportCount: number;
-  participants: string[];
+  participants: any[];
   pluginActions: string[];
   tags: object[];
   firstRelease: IFirstRelase | null;
@@ -165,5 +165,5 @@ interface IActivity {
   dateCreated: string;
   id: string;
   type: string;
-  user: string | null;
+  user: any | null;
 }
