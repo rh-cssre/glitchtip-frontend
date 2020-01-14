@@ -105,8 +105,8 @@
         <p mat-line>TODO but with p tag and mat-line</p>
       </mat-list-item>
       <mat-divider></mat-divider>
-      <h3 mat-subheader>Tags</h3>
-      <mat-list-item>
+      <h3 mat-subheader *ngIf="issue?.tags">Tags</h3>
+      <mat-list-item *ngIf="issue?.tags">
         <div mat-line *ngFor="let tag of issue?.tags">
           <div class="tags">
             <div class="mat-body-strong">{{ tag.name }}</div>
@@ -114,18 +114,18 @@
           </div>
         </div>
       </mat-list-item>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>
+      <mat-divider *ngIf="issue?.tags"></mat-divider>
+      <h3 mat-subheader *ngIf="issue?.participants">
         {{
           issue?.participants.length | i18nPlural: participantCountPluralMapping
         }}
       </h3>
-      <mat-list-item>
+      <mat-list-item *ngIf="issue?.participants">
         <div mat-line *ngFor="let participant of issue?.participants">
           {{ participant.name }}
         </div>
       </mat-list-item>
-      <mat-divider></mat-divider>
+      <mat-divider *ngIf="issue?.participants"></mat-divider>
       <h3 mat-subheader>Notificiations</h3>
       <mat-list-item>
         <h4 mat-line>TODO</h4>
