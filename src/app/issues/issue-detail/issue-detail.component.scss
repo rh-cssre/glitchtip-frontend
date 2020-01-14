@@ -1,0 +1,57 @@
+.mat-h1 {
+  padding-right: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 16px;
+
+  .button-row button {
+    margin-right: 8px;
+  }
+
+  th.mat-header-cell,
+  td.mat-cell {
+    border-bottom-color: rgba(0, 0, 0, 0);
+    padding-right: 32px;
+  }
+
+  tr.mat-row,
+  tr.mat-header-row {
+    height: 24px;
+  }
+}
+
+mat-grid-list {
+  height: 90vh;
+}
+
+.tags {
+  display: flex;
+  justify-content: space-between;
+}
+
+.row {
+  display: flex;
+
+  .left {
+    flex: 75%;
+    // padding-right: 16px;
+    border-right: 1px solid;
+    border-right-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .right {
+    flex: 25%;
+    // padding-left: 16px;
+  }
+}
+
+dl dt {
+  float: left;
+}
+
+dl dd {
+  text-align: right;
+}

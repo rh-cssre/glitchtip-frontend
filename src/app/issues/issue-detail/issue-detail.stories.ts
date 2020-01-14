@@ -1,41 +1,40 @@
 import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
-import { of } from "rxjs";
-
-import { IssuesPageComponent } from "./issues-page.component";
+import { IssueDetailComponent } from "./issue-detail.component";
+import { sampleIssueDetail } from "./issue-detail-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
-import { IssuesService } from "../issues.service";
-import { issueList } from "../issues-list-test-data";
+import { of } from "rxjs";
+import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SharedModule } from "src/app/shared/shared.module";
 
 export default {
-  title: "Issues Page",
+  title: "Issues Detail",
   decorators: [
     moduleMetadata({
       imports: [
         MaterialModule,
-        HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        BrowserAnimationsModule
-      ],
-      providers: [IssuesService]
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
+        SharedModule
+      ]
     }),
     withKnobs
   ]
 };
 
-export const issueListItem = () => ({
-  component: IssuesPageComponent,
+export const issueDetail = () => ({
+  component: IssueDetailComponent,
   props: {
-    issues$: of(issueList)
+    issue$: of(sampleIssueDetail)
   }
 });
 
-issueListItem.story = {
+issueDetail.story = {
   parameters: {
     notes:
       "Oh hey you can leave notes. Why is the alignment so weird though? Not sure if this is a great place to take notes."
