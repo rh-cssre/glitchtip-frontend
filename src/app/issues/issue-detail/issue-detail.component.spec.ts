@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { IssueDetailComponent } from "./issue-detail.component";
 import { ComponentFixtureAutoDetect } from "@angular/core/testing";
 import { MaterialModule } from "src/app/shared/material.module";
+import { SharedModule } from "src/app/shared/shared.module";
 
 describe("IssueDetailComponent", () => {
   let component: IssueDetailComponent;
@@ -17,7 +18,8 @@ describe("IssueDetailComponent", () => {
         HttpClientTestingModule,
         RouterTestingModule,
         NoopAnimationsModule,
-        MaterialModule
+        MaterialModule,
+        SharedModule
       ],
       declarations: [IssueDetailComponent],
       providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }]

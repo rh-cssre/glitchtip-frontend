@@ -106,7 +106,7 @@ export interface IssueDetail extends Issue {
   userReportCount: number;
   participants: any[];
   pluginActions: string[];
-  tags: object[];
+  tags: ITag[];
   firstRelease: IFirstRelase | null;
   pluginContexts: string[];
   lastRelease: string | null;
@@ -166,4 +166,10 @@ interface IActivity {
   id: string;
   type: string;
   user: any | null;
+}
+
+interface ITag {
+  totalValues: number;
+  name: string;
+  key: string;
 }

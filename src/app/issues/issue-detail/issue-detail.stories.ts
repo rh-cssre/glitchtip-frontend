@@ -8,6 +8,7 @@ import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SharedModule } from "src/app/shared/shared.module";
 
 export default {
   title: "Issues Detail",
@@ -18,7 +19,8 @@ export default {
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        SharedModule
       ]
     }),
     withKnobs

@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { MaterialModule } from "../shared/material.module";
+import { SharedModule } from "../shared/shared.module";
 
 // Components
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
@@ -15,7 +16,8 @@ import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.c
     CommonModule,
     ReactiveFormsModule,
     IssuesRoutingModule,
-    MaterialModule
+    MaterialModule,
+    SharedModule
   ],
   declarations: [
     IssuesPageComponent,
