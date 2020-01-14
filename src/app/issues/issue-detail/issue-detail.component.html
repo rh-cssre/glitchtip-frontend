@@ -37,9 +37,24 @@
       <ng-container matColumnDef="assignee">
         <th mat-header-cell *matHeaderCellDef>Assignee</th>
         <td mat-cell *matCellDef="let element">
-          <span *ngIf="!element.assignedTo"
-            ><mat-icon>perm_identity</mat-icon></span
-          ><span *ngIf="element.assignedTo">{{ element.assignedTo }}</span>
+          <mat-form-field>
+            <mat-label
+              ><span *ngIf="!element.assignedTo"
+                ><mat-icon>perm_identity</mat-icon></span
+              ><span *ngIf="element.assignedTo">{{
+                element.assignedTo
+              }}</span></mat-label
+            >
+            <mat-select>
+              <mat-option>Clear Assignee</mat-option>
+              <mat-option
+                *ngFor="let participant of issue?.participants; let i = index"
+                [value]="'participant-' + i"
+              >
+                {{ participant.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </td>
       </ng-container>
 
@@ -48,59 +63,74 @@
     </table>
   </article>
   <mat-divider></mat-divider>
-  <mat-grid-list cols="4" rowHeight="1:5">
-    <mat-grid-tile colspan="3">
+
+  <div class="row">
+    <div class="column left">
       <router-outlet>Latest Event</router-outlet>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="1" class="right-col"
-      ><aside>
-        <article hidden>
-          <h3 class="mat-body-strong mat-body-2">Ownership Rules</h3>
-          <p>TODO</p>
-        </article>
-        <article>
-          <h3 class="mat-body-strong mat-body-2">All Environments</h3>
-          <p>First Seen</p>
-          <dl>
-            <dt>When:</dt>
-            <dd *ngIf="issue">{{ issue?.firstSeen | daysAgo }} days ago</dd>
-            <br />
-            <dd>{{ issue?.firstSeen | date: "long" }}</dd>
-          </dl>
-          <p>Last Seen</p>
-          <dl>
-            <dt>When:</dt>
-            <dd *ngIf="issue">{{ issue?.lastSeen | daysAgo }} days ago</dd>
-            <br />
-            <dd>{{ issue?.lastSeen | date: "long" }}</dd>
-          </dl>
-        </article>
-        <article hidden>
-          <h3 class="mat-body-strong mat-body-2">Linked Issues</h3>
-          <p>TODO</p>
-        </article>
-        <article>
-          <h3 class="mat-body-strong mat-body-2">Tags</h3>
-          <div *ngFor="let tag of issue?.tags" class="tags">
-            <div>{{ tag.name }}</div>
+    </div>
+
+    <mat-list class="column right">
+      <h3 mat-subheader>Ownership Rules</h3>
+      <mat-list-item>
+        <h4 mat-line>TODO</h4>
+        <p mat-line>TODO but with p tag and mat-line</p>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>All Environments</h3>
+      <mat-list-item>
+        <h4 mat-line>First Seen</h4>
+        <dl mat-line>
+          <dt class="mat-body-strong">When:</dt>
+          <div></div>
+          <dd *ngIf="issue">{{ issue?.firstSeen | daysAgo }} days ago</dd>
+          <dd>
+            {{ issue?.firstSeen | date: "long" }}
+          </dd>
+        </dl>
+      </mat-list-item>
+      <mat-list-item>
+        <h4 mat-line>Last Seen</h4>
+        <dl mat-line>
+          <dt class="mat-body-strong">When:</dt>
+          <dd *ngIf="issue">{{ issue?.lastSeen | daysAgo }} days ago</dd>
+          <dd>
+            {{ issue?.lastSeen | date: "long" }}
+          </dd>
+        </dl>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Linked Issues</h3>
+      <mat-list-item>
+        <h4 mat-line>TODO</h4>
+        <p mat-line>TODO but with p tag and mat-line</p>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Tags</h3>
+      <mat-list-item>
+        <div mat-line *ngFor="let tag of issue?.tags">
+          <div class="tags">
+            <div class="mat-body-strong">{{ tag.name }}</div>
             <div>{{ tag.key }}</div>
           </div>
-        </article>
-        <article>
-          <h3 class="mat-body-strong mat-body-2">
-            {{ issue?.participants.length }} Participant
-          </h3>
-          <!-- TODO: use participant.avatar instead -->
-
-          <div *ngFor="let participant of issue?.participants">
-            {{ participant.name }}
-          </div>
-        </article>
-        <article hidden>
-          <h3 class="mat-body-strong mat-body-2">Notificiations</h3>
-          <p>TODO</p>
-        </article>
-      </aside></mat-grid-tile
-    >
-  </mat-grid-list>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>
+        {{
+          issue?.participants.length | i18nPlural: participantCountPluralMapping
+        }}
+      </h3>
+      <mat-list-item>
+        <div mat-line *ngFor="let participant of issue?.participants">
+          {{ participant.name }}
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Notificiations</h3>
+      <mat-list-item>
+        <h4 mat-line>TODO</h4>
+        <p mat-line>TODO but with p tag and mat-line</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
 </section>

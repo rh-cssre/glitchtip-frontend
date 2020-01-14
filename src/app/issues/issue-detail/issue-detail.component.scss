@@ -5,6 +5,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 16px;
 
   .button-row button {
     margin-right: 8px;
@@ -22,11 +23,6 @@
   }
 }
 
-.right-col {
-  border-left: 1px solid;
-  border-left-color: rgba(0, 0, 0, 0.12);
-}
-
 mat-grid-list {
   height: 90vh;
 }
@@ -34,4 +30,28 @@ mat-grid-list {
 .tags {
   display: flex;
   justify-content: space-between;
+}
+
+.row {
+  display: flex;
+
+  .left {
+    flex: 75%;
+    // padding-right: 16px;
+    border-right: 1px solid;
+    border-right-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .right {
+    flex: 25%;
+    // padding-left: 16px;
+  }
+}
+
+dl dt {
+  float: left;
+}
+
+dl dd {
+  text-align: right;
 }
