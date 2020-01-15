@@ -5,8 +5,10 @@ import { NgModule } from "@angular/core";
 
 import {
   MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatDividerModule,
   MatGridListModule,
   MatIconModule,
@@ -22,8 +24,10 @@ import {
 
 export const COMPONENTS = [
   MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatDividerModule,
   MatGridListModule,
   MatIconModule,

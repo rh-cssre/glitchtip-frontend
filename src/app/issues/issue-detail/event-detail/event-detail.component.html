@@ -1,7 +1,110 @@
-<div *ngIf="event$ | async as event">
-  {{ event?.eventID }}
-  <a [routerLink]="previousEventUrl$ | async">Older</a>
-  {{ previousEvent$ | async }}
-  <a [routerLink]="nextEventUrl$ | async">Newer</a>
-  {{ nextEvent$ | async }}
-</div>
+<section *ngIf="event$ | async as event" class="mat-typography">
+  <article class="header">
+    <div>
+      <h2>Event</h2>
+      <p>
+        <a>{{ event?.eventID }}</a>
+      </p>
+      <p>
+        <span>{{ event?.dateCreated }}</span
+        ><span class="space">
+          <!-- Link to JSON and (size) -->
+          <a>JSON (31.7 KB)</a>
+        </span>
+      </p>
+    </div>
+    <div>
+      <a
+        mat-button
+        [routerLink]="previousEventUrl$ | async"
+        [disabled]="(previousEvent$ | async) === false"
+        ><mat-icon>keyboard_arrow_left</mat-icon> Older</a
+      >
+      <a
+        mat-button
+        [routerLink]="nextEventUrl$ | async"
+        [disabled]="(nextEvent$ | async) === false"
+        >Newer <mat-icon>keyboard_arrow_right</mat-icon></a
+      >
+    </div>
+  </article>
+
+  <mat-divider></mat-divider>
+
+  <article *ngIf="event?.user || event?.contexts.browser" class="location">
+    <div class="wrapper">
+      <mat-icon> my_location</mat-icon>
+      <div class="mat-body-strong spacer">{{ event?.user.ip_address }}</div>
+    </div>
+    <div class="wrapper">
+      <mat-icon>laptop</mat-icon>
+      <div class="spacer">
+        <p class="mat-body-strong">{{ event?.contexts.browser.name }}</p>
+        <p class="mat-small mat-caption">
+          <span class="bold">Version:</span
+          ><span class="spacer-small">{{
+            event?.contexts.browser.version
+          }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="wrapper">
+      <mat-icon>devices</mat-icon>
+      <div class="spacer">
+        <p class="mat-body-strong">{{ event?.contexts.os.name }}</p>
+        <p class="mat-small mat-caption">
+          <span class="bold">Version:</span
+          ><span class="spacer-small">{{ event?.contexts.os.version }}</span>
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <mat-divider *ngIf="event?.user || event?.contexts.browser"></mat-divider>
+
+  <article *ngIf="event?.tags.length > 0" class="tags">
+    <h3>Tags</h3>
+    <mat-chip-list class="wrapper">
+      <mat-chip *ngFor="let tag of event?.tags"
+        ><span>{{ tag.key }}:</span>
+        <a routerLink="." class="spacer">{{ tag.value }}</a></mat-chip
+      >
+    </mat-chip-list>
+  </article>
+
+  <mat-divider *ngIf="event?.tags.length > 0"></mat-divider>
+
+  <article *ngIf="event?.entries.length > 0" class="exception">
+    <div class="header-wrapper">
+      <div class="text-wrapper">
+        <h3>Exception</h3>
+        <p class="spacer">(<a>most recent call first</a>)</p>
+      </div>
+      <mat-button-toggle-group #group="matButtonToggleGroup">
+        <mat-button-toggle value="full" aria-label="full data">
+          Full
+        </mat-button-toggle>
+        <mat-button-toggle checked value="raw" aria-label="raw data">
+          Raw
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div *ngIf="group.value === 'full'">Full data</div>
+    <div *ngIf="group.value === 'raw' && event?.entries">
+      <p class="raw">{{ event?.title }}</p>
+      <p
+        class="raw"
+        *ngFor="
+          let frame of event?.entries[0].data.values[0].stacktrace.frames
+            .slice()
+            .reverse();
+          let i = index
+        "
+      >
+        at {{ frame.function }} ({{ frame.filename }}:{{
+          frame.context[0][0]
+        }}:{{ frame.colNo }})
+      </p>
+    </div>
+  </article>
+</section>

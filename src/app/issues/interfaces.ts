@@ -64,6 +64,8 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
+  contexts: IContext;
+  entries: IEntries[];
 }
 
 export type IssueStatus = "resolved" | "unresolved";
@@ -172,4 +174,52 @@ interface ITag {
   totalValues: number;
   name: string;
   key: string;
+}
+
+interface IContext {
+  os: IContextDetail;
+  browser: IContextDetail;
+}
+
+interface IContextDetail {
+  version: string;
+  type: string;
+  name: string;
+}
+
+interface IEntries {
+  type: string;
+  data: IEntryData;
+}
+
+interface IEntryData {
+  values: IValues[];
+}
+
+interface IValues {
+  stacktrace: IStacktrace;
+}
+
+interface IStacktrace {
+  frames: IFrame[];
+}
+
+interface IFrame {
+  function: string;
+  errors: string | null;
+  colNo: number;
+  vars: string | null;
+  package: string | null;
+  absPath: string;
+  inApp: boolean;
+  lineNo: number;
+  module: string;
+  filename: string;
+  platform: string | null;
+  instructionAddr: string | null;
+  context: string | number[][];
+  symbolAddr: string | null;
+  trust: string | null;
+  symbol: string | null;
+  rawFunction: string | null;
 }

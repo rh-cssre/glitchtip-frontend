@@ -15,7 +15,6 @@ export class EventDetailComponent implements OnInit {
   previousEvent$ = this.issueService.hasPreviousEvent$;
   nextEventUrl$ = this.issueService.nextEventUrl$;
   previousEventUrl$ = this.issueService.previousEventUrl$;
-
   eventIDParam$ = this.route.paramMap.pipe(
     map(params => params.get("event-id"))
   );

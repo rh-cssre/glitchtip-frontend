@@ -37,14 +37,12 @@ mat-grid-list {
 
   .left {
     flex: 75%;
-    // padding-right: 16px;
     border-right: 1px solid;
     border-right-color: rgba(0, 0, 0, 0.12);
   }
 
   .right {
     flex: 25%;
-    // padding-left: 16px;
   }
 }
 
@@ -54,4 +52,8 @@ dl dt {
 
 dl dd {
   text-align: right;
+}
+
+table.mat-table {
+  background: none;
 }
