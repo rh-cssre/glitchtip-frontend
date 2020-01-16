@@ -2,6 +2,8 @@
 
 This Angular CLI project is the frontend for GlitchTip, an open source implementation of Sentry bug tracking software. It works with [GlitchTip-Backend](https://gitlab.com/glitchtip/glitchtip-backend).
 
+View our Contributing documentation [here](./CONTRIBUTING.md).
+
 # Developing locally
 
 ## Development server
