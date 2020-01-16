@@ -65,7 +65,36 @@ export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
   contexts: IContext;
-  entries: IEntries[];
+  entries: IEntryStreamField[];
+  metadata: IEventMetaData | any;
+}
+
+export interface IEntryStreamfieldBlock<Type extends string, Data extends {}> {
+  data: Data;
+  type: Type;
+}
+
+export type IEntryStreamField =
+  | IEntryStreamfieldBlock<"exception", IValueData[]>
+  | IEntryStreamfieldBlock<"breadcrumbs", IValueData[]>;
+// | IEntryStreamfieldBlock<"request", IRequest>;
+
+export interface IValueData {
+  values: IValues[];
+  excOmitted: boolean | null;
+  hasSystemFrames: boolean;
+}
+
+export interface IRequest {
+  fragment: string | null;
+  cookies: object[];
+  inferredContentType: string | null;
+  env: string | null;
+  headers: string[][];
+  url: string;
+  query: object[];
+  data: string | null;
+  method: string | null;
 }
 
 export type IssueStatus = "resolved" | "unresolved";
@@ -187,17 +216,20 @@ interface IContextDetail {
   name: string;
 }
 
-interface IEntries {
-  type: string;
-  data: IEntryData;
-}
-
-interface IEntryData {
-  values: IValues[];
-}
-
 interface IValues {
   stacktrace: IStacktrace;
+  module: string | null;
+  rawStacktrace: string | null;
+  mechanism: IMechanism;
+  threadId: number | null;
+  value: string;
+  type: string;
+}
+
+interface IMechanism {
+  data: { function: string };
+  type: string;
+  handled: boolean;
 }
 
 interface IStacktrace {
@@ -222,4 +254,11 @@ interface IFrame {
   trust: string | null;
   symbol: string | null;
   rawFunction: string | null;
+}
+
+interface IEventMetaData {
+  function: string;
+  type: string;
+  value: string;
+  filename: string;
 }

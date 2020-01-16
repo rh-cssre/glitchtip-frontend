@@ -1,5 +1,5 @@
 <section *ngIf="event$ | async as event" class="mat-typography">
-  <article class="header">
+  <section class="header">
     <div>
       <h2>Event</h2>
       <p>
@@ -27,11 +27,11 @@
         >Newer <mat-icon>keyboard_arrow_right</mat-icon></a
       >
     </div>
-  </article>
+  </section>
 
   <mat-divider></mat-divider>
 
-  <article *ngIf="event?.user || event?.contexts.browser" class="location">
+  <section *ngIf="event?.user || event?.contexts.browser" class="location">
     <div class="wrapper">
       <mat-icon> my_location</mat-icon>
       <div class="mat-body-strong spacer">{{ event?.user.ip_address }}</div>
@@ -58,11 +58,11 @@
         </p>
       </div>
     </div>
-  </article>
+  </section>
 
   <mat-divider *ngIf="event?.user || event?.contexts.browser"></mat-divider>
 
-  <article *ngIf="event?.tags.length > 0" class="tags">
+  <section *ngIf="event?.tags.length > 0" class="tags">
     <h3>Tags</h3>
     <mat-chip-list class="wrapper">
       <mat-chip *ngFor="let tag of event?.tags"
@@ -70,41 +70,102 @@
         <a routerLink="." class="spacer">{{ tag.value }}</a></mat-chip
       >
     </mat-chip-list>
-  </article>
+  </section>
 
   <mat-divider *ngIf="event?.tags.length > 0"></mat-divider>
 
-  <article *ngIf="event?.entries.length > 0" class="exception">
+  <section *ngIf="event?.entries.length > 0" class="exception">
     <div class="header-wrapper">
       <div class="text-wrapper">
         <h3>Exception</h3>
-        <p class="spacer">(<a>most recent call first</a>)</p>
+        <p *ngIf="group.value === 'full'" class="spacer">
+          (<a>most recent call first</a>)
+        </p>
       </div>
       <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle value="full" aria-label="full data">
+        <mat-button-toggle checked value="full" aria-label="full data">
           Full
         </mat-button-toggle>
-        <mat-button-toggle checked value="raw" aria-label="raw data">
+        <mat-button-toggle value="raw" aria-label="raw data">
           Raw
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-    <div *ngIf="group.value === 'full'">Full data</div>
-    <div *ngIf="group.value === 'raw' && event?.entries">
-      <p class="raw">{{ event?.title }}</p>
-      <p
-        class="raw"
-        *ngFor="
-          let frame of event?.entries[0].data.values[0].stacktrace.frames
-            .slice()
-            .reverse();
-          let i = index
-        "
+    <div class="full" *ngIf="group.value === 'full'">
+      <ng-container
+        *ngFor="let entry of event?.entries"
+        [ngSwitch]="entry.type"
       >
-        at {{ frame.function }} ({{ frame.filename }}:{{
-          frame.context[0][0]
-        }}:{{ frame.colNo }})
-      </p>
+        <div *ngSwitchCase="'exception'">
+          <div *ngFor="let value of entry.data.values">
+            <h2>{{ value.type }}</h2>
+            <p>{{ value.value }}</p>
+            <mat-chip-list>
+              <mat-chip disabled
+                >mechanism: {{ value.mechanism.type }}</mat-chip
+              >
+              <mat-chip
+                [class.yes]="value.mechanism.handled"
+                [class.no]="!value.mechanism.handled"
+                disabled
+                >handled:
+                {{ value.mechanism.handled ? "yes" : "no" }}
+              </mat-chip>
+              <mat-chip disabled
+                >function: {{ value.mechanism.data.function }}</mat-chip
+              >
+            </mat-chip-list>
+
+            <mat-accordion>
+              <mat-expansion-panel
+                *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ frame.filename }}
+                    <a
+                      mat-icon-button
+                      color="primary"
+                      target="_blank"
+                      [href]="frame.absPath"
+                    >
+                      <mat-icon>open_in_new</mat-icon>
+                    </a>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    in {{ frame.function }} at line {{ frame.lineNo }}:{{
+                      frame.colNo
+                    }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <p *ngFor="let context of frame.context">
+                  {{ context[0] }}. {{ context[1] }}
+                </p>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </ng-container>
     </div>
-  </article>
+    <div *ngIf="group.value === 'raw' && event?.entries">
+      <ng-container
+        *ngFor="let entry of event?.entries"
+        [ngSwitch]="entry.type"
+      >
+        <div *ngSwitchCase="'exception'">
+          <p>{{ event?.title }}</p>
+          <div *ngFor="let value of entry.data.values">
+            <p
+              class="spacer"
+              *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
+            >
+              at {{ frame.function }} ({{ frame.filename }}:{{
+                frame.lineNo
+              }}:{{ frame.colNo }})
+            </p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </section>
 </section>

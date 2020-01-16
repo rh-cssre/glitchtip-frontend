@@ -1,4 +1,4 @@
-article {
+section {
   margin-top: 16px;
   margin-bottom: 16px;
 }
@@ -57,18 +57,40 @@ article {
   }
   .text-wrapper {
     display: flex;
+  }
 
-    h3,
-    p {
-      margin: 0;
-    }
-    .spacer {
-      margin-left: 8px;
-    }
+  .spacer {
+    margin-left: 8px;
+  }
+
+  h3,
+  p {
+    margin: 0;
+  }
+
+  .yes {
+    border: 2px solid green;
+  }
+
+  .no {
+    border: 2px solid red;
   }
 
   .raw {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  .full {
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  mat-chip-list {
+    display: block;
+    margin-top: 24px;
+    margin-bottom: 24px;
   }
 }
