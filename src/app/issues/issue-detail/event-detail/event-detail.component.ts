@@ -19,8 +19,6 @@ export class EventDetailComponent implements OnInit {
     map(params => params.get("event-id"))
   );
 
-  panelOpenState = false;
-
   constructor(
     private issueService: IssueDetailService,
     private route: ActivatedRoute
@@ -45,5 +43,9 @@ export class EventDetailComponent implements OnInit {
 
   getOlderEvent() {
     this.issueService.getPreviousEvent();
+  }
+
+  getFlippedArray() {
+    this.issueService.flipFramesArray();
   }
 }

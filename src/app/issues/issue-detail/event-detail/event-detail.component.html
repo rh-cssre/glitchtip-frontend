@@ -6,8 +6,10 @@
         <a>{{ event?.eventID }}</a>
       </p>
       <p>
-        <span>{{ event?.dateCreated }}</span
-        ><span class="space">
+        <span *ngIf="event?.dateCreated" class="space">{{
+          event?.dateCreated
+        }}</span
+        ><span>
           <!-- Link to JSON and (size) -->
           <a>JSON (31.7 KB)</a>
         </span>
@@ -72,14 +74,14 @@
     </mat-chip-list>
   </section>
 
-  <mat-divider *ngIf="event?.tags.length > 0"></mat-divider>
+  <mat-divider *ngIf="(event?.tags)[0].value"></mat-divider>
 
   <section *ngIf="event?.entries.length > 0" class="exception">
     <div class="header-wrapper">
       <div class="text-wrapper">
         <h3>Exception</h3>
         <p *ngIf="group.value === 'full'" class="spacer">
-          (<a>most recent call first</a>)
+          (<a (click)="getFlippedArray()">most recent call first</a>)
         </p>
       </div>
       <mat-button-toggle-group #group="matButtonToggleGroup">
@@ -104,13 +106,9 @@
               <mat-chip disabled
                 >mechanism: {{ value.mechanism.type }}</mat-chip
               >
-              <mat-chip
-                [class.yes]="value.mechanism.handled"
-                [class.no]="!value.mechanism.handled"
-                disabled
-                >handled:
-                {{ value.mechanism.handled ? "yes" : "no" }}
-              </mat-chip>
+              <mat-chip color="accent" selected disabled
+                >handled: {{ value.mechanism.handled ? "yes" : "no" }}</mat-chip
+              >
               <mat-chip *ngIf="value.mechanism.data" disabled
                 >function: {{ value.mechanism.data.function }}</mat-chip
               >
