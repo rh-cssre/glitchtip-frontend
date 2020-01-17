@@ -62,7 +62,7 @@
 
   <mat-divider *ngIf="event?.user || event?.contexts.browser"></mat-divider>
 
-  <section *ngIf="event?.tags.length > 0" class="tags">
+  <section *ngIf="(event?.tags)[0].value" class="tags">
     <h3>Tags</h3>
     <mat-chip-list class="wrapper">
       <mat-chip *ngFor="let tag of event?.tags"
@@ -111,7 +111,7 @@
                 >handled:
                 {{ value.mechanism.handled ? "yes" : "no" }}
               </mat-chip>
-              <mat-chip disabled
+              <mat-chip *ngIf="value.mechanism.data" disabled
                 >function: {{ value.mechanism.data.function }}</mat-chip
               >
             </mat-chip-list>
