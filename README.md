@@ -1,6 +1,11 @@
+<script src="https://liberapay.com/GlitchTip/widgets/button.js"></script>
+<noscript><a href="https://liberapay.com/GlitchTip/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+
 # GlitchTip Frontend
 
 This Angular CLI project is the frontend for GlitchTip, an open source implementation of Sentry bug tracking software. It works with [GlitchTip-Backend](https://gitlab.com/glitchtip/glitchtip-backend).
+
+View our Contributing documentation [here](./CONTRIBUTING.md).
 
 # Developing locally
 
