@@ -64,7 +64,7 @@
 
   <mat-divider *ngIf="event?.user || event?.contexts.browser"></mat-divider>
 
-  <section *ngIf="(event?.tags)[0].value" class="tags">
+  <section class="tags">
     <h3>Tags</h3>
     <mat-chip-list class="wrapper">
       <mat-chip *ngFor="let tag of event?.tags"
@@ -74,7 +74,7 @@
     </mat-chip-list>
   </section>
 
-  <mat-divider *ngIf="(event?.tags)[0].value"></mat-divider>
+  <mat-divider></mat-divider>
 
   <section *ngIf="event?.entries.length > 0" class="exception">
     <div class="header-wrapper">
