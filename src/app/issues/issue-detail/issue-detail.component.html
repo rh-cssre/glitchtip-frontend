@@ -9,11 +9,25 @@
         </p>
       </h1>
       <div class="button-row">
-        <button mat-flat-button color="primary">
+        <button
+          *ngIf="issue?.status === 'unresolved'"
+          mat-flat-button
+          color="primary"
+          (click)="markResolved()"
+        >
           <mat-icon aria-hidden="true">done</mat-icon>
           Resolve
         </button>
-        <button mat-flat-button>Ignore</button>
+        <button
+          *ngIf="issue?.status === 'resolved'"
+          mat-flat-button
+          color="primary"
+          (click)="markUnresolved()"
+        >
+          <mat-icon aria-hidden="true">done</mat-icon>
+          Reopen
+        </button>
+        <button mat-flat-button (click)="markIgnored()">Ignore</button>
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
       </div>
     </div>

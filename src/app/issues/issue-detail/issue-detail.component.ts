@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { map, exhaustMap, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 import { IssueDetailService } from "./issue-detail.service";
-import { FormGroup, FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-issue-detail",
@@ -43,5 +43,17 @@ export class IssueDetailComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  markResolved() {
+    this.issueService.setStatus("resolved");
+  }
+
+  markUnresolved() {
+    this.issueService.setStatus("unresolved");
+  }
+
+  markIgnored() {
+    this.issueService.setStatus("ignored");
   }
 }

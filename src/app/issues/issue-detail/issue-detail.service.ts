@@ -3,8 +3,9 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
-import { IssueDetail, EventDetail } from "../interfaces";
+import { IssueDetail, EventDetail, IssueStatus } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { IssuesService } from "../issues.service";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
@@ -58,7 +59,8 @@ export class IssueDetailService {
 
   constructor(
     private http: HttpClient,
-    private organization: OrganizationsService
+    private organization: OrganizationsService,
+    private issueService: IssuesService
   ) {}
 
   retrieveIssue(id: number) {
@@ -95,6 +97,25 @@ export class IssueDetailService {
       return this.retrieveEvent(issue.id, eventID);
     }
     return EMPTY;
+  }
+
+  setStatus(status: IssueStatus) {
+    const issue = this.state.getValue().issue;
+    if (issue) {
+      return this.issueService
+        .setStatus(issue.id, status)
+        .pipe(tap(resp => this.setIssueStatus(resp.status)))
+        .toPromise();
+    }
+  }
+
+  /** Set local state issue state */
+  private setIssueStatus(status: IssueStatus) {
+    const state = this.state.getValue();
+    if (state.issue) {
+      const issue = { ...state.issue, status };
+      this.state.next({ ...state, issue });
+    }
   }
 
   private retrieveLatestEvent(issueId: number) {

@@ -33,7 +33,10 @@
 
   <mat-divider></mat-divider>
 
-  <section *ngIf="event?.user || event?.contexts.browser" class="location">
+  <section
+    *ngIf="event?.user || event?.contexts?.browser"
+    class="location"
+  >
     <div class="wrapper">
       <mat-icon> my_location</mat-icon>
       <div class="mat-body-strong spacer">{{ event?.user.ip_address }}</div>
@@ -62,7 +65,7 @@
     </div>
   </section>
 
-  <mat-divider *ngIf="event?.user || event?.contexts.browser"></mat-divider>
+  <mat-divider *ngIf="event?.user || event?.contexts?.browser"></mat-divider>
 
   <section class="tags">
     <h3>Tags</h3>
