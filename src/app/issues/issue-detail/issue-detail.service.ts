@@ -9,13 +9,11 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 interface IssueDetailState {
   issue: IssueDetail | null;
   event: EventDetail | null;
-  mostRecentCallFirst: boolean;
 }
 
 const initialState: IssueDetailState = {
   issue: null,
-  event: null,
-  mostRecentCallFirst: false
+  event: null
 };
 
 @Injectable({
@@ -106,15 +104,6 @@ export class IssueDetailService {
       .pipe(tap(event => this.setEvent(event)));
   }
 
-  flipFramesArray() {
-    const state = this.state.getValue();
-    state.mostRecentCallFirst = !state.mostRecentCallFirst;
-
-    if (state.event) {
-      this.setEvent(state.event);
-    }
-  }
-
   // private removed for testing
   retrieveEvent(issueId: number, eventID: string) {
     const url = `${this.url}${issueId}/events/${eventID}/`;
@@ -133,9 +122,6 @@ export class IssueDetailService {
   }
 
   private setEvent(event: EventDetail) {
-    if (this.state.getValue().mostRecentCallFirst) {
-      // event = event.entries.whatever.reverse()
-    }
     this.state.next({ ...this.state.getValue(), event });
   }
 
