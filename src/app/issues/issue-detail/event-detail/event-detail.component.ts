@@ -44,8 +44,4 @@ export class EventDetailComponent implements OnInit {
   getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
-
-  getFlippedArray() {
-    this.issueService.flipFramesArray();
-  }
 }
