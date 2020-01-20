@@ -14,7 +14,11 @@
         >
           Reopen issue
         </button>
-        <button style="margin-left: 10px;" mat-flat-button>
+        <button
+          style="margin-left: 10px;"
+          mat-flat-button
+          (click)="bulkMarkIgnored()"
+        >
           Ignore issue
         </button>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
