@@ -64,6 +64,14 @@ export class IssuesPageComponent implements OnInit {
     this.issuesService.bulkSetStatus("resolved");
   }
 
+  bulkMarkUnresolved() {
+    this.issuesService.bulkSetStatus("unresolved");
+  }
+
+  bulkMarkIgnored() {
+    this.issuesService.bulkSetStatus("ignored");
+  }
+
   toggleCheck(issueId: number) {
     this.issuesService.toggleSelected(issueId);
   }

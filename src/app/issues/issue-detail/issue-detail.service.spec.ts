@@ -9,6 +9,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { EMPTY } from "rxjs";
 import { latestEvent } from "./event-detail/event-latest-test-data";
+import { MatSnackBarModule } from "@angular/material";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -18,7 +19,7 @@ describe("IssueDetailService", () => {
   beforeEach(() => {
     mockOrgService = jasmine.createSpyObj(["retrieveIssue"]);
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatSnackBarModule],
       providers: [{ provide: OrganizationsService, useValue: mockOrgService }]
     });
     httpTestingController = TestBed.get(HttpTestingController);

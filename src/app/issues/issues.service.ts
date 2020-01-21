@@ -132,6 +132,12 @@ export class IssuesService {
     }
   }
 
+  /** Set one specified issue ID as status */
+  setStatus(id: number, status: IssueStatus) {
+    return this.updateStatus([id], status);
+  }
+
+  /** Set all selected issues to this status */
   bulkSetStatus(status: IssueStatus) {
     const selectedIssues = this.issuesState.getValue().selectedIssues;
     return this.updateStatus(selectedIssues, status).toPromise();

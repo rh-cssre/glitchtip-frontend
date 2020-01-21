@@ -97,7 +97,7 @@ export interface IRequest {
   method: string | null;
 }
 
-export type IssueStatus = "resolved" | "unresolved";
+export type IssueStatus = "resolved" | "unresolved" | "ignored";
 
 export interface Issue {
   annotations: string[];
