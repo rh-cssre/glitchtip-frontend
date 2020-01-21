@@ -44,4 +44,8 @@ export class EventDetailComponent implements OnInit {
   getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
+
+  getFlippedFrames() {
+    this.issueService.getReversedFrames();
+  }
 }

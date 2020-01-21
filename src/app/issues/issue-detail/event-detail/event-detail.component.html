@@ -81,7 +81,7 @@
       <div class="text-wrapper">
         <h3>Exception</h3>
         <p *ngIf="group.value === 'full'" class="spacer">
-          (<a>most recent call first</a>)
+          (<a (click)="getFlippedFrames()">most recent call first</a>)
         </p>
       </div>
       <mat-button-toggle-group #group="matButtonToggleGroup">
@@ -116,7 +116,7 @@
 
             <mat-accordion>
               <mat-expansion-panel
-                *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
+                *ngFor="let frame of value.stacktrace.frames"
               >
                 <mat-expansion-panel-header>
                   <mat-panel-title>

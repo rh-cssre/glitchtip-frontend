@@ -8,6 +8,7 @@ import { IssueDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { EMPTY } from "rxjs";
+import { latestEvent } from "./event-detail/event-latest-test-data";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -72,5 +73,18 @@ describe("IssueDetailService", () => {
     service.getEventByID(eventID);
     expect(issue).toBe(testData);
     expect(service.retrieveEvent).toHaveBeenCalled();
+  });
+
+  it("getReversedFrames toggles isReversed state when called", () => {
+    const testData: any = latestEvent;
+    let isReversed: boolean | null = true;
+    service.isReversed$.subscribe(reversed => {
+      isReversed = reversed;
+    });
+    expect(isReversed).toBe(true);
+    service.setEvent(testData);
+    expect(isReversed).toBe(true);
+    service.getReversedFrames();
+    expect(isReversed).toBe(false);
   });
 });

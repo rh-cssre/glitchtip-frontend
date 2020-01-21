@@ -9,11 +9,13 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 interface IssueDetailState {
   issue: IssueDetail | null;
   event: EventDetail | null;
+  isReversed: boolean;
 }
 
 const initialState: IssueDetailState = {
   issue: null,
-  event: null
+  event: null,
+  isReversed: true
 };
 
 @Injectable({
@@ -25,6 +27,7 @@ export class IssueDetailService {
   private readonly url = baseUrl + "/issues/";
   readonly issue$ = this.getState$.pipe(map(state => state.issue));
   readonly event$ = this.getState$.pipe(map(state => state.event));
+  readonly isReversed$ = this.getState$.pipe(map(state => state.isReversed));
   readonly hasNextEvent$ = this.event$.pipe(
     map(event => event && event.nextEventID !== null)
   );
@@ -97,6 +100,15 @@ export class IssueDetailService {
     return EMPTY;
   }
 
+  getReversedFrames() {
+    const event = this.state.getValue().event;
+    this.getLatestEvent();
+    console.log("EVENT: ", event);
+    if (event) {
+      this.toggleIsReversed();
+    }
+  }
+
   private retrieveLatestEvent(issueId: number) {
     const url = `${this.url}${issueId}/events/latest/`;
     return this.http
@@ -121,8 +133,14 @@ export class IssueDetailService {
     this.state.next({ ...this.state.getValue(), issue });
   }
 
-  private setEvent(event: EventDetail) {
+  // private removed for testing
+  setEvent(event: EventDetail) {
     this.state.next({ ...this.state.getValue(), event });
+  }
+
+  toggleIsReversed() {
+    const isReversed = this.state.getValue().isReversed;
+    this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
   }
 
   /** Build event detail url string */
