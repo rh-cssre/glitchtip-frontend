@@ -18,6 +18,7 @@ export class EventDetailComponent implements OnInit {
   eventIDParam$ = this.route.paramMap.pipe(
     map(params => params.get("event-id"))
   );
+  reversedFrames$ = this.issueService.reversedFrames$;
 
   constructor(
     private issueService: IssueDetailService,

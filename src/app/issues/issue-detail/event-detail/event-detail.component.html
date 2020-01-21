@@ -33,10 +33,7 @@
 
   <mat-divider></mat-divider>
 
-  <section
-    *ngIf="event?.user || event?.contexts?.browser"
-    class="location"
-  >
+  <section *ngIf="event?.user || event?.contexts?.browser" class="location">
     <div class="wrapper">
       <mat-icon> my_location</mat-icon>
       <div class="mat-body-strong spacer">{{ event?.user.ip_address }}</div>
@@ -117,10 +114,8 @@
               >
             </mat-chip-list>
 
-            <mat-accordion>
-              <mat-expansion-panel
-                *ngFor="let frame of value.stacktrace.frames"
-              >
+            <mat-accordion *ngIf="reversedFrames$ | async as frames">
+              <mat-expansion-panel *ngFor="let frame of frames">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     {{ frame.filename }}
@@ -155,11 +150,8 @@
       >
         <div *ngSwitchCase="'exception'">
           <p>{{ event?.title }}</p>
-          <div *ngFor="let value of entry.data.values">
-            <p
-              class="spacer"
-              *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
-            >
+          <div *ngIf="reversedFrames$ | async as frames">
+            <p class="spacer" *ngFor="let frame of frames">
               at {{ frame.function }} ({{ frame.filename }}:{{
                 frame.lineNo
               }}:{{ frame.colNo }})

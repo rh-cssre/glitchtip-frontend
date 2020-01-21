@@ -59,6 +59,22 @@ export class IssueDetailService {
       return null;
     })
   );
+  readonly reversedFrames$ = combineLatest(this.event$, this.isReversed$).pipe(
+    map(([event, isReversed]) => {
+      if (event) {
+        for (const entry of event.entries) {
+          if (entry.type === "exception") {
+            const frames = entry.data.values[0].stacktrace.frames;
+            if (isReversed) {
+              return frames.reverse();
+            } else {
+              return frames;
+            }
+          }
+        }
+      }
+    })
+  );
 
   constructor(
     private http: HttpClient,
@@ -104,8 +120,6 @@ export class IssueDetailService {
 
   getReversedFrames() {
     const event = this.state.getValue().event;
-    this.getLatestEvent();
-    console.log("EVENT: ", event);
     if (event) {
       this.toggleIsReversed();
     }
