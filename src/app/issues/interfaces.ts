@@ -75,8 +75,8 @@ export interface IEntryStreamfieldBlock<Type extends string, Data extends {}> {
 }
 
 export type IEntryStreamField =
-  | IEntryStreamfieldBlock<"exception", IValueData[]>
-  | IEntryStreamfieldBlock<"breadcrumbs", IValueData[]>;
+  | IEntryStreamfieldBlock<"exception", IValueData>
+  | IEntryStreamfieldBlock<"breadcrumbs", IValueData>;
 // | IEntryStreamfieldBlock<"request", IRequest>;
 
 export interface IValueData {

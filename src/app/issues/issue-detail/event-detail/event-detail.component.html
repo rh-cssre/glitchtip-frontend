@@ -1,7 +1,3 @@
-<section>
-  <div>frames</div>
-  <div *ngIf="reversedFrames$ | async as reverse">{{ reverse | json }}</div>
-</section>
 <section *ngIf="event$ | async as event" class="mat-typography">
   <section class="header">
     <div>
