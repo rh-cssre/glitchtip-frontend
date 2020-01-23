@@ -63,15 +63,6 @@ export class IssueDetailService {
     map(([event, isReversed]) => {
       console.log("IS REVERSED", isReversed);
       if (event && isReversed) {
-        console.log("brendan stuff");
-        const foo = event.entries.find(entry => entry.type === "exception");
-        console.log(foo);
-        if (foo) {
-          console.log(
-            foo.data.values.map(value => [...value.stacktrace.frames].reverse())
-          );
-        }
-
         // for (const entry of event.entries) {
         //   if (entry.type === "exception") {
         //     entry.data.values.forEach(value => {
@@ -144,7 +135,7 @@ export class IssueDetailService {
     console.log("REVERSE STATE: ", reverse);
     if (reverse && event) {
       // return event.entries[0].data.values[0].stacktrace.frames;
-      return event.entries[0].data.values[0].stacktrace.frames.reverse();
+      // return event.entries[0].data.values[0].stacktrace.frames.reverse();
     }
   }
 
