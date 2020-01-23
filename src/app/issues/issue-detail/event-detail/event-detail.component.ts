@@ -11,6 +11,7 @@ import { IssueDetailService } from "../issue-detail.service";
 })
 export class EventDetailComponent implements OnInit {
   event$ = this.issueService.event$;
+  reversedFrames$ = this.issueService.reversedFrames$;
   nextEvent$ = this.issueService.hasNextEvent$;
   previousEvent$ = this.issueService.hasPreviousEvent$;
   nextEventUrl$ = this.issueService.nextEventUrl$;
@@ -18,7 +19,7 @@ export class EventDetailComponent implements OnInit {
   eventIDParam$ = this.route.paramMap.pipe(
     map(params => params.get("event-id"))
   );
-  reversedFrames$ = this.issueService.reversedFrames$;
+  isReversed$ = this.issueService.isReversed$;
 
   constructor(
     private issueService: IssueDetailService,

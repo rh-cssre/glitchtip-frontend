@@ -1,3 +1,7 @@
+<section>
+  <div>frames</div>
+  <div *ngIf="reversedFrames$ | async as reverse">{{ reverse | json }}</div>
+</section>
 <section *ngIf="event$ | async as event" class="mat-typography">
   <section class="header">
     <div>
@@ -81,7 +85,10 @@
       <div class="text-wrapper">
         <h3>Exception</h3>
         <p *ngIf="group.value === 'full'" class="spacer">
-          (<a (click)="getFlippedFrames()">most recent call first</a>)
+          (<a mat-button (click)="getFlippedFrames()"
+            >most recent call <span *ngIf="isReversed$ | async">first</span
+            ><span *ngIf="(isReversed$ | async) === false">last</span></a
+          >)
         </p>
       </div>
       <mat-button-toggle-group #group="matButtonToggleGroup">
@@ -114,8 +121,10 @@
               >
             </mat-chip-list>
 
-            <mat-accordion *ngIf="reversedFrames$ | async as frames">
-              <mat-expansion-panel *ngFor="let frame of frames">
+            <mat-accordion>
+              <mat-expansion-panel
+                *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
+              >
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     {{ frame.filename }}
@@ -150,8 +159,8 @@
       >
         <div *ngSwitchCase="'exception'">
           <p>{{ event?.title }}</p>
-          <div *ngIf="reversedFrames$ | async as frames">
-            <p class="spacer" *ngFor="let frame of frames">
+          <div *ngFor="let value of entry.data.values">
+            <p class="spacer" *ngFor="let frame of value.stacktrace.frames">
               at {{ frame.function }} ({{ frame.filename }}:{{
                 frame.lineNo
               }}:{{ frame.colNo }})

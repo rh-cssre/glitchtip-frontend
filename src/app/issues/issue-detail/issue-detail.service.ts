@@ -61,17 +61,17 @@ export class IssueDetailService {
   );
   readonly reversedFrames$ = combineLatest(this.event$, this.isReversed$).pipe(
     map(([event, isReversed]) => {
-      if (event) {
+      console.log("IS REVERSED", isReversed);
+      if (event && isReversed) {
         for (const entry of event.entries) {
           if (entry.type === "exception") {
-            const frames = entry.data.values[0].stacktrace.frames;
-            if (isReversed) {
-              return frames.reverse();
-            } else {
-              return frames;
-            }
+            entry.data.valuez.forEach(value => {
+              console.log("do more stuff", value);
+            });
           }
         }
+        // const frames = event.entries[0].data.values[0].stacktrace.frames;
+        // frames: frames.reverse();
       }
     })
   );
@@ -120,8 +120,20 @@ export class IssueDetailService {
 
   getReversedFrames() {
     const event = this.state.getValue().event;
+    console.log("REVERSED FRAMES", this.state.getValue().isReversed);
+    console.log("AND EVENT: ", event);
     if (event) {
       this.toggleIsReversed();
+    }
+  }
+
+  reverseFrames() {
+    const reverse = this.state.getValue().isReversed;
+    const event = this.state.getValue().event;
+    console.log("REVERSE STATE: ", reverse);
+    if (reverse && event) {
+      // return event.entries[0].data.values[0].stacktrace.frames;
+      return event.entries[0].data.values[0].stacktrace.frames.reverse();
     }
   }
 

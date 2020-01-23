@@ -76,7 +76,7 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  it("getReversedFrames toggles isReversed state when called", () => {
+  fit("getReversedFrames toggles isReversed state when called", () => {
     const testData: any = latestEvent;
     let isReversed: boolean | null = true;
     service.isReversed$.subscribe(reversed => {
@@ -87,5 +87,32 @@ describe("IssueDetailService", () => {
     expect(isReversed).toBe(true);
     service.getReversedFrames();
     expect(isReversed).toBe(false);
+  });
+
+  fit("reverses the stacktrace frames", () => {
+    const testData: any = latestEvent;
+    // const firstFrameFunction: string | null = "XMLHttpRequest.k";
+    const lastFrameFunction: string | null = "I.next";
+    let frameFunction: any;
+    let isReversed: boolean | null = true;
+    service.isReversed$.subscribe(reversed => {
+      isReversed = reversed;
+      console.log("REVERSE SITCH: ", isReversed);
+    });
+    service.event$.subscribe(event => {
+      if (event) {
+        frameFunction =
+          event.entries[0].data.values[0].stacktrace.frames[0].function;
+        console.log("FRAME FUNCTION: ", frameFunction);
+        console.log("EVENT: ", event.dateCreated);
+      }
+    });
+    expect(isReversed).toBe(true);
+    service.setEvent(testData);
+    expect(frameFunction).toBe(lastFrameFunction);
+    // service.reverseFrames();
+    // service.getReversedFrames();
+    // expect(isReversed).toBe(false);
+    // expect(frameFunction).toBe(firstFrameFunction);
   });
 });
