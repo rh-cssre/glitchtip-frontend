@@ -3,7 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
-import { IssueDetail, EventDetail, IssueStatus } from "../interfaces";
+import {
+  IssueDetail,
+  EventDetail,
+  IssueStatus,
+  IEntryStreamfieldBlock,
+  ExceptionValueData
+} from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
 
@@ -63,19 +69,9 @@ export class IssueDetailService {
   readonly reversedFrames$ = combineLatest(this.event$, this.isReversed$).pipe(
     map(([event, isReversed]) => {
       if (event && isReversed) {
-        const exceptionEntryType = event.entries.find(
-          entry => entry.type === "exception"
-        );
-        if (exceptionEntryType) {
-          const reversedFrames = exceptionEntryType.data.values.map(value =>
-            [...value.stacktrace.frames].reverse()
-          );
-          const entryType = { ...exceptionEntryType, frames: reversedFrames };
-          return { ...event, entries: entryType };
-        }
-      } else {
-        return event;
+        return this.reverseFrames(event);
       }
+      return event;
     })
   );
 
@@ -122,22 +118,7 @@ export class IssueDetailService {
   }
 
   getReversedFrames() {
-    const event = this.state.getValue().event;
-    console.log("REVERSED FRAMES", this.state.getValue().isReversed);
-    console.log("AND EVENT: ", event);
-    if (event) {
-      this.toggleIsReversed();
-    }
-  }
-
-  reverseFrames() {
-    const reverse = this.state.getValue().isReversed;
-    const event = this.state.getValue().event;
-    console.log("REVERSE STATE: ", reverse);
-    if (reverse && event) {
-      // return event.entries[0].data.values[0].stacktrace.frames;
-      // return event.entries[0].data.values[0].stacktrace.frames.reverse();
-    }
+    this.toggleIsReversed();
   }
 
   setStatus(status: IssueStatus) {
@@ -188,9 +169,24 @@ export class IssueDetailService {
     this.state.next({ ...this.state.getValue(), event });
   }
 
-  toggleIsReversed() {
+  private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+  }
+
+  /* Reverse frame array, nested in the event object */
+  private reverseFrames(event: EventDetail) {
+    const exceptionEntryType = event.entries.find(
+      entry => entry.type === "exception"
+    );
+    if (exceptionEntryType) {
+      const reversedFrames = (exceptionEntryType as IEntryStreamfieldBlock<
+        "exception",
+        ExceptionValueData
+      >).data.values.map(value => [...value.stacktrace.frames.reverse()]);
+      const entryType = { ...exceptionEntryType, frames: reversedFrames };
+      return { ...event, entries: [entryType] };
+    }
   }
 
   /** Build event detail url string */
