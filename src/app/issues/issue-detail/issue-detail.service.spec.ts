@@ -4,7 +4,12 @@ import {
   HttpTestingController
 } from "@angular/common/http/testing";
 import { IssueDetailService } from "./issue-detail.service";
-import { IssueDetail } from "../interfaces";
+import {
+  IssueDetail,
+  EventDetail,
+  IEntryStreamfieldBlock,
+  ExceptionValueData
+} from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { EMPTY } from "rxjs";
@@ -76,43 +81,40 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  fit("getReversedFrames toggles isReversed state when called", () => {
-    const testData: any = latestEvent;
-    let isReversed: boolean | null = true;
-    service.isReversed$.subscribe(reversed => {
-      isReversed = reversed;
-    });
-    expect(isReversed).toBe(true);
-    service.setEvent(testData);
-    expect(isReversed).toBe(true);
-    service.getReversedFrames();
-    expect(isReversed).toBe(false);
-  });
+  it("reversedFrames$ selector flips frames array in event object without mutating event state", () => {
+    const testData: EventDetail = latestEvent;
+    const testDataFramesFilenameFirstIndex =
+      "/polyfills.5f194581390fcad97fb1.js";
+    const testDataFramesFilenameLastIndex = "/main.0aa02efa52a79a1f9c59.js";
 
-  fit("reverses the stacktrace frames", () => {
-    const testData: any = latestEvent;
-    // const firstFrameFunction: string | null = "XMLHttpRequest.k";
-    const lastFrameFunction: string | null = "I.next";
-    let frameFunction: any;
-    let isReversed: boolean | null = true;
-    service.isReversed$.subscribe(reversed => {
-      isReversed = reversed;
-      console.log("REVERSE SITCH: ", isReversed);
-    });
+    service.setEvent(testData);
+
+    // Event state doesn't change
     service.event$.subscribe(event => {
       if (event) {
-        frameFunction =
-          event.entries[0].data.values[0].stacktrace.frames[0].function;
-        console.log("FRAME FUNCTION: ", frameFunction);
-        console.log("EVENT: ", event.dateCreated);
+        const exceptionEntryType = event.entries.find(
+          entry => entry.type === "exception"
+        );
+        const firstFrameFilename = (exceptionEntryType as IEntryStreamfieldBlock<
+          "exception",
+          ExceptionValueData
+        >).data.values[0].stacktrace.frames[0].filename;
+        expect(firstFrameFilename).toEqual(testDataFramesFilenameFirstIndex);
       }
     });
-    expect(isReversed).toBe(true);
-    service.setEvent(testData);
-    expect(frameFunction).toBe(lastFrameFunction);
-    // service.reverseFrames();
-    // service.getReversedFrames();
-    // expect(isReversed).toBe(false);
-    // expect(frameFunction).toBe(firstFrameFunction);
+
+    // Reversed frames flips the frames array
+    service.reversedFrames$.subscribe(event => {
+      if (event) {
+        const exceptionEntryType = event.entries.find(
+          entry => entry.type === "exception"
+        );
+        const firstFrameFilename = (exceptionEntryType as IEntryStreamfieldBlock<
+          "exception",
+          ExceptionValueData
+        >).data.values[0].stacktrace.frames[0].filename;
+        expect(firstFrameFilename).toEqual(testDataFramesFilenameLastIndex);
+      }
+    });
   });
 });
