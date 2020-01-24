@@ -79,13 +79,14 @@
     <div class="header-wrapper">
       <div class="text-wrapper">
         <h3>Exception</h3>
-        <p *ngIf="group.value === 'full'" class="spacer">
+        <p class="spacer">
           (<a mat-button (click)="getFlippedFrames()"
             >most recent call <span *ngIf="isReversed$ | async">first</span
             ><span *ngIf="(isReversed$ | async) === false">last</span></a
           >)
         </p>
       </div>
+
       <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle checked value="full" aria-label="full data">
           Full
@@ -118,7 +119,7 @@
 
             <mat-accordion>
               <mat-expansion-panel
-                *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
+                *ngFor="let frame of value.stacktrace.frames"
               >
                 <mat-expansion-panel-header>
                   <mat-panel-title>

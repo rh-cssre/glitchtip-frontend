@@ -89,12 +89,10 @@ export interface IEntryStreamfieldBlock<Type extends string, Data extends {}> {
   type: Type;
 }
 
-export type IEntryStreamField = IEntryStreamfieldBlock<
-  "exception",
-  ExceptionValueData
->;
-// | IEntryStreamfieldBlock<"breadcrumbs", BreadcrumbValueData>;
-// | IEntryStreamfieldBlock<"request", IRequest>;
+export type IEntryStreamField =
+  | IEntryStreamfieldBlock<"exception", ExceptionValueData>
+  | IEntryStreamfieldBlock<"breadcrumbs", BreadcrumbValueData>
+  | IEntryStreamfieldBlock<"request", IRequest>;
 
 export interface BreadcrumbValueData {
   values: Breadcrumb[];
