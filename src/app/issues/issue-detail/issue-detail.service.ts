@@ -59,21 +59,22 @@ export class IssueDetailService {
       return null;
     })
   );
+
   readonly reversedFrames$ = combineLatest(this.event$, this.isReversed$).pipe(
     map(([event, isReversed]) => {
-      console.log("IS REVERSED", isReversed);
       if (event && isReversed) {
-        // for (const entry of event.entries) {
-        //   if (entry.type === "exception") {
-        //     entry.data.values.forEach(value => {
-        //       if (value && value.stacktrace && value.stacktrace.frames) {
-        //         value.stacktrace.frames.reverse();
-        //       }
-        //     });
-        //   }
-        // }
-        // const frames = event.entries[0].data.values[0].stacktrace.frames;
-        // frames: frames.reverse();
+        const exceptionEntryType = event.entries.find(
+          entry => entry.type === "exception"
+        );
+        if (exceptionEntryType) {
+          const reversedFrames = exceptionEntryType.data.values.map(value =>
+            [...value.stacktrace.frames].reverse()
+          );
+          const entryType = { ...exceptionEntryType, frames: reversedFrames };
+          return { ...event, entries: entryType };
+        }
+      } else {
+        return event;
       }
     })
   );

@@ -33,6 +33,7 @@ export const EventDetail = () => ({
     event$: of(latestEvent),
     nextEvent$: of(true),
     previousEvent$: of(false),
-    isReversed$: of(boolean("reversed frames?", false))
+    isReversed$: of(boolean("reversed frames?", false)),
+    reversedFrames$: of(latestEvent)
   }
 });
