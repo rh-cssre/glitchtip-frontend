@@ -1184,133 +1184,133 @@ export const latestEvent: EventDetail = {
         excOmitted: null,
         hasSystemFrames: false
       }
+    },
+    {
+      type: "breadcrumbs",
+      data: {
+        values: [
+          {
+            category: "ui.click",
+            level: "info",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.235000Z",
+            data: null,
+            message: "[Filtered]",
+            type: "default"
+          },
+          {
+            category: "xhr",
+            level: "info",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.514000Z",
+            data: {
+              url: "https://app.passit.io/api/confirm-email-short-code/",
+              status_code: 403,
+              method: "PUT"
+            },
+            message: null,
+            type: "http"
+          },
+          {
+            category: "navigation",
+            level: "info",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.517000Z",
+            data: {
+              to:
+                "/account/confirm-email/N-YFW3Re_dthvgJXfAZ7dqOA704jb9z_yJqHg1_n_YfYg9vacboGsA",
+              from:
+                "/account/confirm-email/N-YFW3Re_dthvgJXfAZ7dqOA704jb9z_yJqHg1_n_YfYg9vacboGsA"
+            },
+            message: null,
+            type: "default"
+          },
+          {
+            category: "navigation",
+            level: "info",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.523000Z",
+            data: {
+              to: "/account/login",
+              from:
+                "/account/confirm-email/N-YFW3Re_dthvgJXfAZ7dqOA704jb9z_yJqHg1_n_YfYg9vacboGsA"
+            },
+            message: null,
+            type: "default"
+          },
+          {
+            category: "console",
+            level: "warning",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.542000Z",
+            data: {
+              logger: "console",
+              extra: {
+                arguments: [
+                  "Did not send error report because user did not opt in."
+                ]
+              }
+            },
+            message: "Did not send error report because user did not opt in.",
+            type: "default"
+          },
+          {
+            category: "console",
+            level: "error",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.543000Z",
+            data: {
+              extra: {
+                arguments: [
+                  {
+                    message:
+                      'Effect "t.VerifyEmail$" dispatched an invalid action: "To validate via confirmation code, please log in first."',
+                    name: "Error",
+                    stack:
+                      'Error: Effect "t.VerifyEmail$" dispatched an invalid action: "To validate via confirmation code, please log in first."\n    at https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:509330\n    at o.project (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:509567)\n    at o._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:745454)\n    at o.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at u.notifyNext (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:498774)\n    at i._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20917)\n    at i.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at u.notifyNext (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20525)\n    at i._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20917)\n    at i.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at o._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:745552)\n    at o.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at a._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:551469)\n    at a.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at l._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:38100)\n    at l.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at u.notifyNext (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:498774)\n    at i._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20917)\n    at i.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:471548\n    at a.invoke (https://app.passit.io/polyfills.5f194581390fcad97fb1.js:1:6415)\n    at Object.onInvoke (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:241432)\n    at a.invoke (https://app.passit.io/polyfills.5f194581390fcad97fb1.js:1:6355)\n    at s.run (https://app.passit.io/pol...'
+                  }
+                ]
+              }
+            },
+            message:
+              'Error: Effect "t.VerifyEmail$" dispatched an invalid action: "To validate via confirmation code, please log in first."',
+            type: "default"
+          },
+          {
+            category: "xhr",
+            level: "info",
+            event_id: null,
+            timestamp: "2020-01-14T00:19:53.565000Z",
+            data: {
+              url: "https://app.passit.io/assets/svg/check.svg",
+              status_code: 200,
+              method: "GET"
+            },
+            message: null,
+            type: "http"
+          }
+        ]
+      }
+    },
+    {
+      type: "request",
+      data: {
+        fragment: null,
+        cookies: [],
+        inferredContentType: null,
+        env: null,
+        headers: [
+          [
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
+          ]
+        ],
+        url: "https://app.passit.io/account/login",
+        query: [],
+        data: null,
+        method: null
+      }
     }
-    // {
-    //   type: "breadcrumbs",
-    //   data: {
-    //     values: [
-    //       {
-    //         category: "ui.click",
-    //         level: "info",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.235000Z",
-    //         data: null,
-    //         message: "[Filtered]",
-    //         type: "default"
-    //       },
-    //       {
-    //         category: "xhr",
-    //         level: "info",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.514000Z",
-    //         data: {
-    //           url: "https://app.passit.io/api/confirm-email-short-code/",
-    //           status_code: 403,
-    //           method: "PUT"
-    //         },
-    //         message: null,
-    //         type: "http"
-    //       },
-    //       {
-    //         category: "navigation",
-    //         level: "info",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.517000Z",
-    //         data: {
-    //           to:
-    //             "/account/confirm-email/N-YFW3Re_dthvgJXfAZ7dqOA704jb9z_yJqHg1_n_YfYg9vacboGsA",
-    //           from:
-    //             "/account/confirm-email/N-YFW3Re_dthvgJXfAZ7dqOA704jb9z_yJqHg1_n_YfYg9vacboGsA"
-    //         },
-    //         message: null,
-    //         type: "default"
-    //       },
-    //       {
-    //         category: "navigation",
-    //         level: "info",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.523000Z",
-    //         data: {
-    //           to: "/account/login",
-    //           from:
-    //             "/account/confirm-email/N-YFW3Re_dthvgJXfAZ7dqOA704jb9z_yJqHg1_n_YfYg9vacboGsA"
-    //         },
-    //         message: null,
-    //         type: "default"
-    //       },
-    //       {
-    //         category: "console",
-    //         level: "warning",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.542000Z",
-    //         data: {
-    //           logger: "console",
-    //           extra: {
-    //             arguments: [
-    //               "Did not send error report because user did not opt in."
-    //             ]
-    //           }
-    //         },
-    //         message: "Did not send error report because user did not opt in.",
-    //         type: "default"
-    //       },
-    //       {
-    //         category: "console",
-    //         level: "error",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.543000Z",
-    //         data: {
-    //           extra: {
-    //             arguments: [
-    //               {
-    //                 message:
-    //                   'Effect "t.VerifyEmail$" dispatched an invalid action: "To validate via confirmation code, please log in first."',
-    //                 name: "Error",
-    //                 stack:
-    //                   'Error: Effect "t.VerifyEmail$" dispatched an invalid action: "To validate via confirmation code, please log in first."\n    at https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:509330\n    at o.project (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:509567)\n    at o._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:745454)\n    at o.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at u.notifyNext (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:498774)\n    at i._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20917)\n    at i.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at u.notifyNext (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20525)\n    at i._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20917)\n    at i.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at o._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:745552)\n    at o.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at a._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:551469)\n    at a.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at l._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:38100)\n    at l.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at u.notifyNext (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:498774)\n    at i._next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:20917)\n    at i.next (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:37874)\n    at https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:471548\n    at a.invoke (https://app.passit.io/polyfills.5f194581390fcad97fb1.js:1:6415)\n    at Object.onInvoke (https://app.passit.io/main.0aa02efa52a79a1f9c59.js:1:241432)\n    at a.invoke (https://app.passit.io/polyfills.5f194581390fcad97fb1.js:1:6355)\n    at s.run (https://app.passit.io/pol...'
-    //               }
-    //             ]
-    //           }
-    //         },
-    //         message:
-    //           'Error: Effect "t.VerifyEmail$" dispatched an invalid action: "To validate via confirmation code, please log in first."',
-    //         type: "default"
-    //       },
-    //       {
-    //         category: "xhr",
-    //         level: "info",
-    //         event_id: null,
-    //         timestamp: "2020-01-14T00:19:53.565000Z",
-    //         data: {
-    //           url: "https://app.passit.io/assets/svg/check.svg",
-    //           status_code: 200,
-    //           method: "GET"
-    //         },
-    //         message: null,
-    //         type: "http"
-    //       }
-    //     ]
-    //   }
-    // },
-    // {
-    //   type: "request",
-    //   data: {
-    //     fragment: null,
-    //     cookies: [],
-    //     inferredContentType: null,
-    //     env: null,
-    //     headers: [
-    //       [
-    //         "User-Agent",
-    //         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
-    //       ]
-    //     ],
-    //     url: "https://app.passit.io/account/login",
-    //     query: [],
-    //     data: null,
-    //     method: null
-    //   }
-    // }
   ],
   packages: {},
   sdk: { version: "5.7.1", name: "sentry.javascript.browser" },
