@@ -31,9 +31,7 @@ export const EventDetail = () => ({
   component: EventDetailComponent,
   props: {
     event$: of(latestEvent),
-    nextEvent$: of(true),
-    previousEvent$: of(false),
-    isReversed$: of(boolean("reversed frames?", false)),
-    reversedFrames$: of(latestEvent)
+    nextEvent$: of(boolean("has next event?", true)),
+    previousEvent$: of(boolean("has previous event?", false))
   }
 });
