@@ -21,6 +21,7 @@ spec:
             value: "False"
           - name: STATIC_URL
             value: /
-        envFrom:
-          - secretRef:
-              name: {{ include "glitchtip.fullname" . }}
+          - name: DATABASE_URL
+            value: {{ required "databaseURL is a required value." .Values.databaseURL | quote }}
+          - name: SECRET_KEY
+            value: {{ required "secretKey is a required value." .Values.secretKey | quote }}
