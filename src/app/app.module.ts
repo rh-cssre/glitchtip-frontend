@@ -6,11 +6,11 @@ import {
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS
 } from "@angular/common/http";
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material";
+import { OAuthModule } from "angular-oauth2-oidc";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
-
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material";
 
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
@@ -26,6 +26,7 @@ import { MainNavModule } from "./main-nav/main-nav.module";
     AuthModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN"

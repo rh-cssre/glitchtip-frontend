@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { OAuthService, JwksValidationHandler } from "angular-oauth2-oidc";
 import { LoginService } from "./login.service";
+import { gitlabAuthConfig } from "../social";
 
 @Component({
   selector: "app-login",
@@ -19,7 +21,27 @@ export class LoginComponent {
     ])
   });
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private oauthService: OAuthService
+  ) {
+    this.oauthService.configure(gitlabAuthConfig);
+    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  }
+
+  lol() {
+    this.oauthService.initLoginFlow();
+  }
+
+  public get name() {
+    const claims: any = this.oauthService.getIdentityClaims();
+    if (!claims) {
+      return null;
+    }
+    return claims.given_name;
+  }
 
   onSubmit() {
     if (this.form.valid) {
