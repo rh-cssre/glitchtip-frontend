@@ -10,7 +10,7 @@ import { IssueDetailService } from "../issue-detail.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventDetailComponent implements OnInit {
-  event$ = this.issueService.reversedFrames$;
+  event$ = this.issueService.sortedEvent$;
   nextEvent$ = this.issueService.hasNextEvent$;
   previousEvent$ = this.issueService.hasPreviousEvent$;
   nextEventUrl$ = this.issueService.nextEventUrl$;

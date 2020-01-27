@@ -33,7 +33,7 @@ export class IssueDetailService {
   private readonly getState$ = this.state.asObservable();
   private readonly url = baseUrl + "/issues/";
   readonly issue$ = this.getState$.pipe(map(state => state.issue));
-  readonly event$ = this.getState$.pipe(map(state => state.event));
+  private readonly event$ = this.getState$.pipe(map(state => state.event));
   readonly isReversed$ = this.getState$.pipe(map(state => state.isReversed));
   readonly hasNextEvent$ = this.event$.pipe(
     map(event => event && event.nextEventID !== null)
@@ -66,7 +66,7 @@ export class IssueDetailService {
     })
   );
 
-  readonly reversedFrames$ = combineLatest(this.event$, this.isReversed$).pipe(
+  readonly sortedEvent$ = combineLatest(this.event$, this.isReversed$).pipe(
     map(([event, isReversed]) => {
       if (event && isReversed) {
         return this.reverseFrames(event);

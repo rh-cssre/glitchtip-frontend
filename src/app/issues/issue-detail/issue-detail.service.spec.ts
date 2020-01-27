@@ -84,12 +84,12 @@ describe("IssueDetailService", () => {
 
     service.setEvent(testData);
 
-    service.reversedFrames$.pipe(take(1)).subscribe((event: any) => {
+    service.sortedEvent$.pipe(take(1)).subscribe((event: any) => {
       expect(
         event.entries[0].data.values[0].stacktrace.frames[0].filename
       ).toBe(lastFilename);
       service.getReversedFrames();
-      service.reversedFrames$.subscribe((event2: any) => {
+      service.sortedEvent$.subscribe((event2: any) => {
         expect(
           event2.entries[0].data.values[0].stacktrace.frames[0].filename
         ).toBe(firstFilename);
