@@ -16,48 +16,6 @@ export interface Event {
   // made undefined because EventDetail extends this and didn't need it
   "event.type"?: EventTypes;
   platform: string;
-
-  /* Before we delete this stuff, we should figure out where it came from. It didn't show up here by accident */
-  // exception: {
-  //   values: [
-  //     {
-  //       type: string; // "Error"
-  //       value: string;
-  //       stacktrace: {
-  //         frames: {
-  //           colno: number;
-  //           filename: string;
-  //           function: string;
-  //           in_app: boolean;
-  //           lineno: number;
-  //         }[];
-  //       };
-  //       mechanism: {
-  //         handled: boolean;
-  //         type: string; // "generic"
-  //       };
-  //     }
-  //   ];
-  // };
-  // level: string;
-  // sdk: {
-  //   name: string;
-  //   version: string;
-  //   packages: {
-  //     name: string;
-  //     version: string;
-  //   }[];
-  //   integrations: string[];
-  // };
-  // release: string;
-  // request: {
-  //   url: string;
-  //   headers: {
-  //     "User-Agent": string;
-  //   };
-  // };
-  // breadcrumbs: any;
-  // received_at: string;
 }
 
 export type EventTypes = "error" | "default";
@@ -72,7 +30,6 @@ export interface EventDetail extends Event {
   userReport: null;
   size: number;
   errors: any[];
-  sdkUpdates: SdkUpdate[];
   type: "error";
   groupingConfig: GroupingConfig;
   dateReceived: string;
@@ -80,7 +37,7 @@ export interface EventDetail extends Event {
   sdk: any;
   _meta: any;
   fingerprints: string[];
-  context: { arguments: string[] };
+  context: { "sys.argv": string[] };
   release: any;
 }
 
@@ -110,7 +67,7 @@ export interface Breadcrumb {
 }
 
 export interface ExceptionValueData {
-  values: IValues[];
+  values: Values[];
   excOmitted: boolean | null;
   hasSystemFrames: boolean;
 }
@@ -119,12 +76,17 @@ export interface IRequest {
   fragment: string | null;
   cookies: object[];
   inferredContentType: string | null;
-  env: string | null;
+  env: object | null;
   headers: string[][];
   url: string;
   query: object[];
-  data: string | null;
+  data: RequestData | null;
   method: string | null;
+}
+
+interface RequestData {
+  csrfmiddlewaretoken: string;
+  param1: string;
 }
 
 export type IssueStatus = "resolved" | "unresolved" | "ignored";
@@ -236,49 +198,67 @@ interface ITag {
 }
 
 interface IContext {
+  runtime?: Runtime;
+  trace?: Trace;
   os: IContextDetail;
   browser: IContextDetail;
 }
 
-interface IContextDetail {
+interface Trace {
+  description: string;
+  parent_span_id: string;
+  trace_id: string;
+  span_id: string;
+  type: string;
+  op: string;
+}
+
+interface Runtime {
   version: string;
+  type: string;
+  build: string;
+  name: string;
+}
+
+interface IContextDetail {
+  version?: string;
   type: string;
   name: string;
 }
 
-interface IValues {
+interface Values {
   stacktrace: IStacktrace;
   module: string | null;
   rawStacktrace: string | null;
-  mechanism: IMechanism;
+  mechanism: Mechanism;
   threadId: number | null;
   value: string;
   type: string;
 }
 
-interface IMechanism {
-  data: { function: string };
+interface Mechanism {
+  data?: { function: string };
   type: string;
   handled: boolean;
 }
 
 interface IStacktrace {
-  frames: IFrame[];
+  frames: Frame[];
   framesOmitted: null;
   registers: null;
   hasSystemFrames: boolean;
 }
 
-interface IFrame {
+interface Frame {
   function: string | null;
   errors: string | null;
-  colNo: number;
-  vars: string | null;
+  colNo: number | null;
+  vars: Vars | null;
   package: string | null;
   absPath: string;
   inApp: boolean;
   lineNo: number;
-  module: string;
+  module: string | null;
   filename: string;
   platform: string | null;
   instructionAddr: string | null;
@@ -286,7 +266,59 @@ interface IFrame {
   symbolAddr: string | null;
   trust: string | null;
   symbol: string | null;
-  rawFunction: string | null;
+  rawFunction?: string | null;
+}
+
+interface Vars {
+  __class__?: string;
+  _prefix?: string;
+  args?: [];
+  bit?: string;
+  callback?: string;
+  bits?: string[];
+  callback_args?: [];
+  callback_kwargs?: {};
+  clone?: string;
+  cls?: string;
+  context?: { view: string } | string;
+  current_app?: string;
+  current_path?: string;
+  exc?: string;
+  get_response?: string;
+  handler?: string;
+  initkwargs?: object;
+  key?: string;
+  kwargs?: object;
+  limit?: string;
+  lookup_view?: string;
+  lookup_view_s?: string;
+  m?: string;
+  middleware_method?: string;
+  msg?: string;
+  n?: string;
+  name?: string;
+  NoReverseMatch?: string;
+  node?: string;
+  num?: string;
+  path?: [];
+  patterns?: [];
+  possibilities?: [];
+  prefix?: string;
+  request?: string;
+  resolver?: string;
+  resolver_match?: string;
+  response?: string;
+  retval?: string;
+  reverse?: string;
+  self?: any;
+  template?: string;
+  url?: string;
+  urlconf?: string;
+  users?: string;
+  view?: string;
+  view_name?: string;
+  viewname?: string;
+  wrapped_callback?: string;
 }
 
 interface IEventMetaData {
@@ -296,15 +328,7 @@ interface IEventMetaData {
   filename: string;
 }
 
-interface SdkUpdate {
-  enables: any[];
-  sdkUrl: string;
-  sdkName: string;
-  newSdkVersion: string;
-  type: string;
-}
-
 interface GroupingConfig {
-  enhancements: string;
+  enhancements?: string;
   id: string;
 }
