@@ -10,7 +10,6 @@
           event?.dateCreated
         }}</span
         ><span>
-          <!-- Link to JSON and (size) -->
           <a>JSON (31.7 KB)</a>
         </span>
       </p>
@@ -33,10 +32,7 @@
 
   <mat-divider></mat-divider>
 
-  <section
-    *ngIf="event?.user || event?.contexts?.browser"
-    class="location"
-  >
+  <section *ngIf="event?.user || event?.contexts?.browser" class="location">
     <div class="wrapper">
       <mat-icon> my_location</mat-icon>
       <div class="mat-body-strong spacer">{{ event?.user.ip_address }}</div>
@@ -79,14 +75,18 @@
 
   <mat-divider></mat-divider>
 
-  <section *ngIf="event?.entries.length > 0" class="exception">
+  <section class="exception">
     <div class="header-wrapper">
       <div class="text-wrapper">
         <h3>Exception</h3>
-        <p *ngIf="group.value === 'full'" class="spacer">
-          (<a>most recent call first</a>)
+        <p class="spacer">
+          (<a mat-button (click)="getFlippedFrames()"
+            >most recent call <span *ngIf="isReversed$ | async">first</span
+            ><span *ngIf="(isReversed$ | async) === false">last</span></a
+          >)
         </p>
       </div>
+
       <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle checked value="full" aria-label="full data">
           Full
@@ -119,7 +119,7 @@
 
             <mat-accordion>
               <mat-expansion-panel
-                *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
+                *ngFor="let frame of value.stacktrace.frames"
               >
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -156,10 +156,7 @@
         <div *ngSwitchCase="'exception'">
           <p>{{ event?.title }}</p>
           <div *ngFor="let value of entry.data.values">
-            <p
-              class="spacer"
-              *ngFor="let frame of value.stacktrace.frames.slice().reverse()"
-            >
+            <p class="spacer" *ngFor="let frame of value.stacktrace.frames">
               at {{ frame.function }} ({{ frame.filename }}:{{
                 frame.lineNo
               }}:{{ frame.colNo }})

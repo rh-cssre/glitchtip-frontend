@@ -13,7 +13,8 @@ export interface Event {
   location: string;
   crashFile: string | null;
   groupID: string;
-  "event.type": EventTypes;
+  // made undefined because EventDetail extends this and didn't need it
+  "event.type"?: EventTypes;
   platform: string;
 
   /* Before we delete this stuff, we should figure out where it came from. It didn't show up here by accident */
@@ -67,6 +68,20 @@ export interface EventDetail extends Event {
   contexts: IContext;
   entries: IEntryStreamField[];
   metadata: IEventMetaData | any;
+  dist: null;
+  userReport: null;
+  size: number;
+  errors: any[];
+  sdkUpdates: SdkUpdate[];
+  type: "error";
+  groupingConfig: GroupingConfig;
+  dateReceived: string;
+  packages: any;
+  sdk: any;
+  _meta: any;
+  fingerprints: string[];
+  context: { arguments: string[] };
+  release: any;
 }
 
 export interface IEntryStreamfieldBlock<Type extends string, Data extends {}> {
@@ -75,11 +90,26 @@ export interface IEntryStreamfieldBlock<Type extends string, Data extends {}> {
 }
 
 export type IEntryStreamField =
-  | IEntryStreamfieldBlock<"exception", IValueData[]>
-  | IEntryStreamfieldBlock<"breadcrumbs", IValueData[]>;
-// | IEntryStreamfieldBlock<"request", IRequest>;
+  | IEntryStreamfieldBlock<"exception", ExceptionValueData>
+  | IEntryStreamfieldBlock<"breadcrumbs", BreadcrumbValueData>
+  | IEntryStreamfieldBlock<"request", IRequest>;
 
-export interface IValueData {
+export interface BreadcrumbValueData {
+  values: Breadcrumb[];
+}
+
+// https://docs.sentry.io/enriching-error-data/breadcrumbs/?platform=javascript
+export interface Breadcrumb {
+  message: string | null;
+  category: string;
+  data: any;
+  level: "fatal" | "error" | "warning" | "info" | "debug";
+  type: "default" | "http" | "error";
+  event_id: null;
+  timestamp: string; // technically a string, functionally a Date
+}
+
+export interface ExceptionValueData {
   values: IValues[];
   excOmitted: boolean | null;
   hasSystemFrames: boolean;
@@ -234,10 +264,13 @@ interface IMechanism {
 
 interface IStacktrace {
   frames: IFrame[];
+  framesOmitted: null;
+  registers: null;
+  hasSystemFrames: boolean;
 }
 
 interface IFrame {
-  function: string;
+  function: string | null;
   errors: string | null;
   colNo: number;
   vars: string | null;
@@ -249,7 +282,7 @@ interface IFrame {
   filename: string;
   platform: string | null;
   instructionAddr: string | null;
-  context: string | number[][];
+  context: (string | number)[][];
   symbolAddr: string | null;
   trust: string | null;
   symbol: string | null;
@@ -261,4 +294,17 @@ interface IEventMetaData {
   type: string;
   value: string;
   filename: string;
+}
+
+interface SdkUpdate {
+  enables: any[];
+  sdkUrl: string;
+  sdkName: string;
+  newSdkVersion: string;
+  type: string;
+}
+
+interface GroupingConfig {
+  enhancements: string;
+  id: string;
 }

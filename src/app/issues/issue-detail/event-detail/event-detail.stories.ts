@@ -1,6 +1,6 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs } from "@storybook/addon-knobs";
+import { withKnobs, boolean } from "@storybook/addon-knobs";
 import { EventDetailComponent } from "./event-detail.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { of } from "rxjs";
@@ -31,7 +31,7 @@ export const EventDetail = () => ({
   component: EventDetailComponent,
   props: {
     event$: of(latestEvent),
-    nextEvent$: of(true),
-    previousEvent$: of(false)
+    nextEvent$: of(boolean("has next event?", true)),
+    previousEvent$: of(boolean("has previous event?", false))
   }
 });

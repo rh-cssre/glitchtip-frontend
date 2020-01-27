@@ -1,5 +1,7 @@
+import { EventDetail } from "../../interfaces";
+
 /* tslint:disable */
-export const latestEvent = {
+export const latestEvent: EventDetail = {
   eventID: "e4c096c4940d4d3e96c7560592cdad96",
   dist: null,
   userReport: null,

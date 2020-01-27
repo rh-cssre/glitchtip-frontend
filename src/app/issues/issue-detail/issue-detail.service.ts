@@ -3,18 +3,26 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
-import { IssueDetail, EventDetail, IssueStatus } from "../interfaces";
+import {
+  IssueDetail,
+  EventDetail,
+  IssueStatus,
+  IEntryStreamfieldBlock,
+  ExceptionValueData
+} from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
   event: EventDetail | null;
+  isReversed: boolean;
 }
 
 const initialState: IssueDetailState = {
   issue: null,
-  event: null
+  event: null,
+  isReversed: true
 };
 
 @Injectable({
@@ -25,7 +33,8 @@ export class IssueDetailService {
   private readonly getState$ = this.state.asObservable();
   private readonly url = baseUrl + "/issues/";
   readonly issue$ = this.getState$.pipe(map(state => state.issue));
-  readonly event$ = this.getState$.pipe(map(state => state.event));
+  private readonly event$ = this.getState$.pipe(map(state => state.event));
+  readonly isReversed$ = this.getState$.pipe(map(state => state.isReversed));
   readonly hasNextEvent$ = this.event$.pipe(
     map(event => event && event.nextEventID !== null)
   );
@@ -54,6 +63,15 @@ export class IssueDetailService {
         return this.eventUrl(orgSlug, issue, event.previousEventID);
       }
       return null;
+    })
+  );
+
+  readonly sortedEvent$ = combineLatest(this.event$, this.isReversed$).pipe(
+    map(([event, isReversed]) => {
+      if (event && isReversed) {
+        return this.reverseFrames(event);
+      }
+      return event;
     })
   );
 
@@ -99,6 +117,10 @@ export class IssueDetailService {
     return EMPTY;
   }
 
+  getReversedFrames() {
+    this.toggleIsReversed();
+  }
+
   setStatus(status: IssueStatus) {
     const issue = this.state.getValue().issue;
     if (issue) {
@@ -142,8 +164,29 @@ export class IssueDetailService {
     this.state.next({ ...this.state.getValue(), issue });
   }
 
-  private setEvent(event: EventDetail) {
+  // private removed for testing
+  setEvent(event: EventDetail) {
     this.state.next({ ...this.state.getValue(), event });
+  }
+
+  private toggleIsReversed() {
+    const isReversed = this.state.getValue().isReversed;
+    this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+  }
+
+  /* Reverse frame array, nested in the event object */
+  private reverseFrames(event: EventDetail) {
+    const exceptionEntryType = event.entries.find(
+      entry => entry.type === "exception"
+    );
+    if (exceptionEntryType) {
+      const reversedFrames = (exceptionEntryType as IEntryStreamfieldBlock<
+        "exception",
+        ExceptionValueData
+      >).data.values.map(value => [...value.stacktrace.frames.reverse()]);
+      const entryType = { ...exceptionEntryType, frames: reversedFrames };
+      return { ...event, entries: [entryType] };
+    }
   }
 
   /** Build event detail url string */
