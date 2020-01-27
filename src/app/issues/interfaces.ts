@@ -53,7 +53,7 @@ export interface Event {
   // request: {
   //   url: string;
   //   headers: {
-  //     "User-Agent": string;`
+  //     "User-Agent": string;
   //   };
   // };
   // breadcrumbs: any;
