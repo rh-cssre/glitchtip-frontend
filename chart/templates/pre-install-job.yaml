@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "glitchtip.fullname" . }}
+  labels:
+    {{- include "glitchtip.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  activeDeadlineSeconds: 180
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: pre-install-job
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["./manage.py","migrate"]
+        env:
+          - name: DEBUG
+            value: "False"
+          - name: STATIC_URL
+            value: /
+          - name: DATABASE_URL
+            value: {{ required "databaseURL is a required value." .Values.databaseURL | quote }}
+          - name: SECRET_KEY
+            value: {{ required "secretKey is a required value." .Values.secretKey | quote }}
