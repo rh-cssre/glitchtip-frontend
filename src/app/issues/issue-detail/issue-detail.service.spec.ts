@@ -4,17 +4,13 @@ import {
   HttpTestingController
 } from "@angular/common/http/testing";
 import { IssueDetailService } from "./issue-detail.service";
-import {
-  IssueDetail,
-  EventDetail,
-  IEntryStreamfieldBlock,
-  ExceptionValueData
-} from "../interfaces";
+import { IssueDetail, EventDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { EMPTY } from "rxjs";
 import { latestEvent } from "./event-detail/event-latest-test-data";
 import { MatSnackBarModule } from "@angular/material";
+import { take } from "rxjs/operators";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -83,38 +79,21 @@ describe("IssueDetailService", () => {
 
   it("reversedFrames$ selector flips frames array in event object without mutating event state", () => {
     const testData: EventDetail = latestEvent;
-    const testDataFramesFilenameFirstIndex =
-      "/polyfills.5f194581390fcad97fb1.js";
-    const testDataFramesFilenameLastIndex = "/main.0aa02efa52a79a1f9c59.js";
+    const firstFilename = "/polyfills.5f194581390fcad97fb1.js";
+    const lastFilename = "/main.0aa02efa52a79a1f9c59.js";
 
     service.setEvent(testData);
 
-    // Event state doesn't change
-    service.event$.subscribe(event => {
-      if (event) {
-        const exceptionEntryType = event.entries.find(
-          entry => entry.type === "exception"
-        );
-        const firstFrameFilename = (exceptionEntryType as IEntryStreamfieldBlock<
-          "exception",
-          ExceptionValueData
-        >).data.values[0].stacktrace.frames[0].filename;
-        expect(firstFrameFilename).toEqual(testDataFramesFilenameFirstIndex);
-      }
-    });
-
-    // Reversed frames flips the frames array
-    service.reversedFrames$.subscribe(event => {
-      if (event) {
-        const exceptionEntryType = event.entries.find(
-          entry => entry.type === "exception"
-        );
-        const firstFrameFilename = (exceptionEntryType as IEntryStreamfieldBlock<
-          "exception",
-          ExceptionValueData
-        >).data.values[0].stacktrace.frames[0].filename;
-        expect(firstFrameFilename).toEqual(testDataFramesFilenameLastIndex);
-      }
+    service.reversedFrames$.pipe(take(1)).subscribe((event: any) => {
+      expect(
+        event.entries[0].data.values[0].stacktrace.frames[0].filename
+      ).toBe(lastFilename);
+      service.getReversedFrames();
+      service.reversedFrames$.subscribe((event2: any) => {
+        expect(
+          event2.entries[0].data.values[0].stacktrace.frames[0].filename
+        ).toBe(firstFilename);
+      });
     });
   });
 });
