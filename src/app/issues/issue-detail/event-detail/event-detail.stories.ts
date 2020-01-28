@@ -12,9 +12,9 @@ import { SharedModule } from "src/app/shared/shared.module";
 // Data
 import { databaseError } from "./test-data/database-error";
 import { databaseStackError } from "./test-data/database-stack-error";
-// import { postError } from "./test-data/post-error";
-// import { templateError } from "./test-data/template-error";
-// import { zeroDivisionError } from "./test-data/zero-division-error";
+import { postError } from "./test-data/post-error";
+import { templateError } from "./test-data/template-error";
+import { zeroDivisionError } from "./test-data/zero-division-error";
 
 export default {
   title: "Event Detail",
@@ -33,19 +33,44 @@ export default {
   ]
 };
 
-const eventTypeData = {
-  databaseError: databaseError as any,
-  databaseStackError: databaseStackError as any
-  // postError: postError as any,
-  // templateError: templateError as any,
-  // zeroDivisionError: zeroDivisionError as any
+export const EventDetails = () => {
+  const errorOptions = [
+    "Database Error",
+    "Database Stack Error",
+    "Post Error",
+    "Template Error",
+    "Zero Division Error"
+  ];
+  const selectedError = select("Error Type", errorOptions, errorOptions[3]);
+  let error = databaseError;
+
+  if (selectedError === "Database Error") {
+    error = databaseError;
+  }
+  if (selectedError === "Database Stack Error") {
+    error = databaseStackError;
+  }
+  if (selectedError === "PostError") {
+    error = postError;
+  }
+  if (selectedError === "Template Error") {
+    error = templateError;
+  }
+  if (selectedError === "Zero Division Error") {
+    error = zeroDivisionError;
+  }
+
+  return {
+    component: EventDetailComponent,
+    props: {
+      selectedError,
+      event$: of(error),
+      nextEvent$: of(boolean("has next event?", true)),
+      previousEvent$: of(boolean("has previous event?", false))
+    }
+  };
 };
 
-export const EventDetail = () => ({
-  component: EventDetailComponent,
-  props: {
-    event$: of(select("eventType", eventTypeData, databaseError)),
-    nextEvent$: of(boolean("has next event?", true)),
-    previousEvent$: of(boolean("has previous event?", false))
-  }
-});
+EventDetails.story = {
+  name: "Event Detail"
+};
