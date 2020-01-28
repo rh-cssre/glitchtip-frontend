@@ -8,9 +8,9 @@ import { IssueDetail, EventDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { EMPTY } from "rxjs";
-import { latestEvent } from "./event-detail/event-latest-test-data";
 import { MatSnackBarModule } from "@angular/material";
 import { take } from "rxjs/operators";
+import { databaseError } from "./event-detail/test-data/database-error";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -77,10 +77,10 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  it("reversedFrames$ selector flips frames array in event object without mutating event state", () => {
-    const testData: EventDetail = latestEvent;
-    const firstFilename = "/polyfills.5f194581390fcad97fb1.js";
-    const lastFilename = "/main.0aa02efa52a79a1f9c59.js";
+  it("sortedEvent$ selector flips frames array in event object without mutating event state", () => {
+    const testData: EventDetail = databaseError;
+    const firstFilename = "django/core/handlers/exception.py";
+    const lastFilename = "django/db/models/query.py";
 
     service.setEvent(testData);
 
