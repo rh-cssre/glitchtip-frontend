@@ -136,9 +136,7 @@
                   </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <p *ngFor="let context of frame.context">
-                  {{ context[0] }}. {{ context[1] }}
-                </p>
+                <p>{{ frame.context[0][0] }}. {{ frame.context[1][1] }}</p>
               </mat-expansion-panel>
             </mat-accordion>
           </div>

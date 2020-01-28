@@ -12,9 +12,9 @@ import { SharedModule } from "src/app/shared/shared.module";
 // Data
 import { databaseError } from "./test-data/database-error";
 import { databaseStackError } from "./test-data/database-stack-error";
-import { postError } from "./test-data/post-error";
-import { templateError } from "./test-data/template-error";
-import { zeroDivisionError } from "./test-data/zero-division-error";
+// import { postError } from "./test-data/post-error";
+// import { templateError } from "./test-data/template-error";
+// import { zeroDivisionError } from "./test-data/zero-division-error";
 
 export default {
   title: "Event Detail",
@@ -35,10 +35,10 @@ export default {
 
 const eventTypeData = {
   databaseError: databaseError as any,
-  databaseStackError: databaseStackError as any,
-  postError: postError as any,
-  templateError: templateError as any,
-  zeroDivisionError: zeroDivisionError as any
+  databaseStackError: databaseStackError as any
+  // postError: postError as any,
+  // templateError: templateError as any,
+  // zeroDivisionError: zeroDivisionError as any
 };
 
 export const EventDetail = () => ({
