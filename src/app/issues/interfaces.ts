@@ -37,7 +37,7 @@ export interface EventDetail extends Event {
   sdk: any;
   _meta: any;
   fingerprints: string[];
-  context: { "sys.argv": string[] };
+  context: { "sys.argv"?: string[]; arguments?: [] };
   release: any;
 }
 

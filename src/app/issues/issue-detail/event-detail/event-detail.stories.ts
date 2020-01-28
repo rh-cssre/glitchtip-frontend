@@ -15,6 +15,7 @@ import { databaseStackError } from "./test-data/database-stack-error";
 import { postError } from "./test-data/post-error";
 import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
+import { stringError } from "./test-data/string-error";
 
 export default {
   title: "Event Detail",
@@ -39,9 +40,10 @@ export const EventDetails = () => {
     "Database Stack Error",
     "Post Error",
     "Template Error",
-    "Zero Division Error"
+    "Zero Division Error",
+    "String Error"
   ];
-  const selectedError = select("Error Type", errorOptions, errorOptions[3]);
+  const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error = databaseError;
 
   if (selectedError === "Database Error") {
@@ -58,6 +60,9 @@ export const EventDetails = () => {
   }
   if (selectedError === "Zero Division Error") {
     error = zeroDivisionError;
+  }
+  if (selectedError === "String Error") {
+    error = stringError;
   }
 
   return {
