@@ -4,11 +4,13 @@ import {
   HttpTestingController
 } from "@angular/common/http/testing";
 import { IssueDetailService } from "./issue-detail.service";
-import { IssueDetail } from "../interfaces";
+import { IssueDetail, EventDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { EMPTY } from "rxjs";
+import { latestEvent } from "./event-detail/event-latest-test-data";
 import { MatSnackBarModule } from "@angular/material";
+import { take } from "rxjs/operators";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -73,5 +75,25 @@ describe("IssueDetailService", () => {
     service.getEventByID(eventID);
     expect(issue).toBe(testData);
     expect(service.retrieveEvent).toHaveBeenCalled();
+  });
+
+  it("reversedFrames$ selector flips frames array in event object without mutating event state", () => {
+    const testData: EventDetail = latestEvent;
+    const firstFilename = "/polyfills.5f194581390fcad97fb1.js";
+    const lastFilename = "/main.0aa02efa52a79a1f9c59.js";
+
+    service.setEvent(testData);
+
+    service.sortedEvent$.pipe(take(1)).subscribe((event: any) => {
+      expect(
+        event.entries[0].data.values[0].stacktrace.frames[0].filename
+      ).toBe(lastFilename);
+      service.getReversedFrames();
+      service.sortedEvent$.subscribe((event2: any) => {
+        expect(
+          event2.entries[0].data.values[0].stacktrace.frames[0].filename
+        ).toBe(firstFilename);
+      });
+    });
   });
 });

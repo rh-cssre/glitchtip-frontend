@@ -10,7 +10,7 @@ import { IssueDetailService } from "../issue-detail.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventDetailComponent implements OnInit {
-  event$ = this.issueService.event$;
+  event$ = this.issueService.sortedEvent$;
   nextEvent$ = this.issueService.hasNextEvent$;
   previousEvent$ = this.issueService.hasPreviousEvent$;
   nextEventUrl$ = this.issueService.nextEventUrl$;
@@ -18,6 +18,7 @@ export class EventDetailComponent implements OnInit {
   eventIDParam$ = this.route.paramMap.pipe(
     map(params => params.get("event-id"))
   );
+  isReversed$ = this.issueService.isReversed$;
 
   constructor(
     private issueService: IssueDetailService,
@@ -43,5 +44,9 @@ export class EventDetailComponent implements OnInit {
 
   getOlderEvent() {
     this.issueService.getPreviousEvent();
+  }
+
+  getFlippedFrames() {
+    this.issueService.getReversedFrames();
   }
 }
