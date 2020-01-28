@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { OAuthService, JwksValidationHandler } from "angular-oauth2-oidc";
+import { OAuthService } from "angular-oauth2-oidc";
 import { LoginService } from "./login.service";
 import { gitlabAuthConfig } from "../social";
 
@@ -27,11 +27,13 @@ export class LoginComponent {
     private oauthService: OAuthService
   ) {
     this.oauthService.configure(gitlabAuthConfig);
-    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+
+    // this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+    // this.oauthService.loadDiscoveryDocumentAndTryLogin();
   }
 
   lol() {
+    console.log(this.oauthService.scope);
     this.oauthService.initLoginFlow();
   }
 

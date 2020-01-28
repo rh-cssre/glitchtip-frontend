@@ -3,7 +3,13 @@ import { AuthConfig } from "angular-oauth2-oidc";
 export const gitlabAuthConfig: AuthConfig = {
   // Url of the Identity Provider
   issuer: "https://gitlab.com",
-
+  tokenEndpoint: "https://gitlab.com/oauth/token",
+  userinfoEndpoint: "https://gitlab.com/oauth/userinfo",
+  responseType: "token",
+  loginUrl: "https://gitlab.com/oauth/authorize",
+  strictDiscoveryDocumentValidation: false,
+  skipIssuerCheck: true,
+  oidc: false,
   // URL of the SPA to redirect the user to after login
   redirectUri: window.location.origin,
 
@@ -13,4 +19,14 @@ export const gitlabAuthConfig: AuthConfig = {
   // set the scope for the permissions the client should request
   // The first three are defined by OIDC. The 4th is a usecase-specific one
   scope: "read_user"
+};
+
+export const googleAuthConfig: AuthConfig = {
+  issuer: "https://accounts.google.com",
+  redirectUri: window.location.origin + "/index.html",
+  silentRefreshRedirectUri: window.location.origin + "/silent-refresh.html",
+  clientId: "",
+  strictDiscoveryDocumentValidation: false,
+  scope: "openid profile email",
+  sessionChecksEnabled: true
 };
