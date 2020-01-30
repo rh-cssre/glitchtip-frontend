@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { OAuthService } from "angular-oauth2-oidc";
 import { LoginService } from "./login.service";
@@ -24,8 +24,10 @@ export class LoginComponent {
   constructor(
     private loginService: LoginService,
     private router: Router,
+    private route: ActivatedRoute,
     private oauthService: OAuthService
   ) {
+    console.log(this.route.snapshot.fragment);
     this.oauthService.configure(gitlabAuthConfig);
 
     // this.oauthService.tokenValidationHandler = new JwksValidationHandler();

@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { AuthService } from "./api/auth/auth.service";
 import { OrganizationsService } from "./api/organizations/organizations.service";
 
@@ -15,18 +14,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private organizations: OrganizationsService,
-    private router: Router
+    private organizations: OrganizationsService
   ) {}
 
-  /**
-   * Send user to login page or default org issues list
-   */
   ngOnInit() {
     this.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn === false) {
-        this.router.navigate(["login"]);
-      } else {
+      if (isLoggedIn === true) {
         this.organizations.retrieveOrganizations().toPromise();
       }
     });

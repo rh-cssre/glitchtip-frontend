@@ -11,7 +11,7 @@ export const gitlabAuthConfig: AuthConfig = {
   skipIssuerCheck: true,
   oidc: false,
   // URL of the SPA to redirect the user to after login
-  redirectUri: window.location.origin,
+  redirectUri: window.location.toString(),
 
   // The SPA's id. The SPA is registered with this id at the auth-server
   clientId: "0b6b2912b57032df9a6bd2186bbb394b67083a17fad98ff590ab5c7a9355f118",
