@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 import { EventDetailComponent } from "./event-detail.component";
 import { MaterialModule } from "src/app/shared/material.module";
+import { EntryRequestComponent } from "./entry-request/entry-request.component";
 
 describe("EventDetailComponent", () => {
   let component: EventDetailComponent;
@@ -11,7 +12,7 @@ describe("EventDetailComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EventDetailComponent],
+      declarations: [EventDetailComponent, EntryRequestComponent],
       imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule]
     }).compileComponents();
   }));

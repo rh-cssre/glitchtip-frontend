@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { EntryRequestComponent } from "./entry-request.component";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MaterialModule } from "src/app/shared/material.module";
 
 describe("EntryRequestComponent", () => {
   let component: EntryRequestComponent;
@@ -8,7 +11,8 @@ describe("EntryRequestComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EntryRequestComponent]
+      declarations: [EntryRequestComponent],
+      imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule]
     }).compileComponents();
   }));
 
