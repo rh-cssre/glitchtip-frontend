@@ -1,8 +1,3 @@
-// These might not be in the right spot
-$font-sans-serif: "Plex Sans";
-$font-serif: "Plex Serif";
-$font-mono: "Plex Mono";
-
 @font-face {
   font-family: $font-sans-serif;
   src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
