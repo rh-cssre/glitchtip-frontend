@@ -1,13 +1,18 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean, select } from "@storybook/addon-knobs";
-import { EventDetailComponent } from "./event-detail.component";
-import { MaterialModule } from "src/app/shared/material.module";
 import { of } from "rxjs";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+// Imports
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MaterialModule } from "src/app/shared/material.module";
+import { RouterTestingModule } from "@angular/router/testing";
 import { SharedModule } from "src/app/shared/shared.module";
+
+// Components
+import { EventDetailComponent } from "./event-detail.component";
+import { EntryRequestComponent } from "../event-detail/entry-request/entry-request.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -16,6 +21,7 @@ import { postError } from "./test-data/post-error";
 import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
 import { stringError } from "./test-data/string-error";
+import { EntryDataComponent } from "./entry-data/entry-data.component";
 
 export default {
   title: "Event Detail",
@@ -28,7 +34,8 @@ export default {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         SharedModule
-      ]
+      ],
+      declarations: [EntryRequestComponent, EntryDataComponent]
     }),
     withKnobs
   ]
@@ -46,23 +53,25 @@ export const EventDetails = () => {
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error = databaseError;
 
-  if (selectedError === "Database Error") {
-    error = databaseError;
-  }
-  if (selectedError === "Database Stack Error") {
-    error = databaseStackError;
-  }
-  if (selectedError === "PostError") {
-    error = postError;
-  }
-  if (selectedError === "Template Error") {
-    error = templateError;
-  }
-  if (selectedError === "Zero Division Error") {
-    error = zeroDivisionError;
-  }
-  if (selectedError === "String Error") {
-    error = stringError;
+  switch (selectedError) {
+    case "Database Error":
+      error = databaseError;
+      break;
+    case "Database Stack Error":
+      error = databaseStackError;
+      break;
+    case "Post Error":
+      error = postError;
+      break;
+    case "Template Error":
+      error = templateError;
+      break;
+    case "Zero Division Error":
+      error = zeroDivisionError;
+      break;
+    case "String Error":
+      error = stringError;
+      break;
   }
 
   return {
@@ -78,4 +87,24 @@ export const EventDetails = () => {
 
 EventDetails.story = {
   name: "Event Detail"
+};
+
+export const EntryRequest = () => {
+  const error = databaseStackError.entries[2].data;
+  const requestObject = {
+    ...error,
+    domainName: "localhost",
+    path: "/database-stack-error/"
+  };
+
+  return {
+    component: EntryRequestComponent,
+    props: {
+      eventEntryRequest$: of(requestObject)
+    }
+  };
+};
+
+EntryRequest.story = {
+  name: "Entry Request"
 };

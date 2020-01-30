@@ -120,8 +120,8 @@ export const icons = () => ({
   template: `
   <section class="mat-typography">
     <h1>Icons</h1>
-    <p>Angular material has a bunch of icons. You can find a pretty exhaustive list of them <a href="https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list/">here</a>
-    <p>Also, <a href="https://material.angular.io/components/icon/overview">here's</a> Angular's documentation on icons</p>
+    <p>Angular material has a bunch of icons. You can find a pretty exhaustive list of them <a href="https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list/" target="_blank">here</a>
+    <p>Also, <a href="https://material.angular.io/components/icon/overview" target="_blank">here's</a> Angular's documentation on icons</p>
     <p>Make sure to add the appropriate aria classes for accessibility!</p>
     <mat-divider></mat-divider>
     <mat-icon>delete</mat-icon>
@@ -139,9 +139,16 @@ export const icons = () => ({
   `
 });
 
-typography.story = {
-  parameters: {
-    notes:
-      "Oh hey you can leave notes. Why is the alignment so weird though? Not sure if this is a great place to take notes."
-  }
-};
+export const colors = () => ({
+  template: `
+  <section class="mat-typography">
+    <p class="mat-h1">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>
+    <p>Use mat-color($amaranth-palette, 50) to get a color from the palette: <a href="https://v5.material.angular.io/guide/theming-your-components#using-colors-from-a-palette" target="_blank">Material Reference</a></p>
+    <div style="width: 100%; height: 100px; background-color: #fce8ed"></div>
+    <p style="margin-top: 50px">Use mat-contrast($amaranth-palette, 50) to get the contrasting color:</p>
+    <div style="width: 100%; height: 100px; background-color: #000000"></div>
+    <p style="margin-top: 50px">To use a gray color, use mat-color($mat-gray, 500): <a target="_blank" href="https://material.io/design/color/the-color-system.html#tools-for-picking-colors">Material Reference</a></p>
+    <div style="width: 100%; height: 100px; background-color: #9E9E9E"></div>
+  </section>
+  `
+});

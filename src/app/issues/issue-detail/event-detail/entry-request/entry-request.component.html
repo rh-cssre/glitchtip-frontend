@@ -1,0 +1,20 @@
+<section *ngIf="eventEntryRequest$ | async as request" class="mat-typography">
+  <section class="location">
+    <span>{{ request?.method }}</span>
+    <a color="primary" target="_blank" [href]="request?.url">{{
+      request?.path
+    }}</a
+    ><a mat-icon-button color="primary" target="_blank" [href]="request?.url">
+      <mat-icon>open_in_new</mat-icon>
+    </a>
+    <span>{{ request?.domainName }}</span>
+  </section>
+  <section *ngIf="request?.headers">
+    <h3>Headers</h3>
+    <app-entry-data [data]="request?.headers"></app-entry-data>
+  </section>
+
+  <div class="data">
+    {{ request | json }}
+  </div>
+</section>
