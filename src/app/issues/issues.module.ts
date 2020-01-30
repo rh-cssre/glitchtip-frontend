@@ -11,6 +11,7 @@ import { IssueListItemComponent } from "./issue-list-item/issue-list-item.compon
 import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 import { EntryRequestComponent } from "./issue-detail/event-detail/entry-request/entry-request.component";
+import { EntryDataComponent } from "./issue-detail/event-detail/entry-data/entry-data.component";
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { EntryRequestComponent } from "./issue-detail/event-detail/entry-request
     IssueListItemComponent,
     IssueDetailComponent,
     EventDetailComponent,
-    EntryRequestComponent
+    EntryRequestComponent,
+    EntryDataComponent
   ]
 })
 export class IssuesModule {}

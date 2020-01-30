@@ -1,0 +1,25 @@
+.key {
+  width: 33%;
+  padding-right: 16px;
+  vertical-align: top;
+}
+
+.content {
+  padding: 8px;
+  background-color: #ffdbe1;
+  font-family: monospace;
+  border-radius: 3px;
+  border: none;
+}
+
+tr {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 4px;
+  table-layout: auto;
+  width: 100%;
+}
