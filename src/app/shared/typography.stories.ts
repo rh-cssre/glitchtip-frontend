@@ -139,9 +139,14 @@ export const icons = () => ({
   `
 });
 
-typography.story = {
-  parameters: {
-    notes:
-      "Oh hey you can leave notes. Why is the alignment so weird though? Not sure if this is a great place to take notes."
-  }
-};
+export const colors = () => ({
+  template: `
+  <section class="mat-typography">
+    <p class="mat-h1">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>
+    <p>Use mat-color($amaranth-palette, 50) to get a color from the palette: </p>
+    <div style="width: 100%; height: 100px; background-color: #fce8ed"></div>
+    <p style="margin-top: 50px">use mat-contrast($amaranth-palette, 50) to get the contrasting color:</p>
+    <div style="width: 100%; height: 100px; background-color: #000000"></div>
+  </section>
+  `
+});
