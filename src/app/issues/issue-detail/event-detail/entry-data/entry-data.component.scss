@@ -1,3 +1,5 @@
+@import "../../../../../assets/styles/variables";
+
 .key {
   width: 33%;
   padding-right: 16px;
@@ -6,8 +8,7 @@
 
 .content {
   padding: 8px;
-  background-color: #ffdbe1;
-  font-family: monospace;
+  font-family: $font-mono;
   border-radius: 3px;
   border: none;
 }
