@@ -1,6 +1,6 @@
-<table>
-  <tr *ngFor="let lineData of data">
-    <td class="key mat-body-strong mat-body-2">{{ lineData[0] }}:</td>
-    <td class="content">{{ lineData[1] }}</td>
-  </tr>
-</table>
+<dl class="mat-typography">
+  <div *ngFor="let lineData of data">
+    <dt class="mat-body-strong">{{ lineData[0] }}</dt>
+    <dd>{{ lineData[1] }}</dd>
+  </div>
+</dl>
