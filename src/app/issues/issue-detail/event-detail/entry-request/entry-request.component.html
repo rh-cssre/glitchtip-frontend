@@ -1,0 +1,4 @@
+<section *ngIf="eventEntryRequest$ | async as request">
+  {{ request?.method }} {{ culprit }}
+  {{ request | json }}
+</section>

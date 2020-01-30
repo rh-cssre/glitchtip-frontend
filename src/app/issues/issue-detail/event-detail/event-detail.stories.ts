@@ -1,13 +1,18 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean, select } from "@storybook/addon-knobs";
-import { EventDetailComponent } from "./event-detail.component";
-import { MaterialModule } from "src/app/shared/material.module";
 import { of } from "rxjs";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+// Imports
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MaterialModule } from "src/app/shared/material.module";
+import { RouterTestingModule } from "@angular/router/testing";
 import { SharedModule } from "src/app/shared/shared.module";
+
+// Components
+import { EventDetailComponent } from "./event-detail.component";
+import { EntryRequestComponent } from "../event-detail/entry-request/entry-request.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -28,7 +33,8 @@ export default {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         SharedModule
-      ]
+      ],
+      declarations: [EntryRequestComponent]
     }),
     withKnobs
   ]
@@ -78,4 +84,18 @@ export const EventDetails = () => {
 
 EventDetails.story = {
   name: "Event Detail"
+};
+
+export const EntryRequest = () => {
+  return {
+    component: EntryRequestComponent,
+    props: {
+      culprit: zeroDivisionError.culprit,
+      eventEntryRequest$: of(zeroDivisionError.entries[1].data)
+    }
+  };
+};
+
+EntryRequest.story = {
+  name: "Entry Request"
 };
