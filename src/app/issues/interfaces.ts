@@ -72,7 +72,12 @@ export interface ExceptionValueData {
   hasSystemFrames: boolean;
 }
 
-export interface IRequest {
+export interface RequestUrls {
+  domainName?: string;
+  path?: string;
+}
+
+export interface IRequest extends RequestUrls {
   fragment: string | null;
   cookies: object[];
   inferredContentType: string | null;

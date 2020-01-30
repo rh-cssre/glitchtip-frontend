@@ -34,7 +34,7 @@ export class IssueDetailService {
   private readonly getState$ = this.state.asObservable();
   private readonly url = baseUrl + "/issues/";
   readonly issue$ = this.getState$.pipe(map(state => state.issue));
-  private readonly event$ = this.getState$.pipe(map(state => state.event));
+  readonly event$ = this.getState$.pipe(map(state => state.event));
   readonly isReversed$ = this.getState$.pipe(map(state => state.isReversed));
   readonly hasNextEvent$ = this.event$.pipe(
     map(event => event && event.nextEventID !== null)
@@ -77,16 +77,7 @@ export class IssueDetailService {
   readonly eventEntryRequest$ = this.event$.pipe(
     map(event => {
       if (event) {
-        const requestEntryType = event.entries.find(
-          entry => entry.type === "request"
-        );
-        if (requestEntryType) {
-          const eventRequest = (requestEntryType as IEntryStreamfieldBlock<
-            "request",
-            IRequest
-          >).data;
-          return eventRequest;
-        }
+        return this.entryRequestData(event);
       }
     })
   );
@@ -188,6 +179,22 @@ export class IssueDetailService {
   private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+  }
+
+  /* Return the request entry type for an event with additional fields parsed from url */
+  private entryRequestData(event: EventDetail) {
+    const requestEntryType = event.entries.find(
+      entry => entry.type === "request"
+    );
+    if (requestEntryType) {
+      const eventRequest = (requestEntryType as IEntryStreamfieldBlock<
+        "request",
+        IRequest
+      >).data;
+      const urlDomainName = new URL(eventRequest.url).hostname;
+      const urlPath = new URL(eventRequest.url).pathname;
+      return { ...eventRequest, domainName: urlDomainName, path: urlPath };
+    }
   }
 
   /* Reverse frame array, nested in the event object */

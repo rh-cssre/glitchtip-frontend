@@ -1,12 +1,13 @@
 <section *ngIf="eventEntryRequest$ | async as request">
   <section class="location">
     <span>{{ request?.method }}</span>
-    <a color="primary" target="_blank" [href]="request?.url"
-      >{{ getUrlPath(request?.url) }} </a
+    <a color="primary" target="_blank" [href]="request?.url">{{
+      request?.path
+    }}</a
     ><a mat-icon-button color="primary" target="_blank" [href]="request?.url">
       <mat-icon>open_in_new</mat-icon>
     </a>
-    <span>{{ getUrlDomainName(request?.url) }}</span>
+    <span>{{ request?.domainName }}</span>
   </section>
   <section *ngIf="request?.headers">
     <h2>Headers</h2>
