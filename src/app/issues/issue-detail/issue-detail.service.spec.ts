@@ -96,4 +96,15 @@ describe("IssueDetailService", () => {
       });
     });
   });
+
+  it("request$ selector returns the request entry type object", () => {
+    const testData: EventDetail = databaseError;
+    service.setEvent(testData);
+
+    service.eventEntryRequest$
+      .pipe(take(1))
+      .subscribe((eventEntryRequest: any) =>
+        expect(eventEntryRequest).toBe(testData.entries[2].data)
+      );
+  });
 });

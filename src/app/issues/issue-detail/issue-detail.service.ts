@@ -8,7 +8,8 @@ import {
   EventDetail,
   IssueStatus,
   IEntryStreamfieldBlock,
-  ExceptionValueData
+  ExceptionValueData,
+  IRequest
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -65,13 +66,28 @@ export class IssueDetailService {
       return null;
     })
   );
-
   readonly sortedEvent$ = combineLatest(this.event$, this.isReversed$).pipe(
     map(([event, isReversed]) => {
       if (event && isReversed) {
         return this.reverseFrames(event);
       }
       return event;
+    })
+  );
+  readonly eventEntryRequest$ = this.event$.pipe(
+    map(event => {
+      if (event) {
+        const requestEntryType = event.entries.find(
+          entry => entry.type === "request"
+        );
+        if (requestEntryType) {
+          const eventRequest = (requestEntryType as IEntryStreamfieldBlock<
+            "request",
+            IRequest
+          >).data;
+          return eventRequest;
+        }
+      }
     })
   );
 
