@@ -65,49 +65,49 @@ export const typography = () => ({
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h1, mat-headline: Section heading corresponding to the h1 tag.
+    mat-h1 OR mat-headline: Section heading corresponding to the h1 tag.
     </p>
     <h1 class="mat-h1 mat-headline">The quick brown fox jumps over the lazy dog</h1>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h2, mat-title: Section heading corresponding to the h2 tag.
+    mat-h2 OR mat-title: Section heading corresponding to the h2 tag.
     </p>
     <h2 class="mat-h2 mat-title">The quick brown fox jumps over the lazy dog</h2>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h3, mat-subheading-2: Section heading corresponding to the h3 tag.
+    mat-h3 OR mat-subheading-2: Section heading corresponding to the h3 tag.
     </p>
     <h3 class="mat-h3 mat-subheading-2">The quick brown fox jumps over the lazy dog</h3>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h4, mat-subheading-1: Section heading corresponding to the h4 tag.
+    mat-h4 OR mat-subheading-1: Section heading corresponding to the h4 tag.
     </p>
     <h4 class="mat-h4 mat-subheading-1">The quick brown fox jumps over the lazy dog</h4>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-body, mat-body-1: Base body text.
+    mat-body OR mat-body-1: Base body text.
     </p>
     <p class="mat-body mat-body-1">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-body-strong, mat-body-2: Bolder body text.
+    mat-body-strong OR mat-body-2: Bolder body text.
     </p>
     <p class="mat-body-strong mat-body-2">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-small, mat-caption: Smaller body and hint text.
+    mat-small OR mat-caption: Smaller body and hint text.
     </p>
     <p class="mat-small mat-caption">The quick brown fox jumps over the lazy dog</p>
 
