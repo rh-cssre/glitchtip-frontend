@@ -21,6 +21,7 @@ import { postError } from "./test-data/post-error";
 import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
 import { stringError } from "./test-data/string-error";
+import { EntryDataComponent } from "./entry-data/entry-data.component";
 
 export default {
   title: "Event Detail",
@@ -34,7 +35,7 @@ export default {
         BrowserAnimationsModule,
         SharedModule
       ],
-      declarations: [EntryRequestComponent]
+      declarations: [EntryRequestComponent, EntryDataComponent]
     }),
     withKnobs
   ]
@@ -90,7 +91,6 @@ export const EntryRequest = () => {
   return {
     component: EntryRequestComponent,
     props: {
-      culprit: zeroDivisionError.culprit,
       eventEntryRequest$: of(zeroDivisionError.entries[1].data)
     }
   };

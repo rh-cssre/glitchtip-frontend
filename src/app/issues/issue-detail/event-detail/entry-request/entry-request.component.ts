@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Input
-} from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { IssueDetailService } from "../../issue-detail.service";
 
 @Component({
@@ -13,11 +8,17 @@ import { IssueDetailService } from "../../issue-detail.service";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntryRequestComponent implements OnInit {
-  @Input() culprit: string;
-
   eventEntryRequest$ = this.issueService.eventEntryRequest$;
 
   constructor(private issueService: IssueDetailService) {}
 
   ngOnInit() {}
+
+  getUrlPath(url: string) {
+    return new URL(url).pathname;
+  }
+
+  getUrlDomainName(url: string) {
+    return new URL(url).hostname;
+  }
 }
