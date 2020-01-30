@@ -7,7 +7,7 @@ import {
   IssueDetail,
   EventDetail,
   IssueStatus,
-  IEntryStreamfieldBlock,
+  Entry,
   ExceptionValueData,
   IRequest
 } from "../interfaces";
@@ -187,10 +187,8 @@ export class IssueDetailService {
       entry => entry.type === "request"
     );
     if (requestEntryType) {
-      const eventRequest = (requestEntryType as IEntryStreamfieldBlock<
-        "request",
-        IRequest
-      >).data;
+      const eventRequest = (requestEntryType as Entry<"request", IRequest>)
+        .data;
       const urlDomainName = new URL(eventRequest.url).hostname;
       const urlPath = new URL(eventRequest.url).pathname;
       return { ...eventRequest, domainName: urlDomainName, path: urlPath };
@@ -203,7 +201,7 @@ export class IssueDetailService {
       entry => entry.type === "exception"
     );
     if (exceptionEntryType) {
-      const reversedFrames = (exceptionEntryType as IEntryStreamfieldBlock<
+      const reversedFrames = (exceptionEntryType as Entry<
         "exception",
         ExceptionValueData
       >).data.values.map(value => [...value.stacktrace.frames.reverse()]);

@@ -24,7 +24,7 @@ export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
   contexts: IContext;
-  entries: IEntryStreamField[];
+  entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist: null;
   userReport: null;
@@ -41,15 +41,15 @@ export interface EventDetail extends Event {
   release: any;
 }
 
-export interface IEntryStreamfieldBlock<Type extends string, Data extends {}> {
+export interface Entry<Type extends string, Data extends {}> {
   data: Data;
   type: Type;
 }
 
-export type IEntryStreamField =
-  | IEntryStreamfieldBlock<"exception", ExceptionValueData>
-  | IEntryStreamfieldBlock<"breadcrumbs", BreadcrumbValueData>
-  | IEntryStreamfieldBlock<"request", IRequest>;
+export type EntryUnion =
+  | Entry<"exception", ExceptionValueData>
+  | Entry<"breadcrumbs", BreadcrumbValueData>
+  | Entry<"request", IRequest>;
 
 export interface BreadcrumbValueData {
   values: Breadcrumb[];
@@ -72,12 +72,7 @@ export interface ExceptionValueData {
   hasSystemFrames: boolean;
 }
 
-export interface RequestUrls {
-  domainName?: string;
-  path?: string;
-}
-
-export interface IRequest extends RequestUrls {
+export interface IRequest {
   fragment: string | null;
   cookies: object[];
   inferredContentType: string | null;
@@ -87,6 +82,11 @@ export interface IRequest extends RequestUrls {
   query: object[];
   data: RequestData | null;
   method: string | null;
+}
+
+export interface RequestUrls extends IRequest {
+  domainName: string;
+  path: string;
 }
 
 interface RequestData {

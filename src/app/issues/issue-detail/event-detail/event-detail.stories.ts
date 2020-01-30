@@ -53,23 +53,25 @@ export const EventDetails = () => {
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error = databaseError;
 
-  if (selectedError === "Database Error") {
-    error = databaseError;
-  }
-  if (selectedError === "Database Stack Error") {
-    error = databaseStackError;
-  }
-  if (selectedError === "PostError") {
-    error = postError;
-  }
-  if (selectedError === "Template Error") {
-    error = templateError;
-  }
-  if (selectedError === "Zero Division Error") {
-    error = zeroDivisionError;
-  }
-  if (selectedError === "String Error") {
-    error = stringError;
+  switch (selectedError) {
+    case "Database Error":
+      error = databaseError;
+      break;
+    case "Database Stack Error":
+      error = databaseStackError;
+      break;
+    case "Post Error":
+      error = postError;
+      break;
+    case "Template Error":
+      error = templateError;
+      break;
+    case "Zero Division Error":
+      error = zeroDivisionError;
+      break;
+    case "String Error":
+      error = stringError;
+      break;
   }
 
   return {
@@ -88,10 +90,17 @@ EventDetails.story = {
 };
 
 export const EntryRequest = () => {
+  const error = databaseStackError.entries[2].data;
+  const requestObject = {
+    ...error,
+    domainName: "localhost",
+    path: "/database-stack-error/"
+  };
+
   return {
     component: EntryRequestComponent,
     props: {
-      eventEntryRequest$: of(zeroDivisionError.entries[1].data)
+      eventEntryRequest$: of(requestObject)
     }
   };
 };
