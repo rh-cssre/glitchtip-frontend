@@ -9,7 +9,7 @@
 .content {
   padding: 8px;
   font-family: $font-mono;
-  background-color: mat-contrast($amaranth-palette, 50);
+  background-color: mat-color($mat-gray, 100);
   border-radius: 3px;
   border: none;
 }

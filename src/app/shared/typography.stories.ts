@@ -147,6 +147,8 @@ export const colors = () => ({
     <div style="width: 100%; height: 100px; background-color: #fce8ed"></div>
     <p style="margin-top: 50px">Use mat-contrast($amaranth-palette, 50) to get the contrasting color:</p>
     <div style="width: 100%; height: 100px; background-color: #000000"></div>
+    <p style="margin-top: 50px">To use a gray color, use mat-color($mat-gray, 500): <a target="_blank" href="https://material.io/design/color/the-color-system.html#tools-for-picking-colors">Material Reference</a></p>
+    <div style="width: 100%; height: 100px; background-color: #9E9E9E"></div>
   </section>
   `
 });
