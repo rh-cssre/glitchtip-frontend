@@ -1,16 +1,15 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { OAuthService } from "angular-oauth2-oidc";
 import { LoginService } from "./login.service";
-import { gitlabAuthConfig } from "../social";
+import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loading = false;
   error: string;
   form = new FormGroup({
@@ -25,27 +24,26 @@ export class LoginComponent {
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
-    private oauthService: OAuthService
-  ) {
-    console.log(this.route.snapshot.fragment);
-    this.oauthService.configure(gitlabAuthConfig);
+    private oauthService: GlitchTipOAuthService
+  ) {}
 
-    // this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    // this.oauthService.loadDiscoveryDocumentAndTryLogin();
-  }
-
-  lol() {
-    console.log(this.oauthService.scope);
-    this.oauthService.initLoginFlow();
-  }
-
-  public get name() {
-    const claims: any = this.oauthService.getIdentityClaims();
-    if (!claims) {
-      return null;
+  ngOnInit() {
+    const fragment = this.route.snapshot.fragment;
+    if (fragment) {
+      const accessToken = new URLSearchParams(fragment).get("access_token");
+      if (accessToken) {
+        this.oauthService.gitlabConnect(accessToken).toPromise();
+      }
     }
-    return claims.given_name;
   }
+
+  gitlab() {
+    this.oauthService.initGitlabLogin();
+  }
+
+  google() {}
+
+  microsoft() {}
 
   onSubmit() {
     if (this.form.valid) {
