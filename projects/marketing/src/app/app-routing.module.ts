@@ -7,11 +7,10 @@ const routes: Routes = [
     loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
     pathMatch: "full"
   },
-  //   {
-  //     path: "privacy",
-  //     loadChildren: () =>
-  //       import("./settings/settings.module").then(m => m.SettingsModule),
-  //   },
+  {
+    path: "legal",
+    loadChildren: () => import("./legal/legal.module").then(m => m.LegalModule)
+  },
   {
     path: "**",
     redirectTo: "",
