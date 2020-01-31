@@ -1,111 +1,13 @@
 @import "../../../../src/assets/styles/variables";
 
-.logo-test {
-  font-family: mat-font-family($custom-typography);
-  font-size: 22px;
-  letter-spacing: -0.02em;
-  // font-style: italic;
-  font-weight: 700;
-  color: $amaranth;
-  // text-shadow: 1px 1px 0 #ca95f7;
-}
-
-.hero-and-nav-container {
-  background: #ead5d0;
-  background: linear-gradient(45deg, #faddff 0%, #ffd3b9 100%);
-  background-image: url("../assets/glitchy.png"),
-    linear-gradient(45deg, #faddff 0%, #ffd3b9 100%);
-  background-size: cover, cover;
-  padding-bottom: 70px;
-}
-
-.hero {
-  .content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .mat-body-1 {
-    font-size: 1.25em;
-    line-height: 1.5em;
-  }
-}
-
-.big-card-wrapper {
-  width: 1180px;
-  margin: -70px auto 50px;
-
-  @media screen and (max-width: 1199px) {
-    width: auto;
-    margin-left: 10vw;
-    margin-right: 10vw;
-  }
-
-  @media screen and (max-width: 767px) {
-    margin-left: 10vw;
-    margin-right: 10vw;
-  }
-}
-
-.centered-block {
-  text-align: center;
-  padding: 20px 10vw 40px;
-  overflow: hidden;
-
-  @media screen and (max-width: 767px) {
-    padding: 15px 5vw 20px;
-  }
-
-  .content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-}
-
-.mat-toolbar {
-  background: transparent;
-}
-
-.divider {
-  border-top: 1px solid lightgray;
-}
-
-.fancy {
-  color: white;
-  background: $amaranth;
-  background: -webkit-linear-gradient(to left, #8a2387, #e94057, #f27121);
-  background: linear-gradient(to left, #8a2387, #e94057, #f27121);
-  background-clip: border-box;
-  font-style: italic;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  box-decoration-break: clone;
-  margin: 0.5em 0 1em;
-}
-
 footer {
   width: 100%;
   height: 150px;
   background: $amaranth;
-}
+  text-align: center;
+  padding: 20px;
 
-.subscribe-wrapper {
-  display: flex;
-
-  @media screen and (min-width: 501px) {
-    margin: 0 50px;
-  }
-
-  .mc-field-group {
-    flex: 1;
-
-    mat-form-field {
-      width: 100%;
-      padding-right: 20px;
-    }
-  }
-
-  button {
-    top: 9px;
+  a {
+    color: white;
   }
 }
