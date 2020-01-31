@@ -65,49 +65,49 @@ export const typography = () => ({
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h1, mat-headline: Section heading corresponding to the h1 tag.
+    mat-h1 OR mat-headline: Section heading corresponding to the h1 tag.
     </p>
     <h1 class="mat-h1 mat-headline">The quick brown fox jumps over the lazy dog</h1>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h2, mat-title: Section heading corresponding to the h2 tag.
+    mat-h2 OR mat-title: Section heading corresponding to the h2 tag.
     </p>
     <h2 class="mat-h2 mat-title">The quick brown fox jumps over the lazy dog</h2>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h3, mat-subheading-2: Section heading corresponding to the h3 tag.
+    mat-h3 OR mat-subheading-2: Section heading corresponding to the h3 tag.
     </p>
     <h3 class="mat-h3 mat-subheading-2">The quick brown fox jumps over the lazy dog</h3>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-h4, mat-subheading-1: Section heading corresponding to the h4 tag.
+    mat-h4 OR mat-subheading-1: Section heading corresponding to the h4 tag.
     </p>
     <h4 class="mat-h4 mat-subheading-1">The quick brown fox jumps over the lazy dog</h4>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-body, mat-body-1: Base body text.
+    mat-body OR mat-body-1: Base body text.
     </p>
     <p class="mat-body mat-body-1">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-body-strong, mat-body-2: Bolder body text.
+    mat-body-strong OR mat-body-2: Bolder body text.
     </p>
     <p class="mat-body-strong mat-body-2">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-small, mat-caption: Smaller body and hint text.
+    mat-small OR mat-caption: Smaller body and hint text.
     </p>
     <p class="mat-small mat-caption">The quick brown fox jumps over the lazy dog</p>
 
@@ -120,8 +120,8 @@ export const icons = () => ({
   template: `
   <section class="mat-typography">
     <h1>Icons</h1>
-    <p>Angular material has a bunch of icons. You can find a pretty exhaustive list of them <a href="https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list/">here</a>
-    <p>Also, <a href="https://material.angular.io/components/icon/overview">here's</a> Angular's documentation on icons</p>
+    <p>Angular material has a bunch of icons. You can find a pretty exhaustive list of them <a href="https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list/" target="_blank">here</a>
+    <p>Also, <a href="https://material.angular.io/components/icon/overview" target="_blank">here's</a> Angular's documentation on icons</p>
     <p>Make sure to add the appropriate aria classes for accessibility!</p>
     <mat-divider></mat-divider>
     <mat-icon>delete</mat-icon>
@@ -151,9 +151,16 @@ export const icons = () => ({
   `
 });
 
-typography.story = {
-  parameters: {
-    notes:
-      "Oh hey you can leave notes. Why is the alignment so weird though? Not sure if this is a great place to take notes."
-  }
-};
+export const colors = () => ({
+  template: `
+  <section class="mat-typography">
+    <p class="mat-h1">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>
+    <p>Use mat-color($amaranth-palette, 50) to get a color from the palette: <a href="https://v5.material.angular.io/guide/theming-your-components#using-colors-from-a-palette" target="_blank">Material Reference</a></p>
+    <div style="width: 100%; height: 100px; background-color: #fce8ed"></div>
+    <p style="margin-top: 50px">Use mat-contrast($amaranth-palette, 50) to get the contrasting color:</p>
+    <div style="width: 100%; height: 100px; background-color: #000000"></div>
+    <p style="margin-top: 50px">To use a gray color, use mat-color($mat-gray, 500): <a target="_blank" href="https://material.io/design/color/the-color-system.html#tools-for-picking-colors">Material Reference</a></p>
+    <div style="width: 100%; height: 100px; background-color: #9E9E9E"></div>
+  </section>
+  `
+});

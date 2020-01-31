@@ -7,8 +7,9 @@ import {
   IssueDetail,
   EventDetail,
   IssueStatus,
-  IEntryStreamfieldBlock,
-  ExceptionValueData
+  Entry,
+  ExceptionValueData,
+  IRequest
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -33,7 +34,7 @@ export class IssueDetailService {
   private readonly getState$ = this.state.asObservable();
   private readonly url = baseUrl + "/issues/";
   readonly issue$ = this.getState$.pipe(map(state => state.issue));
-  private readonly event$ = this.getState$.pipe(map(state => state.event));
+  readonly event$ = this.getState$.pipe(map(state => state.event));
   readonly isReversed$ = this.getState$.pipe(map(state => state.isReversed));
   readonly hasNextEvent$ = this.event$.pipe(
     map(event => event && event.nextEventID !== null)
@@ -65,13 +66,19 @@ export class IssueDetailService {
       return null;
     })
   );
-
   readonly sortedEvent$ = combineLatest(this.event$, this.isReversed$).pipe(
     map(([event, isReversed]) => {
       if (event && isReversed) {
         return this.reverseFrames(event);
       }
       return event;
+    })
+  );
+  readonly eventEntryRequest$ = this.event$.pipe(
+    map(event => {
+      if (event) {
+        return this.entryRequestData(event);
+      }
     })
   );
 
@@ -174,13 +181,27 @@ export class IssueDetailService {
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
   }
 
+  /* Return the request entry type for an event with additional fields parsed from url */
+  private entryRequestData(event: EventDetail) {
+    const requestEntryType = event.entries.find(
+      entry => entry.type === "request"
+    );
+    if (requestEntryType) {
+      const eventRequest = (requestEntryType as Entry<"request", IRequest>)
+        .data;
+      const urlDomainName = new URL(eventRequest.url).hostname;
+      const urlPath = new URL(eventRequest.url).pathname;
+      return { ...eventRequest, domainName: urlDomainName, path: urlPath };
+    }
+  }
+
   /* Reverse frame array, nested in the event object */
   private reverseFrames(event: EventDetail) {
     const exceptionEntryType = event.entries.find(
       entry => entry.type === "exception"
     );
     if (exceptionEntryType) {
-      const reversedFrames = (exceptionEntryType as IEntryStreamfieldBlock<
+      const reversedFrames = (exceptionEntryType as Entry<
         "exception",
         ExceptionValueData
       >).data.values.map(value => [...value.stacktrace.frames.reverse()]);

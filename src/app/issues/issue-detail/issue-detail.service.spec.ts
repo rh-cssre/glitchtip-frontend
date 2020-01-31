@@ -77,7 +77,7 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  it("sortedEvent$ selector flips frames array in event object without mutating event state", () => {
+  it("sortedEvent$ selector flips frames array in event object", () => {
     const testData: EventDetail = databaseError;
     const firstFilename = "django/core/handlers/exception.py";
     const lastFilename = "django/db/models/query.py";
@@ -94,6 +94,23 @@ describe("IssueDetailService", () => {
           event2.entries[0].data.values[0].stacktrace.frames[0].filename
         ).toBe(firstFilename);
       });
+    });
+  });
+
+  it("request$ selector returns the request entry type object without mutating event state", () => {
+    const testData: EventDetail = databaseError;
+    service.setEvent(testData);
+
+    service.eventEntryRequest$
+      .pipe(take(1))
+      .subscribe((eventEntryRequest: any) => {
+        expect(eventEntryRequest.path).toEqual("/database-error/");
+        expect(eventEntryRequest.domainName).toEqual("localhost");
+      });
+
+    /* checks that changing the testData for eventEntryRequest$ does not mutate event data */
+    service.event$.pipe(take(1)).subscribe((event: any) => {
+      expect(event).toBe(testData);
     });
   });
 });

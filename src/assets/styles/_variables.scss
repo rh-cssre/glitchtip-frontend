@@ -51,27 +51,31 @@ $candy-app-theme: mat-light-theme(
   $candy-app-warn
 );
 
+$font-sans-serif: "Plex Sans";
+$font-serif: "Plex Serif";
+$font-mono: "Plex Mono";
+
 // Define a custom typography config that overrides the font-family as well as specific levels
 // See for defaults:
 // https://github.com/angular/components/blob/d9977bdb1101e107312580c124acf0a9f410452e/src/material/core/typography/_typography.scss
 // See for intended use cases
 // https://material.angular.io/guide/typography#what-is-typography-
 $custom-typography: mat-typography-config(
-  $font-family: "Plex Sans",
-  $display-4: mat-typography-level(112px, 112px, 300, "Plex Serif", -0.05em),
-  $display-3: mat-typography-level(56px, 65px, 400, "Plex Serif", -0.02em),
-  $display-2: mat-typography-level(45px, 55px, 400, "Plex Serif", -0.005em),
-  $display-1: mat-typography-level(34px, 40px, 400, "Plex Serif"),
+  $font-family: $font-sans-serif,
+  $display-4: mat-typography-level(112px, 112px, 300, $font-serif, -0.05em),
+  $display-3: mat-typography-level(56px, 65px, 400, $font-serif, -0.02em),
+  $display-2: mat-typography-level(45px, 55px, 400, $font-serif, -0.005em),
+  $display-1: mat-typography-level(34px, 40px, 400, $font-serif),
   $body-2: mat-typography-level(16px, 28px, 500),
   $body-1: mat-typography-level(16px, 24px, 400)
 );
 
 $mobile-typography: mat-typography-config(
-  $font-family: "Plex Sans",
-  $display-4: mat-typography-level(90px, 102px, 300, "Plex Serif", -0.05em),
-  $display-3: mat-typography-level(45px, 55px, 400, "Plex Serif", -0.02em),
-  $display-2: mat-typography-level(36px, 46px, 400, "Plex Serif", -0.005em),
-  $display-1: mat-typography-level(28px, 33px, 400, "Plex Serif")
+  $font-family: $font-sans-serif,
+  $display-4: mat-typography-level(90px, 102px, 300, $font-serif, -0.05em),
+  $display-3: mat-typography-level(45px, 55px, 400, $font-serif, -0.02em),
+  $display-2: mat-typography-level(36px, 46px, 400, $font-serif, -0.005em),
+  $display-1: mat-typography-level(28px, 33px, 400, $font-serif)
 );
 
 // Breakpoints
