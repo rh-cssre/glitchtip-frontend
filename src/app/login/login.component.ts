@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { LoginService } from "./login.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
+import { SettingsService } from "../api/settings.service";
 
 @Component({
   selector: "app-login",
@@ -19,12 +20,14 @@ export class LoginComponent implements OnInit {
       Validators.minLength(8)
     ])
   });
+  socialAuth$ = this.settings.socialAuth$;
 
   constructor(
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
-    private oauthService: GlitchTipOAuthService
+    private oauthService: GlitchTipOAuthService,
+    private settings: SettingsService
   ) {}
 
   ngOnInit() {

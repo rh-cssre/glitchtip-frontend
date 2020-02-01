@@ -1,6 +1,6 @@
 apiVersion: v2
 name: glitchtip
-description: A Helm chart for Kubernetes
+description: Open source error tracking that is compatible with Sentry
 
 # A chart can be either an 'application' or a 'library' chart.
 #
