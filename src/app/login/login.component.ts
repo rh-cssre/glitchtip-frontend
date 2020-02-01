@@ -29,10 +29,26 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     const fragment = this.route.snapshot.fragment;
+    const query = this.route.snapshot.queryParamMap;
+    const provider = this.route.snapshot.paramMap.get("provider");
+
     if (fragment) {
       const accessToken = new URLSearchParams(fragment).get("access_token");
       if (accessToken) {
-        this.oauthService.gitlabConnect(accessToken).toPromise();
+        if (provider === "gitlab") {
+          this.oauthService.gitlabLogin(accessToken).toPromise();
+        } else if (provider === "google") {
+          this.oauthService.googleLogin(accessToken).toPromise();
+        } else if (provider === "microsoft") {
+          this.oauthService.microsoftLogin(accessToken).toPromise();
+        }
+      }
+    } else if (query) {
+      const code = query.get("code");
+      if (code) {
+        if (provider === "github") {
+          this.oauthService.githubLogin(code).toPromise();
+        }
       }
     }
   }
@@ -41,9 +57,17 @@ export class LoginComponent implements OnInit {
     this.oauthService.initGitlabLogin();
   }
 
-  google() {}
+  github() {
+    this.oauthService.initGithubLogin();
+  }
 
-  microsoft() {}
+  google() {
+    this.oauthService.initGoogleLogin();
+  }
+
+  microsoft() {
+    this.oauthService.initMicrosoftLogin();
+  }
 
   onSubmit() {
     if (this.form.valid) {

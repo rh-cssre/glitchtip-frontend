@@ -4,14 +4,19 @@ import { OAuthService } from "angular-oauth2-oidc";
 import { tap } from "rxjs/operators";
 
 import { AuthService } from "../auth/auth.service";
-import { gitlabAuthConfig } from "./social";
+import {
+  gitlabAuthConfig,
+  googleAuthConfig,
+  microsoftAuthConfig,
+  githubAuthConfig
+} from "./social";
 
 interface RestAuthConnectData {
-  access_token: string;
+  access_token?: string;
   code?: string;
 }
 
-interface RestAuthConnectResp {
+interface RestAuthLoginResp {
   key: string;
 }
 
@@ -27,19 +32,63 @@ export class GlitchTipOAuthService {
     private oauthService: OAuthService
   ) {}
 
-  gitlabConnect(accessToken: string, code?: string) {
+  githubLogin(code: string) {
     const data: RestAuthConnectData = {
-      access_token: accessToken,
       code
+    };
+    const url = this.baseUrl + "/github/";
+    return this.http
+      .post<RestAuthLoginResp>(url, data)
+      .pipe(tap(resp => this.auth.setAuth(resp)));
+  }
+
+  microsoftLogin(accessToken: string) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken
+    };
+    const url = this.baseUrl + "/microsoft/";
+    return this.http
+      .post<RestAuthLoginResp>(url, data)
+      .pipe(tap(resp => this.auth.setAuth(resp)));
+  }
+
+  gitlabLogin(accessToken: string) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken
     };
     const url = this.baseUrl + "/gitlab/";
     return this.http
-      .post<RestAuthConnectResp>(url, data)
+      .post<RestAuthLoginResp>(url, data)
+      .pipe(tap(resp => this.auth.setAuth(resp)));
+  }
+
+  googleLogin(accessToken: string) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken
+    };
+    const url = this.baseUrl + "/google/";
+    return this.http
+      .post<RestAuthLoginResp>(url, data)
       .pipe(tap(resp => this.auth.setAuth(resp)));
   }
 
   initGitlabLogin() {
     this.oauthService.configure(gitlabAuthConfig);
+    this.oauthService.initLoginFlow();
+  }
+
+  initGithubLogin() {
+    this.oauthService.configure(githubAuthConfig);
+    this.oauthService.initLoginFlow();
+  }
+
+  initGoogleLogin() {
+    this.oauthService.configure(googleAuthConfig);
+    this.oauthService.initLoginFlow();
+  }
+
+  initMicrosoftLogin() {
+    this.oauthService.configure(microsoftAuthConfig);
     this.oauthService.initLoginFlow();
   }
 }
