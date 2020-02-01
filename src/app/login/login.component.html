@@ -1,9 +1,8 @@
 <mat-card>
   <h1>Login</h1>
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <p>
-      <mat-form-field class="example-full-width">
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field class="full-width">
         <input
           matInput
           type="email"
@@ -11,7 +10,7 @@
           formControlName="email"
         />
       </mat-form-field>
-      <mat-form-field class="example-full-width">
+      <mat-form-field class="full-width">
         <input
           matInput
           type="password"
@@ -19,17 +18,47 @@
           formControlName="password"
         />
       </mat-form-field>
-      <!-- <mat-checkbox class="example-full-width">Keep me logged in</mat-checkbox> -->
-      <button
-        id="submit"
-        class="example-full-width"
-        mat-flat-button
-        color="primary"
-      >
-        Login
+      <button id="submit" class="full-width" mat-flat-button color="primary">
+        Log in
       </button>
-      {{ error }}
-    </p>
-  </form>
-  <!-- <a class="example-full-width" mat-button routerLink=".">Forgot?</a> -->
+      <mat-error *ngIf="error">{{ error }} </mat-error>
+    </form>
+    <div class="or">
+      <span class="mat-body-strong mat-body-2">or</span>
+    </div>
+    <div class="o-auth">
+      <button mat-stroked-button class="full-width margin" (click)="gitlab()">
+        <span class="wrapper">
+          <svg>
+            <use xlink:href="#gitlab"></use>
+          </svg>
+          <span class="text">Log in with GitLab</span>
+        </span>
+      </button>
+      <button mat-stroked-button class="full-width margin" (click)="github()">
+        <span class="wrapper">
+          <svg>
+            <use xlink:href="#github"></use>
+          </svg>
+          <span class="text">Log in with GitHub</span>
+        </span>
+      </button>
+      <button mat-stroked-button class="full-width margin" (click)="google()">
+        <span class="wrapper">
+          <svg>
+            <use xlink:href="#google"></use>
+          </svg>
+          <span class="text">Log in with Google</span>
+        </span>
+      </button>
+      <button mat-stroked-button class="full-width" (click)="microsoft()">
+        <span class="wrapper">
+          <svg>
+            <use xlink:href="#microsoft"></use>
+          </svg>
+          <span class="text">Log in with Microsoft</span>
+        </span>
+      </button>
+    </div>
+  </mat-card-content>
 </mat-card>

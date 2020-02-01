@@ -136,6 +136,18 @@ export const icons = () => ({
     </button>
     <p>If the icon is purely decorative, you can make aria hidden true</p>
   </section>
+  <section class="mat-typography">
+    <h1>Custom Icons</h1>
+    <p>In addition to Angular's icons, we have added custom ones in 'index.html'</p>
+    <div style="display: flex; align-items: center; margin: 16px">
+      <div>#gitlab:</div>
+      <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#gitlab"></use></svg>
+      <div>#google:</div>
+      <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#google"></use></svg>
+      <div>#microsoft:</div>
+      <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#microsoft"></use></svg>
+    </div>
+  </section>
   `
 });
 

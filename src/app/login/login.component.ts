@@ -1,14 +1,15 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { LoginService } from "./login.service";
+import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loading = false;
   error: string;
   form = new FormGroup({
@@ -19,7 +20,54 @@ export class LoginComponent {
     ])
   });
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private oauthService: GlitchTipOAuthService
+  ) {}
+
+  ngOnInit() {
+    const fragment = this.route.snapshot.fragment;
+    const query = this.route.snapshot.queryParamMap;
+    const provider = this.route.snapshot.paramMap.get("provider");
+
+    if (fragment) {
+      const accessToken = new URLSearchParams(fragment).get("access_token");
+      if (accessToken) {
+        if (provider === "gitlab") {
+          this.oauthService.gitlabLogin(accessToken).toPromise();
+        } else if (provider === "google") {
+          this.oauthService.googleLogin(accessToken).toPromise();
+        } else if (provider === "microsoft") {
+          this.oauthService.microsoftLogin(accessToken).toPromise();
+        }
+      }
+    } else if (query) {
+      const code = query.get("code");
+      if (code) {
+        if (provider === "github") {
+          this.oauthService.githubLogin(code).toPromise();
+        }
+      }
+    }
+  }
+
+  gitlab() {
+    this.oauthService.initGitlabLogin();
+  }
+
+  github() {
+    this.oauthService.initGithubLogin();
+  }
+
+  google() {
+    this.oauthService.initGoogleLogin();
+  }
+
+  microsoft() {
+    this.oauthService.initMicrosoftLogin();
+  }
 
   onSubmit() {
     if (this.form.valid) {
