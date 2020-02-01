@@ -35,6 +35,7 @@ export const microsoftAuthConfig: AuthConfig = {
   tokenEndpoint: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
   loginUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
   responseType: "token",
+  scope: "User.Read",
   redirectUri: window.location.origin + "/login/microsoft",
   userinfoEndpoint: "https://graph.microsoft.com/v1.0/me/",
   oidc: false,
