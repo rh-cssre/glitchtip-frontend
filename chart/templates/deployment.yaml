@@ -9,10 +9,12 @@ spec:
   selector:
     matchLabels:
       {{- include "glitchtip.selectorLabels" . | nindent 6 }}
+      role: web
   template:
     metadata:
       labels:
         {{- include "glitchtip.selectorLabels" . | nindent 8 }}
+        role: web
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
