@@ -23,7 +23,7 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
-  contexts: IContext | {};
+  contexts: Context | Partial<Context>;
   entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist: null;
@@ -217,7 +217,7 @@ interface ITag {
   key: string;
 }
 
-interface IContext {
+export interface Context {
   runtime?: Runtime;
   trace?: Trace;
   os: IContextDetail;

@@ -16,7 +16,7 @@ export class IssueDetailComponent implements OnInit {
   form = new FormGroup({
     assignee: new FormControl("")
   });
-  displayedColumns: string[] = ["issueNum", "events", "users", "assignee"];
+  displayedColumns: string[] = ["issueNum", "events"];
   issueIdParam$ = this.route.paramMap.pipe(
     map(params => params.get("issue-id"))
   );

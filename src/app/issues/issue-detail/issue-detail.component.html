@@ -43,11 +43,13 @@
         <td mat-cell *matCellDef="let element">{{ element.count }}</td>
       </ng-container>
 
+      <!--
       <ng-container matColumnDef="users">
         <th mat-header-cell *matHeaderCellDef>Users</th>
         <td mat-cell *matCellDef="let element">{{ element.userCount }}</td>
       </ng-container>
-
+      -->
+      <!--
       <ng-container matColumnDef="assignee">
         <th mat-header-cell *matHeaderCellDef>Assignee</th>
         <td mat-cell *matCellDef="let element">
@@ -71,6 +73,7 @@
           </mat-form-field>
         </td>
       </ng-container>
+      -->
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -84,13 +87,11 @@
     </div>
 
     <mat-list class="column right">
+      <!--
       <h3 mat-subheader>Ownership Rules</h3>
-      <mat-list-item>
-        <h4 mat-line>TODO</h4>
-        <p mat-line>TODO but with p tag and mat-line</p>
-      </mat-list-item>
       <mat-divider></mat-divider>
       <h3 mat-subheader>All Environments</h3>
+      -->
       <mat-list-item>
         <h4 mat-line>First Seen</h4>
         <dl mat-line>
@@ -112,15 +113,12 @@
           </dd>
         </dl>
       </mat-list-item>
+      <!--
       <mat-divider></mat-divider>
       <h3 mat-subheader>Linked Issues</h3>
-      <mat-list-item>
-        <h4 mat-line>TODO</h4>
-        <p mat-line>TODO but with p tag and mat-line</p>
-      </mat-list-item>
       <mat-divider></mat-divider>
-      <h3 mat-subheader *ngIf="issue?.tags">Tags</h3>
-      <mat-list-item *ngIf="issue?.tags">
+      <h3 mat-subheader>Tags</h3>
+      <mat-list-item>
         <div mat-line *ngFor="let tag of issue?.tags">
           <div class="tags">
             <div class="mat-body-strong">{{ tag.name }}</div>
@@ -128,23 +126,20 @@
           </div>
         </div>
       </mat-list-item>
-      <mat-divider *ngIf="issue?.tags"></mat-divider>
+      <mat-divider></mat-divider>
       <h3 mat-subheader *ngIf="issue?.participants">
         {{
           issue?.participants.length | i18nPlural: participantCountPluralMapping
         }}
       </h3>
-      <mat-list-item *ngIf="issue?.participants">
+      <mat-list-item>
         <div mat-line *ngFor="let participant of issue?.participants">
           {{ participant.name }}
         </div>
       </mat-list-item>
-      <mat-divider *ngIf="issue?.participants"></mat-divider>
+      <mat-divider></mat-divider>
       <h3 mat-subheader>Notificiations</h3>
-      <mat-list-item>
-        <h4 mat-line>TODO</h4>
-        <p mat-line>TODO but with p tag and mat-line</p>
-      </mat-list-item>
+      -->
     </mat-list>
   </div>
 </section>

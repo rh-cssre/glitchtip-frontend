@@ -11,6 +11,7 @@ import {
   ExceptionValueData,
   IRequest,
   AnnotatedRequest
+  // Context
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -206,7 +207,10 @@ export class IssueDetailService {
         "exception",
         ExceptionValueData
       >).data.values.map(value => [...value.stacktrace.frames.reverse()]);
-      const entryType = { ...exceptionEntryType, frames: reversedFrames };
+      const entryType = {
+        ...exceptionEntryType,
+        frames: reversedFrames
+      };
       return { ...event, entries: [entryType] };
     }
   }
