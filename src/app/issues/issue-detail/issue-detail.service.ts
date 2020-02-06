@@ -9,7 +9,8 @@ import {
   IssueStatus,
   Entry,
   ExceptionValueData,
-  IRequest
+  IRequest,
+  AnnotatedRequest
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -182,7 +183,7 @@ export class IssueDetailService {
   }
 
   /* Return the request entry type for an event with additional fields parsed from url */
-  private entryRequestData(event: EventDetail) {
+  private entryRequestData(event: EventDetail): AnnotatedRequest | undefined {
     const requestEntryType = event.entries.find(
       entry => entry.type === "request"
     );
@@ -196,7 +197,7 @@ export class IssueDetailService {
   }
 
   /* Reverse frame array, nested in the event object */
-  private reverseFrames(event: EventDetail) {
+  private reverseFrames(event: EventDetail): EventDetail | undefined {
     const exceptionEntryType = event.entries.find(
       entry => entry.type === "exception"
     );

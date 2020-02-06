@@ -84,7 +84,7 @@ export interface IRequest {
   method: string | null;
 }
 
-export interface RequestUrls extends IRequest {
+export interface AnnotatedRequest extends IRequest {
   domainName: string;
   path: string;
 }
