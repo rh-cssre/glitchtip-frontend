@@ -23,3 +23,55 @@ a {
   color: $amaranth;
   font-weight: 500;
 }
+
+.fancy {
+  color: white;
+  background: $amaranth;
+  background: -webkit-linear-gradient(to left, #8a2387, #e94057, #f27121);
+  background: linear-gradient(to left, #8a2387, #e94057, #f27121);
+  background-clip: border-box;
+  font-style: italic;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  margin: 0.5em 0 1em;
+}
+
+.hero-and-nav-container {
+  background: #ead5d0;
+  background: linear-gradient(45deg, #faddff 0%, #ffd3b9 100%);
+  background-image: url("./assets/glitchy.png"),
+    linear-gradient(45deg, #faddff 0%, #ffd3b9 100%);
+  background-size: cover, cover;
+  padding-bottom: 70px;
+}
+
+.big-card-wrapper {
+  width: 1180px;
+  margin: -70px auto 50px;
+
+  @media screen and (max-width: 1199px) {
+    width: auto;
+    margin-left: 10vw;
+    margin-right: 10vw;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-left: 10vw;
+    margin-right: 10vw;
+  }
+}
+
+.centered-block {
+  padding: 20px 10vw 40px;
+  overflow: hidden;
+
+  @media screen and (max-width: 767px) {
+    padding: 15px 5vw 20px;
+  }
+
+  .content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
