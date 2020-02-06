@@ -22,6 +22,7 @@ import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
 import { stringError } from "./test-data/string-error";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
+import { cspError } from "./test-data/csp-error";
 
 export default {
   title: "Event Detail",
@@ -48,7 +49,8 @@ export const EventDetails = () => {
     "Post Error",
     "Template Error",
     "Zero Division Error",
-    "String Error"
+    "String Error",
+    "CSP Error"
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error = databaseError;
@@ -71,6 +73,9 @@ export const EventDetails = () => {
       break;
     case "String Error":
       error = stringError;
+      break;
+    case "CSP Error":
+      error = cspError;
       break;
   }
 

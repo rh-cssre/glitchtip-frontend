@@ -23,14 +23,14 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
-  contexts: IContext;
+  contexts: IContext | {};
   entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist: null;
   userReport: null;
   size: number;
   errors: any[];
-  type: "error";
+  type: "error" | "csp";
   groupingConfig: GroupingConfig;
   dateReceived: string;
   packages: any;
@@ -49,10 +49,25 @@ export interface Entry<Type extends string, Data extends {}> {
 export type EntryUnion =
   | Entry<"exception", ExceptionValueData>
   | Entry<"breadcrumbs", BreadcrumbValueData>
-  | Entry<"request", IRequest>;
+  | Entry<"request", IRequest>
+  | Entry<"message", Message>
+  | Entry<"csp", CSP>;
 
 export interface BreadcrumbValueData {
   values: Breadcrumb[];
+}
+
+export interface Message {
+  formatted: string;
+}
+
+export interface CSP {
+  blocked_uri: string;
+  referrer: string;
+  violated_directive: string;
+  document_uri: string;
+  original_policy: string;
+  effective_directive: string;
 }
 
 // https://docs.sentry.io/enriching-error-data/breadcrumbs/?platform=javascript
