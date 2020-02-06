@@ -3,6 +3,11 @@
 .hero {
   padding-top: 100px;
 
+  @media screen and (max-width: 767px) {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+
   .content {
     max-width: 600px;
     margin: 0 auto;
