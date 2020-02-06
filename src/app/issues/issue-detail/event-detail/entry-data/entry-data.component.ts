@@ -7,5 +7,6 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntryDataComponent {
-  @Input() data: string[][];
+  @Input() key: string;
+  @Input() value: string;
 }

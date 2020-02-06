@@ -91,7 +91,7 @@ export interface IRequest {
   fragment: string | null;
   cookies: object[];
   inferredContentType: string | null;
-  env: object | null;
+  env: { SERVER_NAME: string; SERVER_PORT: string } | null;
   headers: string[][];
   url: string;
   query: object[];

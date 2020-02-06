@@ -29,9 +29,24 @@
 
   <mat-divider></mat-divider>
 
-  <section *ngIf="event?.contexts" class="location">
-    <div class="wrapper">
-      <mat-icon>laptop</mat-icon>
+  <section
+    *ngIf="event?.contexts?.browser || event?.contexts?.os"
+    class="location"
+  >
+    <div *ngIf="event?.user" class="wrapper">
+      <mat-icon>face</mat-icon>
+      <div class="spacer">
+        <p class="mat-body-strong">
+          {{ event?.user.email ? event?.user.email : event?.user.ip_address }}
+        </p>
+        <p *ngIf="event?.user.id" class="mat-small mat-caption">
+          <span class="bold">Version:</span
+          ><span class="spacer-small">{{ event?.user.id }}</span>
+        </p>
+      </div>
+    </div>
+    <div *ngIf="event?.contexts?.browser" class="wrapper">
+      <mat-icon>tab</mat-icon>
       <div class="spacer">
         <p class="mat-body-strong">{{ event?.contexts?.browser?.name }}</p>
         <p class="mat-small mat-caption">
@@ -42,13 +57,17 @@
         </p>
       </div>
     </div>
-    <div class="wrapper">
-      <mat-icon>devices</mat-icon>
+    <div *ngIf="event?.contexts?.os" class="wrapper">
+      <mat-icon>laptop</mat-icon>
       <div class="spacer">
         <p class="mat-body-strong">{{ event?.contexts?.os?.name }}</p>
         <p class="mat-small mat-caption">
           <span class="bold">Version:</span
-          ><span class="spacer-small">{{ event?.contexts?.os?.version }}</span>
+          ><span class="spacer-small">{{
+            event?.contexts?.os?.version
+              ? event?.contexts?.os?.version
+              : "unknown"
+          }}</span>
         </p>
       </div>
     </div>

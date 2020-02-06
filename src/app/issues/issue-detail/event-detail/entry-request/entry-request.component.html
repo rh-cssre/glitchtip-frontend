@@ -1,19 +1,34 @@
 <section *ngIf="eventEntryRequest$ | async as request" class="mat-typography">
   <section class="location">
-    <span>{{ request?.method }}</span>
+    <span class="method">{{ request?.method }}</span>
     <a color="primary" target="_blank" [href]="request?.url">{{
       request?.path
     }}</a
     ><a mat-icon-button color="primary" target="_blank" [href]="request?.url">
       <mat-icon>open_in_new</mat-icon>
     </a>
-    <span>{{ request?.domainName }}</span>
+    <span class="domain">{{ request?.domainName }}</span>
   </section>
   <section *ngIf="request?.headers">
     <h3>Headers</h3>
-    <app-entry-data [data]="request?.headers"></app-entry-data>
+    <app-entry-data
+      *ngFor="let header of request?.headers"
+      [key]="header[0]"
+      [value]="header[1]"
+    ></app-entry-data>
   </section>
-
+  <section *ngIf="request?.headers">
+    <h3>Environment</h3>
+    <p>request: {{ request?.env | json }}</p>
+    <app-entry-data
+      key="SERVER_NAME"
+      [value]="request?.env?.SERVER_NAME"
+    ></app-entry-data>
+    <app-entry-data
+      key="SERVER_PORT"
+      [value]="request?.env?.SERVER_PORT"
+    ></app-entry-data>
+  </section>
   <div class="data">
     {{ request | json }}
   </div>
