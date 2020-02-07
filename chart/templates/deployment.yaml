@@ -12,6 +12,8 @@ spec:
       role: web
   template:
     metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       labels:
         {{- include "glitchtip.selectorLabels" . | nindent 8 }}
         role: web
@@ -40,12 +42,11 @@ spec:
               value: "False"
             - name: STATIC_URL
               value: /
-            - name: DATABASE_URL
-              value: {{ required "databaseURL is a required value." .Values.databaseURL | quote }}
-            - name: SECRET_KEY
-              value: {{ required "secretKey is a required value." .Values.secretKey | quote }}
             - name: ENABLE_SOCIAL_AUTH
               value: {{ .Values.enableSocialAuth | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ include "glitchtip.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
