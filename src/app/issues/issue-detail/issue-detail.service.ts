@@ -11,8 +11,8 @@ import {
   ExceptionValueData,
   IRequest,
   AnnotatedRequest,
-  CSP
-  // Context
+  CSP,
+  Message
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -70,26 +70,18 @@ export class IssueDetailService {
     })
   );
   readonly sortedEvent$ = combineLatest([this.event$, this.isReversed$]).pipe(
-    map(([event, isReversed]) => {
-      if (event && isReversed) {
-        return this.reverseFrames(event);
-      }
-      return event;
-    })
+    map(([event, isReversed]) =>
+      event && isReversed ? this.reverseFrames(event) : event
+    )
   );
   readonly eventEntryRequest$ = this.event$.pipe(
-    map(event => {
-      if (event) {
-        return this.entryRequestData(event);
-      }
-    })
+    map(event => (event ? this.entryRequestData(event) : undefined))
   );
   readonly eventEntryCSP$ = this.event$.pipe(
-    map(event => {
-      if (event) {
-        return this.eventEntryCSP(event);
-      }
-    })
+    map(event => (event ? this.eventEntryCSP(event) : undefined))
+  );
+  readonly eventEntryMessage$ = this.event$.pipe(
+    map(event => (event ? this.eventEntryMessage(event) : undefined))
   );
 
   constructor(
@@ -189,6 +181,18 @@ export class IssueDetailService {
   private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+  }
+
+  /* Return the message entry type for an event */
+  private eventEntryMessage(event: EventDetail): Message | undefined {
+    const eventEntryMessage = event.entries.find(
+      entry => entry.type === "message"
+    );
+    if (eventEntryMessage) {
+      const eventMessage = (eventEntryMessage as Entry<"message", Message>)
+        .data;
+      return { ...eventMessage };
+    }
   }
 
   /* Return the CSP entry type for an event */

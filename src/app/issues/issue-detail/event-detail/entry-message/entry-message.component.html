@@ -1,0 +1,7 @@
+<section *ngIf="eventEntryMessage$ | async as message" class="mat-typography">
+  <section>
+    <mat-divider></mat-divider>
+    <h3>Message</h3>
+    <p>{{ message?.formatted }}</p>
+  </section>
+</section>
