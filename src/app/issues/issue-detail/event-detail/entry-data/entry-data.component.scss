@@ -1,20 +1,24 @@
 @import "../../../../../assets/styles/variables";
 
+$left-column-width: 30%;
+
 div {
-  display: flex;
   margin-top: 8px;
   margin-bottom: 8px;
 }
 
 dt {
-  flex-basis: 33%;
+  float: left;
+  width: $left-column-width;
   padding-right: 16px;
 }
 
 dd {
+  margin-left: $left-column-width;
+  width: 70%;
+  word-wrap: break-word;
   padding: 8px;
   font-family: $font-mono;
   background-color: mat-color($mat-gray, 100);
   border-radius: 3px;
-  flex-basis: 67%;
 }

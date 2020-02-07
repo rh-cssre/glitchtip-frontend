@@ -180,6 +180,7 @@
   </section>
   <app-entry-request></app-entry-request>
   <section *ngIf="event?.contexts">
+    <mat-divider></mat-divider>
     <h3>Runtime</h3>
     <app-entry-data
       key="Name"
@@ -191,6 +192,7 @@
     ></app-entry-data>
   </section>
   <section *ngIf="event?.contexts">
+    <mat-divider></mat-divider>
     <h3>Operating System</h3>
     <app-entry-data
       key="Name"
@@ -204,6 +206,7 @@
     ></app-entry-data>
   </section>
   <section *ngIf="event?.contexts">
+    <mat-divider></mat-divider>
     <h3>Trace (trace)</h3>
     <app-entry-data
       key="description"
@@ -226,7 +229,8 @@
       [value]="event?.contexts?.trace?.trace_id"
     ></app-entry-data>
   </section>
-  <section *ngIf="event?.contexts">
+  <section *ngIf="event?.contexts && event?.contexts.browser">
+    <mat-divider></mat-divider>
     <h3>Browser</h3>
     <app-entry-data
       key="name"
@@ -238,6 +242,7 @@
     ></app-entry-data>
   </section>
   <section *ngIf="event?.context">
+    <mat-divider></mat-divider>
     <h3>Aditional Data</h3>
     <app-entry-data
       key="argv"
@@ -249,6 +254,7 @@
     ></app-entry-data>
   </section>
   <section *ngIf="event?.sdk">
+    <mat-divider></mat-divider>
     <h3>SDK</h3>
     <app-entry-data key="name" [value]="event?.sdk.name"></app-entry-data>
     <app-entry-data key="version" [value]="event?.sdk.version"></app-entry-data>

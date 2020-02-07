@@ -1,5 +1,6 @@
 <section *ngIf="eventEntryRequest$ | async as request" class="mat-typography">
   <section class="location">
+    <mat-divider></mat-divider>
     <span class="method">{{ request?.method }}</span>
     <a color="primary" target="_blank" [href]="request?.url">{{
       request?.path
@@ -11,6 +12,7 @@
   </section>
   <section *ngIf="request?.headers">
     <h3>Headers</h3>
+    <mat-divider></mat-divider>
     <app-entry-data
       *ngFor="let header of request?.headers"
       [key]="header[0]"
@@ -18,6 +20,7 @@
     ></app-entry-data>
   </section>
   <section *ngIf="request?.headers">
+    <mat-divider></mat-divider>
     <h3>Environment</h3>
     <p>request: {{ request?.env | json }}</p>
     <app-entry-data
