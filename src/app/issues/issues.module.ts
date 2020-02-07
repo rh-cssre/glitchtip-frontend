@@ -12,6 +12,7 @@ import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 import { EntryRequestComponent } from "./issue-detail/event-detail/entry-request/entry-request.component";
 import { EntryDataComponent } from "./issue-detail/event-detail/entry-data/entry-data.component";
+import { HeaderNavComponent } from "./header-nav/header-nav.component";
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { EntryDataComponent } from "./issue-detail/event-detail/entry-data/entry
     IssueDetailComponent,
     EventDetailComponent,
     EntryRequestComponent,
-    EntryDataComponent
+    EntryDataComponent,
+    HeaderNavComponent
   ]
 })
 export class IssuesModule {}

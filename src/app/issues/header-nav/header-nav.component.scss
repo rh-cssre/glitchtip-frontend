@@ -1,0 +1,58 @@
+mat-accordion {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: 48px;
+  z-index: 1;
+}
+
+mat-expansion-panel.mat-expansion-panel {
+  flex: 1;
+  &:first-of-type,
+  &:last-of-type {
+    border-radius: 0;
+  }
+}
+
+mat-expansion-panel::ng-deep {
+  div.mat-expansion-panel-body {
+    padding-left: 0;
+    padding-right: 0;
+
+    .mat-list-base .mat-list-item .mat-list-item-content {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+
+  .mat-selection-list {
+    max-height: 275px;
+    overflow-y: auto;
+  }
+
+  .mat-form-field {
+    display: block;
+  }
+
+  .mat-form-field-wrapper {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+  .mat-expansion-panel-header-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+
+  .button-group {
+    text-align: right;
+    margin-top: 16px;
+    margin-right: 24px;
+  }
+
+  button {
+    margin-left: 5px;
+  }
+}

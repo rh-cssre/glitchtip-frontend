@@ -1,0 +1,63 @@
+<section>
+  <mat-accordion displayMode="flat" [hideToggle]="false">
+    <mat-expansion-panel (closed)="cancelSelected()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ selectedProjectString | async }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-form-field>
+        <input
+          type="text"
+          placeholder="Filter projects"
+          aria-label="Filter projects"
+          matInput
+          [formControl]="filterProjectInput"
+        />
+      </mat-form-field>
+
+      <mat-selection-list
+        #projectFilter
+        [disableRipple]="true"
+        (selectionChange)="updateSelectedOptions($event)"
+      >
+        <mat-list-option
+          *ngFor="let project of filteredProjects$ | async"
+          [value]="project"
+          [selected]="isSelected(project)"
+        >
+          {{ project }}
+        </mat-list-option>
+      </mat-selection-list>
+      <div class="button-group">
+        <button mat-stroked-button (click)="cancelSelected()">Reset</button>
+        <button mat-stroked-button (click)="selectAll()">Select All</button>
+        <button
+          mat-flat-button
+          [disabled]="applyButtonIsDisabled()"
+          (click)="submitApplyFilter()"
+          color="primary"
+        >
+          Filter
+        </button>
+      </div>
+    </mat-expansion-panel>
+    <!--mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Environments
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      Production, staging
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Time Range
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      Last 24 hours, Last 7 days, Last 14 days, Last 30 days, Absolute date
+    </mat-expansion-panel-->
+  </mat-accordion>
+</section>
