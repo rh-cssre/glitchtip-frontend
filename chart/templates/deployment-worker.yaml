@@ -37,6 +37,21 @@ spec:
               value: /
             - name: SERVER_ROLE
               value: "worker"
+            {{- if .Values.redisUrl }}
+            - name: REDIS_URL
+              value: {{ .Values.redisUrl }}
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: {{ include "glitchtip.fullname" . }}-glitchtip-redis
+            - name: REDIS_HOST
+              value: {{ template "glitchtip.redis.host" . }}
+            - name: REDIS_PORT
+              value: {{ template "glitchtip.redis.port" . }}
+            {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "glitchtip.fullname" . }}
