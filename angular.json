@@ -36,7 +36,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -59,7 +59,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -158,7 +157,7 @@
             "main": "projects/marketing/src/main.ts",
             "polyfills": "projects/marketing/src/polyfills.ts",
             "tsConfig": "projects/marketing/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/marketing/src/favicon.ico",
               "projects/marketing/src/assets"
@@ -181,7 +180,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -275,10 +273,7 @@
                 }
               ],
               "sourceMap": false,
-              "optimization": {
-                "scripts": false,
-                "styles": true
-              }
+              "optimization": true
             }
           }
         }
@@ -290,5 +285,8 @@
     "@schematics/angular:component": {
       "changeDetection": "OnPush"
     }
+  },
+  "cli": {
+    "analytics": "c7f39e0d-2c15-4afb-8516-838f6c815966"
   }
 }

@@ -3,13 +3,13 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from "@angular/common/http/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { EMPTY } from "rxjs";
+import { take } from "rxjs/operators";
 import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail, EventDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
-import { EMPTY } from "rxjs";
-import { MatSnackBarModule } from "@angular/material";
-import { take } from "rxjs/operators";
 import { databaseError } from "./event-detail/test-data/database-error";
 
 describe("IssueDetailService", () => {

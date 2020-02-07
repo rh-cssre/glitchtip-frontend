@@ -1,13 +1,9 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-
-// Not lazy loaded, so material imports included here
-import {
-  MatCardModule,
-  MatInputModule,
-  MatCheckboxModule,
-  MatButtonModule
-} from "@angular/material";
+import { MatInputModule } from "@angular/material/input";
+import { MatPseudoCheckboxModule } from "@angular/material/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
 import { ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "./login.component";
@@ -22,7 +18,7 @@ import { AuthModule } from "../api/auth/auth.module";
     ReactiveFormsModule,
     AuthModule,
     MatInputModule,
-    MatCheckboxModule,
+    MatPseudoCheckboxModule,
     MatButtonModule,
     MatCardModule
   ]
