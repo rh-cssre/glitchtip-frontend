@@ -13,6 +13,8 @@ import { SharedModule } from "src/app/shared/shared.module";
 // Components
 import { EventDetailComponent } from "./event-detail.component";
 import { EntryRequestComponent } from "../event-detail/entry-request/entry-request.component";
+import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
+import { EntryDataComponent } from "./entry-data/entry-data.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -21,7 +23,6 @@ import { postError } from "./test-data/post-error";
 import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
 import { stringError } from "./test-data/string-error";
-import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { cspError } from "./test-data/csp-error";
 
 export default {
@@ -36,7 +37,11 @@ export default {
         BrowserAnimationsModule,
         SharedModule
       ],
-      declarations: [EntryRequestComponent, EntryDataComponent]
+      declarations: [
+        EntryRequestComponent,
+        EntryDataComponent,
+        EntryCSPComponent
+      ]
     }),
     withKnobs
   ]
@@ -95,9 +100,9 @@ EventDetails.story = {
 };
 
 export const EntryRequest = () => {
-  const error = databaseStackError.entries[2].data;
+  const stackError = databaseStackError.entries[2].data;
   const requestObject = {
-    ...error,
+    ...stackError,
     domainName: "localhost",
     path: "/database-stack-error/"
   };
@@ -112,4 +117,17 @@ export const EntryRequest = () => {
 
 EntryRequest.story = {
   name: "Entry Request"
+};
+
+export const EntryCSP = () => {
+  return {
+    component: EntryCSPComponent,
+    props: {
+      eventEntryCSP$: of(cspError.entries[1].data)
+    }
+  };
+};
+
+EntryCSP.story = {
+  name: "Entry CSP"
 };

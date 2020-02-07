@@ -1,0 +1,28 @@
+<section *ngIf="eventEntryCSP$ | async as csp" class="mat-typography">
+  <section class="report">
+    <mat-divider></mat-divider>
+    <h3>CSP Report</h3>
+    <h2>style-src</h2>
+    <app-entry-data
+      key="blocked_uri"
+      [value]="csp?.blocked_uri"
+    ></app-entry-data>
+    <app-entry-data
+      key="document_uri"
+      [value]="csp?.document_uri"
+    ></app-entry-data>
+    <app-entry-data
+      key="effective_directive"
+      [value]="csp?.effective_directive"
+    ></app-entry-data>
+    <app-entry-data
+      key="original_policy"
+      [value]="csp?.original_policy"
+    ></app-entry-data>
+    <app-entry-data key="referrer" [value]="csp?.referrer"></app-entry-data>
+    <app-entry-data
+      key="violated_directive"
+      [value]="csp?.violated_directive"
+    ></app-entry-data>
+  </section>
+</section>

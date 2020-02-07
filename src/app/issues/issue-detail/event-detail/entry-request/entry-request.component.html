@@ -12,7 +12,6 @@
   </section>
   <section *ngIf="request?.headers">
     <h3>Headers</h3>
-    <mat-divider></mat-divider>
     <app-entry-data
       *ngFor="let header of request?.headers"
       [key]="header[0]"

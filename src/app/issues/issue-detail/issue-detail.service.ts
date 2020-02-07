@@ -10,7 +10,8 @@ import {
   Entry,
   ExceptionValueData,
   IRequest,
-  AnnotatedRequest
+  AnnotatedRequest,
+  CSP
   // Context
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -44,11 +45,11 @@ export class IssueDetailService {
   readonly hasPreviousEvent$ = this.event$.pipe(
     map(event => event && event.previousEventID !== null)
   );
-  readonly nextEventUrl$ = combineLatest(
+  readonly nextEventUrl$ = combineLatest([
     this.organization.activeOrganizationSlug$,
     this.issue$,
     this.event$
-  ).pipe(
+  ]).pipe(
     map(([orgSlug, issue, event]) => {
       if (event && event.nextEventID) {
         return this.eventUrl(orgSlug, issue, event.nextEventID);
@@ -56,11 +57,11 @@ export class IssueDetailService {
       return null;
     })
   );
-  readonly previousEventUrl$ = combineLatest(
+  readonly previousEventUrl$ = combineLatest([
     this.organization.activeOrganizationSlug$,
     this.issue$,
     this.event$
-  ).pipe(
+  ]).pipe(
     map(([orgSlug, issue, event]) => {
       if (event && event.previousEventID) {
         return this.eventUrl(orgSlug, issue, event.previousEventID);
@@ -68,7 +69,7 @@ export class IssueDetailService {
       return null;
     })
   );
-  readonly sortedEvent$ = combineLatest(this.event$, this.isReversed$).pipe(
+  readonly sortedEvent$ = combineLatest([this.event$, this.isReversed$]).pipe(
     map(([event, isReversed]) => {
       if (event && isReversed) {
         return this.reverseFrames(event);
@@ -80,6 +81,13 @@ export class IssueDetailService {
     map(event => {
       if (event) {
         return this.entryRequestData(event);
+      }
+    })
+  );
+  readonly eventEntryCSP$ = this.event$.pipe(
+    map(event => {
+      if (event) {
+        return this.eventEntryCSP(event);
       }
     })
   );
@@ -181,6 +189,15 @@ export class IssueDetailService {
   private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+  }
+
+  /* Return the CSP entry type for an event */
+  private eventEntryCSP(event: EventDetail): CSP | undefined {
+    const cspEntryType = event.entries.find(entry => entry.type === "csp");
+    if (cspEntryType) {
+      const eventCSP = (cspEntryType as Entry<"csp", CSP>).data;
+      return { ...eventCSP };
+    }
   }
 
   /* Return the request entry type for an event with additional fields parsed from url */

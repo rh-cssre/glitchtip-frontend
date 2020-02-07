@@ -16,6 +16,7 @@ dt {
 dd {
   margin-left: $left-column-width;
   width: 70%;
+  min-height: 36px;
   word-wrap: break-word;
   padding: 8px;
   font-family: $font-mono;
