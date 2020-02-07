@@ -69,9 +69,12 @@ export class IssueDetailService {
       return null;
     })
   );
-  readonly sortedEvent$ = combineLatest([this.event$, this.isReversed$]).pipe(
+  readonly eventEntryException$ = combineLatest([
+    this.event$,
+    this.isReversed$
+  ]).pipe(
     map(([event, isReversed]) =>
-      event && isReversed ? this.reverseFrames(event) : event
+      event ? this.reverseFrames(event, isReversed) : undefined
     )
   );
   readonly eventEntryRequest$ = this.event$.pipe(
@@ -219,20 +222,30 @@ export class IssueDetailService {
   }
 
   /* Reverse frame array, nested in the event object */
-  private reverseFrames(event: EventDetail): EventDetail | undefined {
+  private reverseFrames(
+    event: EventDetail,
+    isReversed: boolean
+  ): ExceptionValueData | undefined {
     const exceptionEntryType = event.entries.find(
       entry => entry.type === "exception"
     );
     if (exceptionEntryType) {
-      const reversedFrames = (exceptionEntryType as Entry<
+      const exceptionData = (exceptionEntryType as Entry<
         "exception",
         ExceptionValueData
-      >).data.values.map(value => [...value.stacktrace.frames.reverse()]);
-      const entryType = {
-        ...exceptionEntryType,
-        frames: reversedFrames
-      };
-      return { ...event, entries: [entryType] };
+      >).data;
+      if (isReversed) {
+        // const reversedFrames = exceptionData.values.map(value => [
+        //   ...value.stacktrace.frames.reverse()
+        // ]);
+        // const entryType = {
+        //   ...exceptionData,
+        //   frames: reversedFrames
+        // };
+        return { ...exceptionData };
+      } else {
+        return { ...exceptionData };
+      }
     }
   }
 

@@ -16,6 +16,7 @@ import { EntryRequestComponent } from "../event-detail/entry-request/entry-reque
 import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EntryMessageComponent } from "./entry-message/entry-message.component";
+import { EntryExceptionComponent } from "./entry-exception/entry-exception.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -42,7 +43,8 @@ export default {
         EntryRequestComponent,
         EntryDataComponent,
         EntryCSPComponent,
-        EntryMessageComponent
+        EntryMessageComponent,
+        EntryExceptionComponent
       ]
     }),
     withKnobs
@@ -145,4 +147,17 @@ export const EntryMessage = () => {
 
 EntryMessage.story = {
   name: "Entry Message"
+};
+
+export const EntryException = () => {
+  return {
+    component: EntryExceptionComponent,
+    props: {
+      eventEntryException$: of(databaseError.entries[0].data)
+    }
+  };
+};
+
+EntryException.story = {
+  name: "Entry Exception"
 };
