@@ -10,7 +10,10 @@ import {
 import { startWith, map } from "rxjs/operators";
 import { Observable, BehaviorSubject } from "rxjs";
 import { FormControl } from "@angular/forms";
-import { MatSelectionListChange, MatSelectionList } from "@angular/material";
+import {
+  MatSelectionList,
+  MatSelectionListChange
+} from "@angular/material/list";
 
 @Component({
   selector: "app-header-nav",
