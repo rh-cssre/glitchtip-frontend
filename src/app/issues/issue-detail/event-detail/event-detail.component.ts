@@ -49,4 +49,14 @@ export class EventDetailComponent implements OnInit {
   getFlippedFrames() {
     this.issueService.getReversedFrames();
   }
+
+  argv(argvs: string[]) {
+    const newArgv: string[] = [];
+    argvs.forEach((arg, index) => {
+      let newArg = "'" + arg + "'";
+      newArg = index === 0 ? newArg : " " + newArg;
+      newArgv.push(newArg);
+    });
+    return "[" + newArgv + "]";
+  }
 }

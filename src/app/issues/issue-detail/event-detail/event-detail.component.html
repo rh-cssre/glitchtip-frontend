@@ -179,4 +179,78 @@
     </div>
   </section>
   <app-entry-request></app-entry-request>
+  <section *ngIf="event?.contexts">
+    <h3>Runtime</h3>
+    <app-entry-data
+      key="Name"
+      [value]="event?.contexts?.runtime?.name"
+    ></app-entry-data>
+    <app-entry-data
+      key="Version"
+      [value]="event?.contexts?.runtime?.version"
+    ></app-entry-data>
+  </section>
+  <section *ngIf="event?.contexts">
+    <h3>Operating System</h3>
+    <app-entry-data
+      key="Name"
+      [value]="event?.contexts?.os?.name"
+    ></app-entry-data>
+    <app-entry-data
+      key="Version"
+      [value]="
+        event?.contexts?.os?.version ? event?.contexts?.os?.version : 'unknown'
+      "
+    ></app-entry-data>
+  </section>
+  <section *ngIf="event?.contexts">
+    <h3>Trace (trace)</h3>
+    <app-entry-data
+      key="description"
+      [value]="event?.contexts?.trace?.description"
+    ></app-entry-data>
+    <app-entry-data
+      key="op"
+      [value]="event?.contexts?.trace?.op"
+    ></app-entry-data>
+    <app-entry-data
+      key="parent_span_id"
+      [value]="event?.contexts?.trace?.parent_span_id"
+    ></app-entry-data>
+    <app-entry-data
+      key="span_id"
+      [value]="event?.contexts?.trace?.span_id"
+    ></app-entry-data>
+    <app-entry-data
+      key="trace_id"
+      [value]="event?.contexts?.trace?.trace_id"
+    ></app-entry-data>
+  </section>
+  <section *ngIf="event?.contexts">
+    <h3>Browser</h3>
+    <app-entry-data
+      key="name"
+      [value]="event?.contexts?.browser?.name"
+    ></app-entry-data>
+    <app-entry-data
+      key="version"
+      [value]="event?.contexts?.browser?.version"
+    ></app-entry-data>
+  </section>
+  <section *ngIf="event?.context">
+    <h3>Aditional Data</h3>
+    <app-entry-data
+      key="argv"
+      [value]="argv((event?.context)['sys.argv'])"
+    ></app-entry-data>
+    <app-entry-data
+      key="version"
+      [value]="event?.contexts?.browser?.version"
+    ></app-entry-data>
+  </section>
+  <section *ngIf="event?.sdk">
+    <h3>SDK</h3>
+    <app-entry-data key="name" [value]="event?.sdk.name"></app-entry-data>
+    <app-entry-data key="version" [value]="event?.sdk.version"></app-entry-data>
+  </section>
 </section>
