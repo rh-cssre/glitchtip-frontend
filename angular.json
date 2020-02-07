@@ -261,7 +261,7 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/marketing-server",
-            "main": "projects/marketing/src/main.server.ts",
+            "main": "projects/marketing/server.ts",
             "tsConfig": "projects/marketing/tsconfig.server.json"
           },
           "configurations": {
@@ -275,6 +275,32 @@
               "sourceMap": false,
               "optimization": true
             }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "marketing:build",
+            "serverTarget": "marketing:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "marketing:build:production",
+              "serverTarget": "marketing:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "marketing:build:production",
+            "serverTarget": "marketing:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }
