@@ -57,9 +57,7 @@ pages:
   stage: deploy
   script:
     - npm ci
-    - npm run ng build marketing -- --prod
-    - npm run ng run marketing:server
-    - npx angular-prerender --browser-target=marketing:build --server-target=marketing:server
+    - npm run prerender
     - mv dist/marketing public
   artifacts:
     paths:
