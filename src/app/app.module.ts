@@ -6,7 +6,7 @@ import {
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS
 } from "@angular/common/http";
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material";
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
 import { OAuthModule } from "angular-oauth2-oidc";
 
 import { AppComponent } from "./app.component";

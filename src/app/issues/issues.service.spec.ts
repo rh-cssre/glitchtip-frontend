@@ -3,7 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from "@angular/common/http/testing";
-import { MatSnackBarModule } from "@angular/material";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { IssuesService } from "./issues.service";
 import { Issue } from "./interfaces";
