@@ -61,3 +61,38 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "glitchtip.redis.fullname" -}}
+{{- if .Values.redis.fullnameOverride -}}
+{{- .Values.redis.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.redis.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name "glitchtip-redis" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Set redis host
+*/}}
+{{- define "glitchtip.redis.host" -}}
+{{- if .Values.redis.enabled -}}
+{{- template "glitchtip.redis.fullname" . -}}-master
+{{- else -}}
+{{- .Values.redis.host | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Set redis port
+*/}}
+{{- define "glitchtip.redis.port" -}}
+{{- if .Values.redis.enabled -}}
+    "6379"
+{{- else -}}
+{{- default "6379" .Values.redis.port | quote -}}
+{{- end -}}
+{{- end -}}
