@@ -1,9 +1,6 @@
 # Default values for glitchtip.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-replicaCount: 1
-
 image:
   repository: registry.gitlab.com/glitchtip/glitchtip-frontend
   tag: master
@@ -18,7 +15,26 @@ secretKey:
 redisUrl:
 enableSocialAuth: false
 
+web:
+  hpa:
+    enabled: false
+    cputhreshold: 60
+    minpods: 2
+    maxpods: 5
+  replicacount: 1
+  resources: {}
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
 worker:
+  hpa:
+    enabled: false
+    cputhreshold: 60
+    minpods: 1
+    maxpods: 5
   replicaCount: 1
   resources:
     limits:
@@ -66,19 +82,6 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
 nodeSelector: {}
 
 tolerations: []
@@ -86,7 +89,14 @@ tolerations: []
 affinity: {}
 
 redis:
+  nameOverride: glitchtip-redis
   enabled: true
+  master:
+    persistence:
+      enabled: false
+  slave:
+    persistence:
+      enabled: false
 
 postgresql:
   enabled: false

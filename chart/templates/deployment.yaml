@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "glitchtip.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.web.replicaCount }}
   selector:
     matchLabels:
       {{- include "glitchtip.selectorLabels" . | nindent 6 }}
@@ -36,7 +36,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.web.resources | nindent 12 }}
           env:
             - name: DEBUG
               value: "False"
