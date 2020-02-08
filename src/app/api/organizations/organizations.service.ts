@@ -32,12 +32,18 @@ export class OrganizationsService {
   readonly organizations$ = this.getState$.pipe(
     map(data => data.organizations)
   );
-  readonly activeOrganization$ = this.getState$.pipe(
+  readonly activeOrganizationId$ = this.getState$.pipe(
     map(data => data.activeOrganizationId)
+  );
+  readonly activeOrganization$ = this.getState$.pipe(
+    map(data => data.activeOrganization)
+  );
+  readonly activeOrganizationProjects$ = this.activeOrganization$.pipe(
+    map(data => (data ? data.projects : null))
   );
   readonly activeOrganizationDetail$ = combineLatest([
     this.organizations$,
-    this.activeOrganization$
+    this.activeOrganizationId$
   ]).pipe(
     map(([organizations, activeOrganization]) =>
       organizations.find(organization => organization.id === activeOrganization)
@@ -65,7 +71,7 @@ export class OrganizationsService {
   retrieveOrganizations() {
     return this.http.get<Organization[]>(this.url).pipe(
       tap(organizations => this.setOrganizations(organizations)),
-      withLatestFrom(this.activeOrganization$),
+      withLatestFrom(this.activeOrganizationId$),
       tap(([organizations, activeOrgId]) => {
         if (activeOrgId === null && organizations.length) {
           let activeOrg: Organization | undefined;

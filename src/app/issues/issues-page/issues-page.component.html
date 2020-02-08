@@ -1,6 +1,8 @@
 <section class="mat-elevation-z0">
   <mat-toolbar class="primary-toolbar" color="primary">Issues</mat-toolbar>
 
+  <app-header-nav></app-header-nav>
+
   <table mat-table [dataSource]="issues$">
     <ng-container matColumnDef="actions">
       <th mat-header-cell colspan="3" *matHeaderCellDef class="resolved-row">

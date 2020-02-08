@@ -35,7 +35,7 @@ describe("OrganizationsService", () => {
 
   it("Initial active organization", () => {
     service = TestBed.get(OrganizationsService);
-    service.activeOrganization$.subscribe(activeOrganization => {
+    service.activeOrganizationId$.subscribe(activeOrganization => {
       expect(activeOrganization).toBe(null);
     });
   });
@@ -46,7 +46,7 @@ describe("OrganizationsService", () => {
     const req = httpTestingController.expectOne(`/api/0/organizations/`);
     req.flush(testData);
     service.organizations$.subscribe(orgs => expect(orgs).toEqual(testData));
-    service.activeOrganization$.subscribe(active =>
+    service.activeOrganizationId$.subscribe(active =>
       expect(active).toEqual(testData[0].id)
     );
   });
@@ -54,6 +54,8 @@ describe("OrganizationsService", () => {
   it("changes the active organization", () => {
     const testData = organizationList[1];
     service.changeActiveOrganization(1);
-    service.activeOrganization$.subscribe(org => expect(org).toBe(testData.id));
+    service.activeOrganizationId$.subscribe(org =>
+      expect(org).toBe(testData.id)
+    );
   });
 });

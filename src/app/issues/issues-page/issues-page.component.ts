@@ -1,8 +1,7 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { IssuesService } from "../issues.service";
-import { RetrieveIssuesParams } from "../interfaces";
 
 @Component({
   selector: "app-issues-page",
@@ -10,7 +9,7 @@ import { RetrieveIssuesParams } from "../interfaces";
   styleUrls: ["./issues-page.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IssuesPageComponent implements OnInit {
+export class IssuesPageComponent {
   displayedColumns: string[] = ["select", "status", "title"];
   form = new FormGroup({
     query: new FormControl("")
@@ -22,34 +21,22 @@ export class IssuesPageComponent implements OnInit {
   nextParams$ = this.issuesService.nextPageParams$;
   previousParams$ = this.issuesService.previousPageParams$;
 
-  constructor(
-    private issuesService: IssuesService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  preppedGetParams$ = this.issuesService.preppedGetParams$;
+  paramSubsription = this.preppedGetParams$.subscribe(getParams => {
+    this.form.controls.query.setValue(getParams.query);
+    this.issuesService.getIssues(getParams).subscribe();
+  });
 
-  ngOnInit() {
-    /** Set initial state based on query params */
-    this.issuesService.clearState();
-    const params = this.getQueryParams();
-    // Desired effect is to default to unresolved but don't show the query param until it's actually set
-    if (params.query === undefined) {
-      params.query = "is:unresolved";
-    }
-    this.form.controls.query.setValue(params.query);
-    this.issuesService.getIssues(params).subscribe();
-  }
+  constructor(private issuesService: IssuesService, private router: Router) {}
 
   onSubmit() {
-    this.router
-      .navigate([], {
-        queryParams: { query: this.form.value.query },
-        queryParamsHandling: "merge"
-      })
-      .then(() => {
-        const params = this.getQueryParams();
-        this.issuesService.getIssues(params).subscribe();
-      });
+    this.router.navigate([], {
+      queryParams: {
+        query: this.form.value.query,
+        cursor: null
+      },
+      queryParamsHandling: "merge"
+    });
   }
 
   getNextPage() {
@@ -78,21 +65,5 @@ export class IssuesPageComponent implements OnInit {
 
   toggleSelectAll() {
     this.issuesService.toggleSelectAll();
-  }
-
-  private getQueryParams(): RetrieveIssuesParams {
-    const paramMap = this.route.snapshot.queryParamMap;
-    const retrieveParams: RetrieveIssuesParams = {};
-
-    const cursor = paramMap.get("cursor");
-    if (cursor) {
-      retrieveParams.cursor = cursor;
-    }
-
-    const query = paramMap.get("query");
-    if (query) {
-      retrieveParams.query = query;
-    }
-    return retrieveParams;
   }
 }

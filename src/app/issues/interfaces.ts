@@ -156,7 +156,23 @@ export interface IssueDetail extends Issue {
   activity: IActivity[];
 }
 
-export interface RetrieveIssuesParams {
+/**
+ * Not sure if this is a good idea, but in general I prefer explicit null
+ * statements to undefined. But when we actually make the URL request we
+ * want undefined stuff. So if we're gonna do both, we need two interfaces.
+ */
+export interface IssuesUrlParamsState {
+  cursor: string | null;
+  query: string | null;
+  /**
+   * If you get `project` from this.route.queryParams (ActivatedRoute), it
+   * could be `string` or `string[]`. But we normalize it before it is used
+   * anywhere, so `string` is not included here.
+   */
+  project: string[] | null;
+}
+
+export interface IssuesUrlParams {
   cursor?: string;
   query?: string;
   project?: string;
