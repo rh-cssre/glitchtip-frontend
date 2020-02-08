@@ -25,12 +25,12 @@ worker:
       cpu: 500m
       memory: 256Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 50m
+      memory: 96Mi
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name:
