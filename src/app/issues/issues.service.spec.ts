@@ -8,6 +8,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { IssuesService } from "./issues.service";
 import { Issue } from "./interfaces";
 import { issueList } from "./issues-list-test-data";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("IssuesService", () => {
   let httpTestingController: HttpTestingController;
@@ -15,7 +16,7 @@ describe("IssuesService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MatSnackBarModule]
+      imports: [HttpClientTestingModule, MatSnackBarModule, RouterTestingModule]
     });
     httpTestingController = TestBed.get(HttpTestingController);
     service = TestBed.get(IssuesService);

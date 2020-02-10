@@ -12,9 +12,11 @@ import {
   IssueWithSelected,
   IssueStatus,
   UpdateStatusResponse,
-  RetrieveIssuesParams
+  IssuesUrlParams,
+  IssuesUrlParamsState
 } from "./interfaces";
 import { baseUrl } from "../constants";
+import { ActivatedRoute } from "@angular/router";
 
 interface IssuesState {
   issues: Issue[];
@@ -42,12 +44,14 @@ export class IssuesService {
   private getState$ = this.issuesState.asObservable();
   private url = baseUrl + "/issues/";
 
+  debugState = this.getState$.subscribe(state => console.log(state));
+
   issues$ = this.getState$.pipe(map(state => state.issues));
   selectedIssues$ = this.getState$.pipe(map(state => state.selectedIssues));
-  issuesWithSelected$: Observable<IssueWithSelected[]> = combineLatest(
+  issuesWithSelected$: Observable<IssueWithSelected[]> = combineLatest([
     this.issues$,
     this.selectedIssues$
-  ).pipe(
+  ]).pipe(
     map(([issues, selectedIssues]) =>
       issues.map(issue => ({
         ...issue,
@@ -55,7 +59,7 @@ export class IssuesService {
       }))
     )
   );
-  areAllSelected$ = combineLatest(this.issues$, this.selectedIssues$).pipe(
+  areAllSelected$ = combineLatest([this.issues$, this.selectedIssues$]).pipe(
     map(([issues, selectedIssues]) => issues.length === selectedIssues.length)
   );
   issueCount$ = this.getState$.pipe(map(state => state.issueCount));
@@ -70,7 +74,52 @@ export class IssuesService {
     map(state => this.urlParamsToObject(state.previousPage))
   );
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
+  /** Watch the URL for param changes */
+  routeQueryParams$ = this.route.queryParams;
+  /* Make params easier to work with in the code */
+  normalizedGetParams$: Observable<
+    IssuesUrlParamsState
+  > = this.routeQueryParams$.pipe(
+    map(params => ({
+      project: this.getAppliedProjectsFromParams(params.project),
+      query: params.query ? params.query : "is:unresolved",
+      cursor: params.cursor ? params.cursor : null
+    }))
+  );
+  /* Convert params to what the URL needs */
+  preppedGetParams$: Observable<
+    IssuesUrlParams
+  > = this.normalizedGetParams$.pipe(
+    map(getParams => {
+      // Trying to futureproof this a bit
+      const keys = Object.keys(getParams);
+      const preppedParams: IssuesUrlParams = {};
+      keys.forEach(param =>
+        getParams[param] ? (preppedParams[param] = getParams[param]) : null
+      );
+      // Project is a special case. Need to be able to do project=1&project=2
+      // Which is possible with JSON but not with JS objects
+      if (getParams.project) {
+        preppedParams.project = getParams.project.join(",");
+      }
+      console.log("process get param", preppedParams);
+      return preppedParams;
+    })
+  );
+  appliedProjectIds$ = this.normalizedGetParams$.pipe(
+    map(getParams => getParams.project)
+  );
+
+  hmm = this.preppedGetParams$.subscribe(bloop => {
+    console.log(bloop);
+    this.getIssues(bloop).subscribe();
+  });
+
+  constructor(
+    private http: HttpClient,
+    private snackbar: MatSnackBar,
+    private route: ActivatedRoute
+  ) {}
 
   urlParamsToObject(url: string | null) {
     return url
@@ -102,7 +151,7 @@ export class IssuesService {
     }
   }
 
-  getIssues(params: RetrieveIssuesParams) {
+  getIssues(params: IssuesUrlParams) {
     return this.retrieveIssues(this.url, params);
   }
 
@@ -144,7 +193,7 @@ export class IssuesService {
   }
 
   // Not private for testing purposes
-  retrieveIssues(url: string, params?: RetrieveIssuesParams) {
+  retrieveIssues(url: string, params?: IssuesUrlParams) {
     let httpParams = new HttpParams();
     if (params) {
       Object.keys(params).forEach(key => {
@@ -165,6 +214,7 @@ export class IssuesService {
   }
 
   clearState() {
+    console.log("clear state!");
     this.issuesState.next(initialState);
   }
 
@@ -225,5 +275,13 @@ export class IssuesService {
       nextPage: parts.next ? parts.next : null,
       previousPage: parts.prev ? parts.prev : null
     });
+  }
+
+  private getAppliedProjectsFromParams(project: string) {
+    // Need the spread operator because this is either a string or a string[]
+    const normalizedProject = project ? project.split(",") : null;
+    // They're IDs, which are numbers. But since these are get params, they've
+    // gotta get passed around as strings.
+    return normalizedProject ? normalizedProject : null;
   }
 }
