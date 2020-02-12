@@ -1,15 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "glitchtip.fullname" . }}
+  name: {{ include "glitchtip.fullname" . }}-beat
   labels:
     {{- include "glitchtip.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.web.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "glitchtip.selectorLabels" . | nindent 6 }}
-      role: web
   template:
     metadata:
       annotations:
@@ -17,13 +16,11 @@ spec:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
         {{- include "glitchtip.selectorLabels" . | nindent 8 }}
-        role: web
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "glitchtip.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -32,31 +29,20 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-          livenessProbe:
-            failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /_health/
-              port: 8080
-            initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
-          readinessProbe:
-            failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
-            httpGet:
-              path: /_health/
-              port: 8080
-            initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
           resources:
-            {{- toYaml .Values.web.resources | nindent 12 }}
+            limits:
+              cpu: 50m
+              memory: 96Mi
+            requests:
+              cpu: 1m
+              memory: 32Mi
           env:
             - name: DEBUG
               value: "False"
             - name: STATIC_URL
               value: /
+            - name: SERVER_ROLE
+              value: "beat"
             {{- if .Values.redisURL }}
             - name: REDIS_URL
               value: {{ .Values.redisURL }}
@@ -77,15 +63,3 @@ spec:
                 name: {{ include "glitchtip.fullname" . }}
             - configMapRef:
                 name: {{ include "glitchtip.fullname" . }}
-      {{- with .Values.web.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.web.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.web.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
