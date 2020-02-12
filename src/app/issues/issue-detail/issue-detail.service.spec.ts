@@ -11,6 +11,7 @@ import { IssueDetail, EventDetail } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -20,7 +21,11 @@ describe("IssueDetailService", () => {
   beforeEach(() => {
     mockOrgService = jasmine.createSpyObj(["retrieveIssue"]);
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MatSnackBarModule],
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule,
+        RouterTestingModule
+      ],
       providers: [{ provide: OrganizationsService, useValue: mockOrgService }]
     });
     httpTestingController = TestBed.get(HttpTestingController);

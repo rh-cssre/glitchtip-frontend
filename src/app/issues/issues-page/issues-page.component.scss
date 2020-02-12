@@ -13,11 +13,14 @@ table {
 }
 
 .primary-toolbar {
-  margin-bottom: 20px;
-
   @media (max-width: $tablet - 1) {
     padding-left: $iconWidth;
   }
+}
+
+app-header-nav {
+  display: block;
+  margin-bottom: 20px;
 }
 
 .mat-column-title {
