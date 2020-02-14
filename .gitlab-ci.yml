@@ -71,7 +71,7 @@ deploy-staging:
   stage: deploy
   image: lwolf/helm-kubectl-docker
   script:
-    - helm upgrade glitchtip-staging ./chart --set image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
+    - helm --namespace=glitchtip-staging upgrade glitchtip-staging ./chart --set image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
   environment:
     name: staging
     url: https://staging.glitchtip.com
