@@ -69,7 +69,7 @@ pages:
 
 deploy-staging:
   stage: deploy
-  image: lwolf/helm-kubectl-docker
+  image: lwolf/helm-kubectl-docker:v1.15.10-v3.1.0
   script:
     - helm upgrade glitchtip-staging ./chart --set image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
   environment:
