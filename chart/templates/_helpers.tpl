@@ -96,7 +96,7 @@ Set redis host
 */}}
 {{- define "glitchtip.redis.host" -}}
 {{- if .Values.redis.enabled -}}
-{{- template "glitchtip.redis.fullname" . -}}-master
+{{- template "glitchtip.redis.fullname" . -}}-redis-master
 {{- else -}}
 {{- .Values.redis.host | quote -}}
 {{- end -}}
