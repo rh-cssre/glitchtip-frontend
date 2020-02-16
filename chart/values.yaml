@@ -22,7 +22,8 @@ web:
     cputhreshold: 60
     minpods: 2
     maxpods: 5
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 100m
     #   memory: 256Mi
@@ -48,7 +49,8 @@ worker:
     cputhreshold: 60
     minpods: 1
     maxpods: 10
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 500m
     #   memory: 256Mi
@@ -72,7 +74,8 @@ service:
 
 ingress:
   enabled: false
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -85,7 +88,6 @@ ingress:
 
 redis:
   enabled: true
-  nameOverride: glitchtip-redis
   master:
     persistence:
       enabled: false

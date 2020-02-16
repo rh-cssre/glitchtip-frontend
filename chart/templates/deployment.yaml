@@ -15,6 +15,7 @@ spec:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        tag: {{ .Values.image.tag }}
       labels:
         {{- include "glitchtip.selectorLabels" . | nindent 8 }}
         role: web
@@ -66,7 +67,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: redis-password
-                  name: {{ include "glitchtip.fullname" . }}-glitchtip-redis
+                  name: {{ include "glitchtip.fullname" . }}-redis
             - name: REDIS_HOST
               value: {{ template "glitchtip.redis.host" . }}
             - name: REDIS_PORT
