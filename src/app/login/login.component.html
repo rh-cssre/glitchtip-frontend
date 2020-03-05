@@ -2,6 +2,7 @@
   <h1>Login</h1>
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-error *ngIf="error">{{ error }}</mat-error>
       <mat-form-field class="full-width">
         <input
           matInput
@@ -9,6 +10,12 @@
           placeholder="Email"
           formControlName="email"
         />
+        <mat-error *ngIf="email?.errors?.required"
+          >Your email is required to log in</mat-error
+        >
+        <mat-error *ngIf="email?.errors?.email"
+          >Enter a valid email address</mat-error
+        >
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -17,11 +24,16 @@
           placeholder="Password"
           formControlName="password"
         />
+        <mat-error *ngIf="password?.errors && password?.errors?.required">
+          Your password should be at least 8 characters long</mat-error
+        >
+        <mat-error *ngIf="password?.errors?.required"
+          >Your password is required to log in</mat-error
+        >
       </mat-form-field>
       <button id="submit" class="full-width" mat-flat-button color="primary">
         Log in
       </button>
-      <mat-error *ngIf="error">{{ error }} </mat-error>
     </form>
     <ng-container *ngIf="socialAuth$ | async">
       <div class="or">
