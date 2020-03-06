@@ -16,6 +16,7 @@ import {
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-header-nav",
@@ -139,11 +140,18 @@ export class HeaderNavComponent implements OnInit {
   }
 
   submitApplyFilter() {
-    this.applyFilter.emit(this.selectedProjectIds.getValue());
+    const selectedProjectIds = this.selectedProjectIds.getValue();
+    this.router.navigate([], {
+      queryParams: {
+        project: selectedProjectIds.length > 0 ? selectedProjectIds : null
+      },
+      queryParamsHandling: "merge"
+    });
   }
 
   constructor(
     private organizationsService: OrganizationsService,
-    private issuesService: IssuesService
+    private issuesService: IssuesService,
+    private router: Router
   ) {}
 }

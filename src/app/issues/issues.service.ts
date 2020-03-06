@@ -44,7 +44,7 @@ export class IssuesService {
   private getState$ = this.issuesState.asObservable();
   private url = baseUrl + "/issues/";
 
-  debugState = this.getState$.subscribe(state => console.log(state));
+  // debugState = this.getState$.subscribe(state => console.log(state));
 
   issues$ = this.getState$.pipe(map(state => state.issues));
   selectedIssues$ = this.getState$.pipe(map(state => state.selectedIssues));
@@ -102,7 +102,7 @@ export class IssuesService {
       if (getParams.project) {
         preppedParams.project = getParams.project.join(",");
       }
-      console.log("process get param", preppedParams);
+      // console.log("process get param", preppedParams);
       return preppedParams;
     })
   );
@@ -110,9 +110,9 @@ export class IssuesService {
     map(getParams => getParams.project)
   );
 
-  hmm = this.preppedGetParams$.subscribe(bloop => {
-    console.log(bloop);
-    this.getIssues(bloop).subscribe();
+  paramWatcher = this.preppedGetParams$.subscribe(getParams => {
+    console.log("params changed. let's update!", getParams);
+    this.getIssues(getParams).subscribe();
   });
 
   constructor(
@@ -195,10 +195,24 @@ export class IssuesService {
   // Not private for testing purposes
   retrieveIssues(url: string, params?: IssuesUrlParams) {
     let httpParams = new HttpParams();
+    // Assign our params to HttpParams object
     if (params) {
       Object.keys(params).forEach(key => {
-        httpParams = httpParams.append(key, params[key]);
+        if (key !== "project") {
+          httpParams = httpParams.append(key, params[key]);
+        }
       });
+      // Project is a special case, if there are more than one selected
+      if (params.project) {
+        if (params.project.includes(",")) {
+          const split = params.project.split(",");
+          split.forEach(id => {
+            httpParams = httpParams.append("project", id);
+          });
+        } else {
+          httpParams = httpParams.append("project", params.project);
+        }
+      }
     }
     return this.http
       .get<Issue[]>(url, { observe: "response", params: httpParams })
@@ -277,11 +291,7 @@ export class IssuesService {
     });
   }
 
-  private getAppliedProjectsFromParams(project: string) {
-    // Need the spread operator because this is either a string or a string[]
-    const normalizedProject = project ? project.split(",") : null;
-    // They're IDs, which are numbers. But since these are get params, they've
-    // gotta get passed around as strings.
-    return normalizedProject ? normalizedProject : null;
+  private getAppliedProjectsFromParams(project: string | string[] | null) {
+    return project ? [...project] : null;
   }
 }

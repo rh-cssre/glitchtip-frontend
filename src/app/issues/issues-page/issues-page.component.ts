@@ -24,7 +24,6 @@ export class IssuesPageComponent {
   preppedGetParams$ = this.issuesService.preppedGetParams$;
   paramSubsription = this.preppedGetParams$.subscribe(getParams => {
     this.form.controls.query.setValue(getParams.query);
-    this.issuesService.getIssues(getParams).subscribe();
   });
 
   constructor(private issuesService: IssuesService, private router: Router) {}
