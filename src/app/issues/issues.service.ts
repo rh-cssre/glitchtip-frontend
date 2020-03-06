@@ -17,6 +17,7 @@ import {
 } from "./interfaces";
 import { baseUrl } from "../constants";
 import { ActivatedRoute } from "@angular/router";
+import { OrganizationsService } from "../api/organizations/organizations.service";
 
 interface IssuesState {
   issues: Issue[];
@@ -43,6 +44,9 @@ export class IssuesService {
   private issuesState = new BehaviorSubject<IssuesState>(initialState);
   private getState$ = this.issuesState.asObservable();
   private url = baseUrl + "/issues/";
+
+  activeOrganizationSlug$ = this.organizationService.activeOrganizationSlug$;
+  organizationApiUrl: string | null;
 
   // debugState = this.getState$.subscribe(state => console.log(state));
 
@@ -115,10 +119,21 @@ export class IssuesService {
     this.getIssues(getParams).subscribe();
   });
 
+  organizationWatcher = this.activeOrganizationSlug$.subscribe(slug => {
+    if (slug === null) {
+      this.organizationApiUrl = `${baseUrl}/issues/`;
+    } else {
+      this.organizationApiUrl = `${baseUrl}/organizations/${slug}/issues/`;
+    }
+    console.log("org changed!", this.organizationApiUrl);
+    this.getIssues({}).subscribe();
+  });
+
   constructor(
     private http: HttpClient,
     private snackbar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private organizationService: OrganizationsService
   ) {}
 
   urlParamsToObject(url: string | null) {
@@ -152,7 +167,10 @@ export class IssuesService {
   }
 
   getIssues(params: IssuesUrlParams) {
-    return this.retrieveIssues(this.url, params);
+    return this.retrieveIssues(
+      this.organizationApiUrl ? this.organizationApiUrl : this.url,
+      params
+    );
   }
 
   toggleSelected(issueId: number) {
