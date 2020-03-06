@@ -5,7 +5,23 @@
 
   <table mat-table [dataSource]="issues$">
     <ng-container matColumnDef="actions">
-      <th mat-header-cell colspan="3" *matHeaderCellDef class="resolved-row">
+      <th
+        mat-header-cell
+        colspan="3"
+        *matHeaderCellDef
+        class="resolved-row"
+        class="table-header"
+      >
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field>
+            <input
+              matInput
+              type="search"
+              placeholder="Search"
+              formControlName="query"
+            />
+          </mat-form-field>
+        </form>
         <button mat-flat-button color="primary" (click)="bulkMarkResolved()">
           Mark as resolved
         </button>
@@ -23,16 +39,6 @@
         >
           Ignore issue
         </button>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <mat-form-field>
-            <input
-              matInput
-              type="search"
-              placeholder="Search"
-              formControlName="query"
-            />
-          </mat-form-field>
-        </form>
       </th>
     </ng-container>
 

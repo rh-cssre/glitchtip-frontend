@@ -1,6 +1,6 @@
 <section>
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel (closed)="resetSubject.next()">
+    <mat-expansion-panel (closed)="resetSubject.next()"  class="mat-elevation-z1">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ selectedProjectsString$ | async }}

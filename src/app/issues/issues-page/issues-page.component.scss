@@ -20,7 +20,10 @@ table {
 
 app-header-nav {
   display: block;
-  margin-bottom: 20px;
+}
+
+.table-header {
+  padding: 20px 0;
 }
 
 .mat-column-title {
