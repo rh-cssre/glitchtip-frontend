@@ -1,14 +1,12 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 
+import { MaterialModule } from "src/app/shared/material.module";
 import { OrganizationsComponent } from "./organizations.component";
 import { OrganizationDetailComponent } from "./organization-detail/organization-detail.component";
 import { SettingsComponent } from "../settings/settings.component";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-
-import { MatListModule } from "@angular/material/list";
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 
 describe("OrganizationsComponent", () => {
   let component: OrganizationsComponent;
@@ -22,8 +20,7 @@ describe("OrganizationsComponent", () => {
         SettingsComponent
       ],
       imports: [
-        MatListModule,
-        MatSidenavModule,
+        MaterialModule,
         HttpClientTestingModule,
         RouterTestingModule,
         NoopAnimationsModule

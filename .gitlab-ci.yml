@@ -53,20 +53,6 @@ build-docker:
     - docker push ${CONTAINER_IMAGE}
     - if [ $CI_COMMIT_REF_NAME = "master" ]; then docker push ${CI_REGISTRY_IMAGE}:latest; fi
 
-pages:
-  stage: deploy
-  script:
-    - npm ci
-    - npm run prerender
-    - mv dist/marketing public
-  artifacts:
-    paths:
-      - public
-  only:
-    - master
-    - staging
-    - dev
-
 deploy-staging:
   stage: deploy
   image: lwolf/helm-kubectl-docker:v1.15.10-v3.1.0

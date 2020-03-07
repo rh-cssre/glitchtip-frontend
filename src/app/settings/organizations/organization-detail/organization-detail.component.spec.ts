@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 
 import { OrganizationDetailComponent } from "./organization-detail.component";
+import { MaterialModule } from "src/app/shared/material.module";
 
 describe("OrganizationDetailComponent", () => {
   let component: OrganizationDetailComponent;
@@ -11,7 +12,7 @@ describe("OrganizationDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OrganizationDetailComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule]
+      imports: [HttpClientTestingModule, RouterTestingModule, MaterialModule]
     }).compileComponents();
   }));
 

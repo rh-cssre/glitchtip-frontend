@@ -1,12 +1,11 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { MatCardModule } from "@angular/material/card";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 import { NewOrganizationsComponent } from "./new-organization.component";
-import { MatInputModule } from "@angular/material/input";
+import { MaterialModule } from "../shared/material.module";
 
 describe("NewOrganizationsComponent", () => {
   let component: NewOrganizationsComponent;
@@ -20,8 +19,7 @@ describe("NewOrganizationsComponent", () => {
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        MatCardModule,
-        MatInputModule
+        MaterialModule
       ]
     }).compileComponents();
   }));

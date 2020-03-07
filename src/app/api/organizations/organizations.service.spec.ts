@@ -7,8 +7,8 @@ import {
 
 import { OrganizationsService } from "./organizations.service";
 import { Organization } from "./organizations.interface";
-
 import { organizationList } from "./organization-test-data";
+import { MaterialModule } from "src/app/shared/material.module";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;
@@ -16,7 +16,7 @@ describe("OrganizationsService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule]
+      imports: [HttpClientTestingModule, RouterTestingModule, MaterialModule]
     });
     httpTestingController = TestBed.get(HttpTestingController);
     service = TestBed.get(OrganizationsService);
