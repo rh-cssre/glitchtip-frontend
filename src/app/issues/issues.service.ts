@@ -6,7 +6,7 @@ import {
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
-import { tap, catchError, map } from "rxjs/operators";
+import { tap, catchError, map, distinctUntilChanged } from "rxjs/operators";
 import {
   Issue,
   IssueWithSelected,
@@ -108,25 +108,26 @@ export class IssuesService {
       }
       // console.log("process get param", preppedParams);
       return preppedParams;
-    })
+    }),
+    distinctUntilChanged()
   );
   appliedProjectIds$ = this.normalizedGetParams$.pipe(
     map(getParams => getParams.project)
   );
 
-  paramWatcher = this.preppedGetParams$.subscribe(getParams => {
-    console.log("params changed. let's update!", getParams);
-    this.getIssues(getParams); // .subscribe();
-  });
+  urlWatcher = combineLatest([
+    this.preppedGetParams$,
+    this.activeOrganizationSlug$
+  ]).subscribe(([getParams, slug]) => {
+    console.log("URL changed!", getParams, slug);
 
-  organizationWatcher = this.activeOrganizationSlug$.subscribe(slug => {
     if (slug === null) {
       this.organizationApiUrl = `${baseUrl}/issues/`;
     } else {
       this.organizationApiUrl = `${baseUrl}/organizations/${slug}/issues/`;
     }
-    console.log("org changed!", this.organizationApiUrl);
-    this.getIssues({});
+
+    this.getIssues(getParams).subscribe();
   });
 
   constructor(
