@@ -5,4 +5,6 @@ metadata:
   labels:
     {{- include "glitchtip.labels" . | nindent 4 }}
 data:
-  ENABLE_SOCIAL_AUTH: {{ .Values.enableSocialAuth | quote }}
+{{- range $k, $v := .Values.environmentVariables }}
+  {{ $k }}: {{ $v | quote }}
+{{- end }}
