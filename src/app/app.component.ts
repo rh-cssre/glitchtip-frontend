@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthService } from "./api/auth/auth.service";
 import { OrganizationsService } from "./api/organizations/organizations.service";
 import { SettingsService } from "./api/settings.service";
@@ -6,8 +6,7 @@ import { SettingsService } from "./api/settings.service";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit {
   title = "glitchtip-frontend";
