@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router, RoutesRecognized, Params } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { tap, map, withLatestFrom } from "rxjs/operators";
+import { tap, map, withLatestFrom, distinctUntilChanged } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization, OrganizationDetail } from "./organizations.interface";
 
@@ -50,7 +50,8 @@ export class OrganizationsService {
     )
   );
   readonly activeOrganizationSlug$ = this.activeOrganizationDetail$.pipe(
-    map(org => (org ? org.slug : null))
+    map(org => (org ? org.slug : null)),
+    distinctUntilChanged()
   );
 
   constructor(private http: HttpClient, private router: Router) {

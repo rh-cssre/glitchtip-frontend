@@ -116,7 +116,7 @@ export class IssuesService {
 
   paramWatcher = this.preppedGetParams$.subscribe(getParams => {
     console.log("params changed. let's update!", getParams);
-    this.getIssues(getParams).subscribe();
+    this.getIssues(getParams); // .subscribe();
   });
 
   organizationWatcher = this.activeOrganizationSlug$.subscribe(slug => {
@@ -126,7 +126,7 @@ export class IssuesService {
       this.organizationApiUrl = `${baseUrl}/organizations/${slug}/issues/`;
     }
     console.log("org changed!", this.organizationApiUrl);
-    this.getIssues({}).subscribe();
+    this.getIssues({});
   });
 
   constructor(
