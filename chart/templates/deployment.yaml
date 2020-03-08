@@ -77,8 +77,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: ALLOWED_HOSTS
-              value: 'staging.glitchtip.com'
           envFrom:
             - secretRef:
                 name: {{ include "glitchtip.fullname" . }}
