@@ -16,7 +16,7 @@ import {
   IssuesUrlParamsState
 } from "./interfaces";
 import { baseUrl } from "../constants";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 
 interface IssuesState {
@@ -26,7 +26,10 @@ interface IssuesState {
   page: number | null;
   nextPage: string | null;
   previousPage: string | null;
+  organizationIssueApiUrl: string | null;
 }
+
+const ISSUES_API_URL = `${baseUrl}/issues/`;
 
 const initialState: IssuesState = {
   issues: [],
@@ -34,7 +37,8 @@ const initialState: IssuesState = {
   issueCount: null,
   page: null,
   nextPage: null,
-  previousPage: null
+  previousPage: null,
+  organizationIssueApiUrl: null
 };
 
 @Injectable({
@@ -43,7 +47,7 @@ const initialState: IssuesState = {
 export class IssuesService {
   private issuesState = new BehaviorSubject<IssuesState>(initialState);
   private getState$ = this.issuesState.asObservable();
-  private url = baseUrl + "/issues/";
+  private url = ISSUES_API_URL;
 
   activeOrganizationSlug$ = this.organizationService.activeOrganizationSlug$;
   organizationApiUrl: string | null;
@@ -115,27 +119,80 @@ export class IssuesService {
     map(getParams => getParams.project)
   );
 
-  urlWatcher = combineLatest([
-    this.preppedGetParams$,
-    this.activeOrganizationSlug$
-  ]).subscribe(([getParams, slug]) => {
-    console.log("URL changed!", getParams, slug);
+  // Turns out you can't have multiple subscriptions to the same observable,
+  // at least not the way I was doing it.
+  // organizationIssueApiUrl$ = this.activeOrganizationSlug$.pipe(
+  //   map(slug => {
+  //     this.setOrganizationIssuesApiUrl(
+  //       slug === null
+  //         ? ISSUES_API_URL
+  //         : `${baseUrl}/organizations/${slug}/issues/`
+  //     );
+  //   })
+  // );
 
-    if (slug === null) {
-      this.organizationApiUrl = `${baseUrl}/issues/`;
-    } else {
-      this.organizationApiUrl = `${baseUrl}/organizations/${slug}/issues/`;
-    }
+  // urlWatcher = combineLatest([
+  //   this.preppedGetParams$,
+  //   this.activeOrganizationSlug$
+  // ]).subscribe(([getParams, slug]) => {
+  //   console.log("URL changed!", getParams, slug);
+  //   this.getIssues(getParams).subscribe();
+  // });
 
-    this.getIssues(getParams).subscribe();
+  paramWatcher = this.preppedGetParams$.subscribe(getParams => {
+    console.log("URL changed by params", getParams);
+    this.triggerGetIssues(getParams);
   });
+
+  orgSlugWatcher = this.activeOrganizationSlug$.subscribe(slug => {
+    console.log("URL changed by slug", slug);
+
+    // If we're switching from null to something, then hopefully (for the sake
+    // of my assumptions) we're doing an initial load, and we'd want to keep
+    // the URL params
+    const currentUrl = this.issuesState.getValue().organizationIssueApiUrl;
+    const keepParams = currentUrl === null;
+
+    this.setOrganizationIssuesApiUrl(
+      slug === null ? null : `${baseUrl}/organizations/${slug}/issues/`
+    );
+
+    // Rudimentary gate to make sure we're on the right page.
+    // Probably need to do this somewhere else, maybe in another way.
+    const onIssuesPage =
+      this.router.url.includes("issues") &&
+      this.router.url.includes("organizations");
+
+    if (slug !== null && onIssuesPage) {
+      this.router.navigate(["organizations", slug, "issues"], {
+        queryParams: {},
+        queryParamsHandling: keepParams ? "preserve" : ""
+      });
+      this.triggerGetIssues({});
+    }
+  });
+
+  triggerGetIssues(params: IssuesUrlParams) {
+    const url = this.issuesState.getValue().organizationIssueApiUrl;
+    console.log("get issues", url);
+    if (url) {
+      this.getIssues(params, url).subscribe();
+    }
+  }
 
   constructor(
     private http: HttpClient,
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
-    private organizationService: OrganizationsService
-  ) {}
+    private organizationService: OrganizationsService,
+    private router: Router
+  ) {
+    // this.router.events.subscribe(event => {
+    //   if (event instanceof RouterEvent) {
+    //     console.log("router event from issue service constructor!", event.url);
+    //   }
+    // });
+  }
 
   urlParamsToObject(url: string | null) {
     return url
@@ -167,11 +224,8 @@ export class IssuesService {
     }
   }
 
-  getIssues(params: IssuesUrlParams) {
-    return this.retrieveIssues(
-      this.organizationApiUrl ? this.organizationApiUrl : this.url,
-      params
-    );
+  getIssues(params: IssuesUrlParams, url: string) {
+    return this.retrieveIssues(url, params);
   }
 
   toggleSelected(issueId: number) {
@@ -278,6 +332,13 @@ export class IssuesService {
         issueIds.includes(issue.id) ? { ...issue, status } : issue
       ),
       selectedIssues: []
+    });
+  }
+
+  private setOrganizationIssuesApiUrl(url: string | null) {
+    this.issuesState.next({
+      ...this.issuesState.getValue(),
+      organizationIssueApiUrl: url
     });
   }
 
