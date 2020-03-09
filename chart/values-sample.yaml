@@ -12,3 +12,7 @@ web:
 worker:
   hpa:
     enabled: true
+
+environmentVariables:
+  ENABLE_SOCIAL_AUTH: true
+  GLITCHTIP_DOMAIN: https://staging.glitchtip.com

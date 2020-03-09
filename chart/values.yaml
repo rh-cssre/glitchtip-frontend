@@ -13,15 +13,18 @@ fullnameOverride: ""
 databaseURL:
 secretKey:
 redisURL:
-enableSocialAuth: false
+
+environmentVariables:
+  ENABLE_SOCIAL_AUTH: false
+  GLITCHTIP_DOMAIN: https://example.com
 
 web:
   replicaCount: 1
   hpa:
     enabled: false
-    cputhreshold: 60
+    cputhreshold: 70
     minpods: 2
-    maxpods: 5
+    maxpods: 4
   resources:
     {}
     # limits:
@@ -46,9 +49,9 @@ worker:
   replicaCount: 1
   hpa:
     enabled: false
-    cputhreshold: 60
+    cputhreshold: 90
     minpods: 1
-    maxpods: 10
+    maxpods: 4
   resources:
     {}
     # limits:

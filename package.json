@@ -4,18 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check",
-    "start-marketing": "ng serve marketing",
     "build": "ng build",
-    "test": "ng test glitchtip-frontend",
+    "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "analyze": "webpack-bundle-analyzer dist/stats-es2015.json",
-    "dev:ssr": "ng run marketing:serve-ssr",
-    "serve:ssr": "node dist/marketing-server/main.js",
-    "build:ssr": "ng build --prod && ng run marketing:server:production",
-    "prerender": "ng run marketing:prerender"
+    "analyze": "webpack-bundle-analyzer dist/stats-es2015.json"
   },
   "private": true,
   "dependencies": {
@@ -30,7 +25,6 @@
     "@angular/platform-browser-dynamic": "~9.0.0",
     "@angular/platform-server": "~9.0.0",
     "@angular/router": "~9.0.0",
-    "@nguniversal/express-engine": "^9.0.0",
     "@storybook/addon-knobs": "^5.3.12",
     "angular-oauth2-oidc": "^8.0.4",
     "express": "^4.15.2",
@@ -44,7 +38,6 @@
     "@angular/compiler-cli": "~9.0.0",
     "@angular/language-service": "~9.0.0",
     "@babel/core": "^7.7.2",
-    "@nguniversal/builders": "^9.0.0",
     "@storybook/addon-actions": "^5.3.12",
     "@storybook/addon-links": "^5.3.12",
     "@storybook/addon-notes": "^5.3.12",

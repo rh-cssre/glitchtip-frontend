@@ -73,6 +73,10 @@ spec:
             - name: REDIS_PORT
               value: {{ template "glitchtip.redis.port" . }}
             {{- end }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
           envFrom:
             - secretRef:
                 name: {{ include "glitchtip.fullname" . }}
