@@ -17,6 +17,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,7 +34,10 @@ import { MainNavModule } from "./main-nav/main-nav.module";
       headerName: "X-CSRFTOKEN"
     }),
     MainNavModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers
+    })
   ],
   providers: [
     {
