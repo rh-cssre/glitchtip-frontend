@@ -7,6 +7,10 @@ import {
   HTTP_INTERCEPTORS
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import { StoreModule } from "@ngrx/store";
+import { reducers, metaReducers } from "./reducers";
+import { EffectsModule } from "@ngrx/effects";
+import { StoreRouterConnectingModule } from "@ngrx/router-store";
 import { OAuthModule } from "angular-oauth2-oidc";
 
 import { AppComponent } from "./app.component";
@@ -17,8 +21,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,7 +39,9 @@ import { reducers, metaReducers } from './reducers';
     SharedModule,
     StoreModule.forRoot(reducers, {
       metaReducers
-    })
+    }),
+    EffectsModule.forRoot([]),
+    StoreRouterConnectingModule.forRoot()
   ],
   providers: [
     {
