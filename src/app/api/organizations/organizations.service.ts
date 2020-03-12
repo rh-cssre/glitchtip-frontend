@@ -5,7 +5,6 @@ import { BehaviorSubject, combineLatest } from "rxjs";
 import { tap, map, withLatestFrom } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization, OrganizationDetail } from "./organizations.interface";
-import { IssuesService } from "src/app/issues/issues.service";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -54,11 +53,7 @@ export class OrganizationsService {
     map(org => (org ? org.slug : null))
   );
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private issuesService: IssuesService
-  ) {
+  constructor(private http: HttpClient, private router: Router) {
     this.router.events.subscribe(val => {
       if (val instanceof RoutesRecognized && val.state.root.firstChild) {
         this.routeParams = val.state.root.firstChild.params;
@@ -102,11 +97,17 @@ export class OrganizationsService {
       .getValue()
       .organizations.find(org => org.id === activeOrganizationId);
     if (organization) {
-      this.getOrganizationDetail(organization.slug).toPromise();
-      if (this.router.url.includes("issues")) {
-        this.router.navigate(["organizations", organization.slug, "issues"]);
-        this.issuesService.getIssues({}).subscribe();
-      }
+      this.getOrganizationDetail(organization.slug)
+        .pipe(
+          tap(organizationDetail =>
+            this.router.navigate([
+              "organizations",
+              organizationDetail.slug,
+              "issues"
+            ])
+          )
+        )
+        .toPromise();
     }
   }
 

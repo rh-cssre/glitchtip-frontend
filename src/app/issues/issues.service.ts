@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import {
   HttpClient,
   HttpParams,
@@ -16,7 +17,6 @@ import {
   IssuesUrlParamsState
 } from "./interfaces";
 import { baseUrl } from "../constants";
-import { ActivatedRoute } from "@angular/router";
 
 interface IssuesState {
   issues: Issue[];
@@ -111,7 +111,6 @@ export class IssuesService {
   );
 
   paramWatcher = this.preppedGetParams$.subscribe(getParams => {
-    console.log("params changed. let's update!", getParams);
     this.getIssues(getParams).subscribe();
   });
 
@@ -228,7 +227,6 @@ export class IssuesService {
   }
 
   clearState() {
-    console.log("clear state!");
     this.issuesState.next(initialState);
   }
 
