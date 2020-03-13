@@ -28,9 +28,11 @@ describe("IssuesService", () => {
 
   it("should retrieve a list of issues", () => {
     const testData: Issue[] = issueList;
-    const url = "/api/0/issues/";
-    service.retrieveIssues(url).toPromise();
-    const req = httpTestingController.expectOne(url);
+    const url = "burke-software-consulting";
+    (service as any).retrieveIssues(url).toPromise();
+    const req = httpTestingController.expectOne(
+      "/api/0/organizations/burke-software-consulting/issues/"
+    );
     req.flush(testData, { headers: { Link: "link header info" } });
     service.issues$.subscribe(issues => expect(issues).toEqual(testData));
   });

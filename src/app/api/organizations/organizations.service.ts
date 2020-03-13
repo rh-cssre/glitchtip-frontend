@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router, RoutesRecognized, Params } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { tap, map, withLatestFrom } from "rxjs/operators";
+import { tap, map, withLatestFrom, filter } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization, OrganizationDetail } from "./organizations.interface";
 
@@ -92,6 +92,8 @@ export class OrganizationsService {
   }
 
   changeActiveOrganization(activeOrganizationId: number) {
+    const activeOrgIdIsNull =
+      this.organizationsState.getValue().activeOrganizationId === null;
     this.setActiveOrganizationId(activeOrganizationId);
     const organization = this.organizationsState
       .getValue()
@@ -99,6 +101,8 @@ export class OrganizationsService {
     if (organization) {
       this.getOrganizationDetail(organization.slug)
         .pipe(
+          // Only navigate when the user goes from one organization to another
+          filter(() => !activeOrgIdIsNull),
           tap(organizationDetail =>
             this.router.navigate([
               "organizations",

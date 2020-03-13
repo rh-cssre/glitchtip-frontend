@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   ViewChild,
   Output,
@@ -15,7 +14,6 @@ import {
 } from "@angular/material/list";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { IssuesService } from "../issues.service";
 import { Router } from "@angular/router";
 
 @Component({
@@ -24,12 +22,9 @@ import { Router } from "@angular/router";
   styleUrls: ["./header-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderNavComponent implements OnInit {
+export class HeaderNavComponent {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
-
-  /** Projects that were previously selected and applied */
-  appliedProjectIds$ = this.issuesService.appliedProjectIds$;
 
   /** Projects that are selected in this component but not yet applied */
   selectedProjectIds = new BehaviorSubject<number[]>([]);
@@ -73,17 +68,6 @@ export class HeaderNavComponent implements OnInit {
     )
   );
 
-  selectedEqualsAppliedProjects$ = combineLatest([
-    this.appliedProjectIds$,
-    this.selectedProjectIds$
-  ]).pipe(
-    map(
-      ([appliedProjectIds, selectedProjectIds]) =>
-        appliedProjectIds?.sort().join(",") ===
-        selectedProjectIds.sort().join(",")
-    )
-  );
-
   isAllSelected$ = combineLatest([
     this.projects$,
     this.selectedProjectIds$
@@ -108,24 +92,10 @@ export class HeaderNavComponent implements OnInit {
     );
   });
 
-  resetSubject = new Subject<any>();
-  resetSubscription = combineLatest([
-    this.resetSubject,
-    this.appliedProjectIds$
-  ]).subscribe(([_, projectIds]) => {
-    this.selectedProjectIds.next(
-      projectIds ? projectIds.map(id => parseInt(id, 10)) : []
-    );
-  });
-
   @Output() applyFilter: EventEmitter<number[]>;
 
   @ViewChild(MatSelectionList, { static: false })
   private selectionList: MatSelectionList;
-
-  ngOnInit() {
-    this.resetSubject.next();
-  }
 
   updateSelectedOptions(change: MatSelectionListChange) {
     this.selectedProjectIds.next(
@@ -151,7 +121,6 @@ export class HeaderNavComponent implements OnInit {
 
   constructor(
     private organizationsService: OrganizationsService,
-    private issuesService: IssuesService,
     private router: Router
   ) {}
 }

@@ -93,7 +93,6 @@
           queryParamsHandling="merge"
           mat-button
           [disabled]="(hasPreviousPage$ | async) === false"
-          (click)="getPreviousPage()"
         >
           <mat-icon>keyboard_arrow_left</mat-icon>
         </a>
@@ -103,10 +102,14 @@
           queryParamsHandling="merge"
           mat-button
           *ngIf="hasNextPage$ | async"
-          (click)="getNextPage()"
         >
           <mat-icon>keyboard_arrow_right</mat-icon>
         </a>
+        <mat-progress-spinner
+          *ngIf="loading$ | async"
+          color="primary"
+          mode="indeterminate"
+        ></mat-progress-spinner>
       </td>
     </ng-container>
 
