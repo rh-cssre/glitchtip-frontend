@@ -16,6 +16,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 // Import all material modules that are used in lazy loaded components here
 // Do not include this module in modules that are not lazy loaded
@@ -37,7 +38,8 @@ export const COMPONENTS = [
   MatSidenavModule,
   MatSnackBarModule,
   MatTableModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

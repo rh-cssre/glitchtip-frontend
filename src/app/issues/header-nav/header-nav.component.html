@@ -1,6 +1,6 @@
 <section>
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel (closed)="resetSubject.next()"  class="mat-elevation-z1">
+    <mat-expansion-panel class="mat-elevation-z1">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ selectedProjectsString$ | async }}
@@ -30,23 +30,15 @@
         </mat-list-option>
       </mat-selection-list>
       <div class="button-group">
-        <button
-          mat-stroked-button
-          [disabled]="selectedEqualsAppliedProjects$ | async"
-          (click)="resetSubject.next()"
-        >
+        <button mat-stroked-button [disabled]="">
           Reset
         </button>
-        <button
-          mat-stroked-button
-          [disabled]="isAllSelected$ | async"
-          (click)="selectAllSubject.next()"
-        >
+        <button mat-stroked-button [disabled]="isAllSelected$ | async">
           Select All
         </button>
         <button
           mat-flat-button
-          [disabled]="selectedEqualsAppliedProjects$ | async"
+          [disabled]=""
           (click)="submitApplyFilter()"
           color="primary"
         >

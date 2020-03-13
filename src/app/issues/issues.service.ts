@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import {
   HttpClient,
   HttpParams,
@@ -7,16 +6,15 @@ import {
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
-import { tap, catchError, map } from "rxjs/operators";
+import { tap, catchError, map, distinctUntilChanged } from "rxjs/operators";
 import {
   Issue,
   IssueWithSelected,
   IssueStatus,
-  UpdateStatusResponse,
-  IssuesUrlParams,
-  IssuesUrlParamsState
+  UpdateStatusResponse
 } from "./interfaces";
 import { baseUrl } from "../constants";
+import { urlParamsToObject } from "./utils";
 
 interface IssuesState {
   issues: Issue[];
@@ -25,6 +23,7 @@ interface IssuesState {
   page: number | null;
   nextPage: string | null;
   previousPage: string | null;
+  loading: boolean;
 }
 
 const initialState: IssuesState = {
@@ -33,7 +32,8 @@ const initialState: IssuesState = {
   issueCount: null,
   page: null,
   nextPage: null,
-  previousPage: null
+  previousPage: null,
+  loading: false
 };
 
 @Injectable({
@@ -43,8 +43,6 @@ export class IssuesService {
   private issuesState = new BehaviorSubject<IssuesState>(initialState);
   private getState$ = this.issuesState.asObservable();
   private url = baseUrl + "/issues/";
-
-  // debugState = this.getState$.subscribe(state => console.log(state));
 
   issues$ = this.getState$.pipe(map(state => state.issues));
   selectedIssues$ = this.getState$.pipe(map(state => state.selectedIssues));
@@ -68,90 +66,26 @@ export class IssuesService {
     map(state => state.previousPage !== null)
   );
   nextPageParams$ = this.getState$.pipe(
-    map(state => this.urlParamsToObject(state.nextPage))
+    map(state => urlParamsToObject(state.nextPage))
   );
   previousPageParams$ = this.getState$.pipe(
-    map(state => this.urlParamsToObject(state.previousPage))
+    map(state => urlParamsToObject(state.previousPage))
+  );
+  loading$ = this.getState$.pipe(
+    map(state => state.loading),
+    distinctUntilChanged()
   );
 
-  /** Watch the URL for param changes */
-  routeQueryParams$ = this.route.queryParams;
-  /* Make params easier to work with in the code */
-  normalizedGetParams$: Observable<
-    IssuesUrlParamsState
-  > = this.routeQueryParams$.pipe(
-    map(params => ({
-      project: this.getAppliedProjectsFromParams(params.project),
-      query: params.query ? params.query : "is:unresolved",
-      cursor: params.cursor ? params.cursor : null
-    }))
-  );
-  /* Convert params to what the URL needs */
-  preppedGetParams$: Observable<
-    IssuesUrlParams
-  > = this.normalizedGetParams$.pipe(
-    map(getParams => {
-      // Trying to futureproof this a bit
-      const keys = Object.keys(getParams);
-      const preppedParams: IssuesUrlParams = {};
-      keys.forEach(param =>
-        getParams[param] ? (preppedParams[param] = getParams[param]) : null
-      );
-      // Project is a special case. Need to be able to do project=1&project=2
-      // Which is possible with JSON but not with JS objects
-      if (getParams.project) {
-        preppedParams.project = getParams.project.join(",");
-      }
-      // console.log("process get param", preppedParams);
-      return preppedParams;
-    })
-  );
-  appliedProjectIds$ = this.normalizedGetParams$.pipe(
-    map(getParams => getParams.project)
-  );
+  constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
 
-  paramWatcher = this.preppedGetParams$.subscribe(getParams => {
-    this.getIssues(getParams).subscribe();
-  });
-
-  constructor(
-    private http: HttpClient,
-    private snackbar: MatSnackBar,
-    private route: ActivatedRoute
-  ) {}
-
-  urlParamsToObject(url: string | null) {
-    return url
-      ? this.paramsToObject(new URLSearchParams(url.split("?")[1]))
-      : null;
-  }
-
-  paramsToObject(entries) {
-    const result = {};
-    for (const entry of entries) {
-      // each 'entry' is a [key, value] tuple
-      const [key, value] = entry;
-      result[key] = value;
-    }
-    return result;
-  }
-
-  getNextPage() {
-    const nextPage = this.issuesState.getValue().nextPage;
-    if (nextPage) {
-      this.retrieveIssues(nextPage).toPromise();
-    }
-  }
-
-  getPreviousPage() {
-    const previousPage = this.issuesState.getValue().previousPage;
-    if (previousPage) {
-      this.retrieveIssues(previousPage).toPromise();
-    }
-  }
-
-  getIssues(params: IssuesUrlParams) {
-    return this.retrieveIssues(this.url, params);
+  /** Refresh issues data. orgSlug is required. */
+  getIssues(
+    orgSlug: string,
+    cursor: string | undefined,
+    query: string = "is:unresolved"
+  ) {
+    this.setLoading(true);
+    this.retrieveIssues(orgSlug, cursor, query).toPromise();
   }
 
   toggleSelected(issueId: number) {
@@ -191,27 +125,22 @@ export class IssuesService {
     return this.updateStatus(selectedIssues, status).toPromise();
   }
 
-  // Not private for testing purposes
-  retrieveIssues(url: string, params?: IssuesUrlParams) {
+  /** Get issues from backend using appropriate endpoint based on organization */
+  private retrieveIssues(
+    organizationSlug?: string,
+    cursor?: string,
+    query?: string
+  ) {
+    let url = this.url;
     let httpParams = new HttpParams();
-    // Assign our params to HttpParams object
-    if (params) {
-      Object.keys(params).forEach(key => {
-        if (key !== "project") {
-          httpParams = httpParams.append(key, params[key]);
-        }
-      });
-      // Project is a special case, if there are more than one selected
-      if (params.project) {
-        if (params.project.includes(",")) {
-          const split = params.project.split(",");
-          split.forEach(id => {
-            httpParams = httpParams.append("project", id);
-          });
-        } else {
-          httpParams = httpParams.append("project", params.project);
-        }
-      }
+    if (organizationSlug) {
+      url = `${baseUrl}/organizations/${organizationSlug}/issues/`;
+    }
+    if (cursor) {
+      httpParams = httpParams.set("cursor", cursor);
+    }
+    if (query) {
+      httpParams = httpParams.set("query", query);
     }
     return this.http
       .get<Issue[]>(url, { observe: "response", params: httpParams })
@@ -261,7 +190,15 @@ export class IssuesService {
   }
 
   private setIssues(issues: Issue[]) {
-    this.issuesState.next({ ...this.issuesState.getValue(), issues });
+    this.issuesState.next({
+      ...this.issuesState.getValue(),
+      issues,
+      loading: false
+    });
+  }
+
+  private setLoading(loading: boolean) {
+    this.issuesState.next({ ...this.issuesState.getValue(), loading });
   }
 
   /**
@@ -287,9 +224,5 @@ export class IssuesService {
       nextPage: parts.next ? parts.next : null,
       previousPage: parts.prev ? parts.prev : null
     });
-  }
-
-  private getAppliedProjectsFromParams(project: string | string[] | null) {
-    return project ? [...project] : null;
   }
 }
