@@ -87,7 +87,7 @@
 
     <ng-container matColumnDef="pagination">
       <td mat-footer-cell *matFooterCellDef colspan="3" class="footer">
-        <ng-container *ngIf="!(loading$ | async)">
+        <ng-container *ngIf="(loading$ | async) === false">
           <a
             [routerLink]=""
             [queryParams]="previousParams$ | async"
