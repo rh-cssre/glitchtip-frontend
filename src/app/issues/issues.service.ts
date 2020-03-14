@@ -6,7 +6,7 @@ import {
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
-import { tap, catchError, map, distinctUntilChanged } from "rxjs/operators";
+import { tap, catchError, map } from "rxjs/operators";
 import {
   Issue,
   IssueWithSelected,
@@ -71,10 +71,7 @@ export class IssuesService {
   previousPageParams$ = this.getState$.pipe(
     map(state => urlParamsToObject(state.previousPage))
   );
-  loading$ = this.getState$.pipe(
-    map(state => state.loading),
-    distinctUntilChanged()
-  );
+  loading$ = this.getState$.pipe(map(state => state.loading));
 
   constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
 

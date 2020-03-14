@@ -87,29 +87,33 @@
 
     <ng-container matColumnDef="pagination">
       <td mat-footer-cell *matFooterCellDef colspan="3" class="footer">
-        <a
-          [routerLink]=""
-          [queryParams]="previousParams$ | async"
-          queryParamsHandling="merge"
-          mat-button
-          [disabled]="(hasPreviousPage$ | async) === false"
-        >
-          <mat-icon>keyboard_arrow_left</mat-icon>
-        </a>
-        <a
-          [routerLink]=""
-          [queryParams]="nextParams$ | async"
-          queryParamsHandling="merge"
-          mat-button
-          *ngIf="hasNextPage$ | async"
-        >
-          <mat-icon>keyboard_arrow_right</mat-icon>
-        </a>
-        <mat-progress-spinner
-          *ngIf="loading$ | async"
-          color="primary"
-          mode="indeterminate"
-        ></mat-progress-spinner>
+        <ng-container *ngIf="!(loading$ | async)">
+          <a
+            [routerLink]=""
+            [queryParams]="previousParams$ | async"
+            queryParamsHandling="merge"
+            mat-button
+            [disabled]="(hasPreviousPage$ | async) === false"
+          >
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </a>
+          <a
+            [routerLink]=""
+            [queryParams]="nextParams$ | async"
+            queryParamsHandling="merge"
+            mat-button
+            *ngIf="hasNextPage$ | async"
+          >
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </a>
+        </ng-container>
+        <div *ngIf="loading$ | async" class="spinner-container">
+          <mat-progress-spinner
+            [diameter]="33"
+            color="primary"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+        </div>
       </td>
     </ng-container>
 

@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { Subscription, combineLatest } from "rxjs";
 import { map, filter, withLatestFrom } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
 
@@ -18,16 +18,19 @@ import { IssuesService } from "../issues.service";
 })
 export class IssuesPageComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ["select", "status", "title"];
+  loading$ = this.issuesService.loading$;
   form = new FormGroup({
     query: new FormControl("")
   });
-  issues$ = this.issuesService.issuesWithSelected$;
+  issues$ = combineLatest([
+    this.issuesService.issuesWithSelected$,
+    this.loading$
+  ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
   areAllSelected$ = this.issuesService.areAllSelected$;
   hasNextPage$ = this.issuesService.hasNextPage$;
   hasPreviousPage$ = this.issuesService.hasPreviousPage$;
   nextParams$ = this.issuesService.nextPageParams$;
   previousParams$ = this.issuesService.previousPageParams$;
-  loading$ = this.issuesService.loading$;
   routerEventSubscription: Subscription;
 
   constructor(

@@ -54,3 +54,9 @@ app-header-nav {
   background: lightgray;
   text-decoration: line-through;
 }
+
+.spinner-container {
+  mat-progress-spinner {
+    margin: 30px auto;
+  }
+}
