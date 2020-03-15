@@ -5,6 +5,7 @@ import { NewProjectComponent } from "./projects/new-project/new-project.componen
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { OrganizationsComponent } from "./organizations/organizations.component";
+import { SubscriptionComponent } from "./subscription/subscription.component";
 
 const routes: Routes = [
   { path: "", component: SettingsComponent },
@@ -13,7 +14,9 @@ const routes: Routes = [
   { path: "projects/new", component: NewProjectComponent },
   { path: "projects/:slug", component: ProjectDetailComponent },
 
-  { path: ":slug", component: OrganizationsComponent }
+  { path: ":slug", component: OrganizationsComponent },
+
+  { path: ":slug/subscription", component: SubscriptionComponent }
 ];
 
 @NgModule({

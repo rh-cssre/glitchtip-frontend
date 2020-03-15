@@ -11,6 +11,7 @@ import { ProjectDetailComponent } from "./projects/project-detail/project-detail
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
+import { SubscriptionComponent } from "./subscription/subscription.component";
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { SettingsComponent } from "./settings/settings.component";
     ProjectDetailComponent,
     OrganizationsComponent,
     OrganizationDetailComponent,
-    SettingsComponent
+    SettingsComponent,
+    SubscriptionComponent
   ]
 })
 export class SettingsModule {}

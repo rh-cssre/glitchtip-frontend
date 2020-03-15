@@ -5,10 +5,12 @@ import { tap, map } from "rxjs/operators";
 
 interface SettingsState {
   socialAuth: boolean;
+  billingEnabled: boolean;
 }
 
 const initialState: SettingsState = {
-  socialAuth: false
+  socialAuth: false,
+  billingEnabled: false
 };
 
 @Injectable({
@@ -17,6 +19,7 @@ const initialState: SettingsState = {
 export class SettingsService {
   private readonly state = new BehaviorSubject<SettingsState>(initialState);
   socialAuth$ = this.state.pipe(map(settings => settings.socialAuth));
+  billingEnabled$ = this.state.pipe(map(settings => settings.billingEnabled));
   private readonly url = "/api/settings/";
 
   constructor(private http: HttpClient) {}
