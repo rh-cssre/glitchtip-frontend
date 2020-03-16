@@ -1,6 +1,10 @@
 <section>
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel class="mat-elevation-z1">
+    <mat-expansion-panel
+      #expansionPanel
+      (closed)="resetSubject.next()"
+      class="mat-elevation-z1"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ selectedProjectsString$ | async }}
@@ -17,7 +21,6 @@
       </mat-form-field>
 
       <mat-selection-list
-        #projectFilter
         [disableRipple]="true"
         (selectionChange)="updateSelectedOptions($event)"
       >
@@ -30,15 +33,16 @@
         </mat-list-option>
       </mat-selection-list>
       <div class="button-group">
-        <button mat-stroked-button [disabled]="">
-          Reset
-        </button>
-        <button mat-stroked-button [disabled]="isAllSelected$ | async">
-          Select All
+        <button
+          *ngIf="someProjectsAreSelected$ | async"
+          mat-stroked-button
+          (click)="resetSubject.next(); submitApplyFilter(true)"
+        >
+          View All
         </button>
         <button
           mat-flat-button
-          [disabled]=""
+          [disabled]="selectedEqualsAppliedProjects$ | async"
           (click)="submitApplyFilter()"
           color="primary"
         >
@@ -46,21 +50,5 @@
         </button>
       </div>
     </mat-expansion-panel>
-    <!--mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Environments
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      Production, staging
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Time Range
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      Last 24 hours, Last 7 days, Last 14 days, Last 30 days, Absolute date
-    </mat-expansion-panel-->
   </mat-accordion>
 </section>

@@ -80,7 +80,7 @@ export class IssuesService {
     orgSlug: string,
     cursor: string | undefined,
     query: string = "is:unresolved",
-    project: string[] | undefined
+    project: string[] | null
   ) {
     this.setLoading(true);
     this.retrieveIssues(orgSlug, cursor, query, project).toPromise();
@@ -128,7 +128,7 @@ export class IssuesService {
     organizationSlug?: string,
     cursor?: string,
     query?: string,
-    project?: string[] | undefined
+    project?: string[] | null
   ) {
     let url = this.url;
     let httpParams = new HttpParams();
@@ -142,7 +142,9 @@ export class IssuesService {
       httpParams = httpParams.set("query", query);
     }
     if (project) {
-      httpParams = httpParams.set("project", project);
+      project.forEach(id => {
+        httpParams = httpParams.append("project", id);
+      });
     }
     return this.http
       .get<Issue[]>(url, { observe: "response", params: httpParams })

@@ -46,14 +46,16 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
           const orgSlug: string | undefined = params["org-slug"];
           const cursor: string | undefined = queryParams.cursor;
           const query: string | undefined = queryParams.query;
-          const project: string | undefined =
-            typeof queryParams.project === "string"
-              ? [...queryParams.project]
-              : queryParams.project;
-          return [orgSlug, cursor, query, project];
+          let project: string[] | null = null;
+          if (typeof queryParams.project === "string") {
+            project = [...queryParams.project];
+          } else if (typeof queryParams.project === "object") {
+            project = queryParams.project;
+          }
+          return { orgSlug, cursor, query, project };
         })
       )
-      .subscribe(([orgSlug, cursor, query, project]) => {
+      .subscribe(({ orgSlug, cursor, query, project }) => {
         if (orgSlug) {
           this.issuesService.getIssues(orgSlug, cursor, query, project);
         }

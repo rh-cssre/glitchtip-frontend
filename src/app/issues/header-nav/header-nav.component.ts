@@ -2,19 +2,16 @@ import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
-  Output,
-  EventEmitter
+  OnInit
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
 import { Observable, BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { FormControl } from "@angular/forms";
-import {
-  MatSelectionList,
-  MatSelectionListChange
-} from "@angular/material/list";
+import { MatSelectionListChange } from "@angular/material/list";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { MatExpansionPanel } from "@angular/material/expansion";
 
 @Component({
   selector: "app-header-nav",
@@ -22,9 +19,23 @@ import { Router } from "@angular/router";
   styleUrls: ["./header-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderNavComponent {
+export class HeaderNavComponent implements OnInit {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
+
+  /** Projects that were previously selected and applied */
+  appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
+    map(params => {
+      const project = params.project;
+      let projectToReturn: string[] = [];
+      if (typeof project === "string") {
+        projectToReturn = [project];
+      } else if (typeof project === "object") {
+        projectToReturn = project;
+      }
+      return projectToReturn;
+    })
+  );
 
   /** Projects that are selected in this component but not yet applied */
   selectedProjectIds = new BehaviorSubject<number[]>([]);
@@ -68,34 +79,34 @@ export class HeaderNavComponent {
     )
   );
 
-  isAllSelected$ = combineLatest([
-    this.projects$,
+  selectedEqualsAppliedProjects$ = combineLatest([
+    this.appliedProjectIds$,
     this.selectedProjectIds$
   ]).pipe(
     map(
-      ([projects, selectedProjectIds]) =>
-        projects
-          ?.map(project => project.id)
-          .sort()
-          .join(",") === selectedProjectIds.sort().join(",")
+      ([appliedProjectIds, selectedProjectIds]) =>
+        appliedProjectIds?.sort().join(",") ===
+        selectedProjectIds.sort().join(",")
     )
   );
 
-  selectAllSubject = new Subject<any>();
-  selectAllSubscription = combineLatest([
-    this.selectAllSubject,
-    this.projects$
-  ]).subscribe(([_, projects]) => {
-    this.selectionList.selectAll();
+  someProjectsAreSelected$ = this.selectedProjectIds$.pipe(
+    map(selectedProjectIds => selectedProjectIds.length !== 0)
+  );
+
+  resetSubject = new Subject<any>();
+
+  resetSubscription = combineLatest([
+    this.resetSubject,
+    this.appliedProjectIds$
+  ]).subscribe(([_, projectIds]) => {
     this.selectedProjectIds.next(
-      projects ? projects.map(project => project.id) : []
+      projectIds ? projectIds.map(id => parseInt(id, 10)) : []
     );
   });
 
-  @Output() applyFilter: EventEmitter<number[]>;
-
-  @ViewChild(MatSelectionList, { static: false })
-  private selectionList: MatSelectionList;
+  @ViewChild("expansionPanel", { static: false })
+  private expansionPanel: MatExpansionPanel;
 
   updateSelectedOptions(change: MatSelectionListChange) {
     this.selectedProjectIds.next(
@@ -109,18 +120,30 @@ export class HeaderNavComponent {
     return this.selectedProjectIds.getValue().find(id => id === projectId);
   }
 
-  submitApplyFilter() {
+  /**
+   * @param allProjects Optional override that clears project params, which
+   * shows all projects
+   */
+  submitApplyFilter(allProjects = false) {
     const selectedProjectIds = this.selectedProjectIds.getValue();
+    let project: number[] | null = null;
+    if (selectedProjectIds.length !== 0 && allProjects === false) {
+      project = selectedProjectIds;
+    }
     this.router.navigate([], {
-      queryParams: {
-        project: selectedProjectIds.length > 0 ? selectedProjectIds : null
-      },
+      queryParams: { project },
       queryParamsHandling: "merge"
     });
+    this.expansionPanel.close();
+  }
+
+  ngOnInit() {
+    this.resetSubject.next();
   }
 
   constructor(
     private organizationsService: OrganizationsService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 }
