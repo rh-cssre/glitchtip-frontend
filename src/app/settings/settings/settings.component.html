@@ -15,8 +15,19 @@
           routerLink="/settings/projects"
           routerLinkActive="active-route"
           >Projects</a
-        ></mat-nav-list
-      >
+        >
+        <a
+          *ngIf="billingEnabled$ | async"
+          mat-list-item
+          [routerLink]="[
+            '/settings',
+            organizationSlug$ | async,
+            'subscription'
+          ]"
+          routerLinkActive="active-route"
+          >Subscription</a
+        >
+      </mat-nav-list>
     </nav>
   </mat-drawer>
   <mat-drawer-content><ng-content></ng-content></mat-drawer-content>
