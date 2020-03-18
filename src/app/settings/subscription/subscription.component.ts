@@ -1,4 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Subscription } from "rxjs";
+import { map, filter } from "rxjs/operators";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 
 @Component({
   selector: "app-subscription",
@@ -6,11 +10,26 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
   styleUrls: ["./subscription.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SubscriptionComponent implements OnInit {
+export class SubscriptionComponent implements OnDestroy {
+  subscription$ = this.service.subscription$;
+  routerSubscription: Subscription;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    private service: SubscriptionsService,
+    private route: ActivatedRoute
+  ) {
+    this.routerSubscription = this.route.params
+      .pipe(
+        map(params => params.slug as string),
+        filter(slug => !!slug)
+      )
+      .subscribe(slug => {
+        this.service.retrieveSubscription(slug).toPromise();
+      });
   }
 
+  ngOnDestroy() {
+    this.routerSubscription.unsubscribe();
+    this.service.clearState();
+  }
 }

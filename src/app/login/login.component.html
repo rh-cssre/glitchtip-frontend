@@ -16,6 +16,9 @@
         <mat-error *ngIf="email?.errors?.email"
           >Enter a valid email address</mat-error
         >
+        <mat-error *ngIf="email?.errors?.serverError">
+          {{ email?.errors?.serverError }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
         <input

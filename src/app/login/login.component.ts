@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { HttpErrorResponse } from "@angular/common/http";
+import { catchError } from "rxjs/operators";
+import { EMPTY } from "rxjs";
 import { LoginService } from "./login.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
@@ -41,7 +44,17 @@ export class LoginComponent implements OnInit {
         if (provider === "gitlab") {
           this.oauthService.gitlabLogin(accessToken).toPromise();
         } else if (provider === "google") {
-          this.oauthService.googleLogin(accessToken).toPromise();
+          this.oauthService
+            .googleLogin(accessToken)
+            .pipe(
+              catchError((error: HttpErrorResponse) => {
+                if (error.status === 400) {
+                  this.error = error.error.non_field_errors;
+                }
+                return EMPTY;
+              })
+            )
+            .toPromise();
         } else if (provider === "microsoft") {
           this.oauthService.microsoftLogin(accessToken).toPromise();
         }
@@ -91,6 +104,10 @@ export class LoginComponent implements OnInit {
             this.loading = false;
             if (err.status === 400 && err.error.non_field_errors) {
               this.error = err.error.non_field_errors;
+            } else if (err.status === 400 && err.error.email) {
+              this.email?.setErrors({ serverError: err.error.email });
+            } else if (err.status === 400 && err.error.password) {
+              this.password?.setErrors({ serverError: err.error.password });
             } else {
               this.error = "Error";
             }

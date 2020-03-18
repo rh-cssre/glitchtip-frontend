@@ -1,1 +1,6 @@
-<p>subscription works!</p>
+<app-settings>
+  <div *ngIf="subscription$ | async as subscription">
+    Status:
+    {{ subscription.status }}
+  </div>
+</app-settings>
