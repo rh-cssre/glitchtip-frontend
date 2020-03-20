@@ -34,9 +34,10 @@
           {{ organization.name }}
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item routerLink="/organizations/new">
+        <a mat-menu-item routerLink="/organizations/new">
           Create New Organization
-        </button>
+        </a>
+        <button mat-menu-item (click)="this.logout()">Log Out</button>
       </mat-menu>
       <mat-divider class="org-details-divider"></mat-divider>
       <ng-container *ngIf="activeOrganizationDetail$ | async as orgDetails">
