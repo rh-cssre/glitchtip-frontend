@@ -19,6 +19,7 @@ mat-sidenav {
 
   .main-logo {
     width: 115px;
+    cursor: pointer;
   }
 }
 
@@ -52,9 +53,6 @@ mat-sidenav {
 .overflow {
   text-overflow: ellipsis;
   overflow: hidden;
-  // white-space: nowrap;
-  // max-height: 32px;
-  // line-height: 1;
   max-height: 40px;
   line-height: 1.11111;
   font-size: 18px;
@@ -63,12 +61,9 @@ mat-sidenav {
 
 .down-caret {
   transform: scale(1, 0.5);
+  margin-left: 8px;
 }
 
 .org-details-divider {
   margin: 10px 0;
 }
-
-// .wrapper {
-//   margin: 30px;
-// }
