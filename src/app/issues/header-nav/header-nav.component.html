@@ -1,13 +1,9 @@
 <section>
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel
-      #expansionPanel
-      (closed)="resetSubject.next()"
-      class="mat-elevation-z1"
-    >
+    <mat-expansion-panel #expansionPanel class="mat-elevation-z1">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ selectedProjectsString$ | async }}
+          {{ appliedProjectsString$ | async }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-form-field>
@@ -22,7 +18,7 @@
 
       <mat-selection-list
         [disableRipple]="true"
-        (selectionChange)="updateSelectedOptions($event)"
+        (selectionChange)="updateAppliedProjects($event)"
       >
         <mat-list-option
           *ngFor="let project of filteredProjects$ | async"
@@ -36,17 +32,16 @@
         <button
           *ngIf="someProjectsAreSelected$ | async"
           mat-stroked-button
-          (click)="resetSubject.next(); submitApplyFilter(true)"
+          (click)="navigate(null); expansionPanel.close()"
         >
           View All
         </button>
         <button
           mat-flat-button
-          [disabled]="selectedEqualsAppliedProjects$ | async"
-          (click)="submitApplyFilter()"
+          (click)="expansionPanel.close()"
           color="primary"
         >
-          Filter
+          Close
         </button>
       </div>
     </mat-expansion-panel>

@@ -37,26 +37,25 @@ export class HeaderNavComponent implements OnInit {
     })
   );
 
-  /** Projects that are selected in this component but not yet applied */
-  selectedProjectIds = new BehaviorSubject<number[]>([]);
-
-  /** Observable of selectedProjectIds */
-  selectedProjectIds$ = this.selectedProjectIds.asObservable();
+  appliedProjectIds: string[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
-  selectedProjectsString$ = combineLatest([
+  appliedProjectsString$ = combineLatest([
     this.projects$,
-    this.selectedProjectIds$
+    this.appliedProjectIds$
   ]).pipe(
-    map(([projects, selectedProjectIds]) => {
-      switch (selectedProjectIds.length) {
+    map(([projects, ids]) => {
+      switch (ids.length) {
         case 0:
           return "My Projects";
         case projects?.length:
           return "All Projects";
         default:
-          return selectedProjectIds
-            .map(id => projects?.find(project => id === project.id)?.name)
+          return ids
+            .map(
+              id =>
+                projects?.find(project => parseInt(id, 10) === project.id)?.name
+            )
             .join(", ");
       }
     })
@@ -79,66 +78,35 @@ export class HeaderNavComponent implements OnInit {
     )
   );
 
-  selectedEqualsAppliedProjects$ = combineLatest([
-    this.appliedProjectIds$,
-    this.selectedProjectIds$
-  ]).pipe(
-    map(
-      ([appliedProjectIds, selectedProjectIds]) =>
-        appliedProjectIds?.sort().join(",") ===
-        selectedProjectIds.sort().join(",")
-    )
+  someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
+    map(ids => ids.length !== 0)
   );
-
-  someProjectsAreSelected$ = this.selectedProjectIds$.pipe(
-    map(selectedProjectIds => selectedProjectIds.length !== 0)
-  );
-
-  resetSubject = new Subject<any>();
-
-  resetSubscription = combineLatest([
-    this.resetSubject,
-    this.appliedProjectIds$
-  ]).subscribe(([_, projectIds]) => {
-    this.selectedProjectIds.next(
-      projectIds ? projectIds.map(id => parseInt(id, 10)) : []
-    );
-  });
 
   @ViewChild("expansionPanel", { static: false })
-  private expansionPanel: MatExpansionPanel;
+  expansionPanel: MatExpansionPanel;
 
-  updateSelectedOptions(change: MatSelectionListChange) {
-    this.selectedProjectIds.next(
-      change.source.selectedOptions.selected.map(
-        selectedOption => selectedOption.value
-      )
+  updateAppliedProjects(change: MatSelectionListChange) {
+    const project: number[] = change.source.selectedOptions.selected.map(
+      selectedOption => selectedOption.value
     );
+    this.navigate(project.length > 0 ? project : null);
+  }
+
+  navigate(project: number[] | null) {
+    this.router.navigate([], {
+      queryParams: { project: project ? project : null },
+      queryParamsHandling: "merge"
+    });
   }
 
   isSelected(projectId: number) {
-    return this.selectedProjectIds.getValue().find(id => id === projectId);
-  }
-
-  /**
-   * @param allProjects Optional override that clears project params, which
-   * shows all projects
-   */
-  submitApplyFilter(allProjects = false) {
-    const selectedProjectIds = this.selectedProjectIds.getValue();
-    let project: number[] | null = null;
-    if (selectedProjectIds.length !== 0 && allProjects === false) {
-      project = selectedProjectIds;
-    }
-    this.router.navigate([], {
-      queryParams: { project },
-      queryParamsHandling: "merge"
-    });
-    this.expansionPanel.close();
+    return this.appliedProjectIds.find(id => parseInt(id, 10) === projectId);
   }
 
   ngOnInit() {
-    this.resetSubject.next();
+    this.appliedProjectIds$.subscribe(ids => {
+      this.appliedProjectIds = ids;
+    });
   }
 
   constructor(
