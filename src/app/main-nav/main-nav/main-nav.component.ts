@@ -42,6 +42,10 @@ export class MainNavComponent {
     }
   }
 
+  logout() {
+    this.auth.logout();
+  }
+
   isScreenSmall() {
     return this.innerWidth < 768;
   }
