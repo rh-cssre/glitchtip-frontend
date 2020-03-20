@@ -5,7 +5,7 @@ import {
   OnInit
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
-import { Observable, BehaviorSubject, combineLatest, Subject } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { MatSelectionListChange } from "@angular/material/list";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
