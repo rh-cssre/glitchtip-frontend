@@ -46,12 +46,18 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
           const orgSlug: string | undefined = params["org-slug"];
           const cursor: string | undefined = queryParams.cursor;
           const query: string | undefined = queryParams.query;
-          return [orgSlug, cursor, query];
+          let project: string[] | null = null;
+          if (typeof queryParams.project === "string") {
+            project = [...queryParams.project];
+          } else if (typeof queryParams.project === "object") {
+            project = queryParams.project;
+          }
+          return { orgSlug, cursor, query, project };
         })
       )
-      .subscribe(([orgSlug, cursor, query]) => {
+      .subscribe(({ orgSlug, cursor, query, project }) => {
         if (orgSlug) {
-          this.issuesService.getIssues(orgSlug, cursor, query);
+          this.issuesService.getIssues(orgSlug, cursor, query, project);
         }
       });
   }

@@ -79,10 +79,11 @@ export class IssuesService {
   getIssues(
     orgSlug: string,
     cursor: string | undefined,
-    query: string = "is:unresolved"
+    query: string = "is:unresolved",
+    project: string[] | null
   ) {
     this.setLoading(true);
-    this.retrieveIssues(orgSlug, cursor, query).toPromise();
+    this.retrieveIssues(orgSlug, cursor, query, project).toPromise();
   }
 
   toggleSelected(issueId: number) {
@@ -126,7 +127,8 @@ export class IssuesService {
   private retrieveIssues(
     organizationSlug?: string,
     cursor?: string,
-    query?: string
+    query?: string,
+    project?: string[] | null
   ) {
     let url = this.url;
     let httpParams = new HttpParams();
@@ -138,6 +140,11 @@ export class IssuesService {
     }
     if (query) {
       httpParams = httpParams.set("query", query);
+    }
+    if (project) {
+      project.forEach(id => {
+        httpParams = httpParams.append("project", id);
+      });
     }
     return this.http
       .get<Issue[]>(url, { observe: "response", params: httpParams })

@@ -1,9 +1,9 @@
 <section>
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel class="mat-elevation-z1">
+    <mat-expansion-panel #expansionPanel class="mat-elevation-z1">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ selectedProjectsString$ | async }}
+          {{ appliedProjectsString$ | async }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-form-field>
@@ -17,9 +17,8 @@
       </mat-form-field>
 
       <mat-selection-list
-        #projectFilter
         [disableRipple]="true"
-        (selectionChange)="updateSelectedOptions($event)"
+        (selectionChange)="updateAppliedProjects($event)"
       >
         <mat-list-option
           *ngFor="let project of filteredProjects$ | async"
@@ -30,37 +29,21 @@
         </mat-list-option>
       </mat-selection-list>
       <div class="button-group">
-        <button mat-stroked-button [disabled]="">
-          Reset
-        </button>
-        <button mat-stroked-button [disabled]="isAllSelected$ | async">
-          Select All
+        <button
+          *ngIf="someProjectsAreSelected$ | async"
+          mat-stroked-button
+          (click)="navigate(null); expansionPanel.close()"
+        >
+          View All
         </button>
         <button
           mat-flat-button
-          [disabled]=""
-          (click)="submitApplyFilter()"
+          (click)="expansionPanel.close()"
           color="primary"
         >
-          Filter
+          Close
         </button>
       </div>
     </mat-expansion-panel>
-    <!--mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Environments
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      Production, staging
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Time Range
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      Last 24 hours, Last 7 days, Last 14 days, Last 30 days, Absolute date
-    </mat-expansion-panel-->
   </mat-accordion>
 </section>

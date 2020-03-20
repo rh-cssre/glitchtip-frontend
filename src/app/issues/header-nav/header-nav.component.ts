@@ -2,19 +2,16 @@ import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
-  Output,
-  EventEmitter
+  OnInit
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
-import { Observable, BehaviorSubject, combineLatest, Subject } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { FormControl } from "@angular/forms";
-import {
-  MatSelectionList,
-  MatSelectionListChange
-} from "@angular/material/list";
+import { MatSelectionListChange } from "@angular/material/list";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { MatExpansionPanel } from "@angular/material/expansion";
 
 @Component({
   selector: "app-header-nav",
@@ -22,30 +19,43 @@ import { Router } from "@angular/router";
   styleUrls: ["./header-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderNavComponent {
+export class HeaderNavComponent implements OnInit {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
-  /** Projects that are selected in this component but not yet applied */
-  selectedProjectIds = new BehaviorSubject<number[]>([]);
+  /** Projects that were previously selected and applied */
+  appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
+    map(params => {
+      const project = params.project;
+      let projectToReturn: string[] = [];
+      if (typeof project === "string") {
+        projectToReturn = [project];
+      } else if (typeof project === "object") {
+        projectToReturn = project;
+      }
+      return projectToReturn;
+    })
+  );
 
-  /** Observable of selectedProjectIds */
-  selectedProjectIds$ = this.selectedProjectIds.asObservable();
+  appliedProjectIds: string[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
-  selectedProjectsString$ = combineLatest([
+  appliedProjectsString$ = combineLatest([
     this.projects$,
-    this.selectedProjectIds$
+    this.appliedProjectIds$
   ]).pipe(
-    map(([projects, selectedProjectIds]) => {
-      switch (selectedProjectIds.length) {
+    map(([projects, ids]) => {
+      switch (ids.length) {
         case 0:
           return "My Projects";
         case projects?.length:
           return "All Projects";
         default:
-          return selectedProjectIds
-            .map(id => projects?.find(project => id === project.id)?.name)
+          return ids
+            .map(
+              id =>
+                projects?.find(project => parseInt(id, 10) === project.id)?.name
+            )
             .join(", ");
       }
     })
@@ -68,59 +78,40 @@ export class HeaderNavComponent {
     )
   );
 
-  isAllSelected$ = combineLatest([
-    this.projects$,
-    this.selectedProjectIds$
-  ]).pipe(
-    map(
-      ([projects, selectedProjectIds]) =>
-        projects
-          ?.map(project => project.id)
-          .sort()
-          .join(",") === selectedProjectIds.sort().join(",")
-    )
+  someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
+    map(ids => ids.length !== 0)
   );
 
-  selectAllSubject = new Subject<any>();
-  selectAllSubscription = combineLatest([
-    this.selectAllSubject,
-    this.projects$
-  ]).subscribe(([_, projects]) => {
-    this.selectionList.selectAll();
-    this.selectedProjectIds.next(
-      projects ? projects.map(project => project.id) : []
+  @ViewChild("expansionPanel", { static: false })
+  expansionPanel: MatExpansionPanel;
+
+  updateAppliedProjects(change: MatSelectionListChange) {
+    const project: number[] = change.source.selectedOptions.selected.map(
+      selectedOption => selectedOption.value
     );
-  });
+    this.navigate(project.length > 0 ? project : null);
+  }
 
-  @Output() applyFilter: EventEmitter<number[]>;
-
-  @ViewChild(MatSelectionList, { static: false })
-  private selectionList: MatSelectionList;
-
-  updateSelectedOptions(change: MatSelectionListChange) {
-    this.selectedProjectIds.next(
-      change.source.selectedOptions.selected.map(
-        selectedOption => selectedOption.value
-      )
-    );
+  navigate(project: number[] | null) {
+    this.router.navigate([], {
+      queryParams: { project: project ? project : null },
+      queryParamsHandling: "merge"
+    });
   }
 
   isSelected(projectId: number) {
-    return this.selectedProjectIds.getValue().find(id => id === projectId);
+    return this.appliedProjectIds.find(id => parseInt(id, 10) === projectId);
   }
 
-  submitApplyFilter() {
-    const selectedProjectIds = this.selectedProjectIds.getValue();
-    this.router.navigate([], {
-      queryParams: {
-        project: selectedProjectIds.length > 0 ? selectedProjectIds : null
-      },
-      queryParamsHandling: "merge"
+  ngOnInit() {
+    this.appliedProjectIds$.subscribe(ids => {
+      this.appliedProjectIds = ids;
     });
   }
 
   constructor(
     private organizationsService: OrganizationsService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 }
