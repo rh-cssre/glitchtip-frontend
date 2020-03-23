@@ -1,4 +1,6 @@
+import { NgZone } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
+import { Router, ActivatedRoute } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 import {
   HttpClientTestingModule,
@@ -9,25 +11,29 @@ import { OrganizationsService } from "./organizations.service";
 import { Organization } from "./organizations.interface";
 import { organizationList } from "./organization-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
+import { routes } from "src/app/app-routing.module";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;
   let service: OrganizationsService;
+  let router: Router;
+  let zone: NgZone;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, MaterialModule]
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes(routes),
+        MaterialModule
+      ]
     });
     httpTestingController = TestBed.get(HttpTestingController);
     service = TestBed.get(OrganizationsService);
-  });
-
-  it("should be created", () => {
-    expect(service).toBeTruthy();
+    router = TestBed.get(Router);
+    zone = TestBed.get(NgZone);
   });
 
   it("Initial organizations", () => {
-    service = TestBed.get(OrganizationsService);
     service.organizations$.subscribe((organizations: Organization[]) => {
       expect(organizations).toEqual([]);
     });
@@ -57,5 +63,72 @@ describe("OrganizationsService", () => {
     service.activeOrganizationId$.subscribe(org =>
       expect(org).toBe(testData.id)
     );
+  });
+
+  it("navigates when changing active organization", async () => {
+    // Switch from one issues to another
+    await zone.run(() =>
+      router.navigate(["organizations", organizationList[0].slug, "issues"])
+    );
+    const navigateSpy = spyOn(router, "navigate");
+    // @ts-ignore
+    service.setOrganizations(organizationList);
+    // @ts-ignore
+    service.setActiveOrganizationId(2);
+    service.changeActiveOrganization(1);
+    const req = httpTestingController.expectOne(
+      `/api/0/organizations/${organizationList[1].slug}/`
+    );
+    req.flush(organizationList[1]);
+    expect(navigateSpy).toHaveBeenCalledWith([
+      "organizations",
+      organizationList[1].slug,
+      "issues"
+    ]);
+  });
+
+  it("navigates within settings when changing active organization", async () => {
+    // Remake testing module to inject mock ActivatedRoute
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes(routes),
+        MaterialModule
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              firstChild: {
+                url: [{ path: "settings" }, { path: organizationList[0].slug }]
+              }
+            }
+          }
+        }
+      ]
+    });
+    httpTestingController = TestBed.get(HttpTestingController);
+    service = TestBed.get(OrganizationsService);
+    router = TestBed.get(Router);
+    // Switch from one issues to another
+    await zone.run(() =>
+      router.navigate(["settings", organizationList[0].slug])
+    );
+    const navigateSpy = spyOn(router, "navigate");
+    // @ts-ignore
+    service.setOrganizations(organizationList);
+    // @ts-ignore
+    service.setActiveOrganizationId(2);
+    service.changeActiveOrganization(1);
+    const req = httpTestingController.expectOne(
+      `/api/0/organizations/${organizationList[1].slug}/`
+    );
+    req.flush(organizationList[1]);
+    expect(navigateSpy).toHaveBeenCalledWith([
+      "settings",
+      organizationList[1].slug
+    ]);
   });
 });

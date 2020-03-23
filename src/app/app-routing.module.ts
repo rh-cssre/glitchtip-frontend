@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: "",
     loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
@@ -45,7 +45,9 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       onSameUrlNavigation: "reload",
-      scrollPositionRestoration: "enabled"
+      scrollPositionRestoration: "enabled",
+      relativeLinkResolution: "corrected",
+      paramsInheritanceStrategy: "always"
     })
   ],
   exports: [RouterModule]
