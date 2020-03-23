@@ -7,6 +7,9 @@ metadata:
   annotations:
     "helm.sh/hook": post-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+    checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    tag: {{ .Values.image.tag }}
 spec:
   activeDeadlineSeconds: 180
   template:
@@ -21,7 +24,8 @@ spec:
             value: "False"
           - name: STATIC_URL
             value: /
-          - name: DATABASE_URL
-            value: {{ required "databaseURL is a required value." .Values.databaseURL | quote }}
-          - name: SECRET_KEY
-            value: {{ required "secretKey is a required value." .Values.secretKey | quote }}
+        envFrom:
+          - secretRef:
+              name: {{ include "glitchtip.fullname" . }}
+          - configMapRef:
+              name: {{ include "glitchtip.fullname" . }}
