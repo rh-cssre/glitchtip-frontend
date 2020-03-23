@@ -8,15 +8,17 @@ import { OrganizationsComponent } from "./organizations/organizations.component"
 import { SubscriptionComponent } from "./subscription/subscription.component";
 
 const routes: Routes = [
-  { path: "", component: SettingsComponent },
-
-  { path: "projects", component: ProjectsComponent },
-  { path: "projects/new", component: NewProjectComponent },
-  { path: "projects/:slug", component: ProjectDetailComponent },
-
-  { path: ":slug", component: OrganizationsComponent },
-
-  { path: ":slug/subscription", component: SubscriptionComponent }
+  {
+    path: ":org-slug",
+    component: SettingsComponent,
+    children: [
+      { path: "", component: OrganizationsComponent },
+      { path: "projects", component: ProjectsComponent },
+      { path: "projects/new", component: NewProjectComponent },
+      { path: "projects/:slug", component: ProjectDetailComponent },
+      { path: "subscription", component: SubscriptionComponent }
+    ]
+  }
 ];
 
 @NgModule({

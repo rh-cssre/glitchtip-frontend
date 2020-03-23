@@ -1,18 +1,16 @@
-<app-settings
-  ><section>
-    <h1>Organizations</h1>
-    <div>
-      <p>Select organization to edit</p>
-      <button
-        *ngFor="let organization of organizations$ | async"
-        (click)="onSelected(organization.id)"
-        mat-button
-      >
-        {{ organization.name }}
-      </button>
-    </div>
-  </section>
-  <section>
-    <app-organization-detail></app-organization-detail>
-  </section>
-</app-settings>
+<section>
+  <h1>Organizations</h1>
+  <div>
+    <p>Select organization to edit</p>
+    <button
+      *ngFor="let organization of organizations$ | async"
+      (click)="onSelected(organization.id)"
+      mat-button
+    >
+      {{ organization.name }}
+    </button>
+  </div>
+</section>
+<section>
+  <app-organization-detail></app-organization-detail>
+</section>

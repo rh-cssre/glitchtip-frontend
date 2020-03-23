@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router, RoutesRecognized, Params } from "@angular/router";
+import { Router, RoutesRecognized, ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import { tap, map, withLatestFrom, filter } from "rxjs/operators";
 import { baseUrl } from "../../constants";
@@ -27,7 +27,7 @@ export class OrganizationsService {
   );
   private readonly getState$ = this.organizationsState.asObservable();
   private readonly url = baseUrl + "/organizations/";
-  private routeParams: Params;
+  private routeParams: { [key: string]: string };
 
   readonly organizations$ = this.getState$.pipe(
     map(data => data.organizations)
@@ -53,10 +53,18 @@ export class OrganizationsService {
     map(org => (org ? org.slug : null))
   );
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.router.events.subscribe(val => {
-      if (val instanceof RoutesRecognized && val.state.root.firstChild) {
-        this.routeParams = val.state.root.firstChild.params;
+      if (val instanceof RoutesRecognized) {
+        // Combine nested route params
+        this.routeParams = {
+          ...val.state.root.firstChild?.params,
+          ...val.state.root.firstChild?.firstChild?.params
+        };
       }
     });
   }
@@ -103,13 +111,23 @@ export class OrganizationsService {
         .pipe(
           // Only navigate when the user goes from one organization to another
           filter(() => !activeOrgIdIsNull),
-          tap(organizationDetail =>
-            this.router.navigate([
-              "organizations",
-              organizationDetail.slug,
-              "issues"
-            ])
-          )
+          tap(organizationDetail => {
+            // Switch org but stay in settings page
+            if (
+              this.routeParams["org-slug"] &&
+              this.route.snapshot.firstChild?.url &&
+              this.route.snapshot.firstChild.url[0].path === "settings"
+            ) {
+              this.router.navigate(["settings", organizationDetail.slug]);
+            } else {
+              // Fallback to viewing issues
+              this.router.navigate([
+                "organizations",
+                organizationDetail.slug,
+                "issues"
+              ]);
+            }
+          })
         )
         .toPromise();
     }

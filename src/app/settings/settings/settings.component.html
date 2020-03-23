@@ -5,30 +5,26 @@
         <h3 mat-subheader>Organization</h3>
         <a
           mat-list-item
-          routerLink="/settings/organizations"
+          routerLink="./"
           routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           General Settings
         </a>
-        <a
-          mat-list-item
-          routerLink="/settings/projects"
-          routerLinkActive="active-route"
+        <a mat-list-item routerLink="./projects" routerLinkActive="active-route"
           >Projects</a
         >
         <a
           *ngIf="billingEnabled$ | async"
           mat-list-item
-          [routerLink]="[
-            '/settings',
-            organizationSlug$ | async,
-            'subscription'
-          ]"
+          routerLink="./subscription"
           routerLinkActive="active-route"
           >Subscription</a
         >
       </mat-nav-list>
     </nav>
   </mat-drawer>
-  <mat-drawer-content><ng-content></ng-content></mat-drawer-content>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
 </mat-drawer-container>

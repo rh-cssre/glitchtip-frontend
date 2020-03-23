@@ -1,31 +1,29 @@
-<app-settings
-  ><div>
-    <h1>Projects</h1>
-    <button
-      mat-flat-button
-      [routerLink]="['/settings/projects', 'new']"
-      color="accent"
-    >
-      Create New Project
-    </button>
-  </div>
-  <section>
-    <mat-card *ngFor="let project of projects$ | async">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>{{ project.name }}</mat-card-title>
-        <mat-card-subtitle
-          >Created on {{ project.dateCreated | date }}</mat-card-subtitle
-        >
-      </mat-card-header>
-      <mat-card-actions>
-        <button mat-button [routerLink]="project.slug">
-          Project Details
-        </button>
-        <button (click)="onDelete(project.id)" mat-button>
-          Remove Project
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </section>
-</app-settings>
+<div>
+  <h1>Projects</h1>
+  <button
+    mat-flat-button
+    [routerLink]="['/settings/projects', 'new']"
+    color="accent"
+  >
+    Create New Project
+  </button>
+</div>
+<section>
+  <mat-card *ngFor="let project of projects$ | async">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{ project.name }}</mat-card-title>
+      <mat-card-subtitle
+        >Created on {{ project.dateCreated | date }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-button [routerLink]="project.slug">
+        Project Details
+      </button>
+      <button (click)="onDelete(project.id)" mat-button>
+        Remove Project
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>

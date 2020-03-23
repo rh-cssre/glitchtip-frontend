@@ -20,7 +20,7 @@ export class SubscriptionComponent implements OnDestroy {
   ) {
     this.routerSubscription = this.route.params
       .pipe(
-        map(params => params.slug as string),
+        map(params => params["org-slug"] as string),
         filter(slug => !!slug)
       )
       .subscribe(slug => {
