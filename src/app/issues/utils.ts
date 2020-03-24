@@ -11,3 +11,13 @@ export function paramsToObject(entries) {
   }
   return result;
 }
+
+export function normalizeProjectParams(project) {
+  let projects: string[] = [];
+  if (typeof project === "string") {
+    projects = [project];
+  } else if (typeof project === "object") {
+    projects = project;
+  }
+  return projects;
+}

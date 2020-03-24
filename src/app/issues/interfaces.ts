@@ -164,6 +164,7 @@ export interface UpdateStatusResponse {
 
 export interface IssueWithSelected extends UpdateStatusResponse {
   isSelected: boolean;
+  projectSlug: string;
 }
 
 type StatsPeriod = "24h" | "14d" | "30d" | "";

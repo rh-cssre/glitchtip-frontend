@@ -9,6 +9,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { Subscription, combineLatest } from "rxjs";
 import { map, filter, withLatestFrom } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
+import { normalizeProjectParams } from "../utils";
 
 @Component({
   selector: "app-issues-page",
@@ -32,6 +33,13 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   nextParams$ = this.issuesService.nextPageParams$;
   previousParams$ = this.issuesService.previousPageParams$;
   routerEventSubscription: Subscription;
+
+  oneProjectApplied$ = this.route.queryParams.pipe(
+    map(params => {
+      const projects = normalizeProjectParams(params.project);
+      return projects.length === 1;
+    })
+  );
 
   constructor(
     private issuesService: IssuesService,
