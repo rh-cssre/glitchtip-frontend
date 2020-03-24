@@ -2,17 +2,17 @@ import { ProjectIssueView } from "../api/projects/projects.interfaces";
 
 export interface Event {
   eventID: string;
-  tags: any[];
-  projectID: string;
-  dateCreated: string;
-  user: any;
-  message: string;
   id: string;
+  tags: any[];
+  projectID?: string;
+  dateCreated: string;
+  user?: any;
+  message?: string;
   culprit: string;
   title: string;
-  location: string;
-  crashFile: string | null;
-  groupID: string;
+  location?: string;
+  crashFile?: string | null;
+  groupID?: string;
   // made undefined because EventDetail extends this and didn't need it
   "event.type"?: EventTypes;
   platform: string;
@@ -26,19 +26,20 @@ export interface EventDetail extends Event {
   contexts: Context | Partial<Context>;
   entries: EntryUnion[];
   metadata: IEventMetaData | any;
-  dist: null;
-  userReport: null;
-  size: number;
-  errors: any[];
-  type: "error" | "csp";
-  groupingConfig: GroupingConfig;
+  dist?: null;
+  userReport?: null;
+  size?: number;
+  errors?: any[];
+  type: "error" | "csp" | "default";
+  groupingConfig?: GroupingConfig;
   dateReceived: string;
   packages: any;
   sdk: any;
-  _meta: any;
-  fingerprints: string[];
-  context: { "sys.argv"?: string[]; arguments?: [] };
-  release: any;
+  _meta?: any;
+  fingerprints?: string[];
+  context?: { "sys.argv"?: string[]; arguments?: [] };
+  release?: any;
+  issue?: number;
 }
 
 export interface Entry<Type extends string, Data extends {}> {
@@ -88,15 +89,16 @@ export interface ExceptionValueData {
 }
 
 export interface IRequest {
-  fragment: string | null;
-  cookies: object[];
+  fragment?: string | null;
+  cookies?: object[];
   inferredContentType: string | null;
   env: { SERVER_NAME: string; SERVER_PORT: string } | null;
   headers: string[][];
   url: string;
-  query: object[];
-  data: RequestData | null;
+  query?: object[];
+  data?: RequestData | null;
   method: string | null;
+  query_string?: string;
 }
 
 export interface AnnotatedRequest extends IRequest {
@@ -105,8 +107,9 @@ export interface AnnotatedRequest extends IRequest {
 }
 
 interface RequestData {
-  csrfmiddlewaretoken: string;
-  param1: string;
+  csrfmiddlewaretoken?: string;
+  param1?: string;
+  access_token?: string;
 }
 
 export type IssueStatus = "resolved" | "unresolved" | "ignored";
@@ -224,13 +227,13 @@ interface Trace {
   parent_span_id: string;
   trace_id: string;
   span_id: string;
-  type: string;
+  type?: string;
   op: string;
 }
 
 interface Runtime {
   version: string;
-  type: string;
+  type?: string;
   build: string;
   name: string;
 }
@@ -244,9 +247,9 @@ interface IContextDetail {
 interface Values {
   stacktrace: IStacktrace;
   module: string | null;
-  rawStacktrace: string | null;
+  rawStacktrace?: string | null;
   mechanism: Mechanism;
-  threadId: number | null;
+  threadId?: number | null;
   value: string;
   type: string;
 }

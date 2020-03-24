@@ -15,6 +15,7 @@ import { EntryDataComponent } from "./issue-detail/event-detail/entry-data/entry
 import { HeaderNavComponent } from "./header-nav/header-nav.component";
 import { EntryCSPComponent } from "./issue-detail/event-detail/entry-csp/entry-csp.component";
 import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message/entry-message.component";
+import { EntryExceptionComponent } from "./issue-detail/event-detail/entry-exception/entry-exception.component";
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message
     EntryCSPComponent,
     EntryMessageComponent,
     EntryDataComponent,
-    HeaderNavComponent
+    HeaderNavComponent,
+    EntryExceptionComponent
   ]
 })
 export class IssuesModule {}
