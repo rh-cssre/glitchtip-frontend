@@ -53,7 +53,8 @@ export class IssuesService {
     map(([issues, selectedIssues]) =>
       issues.map(issue => ({
         ...issue,
-        isSelected: selectedIssues.includes(issue.id) ? true : false
+        isSelected: selectedIssues.includes(issue.id) ? true : false,
+        projectSlug: issue.project?.slug
       }))
     )
   );
