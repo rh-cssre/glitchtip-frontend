@@ -82,24 +82,21 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  it("sortedEvent$ selector flips frames array in event object", () => {
-    const testData: EventDetail = databaseError;
-    const firstFilename = "django/core/handlers/exception.py";
-    const lastFilename = "django/db/models/query.py";
+  fit("eventEntryException$ selector flips frames array without mutating event state", () => {
+    const testData: any = databaseError;
+    let fileName = "";
 
     service.setEvent(testData);
 
-    service.sortedEvent$.pipe(take(1)).subscribe((event: any) => {
-      expect(
-        event.entries[0].data.values[0].stacktrace.frames[0].filename
-      ).toBe(lastFilename);
-      service.getReversedFrames();
-      service.sortedEvent$.subscribe((event2: any) => {
-        expect(
-          event2.entries[0].data.values[0].stacktrace.frames[0].filename
-        ).toBe(firstFilename);
+    service.eventEntryException$
+      .pipe(take(2))
+      .subscribe((entryException: any) => {
+        fileName = entryException.values[0].stacktrace.frames[0].filename;
       });
-    });
+
+    expect(fileName).toBe("django/db/models/query.py");
+    service.getReversedFrames();
+    expect(fileName).toBe("django/core/handlers/exception.py");
   });
 
   it("request$ selector returns the request entry type object without mutating event state", () => {

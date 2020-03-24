@@ -16,6 +16,7 @@ import { EntryRequestComponent } from "../event-detail/entry-request/entry-reque
 import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EntryMessageComponent } from "./entry-message/entry-message.component";
+import { EntryExceptionComponent } from "./entry-exception/entry-exception.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -25,6 +26,8 @@ import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
 import { stringError } from "./test-data/string-error";
 import { cspError } from "./test-data/csp-error";
+import { pageNotFound } from "./test-data/page-not-found";
+import { socialApp } from "./test-data/social-app";
 
 export default {
   title: "Event Detail",
@@ -42,7 +45,8 @@ export default {
         EntryRequestComponent,
         EntryDataComponent,
         EntryCSPComponent,
-        EntryMessageComponent
+        EntryMessageComponent,
+        EntryExceptionComponent
       ]
     }),
     withKnobs
@@ -57,10 +61,12 @@ export const EventDetails = () => {
     "Template Error",
     "Zero Division Error",
     "String Error",
-    "CSP Error"
+    "CSP Error",
+    "Page Not Found",
+    "SocialApp.DoesNotExist"
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
-  let error = databaseError;
+  let error: any = databaseError;
 
   switch (selectedError) {
     case "Database Error":
@@ -83,6 +89,12 @@ export const EventDetails = () => {
       break;
     case "CSP Error":
       error = cspError;
+      break;
+    case "Page Not Found":
+      error = pageNotFound;
+      break;
+    case "SocialApp.DoesNotExist":
+      error = socialApp;
       break;
   }
 
@@ -145,4 +157,61 @@ export const EntryMessage = () => {
 
 EntryMessage.story = {
   name: "Entry Message"
+};
+
+export const EntryException = () => {
+  const errorOptions = [
+    "Database Error",
+    "Database Stack Error",
+    "Post Error",
+    "Template Error",
+    "Zero Division Error",
+    "String Error",
+    "SocialApp.DoesNotExist"
+  ];
+  const selectedError = select("Error Type", errorOptions, errorOptions[0]);
+  let error: any = databaseError.entries[0].data;
+  let title: string = databaseError.title;
+
+  switch (selectedError) {
+    case "Database Error":
+      error = databaseError.entries[0].data;
+      title = databaseError.title;
+      break;
+    case "Database Stack Error":
+      error = databaseStackError.entries[0].data;
+      title = databaseStackError.title;
+      break;
+    case "Post Error":
+      error = postError.entries[0].data;
+      title = postError.title;
+      break;
+    case "Template Error":
+      error = templateError.entries[0].data;
+      title = templateError.title;
+      break;
+    case "Zero Division Error":
+      error = zeroDivisionError.entries[0].data;
+      title = zeroDivisionError.title;
+      break;
+    case "String Error":
+      error = stringError.entries[0].data;
+      title = stringError.title;
+      break;
+    case "SocialApp.DoesNotExist":
+      error = socialApp.entries[0].data;
+      title = socialApp.title;
+      break;
+  }
+  return {
+    component: EntryExceptionComponent,
+    props: {
+      eventEntryException$: of(error),
+      eventTitle: title
+    }
+  };
+};
+
+EntryException.story = {
+  name: "Entry Exception"
 };
