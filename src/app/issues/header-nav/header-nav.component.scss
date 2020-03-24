@@ -30,6 +30,21 @@ mat-expansion-panel::ng-deep {
     overflow-y: auto;
   }
 
+  // need to increase the hitbox area since it's doing something different
+  // than clicking the rest of the list option
+  .mat-pseudo-checkbox {
+    $hitbox: -15px;
+    &:before {
+      content: "";
+      background: transparent;
+      position: absolute;
+      top: $hitbox;
+      right: $hitbox;
+      bottom: $hitbox;
+      left: $hitbox;
+    }
+  }
+
   .mat-form-field {
     display: block;
   }

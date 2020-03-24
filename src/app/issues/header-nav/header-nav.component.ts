@@ -2,7 +2,9 @@ import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
-  OnInit
+  OnInit,
+  HostListener,
+  ElementRef
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
 import { Observable, combineLatest } from "rxjs";
@@ -77,6 +79,23 @@ export class HeaderNavComponent implements OnInit {
   @ViewChild("expansionPanel", { static: false })
   expansionPanel: MatExpansionPanel;
 
+  @ViewChild("filterInput", { static: false })
+  filterInput: ElementRef<HTMLInputElement>;
+
+  @HostListener("document:keydown", ["$event"]) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    if (event.key === "/" && !this.expansionPanel.expanded) {
+      event.preventDefault();
+      // turns out this is where the scrolling is happening for whatever reason
+      document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
+      this.expansionPanel.open();
+    }
+    if (event.key === "Escape" && this.expansionPanel.expanded) {
+      this.expansionPanel.close();
+    }
+  }
+
   updateAppliedProjects(change: MatSelectionListChange) {
     const project: number[] = change.source.selectedOptions.selected.map(
       selectedOption => selectedOption.value
@@ -93,6 +112,18 @@ export class HeaderNavComponent implements OnInit {
 
   isSelected(projectId: number) {
     return this.appliedProjectIds.find(id => parseInt(id, 10) === projectId);
+  }
+
+  focusPanel() {
+    // G R O S S
+    // no timeout didn't work though, nor did 0, 1ms, 10ms timeouts
+    setTimeout(() => this.filterInput.nativeElement.focus(), 100);
+  }
+
+  clickListOption(event: MouseEvent) {
+    if ((event.target as HTMLElement)?.nodeName !== "MAT-PSEUDO-CHECKBOX") {
+      this.expansionPanel.close();
+    }
   }
 
   ngOnInit() {

@@ -1,6 +1,10 @@
 <section>
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel #expansionPanel class="mat-elevation-z1">
+    <mat-expansion-panel
+      #expansionPanel
+      class="mat-elevation-z1"
+      (opened)="focusPanel()"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ appliedProjectsString$ | async }}
@@ -8,6 +12,7 @@
       </mat-expansion-panel-header>
       <mat-form-field>
         <input
+          #filterInput
           type="text"
           placeholder="Filter projects"
           aria-label="Filter projects"
@@ -24,6 +29,7 @@
           *ngFor="let project of filteredProjects$ | async"
           [value]="project.id"
           [selected]="isSelected(project.id)"
+          (click)="clickListOption($event)"
         >
           {{ project.name }}
         </mat-list-option>
