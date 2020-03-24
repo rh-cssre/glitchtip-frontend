@@ -12,6 +12,7 @@ import { OrganizationProduct } from "../../api/organizations/organizations.inter
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
+import { normalizeProjectParams } from "../utils";
 
 @Component({
   selector: "app-header-nav",
@@ -25,16 +26,7 @@ export class HeaderNavComponent implements OnInit {
 
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
-    map(params => {
-      const project = params.project;
-      let projectToReturn: string[] = [];
-      if (typeof project === "string") {
-        projectToReturn = [project];
-      } else if (typeof project === "object") {
-        projectToReturn = project;
-      }
-      return projectToReturn;
-    })
+    map(params => normalizeProjectParams(params.project))
   );
 
   appliedProjectIds: string[];
