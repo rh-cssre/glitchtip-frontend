@@ -27,7 +27,8 @@
           *ngFor="let project of filteredProjects$ | async"
         >
           <button
-            class="mat-body-1"
+            id="picker-button-{{ project.id }}"
+            class="picker-button mat-body-1"
             (click)="selectProjectAndClose(project.id)"
           >
             {{ project.name }}

@@ -90,8 +90,53 @@ export class HeaderNavComponent implements OnInit {
       document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
       this.expansionPanel.open();
     }
-    if (event.key === "Escape" && this.expansionPanel.expanded) {
-      this.expansionPanel.close();
+    if (this.expansionPanel.expanded) {
+      if (event.key === "Escape") {
+        this.expansionPanel.close();
+      }
+      if (event.key === "ArrowDown") {
+        this.moveDown();
+      }
+      if (event.key === "ArrowUp") {
+        this.moveUp();
+      }
+    }
+  }
+
+  moveDown() {
+    const projectButtons = Array.from(
+      document.querySelectorAll(".picker-button")
+    ) as HTMLElement[];
+    // If the text box is focused, go to the first item
+    if (this.filterInput.nativeElement.id === document.activeElement?.id) {
+      projectButtons[0]?.focus();
+    } else {
+      const indexOfActive = projectButtons.findIndex(
+        button => button.id === document.activeElement?.id
+      );
+      if (indexOfActive <= projectButtons.length - 2) {
+        // If we're in the list items, go to the next list item
+        projectButtons[indexOfActive + 1].focus();
+      } else {
+        // If we're in the last list item, go to the first item
+        projectButtons[0].focus();
+      }
+    }
+  }
+
+  moveUp() {
+    const projectButtons = Array.from(
+      document.querySelectorAll(".picker-button")
+    ) as HTMLElement[];
+    const indexOfActive = projectButtons.findIndex(
+      button => button.id === document.activeElement?.id
+    );
+    if (indexOfActive > 0) {
+      // If we're in the list items, go to the previous list item
+      projectButtons[indexOfActive - 1].focus();
+    } else {
+      // If we're in the first list item, go to the first item
+      this.filterInput.nativeElement.focus();
     }
   }
 
@@ -107,8 +152,7 @@ export class HeaderNavComponent implements OnInit {
   }
 
   focusPanel() {
-    // G R O S S
-    // no timeout didn't work though, nor did 0, 1ms, 10ms timeouts
+    // G R O S S. Needed it though. 0, 1ms, 10ms timeouts didn't work
     setTimeout(() => this.filterInput.nativeElement.focus(), 100);
   }
 
