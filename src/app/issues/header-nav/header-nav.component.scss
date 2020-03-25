@@ -30,21 +30,6 @@ mat-expansion-panel::ng-deep {
     overflow-y: auto;
   }
 
-  // need to increase the hitbox area since it's doing something different
-  // than clicking the rest of the list option
-  .mat-pseudo-checkbox {
-    $hitbox: -15px;
-    &:before {
-      content: "";
-      background: transparent;
-      position: absolute;
-      top: $hitbox;
-      right: $hitbox;
-      bottom: $hitbox;
-      left: $hitbox;
-    }
-  }
-
   .mat-form-field {
     display: block;
   }
@@ -69,5 +54,39 @@ mat-expansion-panel::ng-deep {
 
   button {
     margin-left: 5px;
+  }
+}
+
+.list-item {
+  button {
+    // borrowed from some "button unstyled" classes I've done elsewhere
+    display: inline-block;
+    border: none;
+    margin: 0 15px 0 0; // 0
+    padding: 12px 0; // 0
+    -webkit-text-fill-color: currentColor;
+    background: transparent;
+    -webkit-appearance: none;
+    cursor: pointer;
+    color: inherit;
+    font-weight: inherit;
+
+    width: 100%;
+    text-align: left;
+  }
+
+  mat-checkbox ::ng-deep label {
+    position: relative;
+
+    &:after {
+      $hitbox: -15px;
+      content: "";
+      background: transparent;
+      position: absolute;
+      top: $hitbox;
+      right: $hitbox;
+      bottom: $hitbox;
+      left: $hitbox;
+    }
   }
 }

@@ -9,7 +9,6 @@ import {
 import { map, startWith } from "rxjs/operators";
 import { Observable, combineLatest } from "rxjs";
 import { FormControl } from "@angular/forms";
-import { MatSelectionListChange } from "@angular/material/list";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -96,13 +95,6 @@ export class HeaderNavComponent implements OnInit {
     }
   }
 
-  updateAppliedProjects(change: MatSelectionListChange) {
-    const project: number[] = change.source.selectedOptions.selected.map(
-      selectedOption => selectedOption.value
-    );
-    this.navigate(project.length > 0 ? project : null);
-  }
-
   navigate(project: number[] | null) {
     this.router.navigate([], {
       queryParams: { project: project ? project : null },
@@ -120,10 +112,20 @@ export class HeaderNavComponent implements OnInit {
     setTimeout(() => this.filterInput.nativeElement.focus(), 100);
   }
 
-  clickListOption(event: MouseEvent) {
-    if ((event.target as HTMLElement)?.nodeName !== "MAT-PSEUDO-CHECKBOX") {
-      this.expansionPanel.close();
+  selectProjectAndClose(projectId: number) {
+    this.navigate([projectId]);
+    this.expansionPanel.close();
+  }
+
+  toggleProject(projectId: number) {
+    const appliedIds = [...this.appliedProjectIds].map(id => parseInt(id, 10));
+    const idMatchIndex = appliedIds.indexOf(projectId);
+    if (idMatchIndex > -1) {
+      appliedIds.splice(idMatchIndex, 1);
+    } else {
+      appliedIds.push(projectId);
     }
+    this.navigate(appliedIds.length > 0 ? appliedIds : null);
   }
 
   ngOnInit() {

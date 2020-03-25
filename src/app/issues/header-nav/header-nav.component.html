@@ -21,19 +21,25 @@
         />
       </mat-form-field>
 
-      <mat-selection-list
-        [disableRipple]="true"
-        (selectionChange)="updateAppliedProjects($event)"
-      >
-        <mat-list-option
+      <mat-list>
+        <mat-list-item
+          class="list-item"
           *ngFor="let project of filteredProjects$ | async"
-          [value]="project.id"
-          [selected]="isSelected(project.id)"
-          (click)="clickListOption($event)"
         >
-          {{ project.name }}
-        </mat-list-option>
-      </mat-selection-list>
+          <button
+            class="mat-body-1"
+            (click)="selectProjectAndClose(project.id)"
+          >
+            {{ project.name }}
+          </button>
+          <mat-checkbox
+            (change)="toggleProject(project.id)"
+            [checked]="isSelected(project.id)"
+          >
+          </mat-checkbox>
+        </mat-list-item>
+      </mat-list>
+
       <div class="button-group">
         <button
           *ngIf="someProjectsAreSelected$ | async"
