@@ -95,11 +95,19 @@ export class HeaderNavComponent implements OnInit {
         this.expansionPanel.close();
       }
       if (event.key === "ArrowDown") {
+        event.preventDefault();
         this.moveDown();
       }
       if (event.key === "ArrowUp") {
         this.moveUp();
       }
+    }
+  }
+
+  @HostListener("document:click", ["$event.target"])
+  onClickHandler(target) {
+    if (!target.closest("#project-picker") && this.expansionPanel.opened) {
+      this.expansionPanel.close();
     }
   }
 
