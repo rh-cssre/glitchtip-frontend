@@ -82,7 +82,7 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  fit("eventEntryException$ selector flips frames array without mutating event state", () => {
+  it("eventEntryException$ selector flips frames array without mutating event state", () => {
     const testData: any = databaseError;
     let fileName = "";
 
