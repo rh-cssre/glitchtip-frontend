@@ -1,6 +1,10 @@
-<section>
+<section id="project-picker">
   <mat-accordion displayMode="flat" [hideToggle]="false">
-    <mat-expansion-panel #expansionPanel class="mat-elevation-z1">
+    <mat-expansion-panel
+      #expansionPanel
+      class="mat-elevation-z1"
+      (opened)="focusPanel()"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ appliedProjectsString$ | async }}
@@ -8,6 +12,7 @@
       </mat-expansion-panel-header>
       <mat-form-field>
         <input
+          #filterInput
           type="text"
           placeholder="Filter projects"
           aria-label="Filter projects"
@@ -16,18 +21,26 @@
         />
       </mat-form-field>
 
-      <mat-selection-list
-        [disableRipple]="true"
-        (selectionChange)="updateAppliedProjects($event)"
-      >
-        <mat-list-option
+      <mat-list>
+        <mat-list-item
+          class="list-item"
           *ngFor="let project of filteredProjects$ | async"
-          [value]="project.id"
-          [selected]="isSelected(project.id)"
         >
-          {{ project.name }}
-        </mat-list-option>
-      </mat-selection-list>
+          <button
+            id="picker-button-{{ project.id }}"
+            class="picker-button mat-body-1"
+            (click)="selectProjectAndClose(project.id)"
+          >
+            {{ project.name }}
+          </button>
+          <mat-checkbox
+            (change)="toggleProject(project.id)"
+            [checked]="isSelected(project.id)"
+          >
+          </mat-checkbox>
+        </mat-list-item>
+      </mat-list>
+
       <div class="button-group">
         <button
           *ngIf="someProjectsAreSelected$ | async"

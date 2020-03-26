@@ -2,12 +2,13 @@ import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
-  OnInit
+  OnInit,
+  HostListener,
+  ElementRef
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
 import { Observable, combineLatest } from "rxjs";
 import { FormControl } from "@angular/forms";
-import { MatSelectionListChange } from "@angular/material/list";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -77,11 +78,74 @@ export class HeaderNavComponent implements OnInit {
   @ViewChild("expansionPanel", { static: false })
   expansionPanel: MatExpansionPanel;
 
-  updateAppliedProjects(change: MatSelectionListChange) {
-    const project: number[] = change.source.selectedOptions.selected.map(
-      selectedOption => selectedOption.value
+  @ViewChild("filterInput", { static: false })
+  filterInput: ElementRef<HTMLInputElement>;
+
+  @HostListener("document:keydown", ["$event"]) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    if (event.key === "/" && !this.expansionPanel.expanded) {
+      event.preventDefault();
+      // turns out this is where the scrolling is happening for whatever reason
+      document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
+      this.expansionPanel.open();
+    }
+    if (this.expansionPanel.expanded) {
+      if (event.key === "Escape") {
+        this.expansionPanel.close();
+      }
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        this.moveDown();
+      }
+      if (event.key === "ArrowUp") {
+        this.moveUp();
+      }
+    }
+  }
+
+  @HostListener("document:click", ["$event.target"])
+  onClickHandler(target) {
+    if (!target.closest("#project-picker") && this.expansionPanel.opened) {
+      this.expansionPanel.close();
+    }
+  }
+
+  moveDown() {
+    const projectButtons = Array.from(
+      document.querySelectorAll(".picker-button")
+    ) as HTMLElement[];
+    // If the text box is focused, go to the first item
+    if (this.filterInput.nativeElement.id === document.activeElement?.id) {
+      projectButtons[0]?.focus();
+    } else {
+      const indexOfActive = projectButtons.findIndex(
+        button => button.id === document.activeElement?.id
+      );
+      if (indexOfActive <= projectButtons.length - 2) {
+        // If we're in the list items, go to the next list item
+        projectButtons[indexOfActive + 1].focus();
+      } else {
+        // If we're in the last list item, go to the first item
+        projectButtons[0].focus();
+      }
+    }
+  }
+
+  moveUp() {
+    const projectButtons = Array.from(
+      document.querySelectorAll(".picker-button")
+    ) as HTMLElement[];
+    const indexOfActive = projectButtons.findIndex(
+      button => button.id === document.activeElement?.id
     );
-    this.navigate(project.length > 0 ? project : null);
+    if (indexOfActive > 0) {
+      // If we're in the list items, go to the previous list item
+      projectButtons[indexOfActive - 1].focus();
+    } else {
+      // If we're in the first list item, go to the first item
+      this.filterInput.nativeElement.focus();
+    }
   }
 
   navigate(project: number[] | null) {
@@ -93,6 +157,27 @@ export class HeaderNavComponent implements OnInit {
 
   isSelected(projectId: number) {
     return this.appliedProjectIds.find(id => parseInt(id, 10) === projectId);
+  }
+
+  focusPanel() {
+    // G R O S S. Needed it though. 0, 1ms, 10ms timeouts didn't work
+    setTimeout(() => this.filterInput.nativeElement.focus(), 100);
+  }
+
+  selectProjectAndClose(projectId: number) {
+    this.navigate([projectId]);
+    this.expansionPanel.close();
+  }
+
+  toggleProject(projectId: number) {
+    const appliedIds = [...this.appliedProjectIds].map(id => parseInt(id, 10));
+    const idMatchIndex = appliedIds.indexOf(projectId);
+    if (idMatchIndex > -1) {
+      appliedIds.splice(idMatchIndex, 1);
+    } else {
+      appliedIds.push(projectId);
+    }
+    this.navigate(appliedIds.length > 0 ? appliedIds : null);
   }
 
   ngOnInit() {
