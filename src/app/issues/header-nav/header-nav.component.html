@@ -49,11 +49,12 @@
         >
           View All
         </button>
-        <button
-          mat-flat-button
-          (click)="expansionPanel.close()"
-          color="primary"
-        >
+        <button mat-flat-button (click)="closePanel()" color="primary">
+          <ng-container
+            *ngIf="(selectedAndAppliedIdsAreEqual$ | async) === false"
+          >
+            Apply &
+          </ng-container>
           Close
         </button>
       </div>

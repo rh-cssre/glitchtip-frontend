@@ -7,7 +7,7 @@ import {
   ElementRef
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
-import { Observable, combineLatest } from "rxjs";
+import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -25,9 +25,21 @@ export class HeaderNavComponent implements OnInit {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
+  /** Projects that are selected in this component but not yet applied */
+  selectedProjectIds = new BehaviorSubject<number[]>([]);
+
+  /** Observable of selectedProjectIds, intended to separate concerns */
+  selectedProjectIds$ = this.selectedProjectIds.asObservable();
+
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
-    map(params => normalizeProjectParams(params.project))
+    map(params => {
+      const normalizedParams = normalizeProjectParams(params.project);
+      this.selectedProjectIds.next(
+        normalizedParams.map(id => parseInt(id, 10))
+      );
+      return normalizedParams;
+    })
   );
 
   appliedProjectIds: string[];
@@ -52,6 +64,16 @@ export class HeaderNavComponent implements OnInit {
             .join(", ");
       }
     })
+  );
+
+  selectedAndAppliedIdsAreEqual$ = combineLatest([
+    this.selectedProjectIds$,
+    this.appliedProjectIds$
+  ]).pipe(
+    map(
+      ([selected, applied]) =>
+        selected.sort().join(",") === applied.sort().join(",")
+    )
   );
 
   /** Used to filter project names */
@@ -92,7 +114,7 @@ export class HeaderNavComponent implements OnInit {
     }
     if (this.expansionPanel.expanded) {
       if (event.key === "Escape") {
-        this.expansionPanel.close();
+        this.resetPanel();
       }
       if (event.key === "ArrowDown") {
         event.preventDefault();
@@ -107,7 +129,7 @@ export class HeaderNavComponent implements OnInit {
   @HostListener("document:click", ["$event.target"])
   onClickHandler(target) {
     if (!target.closest("#project-picker") && this.expansionPanel.opened) {
-      this.expansionPanel.close();
+      this.closePanel();
     }
   }
 
@@ -156,7 +178,7 @@ export class HeaderNavComponent implements OnInit {
   }
 
   isSelected(projectId: number) {
-    return this.appliedProjectIds.find(id => parseInt(id, 10) === projectId);
+    return this.selectedProjectIds.getValue().find(id => id === projectId);
   }
 
   focusPanel() {
@@ -166,18 +188,31 @@ export class HeaderNavComponent implements OnInit {
 
   selectProjectAndClose(projectId: number) {
     this.navigate([projectId]);
+    this.selectedProjectIds.next([projectId]);
     this.expansionPanel.close();
   }
 
   toggleProject(projectId: number) {
-    const appliedIds = [...this.appliedProjectIds].map(id => parseInt(id, 10));
-    const idMatchIndex = appliedIds.indexOf(projectId);
+    const selectedIds = [...this.selectedProjectIds.getValue()];
+    const idMatchIndex = selectedIds.indexOf(projectId);
     if (idMatchIndex > -1) {
-      appliedIds.splice(idMatchIndex, 1);
+      selectedIds.splice(idMatchIndex, 1);
     } else {
-      appliedIds.push(projectId);
+      selectedIds.push(projectId);
     }
-    this.navigate(appliedIds.length > 0 ? appliedIds : null);
+    this.selectedProjectIds.next(selectedIds);
+  }
+
+  resetPanel() {
+    this.selectedProjectIds.next(
+      this.appliedProjectIds.map(id => parseInt(id, 10))
+    );
+    this.expansionPanel.close();
+  }
+
+  closePanel() {
+    this.navigate(this.selectedProjectIds.getValue());
+    this.expansionPanel.close();
   }
 
   ngOnInit() {
