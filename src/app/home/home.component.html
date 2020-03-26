@@ -1,1 +1,80 @@
-<p>home works!</p>
+<section>
+  <h1>Good {{ timeOfDay() }}!</h1>
+
+  <div *ngIf="!projects$ && !activeOrganizationDetail$">
+    <p>You don't have any organizations yet. Create one to get started.</p>
+    <a mat-flat-button color="primary" [routerLink]="['/organizations', 'new']"
+      >Create New Organization</a
+    >
+  </div>
+
+  <div *ngIf="activeOrganizationDetail$ | async as orgDetails">
+    <div *ngIf="!projects$">
+      <p>You don't have any projects yet. Try creating one to get started.</p>
+      <a
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
+        >Create New Project</a
+      >
+    </div>
+
+    <div *ngIf="projects$">
+      <div class="projects">
+        <h2>Projects</h2>
+        <a
+          *ngIf="activeOrganizationDetail$ | async as orgDetails"
+          mat-flat-button
+          color="primary"
+          [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
+          >Create New Project</a
+        >
+      </div>
+      <div class="project-card-wrapper">
+        <a
+          *ngFor="let project of projects$ | async"
+          [routerLink]="['/organizations', orgDetails?.slug, 'issues']"
+          [queryParams]="{ project: orgDetails?.id }"
+        >
+          <mat-card>
+            <mat-card-content>
+              <mat-card-title>{{ project.name }}</mat-card-title>
+              <mat-divider></mat-divider>
+
+              <p class="mat-small organization">ORGANIZATION</p>
+              <p>{{ project.organization.name }}</p>
+
+              <p class="mat-small date-created">DATE CREATED</p>
+              <p>{{ project.dateCreated | date }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <a
+                class="action-button"
+                mat-stroked-button
+                color="primary"
+                [routerLink]="['/organizations', orgDetails?.slug, 'issues']"
+                [queryParams]="{ project: orgDetails?.id }"
+              >
+                <mat-icon class="icon__warning" aria-hidden="true"
+                  >warning</mat-icon
+                >
+                <span>Issues</span>
+              </a>
+              <a
+                class="action-button"
+                mat-button
+                color="primary"
+                [routerLink]="['/settings', orgDetails?.slug, 'projects']"
+              >
+                <mat-icon class="icon__settings" aria-hidden="true"
+                  >settings</mat-icon
+                >
+                Settings
+              </a>
+            </mat-card-actions>
+          </mat-card></a
+        >
+      </div>
+    </div>
+  </div>
+</section>

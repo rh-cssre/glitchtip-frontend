@@ -1,12 +1,13 @@
 <div>
   <h1>Projects</h1>
-  <button
+  <a
+    *ngIf="activeOrganizationDetail$ | async as orgDetails"
     mat-flat-button
-    [routerLink]="['/settings/projects', 'new']"
+    [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
     color="accent"
   >
     Create New Project
-  </button>
+  </a>
 </div>
 <section>
   <mat-card *ngFor="let project of projects$ | async">
