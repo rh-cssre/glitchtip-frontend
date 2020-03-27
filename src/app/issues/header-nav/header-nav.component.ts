@@ -128,7 +128,7 @@ export class HeaderNavComponent implements OnInit {
 
   @HostListener("document:click", ["$event.target"])
   onClickHandler(target) {
-    if (!target.closest("#project-picker") && this.expansionPanel.opened) {
+    if (!target.closest("#project-picker") && this.expansionPanel.expanded) {
       this.closePanel();
     }
   }
