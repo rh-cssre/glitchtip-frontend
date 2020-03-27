@@ -59,5 +59,13 @@
         </button>
       </div>
     </mat-expansion-panel>
+    <button
+      mat-button
+      class="reset-button"
+      *ngIf="(appliedProjectIds$ | async)?.length > 0"
+      (click)="navigate(null)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
   </mat-accordion>
 </section>

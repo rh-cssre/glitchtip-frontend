@@ -1,3 +1,25 @@
+#project-picker {
+  position: relative;
+}
+
+.reset-button {
+  position: absolute;
+  right: 50px;
+  z-index: 2;
+  height: 48px;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 0;
+  width: 35px;
+  min-width: 35px;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.2s;
+}
+
+.mat-expanded + .reset-button {
+  transform: translateY(4px);
+}
+
 mat-accordion {
   position: relative;
   display: flex;
