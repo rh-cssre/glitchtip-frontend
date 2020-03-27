@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { OAuthService } from "angular-oauth2-oidc";
 import { tap } from "rxjs/operators";
@@ -29,7 +30,8 @@ export class GlitchTipOAuthService {
   constructor(
     private http: HttpClient,
     private auth: AuthService,
-    private oauthService: OAuthService
+    private oauthService: OAuthService,
+    private router: Router
   ) {}
 
   githubLogin(code: string) {
@@ -39,7 +41,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/github/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.auth.setAuth(resp)));
+      .pipe(tap(resp => this.loginSuccess(resp)));
   }
 
   microsoftLogin(accessToken: string) {
@@ -49,7 +51,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/microsoft/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.auth.setAuth(resp)));
+      .pipe(tap(resp => this.loginSuccess(resp)));
   }
 
   gitlabLogin(accessToken: string) {
@@ -59,7 +61,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/gitlab/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.auth.setAuth(resp)));
+      .pipe(tap(resp => this.loginSuccess(resp)));
   }
 
   googleLogin(accessToken: string) {
@@ -69,7 +71,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/google/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.auth.setAuth(resp)));
+      .pipe(tap(resp => this.loginSuccess(resp)));
   }
 
   initGitlabLogin() {
@@ -90,5 +92,11 @@ export class GlitchTipOAuthService {
   initMicrosoftLogin() {
     this.oauthService.configure(microsoftAuthConfig);
     this.oauthService.initLoginFlow();
+  }
+
+  /** On success for any oauth client, set auth data and redirect to home */
+  private loginSuccess(resp: RestAuthLoginResp) {
+    this.auth.setAuth(resp);
+    this.router.navigate([""]);
   }
 }

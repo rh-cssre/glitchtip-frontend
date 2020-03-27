@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
+import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
 
 export const routes: Routes = [
   {
@@ -32,7 +33,8 @@ export const routes: Routes = [
   },
   {
     path: "login",
-    loadChildren: () => import("./login/login.module").then(m => m.LoginModule)
+    loadChildren: () => import("./login/login.module").then(m => m.LoginModule),
+    canActivate: [AlreadyLoggedInGuard]
   },
   {
     path: "**",
