@@ -31,31 +31,9 @@
         >
       </div>
       <div class="project-card-wrapper">
-        <mat-card *ngFor="let project of projects$ | async">
-          <a
-            [routerLink]="[
-              '/organizations',
-              project.organization.slug,
-              'issues'
-            ]"
-            [queryParams]="{ project: project.id }"
-          >
-            <mat-card-content>
-              <mat-card-title>{{ project.name }}</mat-card-title>
-              <mat-divider></mat-divider>
-
-              <p class="mat-small organization">ORGANIZATION</p>
-              <p>{{ project.organization.name }}</p>
-
-              <p class="mat-small date-created">DATE CREATED</p>
-              <p>{{ project.dateCreated | date }}</p>
-            </mat-card-content>
-          </a>
-          <mat-card-actions>
+        <ng-container *ngFor="let project of projects$ | async">
+          <mat-card *ngIf="project.organization.slug === orgDetails?.slug">
             <a
-              class="action-button"
-              mat-stroked-button
-              color="primary"
               [routerLink]="[
                 '/organizations',
                 project.organization.slug,
@@ -63,28 +41,52 @@
               ]"
               [queryParams]="{ project: project.id }"
             >
-              <mat-icon class="icon__warning" aria-hidden="true"
-                >warning</mat-icon
-              >
-              <span>Issues</span>
+              <mat-card-content>
+                <mat-card-title>{{ project.name }}</mat-card-title>
+                <mat-divider></mat-divider>
+
+                <p class="mat-small organization">ORGANIZATION</p>
+                <p>{{ project.organization.name }}</p>
+
+                <p class="mat-small date-created">DATE CREATED</p>
+                <p>{{ project.dateCreated | date }}</p>
+              </mat-card-content>
             </a>
-            <a
-              class="action-button"
-              mat-button
-              color="primary"
-              [routerLink]="[
-                '/settings',
-                project.organization.slug,
-                'projects'
-              ]"
-            >
-              <mat-icon class="icon__settings" aria-hidden="true"
-                >settings</mat-icon
+            <mat-card-actions>
+              <a
+                class="action-button"
+                mat-stroked-button
+                color="primary"
+                [routerLink]="[
+                  '/organizations',
+                  project.organization.slug,
+                  'issues'
+                ]"
+                [queryParams]="{ project: project.id }"
               >
-              Settings
-            </a>
-          </mat-card-actions>
-        </mat-card>
+                <mat-icon class="icon__warning" aria-hidden="true"
+                  >warning</mat-icon
+                >
+                <span>Issues</span>
+              </a>
+              <a
+                class="action-button"
+                mat-button
+                color="primary"
+                [routerLink]="[
+                  '/settings',
+                  project.organization.slug,
+                  'projects'
+                ]"
+              >
+                <mat-icon class="icon__settings" aria-hidden="true"
+                  >settings</mat-icon
+                >
+                Settings
+              </a>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
       </div>
     </div>
   </div>
