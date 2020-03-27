@@ -13,6 +13,8 @@ table {
 }
 
 .primary-toolbar {
+  padding: 0 24px;
+
   @media (max-width: $tablet - 1) {
     padding-left: $iconWidth;
   }

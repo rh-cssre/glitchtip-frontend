@@ -7,7 +7,7 @@ import {
   ElementRef
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
-import { Observable, combineLatest } from "rxjs";
+import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { OrganizationProduct } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -25,19 +25,37 @@ export class HeaderNavComponent implements OnInit {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
+  /** Active Organization Slug */
+  activeOrgSlug$ = this.organizationsService.activeOrganizationSlug$;
+
+  /** Projects that are selected in this component but not yet applied */
+  selectedProjectIds = new BehaviorSubject<number[]>([]);
+
+  /** Observable of selectedProjectIds, intended to separate concerns */
+  selectedProjectIds$ = this.selectedProjectIds.asObservable();
+
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
-    map(params => normalizeProjectParams(params.project))
+    map(params => {
+      const normalizedParams = normalizeProjectParams(params.project);
+      this.selectedProjectIds.next(
+        normalizedParams.map(id => parseInt(id, 10))
+      );
+      return normalizedParams;
+    })
   );
 
   appliedProjectIds: string[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
-  appliedProjectsString$ = combineLatest([
+  selectedProjectsString$ = combineLatest([
     this.projects$,
-    this.appliedProjectIds$
+    this.selectedProjectIds$
   ]).pipe(
     map(([projects, ids]) => {
+      if (projects?.length === 1) {
+        return projects[0].name;
+      }
       switch (ids.length) {
         case 0:
           return "My Projects";
@@ -45,13 +63,20 @@ export class HeaderNavComponent implements OnInit {
           return "All Projects";
         default:
           return ids
-            .map(
-              id =>
-                projects?.find(project => parseInt(id, 10) === project.id)?.name
-            )
+            .map(id => projects?.find(project => id === project.id)?.name)
             .join(", ");
       }
     })
+  );
+
+  selectedAndAppliedIdsAreEqual$ = combineLatest([
+    this.selectedProjectIds$,
+    this.appliedProjectIds$
+  ]).pipe(
+    map(
+      ([selected, applied]) =>
+        selected.sort().join(",") === applied.sort().join(",")
+    )
   );
 
   /** Used to filter project names */
@@ -84,7 +109,11 @@ export class HeaderNavComponent implements OnInit {
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
-    if (event.key === "/" && !this.expansionPanel.expanded) {
+    if (
+      event.key === "/" &&
+      !this.expansionPanel.expanded &&
+      !this.expansionPanel.disabled
+    ) {
       event.preventDefault();
       // turns out this is where the scrolling is happening for whatever reason
       document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
@@ -92,7 +121,7 @@ export class HeaderNavComponent implements OnInit {
     }
     if (this.expansionPanel.expanded) {
       if (event.key === "Escape") {
-        this.expansionPanel.close();
+        this.resetPanel();
       }
       if (event.key === "ArrowDown") {
         event.preventDefault();
@@ -106,8 +135,8 @@ export class HeaderNavComponent implements OnInit {
 
   @HostListener("document:click", ["$event.target"])
   onClickHandler(target) {
-    if (!target.closest("#project-picker") && this.expansionPanel.opened) {
-      this.expansionPanel.close();
+    if (!target.closest("#project-picker") && this.expansionPanel.expanded) {
+      this.closePanel();
     }
   }
 
@@ -156,7 +185,7 @@ export class HeaderNavComponent implements OnInit {
   }
 
   isSelected(projectId: number) {
-    return this.appliedProjectIds.find(id => parseInt(id, 10) === projectId);
+    return this.selectedProjectIds.getValue().find(id => id === projectId);
   }
 
   focusPanel() {
@@ -166,18 +195,31 @@ export class HeaderNavComponent implements OnInit {
 
   selectProjectAndClose(projectId: number) {
     this.navigate([projectId]);
+    this.selectedProjectIds.next([projectId]);
     this.expansionPanel.close();
   }
 
   toggleProject(projectId: number) {
-    const appliedIds = [...this.appliedProjectIds].map(id => parseInt(id, 10));
-    const idMatchIndex = appliedIds.indexOf(projectId);
+    const selectedIds = [...this.selectedProjectIds.getValue()];
+    const idMatchIndex = selectedIds.indexOf(projectId);
     if (idMatchIndex > -1) {
-      appliedIds.splice(idMatchIndex, 1);
+      selectedIds.splice(idMatchIndex, 1);
     } else {
-      appliedIds.push(projectId);
+      selectedIds.push(projectId);
     }
-    this.navigate(appliedIds.length > 0 ? appliedIds : null);
+    this.selectedProjectIds.next(selectedIds);
+  }
+
+  resetPanel() {
+    this.selectedProjectIds.next(
+      this.appliedProjectIds.map(id => parseInt(id, 10))
+    );
+    this.expansionPanel.close();
+  }
+
+  closePanel() {
+    this.navigate(this.selectedProjectIds.getValue());
+    this.expansionPanel.close();
   }
 
   ngOnInit() {

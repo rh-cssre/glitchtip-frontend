@@ -1,13 +1,17 @@
 <section id="project-picker">
-  <mat-accordion displayMode="flat" [hideToggle]="false">
+  <mat-accordion
+    displayMode="flat"
+    [hideToggle]="(projects$ | async)?.length < 2"
+  >
     <mat-expansion-panel
       #expansionPanel
       class="mat-elevation-z1"
       (opened)="focusPanel()"
+      [disabled]="(projects$ | async)?.length < 2"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ appliedProjectsString$ | async }}
+          {{ selectedProjectsString$ | async }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-form-field>
@@ -49,14 +53,32 @@
         >
           View All
         </button>
-        <button
-          mat-flat-button
-          (click)="expansionPanel.close()"
-          color="primary"
-        >
+        <button mat-flat-button (click)="closePanel()" color="primary">
+          <ng-container
+            *ngIf="(selectedAndAppliedIdsAreEqual$ | async) === false"
+          >
+            Apply &
+          </ng-container>
           Close
         </button>
       </div>
     </mat-expansion-panel>
+    <a
+      mat-flat-button
+      color="primary"
+      class="add-button"
+      [routerLink]="['/settings', activeOrgSlug$ | async, 'projects', 'new']"
+    >
+      <mat-icon>add</mat-icon>
+      Add Project
+    </a>
+    <button
+      mat-button
+      class="reset-button"
+      *ngIf="(appliedProjectIds$ | async)?.length > 0"
+      (click)="navigate(null)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
   </mat-accordion>
 </section>
