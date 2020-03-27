@@ -28,8 +28,8 @@ describe("IssueDetailService", () => {
       ],
       providers: [{ provide: OrganizationsService, useValue: mockOrgService }]
     });
-    httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(IssueDetailService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(IssueDetailService);
   });
 
   it("should be created", () => {

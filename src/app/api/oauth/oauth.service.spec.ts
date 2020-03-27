@@ -19,7 +19,9 @@ describe("OauthService", () => {
   );
 
   it("should be created", () => {
-    const service: GlitchTipOAuthService = TestBed.get(GlitchTipOAuthService);
+    const service: GlitchTipOAuthService = TestBed.inject(
+      GlitchTipOAuthService
+    );
     expect(service).toBeTruthy();
   });
 });

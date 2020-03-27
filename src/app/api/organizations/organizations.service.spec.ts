@@ -27,10 +27,10 @@ describe("OrganizationsService", () => {
         MaterialModule
       ]
     });
-    httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(OrganizationsService);
-    router = TestBed.get(Router);
-    zone = TestBed.get(NgZone);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(OrganizationsService);
+    router = TestBed.inject(Router);
+    zone = TestBed.inject(NgZone);
   });
 
   it("Initial organizations", () => {
@@ -40,7 +40,7 @@ describe("OrganizationsService", () => {
   });
 
   it("Initial active organization", () => {
-    service = TestBed.get(OrganizationsService);
+    service = TestBed.inject(OrganizationsService);
     service.activeOrganizationId$.subscribe(activeOrganization => {
       expect(activeOrganization).toBe(null);
     });
@@ -109,9 +109,9 @@ describe("OrganizationsService", () => {
         }
       ]
     });
-    httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(OrganizationsService);
-    router = TestBed.get(Router);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(OrganizationsService);
+    router = TestBed.inject(Router);
     // Switch from one issues to another
     await zone.run(() =>
       router.navigate(["settings", organizationList[0].slug])

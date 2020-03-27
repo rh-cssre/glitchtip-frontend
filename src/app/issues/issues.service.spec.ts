@@ -18,8 +18,8 @@ describe("IssuesService", () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, MatSnackBarModule, RouterTestingModule]
     });
-    httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(IssuesService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(IssuesService);
   });
 
   it("should be created", () => {

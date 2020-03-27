@@ -9,7 +9,7 @@ describe("SettingsService", () => {
   );
 
   it("should be created", () => {
-    const service: SettingsService = TestBed.get(SettingsService);
+    const service: SettingsService = TestBed.inject(SettingsService);
     expect(service).toBeTruthy();
   });
 });
