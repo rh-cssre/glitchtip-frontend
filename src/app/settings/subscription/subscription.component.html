@@ -1,5 +1,66 @@
-<h2>Subscription</h2>
-<div *ngIf="subscription$ | async as subscription">
-  Status:
-  {{ subscription.status }}
-</div>
+<mat-card-header>
+  <mat-card-title>Subscription</mat-card-title>
+</mat-card-header>
+<mat-card-content>
+  <div *ngIf="subscription$ | async as subscription">
+    <div *ngIf="subscription.status === 'active'">
+      <p class="mat-body-1">
+        This organization has an active subscription to GlitchTip. Thank you!
+      </p>
+
+      <mat-card-subtitle>Details</mat-card-subtitle>
+
+      <ul>
+        <li class="mat-body-1">
+          Start date for this plan: {{ subscription.start | date }}
+        </li>
+        <li class="mat-body-1">
+          Plan cost: {{ subscription.plan?.amount | currency }}
+        </li>
+        <li class="mat-body-1">
+          Billing:
+          <ng-container *ngIf="subscription.billing === 'charge_automatically'">
+            Automatic
+          </ng-container>
+          <ng-container *ngIf="subscription.billing === 'send_invoice'">
+            Send invoice
+          </ng-container>
+        </li>
+        <li class="mat-body-1">
+          Billing period:
+          {{ subscription.current_period_start | date }} to
+          {{ subscription.current_period_end | date }}
+        </li>
+      </ul>
+
+      <p class="mat-body-1">
+        If you have questions about your subscription, please contact us at
+        <a href="mailto:billing@mail.glitchtip.com"
+          >billing@mail.glitchtip.com</a
+        >.
+      </p>
+    </div>
+    <div *ngIf="subscription.status !== 'active'">
+      <p class="mat-body-1">
+        This organization does not have an active subscription to GlitchTip.
+      </p>
+      <p class="mat-body-1">
+        If you would like to purchase a subscription, please contact us at
+        <a href="mailto:billing@mail.glitchtip.com"
+          >billing@mail.glitchtip.com</a
+        >.
+      </p>
+    </div>
+  </div>
+  <div *ngIf="(subscription$ | async) === null as subscription">
+    <p class="mat-body-1">
+      This organization does not have an active subscription to GlitchTip.
+    </p>
+
+    <p class="mat-body-1">
+      If you would like to purchase a subscription, please contact us at
+      <a href="mailto:billing@mail.glitchtip.com">billing@mail.glitchtip.com</a
+      >.
+    </p>
+  </div>
+</mat-card-content>

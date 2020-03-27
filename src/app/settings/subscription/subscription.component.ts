@@ -13,7 +13,6 @@ import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.se
 export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
   routerSubscription: Subscription;
-
   constructor(
     private service: SubscriptionsService,
     private route: ActivatedRoute
