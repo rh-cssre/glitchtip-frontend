@@ -1,8 +1,7 @@
-<mat-drawer-container class="example-container">
-  <mat-drawer mode="side" opened
-    ><nav>
+<mat-drawer-container>
+  <mat-drawer class="mat-elevation-z2" mode="side" opened>
+    <nav>
       <mat-nav-list>
-        <h3 mat-subheader>Organization</h3>
         <a
           mat-list-item
           routerLink="./"
@@ -11,20 +10,27 @@
         >
           General Settings
         </a>
-        <a mat-list-item routerLink="./projects" routerLinkActive="active-route"
-          >Projects</a
+        <a
+          mat-list-item
+          routerLink="./projects"
+          routerLinkActive="active-route"
         >
+          Projects
+        </a>
         <a
           *ngIf="billingEnabled$ | async"
           mat-list-item
           routerLink="./subscription"
           routerLinkActive="active-route"
-          >Subscription</a
         >
+          Subscription
+        </a>
       </mat-nav-list>
     </nav>
   </mat-drawer>
   <mat-drawer-content>
-    <router-outlet></router-outlet>
+    <mat-card>
+      <router-outlet></router-outlet>
+    </mat-card>
   </mat-drawer-content>
 </mat-drawer-container>

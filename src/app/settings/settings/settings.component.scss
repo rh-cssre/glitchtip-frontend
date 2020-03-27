@@ -10,3 +10,11 @@ mat-drawer-container {
   left: 0;
   right: 0;
 }
+
+mat-drawer {
+  min-width: 200px;
+}
+
+mat-drawer-content {
+  // padding: 0 20px;
+}
