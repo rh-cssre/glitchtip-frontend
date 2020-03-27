@@ -1,13 +1,17 @@
 <section id="project-picker">
-  <mat-accordion displayMode="flat" [hideToggle]="false">
+  <mat-accordion
+    displayMode="flat"
+    [hideToggle]="(projects$ | async)?.length < 2"
+  >
     <mat-expansion-panel
       #expansionPanel
       class="mat-elevation-z1"
       (opened)="focusPanel()"
+      [disabled]="(projects$ | async)?.length < 2"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ appliedProjectsString$ | async }}
+          {{ selectedProjectsString$ | async }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-form-field>

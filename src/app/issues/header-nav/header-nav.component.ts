@@ -45,11 +45,14 @@ export class HeaderNavComponent implements OnInit {
   appliedProjectIds: string[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
-  appliedProjectsString$ = combineLatest([
+  selectedProjectsString$ = combineLatest([
     this.projects$,
-    this.appliedProjectIds$
+    this.selectedProjectIds$
   ]).pipe(
     map(([projects, ids]) => {
+      if (projects?.length === 1) {
+        return projects[0].name;
+      }
       switch (ids.length) {
         case 0:
           return "My Projects";
@@ -57,10 +60,7 @@ export class HeaderNavComponent implements OnInit {
           return "All Projects";
         default:
           return ids
-            .map(
-              id =>
-                projects?.find(project => parseInt(id, 10) === project.id)?.name
-            )
+            .map(id => projects?.find(project => id === project.id)?.name)
             .join(", ");
       }
     })
@@ -106,7 +106,11 @@ export class HeaderNavComponent implements OnInit {
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
-    if (event.key === "/" && !this.expansionPanel.expanded) {
+    if (
+      event.key === "/" &&
+      !this.expansionPanel.expanded &&
+      !this.expansionPanel.disabled
+    ) {
       event.preventDefault();
       // turns out this is where the scrolling is happening for whatever reason
       document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);

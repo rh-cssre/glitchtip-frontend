@@ -61,6 +61,10 @@ mat-expansion-panel::ng-deep {
     margin-right: 24px;
   }
 
+  .mat-expansion-panel-header[aria-disabled="true"] {
+    color: rgba(0, 0, 0, 0.87);
+  }
+
   .mat-expansion-panel-header-title {
     white-space: nowrap;
     text-overflow: ellipsis;
