@@ -1,3 +1,8 @@
+:host {
+  background: white;
+  padding: 20px 25px 0;
+}
+
 #project-picker {
   position: relative;
 }
@@ -115,4 +120,8 @@ mat-expansion-panel::ng-deep {
       left: $hitbox;
     }
   }
+}
+
+.add-button {
+  margin: 6px 0 0 20px;
 }

@@ -25,6 +25,9 @@ export class HeaderNavComponent implements OnInit {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
+  /** Active Organization Slug */
+  activeOrgSlug$ = this.organizationsService.activeOrganizationSlug$;
+
   /** Projects that are selected in this component but not yet applied */
   selectedProjectIds = new BehaviorSubject<number[]>([]);
 

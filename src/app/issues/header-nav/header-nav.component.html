@@ -63,6 +63,15 @@
         </button>
       </div>
     </mat-expansion-panel>
+    <a
+      mat-flat-button
+      color="primary"
+      class="add-button"
+      [routerLink]="['/settings', activeOrgSlug$ | async, 'projects', 'new']"
+    >
+      <mat-icon>add</mat-icon>
+      Add Project
+    </a>
     <button
       mat-button
       class="reset-button"
