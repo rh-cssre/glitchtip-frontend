@@ -4,6 +4,8 @@ metadata:
   name: {{ include "glitchtip.fullname" . }}
   labels:
     {{- include "glitchtip.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook-weight": "-1"
 data:
 {{- range $k, $v := .Values.environmentVariables }}
   {{ $k }}: {{ $v | quote }}

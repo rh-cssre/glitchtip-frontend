@@ -13,6 +13,9 @@ fullnameOverride: ""
 databaseURL:
 secretKey:
 redisURL:
+# Only needed when using stripe for saas environment
+stripeLiveSecretKey:
+djstripeWebhookSecret: 
 
 environmentVariables:
   ENABLE_SOCIAL_AUTH: false
