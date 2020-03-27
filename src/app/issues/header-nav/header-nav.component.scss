@@ -1,10 +1,13 @@
 :host {
   background: white;
   padding: 20px 25px 0;
+  display: flex;
+  align-items: center;
 }
 
 #project-picker {
   position: relative;
+  flex: 1;
 }
 
 .reset-button {
@@ -123,5 +126,5 @@ mat-expansion-panel::ng-deep {
 }
 
 .add-button {
-  margin: 6px 0 0 20px;
+  margin: 0 0 0 20px;
 }
