@@ -1,8 +1,12 @@
-image: node:12-alpine
+image: node:12
 
 variables:
   CHROME_BIN: chromium-browser
   CONTAINER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  POSTGRES_HOST_AUTH_METHOD: "trust"
+  SECRET_KEY: "testing"
+  ENABLE_TEST_API: "true"
+  FF_NETWORK_PER_BUILD: 1
 
 stages:
   - test
@@ -17,9 +21,33 @@ test:
     paths:
     - .npm/
   script:
+    - apk add --no-cache git
     - npm ci --cache .npm --prefer-offline
     - npm run lint
     - npm run test -- --progress false --watch=false --browsers=Chromium_CI
+
+test-e2e:
+  stage: test
+  services:
+    - postgres
+    - name: registry.gitlab.com/glitchtip/glitchtip-backend:master
+      alias: backend
+      command: ["./bin/run-migrate-and-runserver.sh"]
+  image:
+    name: cypress/included:4.2.0
+    entrypoint: [""]
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - cp src/proxy.conf.ci.json src/proxy.conf.json 
+    - npm run e2e
+  variables:
+    CYPRESS_backendBaseURL: "http://backend:8080"
+  artifacts:
+    when: always
+    paths:
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
+    expire_in: 1 day
 
 build-assets:
   stage: test
