@@ -1,0 +1,4 @@
+{
+  "baseUrl": "http://localhost:4200",
+  "backendBaseURL": "http://localhooost:8000"
+}
