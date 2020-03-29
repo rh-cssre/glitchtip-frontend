@@ -1,4 +1,5 @@
 <script src="https://liberapay.com/GlitchTip/widgets/button.js"></script>
+
 <noscript><a href="https://liberapay.com/GlitchTip/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
 # GlitchTip Frontend
@@ -24,6 +25,15 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end to end tests
+
+We define end to end testing as running both the Django backend and Angular frontend.
+We use Cypress to run end to end tests. Be aware the tests will seed the backend codebase with test data.
+
+1. Run the backend server. From the backend repo run `docker-compose up`
+2. Run the frontend development server `npm start`
+3. Run Cypress `npm run cy:open`
 
 # Contributing
 
