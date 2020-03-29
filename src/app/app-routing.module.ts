@@ -37,6 +37,12 @@ export const routes: Routes = [
     canActivate: [AlreadyLoggedInGuard]
   },
   {
+    path: "profile",
+    loadChildren: () =>
+      import("./profile/profile.module").then(m => m.ProfileModule),
+    canActivate: [IsLoggedInGuard]
+  },
+  {
     path: "**",
     redirectTo: "",
     pathMatch: "full"
