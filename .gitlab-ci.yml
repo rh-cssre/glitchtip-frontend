@@ -17,7 +17,7 @@ test:
   stage: test
   image: registry.gitlab.com/dasch8/angular-ci:latest
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key: ${CI_COMMIT_REF_SLUG}-dasch8
     paths:
     - .npm/
   script:
@@ -42,6 +42,10 @@ test-e2e:
     - npm run e2e
   variables:
     CYPRESS_backendBaseURL: "http://backend:8080"
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+    - .npm/
   artifacts:
     when: always
     paths:
