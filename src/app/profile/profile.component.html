@@ -1,1 +1,12 @@
-<p>profile works!</p>
+<p>User Profile</p>
+
+<div *ngIf="user$ | async as user">
+  {{ user.email }}
+
+  <div *ngIf="isGoogleConnected$ | async; else googleDisconnected">
+    Google is connected, disconnect option goes here
+  </div>
+  <ng-template #googleDisconnected
+    >Google isn't connected, connect option goes here</ng-template
+  >
+</div>
