@@ -1,7 +1,12 @@
 <section>
   <h1>Good {{ timeOfDay() }}!</h1>
 
-  <div *ngIf="!projects$ && !activeOrganizationDetail$">
+  <div
+    *ngIf="
+      (projects$ | async)?.length === 0 &&
+      (activeOrganizationDetail$ | async) === undefined
+    "
+  >
     <p>You don't have any organizations yet. Create one to get started.</p>
     <a mat-flat-button color="primary" [routerLink]="['/organizations', 'new']"
       >Create New Organization</a

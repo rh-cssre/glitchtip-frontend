@@ -1,4 +1,4 @@
-import { seedBackend } from "./utils";
+import { seedBackend, requestLogin } from "./utils";
 import { user } from "../fixtures/users";
 
 describe("Login", () => {
@@ -16,6 +16,6 @@ describe("Login", () => {
     cy.get("input[formcontrolname=email]").type(user.email);
     cy.get("input[formcontrolname=password]").type(user.password);
     cy.get("#submit").click();
-    cy.url().should("be", "/");
+    cy.url().should("not.include", "login");
   });
 });
