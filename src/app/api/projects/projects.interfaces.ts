@@ -1,10 +1,12 @@
 import { Organization } from "../organizations/organizations.interface";
 
-export interface ProjectKey {
+export interface ProjectKeys {
+  dateCreated: Date;
+  dsn: { public: string };
+  id: string;
   label: string;
-  public_key: string;
-  date_added: string;
-  dsn: string;
+  public: string;
+  projectId: string;
 }
 
 export interface ProjectNew {
@@ -21,4 +23,20 @@ export interface Project extends ProjectIssueView {
   firstEvent: string;
   dateCreated: string;
   organization: Organization;
+}
+
+export interface ProjectDetail extends Project {
+  avatar: Avatar;
+  color: string;
+  features: [];
+  hasAccess: boolean;
+  isBookmarked: boolean;
+  isInternal: boolean;
+  isMember: boolean;
+  isPublic: boolean;
+}
+
+interface Avatar {
+  avatarType: string;
+  avatarUuid: string | null;
 }

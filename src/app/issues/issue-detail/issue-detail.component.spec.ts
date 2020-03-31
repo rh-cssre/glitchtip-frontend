@@ -5,7 +5,6 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 import { IssueDetailComponent } from "./issue-detail.component";
 import { ComponentFixtureAutoDetect } from "@angular/core/testing";
-import { MaterialModule } from "src/app/shared/material.module";
 import { SharedModule } from "src/app/shared/shared.module";
 
 describe("IssueDetailComponent", () => {
@@ -18,7 +17,6 @@ describe("IssueDetailComponent", () => {
         HttpClientTestingModule,
         RouterTestingModule,
         NoopAnimationsModule,
-        MaterialModule,
         SharedModule
       ],
       declarations: [IssueDetailComponent],

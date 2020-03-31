@@ -29,3 +29,24 @@ a {
 .active-route {
   font-weight: 700;
 }
+
+.card-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax((334px), 1fr));
+  grid-gap: 24px;
+}
+
+.heading-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.l-body {
+  max-width: 1100px;
+  padding-left: 24px;
+  padding-right: 24px;
+  margin-top: 32px;
+  margin-left: auto;
+  margin-right: auto;
+}

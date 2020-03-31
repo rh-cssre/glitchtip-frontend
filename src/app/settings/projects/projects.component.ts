@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { ProjectsService } from "../../api/projects/projects.service";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { ProjectsService } from "src/app/api/projects/projects.service";
 
 @Component({
   selector: "app-projects",
@@ -9,22 +9,16 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsComponent implements OnInit {
-  projects$ = this.projectsService.getProjects;
-  activeOrganizationDetail$ = this.organizationsService
-    .activeOrganizationDetail$;
+  projects$ = this.organizationsService.activeOrganizationProjects$;
+  activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
+  projectsForActiveOrg$ = this.projectsService.projectsForActiveOrg$;
 
   constructor(
-    private projectsService: ProjectsService,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private projectsService: ProjectsService
   ) {}
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
-  }
-
-  onDelete(projectId: number) {
-    if (window.confirm("Are you sure you want to delete your project?")) {
-      this.projectsService.deleteProject(projectId).toPromise();
-    }
   }
 }
