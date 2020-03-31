@@ -30,6 +30,11 @@ export const googleAuthConfig: AuthConfig = {
   sessionChecksEnabled: true
 };
 
+export const googleAuthConnectConfig: AuthConfig = {
+  ...googleAuthConfig,
+  redirectUri: window.location.origin + "/profile/connect/google"
+};
+
 export const microsoftAuthConfig: AuthConfig = {
   issuer: "https://login.microsoftonline.com/common",
   tokenEndpoint: "https://login.microsoftonline.com/common/oauth2/v2.0/token",

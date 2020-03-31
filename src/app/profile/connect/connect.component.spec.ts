@@ -4,15 +4,15 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OAuthModule } from "angular-oauth2-oidc";
 
-import { ProfileComponent } from "./profile.component";
+import { ConnectComponent } from "./connect.component";
 
-describe("ProfileComponent", () => {
-  let component: ProfileComponent;
-  let fixture: ComponentFixture<ProfileComponent>;
+describe("ConnectComponent", () => {
+  let component: ConnectComponent;
+  let fixture: ComponentFixture<ConnectComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProfileComponent],
+      declarations: [ConnectComponent],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -23,7 +23,7 @@ describe("ProfileComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProfileComponent);
+    fixture = TestBed.createComponent(ConnectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

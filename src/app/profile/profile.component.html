@@ -7,6 +7,9 @@
     Google is connected, disconnect option goes here
   </div>
   <ng-template #googleDisconnected
-    >Google isn't connected, connect option goes here</ng-template
+    >Google isn't connected,
+    <a (click)="connectGoogle()">connect</a></ng-template
   >
+
+  <!-- Repeat for MS, gitlab, github -->
 </div>

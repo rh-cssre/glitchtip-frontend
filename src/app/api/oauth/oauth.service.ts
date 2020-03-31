@@ -9,7 +9,8 @@ import {
   gitlabAuthConfig,
   googleAuthConfig,
   microsoftAuthConfig,
-  githubAuthConfig
+  githubAuthConfig,
+  googleAuthConnectConfig
 } from "./social";
 
 interface RestAuthConnectData {
@@ -74,6 +75,14 @@ export class GlitchTipOAuthService {
       .pipe(tap(resp => this.loginSuccess(resp)));
   }
 
+  googleConnect(accessToken: string) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken
+    };
+    const url = this.baseUrl + "/google/connect/";
+    return this.http.post<RestAuthLoginResp>(url, data);
+  }
+
   initGitlabLogin() {
     this.oauthService.configure(gitlabAuthConfig);
     this.oauthService.initLoginFlow();
@@ -86,6 +95,11 @@ export class GlitchTipOAuthService {
 
   initGoogleLogin() {
     this.oauthService.configure(googleAuthConfig);
+    this.oauthService.initLoginFlow();
+  }
+
+  initGoogleConnect() {
+    this.oauthService.configure(googleAuthConnectConfig);
     this.oauthService.initLoginFlow();
   }
 
