@@ -6,7 +6,6 @@ import { of } from "rxjs";
 // Imports
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { MaterialModule } from "src/app/shared/material.module";
 import { RouterTestingModule } from "@angular/router/testing";
 import { SharedModule } from "src/app/shared/shared.module";
 
@@ -14,7 +13,6 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { EventDetailComponent } from "./event-detail.component";
 import { EntryRequestComponent } from "../event-detail/entry-request/entry-request.component";
 import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
-import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EntryMessageComponent } from "./entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./entry-exception/entry-exception.component";
 
@@ -34,7 +32,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
@@ -43,7 +40,6 @@ export default {
       ],
       declarations: [
         EntryRequestComponent,
-        EntryDataComponent,
         EntryCSPComponent,
         EntryMessageComponent,
         EntryExceptionComponent

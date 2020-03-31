@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router, ActivatedRoute, ParamMap } from "@angular/router";
-import { switchMap } from "rxjs/operators";
-import { of } from "rxjs";
+import { Router, ActivatedRoute } from "@angular/router";
+import { map, exhaustMap } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
+import { EMPTY, combineLatest } from "rxjs";
 
 @Component({
   selector: "app-project-detail",
@@ -11,59 +11,72 @@ import { ProjectsService } from "../../../api/projects/projects.service";
   styleUrls: ["./project-detail.component.scss"]
 })
 export class ProjectDetailComponent implements OnInit {
-  project: any;
-  organizationSlug: string;
-  projectSlug: string | null;
-  error: string;
+  projectKeys$ = this.projectsService.projectKeys$;
+  activeProject$ = this.projectsService.activeProject$;
 
+  orgParam$ = this.activatedRoute.paramMap.pipe(
+    map(params => params.get("org-slug"))
+  );
+  projectParam$ = this.activatedRoute.paramMap.pipe(
+    map(params => params.get("slug"))
+  );
+  orgAndProjectParams$ = combineLatest([this.orgParam$, this.projectParam$]);
+
+  error: string;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
     platform: new FormControl("", [Validators.required])
   });
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private projectsService: ProjectsService
-  ) {}
-
-  loadValues() {
-    this.form.setValue({
-      name: this.project.name,
-      platform: this.project.platform
+  ) {
+    this.activeProject$.subscribe(data => {
+      if (data) {
+        this.form.patchValue({
+          name: data.name,
+          platform: data.platform
+        });
+      }
     });
   }
 
   ngOnInit() {
-    this.route.paramMap
-      .pipe(switchMap((params: ParamMap) => of(params.get("slug"))))
-      .subscribe(slug => (this.projectSlug = slug));
+    this.orgAndProjectParams$
+      .pipe(
+        exhaustMap(([orgSlug, projectSlug]) => {
+          if (orgSlug && projectSlug) {
+            this.projectsService.retrieveProjectDetail(orgSlug, projectSlug);
+            this.projectsService.retrieveClientKeys(orgSlug, projectSlug);
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
 
-    if (this.projectSlug) {
-      this.projectsService
-        .retrieveProjectDetail("test-org", this.projectSlug)
-        .subscribe(project => {
-          this.project = project;
-          this.loadValues();
-        });
+  onDelete(orgSlug: string, projectSlug: string) {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      this.projectsService.deleteProject(orgSlug, projectSlug).subscribe(
+        () => this.router.navigate(["settings", orgSlug, "projects"]),
+        err => console.log("delete project error: ", err)
+      );
     }
   }
 
-  onDelete(projectId: number) {
-    this.projectsService.deleteProject(projectId);
-  }
-
-  onSubmit() {
+  onSubmit(orgSlug: string, projectSlug: string) {
     console.log(this.form);
     if (this.form.valid) {
       this.projectsService
-        .updateProject(this.project.organization.slug, this.project.slug, {
+        .updateProject(orgSlug, projectSlug, {
           name: this.form.value.name,
           platform: this.form.value.platform
         })
         .subscribe(
           () => this.router.navigate(["/settings/projects"]),
-          err => console.log("error:", err)
+          err => console.log("form error:", err)
         );
     } else {
       this.error = "form not valid";

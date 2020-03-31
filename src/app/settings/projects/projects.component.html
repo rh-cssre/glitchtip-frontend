@@ -1,30 +1,27 @@
-<div>
-  <h1>Projects</h1>
-  <a
-    *ngIf="activeOrganizationDetail$ | async as orgDetails"
-    mat-flat-button
-    [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
-    color="accent"
-  >
-    Create New Project
-  </a>
-</div>
-<section>
-  <mat-card *ngFor="let project of projects$ | async">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{ project.name }}</mat-card-title>
-      <mat-card-subtitle
-        >Created on {{ project.dateCreated | date }}</mat-card-subtitle
-      >
-    </mat-card-header>
-    <mat-card-actions>
-      <button mat-button [routerLink]="project.slug">
-        Project Details
-      </button>
-      <button (click)="onDelete(project.id)" mat-button>
-        Remove Project
-      </button>
-    </mat-card-actions>
-  </mat-card>
+<section class="l-body">
+  <div class="heading-with-button">
+    <h1>Projects</h1>
+    <a
+      *ngIf="activeOrganizationSlug$ | async as slug"
+      mat-flat-button
+      [routerLink]="['/settings', slug, 'projects', 'new']"
+      color="primary"
+    >
+      Create New Project
+    </a>
+  </div>
+  <div class="card-wrapper">
+    <app-project-card
+      *ngFor="let project of projectsForActiveOrg$ | async"
+      [cardLink]="[project.slug]"
+      [title]="project.name"
+      [descriptionList]="[
+        { key: 'organization', value: project.organization.name },
+        { key: 'date created', value: project.dateCreated | date }
+      ]"
+      [primaryActionButtonLink]="[project.slug]"
+      primaryActionButtonIcon="settings"
+      primaryActionButtonText="Settings"
+    ></app-project-card>
+  </div>
 </section>

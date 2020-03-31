@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { EventDetailComponent } from "./event-detail.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { EntryRequestComponent } from "./entry-request/entry-request.component";
-import { EntryDataComponent } from "./entry-data/entry-data.component";
+import { EntryDataComponent } from "../../../shared/entry-data/entry-data.component";
 
 describe("EventDetailComponent", () => {
   let component: EventDetailComponent;

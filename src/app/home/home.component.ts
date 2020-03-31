@@ -11,7 +11,7 @@ import { ProjectsService } from "../api/projects/projects.service";
 export class HomeComponent implements OnInit {
   activeOrganizationDetail$ = this.organizationsService
     .activeOrganizationDetail$;
-  projects$ = this.projectsService.getProjects;
+  projects$ = this.projectsService.projects$;
 
   constructor(
     private organizationsService: OrganizationsService,
@@ -20,12 +20,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
-  }
-
-  onDelete(projectId: number) {
-    if (window.confirm("Are you sure you want to delete your project?")) {
-      this.projectsService.deleteProject(projectId).toPromise();
-    }
   }
 
   timeOfDay() {

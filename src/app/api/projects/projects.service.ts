@@ -1,21 +1,60 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { BehaviorSubject, of, EMPTY } from "rxjs";
-import { tap, catchError, map, exhaustMap } from "rxjs/operators";
+import { BehaviorSubject, of, combineLatest } from "rxjs";
+import { tap, catchError, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
-import { ProjectNew, Project } from "./projects.interfaces";
+import {
+  ProjectNew,
+  Project,
+  ProjectKeys,
+  ProjectDetail
+} from "./projects.interfaces";
+import { OrganizationsService } from "../organizations/organizations.service";
+
+interface ProjectsState {
+  projects: Project[] | null;
+  projectDetail: ProjectDetail | null;
+  projectKeys: ProjectKeys | null;
+}
+
+const initialState: any = {
+  projects: null,
+  projectDetail: null,
+  projectKeys: null
+};
 
 @Injectable({
   providedIn: "root"
 })
 export class ProjectsService {
-  private projects = new BehaviorSubject<Project[]>([]);
-  getProjects = this.projects.asObservable();
-  url = baseUrl + "/projects/";
+  private readonly projectsState = new BehaviorSubject<ProjectsState>(
+    initialState
+  );
+  private readonly getState$ = this.projectsState.asObservable();
+  private readonly url = baseUrl + "/projects/";
 
-  constructor(private http: HttpClient) {}
+  readonly projects$ = this.getState$.pipe(map(data => data.projects));
 
-  createProject(project: ProjectNew) {
+  readonly activeProject$ = this.getState$.pipe(
+    map(data => data.projectDetail)
+  );
+  readonly projectKeys$ = this.getState$.pipe(map(data => data.projectKeys));
+
+  readonly projectsForActiveOrg$ = combineLatest([
+    this.projects$,
+    this.organizationsService.activeOrganizationId$
+  ]).pipe(
+    map(([projects, activeOrg]) =>
+      projects?.filter(project => project.organization.id === activeOrg)
+    )
+  );
+
+  constructor(
+    private http: HttpClient,
+    private organizationsService: OrganizationsService
+  ) {}
+
+  createProject(project: any) {
     return this.http
       .post<Project>(this.url, project)
       .pipe(tap(newProject => this.addOneProject(newProject)));
@@ -30,7 +69,18 @@ export class ProjectsService {
 
   retrieveProjectDetail(organizationSlug: string, projectSlug: string) {
     const url = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http.get<Project>(url);
+    return this.http
+      .get<ProjectDetail>(url)
+      .pipe(tap(activeProject => this.setActiveProject(activeProject)))
+      .subscribe();
+  }
+
+  retrieveClientKeys(organizationSlug: string, projectSlug: string) {
+    const keysUrl = `${this.url}${organizationSlug}/${projectSlug}/keys/`;
+    return this.http
+      .get<any>(keysUrl)
+      .pipe(tap(projectKeys => this.setKeys(projectKeys)))
+      .subscribe();
   }
 
   updateProject(
@@ -45,35 +95,50 @@ export class ProjectsService {
     );
   }
 
-  deleteProject(projectId: number) {
-    return this.projects.pipe(
-      map(projects => projects.find(project => project.id === projectId)),
-      exhaustMap(project => {
-        if (project) {
-          return this.http
-            .delete(`${this.url}${project.organization.slug}/${project.slug}/`)
-            .pipe(
-              map(() => this.removeOneProject(projectId)),
-              catchError((err: HttpErrorResponse) => of(err))
-            );
-        }
-        return EMPTY;
-      })
+  deleteProject(organizationSlug: string, projectSlug: string) {
+    const deleteUrl = `${this.url}${organizationSlug}/${projectSlug}/`;
+    return this.http.delete(deleteUrl).pipe(
+      map(() => this.removeOneProject(projectSlug)),
+      catchError((err: HttpErrorResponse) => of(err))
     );
   }
 
   private setProjects(projects: Project[]) {
-    this.projects.next(projects);
+    this.projectsState.next({ ...this.projectsState.getValue(), projects });
+  }
+
+  private setActiveProject(projectDetail: ProjectDetail) {
+    this.projectsState.next({
+      ...this.projectsState.getValue(),
+      projectDetail
+    });
   }
 
   private addOneProject(project: Project) {
-    const newProjects = this.projects.getValue().concat([project]);
-    this.projects.next(newProjects);
+    const newProjects = this.projectsState
+      .getValue()
+      .projects?.concat([project]);
+    if (newProjects) {
+      this.projectsState.next({
+        ...this.projectsState.getValue(),
+        projects: newProjects
+      });
+    }
   }
 
-  private removeOneProject(projectId: number) {
-    this.projects.next(
-      this.projects.getValue().filter(project => project.id !== projectId)
-    );
+  private removeOneProject(projectSlug: string) {
+    const filteredProjects = this.projectsState
+      .getValue()
+      .projects?.filter(project => project.slug !== projectSlug);
+    if (filteredProjects) {
+      this.projectsState.next({
+        ...this.projectsState.getValue(),
+        projects: filteredProjects
+      });
+    }
+  }
+
+  private setKeys(projectKeys: any) {
+    this.projectsState.next({ ...this.projectsState.getValue(), projectKeys });
   }
 }

@@ -6,8 +6,8 @@ export interface OrganizationNew {
 export interface Organization extends OrganizationNew {
   id: number;
   dateCreated: string;
-  status: IStatus;
-  avatar: IAvatar;
+  status: OrgStatus;
+  avatar: Avatar;
   isEarlyAdopter: boolean;
   require2FA: boolean;
 }
@@ -17,12 +17,12 @@ export interface OrganizationDetail extends Organization {
   projects: OrganizationProduct[];
 }
 
-interface IStatus {
+interface OrgStatus {
   id: string;
   name: string;
 }
 
-interface IAvatar {
+export interface Avatar {
   avatarType: string;
   avatarUuid: string | null;
 }

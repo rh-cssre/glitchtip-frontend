@@ -1,7 +1,6 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, select } from "@storybook/addon-knobs";
-import { MaterialModule } from "src/app/shared/material.module";
 import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -14,7 +13,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
