@@ -5,6 +5,7 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { SettingsComponent } from "./settings.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("SettingsComponent", () => {
   let component: SettingsComponent;
@@ -16,6 +17,7 @@ describe("SettingsComponent", () => {
       imports: [
         MatSidenavModule,
         MatListModule,
+        MatSnackBarModule,
         NoopAnimationsModule,
         HttpClientTestingModule,
         RouterTestingModule
