@@ -43,8 +43,6 @@ export class MainNavComponent {
     if (this.isScreenSmall()) {
       this.hideSideNav();
     }
-
-    this.mainNav.navOpen$.subscribe(bool => console.log("nav staus: ", bool));
   }
 
   logout() {
