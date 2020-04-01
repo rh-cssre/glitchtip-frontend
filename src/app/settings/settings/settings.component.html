@@ -29,6 +29,15 @@
     </nav>
   </mat-drawer>
   <mat-drawer-content>
+    <mat-toolbar color="primary" (click)="toggleSideNav()">
+      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
+        <mat-icon>menu</mat-icon></button
+      ><span
+        class="active-org"
+        *ngIf="activeOrganizationDetail$ | async as orgDetails"
+        >{{ orgDetails?.name }}</span
+      >
+    </mat-toolbar>
     <mat-card>
       <router-outlet></router-outlet>
     </mat-card>

@@ -23,39 +23,47 @@ mat-sidenav {
   }
 }
 
-mat-toolbar {
-  display: none;
-  padding-left: $iconWidth;
-  cursor: pointer;
+.sub-items {
+  display: none !important;
 
   @media (max-width: $tablet - 1) {
-    display: flex;
+    display: block !important;
+    margin-left: 24px;
+    color: mat-color($mat-gray, 600);
   }
+}
 
-  .sidenav-toggle {
-    padding: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin: 0;
-    min-width: $iconWidth;
-  }
+mat-sidenav-content {
+  mat-toolbar {
+    display: none;
+    padding-left: $iconWidth;
+    cursor: pointer;
+    margin-bottom: 32px;
 
-  mat-icon {
-    font-size: 25px;
-    height: $iconWidth;
-    width: $iconWidth;
-    line-height: $iconWidth;
-    color: white;
-
-    @media (min-width: $small) {
-      height: 64px;
-      line-height: 64px;
+    @media (max-width: $tablet - 1) {
+      display: flex;
     }
-  }
 
-  .active-org {
-    margin-left: 8px;
+    .sidenav-toggle {
+      padding: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 0;
+      min-width: $iconWidth;
+    }
+
+    mat-icon {
+      font-size: 25px;
+      height: $iconWidth;
+      width: $iconWidth;
+      line-height: $iconWidth;
+      color: white;
+    }
+
+    .active-org {
+      margin-left: 8px;
+    }
   }
 }
 
