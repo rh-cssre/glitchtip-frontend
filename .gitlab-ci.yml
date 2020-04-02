@@ -19,7 +19,7 @@ test:
   cache:
     key: ${CI_COMMIT_REF_SLUG}-dasch8
     paths:
-    - .npm/
+      - .npm/
   script:
     - apk add --no-cache git
     - npm ci --cache .npm --prefer-offline
@@ -38,14 +38,12 @@ test-e2e:
     entrypoint: [""]
   script:
     - npm ci --cache .npm --prefer-offline
-    - cp src/proxy.conf.ci.json src/proxy.conf.json 
+    - cp src/proxy.conf.ci.json src/proxy.conf.json
     - npm run e2e
-  variables:
-    CYPRESS_backendBaseURL: "http://backend:8080"
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
-    - .npm/
+      - .npm/
   artifacts:
     when: always
     paths:
@@ -58,7 +56,7 @@ build-assets:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
-    - .npm/
+      - .npm/
   script:
     - npm ci --cache .npm --prefer-offline
     - node --max_old_space_size=6000 node_modules/@angular/cli/bin/ng build --prod --progress false
