@@ -82,8 +82,18 @@
         [class.ignored]="element.status === 'ignored'"
       >
         <a [routerLink]="element.id">{{ element.title }}</a>
-        <div class="mat-caption" *ngIf="(oneProjectApplied$ | async) === false">
-          {{ element.projectSlug }}
+        <div>
+          <span
+            class="mat-caption"
+            *ngIf="(oneProjectApplied$ | async) === false"
+          >
+            {{ element.projectSlug }}
+          </span>
+          <span
+            class="mat-caption"
+            *ngIf="element.type && element.type !== 'error'"
+            >&mdash;{{ element.type }} error</span
+          >
         </div>
       </td>
     </ng-container>

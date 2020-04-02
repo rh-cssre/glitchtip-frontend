@@ -3,13 +3,16 @@ import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
 import { IssueListItemComponent } from "./issue-list-item.component";
 import { issueList } from "../issues-list-test-data";
-import { MaterialModule } from "src/app/shared/material.module";
+import { HeaderNavComponent } from "../header-nav/header-nav.component";
+import { SharedModule } from "src/app/shared/shared.module";
+import { RouterTestingModule } from "@angular/router/testing";
 
 export default {
   title: "Issues List",
   decorators: [
     moduleMetadata({
-      imports: [MaterialModule, ReactiveFormsModule]
+      imports: [SharedModule, ReactiveFormsModule, RouterTestingModule],
+      declarations: [HeaderNavComponent]
     }),
     withKnobs
   ]

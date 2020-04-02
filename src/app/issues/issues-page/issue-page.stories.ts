@@ -10,6 +10,7 @@ import { MaterialModule } from "src/app/shared/material.module";
 import { IssuesService } from "../issues.service";
 import { issueList } from "../issues-list-test-data";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HeaderNavComponent } from "../header-nav/header-nav.component";
 
 export default {
   title: "Issues Page",
@@ -22,7 +23,8 @@ export default {
         RouterTestingModule,
         BrowserAnimationsModule
       ],
-      providers: [IssuesService]
+      providers: [IssuesService],
+      declarations: [HeaderNavComponent]
     }),
     withKnobs
   ]
@@ -31,13 +33,11 @@ export default {
 export const issueListItem = () => ({
   component: IssuesPageComponent,
   props: {
+    oneProjectApplied$: of(false),
     issues$: of(issueList)
   }
 });
 
 issueListItem.story = {
-  parameters: {
-    notes:
-      "Oh hey you can leave notes. Why is the alignment so weird though? Not sure if this is a great place to take notes."
-  }
+  name: "Issues Page"
 };

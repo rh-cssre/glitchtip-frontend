@@ -40,7 +40,7 @@ export const issueList = [
     id: 1412895512,
     assignedTo: null,
     logger: null,
-    type: "error",
+    type: "csp",
     annotations: [],
     metadata: {
       function: "<module>",
