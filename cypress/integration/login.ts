@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend } from "./utils";
 import { user } from "../fixtures/users";
 
 describe("Login", () => {
@@ -16,8 +16,6 @@ describe("Login", () => {
     cy.get("input[formcontrolname=email]").type(user.email);
     cy.get("input[formcontrolname=password]").type(user.password);
     cy.get("#submit").click();
-    // This is a false pass, but it doesn't break CI!
-    cy.url().should("be", "edjfklfsdjfklsdjkl");
-    // cy.url().should("not.include", "login");
+    cy.url().should("eq", "http://localhost:4200/");
   });
 });
