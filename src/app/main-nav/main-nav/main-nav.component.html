@@ -3,7 +3,7 @@
     #sidenav
     *ngIf="isLoggedIn$ | async"
     class="mat-elevation-z4"
-    [opened]="sideNavOpen"
+    [opened]="navOpen$ | async"
     (closed)="hideSideNav()"
     [mode]="isScreenSmall() ? 'over' : 'side'"
   >
@@ -58,19 +58,27 @@
           routerLinkActive="active-route"
           >Settings</a
         >
+        <a
+          class="sub-items"
+          mat-list-item
+          [routerLink]="['/settings', orgDetails?.slug, 'projects']"
+          routerLinkActive="active-route"
+          >Projects</a
+        >
       </ng-container>
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <button
-      *ngIf="isLoggedIn$ | async"
-      mat-button
-      class="sidenav-toggle"
-      (click)="toggleSideNav()"
-    >
-      <mat-icon>menu</mat-icon>
-    </button>
+  <mat-sidenav-content
+    ><mat-toolbar (click)="toggleSideNav()" color="primary">
+      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
+        <mat-icon>menu</mat-icon></button
+      ><span
+        class="active-org"
+        *ngIf="activeOrganizationDetail$ | async as orgDetails"
+        >{{ orgDetails?.name }}</span
+      >
+    </mat-toolbar>
 
     <div class="wrapper">
       <ng-content></ng-content>

@@ -2,6 +2,10 @@
 
 $iconWidth: 56px;
 
+h1 {
+  padding-left: 25px;
+}
+
 table {
   width: 100%;
   margin-bottom: 40px;
@@ -10,14 +14,6 @@ table {
 .table-actions {
   display: flex;
   justify-content: space-between;
-}
-
-.primary-toolbar {
-  padding: 0 24px;
-
-  @media (max-width: $tablet - 1) {
-    padding-left: $iconWidth;
-  }
 }
 
 .table-header {

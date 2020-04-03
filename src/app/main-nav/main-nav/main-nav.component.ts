@@ -5,6 +5,7 @@ import {
 } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
+import { MainNavService } from "../main-nav.service";
 
 @Component({
   selector: "app-main-nav",
@@ -21,6 +22,7 @@ export class MainNavComponent {
     .activeOrganizationDetail$;
   organizations$ = this.organizationsService.organizations$;
   isLoggedIn$ = this.auth.isLoggedIn;
+  navOpen$ = this.mainNav.navOpen$;
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
@@ -33,6 +35,7 @@ export class MainNavComponent {
   }
 
   constructor(
+    private mainNav: MainNavService,
     private organizationsService: OrganizationsService,
     private auth: AuthService
   ) {
@@ -51,15 +54,15 @@ export class MainNavComponent {
   }
 
   toggleSideNav() {
-    this.sideNavOpen = !this.sideNavOpen;
+    this.mainNav.getToggledNav();
   }
 
   hideSideNav() {
-    this.sideNavOpen = false;
+    this.mainNav.getClosedNav();
   }
 
   showSideNav() {
-    this.sideNavOpen = true;
+    this.mainNav.getOpenedNav();
   }
 
   setOrganization(id: number) {
