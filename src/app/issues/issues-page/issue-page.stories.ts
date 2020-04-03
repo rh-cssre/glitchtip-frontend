@@ -8,7 +8,7 @@ import { of } from "rxjs";
 import { IssuesPageComponent } from "./issues-page.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { IssuesService } from "../issues.service";
-import { issueList } from "../issues-list-test-data";
+import { issueListFrontend } from "../issues-list-frontend-test-data";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
 
@@ -34,7 +34,7 @@ export const issueListItem = () => ({
   component: IssuesPageComponent,
   props: {
     oneProjectApplied$: of(false),
-    issues$: of(issueList)
+    issues$: of(issueListFrontend)
   }
 });
 

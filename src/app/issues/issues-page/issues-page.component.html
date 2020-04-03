@@ -92,7 +92,11 @@
           <span
             class="mat-caption"
             *ngIf="element.type && element.type !== 'error'"
-            >&mdash;{{ element.type }} error</span
+            ><span
+              *ngIf="(oneProjectApplied$ | async) === false && element.type"
+            >
+              &mdash; </span
+            >{{ element.type }} error</span
           >
         </div>
       </td>

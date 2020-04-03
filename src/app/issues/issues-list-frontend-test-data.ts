@@ -1,4 +1,6 @@
-export const issueList = [
+import { IssueWithSelected } from "./interfaces";
+
+export const issueListFrontend: IssueWithSelected[] = [
   {
     platform: "python",
     lastSeen: "2019-12-31T19:34:22.397462Z",
@@ -65,7 +67,7 @@ export const issueList = [
       name: "django-app"
     },
     statusDetails: {},
-    isResolved: false,
+    isSelected: false,
     projectSlug: "merino"
   },
   {
@@ -134,7 +136,7 @@ export const issueList = [
       name: "django-app"
     },
     statusDetails: {},
-    isResolved: false,
+    isSelected: false,
     projectSlug: "merino"
   },
   {
@@ -203,7 +205,7 @@ export const issueList = [
       name: "django-app"
     },
     statusDetails: {},
-    isResolved: false,
+    isSelected: false,
     projectSlug: "merino"
   },
   {
@@ -274,7 +276,7 @@ export const issueList = [
       name: "django-app"
     },
     statusDetails: {},
-    isResolved: false,
+    isSelected: false,
     projectSlug: "merino"
   }
 ];
