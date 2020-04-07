@@ -1,6 +1,6 @@
-import { Issue } from "./interfaces";
+import { IssueWithSelected } from "./interfaces";
 
-export const issueList: Issue[] = [
+export const issueListFrontend: IssueWithSelected[] = [
   {
     platform: "python",
     lastSeen: "2019-12-31T19:34:22.397462Z",
@@ -35,11 +35,11 @@ export const issueList: Issue[] = [
       ]
     },
     culprit: "composeexample.wsgi in <module>",
-    title: "NameError: name 'get_wsgi_application' is not defined",
+    title: "Blocked 'style' from 'example.com'",
     id: 1412895512,
     assignedTo: null,
     logger: null,
-    type: "error",
+    type: "csp",
     annotations: [],
     metadata: {
       function: "<module>",
@@ -66,7 +66,9 @@ export const issueList: Issue[] = [
       id: 1851390,
       name: "django-app"
     },
-    statusDetails: {}
+    statusDetails: {},
+    isSelected: false,
+    projectSlug: "merino"
   },
   {
     platform: "python",
@@ -133,7 +135,9 @@ export const issueList: Issue[] = [
       id: 1851390,
       name: "django-app"
     },
-    statusDetails: {}
+    statusDetails: {},
+    isSelected: false,
+    projectSlug: "merino"
   },
   {
     platform: "python",
@@ -200,7 +204,9 @@ export const issueList: Issue[] = [
       id: 1851390,
       name: "django-app"
     },
-    statusDetails: {}
+    statusDetails: {},
+    isSelected: false,
+    projectSlug: "merino"
   },
   {
     platform: "python",
@@ -269,6 +275,8 @@ export const issueList: Issue[] = [
       id: 1851390,
       name: "django-app"
     },
-    statusDetails: {}
+    statusDetails: {},
+    isSelected: false,
+    projectSlug: "merino"
   }
 ];

@@ -165,7 +165,7 @@ export interface UpdateStatusResponse {
 
 // not in issues api reference, but is in issue list data
 
-export interface IssueWithSelected extends UpdateStatusResponse {
+export interface IssueWithSelected extends Issue {
   isSelected: boolean;
   projectSlug: string;
 }
