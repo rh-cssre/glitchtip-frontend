@@ -1,15 +1,70 @@
-<p>User Profile</p>
-
-<div *ngIf="user$ | async as user">
-  {{ user.email }}
-
-  <div *ngIf="isGoogleConnected$ | async; else googleDisconnected">
-    Google is connected, disconnect option goes here
+<section class="l-body">
+  <h1>User Profile</h1>
+  <div *ngIf="user$ | async as user">
+    <p class="subtitle">{{ user.email }}</p>
+    <mat-card>
+      <mat-card-content>
+        <mat-card-title>Social Auth Accounts</mat-card-title>
+        <mat-divider></mat-divider>
+        <div class="button-wrapper">
+          <!-- Github -->
+          <app-auth-button
+            *ngIf="isGithubConnected$ | async; else githubDisconnected"
+            text="Disconnect GitHub"
+            svg="github"
+            (clickEvent)="disconnectGithub()"
+          ></app-auth-button>
+          <ng-template #githubDisconnected>
+            <app-auth-button
+              text="Connect to GitHub"
+              svg="github"
+              (clickEvent)="connectGithub()"
+            ></app-auth-button
+          ></ng-template>
+          <!-- Gitlab -->
+          <app-auth-button
+            *ngIf="isGitlabConnected$ | async; else gitlabDisconnected"
+            text="Disconnect GitLab"
+            svg="gitlab"
+            (clickEvent)="disconnectGitlab()"
+          ></app-auth-button>
+          <ng-template #gitlabDisconnected>
+            <app-auth-button
+              text="Connect to GitLab"
+              svg="gitlab"
+              (clickEvent)="connectGitlab()"
+            ></app-auth-button
+          ></ng-template>
+          <!-- Google -->
+          <app-auth-button
+            *ngIf="isGoogleConnected$ | async; else googleDisconnected"
+            text="Disconnect Google"
+            svg="google"
+            (clickEvent)="disconnectGoogle()"
+          ></app-auth-button>
+          <ng-template #googleDisconnected>
+            <app-auth-button
+              text="Connect to Google"
+              svg="google"
+              (clickEvent)="connectGoogle()"
+            ></app-auth-button
+          ></ng-template>
+          <!-- Microsoft -->
+          <app-auth-button
+            *ngIf="isMicrosoftConnected$ | async; else microsoftDisconnected"
+            text="Disconnect Microsoft"
+            svg="microsoft"
+            (clickEvent)="disconnectMicrosoft()"
+          ></app-auth-button>
+          <ng-template #microsoftDisconnected>
+            <app-auth-button
+              text="Connect to Microsoft"
+              svg="microsoft"
+              (clickEvent)="connectMicrosoft()"
+            ></app-auth-button
+          ></ng-template>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <ng-template #googleDisconnected
-    >Google isn't connected,
-    <a (click)="connectGoogle()">connect</a></ng-template
-  >
-
-  <!-- Repeat for MS, gitlab, github -->
-</div>
+</section>
