@@ -1,0 +1,12 @@
+<button
+  mat-stroked-button
+  class="full-width margin"
+  (click)="clickEvent.emit()"
+>
+  <span class="wrapper">
+    <svg>
+      <use [attr.xlink:href]="'#' + svg"></use>
+    </svg>
+    <span class="text">{{ text }}</span>
+  </span>
+</button>

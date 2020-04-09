@@ -1,0 +1,22 @@
+@import "../../assets/styles/variables";
+
+h1 {
+  margin-bottom: 0;
+}
+
+.subtitle {
+  margin-top: 8px;
+  margin-bottom: 32px;
+  color: mat-color($mat-gray, 600);
+}
+
+.button-wrapper {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 0 24px;
+  margin-top: 24px;
+
+  @media (max-width: $tablet - 1) {
+    grid-template-columns: auto;
+  }
+}
