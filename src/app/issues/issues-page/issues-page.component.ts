@@ -56,7 +56,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
           const query: string | undefined = queryParams.query;
           let project: string[] | null = null;
           if (typeof queryParams.project === "string") {
-            project = [...queryParams.project];
+            project = [queryParams.project];
           } else if (typeof queryParams.project === "object") {
             project = queryParams.project;
           }
