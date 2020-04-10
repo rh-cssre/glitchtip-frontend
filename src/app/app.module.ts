@@ -4,10 +4,11 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   HttpClientModule,
   HttpClientXsrfModule,
-  HTTP_INTERCEPTORS
+  HTTP_INTERCEPTORS,
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
 import { OAuthModule } from "angular-oauth2-oidc";
+import { MatomoModule } from "ngx-matomo";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
@@ -27,21 +28,22 @@ import { MainNavModule } from "./main-nav/main-nav.module";
     BrowserAnimationsModule,
     HttpClientModule,
     OAuthModule.forRoot(),
+    MatomoModule,
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
-      headerName: "X-CSRFTOKEN"
+      headerName: "X-CSRFTOKEN",
     }),
     MainNavModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
+      multi: true,
     },
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } }
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

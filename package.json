@@ -30,6 +30,7 @@
     "@storybook/addon-knobs": "^5.3.12",
     "angular-oauth2-oidc": "^9.0.1",
     "express": "^4.15.2",
+    "ngx-matomo": "^0.1.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
