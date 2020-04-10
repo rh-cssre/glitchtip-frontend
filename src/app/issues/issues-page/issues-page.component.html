@@ -89,6 +89,15 @@
           >
             {{ element.projectSlug }}
           </span>
+          <span class="mat-caption" *ngIf="true">
+            <ng-container *ngIf="(oneProjectApplied$ | async) === false">
+              &mdash;
+            </ng-container>
+            {{ element.firstSeen | date }}
+            <ng-container *ngIf="element.firstSeen !== element.lastSeen">
+              / {{ element.lastSeen | date }}
+            </ng-container>
+          </span>
           <span
             class="mat-caption"
             *ngIf="element.type && element.type !== 'error'"
