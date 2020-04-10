@@ -6,47 +6,54 @@ import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
 export const routes: Routes = [
   {
     path: "",
-    loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
+    loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
     pathMatch: "full",
-    canActivate: [IsLoggedInGuard]
+    canActivate: [IsLoggedInGuard],
   },
   {
     path: "settings",
     loadChildren: () =>
-      import("./settings/settings.module").then(m => m.SettingsModule),
-    canActivate: [IsLoggedInGuard]
+      import("./settings/settings.module").then((m) => m.SettingsModule),
+    canActivate: [IsLoggedInGuard],
   },
 
   {
     path: "organizations/:org-slug/issues",
     loadChildren: () =>
-      import("./issues/issues.module").then(m => m.IssuesModule),
-    canActivate: [IsLoggedInGuard]
+      import("./issues/issues.module").then((m) => m.IssuesModule),
+    canActivate: [IsLoggedInGuard],
   },
   {
     path: "organizations/new",
     loadChildren: () =>
       import("./new-organization/new-organization.module").then(
-        m => m.NewOrganizationModule
+        (m) => m.NewOrganizationModule
       ),
-    canActivate: [IsLoggedInGuard]
+    canActivate: [IsLoggedInGuard],
   },
   {
     path: "login",
-    loadChildren: () => import("./login/login.module").then(m => m.LoginModule),
-    canActivate: [AlreadyLoggedInGuard]
+    loadChildren: () =>
+      import("./login/login.module").then((m) => m.LoginModule),
+    canActivate: [AlreadyLoggedInGuard],
   },
   {
     path: "profile",
     loadChildren: () =>
-      import("./profile/profile.module").then(m => m.ProfileModule),
-    canActivate: [IsLoggedInGuard]
+      import("./profile/profile.module").then((m) => m.ProfileModule),
+    canActivate: [IsLoggedInGuard],
+  },
+  {
+    path: "register",
+    loadChildren: () =>
+      import("./register/register.module").then((m) => m.RegisterModule),
+    canActivate: [AlreadyLoggedInGuard],
   },
   {
     path: "**",
     redirectTo: "",
-    pathMatch: "full"
-  }
+    pathMatch: "full",
+  },
 ];
 
 @NgModule({
@@ -55,9 +62,9 @@ export const routes: Routes = [
       onSameUrlNavigation: "reload",
       scrollPositionRestoration: "enabled",
       relativeLinkResolution: "corrected",
-      paramsInheritanceStrategy: "always"
-    })
+      paramsInheritanceStrategy: "always",
+    }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

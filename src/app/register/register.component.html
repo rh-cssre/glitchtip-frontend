@@ -1,0 +1,63 @@
+<section class="l-body">
+  <mat-card>
+    <h1>Register</h1>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-error *ngIf="error">{{ error }}</mat-error>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+          />
+          <mat-error *ngIf="email?.errors?.required"
+            >Your email is required to sign up</mat-error
+          >
+          <mat-error *ngIf="email?.errors?.email"
+            >Enter a valid email address</mat-error
+          >
+          <mat-error *ngIf="email?.errors?.serverError">
+            {{ email?.errors?.serverError }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            formControlName="password1"
+          />
+          <mat-error *ngIf="password1?.errors && password1?.errors?.required">
+            Your password should be at least 8 characters long</mat-error
+          >
+          <mat-error *ngIf="password1?.errors?.required"
+            >Your password is required to sign up</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input
+            matInput
+            type="password"
+            placeholder="Confirm Password"
+            formControlName="password2"
+            appInputMatcher="password1"
+          />
+
+          <mat-error *ngIf="password2?.errors?.required"
+            >Your password is required to sign up</mat-error
+          >
+          <mat-error *ngIf="password2?.errors?.notEqual"
+            >Your passwords don't match</mat-error
+          >
+        </mat-form-field>
+        <button id="submit" class="full-width" mat-flat-button color="primary">
+          Register
+        </button>
+      </form>
+      <p class="mat-body-1 sign-up">
+        Already have an account? <a routerLink="../login">Log In</a>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</section>

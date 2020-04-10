@@ -157,7 +157,7 @@
     <h3>Aditional Data</h3>
     <app-entry-data
       key="argv"
-      [value]="argv((event?.context)['sys.argv'])"
+      [value]="(event?.context)['sys.argv'] | json"
     ></app-entry-data>
     <app-entry-data
       key="version"
