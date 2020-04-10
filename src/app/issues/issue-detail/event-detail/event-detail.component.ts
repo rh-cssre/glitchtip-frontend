@@ -44,16 +44,4 @@ export class EventDetailComponent implements OnInit {
   getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
-
-  argv(argvs: string[] | undefined) {
-    if (argvs) {
-      const newArgv: string[] = [];
-      argvs.forEach((arg, index) => {
-        let newArg = "'" + arg + "'";
-        newArg = index === 0 ? newArg : " " + newArg;
-        newArgv.push(newArg);
-      });
-      return "[" + newArgv + "]";
-    }
-  }
 }
