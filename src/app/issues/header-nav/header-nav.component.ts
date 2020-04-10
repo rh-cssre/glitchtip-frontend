@@ -178,7 +178,6 @@ export class HeaderNavComponent implements OnInit {
   }
 
   navigate(project: number[] | null) {
-    console.log("navigating?", project);
     this.router.navigate([], {
       queryParams: { project: project ? project : null },
       queryParamsHandling: "merge",
