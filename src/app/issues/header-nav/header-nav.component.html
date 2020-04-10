@@ -74,10 +74,11 @@
   </mat-accordion>
 </section>
 <a
+  *ngIf="activeOrgSlug$ | async as activeOrgSlug"
   mat-flat-button
   color="primary"
   class="add-button"
-  [routerLink]="['/settings', activeOrgSlug$ | async, 'projects', 'new']"
+  [routerLink]="['/settings', activeOrgSlug, 'projects', 'new']"
 >
   <mat-icon>add</mat-icon>
   Add Project
