@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { EMPTY } from "rxjs";
+import { MatomoModule } from "ngx-matomo";
 import { OAuthModule } from "angular-oauth2-oidc";
 import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
@@ -22,11 +23,12 @@ describe("LoginComponent", () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         MaterialModule,
+        MatomoModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        OAuthModule.forRoot()
+        OAuthModule.forRoot(),
       ],
-      providers: [{ provide: LoginService, useValue: authServiceSpy }]
+      providers: [{ provide: LoginService, useValue: authServiceSpy }],
     }).compileComponents();
   }));
 
