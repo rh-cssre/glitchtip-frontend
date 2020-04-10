@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import {
   HttpClient,
   HttpParams,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
@@ -11,7 +11,7 @@ import {
   Issue,
   IssueWithSelected,
   IssueStatus,
-  UpdateStatusResponse
+  UpdateStatusResponse,
 } from "./interfaces";
 import { baseUrl } from "../constants";
 import { urlParamsToObject } from "./utils";
@@ -33,46 +33,46 @@ const initialState: IssuesState = {
   page: null,
   nextPage: null,
   previousPage: null,
-  loading: false
+  loading: false,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class IssuesService {
   private issuesState = new BehaviorSubject<IssuesState>(initialState);
   private getState$ = this.issuesState.asObservable();
   private url = baseUrl + "/issues/";
 
-  issues$ = this.getState$.pipe(map(state => state.issues));
-  selectedIssues$ = this.getState$.pipe(map(state => state.selectedIssues));
+  issues$ = this.getState$.pipe(map((state) => state.issues));
+  selectedIssues$ = this.getState$.pipe(map((state) => state.selectedIssues));
   issuesWithSelected$: Observable<IssueWithSelected[]> = combineLatest([
     this.issues$,
-    this.selectedIssues$
+    this.selectedIssues$,
   ]).pipe(
     map(([issues, selectedIssues]) =>
-      issues.map(issue => ({
+      issues.map((issue) => ({
         ...issue,
         isSelected: selectedIssues.includes(issue.id) ? true : false,
-        projectSlug: issue.project?.slug
+        projectSlug: issue.project?.slug,
       }))
     )
   );
   areAllSelected$ = combineLatest([this.issues$, this.selectedIssues$]).pipe(
     map(([issues, selectedIssues]) => issues.length === selectedIssues.length)
   );
-  issueCount$ = this.getState$.pipe(map(state => state.issueCount));
-  hasNextPage$ = this.getState$.pipe(map(state => state.nextPage !== null));
+  issueCount$ = this.getState$.pipe(map((state) => state.issueCount));
+  hasNextPage$ = this.getState$.pipe(map((state) => state.nextPage !== null));
   hasPreviousPage$ = this.getState$.pipe(
-    map(state => state.previousPage !== null)
+    map((state) => state.previousPage !== null)
   );
   nextPageParams$ = this.getState$.pipe(
-    map(state => urlParamsToObject(state.nextPage))
+    map((state) => urlParamsToObject(state.nextPage))
   );
   previousPageParams$ = this.getState$.pipe(
-    map(state => urlParamsToObject(state.previousPage))
+    map((state) => urlParamsToObject(state.previousPage))
   );
-  loading$ = this.getState$.pipe(map(state => state.loading));
+  loading$ = this.getState$.pipe(map((state) => state.loading));
 
   constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
 
@@ -91,7 +91,9 @@ export class IssuesService {
     const state = this.issuesState.getValue();
     let selectedIssues: number[];
     if (state.selectedIssues.includes(issueId)) {
-      selectedIssues = state.selectedIssues.filter(issue => issue !== issueId);
+      selectedIssues = state.selectedIssues.filter(
+        (issue) => issue !== issueId
+      );
     } else {
       selectedIssues = state.selectedIssues.concat([issueId]);
     }
@@ -103,12 +105,12 @@ export class IssuesService {
     if (state.issues.length === state.selectedIssues.length) {
       this.issuesState.next({
         ...state,
-        selectedIssues: []
+        selectedIssues: [],
       });
     } else {
       this.issuesState.next({
         ...state,
-        selectedIssues: state.issues.map(issue => issue.id)
+        selectedIssues: state.issues.map((issue) => issue.id),
       });
     }
   }
@@ -143,14 +145,14 @@ export class IssuesService {
       httpParams = httpParams.set("query", query);
     }
     if (project) {
-      project.forEach(id => {
+      project.forEach((id) => {
         httpParams = httpParams.append("project", id);
       });
     }
     return this.http
       .get<Issue[]>(url, { observe: "response", params: httpParams })
       .pipe(
-        tap(resp => {
+        tap((resp) => {
           const linkHeader = resp.headers.get("link");
           if (resp.body && linkHeader) {
             this.setIssues(resp.body);
@@ -166,15 +168,15 @@ export class IssuesService {
 
   private updateStatus(ids: number[], status: IssueStatus) {
     const params = {
-      id: ids.map(id => id.toString())
+      id: ids.map((id) => id.toString()),
     };
     const data = {
-      status
+      status,
     };
     return this.http
       .put<UpdateStatusResponse>(this.url, data, { params })
       .pipe(
-        tap(resp => this.setIssueStatuses(ids, resp.status)),
+        tap((resp) => this.setIssueStatuses(ids, resp.status)),
         catchError((err: HttpErrorResponse) => {
           console.log(err);
           this.snackbar.open("Error, unable to update issue");
@@ -187,10 +189,10 @@ export class IssuesService {
     const state = this.issuesState.getValue();
     this.issuesState.next({
       ...state,
-      issues: state.issues.map(issue =>
+      issues: state.issues.map((issue) =>
         issueIds.includes(issue.id) ? { ...issue, status } : issue
       ),
-      selectedIssues: []
+      selectedIssues: [],
     });
   }
 
@@ -198,7 +200,7 @@ export class IssuesService {
     this.issuesState.next({
       ...this.issuesState.getValue(),
       issues,
-      loading: false
+      loading: false,
     });
   }
 
@@ -227,7 +229,7 @@ export class IssuesService {
     this.issuesState.next({
       ...this.issuesState.getValue(),
       nextPage: parts.next ? parts.next : null,
-      previousPage: parts.prev ? parts.prev : null
+      previousPage: parts.prev ? parts.prev : null,
     });
   }
 }

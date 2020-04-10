@@ -4,7 +4,7 @@ import {
   ViewChild,
   OnInit,
   HostListener,
-  ElementRef
+  ElementRef,
 } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
@@ -19,7 +19,7 @@ import { normalizeProjectParams } from "../utils";
   selector: "app-header-nav",
   templateUrl: "./header-nav.component.html",
   styleUrls: ["./header-nav.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderNavComponent implements OnInit {
   /** All projects available */
@@ -36,10 +36,10 @@ export class HeaderNavComponent implements OnInit {
 
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
-    map(params => {
+    map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
       this.selectedProjectIds.next(
-        normalizedParams.map(id => parseInt(id, 10))
+        normalizedParams.map((id) => parseInt(id, 10))
       );
       return normalizedParams;
     })
@@ -50,7 +50,7 @@ export class HeaderNavComponent implements OnInit {
   /** Use selected projects to generate a string that's displayed in the UI */
   selectedProjectsString$ = combineLatest([
     this.projects$,
-    this.selectedProjectIds$
+    this.selectedProjectIds$,
   ]).pipe(
     map(([projects, ids]) => {
       if (projects?.length === 1) {
@@ -63,7 +63,7 @@ export class HeaderNavComponent implements OnInit {
           return "All Projects";
         default:
           return ids
-            .map(id => projects?.find(project => id === project.id)?.name)
+            .map((id) => projects?.find((project) => id === project.id)?.name)
             .join(", ");
       }
     })
@@ -71,7 +71,7 @@ export class HeaderNavComponent implements OnInit {
 
   selectedAndAppliedIdsAreEqual$ = combineLatest([
     this.selectedProjectIds$,
-    this.appliedProjectIds$
+    this.appliedProjectIds$,
   ]).pipe(
     map(
       ([selected, applied]) =>
@@ -85,11 +85,11 @@ export class HeaderNavComponent implements OnInit {
   /** Projects that are filtered via the text field form control */
   filteredProjects$: Observable<OrganizationProduct[] | null> = combineLatest([
     this.projects$.pipe(startWith([] as OrganizationProduct[])),
-    this.filterProjectInput.valueChanges.pipe(startWith(""))
+    this.filterProjectInput.valueChanges.pipe(startWith("")),
   ]).pipe(
     map(([projects, value]) =>
       projects
-        ? projects.filter(project =>
+        ? projects.filter((project) =>
             project.name.toLowerCase().includes(value.toLowerCase())
           )
         : null
@@ -97,7 +97,7 @@ export class HeaderNavComponent implements OnInit {
   );
 
   someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
-    map(ids => ids.length !== 0)
+    map((ids) => ids.length !== 0)
   );
 
   @ViewChild("expansionPanel", { static: false })
@@ -149,7 +149,7 @@ export class HeaderNavComponent implements OnInit {
       projectButtons[0]?.focus();
     } else {
       const indexOfActive = projectButtons.findIndex(
-        button => button.id === document.activeElement?.id
+        (button) => button.id === document.activeElement?.id
       );
       if (indexOfActive <= projectButtons.length - 2) {
         // If we're in the list items, go to the next list item
@@ -166,7 +166,7 @@ export class HeaderNavComponent implements OnInit {
       document.querySelectorAll(".picker-button")
     ) as HTMLElement[];
     const indexOfActive = projectButtons.findIndex(
-      button => button.id === document.activeElement?.id
+      (button) => button.id === document.activeElement?.id
     );
     if (indexOfActive > 0) {
       // If we're in the list items, go to the previous list item
@@ -178,14 +178,15 @@ export class HeaderNavComponent implements OnInit {
   }
 
   navigate(project: number[] | null) {
+    console.log("navigating?", project);
     this.router.navigate([], {
       queryParams: { project: project ? project : null },
-      queryParamsHandling: "merge"
+      queryParamsHandling: "merge",
     });
   }
 
   isSelected(projectId: number) {
-    return this.selectedProjectIds.getValue().find(id => id === projectId);
+    return this.selectedProjectIds.getValue().find((id) => id === projectId);
   }
 
   focusPanel() {
@@ -212,7 +213,7 @@ export class HeaderNavComponent implements OnInit {
 
   resetPanel() {
     this.selectedProjectIds.next(
-      this.appliedProjectIds.map(id => parseInt(id, 10))
+      this.appliedProjectIds.map((id) => parseInt(id, 10))
     );
     this.expansionPanel.close();
   }
@@ -223,7 +224,7 @@ export class HeaderNavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.appliedProjectIds$.subscribe(ids => {
+    this.appliedProjectIds$.subscribe((ids) => {
       this.appliedProjectIds = ids;
     });
   }

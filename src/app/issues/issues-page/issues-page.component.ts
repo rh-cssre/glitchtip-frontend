@@ -2,7 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   OnDestroy,
-  OnInit
+  OnInit,
 } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -15,17 +15,17 @@ import { normalizeProjectParams } from "../utils";
   selector: "app-issues-page",
   templateUrl: "./issues-page.component.html",
   styleUrls: ["./issues-page.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IssuesPageComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ["select", "status", "title"];
   loading$ = this.issuesService.loading$;
   form = new FormGroup({
-    query: new FormControl("")
+    query: new FormControl(""),
   });
   issues$ = combineLatest([
     this.issuesService.issuesWithSelected$,
-    this.loading$
+    this.loading$,
   ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
   areAllSelected$ = this.issuesService.areAllSelected$;
   hasNextPage$ = this.issuesService.hasNextPage$;
@@ -35,7 +35,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   routerEventSubscription: Subscription;
 
   oneProjectApplied$ = this.route.queryParams.pipe(
-    map(params => {
+    map((params) => {
       const projects = normalizeProjectParams(params.project);
       return projects.length === 1;
     })
@@ -48,7 +48,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   ) {
     this.routerEventSubscription = this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         withLatestFrom(this.route.params, this.route.queryParams),
         map(([event, params, queryParams]) => {
           const orgSlug: string | undefined = params["org-slug"];
@@ -71,10 +71,10 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(_ => {
+    this.route.params.subscribe((_) => {
       const query: string | undefined = this.route.snapshot.queryParams.query;
       this.form.setValue({
-        query: query !== undefined ? query : "is:unresolved"
+        query: query !== undefined ? query : "is:unresolved",
       });
     });
   }
@@ -88,9 +88,9 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     this.router.navigate([], {
       queryParams: {
         query: this.form.value.query,
-        cursor: null
+        cursor: null,
       },
-      queryParamsHandling: "merge"
+      queryParamsHandling: "merge",
     });
   }
 

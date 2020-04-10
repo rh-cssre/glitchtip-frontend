@@ -15,11 +15,11 @@ interface OrganizationsState {
 const initialState: OrganizationsState = {
   organizations: [],
   activeOrganizationId: null,
-  activeOrganization: null
+  activeOrganization: null,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class OrganizationsService {
   private readonly organizationsState = new BehaviorSubject<OrganizationsState>(
@@ -30,27 +30,29 @@ export class OrganizationsService {
   private routeParams: { [key: string]: string };
 
   readonly organizations$ = this.getState$.pipe(
-    map(data => data.organizations)
+    map((data) => data.organizations)
   );
   readonly activeOrganizationId$ = this.getState$.pipe(
-    map(data => data.activeOrganizationId)
+    map((data) => data.activeOrganizationId)
   );
   readonly activeOrganization$ = this.getState$.pipe(
-    map(data => data.activeOrganization)
+    map((data) => data.activeOrganization)
   );
   readonly activeOrganizationProjects$ = this.activeOrganization$.pipe(
-    map(data => (data ? data.projects : null))
+    map((data) => (data ? data.projects : null))
   );
   readonly activeOrganizationDetail$ = combineLatest([
     this.organizations$,
-    this.activeOrganizationId$
+    this.activeOrganizationId$,
   ]).pipe(
     map(([organizations, activeOrganization]) =>
-      organizations.find(organization => organization.id === activeOrganization)
+      organizations.find(
+        (organization) => organization.id === activeOrganization
+      )
     )
   );
   readonly activeOrganizationSlug$ = this.activeOrganizationDetail$.pipe(
-    map(org => (org ? org.slug : null))
+    map((org) => (org ? org.slug : null))
   );
 
   constructor(
@@ -58,12 +60,12 @@ export class OrganizationsService {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.router.events.subscribe(val => {
+    this.router.events.subscribe((val) => {
       if (val instanceof RoutesRecognized) {
         // Combine nested route params
         this.routeParams = {
           ...val.state.root.firstChild?.params,
-          ...val.state.root.firstChild?.firstChild?.params
+          ...val.state.root.firstChild?.firstChild?.params,
         };
       }
     });
@@ -71,21 +73,21 @@ export class OrganizationsService {
 
   createOrganization(name: string) {
     const data = {
-      name
+      name,
     };
     return this.http.post<Organization>(this.url, data);
   }
 
   retrieveOrganizations() {
     return this.http.get<Organization[]>(this.url).pipe(
-      tap(organizations => this.setOrganizations(organizations)),
+      tap((organizations) => this.setOrganizations(organizations)),
       withLatestFrom(this.activeOrganizationId$),
       tap(([organizations, activeOrgId]) => {
         if (activeOrgId === null && organizations.length) {
           let activeOrg: Organization | undefined;
           if (this.routeParams) {
             activeOrg = organizations.find(
-              org => org.slug === this.routeParams["org-slug"]
+              (org) => org.slug === this.routeParams["org-slug"]
             );
           }
           if (activeOrg) {
@@ -105,13 +107,13 @@ export class OrganizationsService {
     this.setActiveOrganizationId(activeOrganizationId);
     const organization = this.organizationsState
       .getValue()
-      .organizations.find(org => org.id === activeOrganizationId);
+      .organizations.find((org) => org.id === activeOrganizationId);
     if (organization) {
       this.getOrganizationDetail(organization.slug)
         .pipe(
           // Only navigate when the user goes from one organization to another
           filter(() => !activeOrgIdIsNull),
-          tap(organizationDetail => {
+          tap((organizationDetail) => {
             // Switch org but stay in settings page
             if (
               this.routeParams["org-slug"] &&
@@ -124,7 +126,7 @@ export class OrganizationsService {
               this.router.navigate([
                 "organizations",
                 organizationDetail.slug,
-                "issues"
+                "issues",
               ]);
             }
           })
@@ -145,27 +147,27 @@ export class OrganizationsService {
   private setOrganizations(organizations: Organization[]) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
-      organizations
+      organizations,
     });
   }
 
   private setActiveOrganizationId(activeOrganizationId: number) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
-      activeOrganizationId
+      activeOrganizationId,
     });
   }
 
   private setActiveOrganization(organization: OrganizationDetail) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
-      activeOrganization: organization
+      activeOrganization: organization,
     });
   }
 
   private getOrganizationDetail(slug: string) {
     return this.http
       .get<OrganizationDetail>(`${this.url}${slug}/`)
-      .pipe(tap(organization => this.setActiveOrganization(organization)));
+      .pipe(tap((organization) => this.setActiveOrganization(organization)));
   }
 }
