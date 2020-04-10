@@ -10,6 +10,7 @@ interface SocialAccount {
 
 export interface UserDetails {
   pk: number;
+  email: string;
   first_name: string;
   last_name: string;
   socialaccount_set: SocialAccount[];

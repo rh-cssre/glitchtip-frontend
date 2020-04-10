@@ -1,13 +1,10 @@
-<section id="project-picker">
-  <mat-accordion
-    displayMode="flat"
-    [hideToggle]="(projects$ | async)?.length < 2"
-  >
+<section *ngIf="projects$ | async as projects" id="project-picker">
+  <mat-accordion displayMode="flat" [hideToggle]="projects.length < 2">
     <mat-expansion-panel
       #expansionPanel
       class="mat-elevation-z1"
       (opened)="focusPanel()"
-      [disabled]="(projects$ | async)?.length < 2"
+      [disabled]="projects.length < 2"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -66,7 +63,7 @@
     <button
       mat-button
       class="reset-button"
-      *ngIf="(appliedProjectIds$ | async)?.length > 0"
+      *ngIf="(appliedProjectIds$ | async)?.length"
       (click)="navigate(null)"
     >
       <mat-icon>close</mat-icon>

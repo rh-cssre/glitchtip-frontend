@@ -4,9 +4,9 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
   selector: "app-entry-data",
   templateUrl: "./entry-data.component.html",
   styleUrls: ["./entry-data.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryDataComponent {
   @Input() key: string;
-  @Input() value: string;
+  @Input() value: string | undefined;
 }
