@@ -46,7 +46,7 @@
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           (change)="toggleSelectAll()"
-          [checked]="areAllSelected$ | async"
+          [checked]="!!(areAllSelected$ | async)"
         >
         </mat-checkbox>
       </th>
@@ -106,8 +106,8 @@
       <td mat-footer-cell *matFooterCellDef colspan="3" class="footer">
         <ng-container *ngIf="(loading$ | async) === false">
           <a
-            [routerLink]=""
-            [queryParams]="previousParams$ | async"
+            [routerLink]="''"
+            [queryParams]="(previousParams$ | async) || {}"
             queryParamsHandling="merge"
             mat-button
             [disabled]="(hasPreviousPage$ | async) === false"
@@ -115,8 +115,8 @@
             <mat-icon>keyboard_arrow_left</mat-icon>
           </a>
           <a
-            [routerLink]=""
-            [queryParams]="nextParams$ | async"
+            [routerLink]="''"
+            [queryParams]="(nextParams$ | async) || {}"
             queryParamsHandling="merge"
             mat-button
             *ngIf="hasNextPage$ | async"

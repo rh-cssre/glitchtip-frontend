@@ -97,7 +97,9 @@
         <dl mat-line>
           <dt class="mat-body-strong">When:</dt>
           <div></div>
-          <dd *ngIf="issue">{{ issue?.firstSeen | daysAgo }} days ago</dd>
+          <dd *ngIf="issue && issue.lastSeen">
+            {{ issue.firstSeen | daysAgo }} days ago
+          </dd>
           <dd>
             {{ issue?.firstSeen | date: "long" }}
           </dd>
@@ -107,7 +109,9 @@
         <h4 mat-line>Last Seen</h4>
         <dl mat-line>
           <dt class="mat-body-strong">When:</dt>
-          <dd *ngIf="issue">{{ issue?.lastSeen | daysAgo }} days ago</dd>
+          <dd *ngIf="issue && issue.lastSeen">
+            {{ issue.lastSeen | daysAgo }} days ago
+          </dd>
           <dd>
             {{ issue?.lastSeen | date: "long" }}
           </dd>

@@ -5,10 +5,10 @@ import { IssueDetailService } from "../../issue-detail.service";
   selector: "app-entry-exception",
   templateUrl: "./entry-exception.component.html",
   styleUrls: ["./entry-exception.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryExceptionComponent {
-  @Input() eventTitle: string;
+  @Input() eventTitle: string | undefined;
   eventEntryException$ = this.issueService.eventEntryException$;
   isReversed$ = this.issueService.isReversed$;
 

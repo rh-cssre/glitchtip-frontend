@@ -14,13 +14,13 @@
     <div>
       <a
         mat-button
-        [routerLink]="previousEventUrl$ | async"
+        [routerLink]="(previousEventUrl$ | async) || ''"
         [disabled]="(previousEvent$ | async) === false"
         ><mat-icon>keyboard_arrow_left</mat-icon> Older</a
       >
       <a
         mat-button
-        [routerLink]="nextEventUrl$ | async"
+        [routerLink]="(nextEventUrl$ | async) || ''"
         [disabled]="(nextEvent$ | async) === false"
         >Newer <mat-icon>keyboard_arrow_right</mat-icon></a
       >
@@ -140,7 +140,7 @@
       [value]="event?.contexts?.trace?.trace_id"
     ></app-entry-data>
   </section>
-  <section *ngIf="event?.contexts && event?.contexts.browser">
+  <section *ngIf="event?.contexts?.browser">
     <mat-divider></mat-divider>
     <h3>Browser</h3>
     <app-entry-data
@@ -157,7 +157,7 @@
     <h3>Aditional Data</h3>
     <app-entry-data
       key="argv"
-      [value]="(event?.context)['sys.argv'] | json"
+      [value]="removeType(event?.context)['sys.argv'] | json"
     ></app-entry-data>
     <app-entry-data
       key="version"
