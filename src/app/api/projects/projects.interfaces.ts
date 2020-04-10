@@ -1,8 +1,12 @@
 import { Organization } from "../organizations/organizations.interface";
 
+export interface DSN {
+  public: string;
+}
+
 export interface ProjectKeys {
   dateCreated: Date;
-  dsn: { public: string };
+  dsn: DSN;
   id: string;
   label: string;
   public: string;
