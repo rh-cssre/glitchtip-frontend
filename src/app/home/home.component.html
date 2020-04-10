@@ -1,6 +1,4 @@
 <section class="l-body">
-  <h1>Good {{ timeOfDay() }}!</h1>
-
   <div
     *ngIf="
       (projects$ | async)?.length === 0 &&
@@ -25,8 +23,8 @@
     </div>
 
     <div *ngIf="projects$">
-      <div class="heading-with-button">
-        <h2>Projects</h2>
+      <header class="page-header">
+        <h2 class="mat-display-1">Projects</h2>
         <a
           *ngIf="activeOrganizationDetail$ | async as orgDetails"
           mat-flat-button
@@ -34,7 +32,7 @@
           [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
           >Create New Project</a
         >
-      </div>
+      </header>
       <div class="card-wrapper">
         <ng-container *ngFor="let project of projects$ | async">
           <app-project-card

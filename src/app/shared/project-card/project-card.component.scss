@@ -1,5 +1,9 @@
 @import "../../../assets/styles/variables";
 
+mat-card {
+  border-radius: 0;
+}
+
 mat-card > a {
   text-decoration: none;
   color: mat-color($mat-gray, 900);

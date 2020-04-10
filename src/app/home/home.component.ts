@@ -21,18 +21,4 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.projectsService.retrieveProjects();
   }
-
-  timeOfDay() {
-    const currentHour = new Date().getHours();
-
-    let partOfDay = "Morning";
-
-    if (currentHour > 12 && currentHour < 18) {
-      partOfDay = "Afternoon";
-    } else if (currentHour > 18 || currentHour < 5) {
-      partOfDay = "Evening";
-    }
-
-    return partOfDay;
-  }
 }

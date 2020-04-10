@@ -1,9 +1,11 @@
-<section class="mat-elevation-z0">
-  <h1>Issues</h1>
+<section class="l-body mat-elevation-z0">
+  <header class="page-header">
+    <h1 class="mat-display-1">Issues</h1>
+  </header>
 
   <app-header-nav></app-header-nav>
 
-  <table mat-table [dataSource]="issues$">
+  <table mat-table [dataSource]="issues$" class="mat-elevation-z2">
     <ng-container matColumnDef="actions">
       <th
         mat-header-cell

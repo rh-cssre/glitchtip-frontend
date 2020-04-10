@@ -2,8 +2,10 @@
 
 $iconWidth: 56px;
 
-h1 {
-  padding-left: 25px;
+app-header-nav {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 table {

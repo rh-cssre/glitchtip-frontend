@@ -1,5 +1,7 @@
 <section class="l-body" *ngIf="activeProject$ | async as project">
-  <h1>Settings for {{ project.name }}</h1>
+  <header class="page-header">
+    <h1 class="mat-display-1">Settings for {{ project.name }}</h1>
+  </header>
   <mat-card>
     <form
       [formGroup]="form"

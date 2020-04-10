@@ -1,6 +1,6 @@
 <section class="l-body">
-  <div class="heading-with-button">
-    <h1>Projects</h1>
+  <header class="page-header">
+    <h1 class="mat-display-1">Projects</h1>
     <a
       *ngIf="activeOrganizationSlug$ | async as slug"
       mat-flat-button
@@ -9,7 +9,7 @@
     >
       Create New Project
     </a>
-  </div>
+  </header>
   <div class="card-wrapper">
     <app-project-card
       *ngFor="let project of projectsForActiveOrg$ | async"

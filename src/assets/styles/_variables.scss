@@ -62,12 +62,12 @@ $font-mono: "Plex Mono";
 // https://material.angular.io/guide/typography#what-is-typography-
 $custom-typography: mat-typography-config(
   $font-family: $font-sans-serif,
-  $display-4: mat-typography-level(112px, 112px, 300, $font-serif, -0.05em),
-  $display-3: mat-typography-level(56px, 65px, 400, $font-serif, -0.02em),
-  $display-2: mat-typography-level(45px, 55px, 400, $font-serif, -0.005em),
-  $display-1: mat-typography-level(34px, 40px, 400, $font-serif),
+  $display-4: mat-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $display-3: mat-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $display-2: mat-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $display-1: mat-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
   $body-2: mat-typography-level(16px, 28px, 500),
-  $body-1: mat-typography-level(16px, 24px, 400)
+  $body-1: mat-typography-level(16px, 24px, 400),
 );
 
 $mobile-typography: mat-typography-config(
@@ -75,7 +75,7 @@ $mobile-typography: mat-typography-config(
   $display-4: mat-typography-level(48px, 60px, 300, $font-serif, -0.05em),
   $display-3: mat-typography-level(40px, 44px, 400, $font-serif, -0.02em),
   $display-2: mat-typography-level(34px, 38px, 400, $font-serif, -0.005em),
-  $display-1: mat-typography-level(28px, 32px, 400, $font-serif)
+  $display-1: mat-typography-level(28px, 32px, 400, $font-serif),
 );
 
 // Breakpoints
