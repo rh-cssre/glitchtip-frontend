@@ -75,6 +75,7 @@ build-docker:
     - master
     - staging
     - dev
+    - tags
   script:
     - echo "Start build docker step $CI_REGISTRY_IMAGE commit ref $CI_COMMIT_REF_NAME"
     - trap '' PIPE
@@ -89,7 +90,7 @@ build-docker:
 
 deploy-staging:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.10-v3.1.1
+  image: lwolf/helm-kubectl-docker:v1.18.1-v3.1.2
   script:
     - helm upgrade glitchtip-staging ./chart --set image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
   environment:
@@ -97,3 +98,30 @@ deploy-staging:
     url: https://staging.glitchtip.com
   only:
     - master
+
+deploy-production:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.18.1-v3.1.2
+  script:
+    - helm upgrade glitchtip-prod ./chart --set image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
+  environment:
+    name: production
+    url: https://app.glitchtip.com
+  only:
+    - tags
+
+deploy-dockerhub:
+  stage: deploy
+  image: docker:stable
+  services:
+    - docker:dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker login -u ${DOCKER_CI_REGISTRY_USER} -p ${DOCKER_CI_REGISTRY_PASSWORD}
+    - echo tag image ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} as ${DOCKER_CI_REGISTRY_IMAGE}
+    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} ${DOCKER_CI_REGISTRY_IMAGE}
+    - docker push ${DOCKER_CI_REGISTRY_IMAGE}
+  only:
+    - tags
+
