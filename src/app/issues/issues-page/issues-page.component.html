@@ -48,7 +48,7 @@
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           (change)="toggleSelectAll()"
-          [checked]="!!(areAllSelected$ | async)"
+          [checked]="(areAllSelected$ | async)!"
         >
         </mat-checkbox>
       </th>
