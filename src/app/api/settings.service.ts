@@ -1,14 +1,16 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { MatomoInjector } from "ngx-matomo";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
+import { MatomoInjector } from "ngx-matomo";
+import * as Sentry from "@sentry/browser";
 
 interface SettingsState {
   socialAuth: boolean;
   billingEnabled: boolean;
   matomoURL: string | null;
   matomoSiteId: string | null;
+  sentryDSN: string | null;
 }
 
 const initialState: SettingsState = {
@@ -16,6 +18,7 @@ const initialState: SettingsState = {
   billingEnabled: false,
   matomoURL: null,
   matomoSiteId: null,
+  sentryDSN: null,
 };
 
 @Injectable({
@@ -39,6 +42,13 @@ export class SettingsService {
       tap((settings) => {
         if (settings.matomoSiteId && settings.matomoURL) {
           this.matomoInjector.init(settings.matomoURL, +settings.matomoSiteId);
+        }
+      }),
+      tap((settings) => {
+        if (settings.sentryDSN) {
+          Sentry.init({
+            dsn: settings.sentryDSN,
+          });
         }
       })
     );

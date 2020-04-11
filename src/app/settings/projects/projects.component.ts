@@ -6,7 +6,7 @@ import { ProjectsService } from "src/app/api/projects/projects.service";
   selector: "app-projects",
   templateUrl: "./projects.component.html",
   styleUrls: ["./projects.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
   projects$ = this.organizationsService.activeOrganizationProjects$;
