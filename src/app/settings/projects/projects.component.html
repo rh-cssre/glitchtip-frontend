@@ -13,13 +13,13 @@
   <div class="card-wrapper">
     <app-project-card
       *ngFor="let project of projectsForActiveOrg$ | async"
-      [cardLink]="[project.slug]"
+      [cardLink]="project.slug"
       [title]="project.name"
       [descriptionList]="[
         { key: 'organization', value: project.organization.name },
-        { key: 'date created', value: project.dateCreated | date }
+        { key: 'date created', value: (project.dateCreated | date)! }
       ]"
-      [primaryActionButtonLink]="[project.slug]"
+      [primaryActionButtonLink]="project.slug"
       primaryActionButtonIcon="settings"
       primaryActionButtonText="Settings"
     ></app-project-card>

@@ -4,7 +4,7 @@ export interface DSN {
   public: string;
 }
 
-export interface ProjectKeys {
+export interface ProjectKey {
   dateCreated: Date;
   dsn: DSN;
   id: string;

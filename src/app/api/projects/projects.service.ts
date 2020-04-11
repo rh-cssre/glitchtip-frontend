@@ -6,25 +6,25 @@ import { baseUrl } from "../../constants";
 import {
   ProjectNew,
   Project,
-  ProjectKeys,
-  ProjectDetail
+  ProjectKey,
+  ProjectDetail,
 } from "./projects.interfaces";
 import { OrganizationsService } from "../organizations/organizations.service";
 
 interface ProjectsState {
   projects: Project[] | null;
   projectDetail: ProjectDetail | null;
-  projectKeys: ProjectKeys | null;
+  projectKeys: ProjectKey[] | null;
 }
 
 const initialState: any = {
   projects: null,
   projectDetail: null,
-  projectKeys: null
+  projectKeys: null,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProjectsService {
   private readonly projectsState = new BehaviorSubject<ProjectsState>(
@@ -33,19 +33,19 @@ export class ProjectsService {
   private readonly getState$ = this.projectsState.asObservable();
   private readonly url = baseUrl + "/projects/";
 
-  readonly projects$ = this.getState$.pipe(map(data => data.projects));
+  readonly projects$ = this.getState$.pipe(map((data) => data.projects));
 
   readonly activeProject$ = this.getState$.pipe(
-    map(data => data.projectDetail)
+    map((data) => data.projectDetail)
   );
-  readonly projectKeys$ = this.getState$.pipe(map(data => data.projectKeys));
+  readonly projectKeys$ = this.getState$.pipe(map((data) => data.projectKeys));
 
   readonly projectsForActiveOrg$ = combineLatest([
     this.projects$,
-    this.organizationsService.activeOrganizationId$
+    this.organizationsService.activeOrganizationId$,
   ]).pipe(
     map(([projects, activeOrg]) =>
-      projects?.filter(project => project.organization.id === activeOrg)
+      projects?.filter((project) => project.organization.id === activeOrg)
     )
   );
 
@@ -57,13 +57,13 @@ export class ProjectsService {
   createProject(project: any) {
     return this.http
       .post<Project>(this.url, project)
-      .pipe(tap(newProject => this.addOneProject(newProject)));
+      .pipe(tap((newProject) => this.addOneProject(newProject)));
   }
 
   retrieveProjects() {
     return this.http
       .get<Project[]>(this.url)
-      .pipe(tap(projects => this.setProjects(projects)))
+      .pipe(tap((projects) => this.setProjects(projects)))
       .subscribe();
   }
 
@@ -71,15 +71,15 @@ export class ProjectsService {
     const url = `${this.url}${organizationSlug}/${projectSlug}/`;
     return this.http
       .get<ProjectDetail>(url)
-      .pipe(tap(activeProject => this.setActiveProject(activeProject)))
+      .pipe(tap((activeProject) => this.setActiveProject(activeProject)))
       .subscribe();
   }
 
   retrieveClientKeys(organizationSlug: string, projectSlug: string) {
     const keysUrl = `${this.url}${organizationSlug}/${projectSlug}/keys/`;
     return this.http
-      .get<any>(keysUrl)
-      .pipe(tap(projectKeys => this.setKeys(projectKeys)))
+      .get<ProjectKey[]>(keysUrl)
+      .pipe(tap((projectKeys) => this.setKeys(projectKeys)))
       .subscribe();
   }
 
@@ -90,8 +90,8 @@ export class ProjectsService {
   ) {
     const url = `${this.url}${organizationSlug}/${projectSlug}/`;
     return this.http.put<Project>(url, project).pipe(
-      tap(_ => console.log("Post Status", _)),
-      catchError(err => "error alert")
+      tap((_) => console.log("Post Status", _)),
+      catchError((err) => "error alert")
     );
   }
 
@@ -110,7 +110,7 @@ export class ProjectsService {
   private setActiveProject(projectDetail: ProjectDetail) {
     this.projectsState.next({
       ...this.projectsState.getValue(),
-      projectDetail
+      projectDetail,
     });
   }
 
@@ -121,7 +121,7 @@ export class ProjectsService {
     if (newProjects) {
       this.projectsState.next({
         ...this.projectsState.getValue(),
-        projects: newProjects
+        projects: newProjects,
       });
     }
   }
@@ -129,11 +129,11 @@ export class ProjectsService {
   private removeOneProject(projectSlug: string) {
     const filteredProjects = this.projectsState
       .getValue()
-      .projects?.filter(project => project.slug !== projectSlug);
+      .projects?.filter((project) => project.slug !== projectSlug);
     if (filteredProjects) {
       this.projectsState.next({
         ...this.projectsState.getValue(),
-        projects: filteredProjects
+        projects: filteredProjects,
       });
     }
   }

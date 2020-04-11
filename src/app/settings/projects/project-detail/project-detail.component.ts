@@ -1,31 +1,31 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
+import { EMPTY, combineLatest } from "rxjs";
 import { map, exhaustMap } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
-import { EMPTY, combineLatest } from "rxjs";
 
 @Component({
   selector: "app-project-detail",
   templateUrl: "./project-detail.component.html",
-  styleUrls: ["./project-detail.component.scss"]
+  styleUrls: ["./project-detail.component.scss"],
 })
 export class ProjectDetailComponent implements OnInit {
   projectKeys$ = this.projectsService.projectKeys$;
   activeProject$ = this.projectsService.activeProject$;
 
   orgParam$ = this.activatedRoute.paramMap.pipe(
-    map(params => params.get("org-slug"))
+    map((params) => params.get("org-slug"))
   );
   projectParam$ = this.activatedRoute.paramMap.pipe(
-    map(params => params.get("slug"))
+    map((params) => params.get("slug"))
   );
   orgAndProjectParams$ = combineLatest([this.orgParam$, this.projectParam$]);
 
   error: string;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
-    platform: new FormControl("", [Validators.required])
+    platform: new FormControl("", [Validators.required]),
   });
 
   constructor(
@@ -33,11 +33,11 @@ export class ProjectDetailComponent implements OnInit {
     private router: Router,
     private projectsService: ProjectsService
   ) {
-    this.activeProject$.subscribe(data => {
+    this.activeProject$.subscribe((data) => {
       if (data) {
         this.form.patchValue({
           name: data.name,
-          platform: data.platform
+          platform: data.platform,
         });
       }
     });
@@ -61,7 +61,7 @@ export class ProjectDetailComponent implements OnInit {
     if (window.confirm("Are you sure you want to delete this project?")) {
       this.projectsService.deleteProject(orgSlug, projectSlug).subscribe(
         () => this.router.navigate(["settings", orgSlug, "projects"]),
-        err => console.log("delete project error: ", err)
+        (err) => console.log("delete project error: ", err)
       );
     }
   }
@@ -72,11 +72,11 @@ export class ProjectDetailComponent implements OnInit {
       this.projectsService
         .updateProject(orgSlug, projectSlug, {
           name: this.form.value.name,
-          platform: this.form.value.platform
+          platform: this.form.value.platform,
         })
         .subscribe(
           () => this.router.navigate(["/settings/projects"]),
-          err => console.log("form error:", err)
+          (err) => console.log("form error:", err)
         );
     } else {
       this.error = "form not valid";

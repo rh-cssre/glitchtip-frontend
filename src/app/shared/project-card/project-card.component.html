@@ -1,5 +1,5 @@
 <mat-card>
-  <a [routerLink]="cardLink" [queryParams]="cardLinkQueryParams">
+  <a [routerLink]="cardLink" [queryParams]="cardLinkQueryParams || {}">
     <mat-card-content>
       <mat-card-title>{{ title }}</mat-card-title>
       <mat-divider></mat-divider>
@@ -16,7 +16,7 @@
       mat-stroked-button
       color="primary"
       [routerLink]="primaryActionButtonLink"
-      [queryParams]="primaryActionButtonQuery"
+      [queryParams]="primaryActionButtonQuery || {}"
     >
       <mat-icon
         *ngIf="primaryActionButtonIcon"

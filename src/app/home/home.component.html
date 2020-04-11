@@ -42,7 +42,7 @@
             [title]="project.name"
             [descriptionList]="[
               { key: 'organization', value: project.organization.name },
-              { key: 'date created', value: project.dateCreated | date }
+              { key: 'date created', value: (project.dateCreated | date)! }
             ]"
             [primaryActionButtonLink]="[
               '/organizations',
