@@ -15,6 +15,7 @@ import {
 export class AuthButtonComponent {
   @Input() svg: string;
   @Input() text: string;
+  @Input() disabled = false;
 
   @Output() clickEvent: EventEmitter<any> = new EventEmitter();
 }

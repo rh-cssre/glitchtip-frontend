@@ -1,6 +1,7 @@
 <button
   mat-stroked-button
   class="full-width margin"
+  [disabled]="disabled"
   (click)="clickEvent.emit()"
 >
   <span class="wrapper">

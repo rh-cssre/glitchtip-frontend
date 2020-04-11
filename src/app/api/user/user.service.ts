@@ -10,26 +10,26 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  user: null
+  user: null,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class UserService {
   private readonly state = new BehaviorSubject<UserState>(initialState);
-  readonly userDetails$ = this.state.pipe(map(state => state.user));
+  readonly userDetails$ = this.state.pipe(map((state) => state.user));
   readonly isGoogleConnected$ = this.userDetails$.pipe(
-    map(user => this.isOAuthConnected(user, "google"))
+    map((user) => this.isOAuthConnected(user, "google"))
   );
   readonly isMicrosoftConnected$ = this.userDetails$.pipe(
-    map(user => this.isOAuthConnected(user, "microsoft"))
+    map((user) => this.isOAuthConnected(user, "microsoft"))
   );
   readonly isGitlabConnected$ = this.userDetails$.pipe(
-    map(user => this.isOAuthConnected(user, "gitlab"))
+    map((user) => this.isOAuthConnected(user, "gitlab"))
   );
   readonly isGithubConnected$ = this.userDetails$.pipe(
-    map(user => this.isOAuthConnected(user, "github"))
+    map((user) => this.isOAuthConnected(user, "github"))
   );
   private readonly url = "/rest-auth/user/";
   constructor(private http: HttpClient) {}
@@ -53,7 +53,7 @@ export class UserService {
   private isOAuthConnected(user: UserDetails | null, provider: OAuthProvider) {
     return (
       user?.socialaccount_set.findIndex(
-        account => account.provider === "google"
+        (account) => account.provider === provider
       ) !== -1
     );
   }
