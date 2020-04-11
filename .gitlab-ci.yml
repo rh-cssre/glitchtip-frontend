@@ -109,6 +109,7 @@ deploy-production:
     url: https://app.glitchtip.com
   only:
     - tags
+  when: manual
 
 deploy-dockerhub:
   stage: deploy
@@ -119,9 +120,8 @@ deploy-dockerhub:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
     - docker login -u ${DOCKER_CI_REGISTRY_USER} -p ${DOCKER_CI_REGISTRY_PASSWORD}
-    - echo tag image ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} as ${DOCKER_CI_REGISTRY_IMAGE}
-    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} ${DOCKER_CI_REGISTRY_IMAGE}
-    - docker push ${DOCKER_CI_REGISTRY_IMAGE}
+    - echo tag image ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} as ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker push ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
   only:
     - tags
-
