@@ -72,7 +72,7 @@
 </section>
 <a
   *ngIf="activeOrgSlug$ | async as activeOrgSlug"
-  mat-flat-button
+  mat-stroked-button
   color="primary"
   class="add-button"
   [routerLink]="['/settings', activeOrgSlug, 'projects', 'new']"

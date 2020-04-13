@@ -18,8 +18,23 @@ table {
   justify-content: space-between;
 }
 
+.action-group {
+  display: flex;
+  justify-content: space-between;
+
+  > form {
+    flex: 1;
+    max-width: 400px;
+    padding-left: 50px;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}
+
 .table-header {
-  padding: 20px 0;
+  padding: 20px 0 8px;
 }
 
 .mat-column-title {

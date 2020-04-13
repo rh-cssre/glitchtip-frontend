@@ -28,6 +28,9 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     this.loading$,
   ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
   areAllSelected$ = this.issuesService.areAllSelected$;
+  thereAreSelectedIssues$ = this.issuesService.selectedIssues$.pipe(
+    map((selectedIssues) => selectedIssues.length > 0)
+  );
   hasNextPage$ = this.issuesService.hasNextPage$;
   hasPreviousPage$ = this.issuesService.hasPreviousPage$;
   nextParams$ = this.issuesService.nextPageParams$;
