@@ -8,6 +8,14 @@
       [value]="csp?.blocked_uri"
     ></app-entry-data>
     <app-entry-data
+      key="column_number"
+      [value]="csp?.column_number"
+    ></app-entry-data>
+    <app-entry-data
+      key="disposition"
+      [value]="csp?.disposition"
+    ></app-entry-data>
+    <app-entry-data
       key="document_uri"
       [value]="csp?.document_uri"
     ></app-entry-data>
@@ -16,13 +24,25 @@
       [value]="csp?.effective_directive"
     ></app-entry-data>
     <app-entry-data
+      key="line_number"
+      [value]="csp?.line_number"
+    ></app-entry-data>
+    <app-entry-data
       key="original_policy"
       [value]="csp?.original_policy"
     ></app-entry-data>
-    <app-entry-data key="referrer" [value]="csp?.referrer"></app-entry-data>
+    <app-entry-data
+      key="source_file"
+      [value]="csp?.source_file"
+    ></app-entry-data>
+    <app-entry-data
+      key="status_code"
+      [value]="csp?.status_code"
+    ></app-entry-data>
     <app-entry-data
       key="violated_directive"
       [value]="csp?.violated_directive"
     ></app-entry-data>
+    <app-entry-data key="referrer" [value]="csp?.referrer"></app-entry-data>
   </section>
 </section>

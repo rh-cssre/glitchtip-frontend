@@ -40,6 +40,7 @@ export interface EventDetail extends Event {
   context?: { "sys.argv"?: string[]; arguments?: [] };
   release?: any;
   issue?: number;
+  sdkUpdates?: [];
 }
 
 export interface Entry<Type extends string, Data extends {}> {
@@ -63,12 +64,24 @@ export interface Message {
 }
 
 export interface CSP {
+  line_number?: number;
+  status_code?: number;
+  column_number?: number;
+  source_file?: string;
   blocked_uri: string;
   referrer: string;
   violated_directive: string;
   document_uri: string;
   original_policy: string;
   effective_directive: string;
+  disposition?: string;
+}
+
+interface CSPDevice {
+  brand: string;
+  type: string;
+  model: string;
+  family: string;
 }
 
 // https://docs.sentry.io/enriching-error-data/breadcrumbs/?platform=javascript
@@ -218,8 +231,10 @@ interface ITag {
 export interface Context {
   runtime?: Runtime;
   trace?: Trace;
-  os: IContextDetail;
-  browser: IContextDetail;
+  os: ContextDetail;
+  browser: ContextDetail;
+  device?: CSPDevice;
+  client_os: ContextDetail;
 }
 
 interface Trace {
@@ -238,7 +253,7 @@ interface Runtime {
   name: string;
 }
 
-interface IContextDetail {
+interface ContextDetail {
   version?: string;
   type: string;
   name: string;
