@@ -76,7 +76,11 @@
   </mat-sidenav>
 
   <mat-sidenav-content
-    ><mat-toolbar (click)="toggleSideNav()" color="primary">
+    ><mat-toolbar
+      *ngIf="isLoggedIn$ | async"
+      (click)="toggleSideNav()"
+      color="primary"
+    >
       <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
         <mat-icon>menu</mat-icon></button
       ><span

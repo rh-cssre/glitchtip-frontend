@@ -2,93 +2,112 @@ import { EventDetail } from "src/app/issues/interfaces";
 
 /*tslint:disable */
 export const cspError: EventDetail = {
-  eventID: "75c941b27a9c4819a374a2f2052279bc",
+  eventID: "aaa83b555096427390ae2a5edb1c42ba",
   dist: null,
   userReport: null,
-  projectID: "1",
-  previousEventID: null,
-  message: "Blocked 'style' from 'example.com'",
-  id: "41",
-  size: 1317,
+  projectID: "1388394",
+  previousEventID: "c41fcae5f26440e7b7382659c2ebcd46",
+  message: "Blocked 'connect' from 'bat.bing.com'",
+  id: "aaa83b555096427390ae2a5edb1c42ba",
+  size: 4784,
   errors: [],
-  culprit: "style-src cdn.example.com",
-  title: "Blocked 'style' from 'example.com'",
+  culprit:
+    "connect-src https://*.revo.com https://*.thelabnyc.com https://*.myshopify.com localhost:* *.hotjar.com *.hotjar.io facebook.com sentry.io *.yotpo.com storerocket.io *.mapbox.com www.google-analyti...",
+  title: "Blocked 'connect' from 'bat.bing.com'",
+  sdkUpdates: [],
   platform: "other",
-  location: "example.com",
+  location: "bat.bing.com",
   nextEventID: null,
   type: "csp",
   metadata: {
-    message: "Blocked 'style' from 'example.com'",
-    uri: "example.com",
-    directive: "style-src"
+    message: "Blocked 'connect' from 'bat.bing.com'",
+    uri: "bat.bing.com",
+    directive: "connect-src",
   },
-  groupingConfig: { id: "legacy:2019-03-12" },
+  groupingConfig: {
+    enhancements: "eJybzDhxY05qemJypZWRgaGlroGxrqHRBABbEwcC",
+    id: "legacy:2019-03-12",
+  },
   crashFile: null,
   tags: [
-    {
-      value: "http://example.com/css/style.css",
-      key: "blocked-uri",
-      _meta: null
-    },
-    { value: "style-src", key: "effective-directive", _meta: null },
+    { value: "https://bat.bing.com", key: "blocked-uri", _meta: null },
+    { value: "Google 101.0.303750571", key: "browser", _meta: null },
+    { value: "Google", key: "browser.name", _meta: null },
+    { value: "iOS 13.2", key: "client_os", _meta: null },
+    { value: "iOS", key: "client_os.name", _meta: null },
+    { value: "iPhone", key: "device", _meta: null },
+    { value: "iPhone", key: "device.family", _meta: null },
+    { value: "connect-src", key: "effective-directive", _meta: null },
+    { value: "production", key: "environment", _meta: null },
     { value: "error", key: "level", _meta: null },
     { value: "csp", key: "logger", _meta: null },
-    { value: "http://example.com/signup.html", key: "url", _meta: null },
     {
-      query: "user.ip:69.197.135.226",
-      value: "ip:69.197.135.226",
+      value: "https://www.revo.com/about-us/lens-replacement",
+      key: "url",
+      _meta: null,
+    },
+    {
+      query: 'user.ip:"99.251.88.88"',
+      value: "ip:99.251.88.88",
       key: "user",
-      _meta: null
-    }
+      _meta: null,
+    },
   ],
-  dateCreated: "2020-02-06T19:35:11.310Z",
-  dateReceived: "2020-02-06T19:35:11.310Z",
+  dateCreated: "2020-04-10T16:09:45.860455Z",
+  dateReceived: "2020-04-10T16:09:45.860455Z",
   user: {
     username: null,
     name: null,
-    ip_address: "69.197.135.226",
+    ip_address: "99.251.88.88",
     email: null,
-    data: {},
-    id: null
+    data: null,
+    id: null,
   },
   entries: [
     {
       type: "message",
-      data: { formatted: "Blocked 'style' from 'example.com'" }
+      data: { formatted: "Blocked 'connect' from 'bat.bing.com'" },
     },
     {
       type: "csp",
       data: {
-        blocked_uri: "http://example.com/css/style.css",
-        referrer: "",
-        violated_directive: "style-src cdn.example.com",
-        document_uri: "http://example.com/signup.html",
+        line_number: 1,
+        blocked_uri: "https://bat.bing.com",
+        status_code: 0,
+        violated_directive:
+          "connect-src https://*.revo.com https://*.thelabnyc.com https://*.myshopify.com localhost:* *.hotjar.com *.hotjar.io facebook.com sentry.io *.yotpo.com storerocket.io *.mapbox.com www.google-analytics.com www.facebook.com wss://ws2.hotjar.com https://*.openshiftapps.com https://widget.us.criteo.com http://siteblock.exeloncorp.com https://s3-us-west-2.amazonaws.com/afterpayus-integrations/javascript/modal/us_modal.html adservice.google.com stats.g.doubleclick.net *.fastly.net https://*.amplitude.com storerocket.global.ssl.fastly.net https://*.ads-twitter.com",
+        column_number: 25315,
+        document_uri: "https://www.revo.com/about-us/lens-replacement",
         original_policy:
-          "default-src 'none'; style-src cdn.example.com; report-uri /_/csp-reports",
-        effective_directive: "style-src"
-      }
+          "default-src 'self'; connect-src https://*.revo.com https://*.thelabnyc.com https://*.myshopify.com localhost:* *.hotjar.com *.hotjar.io facebook.com sentry.io *.yotpo.com storerocket.io *.mapbox.com www.google-analytics.com www.facebook.com wss://ws2.hotjar.com https://*.openshiftapps.com https://widget.us.criteo.com http://siteblock.exeloncorp.com https://s3-us-west-2.amazonaws.com/afterpayus-integrations/javascript/modal/us_modal.html adservice.google.com stats.g.doubleclick.net *.fastly.net https://*.amplitude.com storerocket.global.ssl.fastly.net https://*.ads-twitter.com; font-src 'self' *.yotpo.com *.gstatic.com fonts.gstatic.com data:; frame-src 'self' *.doubleclick.net *.hotjar.com *.criteo.com *.criteo.net optimize.google.com www.googletagmanager.com connect.facebook.net www.facebook.com www.yahoo.com *.yahoo.com app.five9.com; img-src * data: blob: www.google-analytics.com optimize.google.com; script-src 'self' 'unsafe-eval' 'unsafe-inline' bat.bing.com connect.facebook.net *.hotjar.com www.google-analytics.com www.googletagmanager.com www.googleadservices.com *.criteo.net *.criteo.com *.criteotilt.com *.experticity.com *.storerocket.io *.yotpo.com *.doubleclick.net *.jsdelivr.net *.mapbox.com tagmanager.google.com optimize.google.com *.list-manage.com z.moatads.com https://l.facebook.com app.five9.com *.fastly.net *.ads-twitter.com www.google.com *.google.com *.google-analytics.com https://*.twitter.com *.afterpay.com; worker-src blob:; style-src 'self' 'unsafe-inline' *.yotpo.com tagmanager.google.com optimize.google.com fonts.googleapis.com app.five9.com; child-src blob:; report-uri https://sentry.io/api/1388394/security/?sentry_key=05cf1ae732d54995bff9b1d4ab1dfc07&sentry_environment=production",
+        source_file: "https://bat.bing.com",
+        referrer: "https://www.google.com/",
+        effective_directive: "connect-src",
+      },
     },
     {
       type: "request",
       data: {
-        fragment: "",
+        fragment: null,
         cookies: [],
         inferredContentType: null,
         env: null,
-        headers: [["User-Agent", "axios/0.19.0"]],
-        url: "http://example.com/signup.html",
+        headers: [
+          ["Referer", "https://www.google.com/"],
+          [
+            "User-Agent",
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/101.0.303750571 Mobile/15E148 Safari/604.1",
+          ],
+        ],
+        url: "https://www.revo.com/about-us/lens-replacement",
         query: [],
         data: null,
-        method: null
-      }
-    }
+        method: null,
+      },
+    },
   ],
   packages: {},
-  sdk: {
-    version: "0.19.0",
-    name: "axios",
-    upstream: { url: null, isNewer: false, name: "axios" }
-  },
+  sdk: null,
   _meta: {
     user: null,
     context: null,
@@ -97,11 +116,20 @@ export const cspError: EventDetail = {
     message: null,
     packages: null,
     tags: {},
-    sdk: null
+    sdk: null,
   },
-  contexts: {},
-  fingerprints: ["d5345fd5e29cfa4c251224cb7a035edc"],
+  contexts: {
+    device: {
+      brand: "Apple",
+      type: "device",
+      model: "iPhone",
+      family: "iPhone",
+    },
+    browser: { version: "101.0.303750571", type: "browser", name: "Google" },
+    client_os: { version: "13.2", type: "os", name: "iOS" },
+  },
+  fingerprints: ["4dbf7ab1823094ca25bfeb21e4f44669"],
   context: {},
   release: null,
-  groupID: "12"
+  groupID: "1563601466",
 };

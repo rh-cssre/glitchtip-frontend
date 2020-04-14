@@ -113,12 +113,12 @@
           </span>
           <span
             class="mat-caption"
-            *ngIf="element.type && element.type !== 'error'"
+            *ngIf="element.type && element.type === 'csp'"
             ><span
               *ngIf="(oneProjectApplied$ | async) === false && element.type"
             >
               &mdash; </span
-            >{{ element.type }} error</span
+            >{{ element.type }} report</span
           >
         </div>
       </td>

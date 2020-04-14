@@ -8,5 +8,5 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 })
 export class EntryDataComponent {
   @Input() key: string;
-  @Input() value: string | undefined;
+  @Input() value: string | number | undefined;
 }
