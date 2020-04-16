@@ -1,6 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -15,25 +13,25 @@ const initialState: AuthState = {
   key: null,
   email: null,
   first_name: null,
-  last_name: null
+  last_name: null,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AuthService {
   private authData = new BehaviorSubject<AuthState>(initialState);
   data = this.authData.asObservable();
-  isLoggedIn = this.data.pipe(map(data => Boolean(data.key)));
-  getAuthToken = this.authData.pipe(map(auth => auth.key));
+  isLoggedIn = this.data.pipe(map((data) => Boolean(data.key)));
+  getAuthToken = this.authData.pipe(map((auth) => auth.key));
 
-  constructor(private router: Router, private snackBar: MatSnackBar) {
+  constructor() {
     const authData = localStorage.getItem("auth");
     if (authData) {
       const auth = JSON.parse(authData);
       if (auth.key) {
         this.setAuth({
-          key: auth.key
+          key: auth.key,
         });
       }
     }
@@ -46,8 +44,7 @@ export class AuthService {
 
   logout() {
     this.clearAuth();
-    this.router.navigate(["/login"]);
-    this.snackBar.open("You have been logged out.");
+    window.location.href = "/login";
   }
 
   private clearAuth() {
