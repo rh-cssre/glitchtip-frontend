@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean } from "@storybook/addon-knobs";
-
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ProfileComponent } from "./profile.component";
 import { AuthButtonComponent } from "./auth-button/auth-button.component";

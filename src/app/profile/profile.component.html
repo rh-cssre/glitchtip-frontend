@@ -12,14 +12,19 @@
         <mat-card-title>Social Auth Accounts</mat-card-title>
         <mat-divider></mat-divider>
         <div class="button-wrapper">
-          <!-- Disconnect isn't implemented yet -->
+          <!-- Github -->
+          <app-auth-button
+            *ngIf="isGithubConnected$ | async"
+            text="GitHub is Connected"
+            svg="github"
+            [disabled]="true"
+          ></app-auth-button>
           <!-- Gitlab -->
           <app-auth-button
             *ngIf="isGitlabConnected$ | async; else gitlabDisconnected"
-            text="Disconnect GitLab"
+            text="GitLab is Connected"
             svg="gitlab"
             [disabled]="true"
-            (clickEvent)="disconnectGitlab()"
           ></app-auth-button>
           <ng-template #gitlabDisconnected>
             <app-auth-button
@@ -37,23 +42,20 @@
             text="Disconnect GitHub"
             svg="github"
             [disabled]="true"
-            (clickEvent)="disconnectGithub()"
           ></app-auth-button>
           <ng-template #githubDisconnected>
             <app-auth-button
               text="Connect to GitHub"
               svg="github"
-              (clickEvent)="connectGithub()"
               [disabled]="true"
             ></app-auth-button>
           </ng-template>
           <!-- Google -->
           <app-auth-button
             *ngIf="isGoogleConnected$ | async; else googleDisconnected"
-            text="Disconnect Google"
+            text="Google is Connected"
             svg="google"
             [disabled]="true"
-            (clickEvent)="disconnectGoogle()"
           ></app-auth-button>
           <ng-template #googleDisconnected>
             <app-auth-button
@@ -65,10 +67,9 @@
           <!-- Microsoft -->
           <app-auth-button
             *ngIf="isMicrosoftConnected$ | async; else microsoftDisconnected"
-            text="Disconnect Microsoft"
+            text="Microsoft is Connected"
             svg="microsoft"
             [disabled]="true"
-            (clickEvent)="disconnectMicrosoft()"
           ></app-auth-button>
           <ng-template #microsoftDisconnected>
             <app-auth-button
