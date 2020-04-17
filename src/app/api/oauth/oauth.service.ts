@@ -10,7 +10,9 @@ import {
   googleAuthConfig,
   microsoftAuthConfig,
   githubAuthConfig,
-  googleAuthConnectConfig
+  googleAuthConnectConfig,
+  gitlabAuthConnectConfig,
+  microsoftAuthConnectConfig,
 } from "./social";
 
 interface RestAuthConnectData {
@@ -23,7 +25,7 @@ interface RestAuthLoginResp {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class GlitchTipOAuthService {
   private readonly baseUrl = "rest-auth";
@@ -37,47 +39,63 @@ export class GlitchTipOAuthService {
 
   githubLogin(code: string) {
     const data: RestAuthConnectData = {
-      code
+      code,
     };
     const url = this.baseUrl + "/github/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess(resp)));
   }
 
   microsoftLogin(accessToken: string) {
     const data: RestAuthConnectData = {
-      access_token: accessToken
+      access_token: accessToken,
     };
     const url = this.baseUrl + "/microsoft/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess(resp)));
+  }
+
+  microsoftConnect(accessToken: string) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken,
+    };
+    const url = this.baseUrl + "/microsoft/connect/";
+    return this.http.post<RestAuthLoginResp>(url, data);
   }
 
   gitlabLogin(accessToken: string) {
     const data: RestAuthConnectData = {
-      access_token: accessToken
+      access_token: accessToken,
     };
     const url = this.baseUrl + "/gitlab/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess(resp)));
+  }
+
+  gitlabConnect(accessToken: string) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken,
+    };
+    const url = this.baseUrl + "/gitlab/connect/";
+    return this.http.post<RestAuthLoginResp>(url, data);
   }
 
   googleLogin(accessToken: string) {
     const data: RestAuthConnectData = {
-      access_token: accessToken
+      access_token: accessToken,
     };
     const url = this.baseUrl + "/google/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap(resp => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess(resp)));
   }
 
   googleConnect(accessToken: string) {
     const data: RestAuthConnectData = {
-      access_token: accessToken
+      access_token: accessToken,
     };
     const url = this.baseUrl + "/google/connect/";
     return this.http.post<RestAuthLoginResp>(url, data);
@@ -85,6 +103,11 @@ export class GlitchTipOAuthService {
 
   initGitlabLogin() {
     this.oauthService.configure(gitlabAuthConfig);
+    this.oauthService.initLoginFlow();
+  }
+
+  initGitlabConnect() {
+    this.oauthService.configure(gitlabAuthConnectConfig);
     this.oauthService.initLoginFlow();
   }
 
@@ -105,6 +128,11 @@ export class GlitchTipOAuthService {
 
   initMicrosoftLogin() {
     this.oauthService.configure(microsoftAuthConfig);
+    this.oauthService.initLoginFlow();
+  }
+
+  initMicrosoftConnect() {
+    this.oauthService.configure(microsoftAuthConnectConfig);
     this.oauthService.initLoginFlow();
   }
 

@@ -3,6 +3,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GlitchTipOAuthService } from "src/app/api/oauth/oauth.service";
 import { catchError, tap } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 
 /**
@@ -12,25 +13,38 @@ import { EMPTY } from "rxjs";
 @Component({
   templateUrl: "./connect.component.html",
   styleUrls: ["./connect.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectComponent implements OnInit {
   constructor(
     private oauthService: GlitchTipOAuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     const fragment = this.route.snapshot.fragment;
-    const query = this.route.snapshot.queryParamMap;
     const provider = this.route.snapshot.paramMap.get("provider");
+    const errorText = "Bad Request: Unable to connect to ";
 
     if (fragment) {
       const accessToken = new URLSearchParams(fragment).get("access_token");
       if (accessToken) {
         if (provider === "gitlab") {
-          this.oauthService.gitlabLogin(accessToken).toPromise();
+          this.oauthService
+            .gitlabConnect(accessToken)
+            .pipe(
+              tap(() => this.router.navigate(["../../"])),
+              catchError((error: HttpErrorResponse) => {
+                if (error.status === 400) {
+                  this.snackBar.open(errorText, provider);
+                  console.warn(error);
+                }
+                return EMPTY;
+              })
+            )
+            .toPromise();
         } else if (provider === "google") {
           this.oauthService
             .googleConnect(accessToken)
@@ -38,21 +52,27 @@ export class ConnectComponent implements OnInit {
               tap(() => this.router.navigate(["../../"])),
               catchError((error: HttpErrorResponse) => {
                 if (error.status === 400) {
-                  console.log("error, maybe should open a snackbar?", error);
+                  this.snackBar.open(errorText, provider);
+                  console.warn(error);
                 }
                 return EMPTY;
               })
             )
             .toPromise();
         } else if (provider === "microsoft") {
-          this.oauthService.microsoftLogin(accessToken).toPromise();
-        }
-      }
-    } else if (query) {
-      const code = query.get("code");
-      if (code) {
-        if (provider === "github") {
-          this.oauthService.githubLogin(code).toPromise();
+          this.oauthService
+            .microsoftConnect(accessToken)
+            .pipe(
+              tap(() => this.router.navigate(["../../"])),
+              catchError((error: HttpErrorResponse) => {
+                if (error.status === 400) {
+                  this.snackBar.open(errorText, provider);
+                  console.warn(error);
+                }
+                return EMPTY;
+              })
+            )
+            .toPromise();
         }
       }
     }

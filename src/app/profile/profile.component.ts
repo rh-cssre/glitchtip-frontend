@@ -22,35 +22,18 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserDetails();
   }
 
-  connectGithub() {
-    console.log("TODO: connect Github logic");
-  }
-
-  disconnectGithub() {
-    console.log("TODO: disconnect GitHub logic");
-  }
+  // No connection for GitHub because it doesn't allow for multiple redirect URI's
+  // Can connect to GitHub on the log in page
 
   connectGitlab() {
-    console.log("TODO: connect GitLab logic");
-  }
-
-  disconnectGitlab() {
-    console.log("TODO: disconnect GitLab logic");
+    this.oauthService.initGitlabConnect();
   }
 
   connectGoogle() {
     this.oauthService.initGoogleConnect();
   }
 
-  disconnectGoogle() {
-    console.log("TODO: disconnect Google logic");
-  }
-
   connectMicrosoft() {
-    console.log("TODO: connect Microsoft logic");
-  }
-
-  disconnectMicrosoft() {
-    console.log("TODO: disconnect Microsoft logic");
+    this.oauthService.initMicrosoftConnect();
   }
 }

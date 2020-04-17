@@ -11,7 +11,12 @@ export const gitlabAuthConfig: AuthConfig = {
   oidc: false,
   redirectUri: window.location.origin + "/login/gitlab",
   clientId: "0b6b2912b57032df9a6bd2186bbb394b67083a17fad98ff590ab5c7a9355f118",
-  scope: "read_user"
+  scope: "read_user",
+};
+
+export const gitlabAuthConnectConfig: AuthConfig = {
+  ...gitlabAuthConfig,
+  redirectUri: window.location.origin + "/profile/connect/gitlab",
 };
 
 export const googleAuthConfig: AuthConfig = {
@@ -27,12 +32,12 @@ export const googleAuthConfig: AuthConfig = {
     "1005454931976-jvjgtjo6kg8skidrkucti86obq5cmjps.apps.googleusercontent.com",
   strictDiscoveryDocumentValidation: false,
   scope: "openid profile email",
-  sessionChecksEnabled: true
+  sessionChecksEnabled: true,
 };
 
 export const googleAuthConnectConfig: AuthConfig = {
   ...googleAuthConfig,
-  redirectUri: window.location.origin + "/profile/connect/google"
+  redirectUri: window.location.origin + "/profile/connect/google",
 };
 
 export const microsoftAuthConfig: AuthConfig = {
@@ -44,7 +49,12 @@ export const microsoftAuthConfig: AuthConfig = {
   redirectUri: window.location.origin + "/login/microsoft",
   userinfoEndpoint: "https://graph.microsoft.com/v1.0/me/",
   oidc: false,
-  clientId: "47783413-5cc9-4557-a7fc-0033837da5cb"
+  clientId: "47783413-5cc9-4557-a7fc-0033837da5cb",
+};
+
+export const microsoftAuthConnectConfig: AuthConfig = {
+  ...microsoftAuthConfig,
+  redirectUri: window.location.origin + "/profile/connect/microsoft",
 };
 
 export const githubAuthConfig: AuthConfig = {
@@ -56,5 +66,5 @@ export const githubAuthConfig: AuthConfig = {
   responseType: "token",
   oidc: false,
   scope: "read:user user:email",
-  redirectUri: window.location.origin + "/login/github"
+  redirectUri: window.location.origin + "/login/github",
 };
