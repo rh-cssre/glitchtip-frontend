@@ -22,7 +22,7 @@ export const zeroDivisionError: EventDetail = {
     function: "get",
     type: "ZeroDivisionError",
     value: "division by zero",
-    filename: "errors/views.py"
+    filename: "errors/views.py",
   },
   groupingConfig: { id: "legacy:2019-03-12" },
   crashFile: null,
@@ -37,7 +37,7 @@ export const zeroDivisionError: EventDetail = {
     { value: "CPython", key: "runtime.name", _meta: null },
     { value: "ab3aadbbc567", key: "server_name", _meta: null },
     { value: "/divide-zero/", key: "transaction", _meta: null },
-    { value: "http://localhost:8001/divide-zero/", key: "url", _meta: null }
+    { value: "http://localhost:8001/divide-zero/", key: "url", _meta: null },
   ],
   dateCreated: "2020-01-27T19:19:06.143Z",
   dateReceived: "2020-01-27T19:19:06.204Z",
@@ -57,7 +57,7 @@ export const zeroDivisionError: EventDetail = {
                     get_response:
                       "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>>",
                     request: "<WSGIRequest: GET '/divide-zero/'>",
-                    exc: "ZeroDivisionError('division by zero')"
+                    exc: "ZeroDivisionError('division by zero')",
                   },
                   symbol: null,
                   module: "django.core.handlers.exception",
@@ -74,7 +74,7 @@ export const zeroDivisionError: EventDetail = {
                   context: [
                     [
                       29,
-                      "    can rely on getting a response instead of an exception."
+                      "    can rely on getting a response instead of an exception.",
                     ],
                     [30, '    """'],
                     [31, "    @wraps(get_response)"],
@@ -84,13 +84,13 @@ export const zeroDivisionError: EventDetail = {
                     [35, "        except Exception as exc:"],
                     [
                       36,
-                      "            response = response_for_exception(request, exc)"
+                      "            response = response_for_exception(request, exc)",
                     ],
                     [37, "        return response"],
                     [38, "    return inner"],
-                    [39, ""]
+                    [39, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_get_response",
@@ -110,7 +110,7 @@ export const zeroDivisionError: EventDetail = {
                     resolver:
                       "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     callback_kwargs: {},
-                    response: "None"
+                    response: "None",
                   },
                   symbol: null,
                   module: "django.core.handlers.base",
@@ -128,31 +128,31 @@ export const zeroDivisionError: EventDetail = {
                     [110, "        if response is None:"],
                     [
                       111,
-                      "            wrapped_callback = self.make_view_atomic(callback)"
+                      "            wrapped_callback = self.make_view_atomic(callback)",
                     ],
                     [112, "            try:"],
                     [
                       113,
-                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)"
+                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
                     ],
                     [114, "            except Exception as e:"],
                     [
                       115,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [116, ""],
                     [
                       117,
-                      "        # Complain if the view returned None (a common error)."
+                      "        # Complain if the view returned None (a common error).",
                     ],
                     [118, "        if response is None:"],
                     [
                       119,
-                      "            if isinstance(callback, types.FunctionType):    # FBV"
+                      "            if isinstance(callback, types.FunctionType):    # FBV",
                     ],
-                    [120, "                view_name = callback.__name__"]
+                    [120, "                view_name = callback.__name__"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_get_response",
@@ -172,7 +172,7 @@ export const zeroDivisionError: EventDetail = {
                     resolver:
                       "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     callback_kwargs: {},
-                    response: "None"
+                    response: "None",
                   },
                   symbol: null,
                   module: "django.core.handlers.base",
@@ -192,26 +192,26 @@ export const zeroDivisionError: EventDetail = {
                     [110, "        if response is None:"],
                     [
                       111,
-                      "            wrapped_callback = self.make_view_atomic(callback)"
+                      "            wrapped_callback = self.make_view_atomic(callback)",
                     ],
                     [112, "            try:"],
                     [
                       113,
-                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)"
+                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
                     ],
                     [114, "            except Exception as e:"],
                     [
                       115,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [116, ""],
                     [
                       117,
-                      "        # Complain if the view returned None (a common error)."
+                      "        # Complain if the view returned None (a common error).",
                     ],
-                    [118, "        if response is None:"]
+                    [118, "        if response is None:"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "view",
@@ -223,7 +223,7 @@ export const zeroDivisionError: EventDetail = {
                     args: [],
                     request: "<WSGIRequest: GET '/divide-zero/'>",
                     kwargs: {},
-                    cls: "<class 'errors.views.DivideZeroView'>"
+                    cls: "<class 'errors.views.DivideZeroView'>",
                   },
                   symbol: null,
                   module: "django.views.generic.base",
@@ -242,24 +242,24 @@ export const zeroDivisionError: EventDetail = {
                     [67, "                raise AttributeError("],
                     [
                       68,
-                      "                    \"%s instance has no 'request' attribute. Did you override \""
+                      "                    \"%s instance has no 'request' attribute. Did you override \"",
                     ],
                     [
                       69,
-                      '                    "setup() and forget to call super()?" % cls.__name__'
+                      '                    "setup() and forget to call super()?" % cls.__name__',
                     ],
                     [70, "                )"],
                     [
                       71,
-                      "            return self.dispatch(request, *args, **kwargs)"
+                      "            return self.dispatch(request, *args, **kwargs)",
                     ],
                     [72, "        view.view_class = cls"],
                     [73, "        view.view_initkwargs = initkwargs"],
                     [74, ""],
                     [75, "        # take name and docstring from class"],
-                    [76, "        update_wrapper(view, cls, updated=())"]
+                    [76, "        update_wrapper(view, cls, updated=())"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "dispatch",
@@ -271,7 +271,7 @@ export const zeroDivisionError: EventDetail = {
                       "<bound method DivideZeroView.get of <errors.views.DivideZeroView object at 0x7f9c4ade79a0>>",
                     request: "<WSGIRequest: GET '/divide-zero/'>",
                     args: [],
-                    kwargs: {}
+                    kwargs: {},
                   },
                   symbol: null,
                   module: "django.views.generic.base",
@@ -288,15 +288,15 @@ export const zeroDivisionError: EventDetail = {
                   context: [
                     [
                       92,
-                      "        # request method isn't on the approved list."
+                      "        # request method isn't on the approved list.",
                     ],
                     [
                       93,
-                      "        if request.method.lower() in self.http_method_names:"
+                      "        if request.method.lower() in self.http_method_names:",
                     ],
                     [
                       94,
-                      "            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)"
+                      "            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)",
                     ],
                     [95, "        else:"],
                     [96, "            handler = self.http_method_not_allowed"],
@@ -304,19 +304,19 @@ export const zeroDivisionError: EventDetail = {
                     [98, ""],
                     [
                       99,
-                      "    def http_method_not_allowed(self, request, *args, **kwargs):"
+                      "    def http_method_not_allowed(self, request, *args, **kwargs):",
                     ],
                     [100, "        logger.warning("],
                     [
                       101,
-                      "            'Method Not Allowed (%s): %s', request.method, request.path,"
+                      "            'Method Not Allowed (%s): %s', request.method, request.path,",
                     ],
                     [
                       102,
-                      "            extra={'status_code': 405, 'request': request}"
-                    ]
+                      "            extra={'status_code': 405, 'request': request}",
+                    ],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "get",
@@ -326,7 +326,7 @@ export const zeroDivisionError: EventDetail = {
                       "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
                     args: [],
                     request: "<WSGIRequest: GET '/divide-zero/'>",
-                    kwargs: {}
+                    kwargs: {},
                   },
                   symbol: null,
                   module: "errors.views",
@@ -350,26 +350,26 @@ export const zeroDivisionError: EventDetail = {
                     [14, ""],
                     [15, "class DatabaseErrorView(View):"],
                     [16, "    def get(self, request, *args, **kwargs):"],
-                    [17, '        User.objects.get(id="9999999")']
+                    [17, '        User.objects.get(id="9999999")'],
                   ],
-                  symbolAddr: null
-                }
+                  symbolAddr: null,
+                },
               ],
               framesOmitted: null,
               registers: null,
-              hasSystemFrames: false
+              hasSystemFrames: false,
             },
             module: null,
             rawStacktrace: null,
             mechanism: { type: "django", handled: false },
             threadId: null,
             value: "division by zero",
-            type: "ZeroDivisionError"
-          }
+            type: "ZeroDivisionError",
+          },
         ],
         excOmitted: null,
-        hasSystemFrames: false
-      }
+        hasSystemFrames: false,
+      },
     },
     {
       type: "request",
@@ -381,7 +381,7 @@ export const zeroDivisionError: EventDetail = {
         headers: [
           [
             "Accept",
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
           ],
           ["Accept-Encoding", "gzip, deflate"],
           ["Accept-Language", "en-US,en;q=0.5"],
@@ -393,15 +393,15 @@ export const zeroDivisionError: EventDetail = {
           ["Upgrade-Insecure-Requests", "1"],
           [
             "User-Agent",
-            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"
-          ]
+            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0",
+          ],
         ],
         url: "http://localhost:8001/divide-zero/",
         query: [],
         data: null,
-        method: "GET"
-      }
-    }
+        method: "GET",
+      },
+    },
   ],
   packages: {
     cffi: "1.13.2",
@@ -463,12 +463,12 @@ export const zeroDivisionError: EventDetail = {
     requests: "2.22.0",
     shellingham: "1.3.1",
     idna: "2.8",
-    attrs: "19.3.0"
+    attrs: "19.3.0",
   },
   sdk: {
     version: "0.14.0",
     name: "sentry.python",
-    upstream: { url: null, isNewer: false, name: "sentry.python" }
+    upstream: { url: null, isNewer: false, name: "sentry.python" },
   },
   _meta: {
     user: null,
@@ -478,14 +478,14 @@ export const zeroDivisionError: EventDetail = {
     message: null,
     packages: null,
     tags: {},
-    sdk: null
+    sdk: null,
   },
   contexts: {
     runtime: {
       version: "3.8.0",
       type: "runtime",
       build: "3.8.0 (default, Nov 23 2019, 05:49:00) \n[GCC 8.3.0]",
-      name: "CPython"
+      name: "CPython",
     },
     os: { type: "os", name: "Linux" },
     trace: {
@@ -495,12 +495,12 @@ export const zeroDivisionError: EventDetail = {
       trace_id: "605f4d2d9e6a43499afaf4bd240f33bd",
       span_id: "88ccfce284caa9da",
       type: "default",
-      op: "django.middleware"
+      op: "django.middleware",
     },
-    browser: { version: "72.0", type: "browser", name: "Firefox" }
+    browser: { version: "72.0", type: "browser", name: "Firefox" },
   },
   fingerprints: ["6c64a182729809288e28b95b0258be01"],
   context: { "sys.argv": ["./manage.py", "runserver", "0.0.0.0:8001"] },
   release: null,
-  groupID: "2"
+  groupID: "2",
 };

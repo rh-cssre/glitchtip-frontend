@@ -1,6 +1,8 @@
 .location {
   display: flex;
   align-items: center;
+  margin-bottom: 8px;
+  margin-top: 8px;
 }
 
 .method {
@@ -17,4 +19,8 @@
 
 app-entry-data {
   display: block;
+}
+
+h3 {
+  padding-top: 8px;
 }

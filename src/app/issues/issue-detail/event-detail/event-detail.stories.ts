@@ -36,17 +36,17 @@ export default {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
         EntryRequestComponent,
         EntryCSPComponent,
         EntryMessageComponent,
-        EntryExceptionComponent
-      ]
+        EntryExceptionComponent,
+      ],
     }),
-    withKnobs
-  ]
+    withKnobs,
+  ],
 };
 
 export const EventDetails = () => {
@@ -59,7 +59,7 @@ export const EventDetails = () => {
     "String Error",
     "CSP Error",
     "Page Not Found",
-    "SocialApp.DoesNotExist"
+    "SocialApp.DoesNotExist",
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error: any = databaseError;
@@ -100,59 +100,174 @@ export const EventDetails = () => {
       selectedError,
       event$: of(error),
       nextEvent$: of(boolean("has next event?", true)),
-      previousEvent$: of(boolean("has previous event?", false))
-    }
+      previousEvent$: of(boolean("has previous event?", false)),
+    },
   };
 };
 
 EventDetails.story = {
-  name: "Event Detail"
+  name: "Event Detail",
 };
 
 export const EntryRequest = () => {
-  const stackError = databaseStackError.entries[2].data;
-  const requestObject = {
+  const errorOptions = [
+    "Post Error",
+    "Database Error",
+    "Database Stack Error",
+    "Template Error",
+    "Zero Division Error",
+    "String Error",
+    "CSP Error",
+    "Page Not Found",
+    "SocialApp.DoesNotExist",
+  ];
+
+  const selectedError = select("Error Type", errorOptions, errorOptions[0]);
+  let stackError: any = postError.entries[1].data;
+  let error: any = {
     ...stackError,
     domainName: "localhost",
-    path: "/database-stack-error/"
+    path: "/database-stack-error/",
   };
+  let bodyData: any = [
+    [
+      "csrfmiddlewaretoken",
+      "184VTEFb5oyMNrInUlX5Yxj6EuTllb7IiQ9axkeCcqKYrG4PKkXJnn1RrGRdcJ3z",
+    ],
+    ["param1", "val"],
+  ];
+
+  switch (selectedError) {
+    case "Database Error":
+      stackError = databaseError.entries[2].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/database-error/",
+      };
+      bodyData = null;
+      break;
+    case "Database Stack Error":
+      stackError = databaseStackError.entries[2].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/database-stack-error/",
+      };
+      bodyData = null;
+      break;
+    case "Post Error":
+      stackError = postError.entries[1].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/database-stack-error/",
+      };
+      bodyData = [
+        [
+          "csrfmiddlewaretoken",
+          "184VTEFb5oyMNrInUlX5Yxj6EuTllb7IiQ9axkeCcqKYrG4PKkXJnn1RrGRdcJ3z",
+        ],
+        ["param1", "val"],
+      ];
+      break;
+    case "Template Error":
+      stackError = templateError.entries[1].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/template-error/",
+      };
+      bodyData = null;
+      break;
+    case "Zero Division Error":
+      stackError = zeroDivisionError.entries[1].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/divide-zero/",
+      };
+      bodyData = null;
+      break;
+    case "String Error":
+      stackError = stringError.entries[2].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/",
+      };
+      bodyData = null;
+      break;
+    case "CSP Error":
+      stackError = cspError.entries[2].data;
+      error = {
+        ...stackError,
+        domainName: "www.revo.com",
+        path: "/about-us/lens-replacement",
+      };
+      bodyData = null;
+      break;
+    case "Page Not Found":
+      stackError = pageNotFound.entries[0].data;
+      error = {
+        ...stackError,
+        domainName: "localhost",
+        path: "/message/",
+      };
+      break;
+    case "SocialApp.DoesNotExist":
+      stackError = socialApp.entries[1].data;
+      error = {
+        ...stackError,
+        domainName: "staging.glitchtip.com",
+        path: "/rest-auth/gitlab/",
+      };
+      bodyData = [
+        [
+          "access_token",
+          "7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007",
+        ],
+      ];
+      break;
+  }
 
   return {
     component: EntryRequestComponent,
     props: {
-      eventEntryRequest$: of(requestObject)
-    }
+      eventEntryRequest$: of(error),
+      requestDataArray$: of(bodyData),
+    },
   };
 };
 
 EntryRequest.story = {
-  name: "Entry Request"
+  name: "Entry Request",
 };
 
 export const EntryCSP = () => {
   return {
     component: EntryCSPComponent,
     props: {
-      eventEntryCSP$: of(cspError.entries[1].data)
-    }
+      eventEntryCSP$: of(cspError.entries[1].data),
+    },
   };
 };
 
 EntryCSP.story = {
-  name: "Entry CSP"
+  name: "Entry CSP",
 };
 
 export const EntryMessage = () => {
   return {
     component: EntryMessageComponent,
     props: {
-      eventEntryMessage$: of(cspError.entries[0].data)
-    }
+      eventEntryMessage$: of(cspError.entries[0].data),
+    },
   };
 };
 
 EntryMessage.story = {
-  name: "Entry Message"
+  name: "Entry Message",
 };
 
 export const EntryException = () => {
@@ -163,7 +278,7 @@ export const EntryException = () => {
     "Template Error",
     "Zero Division Error",
     "String Error",
-    "SocialApp.DoesNotExist"
+    "SocialApp.DoesNotExist",
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error: any = databaseError.entries[0].data;
@@ -203,11 +318,11 @@ export const EntryException = () => {
     component: EntryExceptionComponent,
     props: {
       eventEntryException$: of(error),
-      eventTitle: title
-    }
+      eventTitle: title,
+    },
   };
 };
 
 EntryException.story = {
-  name: "Entry Exception"
+  name: "Entry Exception",
 };
