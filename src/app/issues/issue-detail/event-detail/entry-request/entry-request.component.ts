@@ -5,7 +5,7 @@ import { IssueDetailService } from "../../issue-detail.service";
   selector: "app-entry-request",
   templateUrl: "./entry-request.component.html",
   styleUrls: ["./entry-request.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryRequestComponent {
   eventEntryRequest$ = this.issueService.eventEntryRequest$;

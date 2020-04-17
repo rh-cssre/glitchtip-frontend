@@ -51,7 +51,7 @@ export interface Entry<Type extends string, Data extends {}> {
 export type EntryUnion =
   | Entry<"exception", ExceptionValueData>
   | Entry<"breadcrumbs", BreadcrumbValueData>
-  | Entry<"request", IRequest>
+  | Entry<"request", Request>
   | Entry<"message", Message>
   | Entry<"csp", CSP>;
 
@@ -101,7 +101,7 @@ export interface ExceptionValueData {
   hasSystemFrames: boolean;
 }
 
-export interface IRequest {
+export interface Request {
   fragment?: string | null;
   cookies?: object[];
   inferredContentType: string | null;
@@ -109,20 +109,14 @@ export interface IRequest {
   headers: string[][];
   url: string;
   query?: object[];
-  data?: RequestData | null;
+  data?: { [key: string]: string } | null;
   method: string | null;
   query_string?: string;
 }
 
-export interface AnnotatedRequest extends IRequest {
+export interface AnnotatedRequest extends Request {
   domainName: string;
   path: string;
-}
-
-interface RequestData {
-  csrfmiddlewaretoken?: string;
-  param1?: string;
-  access_token?: string;
 }
 
 export type IssueStatus = "resolved" | "unresolved" | "ignored";

@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import {
   HttpClientTestingModule,
-  HttpTestingController
+  HttpTestingController,
 } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
@@ -24,9 +24,9 @@ describe("IssueDetailService", () => {
       imports: [
         HttpClientTestingModule,
         MatSnackBarModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
-      providers: [{ provide: OrganizationsService, useValue: mockOrgService }]
+      providers: [{ provide: OrganizationsService, useValue: mockOrgService }],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(IssueDetailService);
@@ -43,14 +43,14 @@ describe("IssueDetailService", () => {
       `/api/0/issues/${testData.id}/`
     );
     req.flush(testData);
-    service.issue$.subscribe(issue => expect(issue).toEqual(testData));
+    service.issue$.subscribe((issue) => expect(issue).toEqual(testData));
   });
 
   it("should clear the issue state", () => {
     const testData: any = sampleIssueDetail;
     let issue: IssueDetail | null = null;
 
-    service.issue$.subscribe(issueFromSubscription => {
+    service.issue$.subscribe((issueFromSubscription) => {
       issue = issueFromSubscription;
     });
 
@@ -71,7 +71,7 @@ describe("IssueDetailService", () => {
     let issue: any = null;
     spyOn(service, "retrieveEvent");
 
-    service.issue$.subscribe(subIssue => {
+    service.issue$.subscribe((subIssue) => {
       issue = subIssue;
     });
 
