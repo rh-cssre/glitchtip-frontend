@@ -37,11 +37,7 @@ describe("EventDetailComponent", () => {
   });
 
   it("should show .net generated error", () => {
-    (service as any).state.next({
-      issue: null,
-      event: dotnetEvent,
-      isReversed: true,
-    });
+    service.setEvent(dotnetEvent as any);
     fixture.detectChanges();
     expect(fixture.debugElement.nativeElement.innerText).toContain(
       "/api/catalog/promoted/Testitex/featured"
