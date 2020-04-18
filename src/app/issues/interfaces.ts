@@ -257,7 +257,7 @@ interface Values {
   stacktrace: IStacktrace;
   module: string | null;
   rawStacktrace?: string | null;
-  mechanism: Mechanism;
+  mechanism?: Mechanism;
   threadId?: number | null;
   value: string;
   type: string;

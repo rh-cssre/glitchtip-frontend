@@ -28,7 +28,7 @@
       <div *ngFor="let value of exception.values">
         <h2>{{ value.type }}</h2>
         <p>{{ value.value }}</p>
-        <mat-chip-list>
+        <mat-chip-list *ngIf="value.mechanism">
           <mat-chip disabled>mechanism: {{ value.mechanism.type }}</mat-chip>
           <mat-chip color="accent" selected disabled
             >handled: {{ value.mechanism.handled ? "yes" : "no" }}</mat-chip
