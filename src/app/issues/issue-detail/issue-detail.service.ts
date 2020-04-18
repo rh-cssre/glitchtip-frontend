@@ -214,8 +214,14 @@ export class IssueDetailService {
     );
     if (requestEntryType) {
       const eventRequest = (requestEntryType as Entry<"request", Request>).data;
-      const urlDomainName = new URL(eventRequest.url).hostname;
-      const urlPath = new URL(eventRequest.url).pathname;
+      let urlDomainName = "";
+      let urlPath: string;
+      try {
+        urlDomainName = new URL(eventRequest.url).hostname;
+        urlPath = new URL(eventRequest.url).pathname;
+      } catch (_) {
+        urlPath = eventRequest.url;
+      }
       return { ...eventRequest, domainName: urlDomainName, path: urlPath };
     }
   }

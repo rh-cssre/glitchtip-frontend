@@ -6,20 +6,24 @@ import { EventDetailComponent } from "./event-detail.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { EntryRequestComponent } from "./entry-request/entry-request.component";
 import { EntryDataComponent } from "../../../shared/entry-data/entry-data.component";
+import { IssueDetailService } from "../issue-detail.service";
+import dotnetEvent from "./test-data/dotnet-event.json";
 
 describe("EventDetailComponent", () => {
   let component: EventDetailComponent;
   let fixture: ComponentFixture<EventDetailComponent>;
+  let service: IssueDetailService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         EventDetailComponent,
         EntryRequestComponent,
-        EntryDataComponent
+        EntryDataComponent,
       ],
-      imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule]
+      imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule],
     }).compileComponents();
+    service = TestBed.inject(IssueDetailService);
   }));
 
   beforeEach(() => {
@@ -30,5 +34,17 @@ describe("EventDetailComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should show .net generated error", () => {
+    (service as any).state.next({
+      issue: null,
+      event: dotnetEvent,
+      isReversed: true,
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.nativeElement.innerText).toContain(
+      "/api/catalog/promoted/Testitex/featured"
+    );
   });
 });
