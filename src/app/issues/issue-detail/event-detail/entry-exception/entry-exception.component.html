@@ -44,6 +44,7 @@
               <mat-panel-title>
                 {{ frame.filename }}
                 <a
+                  *ngIf="frame.absPath"
                   mat-icon-button
                   color="primary"
                   target="_blank"
