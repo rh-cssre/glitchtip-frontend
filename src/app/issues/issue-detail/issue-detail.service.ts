@@ -222,7 +222,21 @@ export class IssueDetailService {
       } catch (_) {
         urlPath = eventRequest.url;
       }
-      return { ...eventRequest, domainName: urlDomainName, path: urlPath };
+      let eventRequestData: any;
+      if (typeof eventRequest.data === "string") {
+        // sometimes data comes in as a string, so it needs to be turned into an object
+        try {
+          eventRequestData = JSON.parse(eventRequest.data);
+        } catch (error) {
+          console.warn("Data could not be parsed into JSON: ", error);
+        }
+      }
+      return {
+        ...eventRequest,
+        domainName: urlDomainName,
+        path: urlPath,
+        data: { ...eventRequestData },
+      };
     }
   }
 

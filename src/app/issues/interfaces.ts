@@ -109,7 +109,7 @@ export interface Request {
   headers: string[][];
   url: string;
   query?: object[];
-  data?: { [key: string]: string } | null;
+  data?: { [key: string]: string } | null | string;
   method: string | null;
   query_string?: string;
 }
