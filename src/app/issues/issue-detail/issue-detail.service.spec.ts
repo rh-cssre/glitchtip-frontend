@@ -12,6 +12,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
+import { postErrorWithDataString } from "./event-detail/test-data/post-error";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -114,5 +115,15 @@ describe("IssueDetailService", () => {
     service.event$.pipe(take(1)).subscribe((event: any) => {
       expect(event).toBe(testData);
     });
+  });
+  fit("request$ selector returns the request entry type object without mutating event state", () => {
+    const testData: EventDetail = postErrorWithDataString;
+    service.setEvent(testData);
+
+    service.eventEntryRequest$
+      .pipe(take(1))
+      .subscribe((eventEntryRequest: any) => {
+        expect(typeof eventEntryRequest.data).toBe("object");
+      });
   });
 });
