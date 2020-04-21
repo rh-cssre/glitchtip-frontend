@@ -116,7 +116,7 @@ describe("IssueDetailService", () => {
       expect(event).toBe(testData);
     });
   });
-  it("request$ selector returns the request entry type object without mutating event state", () => {
+  it("if request data selector is a string, it turns it into an object", () => {
     const testData: EventDetail = postErrorWithDataString;
     service.setEvent(testData);
 

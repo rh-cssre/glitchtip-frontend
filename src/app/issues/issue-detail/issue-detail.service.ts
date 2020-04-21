@@ -224,22 +224,26 @@ export class IssueDetailService {
       }
 
       // sometimes data comes in as a string, so it needs to be turned into an object
-      let eventRequestData: any = eventRequest.data;
+      let eventRequestData: any;
       if (typeof eventRequest.data === "string") {
         try {
           eventRequestData = JSON.parse(eventRequest.data);
-          return { ...eventRequestData };
         } catch (error) {
           console.warn("Data could not be parsed into JSON: ", error);
         }
+        return {
+          ...eventRequest,
+          domainName: urlDomainName,
+          path: urlPath,
+          data: { ...eventRequestData },
+        };
+      } else {
+        return {
+          ...eventRequest,
+          domainName: urlDomainName,
+          path: urlPath,
+        };
       }
-
-      return {
-        ...eventRequest,
-        domainName: urlDomainName,
-        path: urlPath,
-        data: eventRequestData,
-      };
     }
   }
 
