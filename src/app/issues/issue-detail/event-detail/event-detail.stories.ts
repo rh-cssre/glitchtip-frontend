@@ -23,7 +23,7 @@ import { postError } from "./test-data/post-error";
 import { templateError } from "./test-data/template-error";
 import { zeroDivisionError } from "./test-data/zero-division-error";
 import { stringError } from "./test-data/string-error";
-import { cspError } from "./test-data/csp-error";
+import { cspReport } from "./test-data/csp-error";
 import { pageNotFound } from "./test-data/page-not-found";
 import { socialApp } from "./test-data/social-app";
 
@@ -57,7 +57,7 @@ export const EventDetails = () => {
     "Template Error",
     "Zero Division Error",
     "String Error",
-    "CSP Error",
+    "CSP Report",
     "Page Not Found",
     "SocialApp.DoesNotExist",
   ];
@@ -83,8 +83,8 @@ export const EventDetails = () => {
     case "String Error":
       error = stringError;
       break;
-    case "CSP Error":
-      error = cspError;
+    case "CSP Report":
+      error = cspReport;
       break;
     case "Page Not Found":
       error = pageNotFound;
@@ -117,7 +117,7 @@ export const EntryRequest = () => {
     "Template Error",
     "Zero Division Error",
     "String Error",
-    "CSP Error",
+    "CSP Report",
     "Page Not Found",
     "SocialApp.DoesNotExist",
   ];
@@ -198,8 +198,8 @@ export const EntryRequest = () => {
       };
       bodyData = null;
       break;
-    case "CSP Error":
-      stackError = cspError.entries[2].data;
+    case "CSP Report":
+      stackError = cspReport.entries[2].data;
       error = {
         ...stackError,
         domainName: "www.revo.com",
@@ -248,7 +248,7 @@ export const EntryCSP = () => {
   return {
     component: EntryCSPComponent,
     props: {
-      eventEntryCSP$: of(cspError.entries[1].data),
+      eventEntryCSP$: of(cspReport.entries[1].data),
     },
   };
 };
@@ -261,7 +261,7 @@ export const EntryMessage = () => {
   return {
     component: EntryMessageComponent,
     props: {
-      eventEntryMessage$: of(cspError.entries[0].data),
+      eventEntryMessage$: of(cspReport.entries[0].data),
     },
   };
 };

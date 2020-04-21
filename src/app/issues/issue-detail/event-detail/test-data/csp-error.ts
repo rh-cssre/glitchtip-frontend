@@ -1,7 +1,7 @@
 import { EventDetail } from "src/app/issues/interfaces";
 
 /*tslint:disable */
-export const cspError: EventDetail = {
+export const cspReport: EventDetail = {
   eventID: "aaa83b555096427390ae2a5edb1c42ba",
   dist: null,
   userReport: null,
