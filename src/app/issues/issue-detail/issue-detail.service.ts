@@ -225,7 +225,6 @@ export class IssueDetailService {
 
       // sometimes data comes in as a string, so it needs to be turned into an object
       let eventRequestData: any = eventRequest.data;
-      console.log("Event Request Data: ", typeof eventRequestData);
       if (typeof eventRequest.data === "string") {
         try {
           eventRequestData = JSON.parse(eventRequest.data);
