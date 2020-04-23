@@ -23,7 +23,7 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
-  contexts: Context | Partial<Context>;
+  contexts: { [key: string]: any };
   entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist?: null;
@@ -37,7 +37,7 @@ export interface EventDetail extends Event {
   sdk: any;
   _meta?: any;
   fingerprints?: string[];
-  context?: { "sys.argv"?: string[]; arguments?: [] };
+  context?: { [key: string]: any[] };
   release?: any;
   issue?: number;
   sdkUpdates?: [];
@@ -64,24 +64,7 @@ export interface Message {
 }
 
 export interface CSP {
-  line_number?: number;
-  status_code?: number;
-  column_number?: number;
-  source_file?: string;
-  blocked_uri: string;
-  referrer: string;
-  violated_directive: string;
-  document_uri: string;
-  original_policy: string;
-  effective_directive: string;
-  disposition?: string;
-}
-
-interface CSPDevice {
-  brand: string;
-  type: string;
-  model: string;
-  family: string;
+  [key: string]: string | number;
 }
 
 // https://docs.sentry.io/enriching-error-data/breadcrumbs/?platform=javascript
@@ -222,37 +205,6 @@ interface ITag {
   key: string;
 }
 
-export interface Context {
-  runtime?: Runtime;
-  trace?: Trace;
-  os: ContextDetail;
-  browser: ContextDetail;
-  device?: CSPDevice;
-  client_os: ContextDetail;
-}
-
-interface Trace {
-  description: string;
-  parent_span_id: string;
-  trace_id: string;
-  span_id: string;
-  type?: string;
-  op: string;
-}
-
-interface Runtime {
-  version: string;
-  type?: string;
-  build: string;
-  name: string;
-}
-
-interface ContextDetail {
-  version?: string;
-  type: string;
-  name: string;
-}
-
 interface Values {
   stacktrace: IStacktrace;
   module: string | null;
@@ -280,7 +232,7 @@ interface Frame {
   function: string | null;
   errors: string | null;
   colNo: number | null;
-  vars: Vars | null;
+  vars: { [key: string]: any } | null;
   package: string | null;
   absPath: string;
   inApp: boolean;
@@ -294,58 +246,6 @@ interface Frame {
   trust: string | null;
   symbol: string | null;
   rawFunction?: string | null;
-}
-
-interface Vars {
-  __class__?: string;
-  _prefix?: string;
-  args?: [];
-  bit?: string;
-  callback?: string;
-  bits?: string[];
-  callback_args?: [];
-  callback_kwargs?: {};
-  clone?: string;
-  cls?: string;
-  context?: { view: string } | string;
-  current_app?: string;
-  current_path?: string;
-  exc?: string;
-  get_response?: string;
-  handler?: string;
-  initkwargs?: object;
-  key?: string;
-  kwargs?: object;
-  limit?: string;
-  lookup_view?: string;
-  lookup_view_s?: string;
-  m?: string;
-  middleware_method?: string;
-  msg?: string;
-  n?: string;
-  name?: string;
-  NoReverseMatch?: string;
-  node?: string;
-  num?: string;
-  path?: [];
-  patterns?: [];
-  possibilities?: [];
-  prefix?: string;
-  request?: string;
-  resolver?: string;
-  resolver_match?: string;
-  response?: string;
-  retval?: string;
-  reverse?: string;
-  self?: any;
-  template?: string;
-  url?: string;
-  urlconf?: string;
-  users?: string;
-  view?: string;
-  view_name?: string;
-  viewname?: string;
-  wrapped_callback?: string;
 }
 
 interface IEventMetaData {

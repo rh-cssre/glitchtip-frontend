@@ -23,7 +23,7 @@ export const templateError: EventDetail = {
     type: "NoReverseMatch",
     value:
       "Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.",
-    filename: "/code/errors/templates/template_error.html"
+    filename: "/code/errors/templates/template_error.html",
   },
   groupingConfig: { id: "legacy:2019-03-12" },
   crashFile: null,
@@ -38,7 +38,7 @@ export const templateError: EventDetail = {
     { value: "CPython", key: "runtime.name", _meta: null },
     { value: "ab3aadbbc567", key: "server_name", _meta: null },
     { value: "/template-error/", key: "transaction", _meta: null },
-    { value: "http://localhost:8001/template-error/", key: "url", _meta: null }
+    { value: "http://localhost:8001/template-error/", key: "url", _meta: null },
   ],
   dateCreated: "2020-01-27T19:18:03.345Z",
   dateReceived: "2020-01-27T19:18:03.531Z",
@@ -59,7 +59,7 @@ export const templateError: EventDetail = {
                       "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f61885db580>>",
                     request: "<WSGIRequest: GET '/template-error/'>",
                     exc:
-                      "NoReverseMatch(\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\")"
+                      "NoReverseMatch(\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\")",
                   },
                   symbol: null,
                   module: "django.core.handlers.exception",
@@ -76,7 +76,7 @@ export const templateError: EventDetail = {
                   context: [
                     [
                       29,
-                      "    can rely on getting a response instead of an exception."
+                      "    can rely on getting a response instead of an exception.",
                     ],
                     [30, '    """'],
                     [31, "    @wraps(get_response)"],
@@ -86,13 +86,13 @@ export const templateError: EventDetail = {
                     [35, "        except Exception as exc:"],
                     [
                       36,
-                      "            response = response_for_exception(request, exc)"
+                      "            response = response_for_exception(request, exc)",
                     ],
                     [37, "        return response"],
                     [38, "    return inner"],
-                    [39, ""]
+                    [39, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_get_response",
@@ -113,7 +113,7 @@ export const templateError: EventDetail = {
                       "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     callback_kwargs: {},
                     response:
-                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">'
+                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                   },
                   symbol: null,
                   module: "django.core.handlers.base",
@@ -135,18 +135,18 @@ export const templateError: EventDetail = {
                     [144, "            except Exception as e:"],
                     [
                       145,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [146, ""],
                     [147, "        return response"],
                     [148, ""],
                     [
                       149,
-                      "    def process_exception_by_middleware(self, exception, request):"
+                      "    def process_exception_by_middleware(self, exception, request):",
                     ],
-                    [150, '        """']
+                    [150, '        """'],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_get_response",
@@ -167,7 +167,7 @@ export const templateError: EventDetail = {
                       "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     callback_kwargs: {},
                     response:
-                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">'
+                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                   },
                   symbol: null,
                   module: "django.core.handlers.base",
@@ -184,11 +184,11 @@ export const templateError: EventDetail = {
                   context: [
                     [
                       138,
-                      '                        "HttpResponse object. It returned None instead."'
+                      '                        "HttpResponse object. It returned None instead."',
                     ],
                     [
                       139,
-                      "                        % (middleware_method.__self__.__class__.__name__)"
+                      "                        % (middleware_method.__self__.__class__.__name__)",
                     ],
                     [140, "                    )"],
                     [141, ""],
@@ -197,13 +197,13 @@ export const templateError: EventDetail = {
                     [144, "            except Exception as e:"],
                     [
                       145,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [146, ""],
                     [147, "        return response"],
-                    [148, ""]
+                    [148, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "render",
@@ -212,7 +212,7 @@ export const templateError: EventDetail = {
                     self:
                       '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                     retval:
-                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">'
+                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                   },
                   symbol: null,
                   module: "django.template.response",
@@ -235,14 +235,14 @@ export const templateError: EventDetail = {
                     [105, "            self.content = self.rendered_content"],
                     [
                       106,
-                      "            for post_callback in self._post_render_callbacks:"
+                      "            for post_callback in self._post_render_callbacks:",
                     ],
                     [107, "                newretval = post_callback(retval)"],
                     [108, "                if newretval is not None:"],
                     [109, "                    retval = newretval"],
-                    [110, "        return retval"]
+                    [110, "        return retval"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "rendered_content",
@@ -252,10 +252,10 @@ export const templateError: EventDetail = {
                       '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                     context: {
                       view:
-                        "<errors.views.TemplateErrorView object at 0x7f6187682730>"
+                        "<errors.views.TemplateErrorView object at 0x7f6187682730>",
                     },
                     template:
-                      "<django.template.backends.django.Template object at 0x7f61876e10a0>"
+                      "<django.template.backends.django.Template object at 0x7f61876e10a0>",
                   },
                   symbol: null,
                   module: "django.template.response",
@@ -272,32 +272,32 @@ export const templateError: EventDetail = {
                   context: [
                     [
                       78,
-                      "        response content, you must either call render(), or set the"
+                      "        response content, you must either call render(), or set the",
                     ],
                     [
                       79,
-                      "        content explicitly using the value of this property."
+                      "        content explicitly using the value of this property.",
                     ],
                     [80, '        """'],
                     [
                       81,
-                      "        template = self.resolve_template(self.template_name)"
+                      "        template = self.resolve_template(self.template_name)",
                     ],
                     [
                       82,
-                      "        context = self.resolve_context(self.context_data)"
+                      "        context = self.resolve_context(self.context_data)",
                     ],
                     [
                       83,
-                      "        return template.render(context, self._request)"
+                      "        return template.render(context, self._request)",
                     ],
                     [84, ""],
                     [85, "    def add_post_render_callback(self, callback):"],
                     [86, '        """Add a new post-rendering callback.'],
                     [87, ""],
-                    [88, "        If the response has already been rendered,"]
+                    [88, "        If the response has already been rendered,"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "render",
@@ -307,7 +307,7 @@ export const templateError: EventDetail = {
                       "<django.template.backends.django.Template object at 0x7f61876e10a0>",
                     request: "<WSGIRequest: GET '/template-error/'>",
                     context:
-                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]"
+                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
                   symbol: null,
                   module: "django.template.backends.django",
@@ -327,7 +327,7 @@ export const templateError: EventDetail = {
                     [58, "    def render(self, context=None, request=None):"],
                     [
                       59,
-                      "        context = make_context(context, request, autoescape=self.backend.engine.autoescape)"
+                      "        context = make_context(context, request, autoescape=self.backend.engine.autoescape)",
                     ],
                     [60, "        try:"],
                     [61, "            return self.template.render(context)"],
@@ -335,9 +335,9 @@ export const templateError: EventDetail = {
                     [63, "            reraise(exc, self.backend)"],
                     [64, ""],
                     [65, ""],
-                    [66, "def copy_exception(exc, backend=None):"]
+                    [66, "def copy_exception(exc, backend=None):"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "render",
@@ -346,7 +346,7 @@ export const templateError: EventDetail = {
                     self:
                       "<django.template.base.Template object at 0x7f618769f460>",
                     context:
-                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]"
+                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
                   symbol: null,
                   module: "django.template.base",
@@ -363,26 +363,26 @@ export const templateError: EventDetail = {
                   context: [
                     [
                       166,
-                      '        "Display stage -- can be called many times"'
+                      '        "Display stage -- can be called many times"',
                     ],
                     [
                       167,
-                      "        with context.render_context.push_state(self):"
+                      "        with context.render_context.push_state(self):",
                     ],
                     [168, "            if context.template is None:"],
                     [169, "                with context.bind_template(self):"],
                     [
                       170,
-                      "                    context.template_name = self.name"
+                      "                    context.template_name = self.name",
                     ],
                     [171, "                    return self._render(context)"],
                     [172, "            else:"],
                     [173, "                return self._render(context)"],
                     [174, ""],
                     [175, "    def compile_nodelist(self):"],
-                    [176, '        """']
+                    [176, '        """'],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_render",
@@ -391,7 +391,7 @@ export const templateError: EventDetail = {
                     self:
                       "<django.template.base.Template object at 0x7f618769f460>",
                     context:
-                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]"
+                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
                   symbol: null,
                   module: "django.template.base",
@@ -416,15 +416,15 @@ export const templateError: EventDetail = {
                     [165, "    def render(self, context):"],
                     [
                       166,
-                      '        "Display stage -- can be called many times"'
+                      '        "Display stage -- can be called many times"',
                     ],
                     [
                       167,
-                      "        with context.render_context.push_state(self):"
+                      "        with context.render_context.push_state(self):",
                     ],
-                    [168, "            if context.template is None:"]
+                    [168, "            if context.template is None:"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "render",
@@ -437,10 +437,10 @@ export const templateError: EventDetail = {
                     self: [
                       "<TextNode: '<a href=\"'>",
                       "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
-                      "<TextNode: '\">'>"
+                      "<TextNode: '\">'>",
                     ],
                     context:
-                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]"
+                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
                   symbol: null,
                   module: "django.template.base",
@@ -462,15 +462,15 @@ export const templateError: EventDetail = {
                     [935, "            if isinstance(node, Node):"],
                     [
                       936,
-                      "                bit = node.render_annotated(context)"
+                      "                bit = node.render_annotated(context)",
                     ],
                     [937, "            else:"],
                     [938, "                bit = node"],
                     [939, "            bits.append(str(bit))"],
                     [940, "        return mark_safe(''.join(bits))"],
-                    [941, ""]
+                    [941, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: null,
@@ -488,9 +488,12 @@ export const templateError: EventDetail = {
                   filename: "/code/errors/templates/template_error.html",
                   platform: null,
                   context: [
-                    [1, "&lt;a href=&quot;{% url &#x27;nope&#x27; %}&quot;&gt;"]
+                    [
+                      1,
+                      "&lt;a href=&quot;{% url &#x27;nope&#x27; %}&quot;&gt;",
+                    ],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "render_annotated",
@@ -499,7 +502,7 @@ export const templateError: EventDetail = {
                     self:
                       "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
                     context:
-                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]"
+                      "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
                   symbol: null,
                   module: "django.template.base",
@@ -516,15 +519,15 @@ export const templateError: EventDetail = {
                   context: [
                     [
                       898,
-                      "        rendering, the exception is annotated with contextual line information"
+                      "        rendering, the exception is annotated with contextual line information",
                     ],
                     [
                       899,
-                      "        where it occurred in the template. For internal usage this method is"
+                      "        where it occurred in the template. For internal usage this method is",
                     ],
                     [
                       900,
-                      "        preferred over using the render method directly."
+                      "        preferred over using the render method directly.",
                     ],
                     [901, '        """'],
                     [902, "        try:"],
@@ -532,16 +535,16 @@ export const templateError: EventDetail = {
                     [904, "        except Exception as e:"],
                     [
                       905,
-                      "            if context.template.engine.debug and not hasattr(e, 'template_debug'):"
+                      "            if context.template.engine.debug and not hasattr(e, 'template_debug'):",
                     ],
                     [
                       906,
-                      "                e.template_debug = context.render_context.template.get_exception_info(e, self.token)"
+                      "                e.template_debug = context.render_context.template.get_exception_info(e, self.token)",
                     ],
                     [907, "            raise"],
-                    [908, ""]
+                    [908, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "render",
@@ -558,7 +561,7 @@ export const templateError: EventDetail = {
                       "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                     kwargs: {},
                     NoReverseMatch:
-                      "<class 'django.urls.exceptions.NoReverseMatch'>"
+                      "<class 'django.urls.exceptions.NoReverseMatch'>",
                   },
                   symbol: null,
                   module: "django.template.defaulttags",
@@ -576,25 +579,25 @@ export const templateError: EventDetail = {
                     [438, "                current_app = None"],
                     [
                       439,
-                      "        # Try to look up the URL. If it fails, raise NoReverseMatch unless the"
+                      "        # Try to look up the URL. If it fails, raise NoReverseMatch unless the",
                     ],
                     [
                       440,
-                      "        # {% url ... as var %} construct is used, in which case return nothing."
+                      "        # {% url ... as var %} construct is used, in which case return nothing.",
                     ],
                     [441, "        url = ''"],
                     [442, "        try:"],
                     [
                       443,
-                      "            url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)"
+                      "            url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)",
                     ],
                     [444, "        except NoReverseMatch:"],
                     [445, "            if self.asvar is None:"],
                     [446, "                raise"],
                     [447, ""],
-                    [448, "        if self.asvar:"]
+                    [448, "        if self.asvar:"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "reverse",
@@ -610,7 +613,7 @@ export const templateError: EventDetail = {
                     kwargs: {},
                     path: [],
                     urlconf: "'django_error_factory.urls'",
-                    view: "'nope'"
+                    view: "'nope'",
                   },
                   symbol: null,
                   module: "django.urls.base",
@@ -628,25 +631,25 @@ export const templateError: EventDetail = {
                     [82, "                else:"],
                     [
                       83,
-                      '                    raise NoReverseMatch("%s is not a registered namespace" % key)'
+                      '                    raise NoReverseMatch("%s is not a registered namespace" % key)',
                     ],
                     [84, "        if ns_pattern:"],
                     [
                       85,
-                      "            resolver = get_ns_resolver(ns_pattern, resolver, tuple(ns_converters.items()))"
+                      "            resolver = get_ns_resolver(ns_pattern, resolver, tuple(ns_converters.items()))",
                     ],
                     [86, ""],
                     [
                       87,
-                      "    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))"
+                      "    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))",
                     ],
                     [88, ""],
                     [89, ""],
                     [90, "reverse_lazy = lazy(reverse, str)"],
                     [91, ""],
-                    [92, ""]
+                    [92, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_reverse_with_prefix",
@@ -663,7 +666,7 @@ export const templateError: EventDetail = {
                     possibilities: [],
                     patterns: [],
                     msg:
-                      "\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\""
+                      "\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\"",
                   },
                   symbol: null,
                   module: "django.urls.resolvers",
@@ -682,21 +685,21 @@ export const templateError: EventDetail = {
                     [673, "            msg = ("],
                     [
                       674,
-                      "                \"Reverse for '%(view)s' not found. '%(view)s' is not \""
+                      "                \"Reverse for '%(view)s' not found. '%(view)s' is not \"",
                     ],
                     [
                       675,
-                      "                \"a valid view function or pattern name.\" % {'view': lookup_view_s}"
+                      "                \"a valid view function or pattern name.\" % {'view': lookup_view_s}",
                     ],
                     [676, "            )"],
-                    [677, "        raise NoReverseMatch(msg)"]
+                    [677, "        raise NoReverseMatch(msg)"],
                   ],
-                  symbolAddr: null
-                }
+                  symbolAddr: null,
+                },
               ],
               framesOmitted: null,
               registers: null,
-              hasSystemFrames: true
+              hasSystemFrames: true,
             },
             module: "django.urls.exceptions",
             rawStacktrace: null,
@@ -704,12 +707,12 @@ export const templateError: EventDetail = {
             threadId: null,
             value:
               "Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.",
-            type: "NoReverseMatch"
-          }
+            type: "NoReverseMatch",
+          },
         ],
         excOmitted: null,
-        hasSystemFrames: true
-      }
+        hasSystemFrames: true,
+      },
     },
     {
       type: "request",
@@ -721,7 +724,7 @@ export const templateError: EventDetail = {
         headers: [
           [
             "Accept",
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
           ],
           ["Accept-Encoding", "gzip, deflate"],
           ["Accept-Language", "en-US,en;q=0.5"],
@@ -733,15 +736,15 @@ export const templateError: EventDetail = {
           ["Upgrade-Insecure-Requests", "1"],
           [
             "User-Agent",
-            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"
-          ]
+            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0",
+          ],
         ],
         url: "http://localhost:8001/template-error/",
         query: [],
         data: null,
-        method: "GET"
-      }
-    }
+        method: "GET",
+      },
+    },
   ],
   packages: {
     cffi: "1.13.2",
@@ -803,12 +806,12 @@ export const templateError: EventDetail = {
     requests: "2.22.0",
     shellingham: "1.3.1",
     idna: "2.8",
-    attrs: "19.3.0"
+    attrs: "19.3.0",
   },
   sdk: {
     version: "0.14.0",
     name: "sentry.python",
-    upstream: { url: null, isNewer: false, name: "sentry.python" }
+    upstream: { url: null, isNewer: false, name: "sentry.python" },
   },
   _meta: {
     user: null,
@@ -823,30 +826,30 @@ export const templateError: EventDetail = {
                 "": null,
                 frames: {},
                 registers: null,
-                framesOmitted: null
+                framesOmitted: null,
               },
               mechanism: null,
               module: null,
               value: null,
               threadId: null,
-              type: null
-            }
-          }
-        }
-      }
+              type: null,
+            },
+          },
+        },
+      },
     },
     contexts: null,
     message: null,
     packages: null,
     tags: {},
-    sdk: null
+    sdk: null,
   },
   contexts: {
     runtime: {
       version: "3.8.0",
       type: "runtime",
       build: "3.8.0 (default, Nov 23 2019, 05:49:00) \n[GCC 8.3.0]",
-      name: "CPython"
+      name: "CPython",
     },
     os: { type: "os", name: "Linux" },
     trace: {
@@ -856,12 +859,12 @@ export const templateError: EventDetail = {
       trace_id: "bec9565186e9474eb165f91e81deb6d5",
       span_id: "9cfe2bda8c47ac22",
       type: "default",
-      op: "django.middleware"
+      op: "django.middleware",
     },
-    browser: { version: "72.0", type: "browser", name: "Firefox" }
+    browser: { version: "72.0", type: "browser", name: "Firefox" },
   },
   fingerprints: ["a8b88d9a728170fc062bed162e6b9394"],
   context: { "sys.argv": ["./manage.py", "runserver", "0.0.0.0:8001"] },
   release: null,
-  groupID: "6"
+  groupID: "6",
 };

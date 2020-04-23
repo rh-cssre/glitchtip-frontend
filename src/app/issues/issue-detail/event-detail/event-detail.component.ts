@@ -44,9 +44,4 @@ export class EventDetailComponent implements OnInit {
   getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
-
-  /** Angular template TS checking sucks */
-  removeType(x: any) {
-    return x as any;
-  }
 }
