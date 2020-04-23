@@ -50,10 +50,12 @@
     <mat-card-content>
       <mat-card-title>Keys</mat-card-title>
       <mat-divider></mat-divider>
-      <app-entry-data
-        key="DSN"
-        [value]="projectKey.dsn.public"
-      ></app-entry-data>
+      <dl>
+        <app-entry-data
+          key="DSN"
+          [value]="projectKey.dsn.public"
+        ></app-entry-data>
+      </dl>
     </mat-card-content>
   </mat-card>
 </section>

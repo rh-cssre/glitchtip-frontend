@@ -2,7 +2,9 @@
 
 $left-column-width: 30%;
 
-div {
+:host {
+  display: block;
+  clear: both;
   margin-top: 8px;
   margin-bottom: 8px;
 }
@@ -11,6 +13,7 @@ dt {
   float: left;
   width: $left-column-width;
   padding-right: 16px;
+  padding-top: 7px;
 }
 
 dd {
