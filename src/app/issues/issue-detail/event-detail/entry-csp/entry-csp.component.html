@@ -1,9 +1,29 @@
 <section *ngIf="eventEntryCSP$ | async as csp" class="mat-typography">
-  <section class="report">
-    <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <div class="csp__header">
     <h3>CSP Report</h3>
+    <mat-button-toggle-group #group="matButtonToggleGroup">
+      <mat-button-toggle
+        [checked]="true"
+        value="report-csp"
+        aria-label="full csp report data"
+      >
+        Report
+      </mat-button-toggle>
+      <mat-button-toggle value="raw-csp" aria-label="raw csp report data">
+        Raw
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div *ngIf="group.value === 'report-csp'">
+    <h4>{{ csp?.effective_directive }}</h4>
     <dl *ngFor="let data of csp | keyvalue">
       <app-entry-data [key]="data.key" [value]="data.value"></app-entry-data>
     </dl>
-  </section>
+  </div>
+  <div *ngIf="group.value === 'raw-csp'">
+    <pre>
+&#123;<span class="csp__code">"csp-report": {{ csp | json }}</span>&#125;
+  </pre>
+  </div>
 </section>

@@ -27,12 +27,11 @@
     </div>
   </section>
 
-  <mat-divider></mat-divider>
-
   <section
     *ngIf="event?.contexts?.browser || event?.contexts?.os"
     class="location"
   >
+    <mat-divider></mat-divider>
     <div *ngIf="event?.user" class="wrapper">
       <mat-icon>face</mat-icon>
       <div class="spacer">
@@ -74,18 +73,6 @@
   </section>
 
   <mat-divider *ngIf="event?.contexts?.browser"></mat-divider>
-
-  <!-- <section class="tags">
-    <h3>Tags</h3>
-    <mat-chip-list class="wrapper">
-      <mat-chip *ngFor="let tag of event?.tags"
-        ><span>{{ tag.key }}:</span>
-        <a routerLink="." class="spacer">{{ tag.value }}</a></mat-chip
-      >
-    </mat-chip-list>
-  </section> -->
-
-  <mat-divider></mat-divider>
 
   <app-entry-message></app-entry-message>
   <app-entry-exception [eventTitle]="event?.title"></app-entry-exception>
