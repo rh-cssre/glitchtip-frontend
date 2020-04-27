@@ -27,12 +27,11 @@
     </div>
   </section>
 
-  <mat-divider></mat-divider>
-
   <section
     *ngIf="event?.contexts?.browser || event?.contexts?.os"
     class="location"
   >
+    <mat-divider></mat-divider>
     <div *ngIf="event?.user" class="wrapper">
       <mat-icon>face</mat-icon>
       <div class="spacer">
@@ -75,100 +74,52 @@
 
   <mat-divider *ngIf="event?.contexts?.browser"></mat-divider>
 
-  <section class="tags">
-    <h3>Tags</h3>
-    <mat-chip-list class="wrapper">
-      <mat-chip *ngFor="let tag of event?.tags"
-        ><span>{{ tag.key }}:</span>
-        <a routerLink="." class="spacer">{{ tag.value }}</a></mat-chip
-      >
-    </mat-chip-list>
-  </section>
-
-  <mat-divider></mat-divider>
-
   <app-entry-message></app-entry-message>
   <app-entry-exception [eventTitle]="event?.title"></app-entry-exception>
   <app-entry-csp></app-entry-csp>
   <app-entry-request></app-entry-request>
-  <section *ngIf="event?.contexts">
+  <section *ngFor="let context of event.contexts | keyvalue">
     <mat-divider></mat-divider>
-    <h3>Runtime</h3>
-    <app-entry-data
-      key="Name"
-      [value]="event?.contexts?.runtime?.name"
-    ></app-entry-data>
-    <app-entry-data
-      key="Version"
-      [value]="event?.contexts?.runtime?.version"
-    ></app-entry-data>
+    <h3>
+      {{ context.value.type }}
+
+      <ng-container *ngIf="context.value.type; else elseBlock">
+        ({{ context.key }})
+      </ng-container>
+      <ng-template #elseBlock>{{ context.key }}</ng-template>
+    </h3>
+    <dl>
+      <ng-container *ngFor="let context_entry of context.value | keyvalue">
+        <app-entry-data
+          *ngIf="context_entry.key !== 'type'"
+          [key]="context_entry.key"
+          [value]="context_entry.value"
+        ></app-entry-data>
+      </ng-container>
+    </dl>
   </section>
-  <section *ngIf="event?.contexts">
+
+  <section *ngIf="event.context">
     <mat-divider></mat-divider>
-    <h3>Operating System</h3>
-    <app-entry-data
-      key="Name"
-      [value]="event?.contexts?.os?.name"
-    ></app-entry-data>
-    <app-entry-data
-      key="Version"
-      [value]="
-        event?.contexts?.os?.version ? event?.contexts?.os?.version : 'unknown'
-      "
-    ></app-entry-data>
-  </section>
-  <section *ngIf="event?.contexts">
-    <mat-divider></mat-divider>
-    <h3>Trace (trace)</h3>
-    <app-entry-data
-      key="description"
-      [value]="event?.contexts?.trace?.description"
-    ></app-entry-data>
-    <app-entry-data
-      key="op"
-      [value]="event?.contexts?.trace?.op"
-    ></app-entry-data>
-    <app-entry-data
-      key="parent_span_id"
-      [value]="event?.contexts?.trace?.parent_span_id"
-    ></app-entry-data>
-    <app-entry-data
-      key="span_id"
-      [value]="event?.contexts?.trace?.span_id"
-    ></app-entry-data>
-    <app-entry-data
-      key="trace_id"
-      [value]="event?.contexts?.trace?.trace_id"
-    ></app-entry-data>
-  </section>
-  <section *ngIf="event?.contexts?.browser">
-    <mat-divider></mat-divider>
-    <h3>Browser</h3>
-    <app-entry-data
-      key="name"
-      [value]="event?.contexts?.browser?.name"
-    ></app-entry-data>
-    <app-entry-data
-      key="version"
-      [value]="event?.contexts?.browser?.version"
-    ></app-entry-data>
-  </section>
-  <section *ngIf="event?.context">
-    <mat-divider></mat-divider>
-    <h3>Aditional Data</h3>
-    <app-entry-data
-      key="argv"
-      [value]="removeType(event?.context)['sys.argv'] | json"
-    ></app-entry-data>
-    <app-entry-data
-      key="version"
-      [value]="event?.contexts?.browser?.version"
-    ></app-entry-data>
+    <h3>Additional Data</h3>
+    <dl>
+      <app-entry-data
+        *ngFor="let context of event.context | keyvalue"
+        [key]="context.key"
+        [value]="context.value | json"
+      >
+      </app-entry-data>
+    </dl>
   </section>
   <section *ngIf="event?.sdk">
     <mat-divider></mat-divider>
     <h3>SDK</h3>
-    <app-entry-data key="name" [value]="event?.sdk.name"></app-entry-data>
-    <app-entry-data key="version" [value]="event?.sdk.version"></app-entry-data>
+    <dl>
+      <app-entry-data key="name" [value]="event?.sdk.name"></app-entry-data>
+      <app-entry-data
+        key="version"
+        [value]="event?.sdk.version"
+      ></app-entry-data>
+    </dl>
   </section>
 </section>

@@ -19,6 +19,7 @@ spec:
       containers:
       - name: pre-install-job
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         command: ["./manage.py","migrate"]
         env:
           - name: DEBUG

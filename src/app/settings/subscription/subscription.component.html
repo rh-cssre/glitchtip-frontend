@@ -5,10 +5,18 @@
   <mat-card>
     <mat-card-content>
       <div *ngIf="subscription$ | async as subscription">
-        <div *ngIf="subscription.status === 'active'">
-          <p class="mat-body-1">
+        <div
+          *ngIf="
+            subscription.status === 'active' ||
+            subscription.status === 'trialing'
+          "
+        >
+          <p *ngIf="subscription.status === 'active'" class="mat-body-1">
             This organization has an active subscription to GlitchTip. Thank
             you!
+          </p>
+          <p *ngIf="subscription.status === 'trialing'" class="mat-body-1">
+            This organization has a trial subscription to GlitchTip.
           </p>
 
           <mat-card-subtitle>Details</mat-card-subtitle>

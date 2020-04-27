@@ -13,33 +13,35 @@
     <div *ngIf="request.data">
       <mat-divider></mat-divider>
       <h3>Body</h3>
-      <div *ngFor="let requestData of request.data | keyvalue">
+      <dl>
         <app-entry-data
+          *ngFor="let requestData of request.data | keyvalue"
           [key]="requestData.key"
           [value]="requestData.value"
         ></app-entry-data>
-      </div>
+      </dl>
     </div>
     <section *ngIf="request?.headers">
       <mat-divider></mat-divider>
       <h3>Headers</h3>
-      <app-entry-data
-        *ngFor="let header of request?.headers"
-        [key]="header[0]"
-        [value]="header[1]"
-      ></app-entry-data>
+      <dl>
+        <app-entry-data
+          *ngFor="let header of request?.headers"
+          [key]="header[0]"
+          [value]="header[1]"
+        ></app-entry-data>
+      </dl>
     </section>
     <section *ngIf="request?.env">
       <mat-divider></mat-divider>
       <h3>Environment</h3>
-      <app-entry-data
-        key="SERVER_NAME"
-        [value]="request?.env?.SERVER_NAME"
-      ></app-entry-data>
-      <app-entry-data
-        key="SERVER_PORT"
-        [value]="request?.env?.SERVER_PORT"
-      ></app-entry-data>
+      <dl>
+        <app-entry-data
+          *ngFor="let env of request.env | keyvalue"
+          [key]="env.key"
+          [value]="env.value"
+        ></app-entry-data>
+      </dl>
     </section>
   </section>
 </section>

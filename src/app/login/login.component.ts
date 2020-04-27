@@ -11,7 +11,7 @@ import { SettingsService } from "../api/settings.service";
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"]
+  styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
   loading = false;
@@ -20,8 +20,8 @@ export class LoginComponent implements OnInit {
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [
       Validators.required,
-      Validators.minLength(8)
-    ])
+      Validators.minLength(8),
+    ]),
   });
   socialAuth$ = this.settings.socialAuth$;
 
@@ -42,28 +42,50 @@ export class LoginComponent implements OnInit {
       const accessToken = new URLSearchParams(fragment).get("access_token");
       if (accessToken) {
         if (provider === "gitlab") {
-          this.oauthService.gitlabLogin(accessToken).toPromise();
+          this.oauthService
+            .gitlabLogin(accessToken)
+            .pipe(
+              catchError((error: HttpErrorResponse) => {
+                this.processSocialAuthErrorResponse(error);
+                return EMPTY;
+              })
+            )
+            .toPromise();
         } else if (provider === "google") {
           this.oauthService
             .googleLogin(accessToken)
             .pipe(
               catchError((error: HttpErrorResponse) => {
-                if (error.status === 400) {
-                  this.error = error.error.non_field_errors;
-                }
+                this.processSocialAuthErrorResponse(error);
                 return EMPTY;
               })
             )
             .toPromise();
         } else if (provider === "microsoft") {
-          this.oauthService.microsoftLogin(accessToken).toPromise();
+          this.oauthService
+            .microsoftLogin(accessToken)
+            .pipe(
+              catchError((error: HttpErrorResponse) => {
+                this.processSocialAuthErrorResponse(error);
+                return EMPTY;
+              })
+            )
+            .toPromise();
         }
       }
     } else if (query) {
       const code = query.get("code");
       if (code) {
         if (provider === "github") {
-          this.oauthService.githubLogin(code).toPromise();
+          this.oauthService
+            .githubLogin(code)
+            .pipe(
+              catchError((error: HttpErrorResponse) => {
+                this.processSocialAuthErrorResponse(error);
+                return EMPTY;
+              })
+            )
+            .toPromise();
         }
       }
     }
@@ -100,7 +122,7 @@ export class LoginComponent implements OnInit {
         .login(this.form.value.email, this.form.value.password)
         .subscribe(
           () => this.router.navigate([""]),
-          err => {
+          (err) => {
             this.loading = false;
             if (err.status === 400 && err.error.non_field_errors) {
               this.error = err.error.non_field_errors;
@@ -113,6 +135,12 @@ export class LoginComponent implements OnInit {
             }
           }
         );
+    }
+  }
+
+  private processSocialAuthErrorResponse(error: HttpErrorResponse) {
+    if (error.status === 400) {
+      this.error = error.error.non_field_errors;
     }
   }
 }
