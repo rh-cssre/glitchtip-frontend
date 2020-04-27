@@ -124,6 +124,7 @@ describe("IssueDetailService", () => {
     /* checks that changing the testData for eventEntryRequest$ does not mutate event data */
     service.event$.pipe(take(1)).subscribe((event: any) => {
       expect(event).toBe(testData);
+      expect(event.entries).toBe(undefined);
     });
   });
 });
