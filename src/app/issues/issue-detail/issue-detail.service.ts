@@ -74,17 +74,23 @@ export class IssueDetailService {
     this.isReversed$,
   ]).pipe(
     map(([event, isReversed]) =>
-      event ? this.reverseFrames(event, isReversed) : undefined
+      event && event.entries ? this.reverseFrames(event, isReversed) : undefined
     )
   );
   readonly eventEntryRequest$ = this.event$.pipe(
-    map((event) => (event ? this.entryRequestData(event) : undefined))
+    map((event) =>
+      event && event.entries ? this.entryRequestData(event) : undefined
+    )
   );
   readonly eventEntryCSP$ = this.event$.pipe(
-    map((event) => (event ? this.eventEntryCSP(event) : undefined))
+    map((event) =>
+      event && event.entries ? this.eventEntryCSP(event) : undefined
+    )
   );
   readonly eventEntryMessage$ = this.event$.pipe(
-    map((event) => (event ? this.eventEntryMessage(event) : undefined))
+    map((event) =>
+      event && event.entries ? this.eventEntryMessage(event) : undefined
+    )
   );
 
   constructor(
@@ -188,7 +194,7 @@ export class IssueDetailService {
 
   /* Return the message entry type for an event */
   private eventEntryMessage(event: EventDetail): Message | undefined {
-    const eventEntryMessage = event.entries.find(
+    const eventEntryMessage = event.entries?.find(
       (entry) => entry.type === "message"
     );
     if (eventEntryMessage) {
@@ -200,7 +206,7 @@ export class IssueDetailService {
 
   /* Return the CSP entry type for an event */
   private eventEntryCSP(event: EventDetail): CSP | undefined {
-    const cspEntryType = event.entries.find((entry) => entry.type === "csp");
+    const cspEntryType = event.entries?.find((entry) => entry.type === "csp");
     if (cspEntryType) {
       const eventCSP = (cspEntryType as Entry<"csp", CSP>).data;
       return { ...eventCSP };
@@ -209,7 +215,7 @@ export class IssueDetailService {
 
   /* Return the request entry type for an event with additional fields parsed from url */
   private entryRequestData(event: EventDetail): AnnotatedRequest | undefined {
-    const requestEntryType = event.entries.find(
+    const requestEntryType = event.entries?.find(
       (entry) => entry.type === "request"
     );
     if (requestEntryType) {
@@ -231,7 +237,7 @@ export class IssueDetailService {
     event: EventDetail,
     isReversed: boolean
   ): ExceptionValueData | undefined {
-    const exceptionEntryType = event.entries.find(
+    const exceptionEntryType = event.entries?.find(
       (entry) => entry.type === "exception"
     );
     if (exceptionEntryType) {

@@ -26,6 +26,7 @@ import { stringError } from "./test-data/string-error";
 import { cspError } from "./test-data/csp-error";
 import { pageNotFound } from "./test-data/page-not-found";
 import { socialApp } from "./test-data/social-app";
+import { noEntries } from "./test-data/no-entries";
 
 export default {
   title: "Event Detail",
@@ -60,6 +61,7 @@ export const EventDetails = () => {
     "CSP Error",
     "Page Not Found",
     "SocialApp.DoesNotExist",
+    "No Entries",
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error: any = databaseError;
@@ -92,6 +94,9 @@ export const EventDetails = () => {
     case "SocialApp.DoesNotExist":
       error = socialApp;
       break;
+    case "No Entries":
+      error = noEntries;
+      break;
   }
 
   return {
@@ -123,7 +128,9 @@ export const EntryRequest = () => {
   ];
 
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
-  let stackError: any = postError.entries[1].data;
+  let stackError: any = postError.entries
+    ? postError.entries[1].data
+    : undefined;
   let error: any = {
     ...stackError,
     domainName: "localhost",
@@ -139,7 +146,9 @@ export const EntryRequest = () => {
 
   switch (selectedError) {
     case "Database Error":
-      stackError = databaseError.entries[2].data;
+      stackError = databaseError.entries
+        ? databaseError.entries[2].data
+        : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -148,7 +157,9 @@ export const EntryRequest = () => {
       bodyData = null;
       break;
     case "Database Stack Error":
-      stackError = databaseStackError.entries[2].data;
+      stackError = databaseStackError.entries
+        ? databaseStackError.entries[2].data
+        : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -157,7 +168,7 @@ export const EntryRequest = () => {
       bodyData = null;
       break;
     case "Post Error":
-      stackError = postError.entries[1].data;
+      stackError = postError.entries ? postError.entries[1].data : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -172,7 +183,9 @@ export const EntryRequest = () => {
       ];
       break;
     case "Template Error":
-      stackError = templateError.entries[1].data;
+      stackError = templateError.entries
+        ? templateError.entries[1].data
+        : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -181,7 +194,9 @@ export const EntryRequest = () => {
       bodyData = null;
       break;
     case "Zero Division Error":
-      stackError = zeroDivisionError.entries[1].data;
+      stackError = zeroDivisionError.entries
+        ? zeroDivisionError.entries[1].data
+        : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -190,7 +205,9 @@ export const EntryRequest = () => {
       bodyData = null;
       break;
     case "String Error":
-      stackError = stringError.entries[2].data;
+      stackError = stringError.entries
+        ? stringError.entries[2].data
+        : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -199,7 +216,7 @@ export const EntryRequest = () => {
       bodyData = null;
       break;
     case "CSP Error":
-      stackError = cspError.entries[2].data;
+      stackError = cspError.entries ? cspError.entries[2].data : undefined;
       error = {
         ...stackError,
         domainName: "www.revo.com",
@@ -208,7 +225,9 @@ export const EntryRequest = () => {
       bodyData = null;
       break;
     case "Page Not Found":
-      stackError = pageNotFound.entries[0].data;
+      stackError = pageNotFound.entries
+        ? pageNotFound.entries[0].data
+        : undefined;
       error = {
         ...stackError,
         domainName: "localhost",
@@ -248,7 +267,9 @@ export const EntryCSP = () => {
   return {
     component: EntryCSPComponent,
     props: {
-      eventEntryCSP$: of(cspError.entries[1].data),
+      eventEntryCSP$: of(
+        cspError.entries ? cspError.entries[1].data : undefined
+      ),
     },
   };
 };
@@ -261,7 +282,9 @@ export const EntryMessage = () => {
   return {
     component: EntryMessageComponent,
     props: {
-      eventEntryMessage$: of(cspError.entries[0].data),
+      eventEntryMessage$: of(
+        cspError.entries ? cspError.entries[0].data : undefined
+      ),
     },
   };
 };
@@ -281,32 +304,38 @@ export const EntryException = () => {
     "SocialApp.DoesNotExist",
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
-  let error: any = databaseError.entries[0].data;
+  let error: any = databaseError.entries
+    ? databaseError.entries[0].data
+    : undefined;
   let title: string = databaseError.title;
 
   switch (selectedError) {
     case "Database Error":
-      error = databaseError.entries[0].data;
+      error = databaseError.entries ? databaseError.entries[0].data : undefined;
       title = databaseError.title;
       break;
     case "Database Stack Error":
-      error = databaseStackError.entries[0].data;
+      error = databaseStackError.entries
+        ? databaseStackError.entries[0].data
+        : undefined;
       title = databaseStackError.title;
       break;
     case "Post Error":
-      error = postError.entries[0].data;
+      error = postError.entries ? postError.entries[0].data : undefined;
       title = postError.title;
       break;
     case "Template Error":
-      error = templateError.entries[0].data;
+      error = templateError.entries ? templateError.entries[0].data : undefined;
       title = templateError.title;
       break;
     case "Zero Division Error":
-      error = zeroDivisionError.entries[0].data;
+      error = zeroDivisionError.entries
+        ? zeroDivisionError.entries[0].data
+        : undefined;
       title = zeroDivisionError.title;
       break;
     case "String Error":
-      error = stringError.entries[0].data;
+      error = stringError.entries ? stringError.entries[0].data : undefined;
       title = stringError.title;
       break;
     case "SocialApp.DoesNotExist":

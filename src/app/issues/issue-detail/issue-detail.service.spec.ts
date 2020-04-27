@@ -12,6 +12,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
+import { noEntries } from "./event-detail/test-data/no-entries";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -109,6 +110,16 @@ describe("IssueDetailService", () => {
         expect(eventEntryRequest.path).toEqual("/database-error/");
         expect(eventEntryRequest.domainName).toEqual("localhost");
       });
+
+    /* checks that changing the testData for eventEntryRequest$ does not mutate event data */
+    service.event$.pipe(take(1)).subscribe((event: any) => {
+      expect(event).toBe(testData);
+    });
+  });
+
+  fit("event$ without entries field is not undefined", () => {
+    const testData: EventDetail = noEntries;
+    service.setEvent(testData);
 
     /* checks that changing the testData for eventEntryRequest$ does not mutate event data */
     service.event$.pipe(take(1)).subscribe((event: any) => {
