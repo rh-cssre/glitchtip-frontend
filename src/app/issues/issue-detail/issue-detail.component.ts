@@ -9,21 +9,22 @@ import { IssueDetailService } from "./issue-detail.service";
   selector: "app-issue-detail",
   templateUrl: "./issue-detail.component.html",
   styleUrls: ["./issue-detail.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
   form = new FormGroup({
-    assignee: new FormControl("")
+    assignee: new FormControl(""),
   });
   displayedColumns: string[] = ["issueNum", "events"];
   issueIdParam$ = this.route.paramMap.pipe(
-    map(params => params.get("issue-id"))
+    map((params) => params.get("issue-id"))
   );
+  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
   participantCountPluralMapping: { [k: string]: string } = {
     "=0": "No Participants",
     "=1": "1 Participant",
-    other: "# Participants"
+    other: "# Participants",
   };
 
   constructor(
@@ -35,7 +36,7 @@ export class IssueDetailComponent implements OnInit {
     this.issueIdParam$
       .pipe(
         tap(() => this.issueService.clearState()),
-        exhaustMap(issueId => {
+        exhaustMap((issueId) => {
           if (issueId) {
             return this.issueService.retrieveIssue(+issueId);
           }

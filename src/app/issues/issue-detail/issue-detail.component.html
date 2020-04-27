@@ -1,9 +1,9 @@
 <section *ngIf="issue$ | async as issue">
   <a
     mat-button
-    [routerLink]="['/organizations', 'knit', 'issues']"
+    [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
     [queryParams]="{ project: issue.project.id }"
-    >{{ issue.project.name }}</a
+    >View all issues for {{ issue.project.name }}</a
   >
   <article class="header">
     <div>
