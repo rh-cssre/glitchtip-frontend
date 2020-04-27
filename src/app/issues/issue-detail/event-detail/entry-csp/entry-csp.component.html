@@ -1,48 +1,29 @@
 <section *ngIf="eventEntryCSP$ | async as csp" class="mat-typography">
-  <section class="report">
-    <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
+  <div class="csp__header">
     <h3>CSP Report</h3>
-    <h2>style-src</h2>
-    <app-entry-data
-      key="blocked_uri"
-      [value]="csp?.blocked_uri"
-    ></app-entry-data>
-    <app-entry-data
-      key="column_number"
-      [value]="csp?.column_number"
-    ></app-entry-data>
-    <app-entry-data
-      key="disposition"
-      [value]="csp?.disposition"
-    ></app-entry-data>
-    <app-entry-data
-      key="document_uri"
-      [value]="csp?.document_uri"
-    ></app-entry-data>
-    <app-entry-data
-      key="effective_directive"
-      [value]="csp?.effective_directive"
-    ></app-entry-data>
-    <app-entry-data
-      key="line_number"
-      [value]="csp?.line_number"
-    ></app-entry-data>
-    <app-entry-data
-      key="original_policy"
-      [value]="csp?.original_policy"
-    ></app-entry-data>
-    <app-entry-data
-      key="source_file"
-      [value]="csp?.source_file"
-    ></app-entry-data>
-    <app-entry-data
-      key="status_code"
-      [value]="csp?.status_code"
-    ></app-entry-data>
-    <app-entry-data
-      key="violated_directive"
-      [value]="csp?.violated_directive"
-    ></app-entry-data>
-    <app-entry-data key="referrer" [value]="csp?.referrer"></app-entry-data>
-  </section>
+    <mat-button-toggle-group #group="matButtonToggleGroup">
+      <mat-button-toggle
+        [checked]="true"
+        value="report-csp"
+        aria-label="full csp report data"
+      >
+        Report
+      </mat-button-toggle>
+      <mat-button-toggle value="raw-csp" aria-label="raw csp report data">
+        Raw
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div *ngIf="group.value === 'report-csp'">
+    <h4>{{ csp?.effective_directive }}</h4>
+    <dl *ngFor="let data of csp | keyvalue">
+      <app-entry-data [key]="data.key" [value]="data.value"></app-entry-data>
+    </dl>
+  </div>
+  <div *ngIf="group.value === 'raw-csp'">
+    <pre>
+&#123;<span class="csp__code">"csp-report": {{ csp | json }}</span>&#125;
+  </pre>
+  </div>
 </section>

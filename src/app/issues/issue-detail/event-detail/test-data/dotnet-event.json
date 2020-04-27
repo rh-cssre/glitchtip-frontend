@@ -1,0 +1,135 @@
+{
+  "eventID": "14bf29602f534489b459f2b2e31111e1",
+  "id": "14bf29602f534489b459f2b2e3321111",
+  "issue": 19,
+  "contexts": {
+    "server-os": {
+      "type": "os",
+      "raw_description": "Microsoft Windows 10.0.1000 "
+    },
+    "server-runtime": {
+      "name": ".NET Core",
+      "type": "runtime",
+      "version": "4.3.28004.01",
+      "raw_description": ".NET Core 4.3"
+    }
+  },
+  "culprit": "Testalo_API.Logic.Logic in validateExternalDatasources",
+  "dateCreated": "2019-04-17T19:25:07.907903Z",
+  "dateReceived": "2019-04-17T19:25:08.077645Z",
+  "entries": [
+    {
+      "type": "exception",
+      "data": {
+        "values": [
+          {
+            "type": "System.NullReferenceException",
+            "value": "Object reference not set to an instance of an object.",
+            "module": "System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=ccc",
+            "thread_id": 88,
+            "stacktrace": {
+              "frames": [
+                {
+                  "in_app": true,
+                  "module": "Sentry.AspNetCore.SentryMiddleware",
+                  "package": "Sentry.AspNetCore, Version=1.0.1.0, Culture=neutral, PublicKeyToken=111",
+                  "function": "InvokeAsync",
+                  "context_line": "Void MoveNext()",
+                  "instruction_offset": 434
+                },
+                {
+                  "colno": 25,
+                  "in_app": true,
+                  "module": "Testalo_API.Logic.CatalogPromotedLogic",
+                  "package": "Testalo-API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                  "filename": "/code/output/src/src/Testalo-API/Logic/Logic.cs",
+                  "function": "validateExternalDatasources",
+                  "context_line": "Void validateExternalDatasources(Testalo_API.Common.Platform, System.Collections.Generic.List`1[Testalo_API.MongoModels.MongoPromotedShowsCampaign+FeaturedItem])",
+                  "instruction_offset": 412,
+                  "lineNo": 152,
+                  "context": [
+                    [
+                      152,
+                      "Void validateExternalDatasources(Testalo_API.Common.Platform, System.Collections.Generic.List`1[Testalo_API.MongoModels.Mongo+FeaturedItem])"
+                    ]
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "request",
+      "data": {
+        "env": {
+          "REMOTE_ADDR": "192.168.1.1",
+          "SERVER_NAME": "EC2",
+          "SERVER_PORT": "80"
+        },
+        "url": "/api/catalog/promoted/Testitex/featured",
+        "data": "{\"featured\":1}",
+        "method": "PUT",
+        "headers": [
+          ["Accept", "application/json"],
+          ["Accept-Encoding", "gzip, deflate, br"],
+          ["Accept-Language", "en-US,en;q=0.9"],
+          ["Authorization", "Bearer eeeee"],
+          ["Content-Length", "125852"],
+          ["Content-Type", "application/json"],
+          ["Host", "prod.Testalo.com"],
+          ["Referer", "https://cms.Testalo.com/Testitex/carousels"],
+          [
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
+          ],
+          ["X-Amzn-Trace-Id", "Root=1-1111111"],
+          ["X-Forwarded-Port", "443"],
+          ["X-Original-For", "10.0.0.0:123"],
+          ["X-Original-Proto", "http"],
+          ["origin", "https://cms.Testalo.com"],
+          ["sec-fetch-dest", "empty"],
+          ["sec-fetch-mode", "cors"],
+          ["sec-fetch-site", "same-site"]
+        ],
+        "query_string": "",
+        "inferredContentType": "application/json"
+      }
+    }
+  ],
+  "metadata": {
+    "type": "System.NullReferenceException",
+    "value": "Object reference not set to an instance of an object.",
+    "filename": "/code/output/src/src/Testalo-API/Logic/TestalogLogic.cs",
+    "function": "validateExternalDatasources"
+  },
+  "packages": {
+    "Microsoft.AspNetCore": "2.2.0.0",
+    "System.Globalization": "4.1.1.0",
+    "System.IO.FileSystem": "4.1.1.0",
+    "System.Net.WebClient": "4.0.1.0",
+    "System.Text.Encoding": "4.1.1.0",
+    "System.Xml.XDocument": "4.1.1.0"
+  },
+  "platform": "csharp",
+  "sdk": {
+    "name": "sentry.dotnet.aspnetcore",
+    "version": "1.0.1-beta3",
+    "packages": [
+      {
+        "Name": "nuget:Sentry",
+        "Version": "1.0.1-beta3"
+      },
+      {
+        "Name": "nuget:Sentry.AspNetCore",
+        "Version": "1.0.1-beta3"
+      }
+    ]
+  },
+  "tags": [],
+  "title": "System.NullReferenceException: Object reference not set to an instance of an object.",
+  "type": "error",
+  "nextEventID": null,
+  "previousEventID": "fefc0823f4f14acc9703283a4d11111"
+}

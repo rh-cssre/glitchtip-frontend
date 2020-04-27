@@ -106,10 +106,19 @@
             <ng-container *ngIf="(oneProjectApplied$ | async) === false">
               &mdash;
             </ng-container>
-            {{ element.firstSeen | date }}
-            <ng-container *ngIf="element.firstSeen !== element.lastSeen">
+            <time
+              [dateTime]="element.firstSeen"
+              [title]="element.firstSeen | date: 'medium'"
+            >
+              {{ element.firstSeen | date }}
+            </time>
+            <time
+              *ngIf="element.firstSeen !== element.lastSeen"
+              [dateTime]="element.lastSeen"
+              [title]="element.lastSeen | date: 'medium'"
+            >
               / {{ element.lastSeen | date }}
-            </ng-container>
+            </time>
           </span>
           <span
             class="mat-caption"
