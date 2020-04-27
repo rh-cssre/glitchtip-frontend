@@ -188,9 +188,9 @@ export class IssueDetailService {
 
   /* Return the message entry type for an event */
   private eventEntryMessage(event: EventDetail): Message | undefined {
-    const eventEntryMessage = event.entries
-      ? event.entries.find((entry) => entry.type === "message")
-      : undefined;
+    const eventEntryMessage = event.entries.find(
+      (entry) => entry.type === "message"
+    );
     if (eventEntryMessage) {
       const eventMessage = (eventEntryMessage as Entry<"message", Message>)
         .data;
@@ -200,9 +200,7 @@ export class IssueDetailService {
 
   /* Return the CSP entry type for an event */
   private eventEntryCSP(event: EventDetail): CSP | undefined {
-    const cspEntryType = event.entries
-      ? event.entries.find((entry) => entry.type === "csp")
-      : undefined;
+    const cspEntryType = event.entries.find((entry) => entry.type === "csp");
     if (cspEntryType) {
       const eventCSP = (cspEntryType as Entry<"csp", CSP>).data;
       return { ...eventCSP };
@@ -211,9 +209,9 @@ export class IssueDetailService {
 
   /* Return the request entry type for an event with additional fields parsed from url */
   private entryRequestData(event: EventDetail): AnnotatedRequest | undefined {
-    const requestEntryType = event.entries
-      ? event.entries.find((entry) => entry.type === "request")
-      : undefined;
+    const requestEntryType = event.entries.find(
+      (entry) => entry.type === "request"
+    );
     if (requestEntryType) {
       const eventRequest = (requestEntryType as Entry<"request", Request>).data;
       let urlDomainName = "";
@@ -233,9 +231,9 @@ export class IssueDetailService {
     event: EventDetail,
     isReversed: boolean
   ): ExceptionValueData | undefined {
-    const exceptionEntryType = event.entries
-      ? event.entries.find((entry) => entry.type === "exception")
-      : undefined;
+    const exceptionEntryType = event.entries.find(
+      (entry) => entry.type === "exception"
+    );
     if (exceptionEntryType) {
       const eventException = (exceptionEntryType as Entry<
         "exception",

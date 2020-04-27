@@ -24,7 +24,7 @@ export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
   contexts: { [key: string]: any } | null;
-  entries?: EntryUnion[];
+  entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist?: null;
   userReport?: null;
