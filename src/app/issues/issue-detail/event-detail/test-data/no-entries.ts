@@ -1,7 +1,7 @@
-// import { EventDetail } from "src/app/issues/interfaces";
+import { EventDetail } from "src/app/issues/interfaces";
 
 /*tslint:disable */
-export const noEntries = {
+export const noEntries: EventDetail = {
   eventID: "915d8bd3e6d14d049d523700e66b6147",
   id: "915d8bd3e6d14d049d523700e66b6147",
   issue: 396,

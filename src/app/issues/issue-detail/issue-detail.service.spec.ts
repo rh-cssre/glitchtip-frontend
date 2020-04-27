@@ -117,7 +117,7 @@ describe("IssueDetailService", () => {
     });
   });
 
-  fit("event$ without entries field is not undefined", () => {
+  it("event$ without entries field is not undefined", () => {
     const testData: EventDetail = noEntries;
     service.setEvent(testData);
 
