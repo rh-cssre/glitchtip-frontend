@@ -5,7 +5,7 @@ export interface Event {
   id: string;
   tags: any[];
   projectID?: string;
-  dateCreated: string;
+  dateCreated: string | null;
   user?: any;
   message?: string;
   culprit: string;
@@ -23,7 +23,7 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
-  contexts: { [key: string]: any };
+  contexts: { [key: string]: any } | null;
   entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist?: null;

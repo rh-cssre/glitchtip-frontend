@@ -1,4 +1,10 @@
 <section *ngIf="issue$ | async as issue">
+  <a
+    mat-button
+    [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
+    [queryParams]="{ project: issue.project.id }"
+    >View all issues for {{ issue.project.name }}</a
+  >
   <article class="header">
     <div>
       <h1 class="mat-headline">
