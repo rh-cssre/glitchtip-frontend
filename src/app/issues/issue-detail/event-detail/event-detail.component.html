@@ -75,7 +75,10 @@
   <mat-divider *ngIf="event?.contexts?.browser"></mat-divider>
 
   <app-entry-message></app-entry-message>
-  <app-entry-exception [eventTitle]="event?.title"></app-entry-exception>
+  <app-entry-exception
+    [eventTitle]="event?.title"
+    [platform]="event?.platform"
+  ></app-entry-exception>
   <app-entry-csp></app-entry-csp>
   <app-entry-request></app-entry-request>
   <section *ngFor="let context of event.contexts | keyvalue">

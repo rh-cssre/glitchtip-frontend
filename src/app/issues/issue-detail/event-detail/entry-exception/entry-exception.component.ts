@@ -9,6 +9,7 @@ import { IssueDetailService } from "../../issue-detail.service";
 })
 export class EntryExceptionComponent {
   @Input() eventTitle: string | undefined;
+  @Input() platform: string | null | undefined;
   eventEntryException$ = this.issueService.eventEntryException$;
   isReversed$ = this.issueService.isReversed$;
 
@@ -16,5 +17,18 @@ export class EntryExceptionComponent {
 
   getFlippedFrames() {
     this.issueService.getReversedFrames();
+  }
+
+  getPlatform(
+    eventPlatform: string | null | undefined,
+    framePlatform: string | null
+  ): boolean {
+    switch (eventPlatform || framePlatform) {
+      case "java":
+      case "csharp":
+        return true;
+      default:
+        return false;
+    }
   }
 }

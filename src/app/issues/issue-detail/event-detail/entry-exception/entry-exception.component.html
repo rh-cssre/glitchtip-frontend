@@ -13,7 +13,15 @@
 
       <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle
-          [checked]="true"
+          *ngIf="exception.hasSystemFrames"
+          [checked]="exception.hasSystemFrames"
+          value="app-only"
+          aria-label="app only data"
+        >
+          App Only
+        </mat-button-toggle>
+        <mat-button-toggle
+          [checked]="exception.hasSystemFrames === false"
           value="full-data"
           aria-label="full data"
         >
@@ -23,6 +31,42 @@
           Raw
         </mat-button-toggle>
       </mat-button-toggle-group>
+    </div>
+    <div
+      class="app-only"
+      *ngIf="group.value === 'app-only' && exception.values"
+    >
+      <div *ngFor="let value of exception.values">
+        <h2>{{ value.type }}</h2>
+        <p>{{ value.value }}</p>
+        <div *ngFor="let frame of value.stacktrace.frames">
+          <ng-container *ngIf="frame.inApp">
+            <p>
+              <span>
+                <ng-container
+                  *ngIf="
+                    getPlatform(platform, frame.platform);
+                    else prioritizeFilename
+                  "
+                >
+                  {{ frame.filename || frame.module }}
+                </ng-container>
+                <ng-template #prioritizeFilename>{{
+                  frame.module || frame.filename
+                }}</ng-template>
+              </span>
+              <span> in </span>
+              <span>{{ frame.function }}</span>
+              <span> at line </span>
+              <span>{{ frame.lineNo }}</span>
+              <span>:</span>
+              <span>{{ frame.colNo }}</span>
+              <span> within </span>
+              <span>{{ frame.package }}</span>
+            </p></ng-container
+          >
+        </div>
+      </div>
     </div>
     <div class="full" *ngIf="group.value === 'full-data' && exception.values">
       <div *ngFor="let value of exception.values">
