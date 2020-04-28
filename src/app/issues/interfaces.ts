@@ -5,7 +5,7 @@ export interface Event {
   id: string;
   tags: any[];
   projectID?: string;
-  dateCreated: string;
+  dateCreated: string | null;
   user?: any;
   message?: string;
   culprit: string;
@@ -23,7 +23,7 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
-  contexts: { [key: string]: any };
+  contexts: { [key: string]: any } | null;
   entries: EntryUnion[];
   metadata: IEventMetaData | any;
   dist?: null;
@@ -88,7 +88,11 @@ export interface Request {
   fragment?: string | null;
   cookies?: object[];
   inferredContentType: string | null;
-  env: { SERVER_NAME: string; SERVER_PORT: string } | null;
+  env: {
+    SERVER_NAME: string;
+    SERVER_PORT: string;
+    DOCUMENT_ROOT?: string;
+  } | null;
   headers: string[][];
   url: string;
   query?: object[];
@@ -209,7 +213,7 @@ interface Values {
   stacktrace: IStacktrace;
   module: string | null;
   rawStacktrace?: string | null;
-  mechanism?: Mechanism;
+  mechanism?: Mechanism | null;
   threadId?: number | null;
   value: string;
   type: string;
@@ -230,21 +234,21 @@ interface IStacktrace {
 
 interface Frame {
   function: string | null;
-  errors: string | null;
   colNo: number | null;
   vars: { [key: string]: any } | null;
-  package: string | null;
-  absPath: string;
-  inApp: boolean;
-  lineNo: number;
+  symbol: string | null;
   module: string | null;
-  filename: string;
-  platform: string | null;
+  lineNo: number | null;
+  trust: string | null;
+  errors?: string | null;
+  package: string | null;
+  absPath: string | null;
+  inApp: boolean;
   instructionAddr: string | null;
+  filename: string | null;
+  platform: string | null;
   context: (string | number)[][];
   symbolAddr: string | null;
-  trust: string | null;
-  symbol: string | null;
   rawFunction?: string | null;
 }
 

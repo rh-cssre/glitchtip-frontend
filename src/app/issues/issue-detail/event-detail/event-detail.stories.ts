@@ -26,6 +26,7 @@ import { stringError } from "./test-data/string-error";
 import { cspError } from "./test-data/csp-error";
 import { pageNotFound } from "./test-data/page-not-found";
 import { socialApp } from "./test-data/social-app";
+import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
 
 export default {
   title: "Event Detail",
@@ -56,6 +57,7 @@ export const EventDetails = () => {
     "Post Error",
     "Template Error",
     "Zero Division Error",
+    "Zero Division Dotnet",
     "String Error",
     "CSP Error",
     "Page Not Found",
@@ -79,6 +81,9 @@ export const EventDetails = () => {
       break;
     case "Zero Division Error":
       error = zeroDivisionError;
+      break;
+    case "Zero Division Dotnet":
+      error = zeroDivisionDotnet;
       break;
     case "String Error":
       error = stringError;
@@ -277,6 +282,7 @@ export const EntryException = () => {
     "Post Error",
     "Template Error",
     "Zero Division Error",
+    "Zero Division Dotnet",
     "String Error",
     "SocialApp.DoesNotExist",
   ];
@@ -304,6 +310,10 @@ export const EntryException = () => {
     case "Zero Division Error":
       error = zeroDivisionError.entries[0].data;
       title = zeroDivisionError.title;
+      break;
+    case "Zero Division Dotnet":
+      error = zeroDivisionDotnet.entries[1].data;
+      title = zeroDivisionDotnet.title;
       break;
     case "String Error":
       error = stringError.entries[0].data;
