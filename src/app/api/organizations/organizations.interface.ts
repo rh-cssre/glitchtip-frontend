@@ -12,7 +12,6 @@ export interface Organization extends OrganizationNew {
   require2FA: boolean;
 }
 
-// ts:disable-next-line:no-empty-interface
 export interface OrganizationDetail extends Organization {
   projects: OrganizationProduct[];
 }

@@ -1,0 +1,55 @@
+<div *ngFor="let value of values" class="app-only">
+  <h2>{{ value.type }}</h2>
+  <p class="subhead">{{ value.value }}</p>
+
+  <ng-container *ngFor="let frame of value.stacktrace.frames">
+    <ng-container *ngIf="frame.inApp || showAllFrames">
+      <p [class.show-background]="frame.inApp" class="mat-body-strong frame">
+        <ng-container
+          *ngIf="getPlatform(platform, frame.platform); else prioritizeFilename"
+        >
+          <ng-container *ngIf="frame.filename; else module">
+            {{ frame.filename | slice: 0:100 }}
+          </ng-container>
+          <ng-template #module
+            ><ng-container *ngIf="frame.module">{{
+              frame.module | slice: 0:100
+            }}</ng-container></ng-template
+          >
+        </ng-container>
+        <ng-template #prioritizeFilename>
+          <ng-container *ngIf="frame.module; else filename">
+            {{ frame.module | slice: 0:100 }}
+          </ng-container>
+          <ng-template #filename
+            ><ng-container *ngIf="frame.filename">{{
+              frame.filename | slice: 0:100
+            }}</ng-container></ng-template
+          >
+        </ng-template>
+        <a
+          *ngIf="frame.absPath"
+          mat-icon-button
+          matTooltipPosition="above"
+          [matTooltip]="frame.absPath"
+        >
+          <mat-icon>help</mat-icon>
+        </a>
+        <ng-container *ngIf="frame.function || frame.rawFunction">
+          <span class="mat-body"> in </span
+          >{{ frame.function || frame.rawFunction }}</ng-container
+        >
+        <ng-container *ngIf="frame.lineNo && frame.lineNo != 0">
+          <span class="mat-body"> at line </span>
+          <ng-container *ngIf="frame.colNo; else lineNo"
+            >{{ frame.lineNo }}:{{ frame.colNo }}</ng-container
+          ><ng-template #lineNo>{{ frame.lineNo }}</ng-template>
+        </ng-container>
+        <ng-container *ngIf="frame.package"
+          ><span class="mat-body"> within </span
+          >{{ frame.package }}</ng-container
+        >
+      </p></ng-container
+    >
+  </ng-container>
+</div>

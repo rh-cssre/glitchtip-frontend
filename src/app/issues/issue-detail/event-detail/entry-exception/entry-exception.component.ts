@@ -18,17 +18,4 @@ export class EntryExceptionComponent {
   getFlippedFrames() {
     this.issueService.getReversedFrames();
   }
-
-  getPlatform(
-    eventPlatform: string | null | undefined,
-    framePlatform: string | null
-  ): boolean {
-    switch (eventPlatform || framePlatform) {
-      case "java":
-      case "csharp":
-        return true;
-      default:
-        return false;
-    }
-  }
 }

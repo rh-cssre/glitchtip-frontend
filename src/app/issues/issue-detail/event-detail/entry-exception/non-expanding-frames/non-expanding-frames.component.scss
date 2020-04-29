@@ -1,0 +1,38 @@
+@import "../../../../../../assets/styles/variables";
+
+$helpIcon: 16px;
+
+h2 {
+  margin-bottom: 8px;
+}
+
+p.subhead {
+  margin-bottom: 16px;
+}
+
+p.frame {
+  padding: 8px 16px;
+  border: 1px solid black;
+  margin-top: 0;
+  margin-bottom: -1px;
+}
+
+.show-background {
+  background: mat-color($mat-gray, 100);
+}
+
+a {
+  width: $helpIcon;
+  height: 32px;
+  line-height: $helpIcon;
+  min-width: $helpIcon;
+  margin-left: -2px;
+  margin-right: 2px;
+}
+
+mat-icon {
+  font-size: $helpIcon;
+  height: 32px;
+  width: $helpIcon;
+  line-height: $helpIcon;
+}

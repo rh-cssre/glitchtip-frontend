@@ -27,6 +27,7 @@ import { cspError } from "./test-data/csp-error";
 import { pageNotFound } from "./test-data/page-not-found";
 import { socialApp } from "./test-data/social-app";
 import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
+import { NonExpandingFramesComponent } from "./entry-exception/non-expanding-frames/non-expanding-frames.component";
 
 export default {
   title: "Event Detail",
@@ -44,6 +45,7 @@ export default {
         EntryCSPComponent,
         EntryMessageComponent,
         EntryExceptionComponent,
+        NonExpandingFramesComponent,
       ],
     }),
     withKnobs,

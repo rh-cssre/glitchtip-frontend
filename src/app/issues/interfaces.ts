@@ -209,7 +209,7 @@ interface ITag {
   key: string;
 }
 
-interface Values {
+export interface Values {
   stacktrace: IStacktrace;
   module: string | null;
   rawStacktrace?: string | null;
