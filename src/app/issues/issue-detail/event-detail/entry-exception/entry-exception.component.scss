@@ -1,3 +1,5 @@
+@import "../../../../../assets/styles/variables";
+
 .exception {
   margin-bottom: 16px;
 
@@ -43,5 +45,40 @@
     display: block;
     margin-top: 24px;
     margin-bottom: 24px;
+  }
+}
+
+$helpIcon: 16px;
+
+.app-only {
+  h2 {
+    margin-bottom: 8px;
+  }
+
+  p.subhead {
+    margin-bottom: 16px;
+  }
+
+  p.frame {
+    padding: 8px 16px;
+    background: mat-color($mat-gray, 100);
+    border: 1px solid black;
+    margin-bottom: -1px;
+  }
+
+  a {
+    width: $helpIcon;
+    height: 32px;
+    line-height: $helpIcon;
+    min-width: $helpIcon;
+    margin-left: -2px;
+    margin-right: 2px;
+  }
+
+  mat-icon {
+    font-size: $helpIcon;
+    height: 32px;
+    width: $helpIcon;
+    line-height: $helpIcon;
   }
 }
