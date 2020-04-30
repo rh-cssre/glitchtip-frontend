@@ -15,6 +15,7 @@ import { EntryCSPComponent } from "./issue-detail/event-detail/entry-csp/entry-c
 import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./issue-detail/event-detail/entry-exception/entry-exception.component";
 import { NonExpandingFramesComponent } from "./issue-detail/event-detail/entry-exception/non-expanding-frames/non-expanding-frames.component";
+import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { NonExpandingFramesComponent } from "./issue-detail/event-detail/entry-e
     EntryMessageComponent,
     HeaderNavComponent,
     EntryExceptionComponent,
-    NonExpandingFramesComponent
+    NonExpandingFramesComponent,
+    RawStacktraceComponent
   ]
 })
 export class IssuesModule {}

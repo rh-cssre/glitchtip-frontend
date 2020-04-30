@@ -34,14 +34,14 @@
     </div>
     <ng-container *ngIf="group.value === 'app-only' && exception.values">
       <app-non-expanding-frames
-        [platform]="platform"
+        [platform]="eventPlatform"
         [values]="exception.values"
       ></app-non-expanding-frames>
     </ng-container>
     <div class="full" *ngIf="group.value === 'full-data' && exception.values">
       <ng-container *ngIf="exception.hasSystemFrames; else fullNoSystemFrames">
         <app-non-expanding-frames
-          [platform]="platform"
+          [platform]="eventPlatform"
           [values]="exception.values"
           [showAllFrames]="true"
         ></app-non-expanding-frames>
@@ -89,14 +89,11 @@
       >
     </div>
     <div *ngIf="group.value === 'raw' && exception.values">
-      <p>{{ eventTitle }}</p>
-      <div *ngFor="let value of exception.values">
-        <p class="spacer" *ngFor="let frame of value.stacktrace.frames">
-          at {{ frame.function }} ({{ frame.filename }}:{{ frame.lineNo }}:{{
-            frame.colNo
-          }})
-        </p>
-      </div>
+      <app-raw-stacktrace
+        [eventTitle]="eventTitle"
+        [eventPlatform]="eventPlatform"
+        [values]="exception.values"
+      ></app-raw-stacktrace>
     </div>
   </section>
 </section>

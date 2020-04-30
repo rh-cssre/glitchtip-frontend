@@ -9,7 +9,7 @@ import { IssueDetailService } from "../../issue-detail.service";
 })
 export class EntryExceptionComponent {
   @Input() eventTitle: string | undefined;
-  @Input() platform: string | null | undefined;
+  @Input() eventPlatform: string | null | undefined;
   eventEntryException$ = this.issueService.eventEntryException$;
   isReversed$ = this.issueService.isReversed$;
 
