@@ -447,6 +447,6 @@ export const RawStacktrace = () => {
   };
 };
 
-EntryException.story = {
+RawStacktrace.story = {
   name: "Raw Stacktrace",
 };
