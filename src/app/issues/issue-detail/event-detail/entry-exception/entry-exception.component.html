@@ -13,8 +13,9 @@
 
       <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle
-          *ngIf="exception.hasSystemFrames"
+          [class.display-none]="!exception.hasSystemFrames"
           [checked]="exception.hasSystemFrames"
+          [disabled]="!exception.hasSystemFrames"
           value="app-only"
           aria-label="app only data"
         >
