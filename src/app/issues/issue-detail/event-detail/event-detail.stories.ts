@@ -416,43 +416,35 @@ export const RawStacktrace = () => {
       },
     },
   ];
-  let title: string = databaseError.title;
   let platform: string = databaseError.platform;
 
   switch (selectedError) {
     case "JavaScript":
       testValues = testValues;
-      title = "JavaScript";
       platform = "javascript";
       break;
     case "Ruby":
       testValues = testValues;
-      title = "Ruby";
       platform = "ruby";
       break;
     case "PHP":
       testValues = testValues;
-      title = "PHP";
       platform = "php";
       break;
     case "Java":
       testValues = testValues;
-      title = "Java";
       platform = "java";
       break;
     case "Objective-C, Cocoa":
       testValues = testValues;
-      title = "Objective-C & Cocoa";
       platform = "objc" || "cocoa";
       break;
     case "Native":
       testValues = testValues;
-      title = "Native";
       platform = "native";
       break;
     case "Default":
       testValues = testValues;
-      title = "Default";
       platform = "";
       break;
   }
@@ -460,7 +452,6 @@ export const RawStacktrace = () => {
     component: RawStacktraceComponent,
     props: {
       values: testValues,
-      eventTitle: title,
       eventPlatform: platform,
     },
   };

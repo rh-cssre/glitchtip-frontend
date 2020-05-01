@@ -1,7 +1,15 @@
 <div *ngFor="let value of values">
-  <p>{{ eventTitle }}</p>
-
+  <p>
+    <ng-container *ngIf="eventPlatform === 'java'; else defaultTitle">
+      <ng-container *ngIf="value.module"
+        >{{ value.module }}.
+        <ng-container>{{ value.type }}&#58; {{ value.value }}</ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-template #defaultTitle>{{ value.type }}:{{ value.value }}</ng-template>
+  </p>
   <div
+    class="indent"
     *ngFor="let frame of value.stacktrace.frames; let i = index"
     [ngSwitch]="frame.platform || eventPlatform"
   >

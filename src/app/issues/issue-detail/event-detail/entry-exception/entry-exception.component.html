@@ -90,7 +90,6 @@
     </div>
     <div *ngIf="group.value === 'raw' && exception.values">
       <app-raw-stacktrace
-        [eventTitle]="eventTitle"
         [eventPlatform]="eventPlatform"
         [values]="exception.values"
       ></app-raw-stacktrace>

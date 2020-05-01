@@ -8,7 +8,6 @@ import { Values } from "src/app/issues/interfaces";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RawStacktraceComponent {
-  @Input() eventTitle: string | undefined;
   @Input() eventPlatform: string | null | undefined;
   @Input() values: Values[];
 
