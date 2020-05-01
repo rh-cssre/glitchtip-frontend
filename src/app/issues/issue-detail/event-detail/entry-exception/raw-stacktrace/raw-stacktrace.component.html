@@ -2,8 +2,9 @@
   <p>
     <ng-container *ngIf="eventPlatform === 'java'; else defaultTitle">
       <ng-container *ngIf="value.module"
-        >{{ value.module }}.
-        <ng-container>{{ value.type }}&#58; {{ value.value }}</ng-container>
+        >{{ value.module }}.<ng-container
+          >{{ value.type }}&#58; {{ value.value }}</ng-container
+        >
       </ng-container>
     </ng-container>
     <ng-template #defaultTitle>{{ value.type }}:{{ value.value }}</ng-template>

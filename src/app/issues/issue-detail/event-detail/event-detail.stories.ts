@@ -364,6 +364,9 @@ export const RawStacktrace = () => {
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let testValues: any = [
     {
+      type: "System.DivideByZeroException",
+      value: "Attempted to divide by zero.",
+      module: "System.Runtime.CompilerServices.TaskAwaiter",
       stacktrace: {
         frames: [
           {
