@@ -367,8 +367,12 @@ export const RawStacktrace = () => {
       stacktrace: {
         frames: [
           {
-            function: "inner",
-            colNo: 18,
+            function: select(
+              "function",
+              { NotNull: "inner", Null: null },
+              "inner"
+            ),
+            colNo: select("colNo", { NotNull: 18, Zero: 0, Null: null }, 18),
             vars: {
               get_response:
                 "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>>",
@@ -376,8 +380,12 @@ export const RawStacktrace = () => {
               exc: "ZeroDivisionError('division by zero')",
             },
             symbol: null,
-            module: "django.core.handlers.exception",
-            lineNo: 34,
+            module: select(
+              "module",
+              { NotNull: "django.core.handlers.exception", Null: null },
+              "django.core.handlers.exception"
+            ),
+            lineNo: select("lineNo", { NotNull: 34, Null: null }, 34),
             trust: null,
             errors: null,
             package: "1.0.7",
@@ -385,11 +393,22 @@ export const RawStacktrace = () => {
             inApp: false,
             instructionAddr:
               "/usr/local/lib/python3.8/site-packages/django/core/handlers/exception.py",
-            filename: "django/core/handlers/exception.py",
+            filename: select(
+              "module",
+              { NotNull: "django/core/handlers/exception.py", Null: null },
+              "django/core/handlers/exception.py"
+            ),
             platform: null,
             context: [
               [33, " try:"],
-              [34, " response = get_response(request)"],
+              [
+                select(
+                  "contextLineNo",
+                  { ThirtyFour: 34, AnotherNumber: 117, Null: null },
+                  34
+                ),
+                " response = get_response(request)",
+              ],
             ],
             symbolAddr: null,
           },
