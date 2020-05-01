@@ -55,6 +55,10 @@ header.page-header {
   margin-top: 32px;
   margin-left: auto;
   margin-right: auto;
+
+  &--full-width {
+    max-width: 100%;
+  }
 }
 
 .mat-display-1,
