@@ -110,6 +110,8 @@ deploy-dockerhub:
     - docker login -u ${DOCKER_CI_REGISTRY_USER} -p ${DOCKER_CI_REGISTRY_PASSWORD}
     - echo tag image ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} as ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
     - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} ${DOCKER_CI_REGISTRY_IMAGE}:latest
     - docker push ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker push ${DOCKER_CI_REGISTRY_IMAGE}:latest
   only:
     - tags
