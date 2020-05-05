@@ -7,6 +7,7 @@ variables:
   SECRET_KEY: "testing"
   ENABLE_TEST_API: "true"
   FF_NETWORK_PER_BUILD: 1
+  DEBUG: "true"
 
 stages:
   - test
