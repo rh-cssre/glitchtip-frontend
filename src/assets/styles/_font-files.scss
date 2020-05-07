@@ -29,26 +29,6 @@
 }
 
 @font-face {
-  font-family: $font-serif;
-  src: url("#{$font-path}/plex-serif/woff2/IBMPlexSerif-Bold-Latin1.woff2")
-      format("woff2"),
-    url("#{$font-path}/plex-serif/woff/IBMPlexSerif-Bold-Latin1.woff")
-      format("woff");
-  font-weight: 700;
-  font-style: regular;
-}
-
-@font-face {
-  font-family: $font-serif;
-  src: url("#{$font-path}/plex-serif/woff2/IBMPlexSerif-BoldItalic-Latin1.woff2")
-      format("woff2"),
-    url("#{$font-path}/plex-serif/woff/IBMPlexSerif-BoldItalic-Latin1.woff")
-      format("woff");
-  font-weight: 700;
-  font-style: italic;
-}
-
-@font-face {
   font-family: $font-mono;
   src: url("#{$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
       format("woff2"),
