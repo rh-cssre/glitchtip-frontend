@@ -1,8 +1,29 @@
 <mat-card>
   <mat-card-header
-    ><mat-card-title>Create a New Project</mat-card-title></mat-card-header
+    ><mat-card-title>Create a New Project</mat-card-title>
+    <mat-card-subtitle>Coming Soon!</mat-card-subtitle></mat-card-header
   >
   <mat-card-content>
+    <p>
+      We are working diligently to add the create project feature to GlitchTip.
+    </p>
+    <p>
+      In the meantime, to create a new project, ask your admin for access to
+      <a [routerLink]="['/admin']">admin</a>. Then, follow these steps to make a
+      new project:
+    </p>
+    <ol>
+      <li>
+        Add a
+        <a [routerLink]="['/admin/projects/project/add/']">new project</a>
+      </li>
+      <li>
+        Go to <a [routerLink]="['/admin/teams/team']">teams</a> and either
+        create a new team or add your project to a current team
+      </li>
+      <li>Now you will be able to access your project in the app</li>
+    </ol>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <mat-error *ngIf="error">{{ error }}</mat-error>
       <mat-form-field>
@@ -11,7 +32,7 @@
       <mat-form-field>
         <input matInput formControlName="platform" placeholder="Platform" />
       </mat-form-field>
-      <button mat-flat-button color="primary">
+      <button mat-flat-button disabled color="primary">
         Create Project
       </button>
     </form></mat-card-content
