@@ -23,6 +23,15 @@
     </ng-container>
   </ng-container>
   <p class="mat-subheading-1">
-    {{ metadata.value }}
+    <ng-container [ngSwitch]="issueType">
+      <ng-container *ngSwitchCase="'error'">{{ metadata.value }}</ng-container>
+      <ng-container *ngSwitchCase="'csp'">{{ metadata.message }}</ng-container>
+      <ng-container *ngSwitchCase="'expectct' || 'expectstaple' || 'hpkp'"
+        ><!--blank--></ng-container
+      >
+      <ng-container *ngSwitchDefault>
+        {{ culprit ? culprit : null }}</ng-container
+      >
+    </ng-container>
   </p>
 </h1>
