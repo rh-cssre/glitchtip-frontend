@@ -88,7 +88,11 @@ export interface Request {
   fragment?: string | null;
   cookies?: object[];
   inferredContentType: string | null;
-  env: { SERVER_NAME: string; SERVER_PORT: string } | null;
+  env: {
+    SERVER_NAME: string;
+    SERVER_PORT: string;
+    DOCUMENT_ROOT?: string;
+  } | null;
   headers: string[][];
   url: string;
   query?: object[];
@@ -205,11 +209,11 @@ interface ITag {
   key: string;
 }
 
-interface Values {
+export interface Values {
   stacktrace: IStacktrace;
   module: string | null;
   rawStacktrace?: string | null;
-  mechanism?: Mechanism;
+  mechanism?: Mechanism | null;
   threadId?: number | null;
   value: string;
   type: string;
@@ -228,23 +232,25 @@ interface IStacktrace {
   hasSystemFrames: boolean;
 }
 
-interface Frame {
+// tslint:disable-next-line:max-line-length
+// https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md#frame-attributes
+export interface Frame {
   function: string | null;
-  errors: string | null;
   colNo: number | null;
   vars: { [key: string]: any } | null;
-  package: string | null;
-  absPath: string;
-  inApp: boolean;
-  lineNo: number;
+  symbol: string | null;
   module: string | null;
-  filename: string;
-  platform: string | null;
+  lineNo: number | null;
+  trust: string | null;
+  errors?: string | null;
+  package: string | null;
+  absPath: string | null;
+  inApp: boolean;
   instructionAddr: string | null;
+  filename: string | null;
+  platform: string | null;
   context: (string | number)[][];
   symbolAddr: string | null;
-  trust: string | null;
-  symbol: string | null;
   rawFunction?: string | null;
 }
 

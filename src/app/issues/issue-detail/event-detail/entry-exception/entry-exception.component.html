@@ -27,7 +27,7 @@
     <div class="full" *ngIf="group.value === 'full-data' && exception.values">
       <div *ngFor="let value of exception.values">
         <h2>{{ value.type }}</h2>
-        <p>{{ value.value }}</p>
+        <p class="subtitle">{{ value.value }}</p>
         <mat-chip-list *ngIf="value.mechanism">
           <mat-chip disabled>mechanism: {{ value.mechanism.type }}</mat-chip>
           <mat-chip color="accent" selected disabled
@@ -39,27 +39,26 @@
         </mat-chip-list>
 
         <mat-accordion>
-          <mat-expansion-panel *ngFor="let frame of value.stacktrace.frames">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{ frame.filename }}
-                <a
-                  *ngIf="frame.absPath"
-                  mat-icon-button
-                  color="primary"
-                  target="_blank"
-                  [href]="frame.absPath"
-                >
-                  <mat-icon>open_in_new</mat-icon>
-                </a>
-              </mat-panel-title>
-              <mat-panel-description>
-                in {{ frame.function }} at line {{ frame.lineNo
-                }}<span *ngIf="frame.colNo">:{{ frame.colNo }}</span>
-              </mat-panel-description>
+          <!-- TODO:  Add additional conditions for non expandable frames
+          https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L107-->
+          <mat-expansion-panel
+            *ngFor="let frame of value.stacktrace.frames"
+            [disabled]="
+              (!frame.context || !frame.context.length) && !frame.vars
+            "
+          >
+            <mat-expansion-panel-header
+              collapsedHeight="auto"
+              [class.disabled-panel]="!frame.context?.length && !frame.vars"
+              [class.highlighted]="frame.inApp"
+            >
+              <app-frame-title
+                [frame]="frame"
+                [eventPlatform]="eventPlatform"
+              ></app-frame-title>
             </mat-expansion-panel-header>
             <div *ngFor="let contextLine of frame.context">
-              <p>{{ contextLine[0] }}. {{ contextLine[1] }}</p>
+              <p class="context">{{ contextLine[0] }}. {{ contextLine[1] }}</p>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
