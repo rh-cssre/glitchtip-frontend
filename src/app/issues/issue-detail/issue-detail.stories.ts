@@ -1,6 +1,6 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs } from "@storybook/addon-knobs";
+import { withKnobs, select } from "@storybook/addon-knobs";
 import { IssueDetailComponent } from "./issue-detail.component";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
@@ -9,6 +9,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SharedModule } from "src/app/shared/shared.module";
+import { IssueDetailTitleComponent } from "./issue-detail-title/issue-detail-title.component";
 
 export default {
   title: "Issues Detail",
@@ -20,23 +21,59 @@ export default {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        SharedModule
-      ]
+        SharedModule,
+      ],
+      declarations: [IssueDetailTitleComponent],
     }),
-    withKnobs
-  ]
+    withKnobs,
+  ],
 };
 
 export const issueDetail = () => ({
   component: IssueDetailComponent,
   props: {
-    issue$: of(sampleIssueDetail)
-  }
+    issue$: of(sampleIssueDetail),
+  },
 });
 
 issueDetail.story = {
-  parameters: {
-    notes:
-      "Oh hey you can leave notes. Why is the alignment so weird though? Not sure if this is a great place to take notes."
-  }
+  name: "Issue Detail",
+};
+
+export const IssueDetailTitle = () => {
+  const issueMetadata: any = {
+    directive: "metadata directive",
+    function: "metadata function",
+    message: "metadata message",
+    origin: "metadata origin",
+    title: "metadata title",
+    type: "metadata type",
+    uri: "metadata uri",
+    value: "metadata value",
+  };
+  return {
+    component: IssueDetailTitleComponent,
+    props: {
+      issueType: select(
+        "Issue Type",
+        {
+          Error: "error",
+          CSP: "csp",
+          expectct: "expectct",
+          Default: "whatever",
+        },
+        "whatever"
+      ),
+      culprit: select(
+        "Culprit",
+        { Culprit: "this is the culprit", Empty: "" },
+        "this is the culprit"
+      ),
+      metadata: issueMetadata,
+    },
+  };
+};
+
+IssueDetailTitle.story = {
+  name: "Issue Detail Title",
 };
