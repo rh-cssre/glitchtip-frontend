@@ -15,13 +15,14 @@ import { EntryCSPComponent } from "./issue-detail/event-detail/entry-csp/entry-c
 import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./issue-detail/event-detail/entry-exception/entry-exception.component";
 import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/issue-detail-title.component";
+import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception/frame-title/frame-title.component";
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     IssuesRoutingModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [
     IssuesPageComponent,
@@ -33,7 +34,8 @@ import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/iss
     EntryMessageComponent,
     HeaderNavComponent,
     EntryExceptionComponent,
-    IssueDetailTitleComponent
-  ]
+    IssueDetailTitleComponent,
+    FrameTitleComponent,
+  ],
 })
 export class IssuesModule {}
