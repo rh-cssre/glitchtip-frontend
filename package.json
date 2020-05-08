@@ -27,6 +27,7 @@
     "@angular/platform-browser-dynamic": "~9.1.4",
     "@angular/platform-server": "~9.1.4",
     "@angular/router": "~9.1.4",
+    "@braintree/sanitize-url": "^4.0.1",
     "@sentry/browser": "^5.15.4",
     "angular-oauth2-oidc": "^9.2.0",
     "ngx-matomo": "^0.1.4",

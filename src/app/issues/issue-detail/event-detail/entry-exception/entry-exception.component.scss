@@ -1,3 +1,5 @@
+@import "../../../../../assets/styles/variables";
+
 .exception {
   margin-bottom: 16px;
 
@@ -14,9 +16,8 @@
     margin-left: 8px;
   }
 
-  h3,
-  p {
-    margin: 0;
+  .subtitle {
+    margin-bottom: 24px;
   }
 
   .yes {
@@ -41,7 +42,27 @@
 
   mat-chip-list {
     display: block;
-    margin-top: 24px;
     margin-bottom: 24px;
+  }
+
+  mat-expansion-panel-header {
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    app-frame-title {
+      padding-right: 16px;
+    }
+  }
+
+  .context {
+    font-family: $font-mono;
+  }
+
+  .disabled-panel {
+    color: mat-color($mat-gray, 900);
+  }
+
+  .highlighted {
+    background: mat-color($mat-gray, 100);
   }
 }
