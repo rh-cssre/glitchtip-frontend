@@ -41,16 +41,35 @@ issueDetail.story = {
 };
 
 export const IssueDetailTitle = () => {
-  const issueTypeOptions = "default";
+  const issueMetadata: any = {
+    directive: "metadata directive",
+    function: "metadata function",
+    message: "metadata message",
+    origin: "metadata origin",
+    title: "metadata title",
+    type: "metadata type",
+    uri: "metadata uri",
+    value: "metadata value",
+  };
   return {
-    component: IssueDetailComponent,
+    component: IssueDetailTitleComponent,
     props: {
-      issueType: issueTypeOptions,
+      issueType: select(
+        "Issue Type",
+        {
+          Error: "error",
+          CSP: "csp",
+          expectct: "expectct",
+          Default: "whatever",
+        },
+        "whatever"
+      ),
       culprit: select(
         "Culprit",
         { Culprit: "this is the culprit", Null: null },
         "this is the culprit"
       ),
+      metadata: issueMetadata,
     },
   };
 };
