@@ -165,10 +165,15 @@ type StatsPeriod = "24h" | "14d" | "30d" | "";
 type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
 
 export interface IssueMetadata {
+  directive: string;
   filename: string;
-  type: string;
-  value: string;
   function: string;
+  message: string;
+  origin: string;
+  title: string;
+  type: string;
+  uri: string;
+  value: string;
 }
 
 interface IFirstRelase {

@@ -8,7 +8,8 @@ import { IssueMetadata } from "../../interfaces";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IssueDetailTitleComponent {
-  @Input() title: string;
-  @Input() culprit: string;
+  @Input() issueType?: string;
+  @Input() title?: string;
+  @Input() culprit?: string | null;
   @Input() metadata: IssueMetadata;
 }

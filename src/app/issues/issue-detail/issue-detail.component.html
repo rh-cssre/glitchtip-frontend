@@ -7,36 +7,12 @@
   >
   <article class="header">
     <div>
-      <h1 class="mat-headline">
-        <ng-container [ngSwitch]="issue?.type">
-          <ng-container *ngSwitchCase="'error'">
-            <span class="mat-h1">
-              <ng-container
-                *ngIf="issue?.metadata.type; else errorTitleFunction"
-              >
-                {{ issue?.metadata.type }}
-              </ng-container>
-              <ng-template #errorTitleFunction>
-                {{ issue?.metadata.function || "&lt;unknown&gt;" }}
-              </ng-template></span
-            ><span class="mat-h3">{{ issue?.culprit }}</span>
-          </ng-container>
-          <ng-container *ngSwitchCase="'csp'">
-            <span class="mat-h1">{{ issue?.metadata.directive || "" }}</span>
-            <span class="mat-h3">{{ issue?.metadata.uri }}</span>
-          </ng-container>
-          <ng-container *ngSwitchCase="'expectct' || 'expectstaple' || 'hpkp'">
-            <span class="mat-h1">{{ issue?.metadata.message || "" }}</span>
-            <span class="mat-h3">{{ issue?.metadata.origin }}</span>
-          </ng-container>
-          <ng-container *ngSwitchDefault>
-            <span class="mat-h1">{{ issue?.metadata.title }}</span>
-          </ng-container>
-        </ng-container>
-        <p class="mat-subheading-1">
-          {{ issue?.metadata.value }}
-        </p>
-      </h1>
+      <app-issue-detail-title
+        [issueType]="issue?.type"
+        [title]="issue?.title"
+        [culprit]="issue?.culprit"
+        [metadata]="issue?.metadata"
+      ></app-issue-detail-title>
       <div class="button-row">
         <button
           *ngIf="issue?.status === 'unresolved'"
