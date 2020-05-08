@@ -66,7 +66,7 @@ export const IssueDetailTitle = () => {
       ),
       culprit: select(
         "Culprit",
-        { Culprit: "this is the culprit", Null: null },
+        { Culprit: "this is the culprit", Empty: "" },
         "this is the culprit"
       ),
       metadata: issueMetadata,

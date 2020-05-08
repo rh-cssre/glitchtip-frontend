@@ -29,9 +29,7 @@
       <ng-container *ngSwitchCase="'expectct' || 'expectstaple' || 'hpkp'"
         ><!--blank--></ng-container
       >
-      <ng-container *ngSwitchDefault>
-        {{ culprit ? culprit : null }}</ng-container
-      >
+      <ng-container *ngSwitchDefault> {{ culprit }}</ng-container>
     </ng-container>
   </p>
 </h1>
