@@ -25,7 +25,7 @@ export interface EventDetail extends Event {
   previousEventID: string | null;
   contexts: { [key: string]: any } | null;
   entries: EntryUnion[];
-  metadata: IEventMetaData | any;
+  metadata: EventMetadata | any;
   dist?: null;
   userReport?: null;
   size?: number;
@@ -119,7 +119,7 @@ export interface Issue {
   lastSeen: string;
   level: string;
   logger: string | null;
-  metadata: IIssueMetadata | any;
+  metadata: IssueMetadata | any;
   numComments: number;
   permalink: string;
   project: ProjectIssueView;
@@ -164,7 +164,7 @@ type StatsPeriod = "24h" | "14d" | "30d" | "";
 
 type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
 
-interface IIssueMetadata {
+export interface IssueMetadata {
   filename: string;
   type: string;
   value: string;
@@ -248,7 +248,7 @@ interface Frame {
   rawFunction?: string | null;
 }
 
-interface IEventMetaData {
+interface EventMetadata {
   function: string;
   type: string;
   value: string;
