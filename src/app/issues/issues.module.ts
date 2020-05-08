@@ -14,6 +14,7 @@ import { HeaderNavComponent } from "./header-nav/header-nav.component";
 import { EntryCSPComponent } from "./issue-detail/event-detail/entry-csp/entry-csp.component";
 import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./issue-detail/event-detail/entry-exception/entry-exception.component";
+import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/issue-detail-title.component";
 import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception/frame-title/frame-title.component";
 
 @NgModule({
@@ -21,7 +22,7 @@ import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception
     CommonModule,
     ReactiveFormsModule,
     IssuesRoutingModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [
     IssuesPageComponent,
@@ -33,7 +34,8 @@ import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception
     EntryMessageComponent,
     HeaderNavComponent,
     EntryExceptionComponent,
-    FrameTitleComponent
-  ]
+    IssueDetailTitleComponent,
+    FrameTitleComponent,
+  ],
 })
 export class IssuesModule {}

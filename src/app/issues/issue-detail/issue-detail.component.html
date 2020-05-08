@@ -7,13 +7,11 @@
   >
   <article class="header">
     <div>
-      <h1 class="mat-headline">
-        <span class="mat-h1">{{ issue?.metadata.type }}</span
-        ><span class="mat-h3">{{ issue?.culprit }}</span>
-        <p class="mat-subheading-1">
-          {{ issue?.metadata.value }}
-        </p>
-      </h1>
+      <app-issue-detail-title
+        [issueType]="issue?.type"
+        [culprit]="issue?.culprit"
+        [metadata]="issue?.metadata"
+      ></app-issue-detail-title>
       <div class="button-row">
         <button
           *ngIf="issue?.status === 'unresolved'"
@@ -49,38 +47,6 @@
         <td mat-cell *matCellDef="let element">{{ element.count }}</td>
       </ng-container>
 
-      <!--
-      <ng-container matColumnDef="users">
-        <th mat-header-cell *matHeaderCellDef>Users</th>
-        <td mat-cell *matCellDef="let element">{{ element.userCount }}</td>
-      </ng-container>
-      -->
-      <!--
-      <ng-container matColumnDef="assignee">
-        <th mat-header-cell *matHeaderCellDef>Assignee</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-form-field>
-            <mat-label
-              ><span *ngIf="!element.assignedTo"
-                ><mat-icon>perm_identity</mat-icon></span
-              ><span *ngIf="element.assignedTo">{{
-                element.assignedTo
-              }}</span></mat-label
-            >
-            <mat-select>
-              <mat-option>Clear Assignee</mat-option>
-              <mat-option
-                *ngFor="let participant of issue?.participants; let i = index"
-                [value]="'participant-' + i"
-              >
-                {{ participant.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </td>
-      </ng-container>
-      -->
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
@@ -93,11 +59,6 @@
     </div>
 
     <mat-list class="column right">
-      <!--
-      <h3 mat-subheader>Ownership Rules</h3>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>All Environments</h3>
-      -->
       <mat-list-item>
         <h4 mat-line>First Seen</h4>
         <dl mat-line>
@@ -123,33 +84,6 @@
           </dd>
         </dl>
       </mat-list-item>
-      <!--
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>Linked Issues</h3>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>Tags</h3>
-      <mat-list-item>
-        <div mat-line *ngFor="let tag of issue?.tags">
-          <div class="tags">
-            <div class="mat-body-strong">{{ tag.name }}</div>
-            <div>{{ tag.key }}</div>
-          </div>
-        </div>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader *ngIf="issue?.participants">
-        {{
-          issue?.participants.length | i18nPlural: participantCountPluralMapping
-        }}
-      </h3>
-      <mat-list-item>
-        <div mat-line *ngFor="let participant of issue?.participants">
-          {{ participant.name }}
-        </div>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>Notificiations</h3>
-      -->
     </mat-list>
   </div>
 </section>
