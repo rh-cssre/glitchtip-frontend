@@ -1,11 +1,17 @@
 <mat-card>
   <a [routerLink]="cardLink" [queryParams]="cardLinkQueryParams || {}">
     <mat-card-content>
-      <mat-card-title>{{ title }}</mat-card-title>
+      <mat-card-title>
+        <span>{{ title }}</span>
+      </mat-card-title>
       <mat-divider></mat-divider>
       <div *ngFor="let description of descriptionList">
-        <p class="mat-small organization">{{ description.key | uppercase }}</p>
-        <p>{{ description.value }}</p>
+        <p class="mat-small organization">
+          <span>{{ description.key | uppercase }}</span>
+        </p>
+        <p>
+          <span>{{ description.value }}</span>
+        </p>
       </div>
     </mat-card-content>
   </a>
@@ -39,7 +45,7 @@
         aria-hidden="true"
         >{{ secondaryActionButtonIcon }}</mat-icon
       >
-      {{ secondaryActionButtonText }}
+      <span>{{ secondaryActionButtonText }}</span>
     </a>
   </mat-card-actions>
 </mat-card>

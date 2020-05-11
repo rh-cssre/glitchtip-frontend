@@ -12,27 +12,66 @@
   </div>
 
   <div *ngIf="activeOrganizationDetail$ | async as orgDetails">
-    <div *ngIf="!projects$">
-      <p>You don't have any projects yet. Try creating one to get started.</p>
+    <header class="page-header">
+      <h2 class="mat-display-1">Projects</h2>
       <a
+        *ngIf="activeOrganizationDetail$ | async as orgDetails"
         mat-flat-button
         color="primary"
         [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
         >Create New Project</a
       >
+    </header>
+
+    <div>
+      <div class="card-wrapper" *ngIf="(projects$ | async)?.length === 0">
+        <mat-card class="empty-state-card">
+          <h3>
+            This organization has no projects.
+          </h3>
+          <p>
+            To add a project to this organization, press the "Create New
+            Project"&nbsp;button.
+          </p>
+        </mat-card>
+        <app-project-card
+          class="sample-card"
+          [cardLink]="['']"
+          [cardLinkQueryParams]="{ foo: 'bar' }"
+          title="Test thing"
+          [descriptionList]="[
+            { key: 'organization', value: 'test org' },
+            { key: 'date created', value: 'May 08, 2020' }
+          ]"
+          [primaryActionButtonLink]="['']"
+          [primaryActionButtonQuery]="{ foo: 'bar' }"
+          primaryActionButtonIcon="warning"
+          primaryActionButtonText="Issues"
+          [secondaryActionButtonLink]="['']"
+          secondaryActionButtonIcon="settings"
+          secondaryActionButtonText="Settings"
+        ></app-project-card>
+        <app-project-card
+          class="sample-card"
+          [cardLink]="['']"
+          [cardLinkQueryParams]="{ foo: 'bar' }"
+          title="Test thing"
+          [descriptionList]="[
+            { key: 'organization', value: 'test org' },
+            { key: 'date created', value: 'May 08, 2020' }
+          ]"
+          [primaryActionButtonLink]="['']"
+          [primaryActionButtonQuery]="{ foo: 'bar' }"
+          primaryActionButtonIcon="warning"
+          primaryActionButtonText="Issues"
+          [secondaryActionButtonLink]="['']"
+          secondaryActionButtonIcon="settings"
+          secondaryActionButtonText="Settings"
+        ></app-project-card>
+      </div>
     </div>
 
     <div *ngIf="projects$">
-      <header class="page-header">
-        <h2 class="mat-display-1">Projects</h2>
-        <a
-          *ngIf="activeOrganizationDetail$ | async as orgDetails"
-          mat-flat-button
-          color="primary"
-          [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
-          >Create New Project</a
-        >
-      </header>
       <div class="card-wrapper">
         <ng-container *ngFor="let project of projects$ | async">
           <app-project-card
