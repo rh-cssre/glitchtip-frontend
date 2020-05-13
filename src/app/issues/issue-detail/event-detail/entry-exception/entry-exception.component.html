@@ -65,14 +65,10 @@
       </div>
     </div>
     <div *ngIf="group.value === 'raw' && exception.values">
-      <p>{{ eventTitle }}</p>
-      <div *ngFor="let value of exception.values">
-        <p class="spacer" *ngFor="let frame of value.stacktrace.frames">
-          at {{ frame.function }} ({{ frame.filename }}:{{ frame.lineNo }}:{{
-            frame.colNo
-          }})
-        </p>
-      </div>
+      <app-raw-stacktrace
+        [eventPlatform]="eventPlatform"
+        [values]="exception.values"
+      ></app-raw-stacktrace>
     </div>
   </section>
 </section>

@@ -28,6 +28,7 @@ import { cspError } from "./test-data/csp-error";
 import { pageNotFound } from "./test-data/page-not-found";
 import { socialApp } from "./test-data/social-app";
 import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
+import { RawStacktraceComponent } from "./entry-exception/raw-stacktrace/raw-stacktrace.component";
 
 export default {
   title: "Event Detail",
@@ -46,6 +47,7 @@ export default {
         EntryMessageComponent,
         EntryExceptionComponent,
         FrameTitleComponent,
+        RawStacktraceComponent,
       ],
     }),
     withKnobs,
@@ -414,4 +416,121 @@ export const FrameTitle = () => {
 
 FrameTitle.story = {
   name: "Frame Title",
+};
+
+export const RawStacktrace = () => {
+  const testValues: any = [
+    {
+      type: "System.DivideByZeroException",
+      value: "Attempted to divide by zero.",
+      module: "System.Runtime.CompilerServices.TaskAwaiter",
+      stacktrace: {
+        frames: [
+          {
+            function: select(
+              "function",
+              { NotNull: "inner", Null: null },
+              "inner"
+            ),
+            colNo: select("colNo", { NotNull: 18, Zero: 0, Null: null }, 18),
+            vars: {
+              get_response:
+                "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>>",
+              request: "<WSGIRequest: GET '/divide-zero/'>",
+              exc: "ZeroDivisionError('division by zero')",
+            },
+            symbol: null,
+            module: select(
+              "module",
+              { NotNull: "django.core.handlers.exception", Null: null },
+              "django.core.handlers.exception"
+            ),
+            lineNo: select("lineNo", { NotNull: 34, Null: null }, 34),
+            trust: null,
+            errors: null,
+            package: select(
+              "package",
+              {
+                NotNull: "/System/Library/Frameworks/UIKit.framework/UIKit",
+                Null: null,
+              },
+              null
+            ),
+            absPath: null,
+            inApp: false,
+            instructionAddr: select(
+              "instructionAddr",
+              { NotNull: "0x000000019804aa20", Null: null },
+              null
+            ),
+            filename: select(
+              "module",
+              { NotNull: "django/core/handlers/exception.py", Null: null },
+              "django/core/handlers/exception.py"
+            ),
+            platform: null,
+            context: [
+              [33, " try:"],
+              [
+                select(
+                  "contextLineNo",
+                  { ThirtyFour: 34, AnotherNumber: 117, Null: null },
+                  34
+                ),
+                " response = get_response(request)",
+              ],
+            ],
+            symbolAddr: null,
+          },
+        ],
+      },
+    },
+  ];
+
+  return {
+    template: `
+    <p><b>Case: JavaScript</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform="javascript"
+    ></app-raw-stacktrace>
+    <p><b>Case: Ruby</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform="ruby"
+    ></app-raw-stacktrace>
+    <p><b>Case: PHP</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform="php"
+    ></app-raw-stacktrace>
+    <p><b>Case: Java</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform="java"
+    ></app-raw-stacktrace>
+    <p><b>Case: Objective-C, Cocoa</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform="cocoa"
+    ></app-raw-stacktrace>
+    <p><b>Case: Native</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform="native"
+    ></app-raw-stacktrace>
+    <p><b>Case: Default</b></p>
+    <app-raw-stacktrace
+      [values]="values"
+      eventPlatform=""
+    ></app-raw-stacktrace>
+    `,
+    props: {
+      values: testValues,
+    },
+  };
+};
+
+RawStacktrace.story = {
+  name: "Raw Stacktrace Titles",
 };
