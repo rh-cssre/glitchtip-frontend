@@ -54,6 +54,10 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     })
   );
 
+  urlHasQueryParam$ = this.route.queryParams.pipe(
+    map((params) => !!params.query)
+  );
+
   constructor(
     private issuesService: IssuesService,
     private router: Router,

@@ -6,7 +6,9 @@
   <app-header-nav></app-header-nav>
 
   <div *ngIf="issues$ | async as issues">
-    <mat-card *ngIf="!(orgHasAProject$ | async)">
+    <mat-card
+      *ngIf="!(orgHasAProject$ | async) && !(urlHasQueryParam$ | async)"
+    >
       <h3>
         This organization has no projects.
       </h3>
@@ -16,7 +18,13 @@
       </p>
     </mat-card>
 
-    <mat-card *ngIf="(orgHasAProject$ | async) && issues.length === 0">
+    <mat-card
+      *ngIf="
+        (orgHasAProject$ | async) &&
+        issues.length === 0 &&
+        !(urlHasQueryParam$ | async)
+      "
+    >
       <h3>
         <ng-container *ngIf="multipleProjectsSelected$ | async">
           No issues have been reported to these projects.
@@ -36,7 +44,7 @@
     </mat-card>
 
     <table
-      *ngIf="issues.length > 0"
+      *ngIf="issues.length > 0 || (urlHasQueryParam$ | async)"
       mat-table
       [dataSource]="issues$"
       class="mat-elevation-z2"
