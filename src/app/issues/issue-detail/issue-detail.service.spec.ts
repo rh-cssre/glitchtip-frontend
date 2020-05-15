@@ -12,6 +12,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
+import { zeroDivisionDotnet } from "./event-detail/test-data/zero-division-dotnet";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -82,21 +83,28 @@ describe("IssueDetailService", () => {
     expect(service.retrieveEvent).toHaveBeenCalled();
   });
 
-  it("eventEntryException$ selector flips frames array without mutating event state", () => {
+  it("eventEntryException$ selector flips frames array", () => {
     const testData: any = databaseError;
-    let fileName = "";
+    let lineNo;
 
     service.setEvent(testData);
-
     service.eventEntryException$
-      .pipe(take(2))
+      .pipe(take(3))
       .subscribe((entryException: any) => {
-        fileName = entryException.values[0].stacktrace.frames[0].filename;
+        lineNo = entryException.values[0].stacktrace.frames[0].lineNo;
       });
-
-    expect(fileName).toBe("django/db/models/query.py");
+    expect(lineNo).toEqual(415);
     service.getReversedFrames();
-    expect(fileName).toBe("django/core/handlers/exception.py");
+    expect(lineNo).toEqual(34);
+  });
+
+  it("rawStacktraceValues$ selector flips frames array if the event platform is not python", () => {
+    const testData: any = zeroDivisionDotnet;
+
+    service.setEvent(testData);
+    service.rawStacktraceValues$.subscribe((values: any) => {
+      expect(values[0].stacktrace.frames[0].lineNo).toEqual(14);
+    });
   });
 
   it("request$ selector returns the request entry type object without mutating event state", () => {

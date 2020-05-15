@@ -13,6 +13,7 @@ import {
   AnnotatedRequest,
   CSP,
   Message,
+  Values,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -77,6 +78,9 @@ export class IssueDetailService {
       event ? this.reverseFrames(event, isReversed) : undefined
     )
   );
+  readonly rawStacktraceValues$ = this.event$.pipe(
+    map((event) => (event ? this.rawStacktraceValues(event) : undefined))
+  );
   readonly eventEntryRequest$ = this.event$.pipe(
     map((event) => (event ? this.entryRequestData(event) : undefined))
   );
@@ -92,6 +96,32 @@ export class IssueDetailService {
     private organization: OrganizationsService,
     private issueService: IssuesService
   ) {}
+
+  rawStacktraceValues(event: EventDetail): Values[] | undefined {
+    const platform = event.platform;
+
+    const exceptionEntryType = event.entries.find(
+      (entry) => entry.type === "exception"
+    );
+    if (exceptionEntryType) {
+      const eventException = (exceptionEntryType as Entry<
+        "exception",
+        ExceptionValueData
+      >).data;
+      const values = eventException.values.map((value) => {
+        if (platform !== "python") {
+          const reverseFrames = [...value.stacktrace.frames].reverse();
+          return {
+            ...value,
+            stacktrace: { ...value.stacktrace, frames: reverseFrames },
+          };
+        } else {
+          return { ...value };
+        }
+      });
+      return [...values];
+    }
+  }
 
   retrieveIssue(id: number) {
     return this.http
@@ -241,7 +271,7 @@ export class IssueDetailService {
       >).data;
       if (isReversed) {
         const reversedFrames = eventException.values.map((value) => {
-          const frameReverse = [...value.stacktrace.frames.reverse()];
+          const frameReverse = [...value.stacktrace.frames].reverse();
           return {
             ...value,
             stacktrace: { ...value.stacktrace, frames: [...frameReverse] },
