@@ -1,4 +1,4 @@
-<div *ngFor="let value of values">
+<div *ngFor="let value of rawStacktraceValues$ | async">
   <p>
     <ng-container *ngIf="eventPlatform === 'java'; else defaultTitle">
       <ng-container *ngIf="value.module"

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { Values } from "src/app/issues/interfaces";
+import { IssueDetailService } from "../../../issue-detail.service";
 
 @Component({
   selector: "app-raw-stacktrace",
@@ -9,5 +9,7 @@ import { Values } from "src/app/issues/interfaces";
 })
 export class RawStacktraceComponent {
   @Input() eventPlatform: string | null | undefined;
-  @Input() values: Values[];
+  rawStacktraceValues$ = this.issueService.rawStacktraceValues$;
+
+  constructor(private issueService: IssueDetailService) {}
 }
