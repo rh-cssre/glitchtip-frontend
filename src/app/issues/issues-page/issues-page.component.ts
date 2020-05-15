@@ -10,6 +10,7 @@ import { Subscription, combineLatest } from "rxjs";
 import { map, filter, withLatestFrom } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-issues-page",
@@ -36,6 +37,15 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   nextParams$ = this.issuesService.nextPageParams$;
   previousParams$ = this.issuesService.previousPageParams$;
   routerEventSubscription: Subscription;
+  multipleProjectsSelected$ = this.route.queryParams.pipe(
+    map((params) => {
+      const normalizedParams = normalizeProjectParams(params.project);
+      return normalizedParams.length > 1;
+    })
+  );
+  orgHasAProject$ = this.organizationsService.activeOrganizationProjects$.pipe(
+    map((projects) => !!projects && projects.length > 0)
+  );
 
   oneProjectApplied$ = this.route.queryParams.pipe(
     map((params) => {
@@ -47,7 +57,8 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   constructor(
     private issuesService: IssuesService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private organizationsService: OrganizationsService
   ) {
     this.routerEventSubscription = this.router.events
       .pipe(

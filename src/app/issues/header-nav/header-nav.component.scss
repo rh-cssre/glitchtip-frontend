@@ -64,6 +64,10 @@ mat-expansion-panel::ng-deep {
 
   .mat-expansion-panel-header[aria-disabled="true"] {
     color: rgba(0, 0, 0, 0.87);
+
+    &.disabled-looking {
+      color: rgba(0, 0, 0, 0.4);
+    }
   }
 
   .mat-expansion-panel-header-title {

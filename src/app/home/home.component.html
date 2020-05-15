@@ -23,8 +23,8 @@
       >
     </header>
 
-    <div>
-      <div class="card-wrapper" *ngIf="(projects$ | async)?.length === 0">
+    <div *ngIf="projects$ | async as projects">
+      <div class="card-wrapper" *ngIf="projects.length === 0">
         <mat-card class="empty-state-card">
           <h3>
             This organization has no projects.
