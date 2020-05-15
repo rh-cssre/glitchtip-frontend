@@ -1,0 +1,3 @@
+[submodule "chart"]
+	path = chart
+	url = ../glitchtip-helm-chart.git
