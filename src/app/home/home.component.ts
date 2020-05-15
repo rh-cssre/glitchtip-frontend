@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { ProjectsService } from "../api/projects/projects.service";
 import { combineLatest } from "rxjs";
-import { filter, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-home",
