@@ -10,7 +10,7 @@
   </mat-card>
   <app-project-card
     role="image"
-    class="sample-card"
+    [sampleCard]="true"
     [cardLink]="['']"
     [cardLinkQueryParams]="{ foo: 'bar' }"
     title="Test thing"
@@ -28,7 +28,7 @@
   ></app-project-card>
   <app-project-card
     role="image"
-    class="sample-card"
+    [sampleCard]="true"
     [cardLink]="['']"
     [cardLinkQueryParams]="{ foo: 'bar' }"
     title="Test thing"

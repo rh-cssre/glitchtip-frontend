@@ -55,3 +55,21 @@ mat-card-actions {
     }
   }
 }
+
+.sample-card {
+  pointer-events: none;
+  opacity: 0.6;
+
+  ::ng-deep {
+    mat-card-title span,
+    p span,
+    .mat-button-wrapper span {
+      background-color: #eee;
+      color: #eee;
+    }
+    .action-button .mat-icon {
+      background-color: #eee;
+      color: #eee;
+    }
+  }
+}

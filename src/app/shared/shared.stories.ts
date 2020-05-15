@@ -2,7 +2,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs } from "@storybook/addon-knobs";
+import { withKnobs, boolean } from "@storybook/addon-knobs";
 
 import { MaterialModule } from "src/app/shared/material.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -18,40 +18,45 @@ export default {
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        BrowserAnimationsModule
-      ]
+        BrowserAnimationsModule,
+      ],
     }),
-    withKnobs
-  ]
+    withKnobs,
+  ],
 };
 
-export const projectCard = () => ({
-  component: ProjectCardComponent,
-  props: {
-    title: "alpaca",
-    descriptionList: [
-      { key: "organization", value: "knit" },
-      { key: "date created", value: "Mar 30, 2020" }
-    ],
-    primaryActionButtonIcon: "warning",
-    primaryActionButtonText: "Issues",
-    secondaryActionButtonIcon: "settings",
-    secondaryActionButtonText: "Settings"
-  }
-});
+export const projectCard = () => {
+  const sampleCard = boolean("Sample Card", false);
+
+  return {
+    component: ProjectCardComponent,
+    props: {
+      sampleCard,
+      title: "alpaca",
+      descriptionList: [
+        { key: "organization", value: "knit" },
+        { key: "date created", value: "Mar 30, 2020" },
+      ],
+      primaryActionButtonIcon: "warning",
+      primaryActionButtonText: "Issues",
+      secondaryActionButtonIcon: "settings",
+      secondaryActionButtonText: "Settings",
+    },
+  };
+};
 
 projectCard.story = {
-  parameters: {}
+  parameters: {},
 };
 
 export const entryData = () => ({
   component: EntryDataComponent,
   props: {
     key: "Accept-Encoding",
-    value: "gzip, deflate, br"
-  }
+    value: "gzip, deflate, br",
+  },
 });
 
 entryData.story = {
-  parameters: { name: "Entry Data" }
+  parameters: { name: "Entry Data" },
 };

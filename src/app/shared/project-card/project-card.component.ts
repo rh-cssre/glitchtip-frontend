@@ -20,4 +20,6 @@ export class ProjectCardComponent {
   @Input() secondaryActionButtonLink: string | any[];
   @Input() secondaryActionButtonIcon?: string;
   @Input() secondaryActionButtonText: string;
+
+  @Input() sampleCard = false;
 }
