@@ -1,0 +1,47 @@
+<div class="card-wrapper">
+  <mat-card class="empty-state-card">
+    <h3>
+      This organization has no projects.
+    </h3>
+    <p>
+      To add a project to this organization, press the "Create New
+      Project"&nbsp;button.
+    </p>
+  </mat-card>
+  <app-project-card
+    role="image"
+    [sampleCard]="true"
+    [cardLink]="['']"
+    [cardLinkQueryParams]="{ foo: 'bar' }"
+    title="Test thing"
+    [descriptionList]="[
+      { key: 'organization', value: 'test org' },
+      { key: 'date created', value: 'May 08, 2020' }
+    ]"
+    [primaryActionButtonLink]="['']"
+    [primaryActionButtonQuery]="{ foo: 'bar' }"
+    primaryActionButtonIcon="warning"
+    primaryActionButtonText="Issues"
+    [secondaryActionButtonLink]="['']"
+    secondaryActionButtonIcon="settings"
+    secondaryActionButtonText="Settings"
+  ></app-project-card>
+  <app-project-card
+    role="image"
+    [sampleCard]="true"
+    [cardLink]="['']"
+    [cardLinkQueryParams]="{ foo: 'bar' }"
+    title="Test thing"
+    [descriptionList]="[
+      { key: 'organization', value: 'test org' },
+      { key: 'date created', value: 'May 08, 2020' }
+    ]"
+    [primaryActionButtonLink]="['']"
+    [primaryActionButtonQuery]="{ foo: 'bar' }"
+    primaryActionButtonIcon="warning"
+    primaryActionButtonText="Issues"
+    [secondaryActionButtonLink]="['']"
+    secondaryActionButtonIcon="settings"
+    secondaryActionButtonText="Settings"
+  ></app-project-card>
+</div>

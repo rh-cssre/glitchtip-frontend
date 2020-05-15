@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  HostBinding,
+} from "@angular/core";
 
 @Component({
   selector: "app-project-card",
@@ -20,4 +25,10 @@ export class ProjectCardComponent {
   @Input() secondaryActionButtonLink: string | any[];
   @Input() secondaryActionButtonIcon?: string;
   @Input() secondaryActionButtonText: string;
+
+  @Input() sampleCard = false;
+
+  @HostBinding("class.sample-card") get isSampleCard() {
+    return this.sampleCard;
+  }
 }

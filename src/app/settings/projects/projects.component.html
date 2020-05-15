@@ -10,6 +10,11 @@
       Create New Project
     </a>
   </header>
+
+  <div *ngIf="projectsForActiveOrg$ | async as projects">
+    <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
+  </div>
+
   <div class="card-wrapper">
     <app-project-card
       *ngFor="let project of projectsForActiveOrg$ | async"

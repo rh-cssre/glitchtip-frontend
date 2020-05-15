@@ -6,7 +6,9 @@
       (opened)="focusPanel()"
       [disabled]="projects.length < 2"
     >
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header
+        [class.disabled-looking]="projects.length === 0"
+      >
         <mat-panel-title>
           {{ selectedProjectsString$ | async }}
         </mat-panel-title>

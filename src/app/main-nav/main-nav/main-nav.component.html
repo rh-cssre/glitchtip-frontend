@@ -44,34 +44,39 @@
         <a
           mat-list-item
           [routerLink]="['/organizations', orgDetails?.slug, 'projects']"
-          >Projects</a
         >
+          Projects
+        </a>
         <a
           mat-list-item
           [routerLink]="['/organizations', orgDetails?.slug, 'issues']"
           routerLinkActive="active-route"
-          >Issues</a
         >
+          Issues
+        </a>
         <a
           mat-list-item
           [routerLink]="['/settings', orgDetails?.slug]"
           routerLinkActive="active-route"
-          >Settings</a
         >
+          Settings
+        </a>
         <a
           class="sub-items"
           mat-list-item
           [routerLink]="['/settings', orgDetails?.slug, 'projects']"
           routerLinkActive="active-route"
-          >Projects</a
         >
+          Projects
+        </a>
       </ng-container>
       <a
         mat-list-item
         [routerLink]="['/profile']"
         routerLinkActive="active-route"
-        >Profile</a
       >
+        Profile
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 
