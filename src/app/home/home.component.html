@@ -23,15 +23,16 @@
       >
     </header>
 
-    <div *ngIf="projects$ | async as projects">
+    <div *ngIf="activeOrganizationProjects$ | async as projects">
       <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
     </div>
 
-    <div *ngIf="projects$">
+    <div *ngIf="activeOrganizationProjects$">
       <div class="card-wrapper">
-        <ng-container *ngFor="let project of projects$ | async">
+        <ng-container
+          *ngFor="let project of activeOrganizationProjects$ | async"
+        >
           <app-project-card
-            *ngIf="project.organization.slug === orgDetails?.slug"
             [cardLink]="['/organizations', project.organization.slug, 'issues']"
             [cardLinkQueryParams]="{ project: project.id }"
             [title]="project.name"
