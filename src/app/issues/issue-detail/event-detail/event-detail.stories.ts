@@ -28,6 +28,7 @@ import { cspError } from "./test-data/csp-error";
 import { pageNotFound } from "./test-data/page-not-found";
 import { socialApp } from "./test-data/social-app";
 import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
+import { FrameExpandedComponent } from "./entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./entry-exception/raw-stacktrace/raw-stacktrace.component";
 
 export default {
@@ -47,6 +48,7 @@ export default {
         EntryMessageComponent,
         EntryExceptionComponent,
         FrameTitleComponent,
+        FrameExpandedComponent,
         RawStacktraceComponent,
       ],
     }),

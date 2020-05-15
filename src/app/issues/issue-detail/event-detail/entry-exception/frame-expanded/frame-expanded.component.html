@@ -1,0 +1,16 @@
+<div *ngFor="let contextLine of context">
+  <pre [class.highlight]="contextLine[0] == lineNo" class="context padding"
+    >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
+  >
+</div>
+<div class="var-wrapper">
+  <ng-container *ngFor="let varList of vars | keyvalue">
+    <mat-divider></mat-divider>
+    <div class="vars padding">
+      <dt class="mat-body-strong">{{ varList.key }}:</dt>
+      <dd>
+        <pre>{{ checkType(varList.value) }}</pre>
+      </dd>
+    </div>
+  </ng-container>
+</div>

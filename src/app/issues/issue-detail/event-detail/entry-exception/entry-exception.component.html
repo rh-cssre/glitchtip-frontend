@@ -38,7 +38,7 @@
           >
         </mat-chip-list>
 
-        <mat-accordion>
+        <mat-accordion [multi]="true">
           <!-- TODO:  Add additional conditions for non expandable frames
           https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L107-->
           <mat-expansion-panel
@@ -57,9 +57,11 @@
                 [eventPlatform]="eventPlatform"
               ></app-frame-title>
             </mat-expansion-panel-header>
-            <div *ngFor="let contextLine of frame.context">
-              <p class="context">{{ contextLine[0] }}. {{ contextLine[1] }}</p>
-            </div>
+            <app-frame-expanded
+              [lineNo]="frame.lineNo"
+              [context]="frame.context"
+              [vars]="frame.vars"
+            ></app-frame-expanded>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
