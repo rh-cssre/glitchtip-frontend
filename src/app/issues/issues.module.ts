@@ -16,6 +16,7 @@ import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message
 import { EntryExceptionComponent } from "./issue-detail/event-detail/entry-exception/entry-exception.component";
 import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/issue-detail-title.component";
 import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception/frame-title/frame-title.component";
+import { FrameExpandedComponent } from "./issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
 
 @NgModule({
@@ -37,6 +38,7 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
     EntryExceptionComponent,
     IssueDetailTitleComponent,
     FrameTitleComponent,
+    FrameExpandedComponent,
     RawStacktraceComponent,
   ],
 })
