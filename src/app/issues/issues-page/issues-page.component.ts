@@ -21,6 +21,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 export class IssuesPageComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ["select", "status", "title"];
   loading$ = this.issuesService.loading$;
+  initialLoadComplete$ = this.issuesService.initialLoadComplete$;
   form = new FormGroup({
     query: new FormControl(""),
   });

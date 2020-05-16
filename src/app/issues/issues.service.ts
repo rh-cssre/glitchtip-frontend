@@ -24,6 +24,7 @@ interface IssuesState {
   nextPage: string | null;
   previousPage: string | null;
   loading: boolean;
+  initialLoadComplete: boolean;
 }
 
 const initialState: IssuesState = {
@@ -34,6 +35,7 @@ const initialState: IssuesState = {
   nextPage: null,
   previousPage: null,
   loading: false,
+  initialLoadComplete: false,
 };
 
 @Injectable({
@@ -73,8 +75,9 @@ export class IssuesService {
     map((state) => urlParamsToObject(state.previousPage))
   );
   loading$ = this.getState$.pipe(map((state) => state.loading));
+  initialLoadComplete$ = this.getState$.pipe(map((state) => state.initialLoadComplete));
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
+  constructor(private http: HttpClient, private snackbar: MatSnackBar) { }
 
   /** Refresh issues data. orgSlug is required. */
   getIssues(
@@ -201,6 +204,7 @@ export class IssuesService {
       ...this.issuesState.getValue(),
       issues,
       loading: false,
+      initialLoadComplete: true,
     });
   }
 
