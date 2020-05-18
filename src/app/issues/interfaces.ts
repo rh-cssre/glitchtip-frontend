@@ -43,7 +43,14 @@ export interface EventDetail extends Event {
   sdkUpdates?: [];
 }
 
-export interface Entry<Type extends string, Data extends {}> {
+export type EntryType =
+  | "exception"
+  | "breadcrumbs"
+  | "request"
+  | "message"
+  | "csp";
+
+export interface Entry<Type extends EntryType, Data extends {}> {
   data: Data;
   type: Type;
 }
