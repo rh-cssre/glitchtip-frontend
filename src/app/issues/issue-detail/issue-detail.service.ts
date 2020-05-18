@@ -7,13 +7,13 @@ import {
   IssueDetail,
   EventDetail,
   IssueStatus,
-  Entry,
   ExceptionValueData,
   Request,
   AnnotatedRequest,
   CSP,
   Message,
   Values,
+  EntryType,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -96,32 +96,6 @@ export class IssueDetailService {
     private organization: OrganizationsService,
     private issueService: IssuesService
   ) {}
-
-  rawStacktraceValues(event: EventDetail): Values[] | undefined {
-    const platform = event.platform;
-
-    const exceptionEntryType = event.entries.find(
-      (entry) => entry.type === "exception"
-    );
-    if (exceptionEntryType) {
-      const eventException = (exceptionEntryType as Entry<
-        "exception",
-        ExceptionValueData
-      >).data;
-      const values = eventException.values.map((value) => {
-        if (platform !== "python") {
-          const reverseFrames = [...value.stacktrace.frames].reverse();
-          return {
-            ...value,
-            stacktrace: { ...value.stacktrace, frames: reverseFrames },
-          };
-        } else {
-          return { ...value };
-        }
-      });
-      return [...values];
-    }
-  }
 
   retrieveIssue(id: number) {
     return this.http
@@ -218,32 +192,27 @@ export class IssueDetailService {
 
   /* Return the message entry type for an event */
   private eventEntryMessage(event: EventDetail): Message | undefined {
-    const eventEntryMessage = event.entries.find(
-      (entry) => entry.type === "message"
-    );
-    if (eventEntryMessage) {
-      const eventMessage = (eventEntryMessage as Entry<"message", Message>)
-        .data;
+    const eventMessage = this.getMessageEntryData(event);
+
+    if (eventMessage) {
       return { ...eventMessage };
     }
   }
 
   /* Return the CSP entry type for an event */
   private eventEntryCSP(event: EventDetail): CSP | undefined {
-    const cspEntryType = event.entries.find((entry) => entry.type === "csp");
-    if (cspEntryType) {
-      const eventCSP = (cspEntryType as Entry<"csp", CSP>).data;
+    const eventCSP = this.getCspEntryData(event);
+
+    if (eventCSP) {
       return { ...eventCSP };
     }
   }
 
   /* Return the request entry type for an event with additional fields parsed from url */
   private entryRequestData(event: EventDetail): AnnotatedRequest | undefined {
-    const requestEntryType = event.entries.find(
-      (entry) => entry.type === "request"
-    );
-    if (requestEntryType) {
-      const eventRequest = (requestEntryType as Entry<"request", Request>).data;
+    const eventRequest = this.getRequestEntryData(event);
+
+    if (eventRequest) {
       let urlDomainName = "";
       let urlPath: string;
       try {
@@ -261,14 +230,9 @@ export class IssueDetailService {
     event: EventDetail,
     isReversed: boolean
   ): ExceptionValueData | undefined {
-    const exceptionEntryType = event.entries.find(
-      (entry) => entry.type === "exception"
-    );
-    if (exceptionEntryType) {
-      const eventException = (exceptionEntryType as Entry<
-        "exception",
-        ExceptionValueData
-      >).data;
+    const eventException = this.getExceptionEntryData(event);
+
+    if (eventException) {
       if (isReversed) {
         const reversedFrames = eventException.values.map((value) => {
           const frameReverse = [...value.stacktrace.frames].reverse();
@@ -285,6 +249,63 @@ export class IssueDetailService {
         return { ...eventException };
       }
     }
+  }
+
+  rawStacktraceValues(event: EventDetail): Values[] | undefined {
+    const platform = event.platform;
+    const eventException = this.getExceptionEntryData(event);
+
+    if (eventException) {
+      const values = eventException.values.map((value) => {
+        if (platform !== "python") {
+          const reverseFrames = [...value.stacktrace.frames].reverse();
+          return {
+            ...value,
+            stacktrace: { ...value.stacktrace, frames: reverseFrames },
+          };
+        } else {
+          return { ...value };
+        }
+      });
+      return [...values];
+    }
+  }
+
+  /**
+   * We had some methods above that looked a bit daunting; one way to make them
+   * less daunting was to get the ugly-looking typecasting out of the way.
+   *
+   * So here are a few helper functions that funnel into getEntryData and return
+   * data which is typed the way we want.
+   */
+  private getExceptionEntryData(event: EventDetail) {
+    return this.getEntryData(event, "exception") as
+      | ExceptionValueData
+      | undefined;
+  }
+
+  private getMessageEntryData(event: EventDetail) {
+    return this.getEntryData(event, "message") as Message | undefined;
+  }
+
+  private getCspEntryData(event: EventDetail) {
+    return this.getEntryData(event, "csp") as CSP | undefined;
+  }
+
+  private getRequestEntryData(event: EventDetail) {
+    return this.getEntryData(event, "request") as Request | undefined;
+  }
+
+  /**
+   * Regardless of what kind of entry it is, we want to return the `data`
+   * property or undefined
+   */
+  private getEntryData(event: EventDetail, entryType: EntryType) {
+    const entries = event.entries.find((entry) => entry.type === entryType);
+    if (!entries) {
+      return undefined;
+    }
+    return entries.data;
   }
 
   /** Build event detail url string */
