@@ -18,6 +18,7 @@ export class EventDetailComponent implements OnInit {
   eventIDParam$ = this.route.paramMap.pipe(
     map((params) => params.get("event-id"))
   );
+  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
 
   constructor(
     private issueService: IssueDetailService,
