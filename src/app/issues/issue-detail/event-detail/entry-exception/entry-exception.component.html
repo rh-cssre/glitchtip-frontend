@@ -42,10 +42,11 @@
           <!-- TODO:  Add additional conditions for non expandable frames
           https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L107-->
           <mat-expansion-panel
-            *ngFor="let frame of value.stacktrace.frames"
+            *ngFor="let frame of value.stacktrace.frames; let i = index"
             [disabled]="
               (!frame.context || !frame.context.length) && !frame.vars
             "
+            [expanded]="frame.context?.length ? i === 0 : undefined"
           >
             <mat-expansion-panel-header
               collapsedHeight="auto"
