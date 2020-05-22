@@ -9,6 +9,20 @@
         <span *ngIf="event?.dateCreated" class="space">{{
           event?.dateCreated | date: "long"
         }}</span>
+        <a
+          *ngIf="orgSlug$ | async as orgSlug"
+          target="_blank"
+          [href]="
+            '/organizations/' +
+            orgSlug +
+            '/issues/' +
+            event.issue +
+            '/events/' +
+            event?.eventID +
+            '/json/'
+          "
+          >JSON</a
+        >
       </p>
     </div>
     <div>
