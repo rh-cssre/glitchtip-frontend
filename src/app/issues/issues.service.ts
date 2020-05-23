@@ -75,19 +75,30 @@ export class IssuesService {
     map((state) => urlParamsToObject(state.previousPage))
   );
   loading$ = this.getState$.pipe(map((state) => state.loading));
-  initialLoadComplete$ = this.getState$.pipe(map((state) => state.initialLoadComplete));
+  initialLoadComplete$ = this.getState$.pipe(
+    map((state) => state.initialLoadComplete)
+  );
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar) { }
+  constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
 
   /** Refresh issues data. orgSlug is required. */
   getIssues(
     orgSlug: string,
     cursor: string | undefined,
     query: string = "is:unresolved",
-    project: string[] | null
+    project: string[] | null,
+    start: string | undefined,
+    end: string | undefined
   ) {
     this.setLoading(true);
-    this.retrieveIssues(orgSlug, cursor, query, project).toPromise();
+    this.retrieveIssues(
+      orgSlug,
+      cursor,
+      query,
+      project,
+      start,
+      end
+    ).toPromise();
   }
 
   toggleSelected(issueId: number) {
@@ -134,7 +145,9 @@ export class IssuesService {
     organizationSlug?: string,
     cursor?: string,
     query?: string,
-    project?: string[] | null
+    project?: string[] | null,
+    start?: string,
+    end?: string
   ) {
     let url = this.url;
     let httpParams = new HttpParams();
@@ -151,6 +164,10 @@ export class IssuesService {
       project.forEach((id) => {
         httpParams = httpParams.append("project", id);
       });
+    }
+    if (start && end) {
+      httpParams = httpParams.set("start", start);
+      httpParams = httpParams.set("end", end);
     }
     return this.http
       .get<Issue[]>(url, { observe: "response", params: httpParams })

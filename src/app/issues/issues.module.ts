@@ -18,6 +18,8 @@ import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/iss
 import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception/frame-title/frame-title.component";
 import { FrameExpandedComponent } from "./issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
   imports: [
@@ -25,6 +27,8 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
     ReactiveFormsModule,
     IssuesRoutingModule,
     SharedModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   declarations: [
     IssuesPageComponent,

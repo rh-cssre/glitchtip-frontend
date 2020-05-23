@@ -11,6 +11,7 @@ import { map, filter, withLatestFrom } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { formatDate } from "@angular/common";
 
 @Component({
   selector: "app-issues-page",
@@ -24,6 +25,10 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   initialLoadComplete$ = this.issuesService.initialLoadComplete$;
   form = new FormGroup({
     query: new FormControl(""),
+  });
+  dateForm = new FormGroup({
+    startDate: new FormControl(""),
+    endDate: new FormControl(""),
   });
   issues$ = combineLatest([
     this.issuesService.issuesWithSelected$,
@@ -55,8 +60,8 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     })
   );
 
-  urlHasQueryParam$ = this.route.queryParams.pipe(
-    map((params) => !!params.query)
+  urlHasParam$ = this.route.queryParams.pipe(
+    map((params) => !!params.query || !!params.start || !!params.end)
   );
 
   constructor(
@@ -79,12 +84,21 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
           } else if (typeof queryParams.project === "object") {
             project = queryParams.project;
           }
-          return { orgSlug, cursor, query, project };
+          const start: string | undefined = queryParams.start;
+          const end: string | undefined = queryParams.end;
+          return { orgSlug, cursor, query, project, start, end };
         })
       )
-      .subscribe(({ orgSlug, cursor, query, project }) => {
+      .subscribe(({ orgSlug, cursor, query, project, start, end }) => {
         if (orgSlug) {
-          this.issuesService.getIssues(orgSlug, cursor, query, project);
+          this.issuesService.getIssues(
+            orgSlug,
+            cursor,
+            query,
+            project,
+            start,
+            end
+          );
         }
       });
   }
@@ -92,8 +106,14 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe((_) => {
       const query: string | undefined = this.route.snapshot.queryParams.query;
+      const start: string | undefined = this.route.snapshot.queryParams.start;
+      const end: string | undefined = this.route.snapshot.queryParams.end;
       this.form.setValue({
         query: query !== undefined ? query : "is:unresolved",
+      });
+      this.dateForm.setValue({
+        startDate: start ? start : null,
+        endDate: end ? end : null,
       });
     });
   }
@@ -101,6 +121,51 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
     this.issuesService.clearState();
+  }
+
+  onDateFormSubmit() {
+    /**
+     * The + "Z" feels ridiculous, but it works, and avoids problems I didn't
+     * have time to solve
+     */
+    const startDate = this.dateForm.value.startDate
+      ? formatDate(
+          this.dateForm.value.startDate,
+          "yyyy-MM-ddTHH:mm:ss.SSS",
+          "en-US"
+        ) + "Z"
+      : null;
+
+    /**
+     * End dates come in at midnight, so if you pick May 5, you don't get events
+     * from May 5. Bumping it to 23:59:59.999 fixes this
+     */
+    const modifiedEndDate = this.dateForm.value.endDate
+      ? this.dateForm.value.endDate.getTime() + 86399999
+      : null;
+    const endDate = modifiedEndDate
+      ? formatDate(modifiedEndDate, "yyyy-MM-ddTHH:mm:ss.SSS", "en-US") + "Z"
+      : null;
+    this.router.navigate([], {
+      queryParams: {
+        cursor: null,
+        start: startDate ? startDate : null,
+        end: endDate ? endDate : null,
+      },
+      queryParamsHandling: "merge",
+    });
+  }
+
+  dateFormReset() {
+    this.router.navigate([], {
+      queryParams: {
+        cursor: null,
+        start: null,
+        end: null,
+      },
+      queryParamsHandling: "merge",
+    });
+    this.dateForm.setValue({ startDate: null, endDate: null });
   }
 
   onSubmit() {
