@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   billingEmail: "billing@mail.glitchtip.com",
+  stripePublicKey: "pk_test_A4JRzUqG3N347Fl27eW3G3Fr00byLop55B"
 };
 
 /*

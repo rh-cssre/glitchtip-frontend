@@ -50,6 +50,11 @@ export const routes: Routes = [
     canActivate: [AlreadyLoggedInGuard],
   },
   {
+    path: "payment",
+    loadChildren: () => import("./payment/payment.module").then((m) => m.PaymentModule),
+    canActivate: [IsLoggedInGuard],
+  },
+  {
     path: "**",
     redirectTo: "",
     pathMatch: "full",
@@ -67,4 +72,4 @@ export const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
