@@ -14,3 +14,15 @@ h1 {
     grid-template-columns: auto;
   }
 }
+
+mat-card {
+  margin-bottom: 32px;
+}
+
+.half-width {
+  width: 50%;
+
+  @media (max-width: $tablet - 1) {
+    width: 100%;
+  }
+}

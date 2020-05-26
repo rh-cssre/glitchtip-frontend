@@ -4,15 +4,16 @@ import { RegisterComponent } from "./register.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "../shared/material.module";
 import { RegisterRoutingModule } from "./register-routing.module";
-import { InputMatcherDirective } from "./input-matcher.directive";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
-  declarations: [RegisterComponent, InputMatcherDirective],
+  declarations: [RegisterComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
     RegisterRoutingModule,
+    SharedModule,
   ],
 })
 export class RegisterModule {}
