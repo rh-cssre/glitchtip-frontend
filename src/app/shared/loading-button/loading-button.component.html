@@ -1,0 +1,6 @@
+<div class="spinner-container" *ngIf="loading">
+  <mat-spinner diameter="24"></mat-spinner>
+</div>
+<button mat-flat-button color="primary" [disabled]="loading">
+  <span [class.loading]="loading">{{ buttonText }}</span>
+</button>

@@ -2,12 +2,13 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, boolean } from "@storybook/addon-knobs";
+import { withKnobs, boolean, text } from "@storybook/addon-knobs";
 
 import { MaterialModule } from "src/app/shared/material.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ProjectCardComponent } from "./project-card/project-card.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
+import { LoadingButtonComponent } from "./loading-button/loading-button.component";
 
 export default {
   title: "Shared",
@@ -59,4 +60,18 @@ export const entryData = () => ({
 
 entryData.story = {
   parameters: { name: "Entry Data" },
+};
+
+export const loadingButton = () => {
+  return {
+    component: LoadingButtonComponent,
+    props: {
+      buttonText: text("Button Text", "ClickMe"),
+      loading: boolean("Loading", false),
+    },
+  };
+};
+
+loadingButton.story = {
+  name: "Button with Loading State",
 };

@@ -6,6 +6,8 @@ import { ProjectCardComponent } from "./project-card/project-card.component";
 import { RouterModule } from "@angular/router";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EmptyProjectsComponent } from "./empty-projects/empty-projects.component";
+import { InputMatcherDirective } from "./input-matcher.directive";
+import { LoadingButtonComponent } from "./loading-button/loading-button.component";
 
 @NgModule({
   imports: [CommonModule, MaterialModule, RouterModule],
@@ -14,6 +16,8 @@ import { EmptyProjectsComponent } from "./empty-projects/empty-projects.componen
     ProjectCardComponent,
     EntryDataComponent,
     EmptyProjectsComponent,
+    InputMatcherDirective,
+    LoadingButtonComponent,
   ],
   exports: [
     DaysAgoPipe,
@@ -21,6 +25,8 @@ import { EmptyProjectsComponent } from "./empty-projects/empty-projects.componen
     EntryDataComponent,
     EmptyProjectsComponent,
     MaterialModule,
+    InputMatcherDirective,
+    LoadingButtonComponent,
   ],
 })
 export class SharedModule {}
