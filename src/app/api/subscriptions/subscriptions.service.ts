@@ -10,11 +10,11 @@ interface SubscriptionsState {
 }
 
 const initialState: SubscriptionsState = {
-  subscription: null
+  subscription: null,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class SubscriptionsService {
   private readonly state = new BehaviorSubject<SubscriptionsState>(
@@ -24,7 +24,7 @@ export class SubscriptionsService {
   private readonly url = baseUrl + "/subscriptions/";
 
   readonly subscription$ = this.getState$.pipe(
-    map(state => state.subscription)
+    map((state) => state.subscription)
   );
 
   constructor(private http: HttpClient) {}
@@ -35,12 +35,18 @@ export class SubscriptionsService {
    */
   retrieveSubscription(slug: string) {
     return this.http.get<Subscription>(`${this.url}${slug}/`).pipe(
-      tap(subscription => this.setSubscription(subscription)),
-      catchError(error => {
+      tap((subscription) => this.setSubscription(subscription)),
+      catchError((error) => {
         this.clearState();
         return EMPTY;
       })
     );
+  }
+
+  retrievePlans() {
+    return this.http
+      .get("http://localhost:8000/api/0/plans/")
+      .pipe(tap((plans) => console.log("plans: ", plans)));
   }
 
   clearState() {

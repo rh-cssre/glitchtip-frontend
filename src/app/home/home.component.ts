@@ -3,6 +3,7 @@ import { OrganizationsService } from "../api/organizations/organizations.service
 import { ProjectsService } from "../api/projects/projects.service";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
+import { SubscriptionsService } from "../api/subscriptions/subscriptions.service";
 
 @Component({
   selector: "app-home",
@@ -37,10 +38,18 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private organizationsService: OrganizationsService,
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
+    private subscriptionService: SubscriptionsService
   ) {}
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
+  }
+
+  getPlans() {
+    this.subscriptionService.retrievePlans().subscribe(
+      () => console.log("success!"),
+      (err) => console.log("error: ", err)
+    );
   }
 }

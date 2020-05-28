@@ -1,4 +1,7 @@
 <section class="l-body">
+  <button mat-flat-button color="primary" (click)="getPlans()">
+    Retrieve Plans
+  </button>
   <div
     *ngIf="
       (projects$ | async)?.length === 0 &&
