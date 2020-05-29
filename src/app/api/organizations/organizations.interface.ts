@@ -14,7 +14,7 @@ export interface Organization extends OrganizationNew {
 
 // tslint:disable-next-line:no-empty-interface
 export interface OrganizationDetail extends Organization {
-  projects: OrganizationProduct[];
+  projects: OrganizationProject[];
 }
 
 interface OrgStatus {
@@ -27,9 +27,10 @@ export interface Avatar {
   avatarUuid: string | null;
 }
 
-export interface OrganizationProduct {
+export interface OrganizationProject {
   name: string;
   slug: string;
   platform: string | null;
   id: number;
+  isMember: boolean;
 }

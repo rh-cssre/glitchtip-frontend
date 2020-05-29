@@ -21,6 +21,7 @@ export interface ProjectNew {
 export interface ProjectIssueView extends ProjectNew {
   id: number;
   slug: string;
+  isMember: boolean;
 }
 
 export interface Project extends ProjectIssueView {

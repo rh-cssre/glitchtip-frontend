@@ -4,7 +4,7 @@ import { withKnobs } from "@storybook/addon-knobs";
 import { MaterialModule } from "src/app/shared/material.module";
 import { HeaderNavComponent } from "./header-nav.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { OrganizationProduct } from "src/app/api/organizations/organizations.interface";
+import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -25,7 +25,7 @@ export default {
   ]
 };
 
-const sampleProjects: OrganizationProduct[] = [
+const sampleProjects: OrganizationProject[] = [
   {
     name: "GlitchTip",
     slug: "glitchtip",

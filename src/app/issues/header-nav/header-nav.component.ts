@@ -9,7 +9,7 @@ import {
 import { map, startWith } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { FormControl } from "@angular/forms";
-import { OrganizationProduct } from "../../api/organizations/organizations.interface";
+import { OrganizationProject } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
@@ -83,15 +83,15 @@ export class HeaderNavComponent implements OnInit {
   filterProjectInput = new FormControl();
 
   /** Projects that are filtered via the text field form control */
-  filteredProjects$: Observable<OrganizationProduct[] | null> = combineLatest([
-    this.projects$.pipe(startWith([] as OrganizationProduct[])),
+  filteredProjects$: Observable<OrganizationProject[] | null> = combineLatest([
+    this.projects$.pipe(startWith([] as OrganizationProject[])),
     this.filterProjectInput.valueChanges.pipe(startWith("")),
   ]).pipe(
     map(([projects, value]) =>
       projects
         ? projects.filter((project) =>
-            project.name.toLowerCase().includes(value.toLowerCase())
-          )
+          project.name.toLowerCase().includes(value.toLowerCase())
+        )
         : null
     )
   );
@@ -232,5 +232,5 @@ export class HeaderNavComponent implements OnInit {
     private organizationsService: OrganizationsService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 }

@@ -1,26 +1,17 @@
 <section class="l-body">
-  <div
-    *ngIf="
+  <div *ngIf="
       (projects$ | async)?.length === 0 &&
       (activeOrganizationDetail$ | async) === undefined
-    "
-  >
+    ">
     <p>You don't have any organizations yet. Create one to get started.</p>
-    <a mat-flat-button color="primary" [routerLink]="['/organizations', 'new']"
-      >Create New Organization</a
-    >
+    <a mat-flat-button color="primary" [routerLink]="['/organizations', 'new']">Create New Organization</a>
   </div>
 
   <div *ngIf="activeOrganizationDetail$ | async as orgDetails">
     <header class="page-header">
       <h2 class="mat-display-1">Projects</h2>
-      <a
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        mat-flat-button
-        color="primary"
-        [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
-        >Create New Project</a
-      >
+      <a *ngIf="activeOrganizationDetail$ | async as orgDetails" mat-flat-button color="primary"
+        [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']">Create New Project</a>
     </header>
 
     <div *ngIf="activeOrganizationProjects$ | async as projects">
@@ -29,34 +20,22 @@
 
     <div *ngIf="activeOrganizationProjects$">
       <div class="card-wrapper">
-        <ng-container
-          *ngFor="let project of activeOrganizationProjects$ | async"
-        >
-          <app-project-card
-            [cardLink]="['/organizations', project.organization.slug, 'issues']"
-            [cardLinkQueryParams]="{ project: project.id }"
-            [title]="project.name"
-            [descriptionList]="[
+        <ng-container *ngFor="let project of activeOrganizationProjects$ | async">
+          <app-project-card [cardLink]="['/organizations', project.organization.slug, 'issues']"
+            [cardLinkQueryParams]="{ project: project.id }" [title]="project.name" [descriptionList]="[
               { key: 'organization', value: project.organization.name },
               { key: 'date created', value: (project.dateCreated | date)! }
-            ]"
-            [primaryActionButtonLink]="[
+            ]" [primaryActionButtonLink]="[
               '/organizations',
               project.organization.slug,
               'issues'
-            ]"
-            [primaryActionButtonQuery]="{ project: project.id }"
-            primaryActionButtonIcon="warning"
-            primaryActionButtonText="Issues"
-            [secondaryActionButtonLink]="[
+            ]" [primaryActionButtonQuery]="{ project: project.id }" primaryActionButtonIcon="warning"
+            primaryActionButtonText="Issues" [secondaryActionButtonLink]="[
               '/settings',
               project.organization.slug,
               'projects',
               project.slug
-            ]"
-            secondaryActionButtonIcon="settings"
-            secondaryActionButtonText="Settings"
-          ></app-project-card>
+            ]" secondaryActionButtonIcon="settings" secondaryActionButtonText="Settings"></app-project-card>
         </ng-container>
       </div>
     </div>
