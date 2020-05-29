@@ -30,43 +30,50 @@ const sampleProjects: OrganizationProject[] = [
     name: "GlitchTip",
     slug: "glitchtip",
     id: 1,
-    platform: "javascript"
+    platform: "javascript",
+    isMember: true,
   },
   {
     name: "SwitchGrip",
     slug: "switchgrip",
     id: 2,
-    platform: "python-django"
+    platform: "python-django",
+    isMember: true,
   },
   {
     name: "PitchFlip",
     slug: "pitchflip",
     id: 3,
-    platform: null
+    platform: null,
+    isMember: true,
   },
   {
     name: "StitchStrip",
     slug: "stitchstrip",
     id: 4,
-    platform: "javascript"
+    platform: "javascript",
+    isMember: true,
   },
   {
     name: "NicheScrip",
     slug: "nichescrip",
     id: 5,
-    platform: "python-django"
+    platform: "python-django",
+    isMember: true,
   },
   {
     name: "TwitchQuip",
     slug: "twitchquip",
     id: 6,
-    platform: null
+    platform: null,
+    isMember: true,
   },
   {
     name: "Wassilievitch Proprietorship",
     slug: "wassilievitch-proprietorship",
     id: 7,
-    platform: "javascript"
+    platform: "javascript",
+    isMember: true,
   }
 ];
 

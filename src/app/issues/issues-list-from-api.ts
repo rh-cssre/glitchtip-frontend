@@ -64,7 +64,8 @@ export const issueList: Issue[] = [
       platform: "python",
       slug: "django-app",
       id: 1851390,
-      name: "django-app"
+      name: "django-app",
+      isMember: true,
     },
     statusDetails: {}
   },
@@ -131,7 +132,8 @@ export const issueList: Issue[] = [
       platform: "python",
       slug: "django-app",
       id: 1851390,
-      name: "django-app"
+      name: "django-app",
+      isMember: true,
     },
     statusDetails: {}
   },
@@ -198,7 +200,8 @@ export const issueList: Issue[] = [
       platform: "python",
       slug: "django-app",
       id: 1851390,
-      name: "django-app"
+      name: "django-app",
+      isMember: true,
     },
     statusDetails: {}
   },
@@ -267,7 +270,8 @@ export const issueList: Issue[] = [
       platform: "python",
       slug: "django-app",
       id: 1851390,
-      name: "django-app"
+      name: "django-app",
+      isMember: true,
     },
     statusDetails: {}
   }
