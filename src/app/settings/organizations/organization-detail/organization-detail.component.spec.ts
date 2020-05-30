@@ -4,6 +4,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 
 import { OrganizationDetailComponent } from "./organization-detail.component";
 import { MaterialModule } from "src/app/shared/material.module";
+import { MatomoModule } from "ngx-matomo";
 
 describe("OrganizationDetailComponent", () => {
   let component: OrganizationDetailComponent;
@@ -12,7 +13,12 @@ describe("OrganizationDetailComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OrganizationDetailComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, MaterialModule]
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MaterialModule,
+        MatomoModule,
+      ],
     }).compileComponents();
   }));
 

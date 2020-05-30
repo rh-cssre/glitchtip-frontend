@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 import { NewOrganizationsComponent } from "./new-organization.component";
 import { MaterialModule } from "../shared/material.module";
+import { MatomoModule } from "ngx-matomo";
 
 describe("NewOrganizationsComponent", () => {
   let component: NewOrganizationsComponent;
@@ -19,8 +20,9 @@ describe("NewOrganizationsComponent", () => {
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        MaterialModule
-      ]
+        MaterialModule,
+        MatomoModule,
+      ],
     }).compileComponents();
   }));
 

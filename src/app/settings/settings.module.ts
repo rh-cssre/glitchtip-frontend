@@ -10,7 +10,6 @@ import { ProjectDetailComponent } from "./projects/project-detail/project-detail
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
-import { SubscriptionComponent } from "./subscription/subscription.component";
 import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
@@ -18,7 +17,7 @@ import { SharedModule } from "../shared/shared.module";
     CommonModule,
     ReactiveFormsModule,
     SettingsRoutingModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [
     ProjectsComponent,
@@ -27,7 +26,6 @@ import { SharedModule } from "../shared/shared.module";
     OrganizationsComponent,
     OrganizationDetailComponent,
     SettingsComponent,
-    SubscriptionComponent
-  ]
+  ],
 })
 export class SettingsModule {}

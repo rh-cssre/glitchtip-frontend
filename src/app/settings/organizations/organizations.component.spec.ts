@@ -7,6 +7,7 @@ import { MaterialModule } from "src/app/shared/material.module";
 import { OrganizationsComponent } from "./organizations.component";
 import { OrganizationDetailComponent } from "./organization-detail/organization-detail.component";
 import { SettingsComponent } from "../settings/settings.component";
+import { MatomoModule } from "ngx-matomo";
 
 describe("OrganizationsComponent", () => {
   let component: OrganizationsComponent;
@@ -17,14 +18,15 @@ describe("OrganizationsComponent", () => {
       declarations: [
         OrganizationsComponent,
         OrganizationDetailComponent,
-        SettingsComponent
+        SettingsComponent,
       ],
       imports: [
         MaterialModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        NoopAnimationsModule
-      ]
+        NoopAnimationsModule,
+        MatomoModule,
+      ],
     }).compileComponents();
   }));
 
