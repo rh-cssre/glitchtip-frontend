@@ -6,8 +6,9 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
+import { MatomoModule } from "ngx-matomo";
 
-describe("NewComponent", () => {
+describe("NewProjectComponent", () => {
   let component: NewProjectComponent;
   let fixture: ComponentFixture<NewProjectComponent>;
 
@@ -20,8 +21,9 @@ describe("NewComponent", () => {
         ReactiveFormsModule,
         NoopAnimationsModule,
         HttpClientTestingModule,
-        RouterTestingModule
-      ]
+        RouterTestingModule,
+        MatomoModule,
+      ],
     }).compileComponents();
   }));
 

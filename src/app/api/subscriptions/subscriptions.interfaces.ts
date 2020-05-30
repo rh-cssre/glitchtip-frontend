@@ -1,7 +1,8 @@
-interface Plan {
+export interface Plan {
   id: string;
   nickname: string;
   amount: string;
+  metadata: { [key: string]: string };
 }
 
 export interface Subscription {
@@ -21,4 +22,10 @@ export interface Subscription {
     | "trialing"
     | "unpaid";
   plan: Plan;
+}
+
+export interface CreateSubscriptionResp {
+  organization: number;
+  plan: string;
+  subscription: Subscription;
 }

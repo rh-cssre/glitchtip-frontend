@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     private organizations: OrganizationsService,
     private settings: SettingsService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.settings.getSettings().subscribe();

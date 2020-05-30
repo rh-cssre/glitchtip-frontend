@@ -1,0 +1,28 @@
+<div class="card-wrapper">
+  <ng-container>
+    <mat-card *ngFor="let plan of planOptions$ | async; let i = index">
+      <div>
+        <h2>{{ plan.nickname }}</h2>
+        <p>Cost: {{ plan.amount | currency }} per month</p>
+        <ng-container *ngIf="(plan.metadata | json) !== '{}'">
+          <h3>Includes</h3>
+          <ul>
+            <li *ngFor="let data of plan.metadata | keyvalue">
+              {{ data.key }}: {{ data.value }}
+            </li>
+          </ul></ng-container
+        >
+      </div>
+      <app-loading-button
+        [buttonText]="'Select ' + plan.nickname + 'Plan'"
+        [loading]="isLoading"
+        (click)="onSubmit(plan.id)"
+      ></app-loading-button> </mat-card
+  ></ng-container>
+</div>
+<p class="mat-body-1">
+  If you have questions about subscriptions or need assistance, contact us at
+  <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+  >.
+</p>
+<!-- TODO: add state for user who is not owner, since they cannot sign up for an org-->

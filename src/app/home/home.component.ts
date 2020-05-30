@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private projectsService: ProjectsService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.projectsService.retrieveProjects();

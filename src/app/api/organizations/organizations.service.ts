@@ -2,9 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router, RoutesRecognized, ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { tap, map, withLatestFrom, filter } from "rxjs/operators";
+import { tap, map, withLatestFrom, filter, distinctUntilChanged } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { Organization, OrganizationDetail } from "./organizations.interface";
+import { SettingsService } from "../settings.service";
+import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -58,7 +60,9 @@ export class OrganizationsService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private settingsService: SettingsService,
+    private subscriptionsService: SubscriptionsService
   ) {
     this.router.events.subscribe((val) => {
       if (val instanceof RoutesRecognized) {
@@ -69,13 +73,36 @@ export class OrganizationsService {
         };
       }
     });
+    // When billing is enabled, check if active org has subscription
+    combineLatest([
+      this.settingsService.billingEnabled$,
+      this.activeOrganization$,
+    ])
+      .pipe(
+        filter(
+          ([billingEnabled, activeOrganization]) =>
+            billingEnabled && !!activeOrganization
+        ),
+        distinctUntilChanged((a, b) => a[1]?.id === b[1]?.id),
+        tap(([_, activeOrganization]) => {
+          this.subscriptionsService.checkIfUserHasSubscription(
+            activeOrganization!.slug
+          );
+        })
+      )
+      .subscribe();
   }
 
   createOrganization(name: string) {
     const data = {
       name,
     };
-    return this.http.post<Organization>(this.url, data);
+    return this.http.post<OrganizationDetail>(this.url, data).pipe(
+      tap((organization) => {
+        this.retrieveOrganizations().toPromise();
+        this.setActiveOrganizationId(organization.id);
+      })
+    );
   }
 
   retrieveOrganizations() {

@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 import {
   HttpClientTestingModule,
-  HttpTestingController
+  HttpTestingController,
 } from "@angular/common/http/testing";
 
 import { OrganizationsService } from "./organizations.service";
@@ -12,6 +12,7 @@ import { Organization } from "./organizations.interface";
 import { organizationList } from "./organization-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
 import { routes } from "src/app/app-routing.module";
+import { MatomoModule } from "ngx-matomo";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;
@@ -24,8 +25,9 @@ describe("OrganizationsService", () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
-        MaterialModule
-      ]
+        MaterialModule,
+        MatomoModule,
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(OrganizationsService);
@@ -41,7 +43,7 @@ describe("OrganizationsService", () => {
 
   it("Initial active organization", () => {
     service = TestBed.inject(OrganizationsService);
-    service.activeOrganizationId$.subscribe(activeOrganization => {
+    service.activeOrganizationId$.subscribe((activeOrganization) => {
       expect(activeOrganization).toBe(null);
     });
   });
@@ -51,8 +53,8 @@ describe("OrganizationsService", () => {
     service.retrieveOrganizations().toPromise();
     const req = httpTestingController.expectOne(`/api/0/organizations/`);
     req.flush(testData);
-    service.organizations$.subscribe(orgs => expect(orgs).toEqual(testData));
-    service.activeOrganizationId$.subscribe(active =>
+    service.organizations$.subscribe((orgs) => expect(orgs).toEqual(testData));
+    service.activeOrganizationId$.subscribe((active) =>
       expect(active).toEqual(testData[0].id)
     );
   });
@@ -60,7 +62,7 @@ describe("OrganizationsService", () => {
   it("changes the active organization", () => {
     const testData = organizationList[1];
     service.changeActiveOrganization(1);
-    service.activeOrganizationId$.subscribe(org =>
+    service.activeOrganizationId$.subscribe((org) =>
       expect(org).toBe(testData.id)
     );
   });
@@ -83,7 +85,7 @@ describe("OrganizationsService", () => {
     expect(navigateSpy).toHaveBeenCalledWith([
       "organizations",
       organizationList[1].slug,
-      "issues"
+      "issues",
     ]);
   });
 
@@ -94,7 +96,8 @@ describe("OrganizationsService", () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
-        MaterialModule
+        MaterialModule,
+        MatomoModule,
       ],
       providers: [
         {
@@ -102,12 +105,12 @@ describe("OrganizationsService", () => {
           useValue: {
             snapshot: {
               firstChild: {
-                url: [{ path: "settings" }, { path: organizationList[0].slug }]
-              }
-            }
-          }
-        }
-      ]
+                url: [{ path: "settings" }, { path: organizationList[0].slug }],
+              },
+            },
+          },
+        },
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(OrganizationsService);
@@ -128,7 +131,7 @@ describe("OrganizationsService", () => {
     req.flush(organizationList[1]);
     expect(navigateSpy).toHaveBeenCalledWith([
       "settings",
-      organizationList[1].slug
+      organizationList[1].slug,
     ]);
   });
 });

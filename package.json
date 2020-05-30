@@ -29,6 +29,7 @@
     "@angular/router": "~9.1.7",
     "@braintree/sanitize-url": "^4.0.1",
     "@sentry/browser": "^5.15.5",
+    "@stripe/stripe-js": "^1.5.0",
     "angular-oauth2-oidc": "^9.2.2",
     "ngx-matomo": "^0.1.4",
     "rxjs": "~6.5.4",

@@ -8,6 +8,7 @@ import { EntryRequestComponent } from "./entry-request/entry-request.component";
 import { EntryDataComponent } from "../../../shared/entry-data/entry-data.component";
 import { IssueDetailService } from "../issue-detail.service";
 import dotnetEvent from "./test-data/dotnet-event.json";
+import { MatomoModule } from "ngx-matomo";
 
 describe("EventDetailComponent", () => {
   let component: EventDetailComponent;
@@ -21,7 +22,12 @@ describe("EventDetailComponent", () => {
         EntryRequestComponent,
         EntryDataComponent,
       ],
-      imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule],
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule,
+        MaterialModule,
+        MatomoModule,
+      ],
     }).compileComponents();
     service = TestBed.inject(IssueDetailService);
   }));

@@ -6,7 +6,6 @@ import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.se
 import { environment } from "../../../environments/environment";
 
 @Component({
-  selector: "app-subscription",
   templateUrl: "./subscription.component.html",
   styleUrls: ["./subscription.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

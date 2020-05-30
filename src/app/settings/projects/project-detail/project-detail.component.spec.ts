@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MatomoModule } from "ngx-matomo";
 
 describe("ProjectDetailComponent", () => {
   let component: ProjectDetailComponent;
@@ -20,8 +21,9 @@ describe("ProjectDetailComponent", () => {
         MatCardModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        HttpClientTestingModule
-      ]
+        HttpClientTestingModule,
+        MatomoModule,
+      ],
     }).compileComponents();
   }));
 
