@@ -3,6 +3,8 @@ import { tap } from "rxjs/operators";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { environment } from "../../../../environments/environment";
+import { Plan } from "src/app/api/subscriptions/subscriptions.interfaces";
+import { StripeService } from "../stripe.service";
 
 @Component({
   selector: "app-payment",
@@ -18,7 +20,8 @@ export class PaymentComponent implements OnInit {
 
   constructor(
     private subscriptionService: SubscriptionsService,
-    private organizationService: OrganizationsService
+    private organizationService: OrganizationsService,
+    private stripe: StripeService
   ) {
     this.organizationService.activeOrganizationId$.subscribe(
       (id) => (this.activeOrganizationId = id)
@@ -30,13 +33,18 @@ export class PaymentComponent implements OnInit {
     this.organizationService.retrieveOrganizations().subscribe();
   }
 
-  onSubmit(planId: string) {
+  onSubmit(plan: Plan) {
     if (this.activeOrganizationId) {
       this.isLoading = true;
-      this.subscriptionService
-        .createFreeSubscription(this.activeOrganizationId, planId)
-        .pipe(tap(() => (this.isLoading = false)))
-        .toPromise();
+
+      if (plan.amount == "0.00") {
+        this.subscriptionService
+          .createFreeSubscription(this.activeOrganizationId, plan.id)
+          .pipe(tap(() => (this.isLoading = false)))
+          .toPromise();
+      } else {
+        this.stripe.redirectToSubscriptionCheckout(plan.id);
+      }
     }
   }
 }

@@ -1,22 +1,14 @@
 <div class="card-wrapper">
   <ng-container>
-    <mat-card *ngFor="let plan of planOptions$ | async; let i = index">
+    <mat-card *ngFor="let product of planOptions$ | async; let i = index">
       <div>
-        <h2>{{ plan.nickname }}</h2>
-        <p>Cost: {{ plan.amount | currency }} per month</p>
-        <ng-container *ngIf="(plan.metadata | json) !== '{}'">
-          <h3>Includes</h3>
-          <ul>
-            <li *ngFor="let data of plan.metadata | keyvalue">
-              {{ data.key }}: {{ data.value }}
-            </li>
-          </ul></ng-container
-        >
+        <h2>{{ product.name }}</h2>
+        <p>Cost: {{ product.plans[0].amount | currency }} per month</p>
       </div>
       <app-loading-button
-        [buttonText]="'Select ' + plan.nickname + 'Plan'"
+        [buttonText]="'Select ' + product.name + ' Plan'"
         [loading]="isLoading"
-        (click)="onSubmit(plan.id)"
+        (click)="onSubmit(product.plans[0])"
       ></app-loading-button> </mat-card
   ></ng-container>
 </div>

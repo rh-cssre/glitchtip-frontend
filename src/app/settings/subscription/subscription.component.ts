@@ -4,6 +4,7 @@ import { Subscription } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
+import { StripeService } from "./stripe.service";
 
 @Component({
   templateUrl: "./subscription.component.html",
@@ -17,7 +18,8 @@ export class SubscriptionComponent implements OnDestroy {
 
   constructor(
     private service: SubscriptionsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private stripe: StripeService
   ) {
     this.routerSubscription = this.route.params
       .pipe(
@@ -27,6 +29,10 @@ export class SubscriptionComponent implements OnDestroy {
       .subscribe((slug) => {
         this.service.retrieveSubscription(slug).toPromise();
       });
+  }
+
+  manageSubscription() {
+    this.stripe.redirectToBillingPortal();
   }
 
   ngOnDestroy() {

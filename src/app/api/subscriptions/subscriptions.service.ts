@@ -5,19 +5,19 @@ import { BehaviorSubject, EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import {
   Subscription,
-  Plan,
+  Product,
   CreateSubscriptionResp,
 } from "./subscriptions.interfaces";
 import { baseUrl } from "src/app/constants";
 
 interface SubscriptionsState {
   subscription: Subscription | null;
-  plans: Plan[] | null;
+  products: Product[] | null;
 }
 
 const initialState: SubscriptionsState = {
   subscription: null,
-  plans: null,
+  products: null,
 };
 
 @Injectable({
@@ -33,7 +33,7 @@ export class SubscriptionsService {
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
   );
-  readonly planOptions$ = this.getState$.pipe(map((state) => state.plans));
+  readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -53,8 +53,8 @@ export class SubscriptionsService {
 
   retrieveSubscriptionPlans() {
     return this.http
-      .get<Plan[]>("/api/0/plans/")
-      .pipe(tap((plans) => this.setPlans(plans)));
+      .get<Product[]>("/api/0/products/")
+      .pipe(tap((products) => this.setProducts(products)));
   }
 
   createFreeSubscription(organizationId: number, planId: string) {
@@ -90,8 +90,8 @@ export class SubscriptionsService {
     this.state.next(initialState);
   }
 
-  private setPlans(plans: Plan[]) {
-    this.state.next({ ...this.state.getValue(), plans });
+  private setProducts(products: Product[]) {
+    this.state.next({ ...this.state.getValue(), products });
   }
 
   private setSubscription(subscription: Subscription) {

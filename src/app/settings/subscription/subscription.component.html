@@ -54,6 +54,9 @@
               <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
               >.
             </p>
+            <button (click)="manageSubscription()">
+              Manage Subscription
+            </button>
           </ng-container>
           <ng-template #noSubscription>
             <p class="mat-body-1">

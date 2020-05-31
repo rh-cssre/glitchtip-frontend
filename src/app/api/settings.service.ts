@@ -10,6 +10,7 @@ interface SettingsState {
   billingEnabled: boolean;
   matomoURL: string | null;
   matomoSiteId: string | null;
+  stripePublicKey: string | null;
   sentryDSN: string | null;
 }
 
@@ -18,6 +19,7 @@ const initialState: SettingsState = {
   billingEnabled: false,
   matomoURL: null,
   matomoSiteId: null,
+  stripePublicKey: null,
   sentryDSN: null,
 };
 
@@ -28,6 +30,9 @@ export class SettingsService {
   private readonly state = new BehaviorSubject<SettingsState>(initialState);
   socialAuth$ = this.state.pipe(map((settings) => settings.socialAuth));
   billingEnabled$ = this.state.pipe(map((settings) => settings.billingEnabled));
+  stripePublicKey$ = this.state.pipe(
+    map((settings) => settings.stripePublicKey)
+  );
   private readonly url = "/api/settings/";
 
   constructor(

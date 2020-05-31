@@ -5,6 +5,15 @@ export interface Plan {
   metadata: { [key: string]: string };
 }
 
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  type: string;
+  plans: Plan[];
+  metadata: { [key: string]: string };
+}
+
 export interface Subscription {
   id: string;
   created: string;
