@@ -37,7 +37,7 @@ export class PaymentComponent implements OnInit {
     if (this.activeOrganizationId) {
       this.isLoading = true;
 
-      if (plan.amount == "0.00") {
+      if (plan.amount === "0.00") {
         this.subscriptionService
           .createFreeSubscription(this.activeOrganizationId, plan.id)
           .pipe(tap(() => (this.isLoading = false)))
