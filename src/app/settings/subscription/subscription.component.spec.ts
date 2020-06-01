@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SubscriptionComponent } from "./subscription.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
+import { MatomoModule } from "ngx-matomo";
 
 describe("SubscriptionComponent", () => {
   let component: SubscriptionComponent;
@@ -11,7 +12,7 @@ describe("SubscriptionComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SubscriptionComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule]
+      imports: [HttpClientTestingModule, RouterTestingModule, MatomoModule],
     }).compileComponents();
   }));
 
