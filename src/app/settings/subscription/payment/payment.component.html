@@ -7,8 +7,8 @@
       </div>
       <app-loading-button
         [buttonText]="'Select ' + product.name + ' Plan'"
-        [loading]="isLoading"
-        (click)="onSubmit(product.plans[0])"
+        [loading]="selectedSubscription === i"
+        (click)="onSubmit(product.plans[0], i)"
       ></app-loading-button> </mat-card
   ></ng-container>
 </div>
