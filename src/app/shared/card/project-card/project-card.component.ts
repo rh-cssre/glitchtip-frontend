@@ -4,6 +4,10 @@ import {
   Input,
   HostBinding,
 } from "@angular/core";
+import {
+  ProjectCardButtonWithQuery,
+  ProjectCardButton,
+} from "../../shared.interfaces";
 
 @Component({
   selector: "app-project-card",
@@ -16,15 +20,10 @@ export class ProjectCardComponent {
   @Input() cardLinkQueryParams?: { [k: string]: any };
   @Input() title: string;
   @Input() descriptionList: { key: string; value: string }[];
+  @Input() isMember: boolean;
 
-  @Input() primaryActionButtonLink: string | any[];
-  @Input() primaryActionButtonQuery?: { [k: string]: any };
-  @Input() primaryActionButtonIcon?: string;
-  @Input() primaryActionButtonText: string;
-
-  @Input() secondaryActionButtonLink: string | any[];
-  @Input() secondaryActionButtonIcon?: string;
-  @Input() secondaryActionButtonText: string;
+  @Input() primaryButton: ProjectCardButtonWithQuery;
+  @Input() secondaryButton: ProjectCardButton;
 
   @Input() sampleCard = false;
 

@@ -18,13 +18,17 @@
       { key: 'organization', value: 'test org' },
       { key: 'date created', value: 'May 08, 2020' }
     ]"
-    [primaryActionButtonLink]="['']"
-    [primaryActionButtonQuery]="{ foo: 'bar' }"
-    primaryActionButtonIcon="warning"
-    primaryActionButtonText="Issues"
-    [secondaryActionButtonLink]="['']"
-    secondaryActionButtonIcon="settings"
-    secondaryActionButtonText="Settings"
+    [primaryButton]="{
+      text: 'Issues',
+      icon: 'warning',
+      link: [''],
+      query: { foo: 'bar' }
+    }"
+    [secondaryButton]="{
+      text: 'Settings',
+      icon: 'settings',
+      link: ['']
+    }"
   ></app-project-card>
   <app-project-card
     role="image"
@@ -36,12 +40,16 @@
       { key: 'organization', value: 'test org' },
       { key: 'date created', value: 'May 08, 2020' }
     ]"
-    [primaryActionButtonLink]="['']"
-    [primaryActionButtonQuery]="{ foo: 'bar' }"
-    primaryActionButtonIcon="warning"
-    primaryActionButtonText="Issues"
-    [secondaryActionButtonLink]="['']"
-    secondaryActionButtonIcon="settings"
-    secondaryActionButtonText="Settings"
+    [primaryButton]="{
+      text: 'Issues',
+      icon: 'warning',
+      link: [''],
+      query: { foo: 'bar' }
+    }"
+    [secondaryButton]="{
+      text: 'Settings',
+      icon: 'settings',
+      link: ['']
+    }"
   ></app-project-card>
 </div>

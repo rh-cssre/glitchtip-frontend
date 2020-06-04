@@ -1,0 +1,61 @@
+<app-card
+  [title]="title"
+  [cardLink]="isMember ? cardLink : secondaryButton.link"
+  [cardLinkQueryParams]="isMember ? cardLinkQueryParams || {} : {}"
+  [secondaryButton]="isMember"
+>
+  <div
+    content
+    [class.content--override]="i === 0"
+    class="content"
+    *ngFor="let description of descriptionList; let i = index"
+  >
+    <p class="mat-small organization">
+      <span>{{ description.key | uppercase }}</span>
+    </p>
+    <p>
+      <span>{{ description.value }}</span>
+    </p>
+  </div>
+
+  <ng-container actions>
+    <a
+      *ngIf="primaryButton && primaryButton.text && primaryButton.link"
+      class="action-button"
+      mat-stroked-button
+      [disabled]="!isMember"
+      [matTooltip]="
+        isMember
+          ? undefined
+          : 'To view issues for this project, add yourself to the corresponding team.'
+      "
+      [matTooltipPosition]="isMember ? undefined : 'right'"
+      color="primary"
+      [routerLink]="primaryButton.link"
+      [queryParams]="primaryButton.query || {}"
+    >
+      <mat-icon
+        *ngIf="primaryButton.icon"
+        class="icon__warning"
+        aria-hidden="true"
+        >{{ primaryButton.icon }}</mat-icon
+      >
+      <span>{{ primaryButton.text }}</span>
+    </a>
+    <a
+      *ngIf="secondaryButton.text && secondaryButton.link"
+      class="action-button"
+      mat-button
+      color="primary"
+      [routerLink]="secondaryButton.link"
+    >
+      <mat-icon
+        *ngIf="secondaryButton.icon"
+        class="icon__settings"
+        aria-hidden="true"
+        >{{ secondaryButton.icon }}</mat-icon
+      >
+      <span>{{ secondaryButton.text }}</span>
+    </a>
+  </ng-container>
+</app-card>

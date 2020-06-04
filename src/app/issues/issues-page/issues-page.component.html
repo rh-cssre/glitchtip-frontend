@@ -6,48 +6,87 @@
   <app-header-nav></app-header-nav>
 
   <div *ngIf="issues$ | async as issues">
-    <mat-card
-      *ngIf="
-        (initialLoadComplete$ | async) &&
-        !(orgHasAProject$ | async) &&
-        !(urlHasParam$ | async)
-      "
-    >
-      <h3>
-        This organization has no projects.
-      </h3>
-      <p>
-        To add a project to this organization, press the
-        "Add&nbsp;Project"&nbsp;button.
-      </p>
-    </mat-card>
+    <ng-container *ngIf="initialLoadComplete$ | async">
+      <mat-card *ngIf="userNotInSomeTeams$ | async">
+        <p>
+          You can't see issues for some projects because you're not on the team
+          for those projects.
+        </p>
+      </mat-card>
 
-    <mat-card
-      *ngIf="
-        (initialLoadComplete$ | async) &&
-        (orgHasAProject$ | async) &&
-        issues.length === 0 &&
-        !(urlHasParam$ | async)
-      "
-    >
-      <h3>
-        <ng-container *ngIf="multipleProjectsSelected$ | async">
-          No issues have been reported to these projects.
-        </ng-container>
-        <ng-container *ngIf="!(multipleProjectsSelected$ | async)">
-          No issues have been reported to this project.
-        </ng-container>
-      </h3>
+      <ng-container *ngIf="!(urlHasParam$ | async)">
+        <mat-card *ngIf="!(orgHasAProject$ | async)">
+          <h3>
+            This organization has no projects.
+          </h3>
+          <p>
+            To add a project to this organization, press the
+            "Add&nbsp;Project"&nbsp;button.
+          </p>
+        </mat-card>
+        <mat-card *ngIf="(orgHasAProject$ | async) && issues.length === 0">
+          <h3>
+            <ng-container
+              *ngIf="appliedProjectCount$ | async as appliedProjectCount"
+            >
+              <ng-container *ngIf="appliedProjectCount > 1; else singleProject">
+                <ng-container
+                  *ngIf="
+                    (projectsWhereAdminIsNotOnTheTeam$ | async)?.length === 0;
+                    else notAMemberOfAtLeastOne
+                  "
+                >
+                  No issues have been reported to these projects.
+                </ng-container>
 
-      <p>
-        Add an SDK to your project<ng-container
-          *ngIf="multipleProjectsSelected$ | async"
-          >s</ng-container
-        >
-        to start sending errors to GlitchTip.
-      </p>
-    </mat-card>
+                <ng-template #notAMemberOfAtLeastOne>
+                  No issues, and/or not on the team.
+                </ng-template>
+              </ng-container></ng-container
+            >
 
+            <ng-template #singleProject>
+              <ng-container
+                *ngIf="
+                  (projectsWhereAdminIsNotOnTheTeam$ | async)?.length === 0;
+                  else notAMember
+                "
+              >
+                No issues have been reported to this project.
+              </ng-container>
+
+              <ng-template #notAMember>
+                You can't see issues for this project because you're not on the
+                team.
+              </ng-template>
+            </ng-template>
+          </h3>
+
+          <p>
+            <ng-container
+              *ngIf="
+                (projectsWhereAdminIsNotOnTheTeam$ | async)?.length === 0;
+                else paragraphAltMessaging
+              "
+            >
+              Add an SDK to your project<ng-container
+                *ngIf="appliedProjectCount$ | async as appliedProjectCount"
+                ><ng-container *ngIf="appliedProjectCount > 1"
+                  >s</ng-container
+                ></ng-container
+              >
+              to start sending errors to GlitchTip.
+            </ng-container>
+
+            <ng-template #paragraphAltMessaging>
+              There are no issues here, either because no issues have been
+              reported or because you're not on the team for one or more of the
+              projects.
+            </ng-template>
+          </p>
+        </mat-card>
+      </ng-container>
+    </ng-container>
     <table
       *ngIf="issues.length > 0 || (urlHasParam$ | async)"
       mat-table
@@ -206,12 +245,12 @@
           <div>
             <span
               class="mat-caption"
-              *ngIf="(oneProjectApplied$ | async) === false"
+              *ngIf="(appliedProjectCount$ | async) !== 1"
             >
               {{ element.projectSlug }}
             </span>
             <span class="mat-caption" *ngIf="true">
-              <ng-container *ngIf="(oneProjectApplied$ | async) === false">
+              <ng-container *ngIf="(appliedProjectCount$ | async) !== 1">
                 &mdash;
               </ng-container>
               <time
@@ -232,7 +271,7 @@
               class="mat-caption"
               *ngIf="element.type && element.type === 'csp'"
               ><span
-                *ngIf="(oneProjectApplied$ | async) === false && element.type"
+                *ngIf="(appliedProjectCount$ | async) !== 1 && element.type"
               >
                 &mdash; </span
               >{{ element.type }} report</span
