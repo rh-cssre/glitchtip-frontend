@@ -12,6 +12,7 @@ import { IssuesService } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { formatDate } from "@angular/common";
+import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 
 @Component({
   selector: "app-issues-page",
@@ -43,25 +44,54 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   nextParams$ = this.issuesService.nextPageParams$;
   previousParams$ = this.issuesService.previousPageParams$;
   routerEventSubscription: Subscription;
-  multipleProjectsSelected$ = this.route.queryParams.pipe(
-    map((params) => {
-      const normalizedParams = normalizeProjectParams(params.project);
-      return normalizedParams.length > 1;
-    })
-  );
   orgHasAProject$ = this.organizationsService.activeOrganizationProjects$.pipe(
     map((projects) => !!projects && projects.length > 0)
   );
 
-  oneProjectApplied$ = this.route.queryParams.pipe(
-    map((params) => {
-      const projects = normalizeProjectParams(params.project);
-      return projects.length === 1;
+  projectsFromParams$ = this.route.queryParams.pipe(
+    map((params) => normalizeProjectParams(params.project))
+  );
+
+  /**
+   * Corresponds to project picker/header nav/project IDs in the URL
+   * If the count is zero, we show issues from all projects
+   */
+  appliedProjectCount$ = this.projectsFromParams$.pipe(
+    map((projects) => projects.length)
+  );
+
+  projectsWhereAdminIsNotOnTheTeam$ = combineLatest([
+    this.projectsFromParams$,
+    this.organizationsService.activeOrganizationProjects$,
+  ]).pipe(
+    map(([projectsFromParams, activeOrgProjects]) => {
+      const projectsMatchedFromParams: OrganizationProject[] = [];
+      projectsFromParams.forEach((projectId) => {
+        const matchedProject = activeOrgProjects?.find(
+          (project) => project.id === parseInt(projectId, 10)
+        );
+        if (matchedProject) {
+          projectsMatchedFromParams.push(matchedProject);
+        }
+      });
+      return projectsMatchedFromParams.filter(
+        (project) => project.isMember === false
+      );
     })
   );
 
   urlHasParam$ = this.route.queryParams.pipe(
     map((params) => !!params.query || !!params.start || !!params.end)
+  );
+
+  userNotInSomeTeams$ = combineLatest([
+    this.projectsWhereAdminIsNotOnTheTeam$,
+    this.appliedProjectCount$,
+  ]).pipe(
+    map(
+      ([projectsWhereAdminIsNotOnTheTeam, appliedProjectCount]) =>
+        projectsWhereAdminIsNotOnTheTeam.length && appliedProjectCount > 1
+    )
   );
 
   constructor(

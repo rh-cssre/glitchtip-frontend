@@ -2,6 +2,16 @@
   <header class="page-header">
     <h1 class="mat-display-1">Settings for {{ project.name }}</h1>
   </header>
+  <mat-card *ngIf="project.isMember === false"
+    ><mat-card-content>
+      <p class="mat-body-strong">Note</p>
+      <p>
+        Because you are an admin for {{ project.organization.name }}, you have
+        access to all of its projects. However, if you want to view issues for
+        {{ project.name }}, you must be a member of one of its teams.
+      </p></mat-card-content
+    ></mat-card
+  >
   <mat-card>
     <form
       [formGroup]="form"

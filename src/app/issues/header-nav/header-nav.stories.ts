@@ -8,6 +8,7 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
 import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MatomoModule } from "ngx-matomo";
 
 export default {
   title: "Issue Header Nav",
@@ -18,11 +19,12 @@ export default {
         ReactiveFormsModule,
         BrowserAnimationsModule,
         RouterTestingModule,
-        HttpClientTestingModule
-      ]
+        HttpClientTestingModule,
+        MatomoModule,
+      ],
     }),
-    withKnobs
-  ]
+    withKnobs,
+  ],
 };
 
 const sampleProjects: OrganizationProject[] = [
@@ -74,17 +76,17 @@ const sampleProjects: OrganizationProject[] = [
     id: 7,
     platform: "javascript",
     isMember: true,
-  }
+  },
 ];
 
 export const headerNav = () => ({
   component: HeaderNavComponent,
   props: {
     projects$: of(sampleProjects),
-    appliedProjectIds: [1, 2, 5]
-  }
+    appliedProjectIds: [1, 2, 5],
+  },
 });
 
 headerNav.story = {
-  parameters: {}
+  parameters: {},
 };

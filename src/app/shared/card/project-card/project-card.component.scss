@@ -1,30 +1,14 @@
-@import "../../../assets/styles/variables";
+.content {
+  padding-top: 24px;
+  padding-bottom: 2px;
 
-mat-card {
-  border-radius: 0;
-}
-
-mat-card > a {
-  text-decoration: none;
-  color: mat-color($mat-gray, 900);
-}
-
-mat-card-title {
-  margin-bottom: 0;
-  padding-bottom: 16px;
-}
-
-mat-card-content {
-  margin-bottom: 8px;
+  &--override {
+    padding-top: 0;
+  }
 
   p {
     margin-bottom: 0;
     margin-top: 0;
-  }
-
-  .organization {
-    padding-top: 24px;
-    padding-bottom: 2px;
   }
 
   .date-created {
@@ -33,13 +17,7 @@ mat-card-content {
   }
 }
 
-mat-card-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  margin-left: 0;
-  margin-bottom: 0;
-
+.action-button {
   mat-icon {
     font-size: 16px;
     width: 16px;
@@ -50,10 +28,15 @@ mat-card-actions {
     &__warning {
       margin-right: 8px;
     }
+
     &__settings {
       margin-right: 3px;
     }
   }
+}
+
+.settings {
+  margin-left: auto !important;
 }
 
 :host.sample-card {

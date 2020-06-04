@@ -1,0 +1,15 @@
+<mat-card>
+  <a [routerLink]="cardLink" [queryParams]="cardLinkQueryParams || {}">
+    <mat-card-content>
+      <mat-card-title>
+        <span>{{ title }}</span>
+      </mat-card-title>
+      <mat-divider></mat-divider>
+      <div class="padding"></div>
+      <ng-content class="content" select="[content]"></ng-content>
+    </mat-card-content>
+    <mat-card-actions class="card-actions"
+      ><ng-content select="[actions]"></ng-content
+    ></mat-card-actions>
+  </a>
+</mat-card>

@@ -106,6 +106,12 @@ mat-expansion-panel::ng-deep {
     text-align: left;
   }
 
+  .disabled {
+    cursor: default;
+    pointer-events: none;
+    color: #b0b0b0;
+  }
+
   mat-checkbox ::ng-deep label {
     position: relative;
 

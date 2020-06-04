@@ -90,8 +90,8 @@ export class HeaderNavComponent implements OnInit {
     map(([projects, value]) =>
       projects
         ? projects.filter((project) =>
-          project.name.toLowerCase().includes(value.toLowerCase())
-        )
+            project.name.toLowerCase().includes(value.toLowerCase())
+          )
         : null
     )
   );
@@ -111,15 +111,15 @@ export class HeaderNavComponent implements OnInit {
   ) {
     if (
       event.key === "/" &&
-      !this.expansionPanel.expanded &&
-      !this.expansionPanel.disabled
+      !this.expansionPanel?.expanded &&
+      !this.expansionPanel?.disabled
     ) {
       event.preventDefault();
       // turns out this is where the scrolling is happening for whatever reason
       document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
       this.expansionPanel.open();
     }
-    if (this.expansionPanel.expanded) {
+    if (this.expansionPanel?.expanded) {
       if (event.key === "Escape") {
         this.resetPanel();
       }
@@ -135,7 +135,7 @@ export class HeaderNavComponent implements OnInit {
 
   @HostListener("document:click", ["$event.target"])
   onClickHandler(target) {
-    if (!target.closest("#project-picker") && this.expansionPanel.expanded) {
+    if (!target.closest("#project-picker") && this.expansionPanel?.expanded) {
       this.closePanel();
     }
   }
@@ -232,5 +232,5 @@ export class HeaderNavComponent implements OnInit {
     private organizationsService: OrganizationsService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {}
 }

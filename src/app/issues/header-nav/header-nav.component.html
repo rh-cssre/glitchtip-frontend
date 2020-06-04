@@ -32,6 +32,7 @@
           <button
             id="picker-button-{{ project.id }}"
             class="picker-button mat-body-1"
+            [class.disabled]="!project.isMember"
             (click)="selectProjectAndClose(project.id)"
           >
             {{ project.name }}
@@ -39,6 +40,7 @@
           <mat-checkbox
             (change)="toggleProject(project.id)"
             [checked]="isSelected(project.id)"
+            [disabled]="!project.isMember"
           >
           </mat-checkbox>
         </mat-list-item>

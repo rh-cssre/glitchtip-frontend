@@ -24,9 +24,12 @@
         { key: 'organization', value: project.organization.name },
         { key: 'date created', value: (project.dateCreated | date)! }
       ]"
-      [primaryActionButtonLink]="project.slug"
-      primaryActionButtonIcon="settings"
-      primaryActionButtonText="Settings"
+      [isMember]="project.isMember"
+      [secondaryButton]="{
+        link: project.slug,
+        icon: 'settings',
+        text: 'Settings'
+      }"
     ></app-project-card>
   </div>
 </section>
