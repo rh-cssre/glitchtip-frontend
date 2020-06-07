@@ -5,9 +5,9 @@ describe("Home page", () => {
     seedBackend();
   });
 
-  it("should show zero organization info on home page", () => {
+  it("should show zero projects info on home page", () => {
     requestLogin();
     cy.visit("/");
-    cy.contains("You don't have any organizations yet");
+    cy.contains("This organization has no projects");
   });
 });
