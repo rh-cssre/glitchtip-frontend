@@ -9,8 +9,8 @@ export function requestLogin() {
   const url = "/rest-auth/login/";
   cy.request("POST", url, {
     email: user.email,
-    password: user.password
-  }).then(response => {
+    password: user.password,
+  }).then((response) => {
     localStorage.setItem("auth", JSON.stringify(response?.body));
   });
 }

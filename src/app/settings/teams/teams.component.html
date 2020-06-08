@@ -1,0 +1,35 @@
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-display-1">Teams</h1>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="openCreateTeamDialog()"
+      id="new-team"
+    >
+      Create Team
+    </button>
+  </header>
+  <mat-card>
+    <mat-card-content>
+      <mat-list *ngIf="(teams$ | async)?.length; else noTeamState">
+        <mat-list-item *ngFor="let teams of teams$ | async; let i = index">
+          <a mat-line>#{{ teams.slug }}</a>
+          <p mat-line>
+            {{ teams.memberCount | i18nPlural: memberCountPluralMapping }}
+          </p>
+        </mat-list-item>
+      </mat-list>
+      <ng-template #noTeamState>
+        <p>
+          You don't have any teams set up. Teams determine which users have
+          access to projects in your organization.
+        </p>
+        <p>
+          To create a new team, press the "Create Team" button in the upper
+          right.
+        </p>
+      </ng-template>
+    </mat-card-content></mat-card
+  >
+</section>

@@ -31,7 +31,7 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 We define end to end testing as running both the Django backend and Angular frontend.
 We use Cypress to run end to end tests. Be aware the tests will seed the backend codebase with test data.
 
-1. Run the backend server. From the backend repo run `docker-compose up`
+1. Run the backend server. From the backend repo run `docker-compose up`. Do not enable Stripe.
 2. Run the frontend development server `npm start`
 3. Run Cypress `npm run cy:open`
 
