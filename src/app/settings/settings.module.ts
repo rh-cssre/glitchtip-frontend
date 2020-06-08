@@ -11,6 +11,11 @@ import { OrganizationsComponent } from "./organizations/organizations.component"
 import { OrganizationDetailComponent } from "./organizations/organization-detail/organization-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { SharedModule } from "../shared/shared.module";
+import { TeamsComponent } from "./teams/teams.component";
+import { NewTeamComponent } from "./teams/new-team/new-team.component";
+
+// Material
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
   imports: [
@@ -18,6 +23,7 @@ import { SharedModule } from "../shared/shared.module";
     ReactiveFormsModule,
     SettingsRoutingModule,
     SharedModule,
+    MatDialogModule,
   ],
   declarations: [
     ProjectsComponent,
@@ -26,6 +32,8 @@ import { SharedModule } from "../shared/shared.module";
     OrganizationsComponent,
     OrganizationDetailComponent,
     SettingsComponent,
+    TeamsComponent,
+    NewTeamComponent,
   ],
 })
 export class SettingsModule {}

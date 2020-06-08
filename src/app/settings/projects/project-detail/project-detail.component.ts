@@ -67,7 +67,6 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   onSubmit(orgSlug: string, projectSlug: string) {
-    console.log(this.form);
     if (this.form.valid) {
       this.projectsService
         .updateProject(orgSlug, projectSlug, {

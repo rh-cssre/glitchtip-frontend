@@ -5,6 +5,7 @@ import { NewProjectComponent } from "./projects/new-project/new-project.componen
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { OrganizationsComponent } from "./organizations/organizations.component";
+import { TeamsComponent } from "./teams/teams.component";
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
             (m) => m.SubscriptionModule
           ),
       },
+      { path: "teams", component: TeamsComponent },
     ],
   },
 ];
