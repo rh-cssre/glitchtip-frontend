@@ -1,13 +1,14 @@
 import { requestLogin, seedBackend } from "./utils";
+import { project } from "../fixtures/variables";
 
 describe("Home page", () => {
   beforeEach(() => {
     seedBackend();
   });
 
-  it("should show zero projects info on home page", () => {
+  it("should show a list of projects", () => {
     requestLogin();
     cy.visit("/");
-    cy.contains("This organization has no projects");
+    cy.contains(project.name);
   });
 });
