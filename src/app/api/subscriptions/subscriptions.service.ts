@@ -51,10 +51,25 @@ export class SubscriptionsService {
     );
   }
 
+  /**
+   * Retrieve subscription plans
+   * productAmountSorted converts product prices to ints and sorts from low to high
+   */
   retrieveSubscriptionPlans() {
-    return this.http
-      .get<Product[]>("/api/0/products/")
-      .pipe(tap((products) => this.setProducts(products)));
+    return this.http.get<Product[]>("/api/0/products/").pipe(
+      tap((products) => {
+        const productAmountSorted = products
+          .map((product) => ({
+            ...product,
+            plans: product.plans.map((plans) => ({
+              ...plans,
+              amount: +plans.amount,
+            })),
+          }))
+          .sort((a, b) => a.plans[0].amount - b.plans[0].amount);
+        this.setProducts(productAmountSorted);
+      })
+    );
   }
 
   createFreeSubscription(organizationId: number, planId: string) {

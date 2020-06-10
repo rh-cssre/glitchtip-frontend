@@ -1,7 +1,7 @@
 export interface Plan {
   id: string;
   nickname: string;
-  amount: string;
+  amount: number | string;
   metadata: { [key: string]: string };
 }
 
