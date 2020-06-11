@@ -36,7 +36,7 @@ export class PaymentComponent implements OnInit {
   onSubmit(plan: Plan, selectedIndex: number) {
     this.selectedSubscription = selectedIndex;
     if (this.activeOrganizationId) {
-      if (plan.amount === "0.00") {
+      if (plan.amount === 0) {
         this.subscriptionService
           .createFreeSubscription(this.activeOrganizationId, plan.id)
           .pipe(tap(() => (this.selectedSubscription = null)))
