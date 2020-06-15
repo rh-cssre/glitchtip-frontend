@@ -54,9 +54,10 @@ export class ProjectsService {
     private organizationsService: OrganizationsService
   ) {}
 
-  createProject(project: any) {
+  createProject(project: any, teamSlug: string, orgSlug: string) {
+    const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
     return this.http
-      .post<Project>(this.url, project)
+      .post<Project>(url, project)
       .pipe(tap((newProject) => this.addOneProject(newProject)));
   }
 

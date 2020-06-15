@@ -9,3 +9,8 @@ export const newTeam = {
 export const project = {
   name: "cypresstestproject",
 };
+
+export const newProject = {
+  name: "newcypresstestproject",
+  platform: "newcypresstestplatform",
+};

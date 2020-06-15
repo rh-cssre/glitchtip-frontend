@@ -1,41 +1,103 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { ProjectsService } from "../../../api/projects/projects.service";
+import { TeamsService } from "src/app/api/teams/teams.service";
+import { map, filter, tap } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { NewTeamComponent } from "../../teams/new-team/new-team.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-new-project",
   templateUrl: "./new-project.component.html",
-  styleUrls: ["./new-project.component.scss"]
+  styleUrls: ["./new-project.component.scss"],
 })
 export class NewProjectComponent implements OnInit {
+  teams$ = this.teamsService.teams$;
   loading = false;
   error: string;
+  orgSlug: string;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
-    platform: new FormControl("")
+    platform: new FormControl(""),
+    team: new FormControl("", [Validators.required]),
   });
+
   constructor(
     private projectsService: ProjectsService,
-    private router: Router
-  ) {}
+    private teamsService: TeamsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
+    this.teams$.subscribe((data) => {
+      if (data && data[0]) {
+        this.form.patchValue({
+          team: data[0].slug,
+        });
+      }
+    });
+  }
 
-  ngOnInit() {}
+  get name() {
+    return this.form.get("name");
+  }
+
+  get team() {
+    return this.form.get("team");
+  }
+
+  ngOnInit() {
+    this.route.params
+      .pipe(
+        map((params) => params["org-slug"] as string),
+        filter((slug) => !!slug),
+        tap((slug) => (this.orgSlug = slug))
+      )
+      .subscribe((slug) => {
+        this.teamsService.retrieveTeamsByOrg(slug).toPromise();
+      });
+  }
+
+  openCreateTeamDialog() {
+    this.dialog.open(NewTeamComponent, {
+      maxWidth: "500px",
+      data: {
+        orgSlug: this.orgSlug,
+      },
+    });
+  }
 
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
       this.projectsService
-        .createProject({
-          name: this.form.value.name,
-          platform: this.form.value.platform
-        })
+        .createProject(
+          {
+            name: this.form.value.name,
+            platform: this.form.value.platform,
+          },
+          this.form.value.team,
+          this.orgSlug
+        )
         .subscribe(
-          project =>
-            this.router.navigate(["settings", "projects", project.slug]),
-          err => {
+          (project) => {
             this.loading = false;
-            this.error = "Error";
+            this.snackBar.open(`${project.name} has been created`, undefined, {
+              duration: 4000,
+            });
+            this.router.navigate([
+              "settings",
+              this.orgSlug,
+              "projects",
+              project.slug,
+            ]);
+          },
+          (err) => {
+            this.loading = false;
+            this.error = `${err.statusText}: ${err.status}`;
           }
         );
     }
