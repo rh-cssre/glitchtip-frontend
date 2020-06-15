@@ -280,8 +280,25 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="events">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Events</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [class.resolved]="element.status === 'resolved'"
+          [class.ignored]="element.status === 'ignored'"
+        >
+          <p class="event-cell">{{ element.count }}</p>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="pagination">
-        <td mat-footer-cell *matFooterCellDef colspan="3" class="footer">
+        <td
+          mat-footer-cell
+          *matFooterCellDef
+          [attr.colspan]="displayedColumns.length"
+          class="footer"
+        >
           <ng-container *ngIf="(loading$ | async) === false">
             <a
               [routerLink]="[]"
@@ -297,7 +314,7 @@
               [queryParams]="(nextParams$ | async) || {}"
               queryParamsHandling="merge"
               mat-button
-              *ngIf="hasNextPage$ | async"
+              [disabled]="(hasNextPage$ | async) === false"
             >
               <mat-icon>keyboard_arrow_right</mat-icon>
             </a>
