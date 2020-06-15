@@ -14,7 +14,9 @@
     <mat-card-content>
       <mat-list *ngIf="(teams$ | async)?.length; else noTeamState">
         <mat-list-item *ngFor="let teams of teams$ | async; let i = index">
-          <a mat-line>#{{ teams.slug }}</a>
+          <a mat-line [routerLink]="[teams.slug, 'members']"
+            >#{{ teams.slug }}</a
+          >
           <p mat-line>
             {{ teams.memberCount | i18nPlural: memberCountPluralMapping }}
           </p>

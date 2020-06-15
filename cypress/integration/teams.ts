@@ -1,5 +1,6 @@
 import { seedBackend, requestLogin } from "./utils";
-import { organization, newTeam } from "../fixtures/variables";
+import { organization, newTeam, team } from "../fixtures/variables";
+import { user } from "../fixtures/users";
 
 describe("Create New Team", () => {
   beforeEach(() => {
@@ -23,5 +24,17 @@ describe("Create New Team", () => {
     );
     cy.get("#create-team-submit").click();
     cy.contains("consisting of letters, numbers, underscores or hyphens.");
+  });
+});
+
+describe("List Team Members", () => {
+  beforeEach(() => {
+    seedBackend();
+    requestLogin();
+  });
+
+  it("should list team members", () => {
+    cy.visit(`/settings/${organization.name}/teams/${team.name}/members/`);
+    cy.contains(`${user.email}`);
   });
 });

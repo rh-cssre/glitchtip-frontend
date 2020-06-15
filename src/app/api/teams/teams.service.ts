@@ -7,10 +7,12 @@ import { baseUrl } from "src/app/constants";
 
 interface TeamsState {
   teams: Team[] | null;
+  teamMembers: any;
 }
 
 const initialState: TeamsState = {
   teams: null,
+  teamMembers: null,
 };
 
 @Injectable({
@@ -22,6 +24,9 @@ export class TeamsService {
   private readonly url = baseUrl;
 
   readonly teams$ = this.getState$.pipe(map((state) => state.teams));
+  readonly teamMembers$ = this.getState$.pipe(
+    map((state) => state.teamMembers)
+  );
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +34,12 @@ export class TeamsService {
     return this.http
       .get<Team[]>(`${this.url}/organizations/${orgSlug}/teams/`)
       .pipe(tap((teams) => this.setTeams(teams)));
+  }
+
+  retrieveTeamMembers(orgSlug: string, teamSlug: string) {
+    return this.http
+      .get(`${this.url}/teams/${orgSlug}/${teamSlug}/members/`)
+      .pipe(tap((teamMembers) => this.setTeamMembers(teamMembers)));
   }
 
   createTeam(teamSlug: string, orgSlug: string) {
@@ -42,6 +53,10 @@ export class TeamsService {
 
   private setTeams(teams: Team[]) {
     this.state.next({ ...this.state.getValue(), teams });
+  }
+
+  private setTeamMembers(teamMembers: any) {
+    this.state.next({ ...this.state.getValue(), teamMembers });
   }
 
   /**
