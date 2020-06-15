@@ -21,6 +21,7 @@ table {
 .action-group {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 
   > form {
     flex: 1;
@@ -92,4 +93,8 @@ table {
 mat-card {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.event-cell {
+  text-align: center;
 }

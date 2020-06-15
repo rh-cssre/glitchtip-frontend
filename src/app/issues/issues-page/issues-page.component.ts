@@ -21,7 +21,7 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IssuesPageComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ["select", "status", "title"];
+  displayedColumns: string[] = ["select", "status", "title", "events"];
   loading$ = this.issuesService.loading$;
   initialLoadComplete$ = this.issuesService.initialLoadComplete$;
   form = new FormGroup({
