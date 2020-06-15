@@ -1,41 +1,61 @@
-<mat-card>
-  <mat-card-header
-    ><mat-card-title>Create a New Project</mat-card-title>
-    <mat-card-subtitle>Coming Soon!</mat-card-subtitle></mat-card-header
-  >
-  <mat-card-content>
-    <p>
-      We are working diligently to add the create project feature to GlitchTip.
-    </p>
-    <p>
-      In the meantime, to create a new project, ask your admin for access to
-      <a href="/admin">Django admin</a>. Then, follow these steps to make a new
-      project:
-    </p>
-    <ol>
-      <li>
-        Add a
-        <a href="/admin/projects/project/add">new project</a>
-      </li>
-      <li>
-        Go to
-        <a href="/admin/teams/team">teams</a> and either create a new team or
-        add your project to a current team
-      </li>
-      <li>Now you will be able to access your project in the app</li>
-    </ol>
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-display-1">Create a New Project</h1>
+  </header>
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-center">
+          <mat-error *ngIf="error">{{ error }}</mat-error>
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="Name" />
+            <mat-error
+              ><span *ngIf="name?.errors?.required"
+                >Enter a project name</span
+              ></mat-error
+            >
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="platform" placeholder="Platform" />
+          </mat-form-field>
+          <div class="teams">
+            <mat-form-field *ngIf="teams$ | async as teams">
+              <mat-select
+                (click)="teams.length ? undefined : openCreateTeamDialog()"
+                [placeholder]="teams.length ? 'Assign a team' : 'Create a team'"
+                formControlName="team"
+              >
+                <mat-option *ngFor="let team of teams" [value]="team.slug">
+                  {{ team.slug }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                ><span *ngIf="name?.errors?.required"
+                  >Add a team to this project</span
+                ></mat-error
+              >
+            </mat-form-field>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-error *ngIf="error">{{ error }}</mat-error>
-      <mat-form-field>
-        <input matInput formControlName="name" placeholder="Name" />
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput formControlName="platform" placeholder="Platform" />
-      </mat-form-field>
-      <button mat-flat-button disabled color="primary">
-        Create Project
-      </button>
-    </form></mat-card-content
-  >
-</mat-card>
+            <button
+              mat-icon-button
+              color="primary"
+              aria-label="Add a team"
+              (click)="openCreateTeamDialog()"
+              id="create-team-from-projects"
+              matTooltip="Create a new team for this project"
+              matTooltipPosition="above"
+              type="button"
+            >
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+        <app-loading-button
+          id="create-project-submit"
+          [loading]="loading"
+          buttonText="Create Project"
+        >
+        </app-loading-button>
+      </form> </mat-card-content
+  ></mat-card>
+</section>

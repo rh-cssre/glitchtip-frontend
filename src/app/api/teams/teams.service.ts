@@ -44,8 +44,15 @@ export class TeamsService {
     this.state.next({ ...this.state.getValue(), teams });
   }
 
+  /**
+   * Add new team to state
+   * The new team needs to be added to the beginning of the Teams array
+   */
   private addOneTeam(team: Team) {
-    const newTeams = this.state.getValue().teams?.concat([team]);
+    const getTeamsState = this.state.getValue().teams;
+    const teams = getTeamsState ? getTeamsState : [];
+
+    const newTeams = [team].concat(teams);
     if (newTeams) {
       this.state.next({
         ...this.state.getValue(),
