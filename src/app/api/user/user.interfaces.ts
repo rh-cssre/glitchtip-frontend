@@ -16,3 +16,9 @@ export interface UserDetails {
   last_name: string;
   socialaccount_set: SocialAccount[];
 }
+
+export interface EmailAddress {
+  isPrimary: boolean;
+  email: string;
+  isVerified: boolean;
+}
