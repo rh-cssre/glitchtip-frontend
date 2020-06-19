@@ -26,3 +26,30 @@ mat-chip {
   padding: 0 10px;
   min-height: 24px;
 }
+
+.delete-spinner-container {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.add-email-form-ui {
+  display: flex;
+  padding-top: 7px;
+
+  .mat-form-field {
+    flex: 1;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    max-width: 400px;
+  }
+
+  app-loading-button {
+    margin-top: 12px;
+    margin-left: 15px;
+  }
+}

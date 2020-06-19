@@ -22,16 +22,25 @@
           <button mat-stroked-button color="primary" *ngIf="!email.isVerified">
             Resend verification
           </button>
-          <button
+          <app-loading-button
             *ngIf="!email.isPrimary && email.isVerified"
-            mat-stroked-button
-            color="primary"
+            buttonText="Make primary"
+            [loading]="loadingStates.makePrimary === email.email"
             (click)="makePrimary(email.email)"
+            buttonStyle="stroked"
+          ></app-loading-button>
+          <div
+            *ngIf="loadingStates.delete === email.email"
+            class="delete-spinner-container"
           >
-            Make primary
-          </button>
+            <mat-progress-spinner
+              [diameter]="24"
+              color="primary"
+              mode="indeterminate"
+            ></mat-progress-spinner>
+          </div>
           <button
-            *ngIf="!email.isPrimary"
+            *ngIf="!email.isPrimary && loadingStates.delete !== email.email"
             mat-icon-button
             aria-label="Remove email address"
             (click)="deleteEmail(email.email)"
@@ -41,37 +50,45 @@
         </div>
       </mat-list-item>
     </mat-list>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" id="manage-email-form">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      id="add-email-form"
+      class="add-email-form"
+    >
+      <div class="add-email-form-ui">
+        <mat-form-field>
+          <input
+            matInput
+            type="email"
+            placeholder="Email Address"
+            formControlName="email_address"
+            [errorStateMatcher]="matcher"
+          />
+          <mat-error>
+            <span
+              *ngIf="
+                email_address?.errors?.required || email_address?.errors?.email
+              "
+            >
+              Please enter a valid email address.
+            </span>
+            <span *ngIf="email_address?.errors?.matchesExistingValidator">
+              This email address is already on the list.
+            </span>
+            <span *ngIf="email_address?.errors?.serverError">
+              {{ email_address?.errors?.serverError }}
+            </span>
+          </mat-error>
+        </mat-form-field>
+        <app-loading-button
+          buttonText="Add Email Address"
+          [loading]="loadingStates.add"
+        ></app-loading-button>
+      </div>
       <mat-error class="server-error" *ngIf="addEmailError">
         {{ addEmailError }}
       </mat-error>
-      <mat-form-field>
-        <input
-          matInput
-          type="email"
-          placeholder="Email Address"
-          formControlName="email_address"
-        />
-        <mat-error>
-          <span
-            *ngIf="
-              email_address?.errors?.required || email_address?.errors?.email
-            "
-          >
-            Please enter a valid email address.
-          </span>
-          <span *ngIf="email_address?.errors?.matchesExistingValidator">
-            This email address is already on the list.
-          </span>
-          <span *ngIf="email_address?.errors?.serverError">
-            {{ email_address?.errors?.serverError }}
-          </span>
-        </mat-error>
-      </mat-form-field>
-      <app-loading-button
-        buttonText="Add Email Address"
-        [loading]="loadingStates.new"
-      ></app-loading-button>
     </form>
   </mat-card-content>
 </mat-card>

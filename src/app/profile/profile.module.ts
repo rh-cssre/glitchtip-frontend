@@ -8,7 +8,7 @@ import { ConnectComponent } from "./connect/connect.component";
 import { SharedModule } from "../shared/shared.module";
 import { AuthButtonComponent } from "./auth-button/auth-button.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
-import { ManageEmailsComponent } from './manage-emails/manage-emails.component';
+import { ManageEmailsComponent } from "./manage-emails/manage-emails.component";
 
 @NgModule({
   declarations: [
