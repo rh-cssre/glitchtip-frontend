@@ -19,9 +19,9 @@
           </mat-chip-list>
         </div>
         <div class="email-actions">
-          <button mat-stroked-button color="primary" *ngIf="!email.isVerified">
+          <!-- <button mat-stroked-button color="primary" *ngIf="!email.isVerified">
             Resend verification
-          </button>
+          </button> -->
           <app-loading-button
             *ngIf="!email.isPrimary && email.isVerified"
             buttonText="Make primary"
