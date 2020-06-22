@@ -2,22 +2,36 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router, RoutesRecognized, ActivatedRoute } from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { tap, map, withLatestFrom, filter, distinctUntilChanged } from "rxjs/operators";
+import {
+  tap,
+  map,
+  withLatestFrom,
+  filter,
+  distinctUntilChanged,
+} from "rxjs/operators";
 import { baseUrl } from "../../constants";
-import { Organization, OrganizationDetail } from "./organizations.interface";
+import {
+  Organization,
+  OrganizationDetail,
+  Member,
+} from "./organizations.interface";
 import { SettingsService } from "../settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
+import { TeamsService } from "../teams/teams.service";
+import { Team } from "../teams/teams.interfaces";
 
 interface OrganizationsState {
   organizations: Organization[];
   activeOrganizationId: number | null;
   activeOrganization: OrganizationDetail | null;
+  organizationMembers: Member[];
 }
 
 const initialState: OrganizationsState = {
   organizations: [],
   activeOrganizationId: null,
   activeOrganization: null,
+  organizationMembers: [],
 };
 
 @Injectable({
@@ -40,6 +54,9 @@ export class OrganizationsService {
   readonly activeOrganization$ = this.getState$.pipe(
     map((data) => data.activeOrganization)
   );
+  readonly organizationMembers$ = this.getState$.pipe(
+    map((data) => data.organizationMembers)
+  );
   readonly activeOrganizationProjects$ = this.activeOrganization$.pipe(
     map((data) => (data ? data.projects : null))
   );
@@ -56,13 +73,25 @@ export class OrganizationsService {
   readonly activeOrganizationSlug$ = this.activeOrganizationDetail$.pipe(
     map((org) => (org ? org.slug : null))
   );
+  readonly filteredAddTeamMembers$ = combineLatest([
+    this.organizationMembers$,
+    this.teamsService.teamMembers$,
+  ]).pipe(
+    map(([organizationMembers, teamMembers]) => {
+      return organizationMembers.filter(
+        (orgMembers) =>
+          !teamMembers.find((teamMems) => orgMembers.id === teamMems.id)
+      );
+    })
+  );
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private settingsService: SettingsService,
-    private subscriptionsService: SubscriptionsService
+    private subscriptionsService: SubscriptionsService,
+    private teamsService: TeamsService
   ) {
     this.router.events.subscribe((val) => {
       if (val instanceof RoutesRecognized) {
@@ -171,6 +200,40 @@ export class OrganizationsService {
     return this.http.delete(url);
   }
 
+  retrieveOrganizationMembers(orgSlug: string) {
+    return this.http
+      .get<Member[]>(`${this.url}${orgSlug}/members/`)
+      .pipe(tap((members) => this.setActiveOrganizationMembers(members)));
+  }
+
+  createTeam(teamSlug: string, orgSlug: string) {
+    const data = {
+      slug: teamSlug,
+    };
+    return this.http.post<Team>(`${this.url}/${orgSlug}/teams/`, data).pipe(
+      tap((team) => {
+        this.getOrganizationDetail(orgSlug).toPromise();
+        this.teamsService.addTeam(team);
+      })
+    );
+  }
+
+  addTeamMember(
+    member: Member,
+    orgSlug: string | undefined,
+    teamSlug: string | undefined
+  ) {
+    const url = `${this.url}/${orgSlug}/members/${member.id}/teams/${teamSlug}/`;
+    return this.http.post<Team>(url, member).pipe(
+      tap((team: Team) => {
+        if (orgSlug) {
+          this.teamsService.retrieveTeamMembers(orgSlug, team.slug).toPromise();
+          this.retrieveOrganizationMembers(orgSlug).toPromise();
+        }
+      })
+    );
+  }
+
   private setOrganizations(organizations: Organization[]) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
@@ -189,6 +252,13 @@ export class OrganizationsService {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       activeOrganization: organization,
+    });
+  }
+
+  private setActiveOrganizationMembers(members: Member[]) {
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      organizationMembers: members,
     });
   }
 
