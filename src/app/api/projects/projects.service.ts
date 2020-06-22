@@ -17,7 +17,7 @@ interface ProjectsState {
   projectKeys: ProjectKey[] | null;
 }
 
-const initialState: any = {
+const initialState: ProjectsState = {
   projects: null,
   projectDetail: null,
   projectKeys: null,
@@ -139,7 +139,7 @@ export class ProjectsService {
     }
   }
 
-  private setKeys(projectKeys: any) {
+  private setKeys(projectKeys: ProjectKey[]) {
     this.projectsState.next({ ...this.projectsState.getValue(), projectKeys });
   }
 }

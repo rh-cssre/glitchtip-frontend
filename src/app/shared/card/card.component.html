@@ -5,8 +5,9 @@
         <span>{{ title }}</span>
       </mat-card-title>
       <mat-divider></mat-divider>
-      <div class="padding"></div>
-      <ng-content class="content" select="[content]"></ng-content>
+      <div class="padding">
+        <ng-content select="[content]"></ng-content>
+      </div>
     </mat-card-content>
     <mat-card-actions class="card-actions"
       ><ng-content select="[actions]"></ng-content

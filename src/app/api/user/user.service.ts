@@ -19,6 +19,9 @@ const initialState: UserState = {
 export class UserService {
   private readonly state = new BehaviorSubject<UserState>(initialState);
   readonly userDetails$ = this.state.pipe(map((state) => state.user));
+  readonly activeUserEmail$ = this.userDetails$.pipe(
+    map((userDetails) => userDetails?.email)
+  );
   readonly isGoogleConnected$ = this.userDetails$.pipe(
     map((user) => this.isOAuthConnected(user, "google"))
   );

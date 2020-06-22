@@ -16,3 +16,15 @@ export interface UserDetails {
   last_name: string;
   socialaccount_set: SocialAccount[];
 }
+
+export interface User {
+  lastLogin: string;
+  isSuperuser: boolean;
+  identities: [];
+  id: number;
+  isActive: boolean;
+  name: string;
+  dateJoined: string;
+  hasPasswordAuth: boolean;
+  email: boolean;
+}

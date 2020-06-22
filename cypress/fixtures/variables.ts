@@ -2,6 +2,10 @@ export const organization = {
   name: "cypresstestorg",
 };
 
+export const team = {
+  name: "cypresstestteam",
+};
+
 export const newTeam = {
   slug: "newcypresstestteam",
 };
