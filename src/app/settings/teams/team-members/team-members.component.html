@@ -1,4 +1,41 @@
-<p>team-members works!</p>
-<div *ngIf="teamMembers$ | async as teamMembers">
-  {{ teamMembers | json }}
-</div>
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-display-1">#{{ teamSlug }}</h1>
+    <a mat-flat-button [routerLink]="['/settings', orgSlug, 'teams']">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      Back to Teams
+    </a>
+  </header>
+  <mat-card>
+    <mat-card-header class="card-header">
+      <mat-card-title>Members</mat-card-title>
+      <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
+        <mat-label>Add Member</mat-label>
+        <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
+          <ng-container
+            *ngIf="(filteredAddTeamMembers$ | async)?.length; else emptyState"
+          >
+            <mat-option
+              *ngFor="let orgMember of filteredAddTeamMembers$ | async"
+              [value]="orgMember"
+            >
+              {{ orgMember.user.email }}
+            </mat-option></ng-container
+          ><ng-template #emptyState>
+            <mat-option disabled>No members</mat-option>
+          </ng-template>
+        </mat-select>
+        <mat-error>{{ error }}</mat-error>
+      </mat-form-field>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let teamMember of teamMembers$ | async">
+          <!--TODO: link to /settings/<org-slug>/members/<member id>-->
+          <a>{{ teamMember.user.email }}</a>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</section>

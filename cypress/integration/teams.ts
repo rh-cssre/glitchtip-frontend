@@ -33,8 +33,14 @@ describe("List Team Members", () => {
     requestLogin();
   });
 
-  it("should list team members", () => {
+  it("should add and list team member", () => {
     cy.visit(`/settings/${organization.name}/teams/${team.name}/members/`);
-    cy.contains(`${user.email}`);
+    cy.contains(`#${team.name}`);
+    cy.get("mat-label").contains("Add Member");
+    cy.get("mat-select").first().click();
+    cy.get("mat-option span")
+      .contains(user.email)
+      .then((option) => option[0].click());
+    cy.get("mat-list mat-list-item").first().contains(user.email);
   });
 });
