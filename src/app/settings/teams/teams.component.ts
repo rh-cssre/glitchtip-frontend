@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { map, filter, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NewTeamComponent } from "./new-team/new-team.component";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-teams",
@@ -12,7 +13,13 @@ import { NewTeamComponent } from "./new-team/new-team.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamsComponent implements OnInit {
-  teams$ = this.teamsService.teams$;
+  activeOrganization$ = this.organizationsService.activeOrganization$;
+  yourTeams$ = this.activeOrganization$.pipe(
+    map((orgDetails) => orgDetails?.teams.filter((team) => team.isMember))
+  );
+  otherTeams$ = this.activeOrganization$.pipe(
+    map((orgDetails) => orgDetails?.teams.filter((team) => !team.isMember))
+  );
   orgSlug: string;
 
   memberCountPluralMapping: { [k: string]: string } = {
@@ -22,6 +29,7 @@ export class TeamsComponent implements OnInit {
 
   constructor(
     private teamsService: TeamsService,
+    private organizationsService: OrganizationsService,
     private route: ActivatedRoute,
     public dialog: MatDialog
   ) {}

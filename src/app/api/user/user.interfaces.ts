@@ -22,3 +22,15 @@ export interface EmailAddress {
   email: string;
   isVerified: boolean;
 }
+
+export interface User {
+  lastLogin: string;
+  isSuperuser: boolean;
+  identities: [];
+  id: number;
+  isActive: boolean;
+  name: string;
+  dateJoined: string;
+  hasPasswordAuth: boolean;
+  email: boolean;
+}

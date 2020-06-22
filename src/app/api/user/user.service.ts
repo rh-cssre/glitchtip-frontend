@@ -48,6 +48,10 @@ export class UserService {
       return emailAddresses;
     })
   );
+
+  readonly activeUserEmail$ = this.userDetails$.pipe(
+    map((userDetails) => userDetails?.email)
+  );
   readonly isGoogleConnected$ = this.userDetails$.pipe(
     map((user) => this.isOAuthConnected(user, "google"))
   );

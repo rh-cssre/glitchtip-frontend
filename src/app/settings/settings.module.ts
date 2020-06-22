@@ -16,6 +16,7 @@ import { NewTeamComponent } from "./teams/new-team/new-team.component";
 
 // Material
 import { MatDialogModule } from "@angular/material/dialog";
+import { TeamMembersComponent } from "./teams/team-members/team-members.component";
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     SettingsComponent,
     TeamsComponent,
     NewTeamComponent,
+    TeamMembersComponent,
   ],
 })
 export class SettingsModule {}

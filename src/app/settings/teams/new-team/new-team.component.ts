@@ -1,8 +1,8 @@
 import { Component, Inject } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { TeamsService } from "src/app/api/teams/teams.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-new-team",
@@ -18,7 +18,7 @@ export class NewTeamComponent {
   orgSlug: string;
 
   constructor(
-    private teamsService: TeamsService,
+    private organizationsService: OrganizationsService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<NewTeamComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { orgSlug: string }
@@ -35,7 +35,7 @@ export class NewTeamComponent {
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
-      this.teamsService
+      this.organizationsService
         .createTeam(this.form.value.slug, this.data.orgSlug)
         .subscribe(
           (team) => {
