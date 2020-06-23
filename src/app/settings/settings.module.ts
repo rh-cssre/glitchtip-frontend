@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { SettingsRoutingModule } from "./settings-routing.module";
 
 // Components
@@ -17,11 +17,14 @@ import { NewTeamComponent } from "./teams/new-team/new-team.component";
 // Material
 import { MatDialogModule } from "@angular/material/dialog";
 import { TeamMembersComponent } from "./teams/team-members/team-members.component";
+import { MembersComponent } from "./members/members.component";
+import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     SettingsRoutingModule,
     SharedModule,
     MatDialogModule,
@@ -36,6 +39,8 @@ import { TeamMembersComponent } from "./teams/team-members/team-members.componen
     TeamsComponent,
     NewTeamComponent,
     TeamMembersComponent,
+    MembersComponent,
+    MemberDetailComponent,
   ],
 })
 export class SettingsModule {}

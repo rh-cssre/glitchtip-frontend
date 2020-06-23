@@ -32,8 +32,11 @@
     <mat-card-content>
       <mat-list>
         <mat-list-item *ngFor="let teamMember of teamMembers$ | async">
-          <!--TODO: link to /settings/<org-slug>/members/<member id>-->
-          <a>{{ teamMember.user.email }}</a>
+          <a
+            mat-line
+            [routerLink]="['/settings', orgSlug, 'members', teamMember.id]"
+            >{{ teamMember.user.email }}</a
+          >
         </mat-list-item>
       </mat-list>
     </mat-card-content>

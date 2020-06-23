@@ -1,5 +1,11 @@
 <mat-card>
-  <a [routerLink]="cardLink" [queryParams]="cardLinkQueryParams || {}">
+  <a
+    class="remove-bold"
+    [class.not-clickable]="!cardLink"
+    [tabindex]="cardLink ? 1 : -1"
+    [routerLink]="cardLink"
+    [queryParams]="cardLinkQueryParams || {}"
+  >
     <mat-card-content>
       <mat-card-title>
         <span>{{ title }}</span>

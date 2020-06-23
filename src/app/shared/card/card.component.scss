@@ -38,6 +38,10 @@ mat-card-content {
   }
 }
 
-a {
+.not-clickable {
+  cursor: default;
+}
+
+.remove-bold {
   font-weight: 400;
 }

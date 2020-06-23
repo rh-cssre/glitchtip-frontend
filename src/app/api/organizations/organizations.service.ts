@@ -25,6 +25,7 @@ interface OrganizationsState {
   activeOrganizationId: number | null;
   activeOrganization: OrganizationDetail | null;
   organizationMembers: Member[];
+  memberDetail: Member | null;
 }
 
 const initialState: OrganizationsState = {
@@ -32,6 +33,7 @@ const initialState: OrganizationsState = {
   activeOrganizationId: null,
   activeOrganization: null,
   organizationMembers: [],
+  memberDetail: null,
 };
 
 @Injectable({
@@ -83,6 +85,10 @@ export class OrganizationsService {
           !teamMembers.find((teamMems) => orgMembers.id === teamMems.id)
       );
     })
+  );
+
+  readonly memberDetail$ = this.getState$.pipe(
+    map((data) => data.memberDetail)
   );
 
   constructor(
@@ -206,6 +212,13 @@ export class OrganizationsService {
       .pipe(tap((members) => this.setActiveOrganizationMembers(members)));
   }
 
+  retrieveMemberDetail(orgSlug: string, memberId: string) {
+    const url = `${this.url}${orgSlug}/members/${memberId}/`;
+    return this.http
+      .get<Member>(url)
+      .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)));
+  }
+
   createTeam(teamSlug: string, orgSlug: string) {
     const data = {
       slug: teamSlug,
@@ -223,7 +236,7 @@ export class OrganizationsService {
     orgSlug: string | undefined,
     teamSlug: string | undefined
   ) {
-    const url = `${this.url}/${orgSlug}/members/${member.id}/teams/${teamSlug}/`;
+    const url = `${this.url}${orgSlug}/members/${member.id}/teams/${teamSlug}/`;
     return this.http.post<Team>(url, member).pipe(
       tap((team: Team) => {
         if (orgSlug) {
@@ -259,6 +272,13 @@ export class OrganizationsService {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       organizationMembers: members,
+    });
+  }
+
+  private setMemberDetail(member: Member) {
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      memberDetail: member,
     });
   }
 
