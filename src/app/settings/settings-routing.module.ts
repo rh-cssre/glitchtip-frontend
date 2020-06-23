@@ -7,6 +7,8 @@ import { SettingsComponent } from "./settings/settings.component";
 import { OrganizationsComponent } from "./organizations/organizations.component";
 import { TeamsComponent } from "./teams/teams.component";
 import { TeamMembersComponent } from "./teams/team-members/team-members.component";
+import { MembersComponent } from "./members/members.component";
+import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
 
 const routes: Routes = [
   {
@@ -29,6 +31,13 @@ const routes: Routes = [
         children: [
           { path: "", component: TeamsComponent },
           { path: ":team-slug/members", component: TeamMembersComponent },
+        ],
+      },
+      {
+        path: "members",
+        children: [
+          { path: "", component: MembersComponent },
+          { path: ":member-id", component: MemberDetailComponent },
         ],
       },
     ],

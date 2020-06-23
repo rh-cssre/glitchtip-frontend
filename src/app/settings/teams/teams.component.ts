@@ -15,10 +15,10 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 export class TeamsComponent implements OnInit {
   activeOrganization$ = this.organizationsService.activeOrganization$;
   yourTeams$ = this.activeOrganization$.pipe(
-    map((orgDetails) => orgDetails?.teams.filter((team) => team.isMember))
+    map((orgDetails) => orgDetails?.teams?.filter((team) => team.isMember))
   );
   otherTeams$ = this.activeOrganization$.pipe(
-    map((orgDetails) => orgDetails?.teams.filter((team) => !team.isMember))
+    map((orgDetails) => orgDetails?.teams?.filter((team) => !team.isMember))
   );
   orgSlug: string;
 

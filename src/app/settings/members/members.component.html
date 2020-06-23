@@ -1,0 +1,21 @@
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-display-1">Organization Members</h1>
+  </header>
+  <mat-card>
+    <mat-card-title>
+      {{ (activeOrganization$ | async)?.name }}
+    </mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let orgMember of organizationMembers$ | async">
+          <a mat-line [routerLink]="[orgMember.id]">{{
+            orgMember.user.email
+          }}</a
+          ><span>{{ orgMember.roleName }}</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</section>

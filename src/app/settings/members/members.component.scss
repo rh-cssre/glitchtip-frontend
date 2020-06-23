@@ -1,0 +1,10 @@
+.mat-list-item {
+  &:nth-last-child(n + 2) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  ::ng-deep .mat-list-item-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

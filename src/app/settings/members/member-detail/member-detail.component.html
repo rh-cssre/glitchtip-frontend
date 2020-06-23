@@ -1,0 +1,26 @@
+<section class="l-body" *ngIf="memberDetail$ | async as member">
+  <header class="page-header">
+    <h1 class="mat-display-1">{{ member.user.email }}</h1>
+    <a mat-flat-button [routerLink]="['/settings', orgSlug, 'members']">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      Back to Members
+    </a>
+  </header>
+  <mat-card>
+    <mat-card-title>Basics</mat-card-title><mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="column">
+        <div class="mat-body-strong">Email</div>
+        <div>{{ member.user.email }}</div>
+      </div>
+      <div class="column">
+        <div class="mat-body-strong">Role</div>
+        <div>{{ member.roleName }}</div>
+      </div>
+      <div class="column">
+        <div class="mat-body-strong">Added</div>
+        <div>{{ member.dateCreated | date }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>

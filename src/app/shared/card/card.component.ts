@@ -9,6 +9,6 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 export class CardComponent {
   @Input() cardLink: string | any[];
   @Input() cardLinkQueryParams?: { [k: string]: any };
-  @Input() title: string;
+  @Input() title?: string;
   @Input() secondaryButton = true;
 }
