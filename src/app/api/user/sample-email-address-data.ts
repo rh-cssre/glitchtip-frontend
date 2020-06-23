@@ -6,7 +6,7 @@ export const sampleEmailAddressData = [
   },
   {
     isPrimary: false,
-    email: "ab@example.com",
+    email: "ac@example.com",
     isVerified: true,
   },
   {
