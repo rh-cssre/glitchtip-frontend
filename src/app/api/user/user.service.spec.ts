@@ -1,17 +1,37 @@
 import { TestBed } from "@angular/core/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
 
 import { UserService } from "./user.service";
+import { sampleEmailAddressData } from "./sample-email-address-data";
 
 describe("UserService", () => {
   let service: UserService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
+    httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(UserService);
   });
 
-  it("should be created", () => {
-    expect(service).toBeTruthy();
+  fit("should retrieve a list of email addresses", () => {
+    const url = (service as any).emailAddressesUrl;
+    service.retrieveEmailAddresses();
+    const req = httpTestingController.expectOne(url);
+    req.flush(sampleEmailAddressData);
+    service.emailAddresses$.subscribe((emails) => {
+      expect(emails[0].email).toEqual(sampleEmailAddressData[0].email);
+    });
+    const primaryIndex = sampleEmailAddressData.findIndex(
+      (email) => email.isPrimary === true
+    );
+    service.emailAddressesSorted$.subscribe((emails) => {
+      expect(emails[0].email).toEqual(
+        sampleEmailAddressData[primaryIndex].email
+      );
+    });
   });
 });
