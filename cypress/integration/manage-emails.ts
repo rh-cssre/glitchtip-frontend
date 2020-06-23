@@ -25,10 +25,10 @@ describe("Change Password", () => {
     cy.get("app-manage-emails").contains("is already on the list");
 
     // Email is not valid because mailgun says so. Comment out if problematic
-    const invalidEmail = "hello@a.aa";
-    cy.get("input[formcontrolname=email_address]").clear().type(invalidEmail);
-    cy.get("#add-email-form").submit();
-    cy.get("app-manage-emails").contains("This is not a valid email address");
+    // const invalidEmail = "hello@a.aa";
+    // cy.get("input[formcontrolname=email_address]").clear().type(invalidEmail);
+    // cy.get("#add-email-form").submit();
+    // cy.get("app-manage-emails").contains("This is not a valid email address");
 
     // Email is associated with another account
     const emailForOtherAccount = "cypresstest-other@example.com";
