@@ -121,7 +121,7 @@ export class ManageEmailsComponent implements OnInit {
 
   deleteEmail(email: string) {
     this.loadingStates.delete = email;
-    this.userService.removeEmailAddress(email).then(
+    this.userService.removeEmailAddress(email).subscribe(
       (_) => {
         this.loadingStates.delete = null;
         this.snackBar.open(
@@ -130,7 +130,7 @@ export class ManageEmailsComponent implements OnInit {
           { duration: 4000 }
         );
       },
-      (error) => {
+      (_) => {
         this.loadingStates.delete = null;
         this.snackBar.open(`There was a problem. Try again later.`, undefined, {
           duration: 4000,
@@ -141,8 +141,8 @@ export class ManageEmailsComponent implements OnInit {
 
   makePrimary(email: string) {
     this.loadingStates.makePrimary = email;
-    this.userService.makeEmailPrimary(email).then(
-      () => {
+    this.userService.makeEmailPrimary(email).subscribe(
+      (_) => {
         this.loadingStates.makePrimary = null;
         this.snackBar.open(
           `${email} is now your primary email address.`,
@@ -150,7 +150,7 @@ export class ManageEmailsComponent implements OnInit {
           { duration: 4000 }
         );
       },
-      (error) => {
+      (_) => {
         this.loadingStates.makePrimary = null;
         this.snackBar.open(`There was a problem. Try again later.`, undefined, {
           duration: 4000,
@@ -162,7 +162,7 @@ export class ManageEmailsComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.loadingStates.add = true;
-      this.userService.addEmailAddress(this.form.value.email_address).then(
+      this.userService.addEmailAddress(this.form.value.email_address).subscribe(
         (_) => {
           this.formDirective.resetForm();
           this.loadingStates.add = false;

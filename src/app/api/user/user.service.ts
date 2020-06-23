@@ -72,7 +72,7 @@ export class UserService {
   getUserDetails() {
     this.retrieveUserDetails()
       .pipe(tap((resp: UserDetails) => this.setUserDetails(resp)))
-      .toPromise();
+      .subscribe();
   }
   private retrieveUserDetails() {
     return this.http.get<UserDetails>(this.url);
@@ -85,25 +85,25 @@ export class UserService {
   retrieveEmailAddresses() {
     this.getEmailAddresses()
       .pipe(tap((response: EmailAddress[]) => this.setEmailAddresses(response)))
-      .toPromise();
+      .subscribe();
   }
 
   addEmailAddress(email: string) {
-    return this.postEmailAddress(email)
-      .pipe(tap((response: EmailAddress) => this.setNewEmailAddress(response)))
-      .toPromise();
+    return this.postEmailAddress(email).pipe(
+      tap((response: EmailAddress) => this.setNewEmailAddress(response))
+    );
   }
 
   removeEmailAddress(email: string) {
-    return this.deleteEmailAddress(email)
-      .pipe(tap((_) => this.setRemovedEmailAddress(email)))
-      .toPromise();
+    return this.deleteEmailAddress(email).pipe(
+      tap((_) => this.setRemovedEmailAddress(email))
+    );
   }
 
   makeEmailPrimary(email: string) {
-    return this.putEmailAddress(email)
-      .pipe(tap((response) => this.setNewPrimaryEmail(response)))
-      .toPromise();
+    return this.putEmailAddress(email).pipe(
+      tap((response) => this.setNewPrimaryEmail(response))
+    );
   }
 
   private getEmailAddresses() {
