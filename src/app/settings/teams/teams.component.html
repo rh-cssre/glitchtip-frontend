@@ -10,45 +10,53 @@
       Create Team
     </button>
   </header>
-  <app-card title="Your Teams">
-    <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams" content>
-      <mat-list-item *ngFor="let yourTeam of yourTeams$ | async">
-        <a mat-line [routerLink]="[yourTeam.slug, 'members']"
-          >#{{ yourTeam.slug }}</a
-        >
-        <p mat-line>
-          {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
+  <mat-card>
+    <mat-card-title>Your Teams</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams">
+        <mat-list-item *ngFor="let yourTeam of yourTeams$ | async">
+          <a mat-line [routerLink]="[yourTeam.slug, 'members']">
+            #{{ yourTeam.slug }}
+          </a>
+          <p mat-line>
+            {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
+          </p>
+        </mat-list-item>
+      </mat-list>
+      <ng-template #noTeams>
+        <p *ngIf="(otherTeams$ | async)?.length; else noTeamsInOrg">
+          You aren't part of any teams. Join a team below or press the "Create
+          Team" button in the upper right.
         </p>
-      </mat-list-item>
-    </mat-list>
-    <ng-template #noTeams>
-      <p *ngIf="(otherTeams$ | async)?.length; else noTeamsInOrg">
-        You aren't part of any teams. Join a team below or press the "Create
-        Team" button in the upper right.
-      </p>
-      <ng-template #noTeamsInOrg>
-        <p>
-          You don't have any teams set up. Teams determine which users have
-          access to projects in your organization.
-        </p>
-        <p>
-          To create a new team, press the "Create Team" button in the upper
-          right.
-        </p></ng-template
-      >
-    </ng-template>
-  </app-card>
+        <ng-template #noTeamsInOrg>
+          <p>
+            You don't have any teams set up. Teams determine which users have
+            access to projects in your organization.
+          </p>
+          <p>
+            To create a new team, press the "Create Team" button in the upper
+            right.
+          </p>
+        </ng-template>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
 
-  <app-card *ngIf="(otherTeams$ | async)?.length" title="Other Teams">
-    <mat-list content>
-      <mat-list-item *ngFor="let otherTeam of otherTeams$ | async">
-        <a mat-line [routerLink]="[otherTeam.slug, 'members']"
-          >#{{ otherTeam.slug }}</a
-        >
-        <p mat-line>
-          {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
-        </p>
-      </mat-list-item></mat-list
-    >
-  </app-card>
+  <mat-card *ngIf="(otherTeams$ | async)?.length">
+    <mat-card-title>Other Teams</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let otherTeam of otherTeams$ | async">
+          <a mat-line [routerLink]="[otherTeam.slug, 'members']">
+            #{{ otherTeam.slug }}
+          </a>
+          <p mat-line>
+            {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
+          </p>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
 </section>

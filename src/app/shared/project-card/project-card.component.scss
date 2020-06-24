@@ -1,0 +1,66 @@
+@import "../../../assets/styles/variables";
+
+a {
+  text-decoration: none;
+  color: mat-color($mat-gray, 900);
+  font-weight: 400;
+}
+
+.mat-card-content {
+  padding-top: 24px;
+  padding-bottom: 2px;
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .key {
+    margin-top: 24px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+
+  .action-button {
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+
+    .icon {
+      &__warning {
+        margin-right: 8px;
+      }
+
+      &__settings {
+        margin-right: 3px;
+      }
+    }
+  }
+}
+
+:host.sample-card {
+  pointer-events: none;
+  opacity: 0.6;
+
+  ::ng-deep {
+    mat-card-title span,
+    p span,
+    .mat-button-wrapper span {
+      background-color: #eee;
+      color: #eee;
+    }
+    .action-button .mat-icon {
+      background-color: #eee;
+      color: #eee;
+    }
+  }
+}

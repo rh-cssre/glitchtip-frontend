@@ -1,24 +1,24 @@
-<app-card
-  [title]="title"
-  [cardLink]="isMember ? cardLink : secondaryButton.link"
-  [cardLinkQueryParams]="isMember ? cardLinkQueryParams || {} : {}"
-  [secondaryButton]="isMember"
->
-  <div
-    content
-    [class.content--override]="i === 0"
-    class="content"
-    *ngFor="let description of descriptionList; let i = index"
+<mat-card>
+  <a
+    [routerLink]="isMember ? cardLink : secondaryButton.link"
+    [queryParams]="isMember ? cardLinkQueryParams || {} : {}"
   >
-    <p class="mat-small organization">
-      <span>{{ description.key | uppercase }}</span>
-    </p>
-    <p>
-      <span>{{ description.value }}</span>
-    </p>
-  </div>
-
-  <ng-container actions>
+    <mat-card-title>
+      <span>{{ title }}</span>
+    </mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ng-container *ngFor="let description of descriptionList">
+        <p class="mat-small key">
+          <span>{{ description.key | uppercase }}</span>
+        </p>
+        <p>
+          <span>{{ description.value }}</span>
+        </p>
+      </ng-container>
+    </mat-card-content>
+  </a>
+  <mat-card-actions>
     <a
       *ngIf="primaryButton && primaryButton.text && primaryButton.link"
       class="action-button"
@@ -31,8 +31,8 @@
       "
       [matTooltipPosition]="isMember ? undefined : 'right'"
       color="primary"
-      [routerLink]="primaryButton.link"
-      [queryParams]="primaryButton.query || {}"
+      [routerLink]="isMember ? cardLink : undefined"
+      [queryParams]="isMember ? primaryButton.query || {} : {}"
     >
       <mat-icon
         *ngIf="primaryButton.icon"
@@ -57,5 +57,5 @@
       >
       <span>{{ secondaryButton.text }}</span>
     </a>
-  </ng-container>
-</app-card>
+  </mat-card-actions>
+</mat-card>
