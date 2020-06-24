@@ -7,7 +7,7 @@ import {
 import {
   ProjectCardButtonWithQuery,
   ProjectCardButton,
-} from "../../shared.interfaces";
+} from "../shared.interfaces";
 
 @Component({
   selector: "app-project-card",

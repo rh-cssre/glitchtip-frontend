@@ -2,11 +2,10 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MaterialModule } from "./material.module";
 import { DaysAgoPipe } from "./days-ago.pipe";
-import { ProjectCardComponent } from "./card/project-card/project-card.component";
-import { CardComponent } from "./card/card.component";
+import { ProjectCardComponent } from "./project-card/project-card.component";
 import { RouterModule } from "@angular/router";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
-import { EmptyProjectsComponent } from "./empty-projects/empty-projects.component";
+import { EmptyProjectsComponent } from "./project-card/empty-projects/empty-projects.component";
 import { InputMatcherDirective } from "./input-matcher.directive";
 import { LoadingButtonComponent } from "./loading-button/loading-button.component";
 
@@ -19,7 +18,6 @@ import { LoadingButtonComponent } from "./loading-button/loading-button.componen
     EmptyProjectsComponent,
     InputMatcherDirective,
     LoadingButtonComponent,
-    CardComponent,
   ],
   exports: [
     DaysAgoPipe,
@@ -29,7 +27,6 @@ import { LoadingButtonComponent } from "./loading-button/loading-button.componen
     MaterialModule,
     InputMatcherDirective,
     LoadingButtonComponent,
-    CardComponent,
   ],
 })
 export class SharedModule {}
