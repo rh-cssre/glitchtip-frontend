@@ -9,6 +9,7 @@ import { SharedModule } from "../shared/shared.module";
 import { AuthButtonComponent } from "./auth-button/auth-button.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { ManageEmailsComponent } from "./manage-emails/manage-emails.component";
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ManageEmailsComponent } from "./manage-emails/manage-emails.component";
     AuthButtonComponent,
     ChangePasswordComponent,
     ManageEmailsComponent,
+    ConfirmEmailComponent,
   ],
   imports: [
     CommonModule,
