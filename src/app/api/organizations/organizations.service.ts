@@ -1,6 +1,11 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router, RoutesRecognized, ActivatedRoute } from "@angular/router";
+import {
+  Router,
+  RoutesRecognized,
+  ActivatedRoute,
+  NavigationStart,
+} from "@angular/router";
 import { BehaviorSubject, combineLatest } from "rxjs";
 import {
   tap,
@@ -99,15 +104,55 @@ export class OrganizationsService {
     private subscriptionsService: SubscriptionsService,
     private teamsService: TeamsService
   ) {
-    this.router.events.subscribe((val) => {
-      if (val instanceof RoutesRecognized) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof RoutesRecognized) {
         // Combine nested route params
         this.routeParams = {
-          ...val.state.root.firstChild?.params,
-          ...val.state.root.firstChild?.firstChild?.params,
+          ...event.state.root.firstChild?.params,
+          ...event.state.root.firstChild?.firstChild?.params,
         };
       }
     });
+    combineLatest([
+      this.router.events,
+      this.activeOrganization$,
+      this.organizations$,
+    ])
+      .pipe(
+        // If it's the right kind of router event
+        // If it's a popstate (that is, back or forward event)
+        // If an active org is set
+        filter(
+          ([event, activeOrganization, _]) =>
+            event instanceof NavigationStart &&
+            event.navigationTrigger === "popstate" &&
+            activeOrganization !== null
+        ),
+        // casting here because TS doesn't realize what I did in filter above
+        map(
+          ([event, activeOrganization, organizations]: [
+            NavigationStart,
+            OrganizationDetail,
+            Organization[]
+          ]) => {
+            /**
+             * If there's an org slug in the URL, and
+             * if the org slug is not the same as the active org slug
+             *
+             * I thought that this would have been easier; this.route.paramMap
+             * perhaps? But that didn't work.
+             */
+            const orgInUrl = organizations.find((organization) =>
+              event.url.includes(organization.slug)
+            );
+            if (orgInUrl && !event.url.includes(activeOrganization.slug)) {
+              // Magic setTimeout stopped infinite loops
+              setTimeout(() => this.changeActiveOrganization(orgInUrl.id), 1);
+            }
+          }
+        )
+      )
+      .subscribe();
     // When billing is enabled, check if active org has subscription
     combineLatest([
       this.settingsService.billingEnabled$,
