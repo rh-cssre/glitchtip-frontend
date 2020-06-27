@@ -1,6 +1,5 @@
 import { seedBackend, requestLogin } from "./utils";
-import { organization, newTeam, team } from "../fixtures/variables";
-import { user } from "../fixtures/users";
+import { organization } from "../fixtures/variables";
 
 describe("Organizations", () => {
   beforeEach(() => {
