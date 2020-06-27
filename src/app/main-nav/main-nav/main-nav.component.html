@@ -16,7 +16,11 @@
       />
     </mat-toolbar>
     <mat-nav-list>
-      <mat-list-item color="accent" [matMenuTriggerFor]="menu">
+      <mat-list-item
+        id="org-dropdown"
+        color="accent"
+        [matMenuTriggerFor]="menu"
+      >
         <span
           *ngIf="activeOrganizationDetail$ | async as orgDetails"
           class="overflow"
@@ -34,7 +38,7 @@
           {{ organization.name }}
         </button>
         <mat-divider></mat-divider>
-        <a mat-menu-item routerLink="/organizations/new">
+        <a mat-menu-item id="create-new-link" routerLink="/organizations/new">
           Create New Organization
         </a>
         <button mat-menu-item (click)="this.logout()">Log Out</button>
