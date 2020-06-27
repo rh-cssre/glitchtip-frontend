@@ -14,7 +14,8 @@ describe("Organizations", () => {
     cy.get("#create-new-link").click();
     cy.get("#create-organization-form input").type(secondOrg);
     cy.get("#create-organization-form").submit();
-    cy.get("mat-sidenav mat-nav-list").contains(secondOrg);
+    cy.get("#org-dropdown").click();
+    cy.get(".cdk-overlay-pane .mat-menu-content").contains(secondOrg);
 
     // glitchtip-frontend#55: org slug in URL should always match active org.
     // It got out of sync with a back button.
