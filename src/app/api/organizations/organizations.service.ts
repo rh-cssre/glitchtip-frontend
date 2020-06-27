@@ -6,7 +6,7 @@ import {
   ActivatedRoute,
   NavigationStart,
 } from "@angular/router";
-import { BehaviorSubject, combineLatest } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import {
   tap,
   map,
@@ -96,6 +96,81 @@ export class OrganizationsService {
     map((data) => data.memberDetail)
   );
 
+  /**
+   * Lots of kinds of router events; this isolates a specific kind in a tidy
+   * and TypeScript-friendly way.
+   */
+  readonly navigationStart$ = this.router.events.pipe(
+    filter((event) => event instanceof NavigationStart)
+  ) as Observable<NavigationStart>;
+
+  /**
+   * Lots of kinds of router events; this isolates a specific kind in a tidy
+   * and TypeScript-friendly way.
+   */
+  readonly routesRecognized$ = this.router.events.pipe(
+    filter((event) => event instanceof RoutesRecognized)
+  ) as Observable<RoutesRecognized>;
+
+  /** Combine nested route params */
+  readonly routeParams$ = this.routesRecognized$.pipe(
+    map((event) => ({
+      ...event.state.root.firstChild?.params,
+      ...event.state.root.firstChild?.firstChild?.params,
+    }))
+  );
+
+  /**
+   * The only param we're really looking for from routeParams$ is the org slug,
+   * so here's a tidy and well-typed way to use that specifically.
+   */
+  readonly orgSlugParam$ = this.routeParams$.pipe(
+    map((params) => params["org-slug"])
+  ) as Observable<string | undefined>;
+
+  /**
+   * Active org and org slug from URL can get out of sync. This should fix that.
+   * Priority is given to the URL.
+   */
+  readonly urlAndActiveOrgMismatch$ = combineLatest([
+    this.navigationStart$,
+    this.orgSlugParam$,
+    this.activeOrganization$,
+    this.organizations$,
+  ]).pipe(
+    /**
+     * We only care when the org slug in the route changes from one thing
+     * to another.
+     *
+     * Overlook the letter variable names; I didn't want to do
+     * previous[1] or whatever
+     */
+    distinctUntilChanged(
+      ([a, previousOrgSlugParam, b, c], [d, nextOrgSlugParam, e, f]) =>
+        previousOrgSlugParam === nextOrgSlugParam
+    ),
+    // If it's a back or forward event
+    // If an active org is set
+    // If there's an org slug in the route
+    // If the org slug in the route doesn't match the active org slug
+    filter(
+      ([event, orgSlugParam, activeOrganization, _]) =>
+        event.navigationTrigger === "popstate" &&
+        activeOrganization !== null &&
+        !!orgSlugParam &&
+        activeOrganization.slug !== orgSlugParam
+    ),
+    tap(([_, orgSlugParam, __, organizations]) => {
+      // Change active org to the org that matches the route's org slug
+      const orgMatchedFromUrl = organizations.find(
+        (organization) => organization.slug === orgSlugParam
+      );
+      if (orgMatchedFromUrl) {
+        this.changeActiveOrganization(orgMatchedFromUrl.id);
+      }
+    })
+  );
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -104,55 +179,9 @@ export class OrganizationsService {
     private subscriptionsService: SubscriptionsService,
     private teamsService: TeamsService
   ) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof RoutesRecognized) {
-        // Combine nested route params
-        this.routeParams = {
-          ...event.state.root.firstChild?.params,
-          ...event.state.root.firstChild?.firstChild?.params,
-        };
-      }
-    });
-    combineLatest([
-      this.router.events,
-      this.activeOrganization$,
-      this.organizations$,
-    ])
-      .pipe(
-        // If it's the right kind of router event
-        // If it's a popstate (that is, back or forward event)
-        // If an active org is set
-        filter(
-          ([event, activeOrganization, _]) =>
-            event instanceof NavigationStart &&
-            event.navigationTrigger === "popstate" &&
-            activeOrganization !== null
-        ),
-        // casting here because TS doesn't realize what I did in filter above
-        map(
-          ([event, activeOrganization, organizations]: [
-            NavigationStart,
-            OrganizationDetail,
-            Organization[]
-          ]) => {
-            /**
-             * If there's an org slug in the URL, and
-             * if the org slug is not the same as the active org slug
-             *
-             * I thought that this would have been easier; this.route.paramMap
-             * perhaps? But that didn't work.
-             */
-            const orgInUrl = organizations.find((organization) =>
-              event.url.includes(organization.slug)
-            );
-            if (orgInUrl && !event.url.includes(activeOrganization.slug)) {
-              // Magic setTimeout stopped infinite loops
-              setTimeout(() => this.changeActiveOrganization(orgInUrl.id), 1);
-            }
-          }
-        )
-      )
-      .subscribe();
+    this.routeParams$.subscribe((params) => (this.routeParams = params));
+    this.urlAndActiveOrgMismatch$.subscribe();
+
     // When billing is enabled, check if active org has subscription
     combineLatest([
       this.settingsService.billingEnabled$,
