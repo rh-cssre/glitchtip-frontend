@@ -2,9 +2,9 @@ import { seedBackend, requestLogin } from "./utils";
 import { organization } from "../fixtures/variables";
 
 describe("Organizations", () => {
-  beforeEach((done) => {
+  beforeEach(() => {
     seedBackend();
-    requestLogin().then(() => setTimeout(() => done(), 100));
+    requestLogin();
   });
 
   it("should create an org and more", () => {
