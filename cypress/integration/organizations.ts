@@ -2,7 +2,7 @@ import { seedBackend, requestLogin } from "./utils";
 import { organization, newTeam, team } from "../fixtures/variables";
 import { user } from "../fixtures/users";
 
-describe("Create New Team", () => {
+describe("Organizations", () => {
   beforeEach(() => {
     seedBackend();
     requestLogin();
