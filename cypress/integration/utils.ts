@@ -7,12 +7,12 @@ export function seedBackend() {
 
 export function requestLogin() {
   const url = "/rest-auth/login/";
-  cy.request("POST", url, {
-    email: user.email,
-    password: user.password,
-  }).then((response) => {
-    cy.visit(`/`);
-    localStorage.setItem("auth", JSON.stringify(response?.body));
-  });
-  cy.visit(`/`);
+  return cy
+    .request("POST", url, {
+      email: user.email,
+      password: user.password,
+    })
+    .then((response) => {
+      localStorage.setItem("auth", JSON.stringify(response?.body));
+    });
 }
