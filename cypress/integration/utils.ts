@@ -11,6 +11,8 @@ export function requestLogin() {
     email: user.email,
     password: user.password,
   }).then((response) => {
+    cy.visit(`/`);
     localStorage.setItem("auth", JSON.stringify(response?.body));
   });
+  cy.visit(`/`);
 }
