@@ -19,7 +19,7 @@ export class TokenInterceptor implements HttpInterceptor {
     });
   }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(req: HttpRequest<unknown>, next: HttpHandler) {
     if (this.key) {
       req = req.clone({
         setHeaders: {
