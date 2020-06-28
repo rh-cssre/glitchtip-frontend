@@ -110,12 +110,12 @@ export class UserService {
     return this.http.get<EmailAddress[]>(this.emailAddressesUrl);
   }
 
-  private postEmailAddress(email) {
+  private postEmailAddress(email: string) {
     return this.http.post<EmailAddress>(this.emailAddressesUrl, { email });
   }
 
-  private deleteEmailAddress(email) {
-    // Is this the best way? https://stackoverflow.com/a/40857437/ says so
+  private deleteEmailAddress(email: string) {
+    // Delete with body, from https://stackoverflow.com/a/40857437/
     const options = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -125,7 +125,7 @@ export class UserService {
     return this.http.delete<null>(this.emailAddressesUrl, options);
   }
 
-  private putEmailAddress(email) {
+  private putEmailAddress(email: string) {
     return this.http.put<EmailAddress>(this.emailAddressesUrl, { email });
   }
 

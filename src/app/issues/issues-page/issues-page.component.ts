@@ -57,7 +57,12 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
    * If the count is zero, we show issues from all projects
    */
   appliedProjectCount$ = this.projectsFromParams$.pipe(
-    map((projects) => projects.length)
+    map((projects) => {
+      if (Array.isArray(projects)) {
+        return projects.length;
+      }
+      return 0;
+    })
   );
 
   projectsWhereAdminIsNotOnTheTeam$ = combineLatest([
@@ -65,6 +70,9 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     this.organizationsService.activeOrganizationProjects$,
   ]).pipe(
     map(([projectsFromParams, activeOrgProjects]) => {
+      if (!Array.isArray(projectsFromParams)) {
+        return [];
+      }
       const projectsMatchedFromParams: OrganizationProject[] = [];
       projectsFromParams.forEach((projectId) => {
         const matchedProject = activeOrgProjects?.find(

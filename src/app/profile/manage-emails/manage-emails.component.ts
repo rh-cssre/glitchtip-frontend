@@ -64,7 +64,7 @@ export class ManageEmailsComponent implements OnInit {
    * Best I can tell, this is necessary instead of this.form.reset() because of
    * Angular Material
    */
-  @ViewChild(FormGroupDirective) formDirective;
+  @ViewChild(FormGroupDirective) formDirective: any;
 
   /**
    * Disabling lint was the path of least resistance:

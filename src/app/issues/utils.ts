@@ -2,8 +2,8 @@ export function urlParamsToObject(url: string | null) {
   return url ? paramsToObject(new URLSearchParams(url.split("?")[1])) : null;
 }
 
-export function paramsToObject(entries) {
-  const result = {};
+export function paramsToObject(entries: any) {
+  const result: any = {};
   for (const entry of entries) {
     // each 'entry' is a [key, value] tuple
     const [key, value] = entry;
@@ -12,8 +12,8 @@ export function paramsToObject(entries) {
   return result;
 }
 
-export function normalizeProjectParams(project) {
-  let projects: string[] = [];
+export function normalizeProjectParams(project: string | object) {
+  let projects: string[] | {} = [];
   if (typeof project === "string") {
     projects = [project];
   } else if (typeof project === "object") {

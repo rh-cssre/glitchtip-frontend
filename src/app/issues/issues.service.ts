@@ -237,7 +237,7 @@ export class IssuesService {
   private setPagination(linkHeader: string) {
     const parts: { [key: string]: string } = linkHeader
       .split(",")
-      .reduce((acc, link) => {
+      .reduce((acc: any, link) => {
         const match = link.match(/<(.*)>; rel="(\w*)"/);
         if (match) {
           const url = match[1];

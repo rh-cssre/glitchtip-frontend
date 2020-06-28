@@ -37,9 +37,9 @@ export class HeaderNavComponent implements OnInit {
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
     map((params) => {
-      const normalizedParams = normalizeProjectParams(params.project);
+      const normalizedParams: any = normalizeProjectParams(params.project);
       this.selectedProjectIds.next(
-        normalizedParams.map((id) => parseInt(id, 10))
+        normalizedParams.map((id: string) => parseInt(id, 10))
       );
       return normalizedParams;
     })
@@ -133,11 +133,10 @@ export class HeaderNavComponent implements OnInit {
     }
   }
 
-  @HostListener("document:click", ["$event.target"])
-  onClickHandler(target) {
-    if (!target.closest("#project-picker") && this.expansionPanel?.expanded) {
-      this.closePanel();
-    }
+  /** Close the project picker panel (if open) and remove all project filters */
+  resetProjects() {
+    this.closePanel();
+    this.navigate(null);
   }
 
   moveDown() {
@@ -189,8 +188,7 @@ export class HeaderNavComponent implements OnInit {
   }
 
   focusPanel() {
-    // G R O S S. Needed it though. 0, 1ms, 10ms timeouts didn't work
-    setTimeout(() => this.filterInput.nativeElement.focus(), 100);
+    this.filterInput.nativeElement.focus();
   }
 
   selectProjectAndClose(projectId: number) {
