@@ -10,12 +10,14 @@ export function paramsToObject(entries: URLSearchParams) {
   return result;
 }
 
-export function normalizeProjectParams(project: string | object) {
-  let projects: string[] | {} = [];
-  if (typeof project === "string") {
-    projects = [project];
-  } else if (typeof project === "object") {
-    projects = project;
+export function normalizeProjectParams(
+  projects: string | string[] | undefined
+) {
+  if (Array.isArray(projects)) {
+    return projects;
   }
-  return projects;
+  if (typeof projects === "string") {
+    return [projects];
+  }
+  return [];
 }

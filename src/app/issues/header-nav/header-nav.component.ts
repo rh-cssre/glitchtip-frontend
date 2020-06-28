@@ -37,7 +37,7 @@ export class HeaderNavComponent implements OnInit {
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
     map((params) => {
-      const normalizedParams: any = normalizeProjectParams(params.project);
+      const normalizedParams = normalizeProjectParams(params.project);
       this.selectedProjectIds.next(
         normalizedParams.map((id: string) => parseInt(id, 10))
       );
