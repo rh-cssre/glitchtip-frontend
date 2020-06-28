@@ -1,9 +1,15 @@
 import { ProjectIssueView } from "../api/projects/projects.interfaces";
 
+interface Tag {
+  value: string;
+  name: string;
+  _meta: null;
+}
+
 export interface Event {
   eventID: string;
   id: string;
-  tags: any[];
+  tags: Tag[];
   projectID?: string;
   dateCreated: string | null;
   user?: any;
