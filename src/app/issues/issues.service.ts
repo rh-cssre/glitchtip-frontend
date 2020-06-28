@@ -235,9 +235,9 @@ export class IssuesService {
    * very slightly from sentry open source.
    */
   private setPagination(linkHeader: string) {
-    const parts: { [key: string]: string } = linkHeader
+    const parts = linkHeader
       .split(",")
-      .reduce((acc: any, link) => {
+      .reduce<{ [key: string]: string }>((acc, link) => {
         const match = link.match(/<(.*)>; rel="(\w*)"/);
         if (match) {
           const url = match[1];
@@ -245,7 +245,7 @@ export class IssuesService {
           acc[rel] = url;
           return acc;
         }
-        return "";
+        return {};
       }, {});
     this.issuesState.next({
       ...this.issuesState.getValue(),

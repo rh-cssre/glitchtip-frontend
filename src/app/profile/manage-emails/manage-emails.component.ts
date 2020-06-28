@@ -67,22 +67,6 @@ export class ManageEmailsComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective: any;
 
   /**
-   * Disabling lint was the path of least resistance:
-   * - If I didn't make this as an arrow function, then `this` was undefined
-   *   for `this.emailAddresses`
-   * - If I changed this.matchesExistingValidator in `new FormControl` to pass
-   *   in the email address list and avoid `this`, it wouldn't work because it
-   *   doesn't reinitialize when you get an updated list of email addresses
-   * - Arrow function works fine, but making the change made TypeScript mad
-   *   because it wants the method to be declared before using it
-   * - But putting it above make lint mad because then `form` is coming after an
-   *   instance declaration method
-   * - Also, when there's an arrow function, prettier puts a semicolon at the
-   *   end which lint doesn't like. What a day
-   */
-  /* tslint:disable */
-
-  /**
    * Does the email address match something already on the list? If so, no need
    * to allow it.
    *
@@ -96,6 +80,7 @@ export class ManageEmailsComponent implements OnInit {
     return matchedEmail ? { matchesExistingValidator: true } : null;
   };
 
+  // tslint:disable:member-ordering
   form = new FormGroup({
     email_address: new FormControl("", [
       Validators.email,
@@ -105,7 +90,6 @@ export class ManageEmailsComponent implements OnInit {
   });
 
   matcher = new LessAnnoyingErrorStateMatcher();
-  /* tslint:enable */
 
   constructor(
     private userService: UserService,

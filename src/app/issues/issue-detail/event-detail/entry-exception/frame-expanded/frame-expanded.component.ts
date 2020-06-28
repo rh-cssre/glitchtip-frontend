@@ -1,5 +1,8 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
+/* Not sure exactly what but we know it's json serializable */
+type JSONable = object | unknown[] | string;
+
 @Component({
   selector: "app-frame-expanded",
   templateUrl: "./frame-expanded.component.html",
@@ -9,9 +12,9 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 export class FrameExpandedComponent {
   @Input() lineNo?: string | number | null;
   @Input() context?: (string | number)[][];
-  @Input() vars?: { [key: string]: any } | null;
+  @Input() vars?: { [key: string]: JSONable } | null;
 
-  checkType(value: any): string {
+  checkType(value: JSONable): string {
     if (typeof value === "object" || Array.isArray(value)) {
       return JSON.stringify(value);
     } else {

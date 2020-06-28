@@ -17,5 +17,5 @@ export class AuthButtonComponent {
   @Input() text?: string;
   @Input() disabled = false;
 
-  @Output() clickEvent: EventEmitter<any> = new EventEmitter();
+  @Output() clickEvent = new EventEmitter();
 }
