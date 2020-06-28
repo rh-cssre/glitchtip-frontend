@@ -47,7 +47,7 @@ interface LoadingStates {
 })
 export class ManageEmailsComponent implements OnInit {
   emailAddresses$ = this.userService.emailAddressesSorted$;
-  emailAddresses: EmailAddress[];
+  emailAddresses: EmailAddress[] | undefined;
 
   loadingStates: LoadingStates = {
     add: false,

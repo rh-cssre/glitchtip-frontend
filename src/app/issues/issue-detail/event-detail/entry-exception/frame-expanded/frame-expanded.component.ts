@@ -7,9 +7,9 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameExpandedComponent {
-  @Input() lineNo: string | number | null;
-  @Input() context: (string | number)[][];
-  @Input() vars: { [key: string]: any } | null;
+  @Input() lineNo?: string | number | null;
+  @Input() context?: (string | number)[][];
+  @Input() vars?: { [key: string]: any } | null;
 
   checkType(value: any): string {
     if (typeof value === "object" || Array.isArray(value)) {

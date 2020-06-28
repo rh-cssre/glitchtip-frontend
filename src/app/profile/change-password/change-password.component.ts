@@ -14,10 +14,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ["./change-password.component.scss"],
 })
 export class ChangePasswordComponent {
-  @ViewChild(FormGroupDirective) formDirective: FormGroupDirective;
+  @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective;
 
   loading = false;
-  error: string | null;
+  error: string | null | undefined;
   form = new FormGroup({
     old_password: new FormControl("", [Validators.required]),
     new_password1: new FormControl("", [
@@ -58,7 +58,7 @@ export class ChangePasswordComponent {
         )
         .subscribe(
           () => {
-            this.formDirective.resetForm();
+            this.formDirective?.resetForm();
             this.snackBar.open("Your new password has been saved.", undefined, {
               duration: 4000,
             });

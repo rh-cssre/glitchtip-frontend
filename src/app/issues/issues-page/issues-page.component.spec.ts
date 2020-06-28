@@ -37,7 +37,7 @@ describe("IssuesPageComponent", () => {
     fixture = TestBed.createComponent(IssuesPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.issues$ = ISSUES;
+    component.issues$ = ISSUES as any;
   });
 
   it("should create", () => {

@@ -12,7 +12,7 @@ import { SettingsService } from "../api/settings.service";
 })
 export class NewOrganizationsComponent {
   loading = false;
-  error: string;
+  error: string | undefined;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
   });

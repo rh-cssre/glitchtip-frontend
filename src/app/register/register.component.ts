@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 })
 export class RegisterComponent {
   loading = false;
-  error: string;
+  error: string | undefined;
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password1: new FormControl("", [

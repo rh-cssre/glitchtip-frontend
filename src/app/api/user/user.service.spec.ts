@@ -17,7 +17,7 @@ describe("UserService", () => {
     service = TestBed.inject(UserService);
   });
 
-  fit("should retrieve a list of email addresses", () => {
+  it("should retrieve a list of email addresses", () => {
     const url = (service as any).emailAddressesUrl;
     service.retrieveEmailAddresses();
     const req = httpTestingController.expectOne(url);

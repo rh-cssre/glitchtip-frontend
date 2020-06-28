@@ -15,7 +15,7 @@ import { SettingsService } from "../api/settings.service";
 })
 export class LoginComponent implements OnInit {
   loading = false;
-  error: string;
+  error?: string;
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [

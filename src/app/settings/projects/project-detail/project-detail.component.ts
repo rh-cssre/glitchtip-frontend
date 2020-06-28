@@ -22,7 +22,7 @@ export class ProjectDetailComponent implements OnInit {
   );
   orgAndProjectParams$ = combineLatest([this.orgParam$, this.projectParam$]);
 
-  error: string;
+  error?: string;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
     platform: new FormControl("", [Validators.required]),

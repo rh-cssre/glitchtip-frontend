@@ -4,17 +4,17 @@ import { FormGroup, FormControl } from "@angular/forms";
 @Component({
   selector: "app-issue-list-item",
   templateUrl: "./issue-list-item.component.html",
-  styleUrls: ["./issue-list-item.component.scss"]
+  styleUrls: ["./issue-list-item.component.scss"],
 })
 export class IssueListItemComponent {
-  @Input() title: string;
-  @Input() location: string;
-  @Input() eventID: number;
+  @Input() title?: string;
+  @Input() location?: string;
+  @Input() eventID?: number;
 
   statusOptions = ["unresolved", "resolved", "ignored"];
 
   form = new FormGroup({
-    status: new FormControl("")
+    status: new FormControl(""),
   });
 
   onSubmit() {

@@ -13,7 +13,7 @@ import { tap } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentComponent implements OnInit {
-  activeOrganizationId: number | null;
+  activeOrganizationId?: number | null;
   planOptions$ = this.subscriptionService.planOptions$;
   billingEmail = environment.billingEmail;
   selectedSubscription: number | null = null;
