@@ -16,8 +16,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectCardComponent {
-  @Input() cardLink?: string | any[];
-  @Input() cardLinkQueryParams?: { [k: string]: any };
+  @Input() cardLink?: string | unknown[];
+  @Input() cardLinkQueryParams?: { [k: string]: unknown };
   @Input() title?: string;
   @Input() descriptionList?: { key: string; value: string }[];
   @Input() isMember?: boolean;
