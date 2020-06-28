@@ -50,7 +50,7 @@
     "ordered-imports": false,
     "quotemark": [true, "double"],
     "semicolon": {
-      "options": ["always"]
+      "options": ["always", "ignore-bound-class-methods"]
     },
     "space-before-function-paren": {
       "options": {
