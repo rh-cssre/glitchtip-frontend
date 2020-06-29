@@ -5,9 +5,11 @@ describe("Organizations", () => {
   beforeEach(() => {
     seedBackend();
     requestLogin();
+    cy.saveLocalStorage();
   });
 
   it("should create an org and more", () => {
+    cy.restoreLocalStorage();
     const secondOrg = "cypress second org";
     cy.visit(`/`);
     cy.get("#org-dropdown").click();
