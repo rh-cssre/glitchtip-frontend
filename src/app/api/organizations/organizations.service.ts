@@ -274,19 +274,44 @@ export class OrganizationsService {
     }
   }
 
-  updateOrganization() {
-    console.log("TODO: update org");
+  updateOrganization(orgName: string) {
+    const data = { name: orgName };
+    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    return this.http
+      .put<OrganizationDetail>(`${this.url}${orgSlug}/`, data)
+      .pipe(
+        tap((resp) => {
+          this.setActiveOrganizationId(resp.id);
+          this.updateOrgName(resp);
+        })
+      );
   }
 
+  /** Delete organization: route to available org, if available or get empty org state on home page */
   deleteOrganization(slug: string) {
     const url = `${this.url}${slug}/`;
-    return this.http.delete(url);
+    return this.http.delete(url).pipe(
+      tap((_) => this.removeOrganization(slug)),
+      withLatestFrom(this.organizations$),
+      tap(([_, organizations]) => {
+        if (organizations) {
+          if (organizations.length) {
+            this.setActiveOrganizationId(organizations[0].id);
+            this.router.navigate(["organizations", organizations[0].id]);
+          } else {
+            this.router.navigate([""]);
+          }
+        }
+      })
+    );
   }
 
   retrieveOrganizationMembers(orgSlug: string) {
-    return this.http
-      .get<Member[]>(`${this.url}${orgSlug}/members/`)
-      .pipe(tap((members) => this.setActiveOrganizationMembers(members)));
+    return this.http.get<Member[]>(`${this.url}${orgSlug}/members/`).pipe(
+      tap((members) => {
+        this.setActiveOrganizationMembers(members);
+      })
+    );
   }
 
   retrieveMemberDetail(orgSlug: string, memberId: string) {
@@ -300,7 +325,7 @@ export class OrganizationsService {
     const data = {
       slug: teamSlug,
     };
-    return this.http.post<Team>(`${this.url}/${orgSlug}/teams/`, data).pipe(
+    return this.http.post<Team>(`${this.url}${orgSlug}/teams/`, data).pipe(
       tap((team) => {
         this.getOrganizationDetail(orgSlug).toPromise();
         this.teamsService.addTeam(team);
@@ -331,6 +356,20 @@ export class OrganizationsService {
     });
   }
 
+  private updateOrgName(orgName: Organization) {
+    const state = this.organizationsState.getValue();
+    if (state.organizations) {
+      this.organizationsState.next({
+        ...state,
+        organizations: state.organizations.map((organization) =>
+          orgName.id === organization.id
+            ? { ...organization, name: orgName.name }
+            : organization
+        ),
+      });
+    }
+  }
+
   private setActiveOrganizationId(activeOrganizationId: number) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
@@ -343,6 +382,18 @@ export class OrganizationsService {
       ...this.organizationsState.getValue(),
       activeOrganization: organization,
     });
+  }
+
+  private removeOrganization(orgSlug: string) {
+    const filteredOrgs = this.organizationsState
+      .getValue()
+      .organizations.filter((organization) => organization.slug !== orgSlug);
+    if (filteredOrgs) {
+      this.organizationsState.next({
+        ...this.organizationsState.getValue(),
+        organizations: filteredOrgs,
+      });
+    }
   }
 
   private setActiveOrganizationMembers(members: Member[]) {

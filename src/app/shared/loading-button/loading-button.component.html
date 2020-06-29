@@ -5,7 +5,7 @@
   *ngIf="buttonStyle === 'flat'"
   mat-flat-button
   color="primary"
-  [disabled]="loading"
+  [disabled]="loading || disabled"
 >
   <span [class.loading]="loading">{{ buttonText }}</span>
 </button>
@@ -13,7 +13,7 @@
   *ngIf="buttonStyle === 'stroked'"
   mat-stroked-button
   color="primary"
-  [disabled]="loading"
+  [disabled]="loading || disabled"
 >
   <span [class.loading]="loading">{{ buttonText }}</span>
 </button>
