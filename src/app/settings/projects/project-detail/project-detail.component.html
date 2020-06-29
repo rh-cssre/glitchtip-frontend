@@ -3,7 +3,7 @@
     <h1 class="mat-display-1">Settings for {{ project.name }}</h1>
   </header>
   <mat-card *ngIf="project.isMember === false"
-    ><mat-card-content>
+    ><mat-card-content class="note-padding">
       <p class="mat-body-strong">Note</p>
       <p>
         Because you are an admin for {{ project.organization.name }}, you have
@@ -13,24 +13,38 @@
     ></mat-card
   >
   <mat-card>
-    <form
-      [formGroup]="form"
-      (ngSubmit)="onSubmit(project.organization.slug, project.slug)"
-    >
-      <mat-card-content>
-        <mat-card-title>Update Project</mat-card-title>
-        <mat-divider></mat-divider>
-
-        <mat-error *ngIf="error">{{ error }}</mat-error>
+    <mat-card-title>Update Project</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-error class="server-error" *ngIf="updateNameError">{{
+        updateNameError
+      }}</mat-error>
+      <form [formGroup]="nameForm" (ngSubmit)="updateName()">
         <mat-form-field>
-          <input
-            matInput
-            [value]="project.name"
-            formControlName="name"
-            placeholder="Name"
-          />
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" [value]="project.name" />
+          <mat-error>
+            <span *ngIf="name?.errors?.required"
+              >Enter a project name</span
+            ></mat-error
+          >
         </mat-form-field>
+        <app-loading-button
+          [disabled]="name?.value === project.name"
+          buttonText="Update Name"
+          id="update-project-name"
+        >
+        </app-loading-button>
+      </form>
+      <mat-error class="server-error" *ngIf="updatePlatformError">{{
+        updatePlatformError
+      }}</mat-error>
+      <form
+        [formGroup]="platformForm"
+        (ngSubmit)="updatePlatform(project.name)"
+      >
         <mat-form-field>
+          <mat-label>Platform</mat-label>
           <input
             matInput
             [value]="project.platform"
@@ -38,34 +52,46 @@
             placeholder="Platform"
           />
         </mat-form-field>
-      </mat-card-content>
-      <mat-card-actions>
-        <button disabled mat-flat-button color="primary" type="submit">
-          <mat-icon>update</mat-icon>
-          Update Project
-        </button>
-        <button
-          type="button"
-          (click)="onDelete(project.organization.slug, project.slug)"
-          mat-button
-          color="primary"
+        <app-loading-button
+          [disabled]="platform?.value === project.platform"
+          buttonText="Update Platform"
+          id="update-project-platform"
         >
-          <mat-icon>delete_outline</mat-icon>
-          Delete Project
-        </button></mat-card-actions
-      >
-    </form>
+        </app-loading-button>
+      </form>
+    </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
+    <mat-card-title>Keys</mat-card-title>
+    <mat-divider></mat-divider>
     <mat-card-content>
-      <mat-card-title>Keys</mat-card-title>
-      <mat-divider></mat-divider>
       <dl>
         <app-entry-data
           key="DSN"
           [value]="projectKey.dsn.public"
         ></app-entry-data>
       </dl>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>Delete Project</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content class="remove-content">
+      <div>
+        <p>
+          By deleting your project, you will lose all associated data. This
+          cannot be undone.
+        </p>
+        <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
+      </div>
+      <app-loading-button
+        buttonText="Delete Project"
+        [loading]="deleteLoading"
+        (click)="deleteProject()"
+        id="delete-project"
+      >
+      </app-loading-button>
     </mat-card-content>
   </mat-card>
 </section>
