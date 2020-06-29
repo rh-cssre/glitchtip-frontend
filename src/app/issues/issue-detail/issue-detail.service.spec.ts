@@ -1,3 +1,4 @@
+// tslint:disable:no-any
 import { TestBed } from "@angular/core/testing";
 import {
   HttpClientTestingModule,
@@ -87,7 +88,7 @@ describe("IssueDetailService", () => {
 
   it("eventEntryException$ selector flips frames array", () => {
     const testData: any = databaseError;
-    let lineNo;
+    let lineNo: any;
 
     service.setEvent(testData);
     service.eventEntryException$

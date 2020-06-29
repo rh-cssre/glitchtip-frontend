@@ -1,4 +1,4 @@
-<h1 class="mat-headline">
+<h1 *ngIf="metadata !== undefined" class="mat-headline">
   <ng-container [ngSwitch]="issueType">
     <ng-container *ngSwitchCase="'error'">
       <span class="mat-h1">

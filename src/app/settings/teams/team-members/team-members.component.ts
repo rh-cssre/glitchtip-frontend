@@ -20,7 +20,7 @@ export class TeamMembersComponent implements OnInit {
   orgSlug: string | undefined;
   teamSlug: string | undefined;
   member = new FormControl();
-  error: string;
+  error?: string;
   loading = false;
 
   constructor(

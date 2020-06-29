@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "target": "es2015",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": true,
+    "strictInjectionParameters": true
+  }
+}

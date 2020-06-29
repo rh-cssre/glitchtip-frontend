@@ -16,8 +16,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class NewProjectComponent implements OnInit {
   teams$ = this.teamsService.teams$;
   loading = false;
-  error: string;
-  orgSlug: string;
+  error?: string;
+  orgSlug?: string;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
     platform: new FormControl(""),
@@ -71,7 +71,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.valid) {
+    if (this.form.valid && this.orgSlug) {
       this.loading = true;
       this.projectsService
         .createProject(

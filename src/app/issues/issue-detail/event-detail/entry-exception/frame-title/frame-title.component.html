@@ -1,46 +1,53 @@
-<ng-container *ngIf="frame.filename || frame.module">
-  <span
-    [matTooltip]="
-      frame.absPath
-        ? showToolTip(frame.absPath, frame.filename, frame.module)
-        : undefined
-    "
-  >
-    {{ displayFilenameOrModule(frame.platform, frame.filename, frame.module) }}
-  </span>
-  <ng-container
-    *ngIf="
-      displayFilenameOrModule(frame.platform, frame.filename, frame.module) ===
-        frame.module && frame.filename
-    "
-  >
-    <a
-      class="help-button"
-      mat-icon-button
-      matTooltipPosition="above"
-      [matTooltip]="frame.filename"
+<ng-container *ngIf="frame !== undefined">
+  <ng-container *ngIf="frame.filename || frame.module">
+    <span
+      [matTooltip]="
+        frame.absPath
+          ? showToolTip(frame.absPath, frame.filename, frame.module)
+          : undefined
+      "
     >
-      <mat-icon>help</mat-icon>
-    </a></ng-container
+      {{
+        displayFilenameOrModule(frame.platform, frame.filename, frame.module)
+      }}
+    </span>
+    <ng-container
+      *ngIf="
+        displayFilenameOrModule(
+          frame.platform,
+          frame.filename,
+          frame.module
+        ) === frame.module && frame.filename
+      "
+    >
+      <a
+        class="help-button"
+        mat-icon-button
+        matTooltipPosition="above"
+        [matTooltip]="frame.filename"
+      >
+        <mat-icon>help</mat-icon>
+      </a></ng-container
+    >
+    <a
+      *ngIf="isUrl(frame.absPath)"
+      [href]="frame.absPath ? sanitizeUrl(frame.absPath) : null"
+      target="_blank"
+      >{{ frame.absPath ? sanitizeUrl(frame.absPath) : null }}</a
+    >
+    <ng-container *ngIf="frame?.function"> in </ng-container>
+  </ng-container>
+  <!-- TODO: Add rawFunction conditions-->
+  <ng-container *ngIf="frame.function">{{ frame.function }}</ng-container>
+  <ng-container *ngIf="frame.lineNo && frame.lineNo > 0">
+    at line {{ frame.lineNo
+    }}<ng-container *ngIf="frame.colNo && frame.colNo > 0"
+      >:{{ frame.colNo }}</ng-container
+    ></ng-container
   >
-  <a
-    *ngIf="isUrl(frame.absPath)"
-    [href]="frame.absPath ? sanitizeUrl(frame.absPath) : null"
-    target="_blank"
-    >{{ frame.absPath ? sanitizeUrl(frame.absPath) : null }}</a
-  >
-  <ng-container *ngIf="frame.function"> in </ng-container>
-</ng-container>
-<!-- TODO: Add rawFunction conditions-->
-<ng-container *ngIf="frame.function">{{ frame.function }}</ng-container>
-<ng-container *ngIf="frame.lineNo && frame.lineNo > 0">
-  at line {{ frame.lineNo
-  }}<ng-container *ngIf="frame.colNo && frame.colNo > 0"
-    >:{{ frame.colNo }}</ng-container
-  ></ng-container
->
-<ng-container *ngIf="frame.package"> within {{ frame.package }}</ng-container>
-<!--origAbsPath not in frame docs 
+  <ng-container *ngIf="frame.package"> within {{ frame.package }}</ng-container>
+  <!--origAbsPath not in frame docs 
 code: https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L245
 docs: https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md
 -->
+</ng-container>

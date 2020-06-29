@@ -16,14 +16,14 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectCardComponent {
-  @Input() cardLink: string | any[];
-  @Input() cardLinkQueryParams?: { [k: string]: any };
-  @Input() title: string;
-  @Input() descriptionList: { key: string; value: string }[];
-  @Input() isMember: boolean;
+  @Input() cardLink?: string | unknown[];
+  @Input() cardLinkQueryParams?: { [k: string]: unknown };
+  @Input() title?: string;
+  @Input() descriptionList?: { key: string; value: string }[];
+  @Input() isMember?: boolean;
 
-  @Input() primaryButton: ProjectCardButtonWithQuery;
-  @Input() secondaryButton: ProjectCardButton;
+  @Input() primaryButton?: ProjectCardButtonWithQuery;
+  @Input() secondaryButton?: ProjectCardButton;
 
   @Input() sampleCard = false;
 

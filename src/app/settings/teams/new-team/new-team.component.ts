@@ -15,7 +15,7 @@ export class NewTeamComponent {
   form = new FormGroup({
     slug: new FormControl("", [Validators.required]),
   });
-  orgSlug: string;
+  orgSlug?: string;
 
   constructor(
     private organizationsService: OrganizationsService,

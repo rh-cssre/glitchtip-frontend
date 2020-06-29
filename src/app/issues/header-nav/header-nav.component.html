@@ -3,7 +3,7 @@
     <mat-expansion-panel
       #expansionPanel
       class="mat-elevation-z1"
-      (opened)="focusPanel()"
+      (afterExpand)="focusPanel()"
       [disabled]="projects.length < 2"
     >
       <mat-expansion-panel-header
@@ -68,7 +68,7 @@
       mat-button
       class="reset-button"
       *ngIf="(appliedProjectIds$ | async)?.length"
-      (click)="navigate(null)"
+      (click)="resetProjects()"
     >
       <mat-icon>close</mat-icon>
     </button>

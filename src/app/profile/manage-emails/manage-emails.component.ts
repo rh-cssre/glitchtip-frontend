@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
 } from "@angular/core";
-import { UserService } from "src/app/api/user/user.service";
 import {
   FormGroup,
   FormControl,
@@ -12,9 +11,10 @@ import {
   FormGroupDirective,
   NgForm,
 } from "@angular/forms";
-import { EmailAddress } from "src/app/api/user/user.interfaces";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ErrorStateMatcher } from "@angular/material/core";
+import { EmailAddress } from "src/app/api/user/user.interfaces";
+import { UserService } from "src/app/api/user/user.service";
 
 export class LessAnnoyingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -47,7 +47,7 @@ interface LoadingStates {
 })
 export class ManageEmailsComponent implements OnInit {
   emailAddresses$ = this.userService.emailAddressesSorted$;
-  emailAddresses: EmailAddress[];
+  emailAddresses: EmailAddress[] | undefined;
 
   loadingStates: LoadingStates = {
     add: false,
@@ -64,23 +64,7 @@ export class ManageEmailsComponent implements OnInit {
    * Best I can tell, this is necessary instead of this.form.reset() because of
    * Angular Material
    */
-  @ViewChild(FormGroupDirective) formDirective;
-
-  /**
-   * Disabling lint was the path of least resistance:
-   * - If I didn't make this as an arrow function, then `this` was undefined
-   *   for `this.emailAddresses`
-   * - If I changed this.matchesExistingValidator in `new FormControl` to pass
-   *   in the email address list and avoid `this`, it wouldn't work because it
-   *   doesn't reinitialize when you get an updated list of email addresses
-   * - Arrow function works fine, but making the change made TypeScript mad
-   *   because it wants the method to be declared before using it
-   * - But putting it above make lint mad because then `form` is coming after an
-   *   instance declaration method
-   * - Also, when there's an arrow function, prettier puts a semicolon at the
-   *   end which lint doesn't like. What a day
-   */
-  /* tslint:disable */
+  @ViewChild(FormGroupDirective) formDirective: any;
 
   /**
    * Does the email address match something already on the list? If so, no need
@@ -96,6 +80,7 @@ export class ManageEmailsComponent implements OnInit {
     return matchedEmail ? { matchesExistingValidator: true } : null;
   };
 
+  // tslint:disable:member-ordering
   form = new FormGroup({
     email_address: new FormControl("", [
       Validators.email,
@@ -105,7 +90,6 @@ export class ManageEmailsComponent implements OnInit {
   });
 
   matcher = new LessAnnoyingErrorStateMatcher();
-  /* tslint:enable */
 
   constructor(
     private userService: UserService,

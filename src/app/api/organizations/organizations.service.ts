@@ -50,7 +50,7 @@ export class OrganizationsService {
   );
   private readonly getState$ = this.organizationsState.asObservable();
   private readonly url = baseUrl + "/organizations/";
-  private routeParams: { [key: string]: string };
+  private routeParams?: { [key: string]: string };
 
   readonly organizations$ = this.getState$.pipe(
     map((data) => data.organizations)
@@ -223,7 +223,9 @@ export class OrganizationsService {
           let activeOrg: Organization | undefined;
           if (this.routeParams) {
             activeOrg = organizations.find(
-              (org) => org.slug === this.routeParams["org-slug"]
+              (org) =>
+                org.slug ===
+                (this.routeParams ? this.routeParams["org-slug"] : null)
             );
           }
           if (activeOrg) {
@@ -252,6 +254,7 @@ export class OrganizationsService {
           tap((organizationDetail) => {
             // Switch org but stay in settings page
             if (
+              this.routeParams &&
               this.routeParams["org-slug"] &&
               this.route.snapshot.firstChild?.url &&
               this.route.snapshot.firstChild.url[0].path === "settings"

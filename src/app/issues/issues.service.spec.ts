@@ -1,7 +1,8 @@
+// tslint:disable:no-any
 import { TestBed } from "@angular/core/testing";
 import {
   HttpClientTestingModule,
-  HttpTestingController
+  HttpTestingController,
 } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
@@ -16,7 +17,11 @@ describe("IssuesService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MatSnackBarModule, RouterTestingModule]
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule,
+        RouterTestingModule,
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(IssuesService);
@@ -34,6 +39,6 @@ describe("IssuesService", () => {
       "/api/0/organizations/burke-software-consulting/issues/"
     );
     req.flush(testData, { headers: { Link: "link header info" } });
-    service.issues$.subscribe(issues => expect(issues).toEqual(testData));
+    service.issues$.subscribe((issues) => expect(issues).toEqual(testData));
   });
 });

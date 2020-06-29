@@ -39,13 +39,13 @@ export class HeaderNavComponent implements OnInit {
     map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
       this.selectedProjectIds.next(
-        normalizedParams.map((id) => parseInt(id, 10))
+        normalizedParams.map((id: string) => parseInt(id, 10))
       );
       return normalizedParams;
     })
   );
 
-  appliedProjectIds: string[];
+  appliedProjectIds?: string[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
   selectedProjectsString$ = combineLatest([
@@ -101,10 +101,10 @@ export class HeaderNavComponent implements OnInit {
   );
 
   @ViewChild("expansionPanel", { static: false })
-  expansionPanel: MatExpansionPanel;
+  expansionPanel?: MatExpansionPanel;
 
   @ViewChild("filterInput", { static: false })
-  filterInput: ElementRef<HTMLInputElement>;
+  filterInput?: ElementRef<HTMLInputElement>;
 
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
@@ -117,7 +117,7 @@ export class HeaderNavComponent implements OnInit {
       event.preventDefault();
       // turns out this is where the scrolling is happening for whatever reason
       document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
-      this.expansionPanel.open();
+      this.expansionPanel?.open();
     }
     if (this.expansionPanel?.expanded) {
       if (event.key === "Escape") {
@@ -133,11 +133,10 @@ export class HeaderNavComponent implements OnInit {
     }
   }
 
-  @HostListener("document:click", ["$event.target"])
-  onClickHandler(target) {
-    if (!target.closest("#project-picker") && this.expansionPanel?.expanded) {
-      this.closePanel();
-    }
+  /** Close the project picker panel (if open) and remove all project filters */
+  resetProjects() {
+    this.closePanel();
+    this.navigate(null);
   }
 
   moveDown() {
@@ -145,7 +144,7 @@ export class HeaderNavComponent implements OnInit {
       document.querySelectorAll(".picker-button")
     ) as HTMLElement[];
     // If the text box is focused, go to the first item
-    if (this.filterInput.nativeElement.id === document.activeElement?.id) {
+    if (this.filterInput?.nativeElement.id === document.activeElement?.id) {
       projectButtons[0]?.focus();
     } else {
       const indexOfActive = projectButtons.findIndex(
@@ -173,7 +172,7 @@ export class HeaderNavComponent implements OnInit {
       projectButtons[indexOfActive - 1].focus();
     } else {
       // If we're in the first list item, go to the first item
-      this.filterInput.nativeElement.focus();
+      this.filterInput?.nativeElement.focus();
     }
   }
 
@@ -189,14 +188,13 @@ export class HeaderNavComponent implements OnInit {
   }
 
   focusPanel() {
-    // G R O S S. Needed it though. 0, 1ms, 10ms timeouts didn't work
-    setTimeout(() => this.filterInput.nativeElement.focus(), 100);
+    this.filterInput?.nativeElement.focus();
   }
 
   selectProjectAndClose(projectId: number) {
     this.navigate([projectId]);
     this.selectedProjectIds.next([projectId]);
-    this.expansionPanel.close();
+    this.expansionPanel?.close();
   }
 
   toggleProject(projectId: number) {
@@ -211,15 +209,17 @@ export class HeaderNavComponent implements OnInit {
   }
 
   resetPanel() {
-    this.selectedProjectIds.next(
-      this.appliedProjectIds.map((id) => parseInt(id, 10))
-    );
-    this.expansionPanel.close();
+    if (this.appliedProjectIds !== undefined) {
+      this.selectedProjectIds.next(
+        this.appliedProjectIds.map((id) => parseInt(id, 10))
+      );
+      this.expansionPanel?.close();
+    }
   }
 
   closePanel() {
     this.navigate(this.selectedProjectIds.getValue());
-    this.expansionPanel.close();
+    this.expansionPanel?.close();
   }
 
   ngOnInit() {

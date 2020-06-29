@@ -1,9 +1,9 @@
 export interface ProjectCardButton {
-  link: string | any[];
+  link: string | unknown[];
   icon?: string;
   text: string;
 }
 
 export interface ProjectCardButtonWithQuery extends ProjectCardButton {
-  query?: { [k: string]: any };
+  query?: { [k: string]: unknown };
 }

@@ -20,7 +20,7 @@ export class TeamsComponent implements OnInit {
   otherTeams$ = this.activeOrganization$.pipe(
     map((orgDetails) => orgDetails?.teams?.filter((team) => !team.isMember))
   );
-  orgSlug: string;
+  orgSlug?: string;
 
   memberCountPluralMapping: { [k: string]: string } = {
     "=1": "1 Member",
