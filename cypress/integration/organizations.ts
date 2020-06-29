@@ -5,7 +5,7 @@ describe("Organizations", () => {
   beforeEach(() => {
     seedBackend();
     requestLogin();
-    cy.wait(2000); // Local storage can be slow
+    cy.wait(1000); // Local storage can be slow
   });
 
   it("should create an org and more", () => {
