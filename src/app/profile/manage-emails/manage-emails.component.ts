@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
 } from "@angular/core";
-import { UserService } from "src/app/api/user/user.service";
 import {
   FormGroup,
   FormControl,
@@ -12,9 +11,10 @@ import {
   FormGroupDirective,
   NgForm,
 } from "@angular/forms";
-import { EmailAddress } from "src/app/api/user/user.interfaces";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ErrorStateMatcher } from "@angular/material/core";
+import { EmailAddress } from "src/app/api/user/user.interfaces";
+import { UserService } from "src/app/api/user/user.service";
 
 export class LessAnnoyingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(

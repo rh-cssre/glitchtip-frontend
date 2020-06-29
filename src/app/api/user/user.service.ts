@@ -32,21 +32,12 @@ export class UserService {
    * frontend is not built to accommodate this
    */
   readonly emailAddressesSorted$ = this.emailAddresses$.pipe(
-    map((emailAddresses) => {
-      if (emailAddresses.length > 0) {
-        const primaryEmailIndex = emailAddresses.findIndex(
-          (email) => email.isPrimary
-        );
-        // Immutable splice
-        const sortedEmails = [emailAddresses[primaryEmailIndex]]
-          .concat(emailAddresses.slice(0, primaryEmailIndex))
-          .concat(
-            emailAddresses.slice(primaryEmailIndex + 1, emailAddresses.length)
-          );
-        return sortedEmails;
-      }
-      return emailAddresses;
-    })
+    map((emailAddresses) =>
+      // Sort by boolean https://stackoverflow.com/a/17387454/443457
+      [...emailAddresses].sort((a, b) =>
+        a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
+      )
+    )
   );
 
   readonly activeUserEmail$ = this.userDetails$.pipe(

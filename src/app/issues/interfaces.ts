@@ -2,7 +2,7 @@ import { ProjectIssueView } from "../api/projects/projects.interfaces";
 
 interface Tag {
   value: string;
-  name: string;
+  key: string;
   _meta: null;
 }
 
