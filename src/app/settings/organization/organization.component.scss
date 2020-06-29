@@ -1,0 +1,40 @@
+@import "../../../assets/styles/variables";
+
+mat-card {
+  margin-bottom: 36px;
+  margin-top: 36px;
+
+  mat-card-content {
+    padding-top: 16px;
+  }
+
+  form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: $tablet - 1) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    mat-form-field {
+      width: 50%;
+
+      @media (max-width: $tablet - 1) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.remove-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: $tablet - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
