@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router, RoutesRecognized, ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, combineLatest } from "rxjs";
+import {
+  Router,
+  RoutesRecognized,
+  ActivatedRoute,
+  NavigationStart,
+} from "@angular/router";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import {
   tap,
   map,
@@ -91,6 +96,81 @@ export class OrganizationsService {
     map((data) => data.memberDetail)
   );
 
+  /**
+   * Lots of kinds of router events; this isolates a specific kind in a tidy
+   * and TypeScript-friendly way.
+   */
+  readonly navigationStart$ = this.router.events.pipe(
+    filter((event) => event instanceof NavigationStart)
+  ) as Observable<NavigationStart>;
+
+  /**
+   * Lots of kinds of router events; this isolates a specific kind in a tidy
+   * and TypeScript-friendly way.
+   */
+  readonly routesRecognized$ = this.router.events.pipe(
+    filter((event) => event instanceof RoutesRecognized)
+  ) as Observable<RoutesRecognized>;
+
+  /** Combine nested route params */
+  readonly routeParams$ = this.routesRecognized$.pipe(
+    map((event) => ({
+      ...event.state.root.firstChild?.params,
+      ...event.state.root.firstChild?.firstChild?.params,
+    }))
+  );
+
+  /**
+   * The only param we're really looking for from routeParams$ is the org slug,
+   * so here's a tidy and well-typed way to use that specifically.
+   */
+  readonly orgSlugParam$ = this.routeParams$.pipe(
+    map((params) => params["org-slug"])
+  ) as Observable<string | undefined>;
+
+  /**
+   * Active org and org slug from URL can get out of sync. This should fix that.
+   * Priority is given to the URL.
+   */
+  readonly urlAndActiveOrgMismatch$ = combineLatest([
+    this.navigationStart$,
+    this.orgSlugParam$,
+    this.activeOrganization$,
+    this.organizations$,
+  ]).pipe(
+    /**
+     * We only care when the org slug in the route changes from one thing
+     * to another.
+     *
+     * Overlook the letter variable names; I didn't want to do
+     * previous[1] or whatever
+     */
+    distinctUntilChanged(
+      ([a, previousOrgSlugParam, b, c], [d, nextOrgSlugParam, e, f]) =>
+        previousOrgSlugParam === nextOrgSlugParam
+    ),
+    // If it's a back or forward event
+    // If an active org is set
+    // If there's an org slug in the route
+    // If the org slug in the route doesn't match the active org slug
+    filter(
+      ([event, orgSlugParam, activeOrganization, _]) =>
+        event.navigationTrigger === "popstate" &&
+        activeOrganization !== null &&
+        !!orgSlugParam &&
+        activeOrganization.slug !== orgSlugParam
+    ),
+    tap(([_, orgSlugParam, __, organizations]) => {
+      // Change active org to the org that matches the route's org slug
+      const orgMatchedFromUrl = organizations.find(
+        (organization) => organization.slug === orgSlugParam
+      );
+      if (orgMatchedFromUrl) {
+        this.changeActiveOrganization(orgMatchedFromUrl.id);
+      }
+    })
+  );
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -99,15 +179,9 @@ export class OrganizationsService {
     private subscriptionsService: SubscriptionsService,
     private teamsService: TeamsService
   ) {
-    this.router.events.subscribe((val) => {
-      if (val instanceof RoutesRecognized) {
-        // Combine nested route params
-        this.routeParams = {
-          ...val.state.root.firstChild?.params,
-          ...val.state.root.firstChild?.firstChild?.params,
-        };
-      }
-    });
+    this.routeParams$.subscribe((params) => (this.routeParams = params));
+    this.urlAndActiveOrgMismatch$.subscribe();
+
     // When billing is enabled, check if active org has subscription
     combineLatest([
       this.settingsService.billingEnabled$,
