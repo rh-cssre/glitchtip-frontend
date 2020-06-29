@@ -18,7 +18,7 @@ const routes: Routes = [
       { path: "", component: OrganizationComponent },
       { path: "projects", component: ProjectsComponent },
       { path: "projects/new", component: NewProjectComponent },
-      { path: "projects/:slug", component: ProjectDetailComponent },
+      { path: "projects/:project-slug", component: ProjectDetailComponent },
       {
         path: "subscription",
         loadChildren: () =>

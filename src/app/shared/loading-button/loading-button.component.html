@@ -7,6 +7,7 @@
   color="primary"
   [disabled]="loading || disabled"
 >
+  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
   <span [class.loading]="loading">{{ buttonText }}</span>
 </button>
 <button
@@ -15,5 +16,6 @@
   color="primary"
   [disabled]="loading || disabled"
 >
+  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
   <span [class.loading]="loading">{{ buttonText }}</span>
 </button>

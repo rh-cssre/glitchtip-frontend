@@ -8,6 +8,7 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 })
 export class LoadingButtonComponent {
   @Input() buttonText?: string;
+  @Input() icon?: string;
   @Input() loading?: boolean;
   @Input() disabled?: boolean;
   @Input() buttonStyle: "flat" | "stroked" = "flat";

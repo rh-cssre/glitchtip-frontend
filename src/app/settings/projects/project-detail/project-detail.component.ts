@@ -1,9 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormGroupDirective,
+} from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
-import { EMPTY, combineLatest } from "rxjs";
-import { map, exhaustMap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-project-detail",
@@ -11,74 +16,161 @@ import { ProjectsService } from "../../../api/projects/projects.service";
   styleUrls: ["./project-detail.component.scss"],
 })
 export class ProjectDetailComponent implements OnInit {
+  @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
+
   projectKeys$ = this.projectsService.projectKeys$;
   activeProject$ = this.projectsService.activeProject$;
 
-  orgParam$ = this.activatedRoute.paramMap.pipe(
-    map((params) => params.get("org-slug"))
-  );
-  projectParam$ = this.activatedRoute.paramMap.pipe(
-    map((params) => params.get("slug"))
-  );
-  orgAndProjectParams$ = combineLatest([this.orgParam$, this.projectParam$]);
+  orgSlug: string | undefined;
+  projectSlug: string | undefined;
 
-  error?: string;
-  form = new FormGroup({
+  deleteLoading = false;
+  deleteError = "";
+  updateNameLoading = false;
+  updateNameError = "";
+  updatePlatformLoading = false;
+  updatePlatformError = "";
+
+  nameForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
-    platform: new FormControl("", [Validators.required]),
+  });
+
+  platformForm = new FormGroup({
+    platform: new FormControl(""),
   });
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
+    private snackBar: MatSnackBar
   ) {
     this.activeProject$.subscribe((data) => {
       if (data) {
-        this.form.patchValue({
+        this.nameForm.patchValue({
           name: data.name,
+        });
+        this.platformForm.patchValue({
           platform: data.platform,
         });
       }
     });
   }
 
-  ngOnInit() {
-    this.orgAndProjectParams$
-      .pipe(
-        exhaustMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            this.projectsService.retrieveProjectDetail(orgSlug, projectSlug);
-            this.projectsService.retrieveClientKeys(orgSlug, projectSlug);
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe();
+  get name() {
+    return this.nameForm.get("name");
   }
 
-  onDelete(orgSlug: string, projectSlug: string) {
-    if (window.confirm("Are you sure you want to delete this project?")) {
-      this.projectsService.deleteProject(orgSlug, projectSlug).subscribe(
-        () => this.router.navigate(["settings", orgSlug, "projects"]),
-        (err) => console.log("delete project error: ", err)
-      );
+  get platform() {
+    return this.platformForm.get("platform");
+  }
+
+  ngOnInit() {
+    this.activatedRoute.params
+      .pipe(
+        map((params) => {
+          const orgSlug: string | undefined = params["org-slug"];
+          const projectSlug: string | undefined = params["project-slug"];
+          this.orgSlug = orgSlug;
+          this.projectSlug = projectSlug;
+          return { orgSlug, projectSlug };
+        })
+      )
+      .subscribe(({ orgSlug, projectSlug }) => {
+        if (orgSlug && projectSlug) {
+          this.projectsService.retrieveProjectDetail(orgSlug, projectSlug);
+          this.projectsService.retrieveClientKeys(orgSlug, projectSlug);
+        }
+      });
+  }
+
+  deleteProject() {
+    if (
+      window.confirm("Are you sure you want to delete this project?") &&
+      this.orgSlug &&
+      this.projectSlug
+    ) {
+      this.deleteLoading = true;
+      this.projectsService
+        .deleteProject(this.orgSlug, this.projectSlug)
+        .subscribe(
+          () => {
+            this.deleteLoading = false;
+            this.snackBar.open(
+              "Your project has been sucessfully deleted",
+              undefined,
+              {
+                duration: 4000,
+              }
+            );
+            this.router.navigate(["settings", this.orgSlug, "projects"]);
+          },
+          (err) => {
+            this.deleteLoading = false;
+            this.deleteError = `${err.statusText}: ${err.status}`;
+          }
+        );
     }
   }
 
-  onSubmit(orgSlug: string, projectSlug: string) {
-    if (this.form.valid) {
+  updateName() {
+    this.updateNameLoading = true;
+    if (this.orgSlug && this.projectSlug) {
       this.projectsService
-        .updateProject(orgSlug, projectSlug, {
-          name: this.form.value.name,
-          platform: this.form.value.platform,
-        })
+        .updateProjectName(
+          this.orgSlug,
+          this.projectSlug,
+          this.nameForm.value.name
+        )
         .subscribe(
-          () => this.router.navigate(["/settings/projects"]),
-          (err) => console.log("form error:", err)
+          (resp: { name: any }) => {
+            this.updateNameLoading = false;
+            if (this.updateNameError) {
+              this.updateNameError = "";
+            }
+            this.snackBar.open(
+              `The name of your project has been updated to ${resp.name}`,
+              undefined,
+              {
+                duration: 4000,
+              }
+            );
+          },
+          (err) => {
+            this.updateNameError = `${err.statusText}: ${err.status}`;
+          }
         );
-    } else {
-      this.error = "form not valid";
+    }
+  }
+
+  updatePlatform(projectName: string) {
+    this.updatePlatformLoading = true;
+    if (this.orgSlug && this.projectSlug) {
+      this.projectsService
+        .updateProjectPlatform(
+          this.orgSlug,
+          this.projectSlug,
+          this.platformForm.value.platform,
+          projectName
+        )
+        .subscribe(
+          (resp: { platform: any }) => {
+            this.updatePlatformLoading = false;
+            if (this.updatePlatformError) {
+              this.updatePlatformError = "";
+            }
+            this.snackBar.open(
+              `Your project platform has been updated to ${resp.platform}`,
+              undefined,
+              {
+                duration: 4000,
+              }
+            );
+          },
+          (err) => {
+            this.updatePlatformError = `${err.statusText}: ${err.status}`;
+          }
+        );
     }
   }
 }

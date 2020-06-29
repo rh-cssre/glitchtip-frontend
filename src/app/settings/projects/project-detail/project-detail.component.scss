@@ -1,25 +1,50 @@
+@import "../../../../assets/styles/variables";
+
 mat-card {
   margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 0;
-}
 
-mat-form-field,
-app-entry-data {
-  display: block;
-  width: 100%;
-  padding-top: 24px;
-}
-
-mat-card-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  mat-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
+  mat-card-content {
+    padding-top: 16px;
   }
+
+  .note-padding {
+    padding-top: 0;
+  }
+}
+
+form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+
+  @media (max-width: $tablet - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-right: 40px;
+
+    @media (max-width: $tablet - 1) {
+      margin-right: 0;
+    }
+  }
+}
+
+.remove-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: $tablet - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.server-error {
+  display: block;
 }
