@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ProjectDetail } from "src/app/api/projects/projects.interfaces";
 
 @Component({
   selector: "app-project-detail",
@@ -123,7 +124,7 @@ export class ProjectDetailComponent implements OnInit {
           this.nameForm.value.name
         )
         .subscribe(
-          (resp: { name: any }) => {
+          (resp: ProjectDetail) => {
             this.updateNameLoading = false;
             if (this.updateNameError) {
               this.updateNameError = "";
@@ -154,7 +155,7 @@ export class ProjectDetailComponent implements OnInit {
           projectName
         )
         .subscribe(
-          (resp: { platform: any }) => {
+          (resp: ProjectDetail) => {
             this.updatePlatformLoading = false;
             if (this.updatePlatformError) {
               this.updatePlatformError = "";
