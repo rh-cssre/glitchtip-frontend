@@ -32,5 +32,5 @@ export interface User {
   name: string;
   dateJoined: string;
   hasPasswordAuth: boolean;
-  email: boolean;
+  email: string;
 }

@@ -43,4 +43,14 @@ describe("List Team Members", () => {
       .then((option) => option[0].click());
     cy.get("mat-list mat-list-item").first().contains(user.email);
   });
+
+  it.only("should remove a team member", () => {
+    cy.visit(`/settings/${organization.name}/teams/${team.name}/members/`);
+    cy.get("mat-select").first().click();
+    cy.get("mat-option span")
+      .contains(user.email)
+      .then((option) => option[0].click());
+    cy.get("#remove-team-member").click();
+    cy.contains("This team doesn't have any members");
+  });
 });
