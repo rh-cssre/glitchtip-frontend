@@ -9,7 +9,7 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameTitleComponent {
-  @Input() frame: Frame;
+  @Input() frame: Frame | undefined;
   @Input() eventPlatform: string | null | undefined;
 
   /** Show a tool tip with the absPath if it doesn't match filename or module */

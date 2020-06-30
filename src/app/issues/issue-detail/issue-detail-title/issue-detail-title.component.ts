@@ -10,5 +10,5 @@ import { IssueMetadata } from "../../interfaces";
 export class IssueDetailTitleComponent {
   @Input() issueType?: string;
   @Input() culprit?: string | null;
-  @Input() metadata: IssueMetadata;
+  @Input() metadata?: IssueMetadata;
 }

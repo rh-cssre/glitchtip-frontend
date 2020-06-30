@@ -1,5 +1,10 @@
 import { seedBackend, requestLogin } from "./utils";
-import { organization, newTeam, newProject } from "../fixtures/variables";
+import {
+  organization,
+  newTeam,
+  newProject,
+  project,
+} from "../fixtures/variables";
 
 describe("Create New Project", () => {
   beforeEach(() => {
@@ -48,6 +53,54 @@ describe("Create New Project", () => {
     cy.url().should(
       "eq",
       "http://localhost:4200/settings/cypresstestorg/projects/newcypresstestproject"
+    );
+  });
+});
+
+describe("Edit and Delete a project", () => {
+  beforeEach(() => {
+    seedBackend();
+    requestLogin();
+    cy.visit(`/settings/${organization.name}/projects/${project.name}`);
+  });
+
+  it("should edit the name of a project", () => {
+    cy.get("input[formcontrolname=name]")
+      .clear()
+      .type(
+        "While having too many characters in a project name would be rare, this test ensures that the server error field works."
+      );
+    cy.get("#update-project-name").click();
+    cy.get("mat-error").contains("Bad Request: 400");
+    cy.get("input[formcontrolname=name]").clear();
+    cy.get("#update-project-name").click();
+    cy.get("mat-error").contains("Enter a project name");
+    cy.get("input[formcontrolname=name]").type("New Project Name");
+    cy.get("#update-project-name").click();
+    cy.contains("Settings for New Project Name");
+    // delete from db
+    cy.get("#delete-project").click();
+  });
+
+  it("edit the project platform", () => {
+    cy.get("input[formcontrolname=platform]")
+      .clear()
+      .type(
+        "While having too many characters in a project name would be rare, this test ensures that the server error field works."
+      );
+    cy.get("#update-project-platform").click();
+    cy.get("mat-error").contains("Bad Request: 400");
+    cy.get("input[formcontrolname=platform]").clear().type("Cool new platform");
+    cy.get("#update-project-platform").click();
+    cy.contains("Your project platform has been updated to Cool new platform");
+  });
+
+  it("should remove the project and redirect to projects page", () => {
+    cy.get("#delete-project").click();
+    cy.contains("Your project has been sucessfully deleted");
+    cy.url().should(
+      "eq",
+      `http://localhost:4200/settings/${organization.name}/projects`
     );
   });
 });

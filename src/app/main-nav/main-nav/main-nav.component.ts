@@ -1,7 +1,7 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  HostListener
+  HostListener,
 } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
@@ -11,7 +11,7 @@ import { MainNavService } from "../main-nav.service";
   selector: "app-main-nav",
   templateUrl: "./main-nav.component.html",
   styleUrls: ["./main-nav.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainNavComponent {
   innerWidth: number;
@@ -25,7 +25,7 @@ export class MainNavComponent {
   navOpen$ = this.mainNav.navOpen$;
 
   @HostListener("window:resize", ["$event"])
-  onResize(event) {
+  onResize() {
     this.innerWidth = window.innerWidth;
     if (this.isScreenSmall()) {
       this.hideSideNav();

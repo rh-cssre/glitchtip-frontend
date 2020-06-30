@@ -1,3 +1,4 @@
+// tslint:disable:no-any
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
@@ -37,7 +38,7 @@ describe("IssuesPageComponent", () => {
     fixture = TestBed.createComponent(IssuesPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.issues$ = ISSUES;
+    component.issues$ = ISSUES as any;
   });
 
   it("should create", () => {

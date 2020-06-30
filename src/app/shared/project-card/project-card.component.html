@@ -1,6 +1,6 @@
 <mat-card>
   <a
-    [routerLink]="isMember ? cardLink : secondaryButton.link"
+    [routerLink]="isMember ? cardLink : secondaryButton?.link"
     [queryParams]="isMember ? cardLinkQueryParams || {} : {}"
   >
     <mat-card-title>
@@ -43,7 +43,7 @@
       <span>{{ primaryButton.text }}</span>
     </a>
     <a
-      *ngIf="secondaryButton.text && secondaryButton.link"
+      *ngIf="secondaryButton && secondaryButton.text && secondaryButton.link"
       class="action-button"
       mat-button
       color="primary"

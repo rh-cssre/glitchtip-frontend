@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { BehaviorSubject, of, combineLatest } from "rxjs";
-import { tap, catchError, map } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, combineLatest } from "rxjs";
+import { tap, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
-  ProjectNew,
   Project,
   ProjectKey,
   ProjectDetail,
+  ProjectNew,
 } from "./projects.interfaces";
 import { OrganizationsService } from "../organizations/organizations.service";
 
@@ -54,7 +54,7 @@ export class ProjectsService {
     private organizationsService: OrganizationsService
   ) {}
 
-  createProject(project: any, teamSlug: string, orgSlug: string) {
+  createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
     return this.http
       .post<Project>(url, project)
@@ -84,24 +84,30 @@ export class ProjectsService {
       .subscribe();
   }
 
-  updateProject(
-    organizationSlug: string,
+  updateProjectName(orgSlug: string, projectSlug: string, projectName: string) {
+    const url = `${this.url}${orgSlug}/${projectSlug}/`;
+    const data = { name: projectName };
+    return this.http
+      .put<ProjectDetail>(url, data)
+      .pipe(tap((resp) => this.setActiveProject(resp)));
+  }
+
+  updateProjectPlatform(
+    orgSlug: string,
     projectSlug: string,
-    project: ProjectNew
+    projectPlatform: string,
+    projectName: string
   ) {
-    const url = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http.put<Project>(url, project).pipe(
-      tap((_) => console.log("Post Status", _)),
-      catchError((err) => "error alert")
-    );
+    const url = `${this.url}${orgSlug}/${projectSlug}/`;
+    const data = { name: projectName, platform: projectPlatform };
+    return this.http
+      .put<ProjectDetail>(url, data)
+      .pipe(tap((resp) => this.setActiveProject(resp)));
   }
 
   deleteProject(organizationSlug: string, projectSlug: string) {
     const deleteUrl = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http.delete(deleteUrl).pipe(
-      map(() => this.removeOneProject(projectSlug)),
-      catchError((err: HttpErrorResponse) => of(err))
-    );
+    return this.http.delete(deleteUrl);
   }
 
   private setProjects(projects: Project[]) {
@@ -123,18 +129,6 @@ export class ProjectsService {
       this.projectsState.next({
         ...this.projectsState.getValue(),
         projects: newProjects,
-      });
-    }
-  }
-
-  private removeOneProject(projectSlug: string) {
-    const filteredProjects = this.projectsState
-      .getValue()
-      .projects?.filter((project) => project.slug !== projectSlug);
-    if (filteredProjects) {
-      this.projectsState.next({
-        ...this.projectsState.getValue(),
-        projects: filteredProjects,
       });
     }
   }

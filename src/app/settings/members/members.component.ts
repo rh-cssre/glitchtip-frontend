@@ -11,7 +11,8 @@ import { map, filter } from "rxjs/operators";
 })
 export class MembersComponent implements OnInit {
   organizationMembers$ = this.organizationsService.organizationMembers$;
-  activeOrganization$ = this.organizationsService.activeOrganization$;
+  activeOrganizationDetail$ = this.organizationsService
+    .activeOrganizationDetail$;
 
   constructor(
     private organizationsService: OrganizationsService,

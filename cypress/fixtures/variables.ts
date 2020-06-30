@@ -1,5 +1,6 @@
 export const organization = {
   name: "cypresstestorg",
+  otherOrg: "cypress-test-org-other",
 };
 
 export const team = {

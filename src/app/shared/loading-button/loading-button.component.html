@@ -5,15 +5,17 @@
   *ngIf="buttonStyle === 'flat'"
   mat-flat-button
   color="primary"
-  [disabled]="loading"
+  [disabled]="loading || disabled"
 >
+  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
   <span [class.loading]="loading">{{ buttonText }}</span>
 </button>
 <button
   *ngIf="buttonStyle === 'stroked'"
   mat-stroked-button
   color="primary"
-  [disabled]="loading"
+  [disabled]="loading || disabled"
 >
+  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
   <span [class.loading]="loading">{{ buttonText }}</span>
 </button>

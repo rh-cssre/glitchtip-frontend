@@ -1,0 +1,48 @@
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-display-1">General Settings</h1>
+  </header>
+  <ng-container *ngIf="activeOrganizationDetail$ | async as activeOrg">
+    <mat-card>
+      <mat-card-title>General</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="updateOrganization()">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" [value]="activeOrg.name" />
+            <mat-error *ngIf="updateError">{{ updateError }}</mat-error>
+          </mat-form-field>
+          <app-loading-button
+            [disabled]="name?.value === activeOrg.name"
+            mat-flat-button
+            color="primary"
+            buttonText="Update"
+            id="update-org"
+          >
+          </app-loading-button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-title>Delete Organization</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content class="remove-content">
+        <div>
+          <p>
+            By deleting this organization, you will lose all data including
+            projects and their associated events.
+          </p>
+          <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
+        </div>
+        <app-loading-button
+          buttonText="Delete Organization"
+          [loading]="deleteLoading"
+          (click)="removeOrganization(activeOrg.slug, activeOrg.name)"
+          id="delete-org"
+        >
+        </app-loading-button>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</section>

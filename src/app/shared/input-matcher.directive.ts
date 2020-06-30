@@ -1,5 +1,10 @@
 import { Directive, Input } from "@angular/core";
-import { Validator, NG_VALIDATORS, AbstractControl } from "@angular/forms";
+import {
+  Validator,
+  NG_VALIDATORS,
+  AbstractControl,
+  ValidationErrors,
+} from "@angular/forms";
 
 @Directive({
   selector: "[appInputMatcher]",
@@ -12,14 +17,17 @@ import { Validator, NG_VALIDATORS, AbstractControl } from "@angular/forms";
   ],
 })
 export class InputMatcherDirective implements Validator {
-  @Input() appInputMatcher: string;
+  @Input() appInputMatcher?: string;
 
-  validate(control: AbstractControl): { [key: string]: any } | null {
-    const comparisonInput = control.parent.get(this.appInputMatcher);
-    if (comparisonInput && comparisonInput.value !== control.value) {
-      return { notEqual: true };
-    } else {
-      return null;
+  validate(control: AbstractControl): ValidationErrors | null {
+    if (this.appInputMatcher !== undefined) {
+      const comparisonInput = control.parent.get(this.appInputMatcher);
+      if (comparisonInput && comparisonInput.value !== control.value) {
+        return { notEqual: true };
+      } else {
+        return null;
+      }
     }
+    return null;
   }
 }

@@ -32,21 +32,12 @@ export class UserService {
    * frontend is not built to accommodate this
    */
   readonly emailAddressesSorted$ = this.emailAddresses$.pipe(
-    map((emailAddresses) => {
-      if (emailAddresses.length > 0) {
-        const primaryEmailIndex = emailAddresses.findIndex(
-          (email) => email.isPrimary
-        );
-        // Immutable splice
-        const sortedEmails = [emailAddresses[primaryEmailIndex]]
-          .concat(emailAddresses.slice(0, primaryEmailIndex))
-          .concat(
-            emailAddresses.slice(primaryEmailIndex + 1, emailAddresses.length)
-          );
-        return sortedEmails;
-      }
-      return emailAddresses;
-    })
+    map((emailAddresses) =>
+      // Sort by boolean https://stackoverflow.com/a/17387454/443457
+      [...emailAddresses].sort((a, b) =>
+        a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
+      )
+    )
   );
 
   readonly activeUserEmail$ = this.userDetails$.pipe(
@@ -110,12 +101,12 @@ export class UserService {
     return this.http.get<EmailAddress[]>(this.emailAddressesUrl);
   }
 
-  private postEmailAddress(email) {
+  private postEmailAddress(email: string) {
     return this.http.post<EmailAddress>(this.emailAddressesUrl, { email });
   }
 
-  private deleteEmailAddress(email) {
-    // Is this the best way? https://stackoverflow.com/a/40857437/ says so
+  private deleteEmailAddress(email: string) {
+    // Delete with body, from https://stackoverflow.com/a/40857437/
     const options = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -125,7 +116,7 @@ export class UserService {
     return this.http.delete<null>(this.emailAddressesUrl, options);
   }
 
-  private putEmailAddress(email) {
+  private putEmailAddress(email: string) {
     return this.http.put<EmailAddress>(this.emailAddressesUrl, { email });
   }
 
