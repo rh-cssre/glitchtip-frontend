@@ -349,6 +349,16 @@ export class OrganizationsService {
     );
   }
 
+  removeTeamMember(memberId: number, teamSlug: string) {
+    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    const url = `${this.url}${orgSlug}/members/${memberId}/teams/${teamSlug}/`;
+    return this.http.delete<Team>(url).pipe(
+      tap(() => {
+        this.teamsService.removeMember(memberId);
+      })
+    );
+  }
+
   private setOrganizations(organizations: Organization[]) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),

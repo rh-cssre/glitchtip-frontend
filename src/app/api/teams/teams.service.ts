@@ -60,12 +60,28 @@ export class TeamsService {
     this.addOneTeam(team);
   }
 
+  removeMember(memberId: number) {
+    this.removeTeamMember(memberId);
+  }
+
   private setTeams(teams: Team[]) {
     this.state.next({ ...this.state.getValue(), teams });
   }
 
   private setTeamMembers(teamMembers: Member[]) {
     this.state.next({ ...this.state.getValue(), teamMembers });
+  }
+
+  private removeTeamMember(memberId: number) {
+    const filteredMembers = this.state
+      .getValue()
+      .teamMembers.filter((teamMember) => teamMember.id !== memberId);
+    if (filteredMembers) {
+      this.state.next({
+        ...this.state.getValue(),
+        teamMembers: filteredMembers,
+      });
+    }
   }
 
   /**

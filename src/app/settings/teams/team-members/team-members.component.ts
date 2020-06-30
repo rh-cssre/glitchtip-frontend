@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
@@ -11,17 +11,19 @@ import { FormControl } from "@angular/forms";
   selector: "app-team-members",
   templateUrl: "./team-members.component.html",
   styleUrls: ["./team-members.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamMembersComponent implements OnInit {
   teamMembers$ = this.teamsService.teamMembers$;
   filteredAddTeamMembers$ = this.organizationsService.filteredAddTeamMembers$;
   userTeamRole$ = this.teamsService.userTeamRole$;
-  orgSlug: string | undefined;
-  teamSlug: string | undefined;
+
   member = new FormControl();
-  error?: string;
+  orgSlug = "";
+  teamSlug = "";
+  addMemberError = "";
+  removeMemberError = "";
   loading = false;
+  selectedTeamMember: number | null = null;
 
   constructor(
     private teamsService: TeamsService,
@@ -35,8 +37,8 @@ export class TeamMembersComponent implements OnInit {
     this.route.params
       .pipe(
         map((params) => {
-          const orgSlug: string | undefined = params["org-slug"];
-          const teamSlug: string | undefined = params["team-slug"];
+          const orgSlug: string = params["org-slug"];
+          const teamSlug: string = params["team-slug"];
           this.teamSlug = teamSlug;
           this.orgSlug = orgSlug;
           return { orgSlug, teamSlug };
@@ -64,7 +66,7 @@ export class TeamMembersComponent implements OnInit {
             `${
               this.member.value.user.name
                 ? this.member.value.user.name
-                : this.member.value.email
+                : this.member.value.user.email
             } has been added to #${team.slug}`,
             undefined,
             {
@@ -74,7 +76,29 @@ export class TeamMembersComponent implements OnInit {
         },
         (err) => {
           this.loading = false;
-          this.error = `${err.statusText}: ${err.status}`;
+          this.addMemberError = `${err.statusText}: ${err.status}`;
+        }
+      );
+  }
+
+  removeTeamMember(memberId: number, memberEmail: string) {
+    this.selectedTeamMember = memberId;
+    this.organizationsService
+      .removeTeamMember(memberId, this.teamSlug)
+      .subscribe(
+        (resp) => {
+          this.selectedTeamMember = null;
+          this.snackBar.open(
+            `${memberEmail} has been removed from #${resp.slug}`,
+            undefined,
+            {
+              duration: 4000,
+            }
+          );
+        },
+        (err) => {
+          this.selectedTeamMember = null;
+          this.removeMemberError = `${err.statusText}: ${err.status}`;
         }
       );
   }

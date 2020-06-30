@@ -25,20 +25,36 @@
             <mat-option disabled>No members</mat-option>
           </ng-template>
         </mat-select>
-        <mat-error>{{ error }}</mat-error>
+        <mat-error>{{ addMemberError }}</mat-error>
       </mat-form-field>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let teamMember of teamMembers$ | async">
-          <a
-            mat-line
-            [routerLink]="['/settings', orgSlug, 'members', teamMember.id]"
-            >{{ teamMember.user.email }}</a
-          >
-        </mat-list-item>
-      </mat-list>
+      <ng-container
+        *ngIf="(teamMembers$ | async)?.length === 0; else listMembers"
+      >
+        <p class="center-text">This team doesn't have any members</p>
+      </ng-container>
+      <ng-template #listMembers>
+        <mat-list>
+          <mat-error *ngIf="removeMemberError" class="center-text">{{
+            removeMemberError
+          }}</mat-error>
+          <mat-list-item *ngFor="let teamMember of teamMembers$ | async">
+            <a
+              mat-line
+              [routerLink]="['/settings', orgSlug, 'members', teamMember.id]"
+              >{{ teamMember.user.email }}</a
+            >
+            <app-loading-button
+              buttonText="Remove"
+              buttonStyle="stroked"
+              [loading]="selectedTeamMember === teamMember.id"
+              (click)="removeTeamMember(teamMember.id, teamMember.user.email)"
+              id="remove-team-member"
+            ></app-loading-button>
+          </mat-list-item> </mat-list
+      ></ng-template>
     </mat-card-content>
   </mat-card>
 </section>
