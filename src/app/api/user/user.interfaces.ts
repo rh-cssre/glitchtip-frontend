@@ -17,12 +17,6 @@ export interface UserDetails {
   socialaccount_set: SocialAccount[];
 }
 
-export interface EmailAddress {
-  isPrimary: boolean;
-  email: string;
-  isVerified: boolean;
-}
-
 export interface User {
   lastLogin: string;
   isSuperuser: boolean;

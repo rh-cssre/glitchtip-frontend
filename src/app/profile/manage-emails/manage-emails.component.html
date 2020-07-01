@@ -25,12 +25,12 @@
           <app-loading-button
             *ngIf="!email.isPrimary && email.isVerified"
             buttonText="Make primary"
-            [loading]="loadingStates.makePrimary === email.email"
+            [loading]="(loadingStates$ | async)?.makePrimary === email.email"
             (click)="makePrimary(email.email)"
             buttonStyle="stroked"
           ></app-loading-button>
           <div
-            *ngIf="loadingStates.delete === email.email"
+            *ngIf="(loadingStates$ | async)?.delete === email.email"
             class="delete-spinner-container"
           >
             <mat-progress-spinner
@@ -41,7 +41,10 @@
           </div>
           <button
             class="delete-button"
-            *ngIf="!email.isPrimary && loadingStates.delete !== email.email"
+            *ngIf="
+              !email.isPrimary &&
+              (loadingStates$ | async)?.delete !== email.email
+            "
             mat-icon-button
             aria-label="Remove email address"
             (click)="deleteEmail(email.email)"
@@ -84,7 +87,7 @@
         </mat-form-field>
         <app-loading-button
           buttonText="Add Email Address"
-          [loading]="loadingStates.add"
+          [loading]="(loadingStates$ | async)?.add"
         ></app-loading-button>
       </div>
       <mat-error class="server-error" *ngIf="addEmailError">
