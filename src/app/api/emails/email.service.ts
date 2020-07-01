@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { EmailAddress } from "./email.interfaces";
 import { tap, map, distinctUntilKeyChanged } from "rxjs/operators";
 import { baseUrl } from "../../constants";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 type LoadingStateNames = "add" | "delete" | "makePrimary";
 
@@ -46,6 +47,7 @@ const initialState: EmailState = {
 })
 export class EmailService {
   private readonly state = new BehaviorSubject<EmailState>(initialState);
+  readonly resetFormSubject = new Subject();
   readonly emailAddresses$ = this.state.pipe(
     map((state) => state.emailAddresses)
   );
@@ -59,7 +61,6 @@ export class EmailService {
   readonly addEmailError$ = this.state.pipe(
     map((state) => state.addEmailError)
   );
-  readonly resetForm$ = this.state.pipe(map((state) => state.resetForm));
   /**
    * A list of the user's email addresses, with primary email on top
    *
@@ -76,7 +77,13 @@ export class EmailService {
   );
 
   private readonly url = baseUrl + "/users/me/emails/";
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
+    this.snackbarMessage$.subscribe((message) => {
+      if (message !== "") {
+        this.snackBar.open(message, undefined, { duration: 4000 });
+      }
+    });
+  }
 
   retrieveEmailAddresses() {
     this.getEmailAddresses()
@@ -90,7 +97,7 @@ export class EmailService {
       .pipe(tap((response: EmailAddress) => this.setNewEmailAddress(response)))
       .subscribe(
         (_) => {
-          this.clearForm();
+          this.resetFormSubject.next();
           this.resetLoadingAdd();
           this.setAddEmailError("");
         },
@@ -273,13 +280,5 @@ export class EmailService {
 
   private setAddEmailError = (message: string) => {
     this.state.next({ ...this.state.getValue(), addEmailError: message });
-  };
-
-  private clearForm = () => {
-    this.state.next({ ...this.state.getValue(), resetForm: true });
-  };
-
-  resetClearForm = () => {
-    this.state.next({ ...this.state.getValue(), resetForm: false });
   };
 }

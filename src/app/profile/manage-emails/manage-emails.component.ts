@@ -11,7 +11,6 @@ import {
   FormGroupDirective,
   NgForm,
 } from "@angular/forms";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { EmailAddress } from "../../api/emails/email.interfaces";
 import { EmailService } from "../../api/emails/email.service";
@@ -36,7 +35,7 @@ export class ManageEmailsComponent implements OnInit {
   loadingStates$ = this.emailService.loadingStates$;
   snackbarMessage$ = this.emailService.snackbarMessage$;
   addEmailError$ = this.emailService.addEmailError$;
-  resetForm$ = this.emailService.resetForm$;
+  resetFormSubject = this.emailService.resetFormSubject;
   emailAddresses: EmailAddress[] = [];
 
   get email_address() {
@@ -74,27 +73,14 @@ export class ManageEmailsComponent implements OnInit {
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
-  constructor(
-    private emailService: EmailService,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private emailService: EmailService) {}
 
   ngOnInit(): void {
     this.emailService.retrieveEmailAddresses();
     this.emailAddresses$.subscribe((emails) => {
       this.emailAddresses = emails;
     });
-    this.snackbarMessage$.subscribe((message) => {
-      if (message !== "") {
-        this.snackBar.open(message, undefined, { duration: 4000 });
-      }
-    });
-    this.resetForm$.subscribe((reset) => {
-      if (reset) {
-        this.formDirective.resetForm();
-        this.emailService.resetClearForm();
-      }
-    });
+    this.resetFormSubject.subscribe((_) => this.formDirective.resetForm());
   }
 
   deleteEmail = (email: string) => this.emailService.removeEmailAddress(email);
