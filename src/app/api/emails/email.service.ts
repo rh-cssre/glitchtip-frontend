@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { EmailAddress } from "./email.interfaces";
-import { tap, map } from "rxjs/operators";
+import { tap, map, distinctUntilKeyChanged } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 
 type LoadingStateNames = "add" | "delete" | "makePrimary";
@@ -24,6 +24,8 @@ interface LoadingStates {
 interface EmailState {
   emailAddresses: EmailAddress[];
   loadingStates: LoadingStates;
+  snackBarMessage: string;
+  addEmailError: string;
 }
 
 const initialState: EmailState = {
@@ -33,6 +35,8 @@ const initialState: EmailState = {
     delete: null,
     makePrimary: null,
   },
+  snackBarMessage: "",
+  addEmailError: "",
 };
 
 @Injectable({
@@ -45,6 +49,13 @@ export class EmailService {
   );
   readonly loadingStates$ = this.state.pipe(
     map((state) => state.loadingStates)
+  );
+  readonly snackbarMessage$ = this.state.pipe(
+    distinctUntilKeyChanged("snackBarMessage"),
+    map((state) => state.snackBarMessage)
+  );
+  readonly addEmailError$ = this.state.pipe(
+    map((state) => state.addEmailError)
   );
   /**
    * A list of the user's email addresses, with primary email on top
@@ -71,21 +82,78 @@ export class EmailService {
   }
 
   addEmailAddress(email: string) {
-    return this.postEmailAddress(email).pipe(
-      tap((response: EmailAddress) => this.setNewEmailAddress(response))
-    );
+    this.setLoadingAdd();
+    this.postEmailAddress(email)
+      .pipe(tap((response: EmailAddress) => this.setNewEmailAddress(response)))
+      .subscribe(
+        (_) => {
+          // this.formDirective.resetForm();
+          this.resetLoadingAdd();
+          this.setAddEmailError("");
+        },
+        (error) => {
+          this.resetLoadingAdd();
+          if (error.error?.non_field_errors) {
+            this.setAddEmailError(error.error.non_field_errors.join(", "));
+          } else {
+            if (
+              error.status === 500 &&
+              (error.error as string).includes(
+                `'to' parameter is not a valid address`
+              )
+            ) {
+              this.setAddEmailError(
+                "This is not a valid email address. Please try another one."
+              );
+            } else if (error.status === 500) {
+              this
+                .setAddEmailError(`There was a problem. Refresh the page to see if your email is
+                on the list. You may need to try again, or try a different
+                email address.`);
+            } else if (error.status === 400) {
+              this.setAddEmailError("There was a problem. Please try again.");
+            } else {
+              this.setAddEmailError("Error: " + error.statusText);
+            }
+          }
+        }
+      );
   }
 
   removeEmailAddress(email: string) {
-    return this.deleteEmailAddress(email).pipe(
-      tap((_) => this.setRemovedEmailAddress(email))
-    );
+    this.setLoadingDelete(email);
+    this.deleteEmailAddress(email)
+      .pipe(tap((_) => this.setRemovedEmailAddress(email)))
+      .subscribe(
+        (_) => {
+          this.resetLoadingDelete();
+          this.setSnackbarMessage(
+            `${email} has been removed from your account.`
+          );
+        },
+        (_) => {
+          this.resetLoadingDelete();
+          this.setSnackbarMessage(`There was a problem. Try again later.`);
+        }
+      );
   }
 
   makeEmailPrimary(email: string) {
-    return this.putEmailAddress(email).pipe(
-      tap((response) => this.setNewPrimaryEmail(response))
-    );
+    this.setLoadingMakePrimary(email);
+    this.putEmailAddress(email)
+      .pipe(tap((response) => this.setNewPrimaryEmail(response)))
+      .subscribe(
+        (_) => {
+          this.resetLoadingMakePrimary();
+          this.setSnackbarMessage(
+            `${email} is now your primary email address.`
+          );
+        },
+        (_) => {
+          this.resetLoadingMakePrimary();
+          this.setSnackbarMessage(`There was a problem. Try again later.`);
+        }
+      );
   }
 
   setLoadingAdd = () => this.setLoadingState("add");
@@ -195,4 +263,12 @@ export class EmailService {
 
     this.state.next({ ...current, loadingStates });
   }
+
+  private setSnackbarMessage = (message: string) => {
+    this.state.next({ ...this.state.getValue(), snackBarMessage: message });
+  };
+
+  private setAddEmailError = (message: string) => {
+    this.state.next({ ...this.state.getValue(), addEmailError: message });
+  };
 }

@@ -90,8 +90,8 @@
           [loading]="(loadingStates$ | async)?.add"
         ></app-loading-button>
       </div>
-      <mat-error class="server-error" *ngIf="addEmailError">
-        {{ addEmailError }}
+      <mat-error class="server-error" *ngIf="(addEmailError$ | async) !== ''">
+        {{ addEmailError$ | async }}
       </mat-error>
     </form>
   </mat-card-content>
