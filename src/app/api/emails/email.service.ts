@@ -25,9 +25,7 @@ interface LoadingStates {
 interface EmailState {
   emailAddresses: EmailAddress[];
   loadingStates: LoadingStates;
-  snackBarMessage: string;
   addEmailError: string;
-  resetForm: boolean;
 }
 
 const initialState: EmailState = {
@@ -37,9 +35,7 @@ const initialState: EmailState = {
     delete: null,
     makePrimary: null,
   },
-  snackBarMessage: "",
   addEmailError: "",
-  resetForm: false,
 };
 
 @Injectable({
@@ -53,10 +49,6 @@ export class EmailService {
   );
   readonly loadingStates$ = this.state.pipe(
     map((state) => state.loadingStates)
-  );
-  readonly snackbarMessage$ = this.state.pipe(
-    distinctUntilKeyChanged("snackBarMessage"),
-    map((state) => state.snackBarMessage)
   );
   readonly addEmailError$ = this.state.pipe(
     map((state) => state.addEmailError)
@@ -77,13 +69,7 @@ export class EmailService {
   );
 
   private readonly url = baseUrl + "/users/me/emails/";
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
-    this.snackbarMessage$.subscribe((message) => {
-      if (message !== "") {
-        this.snackBar.open(message, undefined, { duration: 4000 });
-      }
-    });
-  }
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   retrieveEmailAddresses() {
     this.getEmailAddresses()
@@ -174,6 +160,10 @@ export class EmailService {
   resetLoadingAdd = () => this.resetLoadingState("add");
   resetLoadingDelete = () => this.resetLoadingState("delete");
   resetLoadingMakePrimary = () => this.resetLoadingState("makePrimary");
+
+  private setSnackbarMessage(message: string) {
+    this.snackBar.open(message, undefined, { duration: 4000 });
+  }
 
   private getEmailAddresses() {
     return this.http.get<EmailAddress[]>(this.url);
@@ -273,10 +263,6 @@ export class EmailService {
 
     this.state.next({ ...current, loadingStates });
   }
-
-  private setSnackbarMessage = (message: string) => {
-    this.state.next({ ...this.state.getValue(), snackBarMessage: message });
-  };
 
   private setAddEmailError = (message: string) => {
     this.state.next({ ...this.state.getValue(), addEmailError: message });
