@@ -33,7 +33,6 @@ export class LessAnnoyingErrorStateMatcher implements ErrorStateMatcher {
 export class ManageEmailsComponent implements OnInit {
   emailAddresses$ = this.emailService.emailAddressesSorted$;
   loadingStates$ = this.emailService.loadingStates$;
-  snackbarMessage$ = this.emailService.snackbarMessage$;
   addEmailError$ = this.emailService.addEmailError$;
   resetFormSubject = this.emailService.resetFormSubject;
   emailAddresses: EmailAddress[] = [];

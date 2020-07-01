@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject, Subject } from "rxjs";
 import { EmailAddress } from "./email.interfaces";
-import { tap, map, distinctUntilKeyChanged } from "rxjs/operators";
+import { tap, map } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
