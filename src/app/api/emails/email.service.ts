@@ -26,6 +26,7 @@ interface EmailState {
   loadingStates: LoadingStates;
   snackBarMessage: string;
   addEmailError: string;
+  resetForm: boolean;
 }
 
 const initialState: EmailState = {
@@ -37,6 +38,7 @@ const initialState: EmailState = {
   },
   snackBarMessage: "",
   addEmailError: "",
+  resetForm: false,
 };
 
 @Injectable({
@@ -57,6 +59,7 @@ export class EmailService {
   readonly addEmailError$ = this.state.pipe(
     map((state) => state.addEmailError)
   );
+  readonly resetForm$ = this.state.pipe(map((state) => state.resetForm));
   /**
    * A list of the user's email addresses, with primary email on top
    *
@@ -87,7 +90,7 @@ export class EmailService {
       .pipe(tap((response: EmailAddress) => this.setNewEmailAddress(response)))
       .subscribe(
         (_) => {
-          // this.formDirective.resetForm();
+          this.clearForm();
           this.resetLoadingAdd();
           this.setAddEmailError("");
         },
@@ -270,5 +273,13 @@ export class EmailService {
 
   private setAddEmailError = (message: string) => {
     this.state.next({ ...this.state.getValue(), addEmailError: message });
+  };
+
+  private clearForm = () => {
+    this.state.next({ ...this.state.getValue(), resetForm: true });
+  };
+
+  resetClearForm = () => {
+    this.state.next({ ...this.state.getValue(), resetForm: false });
   };
 }

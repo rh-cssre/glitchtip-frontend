@@ -36,6 +36,7 @@ export class ManageEmailsComponent implements OnInit {
   loadingStates$ = this.emailService.loadingStates$;
   snackbarMessage$ = this.emailService.snackbarMessage$;
   addEmailError$ = this.emailService.addEmailError$;
+  resetForm$ = this.emailService.resetForm$;
   emailAddresses: EmailAddress[] = [];
 
   get email_address() {
@@ -86,6 +87,12 @@ export class ManageEmailsComponent implements OnInit {
     this.snackbarMessage$.subscribe((message) => {
       if (message !== "") {
         this.snackBar.open(message, undefined, { duration: 4000 });
+      }
+    });
+    this.resetForm$.subscribe((reset) => {
+      if (reset) {
+        this.formDirective.resetForm();
+        this.emailService.resetClearForm();
       }
     });
   }
