@@ -10,10 +10,11 @@ import {
   Validators,
   FormGroupDirective,
   NgForm,
+  AbstractControl,
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
-import { EmailAddress } from "../../api/emails/email.interfaces";
 import { EmailService } from "../../api/emails/email.service";
+import { map, first } from "rxjs/operators";
 
 export class LessAnnoyingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -35,7 +36,6 @@ export class ManageEmailsComponent implements OnInit {
   loadingStates$ = this.emailService.loadingStates$;
   addEmailError$ = this.emailService.addEmailError$;
   resetFormSubject = this.emailService.resetFormSubject;
-  emailAddresses: EmailAddress[] = [];
 
   get email_address() {
     return this.form.get("email_address");
@@ -49,25 +49,28 @@ export class ManageEmailsComponent implements OnInit {
 
   /**
    * Does the email address match something already on the list? If so, no need
-   * to allow it.
+   * to throw an error.
    *
    * @param control The form control being validated
    */
-  matchesExistingValidator = (control: FormControl) => {
-    const matchedEmail = !!this.emailAddresses.find(
-      (email) => email.email === control.value
+  matchesExistingValidator = (control: AbstractControl) =>
+    this.emailAddresses$.pipe(
+      map((emails) => {
+        const matchedEmail = emails.find(
+          (email) => email.email === control.value
+        );
+        return matchedEmail ? { matchesExistingValidator: true } : null;
+      }),
+      first()
     );
-
-    return matchedEmail ? { matchesExistingValidator: true } : null;
-  };
 
   // tslint:disable:member-ordering
   form = new FormGroup({
-    email_address: new FormControl("", [
-      Validators.email,
-      Validators.required,
-      this.matchesExistingValidator,
-    ]),
+    email_address: new FormControl(
+      "",
+      [Validators.email, Validators.required],
+      this.matchesExistingValidator
+    ),
   });
 
   matcher = new LessAnnoyingErrorStateMatcher();
@@ -76,9 +79,6 @@ export class ManageEmailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.emailService.retrieveEmailAddresses();
-    this.emailAddresses$.subscribe((emails) => {
-      this.emailAddresses = emails;
-    });
     this.resetFormSubject.subscribe((_) => this.formDirective.resetForm());
   }
 
