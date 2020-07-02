@@ -4,6 +4,7 @@ import { SubscriptionComponent } from "./subscription.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatomoModule } from "ngx-matomo";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("SubscriptionComponent", () => {
   let component: SubscriptionComponent;
@@ -12,7 +13,12 @@ describe("SubscriptionComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SubscriptionComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, MatomoModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatomoModule,
+        MatSnackBarModule,
+      ],
     }).compileComponents();
   }));
 

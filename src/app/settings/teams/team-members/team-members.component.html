@@ -25,7 +25,7 @@
             <mat-option disabled>No members</mat-option>
           </ng-template>
         </mat-select>
-        <mat-error>{{ addMemberError }}</mat-error>
+        <mat-error *ngIf="addMemberError">{{ addMemberError }}</mat-error>
       </mat-form-field>
     </mat-card-header>
     <mat-divider></mat-divider>

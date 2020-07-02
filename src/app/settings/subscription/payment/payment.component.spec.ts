@@ -4,6 +4,7 @@ import { PaymentComponent } from "./payment.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatomoModule } from "ngx-matomo";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("PaymentComponent", () => {
   let component: PaymentComponent;
@@ -12,7 +13,12 @@ describe("PaymentComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PaymentComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, MatomoModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatomoModule,
+        MatSnackBarModule,
+      ],
     }).compileComponents();
   }));
 
