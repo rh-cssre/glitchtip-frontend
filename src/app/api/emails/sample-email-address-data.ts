@@ -1,4 +1,6 @@
-export const sampleEmailAddressData = [
+import { EmailAddress } from "./email.interfaces";
+
+export const sampleEmailAddressData: EmailAddress[] = [
   {
     isPrimary: false,
     email: "aa@example.com",
