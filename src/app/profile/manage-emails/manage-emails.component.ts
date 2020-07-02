@@ -48,8 +48,8 @@ export class ManageEmailsComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
   /**
-   * Does the email address match something already on the list? If so, no need
-   * to throw an error.
+   * Does the email address match something already on the list?
+   * If so, throw an error.
    *
    * @param control The form control being validated
    */
