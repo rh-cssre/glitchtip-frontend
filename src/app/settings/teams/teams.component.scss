@@ -8,7 +8,16 @@ mat-card {
 }
 
 mat-list {
+  width: 100%;
   padding-top: 0;
+}
+
+mat-error {
+  display: block;
+}
+
+.center-text {
+  text-align: center;
 }
 
 .mat-list-item {
@@ -20,6 +29,7 @@ mat-list {
   }
 
   ::ng-deep .mat-list-item-content {
+    width: 100%;
     padding-left: 0;
     padding-right: 0;
   }

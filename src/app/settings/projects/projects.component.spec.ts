@@ -9,6 +9,7 @@ import { ProjectsComponent } from "./projects.component";
 import { SettingsComponent } from "../settings/settings.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { MatomoModule } from "ngx-matomo";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("ProjectsComponent", () => {
   let component: ProjectsComponent;
@@ -26,6 +27,7 @@ describe("ProjectsComponent", () => {
         MatListModule,
         HttpClientTestingModule,
         MatomoModule,
+        MatSnackBarModule,
       ],
     }).compileComponents();
   }));

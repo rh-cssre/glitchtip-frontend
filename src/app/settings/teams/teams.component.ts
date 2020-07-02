@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute } from "@angular/router";
 import { map, filter, tap } from "rxjs/operators";
@@ -10,7 +10,6 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
   selector: "app-teams",
   templateUrl: "./teams.component.html",
   styleUrls: ["./teams.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamsComponent implements OnInit {
   activeOrganization$ = this.organizationsService.activeOrganization$;
@@ -20,6 +19,8 @@ export class TeamsComponent implements OnInit {
   otherTeams$ = this.activeOrganization$.pipe(
     map((orgDetails) => orgDetails?.teams?.filter((team) => !team.isMember))
   );
+  errors$ = this.organizationsService.errors$;
+  loading$ = this.organizationsService.loading$;
   orgSlug?: string;
 
   memberCountPluralMapping: { [k: string]: string } = {
@@ -53,5 +54,13 @@ export class TeamsComponent implements OnInit {
         orgSlug: this.orgSlug,
       },
     });
+  }
+
+  leaveTeam(team: string) {
+    this.organizationsService.leaveTeam(team).subscribe();
+  }
+
+  joinTeam(team: string) {
+    this.organizationsService.joinTeam(team).subscribe();
   }
 }

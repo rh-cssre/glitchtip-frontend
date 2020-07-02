@@ -15,6 +15,9 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams">
+        <mat-error class="center-text" *ngIf="errors$ | async as error">{{
+          error.removeTeamMember
+        }}</mat-error>
         <mat-list-item *ngFor="let yourTeam of yourTeams$ | async">
           <a mat-line [routerLink]="[yourTeam.slug, 'members']">
             #{{ yourTeam.slug }}
@@ -22,6 +25,13 @@
           <p mat-line>
             {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
           </p>
+          <app-loading-button
+            buttonText="Leave Team"
+            buttonStyle="stroked"
+            [loading]="(loading$ | async)?.removeTeamMember === yourTeam.slug"
+            (click)="leaveTeam(yourTeam.slug)"
+            id="leave-team"
+          ></app-loading-button>
         </mat-list-item>
       </mat-list>
       <ng-template #noTeams>
@@ -48,6 +58,9 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-list>
+        <mat-error class="center-text" *ngIf="errors$ | async as error">{{
+          error.addTeamMember
+        }}</mat-error>
         <mat-list-item *ngFor="let otherTeam of otherTeams$ | async">
           <a mat-line [routerLink]="[otherTeam.slug, 'members']">
             #{{ otherTeam.slug }}
@@ -55,6 +68,13 @@
           <p mat-line>
             {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
           </p>
+          <app-loading-button
+            buttonText="Join Team"
+            buttonStyle="stroked"
+            [loading]="(loading$ | async)?.addTeamMember === otherTeam.slug"
+            (click)="joinTeam(otherTeam.slug)"
+            id="leave-team"
+          ></app-loading-button>
         </mat-list-item>
       </mat-list>
     </mat-card-content>
