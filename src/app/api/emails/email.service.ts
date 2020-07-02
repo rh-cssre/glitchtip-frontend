@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject, Subject, EMPTY } from "rxjs";
 import { EmailAddress } from "./email.interfaces";
-import { tap, map } from "rxjs/operators";
+import { tap, map, catchError } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
@@ -80,14 +80,14 @@ export class EmailService {
   addEmailAddress(email: string) {
     this.setLoadingAdd();
     this.postEmailAddress(email)
-      .pipe(tap((response: EmailAddress) => this.setNewEmailAddress(response)))
-      .subscribe(
-        (_) => {
+      .pipe(
+        tap((response: EmailAddress) => {
+          this.setNewEmailAddress(response);
           this.resetFormSubject.next();
           this.resetLoadingAdd();
           this.setAddEmailError("");
-        },
-        (error) => {
+        }),
+        catchError((error) => {
           this.resetLoadingAdd();
           if (error.error?.non_field_errors) {
             this.setAddEmailError(error.error.non_field_errors.join(", "));
@@ -112,44 +112,50 @@ export class EmailService {
               this.setAddEmailError("Error: " + error.statusText);
             }
           }
-        }
-      );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   removeEmailAddress(email: string) {
     this.setLoadingDelete(email);
     this.deleteEmailAddress(email)
-      .pipe(tap((_) => this.setRemovedEmailAddress(email)))
-      .subscribe(
-        (_) => {
+      .pipe(
+        tap((_) => {
+          this.setRemovedEmailAddress(email);
           this.resetLoadingDelete();
           this.setSnackbarMessage(
             `${email} has been removed from your account.`
           );
-        },
-        (_) => {
+        }),
+        catchError((_) => {
           this.resetLoadingDelete();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
-        }
-      );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   makeEmailPrimary(email: string) {
     this.setLoadingMakePrimary(email);
     this.putEmailAddress(email)
-      .pipe(tap((response) => this.setNewPrimaryEmail(response)))
-      .subscribe(
-        (_) => {
+      .pipe(
+        tap((response) => {
+          this.setNewPrimaryEmail(response);
           this.resetLoadingMakePrimary();
           this.setSnackbarMessage(
             `${email} is now your primary email address.`
           );
-        },
-        (_) => {
+        }),
+        catchError((error) => {
           this.resetLoadingMakePrimary();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
-        }
-      );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   setLoadingAdd = () => this.setLoadingState("add");
