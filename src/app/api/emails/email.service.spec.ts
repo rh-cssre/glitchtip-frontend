@@ -5,21 +5,24 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 
-import { UserService } from "./user.service";
+import { EmailService } from "./email.service";
 import { sampleEmailAddressData } from "./sample-email-address-data";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-describe("UserService", () => {
-  let service: UserService;
+describe("EmailService", () => {
+  let service: EmailService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, MatSnackBarModule],
+    });
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(UserService);
+    service = TestBed.inject(EmailService);
   });
 
   it("should retrieve a list of email addresses", () => {
-    const url = (service as any).emailAddressesUrl;
+    const url = (service as any).url;
     service.retrieveEmailAddresses();
     const req = httpTestingController.expectOne(url);
     req.flush(sampleEmailAddressData);
