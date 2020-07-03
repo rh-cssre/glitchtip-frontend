@@ -6,7 +6,11 @@ import { tap, map, catchError } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-type LoadingStateNames = "add" | "delete" | "makePrimary";
+type LoadingStateNames =
+  | "add"
+  | "delete"
+  | "makePrimary"
+  | "resendConfirmation";
 
 interface LoadingStates {
   add: boolean;
@@ -20,6 +24,7 @@ interface LoadingStates {
    * cause problems. Again, didn't think it was a 1.0 problem
    */
   makePrimary: string | null;
+  resendConfirmation: string | null;
 }
 
 interface EmailState {
@@ -34,6 +39,7 @@ const initialState: EmailState = {
     add: false,
     delete: null,
     makePrimary: null,
+    resendConfirmation: null,
   },
   addEmailError: "",
 };
@@ -158,14 +164,36 @@ export class EmailService {
       .subscribe();
   }
 
+  resendConfirmation(email: string) {
+    this.setLoadingResend(email);
+    this.sendConfirmation(email)
+      .pipe(
+        tap((_) => {
+          this.resetLoadingResend();
+          this.setSnackbarMessage(
+            `A confirmation email has been sent to ${email}.`
+          );
+        }),
+        catchError((_) => {
+          this.resetLoadingResend();
+          this.setSnackbarMessage(`There was a problem. Try again later.`);
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
   setLoadingAdd = () => this.setLoadingState("add");
   setLoadingDelete = (value: string) => this.setLoadingState("delete", value);
   setLoadingMakePrimary = (value: string) =>
     this.setLoadingState("makePrimary", value);
+  setLoadingResend = (value: string) =>
+    this.setLoadingState("resendConfirmation", value);
 
   resetLoadingAdd = () => this.resetLoadingState("add");
   resetLoadingDelete = () => this.resetLoadingState("delete");
   resetLoadingMakePrimary = () => this.resetLoadingState("makePrimary");
+  resetLoadingResend = () => this.resetLoadingState("resendConfirmation");
 
   private setSnackbarMessage(message: string) {
     this.snackBar.open(message, undefined, { duration: 4000 });
@@ -192,6 +220,10 @@ export class EmailService {
 
   private putEmailAddress(email: string) {
     return this.http.put<EmailAddress>(this.url, { email });
+  }
+
+  private sendConfirmation(email: string) {
+    return this.http.post<EmailAddress>(this.url + "confirm/", { email });
   }
 
   private setEmailAddresses(emailAddresses: EmailAddress[]) {
