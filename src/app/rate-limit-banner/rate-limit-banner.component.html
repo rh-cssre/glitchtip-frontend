@@ -1,4 +1,4 @@
-<mat-card *ngIf="!(isAcceptingEvents$ | async) && bannerVisible">
+<mat-card *ngIf="(isAcceptingEvents$ | async) === false && bannerVisible">
   <mat-card-title>
     Missing some errors?
   </mat-card-title>
