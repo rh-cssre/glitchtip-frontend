@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject, Subject, EMPTY } from "rxjs";
 import { EmailAddress } from "./email.interfaces";
-import { tap, map } from "rxjs/operators";
+import { tap, map, catchError } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-type LoadingStateNames = "add" | "delete" | "makePrimary";
+type LoadingStateNames =
+  | "add"
+  | "delete"
+  | "makePrimary"
+  | "resendConfirmation";
 
 interface LoadingStates {
   add: boolean;
@@ -20,6 +24,7 @@ interface LoadingStates {
    * cause problems. Again, didn't think it was a 1.0 problem
    */
   makePrimary: string | null;
+  resendConfirmation: string | null;
 }
 
 interface EmailState {
@@ -34,6 +39,7 @@ const initialState: EmailState = {
     add: false,
     delete: null,
     makePrimary: null,
+    resendConfirmation: null,
   },
   addEmailError: "",
 };
@@ -80,14 +86,14 @@ export class EmailService {
   addEmailAddress(email: string) {
     this.setLoadingAdd();
     this.postEmailAddress(email)
-      .pipe(tap((response: EmailAddress) => this.setNewEmailAddress(response)))
-      .subscribe(
-        (_) => {
+      .pipe(
+        tap((response: EmailAddress) => {
+          this.setNewEmailAddress(response);
           this.resetFormSubject.next();
           this.resetLoadingAdd();
           this.setAddEmailError("");
-        },
-        (error) => {
+        }),
+        catchError((error) => {
           this.resetLoadingAdd();
           if (error.error?.non_field_errors) {
             this.setAddEmailError(error.error.non_field_errors.join(", "));
@@ -112,54 +118,82 @@ export class EmailService {
               this.setAddEmailError("Error: " + error.statusText);
             }
           }
-        }
-      );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   removeEmailAddress(email: string) {
     this.setLoadingDelete(email);
     this.deleteEmailAddress(email)
-      .pipe(tap((_) => this.setRemovedEmailAddress(email)))
-      .subscribe(
-        (_) => {
+      .pipe(
+        tap((_) => {
+          this.setRemovedEmailAddress(email);
           this.resetLoadingDelete();
           this.setSnackbarMessage(
             `${email} has been removed from your account.`
           );
-        },
-        (_) => {
+        }),
+        catchError((_) => {
           this.resetLoadingDelete();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
-        }
-      );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   makeEmailPrimary(email: string) {
     this.setLoadingMakePrimary(email);
     this.putEmailAddress(email)
-      .pipe(tap((response) => this.setNewPrimaryEmail(response)))
-      .subscribe(
-        (_) => {
+      .pipe(
+        tap((response) => {
+          this.setNewPrimaryEmail(response);
           this.resetLoadingMakePrimary();
           this.setSnackbarMessage(
             `${email} is now your primary email address.`
           );
-        },
-        (_) => {
+        }),
+        catchError((error) => {
           this.resetLoadingMakePrimary();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
-        }
-      );
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
+  resendConfirmation(email: string) {
+    this.setLoadingResend(email);
+    this.sendConfirmation(email)
+      .pipe(
+        tap((_) => {
+          this.resetLoadingResend();
+          this.setSnackbarMessage(
+            `A confirmation email has been sent to ${email}.`
+          );
+        }),
+        catchError((_) => {
+          this.resetLoadingResend();
+          this.setSnackbarMessage(`There was a problem. Try again later.`);
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   setLoadingAdd = () => this.setLoadingState("add");
   setLoadingDelete = (value: string) => this.setLoadingState("delete", value);
   setLoadingMakePrimary = (value: string) =>
     this.setLoadingState("makePrimary", value);
+  setLoadingResend = (value: string) =>
+    this.setLoadingState("resendConfirmation", value);
 
   resetLoadingAdd = () => this.resetLoadingState("add");
   resetLoadingDelete = () => this.resetLoadingState("delete");
   resetLoadingMakePrimary = () => this.resetLoadingState("makePrimary");
+  resetLoadingResend = () => this.resetLoadingState("resendConfirmation");
 
   private setSnackbarMessage(message: string) {
     this.snackBar.open(message, undefined, { duration: 4000 });
@@ -186,6 +220,10 @@ export class EmailService {
 
   private putEmailAddress(email: string) {
     return this.http.put<EmailAddress>(this.url, { email });
+  }
+
+  private sendConfirmation(email: string) {
+    return this.http.post<EmailAddress>(this.url + "confirm/", { email });
   }
 
   private setEmailAddresses(emailAddresses: EmailAddress[]) {

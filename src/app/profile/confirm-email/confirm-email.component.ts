@@ -1,23 +1,22 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
+import { ConfirmEmailService } from "../../api/confirm-email/confirm-email.service";
 
 @Component({
   selector: "app-confirm-email",
-  templateUrl: "./confirm-email.component.html",
-  styleUrls: ["./confirm-email.component.scss"],
+  template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmEmailComponent implements OnInit {
-  key$ = this.activatedRoute.params.pipe(
-    map((params) => {
-      return params.key;
-    })
-  );
-
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private confirmEmailService: ConfirmEmailService
+  ) {}
 
   ngOnInit(): void {
-    this.key$.subscribe();
+    this.activatedRoute.params
+      .pipe(map((params) => this.confirmEmailService.confirmEmail(params.key)))
+      .subscribe();
   }
 }

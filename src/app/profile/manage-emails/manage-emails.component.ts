@@ -84,6 +84,8 @@ export class ManageEmailsComponent implements OnInit {
 
   deleteEmail = (email: string) => this.emailService.removeEmailAddress(email);
   makePrimary = (email: string) => this.emailService.makeEmailPrimary(email);
+  resendConfirmation = (email: string) =>
+    this.emailService.resendConfirmation(email);
 
   onSubmit() {
     if (this.form.valid) {
