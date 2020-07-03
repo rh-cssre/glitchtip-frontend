@@ -8,14 +8,15 @@ export const organizationList: Organization[] = [
     dateCreated: "2019-12-20T14:50:31.641549Z",
     status: {
       id: "active",
-      name: "active"
+      name: "active",
     },
     avatar: {
       avatarType: "",
-      avatarUuid: null
+      avatarUuid: null,
     },
     isEarlyAdopter: false,
-    require2FA: false
+    require2FA: false,
+    isAcceptingEvents: true,
   },
   {
     id: 1,
@@ -24,13 +25,14 @@ export const organizationList: Organization[] = [
     dateCreated: "2019-12-20T14:49:28.631459Z",
     status: {
       id: "active",
-      name: "active"
+      name: "active",
     },
     avatar: {
       avatarType: "",
-      avatarUuid: null
+      avatarUuid: null,
     },
     isEarlyAdopter: false,
-    require2FA: false
-  }
+    require2FA: false,
+    isAcceptingEvents: true,
+  },
 ];

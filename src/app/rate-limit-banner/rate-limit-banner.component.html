@@ -1,0 +1,16 @@
+<mat-card *ngIf="!(isAcceptingEvents$ | async) && bannerVisible">
+  <mat-card-title>
+    Missing some errors?
+  </mat-card-title>
+  <mat-card-content>
+    You've reached the maximum number of events that your plan allows for this
+    billing period. You may
+    <a [routerLink]="['settings', activeOrgSlug$ | async, 'subscription']">
+      change your subscription
+    </a>
+    if you'd like to get things moving again.
+  </mat-card-content>
+  <button mat-icon-button (click)="hideBanner()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-card>

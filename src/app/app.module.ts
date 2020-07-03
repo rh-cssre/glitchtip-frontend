@@ -19,9 +19,10 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
+import { RateLimitBannerComponent } from './rate-limit-banner/rate-limit-banner.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, RateLimitBannerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
