@@ -13,6 +13,7 @@ export interface Organization extends OrganizationNew {
   avatar: Avatar;
   isEarlyAdopter: boolean;
   require2FA: boolean;
+  isAcceptingEvents: boolean;
 }
 
 // tslint:disable-next-line:no-empty-interface
