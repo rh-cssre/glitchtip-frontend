@@ -18,7 +18,7 @@ export class TokenInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (
           error.status === 403 &&
-          error.error.detail == "Authentication credentials were not provided."
+          error.error.detail === "Authentication credentials were not provided."
         ) {
           this.auth.removeAuth();
           return throwError(error);
