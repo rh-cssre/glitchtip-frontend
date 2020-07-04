@@ -44,7 +44,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/github/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess()));
   }
 
   microsoftLogin(accessToken: string) {
@@ -54,7 +54,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/microsoft/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess()));
   }
 
   microsoftConnect(accessToken: string) {
@@ -72,7 +72,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/gitlab/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess()));
   }
 
   gitlabConnect(accessToken: string) {
@@ -90,7 +90,7 @@ export class GlitchTipOAuthService {
     const url = this.baseUrl + "/google/";
     return this.http
       .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess(resp)));
+      .pipe(tap((resp) => this.loginSuccess()));
   }
 
   googleConnect(accessToken: string) {
@@ -137,8 +137,8 @@ export class GlitchTipOAuthService {
   }
 
   /** On success for any oauth client, set auth data and redirect to home */
-  private loginSuccess(resp: RestAuthLoginResp) {
-    this.auth.setAuth(resp);
+  private loginSuccess() {
+    this.auth.setAuth({ isLoggedIn: true });
     this.router.navigate([""]);
   }
 }

@@ -11,26 +11,16 @@ import { AuthService } from "./auth.service";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  key?: string | null;
-
-  constructor(public auth: AuthService) {
-    this.auth.data.subscribe((data) => {
-      this.key = data.key;
-    });
-  }
+  constructor(public auth: AuthService) {}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler) {
-    if (this.key) {
-      req = req.clone({
-        setHeaders: {
-          Authorization: `token ${this.key}`,
-        },
-      });
-    }
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 403) {
-          this.auth.logout();
+        if (
+          error.status === 403 &&
+          error.error.detail == "Authentication credentials were not provided."
+        ) {
+          this.auth.removeAuth();
           return throwError(error);
         }
         return throwError(error);

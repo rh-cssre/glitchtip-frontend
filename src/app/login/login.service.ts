@@ -6,7 +6,7 @@ import { AuthService, AuthState } from "../api/auth/auth.service";
 const baseUrl = "/rest-auth";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class LoginService {
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -15,11 +15,11 @@ export class LoginService {
     const url = baseUrl + "/login/";
     const data = {
       email,
-      password
+      password,
     };
     return this.http
       .post<AuthState>(url, data)
-      .pipe(tap(resp => this.setAuth(resp)));
+      .pipe(tap((resp) => this.setAuth({ isLoggedIn: true })));
   }
 
   setAuth(resp: AuthState) {
