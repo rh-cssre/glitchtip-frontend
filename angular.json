@@ -22,6 +22,9 @@
         "@schematics/angular:directive": {
           "lintFix": true,
           "prefix": "app"
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "root": "",
