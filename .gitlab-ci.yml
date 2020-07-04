@@ -9,6 +9,12 @@ variables:
   FF_NETWORK_PER_BUILD: 1
   DEBUG: "true"
   GIT_SUBMODULE_STRATEGY: normal
+  SAST_EXCLUDED_PATHS: "*.stories.ts, *.spec.ts, cypress"
+
+include:
+  - template: SAST.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Secret-Detection.gitlab-ci.yml
 
 stages:
   - test
