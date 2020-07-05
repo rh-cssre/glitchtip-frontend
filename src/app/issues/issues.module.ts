@@ -1,6 +1,9 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatTableModule } from "@angular/material/table";
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { SharedModule } from "../shared/shared.module";
 
@@ -18,8 +21,6 @@ import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/iss
 import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception/frame-title/frame-title.component";
 import { FrameExpandedComponent } from "./issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { MatNativeDateModule } from "@angular/material/core";
     SharedModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTableModule,
   ],
   declarations: [
     IssuesPageComponent,

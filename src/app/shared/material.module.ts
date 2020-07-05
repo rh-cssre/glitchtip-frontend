@@ -15,7 +15,6 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatTableModule } from "@angular/material/table";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
@@ -38,7 +37,6 @@ export const COMPONENTS = [
   MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
-  MatTableModule,
   MatToolbarModule,
   MatTooltipModule,
   MatProgressSpinnerModule,
