@@ -14,7 +14,6 @@
     "build-storybook": "build-storybook",
     "analyze": "webpack-bundle-analyzer dist/stats.json"
   },
-  "sideEffects": false,
   "dependencies": {
     "@angular/animations": "~10.0.2",
     "@angular/cdk": "~10.0.0",
