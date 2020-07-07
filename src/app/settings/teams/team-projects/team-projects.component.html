@@ -1,0 +1,64 @@
+<mat-card>
+  <mat-card-header class="card-header">
+    <mat-card-title>Projects</mat-card-title>
+    <mat-error *ngIf="(errors$ | async)?.addProjectToTeam">{{
+      (errors$ | async)?.addProjectToTeam
+    }}</mat-error>
+    <div>
+      <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
+        <mat-label>Add Project</mat-label>
+        <mat-select (selectionChange)="addProject()" [formControl]="project">
+          <ng-container
+            *ngIf="(projectsNotOnTeam$ | async)?.length; else emptyState"
+          >
+            <mat-option
+              *ngFor="let project of projectsNotOnTeam$ | async"
+              [value]="project.slug"
+            >
+              {{ project.name }}
+            </mat-option></ng-container
+          ><ng-template #emptyState>
+            <mat-option disabled>No projects</mat-option>
+          </ng-template>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <ng-container
+      *ngIf="(projectsOnTeam$ | async)?.length === 0; else listMembers"
+    >
+      <p class="center-text">This team doesn't have any projects</p>
+    </ng-container>
+    <ng-template #listMembers>
+      <mat-list>
+        <mat-error
+          *ngIf="(errors$ | async)?.removeProjectFromTeam"
+          class="center-text"
+          >{{ (errors$ | async)?.removeProjectFromTeam }}</mat-error
+        >
+        <mat-list-item *ngFor="let project of projectsOnTeam$ | async">
+          <a
+            mat-line
+            [routerLink]="[
+              '/organizations',
+              project.organization.slug,
+              'issues'
+            ]"
+            [queryParams]="{ project: project.id }"
+            >{{ project.name }}</a
+          >
+          <app-loading-button
+            buttonText="Remove"
+            buttonStyle="stroked"
+            [loading]="
+              project.slug === (loading$ | async)?.removeProjectFromTeam
+            "
+            (click)="removeProject(project.slug)"
+            id="remove-team-member"
+          ></app-loading-button>
+        </mat-list-item> </mat-list
+    ></ng-template>
+  </mat-card-content>
+</mat-card>
