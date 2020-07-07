@@ -9,6 +9,8 @@ import { TeamsComponent } from "./teams/teams.component";
 import { TeamMembersComponent } from "./teams/team-members/team-members.component";
 import { MembersComponent } from "./members/members.component";
 import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
+import { TeamProjectsComponent } from "./teams/team-projects/team-projects.component";
+import { TeamDetailsComponent } from "./teams/team-details/team-details.component";
 
 const routes: Routes = [
   {
@@ -30,7 +32,14 @@ const routes: Routes = [
         path: "teams",
         children: [
           { path: "", component: TeamsComponent },
-          { path: ":team-slug/members", component: TeamMembersComponent },
+          {
+            path: ":team-slug",
+            component: TeamDetailsComponent,
+            children: [
+              { path: "members", component: TeamMembersComponent },
+              { path: "projects", component: TeamProjectsComponent },
+            ],
+          },
         ],
       },
       {

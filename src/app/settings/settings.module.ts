@@ -18,6 +18,9 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { TeamMembersComponent } from "./teams/team-members/team-members.component";
 import { MembersComponent } from "./members/members.component";
 import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
+import { MatTabsModule } from "@angular/material/tabs";
+import { TeamProjectsComponent } from "./teams/team-projects/team-projects.component";
+import { TeamDetailsComponent } from "./teams/team-details/team-details.component";
 
 @NgModule({
   imports: [
@@ -27,6 +30,7 @@ import { MemberDetailComponent } from "./members/member-detail/member-detail.com
     SettingsRoutingModule,
     SharedModule,
     MatDialogModule,
+    MatTabsModule,
   ],
   declarations: [
     ProjectsComponent,
@@ -39,6 +43,8 @@ import { MemberDetailComponent } from "./members/member-detail/member-detail.com
     TeamMembersComponent,
     MembersComponent,
     MemberDetailComponent,
+    TeamProjectsComponent,
+    TeamDetailsComponent,
   ],
 })
 export class SettingsModule {}
