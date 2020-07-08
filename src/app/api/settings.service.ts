@@ -8,6 +8,7 @@ import * as Sentry from "@sentry/browser";
 interface SettingsState {
   socialAuth: boolean;
   billingEnabled: boolean;
+  enableUserRegistration: boolean;
   matomoURL: string | null;
   matomoSiteId: string | null;
   stripePublicKey: string | null;
@@ -17,6 +18,7 @@ interface SettingsState {
 const initialState: SettingsState = {
   socialAuth: false,
   billingEnabled: false,
+  enableUserRegistration: false,
   matomoURL: null,
   matomoSiteId: null,
   stripePublicKey: null,
@@ -32,6 +34,9 @@ export class SettingsService {
   billingEnabled$ = this.state.pipe(map((settings) => settings.billingEnabled));
   stripePublicKey$ = this.state.pipe(
     map((settings) => settings.stripePublicKey)
+  );
+  enableUserRegistration$ = this.state.pipe(
+    map((settings) => settings.enableUserRegistration)
   );
   private readonly url = "/api/settings/";
 

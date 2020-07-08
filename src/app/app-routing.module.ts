@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
+import { EnableRegistrationGuard } from "./guards/enable-registration.guard";
 
 export const routes: Routes = [
   {
@@ -47,7 +48,7 @@ export const routes: Routes = [
     path: "register",
     loadChildren: () =>
       import("./register/register.module").then((m) => m.RegisterModule),
-    canActivate: [AlreadyLoggedInGuard],
+    canActivate: [AlreadyLoggedInGuard, EnableRegistrationGuard],
   },
   {
     path: "**",

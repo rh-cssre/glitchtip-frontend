@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
     ]),
   });
   socialAuth$ = this.settings.socialAuth$;
+  enableUserRegistration$ = this.settings.enableUserRegistration$;
 
   constructor(
     private loginService: LoginService,
