@@ -43,8 +43,29 @@ export interface OrganizationProject {
 export interface Member {
   role: string;
   id: number;
-  user: User;
+  user: User | null;
   roleName: string;
   dateCreated: string;
   email: string;
+  pending: boolean;
+}
+
+export type MemberRole = "member" | "admin" | "manager" | "owner";
+
+export interface OrganizationMembersRequest {
+  email: string;
+  role: MemberRole;
+  teams: string[];
+}
+
+export interface OrganizationLoading {
+  addTeamMember: string;
+  removeTeamMember: string;
+  addOrganizationMember: boolean;
+}
+
+export interface OrganizationErrors {
+  addTeamMember: string;
+  removeTeamMember: string;
+  addOrganizationMember: string;
 }

@@ -9,21 +9,11 @@ import {
   FormControl,
   Validators,
   FormGroupDirective,
-  NgForm,
   AbstractControl,
 } from "@angular/forms";
-import { ErrorStateMatcher } from "@angular/material/core";
 import { EmailService } from "../../api/emails/email.service";
 import { map, first } from "rxjs/operators";
-
-export class LessAnnoyingErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null
-  ): boolean {
-    return !!(control && control.invalid && form?.submitted);
-  }
-}
+import { LessAnnoyingErrorStateMatcher } from "../../shared/less-annoying-error-state-matcher";
 
 @Component({
   selector: "app-manage-emails",
