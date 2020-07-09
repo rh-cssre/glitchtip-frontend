@@ -20,6 +20,10 @@ import {
   Organization,
   OrganizationDetail,
   Member,
+  OrganizationMembersRequest,
+  MemberRole,
+  OrganizationErrors,
+  OrganizationLoading,
 } from "./organizations.interface";
 import { SettingsService } from "../settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
@@ -33,8 +37,9 @@ interface OrganizationsState {
   activeOrganization: OrganizationDetail | null;
   organizationMembers: Member[];
   memberDetail: Member | null;
-  errors: { addTeamMember: string; removeTeamMember: string };
-  loading: { addTeamMember: string; removeTeamMember: string };
+  organizationTeams: Team[];
+  errors: OrganizationErrors;
+  loading: OrganizationLoading;
 }
 
 const initialState: OrganizationsState = {
@@ -43,8 +48,17 @@ const initialState: OrganizationsState = {
   activeOrganization: null,
   organizationMembers: [],
   memberDetail: null,
-  errors: { addTeamMember: "", removeTeamMember: "" },
-  loading: { addTeamMember: "", removeTeamMember: "" },
+  organizationTeams: [],
+  errors: {
+    addTeamMember: "",
+    removeTeamMember: "",
+    addOrganizationMember: "",
+  },
+  loading: {
+    addTeamMember: "",
+    removeTeamMember: "",
+    addOrganizationMember: false,
+  },
 };
 
 @Injectable({
@@ -100,6 +114,18 @@ export class OrganizationsService {
   readonly memberDetail$ = this.getState$.pipe(
     map((data) => data.memberDetail)
   );
+  readonly organizationTeams$ = this.getState$.pipe(
+    map((data) => data.organizationTeams)
+  );
+  readonly selectedOrganizationTeams$ = this.organizationTeams$.pipe(
+    map((data) => data)
+  );
+
+  readonly filteredOrganizationTeams$ = this.organizationTeams$.pipe(
+    withLatestFrom(this.selectedOrganizationTeams$),
+    filter(([orgTeams, selectedOrgTeams]) => orgTeams === selectedOrgTeams)
+  );
+
   readonly errors$ = this.getState$.pipe(map((data) => data.errors));
   readonly loading$ = this.getState$.pipe(map((data) => data.loading));
   /**
@@ -321,11 +347,55 @@ export class OrganizationsService {
     );
   }
 
+  inviteOrganizationMembers(
+    emailInput: string,
+    teamsInput: string[],
+    roleInput: MemberRole
+  ) {
+    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    const url = `${this.url}${orgSlug}/members/`;
+    const data: OrganizationMembersRequest = {
+      email: emailInput,
+      role: roleInput,
+      teams: teamsInput,
+    };
+    this.setAddMemberLoading(true);
+    return this.http.post<Member>(url, data).pipe(
+      tap((resp) => {
+        this.setAddMemberLoading(false);
+        this.snackBar.open(
+          `An email invite has been sent to ${resp.email}`,
+          undefined,
+          {
+            duration: 4000,
+          }
+        );
+        this.router.navigate(["settings", orgSlug, "members"]);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.setAddMemberError(error);
+        return EMPTY;
+      })
+    );
+  }
+
   retrieveMemberDetail(orgSlug: string, memberId: string) {
     const url = `${this.url}${orgSlug}/members/${memberId}/`;
     return this.http
       .get<Member>(url)
       .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)));
+  }
+
+  retrieveOrganizationTeams(orgSlug: string) {
+    const url = `${this.url}${orgSlug}/teams/`;
+    return this.http
+      .get<Team[]>(url)
+      .pipe(
+        tap((resp) => {
+          this.getOrganizationTeams(resp);
+        })
+      )
+      .toPromise();
   }
 
   createTeam(teamSlug: string, orgSlug: string) {
@@ -432,6 +502,32 @@ export class OrganizationsService {
     });
   }
 
+  private setAddMemberLoading(loading: boolean) {
+    const state = this.organizationsState.getValue();
+    this.organizationsState.next({
+      ...state,
+      loading: {
+        ...state.loading,
+        addOrganizationMember: loading,
+      },
+    });
+  }
+
+  private setAddMemberError(error: HttpErrorResponse) {
+    const state = this.organizationsState.getValue();
+    this.organizationsState.next({
+      ...state,
+      errors: {
+        ...state.errors,
+        addOrganizationMember: `${error.statusText}: ${error.status}`,
+      },
+      loading: {
+        ...state.loading,
+        addOrganizationMember: false,
+      },
+    });
+  }
+
   private setLeaveTeamError(error: HttpErrorResponse) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
@@ -520,6 +616,13 @@ export class OrganizationsService {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       memberDetail: member,
+    });
+  }
+
+  private getOrganizationTeams(teams: Team[]) {
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      organizationTeams: teams,
     });
   }
 

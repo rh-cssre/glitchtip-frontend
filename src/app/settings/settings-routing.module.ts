@@ -9,6 +9,7 @@ import { TeamsComponent } from "./teams/teams.component";
 import { TeamMembersComponent } from "./teams/team-members/team-members.component";
 import { MembersComponent } from "./members/members.component";
 import { MemberDetailComponent } from "./members/member-detail/member-detail.component";
+import { NewMemberComponent } from "./members/new-member/new-member.component";
 import { TeamProjectsComponent } from "./teams/team-projects/team-projects.component";
 import { TeamDetailsComponent } from "./teams/team-details/team-details.component";
 import { TeamSettingsComponent } from "./teams/team-settings/team-settings.component";
@@ -48,6 +49,7 @@ const routes: Routes = [
         path: "members",
         children: [
           { path: "", component: MembersComponent },
+          { path: "new", component: NewMemberComponent },
           { path: ":member-id", component: MemberDetailComponent },
         ],
       },

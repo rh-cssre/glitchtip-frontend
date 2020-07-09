@@ -11,7 +11,7 @@
             *ngFor="let orgMember of filteredAddTeamMembers$ | async"
             [value]="orgMember"
           >
-            {{ orgMember.user.email }}
+            {{ orgMember.email }}
           </mat-option></ng-container
         ><ng-template #emptyState>
           <mat-option disabled>No members</mat-option>
@@ -36,13 +36,13 @@
           <a
             mat-line
             [routerLink]="['/settings', orgSlug, 'members', teamMember.id]"
-            >{{ teamMember.user.email }}</a
+            >{{ teamMember.email }}</a
           >
           <app-loading-button
             buttonText="Remove"
             buttonStyle="stroked"
             [loading]="selectedTeamMember === teamMember.id"
-            (click)="removeTeamMember(teamMember.id, teamMember.user.email)"
+            (click)="removeTeamMember(teamMember.id, teamMember.email)"
             id="remove-team-member"
           ></app-loading-button>
         </mat-list-item> </mat-list

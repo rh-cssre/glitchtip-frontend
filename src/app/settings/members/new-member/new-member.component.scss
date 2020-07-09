@@ -1,0 +1,49 @@
+mat-card {
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+  mat-card-content {
+    padding-top: 16px;
+  }
+}
+
+.email-paragraph {
+  padding-top: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-radio-group {
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+  mat-radio-button {
+    margin-right: 32px;
+  }
+}
+
+form > div {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+mat-list {
+  padding-top: 0;
+
+  .mat-list-item {
+    &:nth-last-child(n + 2) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    ::ng-deep .mat-list-item-content {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+.server-error {
+  text-align: center;
+}
