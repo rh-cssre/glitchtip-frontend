@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ProjectsService } from "src/app/api/projects/projects.service";
 import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs/internal/operators/map";
+import { map } from "rxjs/operators";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { FormControl } from "@angular/forms";
 import { combineLatest } from "rxjs";
