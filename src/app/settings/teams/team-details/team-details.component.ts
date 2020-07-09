@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 
@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
   templateUrl: "./team-details.component.html",
   styleUrls: ["./team-details.component.scss"],
 })
-export class TeamDetailsComponent implements OnInit {
+export class TeamDetailsComponent {
   teamSlug$ = this.route.paramMap.pipe(
     map((params) => params.get("team-slug"))
   );
@@ -21,8 +21,10 @@ export class TeamDetailsComponent implements OnInit {
       path: "projects",
       label: "Projects",
     },
+    {
+      path: "settings",
+      label: "Settings",
+    },
   ];
   constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {}
 }

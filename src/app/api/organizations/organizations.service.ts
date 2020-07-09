@@ -369,7 +369,7 @@ export class OrganizationsService {
   leaveTeam(team: string) {
     const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
     const url = `${this.url}${orgSlug}/members/me/teams/${team}/`;
-    this.handleLeaveTeamLoading(team);
+    this.setLeaveTeamLoading(team);
     return this.http.delete<Team>(url).pipe(
       tap((resp) => {
         this.snackBar.open(`You have left ${resp.slug}`, undefined, {
@@ -378,7 +378,7 @@ export class OrganizationsService {
         this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
       }),
       catchError((error: HttpErrorResponse) => {
-        this.handleLeaveTeamError(error);
+        this.setLeaveTeamError(error);
         return EMPTY;
       })
     );
@@ -387,7 +387,7 @@ export class OrganizationsService {
   joinTeam(team: string) {
     const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
     const url = `${this.url}${orgSlug}/members/me/teams/${team}/`;
-    this.handleJoinTeamLoading(team);
+    this.setJoinTeamLoading(team);
     return this.http.post<Team>(url, null).pipe(
       tap((resp) => {
         this.snackBar.open(`You joined ${resp.slug}`, undefined, {
@@ -396,13 +396,21 @@ export class OrganizationsService {
         this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
       }),
       catchError((error: HttpErrorResponse) => {
-        this.handleJoinTeamError(error);
+        this.setJoinTeamError(error);
         return EMPTY;
       })
     );
   }
 
-  private handleLeaveTeamLoading(team: string) {
+  deleteTeam(slug: string) {
+    this.updateTeamsView(slug);
+  }
+
+  updateTeam(id: number, newSlug: string) {
+    this.updateTeamSlug(id, newSlug);
+  }
+
+  private setLeaveTeamLoading(team: string) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
       ...state,
@@ -413,7 +421,7 @@ export class OrganizationsService {
     });
   }
 
-  private handleJoinTeamLoading(team: string) {
+  private setJoinTeamLoading(team: string) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
       ...state,
@@ -424,7 +432,7 @@ export class OrganizationsService {
     });
   }
 
-  private handleLeaveTeamError(error: HttpErrorResponse) {
+  private setLeaveTeamError(error: HttpErrorResponse) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
       ...state,
@@ -439,7 +447,7 @@ export class OrganizationsService {
     });
   }
 
-  private handleJoinTeamError(error: HttpErrorResponse) {
+  private setJoinTeamError(error: HttpErrorResponse) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
       ...state,
@@ -532,6 +540,36 @@ export class OrganizationsService {
           ...state.loading,
           addTeamMember: "",
           removeTeamMember: "",
+        },
+      });
+    }
+  }
+
+  private updateTeamsView(slug: string) {
+    const state = this.organizationsState.getValue();
+    if (state.activeOrganization?.teams) {
+      this.organizationsState.next({
+        ...state,
+        activeOrganization: {
+          ...state.activeOrganization,
+          teams: state.activeOrganization?.teams.filter(
+            (team) => team.slug !== slug
+          ),
+        },
+      });
+    }
+  }
+
+  private updateTeamSlug(id: number, newSlug: string) {
+    const state = this.organizationsState.getValue();
+    if (state.activeOrganization?.teams) {
+      this.organizationsState.next({
+        ...state,
+        activeOrganization: {
+          ...state.activeOrganization,
+          teams: state.activeOrganization?.teams.map((team) =>
+            team.id === id ? { ...team, slug: newSlug } : team
+          ),
         },
       });
     }
