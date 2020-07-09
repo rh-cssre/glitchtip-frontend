@@ -5,3 +5,13 @@ export interface Team {
   memberCount: number;
   slug: string;
 }
+
+export interface TeamErrors {
+  updateName: string;
+  deleteTeam: string;
+}
+
+export interface TeamLoading {
+  updateName: boolean;
+  deleteTeam: boolean;
+}

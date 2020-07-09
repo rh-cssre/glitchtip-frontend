@@ -21,6 +21,7 @@ import { MemberDetailComponent } from "./members/member-detail/member-detail.com
 import { MatTabsModule } from "@angular/material/tabs";
 import { TeamProjectsComponent } from "./teams/team-projects/team-projects.component";
 import { TeamDetailsComponent } from "./teams/team-details/team-details.component";
+import { TeamSettingsComponent } from "./teams/team-settings/team-settings.component";
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { TeamDetailsComponent } from "./teams/team-details/team-details.componen
     MemberDetailComponent,
     TeamProjectsComponent,
     TeamDetailsComponent,
+    TeamSettingsComponent,
   ],
 })
 export class SettingsModule {}

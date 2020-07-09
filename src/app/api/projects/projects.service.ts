@@ -94,7 +94,7 @@ export class ProjectsService {
 
   addProjectToTeam(orgSlug: string, teamSlug: string, projectSlug: string) {
     const url = `${this.url}${orgSlug}/${projectSlug}/teams/${teamSlug}/`;
-    this.handleAddProjectToTeamLoading(true);
+    this.setAddProjectToTeamLoading(true);
     return this.http
       .post<Project>(url, null)
       .pipe(
@@ -109,7 +109,7 @@ export class ProjectsService {
           this.setAddProjectToTeam(resp);
         }),
         catchError((error: HttpErrorResponse) => {
-          this.handleAddProjectToTeamError(error);
+          this.setAddProjectToTeamError(error);
           return EMPTY;
         })
       )
@@ -122,7 +122,7 @@ export class ProjectsService {
     projectSlug: string
   ) {
     const url = `${this.url}${orgSlug}/${projectSlug}/teams/${teamSlug}/`;
-    this.handleRemoveProjectFromTeamLoading(projectSlug);
+    this.setRemoveProjectFromTeamLoading(projectSlug);
     return this.http
       .delete<Project>(url)
       .pipe(
@@ -137,7 +137,7 @@ export class ProjectsService {
           this.setRemoveProjectFromTeam(resp);
         }),
         catchError((error: HttpErrorResponse) => {
-          this.handleRemoveProjectFromTeamLoadingError(error);
+          this.setRemoveProjectFromTeamLoadingError(error);
           return EMPTY;
         })
       )
@@ -208,7 +208,7 @@ export class ProjectsService {
     return this.http.delete(deleteUrl);
   }
 
-  private handleAddProjectToTeamError(error: HttpErrorResponse) {
+  private setAddProjectToTeamError(error: HttpErrorResponse) {
     const state = this.projectsState.getValue();
     this.projectsState.next({
       ...state,
@@ -223,7 +223,7 @@ export class ProjectsService {
     });
   }
 
-  private handleAddProjectToTeamLoading(loading: boolean) {
+  private setAddProjectToTeamLoading(loading: boolean) {
     const state = this.projectsState.getValue();
     this.projectsState.next({
       ...state,
@@ -234,7 +234,7 @@ export class ProjectsService {
     });
   }
 
-  private handleRemoveProjectFromTeamLoading(projectSlug: string) {
+  private setRemoveProjectFromTeamLoading(projectSlug: string) {
     const state = this.projectsState.getValue();
     this.projectsState.next({
       ...state,
@@ -245,7 +245,7 @@ export class ProjectsService {
     });
   }
 
-  private handleRemoveProjectFromTeamLoadingError(error: HttpErrorResponse) {
+  private setRemoveProjectFromTeamLoadingError(error: HttpErrorResponse) {
     const state = this.projectsState.getValue();
     this.projectsState.next({
       ...state,
