@@ -1,7 +1,9 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { RegisterService } from "./register.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { AcceptInviteService } from "../api/accept/accept-invite.service";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-register",
@@ -9,7 +11,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./register.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   loading = false;
   error: string | undefined;
   form = new FormGroup({
@@ -23,11 +25,26 @@ export class RegisterComponent {
       Validators.minLength(8),
     ]),
   });
+  acceptInfo$ = this.acceptService.acceptInfo$;
 
   constructor(
     private registerService: RegisterService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private acceptService: AcceptInviteService
   ) {}
+
+  ngOnInit() {
+    this.acceptInfo$
+      .pipe(
+        tap((acceptInfo) => {
+          if (acceptInfo) {
+            this.form.patchValue({ email: acceptInfo.org_user.email });
+          }
+        })
+      )
+      .subscribe();
+  }
 
   get email() {
     return this.form.get("email");
@@ -51,7 +68,15 @@ export class RegisterComponent {
           this.form.value.password2
         )
         .subscribe(
-          () => this.router.navigate([""]),
+          () => {
+            const query = this.route.snapshot.queryParamMap;
+            const next = query.get("next");
+            if (next) {
+              this.router.navigateByUrl(next);
+            } else {
+              this.router.navigate([""]);
+            }
+          },
           (err) => {
             this.loading = false;
             if (err.status === 400 && err.error.non_field_errors) {

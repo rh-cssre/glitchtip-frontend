@@ -2,11 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
-import { catchError } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 import { LoginService } from "./login.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
+import { AcceptInviteService } from "../api/accept/accept-invite.service";
 
 @Component({
   selector: "app-login",
@@ -25,16 +26,28 @@ export class LoginComponent implements OnInit {
   });
   socialAuth$ = this.settings.socialAuth$;
   enableUserRegistration$ = this.settings.enableUserRegistration$;
+  acceptInfo$ = this.acceptService.acceptInfo$;
 
   constructor(
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
     private oauthService: GlitchTipOAuthService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private acceptService: AcceptInviteService
   ) {}
 
   ngOnInit() {
+    this.acceptInfo$
+      .pipe(
+        tap((acceptInfo) => {
+          if (acceptInfo) {
+            this.form.patchValue({ email: acceptInfo.org_user.email });
+          }
+        })
+      )
+      .subscribe();
+
     const fragment = this.route.snapshot.fragment;
     const query = this.route.snapshot.queryParamMap;
     const provider = this.route.snapshot.paramMap.get("provider");
@@ -122,7 +135,15 @@ export class LoginComponent implements OnInit {
       this.loginService
         .login(this.form.value.email, this.form.value.password)
         .subscribe(
-          () => this.router.navigate([""]),
+          () => {
+            const query = this.route.snapshot.queryParamMap;
+            const next = query.get("next");
+            if (next) {
+              this.router.navigateByUrl(next);
+            } else {
+              this.router.navigate([""]);
+            }
+          },
           (err) => {
             this.loading = false;
             if (err.status === 400 && err.error.non_field_errors) {

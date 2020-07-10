@@ -1,0 +1,67 @@
+<div *ngIf="(isLoggedIn$ | async) === false" class="logo-container">
+  <img src="assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
+</div>
+
+<mat-card
+  [class.skinnier]="(isLoggedIn$ | async) === false"
+  [class.not-skinny]="isLoggedIn$ | async"
+>
+  <mat-card-content *ngIf="acceptInfo$ | async as acceptInfo">
+    <mat-card-title>Organization Invite</mat-card-title>
+    <p>
+      You have been invited to join
+      <strong>{{ acceptInfo.org_user.organization.name }}</strong> so you can
+      keep track of errors.
+    </p>
+
+    <p *ngIf="alreadyInOrg$ | async">
+      The account you're logged into is already a part of this organization. You
+      might want to <a (click)="logout()" href="javascript:void(0)">log out</a>,
+      then create an account for or log into the account that this invite link
+      was intended for.
+    </p>
+
+    <p *ngIf="isLoggedIn$ | async">
+      <button
+        *ngIf="(alreadyInOrg$ | async) === false"
+        mat-flat-button
+        color="primary"
+        (click)="onSubmit()"
+      >
+        Accept invitation
+      </button>
+      <button
+        *ngIf="alreadyInOrg$ | async"
+        mat-stroked-button
+        color="primary"
+        (click)="onSubmit()"
+      >
+        Accept invitation
+      </button>
+    </p>
+
+    <p *ngIf="(isLoggedIn$ | async) === false">
+      To continue, you must either log in to your existing account, or create a
+      new one.
+    </p>
+
+    <div class="button-container" *ngIf="(isLoggedIn$ | async) === false">
+      <a
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/register']"
+        [queryParams]="{ next: nextUrl$ | async }"
+      >
+        Create new account
+      </a>
+      <a
+        mat-stroked-button
+        color="primary"
+        [routerLink]="['/login']"
+        [queryParams]="{ next: nextUrl$ | async }"
+      >
+        Log in with existing account
+      </a>
+    </div>
+  </mat-card-content>
+</mat-card>
