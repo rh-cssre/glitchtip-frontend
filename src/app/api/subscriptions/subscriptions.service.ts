@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 import { BehaviorSubject, EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import {
@@ -8,7 +9,6 @@ import {
   CreateSubscriptionResp,
 } from "./subscriptions.interfaces";
 import { baseUrl } from "src/app/constants";
-import { Router } from "@angular/router";
 
 interface SubscriptionsState {
   subscription: Subscription | null;

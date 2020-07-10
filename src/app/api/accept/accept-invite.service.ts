@@ -85,7 +85,6 @@ export class AcceptInviteService {
           this.router.navigate(["/"]);
         }),
         catchError((error) => {
-          console.log(error);
           if (error.status === 500) {
             if ((error.error as string).includes("already exists")) {
               this.snackBar.open(`

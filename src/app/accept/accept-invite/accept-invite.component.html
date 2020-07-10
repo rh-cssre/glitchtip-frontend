@@ -16,9 +16,9 @@
 
     <p *ngIf="alreadyInOrg$ | async">
       The account you're logged into is already a part of this organization. You
-      might want to <a (click)="logout()" href="">log out</a>, then create an
-      account for or log into the account that this invite link was intended
-      for.
+      might want to <a (click)="logout()" href="javascript:void(0)">log out</a>,
+      then create an account for or log into the account that this invite link
+      was intended for.
     </p>
 
     <p *ngIf="isLoggedIn$ | async">
