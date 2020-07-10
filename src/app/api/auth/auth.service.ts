@@ -1,20 +1,14 @@
 import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
 
 export interface AuthState {
   isLoggedIn: boolean;
-  email?: string | null;
-  first_name?: string | null;
-  last_name?: string | null;
 }
 
 const initialState: AuthState = {
   isLoggedIn: false,
-  email: null,
-  first_name: null,
-  last_name: null,
 };
 
 @Injectable({

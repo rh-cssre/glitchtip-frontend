@@ -50,6 +50,12 @@ export interface Member {
   pending: boolean;
 }
 
+export interface MemberSelector extends Member {
+  loadingResendInvite: boolean;
+  sentResendInvite: boolean;
+  isMe: boolean;
+}
+
 export interface OrganizationUser extends Member {
   organization: Organization;
 }

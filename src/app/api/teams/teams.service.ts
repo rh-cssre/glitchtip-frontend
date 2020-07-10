@@ -93,13 +93,7 @@ export class TeamsService {
           "settings",
         ]);
         this.setUpdateTeamSlugLoading(false);
-        this.snackBar.open(
-          `Your team slug has been changed to #${resp.slug}`,
-          undefined,
-          {
-            duration: 4000,
-          }
-        );
+        this.snackBar.open(`Your team slug has been changed to #${resp.slug}`);
         this.setSingleTeam(resp);
       }),
       catchError((error: HttpErrorResponse) => {
@@ -115,13 +109,7 @@ export class TeamsService {
     return this.http.delete(url).pipe(
       tap(() => {
         this.setDeleteTeamLoading(false);
-        this.snackBar.open(
-          `You have successfully deleted #${teamSlug}`,
-          undefined,
-          {
-            duration: 4000,
-          }
-        );
+        this.snackBar.open(`You have successfully deleted #${teamSlug}`);
         this.router.navigate(["settings", orgSlug, "teams"]);
       }),
       catchError((error: HttpErrorResponse) => {

@@ -85,9 +85,7 @@ export class NewProjectComponent implements OnInit {
         .subscribe(
           (project) => {
             this.loading = false;
-            this.snackBar.open(`${project.name} has been created`, undefined, {
-              duration: 4000,
-            });
+            this.snackBar.open(`${project.name} has been created`);
             this.router.navigate([
               "settings",
               this.orgSlug,

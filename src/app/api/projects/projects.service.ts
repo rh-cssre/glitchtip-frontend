@@ -99,13 +99,7 @@ export class ProjectsService {
       .post<Project>(url, null)
       .pipe(
         tap((resp) => {
-          this.snackBar.open(
-            `${resp.slug} has been added to #${teamSlug}`,
-            undefined,
-            {
-              duration: 4000,
-            }
-          );
+          this.snackBar.open(`${resp.slug} has been added to #${teamSlug}`);
           this.setAddProjectToTeam(resp);
         }),
         catchError((error: HttpErrorResponse) => {
@@ -127,13 +121,7 @@ export class ProjectsService {
       .delete<Project>(url)
       .pipe(
         tap((resp) => {
-          this.snackBar.open(
-            `${resp.slug} has been removed from #${teamSlug}`,
-            undefined,
-            {
-              duration: 4000,
-            }
-          );
+          this.snackBar.open(`${resp.slug} has been removed from #${teamSlug}`);
           this.setRemoveProjectFromTeam(resp);
         }),
         catchError((error: HttpErrorResponse) => {

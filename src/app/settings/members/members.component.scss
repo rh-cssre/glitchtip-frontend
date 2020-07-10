@@ -1,10 +1,47 @@
-.mat-list-item {
-  &:nth-last-child(n + 2) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+.list {
+  width: 100%;
+
+  &--item {
+    width: 100%;
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    &:nth-last-child(n + 2) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
   }
 
-  ::ng-deep .mat-list-item-content {
-    padding-left: 0;
-    padding-right: 0;
+  .email {
+    flex: 1 1 0%;
+  }
+
+  .invite-status {
+    width: 180px;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    .pending {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .role {
+    width: 140px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.resend-invite {
+  height: auto;
+
+  &::ng-deep .mat-flat-button {
+    line-height: unset;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 }

@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
-import { UserDetails } from "./user.interfaces";
 import { tap, map } from "rxjs/operators";
+import { User } from "./user.interfaces";
 import { OAuthProvider } from "../oauth/oauth.interfaces";
 
 interface UserState {
-  user: UserDetails | null;
+  user: User | null;
 }
 
 const initialState: UserState = {
@@ -35,30 +35,29 @@ export class UserService {
   readonly isGithubConnected$ = this.userDetails$.pipe(
     map((user) => this.isOAuthConnected(user, "github"))
   );
-  private readonly url = "/rest-auth/user/";
+  private readonly url = "/api/0/users/me/";
 
   constructor(private http: HttpClient) {}
 
   /** Get and set current logged in user details from backend */
   getUserDetails() {
     this.retrieveUserDetails()
-      .pipe(tap((resp: UserDetails) => this.setUserDetails(resp)))
+      .pipe(tap((resp: User) => this.setUserDetails(resp)))
       .subscribe();
   }
   private retrieveUserDetails() {
-    return this.http.get<UserDetails>(this.url);
+    return this.http.get<User>(this.url);
   }
 
-  private setUserDetails(userDetails: UserDetails) {
+  private setUserDetails(userDetails: User) {
     this.state.next({ ...this.state.getValue(), user: userDetails });
   }
 
   /** Check if at least one social account exists with this provider */
-  private isOAuthConnected(user: UserDetails | null, provider: OAuthProvider) {
+  private isOAuthConnected(user: User | null, provider: OAuthProvider) {
     return (
-      user?.socialaccount_set.findIndex(
-        (account) => account.provider === provider
-      ) !== -1
+      user?.identities.findIndex((account) => account.provider === provider) !==
+      -1
     );
   }
 }

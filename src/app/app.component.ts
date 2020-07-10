@@ -1,15 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, RoutesRecognized } from "@angular/router";
-import { map, filter, take, exhaustMap } from "rxjs/operators";
+import { map, filter, take, exhaustMap, tap } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { AuthService } from "./api/auth/auth.service";
 import { OrganizationsService } from "./api/organizations/organizations.service";
 import { SettingsService } from "./api/settings.service";
+import { UserService } from "./api/user/user.service";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
   title = "glitchtip-frontend";
@@ -31,10 +31,11 @@ export class AppComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
+    private userService: UserService,
     private organizations: OrganizationsService,
     private settings: SettingsService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.settings.getSettings().subscribe();
@@ -42,7 +43,8 @@ export class AppComponent implements OnInit {
     combineLatest([this.isLoggedIn$, this.routesAreRecognized$])
       .pipe(
         filter(([isLoggedIn, _]) => !!isLoggedIn),
-        exhaustMap(() => this.organizations.retrieveOrganizations())
+        exhaustMap(() => this.organizations.retrieveOrganizations()),
+        tap(() => this.userService.getUserDetails())
       )
       .subscribe();
   }
