@@ -6,6 +6,7 @@ import {
   ActivatedRoute,
   NavigationStart,
 } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
 import {
   tap,
@@ -29,7 +30,6 @@ import { SettingsService } from "../settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { TeamsService } from "../teams/teams.service";
 import { Team } from "../teams/teams.interfaces";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -363,13 +363,7 @@ export class OrganizationsService {
     return this.http.post<Member>(url, data).pipe(
       tap((resp) => {
         this.setAddMemberLoading(false);
-        this.snackBar.open(
-          `An email invite has been sent to ${resp.email}`,
-          undefined,
-          {
-            duration: 4000,
-          }
-        );
+        this.snackBar.open(`An email invite has been sent to ${resp.email}`);
         this.router.navigate(["settings", orgSlug, "members"]);
       }),
       catchError((error: HttpErrorResponse) => {
@@ -442,9 +436,7 @@ export class OrganizationsService {
     this.setLeaveTeamLoading(team);
     return this.http.delete<Team>(url).pipe(
       tap((resp) => {
-        this.snackBar.open(`You have left ${resp.slug}`, undefined, {
-          duration: 4000,
-        });
+        this.snackBar.open(`You have left ${resp.slug}`);
         this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
       }),
       catchError((error: HttpErrorResponse) => {
@@ -460,9 +452,7 @@ export class OrganizationsService {
     this.setJoinTeamLoading(team);
     return this.http.post<Team>(url, null).pipe(
       tap((resp) => {
-        this.snackBar.open(`You joined ${resp.slug}`, undefined, {
-          duration: 4000,
-        });
+        this.snackBar.open(`You joined ${resp.slug}`);
         this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
       }),
       catchError((error: HttpErrorResponse) => {

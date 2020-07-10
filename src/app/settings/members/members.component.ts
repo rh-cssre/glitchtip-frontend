@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ActivatedRoute } from "@angular/router";
 import { map, filter } from "rxjs/operators";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { MembersService } from "src/app/api/organizations/members.service";
+import { MemberSelector } from "src/app/api/organizations/organizations.interface";
 
 @Component({
   selector: "app-members",
@@ -10,12 +12,13 @@ import { map, filter } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersComponent implements OnInit {
-  organizationMembers$ = this.organizationsService.organizationMembers$;
   activeOrganizationDetail$ = this.organizationsService
     .activeOrganizationDetail$;
+  members$ = this.membersService.members$;
 
   constructor(
     private organizationsService: OrganizationsService,
+    private membersService: MembersService,
     private route: ActivatedRoute
   ) {}
 
@@ -28,5 +31,18 @@ export class MembersComponent implements OnInit {
       .subscribe((slug) => {
         this.organizationsService.retrieveOrganizationMembers(slug).toPromise();
       });
+  }
+
+  resendInvite(memberId: number) {
+    this.membersService.resendInvite(memberId);
+  }
+
+  removeMember(member: MemberSelector) {
+    const message = member.isMe
+      ? `Are you sure you'd like to leave this organization?`
+      : `Are you sure you want to remove ${member.email} from this organization?`;
+    if (window.confirm(message)) {
+      this.membersService.removeMember(member);
+    }
   }
 }

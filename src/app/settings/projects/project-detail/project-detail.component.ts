@@ -97,13 +97,7 @@ export class ProjectDetailComponent implements OnInit {
         .subscribe(
           () => {
             this.deleteLoading = false;
-            this.snackBar.open(
-              "Your project has been sucessfully deleted",
-              undefined,
-              {
-                duration: 4000,
-              }
-            );
+            this.snackBar.open("Your project has been sucessfully deleted");
             this.router.navigate(["settings", this.orgSlug, "projects"]);
           },
           (err) => {
@@ -130,11 +124,7 @@ export class ProjectDetailComponent implements OnInit {
               this.updateNameError = "";
             }
             this.snackBar.open(
-              `The name of your project has been updated to ${resp.name}`,
-              undefined,
-              {
-                duration: 4000,
-              }
+              `The name of your project has been updated to ${resp.name}`
             );
           },
           (err) => {
@@ -161,11 +151,7 @@ export class ProjectDetailComponent implements OnInit {
               this.updatePlatformError = "";
             }
             this.snackBar.open(
-              `Your project platform has been updated to ${resp.platform}`,
-              undefined,
-              {
-                duration: 4000,
-              }
+              `Your project platform has been updated to ${resp.platform}`
             );
           },
           (err) => {

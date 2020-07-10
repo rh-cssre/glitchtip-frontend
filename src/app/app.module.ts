@@ -44,7 +44,7 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
       useClass: TokenInterceptor,
       multi: true,
     },
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 4000 } },
     { provide: ErrorHandler, useClass: SentryErrorHandler },
   ],
   bootstrap: [AppComponent],

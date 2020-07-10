@@ -9,12 +9,34 @@
     </mat-card-title>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let orgMember of organizationMembers$ | async">
-          <a mat-line [routerLink]="[orgMember.id]">{{ orgMember.email }}</a
-          ><span>{{ orgMember.roleName }}</span>
-        </mat-list-item>
-      </mat-list>
+      <div class="list">
+        <div class="list--item" *ngFor="let member of members$ | async">
+          <a class="email" mat-line [routerLink]="[member.id]">{{
+            member.email
+          }}</a>
+
+          <div *ngIf="member.pending" class="invite-status">
+            <p class="pending">Pending</p>
+            <app-loading-button
+              *ngIf="!member.loadingResendInvite && !member.sentResendInvite"
+              class="resend-invite"
+              [loading]="member.loadingResendInvite"
+              buttonText="Resend Invite"
+              (click)="resendInvite(member.id)"
+            >
+            </app-loading-button>
+            <span *ngIf="member.sentResendInvite">Invite Sent</span>
+          </div>
+
+          <div class="role">{{ member.roleName }}</div>
+
+          <app-loading-button
+            (click)="removeMember(member)"
+            [buttonText]="member.isMe ? 'Leave' : 'Remove'"
+            buttonStyle="stroked"
+          ></app-loading-button>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 </section>

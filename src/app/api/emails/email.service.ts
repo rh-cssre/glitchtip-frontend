@@ -196,7 +196,7 @@ export class EmailService {
   resetLoadingResend = () => this.resetLoadingState("resendConfirmation");
 
   private setSnackbarMessage(message: string) {
-    this.snackBar.open(message, undefined, { duration: 4000 });
+    this.snackBar.open(message);
   }
 
   private getEmailAddresses() {

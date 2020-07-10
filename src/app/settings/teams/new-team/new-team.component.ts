@@ -40,9 +40,7 @@ export class NewTeamComponent {
         .subscribe(
           (team) => {
             this.loading = false;
-            this.snackBar.open(`${team.slug} has been created`, undefined, {
-              duration: 4000,
-            });
+            this.snackBar.open(`${team.slug} has been created`);
             this.dialogRef.close();
           },
           (err) => {

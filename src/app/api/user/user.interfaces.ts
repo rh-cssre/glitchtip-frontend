@@ -8,19 +8,10 @@ interface SocialAccount {
   date_joined: string;
 }
 
-// TODO: Update with interface from /api/0/users/me/
-export interface UserDetails {
-  pk: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  socialaccount_set: SocialAccount[];
-}
-
 export interface User {
   lastLogin: string;
   isSuperuser: boolean;
-  identities: [];
+  identities: SocialAccount[];
   id: number;
   isActive: boolean;
   name: string;

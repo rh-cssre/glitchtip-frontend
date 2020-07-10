@@ -59,9 +59,7 @@ export class ChangePasswordComponent {
         .subscribe(
           () => {
             this.formDirective?.resetForm();
-            this.snackBar.open("Your new password has been saved.", undefined, {
-              duration: 4000,
-            });
+            this.snackBar.open("Your new password has been saved.");
             this.loading = false;
             this.error = null;
           },

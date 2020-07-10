@@ -46,6 +46,6 @@ export class ConfirmEmailService {
   }
 
   private setSnackbarMessage(message: string) {
-    this.snackBar.open(message, undefined, { duration: 4000 });
+    this.snackBar.open(message);
   }
 }

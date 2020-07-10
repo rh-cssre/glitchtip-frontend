@@ -45,11 +45,7 @@ export class OrganizationComponent implements OnInit {
         (org: OrganizationDetail) => {
           this.updateLoading = false;
           this.snackBar.open(
-            `The name of your organization has been updated to ${org.name}`,
-            undefined,
-            {
-              duration: 4000,
-            }
+            `The name of your organization has been updated to ${org.name}`
           );
         },
         (err) => {
@@ -70,11 +66,7 @@ export class OrganizationComponent implements OnInit {
         () => {
           this.deleteLoading = false;
           this.snackBar.open(
-            `You have successfully deleted ${name} from your organizations`,
-            undefined,
-            {
-              duration: 4000,
-            }
+            `You have successfully deleted ${name} from your organizations`
           );
         },
         (err) => {

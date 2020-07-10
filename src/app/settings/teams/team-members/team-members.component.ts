@@ -67,11 +67,7 @@ export class TeamMembersComponent implements OnInit {
               this.member.value.user.name
                 ? this.member.value.user.name
                 : this.member.value.user.email
-            } has been added to #${team.slug}`,
-            undefined,
-            {
-              duration: 4000,
-            }
+            } has been added to #${team.slug}`
           );
         },
         (err) => {
@@ -89,11 +85,7 @@ export class TeamMembersComponent implements OnInit {
         (resp) => {
           this.selectedTeamMember = null;
           this.snackBar.open(
-            `${memberEmail} has been removed from #${resp.slug}`,
-            undefined,
-            {
-              duration: 4000,
-            }
+            `${memberEmail} has been removed from #${resp.slug}`
           );
         },
         (err) => {
