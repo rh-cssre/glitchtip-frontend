@@ -18,12 +18,10 @@ export class RegisterService {
       password1,
       password2,
     };
-    return this.http
-      .post<AuthState>(url, data)
-      .pipe(tap((resp) => this.setAuth(resp)));
+    return this.http.post<AuthState>(url, data).pipe(tap(() => this.setAuth()));
   }
 
-  setAuth(resp: AuthState) {
-    this.authService.setAuth(resp);
+  setAuth() {
+    this.authService.setAuth({ isLoggedIn: true });
   }
 }
