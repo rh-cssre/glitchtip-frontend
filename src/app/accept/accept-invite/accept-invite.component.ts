@@ -49,4 +49,8 @@ export class AcceptInviteComponent implements OnInit {
       )
       .subscribe();
   }
+
+  logout() {
+    this.authService.logout();
+  }
 }

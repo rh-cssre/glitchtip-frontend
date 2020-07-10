@@ -14,8 +14,28 @@
       keep track of errors.
     </p>
 
+    <p *ngIf="alreadyInOrg$ | async">
+      The account you're logged into is already a part of this organization. You
+      might want to <a (click)="logout()" href="">log out</a>, then create an
+      account for or log into the account that this invite link was intended
+      for.
+    </p>
+
     <p *ngIf="isLoggedIn$ | async">
-      <button mat-flat-button color="primary" (click)="onSubmit()">
+      <button
+        *ngIf="(alreadyInOrg$ | async) === false"
+        mat-flat-button
+        color="primary"
+        (click)="onSubmit()"
+      >
+        Accept invitation
+      </button>
+      <button
+        *ngIf="alreadyInOrg$ | async"
+        mat-stroked-button
+        color="primary"
+        (click)="onSubmit()"
+      >
         Accept invitation
       </button>
     </p>
@@ -24,8 +44,6 @@
       To continue, you must either log in to your existing account, or create a
       new one.
     </p>
-
-    <p *ngIf="alreadyInOrg$ | async">You're in this org already</p>
 
     <div class="button-container" *ngIf="(isLoggedIn$ | async) === false">
       <a
