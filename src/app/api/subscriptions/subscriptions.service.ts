@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
 import { BehaviorSubject, EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import {
@@ -35,7 +34,7 @@ export class SubscriptionsService {
   );
   readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient /*, private router: Router*/) {}
 
   /**
    * Retrieve subscription for this organization
@@ -90,15 +89,15 @@ export class SubscriptionsService {
    * Retrieve Subscription and navigate to subscription page if no subscription exists
    */
   checkIfUserHasSubscription(orgSlug: string) {
-    this.retrieveSubscription(orgSlug)
-      .pipe(
-        tap((subscription) => {
-          if (subscription.status === null) {
-            this.router.navigate(["settings", orgSlug, "subscription"]);
-          }
-        })
-      )
-      .toPromise();
+    //   this.retrieveSubscription(orgSlug)
+    //     .pipe(
+    //       tap((subscription) => {
+    //         if (subscription.status === null) {
+    //           this.router.navigate(["settings", orgSlug, "subscription"]);
+    //         }
+    //       })
+    //     )
+    //     .toPromise();
   }
 
   clearState() {

@@ -50,6 +50,10 @@ export interface Member {
   pending: boolean;
 }
 
+export interface OrganizationUser extends Member {
+  organization: Organization;
+}
+
 export type MemberRole = "member" | "admin" | "manager" | "owner";
 
 export interface OrganizationMembersRequest {
