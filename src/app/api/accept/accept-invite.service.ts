@@ -60,12 +60,12 @@ export class AcceptInviteService {
         }),
         catchError((error) => {
           if (error.error?.detail === "Not found.") {
-            this.setSnackbarMessage(`
+            this.snackBar.open(`
               This invitation link expired or is invalid. Please
               issue a new invitation request.
             `);
           } else {
-            this.setSnackbarMessage(error.error?.detail);
+            this.snackBar.open(error.error?.detail);
           }
           this.router.navigate(["/"]);
           return EMPTY;
@@ -79,7 +79,7 @@ export class AcceptInviteService {
       .pipe(
         tap((response: AcceptAPIResponse) => {
           this.orgService.retrieveOrganizations().subscribe();
-          this.setSnackbarMessage(
+          this.snackBar.open(
             `You have been added to ${response.org_user.organization.name}.`
           );
           this.router.navigate(["/"]);
@@ -88,22 +88,22 @@ export class AcceptInviteService {
           console.log(error);
           if (error.status === 500) {
             if ((error.error as string).includes("already exists")) {
-              this.setSnackbarMessage(`
+              this.snackBar.open(`
                 There was an error, probably because you tried to join an organization
                 that you're already a part of.
               `);
             } else {
-              this.setSnackbarMessage(`
+              this.snackBar.open(`
                 There was an error. Try again later.
               `);
             }
           } else if (error.error?.detail === "Not found.") {
-            this.setSnackbarMessage(`
+            this.snackBar.open(`
               This invitation link expired or is invalid. Please
               issue a new invitation request.
             `);
           } else {
-            this.setSnackbarMessage(error.error?.detail);
+            this.snackBar.open(error.error?.detail);
           }
           return EMPTY;
         })
@@ -126,9 +126,5 @@ export class AcceptInviteService {
 
   private setAcceptInfo(acceptInfo: AcceptAPIResponse) {
     this.state.next({ ...this.state.getValue(), acceptInfo });
-  }
-
-  private setSnackbarMessage(message: string) {
-    this.snackBar.open(message, undefined, { duration: 4000 });
   }
 }
