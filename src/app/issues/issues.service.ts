@@ -198,7 +198,6 @@ export class IssuesService {
       .pipe(
         tap((resp) => this.setIssueStatuses(ids, resp.status)),
         catchError((err: HttpErrorResponse) => {
-          console.log(err);
           this.snackbar.open("Error, unable to update issue");
           return EMPTY;
         })
