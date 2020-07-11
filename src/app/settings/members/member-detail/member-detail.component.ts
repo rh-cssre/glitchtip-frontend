@@ -1,7 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { FormControl, FormGroup } from "@angular/forms";
 import { map } from "rxjs/operators";
+import { combineLatest } from "rxjs";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
 
 @Component({
   selector: "app-member-detail",
@@ -9,31 +17,58 @@ import { map } from "rxjs/operators";
   styleUrls: ["./member-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MemberDetailComponent implements OnInit {
-  memberDetail$ = this.organizationsService.memberDetail$;
-  orgSlug: string | undefined;
+export class MemberDetailComponent implements OnInit, OnDestroy {
+  memberDetail$ = this.memberDetailService.memberDetail$;
+  teams$ = this.organizationsService.organizationTeams$;
+  updateMemberError$ = this.memberDetailService.updateMemberError$;
+  updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
+  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
+  memberIdSlug$ = this.route.paramMap.pipe(
+    map((params) => params.get("member-id"))
+  );
+  routeParams$ = combineLatest([this.orgSlug$, this.memberIdSlug$]);
+  form = new FormGroup({
+    role: new FormControl(""),
+  });
 
   constructor(
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private memberDetailService: MemberDetailService
   ) {}
 
   ngOnInit(): void {
-    this.route.params
+    this.routeParams$
       .pipe(
-        map((params) => {
-          const organizationSlug: string | undefined = params["org-slug"];
-          const memberIdSlug: string | undefined = params["member-id"];
-          this.orgSlug = organizationSlug;
-          return { organizationSlug, memberIdSlug };
+        map(([organizationSlug, memberIdSlug]) => {
+          if (organizationSlug && memberIdSlug) {
+            this.memberDetailService
+              .retrieveMemberDetail(organizationSlug, memberIdSlug)
+              .toPromise();
+            this.organizationsService.retrieveOrganizationTeams(
+              organizationSlug
+            );
+          }
         })
       )
-      .subscribe(({ organizationSlug, memberIdSlug }) => {
-        if (organizationSlug && memberIdSlug) {
-          this.organizationsService
-            .retrieveMemberDetail(organizationSlug, memberIdSlug)
-            .toPromise();
-        }
-      });
+      .subscribe();
+
+    this.memberDetail$.subscribe((data) => {
+      if (data) {
+        this.form.patchValue({
+          role: data.role,
+        });
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.memberDetailService.clearState();
+  }
+
+  onSubmit() {
+    const role = this.form.get("role")?.value;
+    this.memberDetailService.updateMember(role);
+    // entire member object needs to be put to orgs/org-slug/members/member-id
   }
 }

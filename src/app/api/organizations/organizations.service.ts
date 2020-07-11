@@ -36,7 +36,6 @@ interface OrganizationsState {
   activeOrganizationId: number | null;
   activeOrganization: OrganizationDetail | null;
   organizationMembers: Member[];
-  memberDetail: Member | null;
   organizationTeams: Team[];
   errors: OrganizationErrors;
   loading: OrganizationLoading;
@@ -47,7 +46,6 @@ const initialState: OrganizationsState = {
   activeOrganizationId: null,
   activeOrganization: null,
   organizationMembers: [],
-  memberDetail: null,
   organizationTeams: [],
   errors: {
     addTeamMember: "",
@@ -110,9 +108,6 @@ export class OrganizationsService {
           !teamMembers.find((teamMems) => orgMembers.id === teamMems.id)
       );
     })
-  );
-  readonly memberDetail$ = this.getState$.pipe(
-    map((data) => data.memberDetail)
   );
   readonly organizationTeams$ = this.getState$.pipe(
     map((data) => data.organizationTeams)
@@ -373,13 +368,6 @@ export class OrganizationsService {
     );
   }
 
-  retrieveMemberDetail(orgSlug: string, memberId: string) {
-    const url = `${this.url}${orgSlug}/members/${memberId}/`;
-    return this.http
-      .get<Member>(url)
-      .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)));
-  }
-
   retrieveOrganizationTeams(orgSlug: string) {
     const url = `${this.url}${orgSlug}/teams/`;
     return this.http
@@ -599,13 +587,6 @@ export class OrganizationsService {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       organizationMembers: members,
-    });
-  }
-
-  private setMemberDetail(member: Member) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
-      memberDetail: member,
     });
   }
 

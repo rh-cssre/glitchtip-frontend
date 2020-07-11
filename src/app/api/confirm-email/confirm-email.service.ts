@@ -25,7 +25,6 @@ export class ConfirmEmailService {
           this.router.navigate(["profile"]);
         }),
         catchError((error) => {
-          console.log("failure", error.error);
           if (error.error?.detail === "Not found.") {
             this.setSnackbarMessage(`
                 This e-mail confirmation link expired or is invalid. Please

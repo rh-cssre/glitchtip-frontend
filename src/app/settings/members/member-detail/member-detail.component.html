@@ -3,14 +3,17 @@
     <h1 class="mat-display-1">
       {{ member.email }}
     </h1>
-    <a mat-flat-button [routerLink]="['/settings', orgSlug, 'members']">
+    <a
+      mat-flat-button
+      [routerLink]="['/settings', orgSlug$ | async, 'members']"
+    >
       <mat-icon>keyboard_arrow_left</mat-icon>
       Back to Members
     </a>
   </header>
   <mat-card>
     <mat-card-title>Basics</mat-card-title><mat-divider></mat-divider>
-    <mat-card-content>
+    <mat-card-content class="basics-content">
       <div class="column">
         <div class="mat-body-strong">Email</div>
         <div>{{ member.email }}</div>
@@ -23,6 +26,56 @@
         <div class="mat-body-strong">Added</div>
         <div>{{ member.dateCreated | date }}</div>
       </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>Role</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-error *ngIf="updateMemberError$ | async as error">{{
+          error
+        }}</mat-error>
+        <div>
+          <mat-radio-group formControlName="role">
+            <mat-radio-button value="member">Member</mat-radio-button>
+            <mat-radio-button value="admin">Admin</mat-radio-button>
+            <mat-radio-button value="manager">Manager</mat-radio-button>
+            <mat-radio-button value="owner">Owner</mat-radio-button>
+          </mat-radio-group>
+          <app-loading-button
+            *ngIf="member.role !== form.get('role')?.value"
+            [loading]="(updateMemberLoading$ | async) === true"
+            buttonText="Update Member"
+          ></app-loading-button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>Team(s)</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ng-container *ngIf="member.teams.length === 0; else listMembers">
+        <p class="center-text">This user isn't on any teams.</p>
+      </ng-container>
+      <ng-template #listMembers>
+        <mat-list>
+          <mat-list-item *ngFor="let team of member?.teams">
+            <a
+              mat-line
+              [routerLink]="[
+                '/settings',
+                orgSlug$ | async,
+                'teams',
+                team,
+                'members'
+              ]"
+              >{{ team }}</a
+            >
+          </mat-list-item>
+        </mat-list></ng-template
+      >
     </mat-card-content>
   </mat-card>
 </section>

@@ -48,6 +48,7 @@ export interface Member {
   dateCreated: string;
   email: string;
   pending: boolean;
+  teams: string[];
 }
 
 export interface MemberSelector extends Member {
