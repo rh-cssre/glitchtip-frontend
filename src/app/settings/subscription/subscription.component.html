@@ -33,11 +33,15 @@
                 <li class="mat-body-1">
                   Billing:
                   <ng-container
-                    *ngIf="subscription.billing === 'charge_automatically'"
+                    *ngIf="
+                      subscription.collection_method === 'charge_automatically'
+                    "
                   >
                     Automatic
                   </ng-container>
-                  <ng-container *ngIf="subscription.billing === 'send_invoice'">
+                  <ng-container
+                    *ngIf="subscription.collection_method === 'send_invoice'"
+                  >
                     Send invoice
                   </ng-container>
                 </li>

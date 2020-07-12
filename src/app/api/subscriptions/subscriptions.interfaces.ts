@@ -17,7 +17,7 @@ export interface Product {
 export interface Subscription {
   id: string;
   created: string;
-  billing: string;
+  collection_method: string;
   billing_cycle_anchor: string;
   current_period_end: string;
   current_period_start: string;
