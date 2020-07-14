@@ -96,7 +96,7 @@
       <ng-container matColumnDef="actions">
         <th
           mat-header-cell
-          colspan="3"
+          colspan="4"
           *matHeaderCellDef
           class="resolved-row"
           class="table-header"
@@ -176,7 +176,7 @@
               <button
                 type="button"
                 (click)="dateFormReset()"
-                mat-flat-button
+                mat-stroked-button
                 color="primary"
                 [disabled]="
                   !dateForm.value.startDate && !dateForm.value.endDate
@@ -185,7 +185,11 @@
                 Clear
               </button>
             </form>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form
+              [formGroup]="form"
+              (ngSubmit)="onSubmit()"
+              class="search-form"
+            >
               <mat-form-field>
                 <input
                   matInput
@@ -212,6 +216,7 @@
           *matCellDef="let row"
           [class.resolved]="row.status === 'resolved'"
           [class.ignored]="row.status === 'ignored'"
+          class="checkbox-cell"
         >
           <mat-checkbox
             (change)="toggleCheck(row.id)"
@@ -228,6 +233,7 @@
           *matCellDef="let element"
           [class.resolved]="element.status === 'resolved'"
           [class.ignored]="element.status === 'ignored'"
+          class="status-cell"
         >
           {{ element.status }}
         </td>
@@ -287,8 +293,9 @@
           *matCellDef="let element"
           [class.resolved]="element.status === 'resolved'"
           [class.ignored]="element.status === 'ignored'"
+          class="event-cell"
         >
-          <p class="event-cell">{{ element.count }}</p>
+          <p>{{ element.count }}</p>
         </td>
       </ng-container>
 

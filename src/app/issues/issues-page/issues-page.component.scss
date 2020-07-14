@@ -23,14 +23,19 @@ table {
   justify-content: space-between;
   flex-wrap: wrap;
 
-  > form {
+  .date-form,
+  .search-form {
     flex: 1;
     max-width: 400px;
-    padding-left: 50px;
+    padding-left: 20px;
 
     mat-form-field {
       width: 100%;
     }
+  }
+
+  .search-form {
+    max-width: 350px;
   }
 }
 
@@ -95,6 +100,14 @@ mat-card {
   margin-bottom: 24px;
 }
 
+.checkbox-cell {
+  width: 70px;
+}
+
+.status-cell {
+  width: 120px;
+}
+
 .event-cell {
-  text-align: center;
+  width: 80px;
 }
