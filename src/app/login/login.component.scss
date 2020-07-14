@@ -7,6 +7,7 @@ mat-card {
 
 h1 {
   text-align: center;
+  margin-bottom: 0;
 }
 
 .full-width {
@@ -17,10 +18,14 @@ form {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+}
 
-  mat-error {
-    margin-top: 8px;
-  }
+.server-error {
+  height: 21px;
+}
+
+mat-error span {
+  padding-right: 16px;
 }
 
 .or {
