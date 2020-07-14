@@ -32,6 +32,8 @@ export class ProjectDetailComponent implements OnInit {
   updatePlatformLoading = false;
   updatePlatformError = "";
 
+  copiedDsn = false;
+
   nameForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
   });
@@ -159,5 +161,10 @@ export class ProjectDetailComponent implements OnInit {
           }
         );
     }
+  }
+
+  copied() {
+    this.copiedDsn = true;
+    setTimeout(() => (this.copiedDsn = false), 4000);
   }
 }

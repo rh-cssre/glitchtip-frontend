@@ -62,15 +62,28 @@
     </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title>Keys</mat-card-title>
+    <mat-card-title>DSN Key</mat-card-title>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <dl>
-        <app-entry-data
-          key="DSN"
+      <mat-form-field class="full-width">
+        <input
+          class="background"
+          readonly
+          matInput
           [value]="projectKey.dsn.public"
-        ></app-entry-data>
-      </dl>
+        />
+        <button
+          mat-icon-button
+          [cdkCopyToClipboard]="projectKey.dsn.public"
+          (cdkCopyToClipboardCopied)="copied()"
+          matTooltip="Copy key to clipboard"
+          matSuffix
+        >
+          <mat-icon [class.dsn-copied]="this.copiedDsn">
+            {{ this.copiedDsn ? "check_circle" : "file_copy" }}
+          </mat-icon>
+        </button>
+      </mat-form-field>
     </mat-card-content>
   </mat-card>
 
