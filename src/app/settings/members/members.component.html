@@ -31,6 +31,7 @@
           <div class="role">{{ member.roleName }}</div>
 
           <app-loading-button
+            class="remove-button"
             (click)="removeMember(member)"
             [buttonText]="member.isMe ? 'Leave' : 'Remove'"
             buttonStyle="stroked"

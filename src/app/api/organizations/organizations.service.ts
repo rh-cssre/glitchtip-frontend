@@ -15,6 +15,8 @@ import {
   filter,
   distinctUntilChanged,
   catchError,
+  take,
+  mergeMap,
 } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
@@ -342,30 +344,38 @@ export class OrganizationsService {
     );
   }
 
+  /** Invite a user via email to join an organization */
   inviteOrganizationMembers(
     emailInput: string,
     teamsInput: string[],
     roleInput: MemberRole
   ) {
-    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
-    const url = `${this.url}${orgSlug}/members/`;
     const data: OrganizationMembersRequest = {
       email: emailInput,
       role: roleInput,
       teams: teamsInput,
     };
-    this.setAddMemberLoading(true);
-    return this.http.post<Member>(url, data).pipe(
-      tap((resp) => {
-        this.setAddMemberLoading(false);
-        this.snackBar.open(`An email invite has been sent to ${resp.email}`);
-        this.router.navigate(["settings", orgSlug, "members"]);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.setAddMemberError(error);
-        return EMPTY;
-      })
-    );
+    return this.activeOrganizationSlug$
+      .pipe(
+        take(1),
+        mergeMap((orgSlug) =>
+          this.http
+            .post<Member>(`${this.url}${orgSlug}/members/`, data)
+            .pipe(map((response) => ({ response, orgSlug })))
+        ),
+        tap(({ response, orgSlug }) => {
+          this.setAddMemberLoading(false);
+          this.snackBar.open(
+            `An email invite has been sent to ${response.email}`
+          );
+          this.router.navigate(["settings", orgSlug, "members"]);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.setAddMemberError(error);
+          return EMPTY;
+        })
+      )
+      .toPromise();
   }
 
   retrieveOrganizationTeams(orgSlug: string) {

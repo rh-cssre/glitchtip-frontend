@@ -73,9 +73,11 @@ export class NewMemberComponent implements OnInit {
       const teams = this.form.get("teams")?.value;
 
       emails.split(",").map((email: string) => {
-        this.organizationsService
-          .inviteOrganizationMembers(email.replace(/\s/g, ""), teams, role)
-          .subscribe();
+        this.organizationsService.inviteOrganizationMembers(
+          email.replace(/\s/g, ""),
+          teams,
+          role
+        );
       });
     }
   }
