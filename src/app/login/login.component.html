@@ -2,22 +2,25 @@
   <h1>Login</h1>
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-error *ngIf="error">{{ error }}</mat-error>
+      <div class="server-error">
+        <mat-error *ngIf="error">{{ error }}</mat-error>
+      </div>
       <mat-form-field class="full-width">
         <input
           matInput
           type="email"
           placeholder="Email"
           formControlName="email"
+          [errorStateMatcher]="matcher"
         />
-        <mat-error *ngIf="email?.errors?.required"
-          >Your email is required to log in</mat-error
-        >
-        <mat-error *ngIf="email?.errors?.email"
-          >Enter a valid email address</mat-error
-        >
-        <mat-error *ngIf="email?.errors?.serverError">
-          {{ email?.errors?.serverError }}
+        <mat-error *ngIf="email?.errors">
+          <span *ngIf="email?.errors?.required"
+            >Your email is required to log in</span
+          >
+          <span *ngIf="email?.errors?.email">Enter a valid email address</span>
+          <span *ngIf="email?.errors?.serverError">{{
+            email?.errors?.serverError
+          }}</span>
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
@@ -26,13 +29,16 @@
           type="password"
           placeholder="Password"
           formControlName="password"
+          [errorStateMatcher]="matcher"
         />
-        <mat-error *ngIf="password?.errors && password?.errors?.required">
-          Your password should be at least 8 characters long</mat-error
-        >
-        <mat-error *ngIf="password?.errors?.required"
-          >Your password is required to log in</mat-error
-        >
+        <mat-error *ngIf="password?.errors">
+          <span *ngIf="password?.errors?.minlength"
+            >Your password should be at least 8 characters long</span
+          >
+          <span *ngIf="password?.errors?.required"
+            >Your password is required to log in</span
+          >
+        </mat-error>
       </mat-form-field>
       <button id="submit" class="full-width" mat-flat-button color="primary">
         Log in

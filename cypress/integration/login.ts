@@ -6,7 +6,7 @@ describe("Login", () => {
     cy.visit("/login");
     cy.get("#submit").click();
     cy.contains("email is required");
-    cy.contains("password should be at least");
+    cy.contains("password is required");
   });
 
   it("should allow logging in", () => {

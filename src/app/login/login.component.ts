@@ -8,6 +8,7 @@ import { LoginService } from "./login.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
+import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
 
 @Component({
   selector: "app-login",
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit {
       Validators.minLength(8),
     ]),
   });
+  matcher = new LessAnnoyingErrorStateMatcher();
+
   socialAuth$ = this.settings.socialAuth$;
   enableUserRegistration$ = this.settings.enableUserRegistration$;
   acceptInfo$ = this.acceptService.acceptInfo$;
