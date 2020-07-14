@@ -2,6 +2,7 @@
   <a
     [routerLink]="isMember ? cardLink : secondaryButton?.link"
     [queryParams]="isMember ? cardLinkQueryParams || {} : {}"
+    [tabIndex]="sampleCard && -1"
   >
     <mat-card-title>
       <span>{{ title }}</span>
@@ -48,6 +49,7 @@
       mat-button
       color="primary"
       [routerLink]="secondaryButton.link"
+      [disabled]="sampleCard"
     >
       <mat-icon
         *ngIf="secondaryButton.icon"
