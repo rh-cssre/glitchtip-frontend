@@ -34,6 +34,10 @@ form {
   }
 }
 
+.full-width {
+  width: 100%;
+}
+
 .remove-content {
   display: flex;
   justify-content: space-between;
@@ -47,4 +51,8 @@ form {
 
 .server-error {
   display: block;
+}
+
+.dsn-copied {
+  color: $amaranth;
 }

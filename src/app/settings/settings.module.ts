@@ -7,6 +7,7 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatRadioModule } from "@angular/material/radio";
+import { ClipboardModule } from "@angular/cdk/clipboard";
 
 // Components
 import { ProjectsComponent } from "./projects/projects.component";
@@ -35,6 +36,7 @@ import { TeamSettingsComponent } from "./teams/team-settings/team-settings.compo
     MatDialogModule,
     MatTabsModule,
     MatRadioModule,
+    ClipboardModule,
   ],
   declarations: [
     ProjectsComponent,
