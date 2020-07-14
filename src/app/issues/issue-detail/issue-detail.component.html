@@ -1,10 +1,13 @@
 <section *ngIf="issue$ | async as issue">
   <a
-    mat-button
+    mat-stroked-button
+    class="project-issues-link"
     [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
     [queryParams]="{ project: issue.project.id }"
-    >View all issues for {{ issue.project.name }}</a
   >
+    <mat-icon>keyboard_arrow_left</mat-icon>View all issues for
+    {{ issue.project.name }}
+  </a>
   <article class="header">
     <div>
       <app-issue-detail-title
@@ -31,7 +34,7 @@
           <mat-icon aria-hidden="true">done</mat-icon>
           Reopen
         </button>
-        <button mat-flat-button (click)="markIgnored()">Ignore</button>
+        <button mat-stroked-button (click)="markIgnored()">Ignore</button>
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
       </div>
     </div>
