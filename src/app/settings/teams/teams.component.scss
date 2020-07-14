@@ -34,3 +34,7 @@ mat-error {
     padding-right: 0;
   }
 }
+
+app-loading-button ::ng-deep button {
+  width: 110px;
+}

@@ -19,11 +19,8 @@ mat-card {
     }
 
     mat-form-field {
-      width: 50%;
-
-      @media (max-width: $tablet - 1) {
-        width: 100%;
-      }
+      width: 100%;
+      margin-right: 48px;
     }
   }
 }
@@ -37,4 +34,12 @@ mat-card {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  p {
+    padding-right: 16px;
+  }
+}
+
+app-loading-button ::ng-deep button {
+  width: 160px;
 }
