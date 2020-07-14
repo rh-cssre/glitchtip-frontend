@@ -73,7 +73,7 @@ mat-sidenav-content {
   max-height: 40px;
   line-height: 1.11111;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .down-caret {
@@ -83,4 +83,12 @@ mat-sidenav-content {
 
 .org-details-divider {
   margin: 10px 0;
+}
+
+.org-dropdown-list-item ::ng-deep .mat-list-item-content {
+  justify-content: space-between;
+}
+
+.mat-nav-list > button.mat-menu-item {
+  font-weight: 500;
 }

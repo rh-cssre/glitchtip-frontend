@@ -6,6 +6,7 @@ import {
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "../main-nav.service";
+import { SettingsService } from "src/app/api/settings.service";
 
 @Component({
   selector: "app-main-nav",
@@ -23,6 +24,7 @@ export class MainNavComponent {
   organizations$ = this.organizationsService.organizations$;
   isLoggedIn$ = this.auth.isLoggedIn;
   navOpen$ = this.mainNav.navOpen$;
+  billingEnabled$ = this.settingsService.billingEnabled$;
 
   @HostListener("window:resize", ["$event"])
   onResize() {
@@ -37,7 +39,8 @@ export class MainNavComponent {
   constructor(
     private mainNav: MainNavService,
     private organizationsService: OrganizationsService,
-    private auth: AuthService
+    private auth: AuthService,
+    private settingsService: SettingsService
   ) {
     this.innerWidth = window.innerWidth;
     if (this.isScreenSmall()) {
