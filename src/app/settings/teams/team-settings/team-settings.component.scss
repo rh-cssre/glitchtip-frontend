@@ -44,6 +44,10 @@ form {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  p {
+    padding-right: 16px;
+  }
 }
 
 .server-error {
@@ -52,4 +56,8 @@ form {
 
 .center-text {
   text-align: center;
+}
+
+app-loading-button ::ng-deep button {
+  width: 120px;
 }
