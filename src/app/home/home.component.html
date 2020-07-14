@@ -1,15 +1,23 @@
 <section class="l-body">
-  <div
+  <mat-card
     *ngIf="
       (projects$ | async)?.length === 0 &&
       (activeOrganizationDetail$ | async) === undefined
     "
   >
-    <p>You don't have any organizations yet. Create one to get started.</p>
-    <a mat-flat-button color="primary" [routerLink]="['/organizations', 'new']"
-      >Create New Organization</a
-    >
-  </div>
+    <mat-card-content>
+      <p class="mat-body-1">
+        In order to use GlitchTip, you'll need to create an organzation.
+      </p>
+      <a
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/organizations', 'new']"
+      >
+        Create New Organization
+      </a>
+    </mat-card-content>
+  </mat-card>
 
   <div *ngIf="activeOrganizationDetail$ | async as orgDetails">
     <header class="page-header">

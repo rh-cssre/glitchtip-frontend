@@ -89,6 +89,7 @@ mat-sidenav-content {
   justify-content: space-between;
 }
 
-.mat-nav-list > button.mat-menu-item {
+.mat-nav-list > button.mat-menu-item,
+.no-org-create {
   font-weight: 500;
 }

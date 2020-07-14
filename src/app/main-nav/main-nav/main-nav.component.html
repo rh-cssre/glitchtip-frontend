@@ -19,10 +19,14 @@
       <ng-container
         *ngIf="(organizations$ | async)?.length === 0; else showOrgMenu"
       >
-        <a mat-menu-item id="create-new-link" routerLink="/organizations/new">
+        <a
+          mat-menu-item
+          id="create-new-link"
+          routerLink="/organizations/new"
+          class="no-org-create"
+        >
           Create New Organization
         </a>
-        <button mat-menu-item (click)="this.logout()">Log Out</button>
       </ng-container>
       <ng-template #showOrgMenu>
         <mat-list-item
@@ -108,15 +112,15 @@
           Members
         </a>
         <mat-divider class="org-details-divider"></mat-divider>
-        <a
-          mat-list-item
-          [routerLink]="['/profile']"
-          routerLinkActive="active-route"
-        >
-          Profile
-        </a>
-        <button mat-menu-item (click)="this.logout()">Log Out</button>
       </ng-container>
+      <a
+        mat-list-item
+        [routerLink]="['/profile']"
+        routerLinkActive="active-route"
+      >
+        Profile
+      </a>
+      <button mat-menu-item (click)="this.logout()">Log Out</button>
     </mat-nav-list>
   </mat-sidenav>
 
