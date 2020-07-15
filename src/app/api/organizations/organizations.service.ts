@@ -371,7 +371,11 @@ export class OrganizationsService {
           this.router.navigate(["settings", orgSlug, "members"]);
         }),
         catchError((error: HttpErrorResponse) => {
-          this.setAddMemberError(error);
+          if (error.error?.detail) {
+            this.setAddMemberError(error.error?.detail);
+          } else {
+            this.setAddMemberError(`${error.statusText}: ${error.status}`);
+          }
           return EMPTY;
         })
       )
@@ -468,6 +472,18 @@ export class OrganizationsService {
     this.updateTeamSlug(id, newSlug);
   }
 
+  clearErrorState() {
+    this.setInitialErrorState();
+  }
+
+  private setInitialErrorState() {
+    const state = this.organizationsState.getValue();
+    this.organizationsState.next({
+      ...state,
+      errors: initialState.errors,
+    });
+  }
+
   private setLeaveTeamLoading(team: string) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
@@ -501,13 +517,13 @@ export class OrganizationsService {
     });
   }
 
-  private setAddMemberError(error: HttpErrorResponse) {
+  private setAddMemberError(error: string) {
     const state = this.organizationsState.getValue();
     this.organizationsState.next({
       ...state,
       errors: {
         ...state.errors,
-        addOrganizationMember: `${error.statusText}: ${error.status}`,
+        addOrganizationMember: error,
       },
       loading: {
         ...state.loading,
