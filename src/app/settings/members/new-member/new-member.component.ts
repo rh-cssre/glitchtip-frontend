@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -37,7 +37,7 @@ function emailsValidator(control: AbstractControl): ValidationErrors | null {
   templateUrl: "./new-member.component.html",
   styleUrls: ["./new-member.component.scss"],
 })
-export class NewMemberComponent implements OnInit {
+export class NewMemberComponent implements OnInit, OnDestroy {
   organizationTeams$ = this.organizationsService.organizationTeams$;
   filteredOrganizationTeams$ = this.organizationsService
     .filteredOrganizationTeams$;
@@ -64,6 +64,10 @@ export class NewMemberComponent implements OnInit {
       });
 
     this.form.patchValue({ role: "member" });
+  }
+
+  ngOnDestroy() {
+    this.organizationsService.clearErrorState();
   }
 
   onSubmit() {
