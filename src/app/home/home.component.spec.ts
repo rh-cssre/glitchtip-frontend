@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { HomeComponent } from "./home.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MatomoModule } from "ngx-matomo";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("HomeComponent", () => {
@@ -16,7 +15,6 @@ describe("HomeComponent", () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        MatomoModule,
         MatSnackBarModule,
       ],
     }).compileComponents();

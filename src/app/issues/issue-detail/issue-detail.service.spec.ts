@@ -14,7 +14,6 @@ import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
 import { zeroDivisionDotnet } from "./event-detail/test-data/zero-division-dotnet";
-import { MatomoModule } from "ngx-matomo";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -28,7 +27,6 @@ describe("IssueDetailService", () => {
         HttpClientTestingModule,
         MatSnackBarModule,
         RouterTestingModule,
-        MatomoModule,
       ],
       providers: [{ provide: OrganizationsService, useValue: mockOrgService }],
     });

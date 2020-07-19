@@ -8,7 +8,6 @@ import {
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
 import { OAuthModule } from "angular-oauth2-oidc";
-import { MatomoModule } from "ngx-matomo";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
@@ -30,7 +29,6 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
     BrowserAnimationsModule,
     HttpClientModule,
     OAuthModule.forRoot(),
-    MatomoModule,
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN",

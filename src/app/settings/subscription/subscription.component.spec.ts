@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { SubscriptionComponent } from "./subscription.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MatomoModule } from "ngx-matomo";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("SubscriptionComponent", () => {
@@ -16,7 +15,6 @@ describe("SubscriptionComponent", () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        MatomoModule,
         MatSnackBarModule,
       ],
     }).compileComponents();

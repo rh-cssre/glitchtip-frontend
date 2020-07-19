@@ -7,7 +7,6 @@ import { of } from "rxjs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MatomoModule } from "ngx-matomo";
 import { SharedModule } from "src/app/shared/shared.module";
 
 // Components
@@ -42,7 +41,6 @@ export default {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         SharedModule,
-        MatomoModule,
       ],
       declarations: [
         EntryRequestComponent,

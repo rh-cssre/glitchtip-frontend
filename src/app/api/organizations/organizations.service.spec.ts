@@ -12,7 +12,6 @@ import { Organization } from "./organizations.interface";
 import { organizationList } from "./organization-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
 import { routes } from "src/app/app-routing.module";
-import { MatomoModule } from "ngx-matomo";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;
@@ -26,7 +25,6 @@ describe("OrganizationsService", () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
         MaterialModule,
-        MatomoModule,
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -97,7 +95,6 @@ describe("OrganizationsService", () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
         MaterialModule,
-        MatomoModule,
       ],
       providers: [
         {

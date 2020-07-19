@@ -8,7 +8,6 @@ import { MaterialModule } from "src/app/shared/material.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TeamsComponent } from "./teams.component";
 import { NewTeamComponent } from "./new-team/new-team.component";
-import { MatomoModule } from "ngx-matomo";
 import {
   MatDialogModule,
   MatDialogRef,
@@ -27,7 +26,6 @@ export default {
         ReactiveFormsModule,
         RouterTestingModule,
         BrowserAnimationsModule,
-        MatomoModule,
         MatDialogModule,
         SharedModule,
       ],

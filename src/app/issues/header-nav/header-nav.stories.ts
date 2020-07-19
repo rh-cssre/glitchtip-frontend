@@ -8,7 +8,6 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
 import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { MatomoModule } from "ngx-matomo";
 
 export default {
   title: "Issue Header Nav",
@@ -20,7 +19,6 @@ export default {
         BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        MatomoModule,
       ],
     }),
     withKnobs,

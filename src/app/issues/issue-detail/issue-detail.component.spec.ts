@@ -6,7 +6,6 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { IssueDetailComponent } from "./issue-detail.component";
 import { ComponentFixtureAutoDetect } from "@angular/core/testing";
 import { SharedModule } from "src/app/shared/shared.module";
-import { MatomoModule } from "ngx-matomo";
 
 describe("IssueDetailComponent", () => {
   let component: IssueDetailComponent;
@@ -19,7 +18,6 @@ describe("IssueDetailComponent", () => {
         RouterTestingModule,
         NoopAnimationsModule,
         SharedModule,
-        MatomoModule,
       ],
       declarations: [IssueDetailComponent],
       providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],

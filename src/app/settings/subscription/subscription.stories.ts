@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SharedModule } from "src/app/shared/shared.module";
 import { SubscriptionComponent } from "./subscription.component";
 import { PaymentComponent } from "./payment/payment.component";
-import { MatomoModule } from "ngx-matomo";
 import { of } from "rxjs";
 
 export default {
@@ -20,7 +19,6 @@ export default {
         RouterTestingModule,
         BrowserAnimationsModule,
         SharedModule,
-        MatomoModule,
       ],
       declarations: [PaymentComponent],
     }),

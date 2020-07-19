@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
-import { MatomoInjector } from "ngx-matomo";
 import * as Sentry from "@sentry/browser";
 
 interface SettingsState {
@@ -40,10 +39,7 @@ export class SettingsService {
   );
   private readonly url = "/api/settings/";
 
-  constructor(
-    private http: HttpClient,
-    private matomoInjector: MatomoInjector
-  ) {}
+  constructor(private http: HttpClient) {}
 
   /** Get and set conf settings from backend. Typically run on application start */
   getSettings() {
@@ -51,7 +47,22 @@ export class SettingsService {
       tap((settings) => this.setSettings(settings)),
       tap((settings) => {
         if (settings.matomoSiteId && settings.matomoURL) {
-          this.matomoInjector.init(settings.matomoURL, +settings.matomoSiteId);
+          // tslint:disable:no-any
+          var _paq = (window as any)._paq || [];
+          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+          _paq.push(["trackPageView"]);
+          _paq.push(["enableLinkTracking"]);
+          var u = settings.matomoURL;
+          _paq.push(["setTrackerUrl", u + "matomo.php"]);
+          _paq.push(["setSiteId", settings.matomoSiteId]);
+          var d = document,
+            g = d.createElement("script"),
+            s = d.getElementsByTagName("script")[0];
+          g.type = "text/javascript";
+          g.async = true;
+          g.defer = true;
+          g.src = u + "matomo.js";
+          s.parentNode!.insertBefore(g, s);
         }
       }),
       tap((settings) => {

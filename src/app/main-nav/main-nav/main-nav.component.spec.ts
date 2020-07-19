@@ -5,7 +5,6 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 import { MainNavComponent } from "./main-nav.component";
 import { MaterialModule } from "src/app/shared/material.module";
-import { MatomoModule } from "ngx-matomo";
 
 describe("MainNavComponent", () => {
   let component: MainNavComponent;
@@ -19,7 +18,6 @@ describe("MainNavComponent", () => {
         HttpClientTestingModule,
         NoopAnimationsModule,
         MaterialModule,
-        MatomoModule,
       ],
       declarations: [MainNavComponent],
     }).compileComponents();

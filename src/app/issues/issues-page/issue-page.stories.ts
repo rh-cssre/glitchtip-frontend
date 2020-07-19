@@ -12,7 +12,6 @@ import { issueListFrontend } from "../issues-list-frontend-test-data";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatomoModule } from "ngx-matomo";
 import { MatNativeDateModule } from "@angular/material/core";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
@@ -27,7 +26,6 @@ export default {
         RouterTestingModule,
         BrowserAnimationsModule,
         MatDatepickerModule,
-        MatomoModule,
         MatNativeDateModule,
       ],
       providers: [IssuesService, MatDatepickerModule, OrganizationsService],

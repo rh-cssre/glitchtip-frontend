@@ -6,7 +6,6 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { MatomoModule } from "ngx-matomo";
 
 describe("RegisterComponent", () => {
   let component: RegisterComponent;
@@ -21,7 +20,6 @@ describe("RegisterComponent", () => {
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        MatomoModule,
       ],
     }).compileComponents();
   }));
