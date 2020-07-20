@@ -7,7 +7,6 @@ import {
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
-import { OAuthModule } from "angular-oauth2-oidc";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
@@ -28,7 +27,6 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
     AuthModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    OAuthModule.forRoot(),
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN",

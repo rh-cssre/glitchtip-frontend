@@ -29,7 +29,6 @@
     "@braintree/sanitize-url": "^4.0.1",
     "@sentry/browser": "^5.19.1",
     "@stripe/stripe-js": "^1.8.0",
-    "angular-oauth2-oidc": "^10.0.3",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

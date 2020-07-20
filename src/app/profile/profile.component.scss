@@ -6,12 +6,24 @@ h1 {
 
 .button-wrapper {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: repeat(auto-fill, minmax((334px), 1fr));
   grid-gap: 0 24px;
-  margin-top: 24px;
+  padding-top: 16px;
 
   @media (max-width: $tablet - 1) {
     grid-template-columns: auto;
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-card-header {
+  &::ng-deep .mat-card-header-text {
+    margin-left: 0;
   }
 }
 
@@ -25,4 +37,38 @@ mat-card {
   @media (max-width: $tablet - 1) {
     width: 100%;
   }
+}
+
+svg {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+
+.text {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.empty-auth {
+  padding-top: 16px;
+  text-align: center;
+}
+
+.confirm-email {
+  padding-top: 16px;
+}
+
+.success-text {
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+mat-option ::ng-deep .mat-option-text {
+  display: flex;
+  align-items: center;
 }

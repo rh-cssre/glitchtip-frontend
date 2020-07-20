@@ -3,9 +3,10 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import * as Sentry from "@sentry/browser";
+import { SocialApp } from "./user/user.interfaces";
 
 interface SettingsState {
-  socialAuth: boolean;
+  socialApps: SocialApp[];
   billingEnabled: boolean;
   enableUserRegistration: boolean;
   matomoURL: string | null;
@@ -15,7 +16,7 @@ interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  socialAuth: false,
+  socialApps: [],
   billingEnabled: false,
   enableUserRegistration: false,
   matomoURL: null,
@@ -29,7 +30,7 @@ const initialState: SettingsState = {
 })
 export class SettingsService {
   private readonly state = new BehaviorSubject<SettingsState>(initialState);
-  socialAuth$ = this.state.pipe(map((settings) => settings.socialAuth));
+  socialApps$ = this.state.pipe(map((settings) => settings.socialApps));
   billingEnabled$ = this.state.pipe(map((settings) => settings.billingEnabled));
   stripePublicKey$ = this.state.pipe(
     map((settings) => settings.stripePublicKey)
@@ -48,16 +49,16 @@ export class SettingsService {
       tap((settings) => {
         if (settings.matomoSiteId && settings.matomoURL) {
           // tslint:disable:no-any
-          var _paq = (window as any)._paq || [];
+          const _PAQ = (window as any)._paq || [];
           /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-          _paq.push(["trackPageView"]);
-          _paq.push(["enableLinkTracking"]);
-          var u = settings.matomoURL;
-          _paq.push(["setTrackerUrl", u + "matomo.php"]);
-          _paq.push(["setSiteId", settings.matomoSiteId]);
-          var d = document,
-            g = d.createElement("script"),
-            s = d.getElementsByTagName("script")[0];
+          _PAQ.push(["trackPageView"]);
+          _PAQ.push(["enableLinkTracking"]);
+          const u = settings.matomoURL;
+          _PAQ.push(["setTrackerUrl", u + "matomo.php"]);
+          _PAQ.push(["setSiteId", settings.matomoSiteId]);
+          const d = document;
+          const g = d.createElement("script");
+          const s = d.getElementsByTagName("script")[0];
           g.type = "text/javascript";
           g.async = true;
           g.defer = true;

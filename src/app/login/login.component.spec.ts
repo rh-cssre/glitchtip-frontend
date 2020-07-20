@@ -4,7 +4,6 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { EMPTY } from "rxjs";
-import { OAuthModule } from "angular-oauth2-oidc";
 import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
 import { MaterialModule } from "../shared/material.module";
@@ -24,7 +23,6 @@ describe("LoginComponent", () => {
         MaterialModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        OAuthModule.forRoot(),
       ],
       providers: [{ provide: LoginService, useValue: authServiceSpy }],
     }).compileComponents();

@@ -1,14 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { HttpErrorResponse } from "@angular/common/http";
-import { catchError, tap } from "rxjs/operators";
-import { EMPTY } from "rxjs";
+import { tap } from "rxjs/operators";
 import { LoginService } from "./login.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
+import { SocialApp } from "../api/user/user.interfaces";
 
 @Component({
   selector: "app-login",
@@ -27,7 +26,7 @@ export class LoginComponent implements OnInit {
   });
   matcher = new LessAnnoyingErrorStateMatcher();
 
-  socialAuth$ = this.settings.socialAuth$;
+  socialApps$ = this.settings.socialApps$;
   enableUserRegistration$ = this.settings.enableUserRegistration$;
   acceptInfo$ = this.acceptService.acceptInfo$;
 
@@ -50,62 +49,6 @@ export class LoginComponent implements OnInit {
         })
       )
       .subscribe();
-
-    const fragment = this.route.snapshot.fragment;
-    const query = this.route.snapshot.queryParamMap;
-    const provider = this.route.snapshot.paramMap.get("provider");
-
-    if (fragment) {
-      const accessToken = new URLSearchParams(fragment).get("access_token");
-      if (accessToken) {
-        if (provider === "gitlab") {
-          this.oauthService
-            .gitlabLogin(accessToken)
-            .pipe(
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        } else if (provider === "google") {
-          this.oauthService
-            .googleLogin(accessToken)
-            .pipe(
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        } else if (provider === "microsoft") {
-          this.oauthService
-            .microsoftLogin(accessToken)
-            .pipe(
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        }
-      }
-    } else if (query) {
-      const code = query.get("code");
-      if (code) {
-        if (provider === "github") {
-          this.oauthService
-            .githubLogin(code)
-            .pipe(
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        }
-      }
-    }
   }
 
   get email() {
@@ -116,20 +59,16 @@ export class LoginComponent implements OnInit {
     return this.form.get("password");
   }
 
-  gitlab() {
-    this.oauthService.initGitlabLogin();
-  }
-
-  github() {
-    this.oauthService.initGithubLogin();
-  }
-
-  google() {
-    this.oauthService.initGoogleLogin();
-  }
-
-  microsoft() {
-    this.oauthService.initMicrosoftLogin();
+  onSocialApp(socialApp: SocialApp) {
+    if (socialApp.provider === "github") {
+      this.oauthService.initGithubLogin(socialApp.client_id);
+    } else if (socialApp.provider === "gitlab") {
+      this.oauthService.initGitlabLogin(socialApp.client_id);
+    } else if (socialApp.provider === "google") {
+      this.oauthService.initGoogleLogin(socialApp.client_id);
+    } else if (socialApp.provider === "microsoft") {
+      this.oauthService.initMicrosoftLogin(socialApp.client_id);
+    }
   }
 
   onSubmit() {
@@ -160,12 +99,6 @@ export class LoginComponent implements OnInit {
             }
           }
         );
-    }
-  }
-
-  private processSocialAuthErrorResponse(error: HttpErrorResponse) {
-    if (error.status === 400) {
-      this.error = error.error.non_field_errors;
     }
   }
 }

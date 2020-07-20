@@ -8,14 +8,7 @@ import { ProfileComponent } from "./profile.component";
 import { AuthButtonComponent } from "./auth-button/auth-button.component";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { UserService } from "../api/user/user.service";
-import {
-  OAuthService,
-  UrlHelperService,
-  OAuthLogger,
-} from "angular-oauth2-oidc";
-import { of } from "rxjs";
 import { SharedModule } from "../shared/shared.module";
-import { ConnectComponent } from "./connect/connect.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 
 export default {
@@ -29,13 +22,7 @@ export default {
         BrowserAnimationsModule,
         SharedModule,
       ],
-      providers: [
-        GlitchTipOAuthService,
-        UserService,
-        OAuthService,
-        UrlHelperService,
-        OAuthLogger,
-      ],
+      providers: [GlitchTipOAuthService, UserService],
       declarations: [
         AuthButtonComponent,
         ProfileComponent,
@@ -44,39 +31,6 @@ export default {
     }),
     withKnobs,
   ],
-};
-
-export const profile = () => {
-  const user = {
-    pk: 5,
-    email: "rain@bow.com",
-    first_name: "",
-    last_name: "",
-    socialaccount_set: select("socialaccount_set", { None: [], Yes: [1] }, []),
-  };
-  return {
-    component: ProfileComponent,
-    props: {
-      user$: of(user),
-      isGithubConnected$: of(boolean("GitHub is connected", false)),
-      isGitlabConnected$: of(boolean("GitLab is connected", false)),
-      isGoogleConnected$: of(boolean("Google is connected", false)),
-      isMicrosoftConnected$: of(boolean("Microsoft is connected", false)),
-    },
-  };
-};
-
-profile.story = {
-  name: "Profile Page",
-};
-
-export const connect = () => ({
-  component: ConnectComponent,
-  props: {},
-});
-
-connect.story = {
-  name: "Connect Page",
 };
 
 export const changepw = () => {

@@ -37,12 +37,12 @@ export class MembersService {
     map((state) => state.sentResendInvite)
   );
   /** Organization members with computed loading/success data */
-  readonly members$: Observable<MemberSelector[]> = combineLatest(
+  readonly members$: Observable<MemberSelector[]> = combineLatest([
     this.organizationsService.organizationMembers$,
     this.loadingResendInvite$,
     this.sentResendInvite$,
-    this.userService.activeUserEmail$
-  ).pipe(
+    this.userService.activeUserEmail$,
+  ]).pipe(
     map(([members, loadingResendInvite, sentResendInvite, activeUserEmail]) => {
       return members.map((member) => {
         return {

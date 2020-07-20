@@ -44,41 +44,37 @@
         Log in
       </button>
     </form>
-    <ng-container *ngIf="socialAuth$ | async">
+    <ng-container *ngIf="socialApps$ | async as socialApps">
       <div class="or">
         <span class="mat-body-strong mat-body-2">or</span>
       </div>
       <div class="o-auth">
-        <button mat-stroked-button class="full-width margin" (click)="gitlab()">
+        <button
+          *ngFor="let socialApp of socialApps"
+          mat-stroked-button
+          class="full-width margin"
+          (click)="onSocialApp(socialApp)"
+        >
           <span class="wrapper">
             <svg>
-              <use xlink:href="#gitlab"></use>
+              <use
+                *ngIf="socialApp.provider === 'gitlab'"
+                xlink:href="#gitlab"
+              ></use>
+              <use
+                *ngIf="socialApp.provider === 'microsoft'"
+                xlink:href="#microsoft"
+              ></use>
+              <use
+                *ngIf="socialApp.provider === 'github'"
+                xlink:href="#github"
+              ></use>
+              <use
+                *ngIf="socialApp.provider === 'google'"
+                xlink:href="#google"
+              ></use>
             </svg>
-            <span class="text">Log in with GitLab</span>
-          </span>
-        </button>
-        <button mat-stroked-button class="full-width margin" (click)="github()">
-          <span class="wrapper">
-            <svg>
-              <use xlink:href="#github"></use>
-            </svg>
-            <span class="text">Log in with GitHub</span>
-          </span>
-        </button>
-        <button mat-stroked-button class="full-width margin" (click)="google()">
-          <span class="wrapper">
-            <svg>
-              <use xlink:href="#google"></use>
-            </svg>
-            <span class="text">Log in with Google</span>
-          </span>
-        </button>
-        <button mat-stroked-button class="full-width" (click)="microsoft()">
-          <span class="wrapper">
-            <svg>
-              <use xlink:href="#microsoft"></use>
-            </svg>
-            <span class="text">Log in with Microsoft</span>
+            <span class="text">Log in with {{ socialApp.name }}</span>
           </span>
         </button>
       </div>

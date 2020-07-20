@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
-import { tap, map } from "rxjs/operators";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { BehaviorSubject, EMPTY } from "rxjs";
+import { tap, map, catchError } from "rxjs/operators";
 import { User } from "./user.interfaces";
-import { OAuthProvider } from "../oauth/oauth.interfaces";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 interface UserState {
   user: User | null;
@@ -23,21 +23,9 @@ export class UserService {
   readonly activeUserEmail$ = this.userDetails$.pipe(
     map((userDetails) => userDetails?.email)
   );
-  readonly isGoogleConnected$ = this.userDetails$.pipe(
-    map((user) => this.isOAuthConnected(user, "google"))
-  );
-  readonly isMicrosoftConnected$ = this.userDetails$.pipe(
-    map((user) => this.isOAuthConnected(user, "microsoft"))
-  );
-  readonly isGitlabConnected$ = this.userDetails$.pipe(
-    map((user) => this.isOAuthConnected(user, "gitlab"))
-  );
-  readonly isGithubConnected$ = this.userDetails$.pipe(
-    map((user) => this.isOAuthConnected(user, "github"))
-  );
   private readonly url = "/api/0/users/me/";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   /** Get and set current logged in user details from backend */
   getUserDetails() {
@@ -49,15 +37,22 @@ export class UserService {
     return this.http.get<User>(this.url);
   }
 
-  private setUserDetails(userDetails: User) {
-    this.state.next({ ...this.state.getValue(), user: userDetails });
+  disconnectSocialAccount(accountId: number) {
+    this.http
+      .post("/api/socialaccounts/" + accountId + "/disconnect/", {})
+      .pipe(
+        tap(() => this.getUserDetails()),
+        catchError((err: HttpErrorResponse) => {
+          if (Array.isArray(err.error) && err.error.length) {
+            this.snackBar.open(err.error[0]);
+          }
+          return EMPTY;
+        })
+      )
+      .toPromise();
   }
 
-  /** Check if at least one social account exists with this provider */
-  private isOAuthConnected(user: User | null, provider: OAuthProvider) {
-    return (
-      user?.identities.findIndex((account) => account.provider === provider) !==
-      -1
-    );
+  private setUserDetails(userDetails: User) {
+    this.state.next({ ...this.state.getValue(), user: userDetails });
   }
 }

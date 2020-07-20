@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 
 import { ProfileRoutingModule } from "./profile-routing.module";
 import { ProfileComponent } from "./profile.component";
-import { ConnectComponent } from "./connect/connect.component";
 import { SharedModule } from "../shared/shared.module";
 import { AuthButtonComponent } from "./auth-button/auth-button.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
@@ -14,7 +13,6 @@ import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 @NgModule({
   declarations: [
     ProfileComponent,
-    ConnectComponent,
     AuthButtonComponent,
     ChangePasswordComponent,
     ManageEmailsComponent,

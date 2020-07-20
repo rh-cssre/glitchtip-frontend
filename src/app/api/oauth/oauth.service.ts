@@ -1,19 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { OAuthService } from "angular-oauth2-oidc";
-import { tap } from "rxjs/operators";
 
-import { AuthService } from "../auth/auth.service";
-import {
-  gitlabAuthConfig,
-  googleAuthConfig,
-  microsoftAuthConfig,
-  githubAuthConfig,
-  googleAuthConnectConfig,
-  gitlabAuthConnectConfig,
-  microsoftAuthConnectConfig,
-} from "./social";
+import { getOAuthConfig } from "./social";
+import { OAuthProvider } from "./oauth.interfaces";
 
 interface RestAuthConnectData {
   access_token?: string;
@@ -30,115 +19,80 @@ interface RestAuthLoginResp {
 export class GlitchTipOAuthService {
   private readonly baseUrl = "rest-auth";
 
-  constructor(
-    private http: HttpClient,
-    private auth: AuthService,
-    private oauthService: OAuthService,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  githubLogin(code: string) {
+  githubLogin(code: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       code,
     };
-    const url = this.baseUrl + "/github/";
-    return this.http
-      .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess()));
-  }
-
-  microsoftLogin(accessToken: string) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-    };
-    const url = this.baseUrl + "/microsoft/";
-    return this.http
-      .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess()));
-  }
-
-  microsoftConnect(accessToken: string) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-    };
-    const url = this.baseUrl + "/microsoft/connect/";
+    let url = this.baseUrl + "/github/";
+    if (isConnect) {
+      url += "connect/";
+    }
     return this.http.post<RestAuthLoginResp>(url, data);
   }
 
-  gitlabLogin(accessToken: string) {
+  microsoftLogin(accessToken: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       access_token: accessToken,
     };
-    const url = this.baseUrl + "/gitlab/";
-    return this.http
-      .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess()));
-  }
-
-  gitlabConnect(accessToken: string) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-    };
-    const url = this.baseUrl + "/gitlab/connect/";
+    let url = this.baseUrl + "/microsoft/";
+    if (isConnect) {
+      url += "connect/";
+    }
     return this.http.post<RestAuthLoginResp>(url, data);
   }
 
-  googleLogin(accessToken: string) {
+  googleLogin(accessToken: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       access_token: accessToken,
     };
-    const url = this.baseUrl + "/google/";
-    return this.http
-      .post<RestAuthLoginResp>(url, data)
-      .pipe(tap((resp) => this.loginSuccess()));
-  }
-
-  googleConnect(accessToken: string) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-    };
-    const url = this.baseUrl + "/google/connect/";
+    let url = this.baseUrl + "/google/";
+    if (isConnect) {
+      url += "connect/";
+    }
     return this.http.post<RestAuthLoginResp>(url, data);
   }
 
-  initGitlabLogin() {
-    this.oauthService.configure(gitlabAuthConfig);
-    this.oauthService.initLoginFlow();
+  gitlabLogin(accessToken: string, isConnect: boolean) {
+    const data: RestAuthConnectData = {
+      access_token: accessToken,
+    };
+    let url = this.baseUrl + "/gitlab/";
+    if (isConnect) {
+      url += "connect/";
+    }
+    return this.http.post<RestAuthLoginResp>(url, data);
   }
 
-  initGitlabConnect() {
-    this.oauthService.configure(gitlabAuthConnectConfig);
-    this.oauthService.initLoginFlow();
+  initGitlabLogin(clientId: string) {
+    this.initOAuthLogin(clientId, "gitlab");
   }
 
-  initGithubLogin() {
-    this.oauthService.configure(githubAuthConfig);
-    this.oauthService.initLoginFlow();
+  initGithubLogin(clientId: string) {
+    this.initOAuthLogin(clientId, "gitlab");
   }
 
-  initGoogleLogin() {
-    this.oauthService.configure(googleAuthConfig);
-    this.oauthService.initLoginFlow();
+  initGoogleLogin(clientId: string) {
+    this.initOAuthLogin(clientId, "google");
   }
 
-  initGoogleConnect() {
-    this.oauthService.configure(googleAuthConnectConfig);
-    this.oauthService.initLoginFlow();
+  initMicrosoftLogin(clientId: string) {
+    this.initOAuthLogin(clientId, "microsoft");
   }
 
-  initMicrosoftLogin() {
-    this.oauthService.configure(microsoftAuthConfig);
-    this.oauthService.initLoginFlow();
-  }
-
-  initMicrosoftConnect() {
-    this.oauthService.configure(microsoftAuthConnectConfig);
-    this.oauthService.initLoginFlow();
-  }
-
-  /** On success for any oauth client, set auth data and redirect to home */
-  private loginSuccess() {
-    this.auth.setAuth({ isLoggedIn: true });
-    this.router.navigate([""]);
+  /** Redirect user to OAuth provider auth URL */
+  private initOAuthLogin(clientId: string, provider: OAuthProvider) {
+    const config = getOAuthConfig(provider);
+    if (config) {
+      const params = new URLSearchParams({
+        response_type: "token",
+        client_id: clientId,
+        redirect_uri: window.location.origin + "/auth/" + provider,
+        scope: config.scope,
+      });
+      const url = `${config.loginURL}?${params.toString()}`;
+      window.location.href = url;
+    }
   }
 }

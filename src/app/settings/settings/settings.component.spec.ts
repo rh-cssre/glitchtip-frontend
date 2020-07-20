@@ -5,7 +5,6 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { MatomoModule } from "ngx-matomo";
 import { SettingsComponent } from "./settings.component";
 
 describe("SettingsComponent", () => {
@@ -20,7 +19,6 @@ describe("SettingsComponent", () => {
         MatListModule,
         MatSnackBarModule,
         NoopAnimationsModule,
-        MatomoModule,
         HttpClientTestingModule,
         RouterTestingModule,
       ],
