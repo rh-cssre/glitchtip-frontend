@@ -11,7 +11,6 @@ import { IssuesPageComponent } from "./issues-page.component";
 import { IssueListItemComponent } from "../issue-list-item/issue-list-item.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { issueList } from "../issues-list-from-api";
-import { MatomoModule } from "ngx-matomo";
 
 describe("IssuesPageComponent", () => {
   let component: IssuesPageComponent;
@@ -28,7 +27,6 @@ describe("IssuesPageComponent", () => {
         ReactiveFormsModule,
         MatTableModule,
         NoopAnimationsModule,
-        MatomoModule,
       ],
     }).compileComponents();
   }));

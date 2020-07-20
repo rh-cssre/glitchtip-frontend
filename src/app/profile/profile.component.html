@@ -8,82 +8,98 @@
 
   <div *ngIf="user$ | async as user">
     <mat-card>
-      <mat-card-content>
+      <mat-card-header class="card-header">
         <mat-card-title>Social Auth Accounts</mat-card-title>
-        <mat-divider></mat-divider>
-        <div class="button-wrapper">
-          <!-- Github -->
-          <app-auth-button
-            *ngIf="isGithubConnected$ | async"
-            text="GitHub is Connected"
-            svg="github"
-            [disabled]="true"
-          ></app-auth-button>
-          <!-- Gitlab -->
-          <app-auth-button
-            *ngIf="isGitlabConnected$ | async; else gitlabDisconnected"
-            text="GitLab is Connected"
-            svg="gitlab"
-            [disabled]="true"
-          ></app-auth-button>
-          <ng-template #gitlabDisconnected>
-            <app-auth-button
-              text="Connect to GitLab"
-              svg="gitlab"
-              (clickEvent)="connectGitlab()"
-            ></app-auth-button
-          ></ng-template>
-          <!--
+        <mat-form-field *ngIf="socialApps$ | async as socialApps">
+          <mat-label>Add Account</mat-label>
+          <mat-select (selectionChange)="addAccount()" [formControl]="account">
+            <!--
             Github
             Can't implement connect because Github doesn't support multiple
           -->
-          <app-auth-button
-            *ngIf="isGithubConnected$ | async; else githubDisconnected"
-            text="Disconnect GitHub"
-            svg="github"
-            [disabled]="true"
-          ></app-auth-button>
-          <ng-template #githubDisconnected>
-            <app-auth-button
-              text="Connect to GitHub"
-              svg="github"
-              [disabled]="true"
-            ></app-auth-button>
-          </ng-template>
-          <!-- Google -->
-          <app-auth-button
-            *ngIf="isGoogleConnected$ | async; else googleDisconnected"
-            text="Google is Connected"
-            svg="google"
-            [disabled]="true"
-          ></app-auth-button>
-          <ng-template #googleDisconnected>
-            <app-auth-button
-              text="Connect to Google"
-              svg="google"
-              (clickEvent)="connectGoogle()"
-            ></app-auth-button
-          ></ng-template>
-          <!-- Microsoft -->
-          <app-auth-button
-            *ngIf="isMicrosoftConnected$ | async; else microsoftDisconnected"
-            text="Microsoft is Connected"
-            svg="microsoft"
-            [disabled]="true"
-          ></app-auth-button>
-          <ng-template #microsoftDisconnected>
-            <app-auth-button
-              text="Connect to Microsoft"
-              svg="microsoft"
-              (clickEvent)="connectMicrosoft()"
-            ></app-auth-button
-          ></ng-template>
-        </div>
+            <mat-option
+              *ngFor="let socialApp of socialApps"
+              [value]="socialApp"
+              [disabled]="socialApp.provider === 'github'"
+            >
+              <svg>
+                <use
+                  *ngIf="socialApp.provider === 'gitlab'"
+                  xlink:href="#gitlab"
+                ></use>
+                <use
+                  *ngIf="socialApp.provider === 'microsoft'"
+                  xlink:href="#microsoft"
+                ></use>
+                <use
+                  *ngIf="socialApp.provider === 'github'"
+                  xlink:href="#github"
+                ></use>
+                <use
+                  *ngIf="socialApp.provider === 'google'"
+                  xlink:href="#google"
+                ></use>
+              </svg>
+              <span class="text">{{ socialApp.name }}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content
+        ><ng-container
+          *ngIf="
+            (user$ | async)?.identities?.length === 0;
+            else authAccountsList
+          "
+        >
+          <p class="empty-auth">
+            You haven't connected any social auth accounts.
+          </p>
+        </ng-container>
+        <ng-template #authAccountsList>
+          <div class="button-wrapper">
+            <ng-container
+              *ngFor="let socialAccount of (user$ | async)?.identities"
+            >
+              <app-auth-button
+                [svg]="socialAccount.provider"
+                text="Disconnect {{
+                  socialAccount.username
+                    ? socialAccount.username
+                    : socialAccount.email
+                }}"
+                [matTooltip]="socialAccount.provider"
+                (clickEvent)="disconnect(socialAccount.id)"
+              >
+              </app-auth-button
+            ></ng-container></div
+        ></ng-template>
       </mat-card-content>
     </mat-card>
-    <!-- TODO: check user?.hasPasswordAuth so change password only shows for users who signed up w/ a password -->
-    <mat-card class="half-width">
+    <mat-card *ngIf="user.hasPasswordAuth" class="half-width">
       <app-change-password></app-change-password>
+    </mat-card>
+
+    <mat-card *ngIf="!user.hasPasswordAuth" class="half-width">
+      <mat-card-title>Set Password</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <p class="confirm-email">
+          GlitchTip will need to reconfirm your email before setting one.
+        </p>
+        <app-loading-button
+          *ngIf="!passwordResetSuccess"
+          buttonText="Request set password email"
+          [loading]="passwordResetLoading"
+          (click)="passwordReset()"
+        >
+        </app-loading-button>
+        <p *ngIf="passwordResetSuccess" class="success-text">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>Email sent</span>
+        </p>
+      </mat-card-content>
     </mat-card>
 
     <app-manage-emails></app-manage-emails>

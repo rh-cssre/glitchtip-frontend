@@ -45,6 +45,12 @@ export class AuthService {
       .toPromise();
   }
 
+  passwordReset(email: string) {
+    const data = { email };
+    const url = "/rest-auth/password/reset/";
+    return this.http.post(url, data);
+  }
+
   /** Run if server thinks user is logged out. */
   removeAuth() {
     this.clearAuth();

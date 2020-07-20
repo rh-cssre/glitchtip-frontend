@@ -51,6 +51,10 @@ export const routes: Routes = [
     canActivate: [AlreadyLoggedInGuard, EnableRegistrationGuard],
   },
   {
+    path: "auth",
+    loadChildren: () => import("./auth/auth.module").then((m) => m.AuthModule),
+  },
+  {
     path: "accept/:memberId/:token",
     loadChildren: () =>
       import("./accept/accept.module").then((m) => m.AcceptModule),
