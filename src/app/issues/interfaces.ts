@@ -12,7 +12,7 @@ export interface Event {
   tags: Tag[];
   projectID?: string;
   dateCreated: string | null;
-  user?: any;
+  user: EndUser;
   message?: string;
   culprit: string;
   title: string;
@@ -22,6 +22,14 @@ export interface Event {
   // made undefined because EventDetail extends this and didn't need it
   "event.type"?: EventTypes;
   platform: string;
+}
+
+interface EndUser {
+  id: string;
+  username: string;
+  email: string;
+  ip_address: string;
+  data: { [key: string]: string };
 }
 
 export type EventTypes = "error" | "default";
