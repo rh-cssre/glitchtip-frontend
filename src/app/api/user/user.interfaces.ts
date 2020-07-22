@@ -1,4 +1,5 @@
 import { OAuthProvider } from "../oauth/oauth.interfaces";
+import { Avatar } from "../organizations/organizations.interface";
 
 export interface SocialAccount {
   id: number;
@@ -17,13 +18,39 @@ export interface SocialApp {
 }
 
 export interface User {
+  username: string;
+
   lastLogin: string;
   isSuperuser: boolean;
+  emails: Email[];
+  isManaged: boolean;
+  lastActive: string;
   identities: SocialAccount[];
   id: number;
   isActive: boolean;
+  has2fa: boolean;
+  canReset2fa: boolean;
   name: string;
+  avatarUrl: string;
+  authenticators: [];
   dateJoined: string;
+  options: UserOptions;
+  flags: object;
+  avatar: Avatar;
   hasPasswordAuth: boolean;
+  permissions: [];
   email: string;
+}
+
+interface Email {
+  is_verified: boolean;
+  id: string;
+  email: string;
+}
+
+interface UserOptions {
+  timezone: string;
+  stacktraceOrder: number;
+  language: string;
+  clock24Hours: boolean;
 }
