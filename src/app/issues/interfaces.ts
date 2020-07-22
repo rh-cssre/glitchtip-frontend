@@ -1,9 +1,7 @@
 import { ProjectIssueView } from "../api/projects/projects.interfaces";
 
 interface Tag {
-  value: string;
-  key: string;
-  _meta: null;
+  [key: string]: number | string | null;
 }
 
 export interface Event {
@@ -12,7 +10,7 @@ export interface Event {
   tags: Tag[];
   projectID?: string;
   dateCreated: string | null;
-  user: EndUser;
+  user: EndUser | null;
   message?: string;
   culprit: string;
   title: string;
@@ -25,11 +23,12 @@ export interface Event {
 }
 
 interface EndUser {
-  id: string;
-  username: string;
-  email: string;
-  ip_address: string;
-  data: { [key: string]: string };
+  id: string | null;
+  name: string | null;
+  username?: string | null;
+  email?: string | null;
+  ip_address: string | null;
+  data?: { [key: string]: string | null };
 }
 
 export type EventTypes = "error" | "default";
@@ -167,11 +166,11 @@ export interface IssueDetail extends Issue {
   userReportCount: number;
   participants: any[];
   pluginActions: string[];
-  tags: ITag[];
+  tags: Tag[];
   firstRelease: IFirstRelase | null;
   pluginContexts: string[];
   lastRelease: string | null;
-  activity: IActivity[];
+  activity: Activity[];
 }
 
 export interface UpdateStatusResponse {
@@ -221,18 +220,12 @@ interface IFirstRelase {
   version: string;
 }
 
-interface IActivity {
+interface Activity {
   data: object;
   dateCreated: string;
   id: string;
   type: string;
   user: any | null;
-}
-
-interface ITag {
-  totalValues: number;
-  name: string;
-  key: string;
 }
 
 export interface Values {
@@ -258,26 +251,29 @@ interface IStacktrace {
   hasSystemFrames: boolean;
 }
 
+/* Not sure exactly what but we know it's json serializable */
+type JSONable = object | unknown[] | string;
+
 // tslint:disable-next-line:max-line-length
 // https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md#frame-attributes
 export interface Frame {
-  function: string | null;
-  colNo: number | null;
-  vars: { [key: string]: any } | null;
-  symbol: string | null;
-  module: string | null;
-  lineNo: number | null;
-  trust: string | null;
-  errors?: string | null;
-  package: string | null;
   absPath: string | null;
-  inApp: boolean;
-  instructionAddr: string | null;
   filename: string | null;
   platform: string | null;
-  context: (string | number)[][];
-  symbolAddr: string | null;
+  module: string | null;
+  function: string | null;
   rawFunction?: string | null;
+  package: string | null;
+  instructionAddr: string | null;
+  symbol: string | null;
+  symbolAddr: string | null;
+  trust: string | null;
+  inApp: boolean;
+  context: (string | number)[][];
+  vars: { [key: string]: JSONable } | null;
+  errors?: string | null;
+  lineNo: number | null;
+  colNo: number | null;
 }
 
 interface EventMetadata {
