@@ -1,33 +1,3 @@
-mat-card {
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 24px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 0;
-}
-
-.full-width {
-  width: 100%;
-}
-
-form {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.server-error {
-  height: 21px;
-}
-
-mat-error span {
-  padding-right: 16px;
-}
-
 .or {
   margin-top: 16px;
   margin-bottom: 16px;
@@ -50,19 +20,5 @@ mat-error span {
   }
   .margin {
     margin-bottom: 8px;
-  }
-}
-
-mat-form-field {
-  margin-bottom: 10px;
-}
-
-.sign-up {
-  margin-top: 32px;
-  padding-bottom: 16px;
-  text-align: center;
-
-  a {
-    margin-left: 4px;
   }
 }

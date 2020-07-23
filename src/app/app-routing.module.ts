@@ -51,6 +51,14 @@ export const routes: Routes = [
     canActivate: [AlreadyLoggedInGuard, EnableRegistrationGuard],
   },
   {
+    path: "reset-password",
+    loadChildren: () =>
+      import("./reset-password/reset-password.module").then(
+        (m) => m.ResetPasswordModule
+      ),
+    canActivate: [AlreadyLoggedInGuard],
+  },
+  {
     path: "auth",
     loadChildren: () => import("./auth/auth.module").then((m) => m.AuthModule),
   },
