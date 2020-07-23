@@ -3,6 +3,7 @@
 </div>
 <button
   *ngIf="buttonStyle === 'flat'"
+  [class.full-width]="fullWidth"
   mat-flat-button
   color="primary"
   [disabled]="loading || disabled"

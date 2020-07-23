@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="auth-form">
   <h1>Login</h1>
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -79,8 +79,13 @@
         </button>
       </div>
     </ng-container>
-    <p *ngIf="enableUserRegistration$ | async" class="mat-body-1 sign-up">
-      New to GlitchTip? <a routerLink="../register">Sign Up</a>
-    </p>
+    <div class="sign-up">
+      <p *ngIf="enableUserRegistration$ | async" class="mat-body-1">
+        New to GlitchTip? <a routerLink="../register">Sign Up</a>
+      </p>
+      <p class="mat-body-1">
+        <a routerLink="/reset-password">Reset Password</a>
+      </p>
+    </div>
   </mat-card-content>
 </mat-card>

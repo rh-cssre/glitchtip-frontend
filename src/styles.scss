@@ -4,6 +4,9 @@ $font-path: "../fonts";
 @import "./assets/styles/font-files";
 @import "./assets/styles/resets";
 
+// partials
+@import "./scss/auth-forms";
+
 // Common styles for Angular Material. Included so that we only have to load a
 // single CSS file for Angular Material in our app.
 // Don't include this anywhere else!
@@ -72,4 +75,8 @@ header.page-header {
 
 .marginless {
   margin: 0;
+}
+
+.full-width {
+  width: 100%;
 }
