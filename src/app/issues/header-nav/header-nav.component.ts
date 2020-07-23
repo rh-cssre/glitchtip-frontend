@@ -109,16 +109,6 @@ export class HeaderNavComponent implements OnInit {
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
     event: KeyboardEvent
   ) {
-    if (
-      event.key === "/" &&
-      !this.expansionPanel?.expanded &&
-      !this.expansionPanel?.disabled
-    ) {
-      event.preventDefault();
-      // turns out this is where the scrolling is happening for whatever reason
-      document.querySelector(".mat-sidenav-content")?.scrollTo(0, 0);
-      this.expansionPanel?.open();
-    }
     if (this.expansionPanel?.expanded) {
       if (event.key === "Escape") {
         this.resetPanel();
