@@ -20,7 +20,6 @@
             <mat-option
               *ngFor="let socialApp of socialApps"
               [value]="socialApp"
-              [disabled]="socialApp.provider === 'github'"
             >
               <svg>
                 <use
