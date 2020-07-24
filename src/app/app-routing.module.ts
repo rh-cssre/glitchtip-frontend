@@ -56,7 +56,6 @@ export const routes: Routes = [
       import("./reset-password/reset-password.module").then(
         (m) => m.ResetPasswordModule
       ),
-    canActivate: [AlreadyLoggedInGuard],
   },
   {
     path: "auth",
