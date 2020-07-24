@@ -1,4 +1,5 @@
 import { ProjectIssueView } from "../api/projects/projects.interfaces";
+import { JSONable } from "../interface-primitives";
 
 interface Tag {
   [key: string]: number | string | null;
@@ -250,9 +251,6 @@ interface IStacktrace {
   registers: null;
   hasSystemFrames: boolean;
 }
-
-/* Not sure exactly what but we know it's json serializable */
-type JSONable = object | unknown[] | string;
 
 // tslint:disable-next-line:max-line-length
 // https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md#frame-attributes
