@@ -5,7 +5,7 @@ import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean, text, select } from "@storybook/addon-knobs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ProfileComponent } from "./profile.component";
-import { AuthButtonComponent } from "./auth-button/auth-button.component";
+import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { UserService } from "../api/user/user.service";
 import { SharedModule } from "../shared/shared.module";
@@ -24,7 +24,7 @@ export default {
       ],
       providers: [GlitchTipOAuthService, UserService],
       declarations: [
-        AuthButtonComponent,
+        AuthSvgComponent,
         ProfileComponent,
         ChangePasswordComponent,
       ],

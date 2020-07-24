@@ -4,7 +4,6 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, select } from "@storybook/addon-knobs";
 
-import { MaterialModule } from "src/app/shared/material.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TeamsComponent } from "./teams.component";
 import { NewTeamComponent } from "./new-team/new-team.component";
@@ -21,7 +20,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,

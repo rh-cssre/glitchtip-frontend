@@ -44,7 +44,7 @@ export class ProfileComponent implements OnInit {
       case "microsoft":
         return this.oauthService.initMicrosoftLogin(socialApp.client_id);
       case "github":
-        return this.oauthService.initGitlabLogin(socialApp.client_id);
+        return this.oauthService.initGithubLogin(socialApp.client_id);
     }
   }
 

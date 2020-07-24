@@ -17,7 +17,6 @@ describe("MainNavComponent", () => {
         RouterTestingModule,
         HttpClientTestingModule,
         NoopAnimationsModule,
-        MaterialModule,
       ],
       declarations: [MainNavComponent],
     }).compileComponents();

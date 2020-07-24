@@ -39,17 +39,6 @@ mat-card {
   }
 }
 
-svg {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-}
-
-.text {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .empty-auth {
   padding-top: 16px;
   text-align: center;
@@ -68,7 +57,6 @@ svg {
   }
 }
 
-mat-option ::ng-deep .mat-option-text {
-  display: flex;
-  align-items: center;
+.margin {
+  margin-bottom: 8px;
 }

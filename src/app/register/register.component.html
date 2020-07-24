@@ -54,6 +54,24 @@
         Register
       </button>
     </form>
+    <ng-container *ngIf="socialApps$ | async as socialApps">
+      <div class="or">
+        <span class="mat-body-strong mat-body-2">or</span>
+      </div>
+      <div class="o-auth">
+        <button
+          *ngFor="let socialApp of socialApps"
+          mat-stroked-button
+          class="full-width margin"
+          (click)="onSocialApp(socialApp)"
+        >
+          <app-auth-svg
+            text="Register with {{ socialApp.name }}"
+            [provider]="socialApp.provider"
+          ></app-auth-svg>
+        </button>
+      </div>
+    </ng-container>
     <p class="mat-body-1 sign-up">
       Already have an account? <a routerLink="../login">Log In</a>
     </p>

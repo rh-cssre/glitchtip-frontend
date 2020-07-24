@@ -70,7 +70,7 @@ export class GlitchTipOAuthService {
   }
 
   initGithubLogin(clientId: string) {
-    this.initOAuthLogin(clientId, "gitlab");
+    this.initOAuthLogin(clientId, "github");
   }
 
   initGoogleLogin(clientId: string) {

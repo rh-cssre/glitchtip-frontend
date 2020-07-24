@@ -5,6 +5,7 @@ import { EMPTY } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { AuthService } from "../api/auth/auth.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-auth",
@@ -19,7 +20,8 @@ export class AuthComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private oauthService: GlitchTipOAuthService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackbar: MatSnackBar
   ) {
     authService.isLoggedIn.subscribe(
       (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
@@ -104,7 +106,15 @@ export class AuthComponent implements OnInit {
 
   private processSocialAuthErrorResponse(error: HttpErrorResponse) {
     if (error.status === 400) {
-      // this.error = error.error.non_field_errors;
+      if (error.error?.non_field_errors) {
+        this.router.navigate([""]);
+        this.snackbar.open(error.error.non_field_errors[0]);
+      }
+    } else if (error.status === 500) {
+      this.router.navigate([""]);
+      this.snackbar.open(
+        "There was an error connecting to your social authentication provider."
+      );
     }
   }
 
