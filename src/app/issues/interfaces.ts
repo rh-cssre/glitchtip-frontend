@@ -1,5 +1,4 @@
 import { ProjectIssueView } from "../api/projects/projects.interfaces";
-import { JSONable } from "../interface-primitives";
 
 interface Tag {
   [key: string]: number | string | null;
@@ -268,7 +267,7 @@ export interface Frame {
   trust: string | null;
   inApp: boolean;
   context: (string | number)[][];
-  vars: { [key: string]: JSONable } | null;
+  vars: { [key: string]: any } | null;
   errors?: string | null;
   lineNo: number | null;
   colNo: number | null;

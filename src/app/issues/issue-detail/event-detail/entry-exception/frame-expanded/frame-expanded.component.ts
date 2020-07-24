@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { JSONable } from "src/app/interface-primitives";
+
+type JSONable = object | unknown[] | string;
 
 @Component({
   selector: "app-frame-expanded",
