@@ -1,1 +1,24 @@
+.or {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
 
+.o-auth {
+  .wrapper {
+    display: flex;
+    align-items: center;
+  }
+  svg {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+  }
+  .text {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .margin {
+    margin-bottom: 8px;
+  }
+}
