@@ -14,6 +14,7 @@ import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EmptyProjectsComponent } from "./project-card/empty-projects/empty-projects.component";
 import { InputMatcherDirective } from "./input-matcher.directive";
 import { LoadingButtonComponent } from "./loading-button/loading-button.component";
+import { AuthSvgComponent } from "./auth-svg/auth-svg.component";
 
 @NgModule({
   imports: [CommonModule, MaterialModule, RouterModule],
@@ -24,6 +25,7 @@ import { LoadingButtonComponent } from "./loading-button/loading-button.componen
     EmptyProjectsComponent,
     InputMatcherDirective,
     LoadingButtonComponent,
+    AuthSvgComponent,
   ],
   exports: [
     DaysAgoPipe,
@@ -33,6 +35,7 @@ import { LoadingButtonComponent } from "./loading-button/loading-button.componen
     MaterialModule,
     InputMatcherDirective,
     LoadingButtonComponent,
+    AuthSvgComponent,
   ],
 })
 export class SharedModule {}

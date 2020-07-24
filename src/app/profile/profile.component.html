@@ -13,33 +13,14 @@
         <mat-form-field *ngIf="socialApps$ | async as socialApps">
           <mat-label>Add Account</mat-label>
           <mat-select (selectionChange)="addAccount()" [formControl]="account">
-            <!--
-            Github
-            Can't implement connect because Github doesn't support multiple
-          -->
             <mat-option
               *ngFor="let socialApp of socialApps"
               [value]="socialApp"
             >
-              <svg>
-                <use
-                  *ngIf="socialApp.provider === 'gitlab'"
-                  xlink:href="#gitlab"
-                ></use>
-                <use
-                  *ngIf="socialApp.provider === 'microsoft'"
-                  xlink:href="#microsoft"
-                ></use>
-                <use
-                  *ngIf="socialApp.provider === 'github'"
-                  xlink:href="#github"
-                ></use>
-                <use
-                  *ngIf="socialApp.provider === 'google'"
-                  xlink:href="#google"
-                ></use>
-              </svg>
-              <span class="text">{{ socialApp.name }}</span>
+              <app-auth-svg
+                [provider]="socialApp.provider"
+                [text]="socialApp.name"
+              ></app-auth-svg>
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -61,18 +42,22 @@
             <ng-container
               *ngFor="let socialAccount of (user$ | async)?.identities"
             >
-              <app-auth-button
-                [svg]="socialAccount.provider"
-                text="Disconnect {{
-                  socialAccount.username
-                    ? socialAccount.username
-                    : socialAccount.email
-                }}"
-                [matTooltip]="socialAccount.provider"
-                (clickEvent)="disconnect(socialAccount.id)"
+              <button
+                mat-stroked-button
+                class="full-width margin"
+                (click)="disconnect(socialAccount.id)"
               >
-              </app-auth-button
-            ></ng-container></div
+                <app-auth-svg
+                  text="Disconnect
+              {{
+                    socialAccount.username
+                      ? socialAccount.username
+                      : socialAccount.email
+                  }}"
+                  [provider]="socialAccount.provider"
+                ></app-auth-svg>
+              </button>
+            </ng-container></div
         ></ng-template>
       </mat-card-content>
     </mat-card>
