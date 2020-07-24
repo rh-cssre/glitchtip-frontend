@@ -1,9 +1,9 @@
 import { ReactiveFormsModule } from "@angular/forms";
+import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
 import { MaterialModule } from "src/app/shared/material.module";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 export default {
   title: "General Styling",
@@ -13,11 +13,11 @@ export default {
         MaterialModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        HttpClientTestingModule
-      ]
+        HttpClientTestingModule,
+      ],
     }),
-    withKnobs
-  ]
+    withKnobs,
+  ],
 };
 
 export const typography = () => ({
@@ -113,7 +113,7 @@ export const typography = () => ({
 
     <mat-divider></mat-divider>
   </section>
-  `
+  `,
 });
 
 export const icons = () => ({
@@ -148,7 +148,7 @@ export const icons = () => ({
       <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#microsoft"></use></svg>
     </div>
   </section>
-  `
+  `,
 });
 
 export const colors = () => ({
@@ -162,5 +162,5 @@ export const colors = () => ({
     <p style="margin-top: 50px">To use a gray color, use mat-color($mat-gray, 500): <a target="_blank" href="https://material.io/design/color/the-color-system.html#tools-for-picking-colors">Material Reference</a></p>
     <div style="width: 100%; height: 100px; background-color: #9E9E9E"></div>
   </section>
-  `
+  `,
 });

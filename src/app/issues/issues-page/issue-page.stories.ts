@@ -1,6 +1,9 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
@@ -9,10 +12,7 @@ import { IssuesPageComponent } from "./issues-page.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { IssuesService } from "../issues.service";
 import { issueListFrontend } from "../issues-list-frontend-test-data";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 export default {

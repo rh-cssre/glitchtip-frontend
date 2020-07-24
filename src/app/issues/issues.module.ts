@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
+import { MatSelectModule } from "@angular/material/select";
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { SharedModule } from "../shared/shared.module";
 
@@ -29,6 +30,7 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
     IssuesRoutingModule,
     SharedModule,
     MatDatepickerModule,
+    MatSelectModule,
     MatNativeDateModule,
     MatTableModule,
   ],

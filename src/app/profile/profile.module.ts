@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
+import { MatSelectModule } from "@angular/material/select";
 
 import { ProfileRoutingModule } from "./profile-routing.module";
 import { ProfileComponent } from "./profile.component";
@@ -23,6 +24,7 @@ import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
     ProfileRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    MatSelectModule,
   ],
 })
 export class ProfileModule {}
