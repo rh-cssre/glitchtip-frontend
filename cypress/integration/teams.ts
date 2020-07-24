@@ -44,7 +44,7 @@ describe("List Team Members", () => {
     cy.get("mat-list mat-list-item").first().contains(user.email);
   });
 
-  it.only("should remove a team member", () => {
+  it("should remove a team member", () => {
     cy.visit(`/settings/${organization.name}/teams/${team.name}/members/`);
     cy.get("mat-select").first().click();
     cy.get("mat-option span")
