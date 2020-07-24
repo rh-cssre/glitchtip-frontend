@@ -4,6 +4,9 @@ import { RegisterService } from "./register.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { tap } from "rxjs/operators";
+import { SettingsService } from "../api/settings.service";
+import { SocialApp } from "../api/user/user.interfaces";
+import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 
 @Component({
   selector: "app-register",
@@ -12,6 +15,7 @@ import { tap } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
+  socialApps$ = this.settings.socialApps$;
   loading = false;
   error: string | undefined;
   form = new FormGroup({
@@ -31,7 +35,9 @@ export class RegisterComponent implements OnInit {
     private registerService: RegisterService,
     private router: Router,
     private route: ActivatedRoute,
-    private acceptService: AcceptInviteService
+    private acceptService: AcceptInviteService,
+    private settings: SettingsService,
+    private oauthService: GlitchTipOAuthService
   ) {}
 
   ngOnInit() {
@@ -88,6 +94,18 @@ export class RegisterComponent implements OnInit {
             }
           }
         );
+    }
+  }
+
+  onSocialApp(socialApp: SocialApp) {
+    if (socialApp.provider === "github") {
+      this.oauthService.initGithubLogin(socialApp.client_id);
+    } else if (socialApp.provider === "gitlab") {
+      this.oauthService.initGitlabLogin(socialApp.client_id);
+    } else if (socialApp.provider === "google") {
+      this.oauthService.initGoogleLogin(socialApp.client_id);
+    } else if (socialApp.provider === "microsoft") {
+      this.oauthService.initMicrosoftLogin(socialApp.client_id);
     }
   }
 }
