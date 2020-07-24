@@ -13,6 +13,7 @@
     "module": "es2020",
     "moduleResolution": "node",
     "noUnusedLocals": true,
+    "noImplicitReturns": true,
     "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,

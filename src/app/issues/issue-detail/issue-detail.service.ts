@@ -145,6 +145,7 @@ export class IssueDetailService {
         .pipe(tap((resp) => this.setIssueStatus(resp.status)))
         .toPromise();
     }
+    return;
   }
 
   /** Set local state issue state */
@@ -197,6 +198,7 @@ export class IssueDetailService {
     if (eventMessage) {
       return { ...eventMessage };
     }
+    return;
   }
 
   /* Return the CSP entry type for an event */
@@ -206,6 +208,7 @@ export class IssueDetailService {
     if (eventCSP) {
       return { ...eventCSP };
     }
+    return;
   }
 
   /* Return the request entry type for an event with additional fields parsed from url */
@@ -223,6 +226,7 @@ export class IssueDetailService {
       }
       return { ...eventRequest, domainName: urlDomainName, path: urlPath };
     }
+    return;
   }
 
   /* Reverse frame array, nested in the event object */
@@ -249,6 +253,7 @@ export class IssueDetailService {
         return { ...eventException };
       }
     }
+    return;
   }
 
   rawStacktraceValues(event: EventDetail): Values[] | undefined {
@@ -269,6 +274,7 @@ export class IssueDetailService {
       });
       return [...values];
     }
+    return;
   }
 
   /**

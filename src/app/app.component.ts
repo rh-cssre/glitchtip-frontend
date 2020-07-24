@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
       if (event instanceof RoutesRecognized) {
         return true;
       }
+      return false;
     }),
     filter((isRecognized) => !!isRecognized),
     take(1)
