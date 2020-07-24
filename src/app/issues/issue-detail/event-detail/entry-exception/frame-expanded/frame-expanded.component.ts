@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
-/* Not sure exactly what but we know it's json serializable */
 type JSONable = object | unknown[] | string;
 
 @Component({

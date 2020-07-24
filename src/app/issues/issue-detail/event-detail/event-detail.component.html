@@ -10,11 +10,10 @@
           event?.dateCreated | date: "long"
         }}</span>
         <a
-          *ngIf="orgSlug$ | async as orgSlug"
           target="_blank"
           [href]="
             '/organizations/' +
-            orgSlug +
+            (orgSlug$ | async) +
             '/issues/' +
             event.issue +
             '/events/' +
@@ -50,11 +49,13 @@
       <mat-icon>face</mat-icon>
       <div class="spacer">
         <p class="mat-body-strong">
-          {{ event?.user.email ? event?.user.email : event?.user.ip_address }}
+          {{
+            event?.user?.email ? event?.user?.email : event?.user?.ip_address
+          }}
         </p>
-        <p *ngIf="event?.user.id" class="mat-small mat-caption">
+        <p *ngIf="event?.user?.id" class="mat-small mat-caption">
           <span class="bold">Version:</span
-          ><span class="spacer-small">{{ event?.user.id }}</span>
+          ><span class="spacer-small">{{ event?.user?.id }}</span>
         </p>
       </div>
     </div>
