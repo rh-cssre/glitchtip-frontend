@@ -9,4 +9,5 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 export class AuthSvgComponent {
   @Input() text = "";
   @Input() provider = "";
+  @Input() source: "auth" | "dropdown" | "disconnect" | "" = "";
 }

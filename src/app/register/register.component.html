@@ -66,6 +66,7 @@
           (click)="onSocialApp(socialApp)"
         >
           <app-auth-svg
+            source="auth"
             text="Register with {{ socialApp.name }}"
             [provider]="socialApp.provider"
           ></app-auth-svg>

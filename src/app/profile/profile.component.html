@@ -18,6 +18,7 @@
               [value]="socialApp"
             >
               <app-auth-svg
+                source="dropdown"
                 [provider]="socialApp.provider"
                 [text]="socialApp.name"
               ></app-auth-svg>
@@ -48,6 +49,7 @@
                 (click)="disconnect(socialAccount.id)"
               >
                 <app-auth-svg
+                  source="disconnect"
                   text="Disconnect
               {{
                     socialAccount.username
