@@ -22,7 +22,7 @@ describe("Organization Settings", () => {
     cy.get("#delete-org").click();
     cy.url().should("eq", "http://localhost:4200/");
     cy.contains(
-      "In order to use GlitchTip, you'll need to create an organzation."
+      "In order to use GlitchTip, you'll need to create an"
     );
   });
 
