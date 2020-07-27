@@ -3,19 +3,42 @@
 }
 
 .wrapper {
-  display: flex;
-  align-items: center;
+  display: inline-block;
+  margin: 0 auto;
+
+  &.auth {
+    width: 220px;
+    transform: translateX(-4px);
+
+    .text {
+      width: 144px;
+    }
+  }
+
+  &.dropdown {
+    svg {
+      margin-left: 0;
+    }
+  }
+
+  &.disconnect {
+    svg {
+      margin-left: 0;
+    }
+  }
 }
 
 svg {
-  position: absolute;
-  width: 16px;
-  height: 16px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: 0 24px; // Google requirements are 24dp against an 18px icon size
+  vertical-align: -5px;
 }
 
 .text {
-  margin-left: auto;
-  margin-right: auto;
+  display: inline-block;
+  text-align: left;
 }
 
 .margin {
