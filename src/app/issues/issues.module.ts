@@ -4,7 +4,9 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
+import { MatTabsModule } from "@angular/material/tabs";
 import { MatSelectModule } from "@angular/material/select";
+import { MatBadgeModule } from "@angular/material/badge";
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { SharedModule } from "../shared/shared.module";
 
@@ -22,6 +24,7 @@ import { IssueDetailTitleComponent } from "./issue-detail/issue-detail-title/iss
 import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception/frame-title/frame-title.component";
 import { FrameExpandedComponent } from "./issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
+import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
 
 @NgModule({
   imports: [
@@ -33,6 +36,8 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
     MatSelectModule,
     MatNativeDateModule,
     MatTableModule,
+    MatTabsModule,
+    MatBadgeModule,
   ],
   declarations: [
     IssuesPageComponent,
@@ -48,6 +53,7 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
     FrameTitleComponent,
     FrameExpandedComponent,
     RawStacktraceComponent,
+    UserReportsIssueComponent,
   ],
 })
 export class IssuesModule {}

@@ -42,8 +42,22 @@ export class UserReportsService {
       .subscribe();
   }
 
+  getReportsForIssue(issue: number) {
+    this.getIssueReports(issue)
+      .pipe(
+        tap((response) => {
+          this.setReports(response);
+        }),
+        catchError((error) => {
+          console.log("error", error);
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
   // /api/0/organizations/:orgSlug/user-reports/?project=1
-  getOrganizationReports(orgSlug: string, project?: string[] | null) {
+  private getOrganizationReports(orgSlug: string, project?: string[] | null) {
     let params = new HttpParams();
     if (project) {
       project.forEach((id) => {
@@ -51,15 +65,15 @@ export class UserReportsService {
       });
     }
     return this.http.get<UserReport[]>(
-      `${this.projectPageUrl}/${orgSlug}/user-reports/`,
+      `${this.projectPageUrl}${orgSlug}/user-reports/`,
       { params }
     );
   }
 
   // /api/0/issues/:issueId/user-reports/
-  getIssueReports(issueId: number) {
+  private getIssueReports(issueId: number) {
     return this.http.get<UserReport[]>(
-      `${this.issuePageUrl}/${issueId}/user-reports/`
+      `${this.issuePageUrl}${issueId}/user-reports/`
     );
   }
 
@@ -68,5 +82,9 @@ export class UserReportsService {
       ...this.userReportsState.getValue(),
       reports,
     });
+  }
+
+  clearState() {
+    this.userReportsState.next(initialState);
   }
 }

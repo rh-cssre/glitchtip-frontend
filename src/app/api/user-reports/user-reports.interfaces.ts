@@ -9,6 +9,4 @@ export interface UserReport {
   id: number;
   comments: string;
   email: string;
-  issue: number;
-  project: number;
 }

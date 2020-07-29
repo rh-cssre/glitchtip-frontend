@@ -56,6 +56,32 @@
   </article>
   <mat-divider></mat-divider>
 
+  <nav mat-tab-nav-bar>
+    <a
+      mat-tab-link
+      [routerLink]="['.']"
+      routerLinkActive
+      [active]="rla.isActive"
+      #rla="routerLinkActive"
+    >
+      Details
+    </a>
+    <a
+      mat-tab-link
+      [routerLink]="['user-reports']"
+      routerLinkActive
+      [active]="rla.isActive"
+      #rla="routerLinkActive"
+    >
+      <span
+        [matBadge]="issue.userReportCount.toString()"
+        matBadgeOverlap="false"
+      >
+        User Reports
+      </span>
+    </a>
+  </nav>
+
   <div class="row">
     <div class="column left">
       <router-outlet></router-outlet>

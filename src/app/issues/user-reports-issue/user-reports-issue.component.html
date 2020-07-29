@@ -1,0 +1,7 @@
+<mat-card *ngFor="let report of reports$ | async">
+  <mat-card-content>
+    <p class="name">{{ report.name }} ({{ report.email }})</p>
+    <p class="date">{{ report.dateCreated | date: "medium" }}</p>
+    <p>{{ report.comments }}</p>
+  </mat-card-content>
+</mat-card>
