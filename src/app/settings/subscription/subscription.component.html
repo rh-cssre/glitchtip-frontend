@@ -9,7 +9,8 @@
           <ng-container
             *ngIf="
               subscription.status === 'active' ||
-                subscription.status === 'trialing';
+                subscription.status === 'trialing' ||
+                subscription.status === 'past_due';
               else noSubscription
             "
           >
@@ -19,6 +20,10 @@
             </p>
             <p *ngIf="subscription.status === 'trialing'" class="mat-body-1">
               This organization has a trial subscription to GlitchTip.
+            </p>
+            <p *ngIf="subscription.status === 'past_due'" class="mat-body-1">
+              This organization has a subscription to GlitchTip, but the payment
+              is past due.
             </p>
             <ng-container>
               <mat-card-subtitle>Details</mat-card-subtitle>
