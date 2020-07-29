@@ -91,6 +91,8 @@
         </div>
       </mat-card-content>
     </mat-card>
-    <app-payment *ngIf="subscription.status === null"></app-payment>
+    <app-payment
+      *ngIf="subscription.status === null || subscription.status === 'canceled'"
+    ></app-payment>
   </ng-container>
 </section>
