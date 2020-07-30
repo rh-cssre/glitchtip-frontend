@@ -10,6 +10,15 @@
   {{ errorReports$ | async }}
 </p>
 
+<mat-card *ngIf="(reports$ | async)?.length === 0">
+  <mat-card-content>
+    <p>No user reports have been submitted.</p>
+    <p>
+      To enable user reports, take a look at `showReportDialog` in the JS SDK.
+    </p>
+  </mat-card-content>
+</mat-card>
+
 <mat-card *ngFor="let report of reports$ | async">
   <mat-card-content>
     <p class="name">{{ report.name }} ({{ report.email }})</p>

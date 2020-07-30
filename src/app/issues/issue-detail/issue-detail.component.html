@@ -75,11 +75,15 @@
       #reports="routerLinkActive"
     >
       <span
+        *ngIf="issue.userReportCount > 0"
         [matBadge]="issue.userReportCount.toString()"
         matBadgeOverlap="false"
       >
         User Reports
       </span>
+      <ng-container *ngIf="issue.userReportCount === 0">
+        User Reports
+      </ng-container>
     </a>
   </nav>
 
