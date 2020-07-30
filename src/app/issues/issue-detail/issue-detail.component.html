@@ -76,8 +76,11 @@
     >
       <span
         *ngIf="issue.userReportCount > 0"
-        [matBadge]="issue.userReportCount.toString()"
+        [matBadge]="
+          issue.userReportCount < 100 ? issue.userReportCount.toString() : '99+'
+        "
         matBadgeOverlap="false"
+        class="report-badge"
       >
         User Reports
       </span>
