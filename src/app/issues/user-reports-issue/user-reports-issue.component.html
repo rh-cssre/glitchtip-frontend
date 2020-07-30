@@ -1,3 +1,15 @@
+<div *ngIf="(loadingReports$ | async) === true" class="spinner-container">
+  <mat-progress-spinner
+    [diameter]="40"
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+
+<p class="mat-body-1" *ngIf="errorReports$ | async">
+  {{ errorReports$ | async }}
+</p>
+
 <mat-card *ngFor="let report of reports$ | async">
   <mat-card-content>
     <p class="name">{{ report.name }} ({{ report.email }})</p>

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { tap, catchError, map } from "rxjs/operators";
 import { EMPTY, BehaviorSubject } from "rxjs";
 import { baseUrl } from "../../constants";
@@ -7,10 +7,14 @@ import { UserReport } from "./user-reports.interfaces";
 
 interface UserReportsState {
   reports: UserReport[];
+  loading: { reports: boolean };
+  errors: { reports: string | null };
 }
 
 const initialState: UserReportsState = {
   reports: [],
+  loading: { reports: false },
+  errors: { reports: null },
 };
 
 @Injectable({
@@ -21,59 +25,37 @@ export class UserReportsService {
     initialState
   );
   private getState$ = this.userReportsState.asObservable();
-  private readonly projectPageUrl = baseUrl + "/organizations/";
   private readonly issuePageUrl = baseUrl + "/issues/";
 
   reports$ = this.getState$.pipe(map((state) => state.reports));
+  loadingReports$ = this.getState$.pipe(map((state) => state.loading.reports));
+  errorsReports$ = this.getState$.pipe(map((state) => state.errors.reports));
 
   constructor(private http: HttpClient) {}
 
-  getReports(orgSlug: string, project: string[] | null) {
-    this.getOrganizationReports(orgSlug, project)
-      .pipe(
-        tap((response) => {
-          this.setReports(response);
-        }),
-        catchError((error) => {
-          console.log("error", error);
-          return EMPTY;
-        })
-      )
-      .subscribe();
-  }
-
   getReportsForIssue(issue: number) {
+    this.setLoadingReports(true);
     this.getIssueReports(issue)
       .pipe(
         tap((response) => {
+          this.setLoadingReports(false);
+          this.resetErrorsReports();
           this.setReports(response);
         }),
         catchError((error) => {
-          console.log("error", error);
+          this.setLoadingReports(false);
+          this.setErrorsReports(
+            "Something went wrong. Try reloading the page."
+          );
           return EMPTY;
         })
       )
       .subscribe();
   }
 
-  // /api/0/organizations/:orgSlug/user-reports/?project=1
-  private getOrganizationReports(orgSlug: string, project?: string[] | null) {
-    let params = new HttpParams();
-    if (project) {
-      project.forEach((id) => {
-        params = params.append("project", id);
-      });
-    }
-    return this.http.get<UserReport[]>(
-      `${this.projectPageUrl}${orgSlug}/user-reports/`,
-      { params }
-    );
-  }
-
-  // /api/0/issues/:issueId/user-reports/
   private getIssueReports(issueId: number) {
     return this.http.get<UserReport[]>(
-      `${this.issuePageUrl}${issueId}/user-reports/`
+      `${this.issuePageUrl}${issueId}/user-reportz/`
     );
   }
 
@@ -84,7 +66,24 @@ export class UserReportsService {
     });
   }
 
-  clearState() {
-    this.userReportsState.next(initialState);
+  private setLoadingReports(loading: boolean) {
+    this.userReportsState.next({
+      ...this.userReportsState.getValue(),
+      loading: { reports: loading },
+    });
+  }
+
+  private setErrorsReports(message: string) {
+    this.userReportsState.next({
+      ...this.userReportsState.getValue(),
+      errors: { reports: message },
+    });
+  }
+
+  private resetErrorsReports() {
+    this.userReportsState.next({
+      ...this.userReportsState.getValue(),
+      errors: initialState.errors,
+    });
   }
 }

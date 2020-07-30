@@ -12,6 +12,8 @@ import { map, tap } from "rxjs/operators";
 export class UserReportsIssueComponent {
   issueId$ = this.issueService.issue$.pipe(map((issue) => issue?.id));
   reports$ = this.userReportService.reports$;
+  loadingReports$ = this.userReportService.loadingReports$;
+  errorReports$ = this.userReportService.errorsReports$;
 
   constructor(
     private issueService: IssueDetailService,

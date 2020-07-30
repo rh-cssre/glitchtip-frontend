@@ -59,10 +59,11 @@
   <nav mat-tab-nav-bar>
     <a
       mat-tab-link
-      [routerLink]="['.']"
+      [routerLink]="['./']"
       routerLinkActive
-      [active]="rla.isActive"
-      #rla="routerLinkActive"
+      [active]="details.isActive"
+      [routerLinkActiveOptions]="{ exact: true }"
+      #details="routerLinkActive"
     >
       Details
     </a>
@@ -70,8 +71,8 @@
       mat-tab-link
       [routerLink]="['user-reports']"
       routerLinkActive
-      [active]="rla.isActive"
-      #rla="routerLinkActive"
+      [active]="reports.isActive"
+      #reports="routerLinkActive"
     >
       <span
         [matBadge]="issue.userReportCount.toString()"
