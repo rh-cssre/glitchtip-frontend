@@ -55,7 +55,7 @@ export class UserReportsService {
 
   private getIssueReports(issueId: number) {
     return this.http.get<UserReport[]>(
-      `${this.issuePageUrl}${issueId}/user-reportz/`
+      `${this.issuePageUrl}${issueId}/user-reports/`
     );
   }
 
