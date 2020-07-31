@@ -49,7 +49,7 @@ export class SettingsService {
       tap((settings) => {
         if (settings.matomoSiteId && settings.matomoURL) {
           // tslint:disable:no-any
-          const _PAQ = (window as any)._paq || [];
+          const _PAQ = ((window as any)._paq = (window as any)._paq || []);
           /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
           _PAQ.push(["trackPageView"]);
           _PAQ.push(["enableLinkTracking"]);

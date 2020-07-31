@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, RoutesRecognized } from "@angular/router";
+import { Router, RoutesRecognized, NavigationEnd } from "@angular/router";
 import { map, filter, take, exhaustMap, tap } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { AuthService } from "./api/auth/auth.service";
@@ -40,6 +40,18 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.settings.getSettings().subscribe();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // tslint:disable:no-any
+        const _paq: any = (window as any)._paq;
+        if (_paq) {
+          const origin = location.origin;
+          _paq.push(["setCustomUrl", origin + event.url]);
+          _paq.push(["trackPageView"]);
+        }
+      }
+    });
 
     combineLatest([this.isLoggedIn$, this.routesAreRecognized$])
       .pipe(
