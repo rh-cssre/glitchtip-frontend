@@ -56,6 +56,40 @@
   </article>
   <mat-divider></mat-divider>
 
+  <nav mat-tab-nav-bar>
+    <a
+      mat-tab-link
+      [routerLink]="['./']"
+      routerLinkActive
+      [active]="details.isActive"
+      [routerLinkActiveOptions]="{ exact: true }"
+      #details="routerLinkActive"
+    >
+      Details
+    </a>
+    <a
+      mat-tab-link
+      [routerLink]="['user-reports']"
+      routerLinkActive
+      [active]="reports.isActive"
+      #reports="routerLinkActive"
+    >
+      <span
+        *ngIf="issue.userReportCount > 0"
+        [matBadge]="
+          issue.userReportCount < 100 ? issue.userReportCount.toString() : '99+'
+        "
+        matBadgeOverlap="false"
+        class="report-badge"
+      >
+        User Reports
+      </span>
+      <ng-container *ngIf="issue.userReportCount === 0">
+        User Reports
+      </ng-container>
+    </a>
+  </nav>
+
   <div class="row">
     <div class="column left">
       <router-outlet></router-outlet>

@@ -15,6 +15,7 @@ import {
 } from "./interfaces";
 import { baseUrl } from "../constants";
 import { urlParamsToObject } from "./utils";
+import { processLinkHeader } from "../shared/utils-pagination";
 
 interface IssuesState {
   issues: Issue[];
@@ -228,24 +229,8 @@ export class IssuesService {
     this.issuesState.next({ ...this.issuesState.getValue(), loading });
   }
 
-  /**
-   * Pagination info exists in a header, parse it out and store it.
-   * Anything with an actual link indicates it has results. This differs just
-   * very slightly from sentry open source.
-   */
   private setPagination(linkHeader: string) {
-    const parts = linkHeader
-      .split(",")
-      .reduce<{ [key: string]: string }>((acc, link) => {
-        const match = link.match(/<(.*)>; rel="(\w*)"/);
-        if (match) {
-          const url = match[1];
-          const rel = match[2];
-          acc[rel] = url;
-          return acc;
-        }
-        return {};
-      }, {});
+    const parts = processLinkHeader(linkHeader);
     this.issuesState.next({
       ...this.issuesState.getValue(),
       nextPage: parts.next ? parts.next : null,

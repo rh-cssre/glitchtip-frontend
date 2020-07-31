@@ -1,0 +1,48 @@
+<p class="mat-body-1" *ngIf="errorReports$ | async">
+  {{ errorReports$ | async }}
+</p>
+
+<mat-card *ngIf="(reports$ | async)?.length === 0">
+  <mat-card-content>
+    <p>No user reports have been submitted.</p>
+    <p>
+      To enable user reports, take a look at `showReportDialog` in the JS SDK.
+    </p>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngFor="let report of reports$ | async">
+  <mat-card-content>
+    <p class="name">{{ report.name }} ({{ report.email }})</p>
+    <p class="date">{{ report.dateCreated | date: "medium" }}</p>
+    <p>{{ report.comments }}</p>
+  </mat-card-content>
+</mat-card>
+
+<div class="nav-arrows" *ngIf="(loadingReports$ | async) === false">
+  <a
+    [routerLink]="[]"
+    [queryParams]="(previousParams$ | async) || {}"
+    queryParamsHandling="merge"
+    mat-button
+    [disabled]="(hasPreviousPage$ | async) === false"
+  >
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </a>
+  <a
+    [routerLink]="[]"
+    [queryParams]="(nextParams$ | async) || {}"
+    queryParamsHandling="merge"
+    mat-button
+    [disabled]="(hasNextPage$ | async) === false"
+  >
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </a>
+</div>
+<div *ngIf="loadingReports$ | async" class="spinner-container">
+  <mat-progress-spinner
+    [diameter]="33"
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
