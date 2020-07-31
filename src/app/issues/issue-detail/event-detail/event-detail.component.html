@@ -25,18 +25,20 @@
       </p>
     </div>
     <div>
-      <a
+      <button
         mat-button
         [routerLink]="(previousEventUrl$ | async) || ''"
         [disabled]="(previousEvent$ | async) === false"
-        ><mat-icon>keyboard_arrow_left</mat-icon> Older</a
       >
-      <a
+        <mat-icon>keyboard_arrow_left</mat-icon> Older
+      </button>
+      <button
         mat-button
         [routerLink]="(nextEventUrl$ | async) || ''"
         [disabled]="(nextEvent$ | async) === false"
-        >Newer <mat-icon>keyboard_arrow_right</mat-icon></a
       >
+        Newer <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
     </div>
   </section>
 
