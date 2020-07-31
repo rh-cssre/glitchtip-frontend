@@ -11,16 +11,16 @@ interface UserReportsState {
   reports: UserReport[] | null;
   nextPage: string | null;
   previousPage: string | null;
-  loading: { reports: boolean };
-  errors: { reports: string | null };
+  loading: boolean;
+  errors: string | null;
 }
 
 const initialState: UserReportsState = {
   reports: null,
   nextPage: null,
   previousPage: null,
-  loading: { reports: false },
-  errors: { reports: null },
+  loading: false,
+  errors: null,
 };
 
 @Injectable({
@@ -34,8 +34,8 @@ export class UserReportsService {
   private readonly issuePageUrl = baseUrl + "/issues/";
 
   reports$ = this.getState$.pipe(map((state) => state.reports));
-  loadingReports$ = this.getState$.pipe(map((state) => state.loading.reports));
-  errorsReports$ = this.getState$.pipe(map((state) => state.errors.reports));
+  loading$ = this.getState$.pipe(map((state) => state.loading));
+  errors$ = this.getState$.pipe(map((state) => state.errors));
   hasNextPage$ = this.getState$.pipe(map((state) => state.nextPage !== null));
   hasPreviousPage$ = this.getState$.pipe(
     map((state) => state.previousPage !== null)
@@ -95,14 +95,14 @@ export class UserReportsService {
   private setLoadingReports(loading: boolean) {
     this.userReportsState.next({
       ...this.userReportsState.getValue(),
-      loading: { reports: loading },
+      loading,
     });
   }
 
   private setErrorsReports(message: string) {
     this.userReportsState.next({
       ...this.userReportsState.getValue(),
-      errors: { reports: message },
+      errors: message,
     });
   }
 
