@@ -14,8 +14,8 @@ import { ActivatedRoute } from "@angular/router";
 export class UserReportsIssueComponent implements OnDestroy {
   issueId$ = this.issueService.issue$.pipe(map((issue) => issue?.id));
   reports$ = this.userReportService.reports$;
-  loadingReports$ = this.userReportService.loadingReports$;
-  errorReports$ = this.userReportService.errorsReports$;
+  loadingReports$ = this.userReportService.loading$;
+  errorReports$ = this.userReportService.errors$;
 
   hasNextPage$ = this.userReportService.hasNextPage$;
   hasPreviousPage$ = this.userReportService.hasPreviousPage$;
