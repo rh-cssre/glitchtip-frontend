@@ -5,6 +5,7 @@ import { EMPTY, BehaviorSubject } from "rxjs";
 import { baseUrl } from "../../constants";
 import { UserReport } from "./user-reports.interfaces";
 import { urlParamsToObject } from "src/app/issues/utils";
+import { processLinkHeader } from "src/app/shared/utils-pagination";
 
 interface UserReportsState {
   reports: UserReport[] | null;
@@ -119,24 +120,8 @@ export class UserReportsService {
     });
   }
 
-  /**
-   * Pagination info exists in a header, parse it out and store it.
-   * Anything with an actual link indicates it has results. This differs just
-   * very slightly from sentry open source.
-   */
   private setPagination(linkHeader: string) {
-    const parts = linkHeader
-      .split(",")
-      .reduce<{ [key: string]: string }>((acc, link) => {
-        const match = link.match(/<(.*)>; rel="(\w*)"/);
-        if (match) {
-          const url = match[1];
-          const rel = match[2];
-          acc[rel] = url;
-          return acc;
-        }
-        return {};
-      }, {});
+    const parts = processLinkHeader(linkHeader);
     this.userReportsState.next({
       ...this.userReportsState.getValue(),
       nextPage: parts.next ? parts.next : null,
