@@ -1,3 +1,5 @@
+@import "../../../../assets/styles/variables";
+
 section {
   margin-bottom: 16px;
 }
@@ -50,4 +52,28 @@ section {
 
 app-entry-request {
   display: block;
+}
+
+.pseudo-chip-list {
+  margin: 4px 0 20px;
+  padding: 0;
+  overflow: hidden;
+}
+.pseudo-chip {
+  margin-top: 6px;
+  margin-right: 8px;
+  padding: 2px 12px;
+  border-radius: 16px;
+  border: 1px solid mat-color($mat-gray, 500);
+  background-color: #fefefe;
+  float: left;
+  list-style: none;
+}
+.pseudo-chip-key {
+  font-size: 0.8em;
+  padding-right: 10px;
+  opacity: 0.8;
+}
+.pseudo-chip-value {
+  vertical-align: -0.07em;
 }

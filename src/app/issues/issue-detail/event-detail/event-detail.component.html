@@ -89,6 +89,16 @@
     </div>
   </section>
 
+  <section class="tags" *ngIf="event?.tags?.length > 0">
+    <h2>Tags</h2>
+    <ul class="pseudo-chip-list">
+      <li *ngFor="let tag of event.tags" class="pseudo-chip">
+        <span class="pseudo-chip-key">{{ tag.key }}</span>
+        <span class="pseudo-chip-value">{{ tag.value }}</span>
+      </li>
+    </ul>
+  </section>
+
   <mat-divider *ngIf="event?.contexts?.browser"></mat-divider>
 
   <app-entry-message></app-entry-message>
