@@ -5,6 +5,7 @@ export const pageNotFound: EventDetail = {
   eventID: "121da0ea18894a6e9eafe7d7027fec4b",
   id: "121da0ea18894a6e9eafe7d7027fec4b",
   issue: 13,
+  user: null,
   contexts: {
     trace: {
       op: "django.middleware",
@@ -12,13 +13,13 @@ export const pageNotFound: EventDetail = {
       trace_id: "52c5c9d9b7304cce95659e5d0615601c",
       description:
         "django.middleware.clickjacking.XFrameOptionsMiddleware.__call__",
-      parent_span_id: "bfac543765f9ce61"
+      parent_span_id: "bfac543765f9ce61",
     },
     runtime: {
       name: "CPython",
       build: "3.8.2 (default, Feb 26 2020, 15:09:34) \n[GCC 8.3.0]",
-      version: "3.8.2"
-    }
+      version: "3.8.2",
+    },
   },
   culprit: "/message/",
   dateCreated: "2020-03-13T13:33:44.881822Z",
@@ -29,14 +30,14 @@ export const pageNotFound: EventDetail = {
       data: {
         env: {
           SERVER_NAME: "52c1bc4559ee",
-          SERVER_PORT: "8001"
+          SERVER_PORT: "8001",
         },
         url: "http://localhost:8001/message/",
         method: "GET",
         headers: [
           [
             "Accept",
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
           ],
           ["Accept-Encoding", "gzip, deflate"],
           ["Accept-Language", "en-US,en;q=0.5"],
@@ -50,16 +51,16 @@ export const pageNotFound: EventDetail = {
           ["Upgrade-Insecure-Requests", "1"],
           [
             "User-Agent",
-            "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0"
-          ]
+            "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0",
+          ],
         ],
         query_string: "",
-        inferredContentType: "text/plain"
-      }
-    }
+        inferredContentType: "text/plain",
+      },
+    },
   ],
   metadata: {
-    title: "Page not found!"
+    title: "Page not found!",
   },
   packages: {
     pip: "20.0.2",
@@ -121,7 +122,7 @@ export const pageNotFound: EventDetail = {
     secretstorage: "3.1.2",
     "prompt-toolkit": "3.0.3",
     "ipython-genutils": "0.2.0",
-    "requests-toolbelt": "0.8.0"
+    "requests-toolbelt": "0.8.0",
   },
   platform: "python",
   sdk: {
@@ -130,8 +131,8 @@ export const pageNotFound: EventDetail = {
     packages: [
       {
         name: "pypi:sentry-sdk",
-        version: "0.14.2"
-      }
+        version: "0.14.2",
+      },
     ],
     integrations: [
       "argv",
@@ -142,12 +143,12 @@ export const pageNotFound: EventDetail = {
       "logging",
       "modules",
       "stdlib",
-      "threading"
-    ]
+      "threading",
+    ],
   },
   tags: [],
   title: "Page not found!",
   type: "default",
   nextEventID: null,
-  previousEventID: null
+  previousEventID: null,
 };
