@@ -54,7 +54,6 @@ export interface EventDetail extends Event {
   release?: any;
   issue?: number;
   sdkUpdates?: [];
-  tags: { key: string; value: string }[];
 }
 
 export type EntryType =
