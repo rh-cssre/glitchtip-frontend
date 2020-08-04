@@ -4,7 +4,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { environment } from "../../../../environments/environment";
 import { Plan } from "src/app/api/subscriptions/subscriptions.interfaces";
 import { StripeService } from "../stripe.service";
-import { tap } from "rxjs/operators";
+import { tap, map } from "rxjs/operators";
 
 @Component({
   selector: "app-payment",
@@ -14,7 +14,16 @@ import { tap } from "rxjs/operators";
 })
 export class PaymentComponent implements OnInit {
   activeOrganizationId?: number | null;
-  planOptions$ = this.subscriptionService.planOptions$;
+  planOptions$ = this.subscriptionService.planOptions$.pipe(
+    map((plans) => {
+      return plans?.map((plan) => ({
+        ...plan,
+        name: plan.name.startsWith("GlitchTip ")
+          ? plan.name.substring(10)
+          : plan.name,
+      }));
+    })
+  );
   billingEmail = environment.billingEmail;
   selectedSubscription: number | null = null;
 
