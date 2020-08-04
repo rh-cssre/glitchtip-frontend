@@ -340,7 +340,7 @@ export class OrganizationsService {
   refreshOrganizationDetail() {
     this.activeOrganizationSlug$
       .pipe(
-        distinctUntilChanged(),
+        take(1),
         tap((orgSlug) => {
           if (orgSlug) {
             this.getOrganizationDetail(orgSlug).subscribe();
