@@ -91,6 +91,22 @@
         </div>
       </mat-card-content>
     </mat-card>
+    <mat-card *ngIf="(projectsCount$ | async) === 0">
+      <mat-card-content>
+        <p>
+          Now that you have an organization and a subscription, create a
+          project.
+        </p>
+        <a
+          *ngIf="activeOrganizationSlug$ | async as slug"
+          mat-flat-button
+          [routerLink]="['/settings', slug, 'projects', 'new']"
+          color="primary"
+        >
+          Create New Project
+        </a>
+      </mat-card-content>
+    </mat-card>
     <app-payment
       *ngIf="subscription.status === null || subscription.status === 'canceled'"
     ></app-payment>

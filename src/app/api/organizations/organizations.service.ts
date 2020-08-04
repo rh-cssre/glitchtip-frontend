@@ -336,6 +336,20 @@ export class OrganizationsService {
     );
   }
 
+  /** When you need updated information on the active org */
+  refreshOrganizationDetail() {
+    this.activeOrganizationSlug$
+      .pipe(
+        distinctUntilChanged(),
+        tap((orgSlug) => {
+          if (orgSlug) {
+            this.getOrganizationDetail(orgSlug).subscribe();
+          }
+        })
+      )
+      .subscribe();
+  }
+
   retrieveOrganizationMembers(orgSlug: string) {
     return this.http.get<Member[]>(`${this.url}${orgSlug}/members/`).pipe(
       tap((members) => {

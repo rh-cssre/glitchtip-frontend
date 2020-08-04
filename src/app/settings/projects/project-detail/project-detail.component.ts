@@ -10,6 +10,7 @@ import { map } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProjectDetail } from "src/app/api/projects/projects.interfaces";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-project-detail",
@@ -46,7 +47,8 @@ export class ProjectDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private projectsService: ProjectsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private orgService: OrganizationsService
   ) {
     this.activeProject$.subscribe((data) => {
       if (data) {
@@ -99,6 +101,7 @@ export class ProjectDetailComponent implements OnInit {
         .subscribe(
           () => {
             this.deleteLoading = false;
+            this.orgService.refreshOrganizationDetail();
             this.snackBar.open("Your project has been sucessfully deleted");
             this.router.navigate(["settings", this.orgSlug, "projects"]);
           },
