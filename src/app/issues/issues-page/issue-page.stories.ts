@@ -4,16 +4,17 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
+import { MatTableModule } from "@angular/material/table";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
 
 import { IssuesPageComponent } from "./issues-page.component";
-import { MaterialModule } from "src/app/shared/material.module";
+import { MaterialModule } from "../../shared/material.module";
 import { IssuesService } from "../issues.service";
 import { issueListFrontend } from "../issues-list-frontend-test-data";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { OrganizationsService } from "../../api/organizations/organizations.service";
 
 export default {
   title: "Issues Page",
@@ -27,6 +28,7 @@ export default {
         BrowserAnimationsModule,
         MatDatepickerModule,
         MatNativeDateModule,
+        MatTableModule,
       ],
       providers: [IssuesService, MatDatepickerModule, OrganizationsService],
       declarations: [HeaderNavComponent],
@@ -93,7 +95,9 @@ export const issueListItem = () => {
     "Normal, all projects": statesDefaultValue,
     "Normal, one project applied": "normalOneProjectApplied",
     "Initial Load": "initialLoad",
-    Loading: "loading",
+    "Loading with URL params (page change is a common use case)": "loading",
+    "Loading without URL Params (should only be happening when issue length is 0)":
+      "loadingWithoutParams",
     "Normal, some issues selected (checkboxes for issues won't check in storybook)":
       "normalIssuesSelected",
     "Normal, all issues selected (checkboxes for issues won't check in storybook)":
@@ -152,6 +156,13 @@ export const issueListItem = () => {
       ...sensibleDefaults,
       initialLoadComplete: false,
       loading: true,
+      urlHasParam: true,
+    },
+    loadingWithoutParams: {
+      ...sensibleDefaults,
+      initialLoadComplete: false,
+      loading: true,
+      issueLength: 0,
     },
     orgHasNoProjects: {
       ...sensibleDefaults,
