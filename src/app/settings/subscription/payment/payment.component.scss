@@ -1,4 +1,50 @@
-.option-wrapper {
-  display: flex;
-  justify-content: space-around;
+@import "../../../../assets/styles/variables";
+@import "~@angular/material/theming";
+
+.plans {
+  @media (max-width: $large - 1) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax((285px), 1fr));
+    grid-gap: 24px;
+    box-shadow: none !important;
+  }
+
+  @media (min-width: $large) {
+    display: flex;
+    border-radius: 4px;
+    background: white;
+  }
+
+  mat-card {
+    @media (min-width: $large) {
+      flex: 1;
+      background: transparent;
+      border-right: 1px solid mat-color($mat-gray, 300);
+      border-radius: 0;
+      box-shadow: none !important;
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}
+
+.value-props {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+    font-size: 0.85em;
+    clear: both;
+  }
+
+  mat-icon {
+    width: 1em;
+    height: 1em;
+    margin: 0.07em 0.3em 0.5em 0;
+    font-size: 1em;
+    float: left;
+  }
 }

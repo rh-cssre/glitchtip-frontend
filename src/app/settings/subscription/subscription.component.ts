@@ -5,6 +5,7 @@ import { map, filter } from "rxjs/operators";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
 import { StripeService } from "./stripe.service";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   templateUrl: "./subscription.component.html",
@@ -13,13 +14,16 @@ import { StripeService } from "./stripe.service";
 })
 export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
+  activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
+  projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
 
   constructor(
     private service: SubscriptionsService,
     private route: ActivatedRoute,
-    private stripe: StripeService
+    private stripe: StripeService,
+    private orgService: OrganizationsService
   ) {
     this.routerSubscription = this.route.params
       .pipe(

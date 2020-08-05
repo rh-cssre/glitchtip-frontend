@@ -14,7 +14,7 @@ import { tap } from "rxjs/operators";
 })
 export class PaymentComponent implements OnInit {
   activeOrganizationId?: number | null;
-  planOptions$ = this.subscriptionService.planOptions$;
+  planOptions$ = this.subscriptionService.planOptionsWithShortNames$;
   billingEmail = environment.billingEmail;
   selectedSubscription: number | null = null;
 

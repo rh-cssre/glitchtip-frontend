@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { RegisterService } from "./register.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -7,12 +7,12 @@ import { tap } from "rxjs/operators";
 import { SettingsService } from "../api/settings.service";
 import { SocialApp } from "../api/user/user.interfaces";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
+import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
 
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
       Validators.minLength(8),
     ]),
   });
+  matcher = new LessAnnoyingErrorStateMatcher();
   acceptInfo$ = this.acceptService.acceptInfo$;
 
   constructor(
@@ -80,7 +81,7 @@ export class RegisterComponent implements OnInit {
             if (next) {
               this.router.navigateByUrl(next);
             } else {
-              this.router.navigate([""]);
+              this.router.navigate(["organizations", "new"]);
             }
           },
           (err) => {

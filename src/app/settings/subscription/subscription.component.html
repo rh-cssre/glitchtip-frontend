@@ -74,7 +74,7 @@
           <ng-template #noSubscription>
             <p class="mat-body-1">
               This organization does not have an active subscription to
-              GlitchTip.
+              GlitchTip. Pick a plan to get started.
             </p>
           </ng-template>
         </div>
@@ -89,6 +89,22 @@
             >.
           </p>
         </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="(projectsCount$ | async) === 0">
+      <mat-card-content>
+        <p>
+          Now that you have an organization and a subscription, create a
+          project.
+        </p>
+        <a
+          *ngIf="activeOrganizationSlug$ | async as slug"
+          mat-flat-button
+          [routerLink]="['/settings', slug, 'projects', 'new']"
+          color="primary"
+        >
+          Create New Project
+        </a>
       </mat-card-content>
     </mat-card>
     <app-payment

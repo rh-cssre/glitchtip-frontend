@@ -7,6 +7,7 @@ import { map, filter, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NewTeamComponent } from "../../teams/new-team/new-team.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-new-project",
@@ -25,6 +26,7 @@ export class NewProjectComponent implements OnInit {
   });
 
   constructor(
+    private orgService: OrganizationsService,
     private projectsService: ProjectsService,
     private teamsService: TeamsService,
     private router: Router,
@@ -85,6 +87,7 @@ export class NewProjectComponent implements OnInit {
         .subscribe(
           (project) => {
             this.loading = false;
+            this.orgService.refreshOrganizationDetail();
             this.snackBar.open(`${project.name} has been created`);
             this.router.navigate([
               "settings",

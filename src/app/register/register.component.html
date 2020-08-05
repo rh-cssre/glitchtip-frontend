@@ -9,6 +9,7 @@
           type="email"
           placeholder="Email"
           formControlName="email"
+          [errorStateMatcher]="matcher"
         />
         <mat-error *ngIf="email?.errors?.required"
           >Your email is required to sign up</mat-error
@@ -26,6 +27,7 @@
           type="password"
           placeholder="Password"
           formControlName="password1"
+          [errorStateMatcher]="matcher"
         />
         <mat-error *ngIf="password1?.errors && password1?.errors?.required">
           Your password should be at least 8 characters long</mat-error
@@ -41,6 +43,7 @@
           placeholder="Confirm Password"
           formControlName="password2"
           appInputMatcher="password1"
+          [errorStateMatcher]="matcher"
         />
 
         <mat-error *ngIf="password2?.errors?.required"

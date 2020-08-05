@@ -11,6 +11,7 @@ import { SettingsService } from "../api/settings.service";
   styleUrls: ["./new-organization.component.scss"],
 })
 export class NewOrganizationsComponent {
+  organizationCount$ = this.organizationsService.organizationCount$;
   loading = false;
   error: string | undefined;
   form = new FormGroup({

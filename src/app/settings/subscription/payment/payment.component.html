@@ -1,19 +1,43 @@
-<div class="card-wrapper">
-  <ng-container>
-    <mat-card *ngFor="let product of planOptions$ | async; let i = index">
-      <div>
-        <h2>{{ product.name }}</h2>
-        <p>Cost: {{ product.plans[0].amount | currency }} per month</p>
-      </div>
+<div class="plans mat-elevation-z1">
+  <mat-card *ngFor="let product of planOptions$ | async; let i = index">
+    <mat-card-content>
+      <mat-card-title>{{ product.name }}</mat-card-title>
+      <p>{{ product.description }}</p>
+      <ul class="value-props">
+        <li>
+          <mat-icon color="primary">check_circle</mat-icon>
+          Error tracking
+        </li>
+        <li>
+          <mat-icon color="primary">check_circle</mat-icon>
+          Unlimited projects
+        </li>
+        <li>
+          <mat-icon color="primary">check_circle</mat-icon>
+          Unlimited team members
+        </li>
+      </ul>
+      <p>
+        <span class="mat-display-1">
+          ${{ product.plans[0].amount | number }}
+        </span>
+        / month
+      </p>
       <app-loading-button
-        [buttonText]="'Select ' + product.name + ' Plan'"
+        buttonText="Select"
         [loading]="selectedSubscription === i"
         (click)="onSubmit(product.plans[0], i)"
-      ></app-loading-button> </mat-card
-  ></ng-container>
+      ></app-loading-button>
+    </mat-card-content>
+  </mat-card>
 </div>
 <p class="mat-body-1">
-  If you have questions about subscriptions or need assistance, contact us at
+  An <strong>event</strong> is when your project sends us data one time. For
+  example, if ten users trigger the same bug, GlitchTip will receive ten events.
+</p>
+<p class="mat-body-1">
+  Questions about subscriptions? Need assistance, or a bigger plan? Contact us
+  at
   <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
   >.
 </p>

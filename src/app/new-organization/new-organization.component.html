@@ -1,14 +1,15 @@
-<mat-card>
-  <mat-card-header
-    ><mat-card-title>Create a New Organization</mat-card-title></mat-card-header
-  >
-  <mat-card-content>
-    <form
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()"
-      id="create-organization-form"
-    >
-      <p>
+<div class="l-body">
+  <mat-card>
+    <mat-card-content>
+      <mat-card-title>Create a New Organization</mat-card-title>
+      <p *ngIf="(organizationCount$ | async) === 0">
+        This is the first step to get started with GlitchTip.
+      </p>
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        id="create-organization-form"
+      >
         <mat-error *ngIf="error">{{ error }}</mat-error>
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Name" />
@@ -16,7 +17,7 @@
         <button id="submit" mat-flat-button color="primary">
           Create Organization
         </button>
-      </p>
-    </form></mat-card-content
-  >
-</mat-card>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
