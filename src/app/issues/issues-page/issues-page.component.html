@@ -5,8 +5,27 @@
 
   <app-header-nav></app-header-nav>
 
+  <div
+    *ngIf="
+      (loading$ | async) === true &&
+      (urlHasParam$ | async) === false &&
+      (issues$ | async).length === 0
+    "
+    class="spinner-container"
+  >
+    <mat-progress-spinner
+      [diameter]="33"
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+
   <div *ngIf="issues$ | async as issues">
-    <ng-container *ngIf="initialLoadComplete$ | async">
+    <ng-container
+      *ngIf="
+        (initialLoadComplete$ | async) === true && (loading$ | async) === false
+      "
+    >
       <mat-card *ngIf="userNotInSomeTeams$ | async">
         <p>
           You can't see issues for some projects because you're not on the team
