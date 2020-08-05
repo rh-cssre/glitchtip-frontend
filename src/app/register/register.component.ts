@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { RegisterService } from "./register.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -13,7 +13,6 @@ import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-sta
   selector: "app-register",
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;

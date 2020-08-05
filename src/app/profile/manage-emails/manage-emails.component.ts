@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  ViewChild,
-} from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -19,7 +14,6 @@ import { LessAnnoyingErrorStateMatcher } from "../../shared/less-annoying-error-
   selector: "app-manage-emails",
   templateUrl: "./manage-emails.component.html",
   styleUrls: ["./manage-emails.component.scss"],
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ManageEmailsComponent implements OnInit {
   emailAddresses$ = this.emailService.emailAddressesSorted$;
