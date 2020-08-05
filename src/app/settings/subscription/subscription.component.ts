@@ -15,14 +15,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
-  projectsCount$ = this.orgService.activeOrganizationProjects$.pipe(
-    map((projects) => {
-      if (!projects) {
-        return 0;
-      }
-      return projects.length;
-    })
-  );
+  projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
 

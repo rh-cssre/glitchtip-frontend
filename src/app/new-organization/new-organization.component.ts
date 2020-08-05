@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { tap, withLatestFrom, map } from "rxjs/operators";
+import { tap, withLatestFrom } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "../api/settings.service";
 
@@ -11,9 +11,7 @@ import { SettingsService } from "../api/settings.service";
   styleUrls: ["./new-organization.component.scss"],
 })
 export class NewOrganizationsComponent {
-  organizationCount$ = this.organizationsService.organizations$.pipe(
-    map((organizations) => organizations.length)
-  );
+  organizationCount$ = this.organizationsService.organizationCount$;
   loading = false;
   error: string | undefined;
   form = new FormGroup({

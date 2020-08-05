@@ -34,6 +34,16 @@ export class SubscriptionsService {
     map((state) => state.subscription)
   );
   readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
+  readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
+    map((plans) => {
+      return plans?.map((plan) => ({
+        ...plan,
+        name: plan.name.startsWith("GlitchTip ")
+          ? plan.name.substring(10)
+          : plan.name,
+      }));
+    })
+  );
 
   constructor(private http: HttpClient, private router: Router) {}
 

@@ -75,6 +75,9 @@ export class OrganizationsService {
   readonly organizations$ = this.getState$.pipe(
     map((data) => data.organizations)
   );
+  readonly organizationCount$ = this.organizations$.pipe(
+    map((organizations) => organizations.length)
+  );
   readonly activeOrganizationId$ = this.getState$.pipe(
     map((data) => data.activeOrganizationId)
   );
@@ -86,6 +89,14 @@ export class OrganizationsService {
   );
   readonly activeOrganizationProjects$ = this.activeOrganization$.pipe(
     map((data) => (data ? data.projects : null))
+  );
+  readonly projectsCount$ = this.activeOrganizationProjects$.pipe(
+    map((projects) => {
+      if (!projects) {
+        return 0;
+      }
+      return projects.length;
+    })
   );
   readonly activeOrganizationDetail$ = combineLatest([
     this.organizations$,
