@@ -9,7 +9,7 @@
     *ngIf="
       (loading$ | async) === true &&
       (urlHasParam$ | async) === false &&
-      (issues$ | async).length === 0
+      (issues$ | async)?.length === 0
     "
     class="spinner-container"
   >
