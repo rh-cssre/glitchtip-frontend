@@ -326,7 +326,7 @@
           class="footer"
         >
           <ng-container *ngIf="(loading$ | async) === false">
-            <a
+            <button
               [routerLink]="[]"
               [queryParams]="(previousParams$ | async) || {}"
               queryParamsHandling="merge"
@@ -334,8 +334,8 @@
               [disabled]="(hasPreviousPage$ | async) === false"
             >
               <mat-icon>keyboard_arrow_left</mat-icon>
-            </a>
-            <a
+            </button>
+            <button
               [routerLink]="[]"
               [queryParams]="(nextParams$ | async) || {}"
               queryParamsHandling="merge"
@@ -343,7 +343,7 @@
               [disabled]="(hasNextPage$ | async) === false"
             >
               <mat-icon>keyboard_arrow_right</mat-icon>
-            </a>
+            </button>
           </ng-container>
           <div *ngIf="loading$ | async" class="spinner-container">
             <mat-progress-spinner
