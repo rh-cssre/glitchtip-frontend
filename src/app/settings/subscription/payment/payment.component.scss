@@ -16,6 +16,8 @@
   }
 
   mat-card {
+    text-align: left;
+
     @media (min-width: $large) {
       flex: 1;
       background: transparent;
