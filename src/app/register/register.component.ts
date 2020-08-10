@@ -90,8 +90,12 @@ export class RegisterComponent implements OnInit {
               this.error = err.error.non_field_errors;
             } else if (err.status === 400 && err.error.email) {
               this.email?.setErrors({ serverError: err.error.email });
+            } else if (err.status === 400 && err.error.password1) {
+              this.password1?.setErrors({ serverError: err.error.password1 });
+            } else if (err.status === 400 && err.error.password2) {
+              this.password2?.setErrors({ serverError: err.error.password2 });
             } else {
-              this.error = "Error";
+              this.error = `${err.statusText}: ${err.status}`;
             }
           }
         );
