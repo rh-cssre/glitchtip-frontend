@@ -1,6 +1,9 @@
 @import "../../../../assets/styles/variables";
 @import "~@angular/material/theming";
 
+// THIS IS BEING SHARED WITH A MARKETING COMPONENT
+// Make sure edits work fine in both spots
+
 .plans {
   @media (max-width: $large - 1) {
     display: grid;
