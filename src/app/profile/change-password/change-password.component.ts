@@ -67,6 +67,10 @@ export class ChangePasswordComponent {
             this.loading = false;
             if (err.status === 400 && err.error.old_password) {
               this.error = "Your current password is incorrect.";
+            } else if (err.status === 400 && err.error.new_password2) {
+              this.new_password2?.setErrors({
+                serverError: err.error.new_password2,
+              });
             } else {
               this.error = "Error: " + err.statusText;
             }

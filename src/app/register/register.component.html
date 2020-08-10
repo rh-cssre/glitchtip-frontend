@@ -11,14 +11,14 @@
           formControlName="email"
           [errorStateMatcher]="matcher"
         />
-        <mat-error *ngIf="email?.errors?.required"
-          >Your email is required to sign up</mat-error
-        >
-        <mat-error *ngIf="email?.errors?.email"
-          >Enter a valid email address</mat-error
-        >
-        <mat-error *ngIf="email?.errors?.serverError">
-          {{ email?.errors?.serverError }}
+        <mat-error>
+          <span *ngIf="email?.errors?.required"
+            >Your email is required to sign up</span
+          >
+          <span *ngIf="email?.errors?.email">Enter a valid email address</span>
+          <span *ngIf="email?.errors?.serverError">{{
+            email?.errors?.serverError
+          }}</span>
         </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
@@ -29,12 +29,17 @@
           formControlName="password1"
           [errorStateMatcher]="matcher"
         />
-        <mat-error *ngIf="password1?.errors && password1?.errors?.required">
-          Your password should be at least 8 characters long</mat-error
-        >
-        <mat-error *ngIf="password1?.errors?.required"
-          >Your password is required to sign up</mat-error
-        >
+        <mat-error>
+          <span *ngIf="password1?.errors"
+            >Your password should be at least 8 characters long</span
+          >
+          <span *ngIf="password1?.errors?.required"
+            >A password is required to sign up</span
+          >
+          <span *ngIf="password1?.errors?.serverError">{{
+            password1?.errors?.serverError
+          }}</span>
+        </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
         <input
@@ -46,12 +51,17 @@
           [errorStateMatcher]="matcher"
         />
 
-        <mat-error *ngIf="password2?.errors?.required"
-          >Your password is required to sign up</mat-error
-        >
-        <mat-error *ngIf="password2?.errors?.notEqual"
-          >Your passwords don't match</mat-error
-        >
+        <mat-error>
+          <span *ngIf="password2?.errors?.required"
+            >A password is required to sign up</span
+          >
+          <span *ngIf="password2?.errors?.notEqual"
+            >Your passwords don't match</span
+          >
+          <span *ngIf="password2?.errors?.serverError">{{
+            password2?.errors?.serverError
+          }}</span>
+        </mat-error>
       </mat-form-field>
       <button id="submit" class="full-width" mat-flat-button color="primary">
         Register
