@@ -8,7 +8,7 @@ export const sampleIssueDetail: IssueDetail = {
       lastLogin: "2020-01-06T16:45:45.663255Z",
       isSuperuser: false,
       emails: [
-        { is_verified: true, id: "607715", email: "emily@burkesoftware.com" }
+        { is_verified: true, id: "607715", email: "emily@burkesoftware.com" },
       ],
       isManaged: false,
       lastActive: "2020-01-13T16:05:37.706665Z",
@@ -25,14 +25,14 @@ export const sampleIssueDetail: IssueDetail = {
         timezone: "UTC",
         stacktraceOrder: -1,
         language: "en",
-        clock24Hours: false
+        clock24Hours: false,
       },
       flags: { newsletter_consent_prompt: false },
       avatar: { avatarUuid: null, avatarType: "letter_avatar" },
       hasPasswordAuth: true,
       email: "emily@burkesoftware.com",
-      lastSeen: "2020-01-13T16:08:55.736990Z"
-    }
+      lastSeen: "2020-01-13T16:08:55.736990Z",
+    },
   ],
   platform: "python",
   pluginIssues: [],
@@ -72,7 +72,7 @@ export const sampleIssueDetail: IssueDetail = {
       [1578614400, 0],
       [1578700800, 0],
       [1578787200, 0],
-      [1578873600, 0]
+      [1578873600, 0],
     ],
     "24h": [
       [1578844800, 0],
@@ -99,8 +99,8 @@ export const sampleIssueDetail: IssueDetail = {
       [1578920400, 0],
       [1578924000, 0],
       [1578927600, 0],
-      [1578931200, 0]
-    ]
+      [1578931200, 0],
+    ],
   },
   culprit: "polls.urls in <module>",
   title: "AttributeError: type object 'ResultsView' has no attribute 'as_view'",
@@ -112,7 +112,7 @@ export const sampleIssueDetail: IssueDetail = {
       lastLogin: "2020-01-06T16:45:45.663255Z",
       isSuperuser: false,
       emails: [
-        { is_verified: true, id: "607715", email: "emily@burkesoftware.com" }
+        { is_verified: true, id: "607715", email: "emily@burkesoftware.com" },
       ],
       isManaged: false,
       lastActive: "2020-01-13T16:05:37.706665Z",
@@ -129,13 +129,13 @@ export const sampleIssueDetail: IssueDetail = {
         timezone: "UTC",
         stacktraceOrder: -1,
         language: "en",
-        clock24Hours: false
+        clock24Hours: false,
       },
       flags: { newsletter_consent_prompt: false },
       avatar: { avatarUuid: null, avatarType: "letter_avatar" },
       hasPasswordAuth: true,
-      email: "emily@burkesoftware.com"
-    }
+      email: "emily@burkesoftware.com",
+    },
   ],
   logger: null,
   type: "error",
@@ -144,7 +144,7 @@ export const sampleIssueDetail: IssueDetail = {
     function: "<module>",
     type: "AttributeError",
     value: "type object 'ResultsView' has no attribute 'as_view'",
-    filename: "polls/urls.py"
+    filename: "polls/urls.py",
   },
   status: "unresolved",
   pluginActions: [],
@@ -154,7 +154,7 @@ export const sampleIssueDetail: IssueDetail = {
     { totalValues: 6, name: "Mechanism", key: "mechanism" },
     { totalValues: 6, name: "Runtime", key: "runtime" },
     { totalValues: 6, name: "Runtime.Name", key: "runtime.name" },
-    { totalValues: 6, name: "Server", key: "server_name" }
+    { totalValues: 6, name: "Server", key: "server_name" },
   ],
   subscriptionDetails: { reason: "assigned" },
   isPublic: true,
@@ -173,7 +173,7 @@ export const sampleIssueDetail: IssueDetail = {
   project: {
     platform: "python",
     slug: "django-app",
-    id: 1851390,
+    id: "1851390",
     name: "django-app",
     isMember: true,
   },
@@ -189,7 +189,7 @@ export const sampleIssueDetail: IssueDetail = {
         lastLogin: "2020-01-06T16:45:45.663255Z",
         isSuperuser: false,
         emails: [
-          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" }
+          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" },
         ],
         isManaged: false,
         lastActive: "2020-01-13T16:05:37.706665Z",
@@ -206,13 +206,13 @@ export const sampleIssueDetail: IssueDetail = {
           timezone: "UTC",
           stacktraceOrder: -1,
           language: "en",
-          clock24Hours: false
+          clock24Hours: false,
         },
         flags: { newsletter_consent_prompt: false },
         avatar: { avatarUuid: null, avatarType: "letter_avatar" },
         hasPasswordAuth: true,
-        email: "emily@burkesoftware.com"
-      }
+        email: "emily@burkesoftware.com",
+      },
     },
     {
       data: {},
@@ -224,7 +224,7 @@ export const sampleIssueDetail: IssueDetail = {
         lastLogin: "2020-01-06T16:45:45.663255Z",
         isSuperuser: false,
         emails: [
-          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" }
+          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" },
         ],
         isManaged: false,
         lastActive: "2020-01-13T16:05:37.706665Z",
@@ -241,13 +241,13 @@ export const sampleIssueDetail: IssueDetail = {
           timezone: "UTC",
           stacktraceOrder: -1,
           language: "en",
-          clock24Hours: false
+          clock24Hours: false,
         },
         flags: { newsletter_consent_prompt: false },
         avatar: { avatarUuid: null, avatarType: "letter_avatar" },
         hasPasswordAuth: true,
-        email: "emily@burkesoftware.com"
-      }
+        email: "emily@burkesoftware.com",
+      },
     },
     {
       data: {},
@@ -259,7 +259,7 @@ export const sampleIssueDetail: IssueDetail = {
         lastLogin: "2020-01-06T16:45:45.663255Z",
         isSuperuser: false,
         emails: [
-          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" }
+          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" },
         ],
         isManaged: false,
         lastActive: "2020-01-13T16:05:37.706665Z",
@@ -276,19 +276,19 @@ export const sampleIssueDetail: IssueDetail = {
           timezone: "UTC",
           stacktraceOrder: -1,
           language: "en",
-          clock24Hours: false
+          clock24Hours: false,
         },
         flags: { newsletter_consent_prompt: false },
         avatar: { avatarUuid: null, avatarType: "letter_avatar" },
         hasPasswordAuth: true,
-        email: "emily@burkesoftware.com"
-      }
+        email: "emily@burkesoftware.com",
+      },
     },
     {
       data: {
         assignee: "559298",
         assigneeType: "user",
-        assigneeEmail: "emily@burkesoftware.com"
+        assigneeEmail: "emily@burkesoftware.com",
       },
       dateCreated: "2020-01-10T19:20:03.424081Z",
       type: "assigned",
@@ -298,7 +298,7 @@ export const sampleIssueDetail: IssueDetail = {
         lastLogin: "2020-01-06T16:45:45.663255Z",
         isSuperuser: false,
         emails: [
-          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" }
+          { is_verified: true, id: "607715", email: "emily@burkesoftware.com" },
         ],
         isManaged: false,
         lastActive: "2020-01-13T16:05:37.706665Z",
@@ -315,21 +315,21 @@ export const sampleIssueDetail: IssueDetail = {
           timezone: "UTC",
           stacktraceOrder: -1,
           language: "en",
-          clock24Hours: false
+          clock24Hours: false,
         },
         flags: { newsletter_consent_prompt: false },
         avatar: { avatarUuid: null, avatarType: "letter_avatar" },
         hasPasswordAuth: true,
-        email: "emily@burkesoftware.com"
-      }
+        email: "emily@burkesoftware.com",
+      },
     },
     {
       data: {},
       dateCreated: "2020-01-09T14:22:51.793749Z",
       type: "first_seen",
       id: "0",
-      user: null
-    }
+      user: null,
+    },
   ],
-  statusDetails: {}
+  statusDetails: {},
 };

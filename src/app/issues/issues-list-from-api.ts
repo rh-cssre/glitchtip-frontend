@@ -31,8 +31,8 @@ export const issueList: Issue[] = [
         [1578315600, 0],
         [1578319200, 0],
         [1578322800, 0],
-        [1578326400, 0]
-      ]
+        [1578326400, 0],
+      ],
     },
     culprit: "composeexample.wsgi in <module>",
     title: "Blocked 'style' from 'example.com'",
@@ -45,7 +45,7 @@ export const issueList: Issue[] = [
       function: "<module>",
       type: "NameError",
       value: "name 'get_wsgi_application' is not defined",
-      filename: "composeexample/wsgi.py"
+      filename: "composeexample/wsgi.py",
     },
     status: "unresolved",
     subscriptionDetails: null,
@@ -63,11 +63,11 @@ export const issueList: Issue[] = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: 1851390,
+      id: "1851390",
       name: "django-app",
       isMember: true,
     },
-    statusDetails: {}
+    statusDetails: {},
   },
   {
     platform: "python",
@@ -99,8 +99,8 @@ export const issueList: Issue[] = [
         [1578315600, 0],
         [1578319200, 0],
         [1578322800, 0],
-        [1578326400, 0]
-      ]
+        [1578326400, 0],
+      ],
     },
     culprit: "polls.urls in <module>",
     title: "IndentationError: unexpected indent (views.py, line 13)",
@@ -113,7 +113,7 @@ export const issueList: Issue[] = [
       function: "<module>",
       type: "IndentationError",
       value: "unexpected indent (views.py, line 13)",
-      filename: "polls/urls.py"
+      filename: "polls/urls.py",
     },
     status: "unresolved",
     subscriptionDetails: null,
@@ -131,11 +131,11 @@ export const issueList: Issue[] = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: 1851390,
+      id: "1851390",
       name: "django-app",
       isMember: true,
     },
-    statusDetails: {}
+    statusDetails: {},
   },
   {
     platform: "python",
@@ -167,8 +167,8 @@ export const issueList: Issue[] = [
         [1578315600, 0],
         [1578319200, 0],
         [1578322800, 0],
-        [1578326400, 0]
-      ]
+        [1578326400, 0],
+      ],
     },
     culprit: "importlib._bootstrap in _call_with_frames_removed",
     title: "SyntaxError: invalid syntax (models.py, line 14)",
@@ -181,7 +181,7 @@ export const issueList: Issue[] = [
       function: "_call_with_frames_removed",
       type: "SyntaxError",
       value: "invalid syntax (models.py, line 14)",
-      filename: "<frozen importlib._bootstrap>"
+      filename: "<frozen importlib._bootstrap>",
     },
     status: "unresolved",
     subscriptionDetails: null,
@@ -199,11 +199,11 @@ export const issueList: Issue[] = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: 1851390,
+      id: "1851390",
       name: "django-app",
       isMember: true,
     },
-    statusDetails: {}
+    statusDetails: {},
   },
   {
     platform: "python",
@@ -235,8 +235,8 @@ export const issueList: Issue[] = [
         [1578315600, 0],
         [1578319200, 0],
         [1578322800, 0],
-        [1578326400, 0]
-      ]
+        [1578326400, 0],
+      ],
     },
     culprit: "django.db.models.fields.related in __init__",
     title:
@@ -251,7 +251,7 @@ export const issueList: Issue[] = [
       type: "AssertionError",
       value:
         "ForeignKey(<class 'polls.models.Question'>) is invalid. First parameter to ForeignKey must be either a model, a model name, or the string 'self'",
-      filename: "django/db/models/fields/related.py"
+      filename: "django/db/models/fields/related.py",
     },
     status: "unresolved",
     subscriptionDetails: null,
@@ -269,10 +269,10 @@ export const issueList: Issue[] = [
     project: {
       platform: "python",
       slug: "django-app",
-      id: 1851390,
+      id: "1851390",
       name: "django-app",
       isMember: true,
     },
-    statusDetails: {}
-  }
+    statusDetails: {},
+  },
 ];
