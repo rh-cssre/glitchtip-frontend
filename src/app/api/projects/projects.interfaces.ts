@@ -19,7 +19,7 @@ export interface ProjectNew {
 }
 
 export interface ProjectIssueView extends ProjectNew {
-  id: number;
+  id: string;
   slug: string;
   isMember: boolean;
 }
