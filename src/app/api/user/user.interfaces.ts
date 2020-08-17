@@ -26,7 +26,7 @@ export interface User {
   isManaged: boolean;
   lastActive: string;
   identities: SocialAccount[];
-  id: number;
+  id: string;
   isActive: boolean;
   has2fa: boolean;
   canReset2fa: boolean;
