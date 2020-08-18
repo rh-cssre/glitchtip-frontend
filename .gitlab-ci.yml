@@ -4,6 +4,7 @@ variables:
   CHROME_BIN: chromium-browser
   CONTAINER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
   POSTGRES_HOST_AUTH_METHOD: "trust"
+  EMAIL_BACKEND: "django.core.mail.backends.console.EmailBackend"
   SECRET_KEY: "testing"
   ENABLE_TEST_API: "true"
   FF_NETWORK_PER_BUILD: 1
