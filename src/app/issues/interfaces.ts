@@ -1,4 +1,5 @@
 import { ProjectIssueView } from "../api/projects/projects.interfaces";
+import { Json } from "../interface-primitives";
 
 interface Tag {
   [key: string]: number | string | null;
@@ -38,22 +39,28 @@ export interface EventDetail extends Event {
   previousEventID: string | null;
   contexts: { [key: string]: any } | null;
   entries: EntryUnion[];
-  metadata: EventMetadata | any;
+  metadata: { [key: string]: string };
   dist?: null;
   userReport?: null;
   size?: number;
-  errors?: any[];
+  errors?: Errors[] | [];
   type: "error" | "csp" | "default";
   groupingConfig?: GroupingConfig;
   dateReceived: string;
-  packages: any;
-  sdk: any;
-  _meta?: any;
+  packages: { [key: string]: string } | {};
+  sdk: { [key: string]: Json } | null;
+  _meta?: { [key: string]: Json };
   fingerprints?: string[];
-  context?: { [key: string]: any[] };
-  release?: any;
+  context?: { [key: string]: Json[] };
+  release?: { [key: string]: Json[] } | null;
   issue?: number;
   sdkUpdates?: [];
+}
+
+interface Errors {
+  data: { [key: string]: string };
+  message: string;
+  type: string;
 }
 
 export type EntryType =
@@ -91,7 +98,7 @@ export interface CSP {
 export interface Breadcrumb {
   message: string | null;
   category: string;
-  data: any;
+  data: { [key: string]: Json } | null;
   level: "fatal" | "error" | "warning" | "info" | "debug";
   type: "default" | "http" | "error";
   event_id: null;
@@ -106,7 +113,7 @@ export interface ExceptionValueData {
 
 export interface Request {
   fragment?: string | null;
-  cookies?: object[];
+  cookies?: { [key: string]: Json }[];
   inferredContentType: string | null;
   env: {
     SERVER_NAME: string;
@@ -115,7 +122,7 @@ export interface Request {
   } | null;
   headers: string[][];
   url: string;
-  query?: object[];
+  query?: { [key: string]: Json }[];
   data?: { [key: string]: string } | null;
   method: string | null;
   query_string?: string;
@@ -143,7 +150,7 @@ export interface Issue {
   lastSeen: string;
   level: string;
   logger: string | null;
-  metadata: IssueMetadata | any;
+  metadata: IssueMetadata;
   numComments: number;
   permalink: string;
   project: ProjectIssueView;
@@ -151,20 +158,19 @@ export interface Issue {
   shortId: string;
   stats: IStats;
   status: IssueStatus;
-  statusDetails: object;
-  subscriptionDetails: object | null;
+  statusDetails: { [key: string]: Json };
+  subscriptionDetails: { [key: string]: Json } | null;
   title: string;
   type: string;
   userCount: number;
   platform: string;
 }
 
-// tslint:disable-next-line:no-empty-interface
 export interface IssueDetail extends Issue {
-  seenBy: object[];
+  seenBy: Json[];
   pluginIssues: string[];
   userReportCount: number;
-  participants: any[];
+  participants: Json[];
   pluginActions: string[];
   tags: Tag[];
   firstRelease: IFirstRelase | null;
@@ -189,21 +195,21 @@ type StatsPeriod = "24h" | "14d" | "30d" | "";
 type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
 
 export interface IssueMetadata {
-  directive: string;
-  filename: string;
-  function: string;
-  message: string;
-  origin: string;
-  title: string;
-  type: string;
-  uri: string;
-  value: string;
+  directive?: string;
+  filename?: string;
+  function?: string;
+  message?: string;
+  origin?: string;
+  title?: string;
+  type?: string;
+  uri?: string;
+  value?: string;
 }
 
 interface IFirstRelase {
   authors: string[];
   commitCount: number;
-  data: object;
+  data: { [key: string]: Json };
   dataCreated: string;
   dataReleased: string;
   deployCount: number;
@@ -221,11 +227,11 @@ interface IFirstRelase {
 }
 
 interface Activity {
-  data: object;
+  data: { [key: string]: Json };
   dateCreated: string;
   id: string;
   type: string;
-  user: any | null;
+  user: Json | null;
 }
 
 export interface Values {
@@ -267,17 +273,10 @@ export interface Frame {
   trust: string | null;
   inApp: boolean;
   context: (string | number)[][];
-  vars: { [key: string]: any } | null;
+  vars: { [key: string]: Json } | null;
   errors?: string | null;
   lineNo: number | null;
   colNo: number | null;
-}
-
-interface EventMetadata {
-  function: string;
-  type: string;
-  value: string;
-  filename: string;
 }
 
 interface GroupingConfig {
