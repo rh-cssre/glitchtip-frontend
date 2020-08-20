@@ -235,7 +235,7 @@ interface Activity {
 }
 
 export interface Values {
-  stacktrace: IStacktrace;
+  stacktrace?: IStacktrace;
   module: string | null;
   rawStacktrace?: string | null;
   mechanism?: Mechanism | null;
