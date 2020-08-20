@@ -239,11 +239,14 @@ export class IssueDetailService {
     if (eventException) {
       if (isReversed) {
         const reversedFrames = eventException.values.map((value) => {
-          const frameReverse = [...value.stacktrace.frames].reverse();
-          return {
-            ...value,
-            stacktrace: { ...value.stacktrace, frames: [...frameReverse] },
-          };
+          if (value.stacktrace) {
+            const frameReverse = [...value.stacktrace.frames].reverse();
+            return {
+              ...value,
+              stacktrace: { ...value.stacktrace, frames: [...frameReverse] },
+            };
+          }
+          return value;
         });
         return {
           ...eventException,
@@ -262,7 +265,7 @@ export class IssueDetailService {
 
     if (eventException) {
       const values = eventException.values.map((value) => {
-        if (platform !== "python") {
+        if (platform !== "python" && value.stacktrace) {
           const reverseFrames = [...value.stacktrace.frames].reverse();
           return {
             ...value,
