@@ -23,7 +23,7 @@ export interface Event {
   platform: string;
 }
 
-interface EndUser {
+export interface EndUser {
   id: string | null;
   name: string | null;
   username?: string | null;
@@ -37,7 +37,7 @@ export type EventTypes = "error" | "default";
 export interface EventDetail extends Event {
   nextEventID: string | null;
   previousEventID: string | null;
-  contexts: { [key: string]: any } | null;
+  contexts: { [key: string]: { [key: string]: Json } } | null;
   entries: EntryUnion[];
   metadata: { [key: string]: string };
   dist?: null;
@@ -56,6 +56,23 @@ export interface EventDetail extends Event {
   issue?: number;
   sdkUpdates?: [];
 }
+
+export interface AnnotatedContexts {
+  type: ContextsType;
+  icon: string | null;
+  title: string;
+  subtitle: string | null;
+  key: string | null;
+}
+
+type ContextsType =
+  | "user"
+  | "browser"
+  | "runtime"
+  | "os"
+  | "client_os"
+  | "device"
+  | "gpu";
 
 interface Errors {
   data: { [key: string]: string };

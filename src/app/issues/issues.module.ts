@@ -25,6 +25,7 @@ import { FrameTitleComponent } from "./issue-detail/event-detail/entry-exception
 import { FrameExpandedComponent } from "./issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
 import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
+import { ContextsComponent } from "./issue-detail/event-detail/context/contexts.component";
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-iss
     FrameExpandedComponent,
     RawStacktraceComponent,
     UserReportsIssueComponent,
+    ContextsComponent,
   ],
 })
 export class IssuesModule {}
