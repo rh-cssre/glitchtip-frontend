@@ -1,0 +1,9 @@
+<p>Auth Tokens</p>
+
+<div *ngFor="let authToken of authTokens$ | async">
+  {{ authToken.label }}
+  {{ authToken.token }}
+  <button (click)="deleteAuthToken(authToken.id)">Delete</button>
+</div>
+
+<app-new-token></app-new-token>
