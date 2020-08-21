@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AuthTokensComponent } from "./auth-tokens.component";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("AuthTokensComponent", () => {
   let component: AuthTokensComponent;
@@ -8,9 +9,9 @@ describe("AuthTokensComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AuthTokensComponent ]
-    })
-    .compileComponents();
+      declarations: [AuthTokensComponent],
+      imports: [HttpClientTestingModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
