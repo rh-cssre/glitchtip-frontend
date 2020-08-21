@@ -328,4 +328,12 @@ export class ProjectsService {
   private setKeys(projectKeys: ProjectKey[]) {
     this.projectsState.next({ ...this.projectsState.getValue(), projectKeys });
   }
+
+  clearActiveProject() {
+    this.projectsState.next({
+      ...this.projectsState.getValue(),
+      projectDetail: null,
+      projectKeys: null,
+    });
+  }
 }

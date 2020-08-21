@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -17,7 +17,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
   templateUrl: "./project-detail.component.html",
   styleUrls: ["./project-detail.component.scss"],
 })
-export class ProjectDetailComponent implements OnInit {
+export class ProjectDetailComponent implements OnInit, OnDestroy {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
 
   projectKeys$ = this.projectsService.projectKeys$;
@@ -60,6 +60,10 @@ export class ProjectDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.projectsService.clearActiveProject();
   }
 
   get name() {
