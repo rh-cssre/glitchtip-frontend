@@ -40,7 +40,20 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*.svg",
+                "input": "./node_modules/browser-logos/src/",
+                "output": "./assets/images/browser-svgs"
+              },
+              {
+                "glob": "**/*.png",
+                "input": "./node_modules/operating-system-logos/src/48x48/",
+                "output": "./assets/images/os-logos"
+              }
+            ],
             "styles": ["src/styles.scss"],
             "scripts": []
           },

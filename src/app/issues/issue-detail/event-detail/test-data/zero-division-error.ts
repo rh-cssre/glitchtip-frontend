@@ -487,7 +487,14 @@ export const zeroDivisionError: EventDetail = {
       build: "3.8.0 (default, Nov 23 2019, 05:49:00) \n[GCC 8.3.0]",
       name: "CPython",
     },
-    os: { type: "os", name: "Linux" },
+
+    os: {
+      name: "linux",
+    },
+    device: {
+      arch: "amd64",
+      num_cpu: 8,
+    },
     trace: {
       description:
         "django.middleware.clickjacking.XFrameOptionsMiddleware.__call__",

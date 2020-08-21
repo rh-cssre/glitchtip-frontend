@@ -22,7 +22,7 @@ export const databaseError: EventDetail = {
     function: "get",
     type: "User.DoesNotExist",
     value: "User matching query does not exist.",
-    filename: "django/db/models/query.py"
+    filename: "django/db/models/query.py",
   },
   groupingConfig: { id: "legacy:2019-03-12" },
   crashFile: null,
@@ -37,11 +37,17 @@ export const databaseError: EventDetail = {
     { value: "CPython", key: "runtime.name", _meta: null },
     { value: "ab3aadbbc567", key: "server_name", _meta: null },
     { value: "/database-error/", key: "transaction", _meta: null },
-    { value: "http://localhost:8001/database-error/", key: "url", _meta: null }
+    { value: "http://localhost:8001/database-error/", key: "url", _meta: null },
   ],
   dateCreated: "2020-01-27T19:18:36.900Z",
   dateReceived: "2020-01-27T19:18:36.941Z",
-  user: null,
+  user: {
+    id: "117",
+    name: "EmJay",
+    username: "emjay20",
+    email: "em@jay.com",
+    ip_address: "208.45.234",
+  },
   entries: [
     {
       type: "exception",
@@ -57,7 +63,7 @@ export const databaseError: EventDetail = {
                     get_response:
                       "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>>",
                     request: "<WSGIRequest: GET '/database-error/'>",
-                    exc: "DoesNotExist('User matching query does not exist.')"
+                    exc: "DoesNotExist('User matching query does not exist.')",
                   },
                   symbol: null,
                   module: "django.core.handlers.exception",
@@ -74,7 +80,7 @@ export const databaseError: EventDetail = {
                   context: [
                     [
                       29,
-                      "    can rely on getting a response instead of an exception."
+                      "    can rely on getting a response instead of an exception.",
                     ],
                     [30, '    """'],
                     [31, "    @wraps(get_response)"],
@@ -84,13 +90,13 @@ export const databaseError: EventDetail = {
                     [35, "        except Exception as exc:"],
                     [
                       36,
-                      "            response = response_for_exception(request, exc)"
+                      "            response = response_for_exception(request, exc)",
                     ],
                     [37, "        return response"],
                     [38, "    return inner"],
-                    [39, ""]
+                    [39, ""],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_get_response",
@@ -110,7 +116,7 @@ export const databaseError: EventDetail = {
                     resolver:
                       "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     callback_kwargs: {},
-                    response: "None"
+                    response: "None",
                   },
                   symbol: null,
                   module: "django.core.handlers.base",
@@ -128,31 +134,31 @@ export const databaseError: EventDetail = {
                     [110, "        if response is None:"],
                     [
                       111,
-                      "            wrapped_callback = self.make_view_atomic(callback)"
+                      "            wrapped_callback = self.make_view_atomic(callback)",
                     ],
                     [112, "            try:"],
                     [
                       113,
-                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)"
+                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
                     ],
                     [114, "            except Exception as e:"],
                     [
                       115,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [116, ""],
                     [
                       117,
-                      "        # Complain if the view returned None (a common error)."
+                      "        # Complain if the view returned None (a common error).",
                     ],
                     [118, "        if response is None:"],
                     [
                       119,
-                      "            if isinstance(callback, types.FunctionType):    # FBV"
+                      "            if isinstance(callback, types.FunctionType):    # FBV",
                     ],
-                    [120, "                view_name = callback.__name__"]
+                    [120, "                view_name = callback.__name__"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "_get_response",
@@ -172,7 +178,7 @@ export const databaseError: EventDetail = {
                     resolver:
                       "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     callback_kwargs: {},
-                    response: "None"
+                    response: "None",
                   },
                   symbol: null,
                   module: "django.core.handlers.base",
@@ -192,26 +198,26 @@ export const databaseError: EventDetail = {
                     [110, "        if response is None:"],
                     [
                       111,
-                      "            wrapped_callback = self.make_view_atomic(callback)"
+                      "            wrapped_callback = self.make_view_atomic(callback)",
                     ],
                     [112, "            try:"],
                     [
                       113,
-                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)"
+                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
                     ],
                     [114, "            except Exception as e:"],
                     [
                       115,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [116, ""],
                     [
                       117,
-                      "        # Complain if the view returned None (a common error)."
+                      "        # Complain if the view returned None (a common error).",
                     ],
-                    [118, "        if response is None:"]
+                    [118, "        if response is None:"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "view",
@@ -223,7 +229,7 @@ export const databaseError: EventDetail = {
                     args: [],
                     request: "<WSGIRequest: GET '/database-error/'>",
                     kwargs: {},
-                    cls: "<class 'errors.views.DatabaseErrorView'>"
+                    cls: "<class 'errors.views.DatabaseErrorView'>",
                   },
                   symbol: null,
                   module: "django.views.generic.base",
@@ -242,24 +248,24 @@ export const databaseError: EventDetail = {
                     [67, "                raise AttributeError("],
                     [
                       68,
-                      "                    \"%s instance has no 'request' attribute. Did you override \""
+                      "                    \"%s instance has no 'request' attribute. Did you override \"",
                     ],
                     [
                       69,
-                      '                    "setup() and forget to call super()?" % cls.__name__'
+                      '                    "setup() and forget to call super()?" % cls.__name__',
                     ],
                     [70, "                )"],
                     [
                       71,
-                      "            return self.dispatch(request, *args, **kwargs)"
+                      "            return self.dispatch(request, *args, **kwargs)",
                     ],
                     [72, "        view.view_class = cls"],
                     [73, "        view.view_initkwargs = initkwargs"],
                     [74, ""],
                     [75, "        # take name and docstring from class"],
-                    [76, "        update_wrapper(view, cls, updated=())"]
+                    [76, "        update_wrapper(view, cls, updated=())"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "dispatch",
@@ -271,7 +277,7 @@ export const databaseError: EventDetail = {
                       "<bound method DatabaseErrorView.get of <errors.views.DatabaseErrorView object at 0x7f9c50143fd0>>",
                     request: "<WSGIRequest: GET '/database-error/'>",
                     args: [],
-                    kwargs: {}
+                    kwargs: {},
                   },
                   symbol: null,
                   module: "django.views.generic.base",
@@ -288,15 +294,15 @@ export const databaseError: EventDetail = {
                   context: [
                     [
                       92,
-                      "        # request method isn't on the approved list."
+                      "        # request method isn't on the approved list.",
                     ],
                     [
                       93,
-                      "        if request.method.lower() in self.http_method_names:"
+                      "        if request.method.lower() in self.http_method_names:",
                     ],
                     [
                       94,
-                      "            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)"
+                      "            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)",
                     ],
                     [95, "        else:"],
                     [96, "            handler = self.http_method_not_allowed"],
@@ -304,19 +310,19 @@ export const databaseError: EventDetail = {
                     [98, ""],
                     [
                       99,
-                      "    def http_method_not_allowed(self, request, *args, **kwargs):"
+                      "    def http_method_not_allowed(self, request, *args, **kwargs):",
                     ],
                     [100, "        logger.warning("],
                     [
                       101,
-                      "            'Method Not Allowed (%s): %s', request.method, request.path,"
+                      "            'Method Not Allowed (%s): %s', request.method, request.path,",
                     ],
                     [
                       102,
-                      "            extra={'status_code': 405, 'request': request}"
-                    ]
+                      "            extra={'status_code': 405, 'request': request}",
+                    ],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "get",
@@ -326,7 +332,7 @@ export const databaseError: EventDetail = {
                       "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
                     args: [],
                     request: "<WSGIRequest: GET '/database-error/'>",
-                    kwargs: {}
+                    kwargs: {},
                   },
                   symbol: null,
                   module: "errors.views",
@@ -350,9 +356,9 @@ export const databaseError: EventDetail = {
                     [19, ""],
                     [20, "class PostErrorView(View):"],
                     [21, "    def post(self, request, *args, **kwargs):"],
-                    [22, '        request.POST["nope"]']
+                    [22, '        request.POST["nope"]'],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "manager_method",
@@ -361,7 +367,7 @@ export const databaseError: EventDetail = {
                     self: "[Filtered]",
                     args: [],
                     name: "'get'",
-                    kwargs: { id: "'9999999'" }
+                    kwargs: { id: "'9999999'" },
                   },
                   symbol: null,
                   module: "django.db.models.manager",
@@ -382,22 +388,22 @@ export const databaseError: EventDetail = {
                     [80, "        def create_method(name, method):"],
                     [
                       81,
-                      "            def manager_method(self, *args, **kwargs):"
+                      "            def manager_method(self, *args, **kwargs):",
                     ],
                     [
                       82,
-                      "                return getattr(self.get_queryset(), name)(*args, **kwargs)"
+                      "                return getattr(self.get_queryset(), name)(*args, **kwargs)",
                     ],
                     [
                       83,
-                      "            manager_method.__name__ = method.__name__"
+                      "            manager_method.__name__ = method.__name__",
                     ],
                     [84, "            manager_method.__doc__ = method.__doc__"],
                     [85, "            return manager_method"],
                     [86, ""],
-                    [87, "        new_methods = {}"]
+                    [87, "        new_methods = {}"],
                   ],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "get",
@@ -410,7 +416,7 @@ export const databaseError: EventDetail = {
                     limit: "21",
                     kwargs: { id: "'9999999'" },
                     self:
-                      "<QuerySet from django.db.models.query at 0x7f9c50143c10>"
+                      "<QuerySet from django.db.models.query at 0x7f9c50143c10>",
                   },
                   symbol: null,
                   module: "django.db.models.query",
@@ -433,34 +439,34 @@ export const databaseError: EventDetail = {
                     [415, "            raise self.model.DoesNotExist("],
                     [
                       416,
-                      '                "%s matching query does not exist." %'
+                      '                "%s matching query does not exist." %',
                     ],
                     [417, "                self.model._meta.object_name"],
                     [418, "            )"],
                     [419, "        raise self.model.MultipleObjectsReturned("],
                     [
                       420,
-                      "            'get() returned more than one %s -- it returned %s!' % ("
-                    ]
+                      "            'get() returned more than one %s -- it returned %s!' % (",
+                    ],
                   ],
-                  symbolAddr: null
-                }
+                  symbolAddr: null,
+                },
               ],
               framesOmitted: null,
               registers: null,
-              hasSystemFrames: false
+              hasSystemFrames: false,
             },
             module: "django.contrib.auth.models",
             rawStacktrace: null,
             mechanism: { type: "django", handled: false },
             threadId: null,
             value: "User matching query does not exist.",
-            type: "User.DoesNotExist"
-          }
+            type: "User.DoesNotExist",
+          },
         ],
         excOmitted: null,
-        hasSystemFrames: false
-      }
+        hasSystemFrames: false,
+      },
     },
     {
       type: "breadcrumbs",
@@ -473,10 +479,10 @@ export const databaseError: EventDetail = {
             timestamp: "2020-01-27T19:18:36.897Z",
             data: null,
             message: "[Filtered]",
-            type: "default"
-          }
-        ]
-      }
+            type: "default",
+          },
+        ],
+      },
     },
     {
       type: "request",
@@ -488,7 +494,7 @@ export const databaseError: EventDetail = {
         headers: [
           [
             "Accept",
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
           ],
           ["Accept-Encoding", "gzip, deflate"],
           ["Accept-Language", "en-US,en;q=0.5"],
@@ -500,15 +506,15 @@ export const databaseError: EventDetail = {
           ["Upgrade-Insecure-Requests", "1"],
           [
             "User-Agent",
-            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"
-          ]
+            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0",
+          ],
         ],
         url: "http://localhost:8001/database-error/",
         query: [],
         data: null,
-        method: "GET"
-      }
-    }
+        method: "GET",
+      },
+    },
   ],
   packages: {
     cffi: "1.13.2",
@@ -570,12 +576,12 @@ export const databaseError: EventDetail = {
     requests: "2.22.0",
     shellingham: "1.3.1",
     idna: "2.8",
-    attrs: "19.3.0"
+    attrs: "19.3.0",
   },
   sdk: {
     version: "0.14.0",
     name: "sentry.python",
-    upstream: { url: null, isNewer: false, name: "sentry.python" }
+    upstream: { url: null, isNewer: false, name: "sentry.python" },
   },
   _meta: {
     user: null,
@@ -585,14 +591,14 @@ export const databaseError: EventDetail = {
     message: null,
     packages: null,
     tags: {},
-    sdk: null
+    sdk: null,
   },
   contexts: {
     runtime: {
       version: "3.8.0",
       type: "runtime",
       build: "3.8.0 (default, Nov 23 2019, 05:49:00) \n[GCC 8.3.0]",
-      name: "CPython"
+      name: "CPython",
     },
     os: { type: "os", name: "Linux" },
     trace: {
@@ -602,12 +608,12 @@ export const databaseError: EventDetail = {
       trace_id: "fbe7cbd1d08d48958fa84139e91a939a",
       span_id: "9f4cd5ea58ab9758",
       type: "default",
-      op: "django.middleware"
+      op: "django.middleware",
     },
-    browser: { version: "72.0", type: "browser", name: "Firefox" }
+    browser: { version: "72.0", type: "browser", name: "Firefox" },
   },
   fingerprints: ["fcb5a20863c5c53702766d5f857f1e55"],
   context: { "sys.argv": ["./manage.py", "runserver", "0.0.0.0:8001"] },
   release: null,
-  groupID: "3"
+  groupID: "3",
 };

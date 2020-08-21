@@ -14,9 +14,11 @@ import {
   Message,
   Values,
   EntryType,
+  AnnotatedContexts,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
+import { generateIconPath } from "../../shared/shared.utils";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
@@ -89,6 +91,9 @@ export class IssueDetailService {
   );
   readonly eventEntryMessage$ = this.event$.pipe(
     map((event) => (event ? this.eventEntryMessage(event) : undefined))
+  );
+  readonly specialContexts$ = this.event$.pipe(
+    map((event) => (event ? this.specialContexts(event) : undefined))
   );
 
   constructor(
@@ -278,6 +283,122 @@ export class IssueDetailService {
       return [...values];
     }
     return;
+  }
+
+  /**
+   * For the contexts bar in event detail, find specific contexts and
+   * return array of matching objects to loop through in template.
+   * The order they are return in should always be user, browser, runtime
+   * os, device, gpu
+   */
+  specialContexts(event: EventDetail): AnnotatedContexts[] {
+    const user = event.user;
+    const contexts = event.contexts;
+    const contextsArray: AnnotatedContexts[] = [];
+
+    for (const key in contexts) {
+      if (key) {
+        const contextsObject = contexts[key];
+
+        if (key === "browser" || key === "runtime") {
+          contextsArray.unshift({
+            type: key,
+            icon: contextsObject.name
+              ? generateIconPath(contextsObject.name as string)
+              : null,
+            title: contextsObject.name as string,
+            subtitle: contextsObject.version
+              ? (contextsObject.version as string)
+              : "Unknown",
+            key: "Version",
+          });
+        }
+        if (key === "os" || key === "client_os") {
+          contextsArray.unshift({
+            type: key,
+            icon: contextsObject.name
+              ? generateIconPath(contextsObject.name as string)
+              : null,
+            title: contextsObject.name
+              ? (contextsObject.name as string)
+              : "Unknown OS",
+            subtitle: contextsObject.version
+              ? (contextsObject.version as string)
+              : contextsObject.kernel_version
+              ? (contextsObject.kernel_version as string)
+              : "Unknown",
+            key: contextsObject.version
+              ? "Version"
+              : contextsObject.kernel_version
+              ? "Kernel"
+              : "Version",
+          });
+        }
+        if (key === "device") {
+          contextsArray.unshift({
+            type: key,
+            icon: contextsObject.model
+              ? generateIconPath(contextsObject.model as string)
+              : null,
+            title: contextsObject.model
+              ? (contextsObject.model as string)
+              : "Unknown Device",
+            subtitle: contextsObject.arch
+              ? (contextsObject.arch as string)
+              : contextsObject.model_id
+              ? (contextsObject.model_id as string)
+              : null,
+            key: contextsObject.arch
+              ? "Arch"
+              : contextsObject.model_id
+              ? "Model"
+              : null,
+          });
+        }
+        if (key === "gpu") {
+          contextsArray.unshift({
+            type: key,
+            icon: contextsObject.name
+              ? generateIconPath(contextsObject.name as string)
+              : null,
+            title: contextsObject.name
+              ? (contextsObject.name as string)
+              : "Unknown GPU",
+            subtitle: contextsObject.vendor_name
+              ? (contextsObject.vendor_name as string)
+              : "Unknown",
+            key: "Vendor",
+          });
+        }
+      }
+    }
+
+    if (user) {
+      let userTitle = user.email
+        ? user.email
+        : user.ip_address || user.id || user.username;
+      if (!userTitle) {
+        userTitle = "Unknown User";
+      }
+      let newKey = "";
+      let newSubtitle = "";
+      if (user.id && user.id !== userTitle) {
+        newKey = "ID";
+        newSubtitle = user.id;
+      } else if (user.username && user.username !== userTitle) {
+        newKey = "Username";
+        newSubtitle = user.username;
+      }
+      contextsArray.unshift({
+        type: "user",
+        icon: "account_circle",
+        title: userTitle,
+        subtitle: newSubtitle,
+        key: newKey,
+      });
+    }
+
+    return contextsArray;
   }
 
   /**

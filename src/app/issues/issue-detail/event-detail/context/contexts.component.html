@@ -1,0 +1,26 @@
+<section class="card-wrapper">
+  <div *ngFor="let contexts of specialContexts$ | async" class="wrapper">
+    <ng-container> </ng-container>
+    <ng-container *ngIf="contexts.icon; else noIcon">
+      <ng-container *ngIf="contexts.type === 'user'; else image"
+        ><mat-icon class="image">{{ contexts.icon }}</mat-icon></ng-container
+      >
+      <ng-template #image>
+        <img class="image" [src]="contexts.icon" [alt]="contexts.icon" />
+      </ng-template>
+    </ng-container>
+    <ng-template #noIcon>
+      <mat-icon class="image">help_outline</mat-icon>
+    </ng-template>
+    <div class="spacer">
+      <p class="mat-body-strong">{{ contexts.title }}</p>
+      <p
+        *ngIf="contexts.key && contexts.subtitle"
+        class="mat-small mat-caption"
+      >
+        <span class="bold">{{ contexts.key }}:&nbsp;</span
+        ><span class="spacer-small">{{ contexts.subtitle }}</span>
+      </p>
+    </div>
+  </div>
+</section>

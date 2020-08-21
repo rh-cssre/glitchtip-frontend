@@ -41,55 +41,9 @@
       </button>
     </div>
   </section>
-
-  <!-- TODO Unfinished pre 1.0 code? Doesn't looks good. -->
-  <!-- <section
-    *ngIf="event?.contexts?.browser || event?.contexts?.os"
-    class="location"
-  >
-    <mat-divider></mat-divider>
-    <div *ngIf="event?.user" class="wrapper">
-      <mat-icon>face</mat-icon>
-      <div class="spacer">
-        <p class="mat-body-strong">
-          {{
-            event?.user?.email ? event?.user?.email : event?.user?.ip_address
-          }}
-        </p>
-        <p *ngIf="event?.user?.id" class="mat-small mat-caption">
-          <span class="bold">Version:</span
-          ><span class="spacer-small">{{ event?.user?.id }}</span>
-        </p>
-      </div>
-    </div>
-    <div *ngIf="event?.contexts?.browser" class="wrapper">
-      <mat-icon>tab</mat-icon>
-      <div class="spacer">
-        <p class="mat-body-strong">{{ event?.contexts?.browser?.name }}</p>
-        <p class="mat-small mat-caption">
-          <span class="bold">Version:</span
-          ><span class="spacer-small">{{
-            event?.contexts?.browser?.version
-          }}</span>
-        </p>
-      </div>
-    </div>
-    <div *ngIf="event?.contexts?.os" class="wrapper">
-      <mat-icon>laptop</mat-icon>
-      <div class="spacer">
-        <p class="mat-body-strong">{{ event?.contexts?.os?.name }}</p>
-        <p class="mat-small mat-caption">
-          <span class="bold">Version:</span
-          ><span class="spacer-small">{{
-            event?.contexts?.os?.version
-              ? event?.contexts?.os?.version
-              : "unknown"
-          }}</span>
-        </p>
-      </div>
-    </div>
-  </section> -->
-  <!-- <mat-divider *ngIf="event?.contexts?.browser"></mat-divider> -->
+  <mat-divider *ngIf="event?.contexts || event?.user"></mat-divider>
+  <app-contexts></app-contexts>
+  <mat-divider></mat-divider>
 
   <section class="tags" *ngIf="event?.tags && event.tags.length > 0">
     <h2>Tags</h2>

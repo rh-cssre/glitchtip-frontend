@@ -8,7 +8,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { take } from "rxjs/operators";
 import { IssueDetailService } from "./issue-detail.service";
-import { IssueDetail, EventDetail } from "../interfaces";
+import { IssueDetail, EventDetail, AnnotatedContexts } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
@@ -123,5 +123,46 @@ describe("IssueDetailService", () => {
     service.event$.pipe(take(1)).subscribe((event: any) => {
       expect(event).toBe(testData);
     });
+  });
+
+  it("return an array of contexts objects", () => {
+    const testData: EventDetail = databaseError;
+    const result: AnnotatedContexts[] = [
+      {
+        title: "em@jay.com",
+        subtitle: "117",
+        key: "ID",
+        icon: "account_circle",
+        type: "user",
+      },
+      {
+        title: "Firefox",
+        subtitle: "72.0",
+        key: "Version",
+        icon: "assets/images/browser-svgs/firefox/firefox.svg",
+        type: "browser",
+      },
+      {
+        title: "Linux",
+        subtitle: "Unknown",
+        key: "Version",
+        icon: "assets/images/os-logos/linux.png",
+        type: "os",
+      },
+      {
+        title: "CPython",
+        subtitle: "3.8.0",
+        key: "Version",
+        icon: "assets/images/logos/48x48/cpython.png",
+        type: "runtime",
+      },
+    ];
+    service.setEvent(testData);
+
+    service.specialContexts$
+      .pipe(take(1))
+      .subscribe((contexts: AnnotatedContexts[] | undefined) => {
+        expect(contexts).toEqual(result);
+      });
   });
 });
