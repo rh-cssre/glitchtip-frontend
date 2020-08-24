@@ -25,7 +25,7 @@ export interface ProjectIssueView extends ProjectNew {
 }
 
 export interface Project extends ProjectIssueView {
-  firstEvent: string;
+  firstEvent: string | null;
   dateCreated: string;
   organization: Organization;
 }

@@ -20,6 +20,24 @@
     ></mat-progress-spinner>
   </div>
 
+  <div *ngIf="(singleProjectApplied$ | async) === true">
+    Single project applied
+  </div>
+
+  a{{ activeProjectFirstEvent$ | async }}b
+
+  <mat-card *ngIf="(showOnboarding$ | async) === true">
+    <h2 class="mat-display-1">
+      Send us your events!
+    </h2>
+
+    <markdown src="/sdk-docs/all-sdks.md"></markdown>
+
+    <p>
+      Read the JavaScript installation instructions for more information.
+    </p>
+  </mat-card>
+
   <div *ngIf="issues$ | async as issues">
     <ng-container
       *ngIf="

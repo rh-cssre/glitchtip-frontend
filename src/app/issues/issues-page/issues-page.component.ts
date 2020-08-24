@@ -13,6 +13,7 @@ import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { formatDate } from "@angular/common";
 import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
+import { ProjectsService } from "src/app/api/projects/projects.service";
 
 @Component({
   selector: "app-issues-page",
@@ -43,9 +44,15 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   hasPreviousPage$ = this.issuesService.hasPreviousPage$;
   nextParams$ = this.issuesService.nextPageParams$;
   previousParams$ = this.issuesService.previousPageParams$;
+  activeOrganizationProjects$ = this.organizationsService
+    .activeOrganizationProjects$;
   routerEventSubscription: Subscription;
-  orgHasAProject$ = this.organizationsService.activeOrganizationProjects$.pipe(
+  orgHasAProject$ = this.activeOrganizationProjects$.pipe(
     map((projects) => !!projects && projects.length > 0)
+  );
+  activeProject$ = this.projectsService.activeProject$;
+  activeProjectFirstEvent$ = this.activeProject$.pipe(
+    map((project) => (project ? project.firstEvent : null))
   );
 
   projectsFromParams$ = this.route.queryParams.pipe(
@@ -65,9 +72,38 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     })
   );
 
+  /**
+   * Either a single project is applied with the picker, or there's only one
+   * project, which is functionally similar for some things
+   */
+  singleProjectApplied$ = combineLatest([
+    this.appliedProjectCount$,
+    this.activeOrganizationProjects$,
+  ]).pipe(
+    map(([appliedProjectCount, activeOrganizationProjects]) => {
+      if (
+        appliedProjectCount === 1 ||
+        activeOrganizationProjects?.length === 1
+      ) {
+        return true;
+      }
+      return false;
+    })
+  );
+
+  showOnboarding$ = combineLatest([
+    this.singleProjectApplied$,
+    this.activeProjectFirstEvent$,
+  ]).pipe(
+    map(
+      ([singleProjectApplied, activeProjectFirstEvent]) =>
+        singleProjectApplied && activeProjectFirstEvent === null
+    )
+  );
+
   projectsWhereAdminIsNotOnTheTeam$ = combineLatest([
     this.projectsFromParams$,
-    this.organizationsService.activeOrganizationProjects$,
+    this.activeOrganizationProjects$,
   ]).pipe(
     map(([projectsFromParams, activeOrgProjects]) => {
       if (!Array.isArray(projectsFromParams)) {
@@ -106,7 +142,8 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     private issuesService: IssuesService,
     private router: Router,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private projectsService: ProjectsService
   ) {
     this.routerEventSubscription = this.router.events
       .pipe(
@@ -137,6 +174,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
             start,
             end
           );
+          this.projectsService.retrieveProjectDetail(orgSlug, "aldan");
         }
       });
   }
@@ -153,6 +191,13 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
         startDate: start ? start : null,
         endDate: end ? end : null,
       });
+    });
+
+    this.activeProject$.subscribe((activeProject) => {
+      console.log("activeProject", activeProject);
+    });
+    this.activeOrganizationProjects$.subscribe((projects) => {
+      console.log("active org projects", projects);
     });
   }
 
