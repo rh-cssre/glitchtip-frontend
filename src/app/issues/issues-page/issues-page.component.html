@@ -35,15 +35,13 @@
 
       <ng-container *ngIf="!(urlHasParam$ | async)">
         <mat-card *ngIf="!(orgHasAProject$ | async)">
-          <h3>
-            This organization has no projects.
-          </h3>
+          <h3>This organization has no projects.</h3>
           <p>
             To add a project to this organization, press the
             "Add&nbsp;Project"&nbsp;button.
           </p>
         </mat-card>
-        <mat-card *ngIf="(orgHasAProject$ | async) && issues.length === 0">
+        <!--<mat-card *ngIf="(orgHasAProject$ | async) && issues.length === 0">
           <h3>
             <ng-container
               *ngIf="appliedProjectCount$ | async as appliedProjectCount"
@@ -103,15 +101,10 @@
               projects.
             </ng-template>
           </p>
-        </mat-card>
+        </mat-card>-->
       </ng-container>
     </ng-container>
-    <table
-      *ngIf="issues.length > 0 || (urlHasParam$ | async)"
-      mat-table
-      [dataSource]="issues$"
-      class="mat-elevation-z2"
-    >
+    <table mat-table [dataSource]="issues$" class="mat-elevation-z2">
       <ng-container matColumnDef="actions">
         <th
           mat-header-cell
@@ -131,7 +124,7 @@
                 Mark as resolved
               </button>
               <button
-                style="margin-left: 10px;"
+                style="margin-left: 10px"
                 mat-stroked-button
                 (click)="bulkMarkUnresolved()"
                 [disabled]="(thereAreSelectedIssues$ | async) === false"
@@ -139,7 +132,7 @@
                 Reopen
               </button>
               <button
-                style="margin-left: 10px;"
+                style="margin-left: 10px"
                 mat-stroked-button
                 (click)="bulkMarkIgnored()"
                 [disabled]="(thereAreSelectedIssues$ | async) === false"
