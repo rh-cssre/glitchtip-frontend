@@ -93,3 +93,8 @@ mat-sidenav-content {
 .no-org-create {
   font-weight: 500;
 }
+
+.mat-list-item-disabled {
+  background-color: white;
+  color: mat-color($mat-gray, 500) !important;
+}

@@ -17,11 +17,14 @@ import { SettingsService } from "src/app/api/settings.service";
 export class MainNavComponent {
   innerWidth: number;
   sideNavOpen = true;
+  activeOrganizationLoaded = false;
+  activeOrganizationSlug = "";
   /* TODO: Add primary color to mat-sidenav
   https://stackoverflow.com/questions/54248944/angular-6-7-how-to-apply-default-theme-color-to-mat-sidenav-background */
   activeOrganizationDetail$ = this.organizationsService
     .activeOrganizationDetail$;
   organizations$ = this.organizationsService.organizations$;
+  organizationsInitialLoad$ = this.organizationsService.initialLoad$;
   isLoggedIn$ = this.auth.isLoggedIn;
   navOpen$ = this.mainNav.navOpen$;
   billingEnabled$ = this.settingsService.billingEnabled$;
@@ -46,6 +49,13 @@ export class MainNavComponent {
     if (this.isScreenSmall()) {
       this.hideSideNav();
     }
+    this.organizationsService.activeOrganizationLoaded$.subscribe(
+      (loaded) => (this.activeOrganizationLoaded = loaded)
+    );
+    this.activeOrganizationDetail$.subscribe(
+      (organization) =>
+        (this.activeOrganizationSlug = organization ? organization.slug : "")
+    );
   }
 
   logout() {
