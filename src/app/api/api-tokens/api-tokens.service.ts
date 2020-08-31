@@ -2,13 +2,16 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { baseUrl } from "../../constants";
 import { APIToken, NewAPIToken } from "./api-tokens.interfaces";
+import { APIBaseService } from "../api-base.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class APITokenService {
-  private readonly url = baseUrl + "/api-tokens/";
-  constructor(private http: HttpClient) {}
+export class APITokenService extends APIBaseService {
+  readonly url = baseUrl + "/api-tokens/";
+  constructor(protected http: HttpClient) {
+    super(http);
+  }
 
   list() {
     return this.http.get<APIToken[]>(this.url);
@@ -24,9 +27,5 @@ export class APITokenService {
 
   destroy(id: string) {
     return this.http.delete(this.detailURL(id));
-  }
-
-  private detailURL(id: string) {
-    return this.url + id + "/";
   }
 }

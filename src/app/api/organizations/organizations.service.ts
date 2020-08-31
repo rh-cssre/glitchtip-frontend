@@ -9,7 +9,6 @@ import {
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
 import {
-  tap,
   map,
   withLatestFrom,
   filter,
@@ -17,6 +16,9 @@ import {
   catchError,
   take,
   mergeMap,
+  takeWhile,
+  distinct,
+  tap,
 } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
@@ -32,6 +34,7 @@ import { SettingsService } from "../settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { TeamsService } from "../teams/teams.service";
 import { Team } from "../teams/teams.interfaces";
+import { OrganizationAPIService } from "./organizations-api.service";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -41,6 +44,8 @@ interface OrganizationsState {
   organizationTeams: Team[];
   errors: OrganizationErrors;
   loading: OrganizationLoading;
+  /** Has organizations loaded the first time? */
+  initialLoad: boolean;
 }
 
 const initialState: OrganizationsState = {
@@ -59,6 +64,7 @@ const initialState: OrganizationsState = {
     removeTeamMember: "",
     addOrganizationMember: false,
   },
+  initialLoad: false,
 };
 
 @Injectable({
@@ -71,9 +77,14 @@ export class OrganizationsService {
   private readonly getState$ = this.organizationsState.asObservable();
   private readonly url = baseUrl + "/organizations/";
   private routeParams?: { [key: string]: string };
+  initialLoad$ = this.getState$.pipe(
+    map((data) => data.initialLoad),
+    distinct()
+  );
 
   readonly organizations$ = this.getState$.pipe(
-    map((data) => data.organizations)
+    map((data) => data.organizations),
+    distinct()
   );
   readonly organizationCount$ = this.organizations$.pipe(
     map((organizations) => organizations.length)
@@ -83,6 +94,9 @@ export class OrganizationsService {
   );
   readonly activeOrganization$ = this.getState$.pipe(
     map((data) => data.activeOrganization)
+  );
+  readonly activeOrganizationLoaded$ = this.getState$.pipe(
+    map((data) => !!data.activeOrganization)
   );
   readonly organizationMembers$ = this.getState$.pipe(
     map((data) => data.organizationMembers)
@@ -108,9 +122,19 @@ export class OrganizationsService {
       )
     )
   );
-  readonly activeOrganizationSlug$ = this.activeOrganizationDetail$.pipe(
-    map((org) => (org ? org.slug : null))
+  readonly activeOrganizationSlug$ = combineLatest([
+    this.organizations$,
+    this.activeOrganizationId$,
+  ]).pipe(
+    map(([orgs, id]) => {
+      const activeOrg = orgs.find((org) => org.id === id);
+      if (activeOrg) {
+        return activeOrg.slug;
+      }
+      return null;
+    })
   );
+
   readonly filteredAddTeamMembers$ = combineLatest([
     this.organizationMembers$,
     this.teamsService.teamMembers$,
@@ -160,68 +184,17 @@ export class OrganizationsService {
     }))
   );
 
-  /**
-   * The only param we're really looking for from routeParams$ is the org slug,
-   * so here's a tidy and well-typed way to use that specifically.
-   */
-  readonly orgSlugParam$ = this.routeParams$.pipe(
-    map((params) => params["org-slug"])
-  ) as Observable<string | undefined>;
-
-  /**
-   * Active org and org slug from URL can get out of sync. This should fix that.
-   * Priority is given to the URL.
-   */
-  readonly urlAndActiveOrgMismatch$ = combineLatest([
-    this.navigationStart$,
-    this.orgSlugParam$,
-    this.activeOrganization$,
-    this.organizations$,
-  ]).pipe(
-    /**
-     * We only care when the org slug in the route changes from one thing
-     * to another.
-     *
-     * Overlook the letter variable names; I didn't want to do
-     * previous[1] or whatever
-     */
-    distinctUntilChanged(
-      ([a, previousOrgSlugParam, b, c], [d, nextOrgSlugParam, e, f]) =>
-        previousOrgSlugParam === nextOrgSlugParam
-    ),
-    // If it's a back or forward event
-    // If an active org is set
-    // If there's an org slug in the route
-    // If the org slug in the route doesn't match the active org slug
-    filter(
-      ([event, orgSlugParam, activeOrganization, _]) =>
-        event.navigationTrigger === "popstate" &&
-        activeOrganization !== null &&
-        !!orgSlugParam &&
-        activeOrganization.slug !== orgSlugParam
-    ),
-    tap(([_, orgSlugParam, __, organizations]) => {
-      // Change active org to the org that matches the route's org slug
-      const orgMatchedFromUrl = organizations.find(
-        (organization) => organization.slug === orgSlugParam
-      );
-      if (orgMatchedFromUrl) {
-        this.changeActiveOrganization(orgMatchedFromUrl.id);
-      }
-    })
-  );
-
   constructor(
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
+    private organizationAPIService: OrganizationAPIService,
     private snackBar: MatSnackBar,
     private settingsService: SettingsService,
     private subscriptionsService: SubscriptionsService,
     private teamsService: TeamsService
   ) {
     this.routeParams$.subscribe((params) => (this.routeParams = params));
-    this.urlAndActiveOrgMismatch$.subscribe();
 
     // When billing is enabled, check if active org has subscription
     combineLatest([
@@ -241,22 +214,39 @@ export class OrganizationsService {
         })
       )
       .subscribe();
+
+    this.activeOrganizationId$
+      .pipe(
+        filter((id) => id !== null),
+        distinctUntilChanged(),
+        withLatestFrom(this.organizations$),
+        map(([id, orgs]) => orgs.find((org) => org.id === id)),
+        filter((org) => org !== undefined),
+        map((org) => org!.slug),
+        tap((slug) => this.getOrganizationDetail(slug).toPromise())
+      )
+      .subscribe();
   }
 
   createOrganization(name: string) {
     const data = {
       name,
     };
-    return this.http.post<OrganizationDetail>(this.url, data).pipe(
+    return this.organizationAPIService.create(data).pipe(
       tap((organization) => {
-        this.retrieveOrganizations().toPromise();
-        this.setActiveOrganizationId(organization.id);
+        this.retrieveOrganizations()
+          .pipe(
+            tap(() => {
+              this.setActiveOrganizationId(organization.id);
+            })
+          )
+          .toPromise();
       })
     );
   }
 
   retrieveOrganizations() {
-    return this.http.get<Organization[]>(this.url).pipe(
+    return this.organizationAPIService.list().pipe(
       tap((organizations) => this.setOrganizations(organizations)),
       withLatestFrom(this.activeOrganizationId$),
       tap(([organizations, activeOrgId]) => {
@@ -280,58 +270,83 @@ export class OrganizationsService {
     );
   }
 
+  /**
+   * Change the active organization and if necessary
+   * Update the route to reflect the organization slug update
+   */
   changeActiveOrganization(activeOrganizationId: number) {
-    const activeOrgIdIsNull =
-      this.organizationsState.getValue().activeOrganizationId === null;
     this.setActiveOrganizationId(activeOrganizationId);
-    const organization = this.organizationsState
-      .getValue()
-      .organizations.find((org) => org.id === activeOrganizationId);
-    if (organization) {
-      this.getOrganizationDetail(organization.slug)
-        .pipe(
-          // Only navigate when the user goes from one organization to another
-          filter(() => !activeOrgIdIsNull),
-          tap((organizationDetail) => {
-            // Switch org but stay in settings page
+    this.activeOrganizationSlug$
+      .pipe(
+        take(1),
+        filter((slug) => slug !== null),
+        tap((slug) => {
+          if (
+            this.routeParams &&
+            this.routeParams["org-slug"] &&
+            this.route.snapshot.firstChild?.url &&
+            this.route.snapshot.firstChild.url.length >= 1
+          ) {
             if (
-              this.routeParams &&
-              this.routeParams["org-slug"] &&
-              this.route.snapshot.firstChild?.url &&
-              this.route.snapshot.firstChild.url[0].path === "settings"
+              this.route.snapshot.firstChild.url[0].path === "settings" &&
+              slug !== this.routeParams["org-slug"]
             ) {
-              this.router.navigate(["settings", organizationDetail.slug]);
-            } else {
-              // Fallback to viewing issues
-              this.router.navigate([
-                "organizations",
-                organizationDetail.slug,
-                "issues",
-              ]);
+              this.router.navigate(["settings", slug]);
+            } else if (
+              this.route.snapshot.firstChild.url[0].path === "organizations" &&
+              this.route.snapshot.firstChild.url[1].path !== slug
+            ) {
+              this.router.navigate(["organizations", slug, "issues"]);
             }
-          })
-        )
-        .toPromise();
-    }
+          }
+        })
+      )
+      .toPromise();
+  }
+
+  /**
+   * Set active organization when a route change is observed
+   * @slug organization slug as seen by the router
+   *
+   * Active organization can be set in state even in pages that don't have the organization slug,
+   * for example the profile page.
+   * However some pages have the organization slug in the route params. When this changes, whether by back button
+   * or client side routing, the active org should change.
+   * This function needs called when any such event happens.
+   */
+  setActiveOrganizationFromRouteChange(slug: string) {
+    combineLatest([this.organizations$, this.initialLoad$])
+      .pipe(
+        takeWhile(([_, initialLoad]) => initialLoad === false, true),
+        filter(([_, initialLoad]) => initialLoad),
+        map(([organizations, _]) =>
+          organizations.find((organization) => organization.slug === slug)
+        ),
+        filter((organization) => organization !== undefined),
+        tap((organization) => {
+          this.setActiveOrganizationId(organization!.id);
+        })
+      )
+      .subscribe();
   }
 
   updateOrganization(orgName: string) {
     const data = { name: orgName };
     const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
-    return this.http
-      .put<OrganizationDetail>(`${this.url}${orgSlug}/`, data)
-      .pipe(
+    if (orgSlug) {
+      return this.organizationAPIService.update(orgSlug, data).pipe(
         tap((resp) => {
           this.setActiveOrganizationId(resp.id);
           this.updateOrgName(resp);
         })
       );
+    }
+    return EMPTY;
   }
 
   /** Delete organization: route to available org, if available or get empty org state on home page */
   deleteOrganization(slug: string) {
-    const url = `${this.url}${slug}/`;
-    return this.http.delete(url).pipe(
+    return this.organizationAPIService.destroy(slug).pipe(
       tap((_) => this.removeOrganization(slug)),
       withLatestFrom(this.organizations$),
       tap(([_, organizations]) => {
@@ -425,7 +440,7 @@ export class OrganizationsService {
     };
     return this.http.post<Team>(`${this.url}${orgSlug}/teams/`, data).pipe(
       tap((team) => {
-        this.getOrganizationDetail(orgSlug).toPromise();
+        this.refreshOrganizationDetail();
         this.teamsService.addTeam(team);
       })
     );
@@ -591,6 +606,7 @@ export class OrganizationsService {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       organizations,
+      initialLoad: true,
     });
   }
 
@@ -701,8 +717,8 @@ export class OrganizationsService {
   }
 
   private getOrganizationDetail(slug: string) {
-    return this.http
-      .get<OrganizationDetail>(`${this.url}${slug}/`)
+    return this.organizationAPIService
+      .retrieve(slug)
       .pipe(tap((organization) => this.setActiveOrganization(organization)));
   }
 }

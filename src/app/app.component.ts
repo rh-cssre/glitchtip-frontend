@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private userService: UserService,
-    private organizations: OrganizationsService,
+    private organizationService: OrganizationsService,
     private settings: SettingsService,
     private router: Router
   ) {}
@@ -51,12 +51,22 @@ export class AppComponent implements OnInit {
           _paq.push(["trackPageView"]);
         }
       }
+
+      if (event instanceof RoutesRecognized && event.state.root.firstChild) {
+        const params = event.state.root.firstChild.params;
+        const orgSlug = params["org-slug"];
+        if (orgSlug !== undefined) {
+          this.organizationService.setActiveOrganizationFromRouteChange(
+            orgSlug
+          );
+        }
+      }
     });
 
     combineLatest([this.isLoggedIn$, this.routesAreRecognized$])
       .pipe(
         filter(([isLoggedIn, _]) => !!isLoggedIn),
-        exhaustMap(() => this.organizations.retrieveOrganizations()),
+        exhaustMap(() => this.organizationService.retrieveOrganizations()),
         tap(() => this.userService.getUserDetails())
       )
       .subscribe();

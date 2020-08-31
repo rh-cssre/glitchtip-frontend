@@ -65,28 +65,6 @@ describe("OrganizationsService", () => {
     );
   });
 
-  it("navigates when changing active organization", async () => {
-    // Switch from one issues to another
-    await zone.run(() =>
-      router.navigate(["organizations", organizationList[0].slug, "issues"])
-    );
-    const navigateSpy = spyOn(router, "navigate");
-    // @ts-ignore
-    service.setOrganizations(organizationList);
-    // @ts-ignore
-    service.setActiveOrganizationId(2);
-    service.changeActiveOrganization(1);
-    const req = httpTestingController.expectOne(
-      `/api/0/organizations/${organizationList[1].slug}/`
-    );
-    req.flush(organizationList[1]);
-    expect(navigateSpy).toHaveBeenCalledWith([
-      "organizations",
-      organizationList[1].slug,
-      "issues",
-    ]);
-  });
-
   it("navigates within settings when changing active organization", async () => {
     // Remake testing module to inject mock ActivatedRoute
     TestBed.resetTestingModule();

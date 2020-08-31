@@ -3,7 +3,7 @@ import { Team } from "../teams/teams.interfaces";
 
 export interface OrganizationNew {
   name: string;
-  slug: string;
+  slug?: string;
 }
 
 export interface Organization extends OrganizationNew {
@@ -14,6 +14,7 @@ export interface Organization extends OrganizationNew {
   isEarlyAdopter: boolean;
   require2FA: boolean;
   isAcceptingEvents: boolean;
+  slug: string;
 }
 
 // tslint:disable-next-line:no-empty-interface

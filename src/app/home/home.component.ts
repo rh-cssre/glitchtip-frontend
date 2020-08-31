@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { OrganizationsService } from "../api/organizations/organizations.service";
-import { ProjectsService } from "../api/projects/projects.service";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
+import { OrganizationsService } from "../api/organizations/organizations.service";
+import { ProjectsService } from "../api/projects/projects.service";
 
 @Component({
   selector: "app-home",
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private projectsService: ProjectsService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
