@@ -17,7 +17,11 @@
     </mat-toolbar>
     <mat-nav-list>
       <ng-container
-        *ngIf="(organizations$ | async)?.length === 0; else showOrgMenu"
+        *ngIf="
+          (organizationsInitialLoad$ | async) &&
+            (organizations$ | async)?.length === 0;
+          else showOrgMenu
+        "
       >
         <a
           mat-menu-item
@@ -32,14 +36,12 @@
         <mat-list-item
           id="org-dropdown"
           color="accent"
+          [disabled]="(organizationsInitialLoad$ | async) === false"
           [matMenuTriggerFor]="menu"
           class="org-dropdown-list-item"
         >
-          <span
-            *ngIf="activeOrganizationDetail$ | async as orgDetails"
-            class="overflow"
-          >
-            {{ orgDetails?.name }}
+          <span class="overflow">
+            {{ (activeOrganizationDetail$ | async)?.name }}
           </span>
           <span class="down-caret">▼</span>
         </mat-list-item>
@@ -57,62 +59,64 @@
           Create New Organization
         </a>
       </mat-menu>
-      <ng-container *ngIf="activeOrganizationDetail$ | async as orgDetails">
-        <a
-          mat-list-item
-          [routerLink]="['/organizations', orgDetails?.slug, 'projects']"
-        >
-          Projects
-        </a>
-        <a
-          mat-list-item
-          [routerLink]="['/organizations', orgDetails?.slug, 'issues']"
-          routerLinkActive="active-route"
-        >
-          Issues
-        </a>
-        <a
-          mat-list-item
-          [routerLink]="['/settings', orgDetails?.slug]"
-          routerLinkActive="active-route"
-        >
-          Settings
-        </a>
-        <a
-          class="sub-items"
-          mat-list-item
-          [routerLink]="['/settings', orgDetails?.slug, 'projects']"
-          routerLinkActive="active-route"
-        >
-          Projects
-        </a>
-        <a
-          *ngIf="billingEnabled$ | async"
-          class="sub-items"
-          mat-list-item
-          [routerLink]="['/settings', orgDetails?.slug, 'subscription']"
-          routerLinkActive="active-route"
-        >
-          Subscription
-        </a>
-        <a
-          mat-list-item
-          [routerLink]="['/settings', orgDetails?.slug, 'teams']"
-          routerLinkActive="active-route"
-          class="sub-items"
-        >
-          Teams
-        </a>
-        <a
-          mat-list-item
-          [routerLink]="['/settings', orgDetails?.slug, 'members']"
-          routerLinkActive="active-route"
-          class="sub-items"
-        >
-          Members
-        </a>
-        <mat-divider class="org-details-divider"></mat-divider>
-      </ng-container>
+      <a
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="['/organizations', activeOrganizationSlug, 'projects']"
+      >
+        Projects
+      </a>
+      <a
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="['/organizations', activeOrganizationSlug, 'issues']"
+        routerLinkActive="active-route"
+      >
+        Issues
+      </a>
+      <a
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="['/settings', activeOrganizationSlug]"
+        routerLinkActive="active-route"
+      >
+        Settings
+      </a>
+      <a
+        class="sub-items"
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="['/settings', activeOrganizationSlug, 'projects']"
+        routerLinkActive="active-route"
+      >
+        Projects
+      </a>
+      <a
+        *ngIf="billingEnabled$ | async"
+        class="sub-items"
+        mat-list-item
+        [routerLink]="['/settings', activeOrganizationSlug, 'subscription']"
+        routerLinkActive="active-route"
+      >
+        Subscription
+      </a>
+      <a
+        mat-list-item
+        [routerLink]="['/settings', activeOrganizationSlug, 'teams']"
+        routerLinkActive="active-route"
+        class="sub-items"
+      >
+        Teams
+      </a>
+      <a
+        mat-list-item
+        [routerLink]="['/settings', activeOrganizationSlug, 'members']"
+        routerLinkActive="active-route"
+        class="sub-items"
+      >
+        Members
+      </a>
+      <mat-divider class="org-details-divider"></mat-divider>
       <a
         mat-list-item
         [routerLink]="['/profile']"

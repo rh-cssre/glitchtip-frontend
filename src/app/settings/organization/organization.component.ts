@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { FormControl, FormGroup } from "@angular/forms";
+import { tap, take } from "rxjs/operators";
+import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { OrganizationDetail } from "src/app/api/organizations/organizations.interface";
 
 @Component({
@@ -23,11 +24,21 @@ export class OrganizationComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private snackBar: MatSnackBar
-  ) {
-    this.organizationsService.retrieveOrganizations().subscribe();
-  }
+  ) {}
 
   ngOnInit() {
+    // Ignore first load, on subsequent inits refresh org data
+    this.organizationsService.initialLoad$
+      .pipe(
+        take(1),
+        tap((initialLoad) => {
+          if (initialLoad) {
+            this.organizationsService.retrieveOrganizations().toPromise();
+            this.organizationsService.refreshOrganizationDetail();
+          }
+        })
+      )
+      .toPromise();
     this.activeOrganizationDetail$.subscribe((data) =>
       data ? this.form.patchValue({ name: data.name }) : undefined
     );
