@@ -6,7 +6,7 @@
     "
   >
     <!-- If there are zero projects -->
-    <ng-container *ngIf="!(orgHasAProject$ | async); else hasProject">
+    <ng-container *ngIf="(orgHasAProject$ | async) === false; else hasProject">
       <h3 class="mat-display-1">This organization has no projects.</h3>
       <p class="mat-body-1">
         To add a project to this organization, press the

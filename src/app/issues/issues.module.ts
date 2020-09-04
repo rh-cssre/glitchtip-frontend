@@ -7,6 +7,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatSelectModule } from "@angular/material/select";
 import { MatBadgeModule } from "@angular/material/badge";
+import { MarkdownModule } from "ngx-markdown";
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { SharedModule } from "../shared/shared.module";
 
@@ -26,8 +27,7 @@ import { FrameExpandedComponent } from "./issue-detail/event-detail/entry-except
 import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-exception/raw-stacktrace/raw-stacktrace.component";
 import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
 import { ContextsComponent } from "./issue-detail/event-detail/context/contexts.component";
-import { MarkdownModule } from "ngx-markdown";
-import { IssueZeroStatesComponent } from './issue-zero-states/issue-zero-states.component';
+import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.component";
 
 @NgModule({
   imports: [
