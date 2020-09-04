@@ -27,10 +27,10 @@
       [disabled]="!isMember"
       [matTooltip]="
         isMember
-          ? undefined
+          ? ''
           : 'To view issues for this project, add yourself to the corresponding team.'
       "
-      [matTooltipPosition]="isMember ? undefined : 'right'"
+      matTooltipPosition="right"
       color="primary"
       [routerLink]="isMember ? cardLink : undefined"
       [queryParams]="isMember ? primaryButton.query || {} : {}"
