@@ -1,0 +1,12 @@
+@import "../../../assets/styles/variables";
+
+.empty-states {
+  padding: 1.5em 0 0.5em;
+}
+
+.not-on-team {
+  background: mat-color($amaranth-palette, 50);
+  padding: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}

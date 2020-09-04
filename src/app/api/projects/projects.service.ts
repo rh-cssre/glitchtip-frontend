@@ -53,6 +53,12 @@ export class ProjectsService {
   readonly activeProject$ = this.getState$.pipe(
     map((data) => data.projectDetail)
   );
+  readonly activeProjectFirstEvent$ = this.activeProject$.pipe(
+    map((project) => (project ? project.firstEvent : null))
+  );
+  readonly activeProjectPlatform$ = this.activeProject$.pipe(
+    map((project) => (project ? project.platform : null))
+  );
   readonly projectKeys$ = this.getState$.pipe(map((data) => data.projectKeys));
 
   readonly projectsForActiveOrg$ = combineLatest([

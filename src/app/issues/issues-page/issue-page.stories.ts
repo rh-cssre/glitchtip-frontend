@@ -204,23 +204,23 @@ export const issueListItem = () => {
   return {
     component: IssuesPageComponent,
     props: {
-      initialLoadComplete$: of(pageStateConfig[states].initialLoadComplete),
+      // initialLoadComplete$: of(pageStateConfig[states].initialLoadComplete),
       loading$: of(pageStateConfig[states].loading),
       appliedProjectCount$: of(pageStateConfig[states].appliedProjectCount),
       areAllSelected$: of(pageStateConfig[states].areAllSelected),
       thereAreSelectedIssues$: of(
         pageStateConfig[states].thereAreSelectedIssues
       ),
-      orgHasAProject$: of(pageStateConfig[states].orgHasAProject),
+      // orgHasAProject$: of(pageStateConfig[states].orgHasAProject),
       projectsFromParams$: of([2, 3, 4]),
-      projectsWhereAdminIsNotOnTheTeam$: of(
-        pageStateConfig[states].projectsWhereAdminIsNotOnTheTeam
-      ),
+      // projectsWhereAdminIsNotOnTheTeam$: of(
+      //   pageStateConfig[states].projectsWhereAdminIsNotOnTheTeam
+      // ),
       urlHasParam$: of(pageStateConfig[states].urlHasParam),
       issues$: of(
         issueListFrontend.slice(0, pageStateConfig[states].issueLength)
       ),
-      userNotInSomeTeams$: of(pageStateConfig[states].userNotInSomeTeams),
+      // userNotInSomeTeams$: of(pageStateConfig[states].userNotInSomeTeams),
     },
   };
 };

@@ -1,0 +1,77 @@
+<div class="empty-states">
+  <!-- Don't show any of this until loading state is resolved -->
+  <ng-container
+    *ngIf="
+      (initialLoadComplete$ | async) === true && (loading$ | async) === false
+    "
+  >
+    <!-- If there are zero projects -->
+    <ng-container *ngIf="!(orgHasAProject$ | async); else hasProject">
+      <h3 class="mat-display-1">This organization has no projects.</h3>
+      <p class="mat-body-1">
+        To add a project to this organization, press the
+        "Add&nbsp;Project"&nbsp;button.
+      </p>
+    </ng-container>
+
+    <ng-template #hasProject>
+      <!-- You're an admin, but you're not on the team -->
+      <ng-container
+        *ngIf="projectsWhereAdminIsNotOnTheTeam$ | async as notOnTeam"
+      >
+        <ng-container *ngIf="notOnTeam.length > 0 && notOnTeam.length < 2">
+          <p class="not-on-team">
+            <ng-container
+              *ngIf="singleProjectApplied$ | async; else notOnTeamMultiple"
+            >
+              You can't see issues for this project because you're not on the
+              team.
+            </ng-container>
+            <ng-template #notOnTeamMultiple>
+              Out of the projects you have selected, you are not a part of that
+              project's team for at least one of them.
+            </ng-template>
+          </p>
+        </ng-container>
+        <ng-container *ngIf="notOnTeam.length > 2"> </ng-container>
+      </ng-container>
+
+      <!-- If there is one project applied -->
+      <ng-container
+        *ngIf="singleProjectApplied$ | async; else multipleProjects"
+      >
+        <!-- If no event has been sent -->
+        <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
+          <h2 class="mat-display-1">Send us your events!</h2>
+
+          <markdown src="/sdk-docs/temp-onboarding.md"></markdown>
+
+          <!--p
+            *ngIf="activeProjectPlatform$ | async as platform; else noPlatform"
+          >
+            <a href="">Read the {{ platform }} SDK installation instructions</a>
+          </p>
+          <ng-template #noPlatform>
+            <p>No platform specified.</p>
+          </ng-template-->
+        </ng-container>
+
+        <ng-template #noIssueMessaging>
+          <!-- No issues match the filters, in general -->
+          <h3 class="mat-display-1">No events match your filters.</h3>
+          <p class="mat-body-1">
+            Try changing your search parameters to get something to show here.
+          </p>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #multipleProjects>
+        <h3>No events match your filters.</h3>
+        <p class="mat-body-1">
+          You have multiple projects selected. Select a single project to learn
+          more about why there's nothing here.
+        </p>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+</div>

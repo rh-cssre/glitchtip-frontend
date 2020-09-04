@@ -104,6 +104,9 @@ export class OrganizationsService {
   readonly activeOrganizationProjects$ = this.activeOrganization$.pipe(
     map((data) => (data ? data.projects : null))
   );
+  readonly orgHasAProject$ = this.activeOrganizationProjects$.pipe(
+    map((projects) => !!projects && projects.length > 0)
+  );
   readonly projectsCount$ = this.activeOrganizationProjects$.pipe(
     map((projects) => {
       if (!projects) {
