@@ -4,6 +4,7 @@ import {
   HttpParams,
   HttpErrorResponse,
 } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import { baseUrl } from "../../constants";
@@ -16,7 +17,7 @@ import {
   ProjectError,
 } from "./projects.interfaces";
 import { OrganizationsService } from "../organizations/organizations.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationProject } from "../organizations/organizations.interface";
 
 interface ProjectsState {
   projects: Project[] | null;
@@ -96,6 +97,36 @@ export class ProjectsService {
       .get<Project[]>(this.url)
       .pipe(tap((projects) => this.setProjects(projects)))
       .subscribe();
+  }
+
+  /**
+   * Calls retrieveProjectDetail with the active org slug and the slug of a
+   * single project. Project comes from either the URL or the active org list
+   *
+   * @param project An array of project IDs that come from the URL
+   * @param activeOrgProjects All projects associated with the active organization
+   * @param orgSlug Active organization slug
+   */
+  getProjectDetails(
+    project: string[] | null,
+    activeOrgProjects: OrganizationProject[] | null,
+    orgSlug: string
+  ) {
+    if (activeOrgProjects) {
+      let matchingProject: OrganizationProject | null = null;
+      if (project && project.length === 1) {
+        const match = activeOrgProjects.find(
+          (activeOrgProject) => activeOrgProject.id === parseInt(project[0], 10)
+        );
+        if (match) matchingProject = match;
+      } else if (activeOrgProjects.length === 1) {
+        matchingProject = activeOrgProjects[0];
+      }
+
+      if (matchingProject) {
+        this.retrieveProjectDetail(orgSlug, matchingProject.slug);
+      }
+    }
   }
 
   addProjectToTeam(orgSlug: string, teamSlug: string, projectSlug: string) {

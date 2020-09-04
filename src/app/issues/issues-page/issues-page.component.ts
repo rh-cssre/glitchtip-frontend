@@ -4,8 +4,9 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
+import { formatDate } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
+import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { Subscription, combineLatest } from "rxjs";
 import {
   map,
@@ -16,8 +17,6 @@ import {
 import { IssuesService } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { formatDate } from "@angular/common";
-import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 import { ProjectsService } from "src/app/api/projects/projects.service";
 
 @Component({
@@ -159,14 +158,22 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     this.projectDetailTriggerSwitchOrgs.subscribe(
       ({ orgSlug, projectId, activeOrgProjects }) => {
         if (orgSlug) {
-          this.getProjectDetails(projectId, activeOrgProjects, orgSlug);
+          this.projectsService.getProjectDetails(
+            projectId,
+            activeOrgProjects,
+            orgSlug
+          );
         }
       }
     );
     this.projectDetailTriggerProjectCount.subscribe(
       ({ orgSlug, projectId, activeOrgProjects }) => {
         if (orgSlug) {
-          this.getProjectDetails(projectId, activeOrgProjects, orgSlug);
+          this.projectsService.getProjectDetails(
+            projectId,
+            activeOrgProjects,
+            orgSlug
+          );
         }
       }
     );
@@ -190,39 +197,6 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
     this.issuesService.clearState();
-  }
-
-  /**
-   * Calls retrieveProjectDetail with the active org slug and the slug of a
-   * single project. Project comes from either the URL or the active org list
-   *
-   * @param project An array of project IDs that come from the URL
-   * @param activeOrgProjects All projects associated with the active organization
-   * @param orgSlug Active organization slug
-   */
-  getProjectDetails(
-    project: string[] | null,
-    activeOrgProjects: OrganizationProject[] | null,
-    orgSlug: string
-  ) {
-    if (activeOrgProjects) {
-      let matchingProject: OrganizationProject | null = null;
-      if (project && project.length === 1) {
-        const match = activeOrgProjects.find(
-          (activeOrgProject) => activeOrgProject.id === parseInt(project[0], 10)
-        );
-        if (match) matchingProject = match;
-      } else if (activeOrgProjects.length === 1) {
-        matchingProject = activeOrgProjects[0];
-      }
-
-      if (matchingProject) {
-        this.projectsService.retrieveProjectDetail(
-          orgSlug,
-          matchingProject.slug
-        );
-      }
-    }
   }
 
   onDateFormSubmit() {
