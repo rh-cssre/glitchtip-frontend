@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { IssuesService } from "../issues.service";
@@ -15,7 +15,7 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IssueZeroStatesComponent implements OnInit {
+export class IssueZeroStatesComponent {
   loading$ = this.issuesService.loading$;
   initialLoadComplete$ = this.issuesService.initialLoadComplete$;
   orgHasAProject$ = this.organizationsService.orgHasAProject$;
@@ -104,6 +104,4 @@ export class IssueZeroStatesComponent implements OnInit {
     private projectsService: ProjectsService,
     private activatedRoute: ActivatedRoute
   ) {}
-
-  ngOnInit(): void {}
 }
