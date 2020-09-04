@@ -17,11 +17,11 @@ export class FrameTitleComponent {
     absPath: string | null,
     filename: string | null,
     module: string | null
-  ): string | undefined {
+  ): string {
     if ((absPath && absPath !== filename) || (absPath && absPath !== module)) {
       return absPath;
     } else {
-      return undefined;
+      return "";
     }
   }
 
