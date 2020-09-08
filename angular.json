@@ -54,7 +54,8 @@
                 "output": "./assets/images/os-logos"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": ["src/styles.scss"],
+            "scripts": []
           },
           "configurations": {
             "production": {
