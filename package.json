@@ -12,6 +12,7 @@
     "e2e": "concurrently \"npm run start\" \"wait-on http-get://localhost:4200 && npm run cy:run\" --kill-others --success first",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "build-stats": "ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/stats.json"
   },
   "dependencies": {

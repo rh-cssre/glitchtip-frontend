@@ -64,6 +64,9 @@ export class IssuesService {
   areAllSelected$ = combineLatest([this.issues$, this.selectedIssues$]).pipe(
     map(([issues, selectedIssues]) => issues.length === selectedIssues.length)
   );
+  readonly thereAreSelectedIssues$ = this.selectedIssues$.pipe(
+    map((selectedIssues) => selectedIssues.length > 0)
+  );
   issueCount$ = this.getState$.pipe(map((state) => state.issueCount));
   hasNextPage$ = this.getState$.pipe(map((state) => state.nextPage !== null));
   hasPreviousPage$ = this.getState$.pipe(

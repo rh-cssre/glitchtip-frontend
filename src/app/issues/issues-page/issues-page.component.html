@@ -5,110 +5,12 @@
 
   <app-header-nav></app-header-nav>
 
-  <div
-    *ngIf="
-      (loading$ | async) === true &&
-      (urlHasParam$ | async) === false &&
-      (issues$ | async)?.length === 0
-    "
-    class="spinner-container"
-  >
-    <mat-progress-spinner
-      [diameter]="33"
-      color="primary"
-      mode="indeterminate"
-    ></mat-progress-spinner>
-  </div>
-
   <div *ngIf="issues$ | async as issues">
-    <ng-container
-      *ngIf="
-        (initialLoadComplete$ | async) === true && (loading$ | async) === false
-      "
-    >
-      <mat-card *ngIf="userNotInSomeTeams$ | async">
-        <p>
-          You can't see issues for some projects because you're not on the team
-          for those projects.
-        </p>
-      </mat-card>
-
-      <ng-container *ngIf="!(urlHasParam$ | async)">
-        <mat-card *ngIf="!(orgHasAProject$ | async)">
-          <h3>This organization has no projects.</h3>
-          <p>
-            To add a project to this organization, press the
-            "Add&nbsp;Project"&nbsp;button.
-          </p>
-        </mat-card>
-        <!--<mat-card *ngIf="(orgHasAProject$ | async) && issues.length === 0">
-          <h3>
-            <ng-container
-              *ngIf="appliedProjectCount$ | async as appliedProjectCount"
-            >
-              <ng-container *ngIf="appliedProjectCount > 1; else singleProject">
-                <ng-container
-                  *ngIf="
-                    (projectsWhereAdminIsNotOnTheTeam$ | async)?.length === 0;
-                    else notAMemberOfAtLeastOne
-                  "
-                >
-                  No issues have been reported to these projects.
-                </ng-container>
-
-                <ng-template #notAMemberOfAtLeastOne>
-                  No issues, and/or not on the team.
-                </ng-template>
-              </ng-container></ng-container
-            >
-
-            <ng-template #singleProject>
-              <ng-container
-                *ngIf="
-                  (projectsWhereAdminIsNotOnTheTeam$ | async)?.length === 0;
-                  else notAMember
-                "
-              >
-                No issues have been reported to this project.
-              </ng-container>
-
-              <ng-template #notAMember>
-                You can't see issues for this project because you're not on the
-                team.
-              </ng-template>
-            </ng-template>
-          </h3>
-
-          <p>
-            <ng-container
-              *ngIf="
-                (projectsWhereAdminIsNotOnTheTeam$ | async)?.length === 0;
-                else paragraphAltMessaging
-              "
-            >
-              Add an SDK to your project<ng-container
-                *ngIf="appliedProjectCount$ | async as appliedProjectCount"
-                ><ng-container *ngIf="appliedProjectCount > 1"
-                  >s</ng-container
-                ></ng-container
-              >
-              to start sending errors to GlitchTip.
-            </ng-container>
-
-            <ng-template #paragraphAltMessaging>
-              There are no issues here, either because no issues have been
-              reported or because you're not on the team for one or more of the
-              projects.
-            </ng-template>
-          </p>
-        </mat-card>-->
-      </ng-container>
-    </ng-container>
     <table mat-table [dataSource]="issues$" class="mat-elevation-z2">
       <ng-container matColumnDef="actions">
         <th
           mat-header-cell
-          colspan="4"
+          [attr.colspan]="displayedColumns.length"
           *matHeaderCellDef
           class="resolved-row"
           class="table-header"
@@ -355,6 +257,11 @@
         *matHeaderRowDef="displayedColumns"
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <app-issue-zero-states></app-issue-zero-states>
+        </td>
+      </tr>
       <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
     </table>
   </div>
