@@ -15,6 +15,8 @@ import { IssuesService } from "../issues.service";
 import { issueListFrontend } from "../issues-list-frontend-test-data";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
+import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
+import { MarkdownModule } from "ngx-markdown";
 
 export default {
   title: "Issues Page",
@@ -29,9 +31,10 @@ export default {
         MatDatepickerModule,
         MatNativeDateModule,
         MatTableModule,
+        MarkdownModule,
       ],
       providers: [IssuesService, MatDatepickerModule, OrganizationsService],
-      declarations: [HeaderNavComponent],
+      declarations: [HeaderNavComponent, IssueZeroStatesComponent],
     }),
     withKnobs,
   ],
