@@ -5,11 +5,8 @@ import {
   HttpClientModule,
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS,
-  HttpClient,
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
-
-import { MarkdownModule } from "ngx-markdown";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
@@ -36,8 +33,6 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
     }),
     MainNavModule,
     SharedModule,
-    // MarkdownModule.forRoot()
-    MarkdownModule.forRoot({ loader: HttpClient }),
   ],
   providers: [
     {

@@ -32,7 +32,6 @@
     "operating-system-logos": "^1.0.0",
     "@sentry/browser": "^5.22.3",
     "@stripe/stripe-js": "^1.9.0",
-    "ngx-markdown": "^10.1.1",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

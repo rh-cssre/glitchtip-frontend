@@ -7,7 +7,6 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatSelectModule } from "@angular/material/select";
 import { MatBadgeModule } from "@angular/material/badge";
-import { MarkdownModule } from "ngx-markdown";
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { SharedModule } from "../shared/shared.module";
 
@@ -41,7 +40,6 @@ import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.
     MatTableModule,
     MatTabsModule,
     MatBadgeModule,
-    MarkdownModule.forChild(),
   ],
   declarations: [
     IssuesPageComponent,

@@ -43,7 +43,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/sdk-docs",
               {
                 "glob": "**/*.svg",
                 "input": "./node_modules/browser-logos/src/",
@@ -55,15 +54,7 @@
                 "output": "./assets/images/os-logos"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/prismjs/themes/prism.css"
-            ],
-            "scripts": [
-              "node_modules/marked/lib/marked.js",
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-javascript.min.js"
-            ]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
