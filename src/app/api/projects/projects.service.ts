@@ -54,6 +54,9 @@ export class ProjectsService {
   readonly activeProject$ = this.getState$.pipe(
     map((data) => data.projectDetail)
   );
+  readonly activeProjectSlug$ = this.activeProject$.pipe(
+    map((data) => data?.slug)
+  );
   readonly activeProjectFirstEvent$ = this.activeProject$.pipe(
     map((project) => (project ? project.firstEvent : null))
   );

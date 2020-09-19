@@ -1,0 +1,173 @@
+<mat-card>
+  <mat-card-title>Project Alerts</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <ng-container *ngIf="(initialLoad$ | async) === false; else afterLoad">
+      <div class="loading"></div>
+    </ng-container>
+    <ng-template #afterLoad>
+      <div
+        class="default-settings"
+        [class.add-padding]="(projectAlerts$ | async) === null"
+      >
+        <div class="default-alerts">
+          <ng-container
+            *ngIf="(projectAlerts$ | async) === null; else alertsAreOn"
+          >
+            <p class="mat-body-strong">Project Alerts Off</p>
+            <p class="mat-body-1">
+              You are not currently receiving any alerts for this project.
+            </p>
+          </ng-container>
+          <ng-template #alertsAreOn>
+            <p class="mat-body-strong">Project Alerts On</p>
+            <p class="mat-body-1">
+              These preferences apply to everyone who is part of this project
+            </p>
+          </ng-template>
+        </div>
+        <div class="button-group">
+          <div class="button-and-loading">
+            <mat-spinner
+              *ngIf="(alertToggleLoading$ | async) === true"
+              diameter="24"
+            ></mat-spinner>
+            <mat-button-toggle-group
+              name="defaultNotifications"
+              aria-label="Default Notifications"
+            >
+              <mat-button-toggle
+                value="onDefault"
+                (change)="toggleProjectAlerts()"
+                [class.underline]="projectAlerts$ | async"
+                [checked]="(projectAlerts$ | async) !== null"
+                >On</mat-button-toggle
+              >
+              <mat-button-toggle
+                value="offDefault"
+                (change)="toggleProjectAlerts()"
+                [class.underline]="(projectAlerts$ | async) === null"
+                [checked]="(projectAlerts$ | async) === null"
+                >Off</mat-button-toggle
+              >
+            </mat-button-toggle-group>
+          </div>
+          <mat-error
+            *ngIf="alertToggleError$ | async as error"
+            class="mat-small"
+            >{{ error }}</mat-error
+          >
+        </div>
+      </div>
+    </ng-template>
+
+    <div *ngIf="(projectAlerts$ | async) !== null">
+      <div class="server-error">
+        <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
+      </div>
+      <form class="flex" [formGroup]="projectAlertForm" (ngSubmit)="onSubmit()">
+        <p>
+          <span
+            >If&nbsp;an&nbsp;<span
+              class="tooltip"
+              matTooltip="An event is every occurance of the same error (aka: issue) in your application."
+              >event</span
+            >&nbsp;happens</span
+          >
+          <mat-form-field>
+            <mat-label>Quantity</mat-label>
+            <input
+              matInput
+              min="0"
+              max="10000"
+              type="number"
+              autocomplete="off"
+              formControlName="quantity"
+              [errorStateMatcher]="matcher"
+              placeholder="#"
+            />
+            <mat-error *ngIf="projectAlertForm.get('quantity')?.errors">
+              <span *ngIf="projectAlertForm.get('quantity')?.errors?.min"
+                >The quantity needs to be greater than or equal to 0.</span
+              >
+              <span
+                *ngIf="projectAlertForm.get('quantity')?.errors?.invalidNumber"
+                >Enter a number.
+              </span>
+              <span *ngIf="projectAlertForm.get('quantity')?.errors?.required"
+                >This field is required.</span
+              >
+            </mat-error>
+          </mat-form-field>
+          <span
+            >time<span *ngIf="projectAlertForm.get('quantity')?.value !== 1"
+              >s</span
+            >&nbsp;in</span
+          >
+          <mat-form-field>
+            <mat-label>Timespan</mat-label>
+            <input
+              matInput
+              min="0"
+              max="10000"
+              type="number"
+              autocomplete="off"
+              formControlName="timespan_minutes"
+              [errorStateMatcher]="matcher"
+              placeholder="#"
+            />
+            <mat-error *ngIf="projectAlertForm.get('timespan_minutes')?.errors">
+              <span
+                *ngIf="projectAlertForm.get('timespan_minutes')?.errors?.min"
+                >The timespan needs to be greater than or equal to 0.</span
+              >
+              <span
+                *ngIf="
+                  projectAlertForm.get('timespan_minutes')?.errors
+                    ?.invalidNumber
+                "
+                >Enter a number.
+              </span>
+              <span
+                *ngIf="
+                  projectAlertForm.get('timespan_minutes')?.errors?.required
+                "
+                >This field is required.</span
+              >
+            </mat-error>
+          </mat-form-field>
+          <span
+            >minute<span
+              *ngIf="projectAlertForm.get('timespan_minutes')?.value !== 1"
+              >s</span
+            >,&nbsp;send&nbsp;an&nbsp;email.</span
+          >
+        </p>
+        <app-loading-button
+          buttonText="Update Alerts"
+          [disabled]="
+            projectAlertForm.get('timespan_minutes')?.value ===
+              (projectAlerts$ | async)?.timespan_minutes &&
+            projectAlertForm.get('quantity')?.value ===
+              (projectAlerts$ | async)?.quantity
+          "
+          [loading]="(loading$ | async) === true"
+        ></app-loading-button>
+      </form>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="notifications-wrapper">
+      <div class="notifications-text">
+        <p class="mat-body-strong">Personal project notifications</p>
+        <p>
+          Edit whether or not you want to receive notifications for this project
+        </p>
+      </div>
+      <div>
+        <a mat-flat-button color="primary" routerLink="/profile">
+          Personal Notification Preferences
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
