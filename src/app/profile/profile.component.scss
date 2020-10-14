@@ -1,62 +1,61 @@
 @import "../../assets/styles/variables";
 
+$iconWidth: 56px;
+
+mat-drawer-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+mat-drawer {
+  min-width: 200px;
+
+  @media (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+mat-drawer-content {
+  mat-toolbar {
+    display: none;
+    padding-left: $iconWidth;
+    cursor: pointer;
+
+    @media (max-width: $tablet - 1) {
+      display: flex;
+    }
+
+    .sidenav-toggle {
+      padding: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 0;
+      min-width: $iconWidth;
+    }
+
+    mat-icon {
+      font-size: 25px;
+      height: $iconWidth;
+      width: $iconWidth;
+      line-height: $iconWidth;
+      color: white;
+
+      @media (min-width: $small) {
+        height: 64px;
+        line-height: 64px;
+      }
+    }
+
+    .active-org {
+      margin-left: 8px;
+    }
+  }
+}
+
 h1 {
   margin-bottom: 0;
-}
-
-.button-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax((334px), 1fr));
-  grid-gap: 0 24px;
-  padding-top: 16px;
-
-  @media (max-width: $tablet - 1) {
-    grid-template-columns: auto;
-  }
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-mat-card-header {
-  &::ng-deep .mat-card-header-text {
-    margin-left: 0;
-  }
-}
-
-mat-card {
-  margin-bottom: 32px;
-}
-
-.half-width {
-  width: 50%;
-
-  @media (max-width: $tablet - 1) {
-    width: 100%;
-  }
-}
-
-.empty-auth {
-  padding-top: 16px;
-  text-align: center;
-}
-
-.confirm-email {
-  padding-top: 16px;
-}
-
-.success-text {
-  display: flex;
-  align-items: center;
-
-  mat-icon {
-    margin-right: 8px;
-  }
-}
-
-.margin {
-  margin-bottom: 8px;
 }

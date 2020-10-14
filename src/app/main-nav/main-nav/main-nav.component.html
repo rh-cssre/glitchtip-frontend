@@ -124,6 +124,22 @@
       >
         Profile
       </a>
+      <a
+        mat-list-item
+        [routerLink]="['/profile']"
+        routerLinkActive="active-route"
+        class="sub-items"
+      >
+        Account
+      </a>
+      <a
+        mat-list-item
+        [routerLink]="['/profile', 'notifications']"
+        routerLinkActive="active-route"
+        class="sub-items"
+      >
+        Notifications
+      </a>
       <button mat-menu-item (click)="this.logout()">Log Out</button>
     </mat-nav-list>
   </mat-sidenav>

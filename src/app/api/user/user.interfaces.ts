@@ -19,7 +19,6 @@ export interface SocialApp {
 
 export interface User {
   username: string;
-
   lastLogin: string;
   isSuperuser: boolean;
   emails: Email[];
