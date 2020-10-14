@@ -12,6 +12,8 @@ import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 import { NotificationsComponent } from "./notifications/notifications.component";
 import { AuthTokensComponent } from "./auth-tokens/auth-tokens.component";
 import { NewTokenComponent } from "./auth-tokens/new-token/new-token.component";
+import { SocialAuthComponent } from "./social-auth/social-auth.component";
+import { AccountComponent } from "./account/account.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { NewTokenComponent } from "./auth-tokens/new-token/new-token.component";
     NotificationsComponent,
     AuthTokensComponent,
     NewTokenComponent,
+    SocialAuthComponent,
+    AccountComponent,
   ],
   imports: [
     CommonModule,

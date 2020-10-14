@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -7,14 +7,21 @@ import {
 } from "@angular/forms";
 import { PasswordService } from "./password.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { UserService } from "src/app/api/user/user.service";
+import { AuthService } from "src/app/api/auth/auth.service";
+import { map, take, mergeMap, tap } from "rxjs/operators";
+import { EMPTY } from "rxjs";
 
 @Component({
   selector: "app-change-password",
   templateUrl: "./change-password.component.html",
   styleUrls: ["./change-password.component.scss"],
 })
-export class ChangePasswordComponent {
+export class ChangePasswordComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective;
+  user$ = this.userService.userDetails$;
+  passwordResetLoading = false;
+  passwordResetSuccess = false;
 
   loading = false;
   error: string | null | undefined;
@@ -44,8 +51,16 @@ export class ChangePasswordComponent {
 
   constructor(
     private passwordService: PasswordService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private authService: AuthService
   ) {}
+
+  ngOnInit() {
+    this.userService.getUserDetails();
+    this.passwordResetSuccess = false;
+    this.passwordResetLoading = false;
+  }
 
   onSubmit() {
     if (this.form.valid) {
@@ -77,5 +92,27 @@ export class ChangePasswordComponent {
           }
         );
     }
+  }
+
+  passwordReset() {
+    this.passwordResetSuccess = false;
+    this.passwordResetLoading = true;
+    this.user$
+      .pipe(
+        map((user) => user?.email),
+        take(1),
+        mergeMap((email) => {
+          if (email) {
+            return this.authService.passwordReset(email).pipe(
+              tap(() => {
+                this.passwordResetSuccess = true;
+                this.passwordResetLoading = false;
+              })
+            );
+          }
+          return EMPTY;
+        })
+      )
+      .toPromise();
   }
 }

@@ -1,15 +1,18 @@
 @import "src/assets/styles/variables";
 
-mat-card {
-  margin-bottom: 40px;
+mat-card-content {
+  padding-top: 32px;
 }
 
 .default-settings {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 32px;
   margin-bottom: 32px;
+}
+
+.default-alerts {
+  margin-right: 16px;
 
   p {
     margin-top: 0;
@@ -17,14 +20,10 @@ mat-card {
   }
 }
 
-mat-error {
-  text-align: right;
-  padding-top: 4px;
-  line-height: 1.5;
-}
-
-.default-alerts {
-  margin-right: 16px;
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .button-and-loading {
@@ -36,10 +35,10 @@ mat-error {
   }
 }
 
-.button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+mat-error {
+  text-align: right;
+  padding-top: 4px;
+  line-height: 1.5;
 }
 
 .expand-button {
@@ -49,10 +48,9 @@ mat-error {
   margin-right: auto;
 }
 
-.underline {
-  &::ng-deep .mat-button-toggle-label-content {
-    text-decoration: underline;
-  }
+.org-name {
+  margin-bottom: 4px;
+  margin-top: 32px;
 }
 
 .border {
@@ -72,11 +70,6 @@ mat-error {
   }
 }
 
-.org-name {
-  margin-bottom: 4px;
-  margin-top: 32px;
-}
-
 .project {
   p {
     margin-top: 0;
@@ -88,13 +81,8 @@ mat-error {
   }
 }
 
-.project-link {
-  padding-left: 0;
-  text-align: left;
-
-  &::ng-deep {
-    .mat-button-focus-overlay {
-      background-color: transparent;
-    }
+.underline {
+  &::ng-deep .mat-button-toggle-label-content {
+    text-decoration: underline;
   }
 }

@@ -1,94 +1,49 @@
-<section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1">User Profile</h1>
-    <p class="mat-body-1 subtitle" *ngIf="user$ | async as user">
-      {{ user.email }}
-    </p>
-  </header>
-
-  <div *ngIf="user$ | async as user">
-    <mat-card>
-      <mat-card-header class="card-header">
-        <mat-card-title>Social Auth Accounts</mat-card-title>
-        <mat-form-field *ngIf="socialApps$ | async as socialApps">
-          <mat-label>Add Account</mat-label>
-          <mat-select (selectionChange)="addAccount()" [formControl]="account">
-            <mat-option
-              *ngFor="let socialApp of socialApps"
-              [value]="socialApp"
-            >
-              <app-auth-svg
-                source="dropdown"
-                [provider]="socialApp.provider"
-                [text]="socialApp.name"
-              ></app-auth-svg>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content
-        ><ng-container
-          *ngIf="
-            (user$ | async)?.identities?.length === 0;
-            else authAccountsList
-          "
+<mat-drawer-container>
+  <mat-drawer class="mat-elevation-z2" mode="side" opened>
+    <nav>
+      <mat-nav-list>
+        <a
+          mat-list-item
+          routerLink="/profile"
+          routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Account</a
         >
-          <p class="empty-auth">
-            You haven't connected any social auth accounts.
-          </p>
-        </ng-container>
-        <ng-template #authAccountsList>
-          <div class="button-wrapper">
-            <ng-container
-              *ngFor="let socialAccount of (user$ | async)?.identities"
-            >
-              <button
-                mat-stroked-button
-                class="full-width margin"
-                (click)="disconnect(socialAccount.id)"
-              >
-                <app-auth-svg
-                  source="disconnect"
-                  text="Disconnect
-              {{
-                    socialAccount.username
-                      ? socialAccount.username
-                      : socialAccount.email
-                  }}"
-                  [provider]="socialAccount.provider"
-                ></app-auth-svg>
-              </button>
-            </ng-container></div
-        ></ng-template>
-      </mat-card-content>
-    </mat-card>
-    <mat-card *ngIf="user.hasPasswordAuth" class="half-width">
-      <app-change-password></app-change-password>
-    </mat-card>
-
-    <mat-card *ngIf="!user.hasPasswordAuth" class="half-width">
-      <mat-card-title>Set Password</mat-card-title>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        <p class="confirm-email">
-          GlitchTip will need to reconfirm your email before setting one.
-        </p>
-        <app-loading-button
-          *ngIf="!passwordResetSuccess"
-          buttonText="Request set password email"
-          [loading]="passwordResetLoading"
-          (click)="passwordReset()"
+        <a
+          mat-list-item
+          routerLink="./notifications"
+          routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Notifications</a
         >
-        </app-loading-button>
-        <p *ngIf="passwordResetSuccess" class="success-text">
-          <mat-icon color="primary">check_circle</mat-icon>
-          <span>Email sent</span>
+        <!-- <a
+          mat-list-item
+          routerLink="./auth-tokens"
+          routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Auth Tokens</a
+        > -->
+      </mat-nav-list>
+    </nav>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar color="primary" (click)="toggleSideNav()">
+      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
+        <mat-icon>menu</mat-icon></button
+      ><span
+        class="active-org"
+        *ngIf="activeOrganizationDetail$ | async as orgDetails"
+        >{{ orgDetails?.name }}</span
+      >
+    </mat-toolbar>
+    <section class="l-body">
+      <header class="page-header">
+        <h1 class="mat-display-1">User Profile</h1>
+        <p class="mat-body-1 subtitle" *ngIf="user$ | async as user">
+          {{ user.email }}
         </p>
-      </mat-card-content>
-    </mat-card>
-
-    <app-manage-emails></app-manage-emails>
-    <app-notifications></app-notifications>
-  </div>
-</section>
+      </header>
+      <router-outlet></router-outlet>
+    </section>
+  </mat-drawer-content>
+</mat-drawer-container>

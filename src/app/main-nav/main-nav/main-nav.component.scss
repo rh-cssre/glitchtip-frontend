@@ -29,6 +29,7 @@ mat-sidenav {
   @media (max-width: $tablet - 1) {
     display: block !important;
     margin-left: 24px;
+    max-width: calc(100% - 24px);
     color: mat-color($mat-gray, 600);
   }
 }

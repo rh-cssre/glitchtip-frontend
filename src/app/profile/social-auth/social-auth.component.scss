@@ -1,0 +1,31 @@
+@import "../../../assets/styles/variables";
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &::ng-deep .mat-card-header-text {
+    margin-left: 0;
+  }
+}
+
+.empty-auth {
+  padding-top: 16px;
+  text-align: center;
+}
+
+.button-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax((334px), 1fr));
+  grid-gap: 0 24px;
+  padding-top: 16px;
+
+  @media (max-width: $tablet - 1) {
+    grid-template-columns: auto;
+  }
+
+  .margin {
+    margin-bottom: 8px;
+  }
+}

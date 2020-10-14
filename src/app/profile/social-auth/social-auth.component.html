@@ -1,0 +1,46 @@
+<mat-card *ngIf="user$ | async as user">
+  <mat-card-header>
+    <mat-card-title>Social Auth Accounts</mat-card-title>
+    <mat-form-field *ngIf="socialApps$ | async as socialApps">
+      <mat-label>Add Account</mat-label>
+      <mat-select (selectionChange)="addAccount()" [formControl]="account">
+        <mat-option *ngFor="let socialApp of socialApps" [value]="socialApp">
+          <app-auth-svg
+            source="dropdown"
+            [provider]="socialApp.provider"
+            [text]="socialApp.name"
+          ></app-auth-svg>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content
+    ><ng-container
+      *ngIf="(user$ | async)?.identities?.length === 0; else authAccountsList"
+    >
+      <p class="empty-auth">You haven't connected any social auth accounts.</p>
+    </ng-container>
+    <ng-template #authAccountsList>
+      <div class="button-wrapper">
+        <ng-container *ngFor="let socialAccount of (user$ | async)?.identities">
+          <button
+            mat-stroked-button
+            class="full-width margin"
+            (click)="disconnect(socialAccount.id)"
+          >
+            <app-auth-svg
+              source="disconnect"
+              text="Disconnect
+            {{
+                socialAccount.username
+                  ? socialAccount.username
+                  : socialAccount.email
+              }}"
+              [provider]="socialAccount.provider"
+            ></app-auth-svg>
+          </button>
+        </ng-container></div
+    ></ng-template>
+  </mat-card-content>
+</mat-card>
