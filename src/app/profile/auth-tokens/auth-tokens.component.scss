@@ -1,0 +1,64 @@
+@import "../../../assets/styles//variables";
+
+mat-card {
+  margin-bottom: 32px;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+
+  &::ng-deep .mat-card-header-text {
+    margin-left: 0;
+  }
+
+  mat-card-title {
+    margin-bottom: 0;
+  }
+}
+
+.content {
+  padding-top: 32px;
+  padding-bottom: 16px;
+}
+
+.content-wrapper {
+  padding-top: 16px;
+}
+
+.loading-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.label {
+  width: 80%;
+  margin-bottom: 0;
+}
+
+.token {
+  width: 80%;
+}
+
+.scopes {
+  display: flex;
+  flex-direction: column;
+  margin-top: -4px;
+  margin-bottom: 32px;
+
+  &__list-wrapper {
+    display: inline-block;
+
+    span:not(:last-child)::after {
+      content: ", ";
+    }
+  }
+}
+
+.token-copied {
+  color: $amaranth;
+}

@@ -7,7 +7,6 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatRadioModule } from "@angular/material/radio";
-import { ClipboardModule } from "@angular/cdk/clipboard";
 import { MatSelectModule } from "@angular/material/select";
 
 // Components
@@ -39,7 +38,6 @@ import { ProjectAlertsComponent } from "./projects/project-detail/project-alerts
     MatTabsModule,
     MatRadioModule,
     MatSelectModule,
-    ClipboardModule,
   ],
   declarations: [
     ProjectsComponent,
