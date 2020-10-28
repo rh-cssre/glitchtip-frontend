@@ -1,0 +1,45 @@
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+
+  &::ng-deep .mat-card-header-text {
+    margin-left: 0;
+  }
+
+  mat-card-title {
+    margin-bottom: 0;
+  }
+}
+
+.server-error {
+  padding-top: 16px;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+
+  li {
+    min-width: 25%;
+    list-style-type: none;
+    margin-top: 8px;
+  }
+}
+
+.checkbox-error {
+  font-size: 75%;
+}
+
+app-loading-button {
+  margin-top: 40px;
+}

@@ -22,6 +22,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ClipboardModule } from "@angular/cdk/clipboard";
 
 export const COMPONENTS = [
   MatButtonModule,
@@ -41,6 +42,7 @@ export const COMPONENTS = [
   MatToolbarModule,
   MatTooltipModule,
   MatProgressSpinnerModule,
+  ClipboardModule,
 ];
 
 @NgModule({

@@ -1,19 +1,18 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  OnDestroy,
-} from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthTokensService } from "./auth-tokens.service";
 
 @Component({
   selector: "app-auth-tokens",
   templateUrl: "./auth-tokens.component.html",
   styleUrls: ["./auth-tokens.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthTokensComponent implements OnInit, OnDestroy {
   authTokens$ = this.authTokensService.apiTokens$;
+  deleteLoading$ = this.authTokensService.deleteLoading$;
+  initialLoad$ = this.authTokensService.initialLoad$;
+
+  copiedTokenId = "";
+
   constructor(private authTokensService: AuthTokensService) {}
 
   ngOnInit(): void {
@@ -26,5 +25,10 @@ export class AuthTokensComponent implements OnInit, OnDestroy {
 
   deleteAuthToken(id: string) {
     this.authTokensService.deleteAuthToken(id);
+  }
+
+  copied(tokenId: string) {
+    this.copiedTokenId = tokenId;
+    setTimeout(() => (this.copiedTokenId = ""), 4000);
   }
 }

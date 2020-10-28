@@ -140,6 +140,14 @@
       >
         Notifications
       </a>
+      <a
+        mat-list-item
+        [routerLink]="['/profile', 'auth-tokens']"
+        routerLinkActive="active-route"
+        class="sub-items"
+      >
+        Auth Tokens
+      </a>
       <button mat-menu-item (click)="this.logout()">Log Out</button>
     </mat-nav-list>
   </mat-sidenav>
