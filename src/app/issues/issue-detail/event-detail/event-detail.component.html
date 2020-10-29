@@ -24,7 +24,7 @@
         >
       </p>
     </div>
-    <div>
+    <nav class="navigation-buttons">
       <button
         mat-button
         [routerLink]="(previousEventUrl$ | async) || ''"
@@ -39,7 +39,7 @@
       >
         Newer <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
-    </div>
+    </nav>
   </section>
   <mat-divider *ngIf="event?.contexts || event?.user"></mat-divider>
   <app-contexts></app-contexts>

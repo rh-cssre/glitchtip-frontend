@@ -5,7 +5,7 @@
 
   <app-header-nav></app-header-nav>
 
-  <div *ngIf="issues$ | async as issues">
+  <div *ngIf="issues$ | async as issues" class="wrapper">
     <table mat-table [dataSource]="issues$" class="mat-elevation-z2">
       <ng-container matColumnDef="actions">
         <th
@@ -141,7 +141,14 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="status-header-cell"
+        >
+          Status
+        </th>
         <td
           mat-cell
           *matCellDef="let element"
@@ -160,8 +167,13 @@
           *matCellDef="let element"
           [class.resolved]="element.status === 'resolved'"
           [class.ignored]="element.status === 'ignored'"
+          class="title-cell"
         >
           <a [routerLink]="element.id">{{ element.title }}</a>
+          <div class="other-cell-info mat-caption">
+            {{ element.status }},
+            {{ element.count | i18nPlural: eventCountPluralMapping }}
+          </div>
           <div>
             <span
               class="mat-caption"
@@ -201,7 +213,14 @@
       </ng-container>
 
       <ng-container matColumnDef="events">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Events</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="status-header-cell"
+        >
+          Events
+        </th>
         <td
           mat-cell
           *matCellDef="let element"

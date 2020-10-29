@@ -1,3 +1,5 @@
+@import "../../../assets/styles/variables";
+
 #project-picker {
   position: relative;
   flex: 1;
@@ -130,4 +132,8 @@ mat-expansion-panel::ng-deep {
 
 .add-button {
   margin: 0 0 0 20px;
+
+  @media screen and (max-width: $small - 1) {
+    display: none;
+  }
 }

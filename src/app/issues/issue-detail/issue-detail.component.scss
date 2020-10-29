@@ -1,25 +1,60 @@
+@import "../../../assets/styles/variables";
+
 .mat-h1 {
   padding-right: 20px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 20px;
+header {
+  margin: -16px 0 20px;
+
+  .header-group {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: $tablet - 1) {
+      flex-direction: column;
+    }
+  }
 
   .button-row button {
     margin-right: 8px;
   }
 
-  th.mat-header-cell,
-  td.mat-cell {
-    border-bottom-color: rgba(0, 0, 0, 0);
-    padding-right: 32px;
+  app-issue-detail-title {
+    margin-right: 20px;
+  }
+}
+
+dl {
+  // display: flex;
+  margin-top: 0;
+
+  > div {
+    margin-bottom: 15px;
   }
 
-  tr.mat-row,
-  tr.mat-header-row {
-    height: 24px;
+  // this was done to mimic the table I removed, design preferences
+  // aren't set in stone here
+  dt {
+    font-weight: 500;
+    opacity: 0.54;
+    margin: 2px 0;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.event-detail-card {
+  margin-right: 16px;
+
+  @media screen and (max-width: $medium - 1) {
+    margin-right: 0;
+  }
+
+  > .tabbed-nav {
+    margin: -16px -16px 16px;
   }
 }
 
@@ -34,26 +69,30 @@ mat-grid-list {
 
 .row {
   display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+
+  @media screen and (max-width: $medium - 1) {
+    flex-direction: column-reverse;
+  }
 
   .left {
     flex: 75%;
-    padding: 16px 20px;
-    border-right: 1px solid;
-    border-right-color: rgba(0, 0, 0, 0.12);
     overflow: hidden;
+
+    @media screen and (max-width: $medium - 1) {
+      width: 100%;
+    }
   }
 
   .right {
     flex: 25%;
+
+    @media screen and (max-width: $medium - 1) {
+      width: 100%;
+      margin-bottom: 30px;
+    }
   }
-}
-
-dl dt {
-  float: left;
-}
-
-dl dd {
-  text-align: right;
 }
 
 table.mat-table {
@@ -61,7 +100,7 @@ table.mat-table {
 }
 
 .project-issues-link {
-  margin: 15px 20px 0;
+  margin: 0 0 20px;
 }
 
 .report-badge > span {

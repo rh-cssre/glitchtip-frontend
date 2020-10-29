@@ -2,7 +2,7 @@
   {{ errorReports$ | async }}
 </p>
 
-<mat-card *ngIf="(reports$ | async)?.length === 0">
+<mat-card *ngIf="(reports$ | async)?.length === 0" class="mat-elevation-z0">
   <mat-card-content>
     <p>No user reports have been submitted.</p>
     <p>
@@ -11,13 +11,16 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngFor="let report of reports$ | async">
-  <mat-card-content>
-    <p class="name">{{ report.name }} ({{ report.email }})</p>
-    <p class="date">{{ report.dateCreated | date: "medium" }}</p>
-    <p>{{ report.comments }}</p>
-  </mat-card-content>
-</mat-card>
+<div class="reports">
+  <ng-container *ngFor="let report of reports$ | async">
+    <div class="report">
+      <p class="name">{{ report.name }} ({{ report.email }})</p>
+      <p class="date">{{ report.dateCreated | date: "medium" }}</p>
+      <p>{{ report.comments }}</p>
+    </div>
+    <mat-divider></mat-divider>
+  </ng-container>
+</div>
 
 <div class="nav-arrows" *ngIf="(loadingReports$ | async) === false">
   <a

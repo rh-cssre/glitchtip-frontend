@@ -2,16 +2,19 @@
 
 section {
   margin-bottom: 16px;
-}
 
-mat-divider {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  h3 {
+    padding-top: 8px;
+  }
 }
 
 .header {
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: $small - 1) {
+    flex-direction: column-reverse;
+  }
 
   .space {
     margin-right: 16px;
@@ -22,6 +25,16 @@ mat-divider {
     margin-top: 0;
     margin-bottom: 0;
   }
+
+  .navigation-buttons {
+    @media screen and (max-width: $small - 1) {
+      margin: 0 auto 8px;
+    }
+  }
+}
+
+.tags {
+  margin-top: 16px;
 }
 
 .tags .spacer {

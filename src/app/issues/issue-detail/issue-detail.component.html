@@ -1,20 +1,21 @@
-<section *ngIf="issue$ | async as issue">
-  <a
-    mat-stroked-button
-    class="project-issues-link"
-    [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
-    [queryParams]="{ project: issue.project.id }"
-  >
-    <mat-icon>keyboard_arrow_left</mat-icon>View all issues for
-    {{ issue.project.name }}
-  </a>
-  <article class="header">
-    <div>
+<section class="l-body l-body--full-width" *ngIf="issue$ | async as issue">
+  <header>
+    <a
+      mat-stroked-button
+      class="project-issues-link"
+      [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
+      [queryParams]="{ project: issue.project.id }"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      View all issues for {{ issue.project.name }}
+    </a>
+    <div class="header-group">
       <app-issue-detail-title
         [issueType]="issue?.type"
         [culprit]="issue?.culprit"
         [metadata]="issue?.metadata"
       ></app-issue-detail-title>
+
       <div class="button-row">
         <button
           *ngIf="issue?.status === 'unresolved'"
@@ -38,89 +39,74 @@
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
       </div>
     </div>
-
-    <table mat-table [dataSource]="[issue]">
-      <ng-container matColumnDef="issueNum">
-        <th mat-header-cell *matHeaderCellDef>Issue #</th>
-        <td mat-cell *matCellDef="let element">{{ element.shortId }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="events">
-        <th mat-header-cell *matHeaderCellDef>Events</th>
-        <td mat-cell *matCellDef="let element">{{ element.count }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </article>
-  <mat-divider></mat-divider>
-
-  <nav mat-tab-nav-bar>
-    <a
-      mat-tab-link
-      [routerLink]="['./']"
-      routerLinkActive
-      [active]="details.isActive"
-      [routerLinkActiveOptions]="{ exact: true }"
-      #details="routerLinkActive"
-    >
-      Details
-    </a>
-    <a
-      mat-tab-link
-      [routerLink]="['user-reports']"
-      routerLinkActive
-      [active]="reports.isActive"
-      #reports="routerLinkActive"
-    >
-      <span
-        *ngIf="issue.userReportCount > 0"
-        [matBadge]="
-          issue.userReportCount < 100 ? issue.userReportCount.toString() : '99+'
-        "
-        matBadgeOverlap="false"
-        class="report-badge"
-      >
-        User Reports
-      </span>
-      <ng-container *ngIf="issue.userReportCount === 0">
-        User Reports
-      </ng-container>
-    </a>
-  </nav>
+  </header>
 
   <div class="row">
-    <div class="column left">
-      <router-outlet></router-outlet>
-    </div>
+    <mat-card class="event-detail-card left">
+      <nav mat-tab-nav-bar class="tabbed-nav">
+        <a
+          mat-tab-link
+          [routerLink]="['./']"
+          routerLinkActive
+          [active]="details.isActive"
+          [routerLinkActiveOptions]="{ exact: true }"
+          #details="routerLinkActive"
+        >
+          Event Details
+        </a>
+        <a
+          mat-tab-link
+          [routerLink]="['user-reports']"
+          routerLinkActive
+          [active]="reports.isActive"
+          #reports="routerLinkActive"
+        >
+          <span
+            *ngIf="issue.userReportCount > 0"
+            [matBadge]="
+              issue.userReportCount < 100
+                ? issue.userReportCount.toString()
+                : '99+'
+            "
+            matBadgeOverlap="false"
+            class="report-badge"
+          >
+            User Reports
+          </span>
+          <ng-container *ngIf="issue.userReportCount === 0">
+            User Reports
+          </ng-container>
+        </a>
+      </nav>
 
-    <mat-list class="column right">
-      <mat-list-item>
-        <h4 mat-line>First Seen</h4>
-        <dl mat-line>
-          <dt class="mat-body-strong">When:</dt>
-          <div></div>
-          <dd *ngIf="issue && issue.lastSeen">
-            {{ issue.firstSeen | daysAgo }} days ago
-          </dd>
-          <dd>
+      <router-outlet></router-outlet>
+    </mat-card>
+
+    <mat-card class="right">
+      <dl>
+        <div>
+          <dt class="mat-caption">Issue #</dt>
+          <dd class="mat-body-1">{{ issue?.shortId }}</dd>
+        </div>
+        <div>
+          <dt class="mat-caption">Events</dt>
+          <dd class="mat-body-1">{{ issue?.count }}</dd>
+        </div>
+        <div>
+          <dt class="mat-caption">First Seen</dt>
+          <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }} days ago</dd>
+          <dd class="mat-caption">
             {{ issue?.firstSeen | date: "long" }}
           </dd>
-        </dl>
-      </mat-list-item>
-      <mat-list-item>
-        <h4 mat-line>Last Seen</h4>
-        <dl mat-line>
-          <dt class="mat-body-strong">When:</dt>
-          <dd *ngIf="issue && issue.lastSeen">
-            {{ issue.lastSeen | daysAgo }} days ago
-          </dd>
-          <dd>
+        </div>
+        <div>
+          <dt class="mat-caption">Last Seen</dt>
+          <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }} days ago</dd>
+          <dd class="mat-caption">
             {{ issue?.lastSeen | date: "long" }}
           </dd>
-        </dl>
-      </mat-list-item>
-    </mat-list>
+        </div>
+      </dl>
+    </mat-card>
   </div>
 </section>

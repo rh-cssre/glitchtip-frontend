@@ -67,6 +67,10 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     })
   );
   routerEventSubscription: Subscription;
+  eventCountPluralMapping: { [k: string]: string } = {
+    "=1": "1 event",
+    other: "# events",
+  };
 
   /**
    * Two ways to trigger project detail. The first is if we switch orgs.

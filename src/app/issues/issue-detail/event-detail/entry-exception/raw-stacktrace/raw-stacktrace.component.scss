@@ -1,5 +1,11 @@
 @import "../../../../../../assets/styles/variables";
 
+.wrapper {
+  border: 1px solid mat-color($mat-gray, 300);
+  border-radius: 4px;
+  padding: 8px;
+}
+
 .spacer {
   margin-left: 8px;
 }
