@@ -1,5 +1,15 @@
-mat-card {
-  margin-bottom: 20px;
+.reports {
+  div {
+    padding: 8px 0;
+
+    &:first-of-type {
+      padding-top: 0;
+    }
+
+    &:last-of-type ~ mat-divider {
+      display: none;
+    }
+  }
 }
 
 .name {

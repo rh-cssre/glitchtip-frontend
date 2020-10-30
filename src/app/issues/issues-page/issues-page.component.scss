@@ -8,6 +8,11 @@ app-header-nav {
   margin-bottom: 20px;
 }
 
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
 table {
   width: 100%;
   margin-bottom: 40px;
@@ -23,30 +28,60 @@ table {
   justify-content: space-between;
   flex-wrap: wrap;
 
+  @media screen and (max-width: $tablet - 1) {
+    flex-direction: column-reverse;
+  }
+
   .date-form,
   .search-form {
     flex: 1;
     max-width: 400px;
-    padding-left: 20px;
+
+    @media screen and (max-width: $tablet - 1) {
+      padding-bottom: 5px;
+    }
 
     mat-form-field {
       width: 100%;
     }
   }
 
+  .button-group,
+  .date-form {
+    padding-right: 20px;
+
+    @media screen and (max-width: $tablet - 1) {
+      padding-right: 0;
+    }
+  }
+
+  .button-group {
+    @media screen and (max-width: $tablet - 1) {
+      padding-bottom: 15px;
+    }
+
+    > button {
+      &:not(:last-of-type) {
+        margin-right: 10px;
+      }
+      @media screen and (max-width: $tablet - 1) {
+        margin-top: 10px;
+      }
+    }
+  }
+
   .search-form {
     max-width: 350px;
   }
-}
 
-.table-header {
-  padding: 20px 0 8px;
-}
-
-.action-group {
   form.date-form {
     display: flex;
     align-items: center;
+
+    @media screen and (max-width: $small - 1) {
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
 
     > mat-form-field {
       width: 100px;
@@ -56,8 +91,16 @@ table {
     button {
       margin-top: -14px;
       margin-right: 5px;
+
+      @media screen and (max-width: $small - 1) {
+        margin-top: 0;
+      }
     }
   }
+}
+
+.table-header {
+  padding: 20px 0 8px;
 }
 
 .mat-column-title {
@@ -106,8 +149,36 @@ mat-card {
 
 .status-cell {
   width: 120px;
+
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.status-header-cell,
+.event-header-cell {
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
 }
 
 .event-cell {
   width: 80px;
+
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.title-cell {
+  padding-right: 10px;
+}
+
+.other-cell-info {
+  margin: 3px 0 -4px;
+  font-weight: 500;
+
+  @media screen and (min-width: $tablet) {
+    display: none;
+  }
 }
