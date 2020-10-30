@@ -1,9 +1,10 @@
 @import "../../../../../../assets/styles/variables";
 
 .wrapper {
+  padding: 8px;
   border: 1px solid mat-color($mat-gray, 300);
   border-radius: 4px;
-  padding: 8px;
+  overflow-x: auto;
 }
 
 .spacer {

@@ -14,6 +14,14 @@ dt {
   width: $left-column-width;
   padding-right: 16px;
   padding-top: 7px;
+
+  @media screen and (max-width: $small - 1) {
+    float: none;
+    width: 100%;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 3px;
+  }
 }
 
 dd {
@@ -25,4 +33,11 @@ dd {
   font-family: $font-mono;
   background-color: mat-color($mat-gray, 100);
   border-radius: 3px;
+
+  @media screen and (max-width: $small - 1) {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 12px;
+  }
 }

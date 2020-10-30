@@ -5,7 +5,11 @@
 }
 
 header {
-  margin: -16px 0 20px;
+  margin: -16px 0 5px;
+
+  @media screen and (max-width: $tablet - 1) {
+    margin-bottom: 20px;
+  }
 
   .header-group {
     display: flex;
@@ -26,14 +30,13 @@ header {
 }
 
 dl {
-  // display: flex;
   margin-top: 0;
 
   > div {
     margin-bottom: 15px;
   }
 
-  // this was done to mimic the table I removed, design preferences
+  // this was done to mimic a table I removed, design preferences
   // aren't set in stone here
   dt {
     font-weight: 500;

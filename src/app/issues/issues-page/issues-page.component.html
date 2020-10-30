@@ -26,7 +26,6 @@
                 Mark as resolved
               </button>
               <button
-                style="margin-left: 10px"
                 mat-stroked-button
                 (click)="bulkMarkUnresolved()"
                 [disabled]="(thereAreSelectedIssues$ | async) === false"
@@ -34,7 +33,6 @@
                 Reopen
               </button>
               <button
-                style="margin-left: 10px"
                 mat-stroked-button
                 (click)="bulkMarkIgnored()"
                 [disabled]="(thereAreSelectedIssues$ | async) === false"
