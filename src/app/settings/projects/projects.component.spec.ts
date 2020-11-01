@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
@@ -14,21 +14,23 @@ describe("ProjectsComponent", () => {
   let component: ProjectsComponent;
   let fixture: ComponentFixture<ProjectsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ProjectsComponent, SettingsComponent],
-      imports: [
-        MatButtonModule,
-        MatCardModule,
-        NoopAnimationsModule,
-        RouterTestingModule,
-        MatSidenavModule,
-        MatListModule,
-        HttpClientTestingModule,
-        MatSnackBarModule,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ProjectsComponent, SettingsComponent],
+        imports: [
+          MatButtonModule,
+          MatCardModule,
+          NoopAnimationsModule,
+          RouterTestingModule,
+          MatSidenavModule,
+          MatListModule,
+          HttpClientTestingModule,
+          MatSnackBarModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProjectsComponent);

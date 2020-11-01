@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -10,17 +10,19 @@ describe("MainNavComponent", () => {
   let component: MainNavComponent;
   let fixture: ComponentFixture<MainNavComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        NoopAnimationsModule,
-      ],
-      declarations: [MainNavComponent],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          MaterialModule,
+          RouterTestingModule,
+          HttpClientTestingModule,
+          NoopAnimationsModule,
+        ],
+        declarations: [MainNavComponent],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainNavComponent);
