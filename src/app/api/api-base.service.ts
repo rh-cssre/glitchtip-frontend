@@ -2,8 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 export interface APIBaseService {
-  update(id: any, obj: any, slug1?: string, slug2?: string): Observable<any>;
-  create(obj: any, slug1?: string, slug2?: string): Observable<any>;
+  update(
+    id: unknown,
+    obj: unknown,
+    slug1?: string,
+    slug2?: string
+  ): Observable<unknown>;
+  create(obj: unknown, slug1?: string, slug2?: string): Observable<unknown>;
 }
 
 /**
@@ -16,13 +21,17 @@ export abstract class APIBaseService {
   abstract readonly url: string;
   constructor(protected http: HttpClient) {}
 
-  abstract list(slug1?: string, slug2?: string): Observable<any>;
+  abstract list(slug1?: string, slug2?: string): Observable<unknown>;
   abstract retrieve(
     id: string,
     slug1?: string,
     slug2?: string
-  ): Observable<any>;
-  abstract destroy(id: string, slug1?: string, slug2?: string): Observable<any>;
+  ): Observable<unknown>;
+  abstract destroy(
+    id: string,
+    slug1?: string,
+    slug2?: string
+  ): Observable<unknown>;
 
   protected detailURL(id: string, slug1?: string, slug2?: string) {
     return this.url + id + "/";
