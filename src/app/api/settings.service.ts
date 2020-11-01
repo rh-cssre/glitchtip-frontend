@@ -77,14 +77,16 @@ export class SettingsService {
       }),
       tap((settings) => {
         if (settings.rocketChatDomain) {
+          // tslint:disable:only-arrow-functions
+          // tslint:disable:space-before-function-paren
           (function (w: any, d: Document, s, u) {
             w.RocketChat = function (c: any) {
               w.RocketChat._.push(c);
             };
             w.RocketChat._ = [];
             w.RocketChat.url = u;
-            var h = d.getElementsByTagName(s)[0],
-              j = d.createElement(s) as HTMLScriptElement;
+            const h = d.getElementsByTagName(s)[0];
+            const j = d.createElement(s) as HTMLScriptElement;
             j.async = true;
             j.src =
               settings.rocketChatDomain +
