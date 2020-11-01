@@ -11,6 +11,7 @@ interface SettingsState {
   enableUserRegistration: boolean;
   matomoURL: string | null;
   matomoSiteId: string | null;
+  rocketChatDomain: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
 }
@@ -21,6 +22,7 @@ const initialState: SettingsState = {
   enableUserRegistration: false,
   matomoURL: null,
   matomoSiteId: null,
+  rocketChatDomain: null,
   stripePublicKey: null,
   sentryDSN: null,
 };
@@ -71,6 +73,31 @@ export class SettingsService {
           Sentry.init({
             dsn: settings.sentryDSN,
           });
+        }
+      }),
+      tap((settings) => {
+        if (settings.rocketChatDomain) {
+          (function (w: any, d: Document, s, u) {
+            w.RocketChat = function (c: any) {
+              w.RocketChat._.push(c);
+            };
+            w.RocketChat._ = [];
+            w.RocketChat.url = u;
+            var h = d.getElementsByTagName(s)[0],
+              j = d.createElement(s) as HTMLScriptElement;
+            j.async = true;
+            j.src =
+              settings.rocketChatDomain +
+              "/livechat/rocketchat-livechat.min.js?_=201903270000";
+            if (h.parentNode) {
+              h.parentNode.insertBefore(j, h);
+            }
+          })(
+            window,
+            document,
+            "script",
+            settings.rocketChatDomain + "/livechat"
+          );
         }
       })
     );
