@@ -7,10 +7,12 @@ import { User } from "./user.interfaces";
 
 interface UserState {
   user: User | null;
+  disconnectLoading: number | null;
 }
 
 const initialState: UserState = {
   user: null,
+  disconnectLoading: null,
 };
 
 @Injectable({
@@ -19,6 +21,9 @@ const initialState: UserState = {
 export class UserService {
   private readonly state = new BehaviorSubject<UserState>(initialState);
   readonly userDetails$ = this.state.pipe(map((state) => state.user));
+  readonly disconnectLoading$ = this.state.pipe(
+    map((state) => state.disconnectLoading)
+  );
   private readonly getUserDetailsAction = new Subject();
 
   readonly activeUserEmail$ = this.userDetails$.pipe(
@@ -49,11 +54,19 @@ export class UserService {
   }
 
   disconnectSocialAccount(accountId: number) {
+    this.setDisconnectLoading(accountId);
     this.http
       .post("/api/socialaccounts/" + accountId + "/disconnect/", {})
       .pipe(
-        tap(() => this.getUserDetails()),
+        tap(() => {
+          this.setDisconnectLoading(null);
+          this.getUserDetails();
+          this.snackBar.open(
+            "You have successfully disconnected your social auth account"
+          );
+        }),
         catchError((err: HttpErrorResponse) => {
+          this.setDisconnectLoading(null);
           if (Array.isArray(err.error) && err.error.length) {
             this.snackBar.open(err.error[0]);
           }
@@ -61,6 +74,10 @@ export class UserService {
         })
       )
       .toPromise();
+  }
+
+  private setDisconnectLoading(loading: number | null) {
+    this.state.next({ ...this.state.getValue(), disconnectLoading: loading });
   }
 
   private setUserDetails(userDetails: User) {

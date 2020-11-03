@@ -68,7 +68,7 @@
       </button>
     </form>
     <ng-container *ngIf="socialApps$ | async as socialApps">
-      <div class="or">
+      <div *ngIf="socialApps.length" class="or">
         <span class="mat-body-strong mat-body-2">or</span>
       </div>
       <div class="o-auth">

@@ -10,4 +10,5 @@ export class AuthSvgComponent {
   @Input() text = "";
   @Input() provider = "";
   @Input() source: "auth" | "dropdown" | "disconnect" | "" = "";
+  @Input() loading = false;
 }
