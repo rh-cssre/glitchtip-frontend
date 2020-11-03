@@ -13,6 +13,7 @@ import { SocialApp } from "../../api/user/user.interfaces";
 })
 export class SocialAuthComponent implements OnInit {
   user$ = this.userService.userDetails$;
+  disconnectLoading$ = this.userService.disconnectLoading$;
   socialApps$ = this.settingsService.socialApps$;
   account = new FormControl();
 
