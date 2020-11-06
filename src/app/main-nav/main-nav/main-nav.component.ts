@@ -1,8 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  HostListener,
-} from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "../main-nav.service";
@@ -15,8 +11,6 @@ import { SettingsService } from "src/app/api/settings.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainNavComponent {
-  innerWidth: number;
-  sideNavOpen = true;
   activeOrganizationLoaded = false;
   activeOrganizationSlug = "";
   /* TODO: Add primary color to mat-sidenav
@@ -28,16 +22,7 @@ export class MainNavComponent {
   isLoggedIn$ = this.auth.isLoggedIn;
   navOpen$ = this.mainNav.navOpen$;
   billingEnabled$ = this.settingsService.billingEnabled$;
-
-  @HostListener("window:resize", ["$event"])
-  onResize() {
-    this.innerWidth = window.innerWidth;
-    if (this.isScreenSmall()) {
-      this.hideSideNav();
-    } else {
-      this.showSideNav();
-    }
-  }
+  mobileNav$ = this.mainNav.mobileNav$;
 
   constructor(
     private mainNav: MainNavService,
@@ -45,10 +30,6 @@ export class MainNavComponent {
     private auth: AuthService,
     private settingsService: SettingsService
   ) {
-    this.innerWidth = window.innerWidth;
-    if (this.isScreenSmall()) {
-      this.hideSideNav();
-    }
     this.organizationsService.activeOrganizationLoaded$.subscribe(
       (loaded) => (this.activeOrganizationLoaded = loaded)
     );
@@ -62,20 +43,12 @@ export class MainNavComponent {
     this.auth.logout();
   }
 
-  isScreenSmall() {
-    return this.innerWidth < 768;
-  }
-
   toggleSideNav() {
-    this.mainNav.getToggledNav();
+    this.mainNav.getToggleNav();
   }
 
-  hideSideNav() {
+  closeSideNav() {
     this.mainNav.getClosedNav();
-  }
-
-  showSideNav() {
-    this.mainNav.getOpenedNav();
   }
 
   setOrganization(id: number) {

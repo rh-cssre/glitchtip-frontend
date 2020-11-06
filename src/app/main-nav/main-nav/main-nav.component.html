@@ -4,8 +4,8 @@
     *ngIf="isLoggedIn$ | async"
     class="mat-elevation-z4"
     [opened]="navOpen$ | async"
-    (closed)="hideSideNav()"
-    [mode]="isScreenSmall() ? 'over' : 'side'"
+    (closed)="closeSideNav()"
+    [mode]="(mobileNav$ | async) === true ? 'over' : 'side'"
   >
     <mat-toolbar class="logo-toolbar">
       <img

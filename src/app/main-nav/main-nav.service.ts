@@ -1,44 +1,101 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
+import { BehaviorSubject, fromEvent } from "rxjs";
+import { debounceTime, map, tap } from "rxjs/operators";
 
 interface MainNavState {
   navOpen: boolean;
+  mobileNav: boolean | null;
 }
 
 const initialState: MainNavState = {
-  navOpen: true
+  navOpen: true,
+  mobileNav: null,
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class MainNavService {
   private readonly state = new BehaviorSubject<MainNavState>(initialState);
   private readonly getState$ = this.state.asObservable();
 
-  readonly navOpen$ = this.getState$.pipe(map(state => state.navOpen));
+  readonly navOpen$ = this.getState$.pipe(map((state) => state.navOpen));
+  readonly mobileNav$ = this.getState$.pipe(map((state) => state.mobileNav));
 
-  constructor() {}
+  constructor(private router: Router) {
+    const tabletSize = 768; // same as $tablet for scss
 
-  getToggledNav() {
-    this.toggleNav();
+    if (window.innerWidth < tabletSize) {
+      this.mobileNavSettings();
+    } else {
+      this.desktopNavSettings();
+    }
+
+    this.router.events.subscribe((_) => {
+      if (window.innerWidth < tabletSize) {
+        this.setCloseNav();
+      }
+    });
+
+    fromEvent(window, "resize")
+      .pipe(
+        debounceTime(100),
+        tap((_) => {
+          if (window.innerWidth < tabletSize) {
+            this.mobileNavSettings();
+          } else {
+            this.desktopNavSettings();
+          }
+        })
+      )
+      .subscribe();
   }
 
-  getOpenedNav() {
-    this.openOrCloseNav(true);
+  mobileNavSettings() {
+    this.setMobileNav(true);
+    this.setCloseNav();
+  }
+
+  desktopNavSettings() {
+    this.setMobileNav(false);
+    this.setOpenNav();
+  }
+
+  getToggleNav() {
+    this.setToggleNav();
   }
 
   getClosedNav() {
-    this.openOrCloseNav(false);
+    this.setCloseNav();
   }
 
-  private toggleNav() {
+  private setMobileNav(isMobile: boolean) {
+    this.state.next({
+      ...this.state.getValue(),
+      mobileNav: isMobile,
+    });
+  }
+
+  private setCloseNav() {
+    this.state.next({
+      ...this.state.getValue(),
+      navOpen: false,
+    });
+  }
+
+  private setOpenNav() {
+    this.state.next({
+      ...this.state.getValue(),
+      navOpen: true,
+    });
+  }
+
+  private setToggleNav() {
     const navOpen = this.state.getValue().navOpen;
-    this.state.next({ ...this.state.getValue(), navOpen: !navOpen });
-  }
-
-  private openOrCloseNav(navBoolean: boolean) {
-    this.state.next({ ...this.state.getValue(), navOpen: navBoolean });
+    this.state.next({
+      ...this.state.getValue(),
+      navOpen: !navOpen,
+    });
   }
 }

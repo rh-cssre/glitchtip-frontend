@@ -35,6 +35,6 @@ export class ProfileComponent {
   }
 
   toggleSideNav() {
-    this.mainNav.getToggledNav();
+    this.mainNav.getToggleNav();
   }
 }

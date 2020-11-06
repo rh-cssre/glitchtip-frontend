@@ -37,6 +37,6 @@ export class SettingsComponent {
   }
 
   toggleSideNav() {
-    this.mainNav.getToggledNav();
+    this.mainNav.getToggleNav();
   }
 }
