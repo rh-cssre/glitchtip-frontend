@@ -50,13 +50,17 @@
     margin-bottom: 24px;
   }
 
+  mat-accordion::ng-deep .mat-expansion-panel-body {
+    padding-top: 16px;
+  }
+
   mat-expansion-panel:not(:last-child) mat-expansion-panel-header {
     margin-bottom: -1px;
   }
 
   mat-expansion-panel-header {
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     border: 1px solid mat-color($mat-gray, 300);
 
     app-frame-title {

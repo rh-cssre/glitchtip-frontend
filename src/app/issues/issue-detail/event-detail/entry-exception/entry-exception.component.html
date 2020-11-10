@@ -38,7 +38,11 @@
           >
         </mat-chip-list>
 
-        <mat-accordion *ngIf="value.stacktrace" [multi]="true">
+        <mat-accordion
+          *ngIf="value.stacktrace"
+          [multi]="true"
+          displayMode="flat"
+        >
           <!-- TODO:  Add additional conditions for non expandable frames
           https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L107-->
           <mat-expansion-panel
@@ -51,6 +55,7 @@
           >
             <mat-expansion-panel-header
               collapsedHeight="auto"
+              expandedHeight="auto"
               [class.disabled-panel]="!frame.context?.length && !frame.vars"
               [class.highlighted]="frame.inApp"
             >
