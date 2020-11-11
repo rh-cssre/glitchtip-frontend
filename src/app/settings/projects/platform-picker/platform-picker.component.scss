@@ -1,0 +1,59 @@
+@import "../../../../assets/styles/variables";
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-info {
+  padding-top: 5px;
+  padding-right: 10px;
+  text-align: left;
+
+  .mat-caption {
+    margin-top: 0;
+  }
+}
+
+mat-tab-group {
+  ::ng-deep .mat-tab-label {
+    min-width: 50px;
+  }
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+}
+
+li {
+  list-style: none;
+  width: 33%;
+  padding: 5px 10px 5px 0;
+
+  @media screen and (min-width: $small) {
+    &:nth-child(3n) {
+      padding-right: 0;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    width: 50%;
+
+    &:nth-child(2n) {
+      padding-right: 0;
+    }
+  }
+}
+
+button {
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+
+  &.active {
+    border: 1px solid $amaranth;
+  }
+}

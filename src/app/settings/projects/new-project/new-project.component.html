@@ -7,16 +7,12 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-center">
           <mat-error *ngIf="error">{{ error }}</mat-error>
+          <app-platform-picker formControlName="platform"></app-platform-picker>
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Name" />
-            <mat-error
-              ><span *ngIf="name?.errors?.required"
-                >Enter a project name</span
-              ></mat-error
-            >
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="platform" placeholder="Platform" />
+            <mat-error>
+              <span *ngIf="name?.errors?.required">Enter a project name</span>
+            </mat-error>
           </mat-form-field>
           <div class="teams">
             <mat-form-field *ngIf="teams$ | async as teams">
