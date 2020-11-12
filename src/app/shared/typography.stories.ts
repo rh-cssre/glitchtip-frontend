@@ -3,7 +3,8 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs } from "@storybook/addon-knobs";
-import { MaterialModule } from "src/app/shared/material.module";
+
+import { MaterialModule } from "./material.module";
 
 export default {
   title: "General Styling",
