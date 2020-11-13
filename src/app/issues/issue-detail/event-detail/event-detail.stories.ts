@@ -1,13 +1,12 @@
 import { ReactiveFormsModule } from "@angular/forms";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
 
-// Imports
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { SharedModule } from "src/app/shared/shared.module";
+import { SharedModule } from "../../../shared/shared.module";
 
 // Components
 import { EventDetailComponent } from "./event-detail.component";

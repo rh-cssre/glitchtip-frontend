@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { Frame } from "src/app/issues/interfaces";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { Frame } from "src/app/issues/interfaces";
 
 @Component({
   selector: "app-frame-title",

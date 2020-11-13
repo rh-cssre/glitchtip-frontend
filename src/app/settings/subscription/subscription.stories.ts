@@ -1,13 +1,13 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean, select, number } from "@storybook/addon-knobs";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { SharedModule } from "src/app/shared/shared.module";
+import { of } from "rxjs";
+import { SharedModule } from "../../shared/shared.module";
 import { SubscriptionComponent } from "./subscription.component";
 import { PaymentComponent } from "./payment/payment.component";
-import { of } from "rxjs";
 
 export default {
   title: "Subscription",
