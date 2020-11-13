@@ -1,19 +1,19 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, select } from "@storybook/addon-knobs";
-
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { TeamsComponent } from "./teams.component";
-import { NewTeamComponent } from "./new-team/new-team.component";
 import {
   MatDialogModule,
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
-import { SharedModule } from "src/app/shared/shared.module";
+import { moduleMetadata } from "@storybook/angular";
+import { withKnobs, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
+
+import { TeamsComponent } from "./teams.component";
+import { NewTeamComponent } from "./new-team/new-team.component";
+import { SharedModule } from "../../shared/shared.module";
 
 export default {
   title: "Teams",

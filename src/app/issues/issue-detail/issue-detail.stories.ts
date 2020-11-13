@@ -1,13 +1,14 @@
 import { ReactiveFormsModule } from "@angular/forms";
-import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, select } from "@storybook/addon-knobs";
-import { IssueDetailComponent } from "./issue-detail.component";
-import { sampleIssueDetail } from "./issue-detail-test-data";
-import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { SharedModule } from "src/app/shared/shared.module";
+import { moduleMetadata } from "@storybook/angular";
+import { withKnobs, select } from "@storybook/addon-knobs";
+import { of } from "rxjs";
+
+import { IssueDetailComponent } from "./issue-detail.component";
+import { sampleIssueDetail } from "./issue-detail-test-data";
+import { SharedModule } from "../../shared/shared.module";
 import { IssueDetailTitleComponent } from "./issue-detail-title/issue-detail-title.component";
 
 export default {

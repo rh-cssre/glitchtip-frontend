@@ -1,11 +1,11 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, boolean, text } from "@storybook/addon-knobs";
 
-import { MaterialModule } from "src/app/shared/material.module";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MaterialModule } from "./material.module";
 import { ProjectCardComponent } from "./project-card/project-card.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { LoadingButtonComponent } from "./loading-button/loading-button.component";

@@ -21,7 +21,7 @@ export class InputMatcherDirective implements Validator {
 
   validate(control: AbstractControl): ValidationErrors | null {
     if (this.appInputMatcher !== undefined) {
-      const comparisonInput = control.parent.get(this.appInputMatcher);
+      const comparisonInput = control.parent!.get(this.appInputMatcher);
       if (comparisonInput && comparisonInput.value !== control.value) {
         return { notEqual: true };
       } else {
