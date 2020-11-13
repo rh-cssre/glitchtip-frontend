@@ -208,8 +208,8 @@ export const EntryRequest = () => {
       stackError = cspError.entries[2].data;
       error = {
         ...stackError,
-        domainName: "www.revo.com",
-        path: "/about-us/lens-replacement",
+        domainName: "www.website.com",
+        path: "/about-us/our-staff",
       };
       bodyData = null;
       break;
