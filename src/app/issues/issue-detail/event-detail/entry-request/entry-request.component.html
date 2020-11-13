@@ -1,12 +1,16 @@
 <section *ngIf="eventEntryRequest$ | async as request" class="mat-typography">
   <section class="location">
-    <span class="method">{{ request?.method }}</span>
-    <a color="primary" target="_blank" [href]="request?.url">{{
-      request?.path
-    }}</a
-    ><a mat-icon-button color="primary" target="_blank" [href]="request?.url">
-      <mat-icon>open_in_new</mat-icon>
-    </a>
+    <span class="method mat-body-strong">{{
+      request?.method ? request?.method : "GET"
+    }}</span>
+    <a
+      [matTooltip]="request.url"
+      matTooltipPosition="above"
+      color="primary"
+      target="_blank"
+      [href]="request?.url"
+      >{{ request?.path }}</a
+    >
     <span class="domain">{{ request?.domainName }}</span>
   </section>
   <section>

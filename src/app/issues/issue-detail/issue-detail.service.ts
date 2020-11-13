@@ -219,13 +219,13 @@ export class IssueDetailService {
   /* Return the request entry type for an event with additional fields parsed from url */
   private entryRequestData(event: EventDetail): AnnotatedRequest | undefined {
     const eventRequest = this.getRequestEntryData(event);
-
     if (eventRequest) {
       let urlDomainName = "";
-      let urlPath: string;
+      let urlPath = "";
       try {
         urlDomainName = new URL(eventRequest.url).hostname;
-        urlPath = new URL(eventRequest.url).pathname;
+        const path = new URL(eventRequest.url).pathname;
+        urlPath = path === "/" ? eventRequest.url : path;
       } catch (_) {
         urlPath = eventRequest.url;
       }
