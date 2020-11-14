@@ -36,22 +36,17 @@
         >
         </app-loading-button>
       </form>
-      <mat-error class="server-error" *ngIf="updatePlatformError">{{
-        updatePlatformError
-      }}</mat-error>
+      <mat-error class="server-error" *ngIf="updatePlatformError">
+        {{ updatePlatformError }}
+      </mat-error>
       <form
         [formGroup]="platformForm"
         (ngSubmit)="updatePlatform(project.name)"
       >
-        <mat-form-field>
-          <mat-label>Platform</mat-label>
-          <input
-            matInput
-            [value]="project.platform"
-            formControlName="platform"
-            placeholder="Platform"
-          />
-        </mat-form-field>
+        <app-platform-picker
+          formControlName="platform"
+          template="dropdown"
+        ></app-platform-picker>
         <app-loading-button
           [disabled]="platform?.value === project.platform"
           buttonText="Update Platform"

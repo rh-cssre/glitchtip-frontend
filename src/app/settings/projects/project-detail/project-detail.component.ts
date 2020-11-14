@@ -162,6 +162,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
             this.snackBar.open(
               `Your project platform has been updated to ${resp.platform}`
             );
+            this.platformForm.setValue({ platform: resp.platform });
           },
           (err) => {
             this.updatePlatformError = `${err.statusText}: ${err.status}`;

@@ -1,4 +1,13 @@
-import { Component, ChangeDetectionStrategy, forwardRef } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  forwardRef,
+  Input,
+  ViewChild,
+  ElementRef,
+  HostListener,
+} from "@angular/core";
+import { MatExpansionPanel } from "@angular/material/expansion";
 import { flattenedPlatforms } from "./platforms-for-picker";
 import categoryList from "./platform-categories";
 import {
@@ -22,6 +31,14 @@ import { map, startWith } from "rxjs/operators";
   ],
 })
 export class PlatformPickerComponent implements ControlValueAccessor {
+  @Input() template: "buttons" | "dropdown" = "buttons";
+
+  @ViewChild("expansionPanel", { static: false })
+  expansionPanel?: MatExpansionPanel;
+
+  @ViewChild("filterInput", { static: false })
+  filterInput?: ElementRef<HTMLInputElement>;
+
   platforms = flattenedPlatforms.sort((a, b) => {
     const nameA = a.name.toUpperCase();
     const nameB = b.name.toUpperCase();
@@ -79,13 +96,16 @@ export class PlatformPickerComponent implements ControlValueAccessor {
   // Boilerplate for ControlValueAccessor
   onChange = (platform: string) => {};
   onTouched = () => {};
-  writeValue(platform: string): void {
-    if (platform === this.activePlatform) {
+  writeValue(platform: string, toggle: boolean = true): void {
+    if (platform === this.activePlatform && toggle) {
       this.activePlatform = "";
       this.onChange("");
     } else {
       this.activePlatform = platform;
       this.onChange(platform);
+      if (this.expansionPanel?.expanded) {
+        this.expansionPanel.close();
+      }
     }
   }
   registerOnChange(fn: (platform: string) => void): void {
@@ -93,5 +113,60 @@ export class PlatformPickerComponent implements ControlValueAccessor {
   }
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
+  }
+
+  focusPanel() {
+    this.filterInput?.nativeElement.focus();
+  }
+
+  @HostListener("document:keydown", ["$event"]) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    if (this.expansionPanel?.expanded) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        this.moveDown();
+      }
+      if (event.key === "ArrowUp") {
+        this.moveUp();
+      }
+    }
+  }
+
+  moveDown() {
+    const projectButtons = Array.from(
+      document.querySelectorAll(".picker-button")
+    ) as HTMLElement[];
+    // If the text box is focused, go to the first item
+    if (this.filterInput?.nativeElement.id === document.activeElement?.id) {
+      projectButtons[0]?.focus();
+    } else {
+      const indexOfActive = projectButtons.findIndex(
+        (button) => button.id === document.activeElement?.id
+      );
+      if (indexOfActive <= projectButtons.length - 2) {
+        // If we're in the list items, go to the next list item
+        projectButtons[indexOfActive + 1].focus();
+      } else {
+        // If we're in the last list item, go to the first item
+        projectButtons[0].focus();
+      }
+    }
+  }
+
+  moveUp() {
+    const projectButtons = Array.from(
+      document.querySelectorAll(".picker-button")
+    ) as HTMLElement[];
+    const indexOfActive = projectButtons.findIndex(
+      (button) => button.id === document.activeElement?.id
+    );
+    if (indexOfActive > 0) {
+      // If we're in the list items, go to the previous list item
+      projectButtons[indexOfActive - 1].focus();
+    } else {
+      // If we're in the first list item, go to the first item
+      this.filterInput?.nativeElement.focus();
+    }
   }
 }

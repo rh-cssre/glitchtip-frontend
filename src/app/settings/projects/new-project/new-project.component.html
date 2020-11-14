@@ -7,7 +7,10 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-center">
           <mat-error *ngIf="error">{{ error }}</mat-error>
-          <app-platform-picker formControlName="platform"></app-platform-picker>
+          <app-platform-picker
+            formControlName="platform"
+            template="buttons"
+          ></app-platform-picker>
           <mat-form-field>
             <input matInput formControlName="name" placeholder="Name" />
             <mat-error>
