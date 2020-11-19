@@ -84,6 +84,7 @@ export class PlatformPickerComponent implements ControlValueAccessor {
     );
     return platformInfo ? platformInfo.id : "other";
   }
+
   getPlatformName(platformFromCategoryList: string) {
     const platformInfo = this.platforms.find(
       (platform) => platform.id === platformFromCategoryList

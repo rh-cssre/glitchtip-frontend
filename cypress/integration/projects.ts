@@ -47,7 +47,7 @@ describe("Create New Project", () => {
     cy.visit(`/settings/${organization.name}/projects/new`);
     cy.contains("Create a New Project");
     cy.get("input[formcontrolname=name]").type(newProject.name);
-    // cy.get("[formcontrolname=platform]").type(newProject.platform);
+    cy.get("[formcontrolname=platform] [data-test]").first().click();
     cy.get("#create-project-submit").click();
     cy.contains(`${newProject.name} has been created`);
     cy.url().should(
@@ -83,16 +83,10 @@ describe("Edit and Delete a project", () => {
   });
 
   it("edit the project platform", () => {
-    // cy.get("[formcontrolname=platform]")
-    //   .clear()
-    //   .type(
-    //     "While having too many characters in a project name would be rare, this test ensures that the server error field works."
-    //   );
+    cy.get("[data-test-panel-header]").click();
+    cy.get("[data-test]").last().click();
     cy.get("#update-project-platform").click();
-    cy.get("mat-error").contains("Bad Request: 400");
-    // cy.get("[formcontrolname=platform]").clear().type("Cool new platform");
-    cy.get("#update-project-platform").click();
-    cy.contains("Your project platform has been updated to Cool new platform");
+    cy.contains("Your project platform has been updated to WSGI");
   });
 
   it("should remove the project and redirect to projects page", () => {
