@@ -11,6 +11,7 @@ import { ProjectsService } from "../../../api/projects/projects.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProjectDetail } from "src/app/api/projects/projects.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 
 @Component({
   selector: "app-project-detail",
@@ -73,6 +74,9 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   get platform() {
     return this.platformForm.get("platform");
   }
+
+  getPlatformName = (id: string) =>
+    flattenedPlatforms.find((platform) => platform.id === id)?.name || id;
 
   ngOnInit() {
     this.activatedRoute.params
@@ -160,8 +164,11 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
               this.updatePlatformError = "";
             }
             this.snackBar.open(
-              `Your project platform has been updated to ${resp.platform}`
+              `Your project platform has been updated to ${this.getPlatformName(
+                resp.platform
+              )}.`
             );
+            this.platformForm.setValue({ platform: resp.platform });
           },
           (err) => {
             this.updatePlatformError = `${err.statusText}: ${err.status}`;

@@ -26,6 +26,7 @@ import { MemberDetailComponent } from "./members/member-detail/member-detail.com
 import { NewMemberComponent } from "./members/new-member/new-member.component";
 import { TeamSettingsComponent } from "./teams/team-settings/team-settings.component";
 import { ProjectAlertsComponent } from "./projects/project-detail/project-alerts/project-alerts.component";
+import { PlatformPickerComponent } from "./projects/platform-picker/platform-picker.component";
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { ProjectAlertsComponent } from "./projects/project-detail/project-alerts
     TeamDetailsComponent,
     TeamSettingsComponent,
     ProjectAlertsComponent,
+    PlatformPickerComponent,
   ],
 })
 export class SettingsModule {}

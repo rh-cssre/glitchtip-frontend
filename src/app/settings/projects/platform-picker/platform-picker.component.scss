@@ -1,0 +1,124 @@
+@import "../../../../assets/styles/variables";
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-info {
+  padding-top: 5px;
+  padding-right: 10px;
+  text-align: left;
+
+  .mat-caption {
+    margin-top: 0;
+  }
+}
+
+mat-tab-group {
+  ::ng-deep .mat-tab-label {
+    min-width: 50px;
+  }
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+}
+
+li {
+  list-style: none;
+  width: 33%;
+  padding: 5px 10px 5px 0;
+
+  @media screen and (min-width: $small) {
+    &:nth-child(3n) {
+      padding-right: 0;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    width: 50%;
+
+    &:nth-child(2n) {
+      padding-right: 0;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+
+    &.active {
+      border: 1px solid $amaranth;
+    }
+  }
+}
+
+:host {
+  flex: 1;
+}
+
+mat-accordion {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: 48px;
+  max-width: 400px;
+  margin: 5px 40px 20px 0;
+  z-index: 1;
+}
+
+mat-expansion-panel.mat-expansion-panel {
+  flex: 1;
+  &:first-of-type,
+  &:last-of-type {
+    border-radius: 0;
+  }
+
+  // ::ng-deep .mat-expansion-panel-body {
+  //   padding-left: 0;
+  //   padding-right: 0;
+  // }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+mat-list {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.mat-list-base .mat-list-item ::ng-deep .mat-list-item-content {
+  padding: 0;
+}
+
+.list-item {
+  button {
+    // borrowed from some "button unstyled" classes I've done elsewhere
+    display: inline-block;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 12px 0;
+    -webkit-text-fill-color: currentColor;
+    background: transparent;
+    -webkit-appearance: none;
+    cursor: pointer;
+    color: inherit;
+    font-weight: inherit;
+
+    width: 100%;
+    text-align: left;
+
+    &:focus {
+      border: 1px solid $amaranth;
+    }
+  }
+}
