@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import * as Sentry from "@sentry/angular";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
-import * as Sentry from "@sentry/browser";
 import { SocialApp } from "./user/user.interfaces";
 
 interface SettingsState {

@@ -7,11 +7,11 @@ import {
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import * as Sentry from "@sentry/angular";
 import { MarkdownModule } from "ngx-markdown";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
-import { SentryErrorHandler } from "./error-handler";
 
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
@@ -43,7 +43,7 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
       multi: true,
     },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 4000 } },
-    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    { provide: ErrorHandler, useValue: Sentry.createErrorHandler() },
   ],
   bootstrap: [AppComponent],
 })
