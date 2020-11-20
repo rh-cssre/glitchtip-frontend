@@ -20,6 +20,8 @@ mat-tab-group {
   ::ng-deep .mat-tab-label {
     min-width: 50px;
   }
+
+  border-bottom: 1px solid mat-color($mat-gray, 300);
 }
 
 ul {

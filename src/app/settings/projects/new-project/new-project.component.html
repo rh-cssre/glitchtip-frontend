@@ -11,8 +11,8 @@
             formControlName="platform"
             template="buttons"
           ></app-platform-picker>
-          <mat-form-field>
-            <input matInput formControlName="name" placeholder="Name" />
+          <mat-form-field class="project-name">
+            <input matInput formControlName="name" placeholder="Project Name" />
             <mat-error>
               <span *ngIf="name?.errors?.required">Enter a project name</span>
             </mat-error>
