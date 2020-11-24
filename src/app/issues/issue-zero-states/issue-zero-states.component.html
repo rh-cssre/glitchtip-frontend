@@ -44,33 +44,26 @@
         <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
           <h2 class="mat-display-1">Send us your events!</h2>
 
-          <p>To start using GlitchTip, you will need to:</p>
+          <markdown src="/sdk-docs/all-sdks.md"></markdown>
 
-          <ol>
-            <li>
-              Install a Software Development Kit (SDK) into your project so it
-              is able to send events to GlitchTip.
-              <a target="_blank" href="https://github.com/getsentry/"
-                >Many SDKs are available on&nbsp;GitHub</a
-              >.
-            </li>
-            <li>
-              Configure it with a Data Source Name (DSN) so it knows where
-              exactly to send events. You can find your DSN by clicking
-              "Settings", then "Projects", then the project you want to
-              set&nbsp;up.
-            </li>
-            <li>Initialize the SDK to start sending events.</li>
-          </ol>
-
-          <!--p
-            *ngIf="activeProjectPlatform$ | async as platform; else noPlatform"
+          <ng-container
+            *ngIf="
+              (activeProjectPlatform$ | async) !== 'other';
+              else otherTemplate
+            "
           >
-            <a href="">Read the {{ platform }} SDK installation instructions</a>
-          </p>
-          <ng-template #noPlatform>
-            <p>No platform specified.</p>
-          </ng-template-->
+            <h2 class="mat-display-1">
+              {{ activeProjectPlatformName$ | async }}-specific directions
+            </h2>
+
+            <markdown
+              src="/sdk-docs/{{ activeProjectPlatform$ | async }}.md"
+            ></markdown>
+          </ng-container>
+
+          <ng-template #otherTemplate>
+            <markdown src="/sdk-docs/other.md"></markdown>
+          </ng-template>
         </ng-container>
 
         <ng-template #noIssueMessaging>

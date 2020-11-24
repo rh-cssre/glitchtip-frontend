@@ -18,6 +18,7 @@ import {
 } from "./projects.interfaces";
 import { OrganizationsService } from "../organizations/organizations.service";
 import { OrganizationProject } from "../organizations/organizations.interface";
+import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 
 interface ProjectsState {
   projects: Project[] | null;
@@ -62,6 +63,12 @@ export class ProjectsService {
   );
   readonly activeProjectPlatform$ = this.activeProject$.pipe(
     map((project) => (project ? project.platform : null))
+  );
+  readonly activeProjectPlatformName$ = this.activeProjectPlatform$.pipe(
+    map(
+      (id) =>
+        flattenedPlatforms.find((platform) => platform.id === id)?.name || id
+    )
   );
   readonly projectKeys$ = this.getState$.pipe(map((data) => data.projectKeys));
 

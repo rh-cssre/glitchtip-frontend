@@ -27,6 +27,7 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
 import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
 import { ContextsComponent } from "./issue-detail/event-detail/context/contexts.component";
 import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.component";
+import { MarkdownModule } from "ngx-markdown";
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.
     MatTableModule,
     MatTabsModule,
     MatBadgeModule,
+    MarkdownModule,
   ],
   declarations: [
     IssuesPageComponent,
