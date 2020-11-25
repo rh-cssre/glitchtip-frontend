@@ -47,23 +47,24 @@
           <markdown src="/sdk-docs/all-sdks.md"></markdown>
 
           <ng-container
-            *ngIf="
-              (activeProjectPlatform$ | async) !== 'other';
-              else otherTemplate
-            "
+            *ngIf="activeProjectPlatform$ | async as activeProjectPlatform"
           >
-            <h2 class="mat-display-1">
-              {{ activeProjectPlatformName$ | async }}-specific directions
-            </h2>
+            <ng-container
+              *ngIf="activeProjectPlatform !== 'other'; else otherTemplate"
+            >
+              <h2 class="mat-display-1">
+                {{ activeProjectPlatform }}-specific directions
+              </h2>
 
-            <markdown
-              src="/sdk-docs/{{ activeProjectPlatform$ | async }}.md"
-            ></markdown>
+              <markdown
+                src="/sdk-docs/{{ activeProjectPlatform }}.md"
+              ></markdown>
+            </ng-container>
+
+            <ng-template #otherTemplate>
+              <markdown src="/sdk-docs/other.md"></markdown>
+            </ng-template>
           </ng-container>
-
-          <ng-template #otherTemplate>
-            <markdown src="/sdk-docs/other.md"></markdown>
-          </ng-template>
         </ng-container>
 
         <ng-template #noIssueMessaging>
