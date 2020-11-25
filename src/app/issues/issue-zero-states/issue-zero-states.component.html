@@ -44,7 +44,7 @@
         <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
           <h2 class="mat-display-1">Send us your events!</h2>
 
-          <markdown src="/sdk-docs/all-sdks.md"></markdown>
+          <app-lazy-markdown markdownSrc="/sdk-docs/all-sdks.md"></app-lazy-markdown>
 
           <ng-container
             *ngIf="activeProjectPlatform$ | async as activeProjectPlatform"
@@ -56,13 +56,13 @@
                 {{ activeProjectPlatform }}-specific directions
               </h2>
 
-              <markdown
-                src="/sdk-docs/{{ activeProjectPlatform }}.md"
-              ></markdown>
+              <app-lazy-markdown
+                markdownSrc="/sdk-docs/{{ activeProjectPlatform }}.md"
+              ></app-lazy-markdown>
             </ng-container>
 
             <ng-template #otherTemplate>
-              <markdown src="/sdk-docs/other.md"></markdown>
+              <app-lazy-markdown markdownSrc="/sdk-docs/other.md"></app-lazy-markdown>
             </ng-template>
           </ng-container>
         </ng-container>

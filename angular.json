@@ -55,21 +55,8 @@
                 "output": "./assets/images/os-logos"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/prismjs/themes/prism.css"
-            ],
-            "scripts": [
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-csharp.min.js",
-              "node_modules/prismjs/components/prism-python.min.js",
-              "node_modules/prismjs/components/prism-java.min.js",
-              "node_modules/prismjs/components/prism-ruby.min.js",
-              "node_modules/prismjs/components/prism-markup-templating.min.js",
-              "node_modules/prismjs/components/prism-php.min.js",
-              "node_modules/prismjs/components/prism-go.min.js",
-              "node_modules/prismjs/components/prism-rust.min.js"
-            ]
+            "styles": ["src/styles.scss"],
+            "scripts": []
           },
           "configurations": {
             "production": {
