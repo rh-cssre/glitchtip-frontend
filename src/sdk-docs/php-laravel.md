@@ -1,7 +1,7 @@
 Install the `sentry/sentry-laravel` package:
 
 ```bash
-$ composer require sentry/sentry-laravel:{% sdk_version sentry.php.laravel %}
+$ composer require sentry/sentry-laravel
 ```
 
 If you're on Laravel 5.5 or later the package will be auto-discovered. Otherwise you will need to manually configure it in your `config/app.php`.
