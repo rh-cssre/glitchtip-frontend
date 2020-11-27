@@ -13,12 +13,12 @@ GlitchTip should be initialized as early in your app as possible.
 ```javascript
 const express = require("express");
 const app = express();
-const GlitchTip = require("@sentry/node");
+const Sentry = require("@sentry/node");
 
-GlitchTip.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "your DSN here" });
 
 // The request handler must be the first middleware on the app
-app.use(GlitchTip.Handlers.requestHandler());
+app.use(Sentry.Handlers.requestHandler());
 
 // All controllers should live here
 app.get("/", function rootHandler(req, res) {
@@ -26,7 +26,7 @@ app.get("/", function rootHandler(req, res) {
 });
 
 // The error handler must be before any other error middleware and after all controllers
-app.use(GlitchTip.Handlers.errorHandler());
+app.use(Sentry.Handlers.errorHandler());
 
 // Optional fallthrough error handler
 app.use(function onError(err, req, res, next) {
@@ -73,7 +73,7 @@ For example, if you want to skip the server name and add just user, you would us
 
 ```js
 app.use(
-  GlitchTip.Handlers.requestHandler({
+  Sentry.Handlers.requestHandler({
     serverName: false,
     user: ["email"],
   })
@@ -84,7 +84,7 @@ By default, `errorHandler` will capture only errors with a status code of `500` 
 
 ```js
 app.use(
-  GlitchTip.Handlers.errorHandler({
+  Sentry.Handlers.errorHandler({
     shouldHandleError(error) {
       // Capture all 404 and 500 errors
       if (error.status === 404 || error.status === 500) {

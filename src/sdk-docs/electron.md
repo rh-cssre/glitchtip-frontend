@@ -12,9 +12,9 @@ You need to call `init` in your `main` and every `renderer` process you spawn.
 For more details about Electron [click here]({%- link _documentation/platforms/javascript/electron.md -%})
 
 ```javascript
-import * as GlitchTip from "@sentry/electron";
+import * as Sentry from "@sentry/electron";
 
-GlitchTip.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "your DSN here" });
 ```
 
 One way to break your Electron application is to call an undefined function:

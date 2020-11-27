@@ -11,8 +11,8 @@ $ npm install @sentry/node
 You need to inform the Node SDK about your DSN:
 
 ```javascript
-const GlitchTip = require("@sentry/node");
-GlitchTip.init({ dsn: "your DSN here" });
+const Sentry = require("@sentry/node");
+Sentry.init({ dsn: "your DSN here" });
 ```
 
 One way to break your JavaScript application is to call an undefined function:

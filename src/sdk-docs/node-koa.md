@@ -3,16 +3,16 @@ Our Koa integration only requires the installation of `@sentry/node`, and then y
 ```javascript
 const Koa = require("koa");
 const app = new Koa();
-const GlitchTip = require("@sentry/node");
+const Sentry = require("@sentry/node");
 
-GlitchTip.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "your DSN here" });
 
 app.on("error", (err, ctx) => {
-  GlitchTip.withScope(function (scope) {
+  Sentry.withScope(function (scope) {
     scope.addEventProcessor(function (event) {
-      return GlitchTip.Handlers.parseRequest(event, ctx.request);
+      return Sentry.Handlers.parseRequest(event, ctx.request);
     });
-    GlitchTip.captureException(err);
+    Sentry.captureException(err);
   });
 });
 

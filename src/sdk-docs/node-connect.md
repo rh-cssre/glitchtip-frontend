@@ -10,10 +10,10 @@ $ npm install @sentry/node
 
 ```javascript
 const connect = require("connect");
-const GlitchTip = require("@sentry/node");
+const Sentry = require("@sentry/node");
 
-// Must configure GlitchTip before doing anything else with it
-GlitchTip.init({ dsn: "your DSN here" });
+// Must configure Sentry before doing anything else with it
+Sentry.init({ dsn: "your DSN here" });
 
 function mainHandler(req, res) {
   throw new Error("My first GlitchTip error!");
@@ -28,14 +28,14 @@ function onError(err, req, res, next) {
 
 connect(
   // The request handler be the first item
-  GlitchTip.Handlers.requestHandler(),
+  Sentry.handlers.requestHandler(),
 
   connect.bodyParser(),
   connect.cookieParser(),
   mainHandler,
 
   // The error handler must be before any other error middleware
-  GlitchTip.Handlers.errorHandler(),
+  Sentry.handlers.errorHandler(),
 
   // Optional fallthrough error handler
   onError
@@ -68,7 +68,7 @@ For example, if you want to skip the server name and add just user, you would us
 
 ```js
 app.use(
-  GlitchTip.Handlers.requestHandler({
+  Sentry.handlers.requestHandler({
     serverName: false,
     user: ["email"],
   })
@@ -79,7 +79,7 @@ By default, `errorHandler` will capture only errors with a status code of `500` 
 
 ```js
 app.use(
-  GlitchTip.Handlers.errorHandler({
+  Sentry.handlers.errorHandler({
     shouldHandleError(error) {
       // Capture all 404 and 500 errors
       if (error.status === 404 || error.status === 500) {
