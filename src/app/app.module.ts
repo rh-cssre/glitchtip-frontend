@@ -8,7 +8,6 @@ import {
 } from "@angular/common/http";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
 import * as Sentry from "@sentry/angular";
-import { MarkdownModule } from "ngx-markdown";
 
 import { AppComponent } from "./app.component";
 import { TokenInterceptor } from "./api/auth/token.interceptor";
@@ -32,7 +31,6 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN",
     }),
-    MarkdownModule.forRoot({}),
     MainNavModule,
     SharedModule,
   ],

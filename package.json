@@ -28,7 +28,7 @@
     "@angular/platform-server": "~11.0.0",
     "@angular/router": "~11.0.0",
     "@braintree/sanitize-url": "^5.0.0",
-    "@sentry/angular": "^5.27.4",
+    "@sentry/angular": "^5.27.6",
     "@stripe/stripe-js": "^1.11.0",
     "browser-logos": "github:alrra/browser-logos#68.0.0",
     "ngx-markdown": "^10.1.1",

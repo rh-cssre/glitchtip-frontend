@@ -23,6 +23,7 @@ export class IssueZeroStatesComponent {
     .activeOrganizationProjects$;
   activeProjectFirstEvent$ = this.projectsService.activeProjectFirstEvent$;
   activeProjectPlatform$ = this.projectsService.activeProjectPlatform$;
+  activeProjectPlatformName$ = this.projectsService.activeProjectPlatformName$;
 
   projectsFromParams$ = this.activatedRoute.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
