@@ -71,7 +71,7 @@ export class SubscriptionsService {
    * @param slug Organization Slug for requested subscription event count
    */
   retrieveSubscriptionCount(slug: string) {
-    return this.http.get<Subscription>(`${this.url}${slug}/events_count/`).pipe(
+    return this.http.get<number>(`${this.url}${slug}/events_count/`).pipe(
       tap((count) => this.setSubscriptionCount(count)),
       catchError((error) => {
         return EMPTY;
