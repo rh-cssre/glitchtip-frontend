@@ -55,6 +55,7 @@
                   {{ subscription.current_period_start | date }} to
                   {{ subscription.current_period_end | date }}
                 </li>
+                <li *ngIf="eventsCount$ | async as eventsCount">Events used in billing period: {{ eventsCount }}</li>
               </ul>
             </ng-container>
             <p class="mat-body-1">

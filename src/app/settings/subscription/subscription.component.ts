@@ -14,6 +14,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 })
 export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
+  eventsCount$ = this.service.eventsCount$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
@@ -32,6 +33,7 @@ export class SubscriptionComponent implements OnDestroy {
       )
       .subscribe((slug) => {
         this.service.retrieveSubscription(slug).toPromise();
+        this.service.retrieveSubscriptionCount(slug).toPromise();
       });
   }
 

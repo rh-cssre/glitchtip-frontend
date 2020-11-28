@@ -12,11 +12,13 @@ import { baseUrl } from "src/app/constants";
 
 interface SubscriptionsState {
   subscription: Subscription | null;
+  eventsCount: number | null;
   products: Product[] | null;
 }
 
 const initialState: SubscriptionsState = {
   subscription: null,
+  eventsCount: null,
   products: null,
 };
 
@@ -32,6 +34,9 @@ export class SubscriptionsService {
 
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
+  );
+  readonly eventsCount$ = this.getState$.pipe(
+    map((state) => state.eventsCount)
   );
   readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
   readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
@@ -56,6 +61,19 @@ export class SubscriptionsService {
       tap((subscription) => this.setSubscription(subscription)),
       catchError((error) => {
         this.clearState();
+        return EMPTY;
+      })
+    );
+  }
+
+  /**
+   * Retrieve event count for current active subscription for this organization
+   * @param slug Organization Slug for requested subscription event count
+   */
+  retrieveSubscriptionCount(slug: string) {
+    return this.http.get<Subscription>(`${this.url}${slug}/events_count/`).pipe(
+      tap((count) => this.setSubscriptionCount(count)),
+      catchError((error) => {
         return EMPTY;
       })
     );
@@ -121,5 +139,9 @@ export class SubscriptionsService {
 
   private setSubscription(subscription: Subscription) {
     this.state.next({ ...this.state.getValue(), subscription });
+  }
+
+  private setSubscriptionCount(eventsCount: number) {
+    this.state.next({ ...this.state.getValue(), eventsCount });
   }
 }
