@@ -10,10 +10,9 @@ import { SharedModule } from "../../shared/shared.module";
 import { SocialAuthComponent } from "./social-auth.component";
 import { of } from "rxjs";
 import { SettingsService } from "src/app/api/settings.service";
-import { MatSelectModule } from "@angular/material/select";
 
 export default {
-  title: "Social Auth",
+  title: "Profile/Social Auth",
   decorators: [
     moduleMetadata({
       imports: [
@@ -22,7 +21,6 @@ export default {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         SharedModule,
-        MatSelectModule,
       ],
       providers: [GlitchTipOAuthService, UserService, SettingsService],
       declarations: [SocialAuthComponent],
@@ -33,7 +31,7 @@ export default {
 
 export const socialAuth = () => {
   const loadingBoolean = select(
-    "function",
+    "loading",
     { first: 3, second: 4, null: null },
     null
   );

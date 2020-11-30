@@ -7,7 +7,7 @@ import { withKnobs } from "@storybook/addon-knobs";
 import { MaterialModule } from "./material.module";
 
 export default {
-  title: "General Styling",
+  title: "Styles/General Styling",
   decorators: [
     moduleMetadata({
       imports: [

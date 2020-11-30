@@ -7,7 +7,6 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatRadioModule } from "@angular/material/radio";
-import { MatSelectModule } from "@angular/material/select";
 
 // Components
 import { ProjectsComponent } from "./projects/projects.component";
@@ -38,7 +37,6 @@ import { PlatformPickerComponent } from "./projects/platform-picker/platform-pic
     MatDialogModule,
     MatTabsModule,
     MatRadioModule,
-    MatSelectModule,
   ],
   declarations: [
     ProjectsComponent,

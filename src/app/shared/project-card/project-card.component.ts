@@ -4,7 +4,7 @@ import {
   Input,
   HostBinding,
 } from "@angular/core";
-import {
+import type {
   ProjectCardButtonWithQuery,
   ProjectCardButton,
 } from "../shared.interfaces";
