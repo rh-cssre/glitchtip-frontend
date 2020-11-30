@@ -54,13 +54,14 @@
       </li>
     </ul>
   </section>
-
   <app-entry-message></app-entry-message>
   <app-entry-exception
     [eventTitle]="event?.title"
     [eventPlatform]="event?.platform"
   ></app-entry-exception>
+
   <app-entry-csp></app-entry-csp>
+  <app-breadcrumbs></app-breadcrumbs>
   <app-entry-request></app-entry-request>
   <section *ngFor="let context of event.contexts | keyvalue">
     <mat-divider></mat-divider>
@@ -82,7 +83,6 @@
       </ng-container>
     </dl>
   </section>
-
   <section *ngIf="event.context">
     <mat-divider></mat-divider>
     <h3>Additional Data</h3>

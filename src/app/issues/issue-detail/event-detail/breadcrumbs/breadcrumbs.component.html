@@ -1,0 +1,28 @@
+<section *ngIf="breadcrumbs$ | async as breadcrumbs">
+  <mat-divider></mat-divider>
+  <h3>Breadcrumbs</h3>
+  <ul>
+    <li *ngFor="let value of breadcrumbs?.values">
+      <mat-divider inset="true"></mat-divider>
+      <table cdk-table>
+        <tr>
+          <td class="mat-body-strong column-one">{{ value.category }}</td>
+          <td class="column-two">{{ value.message }}</td>
+          <td class="column-three">
+            {{ value.timestamp | date: "HH:mm:ss.SSS" }}
+          </td>
+        </tr>
+        <tr *ngIf="value.data?.logger">
+          <td class="column-one">logger</td>
+          <td class="column-two">{{ value.data?.logger }}</td>
+        </tr>
+        <tr *ngIf="value.data?.arguments">
+          <td class="column-one">arguments</td>
+          <td class="column-two" *ngFor="let argument of value.data?.arguments">
+            {{ argument }}
+          </td>
+        </tr>
+      </table>
+    </li>
+  </ul>
+</section>
