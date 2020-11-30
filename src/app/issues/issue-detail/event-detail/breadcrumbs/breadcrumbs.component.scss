@@ -1,0 +1,36 @@
+@import "src/assets/styles/variables";
+
+h3 {
+  padding-top: 16px;
+}
+
+ul {
+  padding-left: 0;
+
+  li {
+    list-style: none;
+  }
+}
+
+table {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-spacing: 0 16px;
+
+  .column-one {
+    width: 15%;
+  }
+
+  .column-two {
+    width: 60%;
+    font-family: $font-mono;
+  }
+
+  .column-three {
+    width: 20%;
+  }
+
+  td {
+    vertical-align: top;
+  }
+}
