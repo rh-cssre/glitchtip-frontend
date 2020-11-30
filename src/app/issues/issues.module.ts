@@ -5,7 +5,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
-import { MatSelectModule } from "@angular/material/select";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MarkdownModule } from "ngx-markdown";
 
@@ -38,7 +37,6 @@ import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.
     IssuesRoutingModule,
     SharedModule,
     MatDatepickerModule,
-    MatSelectModule,
     MatNativeDateModule,
     MatTableModule,
     MatTabsModule,

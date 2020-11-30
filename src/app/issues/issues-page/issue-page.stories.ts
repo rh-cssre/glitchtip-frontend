@@ -18,7 +18,7 @@ import { OrganizationsService } from "../../api/organizations/organizations.serv
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
 
 export default {
-  title: "Issues Page",
+  title: "Issues/Issues Page",
   decorators: [
     moduleMetadata({
       imports: [

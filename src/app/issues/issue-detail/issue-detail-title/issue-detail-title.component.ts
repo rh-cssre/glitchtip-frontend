@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { IssueMetadata } from "../../interfaces";
+import type { IssueMetadata } from "../../interfaces";
 
 @Component({
   selector: "app-issue-detail-title",

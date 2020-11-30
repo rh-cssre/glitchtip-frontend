@@ -3,13 +3,12 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, boolean, select } from "@storybook/addon-knobs";
+import { withKnobs, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
 
 import { SharedModule } from "../../../shared/shared.module";
 
 // Components
-import { EventDetailComponent } from "./event-detail.component";
 import { EntryRequestComponent } from "../event-detail/entry-request/entry-request.component";
 import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
 import { EntryMessageComponent } from "./entry-message/entry-message.component";
@@ -29,9 +28,10 @@ import { socialApp } from "./test-data/social-app";
 import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
 import { FrameExpandedComponent } from "./entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./entry-exception/raw-stacktrace/raw-stacktrace.component";
+import { ContextsComponent } from "./context/contexts.component";
 
 export default {
-  title: "Event Detail",
+  title: "Events/Event Detail",
   decorators: [
     moduleMetadata({
       imports: [
@@ -49,70 +49,11 @@ export default {
         FrameTitleComponent,
         FrameExpandedComponent,
         RawStacktraceComponent,
+        ContextsComponent,
       ],
     }),
     withKnobs,
   ],
-};
-
-export const EventDetails = () => {
-  const errorOptions = [
-    "Database Error",
-    "Database Stack Error",
-    "Post Error",
-    "Template Error",
-    "Zero Division Error",
-    "String Error",
-    "CSP Error",
-    "Page Not Found",
-    "SocialApp.DoesNotExist",
-  ];
-  const selectedError = select("Error Type", errorOptions, errorOptions[0]);
-  let error: any = databaseError;
-
-  switch (selectedError) {
-    case "Database Error":
-      error = databaseError;
-      break;
-    case "Database Stack Error":
-      error = databaseStackError;
-      break;
-    case "Post Error":
-      error = postError;
-      break;
-    case "Template Error":
-      error = templateError;
-      break;
-    case "Zero Division Error":
-      error = zeroDivisionError;
-      break;
-    case "String Error":
-      error = stringError;
-      break;
-    case "CSP Error":
-      error = cspError;
-      break;
-    case "Page Not Found":
-      error = pageNotFound;
-      break;
-    case "SocialApp.DoesNotExist":
-      error = socialApp;
-      break;
-  }
-
-  return {
-    component: EventDetailComponent,
-    props: {
-      selectedError,
-      event$: of(error),
-      nextEvent$: of(boolean("has next event?", true)),
-      previousEvent$: of(boolean("has previous event?", false)),
-    },
-  };
-};
-
-EventDetails.story = {
-  name: "Event Detail",
 };
 
 export const EntryRequest = () => {
@@ -489,45 +430,22 @@ export const RawStacktrace = () => {
   ];
 
   return {
-    template: `
-    <p><b>Case: JavaScript</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform="javascript"
-    ></app-raw-stacktrace>
-    <p><b>Case: Ruby</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform="ruby"
-    ></app-raw-stacktrace>
-    <p><b>Case: PHP</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform="php"
-    ></app-raw-stacktrace>
-    <p><b>Case: Java</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform="java"
-    ></app-raw-stacktrace>
-    <p><b>Case: Objective-C, Cocoa</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform="cocoa"
-    ></app-raw-stacktrace>
-    <p><b>Case: Native</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform="native"
-    ></app-raw-stacktrace>
-    <p><b>Case: Default</b></p>
-    <app-raw-stacktrace
-      [values]="values"
-      eventPlatform=""
-    ></app-raw-stacktrace>
-    `,
+    component: RawStacktraceComponent,
     props: {
-      values: testValues,
+      rawStacktraceValues$: of(testValues),
+      eventPlatform: select(
+        "Select Platform",
+        {
+          javascript: "javascript",
+          ruby: "ruby",
+          php: "php",
+          java: "java",
+          cocoa: "cocoa",
+          native: "native",
+          default: "",
+        },
+        "javascript"
+      ),
     },
   };
 };

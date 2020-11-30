@@ -10,7 +10,7 @@ import { SharedModule } from "../../../../shared/shared.module";
 import { ContextsComponent } from "./contexts.component";
 
 export default {
-  title: "Contexts",
+  title: "Events/Contexts",
   decorators: [
     moduleMetadata({
       imports: [

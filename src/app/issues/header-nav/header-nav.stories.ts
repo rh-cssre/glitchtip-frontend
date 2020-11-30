@@ -11,7 +11,7 @@ import { OrganizationProject } from "../../api/organizations/organizations.inter
 import { MaterialModule } from "../../shared/material.module";
 
 export default {
-  title: "Issue Header Nav",
+  title: "Issues/Issue Header Nav",
   decorators: [
     moduleMetadata({
       imports: [

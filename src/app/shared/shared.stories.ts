@@ -11,7 +11,7 @@ import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { LoadingButtonComponent } from "./loading-button/loading-button.component";
 
 export default {
-  title: "Shared",
+  title: "Shared/Shared",
   decorators: [
     moduleMetadata({
       imports: [
