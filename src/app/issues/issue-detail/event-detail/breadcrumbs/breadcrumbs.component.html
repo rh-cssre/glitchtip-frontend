@@ -1,28 +1,66 @@
 <section *ngIf="breadcrumbs$ | async as breadcrumbs">
+  <h2>crumbs: {{ breadcrumbs | json }}</h2>
   <mat-divider></mat-divider>
   <h3>Breadcrumbs</h3>
+  <button
+    *ngIf="breadcrumbs.values.length > 5"
+    mat-button
+    (click)="toggleIsExpanded()"
+  >
+    {{
+      (isExpanded$ | async) === true
+        ? "Hide Earlier Breadcrumbs"
+        : "Show Earlier Breadcrumbs"
+    }}
+  </button>
   <ul>
-    <li *ngFor="let value of breadcrumbs?.values">
-      <mat-divider inset="true"></mat-divider>
-      <table cdk-table>
-        <tr>
-          <td class="mat-body-strong column-one">{{ value.category }}</td>
-          <td class="column-two">{{ value.message }}</td>
-          <td class="column-three">
-            {{ value.timestamp | date: "HH:mm:ss.SSS" }}
-          </td>
-        </tr>
-        <tr *ngIf="value.data?.logger">
-          <td class="column-one">logger</td>
-          <td class="column-two">{{ value.data?.logger }}</td>
-        </tr>
-        <tr *ngIf="value.data?.arguments">
-          <td class="column-one">arguments</td>
-          <td class="column-two" *ngFor="let argument of value.data?.arguments">
-            {{ argument }}
-          </td>
-        </tr>
-      </table>
+    <li *ngFor="let value of breadcrumbs?.values; let i = index">
+      <mat-divider *ngIf="i !== 0" inset="true"></mat-divider>
+      <div
+        [ngSwitch]="value.type"
+        class="table-wrapper"
+        [class.error]="value.level === 'error'"
+      >
+        <table cdk-table>
+          <ng-container *ngSwitchCase="'http'"
+            ><tr>
+              <td class="mat-body-strong column-one">{{ value.category }}</td>
+              <td class="column-two">
+                <ng-container *ngIf="value.data"
+                  ><span *ngIf="value.data?.method" class="mat-body-strong"
+                    >{{ value.data?.method }}
+                  </span>
+                  <a [href]="value.data.url" target="_blank">{{
+                    value.data.url
+                  }}</a
+                  ><span>[{{ value.data.status_code }}] </span>
+                </ng-container>
+              </td>
+              <td class="column-three">
+                {{ value.timestamp | date: "HH:mm:ss.SSS" }}
+              </td>
+            </tr>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            <tr>
+              <td class="mat-body-strong column-one">{{ value.category }}</td>
+              <td class="column-two">{{ value.message }}</td>
+              <td class="column-three">
+                {{ value.timestamp | date: "HH:mm:ss.SSS" }}
+              </td>
+            </tr>
+            <ng-container *ngIf="value.data">
+              <tr *ngFor="let data of value.data | keyvalue: originalOrder">
+                <td class="column-one">{{ data.key }}</td>
+                <td class="column-two">
+                  {{ data.value | json }}
+                </td>
+              </tr></ng-container
+            >
+          </ng-container>
+        </table>
+      </div>
     </li>
   </ul>
 </section>

@@ -103,6 +103,23 @@ export interface BreadcrumbValueData {
   values: Breadcrumb[];
 }
 
+export type BreadcrumbType = "default" | "http" | "error";
+
+export interface Crumb<Type extends BreadcrumbType, Data extends {}> {
+  data: Data;
+  type: Type;
+}
+
+export type CrumbUnion =
+  | Crumb<"default", { [key: string]: Json }>
+  | Crumb<"http", BreadcrumbHttp>
+  | Crumb<"error", { [key: string]: Json }>;
+
+export interface BreadcrumbHttp {
+  url: string;
+  method: string;
+  status_code: number;
+}
 export interface Message {
   formatted: string;
 }
@@ -115,9 +132,9 @@ export interface CSP {
 export interface Breadcrumb {
   message: string | null;
   category: string;
-  data: { [key: string]: Json } | null;
+  data: unknown;
   level: "fatal" | "error" | "warning" | "info" | "debug";
-  type: "default" | "http" | "error";
+  type: BreadcrumbType;
   event_id: null;
   timestamp: string; // technically a string, functionally a Date
 }

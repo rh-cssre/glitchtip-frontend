@@ -1,20 +1,33 @@
 @import "src/assets/styles/variables";
 
 h3 {
-  padding-top: 16px;
+  padding-top: 32px;
+  margin-bottom: 8px;
 }
 
 ul {
   padding-left: 0;
+  margin-bottom: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
 
   li {
     list-style: none;
   }
 }
 
+.table-wrapper {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.error {
+  background-color: mat-color($mat-red, 50);
+}
+
 table {
-  padding-top: 16px;
-  padding-bottom: 16px;
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
   border-spacing: 0 16px;
 
   .column-one {
@@ -24,10 +37,12 @@ table {
   .column-two {
     width: 60%;
     font-family: $font-mono;
+    word-break: break-all;
   }
 
   .column-three {
     width: 20%;
+    text-align: right;
   }
 
   td {
