@@ -15,7 +15,6 @@ import {
   Values,
   EntryType,
   AnnotatedContexts,
-  BreadcrumbValueData,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -95,9 +94,6 @@ export class IssueDetailService {
   );
   readonly specialContexts$ = this.event$.pipe(
     map((event) => (event ? this.specialContexts(event) : undefined))
-  );
-  readonly breadcrumbs$ = this.event$.pipe(
-    map((event) => (event ? this.eventEntryBreadcrumbs(event) : undefined))
   );
 
   constructor(
@@ -216,18 +212,6 @@ export class IssueDetailService {
 
     if (eventCSP) {
       return { ...eventCSP };
-    }
-    return;
-  }
-
-  /* Return the breadcrumbs entry type for an event */
-  private eventEntryBreadcrumbs(
-    event: EventDetail
-  ): BreadcrumbValueData | undefined {
-    const breadcrumbs = this.getBreadcrumbs(event);
-
-    if (breadcrumbs) {
-      return { ...breadcrumbs };
     }
     return;
   }
@@ -442,17 +426,11 @@ export class IssueDetailService {
     return this.getEntryData(event, "request") as Request | undefined;
   }
 
-  private getBreadcrumbs(event: EventDetail) {
-    return this.getEntryData(event, "breadcrumbs") as
-      | BreadcrumbValueData
-      | undefined;
-  }
-
   /**
    * Regardless of what kind of entry it is, we want to return the `data`
    * property or undefined
    */
-  private getEntryData(event: EventDetail, entryType: EntryType) {
+  getEntryData(event: EventDetail, entryType: EntryType) {
     const entries = event.entries.find((entry) => entry.type === entryType);
     if (!entries) {
       return undefined;

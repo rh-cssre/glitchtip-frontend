@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { IssueDetailService } from "../../issue-detail.service";
+import { Json } from "src/app/interface-primitives";
+import { BreadcrumbsService } from "./breadcrumbs.service";
 
 @Component({
   selector: "app-breadcrumbs",
@@ -8,7 +9,19 @@ import { IssueDetailService } from "../../issue-detail.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbsComponent {
-  breadcrumbs$ = this.issueDetailService.breadcrumbs$;
+  breadcrumbs$ = this.breadcrumbsService.breadcrumbs$;
+  isExpanded$ = this.breadcrumbsService.isExpanded;
 
-  constructor(private issueDetailService: IssueDetailService) {}
+  constructor(private breadcrumbsService: BreadcrumbsService) {}
+
+  toggleIsExpanded() {
+    this.breadcrumbsService.toggleExpand();
+  }
+
+  originalOrder = (
+    a: { [key: string]: Json },
+    b: { [key: string]: Json }
+  ): number => {
+    return 0;
+  };
 }
