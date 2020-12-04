@@ -14,8 +14,8 @@ function generateClassName(name: string): string {
 }
 
 /** Paths to different icon asset locations */
-const browserPath = (name: string): string =>
-  `assets/images/browser-svgs/${name}/${name}.svg`;
+const browserPath = (name: string, extension: string = "svg"): string =>
+  `assets/images/browser-svgs/${name}/${name}.${extension}`;
 
 const browserArchivePath = (name: string): string =>
   `assets/images/browser-logos/src/archive/${name}/${name}.svg`;
@@ -30,7 +30,7 @@ const iconDictionary: { [key: string]: string } = {
   chrome: browserPath("chrome"),
   firefox: browserPath("firefox"),
   opera: browserPath("opera"),
-  safari: browserPath("safari"),
+  safari: browserPath("safari", "png"),
   mobilesafari: browserPath("safari-ios"),
   edge: browserPath("edge"),
   chromium: browserPath("chromium"),
