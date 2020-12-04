@@ -300,7 +300,7 @@ export class IssueDetailService {
     if (eventException) {
       if (isReversed) {
         const reversedFrames = eventException.values.map((value) => {
-          if (value.stacktrace) {
+          if (value.stacktrace && "frames" in value.stacktrace) {
             const frameReverse = [...value.stacktrace.frames].reverse();
             return {
               ...value,
@@ -326,7 +326,11 @@ export class IssueDetailService {
 
     if (eventException) {
       const values = eventException.values.map((value) => {
-        if (platform !== "python" && value.stacktrace) {
+        if (
+          platform !== "python" &&
+          value.stacktrace &&
+          "frames" in value.stacktrace
+        ) {
           const reverseFrames = [...value.stacktrace.frames].reverse();
           return {
             ...value,

@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 import { IssueDetailService } from "../../issue-detail.service";
+import { isStacktrace } from "src/app/issues/utils";
 
 @Component({
   selector: "app-entry-exception",
@@ -14,6 +15,8 @@ export class EntryExceptionComponent {
   isReversed$ = this.issueService.isReversed$;
 
   constructor(private issueService: IssueDetailService) {}
+
+  checkStacktraceInterface = isStacktrace;
 
   getFlippedFrames() {
     this.issueService.getReversedFrames();

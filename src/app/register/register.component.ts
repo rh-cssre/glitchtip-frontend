@@ -17,7 +17,7 @@ import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-sta
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
   loading = false;
-  error: string | undefined;
+  error = "";
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password1: new FormControl("", [
@@ -68,6 +68,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
+      this.error = "";
       this.registerService
         .register(
           this.form.value.email,

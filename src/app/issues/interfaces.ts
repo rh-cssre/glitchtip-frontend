@@ -269,7 +269,7 @@ interface Activity {
 }
 
 export interface Values {
-  stacktrace?: IStacktrace;
+  stacktrace?: {} | Stacktrace | null;
   module?: string | null;
   rawStacktrace?: string | null;
   mechanism?: Mechanism | null;
@@ -284,7 +284,7 @@ interface Mechanism {
   handled: boolean;
 }
 
-interface IStacktrace {
+export interface Stacktrace {
   frames: Frame[];
   framesOmitted?: null;
   registers?: null;
