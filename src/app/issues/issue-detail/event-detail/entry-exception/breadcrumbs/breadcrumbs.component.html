@@ -1,9 +1,9 @@
 <section *ngIf="breadcrumbs$ | async as breadcrumbs">
-  <h2>crumbs: {{ breadcrumbs | json }}</h2>
   <mat-divider></mat-divider>
   <h3>Breadcrumbs</h3>
+  <h2>is Expanded: {{ isExpanded$ | async }}</h2>
   <button
-    *ngIf="breadcrumbs.values.length > 5"
+    *ngIf="(originalBreadcrumbs$ | async)?.values.length >= 5"
     mat-button
     (click)="toggleIsExpanded()"
   >

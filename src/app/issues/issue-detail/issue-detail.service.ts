@@ -15,6 +15,7 @@ import {
   Values,
   EntryType,
   AnnotatedContexts,
+  BreadcrumbValueData,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -24,12 +25,14 @@ interface IssueDetailState {
   issue: IssueDetail | null;
   event: EventDetail | null;
   isReversed: boolean;
+  areBreadcrumbsExpanded: boolean;
 }
 
 const initialState: IssueDetailState = {
   issue: null,
   event: null,
   isReversed: true,
+  areBreadcrumbsExpanded: false,
 };
 
 @Injectable({
@@ -96,11 +99,54 @@ export class IssueDetailService {
     map((event) => (event ? this.specialContexts(event) : undefined))
   );
 
+  readonly areBreadcrumbsExpanded = this.getState$.pipe(
+    map((state) => state.areBreadcrumbsExpanded)
+  );
+  readonly breadcrumbs$ = this.event$.pipe(
+    map((event) => (event ? this.eventEntryBreadcrumbs(event) : undefined))
+  );
+  readonly breadcrumbsExpanded$ = combineLatest([
+    this.areBreadcrumbsExpanded,
+    this.breadcrumbs$,
+  ]).pipe(
+    map(([isExpanded, breadcrumbs]) => {
+      if (breadcrumbs) {
+        if (breadcrumbs?.values.length > 5) {
+          if (!isExpanded) {
+            const sliceHere = breadcrumbs.values.length - 6;
+            const endSlice = breadcrumbs.values.length - 1;
+            console.log("slice here: ", sliceHere);
+            const squashedCrumbs = [
+              ...breadcrumbs.values.slice(sliceHere, endSlice),
+            ];
+            return {
+              ...breadcrumbs,
+              values: squashedCrumbs,
+            };
+          } else return { ...breadcrumbs };
+        } else return breadcrumbs;
+      }
+      return;
+    })
+  );
+
   constructor(
     private http: HttpClient,
     private organization: OrganizationsService,
     private issueService: IssuesService
-  ) {}
+  ) {
+    this.breadcrumbs$
+      .pipe(
+        map((breadcrumbs) => {
+          if (breadcrumbs) {
+            breadcrumbs?.values.length < 5
+              ? this.setAreBreadCrumbsExpanded(true)
+              : this.setAreBreadCrumbsExpanded(false);
+          }
+        })
+      )
+      .subscribe();
+  }
 
   retrieveIssue(id: number) {
     return this.http
@@ -140,6 +186,21 @@ export class IssueDetailService {
 
   getReversedFrames() {
     this.toggleIsReversed();
+  }
+
+  getToggleAreBreadcrumbsExpanded() {
+    this.setToggleAreBreadcrumbsExpanded();
+  }
+
+  /* Return the breadcrumbs entry type for an event */
+  private eventEntryBreadcrumbs(
+    event: EventDetail
+  ): BreadcrumbValueData | undefined {
+    const breadcrumbs = this.getBreadcrumbs(event);
+    if (breadcrumbs) {
+      return { ...breadcrumbs };
+    }
+    return;
   }
 
   setStatus(status: IssueStatus) {
@@ -194,6 +255,23 @@ export class IssueDetailService {
   private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+  }
+
+  /* Breadcrumbs **/
+
+  private setAreBreadCrumbsExpanded(expand: boolean) {
+    this.state.next({
+      ...this.state.getValue(),
+      areBreadcrumbsExpanded: expand,
+    });
+  }
+
+  private setToggleAreBreadcrumbsExpanded() {
+    const crumbsAreExpanded = this.state.getValue().areBreadcrumbsExpanded;
+    this.state.next({
+      ...this.state.getValue(),
+      areBreadcrumbsExpanded: !crumbsAreExpanded,
+    });
   }
 
   /* Return the message entry type for an event */
@@ -426,11 +504,17 @@ export class IssueDetailService {
     return this.getEntryData(event, "request") as Request | undefined;
   }
 
+  private getBreadcrumbs(event: EventDetail) {
+    return this.getEntryData(event, "breadcrumbs") as
+      | BreadcrumbValueData
+      | undefined;
+  }
+
   /**
    * Regardless of what kind of entry it is, we want to return the `data`
    * property or undefined
    */
-  getEntryData(event: EventDetail, entryType: EntryType) {
+  private getEntryData(event: EventDetail, entryType: EntryType) {
     const entries = event.entries.find((entry) => entry.type === entryType);
     if (!entries) {
       return undefined;

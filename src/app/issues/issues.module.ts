@@ -29,7 +29,7 @@ import { RawStacktraceComponent } from "./issue-detail/event-detail/entry-except
 import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
 import { ContextsComponent } from "./issue-detail/event-detail/context/contexts.component";
 import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.component";
-import { BreadcrumbsComponent } from "./issue-detail/event-detail/breadcrumbs/breadcrumbs.component";
+import { BreadcrumbsComponent } from "./issue-detail/event-detail/entry-exception/breadcrumbs/breadcrumbs.component";
 
 @NgModule({
   imports: [

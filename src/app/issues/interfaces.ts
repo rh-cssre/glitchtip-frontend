@@ -9,7 +9,7 @@ export interface Event {
   eventID: string;
   id: string;
   tags: Tag[];
-  projectID?: string;
+  projectID?: string | number;
   dateCreated: string | null;
   user: EndUser | null;
   message?: string;
@@ -47,11 +47,11 @@ export interface EventDetail extends Event {
   type: "error" | "csp" | "default";
   groupingConfig?: GroupingConfig;
   dateReceived: string;
-  packages: { [key: string]: string } | {};
+  packages: { [key: string]: string } | {} | null;
   sdk: { [key: string]: Json } | null;
   _meta?: { [key: string]: Json };
   fingerprints?: string[];
-  context?: { [key: string]: Json[] };
+  context?: { [key: string]: Json[] } | null;
   release?: { [key: string]: Json[] } | null;
   issue?: number;
   sdkUpdates?: [];
@@ -135,13 +135,13 @@ export interface Breadcrumb {
   data: unknown;
   level: "fatal" | "error" | "warning" | "info" | "debug";
   type: BreadcrumbType;
-  event_id: null;
+  event_id: string | null;
   timestamp: string; // technically a string, functionally a Date
 }
 
 export interface ExceptionValueData {
   values: Values[];
-  excOmitted: boolean | null;
+  excOmitted?: boolean | null;
   hasSystemFrames: boolean;
 }
 
@@ -149,7 +149,7 @@ export interface Request {
   fragment?: string | null;
   cookies?: { [key: string]: Json }[];
   inferredContentType: string | null;
-  env: {
+  env?: {
     SERVER_NAME: string;
     SERVER_PORT: string;
     DOCUMENT_ROOT?: string;
@@ -158,7 +158,7 @@ export interface Request {
   url: string;
   query?: { [key: string]: Json }[];
   data?: { [key: string]: string } | null;
-  method: string | null;
+  method?: string | null;
   query_string?: string;
 }
 
@@ -270,7 +270,7 @@ interface Activity {
 
 export interface Values {
   stacktrace?: IStacktrace;
-  module: string | null;
+  module?: string | null;
   rawStacktrace?: string | null;
   mechanism?: Mechanism | null;
   threadId?: number | null;
@@ -286,28 +286,28 @@ interface Mechanism {
 
 interface IStacktrace {
   frames: Frame[];
-  framesOmitted: null;
-  registers: null;
-  hasSystemFrames: boolean;
+  framesOmitted?: null;
+  registers?: null;
+  hasSystemFrames?: boolean;
 }
 
 // tslint:disable-next-line:max-line-length
 // https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md#frame-attributes
 export interface Frame {
-  absPath: string | null;
+  absPath?: string | null;
   filename: string | null;
-  platform: string | null;
-  module: string | null;
+  platform?: string | null;
+  module?: string | null;
   function: string | null;
   rawFunction?: string | null;
-  package: string | null;
-  instructionAddr: string | null;
-  symbol: string | null;
-  symbolAddr: string | null;
-  trust: string | null;
+  package?: string | null;
+  instructionAddr?: string | null;
+  symbol?: string | null;
+  symbolAddr?: string | null;
+  trust?: string | null;
   inApp: boolean;
   context: (string | number)[][];
-  vars: { [key: string]: Json } | null;
+  vars?: { [key: string]: Json } | null;
   errors?: string | null;
   lineNo: number | null;
   colNo: number | null;
