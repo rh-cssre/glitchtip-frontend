@@ -2,7 +2,7 @@
   <mat-divider></mat-divider>
   <h3>Breadcrumbs</h3>
   <button
-    *ngIf="(originalBreadcrumbs$ | async)?.values.length >= 5"
+    *ngIf="(showExpandButton$ | async) === true"
     mat-button
     (click)="toggleIsExpanded()"
   >
@@ -25,14 +25,14 @@
             ><tr>
               <td class="mat-body-strong column-one">{{ value.category }}</td>
               <td class="column-two">
-                <ng-container *ngIf="value.data"
-                  ><span *ngIf="value.data?.method" class="mat-body-strong"
+                <ng-container *ngIf="isBreadcrumbHttp(value.data)"
+                  ><span *ngIf="value.data!.method" class="mat-body-strong"
                     >{{ value.data?.method }}
                   </span>
-                  <a [href]="value.data.url" target="_blank">{{
-                    value.data.url
+                  <a [href]="value.data!.url" target="_blank">{{
+                    value.data!.url
                   }}</a
-                  ><span>[{{ value.data.status_code }}] </span>
+                  ><span>[{{ value.data!.status_code }}] </span>
                 </ng-container>
               </td>
               <td class="column-three">
@@ -49,7 +49,7 @@
                 {{ value.timestamp | date: "HH:mm:ss.SSS" }}
               </td>
             </tr>
-            <ng-container *ngIf="value.data">
+            <ng-container *ngIf="checkForJsonType(value.data)">
               <tr *ngFor="let data of value.data | keyvalue: originalOrder">
                 <td class="column-one">{{ data.key }}</td>
                 <td class="column-two">

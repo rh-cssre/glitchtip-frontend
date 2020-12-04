@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { Json } from "src/app/interface-primitives";
 import { IssueDetailService } from "../../../issue-detail.service";
+import { BreadcrumbHttp } from "src/app/issues/interfaces";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-breadcrumbs",
@@ -11,18 +13,29 @@ import { IssueDetailService } from "../../../issue-detail.service";
 export class BreadcrumbsComponent {
   breadcrumbs$ = this.issueDetailService.breadcrumbsExpanded$;
   isExpanded$ = this.issueDetailService.areBreadcrumbsExpanded;
-  originalBreadcrumbs$ = this.issueDetailService.breadcrumbs$;
+  showExpandButton$ = this.issueDetailService.breadcrumbs$.pipe(
+    map((data) => (data && data?.values.length > 5 ? true : false))
+  );
 
   constructor(private issueDetailService: IssueDetailService) {}
+
+  isBreadcrumbHttp(
+    data: { [key: string]: Json } | BreadcrumbHttp | null
+  ): data is BreadcrumbHttp {
+    return (data as BreadcrumbHttp).url !== undefined;
+  }
+
+  checkForJsonType(
+    data: { [key: string]: Json } | BreadcrumbHttp | null
+  ): data is { [key: string]: Json } {
+    return (data as { [key: string]: Json }) !== undefined;
+  }
 
   toggleIsExpanded() {
     this.issueDetailService.getToggleAreBreadcrumbsExpanded();
   }
 
-  originalOrder = (
-    a: { [key: string]: Json },
-    b: { [key: string]: Json }
-  ): number => {
+  originalOrder = (a: any, b: any): number => {
     return 0;
   };
 }

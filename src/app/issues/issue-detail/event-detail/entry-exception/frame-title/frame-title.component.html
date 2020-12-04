@@ -2,7 +2,7 @@
   <ng-container *ngIf="frame.filename || frame.module">
     <span
       [matTooltip]="
-        frame.absPath
+        frame.absPath && frame.filename && frame.module
           ? showToolTip(frame.absPath, frame.filename, frame.module)
           : ''
       "

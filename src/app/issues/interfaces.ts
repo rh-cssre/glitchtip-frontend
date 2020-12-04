@@ -105,16 +105,6 @@ export interface BreadcrumbValueData {
 
 export type BreadcrumbType = "default" | "http" | "error";
 
-export interface Crumb<Type extends BreadcrumbType, Data extends {}> {
-  data: Data;
-  type: Type;
-}
-
-export type CrumbUnion =
-  | Crumb<"default", { [key: string]: Json }>
-  | Crumb<"http", BreadcrumbHttp>
-  | Crumb<"error", { [key: string]: Json }>;
-
 export interface BreadcrumbHttp {
   url: string;
   method: string;
@@ -132,7 +122,7 @@ export interface CSP {
 export interface Breadcrumb {
   message: string | null;
   category: string;
-  data: unknown;
+  data: { [key: string]: Json } | BreadcrumbHttp | null;
   level: "fatal" | "error" | "warning" | "info" | "debug";
   type: BreadcrumbType;
   event_id: string | null;
@@ -294,20 +284,20 @@ export interface Stacktrace {
 // tslint:disable-next-line:max-line-length
 // https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md#frame-attributes
 export interface Frame {
-  absPath?: string | null;
+  absPath: string | null;
   filename: string | null;
-  platform?: string | null;
-  module?: string | null;
+  platform: string | null;
+  module: string | null;
   function: string | null;
   rawFunction?: string | null;
-  package?: string | null;
-  instructionAddr?: string | null;
-  symbol?: string | null;
-  symbolAddr?: string | null;
-  trust?: string | null;
+  package: string | null;
+  instructionAddr: string | null;
+  symbol: string | null;
+  symbolAddr: string | null;
+  trust: string | null;
   inApp: boolean;
   context: (string | number)[][];
-  vars?: { [key: string]: Json } | null;
+  vars: { [key: string]: Json } | null;
   errors?: string | null;
   lineNo: number | null;
   colNo: number | null;
