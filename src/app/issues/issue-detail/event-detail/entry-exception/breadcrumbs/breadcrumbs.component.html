@@ -50,7 +50,7 @@
               </td>
             </tr>
             <ng-container *ngIf="checkForJsonType(value.data)">
-              <tr *ngFor="let data of value.data | keyvalue: originalOrder">
+              <tr *ngFor="let data of value.data | keyvalue: keepOrder">
                 <td class="column-one">{{ data.key }}</td>
                 <td class="column-two">
                   {{ data.value | json }}

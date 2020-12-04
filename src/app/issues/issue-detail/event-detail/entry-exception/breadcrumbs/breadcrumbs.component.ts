@@ -3,6 +3,7 @@ import { Json } from "src/app/interface-primitives";
 import { IssueDetailService } from "../../../issue-detail.service";
 import { BreadcrumbHttp } from "src/app/issues/interfaces";
 import { map } from "rxjs/operators";
+import { KeyValue } from "@angular/common";
 
 @Component({
   selector: "app-breadcrumbs",
@@ -35,7 +36,10 @@ export class BreadcrumbsComponent {
     this.issueDetailService.getToggleAreBreadcrumbsExpanded();
   }
 
-  originalOrder = (a: any, b: any): number => {
+  keepOrder = (
+    a: KeyValue<string, Json>,
+    b: KeyValue<string, Json>
+  ): number => {
     return 0;
   };
 }

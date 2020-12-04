@@ -276,8 +276,8 @@ interface Mechanism {
 
 export interface Stacktrace {
   frames: Frame[];
-  framesOmitted?: null;
-  registers?: null;
+  framesOmitted: unknown;
+  registers: unknown;
   hasSystemFrames?: boolean;
 }
 
