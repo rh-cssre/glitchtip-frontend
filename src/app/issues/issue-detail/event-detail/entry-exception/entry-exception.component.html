@@ -39,7 +39,7 @@
         </mat-chip-list>
 
         <mat-accordion
-          *ngIf="value.stacktrace"
+          *ngIf="checkStacktraceInterface(value.stacktrace)"
           [multi]="true"
           displayMode="flat"
         >
