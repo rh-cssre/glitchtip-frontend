@@ -1,3 +1,5 @@
+import { Stacktrace } from "./interfaces";
+
 export function urlParamsToObject(url: string | null) {
   return url ? paramsToObject(new URLSearchParams(url.split("?")[1])) : null;
 }
@@ -20,4 +22,10 @@ export function normalizeProjectParams(
     return [projects];
   }
   return [];
+}
+
+export function isStacktrace(
+  stacktrace?: {} | Stacktrace | null
+): stacktrace is Stacktrace {
+  return (stacktrace as Stacktrace).frames !== undefined;
 }

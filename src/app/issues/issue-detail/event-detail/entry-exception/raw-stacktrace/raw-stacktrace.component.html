@@ -9,7 +9,7 @@
     </ng-container>
     <ng-template #defaultTitle>{{ value.type }}:{{ value.value }}</ng-template>
   </p>
-  <ng-container *ngIf="value.stacktrace">
+  <ng-container *ngIf="checkStacktraceInterface(value.stacktrace)">
     <div
       class="indent"
       *ngFor="let frame of value.stacktrace.frames; let i = index"

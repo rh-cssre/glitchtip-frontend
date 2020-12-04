@@ -9,7 +9,7 @@ export interface Event {
   eventID: string;
   id: string;
   tags: Tag[];
-  projectID?: string;
+  projectID?: string | number;
   dateCreated: string | null;
   user: EndUser | null;
   message?: string;
@@ -47,11 +47,11 @@ export interface EventDetail extends Event {
   type: "error" | "csp" | "default";
   groupingConfig?: GroupingConfig;
   dateReceived: string;
-  packages: { [key: string]: string } | {};
+  packages: { [key: string]: string } | {} | null;
   sdk: { [key: string]: Json } | null;
   _meta?: { [key: string]: Json };
   fingerprints?: string[];
-  context?: { [key: string]: Json[] };
+  context?: { [key: string]: Json[] } | null;
   release?: { [key: string]: Json[] } | null;
   issue?: number;
   sdkUpdates?: [];
@@ -124,7 +124,7 @@ export interface Breadcrumb {
 
 export interface ExceptionValueData {
   values: Values[];
-  excOmitted: boolean | null;
+  excOmitted?: boolean | null;
   hasSystemFrames: boolean;
 }
 
@@ -132,7 +132,7 @@ export interface Request {
   fragment?: string | null;
   cookies?: { [key: string]: Json }[];
   inferredContentType: string | null;
-  env: {
+  env?: {
     SERVER_NAME: string;
     SERVER_PORT: string;
     DOCUMENT_ROOT?: string;
@@ -141,7 +141,7 @@ export interface Request {
   url: string;
   query?: { [key: string]: Json }[];
   data?: { [key: string]: string } | null;
-  method: string | null;
+  method?: string | null;
   query_string?: string;
 }
 
@@ -252,8 +252,8 @@ interface Activity {
 }
 
 export interface Values {
-  stacktrace?: IStacktrace;
-  module: string | null;
+  stacktrace?: {} | Stacktrace | null;
+  module?: string | null;
   rawStacktrace?: string | null;
   mechanism?: Mechanism | null;
   threadId?: number | null;
@@ -267,10 +267,10 @@ interface Mechanism {
   handled: boolean;
 }
 
-interface IStacktrace {
+export interface Stacktrace {
   frames: Frame[];
-  framesOmitted: null;
-  registers: null;
+  framesOmitted: unknown;
+  registers: unknown;
   hasSystemFrames: boolean;
 }
 
