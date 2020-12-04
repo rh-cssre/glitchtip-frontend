@@ -14,23 +14,26 @@ function generateClassName(name: string): string {
 }
 
 /** Paths to different icon asset locations */
-const browserPath = (name: string): string =>
-  `assets/images/browser-svgs/${name}/${name}.svg`;
-
-const browserArchivePath = (name: string): string =>
-  `assets/images/browser-logos/src/archive/${name}/${name}.svg`;
+const browserPath = (
+  name: string,
+  extension = "svg",
+  isArchive = false
+): string =>
+  `assets/images/browser-svgs/${
+    isArchive ? "archive/" : ""
+  }${name}/${name}.${extension}`;
 
 const osPath = (name: string): string => `assets/images/os-logos/${name}.png`;
 
 const localPath = (name: string, type?: string): string =>
   `assets/images/logos/48x48/${name}.${type ? type : "png"}`;
 
-const iconDictionary: { [key: string]: string } = {
+export const iconDictionary: { [key: string]: string } = {
   /** Browsers */
   chrome: browserPath("chrome"),
   firefox: browserPath("firefox"),
   opera: browserPath("opera"),
-  safari: browserPath("safari"),
+  safari: browserPath("safari", "png"),
   mobilesafari: browserPath("safari-ios"),
   edge: browserPath("edge"),
   chromium: browserPath("chromium"),
@@ -38,7 +41,11 @@ const iconDictionary: { [key: string]: string } = {
   chromemobileios: browserPath("chrome"),
   qqbrowser: localPath("qqbrowser"),
   playstation: osPath("playstation"),
-  internetexplorer: browserArchivePath("internet-explorer-tile_10-11"),
+  internetexplorer: browserPath(
+    "internet-explorer-tile_10-11",
+    undefined,
+    true
+  ),
 
   /** Operating Systems */
   ubuntu: osPath("ubuntu"),
@@ -46,7 +53,7 @@ const iconDictionary: { [key: string]: string } = {
   windows: osPath("windows"),
   android: osPath("android"),
   darwin: osPath("mac"),
-  ios: osPath("IOS"),
+  ios: osPath("ios"),
   macos: osPath("mac"),
   tvos: osPath("mac"),
   macosx: osPath("mac"),

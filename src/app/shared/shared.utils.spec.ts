@@ -19,7 +19,7 @@ describe("Icon Paths", () => {
   it("generates path to browser logo archive library", () => {
     const internetExplorer = generateIconPath("Internet Explorer");
     expect(internetExplorer).toBe(
-      "assets/images/browser-logos/src/archive/internet-explorer-tile_10-11/internet-explorer-tile_10-11.svg"
+      "assets/images/browser-svgs/archive/internet-explorer-tile_10-11/internet-explorer-tile_10-11.svg"
     );
   });
 
