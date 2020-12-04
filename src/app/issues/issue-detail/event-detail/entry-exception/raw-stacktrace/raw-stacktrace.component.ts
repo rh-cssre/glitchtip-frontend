@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { isStacktrace } from "src/app/issues/utils";
 import { IssueDetailService } from "../../../issue-detail.service";
 
 @Component({
@@ -12,4 +13,6 @@ export class RawStacktraceComponent {
   rawStacktraceValues$ = this.issueService.rawStacktraceValues$;
 
   constructor(private issueService: IssueDetailService) {}
+
+  checkStacktraceInterface = isStacktrace;
 }
