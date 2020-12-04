@@ -51,7 +51,7 @@
               },
               {
                 "glob": "**/*.png",
-                "input": "./node_modules/operating-system-logos/src/48x48/",
+                "input": "./node_modules/@egoistdeveloper/operating-system-logos/src/48x48/",
                 "output": "./assets/images/os-logos"
               }
             ],
