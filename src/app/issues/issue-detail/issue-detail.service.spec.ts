@@ -111,21 +111,15 @@ describe("IssueDetailService", () => {
 
   it("breadcrumbs shows last five values when not expanded", () => {
     const testData: any = rangeError;
-    // console.log("OG: ", rangeError.entries[1].data);
     service.setEvent(testData);
+
     expect(testData.entries[1].data.values.length).toEqual(9);
+
     service.breadcrumbsExpanded$.subscribe((crumbs: any) => {
-      console.log(
-        "expect: ",
-        crumbs.values[0].timestamp,
-        " to equal ",
-        testData.entries[1].data.values[4].timestamp
-      );
       expect(crumbs.values.length).toEqual(5);
       expect(crumbs.values[0].timestamp).toBe(
-        testData.entries[1].data.values[4].timestamp
+        testData.entries[0].data.values[4].timestamp
       );
-      // expect(values[0].stacktrace.frames[0].lineNo).toEqual(14);
     });
   });
 

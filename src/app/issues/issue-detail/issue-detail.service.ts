@@ -110,21 +110,20 @@ export class IssueDetailService {
     this.breadcrumbs$,
   ]).pipe(
     map(([isExpanded, breadcrumbs]) => {
-      if (breadcrumbs) {
-        if (breadcrumbs?.values.length > 5) {
-          if (!isExpanded) {
-            const sliceHere = breadcrumbs.values.length - 6;
-            const endSlice = breadcrumbs.values.length - 1;
-            console.log("slice here: ", sliceHere);
-            const squashedCrumbs = [
-              ...breadcrumbs.values.slice(sliceHere, endSlice),
-            ];
-            return {
-              ...breadcrumbs,
-              values: squashedCrumbs,
-            };
-          } else return { ...breadcrumbs };
-        } else return breadcrumbs;
+      if (breadcrumbs && breadcrumbs?.values.length > 5) {
+        if (!isExpanded) {
+          const sliceHere = breadcrumbs.values.length - 6;
+          const endSlice = breadcrumbs.values.length - 1;
+          const squashedCrumbs = [
+            ...breadcrumbs.values.slice(sliceHere, endSlice),
+          ];
+          return {
+            ...breadcrumbs,
+            values: squashedCrumbs,
+          };
+        } else {
+          return { ...breadcrumbs };
+        }
       }
       return;
     })
@@ -134,19 +133,7 @@ export class IssueDetailService {
     private http: HttpClient,
     private organization: OrganizationsService,
     private issueService: IssuesService
-  ) {
-    this.breadcrumbs$
-      .pipe(
-        map((breadcrumbs) => {
-          if (breadcrumbs) {
-            breadcrumbs?.values.length < 5
-              ? this.setAreBreadCrumbsExpanded(true)
-              : this.setAreBreadCrumbsExpanded(false);
-          }
-        })
-      )
-      .subscribe();
-  }
+  ) {}
 
   retrieveIssue(id: number) {
     return this.http
@@ -255,15 +242,6 @@ export class IssueDetailService {
   private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
     this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
-  }
-
-  /* Breadcrumbs **/
-
-  private setAreBreadCrumbsExpanded(expand: boolean) {
-    this.state.next({
-      ...this.state.getValue(),
-      areBreadcrumbsExpanded: expand,
-    });
   }
 
   private setToggleAreBreadcrumbsExpanded() {
