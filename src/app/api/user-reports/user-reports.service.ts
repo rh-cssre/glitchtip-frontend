@@ -125,7 +125,7 @@ export class UserReportsService {
     this.userReportsState.next({
       ...this.userReportsState.getValue(),
       nextPage: parts.next ? parts.next : null,
-      previousPage: parts.prev ? parts.prev : null,
+      previousPage: parts.previous ? parts.previous : null,
     });
   }
 }

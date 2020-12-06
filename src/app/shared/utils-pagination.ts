@@ -5,12 +5,17 @@
  */
 export const processLinkHeader = (linkHeader: string) =>
   linkHeader.split(",").reduce<{ [key: string]: string }>((acc, link) => {
+    // Only return results url when results are present
     const match = link.match(/<(.*)>; rel="(\w*)"/);
-    if (match) {
+    const results = link
+      .split("; ")
+      .find((x) => x.startsWith("results"))
+      ?.includes("true");
+    if (results && match) {
       const url = match[1];
       const rel = match[2];
       acc[rel] = url;
       return acc;
     }
-    return {};
+    return acc;
   }, {});
