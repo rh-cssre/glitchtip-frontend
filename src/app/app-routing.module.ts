@@ -17,7 +17,6 @@ export const routes: Routes = [
       import("./settings/settings.module").then((m) => m.SettingsModule),
     canActivate: [IsLoggedInGuard],
   },
-
   {
     path: "organizations/:org-slug/issues",
     loadChildren: () =>
@@ -65,6 +64,12 @@ export const routes: Routes = [
     path: "accept/:memberId/:token",
     loadChildren: () =>
       import("./accept/accept.module").then((m) => m.AcceptModule),
+  },
+  // Sentry OSS compat redirect
+  {
+    path: ":org-slug/:project-slug/issues/:id",
+    redirectTo: "organizations/:org-slug/issues/:id",
+    pathMatch: "full",
   },
   {
     path: "**",
