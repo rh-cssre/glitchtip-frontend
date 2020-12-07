@@ -16,12 +16,18 @@ export const routes: Routes = [
     loadChildren: () =>
       import("./settings/settings.module").then((m) => m.SettingsModule),
     canActivate: [IsLoggedInGuard],
+    data: {
+      title: "Settings",
+    },
   },
   {
     path: "organizations/:org-slug/issues",
     loadChildren: () =>
       import("./issues/issues.module").then((m) => m.IssuesModule),
     canActivate: [IsLoggedInGuard],
+    data: {
+      title: "Issues",
+    },
   },
   {
     path: "organizations/new",
@@ -30,24 +36,36 @@ export const routes: Routes = [
         (m) => m.NewOrganizationModule
       ),
     canActivate: [IsLoggedInGuard],
+    data: {
+      title: "Create New Organization",
+    },
   },
   {
     path: "login",
     loadChildren: () =>
       import("./login/login.module").then((m) => m.LoginModule),
     canActivate: [AlreadyLoggedInGuard],
+    data: {
+      title: "Log In",
+    },
   },
   {
     path: "profile",
     loadChildren: () =>
       import("./profile/profile.module").then((m) => m.ProfileModule),
     canActivate: [IsLoggedInGuard],
+    data: {
+      title: "Profile",
+    },
   },
   {
     path: "register",
     loadChildren: () =>
       import("./register/register.module").then((m) => m.RegisterModule),
     canActivate: [AlreadyLoggedInGuard, EnableRegistrationGuard],
+    data: {
+      title: "Register",
+    },
   },
   {
     path: "reset-password",
@@ -55,6 +73,9 @@ export const routes: Routes = [
       import("./reset-password/reset-password.module").then(
         (m) => m.ResetPasswordModule
       ),
+    data: {
+      title: "Reset Password",
+    },
   },
   {
     path: "auth",
