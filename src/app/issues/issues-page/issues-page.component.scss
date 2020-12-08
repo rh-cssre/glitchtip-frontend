@@ -124,12 +124,19 @@ table {
 }
 
 .resolved {
-  background: #f8c6d3;
+  background: mat-color($mat-gray, 100);
+  > a {
+    text-decoration: line-through;
+  }
 }
 
 .ignored {
-  background: lightgray;
-  text-decoration: line-through;
+  background: mat-color($mat-gray, 100);
+}
+
+.mute-icon {
+  vertical-align: middle;
+  margin-right: 5px;
 }
 
 .spinner-container {
@@ -175,7 +182,7 @@ mat-card {
 }
 
 .other-cell-info {
-  margin: 3px 0 -4px;
+  margin: 0 0 -4px;
   font-weight: 500;
 
   @media screen and (min-width: $tablet) {
