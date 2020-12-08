@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, select } from "@storybook/addon-knobs";
+import { withKnobs, select, boolean } from "@storybook/addon-knobs";
 import { of } from "rxjs";
 
 import { SharedModule } from "../../../shared/shared.module";
@@ -14,6 +14,7 @@ import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
 import { EntryMessageComponent } from "./entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./entry-exception/entry-exception.component";
 import { FrameTitleComponent } from "./entry-exception/frame-title/frame-title.component";
+import { BreadcrumbsComponent } from "./entry-exception/breadcrumbs/breadcrumbs.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -29,6 +30,7 @@ import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
 import { FrameExpandedComponent } from "./entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./entry-exception/raw-stacktrace/raw-stacktrace.component";
 import { ContextsComponent } from "./context/contexts.component";
+import { rangeError } from "./test-data/range-error";
 
 export default {
   title: "Events/Event Detail",
@@ -452,4 +454,26 @@ export const RawStacktrace = () => {
 
 RawStacktrace.story = {
   name: "Raw Stacktrace Titles",
+};
+
+export const Breadcrumbs = () => {
+  const longBreadcrumbs = rangeError.entries[1].data;
+  const shortBreadcrumbs = stringError.entries[1].data;
+  return {
+    component: BreadcrumbsComponent,
+    props: {
+      breadcrumbs$: of(
+        select(
+          "Breadcrumbs",
+          { long: longBreadcrumbs, short: shortBreadcrumbs } as any,
+          longBreadcrumbs as any
+        )
+      ),
+      showExpandButton$: of(boolean("show Expand Button?", true)),
+    },
+  };
+};
+
+Breadcrumbs.story = {
+  name: "Breadcrumbs Component",
 };
