@@ -45,7 +45,7 @@
               "src/assets",
               "src/sdk-docs",
               {
-                "glob": "**/*.svg",
+                "glob": "**/*.(svg|png|jpg|jpeg)",
                 "input": "./node_modules/browser-logos/src/",
                 "output": "./assets/images/browser-svgs"
               },

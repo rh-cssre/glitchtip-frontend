@@ -8,6 +8,7 @@ import { of } from "rxjs";
 
 import { SharedModule } from "../../../../shared/shared.module";
 import { ContextsComponent } from "./contexts.component";
+import { generateIconPath, iconDictionary } from "src/app/shared/shared.utils";
 
 export default {
   title: "Events/Contexts",
@@ -104,4 +105,31 @@ export const contexts = () => {
 
 contexts.story = {
   name: "Event Detail Contexts",
+};
+
+export const IconPaths = () => {
+  const iconMarkup = Object.keys(iconDictionary).map(
+    (icon) => `
+    <div style="border: 1px solid lightgray; margin: 5px; padding: 0 10px 10px;">
+      <p style="font-size: 0.75em">${icon}</p>
+      <img
+        style="width: 50px; height: 50px;"
+        class="image"
+        src="${generateIconPath(icon)}"
+      />
+    </div>
+  `
+  );
+
+  return {
+    template: `
+      <div style="display: flex; flex-wrap: wrap;">
+        ${iconMarkup.join("")}
+      </div>
+    `,
+  };
+};
+
+IconPaths.story = {
+  name: "Icon Paths",
 };

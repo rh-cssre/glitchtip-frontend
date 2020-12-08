@@ -237,7 +237,7 @@ export class IssuesService {
     this.issuesState.next({
       ...this.issuesState.getValue(),
       nextPage: parts.next ? parts.next : null,
-      previousPage: parts.prev ? parts.prev : null,
+      previousPage: parts.previous ? parts.previous : null,
     });
   }
 }
