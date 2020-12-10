@@ -1,21 +1,12 @@
 import { Injectable } from "@angular/core";
-import {
-  HttpClient,
-  HttpParams,
-  HttpErrorResponse,
-} from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
-import {
-  Issue,
-  IssueWithSelected,
-  IssueStatus,
-  UpdateStatusResponse,
-} from "./interfaces";
-import { baseUrl } from "../constants";
+import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
 import { urlParamsToObject } from "./utils";
 import { processLinkHeader } from "../shared/utils-pagination";
+import { IssuesAPIService } from "../api/issues/issues-api.service";
 
 interface IssuesState {
   issues: Issue[];
@@ -45,7 +36,6 @@ const initialState: IssuesState = {
 export class IssuesService {
   private issuesState = new BehaviorSubject<IssuesState>(initialState);
   private getState$ = this.issuesState.asObservable();
-  private url = baseUrl + "/issues/";
 
   issues$ = this.getState$.pipe(map((state) => state.issues));
   selectedIssues$ = this.getState$.pipe(map((state) => state.selectedIssues));
@@ -83,7 +73,10 @@ export class IssuesService {
     map((state) => state.initialLoadComplete)
   );
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
+  constructor(
+    private snackbar: MatSnackBar,
+    private issuesAPIService: IssuesAPIService
+  ) {}
 
   /** Refresh issues data. orgSlug is required. */
   getIssues(
@@ -153,28 +146,8 @@ export class IssuesService {
     start?: string,
     end?: string
   ) {
-    let url = this.url;
-    let httpParams = new HttpParams();
-    if (organizationSlug) {
-      url = `${baseUrl}/organizations/${organizationSlug}/issues/`;
-    }
-    if (cursor) {
-      httpParams = httpParams.set("cursor", cursor);
-    }
-    if (query) {
-      httpParams = httpParams.set("query", query);
-    }
-    if (project) {
-      project.forEach((id) => {
-        httpParams = httpParams.append("project", id);
-      });
-    }
-    if (start && end) {
-      httpParams = httpParams.set("start", start);
-      httpParams = httpParams.set("end", end);
-    }
-    return this.http
-      .get<Issue[]>(url, { observe: "response", params: httpParams })
+    return this.issuesAPIService
+      .list(organizationSlug, cursor, query, project, start, end)
       .pipe(
         tap((resp) => {
           const linkHeader = resp.headers.get("link");
@@ -191,21 +164,13 @@ export class IssuesService {
   }
 
   private updateStatus(ids: number[], status: IssueStatus) {
-    const params = {
-      id: ids.map((id) => id.toString()),
-    };
-    const data = {
-      status,
-    };
-    return this.http
-      .put<UpdateStatusResponse>(this.url, data, { params })
-      .pipe(
-        tap((resp) => this.setIssueStatuses(ids, resp.status)),
-        catchError((err: HttpErrorResponse) => {
-          this.snackbar.open("Error, unable to update issue");
-          return EMPTY;
-        })
-      );
+    return this.issuesAPIService.update(ids, status).pipe(
+      tap((resp) => this.setIssueStatuses(ids, resp.status)),
+      catchError((err: HttpErrorResponse) => {
+        this.snackbar.open("Error, unable to update issue");
+        return EMPTY;
+      })
+    );
   }
 
   private setIssueStatuses(issueIds: number[], status: IssueStatus) {
