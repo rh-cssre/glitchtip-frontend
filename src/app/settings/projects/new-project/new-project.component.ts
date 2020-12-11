@@ -89,12 +89,9 @@ export class NewProjectComponent implements OnInit {
             this.loading = false;
             this.orgService.refreshOrganizationDetail();
             this.snackBar.open(`${project.name} has been created`);
-            this.router.navigate([
-              "settings",
-              this.orgSlug,
-              "projects",
-              project.slug,
-            ]);
+            this.router.navigate(["organizations", this.orgSlug, "issues"], {
+              queryParams: { project: project.id },
+            });
           },
           (err) => {
             this.loading = false;
