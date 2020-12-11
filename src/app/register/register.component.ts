@@ -16,6 +16,7 @@ import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-sta
 })
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
+  enableUserRegistration$ = this.settings.enableUserRegistration$;
   loading = false;
   error = "";
   form = new FormGroup({
