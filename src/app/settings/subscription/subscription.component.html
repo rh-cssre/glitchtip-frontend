@@ -30,7 +30,7 @@
 
               <ul>
                 <li class="mat-body-1">
-                  Start date for this plan: {{ subscription.start | date }}
+                  Start date for this plan: {{ subscription.start_date | date }}
                 </li>
                 <li class="mat-body-1">
                   Plan cost: {{ subscription.plan?.amount | currency }}
@@ -55,7 +55,7 @@
                   {{ subscription.current_period_start | date }} to
                   {{ subscription.current_period_end | date }}
                 </li>
-                <li *ngIf="eventsCount$ | async as eventsCount">Events used in billing period: {{ eventsCount }}</li>
+                <li>Events used in billing period: {{ eventsCount$ | async }}</li>
               </ul>
             </ng-container>
             <p class="mat-body-1">
