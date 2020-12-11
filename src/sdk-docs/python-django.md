@@ -1,7 +1,4 @@
-The Django integration adds support for the [Django Web Framework](https://www.djangoproject.com/)
-from Version 1.6 upwards.
-
-Install `sentry-sdk`:
+Install `sentry-sdk` into your Django project:
 
 ```bash
 $ pip install --upgrade sentry-sdk
@@ -19,7 +16,7 @@ sentry_sdk.init(
 )
 ```
 
-You can easily verify your SDK installation by creating a route that triggers an error:
+You can verify your SDK installation by creating a route that triggers an error:
 
 ```py
 from django.urls import path
