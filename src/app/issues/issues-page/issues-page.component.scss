@@ -105,8 +105,7 @@ table {
 
 .mat-column-title {
   max-width: 500px;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
   hyphens: auto;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -145,6 +144,18 @@ mat-card {
 
 .checkbox-cell {
   width: 70px;
+
+  @media screen and (max-width: $tablet - 1) {
+    width: 55px;
+  }
+}
+
+@media screen and (max-width: $tablet - 1) {
+  th.mat-header-cell:first-of-type,
+  td.mat-cell:first-of-type,
+  td.mat-footer-cell:first-of-type {
+    padding-left: 20px;
+  }
 }
 
 .status-cell {
