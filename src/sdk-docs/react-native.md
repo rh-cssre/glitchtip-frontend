@@ -23,10 +23,6 @@ Upon linking the following changes will be performed:
 - configure the SDK for the supplied DSN in your _index.js/App.js_ files
 - store build credentials in _ios/sentry.properties_ and _android/sentry.properties_.
 
-To see what is happening during linking you can refer to [_Manual Setup_]({%- link _documentation/clients/react-native/manual-setup.md -%}) which will give you all the details.
-
-Note that we only support `react-native >= 0.38` at the moment.
-
 ## Client Configuration
 
 When you run `react-native link` we will automatically update your _index.ios.js_ / _index.android.js_ with the following changes:

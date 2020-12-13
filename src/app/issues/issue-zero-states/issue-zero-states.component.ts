@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ProjectsService } from "src/app/api/projects/projects.service";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 
