@@ -26,6 +26,7 @@ import { NewMemberComponent } from "./members/new-member/new-member.component";
 import { TeamSettingsComponent } from "./teams/team-settings/team-settings.component";
 import { ProjectAlertsComponent } from "./projects/project-detail/project-alerts/project-alerts.component";
 import { PlatformPickerComponent } from "./projects/platform-picker/platform-picker.component";
+import { SlugifyDirective } from "./teams/new-team/slugify.directive";
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { PlatformPickerComponent } from "./projects/platform-picker/platform-pic
     TeamSettingsComponent,
     ProjectAlertsComponent,
     PlatformPickerComponent,
+    SlugifyDirective,
   ],
 })
 export class SettingsModule {}
