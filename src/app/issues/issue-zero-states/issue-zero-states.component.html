@@ -53,7 +53,8 @@
               *ngIf="activeProjectPlatform !== 'other'; else otherTemplate"
             >
               <h2 class="mat-display-1">
-                {{ activeProjectPlatform }}-specific directions
+                Connect your {{ activeProjectPlatformName$ | async }} project to
+                GlitchTip
               </h2>
 
               <app-lazy-markdown
