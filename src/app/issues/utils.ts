@@ -27,5 +27,5 @@ export function normalizeProjectParams(
 export function isStacktrace(
   stacktrace?: {} | Stacktrace | null
 ): stacktrace is Stacktrace {
-  return (stacktrace as Stacktrace).frames !== undefined;
+  return stacktrace ? (stacktrace as Stacktrace).frames !== undefined : false;
 }

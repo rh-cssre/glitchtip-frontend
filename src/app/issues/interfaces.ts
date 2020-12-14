@@ -51,7 +51,7 @@ export interface EventDetail extends Event {
   sdk: { [key: string]: Json } | null;
   _meta?: { [key: string]: Json };
   fingerprints?: string[];
-  context?: { [key: string]: Json[] } | null;
+  context?: { [key: string]: Json } | null;
   release?: { [key: string]: Json[] } | null;
   issue?: number;
   sdkUpdates?: [];
