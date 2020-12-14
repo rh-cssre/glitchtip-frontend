@@ -10,7 +10,6 @@
           >)
         </p>
       </div>
-
       <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle
           [checked]="true"
@@ -37,7 +36,6 @@
             >function: {{ value.mechanism.data.function }}</mat-chip
           >
         </mat-chip-list>
-
         <mat-accordion
           *ngIf="checkStacktraceInterface(value.stacktrace)"
           [multi]="true"

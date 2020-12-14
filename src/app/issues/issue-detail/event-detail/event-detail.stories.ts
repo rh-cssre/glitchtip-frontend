@@ -29,6 +29,7 @@ import { zeroDivisionDotnet } from "./test-data/zero-division-dotnet";
 import { FrameExpandedComponent } from "./entry-exception/frame-expanded/frame-expanded.component";
 import { RawStacktraceComponent } from "./entry-exception/raw-stacktrace/raw-stacktrace.component";
 import { ContextsComponent } from "./context/contexts.component";
+import { stacktraceUndefined } from "./test-data/stacktrace-undefined";
 
 export default {
   title: "Events/Event Detail",
@@ -227,6 +228,7 @@ export const EntryException = () => {
     "Zero Division Dotnet",
     "String Error",
     "SocialApp.DoesNotExist",
+    "Test with Undefined Stacktrace",
   ];
   const selectedError = select("Error Type", errorOptions, errorOptions[0]);
   let error: any = databaseError.entries[0].data;
@@ -273,6 +275,11 @@ export const EntryException = () => {
       error = socialApp.entries[0].data;
       title = socialApp.title;
       platform = socialApp.platform;
+      break;
+    case "Test with Undefined Stacktrace":
+      error = stacktraceUndefined.entries[0].data;
+      title = stacktraceUndefined.title;
+      platform = databaseError.platform;
       break;
   }
   return {
