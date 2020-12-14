@@ -1,4 +1,4 @@
-Our Koa integration only requires the installation of `@sentry/node`, and then you can use it like this:
+The Koa integration requires the installation of `@sentry/node`. Then, you can use it like this:
 
 ```javascript
 const Koa = require("koa");

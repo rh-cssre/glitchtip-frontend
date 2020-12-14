@@ -1,4 +1,4 @@
-If you are using `yarn` or `npm` you can add our package as a dependency:
+Use `yarn` or `npm` to add `@sentry/node` to your project:
 
 ```bash
 # Using yarn
@@ -8,7 +8,7 @@ $ yarn add @sentry/node
 $ npm install @sentry/node
 ```
 
-You need to inform the Node SDK about your DSN:
+Then, inform the Node SDK about your DSN:
 
 ```javascript
 const Sentry = require("@sentry/node");
