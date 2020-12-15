@@ -13,7 +13,7 @@ The simplest way to send an event to GlitchTip is to paste this into your HTML f
 </script>
 ```
 
-First, install the SDK. Our code sample uses [unpkg](https://unpkg.com), but you can save that file and use it locally, or install with NPM by running `npm i @sentry/browser`.
+First, install the SDK. This code sample uses [unpkg](https://unpkg.com), but you can save that file and use it locally, or install with NPM by running `npm i @sentry/browser`.
 
 Then, initialize the SDK as shown above, using your DSN. Do this as early as possible in your loading sequence so it can capture errors from the start.
 
