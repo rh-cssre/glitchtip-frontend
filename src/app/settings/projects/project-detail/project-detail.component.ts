@@ -6,9 +6,9 @@ import {
   FormGroupDirective,
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { map } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProjectDetail } from "src/app/api/projects/projects.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
@@ -92,7 +92,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       .subscribe(({ orgSlug, projectSlug }) => {
         if (orgSlug && projectSlug) {
           this.projectsService.retrieveProjectDetail(orgSlug, projectSlug);
-          this.projectsService.retrieveClientKeys(orgSlug, projectSlug);
+          this.projectsService.retrieveCurrentProjectClientKeys(orgSlug);
         }
       });
   }
