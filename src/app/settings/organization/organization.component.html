@@ -36,6 +36,7 @@
           <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
         </div>
         <app-loading-button
+          data-test
           buttonText="Delete Organization"
           [loading]="deleteLoading"
           (click)="removeOrganization(activeOrg.slug, activeOrg.name)"

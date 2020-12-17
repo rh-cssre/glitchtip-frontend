@@ -15,7 +15,7 @@ describe("Organizations", () => {
     cy.get("#create-organization-form input").type(secondOrg);
     cy.get("#create-organization-form").submit();
     cy.get("#org-dropdown").click();
-    // cy.get(".cdk-overlay-pane .mat-menu-content").contains(secondOrg);
+    cy.get(".cdk-overlay-pane .mat-menu-content").contains(secondOrg);
 
     // glitchtip-frontend#55: org slug in URL should always match active org.
     // It got out of sync with a back button.
@@ -25,5 +25,19 @@ describe("Organizations", () => {
     // cy.get(".mat-menu-content button:nth-child(1)").click();
     // cy.go("back");
     // cy.get("#org-dropdown span").contains(organization.name);
+  });
+
+  it("should delete an org", () => {
+    const doomedOrg = "cypress doomed org";
+    cy.visit(`/organizations/new`);
+    cy.get("#create-organization-form input").type(doomedOrg);
+    cy.get("#create-organization-form").submit();
+    cy.get("[data-test-settings]").click();
+    cy.get("[data-test] button").click();
+    cy.get("#org-dropdown").click();
+    cy.get(".cdk-overlay-pane .mat-menu-content").should(
+      "not.contain",
+      doomedOrg
+    );
   });
 });
