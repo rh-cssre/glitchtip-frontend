@@ -6,7 +6,7 @@ import {
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
-import { tap, map, catchError } from "rxjs/operators";
+import { tap, map, catchError, filter, first } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
   Project,
@@ -71,6 +71,9 @@ export class ProjectsService {
     )
   );
   readonly projectKeys$ = this.getState$.pipe(map((data) => data.projectKeys));
+  readonly firstProjectKey$ = this.projectKeys$.pipe(
+    map((data) => (data ? data[0] : null))
+  );
 
   readonly projectsForActiveOrg$ = combineLatest([
     this.projects$,
@@ -209,11 +212,21 @@ export class ProjectsService {
       .subscribe();
   }
 
-  retrieveClientKeys(organizationSlug: string, projectSlug: string) {
-    const keysUrl = `${this.url}${organizationSlug}/${projectSlug}/keys/`;
-    return this.http
-      .get<ProjectKey[]>(keysUrl)
-      .pipe(tap((projectKeys) => this.setKeys(projectKeys)))
+  retrieveCurrentProjectClientKeys(organizationSlug: string) {
+    this.activeProject$
+      .pipe(
+        filter((project) => !!project),
+        first(),
+        tap((project) => {
+          const keysUrl = `${this.url}${organizationSlug}/${
+            project!.slug
+          }/keys/`;
+          return this.http
+            .get<ProjectKey[]>(keysUrl)
+            .pipe(tap((projectKeys) => this.setKeys(projectKeys)))
+            .subscribe();
+        })
+      )
       .subscribe();
   }
 
