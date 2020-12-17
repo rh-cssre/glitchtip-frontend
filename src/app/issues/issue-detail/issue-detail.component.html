@@ -39,6 +39,13 @@
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
       </div>
     </div>
+    <p class="mat-body-1" *ngIf="issue.status === 'resolved'">
+      This issue has been marked as resolved.
+    </p>
+    <p class="mat-body-1" *ngIf="issue.status === 'ignored'">
+      This issue is being ignored. You will not be notified of any changes and
+      it will not show up by default in the issues page.
+    </p>
   </header>
 
   <div class="row">

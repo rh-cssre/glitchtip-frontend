@@ -26,7 +26,7 @@ import { ProjectsService } from "src/app/api/projects/projects.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IssuesPageComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ["select", "status", "title", "events"];
+  displayedColumns: string[] = ["select", "title", "events"];
   loading$ = this.issuesService.loading$;
   form = new FormGroup({
     query: new FormControl(""),
