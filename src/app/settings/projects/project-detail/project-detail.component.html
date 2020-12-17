@@ -57,7 +57,12 @@
     </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title>DSN Key</mat-card-title>
+    <mat-card-title>DSN</mat-card-title>
+    <p class="mat-caption">
+      Data Source Name: The code that connects your project to GlitchTip.
+      Install a library into your project, then configure it with the DSN so
+      that it knows how to send errors to your GlitchTip account.
+    </p>
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-form-field class="full-width">
