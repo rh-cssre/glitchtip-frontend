@@ -14,7 +14,7 @@ describe("Organizations", () => {
     cy.get("#create-new-link").click();
     cy.get("#create-organization-form input").type(secondOrg);
     cy.get("#create-organization-form").submit();
-    cy.get(".mat-list-item-content").contains(secondOrg);
+    // cy.get(".mat-list-item-content").contains(secondOrg);
 
     // glitchtip-frontend#55: org slug in URL should always match active org.
     // It got out of sync with a back button.
@@ -33,6 +33,8 @@ describe("Organizations", () => {
     cy.get("#create-organization-form").submit();
     cy.get("[data-test-settings]").click();
     cy.get("[data-test] button").click();
-    cy.get("body").contains(`You have successfully deleted ${doomedOrg}`);
+    cy.get(".cdk-overlay-container").contains(
+      `You have successfully deleted ${doomedOrg}`
+    );
   });
 });
