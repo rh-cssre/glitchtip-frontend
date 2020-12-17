@@ -37,9 +37,10 @@ describe("Create New Project", () => {
     cy.get("input[formcontrolname=name]").type(newProject.name);
     cy.get("#create-project-submit").click();
     cy.contains(`${newProject.name} has been created`);
+    // Don't think I can get the project ID for the test
     cy.url().should(
-      "eq",
-      "http://localhost:4200/settings/cypresstestorg/projects/newcypresstestproject"
+      "contain",
+      "http://localhost:4200/organizations/cypresstestorg/issues?project"
     );
   });
 
@@ -51,8 +52,8 @@ describe("Create New Project", () => {
     cy.get("#create-project-submit").click();
     cy.contains(`${newProject.name} has been created`);
     cy.url().should(
-      "eq",
-      "http://localhost:4200/settings/cypresstestorg/projects/newcypresstestproject"
+      "contain",
+      "http://localhost:4200/organizations/cypresstestorg/issues?project"
     );
   });
 });
