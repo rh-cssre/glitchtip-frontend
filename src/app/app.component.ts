@@ -6,6 +6,7 @@ import { AuthService } from "./api/auth/auth.service";
 import { OrganizationsService } from "./api/organizations/organizations.service";
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-root",
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private organizationService: OrganizationsService,
     private settings: SettingsService,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
@@ -60,6 +62,14 @@ export class AppComponent implements OnInit {
             orgSlug
           );
         }
+      }
+
+      if (event instanceof RoutesRecognized) {
+        let titleTag = "GlitchTip";
+        if (typeof event.state.root.firstChild!.data.title !== "undefined") {
+          titleTag = event.state.root.firstChild!.data.title + " | GlitchTip";
+        }
+        this.titleService.setTitle(titleTag);
       }
     });
 
