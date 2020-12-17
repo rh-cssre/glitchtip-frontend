@@ -21,7 +21,7 @@ export interface Subscription {
   billing_cycle_anchor: string;
   current_period_end: string;
   current_period_start: string;
-  start: string;
+  start_date: string;
   status:
     | "active"
     | "canceled"

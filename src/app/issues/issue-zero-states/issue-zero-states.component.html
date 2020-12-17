@@ -44,7 +44,37 @@
         <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
           <h2 class="mat-display-1">Send us your events!</h2>
 
-          <app-lazy-markdown markdownSrc="/sdk-docs/all-sdks.md"></app-lazy-markdown>
+          <app-lazy-markdown
+            markdownSrc="/sdk-docs/all-sdks.md"
+          ></app-lazy-markdown>
+
+          <div class="dsn" *ngIf="firstProjectKey$ | async as firstProjectKey">
+            <h2 class="mat-display-1">DSN</h2>
+            <p class="mat-body-1">
+              Most instructions below will have a spot that says "your DSN
+              here". Copy the DSN and paste it into that spot.
+            </p>
+
+            <mat-form-field class="dsn-input">
+              <input
+                class="background"
+                readonly
+                matInput
+                [value]="firstProjectKey.dsn.public"
+              />
+              <button
+                mat-icon-button
+                [cdkCopyToClipboard]="firstProjectKey.dsn.public"
+                (cdkCopyToClipboardCopied)="copied()"
+                matTooltip="Copy key to clipboard"
+                matSuffix
+              >
+                <mat-icon [class.dsn-copied]="this.copiedDsn">
+                  {{ this.copiedDsn ? "check_circle" : "file_copy" }}
+                </mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
 
           <ng-container
             *ngIf="activeProjectPlatform$ | async as activeProjectPlatform"
@@ -53,7 +83,8 @@
               *ngIf="activeProjectPlatform !== 'other'; else otherTemplate"
             >
               <h2 class="mat-display-1">
-                {{ activeProjectPlatform }}-specific directions
+                Connect your {{ activeProjectPlatformName$ | async }} project to
+                GlitchTip
               </h2>
 
               <app-lazy-markdown
@@ -62,7 +93,9 @@
             </ng-container>
 
             <ng-template #otherTemplate>
-              <app-lazy-markdown markdownSrc="/sdk-docs/other.md"></app-lazy-markdown>
+              <app-lazy-markdown
+                markdownSrc="/sdk-docs/other.md"
+              ></app-lazy-markdown>
             </ng-template>
           </ng-container>
         </ng-container>

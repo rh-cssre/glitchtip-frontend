@@ -1,4 +1,4 @@
-If you are using `AngularJS` `1.x` you should be able to use our AngularJS integration.
+If you are using `AngularJS` `1.x` you should be able to use the AngularJS integration.
 
 You need to install `@sentry/integrations` with `npm` / `yarn` like:
 

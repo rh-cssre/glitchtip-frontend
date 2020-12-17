@@ -1,11 +1,16 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ProjectsService } from "src/app/api/projects/projects.service";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 
@@ -15,7 +20,7 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IssueZeroStatesComponent {
+export class IssueZeroStatesComponent implements OnInit, OnDestroy {
   loading$ = this.issuesService.loading$;
   initialLoadComplete$ = this.issuesService.initialLoadComplete$;
   orgHasAProject$ = this.organizationsService.orgHasAProject$;
@@ -24,10 +29,13 @@ export class IssueZeroStatesComponent {
   activeProjectFirstEvent$ = this.projectsService.activeProjectFirstEvent$;
   activeProjectPlatform$ = this.projectsService.activeProjectPlatform$;
   activeProjectPlatformName$ = this.projectsService.activeProjectPlatformName$;
+  firstProjectKey$ = this.projectsService.firstProjectKey$;
 
   projectsFromParams$ = this.activatedRoute.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
   );
+
+  copiedDsn = false;
 
   /**
    * Corresponds to project picker/header nav/project IDs in the URL
@@ -105,4 +113,30 @@ export class IssueZeroStatesComponent {
     private projectsService: ProjectsService,
     private activatedRoute: ActivatedRoute
   ) {}
+
+  ngOnInit() {
+    combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
+      .pipe(
+        map(([params, _]) => {
+          const orgSlug: string | undefined = params["org-slug"];
+          return orgSlug;
+        })
+      )
+      .subscribe((orgSlug) => {
+        // Clear old state immediately on route change
+        this.projectsService.clearActiveProject();
+        if (orgSlug) {
+          this.projectsService.retrieveCurrentProjectClientKeys(orgSlug);
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.projectsService.clearActiveProject();
+  }
+
+  copied() {
+    this.copiedDsn = true;
+    setTimeout(() => (this.copiedDsn = false), 4000);
+  }
 }

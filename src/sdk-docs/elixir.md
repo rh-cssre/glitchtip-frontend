@@ -48,7 +48,7 @@ config :sentry, dsn: "your DSN here",
   environment_name: System.get_env("RELEASE_LEVEL") || "development"
 ```
 
-In this example, we are getting the environment name from the `RELEASE_LEVEL` environment variable. If that variable does not exist, it will default to `"development"`. Now, on our servers, we can set the environment variable appropriately. On our local development machines, exceptions will never be sent, because the default value is not in the list of `included_environments`.
+In this example, we are getting the environment name from the `RELEASE_LEVEL` environment variable. If that variable does not exist, it will default to `"development"`. Now, on your server, we can set the environment variable appropriately. On your local development machines, exceptions will never be sent, because the default value is not in the list of `included_environments`.
 
 If using an environment with Plug or Phoenix, add the following to your Plug.Router or Phoenix.Router:
 

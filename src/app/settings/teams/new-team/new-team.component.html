@@ -10,7 +10,7 @@
         <span *ngFor="let error of errors">{{ error }}</span>
       </mat-error>
       <mat-form-field>
-        <input matInput formControlName="slug" placeholder="Slug" />
+        <input matInput appSlugify formControlName="slug" placeholder="Slug" />
         <mat-error *ngIf="slug?.errors?.required">
           <span>Enter a valid slug to create a team</span>
         </mat-error>

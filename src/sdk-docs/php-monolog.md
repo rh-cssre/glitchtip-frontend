@@ -18,7 +18,7 @@ Alternatively you can manually install it:
 
 ### Capturing Errors
 
-Monolog supports GlitchTip out of the box, so you’ll just need to configure a handler:
+Monolog supports GlitchTip out of the box. The only thing you’ll need to do is configure a handler:
 
 ```php
 $client = new Raven_Client('your DSN here');

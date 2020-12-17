@@ -4,7 +4,7 @@ On its own, `@sentry/browser` will report any uncaught exceptions triggered from
 In order to use ESM imports without any additional configuration, you can use `ember-auto-import`
 by installing it with `ember install ember-auto-import`.
 
-Starting with version `5.x` our `Ember` integration lives in it's own package `@sentry/integrations`.
+Starting with version `5.x`, the `Ember` integration lives the `@sentry/integrations` package.
 You can install it with `npm` / `yarn` like:
 
 ```bash

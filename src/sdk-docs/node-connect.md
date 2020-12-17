@@ -1,4 +1,4 @@
-If you are using `yarn` or `npm`, you can add our package as a dependency:
+Use `yarn` or `npm` to add `@sentry/node` to your project:
 
 ```bash
 # Using yarn

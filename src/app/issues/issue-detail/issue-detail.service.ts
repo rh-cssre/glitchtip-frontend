@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import { tap, map } from "rxjs/operators";
-import { baseUrl } from "src/app/constants";
 import {
   IssueDetail,
   EventDetail,
@@ -19,6 +17,7 @@ import {
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
 import { generateIconPath } from "../../shared/shared.utils";
+import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
@@ -38,7 +37,6 @@ const initialState: IssueDetailState = {
 export class IssueDetailService {
   private readonly state = new BehaviorSubject<IssueDetailState>(initialState);
   private readonly getState$ = this.state.asObservable();
-  private readonly url = baseUrl + "/issues/";
   readonly issue$ = this.getState$.pipe(map((state) => state.issue));
   readonly event$ = this.getState$.pipe(map((state) => state.event));
   readonly isReversed$ = this.getState$.pipe(map((state) => state.isReversed));
@@ -97,14 +95,14 @@ export class IssueDetailService {
   );
 
   constructor(
-    private http: HttpClient,
     private organization: OrganizationsService,
-    private issueService: IssuesService
+    private issueService: IssuesService,
+    private issuesAPIService: IssuesAPIService
   ) {}
 
   retrieveIssue(id: number) {
-    return this.http
-      .get<IssueDetail>(`${this.url}${id}/`)
+    return this.issuesAPIService
+      .retrieve(id.toString())
       .pipe(tap((issue) => this.setIssue(issue)));
   }
 
@@ -163,17 +161,15 @@ export class IssueDetailService {
   }
 
   private retrieveLatestEvent(issueId: number) {
-    const url = `${this.url}${issueId}/events/latest/`;
-    return this.http
-      .get<EventDetail>(url)
+    return this.issuesAPIService
+      .retrieveLatestEvent(issueId)
       .pipe(tap((event) => this.setEvent(event)));
   }
 
   // private removed for testing
   retrieveEvent(issueId: number, eventID: string) {
-    const url = `${this.url}${issueId}/events/${eventID}/`;
-    return this.http
-      .get<EventDetail>(url)
+    return this.issuesAPIService
+      .retrieveEvent(issueId, eventID)
       .pipe(tap((event) => this.setEvent(event)));
   }
 
