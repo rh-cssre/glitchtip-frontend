@@ -367,16 +367,12 @@ export class OrganizationsService {
 
   /** When you need updated information on the active org */
   refreshOrganizationDetail() {
-    this.activeOrganizationSlug$
-      .pipe(
-        take(1),
-        tap((orgSlug) => {
-          if (orgSlug) {
-            this.getOrganizationDetail(orgSlug).subscribe();
-          }
-        })
-      )
-      .subscribe();
+    return this.activeOrganizationSlug$.pipe(
+      filter((orgSlug) => orgSlug !== null),
+      map((orgSlug) => orgSlug as string),
+      take(1),
+      mergeMap((orgSlug) => this.getOrganizationDetail(orgSlug))
+    );
   }
 
   retrieveOrganizationMembers(orgSlug: string) {
@@ -443,7 +439,7 @@ export class OrganizationsService {
     };
     return this.http.post<Team>(`${this.url}${orgSlug}/teams/`, data).pipe(
       tap((team) => {
-        this.refreshOrganizationDetail();
+        this.refreshOrganizationDetail().subscribe();
         this.teamsService.addTeam(team);
       })
     );

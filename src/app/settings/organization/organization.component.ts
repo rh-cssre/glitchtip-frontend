@@ -34,7 +34,7 @@ export class OrganizationComponent implements OnInit {
         tap((initialLoad) => {
           if (initialLoad) {
             this.organizationsService.retrieveOrganizations().toPromise();
-            this.organizationsService.refreshOrganizationDetail();
+            this.organizationsService.refreshOrganizationDetail().subscribe();
           }
         })
       )

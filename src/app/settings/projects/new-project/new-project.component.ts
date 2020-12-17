@@ -87,11 +87,17 @@ export class NewProjectComponent implements OnInit {
         .subscribe(
           (project) => {
             this.loading = false;
-            this.orgService.refreshOrganizationDetail();
-            this.snackBar.open(`${project.name} has been created`);
-            this.router.navigate(["organizations", this.orgSlug, "issues"], {
-              queryParams: { project: project.id },
-            });
+            this.orgService
+              .refreshOrganizationDetail()
+              .subscribe((organization) => {
+                this.snackBar.open(`${project.name} has been created`);
+                this.router.navigate(
+                  ["organizations", organization.slug, "issues"],
+                  {
+                    queryParams: { project: project.id },
+                  }
+                );
+              });
           },
           (err) => {
             this.loading = false;
