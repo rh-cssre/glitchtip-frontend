@@ -109,7 +109,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         .subscribe(
           () => {
             this.deleteLoading = false;
-            this.orgService.refreshOrganizationDetail();
+            this.orgService.refreshOrganizationDetail().subscribe();
             this.snackBar.open("Your project has been sucessfully deleted");
             this.router.navigate(["settings", this.orgSlug, "projects"]);
           },

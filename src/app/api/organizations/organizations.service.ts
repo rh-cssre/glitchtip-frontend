@@ -19,6 +19,7 @@ import {
   takeWhile,
   distinct,
   tap,
+  first,
 } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
@@ -367,16 +368,11 @@ export class OrganizationsService {
 
   /** When you need updated information on the active org */
   refreshOrganizationDetail() {
-    this.activeOrganizationSlug$
-      .pipe(
-        take(1),
-        tap((orgSlug) => {
-          if (orgSlug) {
-            this.getOrganizationDetail(orgSlug).subscribe();
-          }
-        })
-      )
-      .subscribe();
+    return this.activeOrganizationSlug$.pipe(
+      first(),
+      filter((orgSlug) => !!orgSlug),
+      mergeMap((orgSlug) => this.getOrganizationDetail(orgSlug!))
+    );
   }
 
   retrieveOrganizationMembers(orgSlug: string) {
@@ -443,7 +439,7 @@ export class OrganizationsService {
     };
     return this.http.post<Team>(`${this.url}${orgSlug}/teams/`, data).pipe(
       tap((team) => {
-        this.refreshOrganizationDetail();
+        this.refreshOrganizationDetail().subscribe();
         this.teamsService.addTeam(team);
       })
     );
