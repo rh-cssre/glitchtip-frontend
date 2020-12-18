@@ -1,10 +1,11 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { exhaustMap, filter, first, tap, withLatestFrom } from "rxjs/operators";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { environment } from "../../../../environments/environment";
 import { Plan } from "src/app/api/subscriptions/subscriptions.interfaces";
 import { StripeService } from "../stripe.service";
-import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-payment",
@@ -13,7 +14,6 @@ import { tap } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentComponent implements OnInit {
-  activeOrganizationId?: number | null;
   planOptions$ = this.subscriptionService.planOptionsWithShortNames$;
   billingEmail = environment.billingEmail;
   selectedSubscription: number | null = null;
@@ -21,12 +21,9 @@ export class PaymentComponent implements OnInit {
   constructor(
     private subscriptionService: SubscriptionsService,
     private organizationService: OrganizationsService,
-    private stripe: StripeService
-  ) {
-    this.organizationService.activeOrganizationId$.subscribe(
-      (id) => (this.activeOrganizationId = id)
-    );
-  }
+    private stripe: StripeService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.subscriptionService.retrieveSubscriptionPlans().subscribe();
@@ -35,15 +32,28 @@ export class PaymentComponent implements OnInit {
 
   onSubmit(plan: Plan, selectedIndex: number) {
     this.selectedSubscription = selectedIndex;
-    if (this.activeOrganizationId) {
-      if (plan.amount === 0) {
-        this.subscriptionService
-          .createFreeSubscription(this.activeOrganizationId, plan.id)
-          .pipe(tap(() => (this.selectedSubscription = null)))
-          .toPromise();
-      } else {
-        this.stripe.redirectToSubscriptionCheckout(plan.id);
-      }
-    }
+    this.organizationService.activeOrganizationId$
+      .pipe(
+        first(),
+        filter((activeOrganizationId) => !!activeOrganizationId),
+        exhaustMap((activeOrganizationId) => {
+          if (plan.amount === 0) {
+            return this.subscriptionService
+              .createFreeSubscription(activeOrganizationId!, plan.id)
+              .pipe(
+                withLatestFrom(
+                  this.organizationService.activeOrganizationSlug$
+                ),
+                tap(([_, orgSlug]) => {
+                  this.selectedSubscription = null;
+                  this.router.navigate(["organizations", orgSlug, "issues"]);
+                })
+              );
+          } else {
+            return this.stripe.redirectToSubscriptionCheckout(plan.id);
+          }
+        })
+      )
+      .toPromise();
   }
 }
