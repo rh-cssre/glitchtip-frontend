@@ -1,12 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
+import { EMPTY } from "rxjs";
+import { map, filter, tap, exhaustMap, catchError } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
 import { TeamsService } from "src/app/api/teams/teams.service";
-import { map, filter, tap } from "rxjs/operators";
-import { MatDialog } from "@angular/material/dialog";
 import { NewTeamComponent } from "../../teams/new-team/new-team.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
@@ -84,12 +85,11 @@ export class NewProjectComponent implements OnInit {
           this.form.value.team,
           this.orgSlug
         )
-        .subscribe(
-          (project) => {
-            this.loading = false;
-            this.orgService
-              .refreshOrganizationDetail()
-              .subscribe((organization) => {
+        .pipe(
+          tap(() => (this.loading = false)),
+          exhaustMap((project) =>
+            this.orgService.refreshOrganizationDetail().pipe(
+              tap((organization) => {
                 this.snackBar.open(`${project.name} has been created`);
                 this.router.navigate(
                   ["organizations", organization.slug, "issues"],
@@ -97,13 +97,16 @@ export class NewProjectComponent implements OnInit {
                     queryParams: { project: project.id },
                   }
                 );
-              });
-          },
-          (err) => {
+              })
+            )
+          ),
+          catchError((err) => {
             this.loading = false;
             this.error = `${err.statusText}: ${err.status}`;
-          }
-        );
+            return EMPTY;
+          })
+        )
+        .toPromise();
     }
   }
 }

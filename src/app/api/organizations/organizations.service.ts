@@ -19,6 +19,7 @@ import {
   takeWhile,
   distinct,
   tap,
+  first,
 } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
@@ -368,10 +369,9 @@ export class OrganizationsService {
   /** When you need updated information on the active org */
   refreshOrganizationDetail() {
     return this.activeOrganizationSlug$.pipe(
-      filter((orgSlug) => orgSlug !== null),
-      map((orgSlug) => orgSlug as string),
-      take(1),
-      mergeMap((orgSlug) => this.getOrganizationDetail(orgSlug))
+      first(),
+      filter((orgSlug) => !!orgSlug),
+      mergeMap((orgSlug) => this.getOrganizationDetail(orgSlug!))
     );
   }
 
