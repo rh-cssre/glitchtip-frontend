@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
-import { tap, map } from "rxjs/operators";
+import { tap, map, catchError, withLatestFrom } from "rxjs/operators";
 import {
   IssueDetail,
   EventDetail,
@@ -18,6 +18,8 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { IssuesService } from "../issues.service";
 import { generateIconPath } from "../../shared/shared.utils";
 import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
@@ -97,7 +99,9 @@ export class IssueDetailService {
   constructor(
     private organization: OrganizationsService,
     private issueService: IssuesService,
-    private issuesAPIService: IssuesAPIService
+    private issuesAPIService: IssuesAPIService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   retrieveIssue(id: number) {
@@ -149,6 +153,25 @@ export class IssueDetailService {
         .toPromise();
     }
     return;
+  }
+
+  deleteIssue(id: string) {
+    this.issuesAPIService
+      .destroy(id)
+      .pipe(
+        withLatestFrom(this.organization.activeOrganizationSlug$),
+        tap(([_, activeOrgSlug]) => {
+          this.snackBar.open(`Issue ${id} has been deleted.`);
+          this.router.navigate(["organizations", activeOrgSlug, "issues"]);
+        }),
+        catchError((_) => {
+          this.snackBar.open(
+            `There was an error deleting this issue. Please try again.`
+          );
+          return EMPTY;
+        })
+      )
+      .subscribe();
   }
 
   /** Set local state issue state */

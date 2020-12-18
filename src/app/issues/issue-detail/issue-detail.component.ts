@@ -56,4 +56,15 @@ export class IssueDetailComponent implements OnInit {
   markIgnored() {
     this.issueService.setStatus("ignored");
   }
+
+  deleteIssue(id?: number) {
+    if (
+      id &&
+      window.confirm(
+        `Are you sure you want delete this issue? You will permanently lose this issue and all associated events.`
+      )
+    ) {
+      this.issueService.deleteIssue(id.toString());
+    }
+  }
 }

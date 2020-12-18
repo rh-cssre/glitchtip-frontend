@@ -15,7 +15,6 @@
         [culprit]="issue?.culprit"
         [metadata]="issue?.metadata"
       ></app-issue-detail-title>
-
       <div class="button-row">
         <button
           *ngIf="issue?.status === 'unresolved'"
@@ -36,7 +35,9 @@
           Reopen
         </button>
         <button mat-stroked-button (click)="markIgnored()">Ignore</button>
-        <button mat-icon-button><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button (click)="deleteIssue(issue?.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
     </div>
     <p class="mat-body-1" *ngIf="issue.status === 'resolved'">
