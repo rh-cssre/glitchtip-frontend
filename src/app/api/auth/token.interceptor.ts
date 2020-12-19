@@ -5,7 +5,7 @@ import {
   HttpInterceptor,
   HttpErrorResponse,
 } from "@angular/common/http";
-import { throwError } from "rxjs";
+import { EMPTY, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { AuthService } from "./auth.service";
 
@@ -21,7 +21,7 @@ export class TokenInterceptor implements HttpInterceptor {
           error.error.detail === "Authentication credentials were not provided."
         ) {
           this.auth.removeAuth();
-          return throwError(error);
+          return EMPTY;
         }
         return throwError(error);
       })
