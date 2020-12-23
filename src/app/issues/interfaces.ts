@@ -103,6 +103,17 @@ export interface BreadcrumbValueData {
   values: Breadcrumb[];
 }
 
+// https://docs.sentry.io/enriching-error-data/breadcrumbs/?platform=javascript
+export interface Breadcrumb {
+  message: string | null;
+  category: string;
+  data: { [key: string]: Json } | null;
+  level: "fatal" | "error" | "warning" | "info" | "debug";
+  type: "default" | "http" | "error";
+  event_id: string | null;
+  timestamp: string; // technically a string, functionally a Date
+}
+
 export interface Message {
   formatted: string;
 }
@@ -111,21 +122,10 @@ export interface CSP {
   [key: string]: string | number;
 }
 
-// https://docs.sentry.io/enriching-error-data/breadcrumbs/?platform=javascript
-export interface Breadcrumb {
-  message: string | null;
-  category: string;
-  data: { [key: string]: Json } | null;
-  level: "fatal" | "error" | "warning" | "info" | "debug";
-  type: "default" | "http" | "error";
-  event_id: null;
-  timestamp: string; // technically a string, functionally a Date
-}
-
 export interface ExceptionValueData {
   values: Values[];
   excOmitted?: boolean | null;
-  hasSystemFrames: boolean;
+  hasSystemFrames?: boolean;
 }
 
 export interface Request {
