@@ -40,8 +40,8 @@ export interface EventDetail extends Event {
   contexts: { [key: string]: { [key: string]: Json } } | null;
   entries: EntryUnion[];
   metadata: { [key: string]: string };
-  dist?: null;
-  userReport?: null;
+  dist?: unknown;
+  userReport?: unknown;
   size?: number;
   errors?: Errors[] | [];
   type: "error" | "csp" | "default";
@@ -173,7 +173,7 @@ export interface Issue {
   project: ProjectIssueView;
   shareId: string | null;
   shortId: string;
-  stats: IStats;
+  stats: Stats;
   status: IssueStatus;
   statusDetails: { [key: string]: Json };
   subscriptionDetails: { [key: string]: Json } | null;
@@ -190,7 +190,7 @@ export interface IssueDetail extends Issue {
   participants: Json[];
   pluginActions: string[];
   tags: Tag[];
-  firstRelease: IFirstRelase | null;
+  firstRelease: FirstRelease | null;
   pluginContexts: string[];
   lastRelease: string | null;
   activity: Activity[];
@@ -209,7 +209,7 @@ export interface IssueWithSelected extends Issue {
 
 type StatsPeriod = "24h" | "14d" | "30d" | "";
 
-type IStats = { [StatPeriod in StatsPeriod]?: number[][] };
+type Stats = { [StatPeriod in StatsPeriod]?: number[][] };
 
 export interface IssueMetadata {
   directive?: string;
@@ -223,7 +223,7 @@ export interface IssueMetadata {
   value?: string;
 }
 
-interface IFirstRelase {
+interface FirstRelease {
   authors: string[];
   commitCount: number;
   data: { [key: string]: Json };
