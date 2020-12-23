@@ -4,7 +4,7 @@ export interface UserReport {
   event: {
     eventId: string;
   };
-  user: null;
+  user: unknown;
   dateCreated: string;
   id: number;
   comments: string;
