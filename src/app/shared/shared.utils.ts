@@ -18,10 +18,17 @@ const browserPath = (
   name: string,
   extension = "svg",
   isArchive = false
-): string =>
-  `assets/images/browser-svgs/${
-    isArchive ? "archive/" : ""
-  }${name}/${name}.${extension}`;
+): string => {
+  if (extension === "svg") {
+    return `assets/images/browser-svgs/${
+      isArchive ? "archive/" : ""
+    }${name}/${name}.${extension}`;
+  } else {
+    return `assets/images/browser-svgs/${
+      isArchive ? "archive/" : ""
+    }${name}/${name}_48x48.${extension}`;
+  }
+};
 
 const osPath = (name: string): string => `assets/images/os-logos/${name}.png`;
 
