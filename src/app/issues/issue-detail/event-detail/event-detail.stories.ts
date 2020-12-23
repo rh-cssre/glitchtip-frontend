@@ -14,6 +14,7 @@ import { EntryCSPComponent } from "./entry-csp/entry-csp.component";
 import { EntryMessageComponent } from "./entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./entry-exception/entry-exception.component";
 import { FrameTitleComponent } from "./entry-exception/frame-title/frame-title.component";
+import { EntryBreadcrumbsComponent } from "./entry-breadcrumbs/entry-breadcrumbs.component";
 
 // Data
 import { databaseError } from "./test-data/database-error";
@@ -30,6 +31,7 @@ import { FrameExpandedComponent } from "./entry-exception/frame-expanded/frame-e
 import { RawStacktraceComponent } from "./entry-exception/raw-stacktrace/raw-stacktrace.component";
 import { ContextsComponent } from "./context/contexts.component";
 import { stacktraceUndefined } from "./test-data/stacktrace-undefined";
+import { breadcrumbError } from "./test-data/breadcrumb-error";
 
 export default {
   title: "Events/Event Detail",
@@ -51,6 +53,7 @@ export default {
         FrameExpandedComponent,
         RawStacktraceComponent,
         ContextsComponent,
+        EntryBreadcrumbsComponent,
       ],
     }),
     withKnobs,
@@ -459,4 +462,160 @@ export const RawStacktrace = () => {
 
 RawStacktrace.story = {
   name: "Raw Stacktrace Titles",
+};
+
+export const BreadcrumbsShort = () => {
+  return {
+    component: EntryBreadcrumbsComponent,
+    props: {
+      breadcrumbs$: of(databaseStackError.entries[1].data),
+    },
+  };
+};
+
+BreadcrumbsShort.story = {
+  name: "Breadcrumbs Component (Short)",
+};
+
+export const BreadcrumbsMedium = () => {
+  const mediumLength: any = {
+    values: [
+      {
+        category: "console",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.476Z",
+        data: {
+          logger: "console",
+          extra: {
+            arguments: [
+              "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+            ],
+          },
+        },
+        message:
+          "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+        type: "default",
+      },
+      {
+        category: "ui.click",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.548Z",
+        data: null,
+        message: "body > app-root > ol > li > a",
+        type: "default",
+      },
+      {
+        category: "xhr",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.569Z",
+        data: {
+          url: "http://localhost:4200/sockjs-node/info?t=1580242793552",
+          status_code: 200,
+          method: "GET",
+        },
+        message: null,
+        type: "http",
+      },
+      {
+        category: "ui.click",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:55.949Z",
+        data: null,
+        message: "body > app-root > ol > li > a",
+        type: "default",
+      },
+      {
+        category: "console",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.476Z",
+        data: {
+          logger: "console",
+          extra: {
+            arguments: [
+              "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+            ],
+          },
+        },
+        message:
+          "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+        type: "default",
+      },
+      {
+        category: "ui.click",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.548Z",
+        data: null,
+        message: "body > app-root > ol > li > a",
+        type: "default",
+      },
+      {
+        category: "xhr",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.569Z",
+        data: {
+          url: "http://localhost:4200/sockjs-node/info?t=1580242793552",
+          status_code: 200,
+          method: "GET",
+        },
+        message: null,
+        type: "http",
+      },
+      {
+        category: "ui.click",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:55.949Z",
+        data: null,
+        message: "body > app-root > ol > li > a",
+        type: "default",
+      },
+      {
+        category: "console",
+        level: "info",
+        event_id: null,
+        timestamp: "2020-01-28T20:19:53.476Z",
+        data: {
+          logger: "console",
+          extra: {
+            arguments: [
+              "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+            ],
+          },
+        },
+        message:
+          "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+        type: "default",
+      },
+    ],
+  };
+  return {
+    component: EntryBreadcrumbsComponent,
+    props: {
+      breadcrumbs$: of(mediumLength),
+    },
+  };
+};
+
+BreadcrumbsMedium.story = {
+  name: "Breadcrumbs Component (Medium)",
+};
+
+export const BreadcrumbsLong = () => {
+  return {
+    component: EntryBreadcrumbsComponent,
+    props: {
+      breadcrumbs$: of(breadcrumbError.entries[1].data),
+    },
+  };
+};
+
+BreadcrumbsLong.story = {
+  name: "Breadcrumbs Component (Long)",
 };

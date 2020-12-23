@@ -14,6 +14,7 @@ import { sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
 import { zeroDivisionDotnet } from "./event-detail/test-data/zero-division-dotnet";
+import { breadcrumbError } from "./event-detail/test-data/breadcrumb-error";
 
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
@@ -164,5 +165,15 @@ describe("IssueDetailService", () => {
       .subscribe((contexts: AnnotatedContexts[] | undefined) => {
         expect(contexts).toEqual(result);
       });
+  });
+  it("breadcrumbs should come through with no changes", () => {
+    const testData: any = breadcrumbError;
+
+    service.setEvent(testData);
+    service.breadcrumbs$.subscribe((breadcrumb: any) => {
+      expect(breadcrumb.values[0].timestamp).toEqual(
+        "2020-12-18T18:09:47.841276Z"
+      );
+    });
   });
 });
