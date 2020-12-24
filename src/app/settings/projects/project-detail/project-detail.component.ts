@@ -7,7 +7,7 @@ import {
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { map } from "rxjs/operators";
+import { filter, first, map, tap } from "rxjs/operators";
 import { ProjectsService } from "../../../api/projects/projects.service";
 import { ProjectDetail } from "src/app/api/projects/projects.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -50,18 +50,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     private projectsService: ProjectsService,
     private snackBar: MatSnackBar,
     private orgService: OrganizationsService
-  ) {
-    this.activeProject$.subscribe((data) => {
-      if (data) {
-        this.nameForm.patchValue({
-          name: data.name,
-        });
-        this.platformForm.patchValue({
-          platform: data.platform,
-        });
-      }
-    });
-  }
+  ) {}
 
   ngOnDestroy() {
     this.projectsService.clearActiveProject();
@@ -95,6 +84,20 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
           this.projectsService.retrieveCurrentProjectClientKeys(orgSlug);
         }
       });
+    this.activeProject$
+      .pipe(
+        filter((data) => !!data),
+        first(),
+        tap((data) => {
+          this.nameForm.patchValue({
+            name: data!.name,
+          });
+          this.platformForm.patchValue({
+            platform: data!.platform,
+          });
+        })
+      )
+      .subscribe();
   }
 
   deleteProject() {
