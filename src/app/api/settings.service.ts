@@ -14,6 +14,8 @@ interface SettingsState {
   rocketChatDomain: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
+  environment: string | null;
+  version: string | null;
 }
 
 const initialState: SettingsState = {
@@ -25,6 +27,8 @@ const initialState: SettingsState = {
   rocketChatDomain: null,
   stripePublicKey: null,
   sentryDSN: null,
+  environment: null,
+  version: null,
 };
 
 @Injectable({
@@ -72,6 +76,12 @@ export class SettingsService {
         if (settings.sentryDSN) {
           Sentry.init({
             dsn: settings.sentryDSN,
+            environment: settings.environment
+              ? settings.environment
+              : undefined,
+            release: settings.version
+              ? "glitchtip@" + settings.version
+              : undefined,
           });
         }
       }),
