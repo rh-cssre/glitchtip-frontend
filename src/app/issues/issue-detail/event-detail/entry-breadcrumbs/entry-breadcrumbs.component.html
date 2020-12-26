@@ -5,7 +5,7 @@
     #breadBox
     class="wrapper"
     [ngClass]="(showShowMore$ | async) ? 'bread-box' : 'bread-box--expanded'"
-    [class.bread-box--expanded]="!(showShowMore$| async)"
+    [class.bread-box--expanded]="(showShowMore$| async) === false"
   >
     <button
       *ngIf="showShowMore$ | async"
