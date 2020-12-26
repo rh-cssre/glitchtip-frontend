@@ -26,12 +26,14 @@ interface IssueDetailState {
   issue: IssueDetail | null;
   event: EventDetail | null;
   isReversed: boolean;
+  showShowMore: boolean;
 }
 
 const initialState: IssueDetailState = {
   issue: null,
   event: null,
   isReversed: true,
+  showShowMore: false,
 };
 
 @Injectable({
@@ -43,6 +45,9 @@ export class IssueDetailService {
   readonly issue$ = this.getState$.pipe(map((state) => state.issue));
   readonly event$ = this.getState$.pipe(map((state) => state.event));
   readonly isReversed$ = this.getState$.pipe(map((state) => state.isReversed));
+  readonly showShowMore$ = this.getState$.pipe(
+    map((state) => state.showShowMore)
+  );
   readonly hasNextEvent$ = this.event$.pipe(
     map((event) => event && event.nextEventID !== null)
   );
@@ -146,6 +151,13 @@ export class IssueDetailService {
 
   getReversedFrames() {
     this.toggleIsReversed();
+  }
+
+  setShowShowMore(value: boolean) {
+    this.state.next({
+      ...this.state.getValue(),
+      showShowMore: value,
+    });
   }
 
   setStatus(status: IssueStatus) {

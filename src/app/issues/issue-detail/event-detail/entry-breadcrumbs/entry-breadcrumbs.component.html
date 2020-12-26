@@ -4,11 +4,11 @@
   <div
     #breadBox
     class="wrapper"
-    [ngClass]="showShowMore ? 'bread-box' : 'bread-box--expanded'"
-    [class.bread-box--expanded]="!showShowMore"
+    [ngClass]="(showShowMore$ | async) ? 'bread-box' : 'bread-box--expanded'"
+    [class.bread-box--expanded]="!(showShowMore$| async)"
   >
     <button
-      *ngIf="showShowMore"
+      *ngIf="showShowMore$ | async"
       class="expand-button"
       mat-button
       color="primary"

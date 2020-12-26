@@ -1,5 +1,11 @@
 import { KeyValue } from "@angular/common";
-import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  ViewChild,
+} from "@angular/core";
 import { Json } from "src/app/interface-primitives";
 import { IssueDetailService } from "../../issue-detail.service";
 
@@ -7,25 +13,24 @@ import { IssueDetailService } from "../../issue-detail.service";
   selector: "app-entry-breadcrumbs",
   templateUrl: "./entry-breadcrumbs.component.html",
   styleUrls: ["./entry-breadcrumbs.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntryBreadcrumbsComponent implements AfterViewInit {
   @ViewChild("breadBox") breadBox?: ElementRef;
 
   breadcrumbs$ = this.issueDetailService.breadcrumbs$;
-
-  showShowMore = false;
+  showShowMore$ = this.issueDetailService.showShowMore$;
 
   constructor(private issueDetailService: IssueDetailService) {}
 
   ngAfterViewInit() {
-    /** height should match .bread-box scss class */
-    this.breadBox?.nativeElement.offsetHeight >= 1250
-      ? (this.showShowMore = true)
-      : (this.showShowMore = false);
+    if (this.breadBox?.nativeElement.offsetHeight >= 1250) {
+      setTimeout(() => this.issueDetailService.setShowShowMore(true));
+    }
   }
 
   expandBreadcrumbs() {
-    this.showShowMore = false;
+    this.issueDetailService.setShowShowMore(false);
   }
 
   keepOrder = (
