@@ -83,10 +83,12 @@ build-docker:
   dependencies:
     - build-assets
   only:
-    - master
-    - staging
-    - dev
-    - tags
+    refs:
+      - master
+      - tags
+    variables:
+      - $CI_COMMIT_REF_PROTECTED
+
   script:
     - echo "Start build docker step $CI_REGISTRY_IMAGE commit ref $CI_COMMIT_REF_NAME"
     - trap '' PIPE
@@ -108,7 +110,10 @@ deploy-staging:
     name: staging
     url: https://staging.glitchtip.com
   only:
-    - master
+    refs:
+      - master
+    variables:
+      - $CI_COMMIT_REF_PROTECTED
 
 deploy-dockerhub:
   stage: deploy
@@ -125,4 +130,7 @@ deploy-dockerhub:
     - docker push ${DOCKER_CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
     - docker push ${DOCKER_CI_REGISTRY_IMAGE}:latest
   only:
-    - tags
+    refs:
+      - tags
+    variables:
+      - $CI_COMMIT_REF_PROTECTED
