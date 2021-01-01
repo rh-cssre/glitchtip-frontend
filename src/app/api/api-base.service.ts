@@ -18,7 +18,7 @@ export interface APIBaseService {
  * JS conventions. Code outside of this service, should match JS conventions.
  */
 export abstract class APIBaseService {
-  abstract readonly url: string;
+  abstract url: string;
   constructor(protected http: HttpClient) {}
 
   abstract list(slug1?: string, slug2?: string): Observable<unknown>;

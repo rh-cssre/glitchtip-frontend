@@ -1,0 +1,10 @@
+<section class="l-body l-body--full-width mat-elevation-z0">
+  <header class="page-header">
+    <h1 class="mat-display-1">Performance (Beta)</h1>
+  </header>
+
+  <div *ngFor="let transaction of transactions$ | async">
+    {{ transaction.transaction }} {{ transaction.startTimestamp }}
+  </div>
+
+</section>

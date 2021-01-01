@@ -75,6 +75,14 @@
         Issues
       </a>
       <a
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="['/organizations', activeOrganizationSlug, 'performance']"
+        routerLinkActive="active-route"
+      >
+        Performance
+      </a>
+      <a
         data-test-settings
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
