@@ -15,7 +15,9 @@ export class TransactionsService extends APIBaseService {
   }
 
   list(organizationSlug: string) {
-    return this.http.get<Transaction[]>(this.listURL(organizationSlug));
+    return this.http.get<Transaction[]>(this.listURL(organizationSlug), {
+      observe: "response",
+    });
   }
 
   retrieve(organizationSlug: string, id: string) {

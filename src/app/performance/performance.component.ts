@@ -1,5 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { TransactionsService } from "../api/transactions/transactions.service";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from "@angular/core";
+import { Subscription } from "rxjs";
+import { distinctUntilChanged, filter } from "rxjs/operators";
+import { OrganizationsService } from "../api/organizations/organizations.service";
+import { PaginationBaseComponent } from "../shared/stateful-service/pagination-stateful-service";
+import { PerformanceState, PerformanceService } from "./performance.service";
 
 @Component({
   selector: "app-performance",
@@ -7,9 +16,38 @@ import { TransactionsService } from "../api/transactions/transactions.service";
   styleUrls: ["./performance.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PerformanceComponent implements OnInit {
-  transactions$ = this.transactionsService.list("burke-software");
-  constructor(private transactionsService: TransactionsService) {}
+export class PerformanceComponent
+  extends PaginationBaseComponent<PerformanceState, PerformanceService>
+  implements OnInit, OnDestroy {
+  sub: Subscription | null = null;
+  transactions$ = this.service.transactions$;
 
-  ngOnInit(): void {}
+  countMapping: { [k: string]: string } = {
+    "=1": "1 Transaction",
+    "=1000": "#+ Transactions", // TODO Should be max hits
+    other: "# Transactions",
+  };
+
+  constructor(
+    protected service: PerformanceService,
+    private organizationsService: OrganizationsService
+  ) {
+    super(service);
+  }
+
+  ngOnInit() {
+    this.sub = this.organizationsService.activeOrganizationSlug$
+      .pipe(
+        filter((slug) => !!slug),
+        distinctUntilChanged()
+      )
+      .subscribe((slug) => {
+        this.service.getTransactions(slug!);
+      });
+  }
+
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
+    this.service.clearState();
+  }
 }
