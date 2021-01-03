@@ -3,13 +3,16 @@
     <h1 class="mat-display-1">Performance (Beta)</h1>
   </header>
 
-  <div *ngIf="hits$ | async as hits">{{ hits | i18nPlural: countMapping }}</div>
+  <ng-container *ngIf="paginator$ | async as paginator">
+    <div>{{ paginator.count }} {{ paginator.hits | i18nPlural: countMapping }}</div>
 
-  <div *ngFor="let transaction of transactions$ | async">
-    {{ transaction.transaction }} {{ transaction.startTimestamp }}
-  </div>
+    <div *ngFor="let transaction of transactions$ | async">
+      {{ transaction.transaction }} {{ transaction.startTimestamp }}
+    </div>
 
-  <div *ngIf="previousPageURL$ | async as url">Previous: {{ url }}</div>
-  <div *ngIf="nextPageURL$ | async as url">Next: {{ url }}</div>
+    <div *ngIf="paginator.hasPreviousPage">Previous</div>
+    <div *ngIf="paginator.hasNextPage">Next</div>
+
+  </ng-container>
 
 </section>

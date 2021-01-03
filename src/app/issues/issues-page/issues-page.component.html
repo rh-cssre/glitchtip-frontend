@@ -1,4 +1,4 @@
-<section class="l-body l-body--full-width mat-elevation-z0">
+<section class="l-body l-body--full-width mat-elevation-z0" *ngIf="paginator$ | async as paginator">
   <header class="page-header">
     <h1 class="mat-display-1">Issues</h1>
   </header>
@@ -226,19 +226,19 @@
           <ng-container *ngIf="(loading$ | async) === false">
             <button
               [routerLink]="[]"
-              [queryParams]="(previousParams$ | async) || {}"
+              [queryParams]="paginator.previousPageParams || {}"
               queryParamsHandling="merge"
               mat-button
-              [disabled]="(hasPreviousPage$ | async) === false"
+              [disabled]="paginator.hasPreviousPage === false"
             >
               <mat-icon>keyboard_arrow_left</mat-icon>
             </button>
             <button
               [routerLink]="[]"
-              [queryParams]="(nextParams$ | async) || {}"
+              [queryParams]="paginator.nextPageParams || {}"
               queryParamsHandling="merge"
               mat-button
-              [disabled]="(hasNextPage$ | async) === false"
+              [disabled]="paginator.hasNextPage === false"
             >
               <mat-icon>keyboard_arrow_right</mat-icon>
             </button>
@@ -262,7 +262,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-          <app-issue-zero-states></app-issue-zero-states>
+          <app-issue-zero-states *ngIf="paginator.initialLoadComplete"></app-issue-zero-states>
         </td>
       </tr>
       <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>

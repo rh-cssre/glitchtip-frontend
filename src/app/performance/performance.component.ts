@@ -23,9 +23,8 @@ export class PerformanceComponent
   transactions$ = this.service.transactions$;
 
   countMapping: { [k: string]: string } = {
-    "=1": "1 Transaction",
-    "=1000": "#+ Transactions", // TODO Should be max hits
-    other: "# Transactions",
+    "=1": "Transaction",
+    other: "Transactions",
   };
 
   constructor(

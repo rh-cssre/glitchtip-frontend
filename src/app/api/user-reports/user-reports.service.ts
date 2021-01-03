@@ -1,53 +1,38 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { tap, catchError, map } from "rxjs/operators";
-import { EMPTY, BehaviorSubject } from "rxjs";
+import { EMPTY } from "rxjs";
 import { baseUrl } from "../../constants";
 import { UserReport } from "./user-reports.interfaces";
-import { urlParamsToObject } from "src/app/issues/utils";
-import { processLinkHeader } from "src/app/shared/utils-pagination";
+import {
+  initialPaginationState,
+  PaginationStatefulService,
+  PaginationStatefulServiceState,
+} from "src/app/shared/stateful-service/pagination-stateful-service";
 
-interface UserReportsState {
+export interface UserReportsState extends PaginationStatefulServiceState {
   reports: UserReport[] | null;
-  nextPage: string | null;
-  previousPage: string | null;
-  loading: boolean;
   errors: string | null;
 }
 
 const initialState: UserReportsState = {
   reports: null,
-  nextPage: null,
-  previousPage: null,
-  loading: false,
   errors: null,
+  pagination: initialPaginationState,
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class UserReportsService {
-  private userReportsState = new BehaviorSubject<UserReportsState>(
-    initialState
-  );
-  private getState$ = this.userReportsState.asObservable();
+export class UserReportsService extends PaginationStatefulService<UserReportsState> {
   private readonly issuePageUrl = baseUrl + "/issues/";
 
   reports$ = this.getState$.pipe(map((state) => state.reports));
-  loading$ = this.getState$.pipe(map((state) => state.loading));
   errors$ = this.getState$.pipe(map((state) => state.errors));
-  hasNextPage$ = this.getState$.pipe(map((state) => state.nextPage !== null));
-  hasPreviousPage$ = this.getState$.pipe(
-    map((state) => state.previousPage !== null)
-  );
-  nextPageParams$ = this.getState$.pipe(
-    map((state) => urlParamsToObject(state.nextPage))
-  );
-  previousPageParams$ = this.getState$.pipe(
-    map((state) => urlParamsToObject(state.previousPage))
-  );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    super(initialState);
+  }
 
   getReportsForIssue(issue: number, cursor: string | undefined) {
     this.setLoadingReports(true);
@@ -57,10 +42,8 @@ export class UserReportsService {
         tap((response) => {
           this.setLoadingReports(false);
           this.resetErrorsReports();
-          const linkHeader = response.headers.get("link");
-          if (response.body && linkHeader) {
-            this.setReports(response.body);
-            this.setPagination(linkHeader);
+          if (response.body) {
+            this.setStateAndPagination({ reports: response.body }, response);
           }
         }),
         catchError((error) => {
@@ -85,47 +68,25 @@ export class UserReportsService {
     );
   }
 
-  private setReports(reports: UserReport[]) {
-    this.userReportsState.next({
-      ...this.userReportsState.getValue(),
-      reports,
-    });
-  }
-
   private setLoadingReports(loading: boolean) {
-    this.userReportsState.next({
-      ...this.userReportsState.getValue(),
-      loading,
+    const state = this.state.getValue();
+    this.setState({
+      pagination: {
+        ...state.pagination,
+        loading,
+      },
     });
   }
 
   private setErrorsReports(message: string) {
-    this.userReportsState.next({
-      ...this.userReportsState.getValue(),
-      errors: message,
-    });
+    this.setState({ errors: message });
   }
 
   private resetUserReports() {
-    this.userReportsState.next({
-      ...this.userReportsState.getValue(),
-      reports: initialState.reports,
-    });
+    this.setState({ reports: initialState.reports });
   }
 
   private resetErrorsReports() {
-    this.userReportsState.next({
-      ...this.userReportsState.getValue(),
-      errors: initialState.errors,
-    });
-  }
-
-  private setPagination(linkHeader: string) {
-    const parts = processLinkHeader(linkHeader);
-    this.userReportsState.next({
-      ...this.userReportsState.getValue(),
-      nextPage: parts.next ? parts.next : null,
-      previousPage: parts.previous ? parts.previous : null,
-    });
+    this.setState({ errors: initialState.errors });
   }
 }

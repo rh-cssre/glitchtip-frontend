@@ -1,9 +1,13 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { IssueDetailService } from "../issue-detail/issue-detail.service";
-import { UserReportsService } from "src/app/api/user-reports/user-reports.service";
+import { ActivatedRoute } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 import { Subscription, combineLatest } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
+import { IssueDetailService } from "../issue-detail/issue-detail.service";
+import {
+  UserReportsState,
+  UserReportsService,
+} from "src/app/api/user-reports/user-reports.service";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 
 @Component({
   selector: "app-user-reports-issue",
@@ -11,16 +15,12 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ["./user-reports-issue.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserReportsIssueComponent implements OnDestroy {
+export class UserReportsIssueComponent
+  extends PaginationBaseComponent<UserReportsState, UserReportsService>
+  implements OnDestroy {
   issueId$ = this.issueService.issue$.pipe(map((issue) => issue?.id));
   reports$ = this.userReportService.reports$;
-  loadingReports$ = this.userReportService.loading$;
   errorReports$ = this.userReportService.errors$;
-
-  hasNextPage$ = this.userReportService.hasNextPage$;
-  hasPreviousPage$ = this.userReportService.hasPreviousPage$;
-  nextParams$ = this.userReportService.nextPageParams$;
-  previousParams$ = this.userReportService.previousPageParams$;
 
   routerEventSubscription: Subscription;
 
@@ -29,6 +29,7 @@ export class UserReportsIssueComponent implements OnDestroy {
     private userReportService: UserReportsService,
     private route: ActivatedRoute
   ) {
+    super(userReportService);
     this.routerEventSubscription = combineLatest([
       this.route.queryParams,
       this.issueId$,

@@ -1,8 +1,28 @@
 import { HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { processLinkHeader } from "../utils-pagination";
+import { urlParamsToObject } from "src/app/issues/utils";
 import { StatefulService } from "./stateful-service";
+
+/**
+ * Pagination info exists in a header, this parses it out for storing.
+ */
+const processLinkHeader = (linkHeader: string) =>
+  linkHeader.split(",").reduce<{ [key: string]: string }>((acc, link) => {
+    // Only return results url when results are present
+    const match = link.match(/<(.*)>; rel="(\w*)"/);
+    const results = link
+      .split("; ")
+      .find((x) => x.startsWith("results"))
+      ?.includes("true");
+    if (results && match) {
+      const url = match[1];
+      const rel = match[2];
+      acc[rel] = url;
+      return acc;
+    }
+    return acc;
+  }, {});
 
 export interface PaginationState {
   hits: number | null;
@@ -62,21 +82,41 @@ export abstract class PaginationStatefulService<
   }
 }
 
+/**
+ * Component level interface for paging needs
+ */
+interface Paginator extends PaginationState {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  nextPageParams: {
+    [key: string]: string;
+  } | null;
+  previousPageParams: {
+    [key: string]: string;
+  } | null;
+  /** Human readable object count string that appends "+" to indicate max hits */
+  count: string | undefined;
+}
+
 export abstract class PaginationBaseComponent<
   TState extends PaginationStatefulServiceState,
   TService extends PaginationStatefulService<TState>
 > {
-  nextPageURL$: Observable<string | null>;
-  previousPageURL$: Observable<string | null>;
-  hits$: Observable<number | null>;
+  paginator$: Observable<Paginator>;
 
   constructor(protected service: TService) {
-    this.nextPageURL$ = service.pagination$.pipe(
-      map((pagination) => pagination.nextPageURL)
+    this.paginator$ = service.pagination$.pipe(
+      map((pagination) => ({
+        ...pagination,
+        hasNextPage: !!pagination.nextPageURL,
+        hasPreviousPage: !!pagination.previousPageURL,
+        nextPageParams: urlParamsToObject(pagination.nextPageURL),
+        previousPageParams: urlParamsToObject(pagination.previousPageURL),
+        count:
+          pagination.hits && pagination.hits === pagination.maxHits
+            ? pagination.hits.toString() + "+"
+            : pagination.hits?.toString(),
+      }))
     );
-    this.previousPageURL$ = service.pagination$.pipe(
-      map((pagination) => pagination.previousPageURL)
-    );
-    this.hits$ = service.pagination$.pipe(map((pagination) => pagination.hits));
   }
 }

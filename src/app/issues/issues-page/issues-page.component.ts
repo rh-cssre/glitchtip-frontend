@@ -14,10 +14,11 @@ import {
   withLatestFrom,
   distinctUntilChanged,
 } from "rxjs/operators";
-import { IssuesService } from "../issues.service";
+import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ProjectsService } from "src/app/api/projects/projects.service";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 
 @Component({
   selector: "app-issues-page",
@@ -25,9 +26,13 @@ import { ProjectsService } from "src/app/api/projects/projects.service";
   styleUrls: ["./issues-page.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IssuesPageComponent implements OnInit, OnDestroy {
+export class IssuesPageComponent
+  extends PaginationBaseComponent<IssuesState, IssuesService>
+  implements OnInit, OnDestroy {
   displayedColumns: string[] = ["select", "title", "events"];
-  loading$ = this.issuesService.loading$;
+  loading$ = this.issuesService.getState$.pipe(
+    map((state) => state.pagination.loading)
+  );
   form = new FormGroup({
     query: new FormControl(""),
   });
@@ -41,10 +46,6 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
   areAllSelected$ = this.issuesService.areAllSelected$;
   thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
-  hasNextPage$ = this.issuesService.hasNextPage$;
-  hasPreviousPage$ = this.issuesService.hasPreviousPage$;
-  nextParams$ = this.issuesService.nextPageParams$;
-  previousParams$ = this.issuesService.previousPageParams$;
   activeOrganizationProjects$ = this.organizationsService
     .activeOrganizationProjects$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
@@ -145,6 +146,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     private organizationsService: OrganizationsService,
     private projectsService: ProjectsService
   ) {
+    super(issuesService);
     this.routerEventSubscription = this.navigationEnd$.subscribe(
       ({ orgSlug, cursor, query, project, start, end }) => {
         if (orgSlug) {
