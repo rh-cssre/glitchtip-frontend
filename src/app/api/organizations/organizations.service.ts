@@ -300,8 +300,8 @@ export class OrganizationsService {
               this.route.snapshot.firstChild.url[0].path === "organizations" &&
               this.route.snapshot.firstChild.url[1].path !== slug
             ) {
-              const child_page = this.route.snapshot.firstChild.url[2].path;
-              this.router.navigate(["organizations", slug, child_page]);
+              const childPage = this.route.snapshot.firstChild.url[2].path;
+              this.router.navigate(["organizations", slug, childPage]);
             }
           }
         })
