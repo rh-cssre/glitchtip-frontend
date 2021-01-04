@@ -32,6 +32,7 @@
     "@sentry/angular": "^5.29.2",
     "@stripe/stripe-js": "^1.11.0",
     "browser-logos": "github:alrra/browser-logos#69.0.4",
+    "date-fns": "^2.16.1",
     "ngx-markdown": "^11.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
