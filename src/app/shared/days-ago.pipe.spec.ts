@@ -13,10 +13,10 @@ describe("DateAgoPipe", () => {
     const mockCurrentDate = 1578579771793;
     const baseTime = new Date(mockCurrentDate);
     jasmine.clock().mockDate(baseTime);
-    expect(pipe.transform(mockFirstSeen)).toBe("31");
+    expect(pipe.transform(mockFirstSeen)).toBe("1 month ago");
   });
 
   it("an invalid date does not transform the value", () => {
-    expect(pipe.transform("invalid date input")).toBe("invalid date input");
+    expect(pipe.transform("fake")).toBe("");
   });
 });
