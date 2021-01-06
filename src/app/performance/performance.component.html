@@ -4,15 +4,28 @@
   </header>
 
   <ng-container *ngIf="paginator$ | async as paginator">
-    <div>{{ paginator.count }} {{ paginator.hits | i18nPlural: countMapping }}</div>
-
-    <div *ngFor="let transaction of transactions$ | async">
-      {{ transaction.transaction }} {{ transaction.startTimestamp }}
+    <div>
+      {{ paginator.count }} {{ paginator.hits | i18nPlural: countMapping }}
     </div>
+
+    <mat-list>
+      <ng-container *ngFor="let transaction of transactions$ | async">
+        <mat-list-item>
+          <p matLine>
+            {{ transaction.transaction }}
+          </p>
+          <p matLine>{{ transaction.delta }}ms</p>
+
+          <div matLine>
+            {{ transaction.startTimestamp | daysAgo }} days ago:
+            {{ transaction.startTimestamp | date: "long" }}
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
 
     <div *ngIf="paginator.hasPreviousPage">Previous</div>
     <div *ngIf="paginator.hasNextPage">Next</div>
-
   </ng-container>
-
 </section>

@@ -22,6 +22,16 @@ const initialState: PerformanceState = {
 })
 export class PerformanceService extends PaginationStatefulService<PerformanceState> {
   transactions$ = this.getState$.pipe(map((state) => state.transactions));
+  transactionsWithDelta$ = this.transactions$.pipe(
+    map((transactions) =>
+      transactions.map((transaction) => ({
+        ...transaction,
+        delta:
+          new Date(transaction.timestamp).getTime() -
+          new Date(transaction.startTimestamp).getTime(),
+      }))
+    )
+  );
 
   constructor(private transactionsService: TransactionsService) {
     super(initialState);

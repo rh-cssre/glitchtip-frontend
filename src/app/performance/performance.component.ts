@@ -20,7 +20,7 @@ export class PerformanceComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>
   implements OnInit, OnDestroy {
   sub: Subscription | null = null;
-  transactions$ = this.service.transactions$;
+  transactions$ = this.service.transactionsWithDelta$;
 
   countMapping: { [k: string]: string } = {
     "=1": "Transaction",
