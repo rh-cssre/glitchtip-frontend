@@ -42,6 +42,6 @@ describe("PerformanceComponent", () => {
     req.flush([testTransaction]);
     fixture.detectChanges();
     const section = fixture.nativeElement.querySelector("section");
-    expect(section.innerHTML).toContain(testTransaction.startTimestamp);
+    expect(section.innerHTML).toContain(testTransaction.transaction);
   });
 });
