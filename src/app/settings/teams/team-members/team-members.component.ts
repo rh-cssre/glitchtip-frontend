@@ -3,6 +3,7 @@ import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { Member } from "src/app/api/organizations/organizations.interface";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from "src/app/api/user/user.service";
 import { FormControl } from "@angular/forms";
@@ -61,14 +62,10 @@ export class TeamMembersComponent implements OnInit {
       .addTeamMember(this.member.value, this.orgSlug, this.teamSlug)
       .subscribe(
         (team) => {
+          /** Had some issues with FormControl's value being typed as `any` */
+          const member: Member = this.member.value;
           this.loading = false;
-          this.snackBar.open(
-            `${
-              this.member.value.user.name
-                ? this.member.value.user.name
-                : this.member.value.user.email
-            } has been added to #${team.slug}`
-          );
+          this.snackBar.open(`${member.email} has been added to #${team.slug}`);
         },
         (err) => {
           this.loading = false;
