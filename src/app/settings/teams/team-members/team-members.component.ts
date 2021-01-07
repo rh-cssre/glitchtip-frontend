@@ -63,11 +63,7 @@ export class TeamMembersComponent implements OnInit {
         (team) => {
           this.loading = false;
           this.snackBar.open(
-            `${
-              this.member.value.user.name
-                ? this.member.value.user.name
-                : this.member.value.user.email
-            } has been added to #${team.slug}`
+            `${this.member.value.email} has been added to #${team.slug}`
           );
         },
         (err) => {
