@@ -12,7 +12,9 @@
       <ng-container *ngFor="let transaction of transactions$ | async">
         <mat-list-item>
           <p matLine>
-            {{ transaction.transaction }}
+            <a [routerLink]="[transaction.eventId]">
+              {{ transaction.transaction }}
+            </a>
           </p>
           <p matLine>{{ transaction.delta }}ms</p>
 

@@ -1,0 +1,5 @@
+<p>transaction-detail</p>
+<div *ngIf="transaction$ | async as transaction">
+    {{ transaction.eventId }}
+    {{ transaction.transaction }}
+</div>
