@@ -19,8 +19,13 @@ import {
 import { OrganizationsService } from "../organizations/organizations.service";
 import { OrganizationProject } from "../organizations/organizations.interface";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
+import {
+  initialPaginationState,
+  PaginationStatefulService,
+  PaginationStatefulServiceState,
+} from "src/app/shared/stateful-service/pagination-stateful-service";
 
-interface ProjectsState {
+export interface ProjectsState extends PaginationStatefulServiceState {
   projects: Project[] | null;
   projectsOnTeam: Project[];
   projectsNotOnTeam: Project[];
@@ -38,16 +43,16 @@ const initialState: ProjectsState = {
   projectKeys: null,
   loading: { addProjectToTeam: false, removeProjectFromTeam: "" },
   errors: { addProjectToTeam: "", removeProjectFromTeam: "" },
+  pagination: initialPaginationState,
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class ProjectsService {
+export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   private readonly projectsState = new BehaviorSubject<ProjectsState>(
     initialState
   );
-  private readonly getState$ = this.projectsState.asObservable();
   private readonly url = baseUrl + "/projects/";
 
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
@@ -96,13 +101,53 @@ export class ProjectsService {
     private http: HttpClient,
     private organizationsService: OrganizationsService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
     return this.http
       .post<Project>(url, project)
       .pipe(tap((newProject) => this.addOneProject(newProject)));
+  }
+
+  retrieveOrganizationProjects(
+    organizationSlug?: string,
+    cursor?: string,
+    query?: string,
+    project?: string[] | null,
+    start?: string,
+    end?: string
+  ) {
+    const url = organizationSlug
+      ? `${baseUrl}/organizations/${organizationSlug}/projects/`
+      : this.url;
+    let httpParams = new HttpParams();
+    if (cursor) {
+      httpParams = httpParams.set("cursor", cursor);
+    }
+    if (query) {
+      httpParams = httpParams.set("query", query);
+    }
+    if (project) {
+      project.forEach((id) => {
+        httpParams = httpParams.append("project", id);
+      });
+    }
+    if (start && end) {
+      httpParams = httpParams.set("start", start);
+      httpParams = httpParams.set("end", end);
+    }
+    return this.http
+      .get<Project[]>(url, { observe: "response", params: httpParams })
+      .pipe(
+        tap((res) => {
+          return this.setStateAndPagination({ projects: res.body! }, res);
+        })
+      )
+
+      .subscribe();
   }
 
   retrieveProjects() {

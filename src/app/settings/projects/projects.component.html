@@ -1,4 +1,4 @@
-<section class="l-body">
+<section *ngIf="paginator$ | async as paginator" class="l-body">
   <header class="page-header">
     <h1 class="mat-display-1">Projects</h1>
     <a
@@ -12,6 +12,7 @@
   </header>
 
   <div *ngIf="projectsForActiveOrg$ | async as projects">
+    <h1>length: {{ projects.length }}</h1>
     <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
   </div>
 
@@ -31,5 +32,26 @@
         text: 'Settings'
       }"
     ></app-project-card>
+  </div>
+  <div class="pagination">
+    <button
+      [routerLink]="[]"
+      [queryParams]="paginator.previousPageParams || {}"
+      queryParamsHandling="merge"
+      mat-button
+      [disabled]="paginator.hasPreviousPage === false"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <p>{{ paginator.nextPageParams | json }}</p>
+    <button
+      [routerLink]="[]"
+      [queryParams]="paginator.nextPageParams || {}"
+      queryParamsHandling="merge"
+      mat-button
+      [disabled]="paginator.hasNextPage === false"
+    >
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
   </div>
 </section>
