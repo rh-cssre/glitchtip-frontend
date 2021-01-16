@@ -1,0 +1,33 @@
+<section class="l-body l-body--full-width mat-elevation-z0">
+  <header class="page-header">
+    <h1 class="mat-display-1">Performance (Beta)</h1>
+  </header>
+
+  <ng-container *ngIf="paginator$ | async as paginator">
+    <div>
+      {{ paginator.count }} {{ paginator.hits | i18nPlural: countMapping }}
+    </div>
+
+    <mat-list>
+      <ng-container *ngFor="let transaction of transactions$ | async">
+        <mat-list-item>
+          <p matLine>
+            <a [routerLink]="[transaction.eventId]">
+              {{ transaction.transaction }}
+            </a>
+          </p>
+          <p matLine>{{ transaction.delta }}ms</p>
+
+          <div matLine>
+            {{ transaction.startTimestamp | daysAgo }} days ago:
+            {{ transaction.startTimestamp | date: "long" }}
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+
+    <div *ngIf="paginator.hasPreviousPage">Previous</div>
+    <div *ngIf="paginator.hasNextPage">Next</div>
+  </ng-container>
+</section>

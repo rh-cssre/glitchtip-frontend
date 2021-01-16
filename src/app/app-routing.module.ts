@@ -29,6 +29,17 @@ export const routes: Routes = [
     },
   },
   {
+    path: "organizations/:org-slug/performance",
+    loadChildren: () =>
+      import("./performance/performance.module").then(
+        (m) => m.PerformanceModule
+      ),
+    canActivate: [IsLoggedInGuard],
+    data: {
+      title: "Performance",
+    },
+  },
+  {
     path: "organizations/new",
     loadChildren: () =>
       import("./new-organization/new-organization.module").then(

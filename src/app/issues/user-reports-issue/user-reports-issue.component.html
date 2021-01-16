@@ -22,30 +22,33 @@
   </ng-container>
 </div>
 
-<div class="nav-arrows" *ngIf="(loadingReports$ | async) === false">
-  <a
-    [routerLink]="[]"
-    [queryParams]="(previousParams$ | async) || {}"
-    queryParamsHandling="merge"
-    mat-button
-    [disabled]="(hasPreviousPage$ | async) === false"
-  >
-    <mat-icon>keyboard_arrow_left</mat-icon>
-  </a>
-  <a
-    [routerLink]="[]"
-    [queryParams]="(nextParams$ | async) || {}"
-    queryParamsHandling="merge"
-    mat-button
-    [disabled]="(hasNextPage$ | async) === false"
-  >
-    <mat-icon>keyboard_arrow_right</mat-icon>
-  </a>
-</div>
-<div *ngIf="loadingReports$ | async" class="spinner-container">
-  <mat-progress-spinner
-    [diameter]="33"
-    color="primary"
-    mode="indeterminate"
-  ></mat-progress-spinner>
-</div>
+<ng-container *ngIf="paginator$ | async as paginator">
+  <div class="nav-arrows" *ngIf="paginator.loading === false">
+    <a
+      [routerLink]="[]"
+      [queryParams]="paginator.previousPageParams || {}"
+      queryParamsHandling="merge"
+      mat-button
+      [disabled]="paginator.hasPreviousPage === false"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </a>
+    <a
+      [routerLink]="[]"
+      [queryParams]="paginator.nextPageParams || {}"
+      queryParamsHandling="merge"
+      mat-button
+      [disabled]="paginator.hasNextPage === false"
+    >
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </a>
+  </div>
+  <div *ngIf="paginator.loading" class="spinner-container">
+    <mat-progress-spinner
+      [diameter]="33"
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+
+</ng-container>

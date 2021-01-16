@@ -5,7 +5,7 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
@@ -21,8 +21,13 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IssueZeroStatesComponent implements OnInit, OnDestroy {
-  loading$ = this.issuesService.loading$;
-  initialLoadComplete$ = this.issuesService.initialLoadComplete$;
+  subscription: Subscription | null = null;
+  loading$ = this.issuesService.getState$.pipe(
+    map((state) => state.pagination.loading)
+  );
+  initialLoadComplete$ = this.issuesService.getState$.pipe(
+    map((state) => state.pagination.initialLoadComplete)
+  );
   orgHasAProject$ = this.organizationsService.orgHasAProject$;
   activeOrganizationProjects$ = this.organizationsService
     .activeOrganizationProjects$;
@@ -115,7 +120,10 @@ export class IssueZeroStatesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
+    this.subscription = combineLatest([
+      this.activatedRoute.params,
+      this.activatedRoute.queryParams,
+    ])
       .pipe(
         map(([params, _]) => {
           const orgSlug: string | undefined = params["org-slug"];
@@ -133,6 +141,7 @@ export class IssueZeroStatesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.projectsService.clearActiveProject();
+    this.subscription?.unsubscribe();
   }
 
   copied() {
