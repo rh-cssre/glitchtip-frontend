@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ViewChild } from "@angular/core";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "../main-nav.service";
@@ -23,6 +24,7 @@ export class MainNavComponent {
   navOpen$ = this.mainNav.navOpen$;
   billingEnabled$ = this.settingsService.billingEnabled$;
   mobileNav$ = this.mainNav.mobileNav$;
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger | undefined = undefined;
 
   constructor(
     private mainNav: MainNavService,
@@ -49,6 +51,7 @@ export class MainNavComponent {
 
   closeSideNav() {
     this.mainNav.getClosedNav();
+    this.trigger?.closeMenu();
   }
 
   setOrganization(id: number) {
