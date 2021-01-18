@@ -97,7 +97,12 @@ export class PlatformPickerComponent implements ControlValueAccessor {
   // Boilerplate for ControlValueAccessor
   onChange = (platform: string) => {};
   onTouched = () => {};
-  writeValue(platform: string, toggle: boolean = true): void {
+  /**
+   * @param toggle Added to boilerplate writeValue because one version of
+   * platform picker uses buttons and they need to be toggle-able. False by
+   * default because Angular doesn't expect it to be there
+   */
+  writeValue(platform: string, toggle = false): void {
     if (platform === this.activePlatform && toggle) {
       this.activePlatform = "";
       this.onChange("");
