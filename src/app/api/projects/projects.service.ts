@@ -16,7 +16,6 @@ import {
   ProjectLoading,
   ProjectError,
 } from "./projects.interfaces";
-import { OrganizationsService } from "../organizations/organizations.service";
 import { OrganizationProject } from "../organizations/organizations.interface";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import {
@@ -24,6 +23,8 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { ProjectByOrgAPIService } from "../organizations/projects/projects-by-org-api.service";
+import { OrganizationsService } from "../organizations/organizations.service";
 
 export interface ProjectsState extends PaginationStatefulServiceState {
   projects: Project[] | null;
@@ -88,6 +89,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
       projects?.filter((project) => project.organization.id === activeOrg)
     )
   );
+
   readonly projectsOnTeam$ = this.getState$.pipe(
     map((data) => data.projectsOnTeam)
   );
@@ -100,6 +102,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   constructor(
     private http: HttpClient,
     private organizationsService: OrganizationsService,
+    private projectsByOrgAPIService: ProjectByOrgAPIService,
     private snackBar: MatSnackBar
   ) {
     super(initialState);
@@ -112,7 +115,25 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
       .pipe(tap((newProject) => this.addOneProject(newProject)));
   }
 
-  retrieveOrganizationProjects(
+  getProjectsByOrg(
+    orgSlug: string,
+    cursor: string | undefined,
+    query: string = "is:unresolved",
+    project: string[] | null,
+    start: string | undefined,
+    end: string | undefined
+  ) {
+    this.retrieveProjectsByOrg(
+      orgSlug,
+      cursor,
+      query,
+      project,
+      start,
+      end
+    ).toPromise();
+  }
+
+  private retrieveProjectsByOrg(
     organizationSlug?: string,
     cursor?: string,
     query?: string,
@@ -120,34 +141,13 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     start?: string,
     end?: string
   ) {
-    const url = organizationSlug
-      ? `${baseUrl}/organizations/${organizationSlug}/projects/`
-      : this.url;
-    let httpParams = new HttpParams();
-    if (cursor) {
-      httpParams = httpParams.set("cursor", cursor);
-    }
-    if (query) {
-      httpParams = httpParams.set("query", query);
-    }
-    if (project) {
-      project.forEach((id) => {
-        httpParams = httpParams.append("project", id);
-      });
-    }
-    if (start && end) {
-      httpParams = httpParams.set("start", start);
-      httpParams = httpParams.set("end", end);
-    }
-    return this.http
-      .get<Project[]>(url, { observe: "response", params: httpParams })
+    return this.projectsByOrgAPIService
+      .list(organizationSlug, cursor, query, project, start, end)
       .pipe(
         tap((res) => {
-          return this.setStateAndPagination({ projects: res.body! }, res);
+          this.setStateAndPagination({ projects: res.body! }, res);
         })
-      )
-
-      .subscribe();
+      );
   }
 
   retrieveProjects() {

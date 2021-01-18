@@ -12,7 +12,6 @@
   </header>
 
   <div *ngIf="projectsForActiveOrg$ | async as projects">
-    <h1>length: {{ projects.length }}</h1>
     <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
   </div>
 
@@ -33,25 +32,11 @@
       }"
     ></app-project-card>
   </div>
-  <div class="pagination">
-    <button
-      [routerLink]="[]"
-      [queryParams]="paginator.previousPageParams || {}"
-      queryParamsHandling="merge"
-      mat-button
-      [disabled]="paginator.hasPreviousPage === false"
-    >
-      <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-    <p>{{ paginator.nextPageParams | json }}</p>
-    <button
-      [routerLink]="[]"
-      [queryParams]="paginator.nextPageParams || {}"
-      queryParamsHandling="merge"
-      mat-button
-      [disabled]="paginator.hasNextPage === false"
-    >
-      <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
-  </div>
+  <app-pagination
+    class="pagination"
+    [hasNextPage]="paginator.hasNextPage"
+    [hasPreviousPage]="paginator.hasPreviousPage"
+    [nextPageParams]="paginator.nextPageParams"
+    [previousPageParams]="paginator.previousPageParams"
+  ></app-pagination>
 </section>
