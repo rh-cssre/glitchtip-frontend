@@ -1,0 +1,20 @@
+<div class="pagination">
+  <button
+    [routerLink]="[]"
+    [queryParams]="previousPageParams || {}"
+    queryParamsHandling="merge"
+    mat-button
+    [disabled]="hasPreviousPage === false"
+  >
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </button>
+  <button
+    [routerLink]="[]"
+    [queryParams]="nextPageParams || {}"
+    queryParamsHandling="merge"
+    mat-button
+    [disabled]="hasNextPage === false"
+  >
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </button>
+</div>
