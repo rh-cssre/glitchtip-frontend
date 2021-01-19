@@ -1,7 +1,8 @@
 <section *ngIf="paginator$ | async as paginator" class="l-body">
   <mat-card
     *ngIf="
-      (projects$ | async)?.length === 0 &&
+      ((projects$ | async)?.length === 0 ||
+        (projects$ | async) === undefined) &&
       (activeOrganizationDetail$ | async) === undefined
     "
   >

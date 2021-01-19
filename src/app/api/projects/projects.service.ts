@@ -56,12 +56,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   );
   private readonly url = baseUrl + "/projects/";
 
-  readonly projects$ = this.getState$.pipe(
-    map((data) => {
-      console.log("project observable: ", data.projects);
-      return data.projects;
-    })
-  );
+  readonly projects$ = this.getState$.pipe(map((data) => data.projects));
 
   readonly activeProject$ = this.getState$.pipe(
     map((data) => data.projectDetail)
@@ -159,7 +154,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     return this.http
       .get<Project[]>(this.url)
       .pipe(tap((projects) => this.setProjects(projects)))
-      .subscribe((resp) => console.log("retrieve projects: ", resp));
+      .subscribe();
   }
 
   /**
@@ -255,18 +250,9 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   retrieveProjectDetail(organizationSlug: string, projectSlug: string) {
-    const url = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http
-      .get<ProjectDetail>(url)
-      .pipe(
-        tap((activeProject) => {
-          return this.setActiveProject(activeProject);
-        }),
-        map((resp) => {
-          console.log("what is her response: ", resp);
-          console.log("what is she: ", this.state.getValue().projectDetail);
-        })
-      )
+    return this.projectsByOrgAPIService
+      .retrieve(organizationSlug, projectSlug)
+      .pipe(tap((activeProject) => this.setActiveProject(activeProject)))
       .subscribe();
   }
 
@@ -385,8 +371,9 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private setActiveProject(projectDetail: ProjectDetail) {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    const state = this.state.getValue();
+    this.setState({
+      ...state,
       projectDetail,
     });
   }
