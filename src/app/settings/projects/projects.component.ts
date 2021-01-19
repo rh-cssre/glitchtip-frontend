@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { Subscription } from "rxjs";
 import { map, filter, withLatestFrom } from "rxjs/operators";
@@ -15,10 +15,9 @@ import { PaginationBaseComponent } from "src/app/shared/stateful-service/paginat
   styleUrls: ["./projects.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectsComponent extends PaginationBaseComponent<
-  ProjectsState,
-  ProjectsService
-> {
+export class ProjectsComponent
+  extends PaginationBaseComponent<ProjectsState, ProjectsService>
+  implements OnDestroy {
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
   projectsForActiveOrg$ = this.projectsService.projectsForActiveOrg$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
@@ -67,5 +66,6 @@ export class ProjectsComponent extends PaginationBaseComponent<
 
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
+    this.projectsService.clearState();
   }
 }

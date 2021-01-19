@@ -80,6 +80,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       )
       .subscribe(({ orgSlug, projectSlug }) => {
         if (orgSlug && projectSlug) {
+          console.log("get em");
           this.projectsService.retrieveProjectDetail(orgSlug, projectSlug);
           this.projectsService.retrieveCurrentProjectClientKeys(orgSlug);
         }

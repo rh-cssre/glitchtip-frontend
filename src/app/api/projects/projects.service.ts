@@ -12,9 +12,9 @@ import {
   Project,
   ProjectKey,
   ProjectDetail,
-  ProjectNew,
   ProjectLoading,
   ProjectError,
+  ProjectPlatform,
 } from "./projects.interfaces";
 import { OrganizationProject } from "../organizations/organizations.interface";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
@@ -23,7 +23,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
-import { ProjectByOrgAPIService } from "../organizations/projects/projects-by-org-api.service";
+import { ProjectByOrgAPIService } from "./projects-by-org/projects-by-org-api.service";
 import { OrganizationsService } from "../organizations/organizations.service";
 
 export interface ProjectsState extends PaginationStatefulServiceState {
@@ -56,7 +56,12 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   );
   private readonly url = baseUrl + "/projects/";
 
-  readonly projects$ = this.getState$.pipe(map((data) => data.projects));
+  readonly projects$ = this.getState$.pipe(
+    map((data) => {
+      console.log("project observable: ", data.projects);
+      return data.projects;
+    })
+  );
 
   readonly activeProject$ = this.getState$.pipe(
     map((data) => data.projectDetail)
@@ -108,7 +113,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     super(initialState);
   }
 
-  createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
+  createProject(project: ProjectPlatform, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
     return this.http
       .post<Project>(url, project)
@@ -154,7 +159,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     return this.http
       .get<Project[]>(this.url)
       .pipe(tap((projects) => this.setProjects(projects)))
-      .subscribe();
+      .subscribe((resp) => console.log("retrieve projects: ", resp));
   }
 
   /**
@@ -253,7 +258,15 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     const url = `${this.url}${organizationSlug}/${projectSlug}/`;
     return this.http
       .get<ProjectDetail>(url)
-      .pipe(tap((activeProject) => this.setActiveProject(activeProject)))
+      .pipe(
+        tap((activeProject) => {
+          return this.setActiveProject(activeProject);
+        }),
+        map((resp) => {
+          console.log("what is her response: ", resp);
+          console.log("what is she: ", this.state.getValue().projectDetail);
+        })
+      )
       .subscribe();
   }
 

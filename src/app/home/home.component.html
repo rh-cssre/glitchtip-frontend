@@ -1,4 +1,4 @@
-<section class="l-body">
+<section *ngIf="paginator$ | async as paginator" class="l-body">
   <mat-card
     *ngIf="
       (projects$ | async)?.length === 0 &&
@@ -31,15 +31,13 @@
       >
     </header>
 
-    <div *ngIf="activeOrganizationProjects$ | async as projects">
+    <div *ngIf="projects$ | async as projects">
       <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
     </div>
 
-    <div *ngIf="activeOrganizationProjects$">
+    <div *ngIf="projects$">
       <div class="card-wrapper">
-        <ng-container
-          *ngFor="let project of activeOrganizationProjects$ | async"
-        >
+        <ng-container *ngFor="let project of projects$ | async">
           <app-project-card
             [cardLink]="['/organizations', project.organization.slug, 'issues']"
             [cardLinkQueryParams]="{ project: project.id }"
@@ -68,6 +66,13 @@
           ></app-project-card>
         </ng-container>
       </div>
+      <app-pagination
+        class="pagination"
+        [hasNextPage]="paginator.hasNextPage"
+        [hasPreviousPage]="paginator.hasPreviousPage"
+        [nextPageParams]="paginator.nextPageParams"
+        [previousPageParams]="paginator.previousPageParams"
+      ></app-pagination>
     </div>
   </div>
 </section>

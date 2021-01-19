@@ -80,3 +80,11 @@ header.page-header {
 .full-width {
   width: 100%;
 }
+
+// displays pagination on bottom right
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}

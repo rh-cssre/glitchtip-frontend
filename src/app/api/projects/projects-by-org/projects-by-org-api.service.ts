@@ -2,11 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { baseUrl } from "../../../constants";
 import { APIBaseService } from "../../api-base.service";
-import {
-  Project,
-  ProjectDetail,
-  ProjectNew,
-} from "../../projects/projects.interfaces";
+import { Project, ProjectDetail, ProjectNew } from "../projects.interfaces";
 
 /**
  * Alerts viewSet nested under organizations ViewSet
