@@ -19,7 +19,11 @@
       <mat-error class="server-error" *ngIf="updateNameError">{{
         updateNameError
       }}</mat-error>
-      <form [formGroup]="nameForm" (ngSubmit)="updateName()">
+      <form
+        [formGroup]="nameForm"
+        (ngSubmit)="updateName()"
+        class="project-form"
+      >
         <mat-form-field>
           <mat-label>Name</mat-label>
           <input matInput formControlName="name" [value]="project.name" />
@@ -42,11 +46,20 @@
       <form
         [formGroup]="platformForm"
         (ngSubmit)="updatePlatform(project.name)"
+        class="platform-form"
       >
         <app-platform-picker
           formControlName="platform"
           template="dropdown"
         ></app-platform-picker>
+        <a
+          *ngIf="platform && platform.value !== ''"
+          href="https://glitchtip.com/sdkdocs/{{ platform.value }}"
+          target="_blank"
+          class="documentation-link"
+        >
+          Platform Documentation
+        </a>
         <app-loading-button
           [disabled]="platform?.value === project.platform"
           buttonText="Update Platform"
