@@ -28,15 +28,10 @@ export class ProjectsComponent
       const orgSlug: string | undefined = params["org-slug"];
       const cursor: string | undefined = queryParams.cursor;
       const query: string | undefined = queryParams.query;
-      let project: string[] | null = null;
-      if (typeof queryParams.project === "string") {
-        project = [queryParams.project];
-      } else if (typeof queryParams.project === "object") {
-        project = queryParams.project;
-      }
+
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
-      return { orgSlug, cursor, query, project, start, end };
+      return { orgSlug, cursor, query, start, end };
     })
   );
   routerEventSubscription: Subscription;
@@ -49,13 +44,12 @@ export class ProjectsComponent
   ) {
     super(projectsService);
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, query, project, start, end }) => {
+      ({ orgSlug, cursor, query, start, end }) => {
         if (orgSlug) {
           this.projectsService.getProjectsByOrg(
             orgSlug,
             cursor,
             query,
-            project,
             start,
             end
           );

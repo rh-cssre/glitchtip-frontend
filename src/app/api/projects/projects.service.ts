@@ -14,7 +14,7 @@ import {
   ProjectDetail,
   ProjectLoading,
   ProjectError,
-  ProjectPlatform,
+  ProjectNew,
 } from "./projects.interfaces";
 import { OrganizationProject } from "../organizations/organizations.interface";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
@@ -105,7 +105,7 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     super(initialState);
   }
 
-  createProject(project: ProjectPlatform, teamSlug: string, orgSlug: string) {
+  createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
     return this.http
       .post<Project>(url, project)
@@ -116,30 +116,21 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     orgSlug: string,
     cursor: string | undefined,
     query: string = "is:unresolved",
-    project: string[] | null,
     start: string | undefined,
     end: string | undefined
   ) {
-    this.retrieveProjectsByOrg(
-      orgSlug,
-      cursor,
-      query,
-      project,
-      start,
-      end
-    ).toPromise();
+    this.retrieveProjectsByOrg(orgSlug, cursor, query, start, end).toPromise();
   }
 
   private retrieveProjectsByOrg(
     organizationSlug?: string,
     cursor?: string,
     query?: string,
-    project?: string[] | null,
     start?: string,
     end?: string
   ) {
     return this.projectsByOrgAPIService
-      .list(organizationSlug, cursor, query, project, start, end)
+      .list(organizationSlug, cursor, query, start, end)
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ projects: res.body! }, res);

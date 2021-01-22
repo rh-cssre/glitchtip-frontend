@@ -15,13 +15,10 @@ export interface ProjectKey {
 
 export interface ProjectNew {
   name: string;
-}
-
-export interface ProjectPlatform extends ProjectNew {
   platform: string;
 }
 
-export interface ProjectIssueView extends ProjectPlatform {
+export interface ProjectIssueView extends ProjectNew {
   id: string;
   slug: string;
   isMember: boolean;

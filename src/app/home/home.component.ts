@@ -28,10 +28,9 @@ export class HomeComponent
     map(([event, params, queryParams]) => {
       const cursor: string | undefined = queryParams.cursor;
       const query: string | undefined = queryParams.query;
-      const project: string[] | null = null;
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
-      return { cursor, query, project, start, end };
+      return { cursor, query, start, end };
     })
   );
   routerEventSubscription: Subscription;
@@ -47,13 +46,12 @@ export class HomeComponent
     this.routerEventSubscription = combineLatest([
       this.navigationEnd$,
       this.organizationsService.activeOrganizationSlug$,
-    ]).subscribe(([{ cursor, query, project, start, end }, orgSlug]) => {
+    ]).subscribe(([{ cursor, query, start, end }, orgSlug]) => {
       if (orgSlug) {
         this.projectsService.getProjectsByOrg(
           orgSlug,
           cursor,
           query,
-          project,
           start,
           end
         );

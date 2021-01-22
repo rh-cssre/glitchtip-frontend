@@ -5,7 +5,7 @@ import { APIBaseService } from "../../api-base.service";
 import { Project, ProjectDetail, ProjectNew } from "../projects.interfaces";
 
 /**
- * Alerts viewSet nested under organizations ViewSet
+ * Projects viewSet nested under organizations ViewSet
  * /api/0/organizations/organization-slug/projects/project-slug/
  */
 @Injectable({
@@ -21,7 +21,6 @@ export class ProjectByOrgAPIService extends APIBaseService {
     organizationSlug?: string,
     cursor?: string,
     query?: string,
-    project?: string[] | null,
     start?: string,
     end?: string
   ) {
@@ -32,11 +31,6 @@ export class ProjectByOrgAPIService extends APIBaseService {
     }
     if (query) {
       httpParams = httpParams.set("query", query);
-    }
-    if (project) {
-      project.forEach((id) => {
-        httpParams = httpParams.append("project", id);
-      });
     }
     if (start && end) {
       httpParams = httpParams.set("start", start);
