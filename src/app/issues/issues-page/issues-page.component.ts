@@ -36,6 +36,9 @@ export class IssuesPageComponent
   form = new FormGroup({
     query: new FormControl(""),
   });
+  sortForm = new FormGroup({
+    sort: new FormControl(""),
+  });
   dateForm = new FormGroup({
     startDate: new FormControl(""),
     endDate: new FormControl(""),
@@ -136,10 +139,6 @@ export class IssuesPageComponent
     })
   );
 
-  urlHasParam$ = this.route.queryParams.pipe(
-    map((params) => !!params.query || !!params.start || !!params.end)
-  );
-
   constructor(
     private issuesService: IssuesService,
     private router: Router,
@@ -192,8 +191,12 @@ export class IssuesPageComponent
       const query: string | undefined = this.route.snapshot.queryParams.query;
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
+      const sort: string | undefined = this.route.snapshot.queryParams.sort;
       this.form.setValue({
         query: query !== undefined ? query : "is:unresolved",
+      });
+      this.sortForm.setValue({
+        sort: sort !== undefined ? sort : null,
       });
       this.dateForm.setValue({
         startDate: start ? start : null,
@@ -280,5 +283,12 @@ export class IssuesPageComponent
 
   toggleSelectAll() {
     this.issuesService.toggleSelectAll();
+  }
+
+  sortByChanged(event: MatSelectChange) {
+    this.router.navigate([], {
+      queryParams: { sort: event.value },
+      queryParamsHandling: "merge",
+    });
   }
 }
