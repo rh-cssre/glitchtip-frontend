@@ -75,6 +75,27 @@
                 Clear
               </button>
             </form>
+
+            <form [formGroup]="sortForm">
+              <mat-form-field>
+                <mat-label>Sort by</mat-label>
+                <mat-select
+                  (selectionChange)="sortByChanged($event)"
+                  formControlName="sort"
+                  [disabled]="(issues$ | async)?.length === 0"
+                >
+                  <mat-option value="-last_seen">Last Seen</mat-option>
+                  <mat-option value="last_seen">First Seen</mat-option>
+                  <mat-option value="-created">Newest Creation Date</mat-option>
+                  <mat-option value="created">Oldest Creation Date</mat-option>
+                  <mat-option value="-count">Most Frequent</mat-option>
+                  <mat-option value="count">Least Frequent</mat-option>
+                  <mat-option value="priority">Highest Priority</mat-option>
+                  <mat-option value="-priority">Lowest Priority</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+
             <form
               [formGroup]="form"
               (ngSubmit)="onSubmit()"
