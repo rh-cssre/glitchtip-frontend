@@ -61,7 +61,8 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     query: string = "is:unresolved",
     project: string[] | null,
     start: string | undefined,
-    end: string | undefined
+    end: string | undefined,
+    sort: string | undefined
   ) {
     this.setLoading(true);
     this.retrieveIssues(
@@ -70,7 +71,8 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       query,
       project,
       start,
-      end
+      end,
+      sort
     ).toPromise();
   }
 
@@ -120,10 +122,11 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     query?: string,
     project?: string[] | null,
     start?: string,
-    end?: string
+    end?: string,
+    sort?: string
   ) {
     return this.issuesAPIService
-      .list(organizationSlug, cursor, query, project, start, end)
+      .list(organizationSlug, cursor, query, project, start, end, sort)
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ issues: res.body! }, res);

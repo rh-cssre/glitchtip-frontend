@@ -217,7 +217,6 @@ export const issueListItem = () => {
       // projectsWhereAdminIsNotOnTheTeam$: of(
       //   pageStateConfig[states].projectsWhereAdminIsNotOnTheTeam
       // ),
-      urlHasParam$: of(pageStateConfig[states].urlHasParam),
       issues$: of(
         issueListFrontend.slice(0, pageStateConfig[states].issueLength)
       ),

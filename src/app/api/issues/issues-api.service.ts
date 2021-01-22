@@ -25,7 +25,8 @@ export class IssuesAPIService extends APIBaseService {
     query?: string,
     project?: string[] | null,
     start?: string,
-    end?: string
+    end?: string,
+    sort?: string
   ) {
     const url = organizationSlug
       ? `${baseUrl}/organizations/${organizationSlug}/issues/`
@@ -45,6 +46,9 @@ export class IssuesAPIService extends APIBaseService {
     if (start && end) {
       httpParams = httpParams.set("start", start);
       httpParams = httpParams.set("end", end);
+    }
+    if (sort) {
+      httpParams = httpParams.set("sort", sort);
     }
     return this.http.get<Issue[]>(url, {
       observe: "response",

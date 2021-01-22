@@ -66,6 +66,11 @@ header.page-header {
   &--full-width {
     max-width: 100%;
   }
+
+  @media screen and (max-width: $small - 1) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 .mat-display-1,

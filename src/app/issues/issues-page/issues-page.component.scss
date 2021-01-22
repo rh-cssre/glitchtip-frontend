@@ -10,7 +10,6 @@ app-header-nav {
 
 .wrapper {
   width: 100%;
-  overflow: hidden;
 }
 
 table {
@@ -21,6 +20,22 @@ table {
 .table-actions {
   display: flex;
   justify-content: space-between;
+}
+
+.button-group {
+  button {
+    font-size: 0.95em;
+    line-height: 30px;
+    padding: 0 12px;
+
+    &:not(:last-of-type) {
+      margin-right: 10px;
+
+      @media screen and (max-width: $small - 1) {
+        margin-right: 5px;
+      }
+    }
+  }
 }
 
 .action-group {
@@ -46,27 +61,11 @@ table {
     }
   }
 
-  .button-group,
   .date-form {
     padding-right: 20px;
 
     @media screen and (max-width: $tablet - 1) {
       padding-right: 0;
-    }
-  }
-
-  .button-group {
-    @media screen and (max-width: $tablet - 1) {
-      padding-bottom: 15px;
-    }
-
-    > button {
-      &:not(:last-of-type) {
-        margin-right: 10px;
-      }
-      @media screen and (max-width: $tablet - 1) {
-        margin-top: 10px;
-      }
     }
   }
 
@@ -163,6 +162,13 @@ mat-card {
   td.mat-footer-cell:first-of-type {
     padding-left: 20px;
   }
+}
+
+.sticky-header {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .status-cell {

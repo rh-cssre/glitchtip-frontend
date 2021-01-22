@@ -6,6 +6,7 @@ import {
 } from "@angular/core";
 import { formatDate } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
+import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 import { Subscription, combineLatest } from "rxjs";
 import {
@@ -36,6 +37,9 @@ export class IssuesPageComponent
   form = new FormGroup({
     query: new FormControl(""),
   });
+  sortForm = new FormGroup({
+    sort: new FormControl(""),
+  });
   dateForm = new FormGroup({
     startDate: new FormControl(""),
     endDate: new FormControl(""),
@@ -64,7 +68,8 @@ export class IssuesPageComponent
       }
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
-      return { orgSlug, cursor, query, project, start, end };
+      const sort: string | undefined = queryParams.sort;
+      return { orgSlug, cursor, query, project, start, end, sort };
     })
   );
   routerEventSubscription: Subscription;
@@ -135,10 +140,6 @@ export class IssuesPageComponent
     })
   );
 
-  urlHasParam$ = this.route.queryParams.pipe(
-    map((params) => !!params.query || !!params.start || !!params.end)
-  );
-
   constructor(
     private issuesService: IssuesService,
     private router: Router,
@@ -148,7 +149,7 @@ export class IssuesPageComponent
   ) {
     super(issuesService);
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, query, project, start, end }) => {
+      ({ orgSlug, cursor, query, project, start, end, sort }) => {
         if (orgSlug) {
           this.issuesService.getIssues(
             orgSlug,
@@ -156,7 +157,8 @@ export class IssuesPageComponent
             query,
             project,
             start,
-            end
+            end,
+            sort
           );
         }
       }
@@ -190,8 +192,12 @@ export class IssuesPageComponent
       const query: string | undefined = this.route.snapshot.queryParams.query;
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
+      const sort: string | undefined = this.route.snapshot.queryParams.sort;
       this.form.setValue({
         query: query !== undefined ? query : "is:unresolved",
+      });
+      this.sortForm.setValue({
+        sort: sort !== undefined ? sort : "-last_seen",
       });
       this.dateForm.setValue({
         startDate: start ? start : null,
@@ -278,5 +284,12 @@ export class IssuesPageComponent
 
   toggleSelectAll() {
     this.issuesService.toggleSelectAll();
+  }
+
+  sortByChanged(event: MatSelectChange) {
+    this.router.navigate([], {
+      queryParams: { sort: event.value },
+      queryParamsHandling: "merge",
+    });
   }
 }
