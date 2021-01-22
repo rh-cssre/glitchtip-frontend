@@ -82,6 +82,7 @@
                 <mat-select
                   (selectionChange)="sortByChanged($event)"
                   formControlName="sort"
+                  [disabled]="(issues$ | async)?.length === 0"
                 >
                   <mat-option value="-last_seen">Last Seen</mat-option>
                   <mat-option value="last_seen">First Seen</mat-option>

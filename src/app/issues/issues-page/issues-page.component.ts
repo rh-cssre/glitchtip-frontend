@@ -197,7 +197,7 @@ export class IssuesPageComponent
         query: query !== undefined ? query : "is:unresolved",
       });
       this.sortForm.setValue({
-        sort: sort !== undefined ? sort : null,
+        sort: sort !== undefined ? sort : "-last_seen",
       });
       this.dateForm.setValue({
         startDate: start ? start : null,
