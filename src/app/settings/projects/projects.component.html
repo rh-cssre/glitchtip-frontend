@@ -15,22 +15,31 @@
     <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
   </div>
 
-  <div class="card-wrapper">
-    <app-project-card
-      *ngFor="let project of projectsForActiveOrg$ | async"
-      [cardLink]="project.slug"
-      [title]="project.name"
-      [descriptionList]="[
-        { key: 'organization', value: project.organization.name },
-        { key: 'date created', value: (project.dateCreated | date)! }
-      ]"
-      [isMember]="project.isMember"
-      [secondaryButton]="{
-        link: project.slug,
-        icon: 'settings',
-        text: 'Settings'
-      }"
-    ></app-project-card>
+  <div class="card-wrapper" [class.loading]="paginator.loading">
+    <ng-container *ngIf="paginator.loading; else projectList">
+      <mat-progress-spinner
+        [diameter]="33"
+        color="primary"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+    </ng-container>
+    <ng-template #projectList>
+      <app-project-card
+        *ngFor="let project of projectsForActiveOrg$ | async"
+        [cardLink]="project.slug"
+        [title]="project.name"
+        [descriptionList]="[
+          { key: 'organization', value: project.organization.name },
+          { key: 'date created', value: (project.dateCreated | date)! }
+        ]"
+        [isMember]="project.isMember"
+        [secondaryButton]="{
+          link: project.slug,
+          icon: 'settings',
+          text: 'Settings'
+        }"
+      ></app-project-card
+    ></ng-template>
   </div>
   <app-pagination
     class="pagination"
