@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import { combineLatest, EMPTY } from "rxjs";
 import { tap, map, catchError, filter, first } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
@@ -51,9 +51,6 @@ const initialState: ProjectsState = {
   providedIn: "root",
 })
 export class ProjectsService extends PaginationStatefulService<ProjectsState> {
-  private readonly projectsState = new BehaviorSubject<ProjectsState>(
-    initialState
-  );
   private readonly url = baseUrl + "/projects/";
 
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
@@ -301,8 +298,8 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private setAddProjectToTeamError(error: HttpErrorResponse) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.setState({
       ...state,
       errors: {
         ...state.errors,
@@ -316,8 +313,8 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private setAddProjectToTeamLoading(loading: boolean) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.setState({
       ...state,
       loading: {
         ...state.loading,
@@ -327,8 +324,8 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private setRemoveProjectFromTeamLoading(projectSlug: string) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.setState({
       ...state,
       loading: {
         ...state.loading,
@@ -338,8 +335,8 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private setRemoveProjectFromTeamLoadingError(error: HttpErrorResponse) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.setState({
       ...state,
       errors: {
         ...state.errors,
@@ -353,19 +350,19 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private setProjects(projects: Project[]) {
-    this.projectsState.next({ ...this.projectsState.getValue(), projects });
+    this.setState({ ...this.state.getValue(), projects });
   }
 
   private setProjectsPerTeam(projectsOnTeam: Project[]) {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.setState({
+      ...this.state.getValue(),
       projectsOnTeam,
     });
   }
 
   private setProjectsNotOnTeam(projectsNotOnTeam: Project[]) {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.state.next({
+      ...this.state.getValue(),
       projectsNotOnTeam,
     });
   }
@@ -379,64 +376,60 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   private addOneProject(project: Project) {
-    const newProjects = this.projectsState
-      .getValue()
-      .projects?.concat([project]);
+    const newProjects = this.state.getValue().projects?.concat([project]);
     if (newProjects) {
-      this.projectsState.next({
-        ...this.projectsState.getValue(),
+      this.setState({
+        ...this.state.getValue(),
         projects: newProjects,
       });
     }
   }
 
   private setRemoveProjectFromTeam(project: Project) {
-    const filteredTeams = this.projectsState
+    const filteredTeams = this.state
       .getValue()
       .projectsOnTeam.filter(
         (currentProject) => currentProject.slug !== project.slug
       );
-    const notOnTeam = this.projectsState
+    const notOnTeam = this.state
       .getValue()
       .projectsNotOnTeam?.concat([project]);
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.setState({
+      ...this.state.getValue(),
       projectsOnTeam: filteredTeams,
       projectsNotOnTeam: notOnTeam,
       loading: {
-        ...this.projectsState.getValue().loading,
+        ...this.state.getValue().loading,
         removeProjectFromTeam: "",
       },
     });
   }
 
   private setAddProjectToTeam(project: Project) {
-    const notOnTeam = this.projectsState
+    const notOnTeam = this.state
       .getValue()
       .projectsNotOnTeam.filter(
         (currentProject) => currentProject.slug !== project.slug
       );
-    const onTeam = this.projectsState
-      .getValue()
-      .projectsOnTeam?.concat([project]);
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    const onTeam = this.state.getValue().projectsOnTeam?.concat([project]);
+    this.setState({
+      ...this.state.getValue(),
       projectsOnTeam: onTeam,
       projectsNotOnTeam: notOnTeam,
       loading: {
-        ...this.projectsState.getValue().loading,
+        ...this.state.getValue().loading,
         addProjectToTeam: false,
       },
     });
   }
 
   private setKeys(projectKeys: ProjectKey[]) {
-    this.projectsState.next({ ...this.projectsState.getValue(), projectKeys });
+    this.setState({ ...this.state.getValue(), projectKeys });
   }
 
   clearActiveProject() {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.setState({
+      ...this.state.getValue(),
       projectDetail: null,
       projectKeys: null,
     });
