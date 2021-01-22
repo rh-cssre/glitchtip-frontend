@@ -285,16 +285,14 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     projectPlatform: string,
     projectName: string
   ) {
-    const url = `${this.url}${orgSlug}/${projectSlug}/`;
     const data = { name: projectName, platform: projectPlatform };
-    return this.http
-      .put<ProjectDetail>(url, data)
+    return this.projectsByOrgAPIService
+      .update(data, orgSlug, projectSlug)
       .pipe(tap((resp) => this.setActiveProject(resp)));
   }
 
   deleteProject(organizationSlug: string, projectSlug: string) {
-    const deleteUrl = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http.delete(deleteUrl);
+    return this.projectsByOrgAPIService.destroy(organizationSlug, projectSlug);
   }
 
   private setAddProjectToTeamError(error: HttpErrorResponse) {

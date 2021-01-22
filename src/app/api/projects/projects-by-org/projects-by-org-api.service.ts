@@ -81,6 +81,6 @@ export class ProjectByOrgAPIService extends APIBaseService {
   }
 
   protected detailURL(organizationSlug: string, projectSlug: string) {
-    return this.listURL(organizationSlug) + "/" + projectSlug + "/";
+    return this.listURL(organizationSlug) + projectSlug + "/";
   }
 }
