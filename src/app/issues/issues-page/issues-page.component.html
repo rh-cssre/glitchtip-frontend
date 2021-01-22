@@ -1,4 +1,7 @@
-<section class="l-body l-body--full-width mat-elevation-z0" *ngIf="paginator$ | async as paginator">
+<section
+  class="l-body l-body--full-width mat-elevation-z0"
+  *ngIf="paginator$ | async as paginator"
+>
   <header class="page-header">
     <h1 class="mat-display-1">Issues</h1>
   </header>
@@ -16,31 +19,6 @@
           class="table-header"
         >
           <div class="action-group">
-            <div class="button-group">
-              <button
-                mat-flat-button
-                color="primary"
-                (click)="bulkMarkResolved()"
-                [disabled]="(thereAreSelectedIssues$ | async) === false"
-              >
-                Mark as resolved
-              </button>
-              <button
-                mat-stroked-button
-                (click)="bulkMarkUnresolved()"
-                [disabled]="(thereAreSelectedIssues$ | async) === false"
-              >
-                Reopen
-              </button>
-              <button
-                mat-stroked-button
-                (click)="bulkMarkIgnored()"
-                [disabled]="(thereAreSelectedIssues$ | async) === false"
-              >
-                Ignore
-              </button>
-            </div>
-
             <form
               class="date-form"
               [formGroup]="dateForm"
@@ -116,7 +94,11 @@
       </ng-container>
 
       <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
+        >
           <mat-checkbox
             (change)="toggleSelectAll()"
             [checked]="(areAllSelected$ | async)!"
@@ -139,7 +121,37 @@
       </ng-container>
 
       <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Issue</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
+        >
+          <div class="button-group">
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="bulkMarkResolved()"
+              [disabled]="(thereAreSelectedIssues$ | async) === false"
+            >
+              Mark as resolved
+            </button>
+            <button
+              mat-stroked-button
+              (click)="bulkMarkUnresolved()"
+              [disabled]="(thereAreSelectedIssues$ | async) === false"
+            >
+              Reopen
+            </button>
+            <button
+              mat-stroked-button
+              (click)="bulkMarkIgnored()"
+              [disabled]="(thereAreSelectedIssues$ | async) === false"
+            >
+              Ignore
+            </button>
+          </div>
+        </th>
         <td
           mat-cell
           *matCellDef="let element"
@@ -201,7 +213,8 @@
           mat-header-cell
           *matHeaderCellDef
           mat-sort-header
-          class="status-header-cell"
+          class="status-header-cell sticky-header"
+          [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
         >
           Events
         </th>
@@ -262,7 +275,9 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-          <app-issue-zero-states *ngIf="paginator.initialLoadComplete"></app-issue-zero-states>
+          <app-issue-zero-states
+            *ngIf="paginator.initialLoadComplete"
+          ></app-issue-zero-states>
         </td>
       </tr>
       <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
