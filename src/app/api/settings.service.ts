@@ -82,6 +82,7 @@ export class SettingsService {
             release: settings.version
               ? "glitchtip@" + settings.version
               : undefined,
+            autoSessionTracking: false,
           });
         }
       }),
