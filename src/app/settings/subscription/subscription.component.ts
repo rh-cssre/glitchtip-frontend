@@ -28,7 +28,8 @@ export class SubscriptionComponent implements OnDestroy {
     ),
     map(
       ([subscription, events]) =>
-        (events! / parseInt(subscription!.plan.product.metadata.events)) * 100
+        (events! / parseInt(subscription!.plan.product.metadata.events, 10)) *
+        100
     )
   );
 
