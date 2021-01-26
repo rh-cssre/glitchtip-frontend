@@ -27,6 +27,27 @@
             </p>
             <ng-container>
               <mat-card-subtitle>Details</mat-card-subtitle>
+              <h3>{{ subscription.plan.product.name }}</h3>
+
+              <div
+                class="progress-bar"
+                *ngIf="eventsPercent$ | async as eventsPercent"
+              >
+                <div class="total-events">
+                  {{ totalEventsAllowed$ | async }}
+                </div>
+                <mat-progress-bar [value]="eventsPercent"></mat-progress-bar>
+                <div
+                  class="event-count"
+                  [class.event-count--left]="eventsPercent < 25"
+                  [class.event-count--right]="eventsPercent > 75"
+                  style="left: {{ eventsPercent }}%"
+                >
+                  {{ eventsCount$ | async }}
+                </div>
+              </div>
+
+              {{ subscription.plan.product.description }}
 
               <ul>
                 <li class="mat-body-1">
@@ -55,7 +76,9 @@
                   {{ subscription.current_period_start | date }} to
                   {{ subscription.current_period_end | date }}
                 </li>
-                <li>Events used in billing period: {{ eventsCount$ | async }}</li>
+                <li>
+                  Events used in billing period: {{ eventsCount$ | async }}
+                </li>
               </ul>
             </ng-container>
             <p class="mat-body-1">

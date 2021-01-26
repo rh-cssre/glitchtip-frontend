@@ -1,17 +1,21 @@
+interface BaseProduct {
+  id: string;
+  name: string;
+  description: string;
+  type: string;
+  metadata: { [key: string]: string };
+}
+
 export interface Plan {
   id: string;
   nickname: string;
   amount: number | string;
   metadata: { [key: string]: string };
+  product: BaseProduct;
 }
 
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  type: string;
+export interface Product extends BaseProduct {
   plans: Plan[];
-  metadata: { [key: string]: string };
 }
 
 export interface Subscription {

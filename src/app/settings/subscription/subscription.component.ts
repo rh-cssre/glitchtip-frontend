@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
@@ -19,6 +19,20 @@ export class SubscriptionComponent implements OnDestroy {
   projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
+  totalEventsAllowed$ = this.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.plan.product.metadata
+        ? parseInt(subscription.plan.product.metadata.events, 10) - 1
+        : null
+    )
+  );
+  eventsPercent$ = combineLatest([
+    this.totalEventsAllowed$,
+    this.eventsCount$,
+  ]).pipe(
+    filter(([eventsAllowed, events]) => !!eventsAllowed && !!events),
+    map(([eventsAllowed, events]) => (events! / eventsAllowed!) * 100)
+  );
 
   constructor(
     private service: SubscriptionsService,
