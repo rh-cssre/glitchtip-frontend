@@ -2,3 +2,32 @@ mat-card {
   margin-top: 24px;
   margin-bottom: 24px;
 }
+
+.progress-bar {
+  position: relative;
+  margin: -10px 0 20px;
+  font-size: 0.9em;
+  font-weight: 500;
+
+  mat-progress-bar {
+    margin: 5px 0;
+  }
+}
+
+.total-events {
+  text-align: right;
+}
+
+.event-count {
+  display: inline-block;
+  position: relative;
+  transform: translateX(-50%);
+
+  &--left {
+    transform: translateX(0);
+  }
+
+  &--right {
+    transform: translateX(-100%);
+  }
+}

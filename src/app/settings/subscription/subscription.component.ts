@@ -19,18 +19,19 @@ export class SubscriptionComponent implements OnDestroy {
   projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
-  eventsPercent$ = combineLatest([this.subscription$, this.eventsCount$]).pipe(
-    filter(
-      ([subscription, events]) =>
-        !!subscription &&
-        !!subscription.plan.product.metadata.events &&
-        !!events
-    ),
-    map(
-      ([subscription, events]) =>
-        (events! / parseInt(subscription!.plan.product.metadata.events, 10)) *
-        100
+  totalEventsAllowed$ = this.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.plan.product.metadata
+        ? parseInt(subscription.plan.product.metadata.events, 10) - 1
+        : null
     )
+  );
+  eventsPercent$ = combineLatest([
+    this.totalEventsAllowed$,
+    this.eventsCount$,
+  ]).pipe(
+    filter(([eventsAllowed, events]) => !!eventsAllowed && !!events),
+    map(([eventsAllowed, events]) => (events! / eventsAllowed!) * 100)
   );
 
   constructor(
