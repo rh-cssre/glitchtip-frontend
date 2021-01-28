@@ -166,6 +166,90 @@ describe("IssueDetailService", () => {
         expect(contexts).toEqual(result);
       });
   });
+
+  it("makes unknown contexts easier to understand", () => {
+    const incomingContexts: any = {
+      os: {
+        name: "Other",
+      },
+      trace: {
+        op: "django.middleware",
+        span_id: "redacted",
+        trace_id: "redacted",
+        description: "redacted",
+        parent_span_id: "redacted",
+      },
+      device: {
+        family: "Other",
+      },
+      browser: {
+        name: "Other",
+      },
+      runtime: {
+        name: "CPython",
+        build: "3.8.6 redacted",
+        version: "3.8.6",
+      },
+    };
+
+    const transformedContexts: any = [
+      {
+        type: "user",
+        icon: null,
+        matIcon: "account_circle",
+        title: "em@jay.com",
+        subtitle: "117",
+        key: "ID",
+      },
+      {
+        type: "runtime",
+        icon: "assets/images/logos/48x48/cpython.png",
+        matIcon: null,
+        title: "CPython",
+        subtitle: "3.8.6",
+        key: "Version",
+      },
+      {
+        type: "browser",
+        icon: undefined,
+        matIcon: "tab",
+        title: "Unknown Browser",
+        subtitle: null,
+        key: "Version",
+      },
+      {
+        type: "device",
+        icon: null,
+        matIcon: "devices_other",
+        title: "Unknown Device",
+        subtitle: null,
+        key: null,
+      },
+      {
+        type: "os",
+        icon: undefined,
+        matIcon: "computer",
+        title: "Unknown Operating System",
+        subtitle: null,
+        key: "Version",
+      },
+    ];
+
+    /** replace contexts object with real-life problem-data */
+    const testData: EventDetail = {
+      ...databaseError,
+      contexts: incomingContexts,
+    };
+
+    service.setEvent(testData);
+
+    service.specialContexts$
+      .pipe(take(1))
+      .subscribe((contexts: AnnotatedContexts[] | undefined) => {
+        expect(contexts).toEqual(transformedContexts);
+      });
+  });
+
   it("breadcrumbs should come through with no changes", () => {
     const testData: any = breadcrumbError;
 

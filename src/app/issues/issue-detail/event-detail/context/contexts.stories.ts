@@ -36,7 +36,8 @@ export const contexts = () => {
         subtitle: "EmJay117",
         key: "Username",
         type: "user",
-        icon: "account_circle",
+        icon: null,
+        matIcon: "account_circle",
       })
     : null;
 
@@ -48,6 +49,7 @@ export const contexts = () => {
         key: "Version",
         type: "browser",
         icon: "assets/images/browser-svgs/firefox/firefox.svg",
+        matIcon: null,
       })
     : null;
 
@@ -59,6 +61,7 @@ export const contexts = () => {
         key: "Version",
         type: "runtime",
         icon: "assets/images/logos/48x48/cpython.png",
+        matIcon: null,
       })
     : null;
 
@@ -70,6 +73,7 @@ export const contexts = () => {
         key: "Version",
         type: "os",
         icon: "assets/images/os-logos/ubuntu.png",
+        matIcon: null,
       })
     : null;
 
@@ -81,6 +85,7 @@ export const contexts = () => {
         key: "Arch",
         type: "device",
         icon: null,
+        matIcon: "devices_other",
       })
     : null;
 
@@ -92,6 +97,7 @@ export const contexts = () => {
         key: "Vendor",
         type: "gpu",
         icon: null,
+        matIcon: null,
       })
     : null;
 
@@ -105,6 +111,61 @@ export const contexts = () => {
 
 contexts.story = {
   name: "Event Detail Contexts",
+};
+
+export const unknownContexts = () => {
+  const contextsExample = [
+    {
+      type: "user",
+      icon: null,
+      matIcon: "account_circle",
+      title: "em@jay.com",
+      subtitle: "117",
+      key: "ID",
+    },
+    {
+      type: "runtime",
+      icon: "assets/images/logos/48x48/cpython.png",
+      matIcon: null,
+      title: "CPython",
+      subtitle: "3.8.6",
+      key: "Version",
+    },
+    {
+      type: "browser",
+      icon: undefined,
+      matIcon: "tab",
+      title: "Unknown Browser",
+      subtitle: null,
+      key: "Version",
+    },
+    {
+      type: "device",
+      icon: null,
+      matIcon: "devices_other",
+      title: "Unknown Device",
+      subtitle: null,
+      key: null,
+    },
+    {
+      type: "os",
+      icon: undefined,
+      matIcon: "computer",
+      title: "Unknown Operating System",
+      subtitle: null,
+      key: "Version",
+    },
+  ];
+  return {
+    component: ContextsComponent,
+    props: {
+      specialContexts$: of(contextsExample),
+    },
+  };
+};
+
+unknownContexts.story = {
+  name: "Event Detail Contexts - Unknown Scenario",
 };
 
 export const IconPaths = () => {
