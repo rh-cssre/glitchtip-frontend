@@ -2,7 +2,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, boolean } from "@storybook/addon-knobs";
+import { boolean, withKnobs } from "@storybook/addon-knobs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs";
 
@@ -114,7 +114,7 @@ contexts.story = {
 };
 
 export const unknownContexts = () => {
-  const contextsExample = [
+  const transformedContexts: any = [
     {
       type: "user",
       icon: null,
@@ -126,7 +126,7 @@ export const unknownContexts = () => {
     {
       type: "runtime",
       icon: "assets/images/logos/48x48/cpython.png",
-      matIcon: null,
+      matIcon: "tab",
       title: "CPython",
       subtitle: "3.8.6",
       key: "Version",
@@ -136,7 +136,7 @@ export const unknownContexts = () => {
       icon: undefined,
       matIcon: "tab",
       title: "Unknown Browser",
-      subtitle: null,
+      subtitle: "Unknown",
       key: "Version",
     },
     {
@@ -152,14 +152,14 @@ export const unknownContexts = () => {
       icon: undefined,
       matIcon: "computer",
       title: "Unknown Operating System",
-      subtitle: null,
+      subtitle: "Unknown",
       key: "Version",
     },
   ];
   return {
     component: ContextsComponent,
     props: {
-      specialContexts$: of(contextsExample),
+      specialContexts$: of(transformedContexts),
     },
   };
 };
