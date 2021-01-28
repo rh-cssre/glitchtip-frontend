@@ -133,7 +133,8 @@ describe("IssueDetailService", () => {
         title: "em@jay.com",
         subtitle: "117",
         key: "ID",
-        icon: "account_circle",
+        icon: null,
+        matIcon: "account_circle",
         type: "user",
       },
       {
@@ -141,6 +142,7 @@ describe("IssueDetailService", () => {
         subtitle: "72.0",
         key: "Version",
         icon: "assets/images/browser-svgs/firefox/firefox.svg",
+        matIcon: "tab",
         type: "browser",
       },
       {
@@ -148,6 +150,7 @@ describe("IssueDetailService", () => {
         subtitle: "Unknown",
         key: "Version",
         icon: "assets/images/os-logos/linux.png",
+        matIcon: "computer",
         type: "os",
       },
       {
@@ -155,6 +158,7 @@ describe("IssueDetailService", () => {
         subtitle: "3.8.0",
         key: "Version",
         icon: "assets/images/logos/48x48/cpython.png",
+        matIcon: "tab",
         type: "runtime",
       },
     ];
@@ -204,7 +208,7 @@ describe("IssueDetailService", () => {
       {
         type: "runtime",
         icon: "assets/images/logos/48x48/cpython.png",
-        matIcon: null,
+        matIcon: "tab",
         title: "CPython",
         subtitle: "3.8.6",
         key: "Version",
@@ -214,7 +218,7 @@ describe("IssueDetailService", () => {
         icon: undefined,
         matIcon: "tab",
         title: "Unknown Browser",
-        subtitle: null,
+        subtitle: "Unknown",
         key: "Version",
       },
       {
@@ -230,7 +234,7 @@ describe("IssueDetailService", () => {
         icon: undefined,
         matIcon: "computer",
         title: "Unknown Operating System",
-        subtitle: null,
+        subtitle: "Unknown",
         key: "Version",
       },
     ];
