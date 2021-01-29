@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
 } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import { combineLatest, EMPTY } from "rxjs";
 import { tap, map, catchError, filter, first } from "rxjs/operators";
 import { baseUrl } from "../../constants";
 import {
@@ -19,8 +19,13 @@ import {
 import { OrganizationsService } from "../organizations/organizations.service";
 import { OrganizationProject } from "../organizations/organizations.interface";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
+import {
+  initialPaginationState,
+  PaginationStatefulService,
+  PaginationStatefulServiceState,
+} from "src/app/shared/stateful-service/pagination-stateful-service";
 
-interface ProjectsState {
+interface ProjectsState extends PaginationStatefulServiceState {
   projects: Project[] | null;
   projectsOnTeam: Project[];
   projectsNotOnTeam: Project[];
@@ -38,16 +43,13 @@ const initialState: ProjectsState = {
   projectKeys: null,
   loading: { addProjectToTeam: false, removeProjectFromTeam: "" },
   errors: { addProjectToTeam: "", removeProjectFromTeam: "" },
+  pagination: initialPaginationState,
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class ProjectsService {
-  private readonly projectsState = new BehaviorSubject<ProjectsState>(
-    initialState
-  );
-  private readonly getState$ = this.projectsState.asObservable();
+export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   private readonly url = baseUrl + "/projects/";
 
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
@@ -96,7 +98,9 @@ export class ProjectsService {
     private http: HttpClient,
     private organizationsService: OrganizationsService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
@@ -257,8 +261,8 @@ export class ProjectsService {
   }
 
   private setAddProjectToTeamError(error: HttpErrorResponse) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.state.next({
       ...state,
       errors: {
         ...state.errors,
@@ -272,8 +276,8 @@ export class ProjectsService {
   }
 
   private setAddProjectToTeamLoading(loading: boolean) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.state.next({
       ...state,
       loading: {
         ...state.loading,
@@ -283,8 +287,8 @@ export class ProjectsService {
   }
 
   private setRemoveProjectFromTeamLoading(projectSlug: string) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.state.next({
       ...state,
       loading: {
         ...state.loading,
@@ -294,8 +298,8 @@ export class ProjectsService {
   }
 
   private setRemoveProjectFromTeamLoadingError(error: HttpErrorResponse) {
-    const state = this.projectsState.getValue();
-    this.projectsState.next({
+    const state = this.state.getValue();
+    this.state.next({
       ...state,
       errors: {
         ...state.errors,
@@ -309,89 +313,85 @@ export class ProjectsService {
   }
 
   private setProjects(projects: Project[]) {
-    this.projectsState.next({ ...this.projectsState.getValue(), projects });
+    this.state.next({ ...this.state.getValue(), projects });
   }
 
   private setProjectsPerTeam(projectsOnTeam: Project[]) {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.state.next({
+      ...this.state.getValue(),
       projectsOnTeam,
     });
   }
 
   private setProjectsNotOnTeam(projectsNotOnTeam: Project[]) {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.state.next({
+      ...this.state.getValue(),
       projectsNotOnTeam,
     });
   }
 
   private setActiveProject(projectDetail: ProjectDetail) {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.state.next({
+      ...this.state.getValue(),
       projectDetail,
     });
   }
 
   private addOneProject(project: Project) {
-    const newProjects = this.projectsState
-      .getValue()
-      .projects?.concat([project]);
+    const newProjects = this.state.getValue().projects?.concat([project]);
     if (newProjects) {
-      this.projectsState.next({
-        ...this.projectsState.getValue(),
+      this.state.next({
+        ...this.state.getValue(),
         projects: newProjects,
       });
     }
   }
 
   private setRemoveProjectFromTeam(project: Project) {
-    const filteredTeams = this.projectsState
+    const filteredTeams = this.state
       .getValue()
       .projectsOnTeam.filter(
         (currentProject) => currentProject.slug !== project.slug
       );
-    const notOnTeam = this.projectsState
+    const notOnTeam = this.state
       .getValue()
       .projectsNotOnTeam?.concat([project]);
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.state.next({
+      ...this.state.getValue(),
       projectsOnTeam: filteredTeams,
       projectsNotOnTeam: notOnTeam,
       loading: {
-        ...this.projectsState.getValue().loading,
+        ...this.state.getValue().loading,
         removeProjectFromTeam: "",
       },
     });
   }
 
   private setAddProjectToTeam(project: Project) {
-    const notOnTeam = this.projectsState
+    const notOnTeam = this.state
       .getValue()
       .projectsNotOnTeam.filter(
         (currentProject) => currentProject.slug !== project.slug
       );
-    const onTeam = this.projectsState
-      .getValue()
-      .projectsOnTeam?.concat([project]);
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    const onTeam = this.state.getValue().projectsOnTeam?.concat([project]);
+    this.state.next({
+      ...this.state.getValue(),
       projectsOnTeam: onTeam,
       projectsNotOnTeam: notOnTeam,
       loading: {
-        ...this.projectsState.getValue().loading,
+        ...this.state.getValue().loading,
         addProjectToTeam: false,
       },
     });
   }
 
   private setKeys(projectKeys: ProjectKey[]) {
-    this.projectsState.next({ ...this.projectsState.getValue(), projectKeys });
+    this.state.next({ ...this.state.getValue(), projectKeys });
   }
 
   clearActiveProject() {
-    this.projectsState.next({
-      ...this.projectsState.getValue(),
+    this.state.next({
+      ...this.state.getValue(),
       projectDetail: null,
       projectKeys: null,
     });
