@@ -38,12 +38,16 @@ export class IssuesPageComponent
     query: new FormControl(""),
   });
   sortForm = new FormGroup({
-    sort: new FormControl(""),
+    sort: new FormControl({
+      value: "",
+      disabled: true,
+    }),
   });
   dateForm = new FormGroup({
     startDate: new FormControl(""),
     endDate: new FormControl(""),
   });
+
   issues$ = combineLatest([
     this.issuesService.issuesWithSelected$,
     this.loading$,
@@ -148,6 +152,13 @@ export class IssuesPageComponent
     private projectsService: ProjectsService
   ) {
     super(issuesService);
+
+    this.issues$.subscribe((resp) =>
+      resp.length === 0
+        ? this.sortForm.controls.sort.disable()
+        : this.sortForm.controls.sort.enable()
+    );
+
     this.routerEventSubscription = this.navigationEnd$.subscribe(
       ({ orgSlug, cursor, query, project, start, end, sort }) => {
         if (orgSlug) {
