@@ -350,13 +350,34 @@ export class IssueDetailService {
       if (key) {
         const contextsObject = contexts[key];
 
-        if (key === "browser" || key === "runtime") {
+        if (key === "browser") {
           contextsArray.unshift({
             type: key,
             icon: contextsObject.name
               ? generateIconPath(contextsObject.name as string)
               : null,
-            title: contextsObject.name as string,
+            matIcon: "tab",
+            title:
+              contextsObject.name !== "Other"
+                ? (contextsObject.name as string)
+                : "Unknown Browser",
+            subtitle: contextsObject.version
+              ? (contextsObject.version as string)
+              : "Unknown",
+            key: "Version",
+          });
+        }
+        if (key === "runtime") {
+          contextsArray.unshift({
+            type: key,
+            icon: contextsObject.name
+              ? generateIconPath(contextsObject.name as string)
+              : null,
+            matIcon: "tab",
+            title:
+              contextsObject.name !== "Other"
+                ? (contextsObject.name as string)
+                : "Unknown Runtime",
             subtitle: contextsObject.version
               ? (contextsObject.version as string)
               : "Unknown",
@@ -369,9 +390,11 @@ export class IssueDetailService {
             icon: contextsObject.name
               ? generateIconPath(contextsObject.name as string)
               : null,
-            title: contextsObject.name
-              ? (contextsObject.name as string)
-              : "Unknown OS",
+            matIcon: "computer",
+            title:
+              contextsObject.name !== "Other"
+                ? (contextsObject.name as string)
+                : "Unknown Operating System",
             subtitle: contextsObject.version
               ? (contextsObject.version as string)
               : contextsObject.kernel_version
@@ -390,6 +413,7 @@ export class IssueDetailService {
             icon: contextsObject.model
               ? generateIconPath(contextsObject.model as string)
               : null,
+            matIcon: "devices_other",
             title: contextsObject.model
               ? (contextsObject.model as string)
               : "Unknown Device",
@@ -411,6 +435,7 @@ export class IssueDetailService {
             icon: contextsObject.name
               ? generateIconPath(contextsObject.name as string)
               : null,
+            matIcon: "memory",
             title: contextsObject.name
               ? (contextsObject.name as string)
               : "Unknown GPU",
@@ -441,7 +466,8 @@ export class IssueDetailService {
       }
       contextsArray.unshift({
         type: "user",
-        icon: "account_circle",
+        icon: null,
+        matIcon: "account_circle",
         title: userTitle,
         subtitle: newSubtitle,
         key: newKey,

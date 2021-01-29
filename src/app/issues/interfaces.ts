@@ -29,7 +29,7 @@ export interface EndUser {
   username?: string | null;
   email?: string | null;
   ip_address: string | null;
-  data?: { [key: string]: string | null };
+  data?: { [key: string]: string | null } | null;
 }
 
 export type EventTypes = "error" | "default";
@@ -60,6 +60,7 @@ export interface EventDetail extends Event {
 export interface AnnotatedContexts {
   type: ContextsType;
   icon: string | null;
+  matIcon: string | null;
   title: string;
   subtitle: string | null;
   key: string | null;
