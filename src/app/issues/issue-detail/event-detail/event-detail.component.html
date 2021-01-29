@@ -49,8 +49,14 @@
     <h2>Tags</h2>
     <ul class="pseudo-chip-list">
       <li *ngFor="let tag of event.tags" class="pseudo-chip">
-        <span class="pseudo-chip-key">{{ tag.key }}</span>
-        <span class="pseudo-chip-value">{{ tag.value }}</span>
+        <a
+          [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
+          [queryParams]="{ query: tag.key + ':' + tag.value }"
+          queryParamsHandling="merge"
+        >
+          <span class="pseudo-chip-key">{{ tag.key }}</span>
+          <span class="pseudo-chip-value">{{ tag.value }}</span></a
+        >
       </li>
     </ul>
   </section>

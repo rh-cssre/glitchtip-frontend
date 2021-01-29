@@ -187,7 +187,9 @@
           >
             volume_off
           </mat-icon>
-          <a [routerLink]="element.id">{{ element.title }}</a>
+          <a [routerLink]="element.id" queryParamsHandling="merge">{{
+            element.title
+          }}</a>
           <div class="other-cell-info mat-caption">
             {{ element.count | i18nPlural: eventCountPluralMapping }}
           </div>
