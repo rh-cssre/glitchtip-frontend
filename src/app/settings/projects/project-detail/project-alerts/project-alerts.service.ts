@@ -12,8 +12,8 @@ import {
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectsService } from "../../../../projects/projects.service";
-import { ProjectAlertsAPIService } from "../../../../api/project-alerts/project-alerts.service";
-import { ProjectAlert } from "../../../../api/project-alerts/project-alerts.interface";
+import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
+import { ProjectAlert } from "../../../../api/projects/project-alerts/project-alerts.interface";
 
 interface ProjectsState {
   projectAlerts: ProjectAlert | null;

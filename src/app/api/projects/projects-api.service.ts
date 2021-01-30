@@ -19,7 +19,7 @@ export class ProjectsAPIService extends APIBaseService {
    * @param query Optional query filter
    */
   list(organizationSlug?: string, query?: string) {
-    let params = new HttpParams();
+    const params = new HttpParams();
     if (query) {
       params.append("query", query);
     }

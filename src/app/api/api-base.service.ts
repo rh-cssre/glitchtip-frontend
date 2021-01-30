@@ -5,8 +5,8 @@ export interface APIBaseService {
   update(
     id: unknown,
     obj: unknown,
-    slug1?: any,
-    slug2?: any
+    slug1?: unknown,
+    slug2?: unknown
   ): Observable<unknown>;
   create(obj: unknown, slug1?: string, slug2?: string): Observable<unknown>;
 }
