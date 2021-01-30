@@ -10,7 +10,7 @@ import { map } from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsService } from "src/app/api/projects/projects.service";
+import { ProjectsService } from "src/app/projects/projects.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 

@@ -5,7 +5,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
 import { EMPTY } from "rxjs";
 import { map, filter, tap, exhaustMap, catchError } from "rxjs/operators";
-import { ProjectsService } from "../../../api/projects/projects.service";
+import { ProjectsService } from "../../../projects/projects.service";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { NewTeamComponent } from "../../teams/new-team/new-team.component";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";

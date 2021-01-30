@@ -11,7 +11,7 @@ import {
   exhaustMap,
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
-import { ProjectsService } from "../../../../api/projects/projects.service";
+import { ProjectsService } from "../../../../projects/projects.service";
 import { ProjectAlertsAPIService } from "../../../../api/project-alerts/project-alerts.service";
 import { ProjectAlert } from "../../../../api/project-alerts/project-alerts.interface";
 

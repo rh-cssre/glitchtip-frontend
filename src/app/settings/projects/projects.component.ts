@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsService } from "src/app/api/projects/projects.service";
+import { ProjectsService } from "src/app/projects/projects.service";
 
 @Component({
   selector: "app-projects",

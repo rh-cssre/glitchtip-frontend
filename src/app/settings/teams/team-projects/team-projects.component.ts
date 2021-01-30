@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ProjectsService } from "src/app/api/projects/projects.service";
+import { ProjectsService } from "src/app/projects/projects.service";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { TeamsService } from "src/app/api/teams/teams.service";

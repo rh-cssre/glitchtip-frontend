@@ -18,7 +18,7 @@ import {
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsService } from "src/app/api/projects/projects.service";
+import { ProjectsService } from "src/app/projects/projects.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 
 @Component({

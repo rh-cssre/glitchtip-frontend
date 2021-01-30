@@ -1,29 +1,25 @@
 import { Injectable } from "@angular/core";
-import {
-  HttpClient,
-  HttpParams,
-  HttpErrorResponse,
-} from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { combineLatest, EMPTY } from "rxjs";
 import { tap, map, catchError, filter, first } from "rxjs/operators";
-import { baseUrl } from "../../constants";
-import {
-  Project,
-  ProjectKey,
-  ProjectDetail,
-  ProjectNew,
-  ProjectLoading,
-  ProjectError,
-} from "./projects.interfaces";
-import { OrganizationsService } from "../organizations/organizations.service";
-import { OrganizationProject } from "../organizations/organizations.interface";
+import { ProjectLoading, ProjectError } from "./projects.interfaces";
+import { OrganizationsService } from "../api/organizations/organizations.service";
+import { OrganizationProject } from "../api/organizations/organizations.interface";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import {
   initialPaginationState,
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
+import {
+  Project,
+  ProjectDetail,
+  ProjectKey,
+  ProjectNew,
+} from "../api/projects/projects-api.interfaces";
+import { ProjectsAPIService } from "../api/projects/projects-api.service";
+import { ProjectKeysAPIService } from "../api/projects/project-keys-api.service";
 
 interface ProjectsState extends PaginationStatefulServiceState {
   projects: Project[] | null;
@@ -50,8 +46,6 @@ const initialState: ProjectsState = {
   providedIn: "root",
 })
 export class ProjectsService extends PaginationStatefulService<ProjectsState> {
-  private readonly url = baseUrl + "/projects/";
-
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
 
   readonly activeProject$ = this.getState$.pipe(
@@ -95,23 +89,23 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   readonly errors$ = this.getState$.pipe(map((data) => data.errors));
 
   constructor(
-    private http: HttpClient,
     private organizationsService: OrganizationsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private projectsAPIService: ProjectsAPIService,
+    private projectKeysAPIService: ProjectKeysAPIService
   ) {
     super(initialState);
   }
 
   createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
-    const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
-    return this.http
-      .post<Project>(url, project)
+    return this.projectsAPIService
+      .create(project, teamSlug, orgSlug)
       .pipe(tap((newProject) => this.addOneProject(newProject)));
   }
 
   retrieveProjects() {
-    return this.http
-      .get<Project[]>(this.url)
+    this.projectsAPIService
+      .list()
       .pipe(tap((projects) => this.setProjects(projects)))
       .subscribe();
   }
@@ -147,10 +141,9 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   addProjectToTeam(orgSlug: string, teamSlug: string, projectSlug: string) {
-    const url = `${this.url}${orgSlug}/${projectSlug}/teams/${teamSlug}/`;
     this.setAddProjectToTeamLoading(true);
-    return this.http
-      .post<Project>(url, null)
+    this.projectsAPIService
+      .addProjectToTeam(orgSlug, teamSlug, projectSlug)
       .pipe(
         tap((resp) => {
           this.snackBar.open(`${resp.slug} has been added to #${teamSlug}`);
@@ -169,10 +162,9 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     teamSlug: string,
     projectSlug: string
   ) {
-    const url = `${this.url}${orgSlug}/${projectSlug}/teams/${teamSlug}/`;
     this.setRemoveProjectFromTeamLoading(projectSlug);
-    return this.http
-      .delete<Project>(url)
+    return this.projectsAPIService
+      .removeProjectFromTeam(orgSlug, teamSlug, projectSlug)
       .pipe(
         tap((resp) => {
           this.snackBar.open(`${resp.slug} has been removed from #${teamSlug}`);
@@ -187,31 +179,24 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   retrieveProjectsOnTeam(orgSlug: string, teamSlug: string) {
-    const url = `${baseUrl}/organizations/${orgSlug}/projects`;
-    const query = new HttpParams({
-      fromString: `query=team%3A${teamSlug}`,
-    });
-    return this.http
-      .get<Project[]>(url, { params: query })
+    const query = `team%3A${teamSlug}`;
+    this.projectsAPIService
+      .list(orgSlug, query)
       .pipe(tap((resp) => this.setProjectsPerTeam(resp)))
       .subscribe();
   }
 
   retrieveProjectsNotOnTeam(orgSlug: string, teamSlug: string) {
-    const url = `${baseUrl}/organizations/${orgSlug}/projects`;
-    const query = new HttpParams({
-      fromString: `query=!team%3A${teamSlug}`,
-    });
-    return this.http
-      .get<Project[]>(url, { params: query })
+    const query = `!team%3A${teamSlug}`;
+    return this.projectsAPIService
+      .list(orgSlug, query)
       .pipe(tap((resp) => this.setProjectsNotOnTeam(resp)))
       .subscribe();
   }
 
   retrieveProjectDetail(organizationSlug: string, projectSlug: string) {
-    const url = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http
-      .get<ProjectDetail>(url)
+    this.projectsAPIService
+      .retrieve(organizationSlug, projectSlug)
       .pipe(tap((activeProject) => this.setActiveProject(activeProject)))
       .subscribe();
   }
@@ -222,11 +207,8 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
         filter((project) => !!project),
         first(),
         tap((project) => {
-          const keysUrl = `${this.url}${organizationSlug}/${
-            project!.slug
-          }/keys/`;
-          return this.http
-            .get<ProjectKey[]>(keysUrl)
+          return this.projectKeysAPIService
+            .list(organizationSlug, project!.slug)
             .pipe(tap((projectKeys) => this.setKeys(projectKeys)))
             .subscribe();
         })
@@ -235,10 +217,9 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
   }
 
   updateProjectName(orgSlug: string, projectSlug: string, projectName: string) {
-    const url = `${this.url}${orgSlug}/${projectSlug}/`;
     const data = { name: projectName };
-    return this.http
-      .put<ProjectDetail>(url, data)
+    return this.projectsAPIService
+      .update(orgSlug, projectSlug, data)
       .pipe(tap((resp) => this.setActiveProject(resp)));
   }
 
@@ -248,16 +229,14 @@ export class ProjectsService extends PaginationStatefulService<ProjectsState> {
     projectPlatform: string,
     projectName: string
   ) {
-    const url = `${this.url}${orgSlug}/${projectSlug}/`;
     const data = { name: projectName, platform: projectPlatform };
-    return this.http
-      .put<ProjectDetail>(url, data)
+    return this.projectsAPIService
+      .update(orgSlug, projectSlug, data)
       .pipe(tap((resp) => this.setActiveProject(resp)));
   }
 
   deleteProject(organizationSlug: string, projectSlug: string) {
-    const deleteUrl = `${this.url}${organizationSlug}/${projectSlug}/`;
-    return this.http.delete(deleteUrl);
+    return this.projectsAPIService.destroy(organizationSlug, projectSlug);
   }
 
   private setAddProjectToTeamError(error: HttpErrorResponse) {

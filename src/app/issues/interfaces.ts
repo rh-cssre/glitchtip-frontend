@@ -1,4 +1,4 @@
-import { ProjectIssueView } from "../api/projects/projects.interfaces";
+import { ProjectIssueView } from "../api/projects/projects-api.interfaces";
 import { Json } from "../interface-primitives";
 
 interface Tag {
