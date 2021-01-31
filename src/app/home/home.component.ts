@@ -16,10 +16,10 @@ export class HomeComponent implements OnInit {
   projects$ = this.projectsService.projects$;
 
   /**
-   * this.organizationsService.activeOrganizationProjects$ will give similar
-   * info, but I don't think it has as much information about the projects.
-   * I had a choice between using it or ditching this.projectsService.projects$,
-   * and I kept the latter since that's what's here.
+   * Filters all projects by active organization
+   * TODO:
+   * - Suffers from lack pagination
+   * - Alternatively make the home page not organization specific
    */
   activeOrganizationProjects$ = combineLatest([
     this.activeOrganizationDetail$,

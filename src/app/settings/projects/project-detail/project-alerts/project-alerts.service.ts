@@ -11,9 +11,9 @@ import {
   exhaustMap,
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
-import { ProjectsService } from "../../../../projects/projects.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
 import { ProjectAlert } from "../../../../api/projects/project-alerts/project-alerts.interface";
+import { ProjectSettingsService } from "../../project-settings.service";
 
 interface ProjectsState {
   projectAlerts: ProjectAlert | null;
@@ -57,7 +57,7 @@ export class ProjectAlertsService {
 
   constructor(
     private organizationsService: OrganizationsService,
-    private projectsService: ProjectsService,
+    private projectSettingsService: ProjectSettingsService,
     private projectAlertsAPIService: ProjectAlertsAPIService,
     private snackBar: MatSnackBar
   ) {}
@@ -65,7 +65,7 @@ export class ProjectAlertsService {
   listProjectAlerts() {
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
-      this.projectsService.activeProjectSlug$,
+      this.projectSettingsService.activeProjectSlug$,
     ])
       .pipe(
         take(1),
@@ -93,7 +93,7 @@ export class ProjectAlertsService {
     combineLatest([
       this.projectAlert$,
       this.organizationsService.activeOrganizationSlug$,
-      this.projectsService.activeProjectSlug$,
+      this.projectSettingsService.activeProjectSlug$,
     ])
       .pipe(
         take(1),
@@ -152,7 +152,7 @@ export class ProjectAlertsService {
     this.setLoading(true);
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
-      this.projectsService.activeProjectSlug$,
+      this.projectSettingsService.activeProjectSlug$,
       this.projectAlert$,
     ])
       .pipe(

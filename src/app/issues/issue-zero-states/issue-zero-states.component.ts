@@ -1,18 +1,21 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  OnDestroy,
-} from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
+import { BehaviorSubject, combineLatest, timer } from "rxjs";
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  take,
+} from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsService } from "src/app/projects/projects.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
+import { ProjectsService } from "src/app/projects/projects.service";
+import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";
+import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 
 @Component({
   selector: "app-issue-zero-states",
@@ -20,27 +23,75 @@ import { OrganizationProject } from "src/app/api/organizations/organizations.int
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IssueZeroStatesComponent implements OnInit, OnDestroy {
-  subscription: Subscription | null = null;
-  loading$ = this.issuesService.getState$.pipe(
-    map((state) => state.pagination.loading)
-  );
-  initialLoadComplete$ = this.issuesService.getState$.pipe(
-    map((state) => state.pagination.initialLoadComplete)
-  );
+export class IssueZeroStatesComponent implements OnInit {
+  loading$ = combineLatest([
+    this.issuesService.loading$,
+    this.projectsService.loading$,
+  ]).pipe(map((loads) => loads.every((load) => !!load)));
+  initialLoadComplete$ = combineLatest([
+    this.issuesService.initialLoadComplete$,
+    this.projectsService.initialLoadComplete$,
+  ]).pipe(map((loads) => loads.every((load) => !!load)));
   orgHasAProject$ = this.organizationsService.orgHasAProject$;
-  activeOrganizationProjects$ = this.organizationsService
-    .activeOrganizationProjects$;
-  activeProjectFirstEvent$ = this.projectsService.activeProjectFirstEvent$;
-  activeProjectPlatform$ = this.projectsService.activeProjectPlatform$;
-  activeProjectPlatformName$ = this.projectsService.activeProjectPlatformName$;
-  firstProjectKey$ = this.projectsService.firstProjectKey$;
-
   projectsFromParams$ = this.activatedRoute.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
   );
+  activeOrganizationProjects$ = this.organizationsService
+    .activeOrganizationProjects$;
+  activeProjectID$ = combineLatest([
+    this.projectsFromParams$,
+    this.activeOrganizationProjects$,
+  ]).pipe(
+    map(([projectIDs, activeOrgProjects]) => {
+      if (projectIDs.length === 1) {
+        return projectIDs[0];
+      }
+      if (activeOrgProjects?.length === 1) {
+        return activeOrgProjects[0].id.toString();
+      }
+      return null;
+    }),
+    distinctUntilChanged()
+  );
+  activeProject$ = combineLatest([
+    this.projectsService.projects$,
+    this.activeProjectID$,
+  ]).pipe(
+    map(([projects, activeProjectID]) => {
+      if (projects && activeProjectID) {
+        const activeProject = projects.find(
+          (project) => project.id === activeProjectID
+        );
+        return activeProject ? activeProject : null;
+      }
+      return null;
+    })
+  );
+  showOnboarding$ = this.activeProject$.pipe(
+    map((project) => !project?.firstEvent)
+  );
+  activeProjectPlatform$ = this.activeProject$.pipe(
+    map((project) => project?.platform)
+  );
+  activeProjectPlatformName$ = this.activeProjectPlatform$.pipe(
+    map((id) => flattenedPlatforms.find((platform) => platform.id === id)?.name)
+  );
+  firstProjectKey$ = combineLatest([
+    this.organizationsService.activeOrganizationSlug$,
+    this.activeProject$,
+  ]).pipe(
+    filter(
+      ([organizationSlug, activeProject]) =>
+        !!organizationSlug && !!activeProject
+    ),
+    switchMap(([organizationSlug, activeProject]) =>
+      this.projectKeysAPIService
+        .list(organizationSlug!, activeProject!.slug)
+        .pipe(map((keys) => keys[0]))
+    )
+  );
 
-  copiedDsn = false;
+  copiedDsn$ = new BehaviorSubject(false);
 
   /**
    * Corresponds to project picker/header nav/project IDs in the URL
@@ -66,16 +117,6 @@ export class IssueZeroStatesComponent implements OnInit, OnDestroy {
     map(
       ([appliedProjectCount, activeOrganizationProjects]) =>
         appliedProjectCount === 1 || activeOrganizationProjects?.length === 1
-    )
-  );
-
-  showOnboarding$ = combineLatest([
-    this.singleProjectApplied$,
-    this.activeProjectFirstEvent$,
-  ]).pipe(
-    map(
-      ([singleProjectApplied, activeProjectFirstEvent]) =>
-        singleProjectApplied && activeProjectFirstEvent === null
     )
   );
 
@@ -115,37 +156,20 @@ export class IssueZeroStatesComponent implements OnInit, OnDestroy {
   constructor(
     private issuesService: IssuesService,
     private organizationsService: OrganizationsService,
+    private projectKeysAPIService: ProjectKeysAPIService,
     private projectsService: ProjectsService,
     private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.subscription = combineLatest([
-      this.activatedRoute.params,
-      this.activatedRoute.queryParams,
-    ])
-      .pipe(
-        map(([params, _]) => {
-          const orgSlug: string | undefined = params["org-slug"];
-          return orgSlug;
-        })
-      )
-      .subscribe((orgSlug) => {
-        // Clear old state immediately on route change
-        this.projectsService.clearActiveProject();
-        if (orgSlug) {
-          this.projectsService.retrieveCurrentProjectClientKeys(orgSlug);
-        }
-      });
-  }
-
-  ngOnDestroy() {
-    this.projectsService.clearActiveProject();
-    this.subscription?.unsubscribe();
+    this.projectsService.retrieveProjects();
   }
 
   copied() {
-    this.copiedDsn = true;
-    setTimeout(() => (this.copiedDsn = false), 4000);
+    timer(0, 4000)
+      .pipe(take(2))
+      .subscribe((i) =>
+        i === 0 ? this.copiedDsn$.next(true) : this.copiedDsn$.next(false)
+      );
   }
 }

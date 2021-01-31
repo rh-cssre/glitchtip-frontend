@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { ProjectsService } from "src/app/projects/projects.service";
 import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs/operators";
-import { TeamsService } from "src/app/api/teams/teams.service";
 import { FormControl } from "@angular/forms";
 import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
+import { TeamsService } from "src/app/api/teams/teams.service";
+import { ProjectSettingsService } from "../../projects/project-settings.service";
 
 @Component({
   selector: "app-team-projects",
@@ -15,7 +15,7 @@ export class TeamProjectsComponent implements OnInit {
   userTeamRole$ = this.teamsService.userTeamRole$;
   projectsOnTeam$ = this.projectsService.projectsOnTeam$;
   projectsNotOnTeam$ = this.projectsService.projectsNotOnTeam$;
-  loading$ = this.projectsService.loading$;
+  loading$ = this.projectsService.addRemoveLoading$;
   errors$ = this.projectsService.errors$;
   project = new FormControl();
   teamSlug$ = this.route.paramMap.pipe(
@@ -24,7 +24,7 @@ export class TeamProjectsComponent implements OnInit {
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
 
   constructor(
-    private projectsService: ProjectsService,
+    private projectsService: ProjectSettingsService,
     private teamsService: TeamsService,
     private route: ActivatedRoute
   ) {}

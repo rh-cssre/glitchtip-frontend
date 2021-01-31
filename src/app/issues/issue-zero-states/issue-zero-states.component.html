@@ -69,8 +69,8 @@
                 matTooltip="Copy key to clipboard"
                 matSuffix
               >
-                <mat-icon [class.dsn-copied]="this.copiedDsn">
-                  {{ this.copiedDsn ? "check_circle" : "file_copy" }}
+                <mat-icon [class.dsn-copied]="copiedDsn$ | async">
+                  {{ (copiedDsn$ | async) ? "check_circle" : "file_copy" }}
                 </mat-icon>
               </button>
             </mat-form-field>

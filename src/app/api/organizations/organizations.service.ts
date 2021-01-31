@@ -136,7 +136,8 @@ export class OrganizationsService {
         return activeOrg.slug;
       }
       return null;
-    })
+    }),
+    distinct()
   );
 
   readonly filteredAddTeamMembers$ = combineLatest([

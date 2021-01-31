@@ -8,10 +8,10 @@ import {
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { filter, first, map, tap } from "rxjs/operators";
-import { ProjectsService } from "../../../projects/projects.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import { ProjectDetail } from "src/app/api/projects/projects-api.interfaces";
+import { ProjectSettingsService } from "../project-settings.service";
 
 @Component({
   selector: "app-project-detail",
@@ -47,7 +47,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private projectsService: ProjectsService,
+    private projectsService: ProjectSettingsService,
     private snackBar: MatSnackBar,
     private orgService: OrganizationsService
   ) {}

@@ -56,6 +56,10 @@ export abstract class PaginationStatefulService<
   TState extends PaginationStatefulServiceState
 > extends StatefulService<TState> {
   pagination$ = this.getState$.pipe(map((state) => state.pagination));
+  initialLoadComplete$ = this.pagination$.pipe(
+    map((pagination) => pagination.initialLoadComplete)
+  );
+  loading$ = this.pagination$.pipe(map((pagination) => pagination.loading));
   constructor(initialState: TState) {
     super(initialState);
   }
