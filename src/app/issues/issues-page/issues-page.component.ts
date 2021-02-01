@@ -18,7 +18,6 @@ import {
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsService } from "src/app/api/projects/projects.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 
 @Component({
@@ -144,8 +143,7 @@ export class IssuesPageComponent
     private issuesService: IssuesService,
     private router: Router,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService,
-    private projectsService: ProjectsService
+    private organizationsService: OrganizationsService
   ) {
     super(issuesService);
     this.routerEventSubscription = this.navigationEnd$.subscribe(
@@ -159,28 +157,6 @@ export class IssuesPageComponent
             start,
             end,
             sort
-          );
-        }
-      }
-    );
-    this.projectDetailTriggerSwitchOrgs.subscribe(
-      ({ orgSlug, projectId, activeOrgProjects }) => {
-        if (orgSlug) {
-          this.projectsService.getProjectDetails(
-            projectId,
-            activeOrgProjects,
-            orgSlug
-          );
-        }
-      }
-    );
-    this.projectDetailTriggerProjectCount.subscribe(
-      ({ orgSlug, projectId, activeOrgProjects }) => {
-        if (orgSlug) {
-          this.projectsService.getProjectDetails(
-            projectId,
-            activeOrgProjects,
-            orgSlug
           );
         }
       }

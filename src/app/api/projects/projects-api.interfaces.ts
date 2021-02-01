@@ -1,18 +1,5 @@
 import { Organization } from "../organizations/organizations.interface";
 
-export interface DSN {
-  public: string;
-}
-
-export interface ProjectKey {
-  dateCreated: Date;
-  dsn: DSN;
-  id: string;
-  label: string;
-  public: string;
-  projectId: string;
-}
-
 export interface ProjectNew {
   name: string;
   platform: string;
@@ -41,17 +28,20 @@ export interface ProjectDetail extends Project {
   isPublic: boolean;
 }
 
+export interface DSN {
+  public: string;
+}
+
+export interface ProjectKey {
+  dateCreated: Date;
+  dsn: DSN;
+  id: string;
+  label: string;
+  public: string;
+  projectId: string;
+}
+
 interface Avatar {
   avatarType: string;
   avatarUuid: string | null;
-}
-
-export interface ProjectLoading {
-  addProjectToTeam: boolean;
-  removeProjectFromTeam: string;
-}
-
-export interface ProjectError {
-  addProjectToTeam: string;
-  removeProjectFromTeam: string;
 }

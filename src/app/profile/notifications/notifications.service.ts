@@ -3,7 +3,7 @@ import { BehaviorSubject, EMPTY, combineLatest } from "rxjs";
 import { map, tap, catchError } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
 import { HttpClient } from "@angular/common/http";
-import { ProjectsService } from "src/app/api/projects/projects.service";
+import { ProjectsService } from "src/app/projects/projects.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import {
   GroupedProjects,

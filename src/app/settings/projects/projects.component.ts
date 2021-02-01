@@ -1,24 +1,40 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy,
+} from "@angular/core";
+import { Subscription } from "rxjs";
+import { distinct, filter, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsService } from "src/app/api/projects/projects.service";
+import { ProjectSettingsService } from "./project-settings.service";
 
 @Component({
-  selector: "app-projects",
   templateUrl: "./projects.component.html",
-  styleUrls: ["./projects.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
+  subscription?: Subscription;
   projects$ = this.organizationsService.activeOrganizationProjects$;
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
-  projectsForActiveOrg$ = this.projectsService.projectsForActiveOrg$;
+  projectsForActiveOrg$ = this.projectSettingsService.projects$;
 
   constructor(
     private organizationsService: OrganizationsService,
-    private projectsService: ProjectsService
+    private projectSettingsService: ProjectSettingsService
   ) {}
 
   ngOnInit() {
-    this.projectsService.retrieveProjects();
+    this.subscription = this.organizationsService.activeOrganizationSlug$
+      .pipe(
+        distinct(),
+        filter((slug) => !!slug),
+        tap((slug) => this.projectSettingsService.retrieveProjects(slug!))
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
   }
 }

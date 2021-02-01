@@ -1,4 +1,4 @@
-import { Project } from "../../api/projects/projects.interfaces";
+import { Project } from "src/app/api/projects/projects-api.interfaces";
 
 export interface SubscribeByDefault {
   subscribeByDefault: boolean;

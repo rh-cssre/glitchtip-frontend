@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { NewProjectAlert, ProjectAlert } from "./project-alerts.interface";
-import { baseUrl } from "../../constants";
-import { APIBaseService } from "../api-base.service";
+import { baseUrl } from "../../../constants";
+import { APIBaseService } from "../../api-base.service";
 
 /**
  * Alerts viewSet nested under projects ViewSet
