@@ -48,7 +48,7 @@ export const contexts = () => {
         subtitle: "11.7",
         key: "Version",
         type: "browser",
-        icon: "assets/images/browser-svgs/firefox/firefox.svg",
+        icon: "static/assets/images/browser-svgs/firefox/firefox.svg",
         matIcon: null,
       })
     : null;
@@ -60,7 +60,7 @@ export const contexts = () => {
         subtitle: "3.8.0",
         key: "Version",
         type: "runtime",
-        icon: "assets/images/logos/48x48/cpython.png",
+        icon: "static/assets/images/logos/48x48/cpython.png",
         matIcon: null,
       })
     : null;
@@ -72,7 +72,7 @@ export const contexts = () => {
         subtitle: "20.0.4",
         key: "Version",
         type: "os",
-        icon: "assets/images/os-logos/ubuntu.png",
+        icon: "static/assets/images/os-logos/ubuntu.png",
         matIcon: null,
       })
     : null;
@@ -125,7 +125,7 @@ export const unknownContexts = () => {
     },
     {
       type: "runtime",
-      icon: "assets/images/logos/48x48/cpython.png",
+      icon: "static/assets/images/logos/48x48/cpython.png",
       matIcon: "tab",
       title: "CPython",
       subtitle: "3.8.6",
