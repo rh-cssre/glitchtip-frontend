@@ -20,20 +20,21 @@ const browserPath = (
   isArchive = false
 ): string => {
   if (extension === "svg") {
-    return `assets/images/browser-svgs/${
+    return `static/assets/images/browser-svgs/${
       isArchive ? "archive/" : ""
     }${name}/${name}.${extension}`;
   } else {
-    return `assets/images/browser-svgs/${
+    return `static/assets/images/browser-svgs/${
       isArchive ? "archive/" : ""
     }${name}/${name}_48x48.${extension}`;
   }
 };
 
-const osPath = (name: string): string => `assets/images/os-logos/${name}.png`;
+const osPath = (name: string): string =>
+  `static/assets/images/os-logos/${name}.png`;
 
 const localPath = (name: string, type?: string): string =>
-  `assets/images/logos/48x48/${name}.${type ? type : "png"}`;
+  `static/assets/images/logos/48x48/${name}.${type ? type : "png"}`;
 
 export const iconDictionary: { [key: string]: string } = {
   /** Browsers */

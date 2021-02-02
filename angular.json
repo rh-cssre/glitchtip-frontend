@@ -42,17 +42,21 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "static/assets"
+              },
               "src/sdk-docs",
               {
                 "glob": "**/*+(.svg|_48x48.png)",
                 "input": "./node_modules/browser-logos/src/",
-                "output": "./assets/images/browser-svgs"
+                "output": "./static/assets/images/browser-svgs"
               },
               {
                 "glob": "**/*.png",
                 "input": "./node_modules/@egoistdeveloper/operating-system-logos/src/48x48/",
-                "output": "./assets/images/os-logos"
+                "output": "./static/assets/images/os-logos"
               }
             ],
             "styles": ["src/styles.scss"],
