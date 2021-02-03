@@ -71,7 +71,6 @@ build-assets:
   script:
     - npm ci --cache .npm --prefer-offline
     - node --max_old_space_size=6000 node_modules/@angular/cli/bin/ng build --prod --deploy-url static/ --progress false
-    - mv dist/*.{js,woff,woff2,css} dist/static
   artifacts:
     paths:
       - dist/

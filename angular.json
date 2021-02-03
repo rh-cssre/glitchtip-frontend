@@ -63,7 +63,7 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "prod-no-static": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -89,6 +89,48 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "assets": [
+                "src/favicon.ico",
+                "src/assets",
+                "src/sdk-docs",
+                {
+                  "glob": "**/*+(.svg|_48x48.png)",
+                  "input": "./node_modules/browser-logos/src/",
+                  "output": "./assets/images/browser-svgs"
+                },
+                {
+                  "glob": "**/*.png",
+                  "input": "./node_modules/@egoistdeveloper/operating-system-logos/src/48x48/",
+                  "output": "./assets/images/os-logos"
+                }
+              ]
             }
           }
         },
@@ -101,6 +143,9 @@
           "configurations": {
             "production": {
               "browserTarget": "glitchtip-frontend:build:production"
+            },
+            "prod-no-static": {
+              "browserTarget": "glitchtip-frontend:build:prod-no-static"
             }
           }
         },
