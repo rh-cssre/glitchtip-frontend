@@ -70,7 +70,7 @@ build-assets:
       - .npm/
   script:
     - npm ci --cache .npm --prefer-offline
-    - npm run build-prod
+    - node --max_old_space_size=6000 $(which npm) run build-prod
   artifacts:
     paths:
       - dist/
