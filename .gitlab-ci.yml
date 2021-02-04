@@ -70,7 +70,7 @@ build-assets:
       - .npm/
   script:
     - npm ci --cache .npm --prefer-offline
-    - node --max_old_space_size=6000 node_modules/@angular/cli/bin/ng build --prod --deploy-url static/ --progress false
+    - npm run build-prod
   artifacts:
     paths:
       - dist/
