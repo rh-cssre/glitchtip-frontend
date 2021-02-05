@@ -14,7 +14,9 @@ View our Contributing documentation [here](./CONTRIBUTING.md).
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+To run a production-like build on a dev server, run `npm run start-prod-no-static` instead.
 
 ## Code scaffolding
 
@@ -22,7 +24,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+To run a production build that works well with glitchtip-backend, run `npm run build-prod`. The build artifacts will be stored in the `dist/` directory. Copy that into the glitchtip-backend folder, run `collectstatic`, serve the backend, and then navigate to `http://localhost:8000`.
 
 ## Running unit tests
 
