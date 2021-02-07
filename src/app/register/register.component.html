@@ -1,106 +1,93 @@
 <mat-card class="auth-form">
   <h1>Register</h1>
   <mat-card-content>
-    <ng-container
-      *ngIf="
-        enableUserRegistration$ | async as enableUserRegistration;
-        else elseBlock
-      "
-    >
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-error *ngIf="error">{{ error }}</mat-error>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-            [errorStateMatcher]="matcher"
-          />
-          <mat-error>
-            <span *ngIf="email?.errors?.required"
-              >Your email is required to sign up</span
-            >
-            <span *ngIf="email?.errors?.email"
-              >Enter a valid email address</span
-            >
-            <span *ngIf="email?.errors?.serverError">{{
-              email?.errors?.serverError
-            }}</span>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            type="password"
-            placeholder="Password"
-            formControlName="password1"
-            [errorStateMatcher]="matcher"
-          />
-          <mat-error>
-            <span *ngIf="password1?.errors"
-              >Your password should be at least 8 characters long</span
-            >
-            <span *ngIf="password1?.errors?.required"
-              >A password is required to sign up</span
-            >
-            <span *ngIf="password1?.errors?.serverError">{{
-              password1?.errors?.serverError
-            }}</span>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            type="password"
-            placeholder="Confirm Password"
-            formControlName="password2"
-            appInputMatcher="password1"
-            [errorStateMatcher]="matcher"
-          />
-
-          <mat-error>
-            <span *ngIf="password2?.errors?.required"
-              >A password is required to sign up</span
-            >
-            <span *ngIf="password2?.errors?.notEqual"
-              >Your passwords don't match</span
-            >
-            <span *ngIf="password2?.errors?.serverError">{{
-              password2?.errors?.serverError
-            }}</span>
-          </mat-error>
-        </mat-form-field>
-        <button id="submit" class="full-width" mat-flat-button color="primary">
-          Register
-        </button>
-      </form>
-      <ng-container *ngIf="socialApps$ | async as socialApps">
-        <div *ngIf="socialApps.length" class="or">
-          <span class="mat-body-strong mat-body-2">or</span>
-        </div>
-        <div class="o-auth">
-          <button
-            *ngFor="let socialApp of socialApps"
-            mat-stroked-button
-            class="full-width margin"
-            (click)="onSocialApp(socialApp)"
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-error *ngIf="error">{{ error }}</mat-error>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error>
+          <span *ngIf="email?.errors?.required"
+            >Your email is required to sign up</span
           >
-            <app-auth-svg
-              source="auth"
-              text="Register with {{ socialApp.name }}"
-              [provider]="socialApp.provider"
-            ></app-auth-svg>
-          </button>
-        </div>
-      </ng-container>
+          <span *ngIf="email?.errors?.email"
+            >Enter a valid email address</span
+          >
+          <span *ngIf="email?.errors?.serverError">{{
+            email?.errors?.serverError
+          }}</span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password1"
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error>
+          <span *ngIf="password1?.errors"
+            >Your password should be at least 8 characters long</span
+          >
+          <span *ngIf="password1?.errors?.required"
+            >A password is required to sign up</span
+          >
+          <span *ngIf="password1?.errors?.serverError">{{
+            password1?.errors?.serverError
+          }}</span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          type="password"
+          placeholder="Confirm Password"
+          formControlName="password2"
+          appInputMatcher="password1"
+          [errorStateMatcher]="matcher"
+        />
+
+        <mat-error>
+          <span *ngIf="password2?.errors?.required"
+            >A password is required to sign up</span
+          >
+          <span *ngIf="password2?.errors?.notEqual"
+            >Your passwords don't match</span
+          >
+          <span *ngIf="password2?.errors?.serverError">{{
+            password2?.errors?.serverError
+          }}</span>
+        </mat-error>
+      </mat-form-field>
+      <button id="submit" class="full-width" mat-flat-button color="primary">
+        Register
+      </button>
+    </form>
+    <ng-container *ngIf="socialApps$ | async as socialApps">
+      <div *ngIf="socialApps.length" class="or">
+        <span class="mat-body-strong mat-body-2">or</span>
+      </div>
+      <div class="o-auth">
+        <button
+          *ngFor="let socialApp of socialApps"
+          mat-stroked-button
+          class="full-width margin"
+          (click)="onSocialApp(socialApp)"
+        >
+          <app-auth-svg
+            source="auth"
+            text="Register with {{ socialApp.name }}"
+            [provider]="socialApp.provider"
+          ></app-auth-svg>
+        </button>
+      </div>
     </ng-container>
-    <ng-template #elseBlock>
-      <p class="mat-body-1 sign-up disabled-messaging">
-        Registration has been disabled on this instance of GlitchTip. Contact an
-        administrator for more details.
-      </p>
-    </ng-template>
   </mat-card-content>
   <p class="mat-body-1 sign-up">
     Already have an account? <a routerLink="../login">Log In</a>

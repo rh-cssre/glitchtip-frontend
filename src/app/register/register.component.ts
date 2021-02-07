@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { RegisterService } from "./register.service";
 import { Router, ActivatedRoute } from "@angular/router";
-import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { tap } from "rxjs/operators";
+import { RegisterService } from "./register.service";
+import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SettingsService } from "../api/settings.service";
 import { SocialApp } from "../api/user/user.interfaces";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
@@ -16,7 +16,6 @@ import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-sta
 })
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
-  enableUserRegistration$ = this.settings.enableUserRegistration$;
   loading = false;
   error = "";
   form = new FormGroup({

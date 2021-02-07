@@ -12,6 +12,7 @@ import { SettingsService } from "../api/settings.service";
 })
 export class NewOrganizationsComponent {
   organizationCount$ = this.organizationsService.organizationCount$;
+  enableUserRegistration$ = this.settingsService.enableUserRegistration$;
   loading = false;
   error: string | undefined;
   form = new FormGroup({
