@@ -37,6 +37,8 @@ test:
 
 test-e2e:
   stage: test
+  variables:
+    ENABLE_OPEN_USER_REGISTRATION: "true"
   services:
     - postgres
     - name: registry.gitlab.com/glitchtip/glitchtip-backend:master
