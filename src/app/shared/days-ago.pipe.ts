@@ -15,3 +15,21 @@ export class DaysAgoPipe implements PipeTransform {
     }
   }
 }
+
+@Pipe({
+  name: "daysOld",
+})
+export class DaysOldPipe implements PipeTransform {
+  transform(value: string): string {
+    const inputDate = new Date(value).getTime();
+    try {
+      const date = formatDistanceStrict(inputDate, new Date(), {
+        addSuffix: true,
+      });
+      return date.replace("ago", "old");
+    } catch (err) {
+      console.warn("Unable to process date", value);
+      return "";
+    }
+  }
+}

@@ -1,10 +1,12 @@
-import { DaysAgoPipe } from "./days-ago.pipe";
+import { DaysAgoPipe, DaysOldPipe } from "./days-ago.pipe";
 
-describe("DateAgoPipe", () => {
-  const pipe = new DaysAgoPipe();
+describe("DaysAgoPipe and DaysOldPipe", () => {
+  const daysAgoPipe = new DaysAgoPipe();
+  const daysOldPipe = new DaysOldPipe();
 
   it("create an instance", () => {
-    expect(pipe).toBeTruthy();
+    expect(daysAgoPipe).toBeTruthy();
+    expect(daysOldPipe).toBeTruthy();
   });
 
   it("a valid date returns days difference", () => {
@@ -13,10 +15,12 @@ describe("DateAgoPipe", () => {
     const mockCurrentDate = 1578579771793;
     const baseTime = new Date(mockCurrentDate);
     jasmine.clock().mockDate(baseTime);
-    expect(pipe.transform(mockFirstSeen)).toBe("1 month ago");
+    expect(daysAgoPipe.transform(mockFirstSeen)).toBe("1 month ago");
+    expect(daysOldPipe.transform(mockFirstSeen)).toBe("1 month old");
   });
 
   it("an invalid date does not transform the value", () => {
-    expect(pipe.transform("fake")).toBe("");
+    expect(daysAgoPipe.transform("fake")).toBe("");
+    expect(daysOldPipe.transform("fake")).toBe("");
   });
 });
