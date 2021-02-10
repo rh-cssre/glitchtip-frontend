@@ -118,6 +118,7 @@
           mat-header-cell
           *matHeaderCellDef
           [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
+          [class.th-checkbox-width]="issues.length === 0"
         >
           <mat-checkbox
             (change)="toggleSelectAll()"
@@ -240,7 +241,7 @@
           class="status-header-cell sticky-header"
           [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
         >
-          Events
+          <ng-container *ngIf="issues.length > 0">Events</ng-container>
         </th>
         <td
           mat-cell
