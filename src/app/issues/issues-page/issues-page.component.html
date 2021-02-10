@@ -122,6 +122,7 @@
           <mat-checkbox
             (change)="toggleSelectAll()"
             [checked]="(areAllSelected$ | async)!"
+            [disabled]="issues.length === 0"
           >
           </mat-checkbox>
         </th>
@@ -294,6 +295,7 @@
         mat-header-row
         class="overlay"
         *matHeaderRowDef="displayedColumns"
+        [class.u-hidden]="issues.length === 0"
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
