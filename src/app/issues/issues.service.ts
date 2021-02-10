@@ -41,7 +41,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     )
   );
   areAllSelected$ = combineLatest([this.issues$, this.selectedIssues$]).pipe(
-    map(([issues, selectedIssues]) => issues.length === selectedIssues.length)
+    map(
+      ([issues, selectedIssues]) =>
+        issues.length === selectedIssues.length && issues.length > 0
+    )
   );
   readonly thereAreSelectedIssues$ = this.selectedIssues$.pipe(
     map((selectedIssues) => selectedIssues.length > 0)

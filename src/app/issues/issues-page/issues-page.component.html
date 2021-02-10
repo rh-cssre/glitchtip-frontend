@@ -122,6 +122,7 @@
           <mat-checkbox
             (change)="toggleSelectAll()"
             [checked]="(areAllSelected$ | async)!"
+            [disabled]="issues.length === 0"
           >
           </mat-checkbox>
         </th>
