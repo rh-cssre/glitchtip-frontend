@@ -8,7 +8,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "./material.module";
-import { DaysAgoPipe } from "./days-ago.pipe";
+import { DaysAgoPipe, DaysOldPipe } from "./days-ago.pipe";
 import { ProjectCardComponent } from "./project-card/project-card.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EmptyProjectsComponent } from "./project-card/empty-projects/empty-projects.component";
@@ -20,6 +20,7 @@ import { AuthSvgComponent } from "./auth-svg/auth-svg.component";
   imports: [CommonModule, MaterialModule, RouterModule],
   declarations: [
     DaysAgoPipe,
+    DaysOldPipe,
     ProjectCardComponent,
     EntryDataComponent,
     EmptyProjectsComponent,
@@ -29,6 +30,7 @@ import { AuthSvgComponent } from "./auth-svg/auth-svg.component";
   ],
   exports: [
     DaysAgoPipe,
+    DaysOldPipe,
     ProjectCardComponent,
     EntryDataComponent,
     EmptyProjectsComponent,
