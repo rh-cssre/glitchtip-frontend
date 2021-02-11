@@ -42,62 +42,119 @@
       >
         <!-- If no event has been sent -->
         <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
-          <h2 class="mat-display-1">Send us your events!</h2>
-
-          <app-lazy-markdown
-            markdownSrc="/sdk-docs/all-sdks.md"
-          ></app-lazy-markdown>
-
-          <div class="dsn" *ngIf="firstProjectKey$ | async as firstProjectKey">
-            <h2 class="mat-display-1">DSN</h2>
-            <p class="mat-body-1">
-              Most instructions below will have a spot that says "your DSN
-              here". Copy the DSN and paste it into that spot.
-            </p>
-
-            <mat-form-field class="dsn-input">
-              <input
-                class="background"
-                readonly
-                matInput
-                [value]="firstProjectKey.dsn.public"
-              />
-              <button
-                mat-icon-button
-                [cdkCopyToClipboard]="firstProjectKey.dsn.public"
-                (cdkCopyToClipboardCopied)="copied()"
-                matTooltip="Copy key to clipboard"
-                matSuffix
-              >
-                <mat-icon [class.dsn-copied]="copiedDsn$ | async">
-                  {{ (copiedDsn$ | async) ? "check_circle" : "file_copy" }}
-                </mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <ng-container
-            *ngIf="activeProjectPlatform$ | async as activeProjectPlatform"
-          >
-            <ng-container
-              *ngIf="activeProjectPlatform !== 'other'; else otherTemplate"
+          <div class="install-wrapper">
+            <div
+              class="install-instructions"
+              *ngIf="
+                activeProjectPlatform$ | async as activeProjectPlatform;
+                else noPlatform
+              "
             >
-              <h2 class="mat-display-1">
-                Connect your {{ activeProjectPlatformName$ | async }} project to
-                GlitchTip
-              </h2>
+              <ng-container
+                *ngIf="
+                  activeProjectPlatform !== 'other' &&
+                    activeProjectPlatform !== '';
+                  else otherTemplate
+                "
+              >
+                <h2 class="mat-display-1">
+                  Connect your {{ activeProjectPlatformName$ | async }} project
+                  to GlitchTip
+                </h2>
 
-              <app-lazy-markdown
-                markdownSrc="/sdk-docs/{{ activeProjectPlatform }}.md"
-              ></app-lazy-markdown>
-            </ng-container>
+                <app-lazy-markdown
+                  markdownSrc="/sdk-docs/{{ activeProjectPlatform }}.md"
+                ></app-lazy-markdown>
+              </ng-container>
 
-            <ng-template #otherTemplate>
-              <app-lazy-markdown
-                markdownSrc="/sdk-docs/other.md"
-              ></app-lazy-markdown>
+              <ng-template #otherTemplate>
+                <h2 class="mat-display-1">Connect your project to GlitchTip</h2>
+
+                <app-lazy-markdown
+                  markdownSrc="/sdk-docs/all-sdks.md"
+                ></app-lazy-markdown>
+
+                <app-lazy-markdown
+                  markdownSrc="/sdk-docs/other.md"
+                ></app-lazy-markdown>
+              </ng-template>
+            </div>
+
+            <ng-template #noPlatform>
+              <div class="install-instructions">
+                <h2 class="mat-display-1">Connect your project to GlitchTip</h2>
+
+                <app-lazy-markdown
+                  markdownSrc="/sdk-docs/all-sdks.md"
+                ></app-lazy-markdown>
+
+                <p class="mat-body-1">
+                  If you go to this project's
+                  <a
+                    [routerLink]="[
+                      '/',
+                      'settings',
+                      activeOrganizationSlug$ | async,
+                      'projects',
+                      activeProjectSlug$ | async
+                    ]"
+                  >
+                    settings page</a
+                  >, you can pick a platform. If you do, you'll get more
+                  specific instructions about how to get started.
+                </p>
+              </div>
             </ng-template>
-          </ng-container>
+            <div
+              class="dsn"
+              *ngIf="firstProjectKey$ | async as firstProjectKey"
+            >
+              <h2 class="mat-display-1">DSN</h2>
+
+              <p class="mat-body-1">
+                Most instructions will have a spot that says "your DSN here".
+                Copy the DSN and paste it into that spot.
+              </p>
+
+              <mat-form-field class="dsn-input">
+                <input
+                  class="background"
+                  readonly
+                  matInput
+                  [value]="firstProjectKey.dsn.public"
+                />
+                <button
+                  mat-icon-button
+                  [cdkCopyToClipboard]="firstProjectKey.dsn.public"
+                  (cdkCopyToClipboardCopied)="copied()"
+                  matTooltip="Copy key to clipboard"
+                  matSuffix
+                >
+                  <mat-icon [class.dsn-copied]="copiedDsn$ | async">
+                    {{ (copiedDsn$ | async) ? "check_circle" : "file_copy" }}
+                  </mat-icon>
+                </button>
+              </mat-form-field>
+
+              <ng-container
+                *ngIf="activeProjectPlatform$ | async as activeProjectPlatform"
+              >
+                <ng-container *ngIf="activeProjectPlatform !== 'other'">
+                  <h2 class="mat-body-2">What's this all about?</h2>
+
+                  <app-lazy-markdown
+                    markdownSrc="/sdk-docs/all-sdks.md"
+                  ></app-lazy-markdown>
+
+                  <p class="mat-body-1">
+                    This page is showing instructions on how to connect
+                    GlitchTip to your project based on the platform you
+                    specified.
+                  </p>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
         </ng-container>
 
         <ng-template #noIssueMessaging>
