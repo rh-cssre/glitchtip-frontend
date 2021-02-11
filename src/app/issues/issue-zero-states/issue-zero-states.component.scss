@@ -16,10 +16,42 @@ markdown {
   margin-bottom: 40px;
 }
 
-.dsn {
-  .mat-display-1 {
-    margin: 30px 0 10px;
+.install-wrapper {
+  display: flex;
+
+  @media (max-width: $medium - 1) {
+    flex-direction: column;
   }
+}
+
+.install-instructions {
+  width: calc(100% - 300px);
+  flex-shrink: 0;
+
+  @media (max-width: $large - 1) {
+    width: calc(100% - 250px);
+  }
+
+  @media (max-width: $medium - 1) {
+    width: 100%;
+  }
+}
+
+.dsn {
+  width: 300px;
+  padding-left: 30px;
+  flex-shrink: 0;
+
+  @media (max-width: $large - 1) {
+    width: 250px;
+  }
+
+  @media (max-width: $medium - 1) {
+    width: 100%;
+    padding-left: 0;
+    padding-top: 30px;
+  }
+
   .mat-body-1 {
     margin: 0;
   }
@@ -29,7 +61,7 @@ markdown {
   }
 
   .dsn-input {
-    width: 60%;
+    width: 100%;
     margin-bottom: 30px;
   }
 }

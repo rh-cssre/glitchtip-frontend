@@ -38,6 +38,7 @@ export class IssueZeroStatesComponent implements OnInit {
   );
   activeOrganizationProjects$ = this.organizationsService
     .activeOrganizationProjects$;
+  activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
   activeProjectID$ = combineLatest([
     this.projectsFromParams$,
     this.activeOrganizationProjects$,
@@ -72,6 +73,9 @@ export class IssueZeroStatesComponent implements OnInit {
   );
   activeProjectPlatform$ = this.activeProject$.pipe(
     map((project) => project?.platform)
+  );
+  activeProjectSlug$ = this.activeProject$.pipe(
+    map((project) => project?.slug)
   );
   activeProjectPlatformName$ = this.activeProjectPlatform$.pipe(
     map((id) => flattenedPlatforms.find((platform) => platform.id === id)?.name)
