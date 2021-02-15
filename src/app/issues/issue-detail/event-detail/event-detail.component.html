@@ -51,7 +51,7 @@
       <li *ngFor="let tag of event.tags" class="pseudo-chip">
         <a
           [routerLink]="['/organizations', orgSlug$ | async, 'issues']"
-          [queryParams]="{ query: tag.key + ':' + tag.value }"
+          [queryParams]="{ query: generateQuery(tag.key, tag.value) }"
           queryParamsHandling="merge"
         >
           <span class="pseudo-chip-key">{{ tag.key }}</span>
