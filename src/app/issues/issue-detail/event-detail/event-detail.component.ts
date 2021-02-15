@@ -45,4 +45,9 @@ export class EventDetailComponent implements OnInit {
   getOlderEvent() {
     this.issueService.getPreviousEvent();
   }
+
+  /** TODO fix these types */
+  generateQuery(key: string | number | null, value: string | number | null) {
+    return `"${key}":"${value}"`;
+  }
 }
