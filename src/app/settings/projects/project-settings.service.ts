@@ -162,7 +162,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
   }
 
   retrieveProjectsOnTeam(orgSlug: string, teamSlug: string) {
-    const query = `team%3A${teamSlug}`;
+    const query = `team:${teamSlug}`;
     this.projectsAPIService
       .list(orgSlug, query)
       .pipe(tap((resp) => this.setProjectsPerTeam(resp)))
@@ -170,7 +170,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
   }
 
   retrieveProjectsNotOnTeam(orgSlug: string, teamSlug: string) {
-    const query = `!team%3A${teamSlug}`;
+    const query = `!team:${teamSlug}`;
     return this.projectsAPIService
       .list(orgSlug, query)
       .pipe(tap((resp) => this.setProjectsNotOnTeam(resp)))
