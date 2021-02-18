@@ -19,9 +19,9 @@ export class ProjectsAPIService extends APIBaseService {
    * @param query Optional query filter
    */
   list(organizationSlug?: string, query?: string) {
-    const params = new HttpParams();
+    let params = new HttpParams();
     if (query) {
-      params.append("query", query);
+      params = params.append("query", query);
     }
     const url = this.listURL(organizationSlug);
     return this.http.get<Project[]>(url, { params });
@@ -76,8 +76,8 @@ export class ProjectsAPIService extends APIBaseService {
 
   private projectTeamsURL(
     organizationSlug: string,
-    projectSlug: string,
-    teamSlug: string
+    teamSlug: string,
+    projectSlug: string
   ) {
     return `${this.url}${organizationSlug}/${projectSlug}/teams/${teamSlug}/`;
   }
