@@ -210,3 +210,45 @@ mat-card {
     display: none;
   }
 }
+
+.level {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--sample:after {
+    background-color: mat-color($mat-gray, 100);
+  }
+
+  &--debug:after {
+    background-color: mat-color($mat-gray, 300);
+  }
+
+  &--info:after {
+    background-color: #4b60b4;
+  }
+
+  &--warning:after {
+    background-color: #e9b949;
+  }
+
+  &--error:after {
+    background-color: $amaranth; //mat-color($amaranth-palette, 200);
+  }
+
+  &--fatal:after {
+    background-image: repeating-linear-gradient(
+      -60deg,
+      $amaranth,
+      $amaranth 5px,
+      white 5px,
+      white 10px
+    );
+  }
+}
