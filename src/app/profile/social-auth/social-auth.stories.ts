@@ -51,7 +51,7 @@ export const socialAuth = () => {
             uid: "secret",
             last_login: "2020-10-29T15:51:52.182486Z",
             date_joined: "2020-10-29T15:51:52.182546Z",
-            email: "emily@burkesoftware.com",
+            email: "a@a.aa",
             username: null,
           },
           {
@@ -60,7 +60,7 @@ export const socialAuth = () => {
             uid: "secret",
             last_login: "2020-10-29T15:51:52.182486Z",
             date_joined: "2020-10-29T15:51:52.182546Z",
-            email: "emilyjensen10@gmail.com",
+            email: "b@b.bb",
             username: null,
           },
         ],

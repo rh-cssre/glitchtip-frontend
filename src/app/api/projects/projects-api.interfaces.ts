@@ -8,7 +8,7 @@ export interface ProjectNew {
 export interface ProjectIssueView extends ProjectNew {
   id: string;
   slug: string;
-  isMember: boolean;
+  isMember?: boolean;
 }
 
 export interface Project extends ProjectIssueView {

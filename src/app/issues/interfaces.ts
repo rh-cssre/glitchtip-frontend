@@ -181,7 +181,7 @@ export interface Issue {
   title: string;
   type: string;
   userCount: number;
-  platform: string;
+  platform?: string;
 }
 
 export interface IssueDetail extends Issue {
