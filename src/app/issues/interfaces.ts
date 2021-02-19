@@ -109,7 +109,7 @@ export interface Breadcrumb {
   message: string | null;
   category: string;
   data: { [key: string]: Json } | null;
-  level: "fatal" | "error" | "warning" | "info" | "debug";
+  level: "fatal" | "error" | "warning" | "info" | "debug" | "sample";
   type: "default" | "http" | "error";
   event_id: string | null;
   timestamp: string; // technically a string, functionally a Date
