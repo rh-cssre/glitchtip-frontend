@@ -136,7 +136,7 @@
           *matCellDef="let row"
           [class.resolved]="row.status === 'resolved'"
           [class.ignored]="row.status === 'ignored'"
-          class="checkbox-cell"
+          class="checkbox-cell level level--{{ row.level }}"
         >
           <mat-checkbox
             (change)="toggleCheck(row.id)"
