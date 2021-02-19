@@ -12,7 +12,7 @@ import { of } from "rxjs";
 import { IssuesPageComponent } from "./issues-page.component";
 import { MaterialModule } from "../../shared/material.module";
 import { IssuesService } from "../issues.service";
-import { issueListFrontend } from "../issues-list-frontend-test-data";
+import { issueList } from "./issues-test-data";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
@@ -120,7 +120,7 @@ export const issueListItem = () => {
   const sensibleDefaults = {
     initialLoadComplete: true,
     loading: false,
-    issueLength: issueListFrontend.length,
+    issueLength: issueList.length,
     orgHasAProject: true,
     appliedProjectCount: 0,
     urlHasParam: false,
@@ -130,7 +130,7 @@ export const issueListItem = () => {
     userNotInSomeTeams: false,
   };
 
-  const pageStateConfig = {
+  const pageStateConfig: any = {
     normal: {
       ...sensibleDefaults,
     },
@@ -217,9 +217,7 @@ export const issueListItem = () => {
       // projectsWhereAdminIsNotOnTheTeam$: of(
       //   pageStateConfig[states].projectsWhereAdminIsNotOnTheTeam
       // ),
-      issues$: of(
-        issueListFrontend.slice(0, pageStateConfig[states].issueLength)
-      ),
+      issues$: of(issueList.slice(0, pageStateConfig[states].issueLength)),
       // userNotInSomeTeams$: of(pageStateConfig[states].userNotInSomeTeams),
     },
   };

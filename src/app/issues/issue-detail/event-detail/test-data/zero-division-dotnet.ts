@@ -14,14 +14,14 @@ export const zeroDivisionDotnet: EventDetail = {
   culprit: "myWebApp.Pages.DivideZeroModel in DivideByZero",
   title: "System.DivideByZeroException: Attempted to divide by zero.",
   platform: "csharp",
-  location: "/home/emily/dotnet-error-factory/Pages/Divide-Zero.cs",
+  location: "/home/dotnet-error-factory/Pages/Divide-Zero.cs",
   nextEventID: null,
   type: "error",
   metadata: {
     function: "DivideByZero",
     type: "System.DivideByZeroException",
     value: "Attempted to divide by zero.",
-    filename: "/home/emily/dotnet-error-factory/Pages/Divide-Zero.cs",
+    filename: "/home/dotnet-error-factory/Pages/Divide-Zero.cs",
   },
   groupingConfig: { id: "legacy:2019-03-12" },
   crashFile: null,
@@ -44,7 +44,7 @@ export const zeroDivisionDotnet: EventDetail = {
     { value: "Linux", key: "server-os.name", _meta: null },
     { value: ".NET Core 3.1.3", key: "server-runtime", _meta: null },
     { value: ".NET Core", key: "server-runtime.name", _meta: null },
-    { value: "bsc-emily", key: "server_name", _meta: null },
+    { value: "bsc", key: "server_name", _meta: null },
     { value: "http://localhost:5000/Divide-Zero", key: "url", _meta: null },
   ],
   dateCreated: "2020-04-23T21:06:09.659Z",
@@ -858,12 +858,10 @@ export const zeroDivisionDotnet: EventDetail = {
                   errors: null,
                   package:
                     "myWebApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                  absPath:
-                    "/home/emily/dotnet-error-factory/Pages/Divide-Zero.cs",
+                  absPath: "/home/dotnet-error-factory/Pages/Divide-Zero.cs",
                   inApp: true,
                   instructionAddr: null,
-                  filename:
-                    "/home/emily/dotnet-error-factory/Pages/Divide-Zero.cs",
+                  filename: "/home/dotnet-error-factory/Pages/Divide-Zero.cs",
                   platform: null,
                   context: [],
                   symbolAddr: null,
@@ -879,12 +877,10 @@ export const zeroDivisionDotnet: EventDetail = {
                   errors: null,
                   package:
                     "myWebApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
-                  absPath:
-                    "/home/emily/dotnet-error-factory/Pages/Divide-Zero.cs",
+                  absPath: "/home/dotnet-error-factory/Pages/Divide-Zero.cs",
                   inApp: true,
                   instructionAddr: null,
-                  filename:
-                    "/home/emily/dotnet-error-factory/Pages/Divide-Zero.cs",
+                  filename: "/home/dotnet-error-factory/Pages/Divide-Zero.cs",
                   platform: null,
                   context: [],
                   symbolAddr: null,
@@ -914,9 +910,9 @@ export const zeroDivisionDotnet: EventDetail = {
         cookies: [],
         inferredContentType: null,
         env: {
-          SERVER_NAME: "bsc-emily",
+          SERVER_NAME: "bsc",
           SERVER_PORT: "5000",
-          DOCUMENT_ROOT: "/home/emily/dotnet-error-factory/wwwroot",
+          DOCUMENT_ROOT: "/home/dotnet-error-factory/wwwroot",
         },
         headers: [
           [

@@ -8,7 +8,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { IssuesService } from "./issues.service";
 import { Issue } from "./interfaces";
-import { issueList } from "./issues-list-from-api";
+import { issueList } from "./issues-page/issues-test-data";
 import { RouterTestingModule } from "@angular/router/testing";
 
 describe("IssuesService", () => {
