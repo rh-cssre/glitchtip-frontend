@@ -14,6 +14,7 @@ import {
   EntryType,
   AnnotatedContexts,
   BreadcrumbValueData,
+  IssueTags,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -25,6 +26,7 @@ import { Router } from "@angular/router";
 interface IssueDetailState {
   issue: IssueDetail | null;
   event: EventDetail | null;
+  tags: IssueTags[] | null;
   isReversed: boolean;
   showShowMore: boolean;
 }
@@ -32,6 +34,7 @@ interface IssueDetailState {
 const initialState: IssueDetailState = {
   issue: null,
   event: null,
+  tags: null,
   isReversed: true,
   showShowMore: false,
 };
@@ -44,6 +47,7 @@ export class IssueDetailService {
   private readonly getState$ = this.state.asObservable();
   readonly issue$ = this.getState$.pipe(map((state) => state.issue));
   readonly event$ = this.getState$.pipe(map((state) => state.event));
+  readonly tags$ = this.getState$.pipe(map((state) => state.tags));
   readonly isReversed$ = this.getState$.pipe(map((state) => state.isReversed));
   readonly showShowMore$ = this.getState$.pipe(
     map((state) => state.showShowMore)
@@ -149,6 +153,14 @@ export class IssueDetailService {
     return EMPTY;
   }
 
+  retrieveTags(id: number, query?: string) {
+    return this.issuesAPIService.retrieveTags(id.toString()).pipe(
+      tap((resp) => {
+        this.setTags(resp);
+      })
+    );
+  }
+
   getReversedFrames() {
     this.toggleIsReversed();
   }
@@ -224,6 +236,10 @@ export class IssueDetailService {
   // private removed for testing
   setEvent(event: EventDetail) {
     this.state.next({ ...this.state.getValue(), event });
+  }
+
+  setTags(tags: IssueTags[]) {
+    this.state.next({ ...this.state.getValue(), tags });
   }
 
   private toggleIsReversed() {
