@@ -1017,9 +1017,9 @@ export const breadcrumbError: EventDetail = {
     ],
   },
   tags: [
-    { key: "browser.name", value: "Chrome" },
-    { key: "os.name", value: "Linux" },
-    { key: "browser", value: "Chrome 87.0.4280" },
+    { key: "browser.name", value: "Chrome", _meta: null },
+    { key: "os.name", value: "Linux", _meta: null },
+    { key: "browser", value: "Chrome 87.0.4280", _meta: null },
   ],
   title: "Error: Bulk Generic Error! 29573c",
   type: "error",

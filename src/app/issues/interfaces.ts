@@ -2,13 +2,18 @@ import { ProjectIssueView } from "../api/projects/projects-api.interfaces";
 import { Json } from "../interface-primitives";
 
 interface Tag {
-  [key: string]: number | string | null;
+  key: string;
+  value: string;
+}
+
+interface EventTag extends Tag {
+  _meta: null | unknown;
 }
 
 export interface Event {
   eventID: string;
   id: string;
-  tags: Tag[];
+  tags: EventTag[];
   projectID?: string | number;
   dateCreated: string | null;
   user: EndUser | null;
@@ -190,7 +195,11 @@ export interface IssueDetail extends Issue {
   userReportCount: number;
   participants: Json[];
   pluginActions: string[];
-  tags: Tag[];
+  tags: {
+    name: string;
+    key: string;
+    uniqueValues: number;
+  }[];
   firstRelease: FirstRelease | null;
   pluginContexts: string[];
   lastRelease: string | null;
@@ -300,4 +309,19 @@ export interface Frame {
 interface GroupingConfig {
   enhancements?: string;
   id: string;
+}
+
+export interface IssueTags {
+  name: string;
+  key: string;
+  uniqueValues: number;
+  topValues: TopValue[];
+  totalValues: number;
+}
+
+interface TopValue extends Tag {
+  count: number;
+  name: string;
+  lastSeen: string;
+  firstSeen: string;
 }

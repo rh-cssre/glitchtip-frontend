@@ -7,6 +7,7 @@ import {
   Issue,
   IssueDetail,
   IssueStatus,
+  IssueTags,
   UpdateStatusResponse,
 } from "src/app/issues/interfaces";
 
@@ -83,5 +84,14 @@ export class IssuesAPIService extends APIBaseService {
   retrieveEvent(issueId: number, eventID: string) {
     const url = `${this.url}${issueId}/events/${eventID}/`;
     return this.http.get<EventDetail>(url);
+  }
+
+  retrieveTags(issueId: string, query?: string) {
+    const url = `${this.url}${issueId}/tags/`;
+    let params = new HttpParams();
+    if (query) {
+      params = params.append("query", query);
+    }
+    return this.http.get<IssueTags[]>(url, { params });
   }
 }
