@@ -19,29 +19,30 @@
     </mat-card-content>
   </mat-card>
 
-  <div *ngIf="activeOrganizationDetail$ | async as orgDetails">
+  <div>
     <header class="page-header">
       <h2 class="mat-display-1">Projects</h2>
+      <!-- TODO  if only one org exists and no projects - offer to create for onboarding -->
       <a
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
+        *ngIf="false"
         mat-flat-button
         color="primary"
-        [routerLink]="['/settings', orgDetails?.slug, 'projects', 'new']"
+        [routerLink]="['/settings', '', 'projects', 'new']"
         >Create New Project</a
       >
     </header>
 
-    <div *ngIf="activeOrganizationProjects$ | async as projects">
+    <div *ngIf="projects$ | async as projects">
       <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
     </div>
 
-    <div *ngIf="activeOrganizationProjects$">
+    <div>
       <div class="card-wrapper">
         <ng-container
-          *ngFor="let project of activeOrganizationProjects$ | async"
+          *ngFor="let project of projects$ | async"
         >
           <app-project-card
-            [cardLink]="['/organizations', project.organization.slug, 'issues']"
+            [cardLink]="[project.organization.slug, 'issues']"
             [cardLinkQueryParams]="{ project: project.id }"
             [title]="project.name"
             [descriptionList]="[
@@ -53,14 +54,14 @@
               text: 'Issues',
               icon: 'warning',
               query: { project: project.id },
-              link: ['/organizations', project.organization.slug, 'issues']
+              link: [project.organization.slug, 'issues']
             }"
             [secondaryButton]="{
               text: 'Settings',
               icon: 'settings',
               link: [
-                '/settings',
                 project.organization.slug,
+                'settings',
                 'projects',
                 project.slug
               ]

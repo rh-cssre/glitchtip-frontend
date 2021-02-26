@@ -99,3 +99,8 @@ mat-sidenav-content {
   background-color: white;
   color: mat-color($mat-gray, 500) !important;
 }
+
+.subdued {
+  color: mat-color($mat-gray, 700);
+  font-weight: 300;
+}

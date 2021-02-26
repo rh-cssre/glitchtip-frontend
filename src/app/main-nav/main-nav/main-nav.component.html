@@ -62,31 +62,31 @@
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="['/organizations', activeOrganizationSlug, 'projects']"
+        [routerLink]="['/']"
       >
         Projects
       </a>
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="['/organizations', activeOrganizationSlug, 'issues']"
+        [routerLink]="[activeOrganizationSlug, 'issues']"
         routerLinkActive="active-route"
       >
         Issues
       </a>
-      <!-- <a
+      <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="['/organizations', activeOrganizationSlug, 'performance']"
+        [routerLink]="[activeOrganizationSlug, 'performance']"
         routerLinkActive="active-route"
       >
-        Performance
-      </a> -->
+        Performance <span class="subdued">&nbsp;(Beta)</span>
+      </a>
       <a
         data-test-settings
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="['/settings', activeOrganizationSlug]"
+        [routerLink]="[activeOrganizationSlug, 'settings']"
         routerLinkActive="active-route"
       >
         Settings

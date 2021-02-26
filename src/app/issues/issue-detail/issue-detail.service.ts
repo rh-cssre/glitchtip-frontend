@@ -190,7 +190,7 @@ export class IssueDetailService {
         withLatestFrom(this.organization.activeOrganizationSlug$),
         tap(([_, activeOrgSlug]) => {
           this.snackBar.open(`Issue ${id} has been deleted.`);
-          this.router.navigate(["organizations", activeOrgSlug, "issues"]);
+          this.router.navigate([activeOrgSlug, "issues"]);
         }),
         catchError((_) => {
           this.snackBar.open(
@@ -543,7 +543,7 @@ export class IssueDetailService {
     eventID: string
   ) {
     if (orgSlug && issue) {
-      return `/organizations/${orgSlug}/issues/${issue.id}/events/${eventID}`;
+      return `/${orgSlug}/issues/${issue.id}/events/${eventID}`;
     }
     return null;
   }
