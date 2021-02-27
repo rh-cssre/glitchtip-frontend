@@ -86,8 +86,8 @@ export class TeamsService {
     return this.http.put<Team>(url, data).pipe(
       tap((resp) => {
         this.router.navigate([
-          "settings",
           orgSlug,
+          "settings",
           "teams",
           resp.slug,
           "settings",
