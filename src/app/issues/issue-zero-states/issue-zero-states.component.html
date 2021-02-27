@@ -53,7 +53,8 @@
               <ng-container
                 *ngIf="
                   activeProjectPlatform !== 'other' &&
-                    activeProjectPlatform !== '';
+                    activeProjectPlatform !== '' &&
+                    (activeProjectPlatformName$ | async);
                   else otherTemplate
                 "
               >
