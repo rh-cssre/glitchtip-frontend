@@ -22,7 +22,7 @@ export class EventDetailComponent implements OnInit {
 
   constructor(
     private issueService: IssueDetailService,
-    private route: ActivatedRoute
+    public route: ActivatedRoute
   ) {}
 
   ngOnInit() {

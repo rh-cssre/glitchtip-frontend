@@ -289,21 +289,13 @@ export class OrganizationsService {
           if (
             this.routeParams &&
             this.routeParams["org-slug"] &&
-            this.route.snapshot.firstChild?.url &&
-            this.route.snapshot.firstChild.url.length >= 1
+            this.route.snapshot.firstChild?.firstChild?.url &&
+            this.route.snapshot.firstChild.firstChild.url.length >= 1
           ) {
-            if (
-              this.route.snapshot.firstChild.url[0].path === "settings" &&
-              slug !== this.routeParams["org-slug"]
-            ) {
-              this.router.navigate(["settings", slug]);
-            } else if (
-              this.route.snapshot.firstChild.url[0].path === "organizations" &&
-              this.route.snapshot.firstChild.url[1].path !== slug
-            ) {
-              const childPage = this.route.snapshot.firstChild.url[2].path;
-              this.router.navigate(["organizations", slug, childPage]);
-            }
+            this.router.navigate([
+              slug,
+              this.route.snapshot.firstChild.firstChild.url[0].path,
+            ]);
           }
         })
       )
