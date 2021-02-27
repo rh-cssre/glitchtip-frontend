@@ -91,12 +91,9 @@ export class NewProjectComponent implements OnInit {
             this.orgService.refreshOrganizationDetail().pipe(
               tap((organization) => {
                 this.snackBar.open(`${project.name} has been created`);
-                this.router.navigate(
-                  ["organizations", organization.slug, "issues"],
-                  {
-                    queryParams: { project: project.id },
-                  }
-                );
+                this.router.navigate([organization.slug, "issues"], {
+                  queryParams: { project: project.id },
+                });
               })
             )
           ),

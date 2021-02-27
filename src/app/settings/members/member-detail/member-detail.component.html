@@ -65,12 +65,11 @@
             <a
               mat-line
               [routerLink]="[
-                '/settings',
-                orgSlug$ | async,
                 'teams',
                 team,
                 'members'
               ]"
+              [relativeTo]="this.route.parent?.parent"
               >{{ team }}</a
             >
           </mat-list-item>

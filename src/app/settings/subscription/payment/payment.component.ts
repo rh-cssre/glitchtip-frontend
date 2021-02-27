@@ -46,7 +46,7 @@ export class PaymentComponent implements OnInit {
                 ),
                 tap(([_, orgSlug]) => {
                   this.selectedSubscription = null;
-                  this.router.navigate(["organizations", orgSlug, "issues"]);
+                  this.router.navigate([orgSlug, "issues"]);
                 })
               );
           } else {

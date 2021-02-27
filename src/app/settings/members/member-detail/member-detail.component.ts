@@ -32,7 +32,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private organizationsService: OrganizationsService,
     private memberDetailService: MemberDetailService
   ) {}

@@ -181,12 +181,8 @@ export class OrganizationsService {
     filter((event) => event instanceof RoutesRecognized)
   ) as Observable<RoutesRecognized>;
 
-  /** Combine nested route params */
   readonly routeParams$ = this.routesRecognized$.pipe(
-    map((event) => ({
-      ...event.state.root.firstChild?.params,
-      ...event.state.root.firstChild?.firstChild?.params,
-    }))
+    map((event) => event.state.root.firstChild?.params)
   );
 
   constructor(
@@ -286,16 +282,21 @@ export class OrganizationsService {
         take(1),
         filter((slug) => slug !== null),
         tap((slug) => {
+          const firstChild = this.route.snapshot.firstChild;
           if (
             this.routeParams &&
             this.routeParams["org-slug"] &&
-            this.route.snapshot.firstChild?.firstChild?.url &&
-            this.route.snapshot.firstChild.firstChild.url.length >= 1
+            slug !== this.routeParams["org-slug"] &&
+            firstChild
           ) {
-            this.router.navigate([
-              slug,
-              this.route.snapshot.firstChild.firstChild.url[0].path,
-            ]);
+            if (
+              firstChild.firstChild?.url &&
+              firstChild.firstChild.url.length >= 1
+            ) {
+              this.router.navigate([slug, firstChild.firstChild.url[0].path]);
+            } else {
+              this.router.navigate([slug]);
+            }
           }
         })
       )
@@ -342,7 +343,7 @@ export class OrganizationsService {
     return EMPTY;
   }
 
-  /** Delete organization: route to available org, if available or get empty org state on home page */
+  /** Delete organization: route to home page */
   deleteOrganization(slug: string) {
     return this.organizationAPIService.destroy(slug).pipe(
       tap((_) => this.removeOrganization(slug)),
@@ -351,10 +352,8 @@ export class OrganizationsService {
         if (organizations) {
           if (organizations.length) {
             this.setActiveOrganizationId(organizations[0].id);
-            this.router.navigate(["organizations", organizations[0].id]);
-          } else {
-            this.router.navigate([""]);
           }
+          this.router.navigate([""]);
         }
       })
     );
@@ -401,7 +400,7 @@ export class OrganizationsService {
           this.snackBar.open(
             `An email invite has been sent to ${response.email}`
           );
-          this.router.navigate(["settings", orgSlug, "members"]);
+          this.router.navigate([orgSlug, "settings", "members"]);
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.error?.detail) {

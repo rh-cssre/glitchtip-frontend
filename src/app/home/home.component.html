@@ -22,12 +22,11 @@
   <div>
     <header class="page-header">
       <h2 class="mat-display-1">Projects</h2>
-      <!-- TODO  if only one org exists and no projects - offer to create for onboarding -->
       <a
-        *ngIf="false"
+        *ngIf="activeOrganizationDetail$ | async as orgDetails"
         mat-flat-button
         color="primary"
-        [routerLink]="['/settings', '', 'projects', 'new']"
+        [routerLink]="['/', orgDetails?.slug, 'settings', 'projects', 'new']"
         >Create New Project</a
       >
     </header>

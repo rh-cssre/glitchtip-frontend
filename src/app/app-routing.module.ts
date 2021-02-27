@@ -70,7 +70,7 @@ export const routes: Routes = [
   // Sentry OSS compat redirect
   {
     path: ":org-slug/:project-slug/issues/:id",
-    redirectTo: "organizations/:org-slug/issues/:id",
+    redirectTo: ":org-slug/issues/:id",
     pathMatch: "full",
   },
   {

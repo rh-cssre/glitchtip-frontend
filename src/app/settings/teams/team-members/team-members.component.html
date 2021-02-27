@@ -35,7 +35,8 @@
         <mat-list-item *ngFor="let teamMember of teamMembers$ | async">
           <a
             mat-line
-            [routerLink]="['/settings', orgSlug, 'members', teamMember.id]"
+            [routerLink]="['../', 'members', teamMember.id]"
+            [relativeTo]="route.parent?.parent"
             >{{ teamMember.email }}</a
           >
           <app-loading-button

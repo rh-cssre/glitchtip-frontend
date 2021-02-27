@@ -114,7 +114,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
             this.deleteLoading = false;
             this.orgService.refreshOrganizationDetail().subscribe();
             this.snackBar.open("Your project has been sucessfully deleted");
-            this.router.navigate(["settings", this.orgSlug, "projects"]);
+            this.router.navigate([this.orgSlug, "settings", "projects"]);
           },
           (err) => {
             this.deleteLoading = false;

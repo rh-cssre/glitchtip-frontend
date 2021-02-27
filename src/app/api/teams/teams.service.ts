@@ -110,7 +110,7 @@ export class TeamsService {
       tap(() => {
         this.setDeleteTeamLoading(false);
         this.snackBar.open(`You have successfully deleted #${teamSlug}`);
-        this.router.navigate(["settings", orgSlug, "teams"]);
+        this.router.navigate([orgSlug, "settings", "teams"]);
       }),
       catchError((error: HttpErrorResponse) => {
         this.setDeleteTeamError(error);
