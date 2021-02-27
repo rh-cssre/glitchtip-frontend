@@ -1,5 +1,5 @@
 import { requestLogin, seedBackend } from "./utils";
-import { organization, project } from "../fixtures/variables";
+import { organization } from "../fixtures/variables";
 
 describe("Organization Settings", () => {
   beforeEach(() => {
@@ -8,7 +8,7 @@ describe("Organization Settings", () => {
   });
 
   it("updates the org name", () => {
-    cy.visit(`/settings/${organization.name}`);
+    cy.visit(`/${organization.name}/settings`);
     cy.contains(organization.name);
     cy.get("input[formcontrolname=name]").clear().type(organization.otherOrg);
     cy.get("#update-org").click();
@@ -18,12 +18,10 @@ describe("Organization Settings", () => {
   });
 
   it("deleting only org results in empty org state", () => {
-    cy.visit(`/settings/${organization.name}`);
+    cy.visit(`/${organization.name}/settings`);
     cy.get("#delete-org").click();
     cy.url().should("eq", "http://localhost:4200/");
-    cy.contains(
-      "In order to use GlitchTip, you'll need to create an"
-    );
+    cy.contains("In order to use GlitchTip, you'll need to create an");
   });
 
   // Commented out because the test logs you out on the pipeline
