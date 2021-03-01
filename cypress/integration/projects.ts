@@ -13,7 +13,7 @@ describe("Create New Project", () => {
   });
 
   it("should render appropriate field and server side errors", () => {
-    cy.visit(`/settings/${organization.name}/projects/new`);
+    cy.visit(`/${organization.name}/settings/projects/new`);
     cy.contains("Create a New Project");
     cy.get("#create-project-submit").click();
     cy.contains("Enter a project name");
@@ -25,7 +25,7 @@ describe("Create New Project", () => {
   });
 
   it("create new project with new team but no platform", () => {
-    cy.visit(`/settings/${organization.name}/projects/new`);
+    cy.visit(`/${organization.name}/settings/projects/new`);
     cy.contains("Create a New Project");
     cy.get("#create-team-from-projects").click();
     cy.contains(
@@ -40,12 +40,12 @@ describe("Create New Project", () => {
     // Don't think I can get the project ID for the test
     cy.url().should(
       "contain",
-      "http://localhost:4200/organizations/cypresstestorg/issues?project"
+      "http://localhost:4200/cypresstestorg/issues?project"
     );
   });
 
   it("create new project with platform and existing team", () => {
-    cy.visit(`/settings/${organization.name}/projects/new`);
+    cy.visit(`/${organization.name}/settings/projects/new`);
     cy.contains("Create a New Project");
     cy.get("input[formcontrolname=name]").type(newProject.name);
     cy.get("[formcontrolname=platform] [data-test]").first().click();
@@ -53,7 +53,7 @@ describe("Create New Project", () => {
     cy.contains(`${newProject.name} has been created`);
     cy.url().should(
       "contain",
-      "http://localhost:4200/organizations/cypresstestorg/issues?project"
+      "http://localhost:4200/cypresstestorg/issues?project"
     );
   });
 });
@@ -62,7 +62,7 @@ describe("Edit and Delete a project", () => {
   beforeEach(() => {
     seedBackend();
     requestLogin();
-    cy.visit(`/settings/${organization.name}/projects/${project.name}`);
+    cy.visit(`/${organization.name}/settings/projects/${project.name}`);
   });
 
   it("should edit the name of a project", () => {
@@ -95,7 +95,7 @@ describe("Edit and Delete a project", () => {
     cy.contains("Your project has been sucessfully deleted");
     cy.url().should(
       "eq",
-      `http://localhost:4200/settings/${organization.name}/projects`
+      `http://localhost:4200/${organization.name}/settings/projects`
     );
   });
 });

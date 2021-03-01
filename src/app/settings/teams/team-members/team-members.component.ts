@@ -29,7 +29,7 @@ export class TeamMembersComponent implements OnInit {
   constructor(
     private teamsService: TeamsService,
     private organizationsService: OrganizationsService,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private userService: UserService
   ) {}

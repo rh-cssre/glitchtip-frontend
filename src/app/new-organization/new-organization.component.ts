@@ -34,8 +34,8 @@ export class NewOrganizationsComponent {
           tap(([organization, billingEnabled]) => {
             if (billingEnabled) {
               this.router.navigate([
-                "settings",
                 organization.slug,
+                "settings",
                 "subscription",
               ]);
             } else {

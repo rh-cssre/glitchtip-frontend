@@ -11,35 +11,6 @@ export const routes: Routes = [
     canActivate: [IsLoggedInGuard],
   },
   {
-    path: "settings",
-    loadChildren: () =>
-      import("./settings/settings.module").then((m) => m.SettingsModule),
-    canActivate: [IsLoggedInGuard],
-    data: {
-      title: "Settings",
-    },
-  },
-  {
-    path: "organizations/:org-slug/issues",
-    loadChildren: () =>
-      import("./issues/issues.module").then((m) => m.IssuesModule),
-    canActivate: [IsLoggedInGuard],
-    data: {
-      title: "Issues",
-    },
-  },
-  {
-    path: "organizations/:org-slug/performance",
-    loadChildren: () =>
-      import("./performance/performance.module").then(
-        (m) => m.PerformanceModule
-      ),
-    canActivate: [IsLoggedInGuard],
-    data: {
-      title: "Performance",
-    },
-  },
-  {
     path: "organizations/new",
     loadChildren: () =>
       import("./new-organization/new-organization.module").then(
@@ -99,8 +70,40 @@ export const routes: Routes = [
   // Sentry OSS compat redirect
   {
     path: ":org-slug/:project-slug/issues/:id",
-    redirectTo: "organizations/:org-slug/issues/:id",
+    redirectTo: ":org-slug/issues/:id",
     pathMatch: "full",
+  },
+  {
+    path: ":org-slug",
+    canActivate: [IsLoggedInGuard],
+    children: [
+      {
+        path: "issues",
+        loadChildren: () =>
+          import("./issues/issues.module").then((m) => m.IssuesModule),
+        data: {
+          title: "Issues",
+        },
+      },
+      {
+        path: "settings",
+        loadChildren: () =>
+          import("./settings/settings.module").then((m) => m.SettingsModule),
+        data: {
+          title: "Settings",
+        },
+      },
+      {
+        path: "performance",
+        loadChildren: () =>
+          import("./performance/performance.module").then(
+            (m) => m.PerformanceModule
+          ),
+        data: {
+          title: "Performance",
+        },
+      },
+    ],
   },
   {
     path: "**",

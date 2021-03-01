@@ -122,7 +122,7 @@ export class SubscriptionsService {
       .pipe(
         tap((subscription) => {
           if (subscription.status === null) {
-            this.router.navigate(["settings", orgSlug, "subscription"]);
+            this.router.navigate([orgSlug, "settings", "subscription"]);
           }
         })
       )

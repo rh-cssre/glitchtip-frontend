@@ -16,7 +16,7 @@ import { TeamSettingsComponent } from "./teams/team-settings/team-settings.compo
 
 const routes: Routes = [
   {
-    path: ":org-slug",
+    path: "",
     component: SettingsComponent,
     children: [
       { path: "", component: OrganizationComponent },

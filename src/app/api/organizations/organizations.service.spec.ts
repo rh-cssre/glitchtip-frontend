@@ -80,7 +80,7 @@ describe("OrganizationsService", () => {
           useValue: {
             snapshot: {
               firstChild: {
-                url: [{ path: "settings" }, { path: organizationList[0].slug }],
+                url: [{ path: organizationList[0].slug }, { path: "settings" }],
               },
             },
           },
@@ -91,9 +91,7 @@ describe("OrganizationsService", () => {
     service = TestBed.inject(OrganizationsService);
     router = TestBed.inject(Router);
     // Switch from one issues to another
-    await zone.run(() =>
-      router.navigate(["settings", organizationList[0].slug])
-    );
+    await zone.run(() => router.navigate([organizationList[0].slug]));
     const navigateSpy = spyOn(router, "navigate");
     // @ts-ignore
     service.setOrganizations(organizationList);
@@ -104,9 +102,6 @@ describe("OrganizationsService", () => {
       `/api/0/organizations/${organizationList[1].slug}/`
     );
     req.flush(organizationList[1]);
-    expect(navigateSpy).toHaveBeenCalledWith([
-      "settings",
-      organizationList[1].slug,
-    ]);
+    expect(navigateSpy).toHaveBeenCalledWith([organizationList[1].slug]);
   });
 });
