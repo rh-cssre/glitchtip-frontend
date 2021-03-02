@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import { Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { combineLatest, EMPTY } from "rxjs";
 import { tap, map, catchError, withLatestFrom } from "rxjs/operators";
 import {
   IssueDetail,
@@ -20,12 +22,16 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { IssuesService } from "../issues.service";
 import { generateIconPath } from "../../shared/shared.utils";
 import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
+  issueLoading: boolean;
+  issueInitialLoadComplete: boolean;
   event: EventDetail | null;
+  eventLoading: boolean;
+  eventInitialLoadComplete: boolean;
   tags: IssueTags[] | null;
   isReversed: boolean;
   showShowMore: boolean;
@@ -37,16 +43,24 @@ const initialState: IssueDetailState = {
   tags: null,
   isReversed: true,
   showShowMore: false,
+  issueLoading: false,
+  issueInitialLoadComplete: false,
+  eventLoading: false,
+  eventInitialLoadComplete: false,
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class IssueDetailService {
-  private readonly state = new BehaviorSubject<IssueDetailState>(initialState);
-  private readonly getState$ = this.state.asObservable();
+export class IssueDetailService extends StatefulService<IssueDetailState> {
   readonly issue$ = this.getState$.pipe(map((state) => state.issue));
+  readonly issueInitialLoadComplete$ = this.getState$.pipe(
+    map((state) => state.issueInitialLoadComplete)
+  );
   readonly event$ = this.getState$.pipe(map((state) => state.event));
+  readonly eventInitialLoadComplete$ = this.getState$.pipe(
+    map((state) => state.eventInitialLoadComplete)
+  );
   readonly tags$ = this.getState$.pipe(map((state) => state.tags));
   readonly isReversed$ = this.getState$.pipe(map((state) => state.isReversed));
   readonly showShowMore$ = this.getState$.pipe(
@@ -115,12 +129,21 @@ export class IssueDetailService {
     private issuesAPIService: IssuesAPIService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   retrieveIssue(id: number) {
-    return this.issuesAPIService
-      .retrieve(id.toString())
-      .pipe(tap((issue) => this.setIssue(issue)));
+    this.setState({ issueLoading: true });
+    return this.issuesAPIService.retrieve(id.toString()).pipe(
+      tap((issue) => this.setIssue(issue)),
+      catchError((error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.clearIssue();
+        }
+        return EMPTY;
+      })
+    );
   }
 
   getPreviousEvent() {
@@ -212,39 +235,74 @@ export class IssueDetailService {
   }
 
   private retrieveLatestEvent(issueId: number) {
-    return this.issuesAPIService
-      .retrieveLatestEvent(issueId)
-      .pipe(tap((event) => this.setEvent(event)));
+    this.setState({ eventLoading: true });
+    return this.issuesAPIService.retrieveLatestEvent(issueId).pipe(
+      tap((event) => this.setEvent(event)),
+      catchError((error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.clearEvent();
+        }
+        return EMPTY;
+      })
+    );
   }
 
   // private removed for testing
   retrieveEvent(issueId: number, eventID: string) {
-    return this.issuesAPIService
-      .retrieveEvent(issueId, eventID)
-      .pipe(tap((event) => this.setEvent(event)));
-  }
-
-  clearState() {
-    this.state.next(initialState);
+    this.setState({ eventLoading: true });
+    return this.issuesAPIService.retrieveEvent(issueId, eventID).pipe(
+      tap((event) => this.setEvent(event)),
+      catchError((error) => {
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          this.clearEvent();
+        }
+        return EMPTY;
+      })
+    );
   }
 
   // private removed for testing
   setIssue(issue: IssueDetail) {
-    this.state.next({ ...this.state.getValue(), issue });
+    this.setState({
+      issue,
+      issueLoading: false,
+      issueInitialLoadComplete: true,
+    });
+  }
+
+  private clearIssue() {
+    this.setState({
+      issue: null,
+      issueLoading: false,
+      issueInitialLoadComplete: true,
+      event: null,
+    });
   }
 
   // private removed for testing
   setEvent(event: EventDetail) {
-    this.state.next({ ...this.state.getValue(), event });
+    this.setState({
+      event,
+      eventLoading: false,
+      eventInitialLoadComplete: true,
+    });
+  }
+
+  clearEvent() {
+    this.setState({
+      event: null,
+      eventLoading: false,
+      eventInitialLoadComplete: true,
+    });
   }
 
   setTags(tags: IssueTags[]) {
-    this.state.next({ ...this.state.getValue(), tags });
+    this.setState({ tags });
   }
 
   private toggleIsReversed() {
     const isReversed = this.state.getValue().isReversed;
-    this.state.next({ ...this.state.getValue(), isReversed: !isReversed });
+    this.setState({ isReversed: !isReversed });
   }
 
   /* Return the message entry type for an event */

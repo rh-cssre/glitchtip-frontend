@@ -11,6 +11,7 @@ import { IssueDetailService } from "../issue-detail.service";
 })
 export class EventDetailComponent implements OnInit {
   event$ = this.issueService.event$;
+  initialLoadComplete$ = this.issueService.eventInitialLoadComplete$;
   nextEvent$ = this.issueService.hasNextEvent$;
   previousEvent$ = this.issueService.hasPreviousEvent$;
   nextEventUrl$ = this.issueService.nextEventUrl$;
