@@ -66,7 +66,8 @@ export class IssueZeroStatesComponent implements OnInit {
         return activeProject ? activeProject : null;
       }
       return null;
-    })
+    }),
+    distinctUntilChanged()
   );
   showOnboarding$ = this.activeProject$.pipe(
     map((project) => !project?.firstEvent)
@@ -80,6 +81,7 @@ export class IssueZeroStatesComponent implements OnInit {
   activeProjectPlatformName$ = this.activeProjectPlatform$.pipe(
     map((id) => flattenedPlatforms.find((platform) => platform.id === id)?.name)
   );
+
   firstProjectKey$ = combineLatest([
     this.organizationsService.activeOrganizationSlug$,
     this.activeProject$,
@@ -88,6 +90,7 @@ export class IssueZeroStatesComponent implements OnInit {
       ([organizationSlug, activeProject]) =>
         !!organizationSlug && !!activeProject
     ),
+    distinctUntilChanged((x, y) => JSON.stringify(x) === JSON.stringify(y)),
     switchMap(([organizationSlug, activeProject]) =>
       this.projectKeysAPIService
         .list(organizationSlug!, activeProject!.slug)
