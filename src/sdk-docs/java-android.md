@@ -1,13 +1,63 @@
-### Installation
+### Configure your Gradle file
 
-Using Gradle (Android Studio) in your `app/build.gradle` add:
+In your top-level build.gradle file, make sure that Maven Central is added as a repository:
 
 ```groovy
-implementation 'io.sentry:sentry-android:1.7.27'
-
-// this dependency is not required if you are already using your own
-// slf4j implementation
-implementation 'org.slf4j:slf4j-nop:1.7.25'
+repositories {
+    mavenCentral()
+}
 ```
 
-For other dependency managers see the [central Maven repository](https://search.maven.org/#artifactdetails%7Cio.sentry%7Csentry-android%7C1.7.27%7Cjar).
+In your `app/build.gradle` file, make sure that you're targeting Java 1.8 (8) compatibility:
+
+```groovy
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+```
+
+Then, add `sentry-android` into your dependencies:
+
+```groovy
+dependencies {
+    implementation 'io.sentry:sentry-android:4.2.0'
+}
+```
+
+For other dependency managers, see the [central Maven repository](https://search.maven.org/artifact/io.sentry/sentry-android/4.2.0/jar).
+
+### Configure your Android manifest
+
+Add this `<meta-data>` tag inside the `<application>` element of your AndroidManifest.xml file:
+
+```xml
+<application>
+  <meta-data android:name="io.sentry.dsn" android:value="your DSN here" />
+</application>
+```
+
+### Send us an error!
+
+Open up `MainActivity.java`, and throw an exception:
+
+```java
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import java.lang.Exception;
+import io.sentry.Sentry;
+
+public class MainActivity extends AppCompatActivity {
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    try {
+      throw new Exception("Hello, GlitchTip!");
+    } catch (Exception exception) {
+      Sentry.captureException(exception);
+    }
+  }
+}
+```
