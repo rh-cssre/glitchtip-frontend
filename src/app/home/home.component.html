@@ -27,8 +27,9 @@
         mat-flat-button
         color="primary"
         [routerLink]="['/', orgDetails?.slug, 'settings', 'projects', 'new']"
-        >Create New Project</a
       >
+        Create New Project in {{ orgDetails.name }}
+      </a>
     </header>
 
     <div *ngIf="projects$ | async as projects">
@@ -37,9 +38,7 @@
 
     <div>
       <div class="card-wrapper">
-        <ng-container
-          *ngFor="let project of projects$ | async"
-        >
+        <ng-container *ngFor="let project of projects$ | async">
           <app-project-card
             [cardLink]="[project.organization.slug, 'issues']"
             [cardLinkQueryParams]="{ project: project.id }"
