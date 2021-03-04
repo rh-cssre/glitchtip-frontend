@@ -86,6 +86,14 @@ export const routes: Routes = [
         },
       },
       {
+        path: "projects",
+        loadChildren: () =>
+          import("./projects/projects.module").then((m) => m.ProjectsModule),
+        data: {
+          title: "Projects",
+        },
+      },
+      {
         path: "settings",
         loadChildren: () =>
           import("./settings/settings.module").then((m) => m.SettingsModule),
