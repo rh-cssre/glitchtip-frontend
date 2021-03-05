@@ -14,6 +14,7 @@ interface SettingsState {
   rocketChatDomain: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
+  sentryTracesSampleRate: number | null;
   environment: string | null;
   version: string | null;
 }
@@ -27,6 +28,7 @@ const initialState: SettingsState = {
   rocketChatDomain: null,
   stripePublicKey: null,
   sentryDSN: null,
+  sentryTracesSampleRate: null,
   environment: null,
   version: null,
 };
@@ -83,6 +85,9 @@ export class SettingsService {
               ? "glitchtip@" + settings.version
               : undefined,
             autoSessionTracking: false,
+            tracesSampleRate: settings.sentryTracesSampleRate
+              ? settings.sentryTracesSampleRate
+              : undefined,
           });
         }
       }),
