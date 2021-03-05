@@ -1,0 +1,35 @@
+<mat-card *ngIf="(tags$ | async)?.length">
+  <h3 class="mat-body-strong">Tags</h3>
+  <ng-container *ngFor="let tag of tags$ | async">
+    <p class="top-value mat-caption">
+      <span class="key">{{ tag.key }}</span>
+      <span>
+        {{ tag.topValues[0].value }}: {{ tag.topValues[0].percentRounded }}%
+      </span>
+    </p>
+    <div>
+      <div class="bars">
+        <span
+          *ngFor="let topValue of tag.topValues"
+          class="bar"
+          [ngStyle]="{
+            'width.%': topValue.percentRounded
+          }"
+          matTooltip="
+            {{ topValue.value }} - {{ topValue.percentRounded }}%
+          "
+          matTooltipPosition="left"
+        ></span
+        ><span
+          class="bar"
+          [ngStyle]="{
+            'width.%': tag.other
+          }"
+          matTooltip="
+          Other - {{ tag.other }}%
+        "
+          matTooltipPosition="left"
+        ></span>
+      </div></div
+  ></ng-container>
+</mat-card>

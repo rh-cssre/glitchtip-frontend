@@ -17,6 +17,7 @@ import {
   AnnotatedContexts,
   BreadcrumbValueData,
   IssueTags,
+  IssueTagsAdjusted,
 } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { IssuesService } from "../issues.service";
@@ -58,10 +59,12 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     map((state) => state.issueInitialLoadComplete)
   );
   readonly event$ = this.getState$.pipe(map((state) => state.event));
+  readonly tags$ = this.getState$.pipe(
+    map((state) => state.tags && this.tagsWithPercent(state.tags))
+  );
   readonly eventInitialLoadComplete$ = this.getState$.pipe(
     map((state) => state.eventInitialLoadComplete)
   );
-  readonly tags$ = this.getState$.pipe(map((state) => state.tags));
   readonly isReversed$ = this.getState$.pipe(map((state) => state.isReversed));
   readonly showShowMore$ = this.getState$.pipe(
     map((state) => state.showShowMore)
@@ -177,7 +180,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   }
 
   retrieveTags(id: number, query?: string) {
-    return this.issuesAPIService.retrieveTags(id.toString()).pipe(
+    return this.issuesAPIService.retrieveTags(id.toString(), query).pipe(
       tap((resp) => {
         this.setTags(resp);
       })
@@ -223,6 +226,42 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
         })
       )
       .subscribe();
+  }
+
+  private tagsWithPercent(tags: IssueTags[]): IssueTagsAdjusted[] | undefined {
+    if (tags.length > 0) {
+      const tagsWithExtraData = tags.map((tag) => {
+        const totalValues = tag.totalValues;
+        const limitedTopValues = tag.topValues.slice(0, 10);
+        const tagWithPercent = limitedTopValues.map((topValue) => {
+          const count = topValue.count;
+          const percent = (count / totalValues) * 100;
+          const percentRounded = Math.round(percent);
+          /** percent is to add up for total percent and percentRounded is for display */
+          return {
+            ...topValue,
+            percentRounded,
+            percent,
+          };
+        });
+        const sumOfPercents = tagWithPercent.reduce(
+          (accum, item) => accum + item.percent,
+          0
+        );
+        if (sumOfPercents < 100) {
+          return {
+            ...tag,
+            topValues: tagWithPercent,
+            other: Math.round(100 - sumOfPercents),
+          };
+        } else {
+          return { ...tag, topValues: tagWithPercent };
+        }
+      });
+
+      return [...tagsWithExtraData];
+    }
+    return;
   }
 
   /** Set local state issue state */
