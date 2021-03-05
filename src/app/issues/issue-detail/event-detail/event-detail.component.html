@@ -1,3 +1,9 @@
+<section class="mat-typography" *ngIf="(initialLoadComplete$ | async) && (event$ | async) === null">
+  <header class="header">
+    <h2>Event not found</h2>
+  </header>
+</section>
+
 <section *ngIf="event$ | async as event" class="mat-typography">
   <section class="header">
     <div>
@@ -44,7 +50,7 @@
   <mat-divider *ngIf="event?.contexts || event?.user"></mat-divider>
   <app-contexts></app-contexts>
   <mat-divider></mat-divider>
-
+<!--  -->
   <section class="tags" *ngIf="event?.tags && event.tags.length > 0">
     <h2>Tags</h2>
     <ul class="pseudo-chip-list">

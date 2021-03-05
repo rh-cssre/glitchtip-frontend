@@ -13,6 +13,7 @@ import { IssueDetailService } from "./issue-detail.service";
 })
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
+  initialLoadComplete$ = this.issueService.issueInitialLoadComplete$;
   form = new FormGroup({
     assignee: new FormControl(""),
   });
