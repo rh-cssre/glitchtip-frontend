@@ -49,7 +49,7 @@
         <div class="card-wrapper">
           <ng-container *ngFor="let project of organization.projects">
             <app-project-card
-              [cardLink]="[project.organization.slug, 'issues']"
+              [cardLink]="['/', project.organization.slug, 'issues']"
               [cardLinkQueryParams]="{ project: project.id }"
               [title]="project.name"
               [descriptionList]="[
@@ -67,6 +67,7 @@
                 text: 'Settings',
                 icon: 'settings',
                 link: [
+                  '/',
                   project.organization.slug,
                   'settings',
                   'projects',

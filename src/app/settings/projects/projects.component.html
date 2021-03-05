@@ -2,9 +2,8 @@
   <header class="page-header">
     <h1 class="mat-display-1">Projects</h1>
     <a
-      *ngIf="activeOrganizationSlug$ | async as slug"
       mat-flat-button
-      [routerLink]="['/', slug, 'settings', 'projects', 'new']"
+      [routerLink]="['new']"
       color="primary"
     >
       Create New Project
