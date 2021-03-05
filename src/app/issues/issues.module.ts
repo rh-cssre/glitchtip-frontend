@@ -14,7 +14,6 @@ import { LazyMarkdownModule } from "../lazy-markdown/lazy-markdown.module";
 
 // Components
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
-import { IssueListItemComponent } from "./issue-list-item/issue-list-item.component";
 import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 import { EntryRequestComponent } from "./issue-detail/event-detail/entry-request/entry-request.component";
@@ -47,7 +46,6 @@ import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-bre
   ],
   declarations: [
     IssuesPageComponent,
-    IssueListItemComponent,
     IssueDetailComponent,
     EventDetailComponent,
     EntryRequestComponent,

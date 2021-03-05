@@ -8,7 +8,6 @@ import { MatTableModule } from "@angular/material/table";
 import { of } from "rxjs";
 
 import { IssuesPageComponent } from "./issues-page.component";
-import { IssueListItemComponent } from "../issue-list-item/issue-list-item.component";
 import { MaterialModule } from "src/app/shared/material.module";
 import { issueList } from "./issues-test-data";
 
@@ -20,7 +19,7 @@ describe("IssuesPageComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [IssuesPageComponent, IssueListItemComponent],
+        declarations: [IssuesPageComponent],
         imports: [
           MaterialModule,
           HttpClientTestingModule,
