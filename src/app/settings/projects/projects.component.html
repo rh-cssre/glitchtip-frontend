@@ -4,7 +4,7 @@
     <a
       *ngIf="activeOrganizationSlug$ | async as slug"
       mat-flat-button
-      [routerLink]="['/settings', slug, 'projects', 'new']"
+      [routerLink]="['/', slug, 'settings', 'projects', 'new']"
       color="primary"
     >
       Create New Project
