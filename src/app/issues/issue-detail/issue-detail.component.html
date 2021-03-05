@@ -94,32 +94,34 @@
 
       <router-outlet></router-outlet>
     </mat-card>
-
-    <mat-card class="right">
-      <dl>
-        <div>
-          <dt class="mat-caption">Issue #</dt>
-          <dd class="mat-body-1">{{ issue?.shortId }}</dd>
-        </div>
-        <div>
-          <dt class="mat-caption">Events</dt>
-          <dd class="mat-body-1">{{ issue?.count }}</dd>
-        </div>
-        <div>
-          <dt class="mat-caption">First Seen</dt>
-          <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
-          <dd class="mat-caption">
-            {{ issue?.firstSeen | date: "long" }}
-          </dd>
-        </div>
-        <div>
-          <dt class="mat-caption">Last Seen</dt>
-          <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
-          <dd class="mat-caption">
-            {{ issue?.lastSeen | date: "long" }}
-          </dd>
-        </div>
-      </dl>
-    </mat-card>
+    <aside class="right">
+      <mat-card>
+        <dl>
+          <div>
+            <dt class="mat-caption">Issue #</dt>
+            <dd class="mat-body-1">{{ issue?.shortId }}</dd>
+          </div>
+          <div>
+            <dt class="mat-caption">Events</dt>
+            <dd class="mat-body-1">{{ issue?.count }}</dd>
+          </div>
+          <div>
+            <dt class="mat-caption">First Seen</dt>
+            <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
+            <dd class="mat-caption">
+              {{ issue?.firstSeen | date: "long" }}
+            </dd>
+          </div>
+          <div>
+            <dt class="mat-caption">Last Seen</dt>
+            <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
+            <dd class="mat-caption">
+              {{ issue?.lastSeen | date: "long" }}
+            </dd>
+          </div>
+        </dl>
+      </mat-card>
+      <app-issue-detail-tags></app-issue-detail-tags>
+    </aside>
   </div>
 </section>

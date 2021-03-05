@@ -1,0 +1,44 @@
+@import "../../../../assets/styles/variables";
+
+mat-card {
+  margin-top: 24px;
+  padding-bottom: 32px;
+}
+
+.key {
+  font-weight: 700;
+}
+
+.bars {
+  height: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.bar {
+  background: mat-color($mat-gray, 400);
+  box-shadow: none;
+  transition: all 0.5s;
+
+  &:not(:last-child) {
+    border-right: 1px solid white;
+  }
+
+  &:hover {
+    background: $amaranth;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+}
+
+.top-value {
+  display: flex;
+  justify-content: space-between;
+
+  &:not(:first-child) {
+    margin-top: 24px;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 8px;
+  }
+}

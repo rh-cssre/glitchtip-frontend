@@ -195,7 +195,7 @@ export interface IssueDetail extends Issue {
   userReportCount: number;
   participants: Json[];
   pluginActions: string[];
-  tags: {
+  tags?: {
     name: string;
     key: string;
     uniqueValues: number;
@@ -324,4 +324,14 @@ interface TopValue extends Tag {
   name: string;
   lastSeen: string;
   firstSeen: string;
+}
+
+export interface IssueTagsAdjusted extends IssueTags {
+  other?: number;
+  topValues: TopValueAdjusted[];
+}
+
+interface TopValueAdjusted extends TopValue {
+  percentRounded: number;
+  percent: number;
 }

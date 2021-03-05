@@ -29,6 +29,7 @@ import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-iss
 import { ContextsComponent } from "./issue-detail/event-detail/context/contexts.component";
 import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.component";
 import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-breadcrumbs/entry-breadcrumbs.component";
+import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue-detail-tags.component";
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-bre
     ContextsComponent,
     IssueZeroStatesComponent,
     EntryBreadcrumbsComponent,
+    IssueDetailTagsComponent,
   ],
 })
 export class IssuesModule {}
