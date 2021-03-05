@@ -1,4 +1,4 @@
-<section class="l-body l-body--full-width" *ngIf="(initialLoadComplete$ | async) && !(issue$ | async)">
+<section class="l-body l-body--full-width" *ngIf="(initialLoadComplete$ | async) && (issue$ | async) === null">
   <header class="page-header">
     <h1 class="mat-display-1">Issue not found</h1>
   </header>
