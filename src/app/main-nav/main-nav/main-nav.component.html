@@ -96,7 +96,7 @@
         class="sub-items"
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="['/settings', activeOrganizationSlug, 'projects']"
+        [routerLink]="['/', activeOrganizationSlug, 'settings', 'projects']"
         routerLinkActive="active-route"
       >
         Projects
@@ -105,14 +105,14 @@
         *ngIf="billingEnabled$ | async"
         class="sub-items"
         mat-list-item
-        [routerLink]="['/settings', activeOrganizationSlug, 'subscription']"
+        [routerLink]="['/', activeOrganizationSlug, 'settings', 'subscription']"
         routerLinkActive="active-route"
       >
         Subscription
       </a>
       <a
         mat-list-item
-        [routerLink]="['/settings', activeOrganizationSlug, 'teams']"
+        [routerLink]="['/', activeOrganizationSlug, 'settings', 'teams']"
         routerLinkActive="active-route"
         class="sub-items"
       >
@@ -120,7 +120,7 @@
       </a>
       <a
         mat-list-item
-        [routerLink]="['/settings', activeOrganizationSlug, 'members']"
+        [routerLink]="['/', activeOrganizationSlug, 'settings', 'members']"
         routerLinkActive="active-route"
         class="sub-items"
       >
