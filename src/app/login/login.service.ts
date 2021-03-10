@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { tap } from "rxjs/operators";
-import { AuthService, AuthState } from "../api/auth/auth.service";
+import { AuthState } from "../api/auth/auth.service";
 
 const baseUrl = "/rest-auth";
 
@@ -9,7 +8,7 @@ const baseUrl = "/rest-auth";
   providedIn: "root",
 })
 export class LoginService {
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
     const url = baseUrl + "/login/";
@@ -17,12 +16,6 @@ export class LoginService {
       email,
       password,
     };
-    return this.http
-      .post<AuthState>(url, data)
-      .pipe(tap((resp) => this.setAuth({ isLoggedIn: true })));
-  }
-
-  setAuth(resp: AuthState) {
-    this.authService.setAuth(resp);
+    return this.http.post<AuthState>(url, data);
   }
 }

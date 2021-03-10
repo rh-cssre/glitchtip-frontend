@@ -22,6 +22,6 @@ export class RegisterService {
   }
 
   setAuth() {
-    this.authService.setAuth({ isLoggedIn: true });
+    this.authService.afterLogin();
   }
 }
