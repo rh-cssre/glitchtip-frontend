@@ -128,8 +128,7 @@ export class AuthComponent implements OnInit {
     if (this.isLoggedIn) {
       this.router.navigate(["profile"]);
     } else {
-      this.authService.setAuth({ isLoggedIn: true });
-      this.router.navigate([""]);
+      this.authService.afterLogin();
     }
   }
 }

@@ -1,40 +1,56 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs";
+import { Router } from "@angular/router";
 import { map, tap } from "rxjs/operators";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 
 export interface AuthState {
   isLoggedIn: boolean;
+  redirectUrl: string;
 }
 
 const initialState: AuthState = {
   isLoggedIn: false,
+  redirectUrl: "",
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class AuthService {
-  private authData = new BehaviorSubject<AuthState>(initialState);
-  data = this.authData.asObservable();
-  isLoggedIn = this.data.pipe(map((data) => data.isLoggedIn));
+export class AuthService extends StatefulService<AuthState> {
+  isLoggedIn = this.getState$.pipe(map((data) => data.isLoggedIn));
   private readonly url = "/rest-auth/logout/";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
+    super(initialState);
     const authData = localStorage.getItem("auth");
     if (authData) {
       const auth = JSON.parse(authData);
-      if (auth.isLoggedIn) {
-        this.setAuth({
-          isLoggedIn: auth.isLoggedIn,
-        });
-      }
+      this.setState({
+        isLoggedIn: auth.isLoggedIn,
+        redirectUrl: auth.redirectUrl,
+      });
     }
   }
 
   setAuth(data: AuthState) {
-    this.authData.next(data);
+    this.state.next(data);
     localStorage.setItem("auth", JSON.stringify(data));
+  }
+
+  setRedirectUrl(url: string) {
+    this.setAuth({
+      isLoggedIn: false,
+      redirectUrl: url,
+    });
+  }
+
+  afterLogin(redirect = true) {
+    const redirectUrl = this.state.getValue().redirectUrl;
+    this.setAuth({ isLoggedIn: true, redirectUrl: "" });
+    if (redirect) {
+      this.router.navigateByUrl(redirectUrl);
+    }
   }
 
   /** Log out user from the backend  */
@@ -58,7 +74,7 @@ export class AuthService {
   }
 
   private clearAuth() {
-    this.authData.next(initialState);
+    this.clearState();
     localStorage.clear();
   }
 }

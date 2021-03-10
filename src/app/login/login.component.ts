@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { tap } from "rxjs/operators";
 import { LoginService } from "./login.service";
@@ -8,6 +7,7 @@ import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
 import { SocialApp } from "../api/user/user.interfaces";
+import { AuthService } from "../api/auth/auth.service";
 
 @Component({
   selector: "app-login",
@@ -32,8 +32,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private router: Router,
-    private route: ActivatedRoute,
+    private authService: AuthService,
     private oauthService: GlitchTipOAuthService,
     private settings: SettingsService,
     private acceptService: AcceptInviteService
@@ -78,13 +77,7 @@ export class LoginComponent implements OnInit {
         .login(this.form.value.email, this.form.value.password)
         .subscribe(
           () => {
-            const query = this.route.snapshot.queryParamMap;
-            const next = query.get("next");
-            if (next) {
-              this.router.navigateByUrl(next);
-            } else {
-              this.router.navigate([""]);
-            }
+            this.authService.afterLogin();
           },
           (err) => {
             this.loading = false;
