@@ -36,20 +36,22 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
   readonly sortedEnvironments$ = this.environments$.pipe(
     map((environments) => {
       if (environments.length === 0) return null;
-      return [
-        {
-          heading: "Visible",
-          environments: environments.filter(
-            (environment) => environment.isHidden === false
-          ),
-        },
-        {
-          heading: "Hidden",
-          environments: environments.filter(
-            (environment) => environment.isHidden === true
-          ),
-        },
-      ];
+      const visible = {
+        heading: "Visible",
+        environments: environments.filter(
+          (environment) => environment.isHidden === false
+        ),
+      };
+      const hidden = {
+        heading: "Hidden",
+        environments: environments.filter(
+          (environment) => environment.isHidden === true
+        ),
+      };
+      const sorted = [];
+      if (visible.environments.length > 0) sorted.push(visible);
+      if (hidden.environments.length > 0) sorted.push(hidden);
+      return sorted;
     })
   );
 
