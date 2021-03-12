@@ -106,9 +106,11 @@ export class HeaderNavComponent implements OnInit {
   ]).pipe(
     map(([projects, ids]) => {
       if (ids.length === 1 && projects) {
-        const project = projects.find((project) => project.id === ids[0]);
-        if (project) {
-          return project.slug;
+        const matchedProject = projects.find(
+          (project) => project.id === ids[0]
+        );
+        if (matchedProject) {
+          return matchedProject.slug;
         }
         return false;
       }
