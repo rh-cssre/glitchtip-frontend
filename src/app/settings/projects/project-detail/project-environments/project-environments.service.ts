@@ -88,7 +88,6 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
   }
 
   updateEnvironment(environment: ProjectEnvironment) {
-    console.log("update");
     return combineLatest([
       this.organizationsService.activeOrganizationSlug$,
       this.projectSettingsService.activeProjectSlug$,
