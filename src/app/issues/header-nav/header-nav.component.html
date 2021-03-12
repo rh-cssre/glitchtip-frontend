@@ -84,3 +84,17 @@
   <mat-icon>add</mat-icon>
   Add Project
 </a>
+<a
+  *ngIf="activeOrgSlug$ | async as activeOrgSlug"
+  mat-stroked-button
+  color="primary"
+  class="add-button"
+  [routerLink]="
+    (singleProjectSlug$ | async)
+      ? ['..', 'settings', 'projects', singleProjectSlug$ | async]
+      : ['..', 'settings', 'projects']
+  "
+>
+  <mat-icon>settings</mat-icon>
+  Project Settings
+</a>
