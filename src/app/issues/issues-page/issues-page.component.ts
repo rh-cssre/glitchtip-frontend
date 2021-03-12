@@ -33,6 +33,7 @@ export class IssuesPageComponent
   loading$ = this.issuesService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
+  searchHits$ = this.issuesService.searchHits$;
   form = new FormGroup({
     query: new FormControl(""),
   });

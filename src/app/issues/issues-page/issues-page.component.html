@@ -3,7 +3,12 @@
   *ngIf="paginator$ | async as paginator"
 >
   <header class="page-header">
-    <h1 class="mat-display-1">Issues</h1>
+    <h1 class="mat-display-1">
+      Issues
+      <ng-container *ngIf="searchHits$ | async as searchHits">
+        ({{ searchHits }})
+      </ng-container>
+    </h1>
   </header>
 
   <app-header-nav></app-header-nav>
