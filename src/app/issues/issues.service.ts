@@ -46,6 +46,9 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         issues.length === selectedIssues.length && issues.length > 0
     )
   );
+  readonly searchHits$ = this.getState$.pipe(
+    map((state) => state.pagination.hits)
+  );
   readonly thereAreSelectedIssues$ = this.selectedIssues$.pipe(
     map((selectedIssues) => selectedIssues.length > 0)
   );
@@ -106,6 +109,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       });
     }
   }
+
 
   /** Set one specified issue ID as status */
   setStatus(id: number, status: IssueStatus) {
