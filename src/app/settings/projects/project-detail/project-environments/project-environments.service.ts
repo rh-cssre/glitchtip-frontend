@@ -64,56 +64,54 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
   }
 
   retrieveEnvironments() {
-    combineLatest([
+    return combineLatest([
       this.organizationsService.activeOrganizationSlug$,
       this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        mergeMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            return this.projectsAPIService
-              .listEnvironments(orgSlug, projectSlug)
-              .pipe(
-                tap((environments) =>
-                  this.setState({
-                    environments: this.sortEnvironments(environments),
-                    initialLoad: true,
-                  })
-                )
-              );
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe();
+    ]).pipe(
+      takeWhile(([orgSlug, projectSlug]) => !orgSlug || !projectSlug, true),
+      mergeMap(([orgSlug, projectSlug]) => {
+        if (orgSlug && projectSlug) {
+          return this.projectsAPIService
+            .listEnvironments(orgSlug, projectSlug)
+            .pipe(
+              tap((environments) =>
+                this.setState({
+                  environments: this.sortEnvironments(environments),
+                  initialLoad: true,
+                })
+              )
+            );
+        }
+        return EMPTY;
+      })
+    );
   }
 
   updateEnvironment(environment: ProjectEnvironment) {
-    combineLatest([
+    console.log("update");
+    return combineLatest([
       this.organizationsService.activeOrganizationSlug$,
       this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        takeWhile(([orgSlug, projectSlug]) => !orgSlug || !projectSlug, true),
-        mergeMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            this.setState({ toggleHiddenLoading: environment.id });
+    ]).pipe(
+      takeWhile(([orgSlug, projectSlug]) => !orgSlug || !projectSlug, true),
+      mergeMap(([orgSlug, projectSlug]) => {
+        if (orgSlug && projectSlug) {
+          this.setState({ toggleHiddenLoading: environment.id });
 
-            return this.projectsAPIService
-              .updateEnvironment(orgSlug, projectSlug, environment)
-              .pipe(
-                tap((updatedEnvironment) =>
-                  this.setState({
-                    environments: this.updatedEnvironments(updatedEnvironment),
-                    toggleHiddenLoading: null,
-                  })
-                )
-              );
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe();
+          return this.projectsAPIService
+            .updateEnvironment(orgSlug, projectSlug, environment)
+            .pipe(
+              tap((updatedEnvironment) =>
+                this.setState({
+                  environments: this.updatedEnvironments(updatedEnvironment),
+                  toggleHiddenLoading: null,
+                })
+              )
+            );
+        }
+        return EMPTY;
+      })
+    );
   }
 
   private sortEnvironments(environments: ProjectEnvironment[]) {
