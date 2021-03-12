@@ -81,3 +81,12 @@ export interface OrganizationErrors {
   removeTeamMember: string;
   addOrganizationMember: string;
 }
+
+export interface Environment {
+  id: number;
+  name: string;
+}
+
+export interface ProjectEnvironment extends Environment {
+  isHidden: boolean;
+}
