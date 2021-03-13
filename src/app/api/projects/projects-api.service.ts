@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
 import { Project, ProjectDetail, ProjectNew } from "./projects-api.interfaces";
+import { ProjectEnvironment } from "../organizations/organizations.interface";
 
 @Injectable({
   providedIn: "root",
@@ -74,12 +75,43 @@ export class ProjectsAPIService extends APIBaseService {
     );
   }
 
+  listEnvironments(organizationSlug: string, projectSlug: string) {
+    return this.http.get<ProjectEnvironment[]>(
+      this.projectEnvironmentsURL(organizationSlug, projectSlug)
+    );
+  }
+
+  updateEnvironment(
+    organizationSlug: string,
+    projectSlug: string,
+    environment: ProjectEnvironment
+  ) {
+    return this.http.put<ProjectEnvironment>(
+      this.projectEnvironmentsURL(
+        organizationSlug,
+        projectSlug,
+        environment.name
+      ),
+      environment
+    );
+  }
+
   private projectTeamsURL(
     organizationSlug: string,
     teamSlug: string,
     projectSlug: string
   ) {
     return `${this.url}${organizationSlug}/${projectSlug}/teams/${teamSlug}/`;
+  }
+
+  private projectEnvironmentsURL(
+    organizationSlug: string,
+    projectSlug: string,
+    name?: string
+  ) {
+    return `${this.url}${organizationSlug}/${projectSlug}/environments/${
+      name ? encodeURIComponent(name) + "/" : ""
+    }`;
   }
 
   private listURL(organizationSlug?: string) {

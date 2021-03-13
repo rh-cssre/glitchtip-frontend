@@ -25,6 +25,7 @@ import { MemberDetailComponent } from "./members/member-detail/member-detail.com
 import { NewMemberComponent } from "./members/new-member/new-member.component";
 import { TeamSettingsComponent } from "./teams/team-settings/team-settings.component";
 import { ProjectAlertsComponent } from "./projects/project-detail/project-alerts/project-alerts.component";
+import { ProjectEnvironmentsComponent } from "./projects/project-detail/project-environments/project-environments.component";
 import { PlatformPickerComponent } from "./projects/platform-picker/platform-picker.component";
 import { SlugifyDirective } from "./teams/new-team/slugify.directive";
 
@@ -57,6 +58,7 @@ import { SlugifyDirective } from "./teams/new-team/slugify.directive";
     ProjectAlertsComponent,
     PlatformPickerComponent,
     SlugifyDirective,
+    ProjectEnvironmentsComponent,
   ],
 })
 export class SettingsModule {}

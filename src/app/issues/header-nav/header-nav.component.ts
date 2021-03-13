@@ -100,6 +100,24 @@ export class HeaderNavComponent implements OnInit {
     map((ids) => ids.length !== 0)
   );
 
+  singleProjectSlug$ = combineLatest([
+    this.projects$,
+    this.selectedProjectIds$,
+  ]).pipe(
+    map(([projects, ids]) => {
+      if (ids.length === 1 && projects) {
+        const matchedProject = projects.find(
+          (project) => project.id === ids[0]
+        );
+        if (matchedProject) {
+          return matchedProject.slug;
+        }
+        return false;
+      }
+      return false;
+    })
+  );
+
   @ViewChild("expansionPanel", { static: false })
   expansionPanel?: MatExpansionPanel;
 
