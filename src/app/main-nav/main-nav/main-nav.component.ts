@@ -23,6 +23,7 @@ export class MainNavComponent {
   isLoggedIn$ = this.auth.isLoggedIn;
   navOpen$ = this.mainNav.navOpen$;
   billingEnabled$ = this.settingsService.billingEnabled$;
+  paidForGlitchTip$ = this.settingsService.paidForGlitchTip$;
   mobileNav$ = this.mainNav.mobileNav$;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger | undefined = undefined;
 

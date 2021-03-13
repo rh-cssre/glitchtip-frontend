@@ -8,6 +8,7 @@ import { SocialApp } from "./user/user.interfaces";
 interface SettingsState {
   socialApps: SocialApp[];
   billingEnabled: boolean;
+  iPaidForGlitchTip: boolean | null;
   enableUserRegistration: boolean;
   matomoURL: string | null;
   matomoSiteId: string | null;
@@ -22,6 +23,7 @@ interface SettingsState {
 const initialState: SettingsState = {
   socialApps: [],
   billingEnabled: false,
+  iPaidForGlitchTip: null,
   enableUserRegistration: false,
   matomoURL: null,
   matomoSiteId: null,
@@ -40,6 +42,9 @@ export class SettingsService {
   private readonly state = new BehaviorSubject<SettingsState>(initialState);
   socialApps$ = this.state.pipe(map((settings) => settings.socialApps));
   billingEnabled$ = this.state.pipe(map((settings) => settings.billingEnabled));
+  paidForGlitchTip$ = this.state.pipe(
+    map((settings) => settings.iPaidForGlitchTip)
+  );
   stripePublicKey$ = this.state.pipe(
     map((settings) => settings.stripePublicKey)
   );
