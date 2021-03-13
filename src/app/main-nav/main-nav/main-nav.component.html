@@ -159,7 +159,10 @@
         Auth Tokens
       </a>
       <button mat-menu-item (click)="this.logout()">Log Out</button>
-      <mat-card>
+      <div *ngIf="(paidForGlitchTip$ | async) === true">
+        <img src="http://placekitten.com/200/300" />
+      </div>
+      <mat-card *ngIf="(paidForGlitchTip$ | async) === false">
         <mat-card-title> Like GlitchTip? </mat-card-title>
         <mat-card-content>
           <ul>
