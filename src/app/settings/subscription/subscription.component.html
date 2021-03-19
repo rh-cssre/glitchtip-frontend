@@ -41,7 +41,7 @@
                   class="event-count"
                   [class.event-count--left]="eventsPercent < 25"
                   [class.event-count--right]="eventsPercent > 75"
-                  style="left: {{ eventsPercent }}%"
+                  style="left: {{ eventsPercent < 100 ? eventsPercent : 100 }}%"
                 >
                   {{ eventsCount$ | async }}
                 </div>
