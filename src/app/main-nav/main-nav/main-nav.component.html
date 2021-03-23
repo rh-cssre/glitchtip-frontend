@@ -159,40 +159,53 @@
         Auth Tokens
       </a>
       <button mat-menu-item (click)="this.logout()">Log Out</button>
-      <div *ngIf="(paidForGlitchTip$ | async) === true">
-        <img src="http://placekitten.com/200/300" />
-      </div>
-      <mat-card *ngIf="(paidForGlitchTip$ | async) === false">
-        <mat-card-title> Like GlitchTip? </mat-card-title>
-        <mat-card-content>
-          <ul>
-            <li>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://liberapay.com/GlitchTip/donate"
-                >Donate via Liberapay</a
-              >
-            </li>
-            <li>
-              Let us run it for you on
-              <a
-                target="_blank"
-                rel="noopener"
-                href="app.glitchtip.com/register"
-                >Hosted GlitchTip</a
-              >
-            </li>
-            <li>
-              Buy support, email
-              <a href="mailto: info@burkesoftware.com"
-                >info@burkesoftware.com</a
-              >
-            </li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
     </mat-nav-list>
+
+    <mat-card *ngIf="(paidForGlitchTip$ | async) === true" class="thankyouware">
+      <p class="mat-copy-1">Thank you for financially supporting GlitchTip!</p>
+    </mat-card>
+
+    <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
+      <button
+        *ngIf="!nagWareOpenState"
+        (click)="nagWareOpenState = !nagWareOpenState"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-card-title>
+        <h3 class="mat-display-1">Support GlitchTip</h3>
+      </mat-card-title>
+      <p *ngIf="nagWareOpenState" class="mat-copy-1">
+        To remove this banner, set the environment variable
+        `I_PAID_FOR_GLITCHTIP` to equal&nbsp;true.
+      </p>
+      <mat-card-content>
+        <ul>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://liberapay.com/GlitchTip/donate"
+              >Donate</a
+            >
+            via Liberapay
+          </li>
+          <li>
+            <a
+              target="_blank"
+              rel="noopener"
+              href="https://app.glitchtip.com/register"
+              >Switch</a
+            >
+            to Hosted GlitchTip
+          </li>
+          <li>
+            <a href="mailto:info@burkesoftware.com">Contact us</a> to purchase
+            support
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
   </mat-sidenav>
 
   <mat-sidenav-content

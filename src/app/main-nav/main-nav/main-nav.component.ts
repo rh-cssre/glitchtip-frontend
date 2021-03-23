@@ -26,6 +26,7 @@ export class MainNavComponent {
   paidForGlitchTip$ = this.settingsService.paidForGlitchTip$;
   mobileNav$ = this.mainNav.mobileNav$;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger | undefined = undefined;
+  nagWareOpenState = false;
 
   constructor(
     private mainNav: MainNavService,
