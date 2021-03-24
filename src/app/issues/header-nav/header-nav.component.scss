@@ -1,5 +1,19 @@
 @import "../../../assets/styles/variables";
 
+section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.no-projects {
+  &__picker {
+    @media screen and (max-width: $small - 1) {
+      display: none;
+    }
+  }
+}
+
 #project-picker {
   position: relative;
   flex: 1;
@@ -130,10 +144,32 @@ mat-expansion-panel::ng-deep {
   }
 }
 
-.add-button {
-  margin: 0 0 0 20px;
+.nav-action-group {
+  margin-left: 10px;
+
+  @media screen and (max-width: $medium - 1) {
+    display: flex;
+    flex-direction: column;
+
+    .nav-action:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    margin-left: 0;
+  }
+}
+
+.nav-action {
+  margin: 0 0 0 10px;
 
   @media screen and (max-width: $small - 1) {
     display: none;
+
+    .no-projects & {
+      display: block;
+      margin-left: 0;
+    }
   }
 }

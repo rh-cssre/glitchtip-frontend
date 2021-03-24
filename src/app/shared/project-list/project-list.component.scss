@@ -1,3 +1,19 @@
+@import "../../../assets/styles/variables";
+
 .org-projects-section {
   margin-bottom: 70px;
+}
+
+.page-header {
+  flex-wrap: wrap;
+
+  @media screen and (max-width: $small - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  h2 {
+    margin-right: 16px;
+    margin-bottom: 10px;
+  }
 }

@@ -1,7 +1,15 @@
+@import "../../../../assets/styles/variables";
+
 .empty-state-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.project-card {
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
 }

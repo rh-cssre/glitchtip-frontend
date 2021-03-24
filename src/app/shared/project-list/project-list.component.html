@@ -40,9 +40,9 @@
           Create New Project in {{ organization.name }}
         </a>
       </header>
-
       <app-empty-projects
         *ngIf="organization.projects.length === 0"
+        [activeOrgOnly]="activeOrgOnly"
       ></app-empty-projects>
 
       <div>
