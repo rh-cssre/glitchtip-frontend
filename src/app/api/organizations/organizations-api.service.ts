@@ -4,6 +4,7 @@ import {
   Organization,
   OrganizationDetail,
   OrganizationNew,
+  Environment,
 } from "./organizations.interface";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
@@ -35,5 +36,10 @@ export class OrganizationAPIService extends APIBaseService {
 
   destroy(id: string) {
     return this.http.delete(this.detailURL(id));
+  }
+
+  retrieveOrganizationEnvironments(orgSlug: string) {
+    const url = `${baseUrl}/organizations/${orgSlug}/environments/`;
+    return this.http.get<Environment[]>(url);
   }
 }

@@ -8,17 +8,22 @@ import { formatDate } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
-import { Subscription, combineLatest } from "rxjs";
+import { Subscription, combineLatest, EMPTY } from "rxjs";
 import {
   map,
   filter,
   withLatestFrom,
   distinctUntilChanged,
+  take,
+  tap,
+  skip,
+  mergeMap,
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 
 @Component({
   selector: "app-issues-page",
@@ -42,6 +47,9 @@ export class IssuesPageComponent
       value: "",
       disabled: true,
     }),
+  });
+  environmentForm = new FormGroup({
+    environment: new FormControl({ value: "" }),
   });
   dateForm = new FormGroup({
     startDate: new FormControl(""),
@@ -77,6 +85,9 @@ export class IssuesPageComponent
     })
   );
   routerEventSubscription: Subscription;
+  orgEnvironmentSubscription: Subscription;
+  projectEnvironmentSubscription: Subscription;
+  resetEnvironmentSubscription: Subscription;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
     other: "# events",
@@ -144,11 +155,22 @@ export class IssuesPageComponent
     })
   );
 
+  organizationEnvironments$ = combineLatest([
+    this.appliedProjectCount$,
+    this.issuesService.organizationEnvironmentsProcessed$,
+    this.environmentsService.visibleEnvironments$,
+  ]).pipe(
+    map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
+      appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
+    )
+  );
+
   constructor(
     private issuesService: IssuesService,
     private router: Router,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private environmentsService: ProjectEnvironmentsService
   ) {
     super(issuesService);
 
@@ -156,6 +178,12 @@ export class IssuesPageComponent
       resp.length === 0
         ? this.sortForm.controls.sort.disable()
         : this.sortForm.controls.sort.enable()
+    );
+
+    this.organizationEnvironments$.subscribe((environments) =>
+      environments.length === 0
+        ? this.environmentForm.controls.environment.disable()
+        : this.environmentForm.controls.environment.enable()
     );
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
@@ -173,6 +201,104 @@ export class IssuesPageComponent
         }
       }
     );
+
+    this.orgEnvironmentSubscription = this.navigationEnd$
+      .pipe(
+        distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
+        mergeMap(({ orgSlug }) =>
+          orgSlug
+            ? this.issuesService.getOrganizationEnvironments(orgSlug)
+            : EMPTY
+        )
+      )
+      .subscribe();
+
+    this.projectEnvironmentSubscription = combineLatest([
+      this.navigationEnd$,
+      this.activeOrganizationProjects$,
+    ])
+      .pipe(
+        filter(
+          ([urlData, projects]) =>
+            urlData.orgSlug !== undefined &&
+            urlData.project?.length === 1 &&
+            projects !== null
+        ),
+        distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
+        map(([urlData, projects]) => {
+          const matchedProject = projects!.find(
+            (project) => project.id === parseInt(urlData.project![0], 10)
+          );
+          if (urlData.orgSlug && matchedProject) {
+            this.environmentsService
+              .retrieveEnvironmentsWithProperties(
+                urlData.orgSlug,
+                matchedProject.slug
+              )
+              .subscribe();
+          }
+        })
+      )
+      .subscribe();
+
+    /**
+     * When changing from one project to another, see if there is an environment
+     * in the URL. If it doesn't match a project environment, reset the URL.
+     */
+    this.resetEnvironmentSubscription = combineLatest([
+      this.environmentsService.visibleEnvironments$,
+      this.route.queryParams,
+    ])
+      .pipe(
+        distinctUntilChanged((a, b) => a[0] === b[0]),
+        // distinctUntilChanged passes the first time because it doesn't have
+        // two things to compare
+        skip(1),
+        tap(([projectEnvironments, queryParams]) => {
+          const newQuery = this.removeEnvironmentQueryIfMatched(
+            projectEnvironments,
+            queryParams.query
+          );
+          if (newQuery !== false) {
+            this.environmentForm.setValue({
+              environment: null,
+            });
+            this.router.navigate([], {
+              queryParams: { query: newQuery },
+              queryParamsHandling: "merge",
+            });
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  /**
+   * Takes a query, looks for the environment tag, and checks it against a list.
+   * If it matches the list, build a new query string without it.
+   *
+   * If removing the environment results in an empty query, return null.
+   *
+   * If there's no query, no environment, or if there's a match, do nothing.
+   */
+  removeEnvironmentQueryIfMatched(
+    projectEnvironments: string[],
+    query: string | undefined
+  ) {
+    if (!!query) {
+      const queryObject = this.getQueryAsObject(query);
+      if (queryObject.environment) {
+        const environmentMatch = projectEnvironments.find(
+          (environment) => environment === queryObject.environment
+        );
+        if (!environmentMatch) {
+          delete queryObject.environment;
+          const newQuery = this.getQueryObjectAsString(queryObject);
+          return !!newQuery ? newQuery : null;
+        }
+      }
+    }
+    return false;
   }
 
   ngOnInit() {
@@ -187,6 +313,10 @@ export class IssuesPageComponent
       this.sortForm.setValue({
         sort: sort !== undefined ? sort : "-last_seen",
       });
+      this.environmentForm.setValue({
+        environment:
+          query !== undefined ? this.getEnvironmentFromQuery(query) : "",
+      });
       this.dateForm.setValue({
         startDate: start ? start : null,
         endDate: end ? end : null,
@@ -196,7 +326,11 @@ export class IssuesPageComponent
 
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
+    this.orgEnvironmentSubscription.unsubscribe();
+    this.projectEnvironmentSubscription.unsubscribe();
+    this.resetEnvironmentSubscription.unsubscribe();
     this.issuesService.clearState();
+    this.environmentsService.clearState();
   }
 
   onDateFormSubmit() {
@@ -279,5 +413,95 @@ export class IssuesPageComponent
       queryParams: { sort: event.value },
       queryParamsHandling: "merge",
     });
+  }
+
+  getEnvironmentFromQuery(query: string) {
+    const queryObject = this.getQueryAsObject(query);
+    if (queryObject.environment) {
+      return queryObject.environment;
+    }
+    return "";
+  }
+
+  getQueryAsObject(query: string) {
+    // queries are split via spaces, but not spaces inside of a quote pair
+    // https://stackoverflow.com/a/25663729/
+    // assumption: no double quotes apart from what's wrapping a tag's key/value
+    const splitQuery: string[] = query.split(/ +(?=(?:(?:[^"]*"){2})*[^"]*$)/g);
+    const queryArrayOfArrays = splitQuery.map((queryItem) =>
+      queryItem.split(":")
+    );
+    queryArrayOfArrays.forEach((queryArray, index) => {
+      queryArray.forEach((queryString, innerIndex) => {
+        if (queryString.startsWith('"') && queryString.endsWith('"')) {
+          queryArrayOfArrays[index][innerIndex] = queryString
+            .substr(1)
+            .slice(0, -1);
+        }
+      });
+    });
+    return Object.assign(
+      {},
+      ...queryArrayOfArrays.map((queryItem) => {
+        const object: { [key: string]: string } = {};
+        object[queryItem[0]] = queryItem[1];
+        return object;
+      })
+    ) as { [key: string]: string };
+  }
+
+  getQueryObjectAsString(queryObject: { [key: string]: string }) {
+    const keyWhiteList = ["is", "has"];
+    return Object.keys(queryObject)
+      .map((key) => {
+        if (keyWhiteList.indexOf(key) > -1) {
+          return `${key}:${queryObject[key]}`;
+        }
+        return `"${key}":"${queryObject[key]}"`;
+      })
+      .join(" ");
+  }
+
+  getNewQueryEnvironment(
+    newEnvironmentName: string | null,
+    query: string | undefined
+  ) {
+    let newQuery: string | null = null;
+    const queryObject = query ? this.getQueryAsObject(query) : null;
+
+    if (newEnvironmentName === null) {
+      if (queryObject && !!queryObject.environment) {
+        delete queryObject.environment;
+        const objectAsString = this.getQueryObjectAsString(queryObject);
+        newQuery = objectAsString === "" ? null : objectAsString;
+      }
+    } else {
+      if (queryObject) {
+        queryObject.environment = newEnvironmentName;
+        newQuery = this.getQueryObjectAsString(queryObject);
+      } else {
+        newQuery = `"environment":"${newEnvironmentName}"`;
+      }
+    }
+    return newQuery;
+  }
+
+  filterByEnvironment(event: MatSelectChange) {
+    this.route.queryParams
+      .pipe(
+        take(1),
+        map((queryParams) => {
+          this.router.navigate([], {
+            queryParams: {
+              query: this.getNewQueryEnvironment(
+                event.value,
+                queryParams.query
+              ),
+            },
+            queryParamsHandling: "merge",
+          });
+        })
+      )
+      .subscribe();
   }
 }

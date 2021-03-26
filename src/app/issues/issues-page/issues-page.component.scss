@@ -51,6 +51,27 @@ table {
     flex-direction: column-reverse;
   }
 
+  @media screen and (min-width: $tablet) {
+    > * {
+      padding-left: 10px;
+      padding-right: 10px;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .environment-form, .sort-form {
+    ::ng-deep .mat-form-field-infix {
+      width: 130px;
+    }
+  }
+
   .date-form,
   .search-form {
     flex: 1;

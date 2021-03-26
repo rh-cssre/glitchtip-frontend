@@ -54,6 +54,13 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
       return sorted;
     })
   );
+  readonly visibleEnvironments$ = this.environments$.pipe(
+    map((environments) =>
+      environments
+        .filter((environment) => environment.isHidden === false)
+        .map((environment) => environment.name)
+    )
+  );
 
   constructor(
     private projectsAPIService: ProjectsAPIService,
@@ -84,6 +91,17 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
         }
         return EMPTY;
       })
+    );
+  }
+
+  retrieveEnvironmentsWithProperties(orgSlug: string, projectSlug: string) {
+    return this.projectsAPIService.listEnvironments(orgSlug, projectSlug).pipe(
+      tap((environments) =>
+        this.setState({
+          environments: this.sortEnvironments(environments),
+          initialLoad: true,
+        })
+      )
     );
   }
 

@@ -16,6 +16,9 @@ import { issueList } from "./issues-test-data";
 import { HeaderNavComponent } from "../header-nav/header-nav.component";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
+import { DaysAgoPipe, DaysOldPipe } from "src/app/shared/days-ago.pipe";
+import { MarkdownModule } from "ngx-markdown";
+import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
 
 export default {
   title: "Issues/Issues Page",
@@ -30,9 +33,16 @@ export default {
         MatDatepickerModule,
         MatNativeDateModule,
         MatTableModule,
+        MarkdownModule,
+        LazyMarkdownModule,
       ],
       providers: [IssuesService, MatDatepickerModule, OrganizationsService],
-      declarations: [HeaderNavComponent, IssueZeroStatesComponent],
+      declarations: [
+        HeaderNavComponent,
+        IssueZeroStatesComponent,
+        DaysOldPipe,
+        DaysAgoPipe,
+      ],
     }),
     withKnobs,
   ],
