@@ -85,7 +85,7 @@
               </button>
             </form>
 
-            <form [formGroup]="sortForm">
+            <form [formGroup]="sortForm" class="sort-form">
               <mat-form-field>
                 <mat-label>Sort by</mat-label>
                 <mat-select
@@ -100,6 +100,26 @@
                   <mat-option value="count">Least Frequent</mat-option>
                   <mat-option value="-priority">Highest Priority</mat-option>
                   <mat-option value="priority">Lowest Priority</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+
+            <form [formGroup]="environmentForm" class="environment-form">
+              <mat-form-field
+                *ngIf="organizationEnvironments$ | async as environments"
+              >
+                <mat-label>Environment</mat-label>
+                <mat-select
+                  (selectionChange)="filterByEnvironment($event)"
+                  formControlName="environment"
+                >
+                  <mat-option [value]="null">All Environments</mat-option>
+                  <mat-option
+                    *ngFor="let environment of environments"
+                    [value]="environment"
+                  >
+                    {{ environment }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </form>

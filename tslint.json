@@ -49,7 +49,7 @@
     "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "ordered-imports": false,
-    "quotemark": [true, "double"],
+    "quotemark": [true, "double", "avoid-escape"],
     "semicolon": {
       "options": ["always", "ignore-bound-class-methods"]
     },
