@@ -76,6 +76,10 @@ describe("IssuesPageComponent", () => {
           "browser.name": "Firefox",
         },
       },
+      {
+        queryString: "",
+        expectedObject: { _special: "all" },
+      },
     ];
 
     queries.forEach((query) => {
@@ -103,11 +107,17 @@ describe("IssuesPageComponent", () => {
         newEnvironment: null,
         expectedQueryString: null,
       },
-      // no query, envname string: create environment query
+      // empty query, envname string: create environment query
+      {
+        queryString: "",
+        newEnvironment: "production",
+        expectedQueryString: '"environment":"production"',
+      },
+      // no query, envname string: create environment query with is:unresolved
       {
         queryString: undefined,
         newEnvironment: "production",
-        expectedQueryString: '"environment":"production"',
+        expectedQueryString: 'is:unresolved "environment":"production"',
       },
       // query, empty envname: delete environment query if it's there
       {

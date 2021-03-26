@@ -443,6 +443,11 @@ export class IssuesPageComponent
     return Object.assign(
       {},
       ...queryArrayOfArrays.map((queryItem) => {
+        // Special case, for when `query=`. Otherwise it'd be
+        // { "": undefined }, which would screw with the types
+        if (queryItem.length === 1) {
+          queryItem = ["_special", "all"];
+        }
         const object: { [key: string]: string } = {};
         object[queryItem[0]] = queryItem[1];
         return object;
@@ -451,10 +456,12 @@ export class IssuesPageComponent
   }
 
   getQueryObjectAsString(queryObject: { [key: string]: string }) {
-    const keyWhiteList = ["is", "has"];
+    const keyNoQuoteWhiteList = ["is", "has"];
+    const keyBlackList = ["_special"];
     return Object.keys(queryObject)
+      .filter((key) => keyBlackList.indexOf(key) === -1)
       .map((key) => {
-        if (keyWhiteList.indexOf(key) > -1) {
+        if (keyNoQuoteWhiteList.indexOf(key) > -1) {
           return `${key}:${queryObject[key]}`;
         }
         return `"${key}":"${queryObject[key]}"`;
@@ -467,7 +474,8 @@ export class IssuesPageComponent
     query: string | undefined
   ) {
     let newQuery: string | null = null;
-    const queryObject = query ? this.getQueryAsObject(query) : null;
+    const queryObject =
+      query !== undefined ? this.getQueryAsObject(query) : null;
 
     if (newEnvironmentName === null) {
       if (queryObject && !!queryObject.environment) {
@@ -480,7 +488,7 @@ export class IssuesPageComponent
         queryObject.environment = newEnvironmentName;
         newQuery = this.getQueryObjectAsString(queryObject);
       } else {
-        newQuery = `"environment":"${newEnvironmentName}"`;
+        newQuery = `is:unresolved "environment":"${newEnvironmentName}"`;
       }
     }
     return newQuery;
