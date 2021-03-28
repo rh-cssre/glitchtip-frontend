@@ -50,6 +50,7 @@ export class UserService {
    * app.glitchtip.com will further anonymize this and respects Do Not Track
    */
   matomoSetUserId(id: string) {
+    // tslint:disable:no-any
     const _paq: any = (window as any)._paq;
     _paq.push(["setUserId", id]);
   }

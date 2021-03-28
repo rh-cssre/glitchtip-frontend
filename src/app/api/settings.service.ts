@@ -95,9 +95,10 @@ export class SettingsService {
         if (settings.chatwootWebsiteToken) {
           // tslint:disable:only-arrow-functions
           // tslint:disable:space-before-function-paren
+          // tslint:disable:one-variable-per-declaration
           (function (d, t) {
-            var BASE_URL = "https://app.chatwoot.com";
-            var g: any = d.createElement(t),
+            const BASE_URL = "https://app.chatwoot.com";
+            const g: any = d.createElement(t),
               s: any = d.getElementsByTagName(t)[0];
             g.src = BASE_URL + "/packs/js/sdk.js";
             s.parentNode.insertBefore(g, s);
