@@ -49,6 +49,10 @@ export class EventDetailComponent implements OnInit {
 
   /** TODO fix these types */
   generateQuery(key: string | number | null, value: string | number | null) {
-    return `"${key}":"${value}"`;
+    if (key === "environment") {
+      return { environment: value };
+    } else {
+      return { query: `"${key}":"${value}"` };
+    }
   }
 }
