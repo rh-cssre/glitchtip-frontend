@@ -61,7 +61,7 @@
         <a
           [routerLink]="['..']"
           [relativeTo]="route.parent"
-          [queryParams]="generateQuery(tag.key, tag.value)"
+          [queryParams]="generateQuery(tag)"
           queryParamsHandling="merge"
         >
           <span class="pseudo-chip-key">{{ tag.key }}</span>
