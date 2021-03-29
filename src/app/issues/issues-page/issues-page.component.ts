@@ -81,7 +81,8 @@ export class IssuesPageComponent
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
-      return { orgSlug, cursor, query, project, start, end, sort };
+      const environment: string | undefined = queryParams.environment;
+      return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
   routerEventSubscription: Subscription;
@@ -187,7 +188,7 @@ export class IssuesPageComponent
     );
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, query, project, start, end, sort }) => {
+      ({ orgSlug, cursor, query, project, start, end, sort, environment }) => {
         if (orgSlug) {
           this.issuesService.getIssues(
             orgSlug,
@@ -196,7 +197,8 @@ export class IssuesPageComponent
             project,
             start,
             end,
-            sort
+            sort,
+            environment
           );
         }
       }
