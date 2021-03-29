@@ -49,7 +49,7 @@ export class EventDetailComponent implements OnInit {
 
   /** TODO fix these types */
   generateQuery(key: string | number | null, value: string | number | null) {
-    // We want to assume unresolved if not present; query overrides otherwise
+    // Assume unresolved if not present; tag overrides query otherwise
     const query = this.route.snapshot.queryParams.query;
     const unresolved = query === undefined ? "is:unresolved " : "";
 
