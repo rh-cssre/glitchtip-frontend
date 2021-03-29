@@ -1,4 +1,7 @@
-<section class="l-body l-body--full-width" *ngIf="(initialLoadComplete$ | async) && (issue$ | async) === null">
+<section
+  class="l-body l-body--full-width"
+  *ngIf="(initialLoadComplete$ | async) && (issue$ | async) === null"
+>
   <header class="page-header">
     <h1 class="mat-display-1">Issue not found</h1>
   </header>
@@ -9,7 +12,7 @@
       mat-stroked-button
       class="project-issues-link"
       [routerLink]="['..']"
-      [queryParams]="{ project: issue.project.id }"
+      [queryParams]="generateBackLink(issue.project.id)"
     >
       <mat-icon>keyboard_arrow_left</mat-icon>
       View all issues for {{ issue.project.name }}

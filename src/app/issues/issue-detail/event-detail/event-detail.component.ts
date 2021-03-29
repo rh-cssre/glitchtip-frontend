@@ -49,10 +49,14 @@ export class EventDetailComponent implements OnInit {
 
   /** TODO fix these types */
   generateQuery(key: string | number | null, value: string | number | null) {
+    // We want to assume unresolved if not present; query overrides otherwise
+    const query = this.route.snapshot.queryParams.query;
+    const unresolved = query === undefined ? "is:unresolved " : "";
+
     if (key === "environment") {
       return { environment: value };
     } else {
-      return { query: `"${key}":"${value}"` };
+      return { query: `${unresolved}"${key}":"${value}"` };
     }
   }
 }
