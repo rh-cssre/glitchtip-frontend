@@ -1,3 +1,6 @@
+import { environments } from "./variables";
+import { uniqueId } from "../integration/utils";
+
 export const jsRangeError = {
   exception: {
     values: [
@@ -349,7 +352,7 @@ export const jsRangeError = {
     ],
   },
   level: "error",
-  event_id: "2dd83f0e558c43be8f74b6ac310e3cd7",
+  event_id: uniqueId(),
   platform: "javascript",
   sdk: {
     name: "sentry.javascript.browser",
@@ -367,7 +370,7 @@ export const jsRangeError = {
     ],
   },
   timestamp: 1617119801.843,
-  environment: "production",
+  environment: environments.production,
   contexts: {
     trace: {
       op: "pageload",
@@ -775,7 +778,7 @@ export const jsReferenceError = {
     ],
   },
   level: "error",
-  event_id: "76879380a28f49c3af3dc5ab09f3f688",
+  event_id: uniqueId(),
   platform: "javascript",
   sdk: {
     name: "sentry.javascript.browser",
@@ -793,7 +796,7 @@ export const jsReferenceError = {
     ],
   },
   timestamp: 1617119948.811,
-  environment: "staging",
+  environment: environments.staging,
   contexts: {
     trace: {
       op: "pageload",
@@ -1245,7 +1248,7 @@ export const jsSyntaxError = {
     ],
   },
   level: "error",
-  event_id: "0a1c63f986d8476fb88d4efa5382c7af",
+  event_id: uniqueId(),
   platform: "javascript",
   sdk: {
     name: "sentry.javascript.browser",
@@ -1263,7 +1266,7 @@ export const jsSyntaxError = {
     ],
   },
   timestamp: 1617119974.697,
-  environment: "development",
+  environment: environments.development,
   contexts: {
     trace: {
       op: "pageload",
@@ -1745,7 +1748,7 @@ export const jsUriError = {
     ],
   },
   level: "error",
-  event_id: "d1885aea212543b895ffb9d917c1d179",
+  event_id: uniqueId(),
   platform: "javascript",
   sdk: {
     name: "sentry.javascript.browser",
@@ -1928,3 +1931,95 @@ export const jsUriError = {
     },
   },
 };
+
+export const generateUniqueErrors = (url: string, count: number) => {
+  for (let i = 0; i < count; i++) {
+    cy.request("POST", url, jsUniqueError());
+  }
+};
+
+export const jsUniqueError = () => ({
+  message: `A Generic Error ${uniqueId(6)}`,
+  exception: {
+    values: [
+      {
+        value: `A Generic Error ${uniqueId(6)}`,
+        type: "Error",
+        mechanism: { synthetic: true, handled: true, type: "generic" },
+      },
+    ],
+  },
+  level: "error",
+  event_id: uniqueId(),
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  timestamp: Date.now() / 1000,
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "8e2b111ba056f7b5",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "1179b08e3ec14455836d323ab9af1d86",
+    },
+  },
+  tags: { transaction: "/" },
+  breadcrumbs: [
+    {
+      timestamp: 1617135472.93,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617135472.935,
+      category: "navigation",
+      data: { from: "/", to: "/" },
+    },
+    {
+      timestamp: 1617135472.946,
+      category: "ui.click",
+      message: "body > app-root > ol > li > a",
+    },
+    {
+      timestamp: 1617135472.975,
+      category: "xhr",
+      data: {
+        method: "GET",
+        url: "http://localhost:4201/sockjs-node/info?t=1617135472946",
+        status_code: 200,
+      },
+      type: "http",
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+    },
+  },
+});

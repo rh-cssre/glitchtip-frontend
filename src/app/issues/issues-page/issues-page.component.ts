@@ -24,6 +24,17 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 
+export const sorts = {
+  "-last_seen": "Last Seen",
+  last_seen: "First Seen",
+  "-created": "Newest Creation Date",
+  created: "Oldest Creation Date",
+  "-count": "Most Frequent",
+  count: "Least Frequent",
+  "-priority": "Highest Priority",
+  priority: "Lowest Priority",
+};
+
 @Component({
   selector: "app-issues-page",
   templateUrl: "./issues-page.component.html",
@@ -92,6 +103,7 @@ export class IssuesPageComponent
     "=1": "1 event",
     other: "# events",
   };
+  sorts = sorts;
 
   /**
    * Two ways to trigger project detail. The first is if we switch orgs.

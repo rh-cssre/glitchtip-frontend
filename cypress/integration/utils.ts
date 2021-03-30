@@ -13,3 +13,9 @@ export function requestLogin() {
     password: user.password,
   });
 }
+
+export function uniqueId(length = 32) {
+  return [...Array(length)]
+    .map(() => Math.floor(Math.random() * 16).toString(16))
+    .join("");
+}
