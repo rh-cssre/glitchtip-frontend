@@ -6,7 +6,7 @@ function seedIssues(dsn: string) {
   const key = dsn.split("@")[0].split("//")[1];
   const host = dsn.split("@")[1].split("/")[0];
   const id = dsn.split("@")[1].split("/")[1];
-  const url = `http://${host}/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
+  const url = `/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
   cy.request("POST", url, jsErrors.jsRangeError);
   cy.request("POST", url, jsErrors.jsReferenceError);
   cy.request("POST", url, jsErrors.jsSyntaxError);
