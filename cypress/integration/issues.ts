@@ -4,7 +4,6 @@ import * as jsErrors from "../fixtures/events";
 function seedIssues(dsn: string) {
   // http://d85d8c23767f4352abf0afffc69e4b89@localhost:8000/82
   const key = dsn.split("@")[0].split("//")[1];
-  const host = dsn.split("@")[1].split("/")[0];
   const id = dsn.split("@")[1].split("/")[1];
   const url = `/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
   cy.request("POST", url, jsErrors.jsRangeError);
