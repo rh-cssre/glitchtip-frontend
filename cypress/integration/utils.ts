@@ -1,7 +1,7 @@
 import { user } from "../fixtures/users";
 
-export function seedBackend() {
-  const url = "/api/test/seed/";
+export function seedBackend(doExtraStuff: boolean) {
+  const url = `/api/test/seed/${doExtraStuff ? "?extras=true" : ""}`;
   cy.request("POST", url);
 }
 
