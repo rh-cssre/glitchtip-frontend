@@ -1,17 +1,35 @@
+@import "variables";
+
 .mat-list-base .mat-list-item {
-  height: 52px;
+  height: auto;
+  padding-top: 4px;
+  padding-bottom: 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 
   ::ng-deep .mat-list-item-content {
     padding-left: 0;
     padding-right: 0;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
+}
+
+.email-info {
+  padding-top: 8px;
+  margin-bottom: 4px;
+
+  span {
+    margin-right: 16px;
+  }
+}
+
+.email-actions {
+  margin-top: 4px;
+  padding-bottom: 8px;
 }
 
 mat-chip-list {
   display: inline-block;
-  margin-left: 15px;
   margin-right: 15px;
   pointer-events: none;
   user-select: none;
@@ -36,6 +54,10 @@ mat-chip {
   display: flex;
   padding-top: 7px;
 
+  @media (max-width: $small - 1) {
+    flex-direction: column;
+  }
+
   .mat-form-field {
     flex: 1;
   }
@@ -47,5 +69,10 @@ mat-chip {
   app-loading-button {
     margin-top: 12px;
     margin-left: 15px;
+
+    @media (max-width: $small - 1) {
+      margin-left: unset;
+      margin-top: 8px;
+    }
   }
 }

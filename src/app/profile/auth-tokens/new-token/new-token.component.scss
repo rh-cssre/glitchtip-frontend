@@ -1,3 +1,5 @@
+@import "variables";
+
 mat-card-header {
   display: flex;
   justify-content: space-between;
@@ -10,6 +12,7 @@ mat-card-header {
 
   mat-card-title {
     margin-bottom: 0;
+    margin-right: 8px;
   }
 }
 
@@ -23,16 +26,15 @@ mat-form-field {
 }
 
 ul {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax((150px), 1fr));
+  grid-gap: 8px 16px;
   margin-top: 0;
   margin-bottom: 0;
   padding-left: 0;
 
   li {
-    min-width: 25%;
     list-style-type: none;
-    margin-top: 8px;
   }
 }
 
