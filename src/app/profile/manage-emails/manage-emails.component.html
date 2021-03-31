@@ -5,7 +5,7 @@
     <mat-list>
       <mat-list-item *ngFor="let email of emailAddresses$ | async">
         <div class="email-info">
-          {{ email.email }}
+          <span>{{ email.email }}</span>
           <mat-chip-list
             *ngIf="email.isPrimary || !email.isVerified"
             [selectable]="false"

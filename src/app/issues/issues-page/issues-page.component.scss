@@ -1,4 +1,4 @@
-@import "../../../assets/styles/variables";
+@import "variables";
 
 $iconWidth: 56px;
 
@@ -66,7 +66,8 @@ table {
     }
   }
 
-  .environment-form, .sort-form {
+  .environment-form,
+  .sort-form {
     ::ng-deep .mat-form-field-infix {
       width: 130px;
     }

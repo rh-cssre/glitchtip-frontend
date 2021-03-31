@@ -1,12 +1,21 @@
-@import "../../../assets/styles/variables";
+@import "variables";
 
 mat-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 
   &::ng-deep .mat-card-header-text {
     margin-left: 0;
+  }
+
+  mat-form-field {
+    margin-top: -5px;
+
+    @media (max-width: $small - 1) {
+      width: 100%;
+    }
   }
 }
 
