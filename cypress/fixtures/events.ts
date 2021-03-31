@@ -1932,18 +1932,41 @@ export const jsUriError = {
   },
 };
 
-export const generateUniqueErrors = (url: string, count: number) => {
+export const generateErrors = (url: string, count: number) => {
   for (let i = 0; i < count; i++) {
-    cy.request("POST", url, jsUniqueError());
+    cy.request("POST", url, jsError());
   }
 };
 
-export const jsUniqueError = () => ({
-  message: `A Generic Error ${uniqueId(6)}`,
+const userAgents: { [key: string]: string } = {
+  ubuntuFirefox:
+    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+  ubuntuChrome:
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
+  windowsChrome:
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
+  macOSSafari:
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
+  iOSSafari:
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
+  windowsOpera:
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.192 Safari/537.36 OPR/74.0.3911.218",
+  androidChrome:
+    "Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.105 Mobile Safari/537.36",
+};
+
+const randomUserAgent = () => {
+  const keys = Object.keys(userAgents);
+  const random = Math.floor(Math.random() * keys.length);
+  return userAgents[keys[random]];
+};
+
+export const jsError = () => ({
+  message: "A Generic Error",
   exception: {
     values: [
       {
-        value: `A Generic Error ${uniqueId(6)}`,
+        value: "A Generic Error",
         type: "Error",
         mechanism: { synthetic: true, handled: true, type: "generic" },
       },
@@ -2017,9 +2040,6 @@ export const jsUniqueError = () => ({
   ],
   request: {
     url: "http://localhost:4201/",
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
-    },
+    headers: { "User-Agent": randomUserAgent() },
   },
 });
