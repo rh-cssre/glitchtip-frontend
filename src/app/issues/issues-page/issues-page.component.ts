@@ -14,7 +14,6 @@ import {
   filter,
   withLatestFrom,
   distinctUntilChanged,
-  take,
   tap,
   skip,
   mergeMap,
@@ -24,6 +23,17 @@ import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
+
+export const sorts = {
+  "-last_seen": "Last Seen",
+  last_seen: "First Seen",
+  "-created": "Newest Creation Date",
+  created: "Oldest Creation Date",
+  "-count": "Most Frequent",
+  count: "Least Frequent",
+  "-priority": "Highest Priority",
+  priority: "Lowest Priority",
+};
 
 @Component({
   selector: "app-issues-page",
@@ -81,7 +91,8 @@ export class IssuesPageComponent
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
-      return { orgSlug, cursor, query, project, start, end, sort };
+      const environment: string | undefined = queryParams.environment;
+      return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
   routerEventSubscription: Subscription;
@@ -92,6 +103,7 @@ export class IssuesPageComponent
     "=1": "1 event",
     other: "# events",
   };
+  sorts = sorts;
 
   /**
    * Two ways to trigger project detail. The first is if we switch orgs.
@@ -187,7 +199,7 @@ export class IssuesPageComponent
     );
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, query, project, start, end, sort }) => {
+      ({ orgSlug, cursor, query, project, start, end, sort, environment }) => {
         if (orgSlug) {
           this.issuesService.getIssues(
             orgSlug,
@@ -196,7 +208,8 @@ export class IssuesPageComponent
             project,
             start,
             end,
-            sort
+            sort,
+            environment
           );
         }
       }
@@ -255,16 +268,13 @@ export class IssuesPageComponent
         // two things to compare
         skip(1),
         tap(([projectEnvironments, queryParams]) => {
-          const newQuery = this.removeEnvironmentQueryIfMatched(
-            projectEnvironments,
-            queryParams.query
-          );
-          if (newQuery !== false) {
+          const environment = queryParams.environment;
+          if (environment && !projectEnvironments.includes(environment)) {
             this.environmentForm.setValue({
               environment: null,
             });
             this.router.navigate([], {
-              queryParams: { query: newQuery },
+              queryParams: { environment: null },
               queryParamsHandling: "merge",
             });
           }
@@ -273,40 +283,14 @@ export class IssuesPageComponent
       .subscribe();
   }
 
-  /**
-   * Takes a query, looks for the environment tag, and checks it against a list.
-   * If it matches the list, build a new query string without it.
-   *
-   * If removing the environment results in an empty query, return null.
-   *
-   * If there's no query, no environment, or if there's a match, do nothing.
-   */
-  removeEnvironmentQueryIfMatched(
-    projectEnvironments: string[],
-    query: string | undefined
-  ) {
-    if (!!query) {
-      const queryObject = this.getQueryAsObject(query);
-      if (queryObject.environment) {
-        const environmentMatch = projectEnvironments.find(
-          (environment) => environment === queryObject.environment
-        );
-        if (!environmentMatch) {
-          delete queryObject.environment;
-          const newQuery = this.getQueryObjectAsString(queryObject);
-          return !!newQuery ? newQuery : null;
-        }
-      }
-    }
-    return false;
-  }
-
   ngOnInit() {
     this.route.params.subscribe((_) => {
       const query: string | undefined = this.route.snapshot.queryParams.query;
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
       const sort: string | undefined = this.route.snapshot.queryParams.sort;
+      const environment: string | undefined = this.route.snapshot.queryParams
+        .environment;
       this.form.setValue({
         query: query !== undefined ? query : "is:unresolved",
       });
@@ -314,8 +298,7 @@ export class IssuesPageComponent
         sort: sort !== undefined ? sort : "-last_seen",
       });
       this.environmentForm.setValue({
-        environment:
-          query !== undefined ? this.getEnvironmentFromQuery(query) : "",
+        environment: environment !== undefined ? environment : "",
       });
       this.dateForm.setValue({
         startDate: start ? start : null,
@@ -415,101 +398,10 @@ export class IssuesPageComponent
     });
   }
 
-  getEnvironmentFromQuery(query: string) {
-    const queryObject = this.getQueryAsObject(query);
-    if (queryObject.environment) {
-      return queryObject.environment;
-    }
-    return "";
-  }
-
-  getQueryAsObject(query: string) {
-    // queries are split via spaces, but not spaces inside of a quote pair
-    // https://stackoverflow.com/a/25663729/
-    // assumption: no double quotes apart from what's wrapping a tag's key/value
-    const splitQuery: string[] = query.split(/ +(?=(?:(?:[^"]*"){2})*[^"]*$)/g);
-    const queryArrayOfArrays = splitQuery.map((queryItem) =>
-      queryItem.split(":")
-    );
-    queryArrayOfArrays.forEach((queryArray, index) => {
-      queryArray.forEach((queryString, innerIndex) => {
-        if (queryString.startsWith('"') && queryString.endsWith('"')) {
-          queryArrayOfArrays[index][innerIndex] = queryString
-            .substr(1)
-            .slice(0, -1);
-        }
-      });
-    });
-    return Object.assign(
-      {},
-      ...queryArrayOfArrays.map((queryItem) => {
-        // Special case, for when `query=`. Otherwise it'd be
-        // { "": undefined }, which would screw with the types
-        if (queryItem.length === 1) {
-          queryItem = ["_special", "all"];
-        }
-        const object: { [key: string]: string } = {};
-        object[queryItem[0]] = queryItem[1];
-        return object;
-      })
-    ) as { [key: string]: string };
-  }
-
-  getQueryObjectAsString(queryObject: { [key: string]: string }) {
-    const keyNoQuoteWhiteList = ["is", "has"];
-    const keyBlackList = ["_special"];
-    return Object.keys(queryObject)
-      .filter((key) => keyBlackList.indexOf(key) === -1)
-      .map((key) => {
-        if (keyNoQuoteWhiteList.indexOf(key) > -1) {
-          return `${key}:${queryObject[key]}`;
-        }
-        return `"${key}":"${queryObject[key]}"`;
-      })
-      .join(" ");
-  }
-
-  getNewQueryEnvironment(
-    newEnvironmentName: string | null,
-    query: string | undefined
-  ) {
-    let newQuery: string | null = null;
-    const queryObject =
-      query !== undefined ? this.getQueryAsObject(query) : null;
-
-    if (newEnvironmentName === null) {
-      if (queryObject && !!queryObject.environment) {
-        delete queryObject.environment;
-        const objectAsString = this.getQueryObjectAsString(queryObject);
-        newQuery = objectAsString === "" ? null : objectAsString;
-      }
-    } else {
-      if (queryObject) {
-        queryObject.environment = newEnvironmentName;
-        newQuery = this.getQueryObjectAsString(queryObject);
-      } else {
-        newQuery = `is:unresolved "environment":"${newEnvironmentName}"`;
-      }
-    }
-    return newQuery;
-  }
-
   filterByEnvironment(event: MatSelectChange) {
-    this.route.queryParams
-      .pipe(
-        take(1),
-        map((queryParams) => {
-          this.router.navigate([], {
-            queryParams: {
-              query: this.getNewQueryEnvironment(
-                event.value,
-                queryParams.query
-              ),
-            },
-            queryParamsHandling: "merge",
-          });
-        })
-      )
-      .subscribe();
+    this.router.navigate([], {
+      queryParams: { environment: event.value },
+      queryParamsHandling: "merge",
+    });
   }
 }
