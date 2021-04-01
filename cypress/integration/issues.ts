@@ -17,7 +17,9 @@ describe("Issues Page", () => {
   beforeEach(() => {
     seedBackend(true);
     requestLogin();
-    cy.visit("/cypresstestorg/issues");
+    cy.visit(`/${organization.slug}/issues`);
+    cy.get("app-header-nav mat-expansion-panel-header").click();
+    cy.get("app-header-nav").contains("PitchFlip").click();
     // Need the DSN to do this from the frontend
     cy.get("[data-test-dsn]")
       .invoke("val")
@@ -25,7 +27,7 @@ describe("Issues Page", () => {
   });
 
   it("should show issues, recognize environments", () => {
-    cy.visit("/cypresstestorg/issues");
+    cy.visit(`/${organization.slug}/issues`);
 
     const issuesSeeded = 5;
     cy.get("table tbody")
@@ -82,7 +84,7 @@ describe("Issues Page", () => {
       .should("contain", "ReferenceError")
       .log("Environments should properly filter issue list");
 
-    const environmentUrl = `${organization.name}/issues?environment=${environments.production}`;
+    const environmentUrl = `${organization.slug}/issues?environment=${environments.production}`;
     cy.visit(environmentUrl).log(
       "Test enviornment filtering by visiting a URL with environment queryParam"
     );
@@ -108,7 +110,7 @@ describe("Issues Page", () => {
     cy.url().should("eq", `${Cypress.config().baseUrl}/${environmentUrl}`);
 
     // uncomment this to see a developed issue with events showing multiple user agent strings
-    // cy.visit(`${organization.name}/issues`);
+    // cy.visit(`${organization.slug}/issues`);
     // cy.get(".title-cell").find("a").contains("<unknown>").click();
   });
 });

@@ -10,6 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "cy:open": "cypress open",
+    "screenshot": "SCREENSHOT=true cypress run --spec cypress/integration/screenshot-run.ts --env screenshot=true",
+    "cy:openscreenshot": "cypress open --env screenshot=true",
     "cy:run": "cypress run",
     "e2e": "concurrently \"npm run start\" \"wait-on http-get://localhost:4200 && npm run cy:run\" --kill-others --success first",
     "storybook": "start-storybook -p 6006",

@@ -1,6 +1,586 @@
 import { environments } from "./variables";
 import { uniqueId } from "../integration/utils";
 
+export const criticalMessage = {
+  message: "Critical Error",
+  level: "critical",
+  event_id: "96de7b91117842b2b13d45bbed6924f2",
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  timestamp: 1617248494.277,
+  environment: "grrrr",
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "90e4a530f0e1c9d1",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "eb14ef60cb5649dca86ebd8ba968f330",
+    },
+  },
+  tags: { transaction: "/" },
+  breadcrumbs: [
+    {
+      timestamp: 1617248490.962,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617248490.966,
+      category: "navigation",
+      data: { from: "/", to: "/" },
+    },
+    {
+      timestamp: 1617248490.979,
+      category: "ui.click",
+      message: "body > app-root > ol > li > a",
+    },
+    {
+      timestamp: 1617248490.994,
+      category: "xhr",
+      data: {
+        method: "GET",
+        url: "http://localhost:4201/sockjs-node/info?t=1617248490979",
+        status_code: 200,
+      },
+      type: "http",
+    },
+    {
+      timestamp: 1617248492.899,
+      category: "sentry.event",
+      event_id: "e3acf095b9ac405f823b5eb633cdaacf",
+      level: "info",
+      message: "A user actually clicked this thing",
+    },
+    {
+      timestamp: 1617248492.903,
+      category: "ui.click",
+      message: "body > app-root > ol > li > button",
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+    },
+  },
+};
+
+export const infoMessage = {
+  message: "A user actually clicked this thing",
+  level: "info",
+  event_id: "e3acf095b9ac405f823b5eb633cdaacf",
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  timestamp: 1617248492.895,
+  environment: "grrrr",
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "90e4a530f0e1c9d1",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "eb14ef60cb5649dca86ebd8ba968f330",
+    },
+  },
+  tags: { transaction: "/" },
+  breadcrumbs: [
+    {
+      timestamp: 1617248490.962,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617248490.966,
+      category: "navigation",
+      data: { from: "/", to: "/" },
+    },
+    {
+      timestamp: 1617248490.979,
+      category: "ui.click",
+      message: "body > app-root > ol > li > a",
+    },
+    {
+      timestamp: 1617248490.994,
+      category: "xhr",
+      data: {
+        method: "GET",
+        url: "http://localhost:4201/sockjs-node/info?t=1617248490979",
+        status_code: 200,
+      },
+      type: "http",
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+    },
+  },
+};
+export const warningMessage = {
+  message: "Warning: something is a little bit bad",
+  level: "warning",
+  event_id: "4a36bb8becc44e3088a359218faecb80",
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  timestamp: 1617248240.919,
+  environment: "grrrr",
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "9cb691e04712aa93",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "76f86569455d499b8da2bd2aeaa7f9e4",
+    },
+  },
+  tags: { transaction: "/" },
+  breadcrumbs: [
+    {
+      timestamp: 1617248238.536,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617248238.54,
+      category: "navigation",
+      data: { from: "/", to: "/" },
+    },
+    {
+      timestamp: 1617248238.552,
+      category: "ui.click",
+      message: "body > app-root > ol > li > a",
+    },
+    {
+      timestamp: 1617248238.585,
+      category: "xhr",
+      data: {
+        method: "GET",
+        url: "http://localhost:4201/sockjs-node/info?t=1617248238552",
+        status_code: 200,
+      },
+      type: "http",
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+    },
+  },
+};
+
+export const debugMessage = {
+  message: "Debug message",
+  level: "debug",
+  event_id: "dd08d8f04fe841d4b44f6fc294251979",
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  timestamp: 1617247994.923,
+  environment: "grrrr",
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "807000baccc94ed1",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "f7c369c07e014b05a5751aa06afd8ab9",
+    },
+  },
+  tags: { transaction: "/" },
+  breadcrumbs: [
+    {
+      timestamp: 1617247992.853,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617247992.857,
+      category: "navigation",
+      data: { from: "/", to: "/" },
+    },
+    {
+      timestamp: 1617247992.876,
+      category: "ui.click",
+      message: "body > app-root > ol > li > a",
+    },
+    {
+      timestamp: 1617247992.913,
+      category: "xhr",
+      data: {
+        method: "GET",
+        url: "http://localhost:4201/sockjs-node/info?t=1617247992878",
+        status_code: 200,
+      },
+      type: "http",
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+    },
+  },
+};
+
+export const autoplayError = {
+  exception: {
+    values: [
+      {
+        type: "EvalError",
+        value:
+          'MDN says "EvalError is not used in the current ECMAScript specification and will thus not be thrown by the runtime. However, the object itself remains for backwards compatibility with earlier versions of the specification."',
+        stacktrace: {
+          frames: [
+            {
+              colno: 21,
+              filename: "http://localhost:4201/polyfills.js",
+              function: "HTMLButtonElement.globalZoneAwareCallback",
+              in_app: true,
+              lineno: 1743,
+            },
+            {
+              colno: 18,
+              filename: "http://localhost:4201/polyfills.js",
+              function: "invokeTask",
+              in_app: true,
+              lineno: 1717,
+            },
+            {
+              colno: 38,
+              filename: "http://localhost:4201/polyfills.js",
+              function: "ZoneTask.invokeTask [as invoke]",
+              in_app: true,
+              lineno: 576,
+            },
+            {
+              colno: 51,
+              filename: "http://localhost:4201/polyfills.js",
+              function: "Zone.runTask",
+              in_app: true,
+              lineno: 263,
+            },
+            {
+              colno: 40,
+              filename: "http://localhost:4201/polyfills.js",
+              function: "ZoneDelegate.invokeTask",
+              in_app: true,
+              lineno: 494,
+            },
+            {
+              colno: 33,
+              filename: "http://localhost:4201/vendor.js",
+              function: "Object.onInvokeTask",
+              in_app: true,
+              lineno: 47780,
+            },
+            {
+              colno: 35,
+              filename: "http://localhost:4201/polyfills.js",
+              function: "ZoneDelegate.invokeTask",
+              in_app: true,
+              lineno: 495,
+            },
+            {
+              colno: 23,
+              filename: "http://localhost:4201/vendor.js",
+              function: "HTMLButtonElement.sentryWrapped",
+              in_app: true,
+              lineno: 79817,
+            },
+            {
+              colno: 38,
+              filename: "http://localhost:4201/vendor.js",
+              function: "HTMLButtonElement.<anonymous>",
+              in_app: true,
+              lineno: 53584,
+            },
+            {
+              colno: 22,
+              filename: "http://localhost:4201/vendor.js",
+              function: "wrapListenerIn_markDirtyAndPreventDefault",
+              in_app: true,
+              lineno: 34527,
+            },
+            {
+              colno: 16,
+              filename: "http://localhost:4201/vendor.js",
+              function: "executeListenerWithErrorHandling",
+              in_app: true,
+              lineno: 34492,
+            },
+            {
+              colno: 146,
+              filename: "http://localhost:4201/main.js",
+              function: "AppComponent_Template_button_click_14_listener",
+              in_app: true,
+              lineno: 203,
+            },
+            {
+              colno: 15,
+              filename: "http://localhost:4201/main.js",
+              function: "AppComponent.throwEvalError",
+              in_app: true,
+              lineno: 143,
+            },
+          ],
+        },
+        mechanism: { handled: true, type: "generic" },
+      },
+    ],
+  },
+  level: "error",
+  event_id: "7a9d061a477b4f1f9363dc9eb078d5ab",
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  timestamp: 1617247433.425,
+  environment: "grrrr",
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "96824092a8c6f343",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "891daa720ccb4171b0fd1f41344ee961",
+    },
+  },
+  tags: { transaction: "/" },
+  breadcrumbs: [
+    {
+      timestamp: 1617247424.183,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617247424.186,
+      category: "navigation",
+      data: { from: "/", to: "/" },
+    },
+    {
+      timestamp: 1617247424.201,
+      category: "ui.click",
+      message: "body > app-root > ol > li > a",
+    },
+    {
+      timestamp: 1617247424.208,
+      category: "xhr",
+      data: {
+        method: "GET",
+        url: "http://localhost:4201/sockjs-node/info?t=1617247424202",
+        status_code: 200,
+      },
+      type: "http",
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
+    },
+  },
+};
+
+export const evalError = {
+  message:
+    "NotAllowedError: The play method is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.",
+  exception: {
+    values: [
+      {
+        value:
+          "NotAllowedError: The play method is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.",
+        type: "Error",
+        mechanism: { handled: false, type: "onunhandledrejection" },
+      },
+    ],
+  },
+  tags: { transaction: "/autoplay", "DOMException.code": "0" },
+  level: "error",
+  platform: "javascript",
+  sdk: {
+    name: "sentry.javascript.browser",
+    packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+    version: "5.29.2",
+    integrations: [
+      "InboundFilters",
+      "FunctionToString",
+      "TryCatch",
+      "Breadcrumbs",
+      "GlobalHandlers",
+      "LinkedErrors",
+      "UserAgent",
+      "BrowserTracing",
+    ],
+  },
+  event_id: "c7b2b791d2f24512b20de453a0d28396",
+  timestamp: 1617247530.337,
+  environment: "grrrr",
+  contexts: {
+    trace: {
+      op: "pageload",
+      span_id: "a33222d43851a661",
+      status: "internal_error",
+      tags: {
+        __sentry_samplingMethod: "client_sampler",
+        __sentry_sampleRate: "0",
+      },
+      trace_id: "e20a6bf912744b368a21893469c42675",
+    },
+  },
+  breadcrumbs: [
+    {
+      timestamp: 1617247530.309,
+      category: "console",
+      data: {
+        arguments: [
+          "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+        ],
+        logger: "console",
+      },
+      level: "log",
+      message:
+        "Angular is running in development mode. Call enableProdMode() to enable production mode.",
+    },
+    {
+      timestamp: 1617247530.317,
+      category: "navigation",
+      data: { from: "/autoplay", to: "/autoplay" },
+    },
+  ],
+  request: {
+    url: "http://localhost:4201/autoplay",
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
+    },
+  },
+};
+
 export const jsRangeError = {
   exception: {
     values: [

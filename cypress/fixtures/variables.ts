@@ -1,7 +1,8 @@
 // import { sorts as appSorts } from "../../src/app/issues/issues-page/issues-page.component";
 
 export const organization = {
-  name: "cypresstestorg",
+  name: "Business Company, Inc.",
+  slug: "business-company-inc",
   otherOrg: "cypress-test-org-other",
 };
 
@@ -14,7 +15,18 @@ export const newTeam = {
 };
 
 export const project = {
-  name: "cypresstestproject",
+  name: "NicheScrip",
+  slug: "nichescrip",
+};
+
+export const project2 = {
+  name: "SwitchGrip",
+  slug: "switchgrip",
+};
+
+export const project3 = {
+  name: "PitchFlip",
+  slug: "pitchflip",
 };
 
 export const newProject = {
