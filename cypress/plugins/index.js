@@ -20,7 +20,21 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   const options = {
-    webpackOptions: require("../webpack.config")
+    webpackOptions: require("../webpack.config"),
   };
   on("file:preprocessor", wp(options));
+
+  on("before:browser:launch", (browser = {}, launchOptions) => {
+    if (
+      browser.name === "electron" &&
+      browser.isHeadless &&
+      process.env.SCREENSHOT
+    ) {
+      launchOptions.preferences.width = 2570;
+      launchOptions.preferences.height = 1600;
+      launchOptions.preferences.webPreferences.zoomFactor = 2;
+    }
+
+    return launchOptions;
+  });
 };
