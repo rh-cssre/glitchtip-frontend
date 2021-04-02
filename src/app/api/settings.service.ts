@@ -64,6 +64,8 @@ export class SettingsService {
           const u = settings.matomoURL;
           _PAQ.push(["setTrackerUrl", u + "matomo.php"]);
           _PAQ.push(["setSiteId", settings.matomoSiteId]);
+          _PAQ.push(["setDomains", ["glitchtip.com", "app.glitchtip.com"]]);
+          _PAQ.push(["enableCrossDomainLinking"]);
           const d = document;
           const g = d.createElement("script");
           const s = d.getElementsByTagName("script")[0];
