@@ -259,6 +259,41 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="bulkProjectSelect">
+        <td
+          mat-header-cell
+          *matHeaderCellDef
+          colspan="3"
+          class="bulk-project-select__inner"
+        >
+          <ng-container
+            *ngIf="
+              (selectedProjectInfo$ | async | json) === '{}';
+              else deselect
+            "
+            ><span class="mat-caption"
+              >{{ numberOfSelectedIssues$ | async }} issues on this page
+              selected.</span
+            >
+            <button mat-button color="primary" (click)="bulkUpdateProject()">
+              <ng-container *ngIf="searchHits$ | async as searchHits"
+                >Select all {{ searchHits }} issues that match this
+                query</ng-container
+              >
+            </button></ng-container
+          ><ng-template #deselect
+            >All {{ searchHits$ | async }} issues are currently selected.
+            <button
+              mat-button
+              color="primary"
+              (click)="clearBulkProjectUpdate()"
+            >
+              Undo
+            </button></ng-template
+          >
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="events">
         <th
           mat-header-cell
@@ -322,6 +357,13 @@
         class="overlay"
         *matHeaderRowDef="displayedColumns"
         [class.u-hidden]="issues.length === 0"
+      ></tr>
+      <tr
+        mat-header-row
+        *matHeaderRowDef="['bulkProjectSelect']"
+        [class.bulk-project-select__hide]="
+          (showBulkSelectProject$ | async) === false
+        "
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
