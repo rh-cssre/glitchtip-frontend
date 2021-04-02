@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { combineLatest, EMPTY } from "rxjs";
-import { map, mergeMap, takeWhile, tap } from "rxjs/operators";
+import { filter, map, mergeMap, takeWhile, tap } from "rxjs/operators";
 import { ProjectEnvironment } from "src/app/api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ProjectsAPIService } from "src/app/api/projects/projects-api.service";
@@ -57,6 +57,14 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
   readonly visibleEnvironments$ = this.environments$.pipe(
     map((environments) =>
       environments
+        .filter((environment) => environment.isHidden === false)
+        .map((environment) => environment.name)
+    )
+  );
+  readonly visibleEnvironmentsLoaded$ = this.getState$.pipe(
+    filter(({ initialLoad }) => initialLoad === true),
+    map((state) =>
+      state.environments
         .filter((environment) => environment.isHidden === false)
         .map((environment) => environment.name)
     )
