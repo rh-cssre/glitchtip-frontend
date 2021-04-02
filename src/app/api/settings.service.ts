@@ -11,7 +11,7 @@ interface SettingsState {
   enableUserRegistration: boolean;
   matomoURL: string | null;
   matomoSiteId: string | null;
-  rocketChatDomain: string | null;
+  chatwootWebsiteToken: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
   sentryTracesSampleRate: number | null;
@@ -25,7 +25,7 @@ const initialState: SettingsState = {
   enableUserRegistration: false,
   matomoURL: null,
   matomoSiteId: null,
-  rocketChatDomain: null,
+  chatwootWebsiteToken: null,
   stripePublicKey: null,
   sentryDSN: null,
   sentryTracesSampleRate: null,
@@ -64,6 +64,8 @@ export class SettingsService {
           const u = settings.matomoURL;
           _PAQ.push(["setTrackerUrl", u + "matomo.php"]);
           _PAQ.push(["setSiteId", settings.matomoSiteId]);
+          _PAQ.push(["setDomains", ["glitchtip.com", "app.glitchtip.com"]]);
+          _PAQ.push(["enableCrossDomainLinking"]);
           const d = document;
           const g = d.createElement("script");
           const s = d.getElementsByTagName("script")[0];
@@ -92,30 +94,23 @@ export class SettingsService {
         }
       }),
       tap((settings) => {
-        if (settings.rocketChatDomain) {
+        if (settings.chatwootWebsiteToken) {
           // tslint:disable:only-arrow-functions
           // tslint:disable:space-before-function-paren
-          (function (w: any, d: Document, s, u) {
-            w.RocketChat = function (c: any) {
-              w.RocketChat._.push(c);
+          // tslint:disable:one-variable-per-declaration
+          (function (d, t) {
+            const BASE_URL = "https://app.chatwoot.com";
+            const g: any = d.createElement(t),
+              s: any = d.getElementsByTagName(t)[0];
+            g.src = BASE_URL + "/packs/js/sdk.js";
+            s.parentNode.insertBefore(g, s);
+            g.onload = function () {
+              (window as any).chatwootSDK.run({
+                websiteToken: settings.chatwootWebsiteToken,
+                baseUrl: BASE_URL,
+              });
             };
-            w.RocketChat._ = [];
-            w.RocketChat.url = u;
-            const h = d.getElementsByTagName(s)[0];
-            const j = d.createElement(s) as HTMLScriptElement;
-            j.async = true;
-            j.src =
-              settings.rocketChatDomain +
-              "/livechat/rocketchat-livechat.min.js?_=201903270000";
-            if (h.parentNode) {
-              h.parentNode.insertBefore(j, h);
-            }
-          })(
-            window,
-            document,
-            "script",
-            settings.rocketChatDomain + "/livechat"
-          );
+          })(document, "script");
         }
       })
     );

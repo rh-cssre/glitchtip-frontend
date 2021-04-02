@@ -1,4 +1,4 @@
-@import "../../../../../assets/styles/variables";
+@import "variables";
 
 .preferences {
   margin-top: 44px;
@@ -79,6 +79,8 @@ form {
 .notifications-wrapper {
   margin-top: 32px;
   display: flex;
+  flex-wrap: wrap;
+
   justify-content: space-between;
   align-items: center;
 

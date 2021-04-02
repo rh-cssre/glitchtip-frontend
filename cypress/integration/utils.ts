@@ -1,7 +1,7 @@
 import { user } from "../fixtures/users";
 
-export function seedBackend() {
-  const url = "/api/test/seed/";
+export function seedBackend(doExtraStuff = false) {
+  const url = `/api/test/seed/${doExtraStuff ? "?extras=true" : ""}`;
   cy.request("POST", url);
 }
 
@@ -12,4 +12,10 @@ export function requestLogin() {
     email: user.email,
     password: user.password,
   });
+}
+
+export function uniqueId(length = 32) {
+  return [...Array(length)]
+    .map(() => Math.floor(Math.random() * 16).toString(16))
+    .join("");
 }

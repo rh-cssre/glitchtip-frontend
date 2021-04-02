@@ -60,7 +60,8 @@ export class AuthService extends StatefulService<AuthState> {
       .pipe(
         tap(() => this.removeAuth()),
         tap(() => {
-          const _paq: any = (window as any)._paq;
+          // tslint:disable:no-any
+          const _paq = (window as any)._paq;
           _paq.push(["resetUserId"]);
         })
       )

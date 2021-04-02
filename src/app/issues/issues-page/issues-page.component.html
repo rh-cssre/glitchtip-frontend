@@ -92,14 +92,12 @@
                   (selectionChange)="sortByChanged($event)"
                   formControlName="sort"
                 >
-                  <mat-option value="-last_seen">Last Seen</mat-option>
-                  <mat-option value="last_seen">First Seen</mat-option>
-                  <mat-option value="-created">Newest Creation Date</mat-option>
-                  <mat-option value="created">Oldest Creation Date</mat-option>
-                  <mat-option value="-count">Most Frequent</mat-option>
-                  <mat-option value="count">Least Frequent</mat-option>
-                  <mat-option value="-priority">Highest Priority</mat-option>
-                  <mat-option value="priority">Lowest Priority</mat-option>
+                  <mat-option
+                    *ngFor="let sort of sorts | keyvalue"
+                    [value]="sort.key"
+                  >
+                    {{ sort.value }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </form>
