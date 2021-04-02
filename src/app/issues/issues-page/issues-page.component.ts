@@ -15,7 +15,6 @@ import {
   withLatestFrom,
   distinctUntilChanged,
   tap,
-  skip,
   mergeMap,
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
@@ -259,20 +258,13 @@ export class IssuesPageComponent
      * in the URL. If it doesn't match a project environment, reset the URL.
      */
     this.resetEnvironmentSubscription = combineLatest([
-      this.environmentsService.visibleEnvironments$,
+      this.environmentsService.visibleEnvironmentsLoaded$,
       this.route.queryParams,
     ])
       .pipe(
-        distinctUntilChanged((a, b) => a[0] === b[0]),
-        // distinctUntilChanged passes the first time because it doesn't have
-        // two things to compare
-        skip(1),
-        tap(([projectEnvironments, queryParams]) => {
-          const environment = queryParams.environment;
+        tap(([projectEnvironments, { environment }]) => {
           if (environment && !projectEnvironments.includes(environment)) {
-            this.environmentForm.setValue({
-              environment: null,
-            });
+            this.environmentForm.setValue({ environment: null });
             this.router.navigate([], {
               queryParams: { environment: null },
               queryParamsHandling: "merge",
