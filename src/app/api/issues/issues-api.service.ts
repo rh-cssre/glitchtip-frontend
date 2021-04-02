@@ -10,7 +10,6 @@ import {
   IssueTags,
   UpdateStatusResponse,
 } from "src/app/issues/interfaces";
-import { Params } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
@@ -66,30 +65,12 @@ export class IssuesAPIService extends APIBaseService {
     return this.http.get<IssueDetail>(this.detailURL(id));
   }
 
-  update(
-    status: IssueStatus,
-    ids: number[],
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
-  ) {
-    let params: Params;
-    let updateUrl: string;
-
-    if (orgSlug && projectId && query) {
-      updateUrl = `${baseUrl}/organizations/${orgSlug}/issues/`;
-      params = {
-        project: projectId,
-        query,
-      };
-    } else {
-      updateUrl = this.url;
-      params = {
-        id: ids.map((id) => id.toString()),
-      };
-    }
+  update(ids: number[], status: IssueStatus) {
+    const params = {
+      id: ids.map((id) => id.toString()),
+    };
     return this.http.put<UpdateStatusResponse>(
-      updateUrl,
+      this.url,
       { status },
       { params }
     );
