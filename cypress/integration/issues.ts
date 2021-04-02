@@ -1,11 +1,9 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend, requestLogin, getDSN } from "./utils";
 import * as jsErrors from "../fixtures/events";
 import { organization, environments } from "../fixtures/variables";
 
 function seedIssues(dsn: string) {
-  const key = dsn.split("@")[0].split("//")[1];
-  const id = dsn.split("@")[1].split("/")[1];
-  const url = `/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
+  const url = getDSN(dsn);
   cy.request("POST", url, jsErrors.jsRangeError);
   cy.request("POST", url, jsErrors.jsReferenceError);
   jsErrors.generateErrors(url, 10);
@@ -18,15 +16,14 @@ describe("Issues Page", () => {
     seedBackend(true);
     requestLogin();
     cy.visit(`/${organization.slug}/issues`);
+    // Need the DSN to do this from the frontend
     cy.get("app-header-nav mat-expansion-panel-header").click();
     cy.get("app-header-nav").contains("PitchFlip").click();
-    // Need the DSN to do this from the frontend
-    cy.get("[data-test-dsn]")
-      .invoke("val")
-      .then((dsn) => seedIssues(dsn as string));
+    cy.get("[data-test-dsn]").invoke("val").as("dsn");
   });
 
-  it("should show issues, recognize environments", () => {
+  it("should show issues, recognize environments", function () {
+    seedIssues(this.dsn);
     cy.visit(`/${organization.slug}/issues`);
 
     const issuesSeeded = 5;
@@ -116,5 +113,10 @@ describe("Issues Page", () => {
     // uncomment this to see a developed issue with events showing multiple user agent strings
     // cy.visit(`${organization.slug}/issues`);
     // cy.get(".title-cell").find("a").contains("<unknown>").click();
+  });
+
+  it("should make 100 issues", function () {
+    jsErrors.generateIssues(getDSN(this.dsn), 100);
+    cy.visit(`/${organization.slug}/issues`);
   });
 });
