@@ -1,14 +1,7 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend, requestLogin, getDSN } from "./utils";
 import * as jsErrors from "../fixtures/events";
 import * as djangoErrors from "../fixtures/django-events";
 import { organization, project2, project3 } from "../fixtures/variables";
-
-const getDSN = (dsn: string) => {
-  const key = dsn.split("@")[0].split("//")[1];
-  const id = dsn.split("@")[1].split("/")[1];
-  const url = `/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
-  return url;
-};
 
 function seedJavaScriptIssues(dsn: string) {
   const url = getDSN(dsn);

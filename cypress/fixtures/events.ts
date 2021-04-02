@@ -2623,3 +2623,42 @@ export const jsError = () => ({
     headers: { "User-Agent": randomUserAgent() },
   },
 });
+
+export const generateIssues = (url: string, count: number) => {
+  for (let i = 0; i < count; i++) {
+    cy.request("POST", url, uniqueInfoLog());
+  }
+};
+
+export const uniqueInfoLog = () => {
+  const unique = uniqueId(6);
+  return {
+    message: `What I'm really trying to say is: ${unique}`,
+    level: "info",
+    event_id: uniqueId(),
+    platform: "javascript",
+    sdk: {
+      name: "sentry.javascript.browser",
+      packages: [{ name: "npm:@sentry/browser", version: "5.29.2" }],
+      version: "5.29.2",
+      integrations: [
+        "InboundFilters",
+        "FunctionToString",
+        "TryCatch",
+        "Breadcrumbs",
+        "GlobalHandlers",
+        "LinkedErrors",
+        "UserAgent",
+        "BrowserTracing",
+      ],
+    },
+    timestamp: Date.now() / 1000,
+    contexts: {},
+    tags: { transaction: "/" },
+    breadcrumbs: [],
+    request: {
+      url: "http://localhost:4201/",
+      headers: { "User-Agent": randomUserAgent() },
+    },
+  };
+};

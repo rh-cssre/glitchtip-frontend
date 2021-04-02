@@ -19,3 +19,10 @@ export function uniqueId(length = 32) {
     .map(() => Math.floor(Math.random() * 16).toString(16))
     .join("");
 }
+
+export const getDSN = (dsn: string) => {
+  const key = dsn.split("@")[0].split("//")[1];
+  const id = dsn.split("@")[1].split("/")[1];
+  const url = `/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
+  return url;
+};
