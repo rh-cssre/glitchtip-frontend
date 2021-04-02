@@ -61,6 +61,8 @@ export class IssuesPageComponent
     this.loading$,
   ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
   areAllSelected$ = this.issuesService.areAllSelected$;
+  selectedProjectInfo$ = this.issuesService.selectedProjectInfo$;
+  numberOfSelectedIssues$ = this.issuesService.numberOfSelectedIssues$;
   thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
   activeOrganizationProjects$ = this.organizationsService
     .activeOrganizationProjects$;
@@ -153,6 +155,29 @@ export class IssuesPageComponent
       }
       return 0;
     })
+  );
+
+  showBulkSelectProject$ = combineLatest([
+    this.appliedProjectCount$,
+    this.areAllSelected$,
+    this.numberOfSelectedIssues$,
+    this.searchHits$,
+  ]).pipe(
+    map(
+      ([
+        appliedProjectCount,
+        areAllSelected,
+        numberOfSelectIssues,
+        searchHits,
+      ]) => {
+        const hits = searchHits && numberOfSelectIssues < searchHits;
+        if (appliedProjectCount === 1 && areAllSelected && hits) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    )
   );
 
   organizationEnvironments$ = combineLatest([
@@ -388,6 +413,20 @@ export class IssuesPageComponent
     });
   }
 
+  bulkUpdateProject() {
+    combineLatest([this.route.params, this.route.queryParams])
+      .pipe(
+        map(([params, queryParams]) => {
+          this.issuesService.bulkUpdateIssuesForProject(
+            params["org-slug"],
+            queryParams.project,
+            queryParams.query
+          );
+        })
+      )
+      .subscribe();
+  }
+
   bulkMarkResolved() {
     this.issuesService.bulkSetStatus("resolved");
   }
@@ -398,6 +437,10 @@ export class IssuesPageComponent
 
   bulkMarkIgnored() {
     this.issuesService.bulkSetStatus("ignored");
+  }
+
+  clearBulkProjectUpdate() {
+    this.issuesService.clearProjectInfo();
   }
 
   toggleCheck(issueId: number) {

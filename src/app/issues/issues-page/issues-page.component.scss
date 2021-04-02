@@ -66,7 +66,8 @@ table {
     }
   }
 
-  .environment-form, .sort-form {
+  .environment-form,
+  .sort-form {
     ::ng-deep .mat-form-field-infix {
       width: 130px;
     }
@@ -125,6 +126,23 @@ table {
 
 .table-header {
   padding: 20px 0 8px;
+}
+
+.bulk-project-select {
+  &__hide {
+    display: none;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &__inner {
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: mat-color($mat-gray, 50);
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 }
 
 .mat-column-title {
