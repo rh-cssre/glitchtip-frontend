@@ -1,17 +1,15 @@
 <section class="l-body">
   <header class="page-header">
     <h1 class="mat-display-1">Projects</h1>
-    <a
-      mat-flat-button
-      [routerLink]="['new']"
-      color="primary"
-    >
+    <a mat-flat-button [routerLink]="['new']" color="primary">
       Create New Project
     </a>
   </header>
-
   <div *ngIf="projectsForActiveOrg$ | async as projects">
-    <app-empty-projects *ngIf="projects.length === 0"></app-empty-projects>
+    <app-empty-projects
+      *ngIf="projects.length === 0"
+      [activeOrgOnly]="true"
+    ></app-empty-projects>
   </div>
 
   <div class="card-wrapper">

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { combineLatest, EMPTY } from "rxjs";
-import { map, mergeMap, takeWhile, tap } from "rxjs/operators";
+import { filter, map, mergeMap, takeWhile, tap } from "rxjs/operators";
 import { ProjectEnvironment } from "src/app/api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ProjectsAPIService } from "src/app/api/projects/projects-api.service";
@@ -54,6 +54,21 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
       return sorted;
     })
   );
+  readonly visibleEnvironments$ = this.environments$.pipe(
+    map((environments) =>
+      environments
+        .filter((environment) => environment.isHidden === false)
+        .map((environment) => environment.name)
+    )
+  );
+  readonly visibleEnvironmentsLoaded$ = this.getState$.pipe(
+    filter(({ initialLoad }) => initialLoad === true),
+    map((state) =>
+      state.environments
+        .filter((environment) => environment.isHidden === false)
+        .map((environment) => environment.name)
+    )
+  );
 
   constructor(
     private projectsAPIService: ProjectsAPIService,
@@ -84,6 +99,17 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
         }
         return EMPTY;
       })
+    );
+  }
+
+  retrieveEnvironmentsWithProperties(orgSlug: string, projectSlug: string) {
+    return this.projectsAPIService.listEnvironments(orgSlug, projectSlug).pipe(
+      tap((environments) =>
+        this.setState({
+          environments: this.sortEnvironments(environments),
+          initialLoad: true,
+        })
+      )
     );
   }
 

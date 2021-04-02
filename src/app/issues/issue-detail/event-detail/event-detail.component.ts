@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, exhaustMap } from "rxjs/operators";
 import { IssueDetailService } from "../issue-detail.service";
+import { EventTag } from "src/app/issues/interfaces";
 
 @Component({
   selector: "app-event-detail",
@@ -48,7 +49,15 @@ export class EventDetailComponent implements OnInit {
   }
 
   /** TODO fix these types */
-  generateQuery(key: string | number | null, value: string | number | null) {
-    return `"${key}":"${value}"`;
+  generateQuery(tag: EventTag) {
+    // Assume unresolved if not present; tag overrides query otherwise
+    const query = this.route.snapshot.queryParams.query;
+    const unresolved = query === undefined ? "is:unresolved " : "";
+
+    if (tag.key === "environment") {
+      return { environment: tag.value };
+    } else {
+      return { query: `${unresolved}"${tag.key}":"${tag.value}"` };
+    }
   }
 }

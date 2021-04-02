@@ -68,4 +68,11 @@ export class IssueDetailComponent implements OnInit {
       this.issueService.deleteIssue(id.toString());
     }
   }
+
+  generateBackLink(projectId: string) {
+    return {
+      ...this.route.snapshot.queryParams,
+      project: projectId,
+    };
+  }
 }

@@ -1,4 +1,4 @@
-@import "../../../../../assets/styles/variables";
+@import "variables";
 
 .preferences {
   margin-top: 44px;
@@ -78,17 +78,30 @@ form {
 }
 .notifications-wrapper {
   margin-top: 32px;
-  padding-bottom: 16px;
   display: flex;
+  flex-wrap: wrap;
+
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: $tablet - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .notifications-text {
+  padding: 0 16px 16px 0;
+
   p {
     margin-top: 0;
     margin-bottom: 0;
   }
+}
+
+.notifications-link {
+  width: 140px;
+  padding-bottom: 16px;
 }
 
 .mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {

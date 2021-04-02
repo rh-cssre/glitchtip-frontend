@@ -1,4 +1,4 @@
-@import "../../../assets/styles/variables";
+@import "variables";
 
 $iconWidth: 56px;
 
@@ -49,6 +49,28 @@ table {
 
   @media screen and (max-width: $tablet - 1) {
     flex-direction: column-reverse;
+  }
+
+  @media screen and (min-width: $tablet) {
+    > * {
+      padding-left: 10px;
+      padding-right: 10px;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .environment-form,
+  .sort-form {
+    ::ng-deep .mat-form-field-infix {
+      width: 130px;
+    }
   }
 
   .date-form,

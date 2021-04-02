@@ -6,8 +6,9 @@ interface Tag {
   value: string;
 }
 
-interface EventTag extends Tag {
-  _meta: null | unknown;
+export interface EventTag extends Tag {
+  _meta?: null | unknown;
+  query?: string;
 }
 
 export interface Event {

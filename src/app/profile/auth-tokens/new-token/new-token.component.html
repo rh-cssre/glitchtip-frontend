@@ -2,9 +2,13 @@
   <mat-card>
     <mat-card-header class="flex-space-between">
       <mat-card-title> Create New Token </mat-card-title>
-      <a mat-flat-button [routerLink]="['/profile', 'auth-tokens']">
+      <a
+        mat-flat-button
+        [routerLink]="['/profile', 'auth-tokens']"
+        aria-label="Back to auth tokens"
+      >
         <mat-icon>keyboard_arrow_left</mat-icon>
-        Back to Auth Tokens
+        Auth Tokens
       </a>
     </mat-card-header>
     <mat-divider></mat-divider>

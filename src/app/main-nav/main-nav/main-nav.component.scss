@@ -1,7 +1,6 @@
-@import "../../../assets/styles/variables";
+@import "variables";
 
-$iconWidth: 56px;
-
+// This make the app cover the whole screen at all times
 mat-sidenav-container {
   position: absolute;
   top: 0;
@@ -37,33 +36,16 @@ mat-sidenav {
 mat-sidenav-content {
   mat-toolbar {
     display: none;
-    padding-left: $iconWidth;
-    cursor: pointer;
-    margin-bottom: 32px;
+    cursor: pointer; // The whole toolbar is clickable
 
     @media (max-width: $tablet - 1) {
       display: flex;
+      padding-left: 0;
     }
 
     .sidenav-toggle {
-      padding: 0;
-      position: absolute;
-      left: 0;
-      top: 0;
-      margin: 0;
-      min-width: $iconWidth;
-    }
-
-    mat-icon {
-      font-size: 25px;
-      height: $iconWidth;
-      width: $iconWidth;
-      line-height: $iconWidth;
-      color: white;
-    }
-
-    .active-org {
-      margin-left: 8px;
+      height: 100%;
+      transform: translateY(-1px);
     }
   }
 }

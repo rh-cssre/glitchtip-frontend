@@ -1,7 +1,7 @@
 import { user } from "../fixtures/users";
 
-export function seedBackend() {
-  const url = "/api/test/seed/";
+export function seedBackend(doExtraStuff = false) {
+  const url = `/api/test/seed/${doExtraStuff ? "?extras=true" : ""}`;
   cy.request("POST", url);
 }
 
@@ -13,3 +13,16 @@ export function requestLogin() {
     password: user.password,
   });
 }
+
+export function uniqueId(length = 32) {
+  return [...Array(length)]
+    .map(() => Math.floor(Math.random() * 16).toString(16))
+    .join("");
+}
+
+export const getDSN = (dsn: string) => {
+  const key = dsn.split("@")[0].split("//")[1];
+  const id = dsn.split("@")[1].split("/")[1];
+  const url = `/api/${id}/store/?sentry_key=${key}&sentry_version=7`;
+  return url;
+};

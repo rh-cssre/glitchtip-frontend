@@ -8,17 +8,31 @@ import { formatDate } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
-import { Subscription, combineLatest } from "rxjs";
+import { Subscription, combineLatest, EMPTY } from "rxjs";
 import {
   map,
   filter,
   withLatestFrom,
   distinctUntilChanged,
+  tap,
+  mergeMap,
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
+
+export const sorts = {
+  "-last_seen": "Last Seen",
+  last_seen: "First Seen",
+  "-created": "Newest Creation Date",
+  created: "Oldest Creation Date",
+  "-count": "Most Frequent",
+  count: "Least Frequent",
+  "-priority": "Highest Priority",
+  priority: "Lowest Priority",
+};
 
 @Component({
   selector: "app-issues-page",
@@ -42,6 +56,9 @@ export class IssuesPageComponent
       value: "",
       disabled: true,
     }),
+  });
+  environmentForm = new FormGroup({
+    environment: new FormControl({ value: "" }),
   });
   dateForm = new FormGroup({
     startDate: new FormControl(""),
@@ -73,14 +90,19 @@ export class IssuesPageComponent
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
-      return { orgSlug, cursor, query, project, start, end, sort };
+      const environment: string | undefined = queryParams.environment;
+      return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
   routerEventSubscription: Subscription;
+  orgEnvironmentSubscription: Subscription;
+  projectEnvironmentSubscription: Subscription;
+  resetEnvironmentSubscription: Subscription;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
     other: "# events",
   };
+  sorts = sorts;
 
   /**
    * Two ways to trigger project detail. The first is if we switch orgs.
@@ -144,11 +166,22 @@ export class IssuesPageComponent
     })
   );
 
+  organizationEnvironments$ = combineLatest([
+    this.appliedProjectCount$,
+    this.issuesService.organizationEnvironmentsProcessed$,
+    this.environmentsService.visibleEnvironments$,
+  ]).pipe(
+    map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
+      appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
+    )
+  );
+
   constructor(
     private issuesService: IssuesService,
     private router: Router,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private environmentsService: ProjectEnvironmentsService
   ) {
     super(issuesService);
 
@@ -158,8 +191,14 @@ export class IssuesPageComponent
         : this.sortForm.controls.sort.enable()
     );
 
+    this.organizationEnvironments$.subscribe((environments) =>
+      environments.length === 0
+        ? this.environmentForm.controls.environment.disable()
+        : this.environmentForm.controls.environment.enable()
+    );
+
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, query, project, start, end, sort }) => {
+      ({ orgSlug, cursor, query, project, start, end, sort, environment }) => {
         if (orgSlug) {
           this.issuesService.getIssues(
             orgSlug,
@@ -168,11 +207,72 @@ export class IssuesPageComponent
             project,
             start,
             end,
-            sort
+            sort,
+            environment
           );
         }
       }
     );
+
+    this.orgEnvironmentSubscription = this.navigationEnd$
+      .pipe(
+        distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
+        mergeMap(({ orgSlug }) =>
+          orgSlug
+            ? this.issuesService.getOrganizationEnvironments(orgSlug)
+            : EMPTY
+        )
+      )
+      .subscribe();
+
+    this.projectEnvironmentSubscription = combineLatest([
+      this.navigationEnd$,
+      this.activeOrganizationProjects$,
+    ])
+      .pipe(
+        filter(
+          ([urlData, projects]) =>
+            urlData.orgSlug !== undefined &&
+            urlData.project?.length === 1 &&
+            projects !== null
+        ),
+        distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
+        map(([urlData, projects]) => {
+          const matchedProject = projects!.find(
+            (project) => project.id === parseInt(urlData.project![0], 10)
+          );
+          if (urlData.orgSlug && matchedProject) {
+            this.environmentsService
+              .retrieveEnvironmentsWithProperties(
+                urlData.orgSlug,
+                matchedProject.slug
+              )
+              .subscribe();
+          }
+        })
+      )
+      .subscribe();
+
+    /**
+     * When changing from one project to another, see if there is an environment
+     * in the URL. If it doesn't match a project environment, reset the URL.
+     */
+    this.resetEnvironmentSubscription = combineLatest([
+      this.environmentsService.visibleEnvironmentsLoaded$,
+      this.route.queryParams,
+    ])
+      .pipe(
+        tap(([projectEnvironments, { environment }]) => {
+          if (environment && !projectEnvironments.includes(environment)) {
+            this.environmentForm.setValue({ environment: null });
+            this.router.navigate([], {
+              queryParams: { environment: null },
+              queryParamsHandling: "merge",
+            });
+          }
+        })
+      )
+      .subscribe();
   }
 
   ngOnInit() {
@@ -181,11 +281,16 @@ export class IssuesPageComponent
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
       const sort: string | undefined = this.route.snapshot.queryParams.sort;
+      const environment: string | undefined = this.route.snapshot.queryParams
+        .environment;
       this.form.setValue({
         query: query !== undefined ? query : "is:unresolved",
       });
       this.sortForm.setValue({
         sort: sort !== undefined ? sort : "-last_seen",
+      });
+      this.environmentForm.setValue({
+        environment: environment !== undefined ? environment : "",
       });
       this.dateForm.setValue({
         startDate: start ? start : null,
@@ -196,7 +301,11 @@ export class IssuesPageComponent
 
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
+    this.orgEnvironmentSubscription.unsubscribe();
+    this.projectEnvironmentSubscription.unsubscribe();
+    this.resetEnvironmentSubscription.unsubscribe();
     this.issuesService.clearState();
+    this.environmentsService.clearState();
   }
 
   onDateFormSubmit() {
@@ -277,6 +386,13 @@ export class IssuesPageComponent
   sortByChanged(event: MatSelectChange) {
     this.router.navigate([], {
       queryParams: { sort: event.value },
+      queryParamsHandling: "merge",
+    });
+  }
+
+  filterByEnvironment(event: MatSelectChange) {
+    this.router.navigate([], {
+      queryParams: { environment: event.value },
       queryParamsHandling: "merge",
     });
   }
