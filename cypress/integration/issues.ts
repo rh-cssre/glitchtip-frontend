@@ -88,6 +88,10 @@ describe("Issues Page", () => {
     cy.visit(environmentUrl).log(
       "Test enviornment filtering by visiting a URL with environment queryParam"
     );
+    // There was a problem with an observable where the param would get stripped on page load
+    cy.url()
+      .should("eq", `${Cypress.config().baseUrl}/${environmentUrl}`)
+      .log("URL should stay the same after loading");
     cy.get("table tbody tr")
       .should("have.length", 1)
       .log("Environments should properly filter issue list");
