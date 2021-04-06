@@ -6,7 +6,7 @@ import {
   HostListener,
   ElementRef,
 } from "@angular/core";
-import { map, startWith } from "rxjs/operators";
+import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { OrganizationProject } from "../../api/organizations/organizations.interface";
@@ -32,7 +32,7 @@ export class HeaderNavComponent implements OnInit {
   selectedProjectIds$ = this.selectedProjectIds.asObservable();
 
   /** Projects that were previously selected and applied */
-  appliedProjectIds$ = this.activatedRoute.queryParams.pipe(
+  appliedProjectIds$ = this.route.queryParams.pipe(
     map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
       this.selectedProjectIds.next(
@@ -231,11 +231,19 @@ export class HeaderNavComponent implements OnInit {
     this.appliedProjectIds$.subscribe((ids) => {
       this.appliedProjectIds = ids;
     });
+
+    this.route.params
+      .pipe(
+        map((params) => params["org-slug"]),
+        filter((orgSlug: string) => orgSlug !== undefined),
+        tap(() => this.expansionPanel?.close())
+      )
+      .subscribe();
   }
 
   constructor(
     private organizationsService: OrganizationsService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private route: ActivatedRoute
   ) {}
 }
