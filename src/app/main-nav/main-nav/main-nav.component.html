@@ -160,6 +160,45 @@
       </a>
       <button mat-menu-item (click)="this.logout()">Log Out</button>
     </mat-nav-list>
+
+    <mat-card *ngIf="(paidForGlitchTip$ | async) === true" class="thankyouware">
+      <p class="mat-copy-1">Thank you for supporting GlitchTip!</p>
+    </mat-card>
+
+    <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
+      <mat-card-title>
+        <h3 class="mat-display-1">Support GlitchTip</h3>
+      </mat-card-title>
+      <mat-card-content>
+        <ul>
+          <li>
+            Donate
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://liberapay.com/GlitchTip/donate"
+              >via Liberapay</a
+            >
+          </li>
+          <li>
+            Switch to
+            <a
+              target="_blank"
+              rel="noopener"
+              href="https://app.glitchtip.com/register?mtm_campaign=selfhost_nagware"
+              >Hosted GlitchTip</a
+            >
+          </li>
+          <li>
+            Purchase support:
+            <a
+              href="mailto:sales@glitchtip.com?subject=Purchase support inquiry"
+              >sales@glitchtip.com</a
+            >
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
   </mat-sidenav>
 
   <mat-sidenav-content
