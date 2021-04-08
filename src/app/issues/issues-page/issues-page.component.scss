@@ -6,6 +6,7 @@ app-header-nav {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  z-index: 2;
 }
 
 .wrapper {
@@ -126,6 +127,36 @@ table {
 
 .table-header {
   padding: 20px 0 8px;
+}
+
+.bulk-project-select {
+  &__hide {
+    display: none;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &__inner {
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: mat-color($mat-gray, 50);
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    button {
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+  }
+
+  &__text {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: mat-color($mat-gray, 800);
+  }
 }
 
 .mat-column-title {

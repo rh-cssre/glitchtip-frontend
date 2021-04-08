@@ -71,6 +71,8 @@ export class IssuesPageComponent
   ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
   areAllSelected$ = this.issuesService.areAllSelected$;
   thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
+  selectedProjectInfo$ = this.issuesService.selectedProjectInfo$;
+  numberOfSelectedIssues$ = this.issuesService.numberOfSelectedIssues$;
   activeOrganizationProjects$ = this.organizationsService
     .activeOrganizationProjects$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
@@ -164,6 +166,29 @@ export class IssuesPageComponent
       }
       return 0;
     })
+  );
+
+  showBulkSelectProject$ = combineLatest([
+    this.appliedProjectCount$,
+    this.areAllSelected$,
+    this.numberOfSelectedIssues$,
+    this.searchHits$,
+  ]).pipe(
+    map(
+      ([
+        appliedProjectCount,
+        areAllSelected,
+        numberOfSelectIssues,
+        searchHits,
+      ]) => {
+        const hits = searchHits && numberOfSelectIssues < searchHits;
+        if (appliedProjectCount === 1 && areAllSelected && hits) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    )
   );
 
   organizationEnvironments$ = combineLatest([
@@ -381,6 +406,24 @@ export class IssuesPageComponent
 
   toggleSelectAll() {
     this.issuesService.toggleSelectAll();
+  }
+
+  bulkUpdateProject() {
+    combineLatest([this.route.params, this.route.queryParams])
+      .pipe(
+        map(([params, queryParams]) => {
+          this.issuesService.bulkUpdateIssuesForProject(
+            params["org-slug"],
+            queryParams.project,
+            queryParams.query
+          );
+        })
+      )
+      .subscribe();
+  }
+
+  clearBulkProjectUpdate() {
+    this.issuesService.clearProjectInfo();
   }
 
   sortByChanged(event: MatSelectChange) {

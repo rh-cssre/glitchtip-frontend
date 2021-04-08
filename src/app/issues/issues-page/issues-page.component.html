@@ -10,7 +10,6 @@
       </ng-container>
     </h1>
   </header>
-
   <app-header-nav></app-header-nav>
   <div *ngIf="issues$ | async as issues" class="wrapper">
     <table
@@ -150,6 +149,7 @@
             (change)="toggleSelectAll()"
             [checked]="(areAllSelected$ | async)!"
             [disabled]="issues.length === 0"
+            id="selectAll"
           >
           </mat-checkbox>
         </th>
@@ -177,6 +177,7 @@
         >
           <div class="button-group">
             <button
+              id="bulkMarkResolved"
               mat-flat-button
               color="primary"
               (click)="bulkMarkResolved()"
@@ -259,6 +260,51 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="bulkProjectSelect">
+        <td
+          mat-header-cell
+          *matHeaderCellDef
+          colspan="3"
+          class="bulk-project-select__inner"
+        >
+          <ng-container *ngIf="(showBulkSelectProject$ | async) === true">
+            <ng-container
+              *ngIf="
+                (selectedProjectInfo$ | async | json) === '{}';
+                else deselect
+              "
+              ><span class="bulk-project-select__text"
+                >{{ numberOfSelectedIssues$ | async }} issues on this page
+                selected.</span
+              >
+              <button
+                id="bulkUpdateProject"
+                mat-stroked-button
+                color="primary"
+                (click)="bulkUpdateProject()"
+              >
+                <ng-container *ngIf="searchHits$ | async as searchHits"
+                  >Select all {{ searchHits }} issues that match this
+                  query</ng-container
+                >
+              </button></ng-container
+            ><ng-template #deselect
+              ><span class="bulk-project-select__text"
+                >All {{ searchHits$ | async }} issues are currently
+                selected.</span
+              >
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="clearBulkProjectUpdate()"
+              >
+                Undo
+              </button></ng-template
+            ></ng-container
+          >
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="events">
         <th
           mat-header-cell
@@ -322,6 +368,13 @@
         class="overlay"
         *matHeaderRowDef="displayedColumns"
         [class.u-hidden]="issues.length === 0"
+      ></tr>
+      <tr
+        mat-header-row
+        *matHeaderRowDef="['bulkProjectSelect']"
+        [class.bulk-project-select__hide]="
+          (showBulkSelectProject$ | async) === false
+        "
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>

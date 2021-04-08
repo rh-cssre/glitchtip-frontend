@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { combineLatest, Observable, EMPTY } from "rxjs";
-import { tap, catchError, map } from "rxjs/operators";
+import { tap, catchError, map, take } from "rxjs/operators";
 import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
 import { IssuesAPIService } from "../api/issues/issues-api.service";
 import {
@@ -17,6 +17,8 @@ export interface IssuesState extends PaginationStatefulServiceState {
   issues: Issue[];
   selectedIssues: number[];
   organizationEnvironments: Environment[];
+  selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
+  areIssuesForProjectSelected: boolean;
 }
 
 const initialState: IssuesState = {
@@ -24,6 +26,8 @@ const initialState: IssuesState = {
   selectedIssues: [],
   pagination: initialPaginationState,
   organizationEnvironments: [],
+  selectedProjectInfo: {},
+  areIssuesForProjectSelected: false,
 };
 
 @Injectable({
@@ -58,6 +62,12 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   );
   readonly organizationEnvironments$ = this.getState$.pipe(
     map((data) => data.organizationEnvironments)
+  );
+  readonly numberOfSelectedIssues$ = this.getState$.pipe(
+    map((state) => state.selectedIssues.length)
+  );
+  readonly selectedProjectInfo$ = this.getState$.pipe(
+    map((state) => state.selectedProjectInfo)
   );
   /**
    * Uses reducer to remove duplicate environments, also converts objects to a
@@ -133,6 +143,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         ...state,
         selectedIssues: [],
       });
+      this.clearBulkProjectUpdate();
     } else {
       this.state.next({
         ...state,
@@ -143,13 +154,37 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
 
   /** Set one specified issue ID as status */
   setStatus(id: number, status: IssueStatus) {
-    return this.updateStatus([id], status);
+    return this.updateStatus(status, [id]);
   }
 
   /** Set all selected issues to this status */
   bulkSetStatus(status: IssueStatus) {
-    const selectedIssues = this.state.getValue().selectedIssues;
-    return this.updateStatus(selectedIssues, status).toPromise();
+    combineLatest([this.selectedIssues$, this.selectedProjectInfo$])
+      .pipe(
+        take(1),
+        map(([selectedIssues, selectedProjectInfo]) => {
+          return this.updateStatus(
+            status,
+            selectedIssues,
+            selectedProjectInfo.orgSlug,
+            selectedProjectInfo.projectId,
+            selectedProjectInfo.query
+          ).toPromise();
+        })
+      )
+      .subscribe();
+  }
+
+  bulkUpdateIssuesForProject(
+    orgSlug: string,
+    projectId: string,
+    query: string
+  ) {
+    this.setBulkUpdateIssuesForProject(orgSlug, projectId, query);
+  }
+
+  clearProjectInfo() {
+    this.clearBulkProjectUpdate();
   }
 
   /** Get issues from backend using appropriate endpoint based on organization */
@@ -181,14 +216,45 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       );
   }
 
-  private updateStatus(ids: number[], status: IssueStatus) {
-    return this.issuesAPIService.update(ids, status).pipe(
-      tap((resp) => this.setIssueStatuses(ids, resp.status)),
-      catchError((err: HttpErrorResponse) => {
-        this.snackbar.open("Error, unable to update issue");
-        return EMPTY;
-      })
-    );
+  private updateStatus(
+    status: IssueStatus,
+    ids: number[],
+    orgSlug?: string,
+    projectId?: string,
+    query?: string
+  ) {
+    return this.issuesAPIService
+      .update(status, ids, orgSlug, projectId, query)
+      .pipe(
+        tap((resp) => {
+          this.setIssueStatuses(ids, resp.status);
+          this.clearBulkProjectUpdate();
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.snackbar.open("Error, unable to update issue");
+          return EMPTY;
+        })
+      );
+  }
+
+  private clearBulkProjectUpdate() {
+    const state = this.state.getValue();
+    this.state.next({
+      ...state,
+      selectedProjectInfo: {},
+    });
+  }
+
+  private setBulkUpdateIssuesForProject(
+    orgSlug?: string,
+    projectId?: string,
+    query?: string
+  ) {
+    const state = this.state.getValue();
+    this.state.next({
+      ...state,
+      selectedProjectInfo: { orgSlug, projectId, query },
+    });
   }
 
   private setIssueStatuses(issueIds: number[], status: IssueStatus) {
