@@ -115,8 +115,39 @@ describe("Issues Page", () => {
     // cy.get(".title-cell").find("a").contains("<unknown>").click();
   });
 
-  it("should make 100 issues", function () {
-    jsErrors.generateIssues(getDSN(this.dsn), 100);
+  it("should make 55 issues and select issues beyond the first page", function () {
+    jsErrors.generateIssues(getDSN(this.dsn), 55);
     cy.visit(`/${organization.slug}/issues`);
+
+    cy.get("#selectAll").click();
+    cy.contains("Select all 55 issues that match this query").should(
+      "not.exist"
+    );
+    cy.log(
+      "you won't get the select all option here because a single project isn't selected"
+    );
+
+    cy.get("#selectAll").click();
+    cy.get("app-header-nav mat-expansion-panel-header").click();
+    cy.get("app-header-nav").contains("PitchFlip").click();
+    cy.get("#selectAll").click();
+    cy.contains("Select all 55 issues that match this query");
+    cy.get("#bulkUpdateProject").click();
+    cy.contains("All 55 issues are currently selected");
+    cy.get("#bulkMarkResolved").click();
+    cy.log(
+      "the ui will change, but to ensure this made a successful network call, we reload the page"
+    );
+    cy.reload();
+    cy.contains("No events match your filters");
+    cy.visit(
+      "http://localhost:4200/business-company-inc/issues?&query=is:resolved"
+    );
+    cy.get("app-header-nav mat-expansion-panel-header").click();
+    cy.get("app-header-nav").contains("PitchFlip").click();
+    cy.log(
+      "now we are testing that the issues we resolved for a specific project are indeed resolved"
+    );
+    cy.get("table tbody").contains("What I'm really trying to say is:");
   });
 });
