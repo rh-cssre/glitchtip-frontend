@@ -1,6 +1,4 @@
-`@sentry/angular` can be used to catch any Angular-specific exceptions reported through the [@angular/core/ErrorHandler](https://angular.io/api/core/ErrorHandler) component.
-
-Install `@angular/angular`:
+Install `@sentry/angular`:
 
 ```bash
 $ npm install --save @sentry/angular
@@ -13,5 +11,65 @@ import * as Sentry from "@sentry/browser";
 
 Sentry.init({
   dsn: "your GlitchTip DSN here",
+  autoSessionTracking: false,
 });
+```
+
+## Configuration
+
+A more robust configuration example:
+
+```javascript
+import * as Sentry from "@sentry/browser";
+
+Sentry.init({
+  dsn: "your GlitchTip DSN here",
+  environment: "production",
+  release: "1.0.0",
+  autoSessionTracking: false,
+  tracesSampleRate: 0.01,
+});
+```
+
+- dsn - Where to send event data too, found in GlitchTip in project settings.
+- release - Set release name such as "1.0". Defaults to environment variable `SENTRY_RELEASE`.
+- environment - Set the running environment name, such as "production". When running in Node, such as Angular Universal, this defaults to environment variable `SENTRY_ENVIRONMENT`. No default is used in browser.
+- sampleRate - Percent of error events to send to GlitchTip. 0.5 would be 50%. Defaults to 1.0.
+- tracesSampleRate - Percent of performance transactions to send to GlitchTip. 0.01 would be 1%. We recommend a lower value to save costs/hard drive space.
+
+### Performance Monitoring
+
+It's possible to send performance transactions to GlitchTip.
+
+Install `@sentry/tracing`
+
+Add integration to SDK configuration:
+
+```javascript
+Sentry.init({
+  dsn: "GlitchTip DSN",
+  integrations: [
+    new Integrations.BrowserTracing({
+      tracingOrigins: ["localhost", "https://example.com"],
+      routingInstrumentation: Sentry.routingInstrumentation,
+    }),
+  ],
+  // Capture 1% of transactions
+  tracesSampleRate: 0.01,
+});
+```
+
+### Show user feedback dialog
+
+Provide a custom Angular ErrorHandler. In your root modules file, adjust providers:
+
+```javascript
+providers: [
+  {
+    provide: ErrorHandler,
+    useValue: Sentry.createErrorHandler({
+      showDialog: true,
+    }),
+  },
+],
 ```
