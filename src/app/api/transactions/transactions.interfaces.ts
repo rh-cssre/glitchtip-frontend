@@ -4,3 +4,7 @@ export interface Transaction {
   timestamp: string;
   startTimestamp: string;
 }
+
+export interface TransactionWithDelta extends Transaction {
+  delta: number;
+}

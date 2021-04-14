@@ -8,7 +8,7 @@ import { ActivatedRoute } from "@angular/router";
 import { combineLatest, Observable, Subscription } from "rxjs";
 import { distinctUntilChanged, filter, map, mergeMap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { Transaction } from "src/app/api/transactions/transactions.interfaces";
+import { TransactionWithDelta } from "src/app/api/transactions/transactions.interfaces";
 import { TransactionsService } from "src/app/api/transactions/transactions.service";
 
 @Component({
@@ -18,10 +18,10 @@ import { TransactionsService } from "src/app/api/transactions/transactions.servi
 })
 export class TransactionDetailComponent implements OnInit, OnDestroy {
   sub: Subscription | null = null;
-  transaction$: Observable<Transaction> | null = null;
+  transaction$: Observable<TransactionWithDelta> | null = null;
   constructor(
     private transactionsService: TransactionsService,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private organizationsService: OrganizationsService
   ) {}
 
@@ -34,10 +34,18 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
       filter(([slug, eventId]) => !!slug && !!eventId),
       distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
       mergeMap(([slug, eventId]) =>
-        this.transactionsService.retrieve(slug!, eventId!)
+        this.transactionsService.retrieve(slug!, eventId!).pipe(
+          map((resp) => {
+            return {
+              ...resp,
+              delta:
+                new Date(resp.timestamp).getTime() -
+                new Date(resp.startTimestamp).getTime(),
+            };
+          })
+        )
       )
     );
-    this.sub = this.transaction$.subscribe();
   }
 
   ngOnDestroy() {

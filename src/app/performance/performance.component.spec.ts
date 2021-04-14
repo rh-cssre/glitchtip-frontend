@@ -3,6 +3,7 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatTableModule } from "@angular/material/table";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { OrganizationsService } from "../api/organizations/organizations.service";
@@ -20,7 +21,12 @@ describe("PerformanceComponent", () => {
       activeOrganizationSlug$: of("test"),
     };
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, SharedModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        SharedModule,
+        MatTableModule,
+      ],
       providers: [
         { provide: OrganizationsService, useValue: organizationsServiceStub },
       ],

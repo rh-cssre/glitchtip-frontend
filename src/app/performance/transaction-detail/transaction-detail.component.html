@@ -1,5 +1,38 @@
-<p>transaction-detail</p>
-<div *ngIf="transaction$ | async as transaction">
-    {{ transaction.eventId }}
-    {{ transaction.transaction }}
-</div>
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-display-1">Transaction Detail</h1>
+    <a
+      mat-stroked-button
+      class="project-issues-link"
+      [routerLink]="['..']"
+      [relativeTo]="route"
+      queryParamsHandling="merge"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      Back to Performance
+    </a>
+  </header>
+  <mat-card *ngIf="transaction$ | async as transaction">
+    <mat-card-header class="flex-space-between">
+      <mat-card-title>{{ transaction.transaction }}</mat-card-title>
+      <mat-card-subtitle>{{
+        transaction.eventId
+      }}</mat-card-subtitle></mat-card-header
+    >
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <app-entry-data
+        key="Timestamp"
+        [value]="transaction.timestamp | date: 'full'"
+      ></app-entry-data>
+      <app-entry-data
+        key="Start Timestamp"
+        [value]="transaction.startTimestamp | date: 'full'"
+      ></app-entry-data>
+      <app-entry-data
+        key="Time"
+        [value]="transaction.delta + 'ms'"
+      ></app-entry-data>
+    </mat-card-content>
+  </mat-card>
+</section>
