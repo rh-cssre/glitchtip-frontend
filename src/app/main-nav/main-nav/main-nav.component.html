@@ -161,10 +161,6 @@
       <button mat-menu-item (click)="this.logout()">Log Out</button>
     </mat-nav-list>
 
-    <mat-card *ngIf="(paidForGlitchTip$ | async) === true" class="thankyouware">
-      <p class="mat-copy-1">Thank you for supporting GlitchTip!</p>
-    </mat-card>
-
     <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
       <mat-card-title>
         <h3 class="mat-display-1">Support GlitchTip</h3>
