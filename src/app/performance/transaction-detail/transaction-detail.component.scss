@@ -1,0 +1,9 @@
+mat-card-header {
+  &::ng-deep .mat-card-header-text {
+    margin-left: 0;
+  }
+}
+
+mat-card-content {
+  margin-top: 24px;
+}

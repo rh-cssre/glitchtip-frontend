@@ -1,0 +1,16 @@
+$iconWidth: 56px;
+
+table {
+  width: 100%;
+
+  .footer {
+    text-align: right;
+
+    mat-icon {
+      font-size: 35px;
+      height: $iconWidth;
+      width: $iconWidth;
+      line-height: $iconWidth;
+    }
+  }
+}

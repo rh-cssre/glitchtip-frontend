@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { MatTableModule } from "@angular/material/table";
 
 import { PerformanceRoutingModule } from "./performance-routing.module";
 import { PerformanceComponent } from "./performance.component";
@@ -8,6 +9,11 @@ import { TransactionDetailComponent } from "./transaction-detail/transaction-det
 
 @NgModule({
   declarations: [PerformanceComponent, TransactionDetailComponent],
-  imports: [SharedModule, CommonModule, PerformanceRoutingModule],
+  imports: [
+    SharedModule,
+    CommonModule,
+    PerformanceRoutingModule,
+    MatTableModule,
+  ],
 })
 export class PerformanceModule {}

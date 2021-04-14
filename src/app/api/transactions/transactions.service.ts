@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Transaction } from "./transactions.interfaces";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
@@ -14,9 +14,14 @@ export class TransactionsService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug: string) {
+  list(organizationSlug: string, cursor?: string) {
+    let httpParams = new HttpParams();
+    if (cursor) {
+      httpParams = httpParams.set("cursor", cursor);
+    }
     return this.http.get<Transaction[]>(this.listURL(organizationSlug), {
       observe: "response",
+      params: httpParams,
     });
   }
 

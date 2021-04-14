@@ -1,11 +1,7 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  OnDestroy,
-} from "@angular/core";
-import { Subscription } from "rxjs";
-import { distinctUntilChanged, filter } from "rxjs/operators";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { combineLatest, Subscription } from "rxjs";
+import { map, filter, distinctUntilChanged } from "rxjs/operators";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { PaginationBaseComponent } from "../shared/stateful-service/pagination-stateful-service";
 import { PerformanceState, PerformanceService } from "./performance.service";
@@ -18,7 +14,9 @@ import { PerformanceState, PerformanceService } from "./performance.service";
 })
 export class PerformanceComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>
-  implements OnInit, OnDestroy {
+  implements OnDestroy {
+  displayedColumns = ["transaction", "time", "date", "daysAgo"];
+
   sub: Subscription | null = null;
   transactions$ = this.service.transactionsWithDelta$;
 
@@ -29,19 +27,24 @@ export class PerformanceComponent
 
   constructor(
     protected service: PerformanceService,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private route: ActivatedRoute
   ) {
     super(service);
-  }
-
-  ngOnInit() {
-    this.sub = this.organizationsService.activeOrganizationSlug$
+    this.sub = combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.route.queryParams,
+    ])
       .pipe(
-        filter((slug) => !!slug),
+        map(([slug, queryParams]) => {
+          const cursor: string | undefined = queryParams.cursor;
+          return { slug, cursor };
+        }),
+        filter(({ slug, cursor }) => !!slug),
         distinctUntilChanged()
       )
-      .subscribe((slug) => {
-        this.service.getTransactions(slug!);
+      .subscribe(({ slug, cursor }) => {
+        this.service.getTransactions(slug!, cursor);
       });
   }
 

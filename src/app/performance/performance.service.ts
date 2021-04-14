@@ -37,9 +37,9 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     super(initialState);
   }
 
-  getTransactions(orgSlug: string) {
+  getTransactions(orgSlug: string, cursor?: string | undefined) {
     this.transactionsService
-      .list(orgSlug)
+      .list(orgSlug, cursor)
       .pipe(
         tap((res) =>
           this.setStateAndPagination({ transactions: res.body! }, res)
