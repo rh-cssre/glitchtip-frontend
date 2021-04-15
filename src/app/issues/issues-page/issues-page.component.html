@@ -11,7 +11,6 @@
     </h1>
   </header>
   <app-header-nav></app-header-nav>
-
   <div *ngIf="issues$ | async as issues" class="wrapper">
     <table
       mat-table
@@ -378,14 +377,10 @@
         "
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      <tr
-        class="mat-row"
-        *matNoDataRow
-        [class.errors]="(errors$ | async)?.length"
-      >
+      <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" [attr.colspan]="displayedColumns.length">
           <app-issue-zero-states
-            *ngIf="paginator.initialLoadComplete || (errors$ | async)?.length"
+            *ngIf="paginator.initialLoadComplete"
           ></app-issue-zero-states>
         </td>
       </tr>

@@ -1,21 +1,5 @@
 <div class="empty-states">
-  <!-- If there are errors -->
-  <ng-container *ngIf="(errors$ | async)?.length">
-    <ng-container *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
-      ><h3 class="mat-display-1">
-        There was an error processing your request
-      </h3></ng-container
-    ><ng-template #multipleErrors
-      ><h3 class="mat-display-1">
-        There were errors while processing your request
-      </h3></ng-template
-    >
-    <ul>
-      <li *ngFor="let error of errors$ | async">{{ error }}</li>
-    </ul>
-  </ng-container>
-
-  <!-- Don't show any of this until loading state is resolved (exception for errors) -->
+  <!-- Don't show any of this until loading state is resolved -->
   <ng-container
     *ngIf="
       (initialLoadComplete$ | async) === true && (loading$ | async) === false

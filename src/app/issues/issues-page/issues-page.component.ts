@@ -96,7 +96,6 @@ export class IssuesPageComponent
       return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
-  errors$ = this.issuesService.errors$;
   routerEventSubscription: Subscription;
   orgEnvironmentSubscription: Subscription;
   projectEnvironmentSubscription: Subscription;
