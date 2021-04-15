@@ -19,6 +19,7 @@ export interface IssuesState extends PaginationStatefulServiceState {
   organizationEnvironments: Environment[];
   selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
   areIssuesForProjectSelected: boolean;
+  errors: string[];
 }
 
 const initialState: IssuesState = {
@@ -28,6 +29,7 @@ const initialState: IssuesState = {
   organizationEnvironments: [],
   selectedProjectInfo: {},
   areIssuesForProjectSelected: false,
+  errors: [],
 };
 
 @Injectable({
@@ -69,6 +71,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   readonly selectedProjectInfo$ = this.getState$.pipe(
     map((state) => state.selectedProjectInfo)
   );
+  readonly errors$ = this.getState$.pipe(map((state) => state.errors));
   /**
    * Uses reducer to remove duplicate environments, also converts objects to a
    * list of names since that's all that the component requires
@@ -107,6 +110,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     environment: string | undefined
   ) {
     this.setLoading(true);
+    this.setErrors([]);
     this.retrieveIssues(
       orgSlug,
       cursor,
@@ -212,6 +216,18 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ issues: res.body! }, res);
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.setLoading(false);
+          let errorArray: string[] = [];
+          if (err.error) {
+            const errorValues: string[][] = Object.values<string[]>(err.error);
+            errorArray = errorValues.reduce((a, v) => a.concat(v), []);
+          } else {
+            errorArray = [err.message];
+          }
+          this.setErrors(errorArray);
+          return EMPTY;
         })
       );
   }
@@ -271,6 +287,11 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   private setLoading(loading: boolean) {
     const state = this.state.getValue();
     this.setState({ pagination: { ...state.pagination, loading } });
+  }
+
+  private setErrors(errors: string[]) {
+    const state = this.state.getValue();
+    this.setState({ ...state, errors });
   }
 
   private retrieveOrganizationEnvironments(orgSlug: string) {

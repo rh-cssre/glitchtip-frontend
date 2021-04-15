@@ -98,6 +98,7 @@ export class IssueZeroStatesComponent implements OnInit {
     )
   );
 
+  errors$ = this.issuesService.errors$;
   copiedDsn$ = new BehaviorSubject(false);
 
   /**
