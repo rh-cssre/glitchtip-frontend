@@ -45,7 +45,7 @@ test-e2e:
       alias: backend
       command: ["./bin/run-migrate-and-runserver.sh"]
   image:
-    name: cypress/included:6.8.0
+    name: cypress/included:7.1.0
     entrypoint: [""]
   script:
     - npm ci --cache .npm --prefer-offline
@@ -105,7 +105,7 @@ build-docker:
 
 deploy-staging:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.20.5-v3.5.3
+  image: lwolf/helm-kubectl-docker:v1.21.0-v3.5.4
   script:
     - helm upgrade glitchtip-staging ./chart --set-string image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
   environment:
