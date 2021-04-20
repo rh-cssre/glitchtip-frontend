@@ -19,6 +19,12 @@ import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
 
+let snackBarDuration = 4000;
+if ((window as any).Cypress) {
+  // Speed up cypress tests
+  snackBarDuration = 100;
+}
+
 @NgModule({
   declarations: [AppComponent, RateLimitBannerComponent],
   imports: [
@@ -40,7 +46,10 @@ import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.
       useClass: TokenInterceptor,
       multi: true,
     },
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 4000 } },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: snackBarDuration },
+    },
     { provide: ErrorHandler, useValue: Sentry.createErrorHandler() },
   ],
   bootstrap: [AppComponent],
