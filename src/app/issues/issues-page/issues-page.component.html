@@ -381,7 +381,7 @@
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" [attr.colspan]="displayedColumns.length">
           <app-issue-zero-states
-            *ngIf="paginator.initialLoadComplete || (errors$ | async)?.length"
+            *ngIf="paginator.initialLoadComplete"
           ></app-issue-zero-states>
         </td>
       </tr>

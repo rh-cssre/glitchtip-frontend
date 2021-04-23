@@ -219,6 +219,8 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         }),
         catchError((err: HttpErrorResponse) => {
           this.setLoading(false);
+          this.setInitialLoadComplete(true);
+
           let errorArray: string[] = [];
           if (err.error) {
             const errorValues: string[][] = Object.values<string[]>(err.error);
@@ -282,6 +284,11 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       ),
       selectedIssues: [],
     });
+  }
+
+  private setInitialLoadComplete(initialLoadComplete: boolean) {
+    const state = this.state.getValue();
+    this.setState({ pagination: { ...state.pagination, initialLoadComplete } });
   }
 
   private setLoading(loading: boolean) {
