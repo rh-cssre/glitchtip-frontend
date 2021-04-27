@@ -51,11 +51,11 @@ describe("Create New Project", () => {
     cy.get("[formcontrolname=platform] [data-test]").first().click();
     cy.get("#create-project-submit").click();
     // cy.contains(`${newProject.name} has been created`);
-  //   cy.url().should(
-  //     "contain",
-  //     `http://localhost:4200/${organization.slug}/issues?project`
-  //   );
-  // });
+    //   cy.url().should(
+    //     "contain",
+    //     `http://localhost:4200/${organization.slug}/issues?project`
+    //   );
+  });
 });
 
 describe("Edit and Delete a project", () => {
