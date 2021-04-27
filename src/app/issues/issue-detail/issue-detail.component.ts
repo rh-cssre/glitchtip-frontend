@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { map, exhaustMap, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 import { IssueDetailService } from "./issue-detail.service";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "app-issue-detail",
@@ -20,7 +21,7 @@ export class IssueDetailComponent implements OnInit {
   issueIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("issue-id"))
   );
-  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
+  organization$ = this.organizationsService.activeOrganization$;
   participantCountPluralMapping: { [k: string]: string } = {
     "=0": "No Participants",
     "=1": "1 Participant",
@@ -29,6 +30,7 @@ export class IssueDetailComponent implements OnInit {
 
   constructor(
     private issueService: IssueDetailService,
+    private organizationsService: OrganizationsService,
     private route: ActivatedRoute
   ) {}
 
