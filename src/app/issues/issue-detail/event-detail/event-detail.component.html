@@ -2,9 +2,11 @@
   class="mat-typography"
   *ngIf="(initialLoadComplete$ | async) && (event$ | async) === null"
 >
-  <header class="header">
-    <h2>Event not found</h2>
-  </header>
+  <h2>Event not found</h2>
+  <p class="mat-body-1">
+    This may be because the URL is pointing to an event that doesn't exist or
+    was deleted.
+  </p>
 </section>
 
 <section *ngIf="event$ | async as event" class="mat-typography">

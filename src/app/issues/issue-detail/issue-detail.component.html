@@ -2,9 +2,28 @@
   class="l-body l-body--full-width"
   *ngIf="(initialLoadComplete$ | async) && (issue$ | async) === null"
 >
-  <header class="page-header">
+  <mat-card
+    class="auth-form issue-404"
+    *ngIf="organization$ | async as organization"
+  >
     <h1 class="mat-display-1">Issue not found</h1>
-  </header>
+    <p class="mat-body-1">
+      This may be because the URL is pointing to an issue that doesn't exist or
+      was deleted.
+    </p>
+    <p class="mat-body-1">
+      It's also possible that this issue was reported to a project that you are
+      not able to access.
+    </p>
+    <a
+      mat-flat-button
+      color="primary"
+      class="project-issues-link"
+      [routerLink]="['..']"
+    >
+      View all issues in {{ organization.name }}
+    </a>
+  </mat-card>
 </section>
 <section class="l-body l-body--full-width" *ngIf="issue$ | async as issue">
   <header>
