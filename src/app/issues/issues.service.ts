@@ -110,7 +110,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     environment: string | undefined
   ) {
     this.setLoading(true);
-    this.setErrors([]);
+    this.clearErrors();
     this.retrieveIssues(
       orgSlug,
       cursor,
@@ -220,15 +220,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         catchError((err: HttpErrorResponse) => {
           this.setLoading(false);
           this.setInitialLoadComplete(true);
-
-          let errorArray: string[] = [];
-          if (err.error) {
-            const errorValues: string[][] = Object.values<string[]>(err.error);
-            errorArray = errorValues.reduce((a, v) => a.concat(v), []);
-          } else {
-            errorArray = [err.message];
-          }
-          this.setErrors(errorArray);
+          this.setErrors(err);
           return EMPTY;
         })
       );
@@ -296,9 +288,14 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     this.setState({ pagination: { ...state.pagination, loading } });
   }
 
-  private setErrors(errors: string[]) {
+  private setErrors(errors: HttpErrorResponse) {
     const state = this.state.getValue();
-    this.setState({ ...state, errors });
+    this.setState({ ...state, errors: this.updateErrorMessage(errors) });
+  }
+
+  private clearErrors() {
+    const state = this.state.getValue();
+    this.setState({ ...state, errors: [] });
   }
 
   private retrieveOrganizationEnvironments(orgSlug: string) {
@@ -309,5 +306,14 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
           this.setState({ organizationEnvironments: environments });
         })
       );
+  }
+
+  private updateErrorMessage(err: HttpErrorResponse): string[] {
+    if (err.error) {
+      const errorValues: string[][] = Object.values<string[]>(err.error);
+      return errorValues.reduce((a, v) => a.concat(v), []);
+    } else {
+      return [err.message];
+    }
   }
 }
