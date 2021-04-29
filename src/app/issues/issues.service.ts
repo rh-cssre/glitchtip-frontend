@@ -218,9 +218,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
           this.setStateAndPagination({ issues: res.body! }, res);
         }),
         catchError((err: HttpErrorResponse) => {
-          this.setLoading(false);
-          this.setInitialLoadComplete(true);
-          this.setErrors(err);
+          this.setIssuesError(err);
           return EMPTY;
         })
       );
@@ -278,19 +276,22 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
-  private setInitialLoadComplete(initialLoadComplete: boolean) {
-    const state = this.state.getValue();
-    this.setState({ pagination: { ...state.pagination, initialLoadComplete } });
-  }
-
   private setLoading(loading: boolean) {
     const state = this.state.getValue();
     this.setState({ pagination: { ...state.pagination, loading } });
   }
 
-  private setErrors(errors: HttpErrorResponse) {
+  private setIssuesError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
-    this.setState({ ...state, errors: this.updateErrorMessage(errors) });
+    this.setState({
+      ...state,
+      errors: this.updateErrorMessage(errors),
+      pagination: {
+        ...state.pagination,
+        loading: false,
+        initialLoadComplete: true,
+      },
+    });
   }
 
   private clearErrors() {
