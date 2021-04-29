@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  billingEmail: "billing@mail.glitchtip.com",
+  billingEmail: "sales@glitchtip.com",
 };
