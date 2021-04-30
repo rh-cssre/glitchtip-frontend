@@ -1,13 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { BehaviorSubject, combineLatest, timer } from "rxjs";
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  switchMap,
-  take,
-} from "rxjs/operators";
+import { combineLatest } from "rxjs";
+import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -98,8 +92,6 @@ export class IssueZeroStatesComponent implements OnInit {
     )
   );
 
-  copiedDsn$ = new BehaviorSubject(false);
-
   /**
    * Corresponds to project picker/header nav/project IDs in the URL
    * If the count is zero, we show issues from all projects
@@ -170,13 +162,5 @@ export class IssueZeroStatesComponent implements OnInit {
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
-  }
-
-  copied() {
-    timer(0, 4000)
-      .pipe(take(2))
-      .subscribe((i) =>
-        i === 0 ? this.copiedDsn$.next(true) : this.copiedDsn$.next(false)
-      );
   }
 }
