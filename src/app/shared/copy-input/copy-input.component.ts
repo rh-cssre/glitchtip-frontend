@@ -11,8 +11,8 @@ import { take } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyInputComponent {
-  @Input() value: string = "";
-  @Input() placeholder: string = "";
+  @Input() value = "";
+  @Input() placeholder = "";
   copied$ = new BehaviorSubject(false);
 
   /**
