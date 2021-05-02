@@ -11,9 +11,7 @@ export class AuthTokensComponent implements OnInit, OnDestroy {
   deleteLoading$ = this.authTokensService.deleteLoading$;
   initialLoad$ = this.authTokensService.initialLoad$;
 
-  copiedTokenId = "";
-
-  constructor(private authTokensService: AuthTokensService) {}
+  constructor(private authTokensService: AuthTokensService) { }
 
   ngOnInit(): void {
     this.authTokensService.loadAuthTokens();
@@ -25,10 +23,5 @@ export class AuthTokensComponent implements OnInit, OnDestroy {
 
   deleteAuthToken(id: string) {
     this.authTokensService.deleteAuthToken(id);
-  }
-
-  copied(tokenId: string) {
-    this.copiedTokenId = tokenId;
-    setTimeout(() => (this.copiedTokenId = ""), 4000);
   }
 }
