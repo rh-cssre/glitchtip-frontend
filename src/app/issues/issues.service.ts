@@ -109,8 +109,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     sort: string | undefined,
     environment: string | undefined
   ) {
-    this.setLoading(true);
-    this.clearErrors();
     this.retrieveIssues(
       orgSlug,
       cursor,
@@ -215,7 +213,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       )
       .pipe(
         tap((res) => {
-          this.setStateAndPagination({ issues: res.body! }, res);
+          this.setStateAndPagination({ errors: [], issues: res.body! }, res);
         }),
         catchError((err: HttpErrorResponse) => {
           this.setIssuesError(err);
@@ -276,15 +274,9 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
-  private setLoading(loading: boolean) {
-    const state = this.state.getValue();
-    this.setState({ pagination: { ...state.pagination, loading } });
-  }
-
   private setIssuesError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      ...state,
       errors: this.updateErrorMessage(errors),
       pagination: {
         ...state.pagination,
@@ -292,11 +284,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         initialLoadComplete: true,
       },
     });
-  }
-
-  private clearErrors() {
-    const state = this.state.getValue();
-    this.setState({ ...state, errors: [] });
   }
 
   private retrieveOrganizationEnvironments(orgSlug: string) {
