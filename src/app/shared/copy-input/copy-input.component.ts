@@ -8,6 +8,7 @@ import { take } from "rxjs/operators";
 @Component({
   selector: "app-copy-input",
   templateUrl: "./copy-input.component.html",
+  styleUrls: ["./copy-input.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyInputComponent {
