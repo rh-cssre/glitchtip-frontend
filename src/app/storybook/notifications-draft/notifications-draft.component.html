@@ -1,0 +1,61 @@
+<section class="l-body">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Project Alerts</mat-card-title>
+      <button mat-flat-button color="primary">
+        Create New Alert
+      </button></mat-card-header
+    >
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let alert of alerts; let i = index">
+          <mat-divider *ngIf="i !== 0"></mat-divider>
+
+          <div class="amount">
+            <span>If an event happens</span>
+            <mat-form-field>
+              <mat-label>Quantity</mat-label>
+              <input
+                matInput
+                min="0"
+                max="10000"
+                type="number"
+                autocomplete="off"
+                formControlName="quantity"
+                placeholder="#"
+              />
+            </mat-form-field>
+            <span>times in</span>
+            <mat-form-field>
+              <mat-label>Timespan</mat-label>
+              <input
+                matInput
+                min="0"
+                max="10000"
+                type="number"
+                autocomplete="off"
+                formControlName="timespan_minutes"
+                placeholder="#"
+              />
+            </mat-form-field>
+            <span>minutes,&nbsp;send&nbsp;an&nbsp;alert to:</span>
+          </div>
+          <ul class="alert-recipients">
+            <li *ngFor="let recipient of alert.alertRecipients">
+              <span>{{ recipient.url }}</span
+              ><span><mat-icon>edit</mat-icon><mat-icon>delete</mat-icon></span>
+            </li>
+            <li>
+              <mat-form-field class="webhook-input">
+                <mat-label>Webhook URL</mat-label>
+                <input type="text" matInput placeholder="www.webhook.com" />
+              </mat-form-field>
+              <button mat-flat-button color="primary">Add Webhook</button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</section>
