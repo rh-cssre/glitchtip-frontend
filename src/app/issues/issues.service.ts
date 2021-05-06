@@ -200,6 +200,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     sort?: string,
     environment?: string
   ) {
+    this.setClearErrors();
     return this.issuesAPIService
       .list(
         organizationSlug,
@@ -213,7 +214,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       )
       .pipe(
         tap((res) => {
-          this.setStateAndPagination({ errors: [], issues: res.body! }, res);
+          this.setStateAndPagination({ issues: res.body! }, res);
         }),
         catchError((err: HttpErrorResponse) => {
           this.setIssuesError(err);
@@ -260,6 +261,14 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     this.state.next({
       ...state,
       selectedProjectInfo: { orgSlug, projectId, query },
+    });
+  }
+
+  private setClearErrors() {
+    const state = this.state.getValue();
+    this.setState({
+      errors: [],
+      pagination: { ...state.pagination, loading: false },
     });
   }
 
