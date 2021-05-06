@@ -30,6 +30,7 @@ export interface ProjectDetail extends Project {
 
 export interface DSN {
   public: string;
+  security: string;
 }
 
 export interface ProjectKey {

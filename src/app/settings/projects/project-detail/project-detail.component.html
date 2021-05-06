@@ -70,7 +70,7 @@
     </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title>DSN</mat-card-title>
+    <mat-card-title>Client Keys (DSN)</mat-card-title>
     <p class="mat-caption">
       Data Source Name: The code that connects your project to GlitchTip.
       Install a library into your project, then configure it with the DSN so
@@ -78,25 +78,14 @@
     </p>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <mat-form-field class="full-width">
-        <input
-          class="background"
-          readonly
-          matInput
-          [value]="projectKey.dsn.public"
-        />
-        <button
-          mat-icon-button
-          [cdkCopyToClipboard]="projectKey.dsn.public"
-          (cdkCopyToClipboardCopied)="copied()"
-          matTooltip="Copy key to clipboard"
-          matSuffix
-        >
-          <mat-icon [class.dsn-copied]="this.copiedDsn">
-            {{ this.copiedDsn ? "check_circle" : "file_copy" }}
-          </mat-icon>
-        </button>
-      </mat-form-field>
+      <app-copy-input
+        [value]="projectKey.dsn.public"
+        placeholder="DSN"
+      ></app-copy-input>
+      <app-copy-input
+        [value]="projectKey.dsn.security"
+        placeholder="Security Endpoint"
+      ></app-copy-input>
     </mat-card-content>
   </mat-card>
 
