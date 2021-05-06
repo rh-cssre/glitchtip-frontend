@@ -1,0 +1,46 @@
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+
+  &::ng-deep .mat-card-header-text {
+    margin-left: 0;
+  }
+
+  mat-card-title {
+    margin-bottom: 0;
+    margin-right: 8px;
+  }
+}
+
+ul {
+  list-style: none;
+  padding-left: unset;
+}
+
+.amount {
+  padding-top: 24px;
+}
+
+.alert-recipients {
+  padding-left: 24px;
+  padding-right: 24px;
+
+  li {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+    &:first-child {
+      border-top: unset;
+    }
+  }
+
+  .webhook-input {
+    width: 80%;
+  }
+}
