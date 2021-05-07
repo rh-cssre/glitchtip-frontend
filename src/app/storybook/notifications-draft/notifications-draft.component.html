@@ -1,4 +1,5 @@
-<section class="l-body">
+<h1>Option 1</h1>
+<section class="l-body first-draft">
   <mat-card>
     <mat-card-header>
       <mat-card-title>Project Alerts</mat-card-title>
@@ -9,8 +10,8 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       <ul>
-        <li *ngFor="let alert of alerts; let i = index">
-          <mat-divider *ngIf="i !== 0"></mat-divider>
+        <li *ngFor="let alert of alerts; let ione = index">
+          <mat-divider *ngIf="ione !== 0"></mat-divider>
 
           <div class="amount">
             <span>If an event happens</span>
@@ -22,7 +23,6 @@
                 max="10000"
                 type="number"
                 autocomplete="off"
-                formControlName="quantity"
                 placeholder="#"
               />
             </mat-form-field>
@@ -35,7 +35,6 @@
                 max="10000"
                 type="number"
                 autocomplete="off"
-                formControlName="timespan_minutes"
                 placeholder="#"
               />
             </mat-form-field>
@@ -53,6 +52,69 @@
               </mat-form-field>
               <button mat-flat-button color="primary">Add Webhook</button>
             </li>
+          </ul>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<h1>Option 2</h1>
+
+<section class="l-body second-draft">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Project Alerts</mat-card-title>
+      <button mat-flat-button color="primary">
+        Create New Alert
+      </button></mat-card-header
+    >
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let alert of alerts; let itwo = index">
+          <mat-divider *ngIf="itwo !== 0"></mat-divider>
+          <h3>Alert {{ itwo + 1 }}</h3>
+          <div class="amount">
+            <span>If an event happens</span>
+            <mat-form-field>
+              <mat-label>Quantity</mat-label>
+              <input
+                matInput
+                min="0"
+                max="10000"
+                type="number"
+                autocomplete="off"
+                placeholder="#"
+              />
+            </mat-form-field>
+            <span>times in</span>
+            <mat-form-field>
+              <mat-label>Timespan</mat-label>
+              <input
+                matInput
+                min="0"
+                max="10000"
+                type="number"
+                autocomplete="off"
+                placeholder="#"
+              />
+            </mat-form-field>
+            <span>minutes,&nbsp;send&nbsp;an&nbsp;alert to:</span>
+          </div>
+          <ul class="alert-recipients">
+            <li
+              *ngFor="
+                let recipient of alert.alertRecipients;
+                let ithree = index
+              "
+            >
+              {{ recipient.url
+              }}<ng-container *ngIf="alert.alertRecipients.length !== ithree"
+                >,</ng-container
+              >
+            </li>
+            <li>emails listed for <a routerLink="">team members</a></li>
           </ul>
         </li>
       </ul>
