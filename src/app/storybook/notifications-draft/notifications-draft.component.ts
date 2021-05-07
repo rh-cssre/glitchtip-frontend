@@ -58,6 +58,7 @@ const testData: Alerts[] = [
 })
 export class NotificationsDraftComponent implements OnInit {
   alerts: Alerts[] = testData;
+  emailTeam: boolean = true;
 
   constructor() {}
 

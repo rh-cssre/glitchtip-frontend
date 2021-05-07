@@ -1,46 +1,106 @@
-mat-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 12px;
-
-  &::ng-deep .mat-card-header-text {
-    margin-left: 0;
-  }
-
-  mat-card-title {
-    margin-bottom: 0;
-    margin-right: 8px;
-  }
-}
-
-ul {
-  list-style: none;
-  padding-left: unset;
-}
-
-.amount {
-  padding-top: 24px;
-}
-
-.alert-recipients {
-  padding-left: 24px;
-  padding-right: 24px;
-
-  li {
-    padding-top: 8px;
-    padding-bottom: 8px;
+.first-draft {
+  mat-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding-bottom: 12px;
 
-    &:first-child {
-      border-top: unset;
+    &::ng-deep .mat-card-header-text {
+      margin-left: 0;
+    }
+
+    mat-card-title {
+      margin-bottom: 0;
+      margin-right: 8px;
     }
   }
 
-  .webhook-input {
-    width: 80%;
+  ul {
+    list-style: none;
+    padding-left: unset;
+  }
+
+  .amount {
+    padding-top: 24px;
+  }
+
+  mat-form-field {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .alert-recipients {
+    padding-left: 24px;
+    padding-right: 24px;
+
+    li {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+      &:first-child {
+        border-top: unset;
+      }
+    }
+
+    .webhook-input {
+      width: 80%;
+    }
+  }
+}
+
+.second-draft {
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+
+    &::ng-deep .mat-card-header-text {
+      margin-left: 0;
+    }
+
+    mat-card-title {
+      margin-bottom: 0;
+      margin-right: 8px;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding-left: unset;
+  }
+
+  li {
+    &:last-child {
+      padding-bottom: 16px;
+    }
+  }
+
+  h3 {
+    margin-bottom: unset;
+
+    &:not(:first-child) {
+      padding-top: 24px;
+    }
+  }
+
+  .amount {
+    mat-form-field {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+
+  .alert-recipients {
+    padding-left: 24px;
+    padding-right: 24px;
+
+    .webhook-input {
+      width: 80%;
+    }
   }
 }
