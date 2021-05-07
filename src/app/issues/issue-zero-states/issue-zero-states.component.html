@@ -1,5 +1,5 @@
 <div class="empty-states">
-  <!-- Don't show any of this until loading state is resolved (exception for errors) -->
+  <!-- Don't show any of this until loading state is resolved -->
   <ng-container
     *ngIf="
       (initialLoadComplete$ | async) === true && (loading$ | async) === false
@@ -144,26 +144,16 @@
                   Copy the DSN and paste it into that spot.
                 </p>
 
-                <mat-form-field class="dsn-input">
-                  <input
-                    class="background"
-                    readonly
-                    matInput
+                <div class="dsn-area">
+                  <app-copy-input
                     [value]="firstProjectKey.dsn.public"
-                    data-test-dsn
-                  />
-                  <button
-                    mat-icon-button
-                    [cdkCopyToClipboard]="firstProjectKey.dsn.public"
-                    (cdkCopyToClipboardCopied)="copied()"
-                    matTooltip="Copy key to clipboard"
-                    matSuffix
-                  >
-                    <mat-icon [class.dsn-copied]="copiedDsn$ | async">
-                      {{ (copiedDsn$ | async) ? "check_circle" : "file_copy" }}
-                    </mat-icon>
-                  </button>
-                </mat-form-field>
+                    placeholder="DSN"
+                  ></app-copy-input>
+                  <app-copy-input
+                    [value]="firstProjectKey.dsn.security"
+                    placeholder="Security Endpoint"
+                  ></app-copy-input>
+                </div>
 
                 <ng-container
                   *ngIf="

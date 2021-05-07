@@ -91,6 +91,7 @@ export class IssueZeroStatesComponent implements OnInit {
         .pipe(map((keys) => keys[0]))
     )
   );
+  errors$ = this.issuesService.errors$;
 
   /**
    * Corresponds to project picker/header nav/project IDs in the URL
