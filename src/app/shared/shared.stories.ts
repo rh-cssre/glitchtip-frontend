@@ -9,6 +9,7 @@ import { MaterialModule } from "./material.module";
 import { ProjectCardComponent } from "./project-card/project-card.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { LoadingButtonComponent } from "./loading-button/loading-button.component";
+import { CopyInputComponent } from "./copy-input/copy-input.component";
 
 export default {
   title: "Shared/Shared",
@@ -81,4 +82,18 @@ export const loadingButton = () => {
 
 loadingButton.story = {
   name: "Button with Loading State",
+};
+
+export const copyInput = () => {
+  return {
+    component: CopyInputComponent,
+    props: {
+      value: "Some copying value",
+      placeholder: "placeholder",
+    },
+  };
+};
+
+copyInput.story = {
+  name: "Ready only, copyable input",
 };

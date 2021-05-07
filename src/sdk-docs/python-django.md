@@ -60,10 +60,10 @@ sentry_sdk.init(
 
 ## Content Security Policy Reporting with Django-CSP
 
-Using Content Security Policy (CSP)? Send reports to GlitchTip. Set your website's CSP `report-uri` directive to `https://<glitchtip domain>/<project id>/security/?sentry_key=<DSN Key>`.
+Using Content Security Policy (CSP)? Send reports to GlitchTip. Set your website's CSP `report-uri` directive to the GlitchTip Security Endpoint.
 
 If using Django-CSP, in settings.py set:
 
 ```python
-CSP_REPORT_URI = ["https://<glitchtip domain>/<project id>/security/?sentry_key=11111111111111111111111111111111"]
+CSP_REPORT_URI = ["your Security Endpoint here"]
 ```
