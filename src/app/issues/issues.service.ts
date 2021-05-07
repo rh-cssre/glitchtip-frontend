@@ -19,6 +19,7 @@ export interface IssuesState extends PaginationStatefulServiceState {
   organizationEnvironments: Environment[];
   selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
   areIssuesForProjectSelected: boolean;
+  errors: string[];
 }
 
 const initialState: IssuesState = {
@@ -28,6 +29,7 @@ const initialState: IssuesState = {
   organizationEnvironments: [],
   selectedProjectInfo: {},
   areIssuesForProjectSelected: false,
+  errors: [],
 };
 
 @Injectable({
@@ -69,6 +71,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   readonly selectedProjectInfo$ = this.getState$.pipe(
     map((state) => state.selectedProjectInfo)
   );
+  readonly errors$ = this.getState$.pipe(map((state) => state.errors));
   /**
    * Uses reducer to remove duplicate environments, also converts objects to a
    * list of names since that's all that the component requires
@@ -106,7 +109,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     sort: string | undefined,
     environment: string | undefined
   ) {
-    this.setLoading(true);
     this.retrieveIssues(
       orgSlug,
       cursor,
@@ -198,6 +200,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     sort?: string,
     environment?: string
   ) {
+    this.setClearErrors();
     return this.issuesAPIService
       .list(
         organizationSlug,
@@ -212,6 +215,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ issues: res.body! }, res);
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.setIssuesError(err);
+          return EMPTY;
         })
       );
   }
@@ -257,6 +264,14 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
+  private setClearErrors() {
+    const state = this.state.getValue();
+    this.setState({
+      errors: [],
+      pagination: { ...state.pagination, loading: false },
+    });
+  }
+
   private setIssueStatuses(issueIds: number[], status: IssueStatus) {
     const state = this.state.getValue();
     this.state.next({
@@ -268,9 +283,16 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
-  private setLoading(loading: boolean) {
+  private setIssuesError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
-    this.setState({ pagination: { ...state.pagination, loading } });
+    this.setState({
+      errors: this.updateErrorMessage(errors),
+      pagination: {
+        ...state.pagination,
+        loading: false,
+        initialLoadComplete: true,
+      },
+    });
   }
 
   private retrieveOrganizationEnvironments(orgSlug: string) {
@@ -281,5 +303,14 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
           this.setState({ organizationEnvironments: environments });
         })
       );
+  }
+
+  private updateErrorMessage(err: HttpErrorResponse): string[] {
+    if (err.error) {
+      const errorValues: string[][] = Object.values<string[]>(err.error);
+      return errorValues.reduce((a, v) => a.concat(v), []);
+    } else {
+      return [err.message];
+    }
   }
 }
