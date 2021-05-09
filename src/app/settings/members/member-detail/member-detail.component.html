@@ -3,10 +3,7 @@
     <h1 class="mat-display-1">
       {{ member.email }}
     </h1>
-    <a
-      mat-flat-button
-      [routerLink]="['/settings', orgSlug$ | async, 'members']"
-    >
+    <a mat-flat-button [routerLink]="['..']">
       <mat-icon>keyboard_arrow_left</mat-icon>
       Back to Members
     </a>
@@ -64,11 +61,7 @@
           <mat-list-item *ngFor="let team of member?.teams">
             <a
               mat-line
-              [routerLink]="[
-                'teams',
-                team,
-                'members'
-              ]"
+              [routerLink]="['teams', team, 'members']"
               [relativeTo]="this.route.parent?.parent"
               >{{ team }}</a
             >
