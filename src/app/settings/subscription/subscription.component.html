@@ -15,8 +15,22 @@
             "
           >
             <p *ngIf="subscription.status === 'active'" class="mat-body-1">
-              This organization has an active subscription to GlitchTip. Thank
-              you!
+              <ng-container
+                *ngIf="
+                  subscription.plan.amount === '0.00';
+                  else paidSubscription
+                "
+                >You have selected the free plan. Please consider making a
+                monthly
+                <a href="https://liberapay.com/GlitchTip/donate" target="_blank"
+                  >donation</a
+                >
+                to help keep open source development sustainable. Thank you for
+                choosing GlitchTip!</ng-container
+              ><ng-template #paidSubscription
+                >This organization has an active subscription to GlitchTip.
+                Thank you!</ng-template
+              >
             </p>
             <p *ngIf="subscription.status === 'trialing'" class="mat-body-1">
               This organization has a trial subscription to GlitchTip.
