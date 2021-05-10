@@ -31,11 +31,11 @@ const testData: Alerts[] = [
     timespan_minutes: 3,
     quantity: 8,
     alertRecipients: [
-      {
-        pk: 3,
-        recipientType: "email",
-        url: "http://email@email.email",
-      },
+      // {
+      //   pk: 3,
+      //   recipientType: "email",
+      //   url: "http://email@email.email",
+      // },
       {
         pk: 2,
         recipientType: "webhook",
@@ -59,6 +59,8 @@ const testData: Alerts[] = [
 export class NotificationsDraftComponent implements OnInit {
   alerts: Alerts[] = testData;
   emailTeam: boolean = true;
+  createNew: boolean = true;
+  addWebhook: boolean = false;
 
   constructor() {}
 

@@ -1,3 +1,5 @@
+@import "variables";
+
 .first-draft {
   mat-card-header {
     display: flex;
@@ -69,6 +71,41 @@
     }
   }
 
+  .create-new {
+    background: mat-color($mat-gray, 100);
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 16px;
+      padding-top: 16px;
+
+      .save {
+        margin-right: 16px;
+      }
+    }
+
+    .off {
+      margin-left: 24px;
+      margin-right: 8px;
+    }
+
+    .webhooks {
+      margin-top: 16px;
+      margin-bottom: unset;
+    }
+
+    .email {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   ul {
     list-style: none;
     padding-left: unset;
@@ -88,6 +125,12 @@
     }
   }
 
+  .amount-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .amount {
     mat-form-field {
       padding-left: 16px;
@@ -96,11 +139,34 @@
   }
 
   .alert-recipients {
-    padding-left: 24px;
-    padding-right: 24px;
+    p {
+      margin-top: unset;
+      margin-bottom: 8px;
+    }
 
     .webhook-input {
       width: 80%;
     }
   }
+
+  .alert-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+  }
+
+  h3 {
+    margin-top: unset;
+  }
+}
+
+.flex-thing {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stretch {
+  width: 100%;
 }

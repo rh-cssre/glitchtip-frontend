@@ -21,6 +21,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ClipboardModule } from "@angular/cdk/clipboard";
@@ -39,6 +40,7 @@ export const COMPONENTS = [
   MatListModule,
   MatMenuModule,
   MatSelectModule,
+  MatSlideToggleModule,
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
