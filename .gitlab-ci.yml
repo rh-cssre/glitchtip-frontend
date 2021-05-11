@@ -1,4 +1,4 @@
-image: node:12
+image: node:14
 
 variables:
   CHROME_BIN: chromium-browser
@@ -45,7 +45,7 @@ test-e2e:
       alias: backend
       command: ["./bin/run-migrate-and-runserver.sh"]
   image:
-    name: cypress/included:7.1.0
+    name: cypress/included:7.3.0
     entrypoint: [""]
   script:
     - npm ci --cache .npm --prefer-offline
@@ -66,12 +66,8 @@ test-e2e:
 
 build-assets:
   stage: test
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
   script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci
     - npm run build-prod
   artifacts:
     paths:

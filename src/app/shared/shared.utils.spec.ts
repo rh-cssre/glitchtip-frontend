@@ -16,13 +16,6 @@ describe("Icon Paths", () => {
     expect(opera).toBe("static/assets/images/browser-svgs/opera/opera.svg");
   });
 
-  it("generates path to browser logo archive library", () => {
-    const internetExplorer = generateIconPath("Internet Explorer");
-    expect(internetExplorer).toBe(
-      "static/assets/images/browser-svgs/archive/internet-explorer-tile_10-11/internet-explorer-tile_10-11.svg"
-    );
-  });
-
   it("generates path to local library", () => {
     const cPython = generateIconPath("C Python");
     expect(cPython).toBe("static/assets/images/logos/48x48/cpython.png");
