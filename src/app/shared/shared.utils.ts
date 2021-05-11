@@ -14,19 +14,11 @@ function generateClassName(name: string): string {
 }
 
 /** Paths to different icon asset locations */
-const browserPath = (
-  name: string,
-  extension = "svg",
-  isArchive = false
-): string => {
+const browserPath = (name: string, extension = "svg"): string => {
   if (extension === "svg") {
-    return `static/assets/images/browser-svgs/${
-      isArchive ? "archive/" : ""
-    }${name}/${name}.${extension}`;
+    return `static/assets/images/browser-svgs/${name}/${name}.${extension}`;
   } else {
-    return `static/assets/images/browser-svgs/${
-      isArchive ? "archive/" : ""
-    }${name}/${name}_48x48.${extension}`;
+    return `static/assets/images/browser-svgs/${name}/${name}_48x48.${extension}`;
   }
 };
 
@@ -49,11 +41,7 @@ export const iconDictionary: { [key: string]: string } = {
   chromemobileios: browserPath("chrome"),
   qqbrowser: localPath("qqbrowser"),
   playstation: osPath("playstation"),
-  internetexplorer: browserPath(
-    "internet-explorer-tile_10-11",
-    undefined,
-    true
-  ),
+  internetexplorer: browserPath("internet-explorer-tile_10-11"),
 
   /** Operating Systems */
   ubuntu: osPath("ubuntu"),
