@@ -9,7 +9,7 @@ interface Alerts {
 
 interface Recipients {
   pk: number;
-  recipientType: "email" | "webhook";
+  recipientType: "email" | "webhook" | "slack";
   url: string;
 }
 
@@ -31,11 +31,11 @@ const testData: Alerts[] = [
     timespan_minutes: 3,
     quantity: 8,
     alertRecipients: [
-      // {
-      //   pk: 3,
-      //   recipientType: "email",
-      //   url: "http://email@email.email",
-      // },
+      {
+        pk: 3,
+        recipientType: "email",
+        url: "Email team members on this project",
+      },
       {
         pk: 2,
         recipientType: "webhook",
