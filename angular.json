@@ -54,7 +54,7 @@
               },
               {
                 "glob": "**/*+(.svg|_48x48.png)",
-                "input": "./node_modules/browser-logos/src/",
+                "input": "./node_modules/@browser-logos/",
                 "output": "./static/assets/images/browser-svgs"
               },
               {
@@ -63,10 +63,14 @@
                 "output": "./static/assets/images/os-logos"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src/assets/styles"]
+              "includePaths": [
+                "./src/assets/styles"
+              ]
             }
           },
           "configurations": {
@@ -104,7 +108,7 @@
                 "src/sdk-docs",
                 {
                   "glob": "**/*+(.svg|_48x48.png)",
-                  "input": "./node_modules/browser-logos/src/",
+                  "input": "./node_modules/@browser-logos/",
                   "output": "./assets/images/browser-svgs"
                 },
                 {
@@ -144,19 +148,31 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src/assets/styles"]
+              "includePaths": [
+                "./src/assets/styles"
+              ]
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
