@@ -1,0 +1,51 @@
+<section>
+  <mat-card>
+    <mat-card-title>Add Alert Recipient</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div>
+        <mat-form-field>
+          <mat-label>Alert Type</mat-label>
+          <mat-select [(value)]="selected">
+            <mat-option value="e">Email</mat-option>
+            <mat-option value="g"> General Webhook</mat-option>
+            <mat-option value="s">Slack</mat-option>
+          </mat-select></mat-form-field
+        >
+      </div>
+      <div class="fixed-height">
+        <div *ngIf="selected === null">
+          Select an alert type to get started.
+        </div>
+        <div *ngIf="selected === 'e'">
+          <p class="email">
+            An email will be sent to the members of this project. Select "Add
+            Recipient" to continue.
+          </p>
+        </div>
+        <div *ngIf="selected === 'g'">
+          <mat-form-field class="full-width">
+            <mat-label>Enter Webook URL</mat-label>
+            <mat-icon matPrefix>webhook</mat-icon>
+            <input matInput type="url" />
+          </mat-form-field>
+        </div>
+        <div *ngIf="selected === 's'">
+          <mat-form-field class="full-width">
+            <mat-label>Enter Slack Webook URL</mat-label>
+            <span matPrefix>
+              <svg>
+                <use xlink:href="#slack"></use>
+              </svg>
+            </span>
+            <input matInput type="url" />
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions
+      ><button mat-flat-button color="primary">Add Recipient</button
+      ><button mat-flat-button>Cancel</button></mat-card-actions
+    >
+  </mat-card>
+</section>

@@ -38,7 +38,7 @@ const testData: Alerts[] = [
       },
       {
         pk: 2,
-        recipientType: "webhook",
+        recipientType: "slack",
         url: "http://www.slackalert.com",
       },
       {

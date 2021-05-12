@@ -147,6 +147,10 @@ export const icons = () => ({
       <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#google"></use></svg>
       <div>#microsoft:</div>
       <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#microsoft"></use></svg>
+      <div>#slack:</div>
+      <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#slack"></use></svg>
+      <div>#webhook:</div>
+      <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#webhook"></use></svg>
     </div>
   </section>
   `,

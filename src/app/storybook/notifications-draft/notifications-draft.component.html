@@ -53,8 +53,8 @@
           </div>
           <p style="margin-top: unset" class="mat-body-strong">Recipients:</p>
           <p>
-            When you add a webhook, it will show up here. You can add as many as
-            you want!
+            When you add an alert recipient, it will show up here. You can add
+            as many as you want!
           </p>
           <ul class="alert-recipients">
             <button
@@ -63,7 +63,7 @@
               (click)="addWebhook = true"
             >
               <mat-icon>add</mat-icon>
-              Add A Webhook
+              Add An Alert Recipient
             </button>
           </ul>
           <div class="actions">
@@ -74,7 +74,10 @@
           </div>
         </li>
         <!---->
-        <li *ngFor="let alert of alerts; let itwo = index">
+        <li
+          class="alert{{ itwo }}"
+          *ngFor="let alert of alerts; let itwo = index"
+        >
           <mat-divider *ngIf="itwo !== 0"></mat-divider>
           <div class="alert-title">
             <h3>Alert {{ itwo + 1 }}</h3>
@@ -127,7 +130,11 @@
                       ><mat-icon class="alert-type">email</mat-icon></span
                     >
                     <span *ngIf="recipient.recipientType === 'webhook'"
-                      ><mat-icon class="alert-type">webhook</mat-icon></span
+                      ><svg class="slack">
+                        <use xlink:href="#webhook"></use></svg></span
+                    ><span *ngIf="recipient.recipientType === 'slack'">
+                      <svg class="slack">
+                        <use xlink:href="#slack"></use></svg></span
                     >{{ recipient.url }}
                   </div>
                   <mat-icon class="trash" color="primary"
@@ -143,7 +150,7 @@
             (click)="addWebhook = true"
           >
             <mat-icon>add</mat-icon>
-            Add A Webhook
+            Add An Alert Recipient
           </button>
         </li>
       </ul>
