@@ -18,6 +18,7 @@ import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
+import { NotificationsDraftComponent } from "./storybook/notifications-draft/notifications-draft.component";
 
 let snackBarDuration = 4000;
 if ((window as any).Cypress) {
@@ -26,7 +27,7 @@ if ((window as any).Cypress) {
 }
 
 @NgModule({
-  declarations: [AppComponent, RateLimitBannerComponent],
+  declarations: [AppComponent, RateLimitBannerComponent, NotificationsDraftComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

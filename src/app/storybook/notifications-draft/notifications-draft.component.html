@@ -1,0 +1,373 @@
+<h1>Option 1</h1>
+
+<section class="l-body second-draft">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Project Alerts</mat-card-title>
+      <button
+        (click)="createNew = true"
+        mat-flat-button
+        color="primary"
+        [disabled]="createNew === true"
+      >
+        Create New Alert
+      </button></mat-card-header
+    >
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ul>
+        <!---->
+        <li *ngIf="createNew === true" class="create-new">
+          <mat-divider></mat-divider>
+          <div class="alert-title">
+            <h3>New Alert</h3>
+          </div>
+          <div class="amount-line">
+            <div class="amount">
+              <span>If an event happens</span>
+              <mat-form-field>
+                <mat-label>Quantity</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>times in</span>
+              <mat-form-field>
+                <mat-label>Timespan</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>minutes,&nbsp;send&nbsp;an alert.</span>
+            </div>
+          </div>
+          <p style="margin-top: unset" class="mat-body-strong">Recipients:</p>
+          <p>
+            When you add an alert recipient, it will show up here. You can add
+            as many as you want!
+          </p>
+          <ul class="alert-recipients">
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="addWebhook = true"
+            >
+              <mat-icon>add</mat-icon>
+              Add An Alert Recipient
+            </button>
+          </ul>
+          <div class="actions">
+            <button class="save" mat-flat-button color="primary">Submit</button
+            ><button mat-stroked-button (click)="createNew = false">
+              Cancel
+            </button>
+          </div>
+        </li>
+        <!---->
+        <li
+          class="alert{{ itwo }}"
+          *ngFor="let alert of alerts; let itwo = index"
+        >
+          <mat-divider *ngIf="itwo !== 0"></mat-divider>
+          <div class="alert-title">
+            <h3>Alert {{ itwo + 1 }}</h3>
+            <button mat-stroked-button color="primary">
+              Remove Alert {{ itwo + 1 }}
+            </button>
+          </div>
+          <div class="amount-line">
+            <div class="amount">
+              <span>If an event happens</span>
+              <mat-form-field>
+                <mat-label>Quantity</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>times in</span>
+              <mat-form-field>
+                <mat-label>Timespan</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>minutes,&nbsp;send&nbsp;an alert.</span>
+            </div>
+            <button mat-button color="primary" disabled>Update</button>
+          </div>
+          <ul class="alert-recipients">
+            <p class="mat-body-strong">Recipients:</p>
+            <li
+              *ngFor="
+                let recipient of alert.alertRecipients;
+                let ithree = index
+              "
+            >
+              <div class="recipients">
+                <div class="flex-thing">
+                  <div class="flex-thing">
+                    <span *ngIf="recipient.recipientType === 'email'"
+                      ><mat-icon class="alert-type">email</mat-icon></span
+                    >
+                    <span *ngIf="recipient.recipientType === 'webhook'"
+                      ><svg class="slack">
+                        <use xlink:href="#webhook"></use></svg></span
+                    ><span *ngIf="recipient.recipientType === 'slack'">
+                      <svg class="slack">
+                        <use xlink:href="#slack"></use></svg></span
+                    >{{ recipient.url }}
+                  </div>
+                  <mat-icon class="trash" color="primary"
+                    >delete_outline</mat-icon
+                  >
+                </div>
+              </div>
+            </li>
+          </ul>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="addWebhook = true"
+          >
+            <mat-icon>add</mat-icon>
+            Add An Alert Recipient
+          </button>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</section>
+
+<!-- <h1>Option 1</h1>
+
+<section class="l-body second-draft">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Project Alerts</mat-card-title>
+      <button
+        (click)="createNew = true"
+        mat-flat-button
+        color="primary"
+        [disabled]="createNew === true"
+      >
+        Create New Alert
+      </button></mat-card-header
+    >
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ul>
+        <li *ngIf="createNew === true" class="create-new">
+          <mat-divider></mat-divider>
+          <div class="alert-title">
+            <h3>New Alert</h3>
+          </div>
+          <div class="amount-line">
+            <div class="amount">
+              <span>If an event happens</span>
+              <mat-form-field>
+                <mat-label>Quantity</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>times in</span>
+              <mat-form-field>
+                <mat-label>Timespan</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>minutes,&nbsp;send&nbsp;an alert.</span>
+            </div>
+          </div>
+          <ul class="alert-recipients">
+            <div class="email">
+              <div>Send an email to team members?</div>
+              <div class="flex-thing">
+                <span class="off">Off</span
+                ><mat-slide-toggle color="primary">On</mat-slide-toggle>
+              </div>
+            </div>
+            <div class="mat-caption">
+              Who is on this <a routerLink="" target="_blank">team</a>?
+            </div>
+            <div class="flex-thing">
+              <mat-form-field class="full-width">
+                <mat-label>Webhook URL</mat-label>
+                <input matInput />
+                <button mat-icon-button matSuffix aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div *ngIf="addWebhook" class="flex-thing">
+              <mat-form-field class="full-width">
+                <mat-label>Webhook URL</mat-label>
+                <input matInput />
+                <button mat-icon-button matSuffix aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="addWebhook = true"
+            >
+              <mat-icon>add</mat-icon>
+              Add Another Webhook
+            </button>
+          </ul>
+          <div class="actions">
+            <button class="save" mat-flat-button color="primary">Submit</button
+            ><button mat-stroked-button (click)="createNew = false">
+              Cancel
+            </button>
+          </div>
+        </li>
+        <li *ngFor="let alert of alerts; let itwo = index">
+          <mat-divider *ngIf="itwo !== 0"></mat-divider>
+          <div class="alert-title">
+            <h3>Alert {{ itwo + 1 }}</h3>
+            <button mat-stroked-button color="primary">
+              Remove Alert {{ itwo + 1 }}
+            </button>
+          </div>
+          <div class="amount-line">
+            <div class="amount">
+              <span>If an event happens</span>
+              <mat-form-field>
+                <mat-label>Quantity</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>times in</span>
+              <mat-form-field>
+                <mat-label>Timespan</mat-label>
+                <input
+                  matInput
+                  min="0"
+                  max="10000"
+                  type="number"
+                  autocomplete="off"
+                  placeholder="#"
+                />
+              </mat-form-field>
+              <span>minutes,&nbsp;send&nbsp;an alert.</span>
+            </div>
+            <button mat-button color="primary" disabled>Update</button>
+          </div>
+          <ul class="alert-recipients">
+            <p class="mat-body-strong">Recipients:</p>
+            <li>Emails listed for <a routerLink="">team awesome</a></li>
+            <li
+              *ngFor="
+                let recipient of alert.alertRecipients;
+                let ithree = index
+              "
+            >
+              {{ recipient.url }}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</section> -->
+
+<!-- <h1>Option 1</h1>
+<section class="l-body first-draft">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Project Alerts</mat-card-title>
+      <button mat-flat-button color="primary">
+        Create New Alert
+      </button></mat-card-header
+    >
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let alert of alerts; let ione = index">
+          <mat-divider *ngIf="ione !== 0"></mat-divider>
+
+          <div class="amount">
+            <span>If an event happens</span>
+            <mat-form-field>
+              <mat-label>Quantity</mat-label>
+              <input
+                matInput
+                min="0"
+                max="10000"
+                type="number"
+                autocomplete="off"
+                placeholder="#"
+              />
+            </mat-form-field>
+            <span>times in</span>
+            <mat-form-field>
+              <mat-label>Timespan</mat-label>
+              <input
+                matInput
+                min="0"
+                max="10000"
+                type="number"
+                autocomplete="off"
+                placeholder="#"
+              />
+            </mat-form-field>
+            <span>minutes,&nbsp;send&nbsp;an&nbsp;alert to:</span>
+          </div>
+          <ul class="alert-recipients">
+            <li *ngFor="let recipient of alert.alertRecipients">
+              <span>{{ recipient.url }}</span
+              ><span><mat-icon>edit</mat-icon><mat-icon>delete</mat-icon></span>
+            </li>
+            <li>
+              <mat-form-field class="webhook-input">
+                <mat-label>Webhook URL</mat-label>
+                <input type="text" matInput placeholder="www.webhook.com" />
+              </mat-form-field>
+              <button mat-flat-button color="primary">Add Webhook</button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</section> -->
