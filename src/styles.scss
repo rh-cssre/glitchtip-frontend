@@ -90,3 +90,9 @@ header.page-header {
 .full-width {
   width: 100%;
 }
+
+.common-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

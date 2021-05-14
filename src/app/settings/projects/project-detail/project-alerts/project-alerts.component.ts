@@ -4,22 +4,22 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from "@angular/core";
-// import {
-//   FormGroup,
-//   FormControl,
-//   Validators,
-//   AbstractControl,
-//   ValidationErrors,
-// } from "@angular/forms";
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from "@angular/forms";
 import { ProjectAlertsService } from "./project-alerts.service";
-// import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
+import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
-// function numberValidator(control: AbstractControl): ValidationErrors | null {
-//   if (typeof control.value === "number") {
-//     return null;
-//   }
-//   return { invalidNumber: true };
-// }
+function numberValidator(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === "number") {
+    return null;
+  }
+  return { invalidNumber: true };
+}
 @Component({
   selector: "app-project-alerts",
   templateUrl: "./project-alerts.component.html",
@@ -27,37 +27,37 @@ import { ProjectAlertsService } from "./project-alerts.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
-  // projectAlerts$ = this.alertsService.projectAlert$;
-  // alertToggleLoading$ = this.alertsService.alertToggleLoading$;
-  // alertToggleError$ = this.alertsService.alertToggleError$;
-  // initialLoad$ = this.alertsService.initialLoad$;
-  // loading$ = this.alertsService.loading$;
-  // error$ = this.alertsService.error$;
+  projectAlerts$ = this.alertsService.projectAlert$;
+  alertToggleLoading$ = this.alertsService.alertToggleLoading$;
+  alertToggleError$ = this.alertsService.alertToggleError$;
+  initialLoad$ = this.alertsService.initialLoad$;
+  loading$ = this.alertsService.loading$;
+  error$ = this.alertsService.error$;
 
-  // projectAlertForm = new FormGroup({
-  //   timespan_minutes: new FormControl("", [
-  //     Validators.min(0),
-  //     numberValidator,
-  //     Validators.required,
-  //   ]),
-  //   quantity: new FormControl("", [
-  //     Validators.min(0),
-  //     numberValidator,
-  //     Validators.required,
-  //   ]),
-  // });
+  projectAlertForm = new FormGroup({
+    timespan_minutes: new FormControl("", [
+      Validators.min(0),
+      numberValidator,
+      Validators.required,
+    ]),
+    quantity: new FormControl("", [
+      Validators.min(0),
+      numberValidator,
+      Validators.required,
+    ]),
+  });
 
-  // matcher = new LessAnnoyingErrorStateMatcher();
+  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(private alertsService: ProjectAlertsService) {
-    // this.projectAlerts$.subscribe((data) => {
-    //   if (data) {
-    //     this.projectAlertForm.patchValue({
-    //       timespan_minutes: data.timespan_minutes,
-    //       quantity: data.quantity,
-    //     });
-    //   }
-    // });
+    this.projectAlerts$.subscribe((data) => {
+      if (data && data[0]) {
+        this.projectAlertForm.patchValue({
+          timespan_minutes: data[0].timespan_minutes,
+          quantity: data[0].quantity,
+        });
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -65,11 +65,17 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.alertsService.clearState();
+    this.alertsService.clearState();
   }
 
   toggleProjectAlerts() {
     // this.alertsService.toggleProjectAlerts();
+  }
+
+  removeAlert(pk: number, alertNumber: number) {
+    window.alert(
+      `Are you sure you want to remove Alert ${alertNumber} from this project?`
+    );
   }
 
   onSubmit() {

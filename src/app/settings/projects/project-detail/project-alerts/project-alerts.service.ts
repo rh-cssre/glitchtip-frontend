@@ -1,18 +1,22 @@
 import { Injectable } from "@angular/core";
-// import { HttpErrorResponse } from "@angular/common/http";
-// import { MatSnackBar } from "@angular/material/snack-bar";
+import { HttpErrorResponse } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import {
   tap,
   map,
   mergeMap,
   take,
-  // catchError,
-  // exhaustMap,
+  catchError,
+  exhaustMap,
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
-import { ProjectAlert } from "../../../../api/projects/project-alerts/project-alerts.interface";
+import {
+  AlertRecipient,
+  NewProjectAlert,
+  ProjectAlert,
+} from "../../../../api/projects/project-alerts/project-alerts.interface";
 import { ProjectSettingsService } from "../../project-settings.service";
 
 interface ProjectsState {
@@ -58,7 +62,8 @@ export class ProjectAlertsService {
   constructor(
     private organizationsService: OrganizationsService,
     private projectSettingsService: ProjectSettingsService,
-    private projectAlertsAPIService: ProjectAlertsAPIService // private snackBar: MatSnackBar
+    private projectAlertsAPIService: ProjectAlertsAPIService,
+    private snackBar: MatSnackBar
   ) {}
 
   listProjectAlerts() {
@@ -147,53 +152,58 @@ export class ProjectAlertsService {
   //     .toPromise();
   // }
 
-  // updateProjectAlerts(timespan: number, amount: number) {
-  //   this.setLoading(true);
-  //   combineLatest([
-  //     this.organizationsService.activeOrganizationSlug$,
-  //     this.projectSettingsService.activeProjectSlug$,
-  //     this.projectAlert$,
-  //   ])
-  //     .pipe(
-  //       take(1),
-  //       exhaustMap(([orgSlug, projectSlug, projectAlert]) => {
-  //         if (orgSlug && projectSlug) {
-  //           const data = {
-  //             timespan_minutes: timespan,
-  //             quantity: amount,
-  //           };
-  //           if (projectAlert) {
-  //             const pk = projectAlert?.pk.toString();
-  //             return this.projectAlertsAPIService
-  //               .update(pk, data, orgSlug, projectSlug)
-  //               .pipe(
-  //                 tap((resp) => {
-  //                   this.setLoading(false);
-  //                   this.setActiveProjectAlert(resp);
-  //                 }),
-  //                 catchError((error: HttpErrorResponse) => {
-  //                   this.setLoading(false);
-  //                   if (error.status === 404) {
-  //                     this.snackBar.open(`Error: ${error.statusText}`);
-  //                     this.setActiveProjectAlert(null);
-  //                   } else {
-  //                     this.setError(
-  //                       `${error.status}: ${error.name}/${error.statusText}`
-  //                     );
-  //                   }
-  //                   return EMPTY;
-  //                 })
-  //               );
-  //           } else {
-  //             this.toggleProjectAlerts();
-  //           }
-  //         }
+  updateProjectAlerts(
+    timespan: number,
+    amount: number,
+    recipients: AlertRecipient[]
+  ) {
+    this.setLoading(true);
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.projectSettingsService.activeProjectSlug$,
+      this.projectAlert$,
+    ])
+      .pipe(
+        take(1),
+        exhaustMap(([orgSlug, projectSlug, projectAlert]) => {
+          if (orgSlug && projectSlug) {
+            const data: NewProjectAlert = {
+              timespan_minutes: timespan,
+              quantity: amount,
+              alertRecipients: recipients,
+            };
+            if (projectAlert) {
+              const pk = projectAlert[0]?.pk.toString();
+              return this.projectAlertsAPIService
+                .update(pk, data, orgSlug, projectSlug)
+                .pipe(
+                  tap((resp) => {
+                    this.setLoading(false);
+                    this.setActiveProjectAlert([resp]);
+                  }),
+                  catchError((error: HttpErrorResponse) => {
+                    this.setLoading(false);
+                    if (error.status === 404) {
+                      this.snackBar.open(`Error: ${error.statusText}`);
+                      this.setActiveProjectAlert(null);
+                    } else {
+                      this.setError(
+                        `${error.status}: ${error.name}/${error.statusText}`
+                      );
+                    }
+                    return EMPTY;
+                  })
+                );
+            } else {
+              // this.toggleProjectAlerts();
+            }
+          }
 
-  //         return EMPTY;
-  //       })
-  //     )
-  //     .toPromise();
-  // }
+          return EMPTY;
+        })
+      )
+      .toPromise();
+  }
 
   clearState() {
     this.projectAlertState.next(initialState);
@@ -221,17 +231,17 @@ export class ProjectAlertsService {
   //   });
   // }
 
-  // private setLoading(isLoading: boolean) {
-  //   this.projectAlertState.next({
-  //     ...this.projectAlertState.getValue(),
-  //     loading: isLoading,
-  //   });
-  // }
+  private setLoading(isLoading: boolean) {
+    this.projectAlertState.next({
+      ...this.projectAlertState.getValue(),
+      loading: isLoading,
+    });
+  }
 
-  // private setError(err: string) {
-  //   this.projectAlertState.next({
-  //     ...this.projectAlertState.getValue(),
-  //     error: err,
-  //   });
-  // }
+  private setError(err: string) {
+    this.projectAlertState.next({
+      ...this.projectAlertState.getValue(),
+      error: err,
+    });
+  }
 }

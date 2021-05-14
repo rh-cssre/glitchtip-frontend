@@ -114,7 +114,49 @@ form {
   }
 }
 
-// Same as project-detail.component.scss
-app-loading-button ::ng-deep button {
-  width: 140px;
+.alert-list {
+  list-style: none;
+  padding: unset;
+  margin: unset;
+  width: 50%;
+
+  li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    &:first-child {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &-icon {
+    margin-right: 8px;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.alert-header {
+  padding-top: 24px;
+  h3 {
+    margin: unset;
+  }
+}
+
+.add-recipient-button {
+  margin-top: 16px;
+}
+
+.alerts {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin-top: 24px;
+
+  &:first-child {
+    border-top: unset;
+    margin-top: unset;
+  }
 }
