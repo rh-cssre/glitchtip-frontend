@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 // This make the app cover the whole screen at all times
@@ -29,7 +30,7 @@ mat-sidenav {
     display: block !important;
     margin-left: 24px;
     max-width: calc(100% - 24px);
-    color: mat-color($mat-gray, 600);
+    color: mat.get-color-from-palette(mat.$gray-palette, 600);
   }
 }
 
@@ -79,11 +80,11 @@ mat-sidenav-content {
 
 .mat-list-item-disabled {
   background-color: white;
-  color: mat-color($mat-gray, 500) !important;
+  color: mat.get-color-from-palette(mat.$gray-palette, 500) !important;
 }
 
 .subdued {
-  color: mat-color($mat-gray, 700);
+  color: mat.get-color-from-palette(mat.$gray-palette, 700);
   font-weight: 300;
 }
 

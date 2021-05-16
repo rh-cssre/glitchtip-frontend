@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 $left-column-width: 30%;
@@ -31,7 +32,7 @@ dd {
   word-wrap: break-word;
   padding: 8px;
   font-family: $font-mono;
-  background-color: mat-color($mat-gray, 100);
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
   border-radius: 3px;
 
   @media screen and (max-width: $small - 1) {

@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 $helpIcon: 16px;
@@ -9,7 +10,7 @@ $helpIcon: 16px;
   min-width: $helpIcon;
   margin-left: -2px;
   margin-right: 2px;
-  color: mat-color($mat-gray, 800);
+  color: mat.get-color-from-palette(mat.$gray-palette, 800);
 
   mat-icon {
     font-size: $helpIcon;
