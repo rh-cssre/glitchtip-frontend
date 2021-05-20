@@ -6,6 +6,37 @@
       <div class="loading"></div>
     </ng-container>
     <ng-template #afterLoad>
+      <!-- <div *ngFor="let alert of projectAlerts$ | async"> -->
+      <!-- <div>{{ alert.timespan_minutes }} {{ alert.quantity }}|</div> -->
+
+      <!-- <ng-container *ngIf="projectAlerts$ | async as alert">
+        <form [formGroup]="projectAlertForm">
+          <ng-container formArrayName="alertTiming">
+            <div *ngFor="let _ of alertTiming.controls; index as i">
+              <ng-container [formGroupName]="i">
+                <button (click)="removeAlert(alert[i].pk, i)">
+                  Delete Alert
+                </button>
+                <label>timespan</label>
+                <input formControlName="timespan_minutes" />
+                <label>quantity</label>
+                <input formControlName="quantity" />
+                <button (click)="updateAlertTiming(alert[i].pk, i)">
+                  update time/quantity
+                </button>
+              </ng-container>
+              <div *ngFor="let recipient of alert[i].alertRecipients">
+                hi {{ recipient | json }}
+                <button (click)="removeRecipient(alert[i].pk, recipient.pk)">
+                  remove recipient
+                </button>
+              </div>
+              <button (click)="addRecipient()">add recipient</button>
+            </div>
+          </ng-container>
+        </form>
+      </ng-container> -->
+      <!-- </div> -->
       <!--  <div
         class="default-settings"
         [class.add-padding]="(projectAlerts$ | async) === null"
@@ -61,7 +92,7 @@
       </div>
      -->
 
-      <div
+      <!-- <div
         *ngFor="let alert of projectAlerts$ | async; let i = index"
         class="alerts"
       >
@@ -214,7 +245,7 @@
           buttonStyle="stroked"
           icon="add"
         ></app-loading-button>
-      </div>
+      </div> -->
       <mat-divider></mat-divider>
       <div class="notifications-wrapper">
         <div class="notifications-text">

@@ -1,0 +1,53 @@
+<h1>Angular Nested FormArray / Dynamic FormArray</h1>
+
+<form [formGroup]="alertsForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="alerts">
+    <div *ngFor="let employee of alerts().controls; let alertIndex = index">
+      <div
+        [formGroupName]="alertIndex"
+        style="border: 1px solid blue; padding: 10px; width: 600px; margin: 5px"
+      >
+        {{ alertIndex }} Timespan :
+        <input type="text" formControlName="timespan" />
+        Quantity:
+        <input type="text" formControlName="quantity" />
+
+        <button (click)="removeAlert(alertIndex)">Remove</button>
+
+        <div formArrayName="skills">
+          <div
+            *ngFor="
+              let skill of alertRecipients(alertIndex).controls;
+              let recipientIndex = index
+            "
+          >
+            <div [formGroupName]="recipientIndex">
+              {{ recipientIndex }} Type :
+              <input type="text" formControlName="type" />
+              URL:
+              <input type="text" formControlName="url" />
+
+              <button
+                (click)="removeAlertRecipient(alertIndex, recipientIndex)"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+        <button type="button" (click)="addAlertRecipients(alertIndex)">
+          Add Skill
+        </button>
+      </div>
+    </div>
+    <button type="button" (click)="addAlert()">Add Alert</button>
+  </div>
+</form>
+
+{{ this.alertsForm.value | json }}
+
+<br /><br />
+<a
+  href="https://www.tektutorialshub.com/angular/nested-formarray-example-add-form-fields-dynamically/"
+  >Nested FormArray / Dynamic FormArray</a
+>

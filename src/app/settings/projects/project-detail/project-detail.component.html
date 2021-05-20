@@ -2,6 +2,7 @@
   <header class="page-header">
     <h1 class="mat-display-1">Settings for {{ project.name }}</h1>
   </header>
+  <mat-card> <app-alert-test></app-alert-test> </mat-card>
   <mat-card *ngIf="project.isMember === false"
     ><mat-card-content class="note-padding">
       <p class="mat-body-strong">Note</p>

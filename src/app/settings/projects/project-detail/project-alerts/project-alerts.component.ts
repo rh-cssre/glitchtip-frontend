@@ -10,6 +10,7 @@ import {
   Validators,
   AbstractControl,
   ValidationErrors,
+  FormArray,
 } from "@angular/forms";
 import { ProjectAlertsService } from "./project-alerts.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
@@ -35,47 +36,76 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   error$ = this.alertsService.error$;
 
   projectAlertForm = new FormGroup({
-    timespan_minutes: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-    quantity: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
+    alertTiming: new FormArray([]),
   });
+
+  alertTiming = this.projectAlertForm.get("alertTiming") as FormArray;
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(private alertsService: ProjectAlertsService) {
-    this.projectAlerts$.subscribe((data) => {
-      if (data && data[0]) {
-        this.projectAlertForm.patchValue({
-          timespan_minutes: data[0].timespan_minutes,
-          quantity: data[0].quantity,
-        });
-      }
-    });
+    this.alertsService.listProjectAlerts();
   }
 
   ngOnInit(): void {
-    this.alertsService.listProjectAlerts();
+    // this.setFormState();
   }
 
   ngOnDestroy() {
     this.alertsService.clearState();
   }
 
+  testDelete(i: number) {
+    this.alertTiming.removeAt(i);
+  }
+
+  setFormState() {
+    this.projectAlerts$.subscribe((alerts) => {
+      if (alerts) {
+        for (const alert of alerts) {
+          this.alertTiming.push(
+            new FormGroup({
+              timespan_minutes: new FormControl(alert.timespan_minutes, [
+                Validators.min(0),
+                numberValidator,
+                Validators.required,
+              ]),
+              quantity: new FormControl(alert.quantity, [
+                Validators.min(0),
+                numberValidator,
+                Validators.required,
+              ]),
+            })
+          );
+        }
+      }
+    });
+  }
+
+  updateAlertTiming(pk: number, index: number) {
+    // console.log("update alert timing");
+    const item = this.alertTiming.at(index).value;
+    const timespan = item.timespan_minutes;
+    const quant = item.quantity;
+    console.log(pk, quant, timespan);
+  }
+
+  removeRecipient(alertPk: number, recipientPk?: number) {
+    // console.log(`alert pk: ${alertPk}, recipientPk: ${recipientPk}`);
+  }
+
+  addRecipient() {
+    // console.log("open modal");
+  }
+
   toggleProjectAlerts() {
     // this.alertsService.toggleProjectAlerts();
   }
 
-  removeAlert(pk: number, alertNumber: number) {
-    window.alert(
-      `Are you sure you want to remove Alert ${alertNumber} from this project?`
-    );
+  removeAlert(pk: number, index: number) {
+    console.log("remove alert: ", pk);
+    this.alertTiming.removeAt(index);
+    this.alertsService.deleteAlert(pk);
   }
 
   onSubmit() {

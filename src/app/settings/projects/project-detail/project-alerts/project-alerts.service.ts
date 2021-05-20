@@ -9,6 +9,7 @@ import {
   take,
   catchError,
   exhaustMap,
+  withLatestFrom,
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
@@ -78,13 +79,40 @@ export class ProjectAlertsService {
             return this.projectAlertsAPIService.list(orgSlug, projectSlug).pipe(
               tap((projectAlerts) => {
                 if (projectAlerts.length) {
-                  console.log("project alerts: ", projectAlerts);
                   this.setActiveProjectAlert(projectAlerts);
                 } else {
                   this.setActiveProjectAlert(null);
                 }
               })
             );
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
+  deleteAlert(pk: number) {
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.projectSettingsService.activeProjectSlug$,
+    ])
+      .pipe(
+        exhaustMap(([orgSlug, projectSlug]) => {
+          if (orgSlug && projectSlug) {
+            return this.projectAlertsAPIService
+              .destroy(pk.toString(), orgSlug, projectSlug)
+              .pipe(
+                withLatestFrom(this.projectAlert$),
+                tap(([_, alerts]) => {
+                  console.log("destroy resp: ", alerts);
+                  alerts ? this.setDeleteProjectAlert(alerts, pk) : null;
+                }),
+                catchError((error: HttpErrorResponse) => {
+                  console.log("error: ", error);
+                  return EMPTY;
+                })
+              );
           }
           return EMPTY;
         })
@@ -214,6 +242,14 @@ export class ProjectAlertsService {
       ...this.projectAlertState.getValue(),
       projectAlerts: alert,
       initialLoad: true,
+    });
+  }
+
+  private setDeleteProjectAlert(alerts: ProjectAlert[], pk: number) {
+    const state = this.projectAlertState.getValue();
+    this.projectAlertState.next({
+      ...state,
+      projectAlerts: alerts.filter((alert) => alert.pk !== pk),
     });
   }
 
