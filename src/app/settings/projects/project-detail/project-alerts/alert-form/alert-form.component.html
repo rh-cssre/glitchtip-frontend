@@ -1,9 +1,13 @@
-<form class="flex" [formGroup]="projectAlertForm" (ngSubmit)="onSubmit()">
+<form
+  class="flex-common"
+  [formGroup]="projectAlertForm"
+  (ngSubmit)="onSubmit()"
+>
   <p>
     <span
       >If&nbsp;an&nbsp;<span
         class="tooltip"
-        matTooltip="An event is every occurance of the same error (aka: issue) in your application."
+        matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
         >event</span
       >&nbsp;happens</span
     >
@@ -69,11 +73,12 @@
     >
   </p>
   <app-loading-button
-    buttonText="Update Alerts"
+    buttonText="Update"
     [disabled]="
       projectAlertForm.get('timespan_minutes')?.value === timespan &&
       projectAlertForm.get('quantity')?.value === quantity
     "
+    buttonStyle="basic"
     [loading]="loading === true"
   ></app-loading-button>
 </form>

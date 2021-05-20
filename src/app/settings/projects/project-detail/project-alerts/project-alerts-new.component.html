@@ -1,15 +1,75 @@
 <mat-card>
-  <mat-card-title>Project Alerts</mat-card-title>
+  <mat-card-header class="flex-common">
+    <mat-card-title>Project Alerts</mat-card-title>
+    <button mat-flat-button color="primary">
+      Create New Alert
+    </button></mat-card-header
+  >
   <mat-divider></mat-divider>
+
   <mat-card-content>
-    <div *ngFor="let alert of projectAlerts$ | async">
-      {{ alert | json }}
+    <div
+      *ngFor="let alert of projectAlerts$ | async; let i = index"
+      class="alert"
+    >
+      <mat-divider *ngIf="i !== 0"></mat-divider>
+
+      <div class="flex-common alert-header">
+        <h3>Alert {{ i + 1 }}</h3>
+        <app-loading-button
+          [buttonText]="'Remove Alert ' + (i + 1)"
+          buttonStyle="stroked"
+        >
+        </app-loading-button>
+      </div>
       <app-alert-form
         [loading]="loading$ | async"
         [timespan]="alert.timespan_minutes"
         [quantity]="alert.quantity"
         [pk]="alert.pk"
       ></app-alert-form>
+      <h4 class="mat-body-strong">Recipients:</h4>
+      <ul>
+        <li
+          *ngFor="
+            let recipient of alert.alertRecipients;
+            let recipientIndex = index
+          "
+        >
+          <div class="recipients" [class.border-top]="recipientIndex === 0">
+            <div class="flex-common">
+              <div class="flex-common">
+                <span
+                  *ngIf="recipient.recipientType === 'email'"
+                  class="flex-common"
+                  ><mat-icon class="alert-type">email</mat-icon>
+                  Send an email to team members on this project.
+                </span>
+                <span
+                  *ngIf="recipient.recipientType === 'webhook'"
+                  class="flex-common"
+                  ><svg class="slack">
+                    <use xlink:href="#webhook"></use>
+                  </svg>
+                  {{ recipient.url }}
+                </span>
+              </div>
+              <button
+                class="trash"
+                mat-icon-button
+                color="primary"
+                aria-label="Example icon button with a home icon"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <button mat-stroked-button color="primary">
+        <mat-icon>add</mat-icon>
+        Add An Alert Recipient
+      </button>
     </div>
   </mat-card-content>
 </mat-card>

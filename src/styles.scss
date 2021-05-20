@@ -29,6 +29,11 @@ a {
   font-weight: 500;
 }
 
+ul {
+  list-style: none;
+  padding: unset;
+}
+
 .active-route {
   font-weight: 700;
   background-color: mat-color($mat-gray, 100);
@@ -89,4 +94,10 @@ header.page-header {
 
 .full-width {
   width: 100%;
+}
+
+.flex-common {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
