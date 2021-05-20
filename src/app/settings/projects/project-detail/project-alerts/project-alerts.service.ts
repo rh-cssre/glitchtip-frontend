@@ -13,6 +13,7 @@ import {
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
 import {
+  AlertRecipient,
   // AlertRecipient,
   // NewProjectAlert,
   ProjectAlert,
@@ -89,6 +90,41 @@ export class ProjectAlertsService {
         })
       )
       .subscribe();
+  }
+
+  deleteProjectAlert(pk: number) {
+    //TODO: loading state
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.projectSettingsService.activeProjectSlug$,
+    ])
+      .pipe(
+        mergeMap(([orgSlug, projectSlug]) => {
+          if (orgSlug && projectSlug) {
+            return this.projectAlertsAPIService
+              .destroy(pk.toString(), orgSlug, projectSlug)
+              .pipe(
+                tap((_) => {
+                  this.setDeleteProjectAlert(pk);
+                })
+              );
+          }
+          return EMPTY;
+        }),
+        catchError((err: HttpErrorResponse) => {
+          console.log("error: ", err);
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
+  updateTimespanQuantity(newTimespan: number, newQuantity: number, pk: number) {
+    console.log("update timespan quantity", newTimespan, newQuantity, pk);
+  }
+
+  deleteAlertRecipient(recipient: AlertRecipient) {
+    console.log("remove: ", recipient);
   }
 
   /*
@@ -233,6 +269,17 @@ export class ProjectAlertsService {
       ...state,
       initialLoad: true,
       error: err.message,
+      loading: false,
+    });
+  }
+
+  private setDeleteProjectAlert(pk: number) {
+    const state = this.projectAlertState.getValue();
+    this.projectAlertState.next({
+      ...state,
+      projectAlerts:
+        state.projectAlerts?.filter((alert) => alert.pk !== pk) ?? null,
+      loading: false,
     });
   }
 
@@ -255,13 +302,6 @@ export class ProjectAlertsService {
   //   this.projectAlertState.next({
   //     ...this.projectAlertState.getValue(),
   //     alertToggleError: error,
-  //   });
-  // }
-
-  // private setLoading(isLoading: boolean) {
-  //   this.projectAlertState.next({
-  //     ...this.projectAlertState.getValue(),
-  //     loading: isLoading,
   //   });
   // }
 

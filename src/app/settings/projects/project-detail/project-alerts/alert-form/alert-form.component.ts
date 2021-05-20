@@ -34,7 +34,7 @@ export class AlertFormComponent implements OnInit {
   @Input() quantity: number | null = null;
   @Input() pk: number | null = null;
   @Output() alertSubmit = new EventEmitter<{
-    alert: number;
+    timespan_minutes: number;
     quantity: number;
     pk: number;
   }>();
@@ -50,6 +50,7 @@ export class AlertFormComponent implements OnInit {
       numberValidator,
       Validators.required,
     ]),
+    pk: new FormControl(""),
   });
 
   matcher = new LessAnnoyingErrorStateMatcher();
@@ -60,10 +61,13 @@ export class AlertFormComponent implements OnInit {
     this.projectAlertForm.setValue({
       timespan_minutes: this.timespan,
       quantity: this.quantity,
+      pk: this.pk,
     });
   }
 
-  onSubmit() {
-    console.log("submit");
+  onSubmit(): void {
+    if (this.projectAlertForm.valid) {
+      this.alertSubmit.emit(this.projectAlertForm.value);
+    }
   }
 }

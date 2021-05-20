@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header class="flex-common">
     <mat-card-title>Project Alerts</mat-card-title>
-    <button mat-flat-button color="primary">
+    <button mat-flat-button color="primary" (click)="newAlert()">
       Create New Alert
     </button></mat-card-header
   >
@@ -19,6 +19,7 @@
         <app-loading-button
           [buttonText]="'Remove Alert ' + (i + 1)"
           buttonStyle="stroked"
+          (click)="removeAlert(alert.pk)"
         >
         </app-loading-button>
       </div>
@@ -27,6 +28,7 @@
         [timespan]="alert.timespan_minutes"
         [quantity]="alert.quantity"
         [pk]="alert.pk"
+        (alertSubmit)="updateTimespanQuantity($event)"
       ></app-alert-form>
       <h4 class="mat-body-strong">Recipients:</h4>
       <ul>
@@ -58,7 +60,8 @@
                 class="trash"
                 mat-icon-button
                 color="primary"
-                aria-label="Example icon button with a home icon"
+                attr.aria-label="Delete Alert {{ i + 0 }}"
+                (click)="removeAlertRecipient(recipient)"
               >
                 <mat-icon>delete_outline</mat-icon>
               </button>
@@ -66,7 +69,7 @@
           </div>
         </li>
       </ul>
-      <button mat-stroked-button color="primary">
+      <button mat-stroked-button color="primary" (click)="addAlertRecipient()">
         <mat-icon>add</mat-icon>
         Add An Alert Recipient
       </button>

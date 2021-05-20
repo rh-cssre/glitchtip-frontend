@@ -4,8 +4,8 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from "@angular/core";
+import { AlertRecipient } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "./project-alerts.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
 @Component({
   selector: "app-project-alerts",
@@ -21,8 +21,6 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   loading$ = this.alertsService.loading$;
   error$ = this.alertsService.error$;
 
-  matcher = new LessAnnoyingErrorStateMatcher();
-
   constructor(private alertsService: ProjectAlertsService) {}
 
   ngOnInit(): void {
@@ -31,6 +29,35 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.alertsService.clearState();
+  }
+
+  newAlert() {
+    // open dialog
+    // show alert form
+  }
+
+  removeAlert(pk: number) {
+    this.alertsService.deleteProjectAlert(pk);
+  }
+
+  updateTimespanQuantity(event: {
+    timespan_minutes: number;
+    quantity: number;
+    pk: number;
+  }) {
+    this.alertsService.updateTimespanQuantity(
+      event.timespan_minutes,
+      event.quantity,
+      event.pk
+    );
+  }
+
+  removeAlertRecipient(recipient: AlertRecipient) {
+    this.alertsService.deleteAlertRecipient(recipient);
+  }
+
+  addAlertRecipient() {
+    // open dialog
   }
 
   // onSubmit() {
