@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
-import { MatSnackBar } from "@angular/material/snack-bar";
+// import { HttpErrorResponse } from "@angular/common/http";
+// import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
 import {
   tap,
@@ -8,15 +8,20 @@ import {
   mergeMap,
   take,
   catchError,
-  exhaustMap,
+  // exhaustMap,
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
-import { ProjectAlert } from "../../../../api/projects/project-alerts/project-alerts.interface";
+import {
+  // AlertRecipient,
+  // NewProjectAlert,
+  ProjectAlert,
+} from "../../../../api/projects/project-alerts/project-alerts.interface";
 import { ProjectSettingsService } from "../../project-settings.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 interface ProjectsState {
-  projectAlerts: ProjectAlert | null;
+  projectAlerts: ProjectAlert[] | null;
   alertToggleLoading: boolean;
   alertToggleError: string;
   initialLoad: boolean;
@@ -58,8 +63,7 @@ export class ProjectAlertsService {
   constructor(
     private organizationsService: OrganizationsService,
     private projectSettingsService: ProjectSettingsService,
-    private projectAlertsAPIService: ProjectAlertsAPIService,
-    private snackBar: MatSnackBar
+    private projectAlertsAPIService: ProjectAlertsAPIService // private snackBar: MatSnackBar
   ) {}
 
   listProjectAlerts() {
@@ -73,12 +77,11 @@ export class ProjectAlertsService {
           if (orgSlug && projectSlug) {
             return this.projectAlertsAPIService.list(orgSlug, projectSlug).pipe(
               tap((projectAlerts) => {
-                if (projectAlerts.length) {
-                  /** Not supporting multiple project alerts yet */
-                  this.setActiveProjectAlert(projectAlerts[0]);
-                } else {
-                  this.setActiveProjectAlert(null);
-                }
+                this.setProjectAlertsList(projectAlerts);
+              }),
+              catchError((err: HttpErrorResponse) => {
+                this.setProjectAlertsListError(err);
+                return EMPTY;
               })
             );
           }
@@ -88,6 +91,7 @@ export class ProjectAlertsService {
       .subscribe();
   }
 
+  /*
   toggleProjectAlerts() {
     this.setAlertToggleLoading(true);
     combineLatest([
@@ -118,9 +122,15 @@ export class ProjectAlertsService {
                   })
                 );
             } else {
-              const data = {
+              const data: NewProjectAlert = {
                 timespan_minutes: 1,
                 quantity: 1,
+                alertRecipients: [
+                  {
+                    recipientType: "webhook",
+                    url: "www.webhook.com",
+                  },
+                ],
               };
               return this.projectAlertsAPIService
                 .create(data, orgSlug, projectSlug)
@@ -147,8 +157,14 @@ export class ProjectAlertsService {
       )
       .toPromise();
   }
+  */
 
-  updateProjectAlerts(timespan: number, amount: number) {
+  /*
+  updateProjectAlerts(
+    timespan: number,
+    amount: number,
+    alertRecipients: AlertRecipient[]
+  ) {
     this.setLoading(true);
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
@@ -162,6 +178,7 @@ export class ProjectAlertsService {
             const data = {
               timespan_minutes: timespan,
               quantity: amount,
+              alertRecipients,
             };
             if (projectAlert) {
               const pk = projectAlert?.pk.toString();
@@ -195,44 +212,63 @@ export class ProjectAlertsService {
       )
       .toPromise();
   }
+  */
 
   clearState() {
     this.projectAlertState.next(initialState);
   }
 
-  private setActiveProjectAlert(alert: ProjectAlert | null) {
+  private setProjectAlertsList(alerts: ProjectAlert[]) {
+    const state = this.projectAlertState.getValue();
     this.projectAlertState.next({
-      ...this.projectAlertState.getValue(),
-      projectAlerts: alert,
+      ...state,
+      projectAlerts: alerts,
       initialLoad: true,
     });
   }
 
-  private setAlertToggleLoading(isLoading: boolean) {
+  private setProjectAlertsListError(err: HttpErrorResponse) {
+    const state = this.projectAlertState.getValue();
     this.projectAlertState.next({
-      ...this.projectAlertState.getValue(),
-      alertToggleLoading: isLoading,
+      ...state,
+      initialLoad: true,
+      error: err.message,
     });
   }
 
-  private setAlertToggleError(error: string) {
-    this.projectAlertState.next({
-      ...this.projectAlertState.getValue(),
-      alertToggleError: error,
-    });
-  }
+  // private setActiveProjectAlert(alert: ProjectAlert[] | null) {
+  //   this.projectAlertState.next({
+  //     ...this.projectAlertState.getValue(),
+  //     projectAlerts: alert,
+  //     initialLoad: true,
+  //   });
+  // }
 
-  private setLoading(isLoading: boolean) {
-    this.projectAlertState.next({
-      ...this.projectAlertState.getValue(),
-      loading: isLoading,
-    });
-  }
+  // private setAlertToggleLoading(isLoading: boolean) {
+  //   this.projectAlertState.next({
+  //     ...this.projectAlertState.getValue(),
+  //     alertToggleLoading: isLoading,
+  //   });
+  // }
 
-  private setError(err: string) {
-    this.projectAlertState.next({
-      ...this.projectAlertState.getValue(),
-      error: err,
-    });
-  }
+  // private setAlertToggleError(error: string) {
+  //   this.projectAlertState.next({
+  //     ...this.projectAlertState.getValue(),
+  //     alertToggleError: error,
+  //   });
+  // }
+
+  // private setLoading(isLoading: boolean) {
+  //   this.projectAlertState.next({
+  //     ...this.projectAlertState.getValue(),
+  //     loading: isLoading,
+  //   });
+  // }
+
+  // private setError(err: string) {
+  //   this.projectAlertState.next({
+  //     ...this.projectAlertState.getValue(),
+  //     error: err,
+  //   });
+  // }
 }

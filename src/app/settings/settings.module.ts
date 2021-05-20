@@ -28,6 +28,7 @@ import { ProjectAlertsComponent } from "./projects/project-detail/project-alerts
 import { ProjectEnvironmentsComponent } from "./projects/project-detail/project-environments/project-environments.component";
 import { PlatformPickerComponent } from "./projects/platform-picker/platform-picker.component";
 import { SlugifyDirective } from "./teams/new-team/slugify.directive";
+import { AlertFormComponent } from "./projects/project-detail/project-alerts/alert-form/alert-form.component";
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import { SlugifyDirective } from "./teams/new-team/slugify.directive";
     PlatformPickerComponent,
     SlugifyDirective,
     ProjectEnvironmentsComponent,
+    AlertFormComponent,
   ],
 })
 export class SettingsModule {}

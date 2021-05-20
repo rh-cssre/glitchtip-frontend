@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-title>Project Alerts</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <div *ngFor="let alert of projectAlerts$ | async">
+      {{ alert | json }}
+      <app-alert-form
+        [loading]="loading$ | async"
+        [timespan]="alert.timespan_minutes"
+        [quantity]="alert.quantity"
+        [pk]="alert.pk"
+      ></app-alert-form>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -4,25 +4,12 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from "@angular/core";
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from "@angular/forms";
 import { ProjectAlertsService } from "./project-alerts.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
-function numberValidator(control: AbstractControl): ValidationErrors | null {
-  if (typeof control.value === "number") {
-    return null;
-  }
-  return { invalidNumber: true };
-}
 @Component({
   selector: "app-project-alerts",
-  templateUrl: "./project-alerts.component.html",
+  templateUrl: "./project-alerts-new.component.html",
   styleUrls: ["./project-alerts.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -34,31 +21,9 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   loading$ = this.alertsService.loading$;
   error$ = this.alertsService.error$;
 
-  projectAlertForm = new FormGroup({
-    timespan_minutes: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-    quantity: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-  });
-
   matcher = new LessAnnoyingErrorStateMatcher();
 
-  constructor(private alertsService: ProjectAlertsService) {
-    this.projectAlerts$.subscribe((data) => {
-      if (data) {
-        this.projectAlertForm.patchValue({
-          timespan_minutes: data.timespan_minutes,
-          quantity: data.quantity,
-        });
-      }
-    });
-  }
+  constructor(private alertsService: ProjectAlertsService) {}
 
   ngOnInit(): void {
     this.alertsService.listProjectAlerts();
@@ -68,15 +33,16 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     this.alertsService.clearState();
   }
 
-  toggleProjectAlerts() {
-    this.alertsService.toggleProjectAlerts();
-  }
-
-  onSubmit() {
-    if (this.projectAlertForm.valid) {
-      const timespan = this.projectAlertForm.get("timespan_minutes")?.value;
-      const quantity = this.projectAlertForm.get("quantity")?.value;
-      this.alertsService.updateProjectAlerts(timespan, quantity);
-    }
-  }
+  // onSubmit() {
+  //   if (this.projectAlertForm.valid) {
+  //     const timespan = this.projectAlertForm.get("timespan_minutes")?.value;
+  //     const quantity = this.projectAlertForm.get("quantity")?.value;
+  //     // TODO: replace placeholder for recipients with real data
+  //     const recipients: AlertRecipient[] = [
+  //       { pk: 0, recipientType: "email", url: "" },
+  //     ];
+  //     console.log(`Submit data: ${timespan}, ${quantity}, and ${recipients}`);
+  //     // this.alertsService.updateProjectAlerts(timespan, quantity, recipients);
+  //   }
+  // }
 }
