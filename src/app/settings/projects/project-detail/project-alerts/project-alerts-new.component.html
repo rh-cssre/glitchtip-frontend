@@ -51,6 +51,10 @@
         >
           {{ error }}
         </p>
+        <p *ngIf="alert.alertRecipients.length === 0" class="no-recipients">
+          This alert isn't being sent anywhere. Select "Add An Alert Recipient"
+          below to get started.
+        </p>
         <ul>
           <li
             *ngFor="
