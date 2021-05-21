@@ -1,10 +1,10 @@
 <mat-card>
   <mat-card-header class="flex-common">
     <mat-card-title>Project Alerts</mat-card-title>
-    <button mat-flat-button color="primary" (click)="newAlert()">
+    <!-- <button mat-flat-button color="primary" (click)="newAlert()">
       Create New Alert
-    </button></mat-card-header
-  >
+    </button> -->
+  </mat-card-header>
   <mat-divider></mat-divider>
 
   <mat-card-content>
@@ -103,14 +103,14 @@
             </div>
           </li>
         </ul>
-        <button
+        <!-- <button
           mat-stroked-button
           color="primary"
           (click)="addAlertRecipient()"
         >
           <mat-icon>add</mat-icon>
           Add An Alert Recipient
-        </button>
+        </button> -->
       </div></ng-container
     ><ng-container *ngIf="(initialLoad$ | async) === false">
       <div class="initial-loading">
