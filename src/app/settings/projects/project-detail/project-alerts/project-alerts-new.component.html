@@ -16,10 +16,10 @@
         <mat-divider *ngIf="i !== 0"></mat-divider>
 
         <p
-          *ngIf="(removeAlertError$ | async) !== null as error"
+          *ngIf="(removeAlertError$ | async) !== null"
           class="error alert-error"
         >
-          {{ error }}
+          {{ removeAlertError$ | async }}
         </p>
         <div class="flex-common alert-header">
           <h3>Alert {{ i + 1 }}</h3>
@@ -32,10 +32,10 @@
           </app-loading-button>
         </div>
         <p
-          *ngIf="(updateTimespanQuantityError$ | async) !== null as error"
+          *ngIf="(updateTimespanQuantityError$ | async) !== null"
           class="error alert-form-error"
         >
-          {{ error }}
+          {{ updateTimespanQuantityError$ | async }}
         </p>
         <app-alert-form
           [loading]="(updateTimespanQuantityLoading$ | async) === alert.pk"
@@ -45,11 +45,8 @@
           (alertSubmit)="updateTimespanQuantity($event, alert.alertRecipients)"
         ></app-alert-form>
         <h4 class="mat-body-strong">Recipients:</h4>
-        <p
-          *ngIf="deleteRecipientError$ | async as error"
-          class="error recipients-error"
-        >
-          {{ error }}
+        <p *ngIf="deleteRecipientError$ | async" class="error recipients-error">
+          {{ deleteRecipientError$ | async }}
         </p>
         <p *ngIf="alert.alertRecipients.length === 0" class="no-recipients">
           This alert isn't being sent anywhere. Select "Add An Alert Recipient"
@@ -123,5 +120,10 @@
           mode="indeterminate"
         ></mat-progress-spinner></div
     ></ng-container>
+    <ng-container *ngIf="(initialLoadError$ | async) !== null">
+      <div class="error initial-load-error">
+        {{ initialLoadError$ | async }}
+      </div></ng-container
+    >
   </mat-card-content>
 </mat-card>
