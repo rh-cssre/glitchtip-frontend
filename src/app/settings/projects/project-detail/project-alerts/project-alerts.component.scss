@@ -12,16 +12,36 @@ mat-card-title {
   margin-bottom: 0;
 }
 
+.error {
+  color: #f44336;
+  text-align: center;
+}
+
 .alert {
   padding-bottom: 24px;
+}
+
+.alert-error {
+  margin-bottom: -21px;
 }
 
 .alert-header {
   padding-top: 16px;
 }
 
+.alert-form-error {
+  margin-top: -21px;
+  margin-bottom: 0;
+}
+
 h4 {
   margin-top: unset;
+}
+
+.recipients-error {
+  text-align: left;
+  margin-top: -14px;
+  margin-bottom: -7px;
 }
 
 .recipients {
@@ -59,5 +79,15 @@ h4 {
       width: 24px;
       height: 24px;
     }
+  }
+}
+
+.initial-loading {
+  padding-top: 200px;
+  padding-bottom: 200px;
+
+  mat-progress-spinner {
+    margin-left: auto;
+    margin-right: auto;
   }
 }

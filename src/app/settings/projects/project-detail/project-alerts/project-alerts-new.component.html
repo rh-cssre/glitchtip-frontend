@@ -8,71 +8,116 @@
   <mat-divider></mat-divider>
 
   <mat-card-content>
-    <div
-      *ngFor="let alert of projectAlerts$ | async; let i = index"
-      class="alert"
-    >
-      <mat-divider *ngIf="i !== 0"></mat-divider>
+    <ng-container *ngIf="(initialLoad$ | async) === true">
+      <div
+        *ngFor="let alert of projectAlerts$ | async; let i = index"
+        class="alert"
+      >
+        <mat-divider *ngIf="i !== 0"></mat-divider>
 
-      <div class="flex-common alert-header">
-        <h3>Alert {{ i + 1 }}</h3>
-        <app-loading-button
-          [buttonText]="'Remove Alert ' + (i + 1)"
-          buttonStyle="stroked"
-          (click)="removeAlert(alert.pk)"
+        <p
+          *ngIf="(removeAlertError$ | async) !== null as error"
+          class="error alert-error"
         >
-        </app-loading-button>
-      </div>
-      <app-alert-form
-        [loading]="loading$ | async"
-        [timespan]="alert.timespan_minutes"
-        [quantity]="alert.quantity"
-        [pk]="alert.pk"
-        (alertSubmit)="updateTimespanQuantity($event)"
-      ></app-alert-form>
-      <h4 class="mat-body-strong">Recipients:</h4>
-      <ul>
-        <li
-          *ngFor="
-            let recipient of alert.alertRecipients;
-            let recipientIndex = index
-          "
+          {{ error }}
+        </p>
+        <div class="flex-common alert-header">
+          <h3>Alert {{ i + 1 }}</h3>
+          <app-loading-button
+            [buttonText]="'Remove Alert ' + (i + 1)"
+            buttonStyle="stroked"
+            (click)="removeAlert(alert.pk)"
+            [loading]="(removeAlertLoading$ | async) === alert.pk"
+          >
+          </app-loading-button>
+        </div>
+        <p
+          *ngIf="(updateTimespanQuantityError$ | async) !== null as error"
+          class="error alert-form-error"
         >
-          <div class="recipients" [class.border-top]="recipientIndex === 0">
-            <div class="flex-common">
+          {{ error }}
+        </p>
+        <app-alert-form
+          [loading]="(updateTimespanQuantityLoading$ | async) === alert.pk"
+          [timespan]="alert.timespan_minutes"
+          [quantity]="alert.quantity"
+          [pk]="alert.pk"
+          (alertSubmit)="updateTimespanQuantity($event, alert.alertRecipients)"
+        ></app-alert-form>
+        <h4 class="mat-body-strong">Recipients:</h4>
+        <p
+          *ngIf="deleteRecipientError$ | async as error"
+          class="error recipients-error"
+        >
+          {{ error }}
+        </p>
+        <ul>
+          <li
+            *ngFor="
+              let recipient of alert.alertRecipients;
+              let recipientIndex = index
+            "
+          >
+            <div class="recipients" [class.border-top]="recipientIndex === 0">
               <div class="flex-common">
-                <span
-                  *ngIf="recipient.recipientType === 'email'"
-                  class="flex-common"
-                  ><mat-icon class="alert-type">email</mat-icon>
-                  Send an email to team members on this project.
-                </span>
-                <span
-                  *ngIf="recipient.recipientType === 'webhook'"
-                  class="flex-common"
-                  ><svg class="slack">
-                    <use xlink:href="#webhook"></use>
-                  </svg>
-                  {{ recipient.url }}
-                </span>
+                <div class="flex-common">
+                  <span
+                    *ngIf="recipient.recipientType === 'email'"
+                    class="flex-common"
+                    ><mat-icon class="alert-type">email</mat-icon>
+                    Send an email to team members on this project.
+                  </span>
+                  <span
+                    *ngIf="recipient.recipientType === 'webhook'"
+                    class="flex-common"
+                    ><svg class="slack">
+                      <use xlink:href="#webhook"></use>
+                    </svg>
+                    {{ recipient.url }}
+                  </span>
+                </div>
+                <ng-container
+                  *ngIf="
+                    (deleteRecipientLoading$ | async) === recipient.pk;
+                    else notLoading
+                  "
+                >
+                  <mat-progress-spinner
+                    [diameter]="20"
+                    color="primary"
+                    mode="indeterminate"
+                  ></mat-progress-spinner></ng-container
+                ><ng-template #notLoading>
+                  <button
+                    class="trash"
+                    mat-icon-button
+                    color="primary"
+                    attr.aria-label="Delete Alert {{ i + 0 }}"
+                    (click)="removeAlertRecipient(recipient, alert)"
+                  >
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </ng-template>
               </div>
-              <button
-                class="trash"
-                mat-icon-button
-                color="primary"
-                attr.aria-label="Delete Alert {{ i + 0 }}"
-                (click)="removeAlertRecipient(recipient)"
-              >
-                <mat-icon>delete_outline</mat-icon>
-              </button>
             </div>
-          </div>
-        </li>
-      </ul>
-      <button mat-stroked-button color="primary" (click)="addAlertRecipient()">
-        <mat-icon>add</mat-icon>
-        Add An Alert Recipient
-      </button>
-    </div>
+          </li>
+        </ul>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="addAlertRecipient()"
+        >
+          <mat-icon>add</mat-icon>
+          Add An Alert Recipient
+        </button>
+      </div></ng-container
+    ><ng-container *ngIf="(initialLoad$ | async) === false">
+      <div class="initial-loading">
+        <mat-progress-spinner
+          [diameter]="40"
+          color="primary"
+          mode="indeterminate"
+        ></mat-progress-spinner></div
+    ></ng-container>
   </mat-card-content>
 </mat-card>

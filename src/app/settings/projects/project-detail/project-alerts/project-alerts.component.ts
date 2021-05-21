@@ -4,7 +4,10 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from "@angular/core";
-import { AlertRecipient } from "src/app/api/projects/project-alerts/project-alerts.interface";
+import {
+  AlertRecipient,
+  ProjectAlert,
+} from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "./project-alerts.service";
 
 @Component({
@@ -15,11 +18,16 @@ import { ProjectAlertsService } from "./project-alerts.service";
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
   projectAlerts$ = this.alertsService.projectAlert$;
-  alertToggleLoading$ = this.alertsService.alertToggleLoading$;
-  alertToggleError$ = this.alertsService.alertToggleError$;
   initialLoad$ = this.alertsService.initialLoad$;
-  loading$ = this.alertsService.loading$;
-  error$ = this.alertsService.error$;
+  initialLoadError$ = this.alertsService.initialLoadError$;
+  removeAlertLoading$ = this.alertsService.removeAlertLoading$;
+  removeAlertError$ = this.alertsService.removeAlertError$;
+  updateTimespanQuantityLoading$ =
+    this.alertsService.updateTimespanQuantityLoading$;
+  updateTimespanQuantityError$ =
+    this.alertsService.updateTimespanQuantityError$;
+  deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
+  deleteRecipientError$ = this.alertsService.deleteRecipientError$;
 
   constructor(private alertsService: ProjectAlertsService) {}
 
@@ -40,36 +48,27 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     this.alertsService.deleteProjectAlert(pk);
   }
 
-  updateTimespanQuantity(event: {
-    timespan_minutes: number;
-    quantity: number;
-    pk: number;
-  }) {
+  updateTimespanQuantity(
+    event: {
+      timespan_minutes: number;
+      quantity: number;
+      pk: number;
+    },
+    recipients: AlertRecipient[]
+  ) {
     this.alertsService.updateTimespanQuantity(
       event.timespan_minutes,
       event.quantity,
-      event.pk
+      event.pk,
+      recipients
     );
   }
 
-  removeAlertRecipient(recipient: AlertRecipient) {
-    this.alertsService.deleteAlertRecipient(recipient);
+  removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
+    this.alertsService.deleteAlertRecipient(recipient, alert);
   }
 
   addAlertRecipient() {
     // open dialog
   }
-
-  // onSubmit() {
-  //   if (this.projectAlertForm.valid) {
-  //     const timespan = this.projectAlertForm.get("timespan_minutes")?.value;
-  //     const quantity = this.projectAlertForm.get("quantity")?.value;
-  //     // TODO: replace placeholder for recipients with real data
-  //     const recipients: AlertRecipient[] = [
-  //       { pk: 0, recipientType: "email", url: "" },
-  //     ];
-  //     console.log(`Submit data: ${timespan}, ${quantity}, and ${recipients}`);
-  //     // this.alertsService.updateProjectAlerts(timespan, quantity, recipients);
-  //   }
-  // }
 }
