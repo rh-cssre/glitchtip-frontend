@@ -12,7 +12,7 @@ import { ProjectAlertsService } from "./project-alerts.service";
 
 @Component({
   selector: "app-project-alerts",
-  templateUrl: "./project-alerts-new.component.html",
+  templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
