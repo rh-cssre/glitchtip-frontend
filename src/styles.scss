@@ -21,7 +21,7 @@ $font-path: "../fonts";
 
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
-  // @include mat.typography-hierarchy($mobile-typography);
+  @include mat.core($mobile-typography);
 }
 
 a {
