@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import { combineLatest, EMPTY } from "rxjs";
 import { tap, map, mergeMap, take, catchError } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
 import {
   AlertRecipient,
-  NewProjectAlert,
   ProjectAlert,
 } from "../../../../api/projects/project-alerts/project-alerts.interface";
 import { ProjectSettingsService } from "../../project-settings.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 
-interface ProjectsState {
+interface ProjectAlertState {
   projectAlerts: ProjectAlert[] | null;
   initialLoad: boolean;
   initialLoadError: string | null;
@@ -24,7 +24,7 @@ interface ProjectsState {
   deleteRecipientError: string | null;
 }
 
-const initialState: ProjectsState = {
+const initialState: ProjectAlertState = {
   projectAlerts: null,
   initialLoad: false,
   initialLoadError: null,
@@ -39,12 +39,7 @@ const initialState: ProjectsState = {
 @Injectable({
   providedIn: "root",
 })
-export class ProjectAlertsService {
-  private readonly projectAlertState = new BehaviorSubject<ProjectsState>(
-    initialState
-  );
-  private readonly getState$ = this.projectAlertState.asObservable();
-
+export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   readonly projectAlert$ = this.getState$.pipe(
     map((data) => data.projectAlerts)
   );
@@ -76,7 +71,9 @@ export class ProjectAlertsService {
     private projectSettingsService: ProjectSettingsService,
     private projectAlertsAPIService: ProjectAlertsAPIService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   listProjectAlerts() {
     combineLatest([
@@ -138,7 +135,8 @@ export class ProjectAlertsService {
     recipients: AlertRecipient[]
   ) {
     this.setUpdateTimespanQuantityLoading(pk);
-    const data: NewProjectAlert = {
+    const data: ProjectAlert = {
+      pk: pk,
       timespan_minutes: newTimespan,
       quantity: newQuantity,
       alertRecipients: recipients,
@@ -206,13 +204,11 @@ export class ProjectAlertsService {
   }
 
   clearState() {
-    this.projectAlertState.next(initialState);
+    this.clearState();
   }
 
   private setProjectAlertsList(alerts: ProjectAlert[]) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       projectAlerts: alerts,
       initialLoad: true,
       initialLoadError: null,
@@ -220,27 +216,22 @@ export class ProjectAlertsService {
   }
 
   private setProjectAlertsListError(err: HttpErrorResponse) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       initialLoad: true,
       initialLoadError: `There was an error loading your alerts. Try refreshing the page.`,
     });
   }
 
   private setDeleteAlertLoading(pk: number) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       removeAlertLoading: pk,
       removeAlertError: null,
     });
   }
 
   private setDeleteProjectAlert(pk: number) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       projectAlerts:
         state.projectAlerts?.filter((alert) => alert.pk !== pk) ?? null,
       removeAlertLoading: null,
@@ -249,18 +240,15 @@ export class ProjectAlertsService {
   }
 
   private setDeleteAlertError(err: HttpErrorResponse) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       removeAlertError: err.message,
       removeAlertLoading: null,
     });
   }
 
   private setUpdateTimespanQuantity(updatedAlert: ProjectAlert) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       projectAlerts: this.findAndReplaceAlert(
         state.projectAlerts,
         updatedAlert
@@ -271,27 +259,22 @@ export class ProjectAlertsService {
   }
 
   private setUpdateTimespanQuantityLoading(pk: number) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       updateTimespanQuantityLoading: pk,
       updateTimespanQuantityError: null,
     });
   }
 
   private setUpdateTimespanQuantityError(err: HttpErrorResponse) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       updateTimespanQuantityLoading: null,
       updateTimespanQuantityError: err.message,
     });
   }
 
   private setUpdateAlertRecipients(newAlert: ProjectAlert) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       projectAlerts:
         state.projectAlerts?.map((alert) => {
           return { ...alert, alertRecipients: newAlert.alertRecipients };
@@ -302,18 +285,14 @@ export class ProjectAlertsService {
   }
 
   private setDeleteRecipientLoading(pk: number) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       deleteRecipientLoading: pk,
       deleteRecipientError: null,
     });
   }
 
   private setDeleteRecipientError(err: HttpErrorResponse) {
-    const state = this.projectAlertState.getValue();
-    this.projectAlertState.next({
-      ...state,
+    this.setState({
       deleteRecipientLoading: null,
       deleteRecipientError: err.message,
     });
@@ -324,11 +303,15 @@ export class ProjectAlertsService {
     currentAlerts: ProjectAlert[] | null,
     newAlert: ProjectAlert
   ): ProjectAlert[] | null {
-    const indexToReplace = currentAlerts?.findIndex(
-      (alert) => alert.pk === newAlert.pk
-    );
-    return indexToReplace !== undefined
-      ? currentAlerts?.splice(indexToReplace, 1, newAlert) ?? null
-      : null;
+    const updatedAlert = currentAlerts?.map((alert) => {
+      if (alert.pk === newAlert.pk) {
+        return {
+          ...alert,
+          timespan_minutes: newAlert.timespan_minutes,
+          quantity: newAlert.quantity,
+        };
+      } else return alert;
+    });
+    return updatedAlert !== undefined ? updatedAlert : null;
   }
 }
