@@ -45,7 +45,9 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   }
 
   removeAlert(pk: number) {
-    this.alertsService.deleteProjectAlert(pk);
+    if (window.confirm("Are you sure you want to remove this notification?")) {
+      this.alertsService.deleteProjectAlert(pk);
+    }
   }
 
   updateTimespanQuantity(
