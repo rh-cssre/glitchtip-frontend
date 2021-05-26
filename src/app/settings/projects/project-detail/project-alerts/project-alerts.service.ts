@@ -131,12 +131,12 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   updateTimespanQuantity(
     newTimespan: number,
     newQuantity: number,
-    pk: number,
+    id: number,
     recipients: AlertRecipient[]
   ) {
-    this.setUpdateTimespanQuantityLoading(pk);
+    this.setUpdateTimespanQuantityLoading(id);
     const data: ProjectAlert = {
-      pk: pk,
+      pk: id,
       timespan_minutes: newTimespan,
       quantity: newQuantity,
       alertRecipients: recipients,
@@ -149,7 +149,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         mergeMap(([orgSlug, projectSlug]) => {
           if (orgSlug && projectSlug) {
             return this.projectAlertsAPIService
-              .update(pk.toString(), data, orgSlug, projectSlug)
+              .update(id.toString(), data, orgSlug, projectSlug)
               .pipe(
                 tap((resp) => {
                   this.setUpdateTimespanQuantity(resp);
