@@ -203,10 +203,6 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       .subscribe();
   }
 
-  clearState() {
-    this.clearState();
-  }
-
   private setProjectAlertsList(alerts: ProjectAlert[]) {
     this.setState({
       projectAlerts: alerts,
