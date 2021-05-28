@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 .empty-states {
@@ -5,7 +6,7 @@
 }
 
 .not-on-team {
-  background: mat-color($amaranth-palette, 50);
+  background: mat.get-color-from-palette($amaranth-palette, 50);
   padding: 10px;
   margin-top: 0;
   margin-bottom: 20px;

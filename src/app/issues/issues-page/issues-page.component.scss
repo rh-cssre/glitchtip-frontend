@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 $iconWidth: 56px;
@@ -140,7 +141,7 @@ table {
   &__inner {
     text-align: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    background-color: mat-color($mat-gray, 50);
+    background-color: mat.get-color-from-palette(mat.$gray-palette, 50);
     padding-top: 8px;
     padding-bottom: 8px;
 
@@ -155,7 +156,7 @@ table {
     margin-right: 8px;
     font-size: 14px;
     font-weight: 500;
-    color: mat-color($mat-gray, 800);
+    color: mat.get-color-from-palette(mat.$gray-palette, 800);
   }
 }
 
@@ -179,14 +180,14 @@ table {
 }
 
 .resolved {
-  background: mat-color($mat-gray, 100);
+  background: mat.get-color-from-palette(mat.$gray-palette, 100);
   > a {
     text-decoration: line-through;
   }
 }
 
 .ignored {
-  background: mat-color($mat-gray, 100);
+  background: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .mute-icon {
@@ -276,11 +277,11 @@ mat-card {
   }
 
   &--sample:after {
-    background-color: mat-color($mat-gray, 100);
+    background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
   }
 
   &--debug:after {
-    background-color: mat-color($mat-gray, 300);
+    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
   }
 
   &--info:after {
@@ -292,7 +293,7 @@ mat-card {
   }
 
   &--error:after {
-    background-color: $amaranth; //mat-color($amaranth-palette, 200);
+    background-color: $amaranth; //mat.get-color-from-palette($amaranth-palette, 200);
   }
 
   &--fatal:after {
