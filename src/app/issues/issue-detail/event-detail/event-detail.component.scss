@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 section {
@@ -62,14 +63,14 @@ app-entry-request {
   margin-right: 8px;
   padding: 2px 12px;
   border-radius: 16px;
-  border: 1px solid mat-color($mat-gray, 500);
+  border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 500);
   background-color: #fefefe;
   float: left;
   list-style: none;
   transition: 0.3s;
 
   &:hover {
-    background: mat-color($mat-gray, 100);
+    background: mat.get-color-from-palette(mat.$gray-palette, 100);
   }
 }
 .pseudo-chip-key {

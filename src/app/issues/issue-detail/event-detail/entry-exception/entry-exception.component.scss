@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 .exception {
@@ -61,7 +62,7 @@
   mat-expansion-panel-header {
     padding-top: 16px;
     padding-bottom: 16px;
-    border: 1px solid mat-color($mat-gray, 300);
+    border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
 
     app-frame-title {
       padding-right: 16px;
@@ -69,10 +70,10 @@
   }
 
   .disabled-panel {
-    color: mat-color($mat-gray, 900);
+    color: mat.get-color-from-palette(mat.$gray-palette, 900);
   }
 
   .highlighted {
-    background: mat-color($mat-gray, 100);
+    background: mat.get-color-from-palette(mat.$gray-palette, 100);
   }
 }

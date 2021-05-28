@@ -30,7 +30,7 @@ export class AuthComponent implements OnInit {
 
   ngOnInit(): void {
     const provider: string | undefined = this.route.snapshot.params.provider;
-    const fragment = this.route.snapshot.fragment;
+    const fragment = this.route.snapshot.fragment!;
     const query = this.route.snapshot.queryParamMap;
     if (provider) {
       this.attemptOAuthLogin(provider, fragment, query);

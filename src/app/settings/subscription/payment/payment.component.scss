@@ -1,5 +1,5 @@
+@use '~@angular/material' as mat;
 @import "variables";
-@import "~@angular/material/theming";
 
 // THIS IS BEING SHARED WITH A MARKETING COMPONENT
 // Make sure edits work fine in both spots
@@ -24,7 +24,7 @@
     @media (min-width: $large) {
       flex: 1;
       background: transparent;
-      border-right: 1px solid mat-color($mat-gray, 300);
+      border-right: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
       border-radius: 0;
       box-shadow: none !important;
 

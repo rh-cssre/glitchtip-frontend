@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "src/assets/styles/variables";
 
 h3 {
@@ -54,7 +55,7 @@ ul {
 }
 
 .error {
-  background-color: mat-color($mat-gray, 100);
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .category {
