@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 mat-card-header {
@@ -34,8 +35,12 @@ mat-card-title {
   margin-bottom: 0;
 }
 
-h4 {
-  margin-top: unset;
+// Move to global styles if we decide to implement in other places in app
+.tooltip {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
+  cursor: help;
 }
 
 .recipients-error {

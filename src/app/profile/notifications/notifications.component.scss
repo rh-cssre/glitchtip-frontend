@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "src/assets/styles/variables";
 
 mat-card-content {
@@ -80,7 +81,7 @@ mat-error {
   p {
     margin-top: 0;
     margin-bottom: 0;
-    color: mat-color($mat-gray, 700);
+    color: mat.get-color-from-palette(mat.$gray-palette, 700);
   }
   a {
     text-decoration: none;

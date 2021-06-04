@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 mat-card {
@@ -16,7 +17,7 @@ mat-card {
 }
 
 .bar {
-  background: mat-color($mat-gray, 400);
+  background: mat.get-color-from-palette(mat.$gray-palette, 400);
   box-shadow: none;
   transition: all 0.5s;
 

@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 mat-card {
@@ -9,7 +10,7 @@ mat-card {
 
 a {
   text-decoration: none;
-  color: mat-color($mat-gray, 900);
+  color: mat.get-color-from-palette(mat.$gray-palette, 900);
   font-weight: 400;
 }
 
