@@ -52,7 +52,7 @@ mat-card-title {
 .no-recipients {
   width: 50%;
   padding: 8px 16px;
-  background-color: mat-color($mat-gray, 100);
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .recipients {

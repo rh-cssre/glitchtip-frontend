@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "variables";
 
 form {
@@ -14,7 +15,7 @@ form {
 .tooltip {
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: mat-color($mat-gray, 500);
+  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
   cursor: help;
 }
 
