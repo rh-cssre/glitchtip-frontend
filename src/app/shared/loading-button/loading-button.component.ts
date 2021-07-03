@@ -13,5 +13,5 @@ export class LoadingButtonComponent {
   @Input() disabled?: boolean;
   /** For fullWidth to work, you may need to set width: 100% to app-loading-button */
   @Input() fullWidth = false;
-  @Input() buttonStyle: "flat" | "stroked" = "flat";
+  @Input() buttonStyle: "flat" | "stroked" | "basic" = "flat";
 }

@@ -1,173 +1,229 @@
 <mat-card>
-  <mat-card-title>Project Alerts</mat-card-title>
+  <mat-card-header class="flex-common">
+    <mat-card-title>Project Alerts</mat-card-title>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="openNewAlert()"
+      [disabled]="(newAlertOpen$ | async) === true"
+    >
+      Create New Alert
+    </button>
+  </mat-card-header>
   <mat-divider></mat-divider>
-  <mat-card-content>
-    <ng-container *ngIf="(initialLoad$ | async) === false; else afterLoad">
-      <div class="loading"></div>
-    </ng-container>
-    <ng-template #afterLoad>
-      <div
-        class="default-settings"
-        [class.add-padding]="(projectAlerts$ | async) === null"
-      >
-        <div class="default-alerts">
-          <ng-container
-            *ngIf="(projectAlerts$ | async) === null; else alertsAreOn"
-          >
-            <p class="mat-body-strong">Project Alerts Off</p>
-            <p class="mat-body-1">
-              You are not currently receiving any alerts for this project.
-            </p>
-          </ng-container>
-          <ng-template #alertsAreOn>
-            <p class="mat-body-strong">Project Alerts On</p>
-            <p class="mat-body-1">
-              These preferences apply to everyone who is part of this project
-            </p>
-          </ng-template>
-        </div>
-        <div class="button-group">
-          <div class="button-and-loading">
-            <mat-spinner
-              *ngIf="(alertToggleLoading$ | async) === true"
-              diameter="24"
-            ></mat-spinner>
-            <mat-button-toggle-group
-              name="defaultNotifications"
-              aria-label="Default Notifications"
-            >
-              <mat-button-toggle
-                value="onDefault"
-                (change)="toggleProjectAlerts()"
-                [class.underline]="projectAlerts$ | async"
-                [checked]="(projectAlerts$ | async) !== null"
-                >On</mat-button-toggle
-              >
-              <mat-button-toggle
-                value="offDefault"
-                (change)="toggleProjectAlerts()"
-                [class.underline]="(projectAlerts$ | async) === null"
-                [checked]="(projectAlerts$ | async) === null"
-                >Off</mat-button-toggle
-              >
-            </mat-button-toggle-group>
-          </div>
-          <mat-error
-            *ngIf="alertToggleError$ | async as error"
-            class="mat-small"
-            >{{ error }}</mat-error
-          >
-        </div>
-      </div>
-    </ng-template>
 
-    <div *ngIf="(projectAlerts$ | async) !== null">
-      <div class="server-error">
-        <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
-      </div>
-      <form class="flex" [formGroup]="projectAlertForm" (ngSubmit)="onSubmit()">
-        <p>
-          <span
-            >If&nbsp;an&nbsp;<span
-              class="tooltip"
-              matTooltip="An event is every occurance of the same error (aka: issue) in your application."
-              >event</span
-            >&nbsp;happens</span
-          >
-          <mat-form-field>
-            <mat-label>Quantity</mat-label>
-            <input
-              matInput
-              min="0"
-              max="10000"
-              type="number"
-              autocomplete="off"
-              formControlName="quantity"
-              [errorStateMatcher]="matcher"
-              placeholder="#"
-            />
-            <mat-error *ngIf="projectAlertForm.get('quantity')?.errors">
-              <span *ngIf="projectAlertForm.get('quantity')?.errors?.min"
-                >The quantity needs to be greater than or equal to 0.</span
-              >
-              <span
-                *ngIf="projectAlertForm.get('quantity')?.errors?.invalidNumber"
-                >Enter a number.
-              </span>
-              <span *ngIf="projectAlertForm.get('quantity')?.errors?.required"
-                >This field is required.</span
-              >
-            </mat-error>
-          </mat-form-field>
-          <span
-            >time<span *ngIf="projectAlertForm.get('quantity')?.value !== 1"
-              >s</span
-            >&nbsp;in</span
-          >
-          <mat-form-field>
-            <mat-label>Timespan</mat-label>
-            <input
-              matInput
-              min="0"
-              max="10000"
-              type="number"
-              autocomplete="off"
-              formControlName="timespan_minutes"
-              [errorStateMatcher]="matcher"
-              placeholder="#"
-            />
-            <mat-error *ngIf="projectAlertForm.get('timespan_minutes')?.errors">
-              <span
-                *ngIf="projectAlertForm.get('timespan_minutes')?.errors?.min"
-                >The timespan needs to be greater than or equal to 0.</span
-              >
-              <span
-                *ngIf="
-                  projectAlertForm.get('timespan_minutes')?.errors
-                    ?.invalidNumber
-                "
-                >Enter a number.
-              </span>
-              <span
-                *ngIf="
-                  projectAlertForm.get('timespan_minutes')?.errors?.required
-                "
-                >This field is required.</span
-              >
-            </mat-error>
-          </mat-form-field>
-          <span
-            >minute<span
-              *ngIf="projectAlertForm.get('timespan_minutes')?.value !== 1"
-              >s</span
-            >,&nbsp;send&nbsp;an&nbsp;email.</span
-          >
+  <mat-card-content>
+    <ng-container *ngIf="(initialLoad$ | async) === true">
+      <!-- New Alert -->
+      <div *ngIf="(newAlertOpen$ | async) === true" class="new-alert">
+        <div class="alert-header">
+          <h3>New Alert</h3>
+        </div>
+        <p
+          *ngIf="newAlertError$ | async as error"
+          class="error new-alert-error"
+        >
+          {{ error }}
         </p>
-        <app-loading-button
-          buttonText="Update Alerts"
-          [disabled]="
-            projectAlertForm.get('timespan_minutes')?.value ===
-              (projectAlerts$ | async)?.timespan_minutes &&
-            projectAlertForm.get('quantity')?.value ===
-              (projectAlerts$ | async)?.quantity
-          "
-          [loading]="(loading$ | async) === true"
-        ></app-loading-button>
-      </form>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="notifications-wrapper">
-      <div class="notifications-text">
-        <p class="mat-body-strong">Personal project notifications</p>
-        <p>
-          Edit whether or not you want to receive notifications for this project
+        <app-alert-form
+          #newAlert
+          [newAlert]="true"
+          (alertSubmit)="newAlertTimespanQuantity($event)"
+        ></app-alert-form>
+        <h4 class="mat-body-strong">Recipients:</h4>
+        <p
+          *ngIf="(newProjectAlertRecipients$ | async)?.length === 0"
+          class="no-recipients no-recipients-new"
+        >
+          This alert isn't being sent anywhere. Select "Add An Alert Recipient"
+          below to get started.
         </p>
+        <ul>
+          <li
+            *ngFor="
+              let recipient of newProjectAlertRecipients$ | async;
+              let recipientIndex = index
+            "
+          >
+            <div class="recipients" [class.border-top]="recipientIndex === 0">
+              <div class="flex-common">
+                <div class="flex-common">
+                  <span
+                    *ngIf="recipient.recipientType === 'email'"
+                    class="flex-common"
+                    ><mat-icon class="alert-type">email</mat-icon>
+                    Send an email to team members on this project.
+                  </span>
+                  <span
+                    *ngIf="recipient.recipientType === 'webhook'"
+                    class="flex-common"
+                    ><svg class="slack">
+                      <use xlink:href="#webhook"></use>
+                    </svg>
+                    {{ recipient.url }}
+                  </span>
+                </div>
+                <button
+                  class="trash"
+                  mat-icon-button
+                  color="primary"
+                  attr.aria-label="Delete Alert For {{ recipient.url }}"
+                  (click)="removeNewAlertRecipient(recipient.url)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openCreateRecipientDialog()"
+        >
+          <mat-icon>add</mat-icon>
+          Add An Alert Recipient
+        </button>
+        <div class="new-alert-actions">
+          <app-loading-button
+            buttonText="submit"
+            [loading]="(newAlertLoading$ | async) === true"
+            (click)="submitCreateAlert()"
+            >Submit</app-loading-button
+          >
+          <button (click)="closeNewAlert()" mat-stroked-button>Cancel</button>
+        </div>
       </div>
-      <div class="notifications-link">
-        <a mat-flat-button color="primary" routerLink="/profile/notifications">
-          Edit Preferences
-        </a>
-      </div>
-    </div>
+      <ng-container
+        *ngIf="
+          (projectAlerts$ | async)?.length === 0 &&
+            (newAlertOpen$ | async) === false;
+          else showAlerts
+        "
+        ><p class="no-alerts">
+          You don't have any alerts set up. Click "Create New Alert" on the top
+          right of this card to get started.
+        </p></ng-container
+      ><ng-template #showAlerts>
+        <div
+          *ngFor="let alert of projectAlerts$ | async; let i = index"
+          class="alert"
+        >
+          <mat-divider *ngIf="i !== 0"></mat-divider>
+
+          <p
+            *ngIf="(removeAlertError$ | async)?.pk === alert.pk"
+            class="error alert-error"
+          >
+            {{ (removeAlertError$ | async)?.error }}
+          </p>
+          <div class="flex-common alert-header">
+            <h3>Alert {{ i + 1 }}</h3>
+            <app-loading-button
+              [buttonText]="'Remove Alert ' + (i + 1)"
+              buttonStyle="stroked"
+              (click)="removeAlert(alert.pk)"
+              [loading]="(removeAlertLoading$ | async) === alert.pk"
+            >
+            </app-loading-button>
+          </div>
+          <p
+            *ngIf="(updateTimespanQuantityError$ | async)?.pk === alert.pk"
+            class="error alert-form-error"
+          >
+            {{ (updateTimespanQuantityError$ | async)?.error }}
+          </p>
+          <app-alert-form
+            [newAlert]="false"
+            [loading]="(updateTimespanQuantityLoading$ | async) === alert.pk"
+            [timespan]="alert.timespan_minutes"
+            [quantity]="alert.quantity"
+            (alertSubmit)="updateTimespanQuantity($event, alert)"
+          ></app-alert-form>
+          <h4 class="mat-body-strong">Recipients:</h4>
+          <p
+            *ngIf="recipientError$ | async as error"
+            class="error recipients-error"
+          >
+            {{ error }}
+          </p>
+          <p *ngIf="alert.alertRecipients.length === 0" class="no-recipients">
+            This alert isn't being sent anywhere. Select "Add An Alert
+            Recipient" below to get started.
+          </p>
+          <ul>
+            <li
+              *ngFor="
+                let recipient of alert.alertRecipients;
+                let recipientIndex = index
+              "
+            >
+              <div class="recipients" [class.border-top]="recipientIndex === 0">
+                <div class="flex-common">
+                  <div class="flex-common">
+                    <span
+                      *ngIf="recipient.recipientType === 'email'"
+                      class="flex-common"
+                      ><mat-icon class="alert-type">email</mat-icon>
+                      Send an email to team members on this project.
+                    </span>
+                    <span
+                      *ngIf="recipient.recipientType === 'webhook'"
+                      class="flex-common"
+                      ><svg class="slack">
+                        <use xlink:href="#webhook"></use>
+                      </svg>
+                      {{ recipient.url }}
+                    </span>
+                  </div>
+                  <ng-container
+                    *ngIf="
+                      (deleteRecipientLoading$ | async) === recipient.pk;
+                      else notLoading
+                    "
+                  >
+                    <mat-progress-spinner
+                      [diameter]="20"
+                      color="primary"
+                      mode="indeterminate"
+                    ></mat-progress-spinner></ng-container
+                  ><ng-template #notLoading>
+                    <button
+                      class="trash"
+                      mat-icon-button
+                      color="primary"
+                      attr.aria-label="Delete Alert {{ i + 0 }}"
+                      (click)="removeAlertRecipient(recipient, alert)"
+                    >
+                      <mat-icon>delete_outline</mat-icon>
+                    </button>
+                  </ng-template>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="openUpdateRecipientDialog(alert)"
+          >
+            <mat-icon>add</mat-icon>
+            Add An Alert Recipient
+          </button>
+        </div></ng-template
+      ></ng-container
+    ><ng-container *ngIf="(initialLoad$ | async) === false">
+      <div class="initial-loading">
+        <mat-progress-spinner
+          [diameter]="40"
+          color="primary"
+          mode="indeterminate"
+        ></mat-progress-spinner></div
+    ></ng-container>
+    <ng-container *ngIf="initialLoadError$ | async as error">
+      <div class="error initial-load-error">
+        {{ error }}
+      </div></ng-container
+    >
   </mat-card-content>
 </mat-card>

@@ -1,0 +1,55 @@
+<div class="dialog-wrapper">
+  <h1 mat-dialog-title>Add Alert Recipient</h1>
+  <form
+    [formGroup]="recipientForm"
+    (ngSubmit)="onSubmit()"
+    id="create-team-form"
+  >
+    <mat-dialog-content class="mat-typography">
+      <mat-form-field class="type">
+        <mat-label>Recipient Type</mat-label>
+        <mat-select [formControl]="recipientType">
+          <mat-option
+            *ngFor="
+              let recipient of selectOptions(
+                recipientOptions,
+                emailSelected$ | async
+              )
+            "
+            [value]="recipient.value"
+          >
+            {{ recipient.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div [ngSwitch]="recipientType.value" class="switch">
+        <mat-form-field class="webhook" *ngSwitchCase="'webhook'">
+          <mat-label>Webhook URL</mat-label>
+          <svg matPrefix class="slack">
+            <use xlink:href="#webhook"></use>
+          </svg>
+          <input matInput type="url" formControlName="url" placeholder="URL" />
+          <mat-error *ngIf="url?.errors">
+            <span *ngIf="url?.errors?.required || url?.errors?.pattern"
+              >Enter a valid URL</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <p class="email" *ngSwitchCase="'email'">
+          An email will be sent to the members of this project.<br />
+          Select "Add Recipient" to continue.
+        </p>
+        <p class="default" *ngSwitchDefault>
+          Select an alert type to get started.
+        </p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <app-loading-button type="submit" buttonText="Add Recipient">
+      </app-loading-button>
+      <button type="button" mat-flat-button (click)="closeDialog()">
+        Cancel
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

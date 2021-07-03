@@ -1,62 +1,75 @@
 @use '~@angular/material' as mat;
 @import "variables";
 
-.preferences {
-  margin-top: 44px;
+mat-card-header {
+  padding-bottom: 12px;
+}
+
+mat-card-title {
+  margin-left: -16px;
+}
+
+.mat-card-title {
   margin-bottom: 0;
 }
 
-.loading {
-  height: 180px;
-}
+.error {
+  color: #f44336;
+  text-align: center;
 
-.default-settings {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 32px;
-
-  p {
-    margin-top: 0;
-    margin-bottom: 0;
+  span {
+    margin-left: 8px;
+    margin-right: 8px;
   }
 }
 
-.default-alerts {
-  margin-right: 16px;
+.new-alert {
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+  margin-left: -16px;
+  margin-right: -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
 }
 
-.add-padding {
-  padding-bottom: 24px;
+.new-alert-error {
+  margin-top: -10px;
+  margin-bottom: -10px;
 }
 
-.button-and-loading {
+.new-alert-actions {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
 
-  mat-spinner {
+  app-loading-button {
     margin-right: 16px;
   }
 }
 
-.button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+.no-alerts {
+  text-align: center;
+  padding-top: 24px;
+  padding-bottom: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
-.server-error {
-  height: 21px;
+.alert {
+  padding-bottom: 24px;
 }
 
-form {
-  padding-bottom: 8px;
-  .mat-form-field {
-    width: 88px;
-  }
-  app-loading-button {
-    margin-bottom: 8px;
-  }
+.alert-error {
+  margin-bottom: -21px;
+  padding-top: 16px;
+}
+
+.alert-header {
+  padding-top: 16px;
+}
+
+.alert-form-error {
+  margin-top: -21px;
+  margin-bottom: 0;
 }
 
 // Move to global styles if we decide to implement in other places in app
@@ -67,55 +80,80 @@ form {
   cursor: help;
 }
 
-.flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.recipients-error {
+  text-align: left;
+  margin-top: -14px;
+  margin-bottom: -7px;
 }
 
-.mat-form-field {
-  margin-left: 12px;
-  margin-right: 12px;
+.no-recipients {
+  width: 50%;
+  padding: 8px 16px;
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
-.notifications-wrapper {
-  margin-top: 32px;
-  display: flex;
-  flex-wrap: wrap;
 
-  justify-content: space-between;
-  align-items: center;
+.no-recipients-new {
+  background-color: #ffffff;
+}
 
-  @media (max-width: $tablet - 1) {
-    flex-direction: column;
-    align-items: flex-start;
+.recipients {
+  display: inline-block;
+  width: 50%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+
+  &.border-top {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .alert-type {
+    margin-left: 0;
+    margin-right: 8px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+
+  .trash {
+    margin-left: 16px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
   }
 }
 
-.notifications-text {
-  padding: 0 16px 16px 0;
+.initial-loading {
+  padding-top: 200px;
+  padding-bottom: 200px;
 
-  p {
-    margin-top: 0;
-    margin-bottom: 0;
+  mat-progress-spinner {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
-.notifications-link {
-  width: 140px;
-  padding-bottom: 16px;
+.initial-load-error {
+  margin: unset;
+  padding: 24px 24px 8px 24px;
 }
 
-.mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {
-  width: 150px;
-}
+// .mat-stroked-button:hover {
+//   background-color: whitesmoke;
+//   opacity: 1;
+// }
 
-.underline {
-  &::ng-deep .mat-button-toggle-label-content {
-    text-decoration: underline;
-  }
-}
-
-// Same as project-detail.component.scss
-app-loading-button ::ng-deep button {
-  width: 140px;
+.mat-button.mat-primary .mat-button-focus-overlay {
+  background-color: transparent;
 }
