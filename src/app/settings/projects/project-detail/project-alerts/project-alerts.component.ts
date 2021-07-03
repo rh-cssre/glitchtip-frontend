@@ -1,82 +1,109 @@
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  OnDestroy,
-} from "@angular/core";
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from "@angular/forms";
+  AlertRecipient,
+  ProjectAlert,
+} from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "./project-alerts.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
+import { MatDialog } from "@angular/material/dialog";
+import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
+import { AlertFormComponent } from "./alert-form/alert-form.component";
 
-function numberValidator(control: AbstractControl): ValidationErrors | null {
-  if (typeof control.value === "number") {
-    return null;
-  }
-  return { invalidNumber: true };
-}
 @Component({
   selector: "app-project-alerts",
   templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
+  @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
   projectAlerts$ = this.alertsService.projectAlert$;
-  alertToggleLoading$ = this.alertsService.alertToggleLoading$;
-  alertToggleError$ = this.alertsService.alertToggleError$;
+  newProjectAlertRecipients$ = this.alertsService.newProjectAlertRecipients$;
   initialLoad$ = this.alertsService.initialLoad$;
-  loading$ = this.alertsService.loading$;
-  error$ = this.alertsService.error$;
+  initialLoadError$ = this.alertsService.initialLoadError$;
+  removeAlertLoading$ = this.alertsService.removeAlertLoading$;
+  removeAlertError$ = this.alertsService.removeAlertError$;
+  updateTimespanQuantityLoading$ = this.alertsService
+    .updateTimespanQuantityLoading$;
+  updateTimespanQuantityError$ = this.alertsService
+    .updateTimespanQuantityError$;
+  deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
+  recipientError$ = this.alertsService.recipientError$;
+  newAlertOpen$ = this.alertsService.newAlertOpen$;
+  recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
+  newAlertLoading$ = this.alertsService.newAlertLoading$;
+  newAlertError$ = this.alertsService.newAlertError$;
 
-  projectAlertForm = new FormGroup({
-    timespan_minutes: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-    quantity: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-  });
-
-  matcher = new LessAnnoyingErrorStateMatcher();
-
-  constructor(private alertsService: ProjectAlertsService) {
-    this.projectAlerts$.subscribe((data) => {
-      if (data) {
-        this.projectAlertForm.patchValue({
-          timespan_minutes: data.timespan_minutes,
-          quantity: data.quantity,
-        });
-      }
-    });
-  }
+  constructor(
+    private alertsService: ProjectAlertsService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.alertsService.listProjectAlerts();
+
+    this.recipientDialogOpen$.subscribe(
+      (resp) => resp && this.dialog.open(NewRecipientComponent)
+    );
   }
 
   ngOnDestroy() {
     this.alertsService.clearState();
   }
 
-  toggleProjectAlerts() {
-    this.alertsService.toggleProjectAlerts();
+  openNewAlert() {
+    this.alertsService.openNewAlert();
   }
 
-  onSubmit() {
-    if (this.projectAlertForm.valid) {
-      const timespan = this.projectAlertForm.get("timespan_minutes")?.value;
-      const quantity = this.projectAlertForm.get("quantity")?.value;
-      this.alertsService.updateProjectAlerts(timespan, quantity);
+  removeNewAlertRecipient(url: string) {
+    this.alertsService.removeNewAlertRecipient(url);
+  }
+
+  openUpdateRecipientDialog(alert: ProjectAlert) {
+    this.alertsService.openUpdateRecipientDialog(alert);
+  }
+
+  openCreateRecipientDialog() {
+    this.alertsService.openCreateRecipientDialog();
+  }
+
+  closeNewAlert() {
+    this.alertsService.closeNewAlert();
+  }
+
+  removeAlert(pk: number) {
+    if (window.confirm("Are you sure you want to remove this notification?")) {
+      this.alertsService.deleteProjectAlert(pk);
     }
+  }
+
+  updateTimespanQuantity(
+    event: {
+      timespan_minutes: number;
+      quantity: number;
+    },
+    alert: ProjectAlert
+  ): void {
+    if (alert.pk) {
+      this.alertsService.updateTimespanQuantity(
+        event.timespan_minutes,
+        event.quantity,
+        alert.pk,
+        alert.alertRecipients
+      );
+    }
+  }
+
+  removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
+    this.alertsService.deleteAlertRecipient(recipient, alert);
+  }
+
+  newAlertTimespanQuantity(event: {
+    timespan_minutes: number;
+    quantity: number;
+  }) {
+    this.alertsService.createNewAlert(event);
+  }
+
+  submitCreateAlert() {
+    this.newAlertRef?.onSubmit();
   }
 }
