@@ -39,7 +39,8 @@ export class NewRecipientComponent implements OnInit {
   ngOnInit(): void {
     this.recipientType.valueChanges.subscribe((type: RecipientType) => {
       if (type === "webhook") {
-        const urlReg = "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?";
+        // URL regex taken from https://www.regextester.com/94502
+        const urlReg = "(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+";
         this.url.setValidators([
           Validators.required,
           Validators.pattern(urlReg),
