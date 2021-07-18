@@ -13,6 +13,7 @@ import { AuthTokensComponent } from "./auth-tokens/auth-tokens.component";
 import { NewTokenComponent } from "./auth-tokens/new-token/new-token.component";
 import { SocialAuthComponent } from "./social-auth/social-auth.component";
 import { AccountComponent } from "./account/account.component";
+import { MultiFactorAuthComponent } from "./multi-factor-auth/multi-factor-auth.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { AccountComponent } from "./account/account.component";
     NewTokenComponent,
     SocialAuthComponent,
     AccountComponent,
+    MultiFactorAuthComponent,
   ],
   imports: [
     CommonModule,
