@@ -37,19 +37,20 @@ export class NewRecipientComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Dynamically set "url" validators
     this.recipientType.valueChanges.subscribe((type: RecipientType) => {
+      this.url.clearValidators();
       if (type === "webhook") {
-        // URL regex taken from https://www.regextester.com/94502
-        const urlReg = "(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+";
+        // https://stackoverflow.com/a/3809435/443457
+        const urlReg = new RegExp(
+          /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
+        );
         this.url.setValidators([
           Validators.required,
           Validators.pattern(urlReg),
         ]);
-        this.url.updateValueAndValidity();
-      } else if (type === "email") {
-        this.url.clearValidators();
-        this.url.updateValueAndValidity();
       }
+      this.url.updateValueAndValidity();
     });
   }
 
