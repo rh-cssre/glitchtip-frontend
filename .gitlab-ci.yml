@@ -101,7 +101,9 @@ build-docker:
 
 deploy-staging:
   stage: deploy
-  image: alpine/helm:3.6.3
+  image:
+    name: alpine/helm:3.6.3
+    entrypoint: [""]
   script:
     - helm repo add glitchtip https://glitchtip.gitlab.io/glitchtip-helm-chart/
     - helm upgrade glitchtip-staging glitchtip/glitchtip --set-string image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
