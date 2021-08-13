@@ -101,7 +101,7 @@ build-docker:
 
 deploy-staging:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.21.1-v3.6.0
+  image: alpine/helm:3.6.3
   script:
     - helm repo add glitchtip https://glitchtip.gitlab.io/glitchtip-helm-chart/
     - helm upgrade glitchtip-staging glitchtip/glitchtip --set-string image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
