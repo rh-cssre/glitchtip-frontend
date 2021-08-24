@@ -105,6 +105,7 @@ deploy-staging:
   image:
     name: alpine/helm:3.6.3
     entrypoint: [""]
+  needs: ["build-docker", "test-e2e"]
   script:
     - helm repo add glitchtip https://glitchtip.gitlab.io/glitchtip-helm-chart/
     - helm upgrade glitchtip-staging glitchtip/glitchtip --set-string image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
@@ -122,6 +123,7 @@ deploy-dockerhub:
   image: docker:stable
   services:
     - docker:dind
+  needs: ["build-docker", "test-e2e"]
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
