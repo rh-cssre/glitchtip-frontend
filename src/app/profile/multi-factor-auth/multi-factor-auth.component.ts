@@ -8,7 +8,7 @@ import { MultiFactorAuthService } from "./multi-factor-auth.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiFactorAuthComponent implements OnInit {
-  userKeys$ = this.service.userKeys$;
+  initialLoad$ = this.service.initialLoad$;
   constructor(private service: MultiFactorAuthService) {}
 
   ngOnInit() {

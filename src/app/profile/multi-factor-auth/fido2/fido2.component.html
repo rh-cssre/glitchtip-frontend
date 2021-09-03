@@ -1,0 +1,10 @@
+<mat-card>
+  <mat-card-title>Register Universal 2nd Factor (U2F) device</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    Keys:
+    <ng-container *ngFor="let key of userKeys$ | async">
+      {{ key.name }}
+    </ng-container>
+  </mat-card-content>
+</mat-card>

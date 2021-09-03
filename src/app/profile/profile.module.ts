@@ -14,6 +14,8 @@ import { NewTokenComponent } from "./auth-tokens/new-token/new-token.component";
 import { SocialAuthComponent } from "./social-auth/social-auth.component";
 import { AccountComponent } from "./account/account.component";
 import { MultiFactorAuthComponent } from "./multi-factor-auth/multi-factor-auth.component";
+import { TOTPComponent } from "./multi-factor-auth/totp/totp.component";
+import { Fido2Component } from "./multi-factor-auth/fido2/fido2.component";
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { MultiFactorAuthComponent } from "./multi-factor-auth/multi-factor-auth.
     SocialAuthComponent,
     AccountComponent,
     MultiFactorAuthComponent,
+    TOTPComponent,
+    Fido2Component,
   ],
   imports: [
     CommonModule,

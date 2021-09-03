@@ -1,0 +1,22 @@
+mat-card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    mat-card-content {
+        padding-top: 16px;
+    }
+}
+
+::ng-deep .mat-flat-button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#canvas {
+    margin-left: -13px;
+    margin-top: -13px;
+}
+
+.totp-string {
+    word-break: break-word;
+}

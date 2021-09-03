@@ -144,6 +144,14 @@
       </a>
       <a
         mat-list-item
+        [routerLink]="['/profile', 'multi-factor-auth']"
+        routerLinkActive="active-route"
+        class="sub-items"
+      >
+        Multi-factor Authentication
+      </a>
+      <a
+        mat-list-item
         [routerLink]="['/profile', 'notifications']"
         routerLinkActive="active-route"
         class="sub-items"
