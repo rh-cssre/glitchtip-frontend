@@ -8,6 +8,6 @@ import { MultiFactorAuthService } from "../multi-factor-auth.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Fido2Component {
-  userKeys$ = this.service.userKeys$;
+  userKeys$ = this.service.FIDO2Keys$;
   constructor(private service: MultiFactorAuthService) {}
 }

@@ -35,6 +35,9 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   TOTPKey$ = this.userKeys$.pipe(
     map((userKeys) => userKeys.find((key) => key.key_type === "TOTP"))
   );
+  FIDO2Keys$ = this.userKeys$.pipe(
+    map((keys) => keys.filter((key) => key.key_type === "FIDO2"))
+  );
   setupTOTPStage$ = this.getState$.pipe(map((state) => state.setupTOTPStage));
   totp$ = this.getState$.pipe(map((state) => state.TOTPResponse));
   serverError$ = this.getState$.pipe(map((state) => state.serverError));
