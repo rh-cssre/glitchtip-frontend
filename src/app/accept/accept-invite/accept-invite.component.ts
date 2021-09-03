@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 
 @Component({
-  selector: "app-accept-invite",
+  selector: "gt-accept-invite",
   templateUrl: "./accept-invite.component.html",
   styleUrls: ["./accept-invite.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

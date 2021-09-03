@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
 @Component({
-  selector: "app-empty-projects",
+  selector: "gt-empty-projects",
   templateUrl: "./empty-projects.component.html",
   styleUrls: ["./empty-projects.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

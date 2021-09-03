@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 import { ServerError } from "../../django.interfaces";
 
 @Component({
-  selector: "app-form-error",
+  selector: "gt-form-error",
   templateUrl: "./form-error.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

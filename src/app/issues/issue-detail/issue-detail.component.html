@@ -37,11 +37,11 @@
       View all issues for {{ issue.project.name }}
     </a>
     <div class="header-group">
-      <app-issue-detail-title
+      <gt-issue-detail-title
         [issueType]="issue?.type"
         [culprit]="issue?.culprit"
         [metadata]="issue?.metadata"
-      ></app-issue-detail-title>
+      ></gt-issue-detail-title>
       <div class="button-row">
         <button
           *ngIf="issue?.status === 'unresolved'"
@@ -143,7 +143,7 @@
           </div>
         </dl>
       </mat-card>
-      <app-issue-detail-tags></app-issue-detail-tags>
+      <gt-issue-detail-tags></gt-issue-detail-tags>
     </aside>
   </div>
 </section>

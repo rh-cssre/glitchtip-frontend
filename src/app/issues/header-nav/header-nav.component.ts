@@ -16,7 +16,7 @@ import { MatExpansionPanel } from "@angular/material/expansion";
 import { normalizeProjectParams } from "../utils";
 
 @Component({
-  selector: "app-header-nav",
+  selector: "gt-header-nav",
   templateUrl: "./header-nav.component.html",
   styleUrls: ["./header-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

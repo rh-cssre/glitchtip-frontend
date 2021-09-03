@@ -13,7 +13,7 @@ import { delay, filter, tap } from "rxjs/operators";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 
 @Component({
-  selector: "app-totp",
+  selector: "gt-totp",
   templateUrl: "./totp.component.html",
   styleUrls: ["./totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

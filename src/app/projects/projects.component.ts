@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 @Component({
-  selector: "app-projects",
-  template: `<app-project-list [activeOrgOnly]="true"></app-project-list>`,
+  selector: "gt-projects",
+  template: `<gt-project-list [activeOrgOnly]="true"></gt-project-list>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent {}

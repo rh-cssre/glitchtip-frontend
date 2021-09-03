@@ -25,13 +25,13 @@
           <p mat-line>
             {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
           </p>
-          <app-loading-button
+          <gt-loading-button
             buttonText="Leave Team"
             buttonStyle="stroked"
             [loading]="(loading$ | async)?.removeTeamMember === yourTeam.slug"
             (click)="leaveTeam(yourTeam.slug)"
             id="leave-team"
-          ></app-loading-button>
+          ></gt-loading-button>
         </mat-list-item>
       </mat-list>
       <ng-template #noTeams>
@@ -68,13 +68,13 @@
           <p mat-line>
             {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
           </p>
-          <app-loading-button
+          <gt-loading-button
             buttonText="Join Team"
             buttonStyle="stroked"
             [loading]="(loading$ | async)?.addTeamMember === otherTeam.slug"
             (click)="joinTeam(otherTeam.slug)"
             id="leave-team"
-          ></app-loading-button>
+          ></gt-loading-button>
         </mat-list-item>
       </mat-list>
     </mat-card-content>

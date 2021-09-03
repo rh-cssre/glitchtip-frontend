@@ -28,7 +28,7 @@ export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: "app-alert-form",
+  selector: "gt-alert-form",
   templateUrl: "./alert-form.component.html",
   styleUrls: ["./alert-form.component.scss"],
 })

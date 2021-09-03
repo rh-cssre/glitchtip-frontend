@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
 @Component({
-  selector: "app-entry-data",
+  selector: "gt-entry-data",
   templateUrl: "./entry-data.component.html",
   styleUrls: ["./entry-data.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

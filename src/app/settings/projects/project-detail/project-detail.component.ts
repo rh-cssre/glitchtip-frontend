@@ -14,7 +14,7 @@ import { ProjectDetail } from "src/app/api/projects/projects-api.interfaces";
 import { ProjectSettingsService } from "../project-settings.service";
 
 @Component({
-  selector: "app-project-detail",
+  selector: "gt-project-detail",
   templateUrl: "./project-detail.component.html",
   styleUrls: ["./project-detail.component.scss"],
 })

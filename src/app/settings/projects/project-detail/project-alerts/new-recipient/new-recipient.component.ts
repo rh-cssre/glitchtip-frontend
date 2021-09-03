@@ -5,7 +5,7 @@ import { RecipientType } from "src/app/api/projects/project-alerts/project-alert
 import { ProjectAlertsService } from "../project-alerts.service";
 
 @Component({
-  selector: "app-new-recipient",
+  selector: "gt-new-recipient",
   templateUrl: "./new-recipient.component.html",
   styleUrls: ["./new-recipient.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

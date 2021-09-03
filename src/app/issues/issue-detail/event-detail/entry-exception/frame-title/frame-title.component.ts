@@ -3,7 +3,7 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import type { Frame } from "src/app/issues/interfaces";
 
 @Component({
-  selector: "app-frame-title",
+  selector: "gt-frame-title",
   templateUrl: "./frame-title.component.html",
   styleUrls: ["./frame-title.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

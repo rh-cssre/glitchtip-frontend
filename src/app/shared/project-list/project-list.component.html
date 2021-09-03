@@ -40,15 +40,15 @@
           Create New Project in {{ organization.name }}
         </a>
       </header>
-      <app-empty-projects
+      <gt-empty-projects
         *ngIf="organization.projects.length === 0"
         [activeOrgOnly]="activeOrgOnly"
-      ></app-empty-projects>
+      ></gt-empty-projects>
 
       <div>
         <div class="card-wrapper">
           <ng-container *ngFor="let project of organization.projects">
-            <app-project-card
+            <gt-project-card
               [cardLink]="['/', project.organization.slug, 'issues']"
               [cardLinkQueryParams]="{ project: project.id }"
               [title]="project.name"
@@ -74,7 +74,7 @@
                   project.slug
                 ]
               }"
-            ></app-project-card>
+            ></gt-project-card>
           </ng-container>
         </div>
       </div>

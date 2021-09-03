@@ -3,7 +3,7 @@ import { OrganizationsService } from "../api/organizations/organizations.service
 import { map } from "rxjs/operators";
 
 @Component({
-  selector: "app-rate-limit-banner",
+  selector: "gt-rate-limit-banner",
   templateUrl: "./rate-limit-banner.component.html",
   styleUrls: ["./rate-limit-banner.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

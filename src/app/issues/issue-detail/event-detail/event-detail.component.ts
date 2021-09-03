@@ -5,7 +5,7 @@ import { IssueDetailService } from "../issue-detail.service";
 import { EventTag } from "src/app/issues/interfaces";
 
 @Component({
-  selector: "app-event-detail",
+  selector: "gt-event-detail",
   templateUrl: "./event-detail.component.html",
   styleUrls: ["./event-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,7 +9,6 @@ import {
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
-import { LessAnnoyingErrorStateMatcher } from "../../../shared/less-annoying-error-state-matcher";
 
 /** Custom validator to vaildate emails separated by commas */
 function validateEmails(emails: string) {
@@ -33,7 +32,7 @@ function emailsValidator(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  selector: "app-new-member",
+  selector: "gt-new-member",
   templateUrl: "./new-member.component.html",
   styleUrls: ["./new-member.component.scss"],
 })
@@ -48,8 +47,6 @@ export class NewMemberComponent implements OnInit, OnDestroy {
     role: new FormControl("", [Validators.required]),
     teams: new FormControl([]),
   });
-
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private organizationsService: OrganizationsService,

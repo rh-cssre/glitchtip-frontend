@@ -6,7 +6,7 @@ import { MembersService } from "src/app/api/organizations/members.service";
 import { MemberSelector } from "src/app/api/organizations/organizations.interface";
 
 @Component({
-  selector: "app-members",
+  selector: "gt-members",
   templateUrl: "./members.component.html",
   styleUrls: ["./members.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

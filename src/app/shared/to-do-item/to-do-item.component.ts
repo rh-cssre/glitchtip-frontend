@@ -5,7 +5,7 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
  * https://www.figma.com/file/TUL7whJuANdvdLt3nejXPt/GlitchTip-Common-Library?node-id=422%3A513
  */
 @Component({
-  selector: "app-to-do-item",
+  selector: "gt-to-do-item",
   templateUrl: "./to-do-item.component.html",
   styleUrls: ["./to-do-item.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

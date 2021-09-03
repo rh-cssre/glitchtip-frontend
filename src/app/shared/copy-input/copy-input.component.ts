@@ -6,7 +6,7 @@ import { take } from "rxjs/operators";
  * A read-only input that allows the user to copy it's value
  */
 @Component({
-  selector: "app-copy-input",
+  selector: "gt-copy-input",
   templateUrl: "./copy-input.component.html",
   styleUrls: ["./copy-input.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

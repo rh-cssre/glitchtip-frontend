@@ -7,10 +7,10 @@
         <mat-form-field class="full-width">
           <input
             matInput
+            autofocus
             type="email"
             placeholder="Email"
             formControlName="email"
-            [errorStateMatcher]="matcher"
           />
           <mat-error>
             <span *ngIf="email?.errors?.required"
@@ -30,7 +30,6 @@
             type="password"
             placeholder="Password"
             formControlName="password1"
-            [errorStateMatcher]="matcher"
           />
           <mat-error>
             <span *ngIf="password1?.errors"
@@ -50,8 +49,7 @@
             type="password"
             placeholder="Confirm Password"
             formControlName="password2"
-            appInputMatcher="password1"
-            [errorStateMatcher]="matcher"
+            gtInputMatcher="password1"
           />
 
           <mat-error>
@@ -81,11 +79,11 @@
             class="full-width margin"
             (click)="onSocialApp(socialApp)"
           >
-            <app-auth-svg
+            <gt-auth-svg
               source="auth"
               text="Register with {{ socialApp.name }}"
               [provider]="socialApp.provider"
-            ></app-auth-svg>
+            ></gt-auth-svg>
           </button>
         </div>
       </ng-container>

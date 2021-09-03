@@ -5,7 +5,7 @@ import { exhaustMap, map } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 
 @Component({
-  selector: "app-issue-detail-tags",
+  selector: "gt-issue-detail-tags",
   templateUrl: "./issue-detail-tags.component.html",
   styleUrls: ["./issue-detail-tags.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

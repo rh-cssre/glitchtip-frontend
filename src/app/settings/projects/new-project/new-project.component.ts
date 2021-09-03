@@ -11,7 +11,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { ProjectSettingsService } from "../project-settings.service";
 
 @Component({
-  selector: "app-new-project",
+  selector: "gt-new-project",
   templateUrl: "./new-project.component.html",
   styleUrls: ["./new-project.component.scss"],
 })

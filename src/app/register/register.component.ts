@@ -7,10 +7,9 @@ import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SettingsService } from "../api/settings.service";
 import { SocialApp } from "../api/user/user.interfaces";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
-import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
 
 @Component({
-  selector: "app-register",
+  selector: "gt-register",
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })
@@ -29,7 +28,6 @@ export class RegisterComponent implements OnInit {
       Validators.minLength(8),
     ]),
   });
-  matcher = new LessAnnoyingErrorStateMatcher();
   acceptInfo$ = this.acceptService.acceptInfo$;
 
   constructor(

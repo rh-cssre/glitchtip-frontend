@@ -9,7 +9,7 @@ import { UserService } from "src/app/api/user/user.service";
 import { FormControl } from "@angular/forms";
 
 @Component({
-  selector: "app-team-members",
+  selector: "gt-team-members",
   templateUrl: "./team-members.component.html",
   styleUrls: ["./team-members.component.scss"],
 })

@@ -25,11 +25,11 @@
         >
           {{ error }}
         </p>
-        <app-alert-form
+        <gt-alert-form
           #newAlert
           [newAlert]="true"
           (alertSubmit)="newAlertTimespanQuantity($event)"
-        ></app-alert-form>
+        ></gt-alert-form>
         <h4 class="mat-body-strong">Recipients:</h4>
         <p
           *ngIf="(newProjectAlertRecipients$ | async)?.length === 0"
@@ -85,11 +85,11 @@
           Add An Alert Recipient
         </button>
         <div class="new-alert-actions">
-          <app-loading-button
+          <gt-loading-button
             buttonText="submit"
             [loading]="(newAlertLoading$ | async) === true"
             (click)="submitCreateAlert()"
-            >Submit</app-loading-button
+            >Submit</gt-loading-button
           >
           <button (click)="closeNewAlert()" mat-stroked-button>Cancel</button>
         </div>
@@ -119,13 +119,13 @@
           </p>
           <div class="flex-common alert-header">
             <h3>Alert {{ i + 1 }}</h3>
-            <app-loading-button
+            <gt-loading-button
               [buttonText]="'Remove Alert ' + (i + 1)"
               buttonStyle="stroked"
               (click)="removeAlert(alert.pk)"
               [loading]="(removeAlertLoading$ | async) === alert.pk"
             >
-            </app-loading-button>
+            </gt-loading-button>
           </div>
           <p
             *ngIf="(updateTimespanQuantityError$ | async)?.pk === alert.pk"
@@ -133,13 +133,13 @@
           >
             {{ (updateTimespanQuantityError$ | async)?.error }}
           </p>
-          <app-alert-form
+          <gt-alert-form
             [newAlert]="false"
             [loading]="(updateTimespanQuantityLoading$ | async) === alert.pk"
             [timespan]="alert.timespan_minutes"
             [quantity]="alert.quantity"
             (alertSubmit)="updateTimespanQuantity($event, alert)"
-          ></app-alert-form>
+          ></gt-alert-form>
           <h4 class="mat-body-strong">Recipients:</h4>
           <p
             *ngIf="recipientError$ | async as error"

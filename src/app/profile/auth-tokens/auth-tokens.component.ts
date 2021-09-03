@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthTokensService } from "./auth-tokens.service";
 
 @Component({
-  selector: "app-auth-tokens",
+  selector: "gt-auth-tokens",
   templateUrl: "./auth-tokens.component.html",
   styleUrls: ["./auth-tokens.component.scss"],
 })
@@ -11,7 +11,7 @@ export class AuthTokensComponent implements OnInit, OnDestroy {
   deleteLoading$ = this.authTokensService.deleteLoading$;
   initialLoad$ = this.authTokensService.initialLoad$;
 
-  constructor(private authTokensService: AuthTokensService) { }
+  constructor(private authTokensService: AuthTokensService) {}
 
   ngOnInit(): void {
     this.authTokensService.loadAuthTokens();

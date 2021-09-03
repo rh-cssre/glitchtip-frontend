@@ -6,7 +6,7 @@ import { OrganizationsService } from "../../api/organizations/organizations.serv
 import { OrganizationDetail } from "src/app/api/organizations/organizations.interface";
 
 @Component({
-  selector: "app-organization",
+  selector: "gt-organization",
   templateUrl: "./organization.component.html",
   styleUrls: ["./organization.component.scss"],
 })

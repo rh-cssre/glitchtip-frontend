@@ -6,11 +6,10 @@ import {
   Validators,
   FormBuilder,
 } from "@angular/forms";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { AuthTokensService } from "../auth-tokens.service";
 
 @Component({
-  selector: "app-new-token",
+  selector: "gt-new-token",
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
 })
@@ -21,7 +20,6 @@ export class NewTokenComponent implements OnDestroy {
   createErrorScopes$ = this.authTokensService.createErrorScopes$;
 
   form: FormGroup;
-  matcher = new LessAnnoyingErrorStateMatcher();
   scopeOptions: string[] = [
     "project:read",
     "project:write",

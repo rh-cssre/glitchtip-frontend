@@ -7,7 +7,7 @@ import { IssueDetailService } from "./issue-detail.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
-  selector: "app-issue-detail",
+  selector: "gt-issue-detail",
   templateUrl: "./issue-detail.component.html",
   styleUrls: ["./issue-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

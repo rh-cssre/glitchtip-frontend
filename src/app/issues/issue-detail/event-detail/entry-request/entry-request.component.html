@@ -19,32 +19,32 @@
       <mat-divider></mat-divider>
       <h3>Body</h3>
       <dl>
-        <app-entry-data
+        <gt-entry-data
           *ngFor="let requestData of request.data | keyvalue"
           [key]="requestData.key"
           [value]="requestData.value"
-        ></app-entry-data>
+        ></gt-entry-data>
       </dl>
     </div>
     <section *ngIf="request?.headers">
       <h3>Headers</h3>
       <dl>
-        <app-entry-data
+        <gt-entry-data
           *ngFor="let header of request?.headers"
           [key]="header[0]"
           [value]="header[1]"
-        ></app-entry-data>
+        ></gt-entry-data>
       </dl>
     </section>
     <section *ngIf="request?.env">
       <mat-divider></mat-divider>
       <h3>Environment</h3>
       <dl>
-        <app-entry-data
+        <gt-entry-data
           *ngFor="let env of request.env | keyvalue"
           [key]="env.key"
           [value]="env.value"
-        ></app-entry-data>
+        ></gt-entry-data>
       </dl>
     </section>
   </section>

@@ -7,10 +7,10 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-center">
           <mat-error *ngIf="error">{{ error }}</mat-error>
-          <app-platform-picker
+          <gt-platform-picker
             formControlName="platform"
             template="buttons"
-          ></app-platform-picker>
+          ></gt-platform-picker>
           <mat-form-field class="project-name">
             <input matInput formControlName="name" placeholder="Project Name" />
             <mat-error>
@@ -49,12 +49,12 @@
             </button>
           </div>
         </div>
-        <app-loading-button
+        <gt-loading-button
           id="create-project-submit"
           [loading]="loading"
           buttonText="Create Project"
         >
-        </app-loading-button>
+        </gt-loading-button>
       </form> </mat-card-content
   ></mat-card>
 </section>

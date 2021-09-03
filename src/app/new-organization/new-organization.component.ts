@@ -6,7 +6,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { SettingsService } from "../api/settings.service";
 
 @Component({
-  selector: "app-new-organizations",
+  selector: "gt-new-organizations",
   templateUrl: "./new-organization.component.html",
   styleUrls: ["./new-organization.component.scss"],
 })

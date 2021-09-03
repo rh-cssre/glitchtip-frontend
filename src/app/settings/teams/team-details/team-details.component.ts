@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 
 @Component({
-  selector: "app-team-details",
+  selector: "gt-team-details",
   templateUrl: "./team-details.component.html",
   styleUrls: ["./team-details.component.scss"],
 })

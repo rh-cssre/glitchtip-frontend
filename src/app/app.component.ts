@@ -9,7 +9,7 @@ import { UserService } from "./api/user/user.service";
 import { Title } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-root",
+  selector: "gt-root",
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {

@@ -8,7 +8,7 @@ import { AuthService } from "../api/auth/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  selector: "app-auth",
+  selector: "gt-auth",
   templateUrl: "./auth.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

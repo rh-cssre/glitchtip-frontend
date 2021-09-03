@@ -10,7 +10,7 @@ import type {
 } from "../shared.interfaces";
 
 @Component({
-  selector: "app-project-card",
+  selector: "gt-project-card",
   templateUrl: "./project-card.component.html",
   styleUrls: ["./project-card.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

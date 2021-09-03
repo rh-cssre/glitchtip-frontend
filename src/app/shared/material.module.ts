@@ -7,6 +7,7 @@
 import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
+import { ErrorStateMatcher } from "@angular/material/core";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
@@ -24,6 +25,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ClipboardModule } from "@angular/cdk/clipboard";
+import { LessAnnoyingErrorStateMatcher } from "./less-annoying-error-state-matcher";
 
 export const COMPONENTS = [
   MatButtonModule,
@@ -50,5 +52,8 @@ export const COMPONENTS = [
 @NgModule({
   imports: COMPONENTS,
   exports: COMPONENTS,
+  providers: [
+    { provide: ErrorStateMatcher, useClass: LessAnnoyingErrorStateMatcher },
+  ],
 })
 export class MaterialModule {}

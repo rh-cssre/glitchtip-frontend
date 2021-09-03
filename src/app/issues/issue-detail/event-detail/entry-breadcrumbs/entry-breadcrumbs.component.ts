@@ -10,7 +10,7 @@ import { Json } from "src/app/interface-primitives";
 import { IssueDetailService } from "../../issue-detail.service";
 
 @Component({
-  selector: "app-entry-breadcrumbs",
+  selector: "gt-entry-breadcrumbs",
   templateUrl: "./entry-breadcrumbs.component.html",
   styleUrls: ["./entry-breadcrumbs.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

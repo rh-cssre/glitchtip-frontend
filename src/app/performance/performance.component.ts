@@ -7,7 +7,7 @@ import { PaginationBaseComponent } from "../shared/stateful-service/pagination-s
 import { PerformanceState, PerformanceService } from "./performance.service";
 
 @Component({
-  selector: "app-performance",
+  selector: "gt-performance",
   templateUrl: "./performance.component.html",
   styleUrls: ["./performance.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

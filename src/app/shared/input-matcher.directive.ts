@@ -7,7 +7,7 @@ import {
 } from "@angular/forms";
 
 @Directive({
-  selector: "[appInputMatcher]",
+  selector: "[gtInputMatcher]",
   providers: [
     {
       provide: NG_VALIDATORS,
@@ -17,11 +17,11 @@ import {
   ],
 })
 export class InputMatcherDirective implements Validator {
-  @Input() appInputMatcher?: string;
+  @Input() gtInputMatcher?: string;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.appInputMatcher !== undefined) {
-      const comparisonInput = control.parent!.get(this.appInputMatcher);
+    if (this.gtInputMatcher !== undefined) {
+      const comparisonInput = control.parent!.get(this.gtInputMatcher);
       if (comparisonInput && comparisonInput.value !== control.value) {
         return { notEqual: true };
       } else {

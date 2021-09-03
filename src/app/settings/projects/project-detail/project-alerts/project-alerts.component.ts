@@ -9,7 +9,7 @@ import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
 
 @Component({
-  selector: "app-project-alerts",
+  selector: "gt-project-alerts",
   templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
 })

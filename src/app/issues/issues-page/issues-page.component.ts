@@ -35,7 +35,7 @@ export const sorts = {
 };
 
 @Component({
-  selector: "app-issues-page",
+  selector: "gt-issues-page",
   templateUrl: "./issues-page.component.html",
   styleUrls: ["./issues-page.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -18,13 +18,13 @@
           ></mat-error
         >
       </mat-form-field>
-      <app-loading-button
+      <gt-loading-button
         [disabled]="this.form.get('slug')?.value === team.slug"
         [loading]="(loading$ | async)?.updateName"
         buttonText="Update Name"
         id="update-project-name"
       >
-      </app-loading-button>
+      </gt-loading-button>
     </form>
   </mat-card-content>
 </mat-card>
@@ -39,11 +39,11 @@
       </p>
       <mat-error></mat-error>
     </div>
-    <app-loading-button
+    <gt-loading-button
       buttonText="Delete Team"
       [loading]="(loading$ | async)?.deleteTeam"
       (click)="deleteTeam()"
     >
-    </app-loading-button>
+    </gt-loading-button>
   </mat-card-content>
 </mat-card>

@@ -39,13 +39,13 @@
             [relativeTo]="route.parent?.parent"
             >{{ teamMember.email }}</a
           >
-          <app-loading-button
+          <gt-loading-button
             buttonText="Remove"
             buttonStyle="stroked"
             [loading]="selectedTeamMember === teamMember.id"
             (click)="removeTeamMember(teamMember.id, teamMember.email)"
             id="remove-team-member"
-          ></app-loading-button>
+          ></gt-loading-button>
         </mat-list-item> </mat-list
     ></ng-template>
   </mat-card-content>

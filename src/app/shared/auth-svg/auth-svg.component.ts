@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
 @Component({
-  selector: "app-auth-svg",
+  selector: "gt-auth-svg",
   templateUrl: "./auth-svg.component.html",
   styleUrls: ["./auth-svg.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

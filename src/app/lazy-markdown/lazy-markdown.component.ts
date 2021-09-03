@@ -16,7 +16,7 @@ import "node_modules/prismjs/components/prism-go.min.js";
 import "node_modules/prismjs/components/prism-rust.min.js";
 
 @Component({
-  selector: "app-lazy-markdown",
+  selector: "gt-lazy-markdown",
   templateUrl: "./lazy-markdown.component.html",
   styleUrls: ["./lazy-markdown.component.scss"],
   encapsulation: ViewEncapsulation.None,

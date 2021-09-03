@@ -3,7 +3,7 @@ import { IssueDetailService } from "../../issue-detail.service";
 import { isStacktrace } from "src/app/issues/utils";
 
 @Component({
-  selector: "app-entry-exception",
+  selector: "gt-entry-exception",
   templateUrl: "./entry-exception.component.html",
   styleUrls: ["./entry-exception.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -10,7 +10,7 @@ import {
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 
 @Component({
-  selector: "app-user-reports-issue",
+  selector: "gt-user-reports-issue",
   templateUrl: "./user-reports-issue.component.html",
   styleUrls: ["./user-reports-issue.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

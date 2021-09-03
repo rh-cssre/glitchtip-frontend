@@ -6,7 +6,7 @@ import { MainNavService } from "../main-nav.service";
 import { SettingsService } from "src/app/api/settings.service";
 
 @Component({
-  selector: "app-main-nav",
+  selector: "gt-main-nav",
   templateUrl: "./main-nav.component.html",
   styleUrls: ["./main-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -40,11 +40,11 @@
             <mat-radio-button value="manager">Manager</mat-radio-button>
             <mat-radio-button value="owner">Owner</mat-radio-button>
           </mat-radio-group>
-          <app-loading-button
+          <gt-loading-button
             *ngIf="member.role !== form.get('role')?.value"
             [loading]="(updateMemberLoading$ | async) === true"
             buttonText="Update Member"
-          ></app-loading-button>
+          ></gt-loading-button>
         </div>
       </form>
     </mat-card-content>

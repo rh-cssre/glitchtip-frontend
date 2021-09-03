@@ -3,7 +3,7 @@ import { NotificationsService } from "./notifications.service";
 import { NotificationStatus } from "./notifications.interface";
 
 @Component({
-  selector: "app-notifications",
+  selector: "gt-notifications",
   templateUrl: "./notifications.component.html",
   styleUrls: ["./notifications.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

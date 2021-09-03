@@ -21,18 +21,18 @@
     >
     <mat-divider></mat-divider>
     <mat-card-content>
-      <app-entry-data
+      <gt-entry-data
         key="Timestamp"
         [value]="transaction.timestamp | date: 'full'"
-      ></app-entry-data>
-      <app-entry-data
+      ></gt-entry-data>
+      <gt-entry-data
         key="Start Timestamp"
         [value]="transaction.startTimestamp | date: 'full'"
-      ></app-entry-data>
-      <app-entry-data
+      ></gt-entry-data>
+      <gt-entry-data
         key="Time"
         [value]="transaction.delta + 'ms'"
-      ></app-entry-data>
+      ></gt-entry-data>
     </mat-card-content>
   </mat-card>
 </section>

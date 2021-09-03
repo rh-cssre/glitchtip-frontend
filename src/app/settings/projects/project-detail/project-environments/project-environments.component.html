@@ -25,14 +25,14 @@
                   <span>
                     {{ environment.name }}
                   </span>
-                  <app-loading-button
+                  <gt-loading-button
                     (click)="toggleHidden(environment)"
                     [loading]="
                       environment.id === (toggleHiddenloading$ | async)
                     "
                     [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
                     buttonStyle="stroked"
-                  ></app-loading-button>
+                  ></gt-loading-button>
                 </mat-list-item>
               </ng-container>
             </mat-list>

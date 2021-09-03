@@ -41,15 +41,11 @@
         <mat-list-item *ngFor="let project of projectsOnTeam$ | async">
           <a
             mat-line
-            [routerLink]="[
-              '/',
-              project.organization.slug,
-              'issues'
-            ]"
+            [routerLink]="['/', project.organization.slug, 'issues']"
             [queryParams]="{ project: project.id }"
             >{{ project.name }}</a
           >
-          <app-loading-button
+          <gt-loading-button
             buttonText="Remove"
             buttonStyle="stroked"
             [loading]="
@@ -57,7 +53,7 @@
             "
             (click)="removeProject(project.slug)"
             id="remove-team-member"
-          ></app-loading-button>
+          ></gt-loading-button>
         </mat-list-item> </mat-list
     ></ng-template>
   </mat-card-content>

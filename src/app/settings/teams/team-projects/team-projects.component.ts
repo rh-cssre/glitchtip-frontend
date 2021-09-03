@@ -7,7 +7,7 @@ import { TeamsService } from "src/app/api/teams/teams.service";
 import { ProjectSettingsService } from "../../projects/project-settings.service";
 
 @Component({
-  selector: "app-team-projects",
+  selector: "gt-team-projects",
   templateUrl: "./team-projects.component.html",
   styleUrls: ["./team-projects.component.scss"],
 })

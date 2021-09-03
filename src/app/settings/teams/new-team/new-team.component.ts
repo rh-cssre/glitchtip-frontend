@@ -5,7 +5,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
-  selector: "app-new-team",
+  selector: "gt-new-team",
   templateUrl: "./new-team.component.html",
   styleUrls: ["./new-team.component.scss"],
 })

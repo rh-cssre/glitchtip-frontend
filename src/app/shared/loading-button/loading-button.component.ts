@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 
 @Component({
-  selector: "app-loading-button",
+  selector: "gt-loading-button",
   templateUrl: "./loading-button.component.html",
   styleUrls: ["./loading-button.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

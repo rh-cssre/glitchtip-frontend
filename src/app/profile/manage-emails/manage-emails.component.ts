@@ -8,10 +8,9 @@ import {
 } from "@angular/forms";
 import { EmailService } from "../../api/emails/email.service";
 import { map, first } from "rxjs/operators";
-import { LessAnnoyingErrorStateMatcher } from "../../shared/less-annoying-error-state-matcher";
 
 @Component({
-  selector: "app-manage-emails",
+  selector: "gt-manage-emails",
   templateUrl: "./manage-emails.component.html",
   styleUrls: ["./manage-emails.component.scss"],
 })
@@ -56,8 +55,6 @@ export class ManageEmailsComponent implements OnInit {
       this.matchesExistingValidator
     ),
   });
-
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(private emailService: EmailService) {}
 

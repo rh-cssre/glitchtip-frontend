@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { ConfirmEmailService } from "../../api/confirm-email/confirm-email.service";
 
 @Component({
-  selector: "app-confirm-email",
+  selector: "gt-confirm-email",
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

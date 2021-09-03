@@ -12,7 +12,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
 
 @Component({
-  selector: "app-member-detail",
+  selector: "gt-member-detail",
   templateUrl: "./member-detail.component.html",
   styleUrls: ["./member-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

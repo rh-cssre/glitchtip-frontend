@@ -1,16 +1,16 @@
-<div class="auth-form-wrapper">
+<div class="auth-form-wrapper" cdkFocusRegionStart>
   <mat-card class="auth-form">
     <h1>Login</h1>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <app-form-error [error]="error"></app-form-error>
+        <gt-form-error [error]="error"></gt-form-error>
         <mat-form-field class="full-width">
           <input
             matInput
+            autofocus
             type="email"
             placeholder="Email"
             formControlName="email"
-            [errorStateMatcher]="matcher"
           />
           <mat-error *ngIf="email?.errors">
             <span *ngIf="email?.errors?.required"
@@ -30,7 +30,6 @@
             type="password"
             placeholder="Password"
             formControlName="password"
-            [errorStateMatcher]="matcher"
           />
           <mat-error *ngIf="password?.errors">
             <span *ngIf="password?.errors?.minlength"
@@ -56,11 +55,11 @@
             class="full-width margin"
             (click)="onSocialApp(socialApp)"
           >
-            <app-auth-svg
+            <gt-auth-svg
               source="auth"
               text="Log in with {{ socialApp.name }}"
               [provider]="socialApp.provider"
-            ></app-auth-svg>
+            ></gt-auth-svg>
           </button>
         </div>
       </ng-container>
@@ -75,3 +74,4 @@
     </mat-card-content>
   </mat-card>
 </div>
+<div cdkFocusRegionEnd></div>

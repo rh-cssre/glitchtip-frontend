@@ -3,7 +3,7 @@ import { isStacktrace } from "src/app/issues/utils";
 import { IssueDetailService } from "../../../issue-detail.service";
 
 @Component({
-  selector: "app-raw-stacktrace",
+  selector: "gt-raw-stacktrace",
   templateUrl: "./raw-stacktrace.component.html",
   styleUrls: ["./raw-stacktrace.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

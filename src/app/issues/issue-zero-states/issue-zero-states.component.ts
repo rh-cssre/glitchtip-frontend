@@ -12,7 +12,7 @@ import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.ser
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 
 @Component({
-  selector: "app-issue-zero-states",
+  selector: "gt-issue-zero-states",
   templateUrl: "./issue-zero-states.component.html",
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

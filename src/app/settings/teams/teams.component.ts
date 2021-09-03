@@ -7,7 +7,7 @@ import { NewTeamComponent } from "./new-team/new-team.component";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
-  selector: "app-teams",
+  selector: "gt-teams",
   templateUrl: "./teams.component.html",
   styleUrls: ["./teams.component.scss"],
 })

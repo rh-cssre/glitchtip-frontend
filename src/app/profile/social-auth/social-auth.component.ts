@@ -6,7 +6,7 @@ import { UserService } from "src/app/api/user/user.service";
 import { SocialApp } from "../../api/user/user.interfaces";
 
 @Component({
-  selector: "app-social-auth",
+  selector: "gt-social-auth",
   templateUrl: "./social-auth.component.html",
   styleUrls: ["./social-auth.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

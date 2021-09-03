@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 import { JsonArrayOrObject, Json } from "src/app/interface-primitives";
 
 @Component({
-  selector: "app-frame-expanded",
+  selector: "gt-frame-expanded",
   templateUrl: "./frame-expanded.component.html",
   styleUrls: ["./frame-expanded.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -12,11 +12,11 @@
               *ngFor="let socialApp of socialApps"
               [value]="socialApp"
             >
-              <app-auth-svg
+              <gt-auth-svg
                 source="dropdown"
                 [provider]="socialApp.provider"
                 [text]="socialApp.name"
-              ></app-auth-svg>
+              ></gt-auth-svg>
             </mat-option>
           </mat-select> </mat-form-field
       ></ng-container>
@@ -44,7 +44,7 @@
               (click)="disconnect(socialAccount.id)"
               [disabled]="(disconnectLoading$ | async) === socialAccount.id"
             >
-              <app-auth-svg
+              <gt-auth-svg
                 [loading]="(disconnectLoading$ | async) === socialAccount.id"
                 source="disconnect"
                 text="Disconnect
@@ -54,7 +54,7 @@
                     : socialAccount.email
                 }}"
                 [provider]="socialAccount.provider"
-              ></app-auth-svg></button
+              ></gt-auth-svg></button
           ></ng-container></div
       ></ng-template>
     </mat-card-content>

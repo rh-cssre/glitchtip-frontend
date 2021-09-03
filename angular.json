@@ -21,7 +21,7 @@
         },
         "@schematics/angular:directive": {
           "lintFix": true,
-          "prefix": "app"
+          "prefix": "gt"
         },
         "@schematics/angular:application": {
           "strict": true
@@ -29,7 +29,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "gt",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

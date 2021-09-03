@@ -6,6 +6,7 @@
  */
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "./material.module";
 import { DaysAgoPipe, DaysOldPipe } from "./days-ago.pipe";
@@ -21,7 +22,7 @@ import { ToDoItemComponent } from "./to-do-item/to-do-item.component";
 import { FormErrorComponent } from "./forms/form-error/form-error.component";
 
 @NgModule({
-  imports: [CommonModule, MaterialModule, RouterModule],
+  imports: [CommonModule, MaterialModule, RouterModule, ReactiveFormsModule],
   declarations: [
     DaysAgoPipe,
     DaysOldPipe,

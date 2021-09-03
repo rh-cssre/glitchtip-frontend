@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { IssueDetailService } from "../../issue-detail.service";
 
 @Component({
-  selector: "app-contexts",
+  selector: "gt-contexts",
   templateUrl: "./contexts.component.html",
   styleUrls: ["./contexts.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

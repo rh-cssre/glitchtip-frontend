@@ -2,7 +2,11 @@
   <mat-card>
     <mat-card-header class="flex-space-between">
       <mat-card-title>Auth Tokens</mat-card-title>
-      <a mat-flat-button [routerLink]="['/profile', 'auth-tokens', 'new']" color="primary">
+      <a
+        mat-flat-button
+        [routerLink]="['/profile', 'auth-tokens', 'new']"
+        color="primary"
+      >
         Create New Token
       </a>
     </mat-card-header>
@@ -22,22 +26,35 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       <ng-container *ngIf="(authTokens$ | async)?.length; else emptyState">
-        <div class="content-wrapper" *ngFor="let authToken of authTokens$ | async; let i = index">
+        <div
+          class="content-wrapper"
+          *ngFor="let authToken of authTokens$ | async; let i = index"
+        >
           <h3 class="label">{{ authToken.label }}</h3>
           <div class="loading-wrapper">
-            <app-copy-input class="token" [value]="authToken.token"></app-copy-input>
-            <app-loading-button (click)="deleteAuthToken(authToken.id)"
-              [loading]="authToken.id === (deleteLoading$ | async)" buttonText="Delete" buttonStyle="stroked">
-            </app-loading-button>
+            <gt-copy-input
+              class="token"
+              [value]="authToken.token"
+            ></gt-copy-input>
+            <gt-loading-button
+              (click)="deleteAuthToken(authToken.id)"
+              [loading]="authToken.id === (deleteLoading$ | async)"
+              buttonText="Delete"
+              buttonStyle="stroked"
+            >
+            </gt-loading-button>
           </div>
           <p class="scopes">
             <span class="mat-body-strong">Scopes</span>
             <span class="scopes__list-wrapper">
               <span *ngFor="let scope of authToken.scopes; let i = index">{{
                 scope
-                }}</span></span>
+              }}</span></span
+            >
           </p>
-          <mat-divider *ngIf="(authTokens$ | async)?.length !== i + 1"></mat-divider>
+          <mat-divider
+            *ngIf="(authTokens$ | async)?.length !== i + 1"
+          ></mat-divider>
         </div>
       </ng-container>
       <ng-template #emptyState>

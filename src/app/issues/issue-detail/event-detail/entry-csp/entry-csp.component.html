@@ -18,7 +18,7 @@
   <div *ngIf="group.value === 'report-csp'">
     <h4>{{ csp?.effective_directive }}</h4>
     <dl *ngFor="let data of csp | keyvalue">
-      <app-entry-data [key]="data.key" [value]="data.value"></app-entry-data>
+      <gt-entry-data [key]="data.key" [value]="data.value"></gt-entry-data>
     </dl>
   </div>
   <div *ngIf="group.value === 'raw-csp'">

@@ -57,22 +57,22 @@
               [class.disabled-panel]="!frame.context?.length && !frame.vars"
               [class.highlighted]="frame.inApp"
             >
-              <app-frame-title
+              <gt-frame-title
                 [frame]="frame"
                 [eventPlatform]="eventPlatform"
-              ></app-frame-title>
+              ></gt-frame-title>
             </mat-expansion-panel-header>
-            <app-frame-expanded
+            <gt-frame-expanded
               [lineNo]="frame.lineNo"
               [context]="frame.context"
               [vars]="frame.vars"
-            ></app-frame-expanded>
+            ></gt-frame-expanded>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
     </div>
     <div *ngIf="group.value === 'raw' && exception.values">
-      <app-raw-stacktrace [eventPlatform]="eventPlatform"></app-raw-stacktrace>
+      <gt-raw-stacktrace [eventPlatform]="eventPlatform"></gt-raw-stacktrace>
     </div>
   </section>
 </section>

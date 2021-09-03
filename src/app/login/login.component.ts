@@ -5,13 +5,12 @@ import { LoginService } from "./login.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
-import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
 import { SocialApp } from "../api/user/user.interfaces";
 import { AuthService } from "../api/auth/auth.service";
 import { ServerError } from "../shared/django.interfaces";
 
 @Component({
-  selector: "app-login",
+  selector: "gt-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
 })
@@ -25,7 +24,6 @@ export class LoginComponent implements OnInit {
       Validators.minLength(8),
     ]),
   });
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   socialApps$ = this.settings.socialApps$;
   enableUserRegistration$ = this.settings.enableUserRegistration$;

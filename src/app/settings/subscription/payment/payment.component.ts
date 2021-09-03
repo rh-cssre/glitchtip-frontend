@@ -8,7 +8,7 @@ import { Plan } from "src/app/api/subscriptions/subscriptions.interfaces";
 import { StripeService } from "../stripe.service";
 
 @Component({
-  selector: "app-payment",
+  selector: "gt-payment",
   templateUrl: "./payment.component.html",
   styleUrls: ["./payment.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

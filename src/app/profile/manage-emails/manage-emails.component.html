@@ -19,7 +19,7 @@
           </mat-chip-list>
         </div>
         <div class="email-actions">
-          <app-loading-button
+          <gt-loading-button
             *ngIf="!email.isVerified"
             buttonText="Resend confirmation"
             [loading]="
@@ -27,14 +27,14 @@
             "
             (click)="resendConfirmation(email.email)"
             buttonStyle="stroked"
-          ></app-loading-button>
-          <app-loading-button
+          ></gt-loading-button>
+          <gt-loading-button
             *ngIf="!email.isPrimary && email.isVerified"
             buttonText="Make primary"
             [loading]="(loadingStates$ | async)?.makePrimary === email.email"
             (click)="makePrimary(email.email)"
             buttonStyle="stroked"
-          ></app-loading-button>
+          ></gt-loading-button>
           <div
             *ngIf="(loadingStates$ | async)?.delete === email.email"
             class="delete-spinner-container"
@@ -73,7 +73,6 @@
             type="email"
             placeholder="Email Address"
             formControlName="email_address"
-            [errorStateMatcher]="matcher"
           />
           <mat-error>
             <span
@@ -91,10 +90,10 @@
             </span>
           </mat-error>
         </mat-form-field>
-        <app-loading-button
+        <gt-loading-button
           buttonText="Add Email Address"
           [loading]="(loadingStates$ | async)?.add"
-        ></app-loading-button>
+        ></gt-loading-button>
       </div>
       <mat-error class="server-error" *ngIf="(addEmailError$ | async) !== ''">
         {{ addEmailError$ | async }}

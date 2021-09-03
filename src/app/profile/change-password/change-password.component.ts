@@ -13,7 +13,7 @@ import { map, take, mergeMap, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 
 @Component({
-  selector: "app-change-password",
+  selector: "gt-change-password",
   templateUrl: "./change-password.component.html",
   styleUrls: ["./change-password.component.scss"],
 })

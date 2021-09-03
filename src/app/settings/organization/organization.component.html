@@ -13,14 +13,14 @@
             <input matInput formControlName="name" [value]="activeOrg.name" />
             <mat-error *ngIf="updateError">{{ updateError }}</mat-error>
           </mat-form-field>
-          <app-loading-button
+          <gt-loading-button
             [disabled]="name?.value === activeOrg.name"
             mat-flat-button
             color="primary"
             buttonText="Update Name"
             id="update-org"
           >
-          </app-loading-button>
+          </gt-loading-button>
         </form>
       </mat-card-content>
     </mat-card>
@@ -35,14 +35,14 @@
           </p>
           <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
         </div>
-        <app-loading-button
+        <gt-loading-button
           data-test
           buttonText="Delete Organization"
           [loading]="deleteLoading"
           (click)="removeOrganization(activeOrg.slug, activeOrg.name)"
           id="delete-org"
         >
-        </app-loading-button>
+        </gt-loading-button>
       </mat-card-content>
     </mat-card>
   </ng-container>

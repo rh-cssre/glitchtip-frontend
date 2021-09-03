@@ -10,7 +10,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { ProjectsService } from "src/app/projects/projects.service";
 
 @Component({
-  selector: "app-project-list",
+  selector: "gt-project-list",
   templateUrl: "./project-list.component.html",
   styleUrls: ["./project-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

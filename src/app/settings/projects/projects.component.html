@@ -6,14 +6,14 @@
     </a>
   </header>
   <div *ngIf="projectsForActiveOrg$ | async as projects">
-    <app-empty-projects
+    <gt-empty-projects
       *ngIf="projects.length === 0"
       [activeOrgOnly]="true"
-    ></app-empty-projects>
+    ></gt-empty-projects>
   </div>
 
   <div class="card-wrapper">
-    <app-project-card
+    <gt-project-card
       *ngFor="let project of projectsForActiveOrg$ | async"
       [cardLink]="project.slug"
       [title]="project.name"
@@ -27,6 +27,6 @@
         icon: 'settings',
         text: 'Settings'
       }"
-    ></app-project-card>
+    ></gt-project-card>
   </div>
 </section>

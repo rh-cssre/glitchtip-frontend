@@ -1,0 +1,27 @@
+import { moduleMetadata } from "@storybook/angular";
+import { Meta } from "@storybook/angular/types-6-0";
+import { SharedModule } from "src/app/shared/shared.module";
+import { FormErrorComponent } from "./form-error.component";
+
+export default {
+  title: "shared/forms/form-error",
+  component: FormErrorComponent,
+  decorators: [moduleMetadata({ imports: [SharedModule] })],
+} as Meta;
+
+export const One = () => ({
+  props: {
+    error: { non_field_errors: ["Something went wrong"] },
+  },
+});
+
+export const Many = () => ({
+  props: {
+    error: {
+      non_field_errors: [
+        "Something went wrong",
+        "Another thing went wrong too",
+      ],
+    },
+  },
+});

@@ -33,12 +33,12 @@
             ></mat-error
           >
         </mat-form-field>
-        <app-loading-button
+        <gt-loading-button
           [disabled]="name?.value === project.name"
           buttonText="Update Name"
           id="update-project-name"
         >
-        </app-loading-button>
+        </gt-loading-button>
       </form>
       <mat-error class="server-error" *ngIf="updatePlatformError">
         {{ updatePlatformError }}
@@ -48,10 +48,10 @@
         (ngSubmit)="updatePlatform(project.name)"
         class="platform-form"
       >
-        <app-platform-picker
+        <gt-platform-picker
           formControlName="platform"
           template="dropdown"
-        ></app-platform-picker>
+        ></gt-platform-picker>
         <a
           *ngIf="platform && platform.value !== ''"
           href="https://glitchtip.com/sdkdocs/{{ platform.value }}"
@@ -60,12 +60,12 @@
         >
           Platform Documentation
         </a>
-        <app-loading-button
+        <gt-loading-button
           [disabled]="platform?.value === project.platform"
           buttonText="Update Platform"
           id="update-project-platform"
         >
-        </app-loading-button>
+        </gt-loading-button>
       </form>
     </mat-card-content>
   </mat-card>
@@ -78,20 +78,20 @@
     </p>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <app-copy-input
+      <gt-copy-input
         [value]="projectKey.dsn.public"
         placeholder="DSN"
-      ></app-copy-input>
-      <app-copy-input
+      ></gt-copy-input>
+      <gt-copy-input
         [value]="projectKey.dsn.security"
         placeholder="Security Endpoint"
-      ></app-copy-input>
+      ></gt-copy-input>
     </mat-card-content>
   </mat-card>
 
-  <app-project-environments></app-project-environments>
+  <gt-project-environments></gt-project-environments>
 
-  <app-project-alerts></app-project-alerts>
+  <gt-project-alerts></gt-project-alerts>
 
   <mat-card>
     <mat-card-title>Personal Project Notifications</mat-card-title>
@@ -121,13 +121,13 @@
         </p>
         <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
       </div>
-      <app-loading-button
+      <gt-loading-button
         buttonText="Delete Project"
         [loading]="deleteLoading"
         (click)="deleteProject()"
         id="delete-project"
       >
-      </app-loading-button>
+      </gt-loading-button>
     </mat-card-content>
   </mat-card>
 </section>

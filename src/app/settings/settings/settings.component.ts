@@ -7,7 +7,7 @@ import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "src/app/main-nav/main-nav.service";
 
 @Component({
-  selector: "app-settings",
+  selector: "gt-settings",
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })

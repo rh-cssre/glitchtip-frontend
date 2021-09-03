@@ -23,11 +23,11 @@
         </span>
         / month
       </p>
-      <app-loading-button
+      <gt-loading-button
         buttonText="Select"
         [loading]="selectedSubscription === i"
         (click)="onSubmit(product.plans[0], i)"
-      ></app-loading-button>
+      ></gt-loading-button>
     </mat-card-content>
   </mat-card>
 </div>

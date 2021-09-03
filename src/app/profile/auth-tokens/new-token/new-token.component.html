@@ -23,12 +23,7 @@
         <p>Give your token a name, so you can easily identify it.</p>
         <mat-form-field>
           <mat-label>Label</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="label"
-            [errorStateMatcher]="matcher"
-          />
+          <input matInput type="text" formControlName="label" />
           <mat-error
             ><span *ngIf="label?.errors?.required"
               >Create a label for your auth token</span
@@ -57,10 +52,10 @@
             scopes?.errors?.serverErrorScopes
           }}</span></mat-error
         >
-        <app-loading-button
+        <gt-loading-button
           [loading]="(createLoading$ | async) === true"
           buttonText="Create Token"
-        ></app-loading-button>
+        ></gt-loading-button>
       </form>
     </mat-card-content>
   </mat-card>

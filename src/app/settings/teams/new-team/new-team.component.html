@@ -10,19 +10,19 @@
         <span *ngFor="let error of errors">{{ error }}</span>
       </mat-error>
       <mat-form-field>
-        <input matInput appSlugify formControlName="slug" placeholder="Slug" />
+        <input matInput gtSlugify formControlName="slug" placeholder="Slug" />
         <mat-error *ngIf="slug?.errors?.required">
           <span>Enter a valid slug to create a team</span>
         </mat-error>
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <app-loading-button
+      <gt-loading-button
         id="create-team-submit"
         buttonText="Create Team"
         [loading]="loading"
       >
-      </app-loading-button>
+      </gt-loading-button>
       <button type="button" mat-flat-button (click)="closeDialog()">
         Cancel
       </button>

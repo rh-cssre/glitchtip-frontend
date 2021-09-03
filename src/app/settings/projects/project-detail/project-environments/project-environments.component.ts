@@ -3,7 +3,7 @@ import { ProjectEnvironment } from "src/app/api/organizations/organizations.inte
 import { ProjectEnvironmentsService } from "./project-environments.service";
 
 @Component({
-  selector: "app-project-environments",
+  selector: "gt-project-environments",
   templateUrl: "./project-environments.component.html",
   styleUrls: ["./project-environments.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

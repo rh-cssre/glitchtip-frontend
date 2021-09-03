@@ -53,7 +53,7 @@
     </nav>
   </section>
   <mat-divider *ngIf="event?.contexts || event?.user"></mat-divider>
-  <app-contexts></app-contexts>
+  <gt-contexts></gt-contexts>
   <mat-divider></mat-divider>
 
   <section class="tags" *ngIf="event?.tags && event.tags.length > 0">
@@ -73,14 +73,14 @@
     </ul>
   </section>
 
-  <app-entry-message></app-entry-message>
-  <app-entry-exception
+  <gt-entry-message></gt-entry-message>
+  <gt-entry-exception
     [eventTitle]="event?.title"
     [eventPlatform]="event?.platform"
-  ></app-entry-exception>
-  <app-entry-csp></app-entry-csp>
-  <app-entry-breadcrumbs></app-entry-breadcrumbs>
-  <app-entry-request></app-entry-request>
+  ></gt-entry-exception>
+  <gt-entry-csp></gt-entry-csp>
+  <gt-entry-breadcrumbs></gt-entry-breadcrumbs>
+  <gt-entry-request></gt-entry-request>
   <section *ngFor="let context of event.contexts | keyvalue">
     <mat-divider></mat-divider>
     <h3>
@@ -93,11 +93,11 @@
     </h3>
     <dl>
       <ng-container *ngFor="let context_entry of context.value | keyvalue">
-        <app-entry-data
+        <gt-entry-data
           *ngIf="context_entry.key !== 'type'"
           [key]="context_entry.key"
           [value]="context_entry.value"
-        ></app-entry-data>
+        ></gt-entry-data>
       </ng-container>
     </dl>
   </section>
@@ -106,23 +106,23 @@
     <mat-divider></mat-divider>
     <h3>Additional Data</h3>
     <dl>
-      <app-entry-data
+      <gt-entry-data
         *ngFor="let context of event.context | keyvalue"
         [key]="context.key"
         [value]="context.value | json"
       >
-      </app-entry-data>
+      </gt-entry-data>
     </dl>
   </section>
   <section *ngIf="event?.sdk">
     <mat-divider></mat-divider>
     <h3>SDK</h3>
     <dl>
-      <app-entry-data key="name" [value]="event?.sdk?.name"></app-entry-data>
-      <app-entry-data
+      <gt-entry-data key="name" [value]="event?.sdk?.name"></gt-entry-data>
+      <gt-entry-data
         key="version"
         [value]="event?.sdk?.version"
-      ></app-entry-data>
+      ></gt-entry-data>
     </dl>
   </section>
 </section>

@@ -6,7 +6,7 @@ import { map, take } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
-  selector: "app-team-settings",
+  selector: "gt-team-settings",
   templateUrl: "./team-settings.component.html",
   styleUrls: ["./team-settings.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -17,25 +17,25 @@
 
           <div *ngIf="member.pending" class="invite-status">
             <p class="pending">Pending</p>
-            <app-loading-button
+            <gt-loading-button
               *ngIf="!member.loadingResendInvite && !member.sentResendInvite"
               class="resend-invite"
               [loading]="member.loadingResendInvite"
               buttonText="Resend Invite"
               (click)="resendInvite(member.id)"
             >
-            </app-loading-button>
+            </gt-loading-button>
             <span *ngIf="member.sentResendInvite">Invite Sent</span>
           </div>
 
           <div class="role">{{ member.roleName }}</div>
 
-          <app-loading-button
+          <gt-loading-button
             class="remove-button"
             (click)="removeMember(member)"
             [buttonText]="member.isMe ? 'Leave' : 'Remove'"
             buttonStyle="stroked"
-          ></app-loading-button>
+          ></gt-loading-button>
         </div>
       </div>
     </mat-card-content>

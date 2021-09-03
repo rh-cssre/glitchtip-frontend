@@ -18,7 +18,7 @@ import {
 import { map, startWith } from "rxjs/operators";
 
 @Component({
-  selector: "app-platform-picker",
+  selector: "gt-platform-picker",
   templateUrl: "./platform-picker.component.html",
   styleUrls: ["./platform-picker.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
