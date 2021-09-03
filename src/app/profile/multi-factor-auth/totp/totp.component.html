@@ -1,0 +1,118 @@
+<mat-card>
+  <mat-card-title
+    >TOTP authentication</mat-card-title
+  >
+  <mat-card-content>
+    <ng-container *ngIf="TOTPKey$ | async as TOTPKey; else TOTPDisabled">
+      <p>TOTP authentication is currently enabled on your account.</p>
+      <button mat-flat-button color="primary" (click)="deleteKey(TOTPKey.id)">
+        Disable two-factor authentication
+      </button>
+    </ng-container>
+    <ng-template #TOTPDisabled>
+      <p class="mat-h3">
+        Make your account more secure by requiring a time-based one time password (TOTP) code after you log in.
+      </p>
+      <p class="mat-body-1">
+        If you ever lose access to your codes, you can recover your account with
+        your <strong>backup code</strong>.
+      </p>
+
+      <div class="totp-process" *ngIf="step$ | async as step">
+        <div *ngIf="step === 1">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="incrementStep()"
+          >
+            Get Started
+          </button>
+        </div>
+        <app-to-do-item
+          [isDone]="getStepIsDone(2, step)"
+          title="Download authenticator app"
+        ></app-to-do-item>
+        <div>
+        <div *ngIf="step === 2">
+          <div class="mat-h3">Download
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://authy.com/download/"
+              >Authy</a
+            >,
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+              >Google Authenticator</a
+            >,
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://play.google.com/store/apps/details?id=me.jmh.authenticatorpro"
+              >Authenticator Pro</a
+            >, or your favorite TOTP app on your mobile device.
+          </div>
+          <div class="mat-h4">
+            Once you have the app running, proceed to the next step.
+          </div>
+          <div>
+            <button mat-flat-button color="primary" (click)="incrementStep()">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+        <app-to-do-item
+          [isDone]="getStepIsDone(3, step)"
+          title="Scan QR code"
+        ></app-to-do-item>
+        <div *ngIf="step === 3">
+          <div>
+            <p class="mat-h3">Scan the QR Code in your authenticator app or enter the code below:</p>
+          </div>
+          <canvas #canvas id="canvas"></canvas>
+          <div *ngIf="TOTP$ | async as TOTP">
+            <span class="totp-string">{{ TOTP.secret_key }}</span>
+          </div>
+          <button mat-flat-button color="primary" (click)="incrementStep()">
+            Next
+          </button>
+        </div>
+        <app-to-do-item
+          [isDone]="getStepIsDone(4, step)"
+          title="Enter TOTP"
+        ></app-to-do-item>
+        <div *ngIf="step === 4">
+          <form [formGroup]="codeForm" (ngSubmit)="enableTOTP()">
+            <app-form-error [error]="error$ | async"></app-form-error>
+            <mat-form-field>
+              <mat-label>6-digit Code</mat-label>
+              <input
+                matInput
+                formControlName="code"
+                pattern="\d*"
+                maxlength="6"
+              />
+              <mat-error *ngIf="code?.invalid">
+                <span *ngIf="code?.errors?.required">Required</span>
+                <span *ngIf="code?.errors?.minlength || code?.errors?.maxlength"
+                  >Code must be 6 digits</span
+                >
+              </mat-error>
+            </mat-form-field>
+            <div>
+              <p class="mat-body-1">Enter the six-digit TOTP code generated in your authenticator app, and submit this form to enable TOTP authentication.</p>
+            </div>
+            <div>
+              <button id="submit" mat-flat-button color="primary">
+                Enable TOTP authentication
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

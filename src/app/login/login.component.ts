@@ -8,6 +8,7 @@ import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { LessAnnoyingErrorStateMatcher } from "../shared/less-annoying-error-state-matcher";
 import { SocialApp } from "../api/user/user.interfaces";
 import { AuthService } from "../api/auth/auth.service";
+import { ServerError } from "../shared/django.interfaces";
 
 @Component({
   selector: "app-login",
@@ -16,7 +17,7 @@ import { AuthService } from "../api/auth/auth.service";
 })
 export class LoginComponent implements OnInit {
   loading = false;
-  error?: string;
+  error?: ServerError;
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [
@@ -82,13 +83,13 @@ export class LoginComponent implements OnInit {
           (err) => {
             this.loading = false;
             if (err.status === 400 && err.error.non_field_errors) {
-              this.error = err.error.non_field_errors;
+              this.error = err.error;
             } else if (err.status === 400 && err.error.email) {
               this.email?.setErrors({ serverError: err.error.email });
             } else if (err.status === 400 && err.error.password) {
               this.password?.setErrors({ serverError: err.error.password });
             } else {
-              this.error = "Error";
+              this.error = { non_field_errors: ["Error"] };
             }
           }
         );

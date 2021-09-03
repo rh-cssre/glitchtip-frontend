@@ -46,6 +46,7 @@
     "@stripe/stripe-js": "^1.16.0",
     "date-fns": "^2.23.0",
     "ngx-markdown": "^12.0.1",
+    "qrcode": "^1.4.4",
     "rxjs": "^6.5.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
@@ -58,6 +59,7 @@
     "@babel/core": "^7.7.2",
     "@compodoc/compodoc": "^1.1.11",
     "@cypress/webpack-preprocessor": "^5.7.0",
+    "@storybook/addon-a11y": "^6.3.7",
     "@storybook/addon-actions": "~6.3.4",
     "@storybook/addon-essentials": "~6.3.4",
     "@storybook/addon-knobs": "~6.3.0",
@@ -70,6 +72,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
+    "@types/qrcode": "^1.4.1",
     "babel-loader": "^8.0.6",
     "codelyzer": "^6.0.1",
     "concurrently": "^6.0.0",

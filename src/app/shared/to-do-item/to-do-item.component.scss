@@ -1,0 +1,22 @@
+.todo-list-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 16pt;
+}
+
+.icon-align {
+  display: flex;
+  align-items: center;
+}
+
+span {
+  font-weight: bold;
+}
+
+.is-not-done {
+  color: #e22a46;
+}
+
+.is-done {
+  color: #54A65A;
+}

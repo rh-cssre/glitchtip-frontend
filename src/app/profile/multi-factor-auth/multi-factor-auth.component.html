@@ -1,12 +1,4 @@
-<section class="l-body">
-  <mat-card>
-    <mat-card-title>Multi-Factor Authentication</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      Keys:
-      <ng-container *ngFor="let key of userKeys$ | async">
-        {{ key.name }}
-      </ng-container>
-    </mat-card-content>
-  </mat-card>
+<section class="l-body" *ngIf="initialLoad$ | async">
+  <app-totp></app-totp>
+  <app-fido2></app-fido2>
 </section>

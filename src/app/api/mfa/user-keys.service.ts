@@ -2,16 +2,18 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 
+type UserKeyType = "FIDO2" | "TOTP" | "Trusted Device" | "Backup Codes";
+
 export interface UserKey {
   id: number;
   user: number;
   name: string;
   created: string;
-  key_type: string;
+  key_type: UserKeyType;
   last_used: string;
 }
 
-interface TOTPReponse {
+export interface TOTPResponse {
   provisioning_uri: string;
   secret_key: string;
 }
@@ -59,7 +61,7 @@ export class UserKeysService extends APIBaseService {
   }
 
   totp() {
-    return this.http.get<TOTPReponse>(this.totpUrl);
+    return this.http.get<TOTPResponse>(this.totpUrl);
   }
 
   totpCreate(data: TOTPRequest) {
