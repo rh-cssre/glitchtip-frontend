@@ -56,7 +56,7 @@ mat-card {
     row-gap: 20px;
     padding-top: 15px;
 
-    app-platform-picker {
+    gt-platform-picker {
       grid-area: topLeft;
     }
 
@@ -64,7 +64,7 @@ mat-card {
       grid-area: bottomLeft;
     }
 
-    app-loading-button {
+    gt-loading-button {
       grid-area: rightCol;
       margin-top: 25px;
     }
@@ -97,6 +97,6 @@ mat-card {
   display: block;
 }
 
-app-loading-button ::ng-deep button {
+gt-loading-button ::ng-deep button {
   width: 140px;
 }
