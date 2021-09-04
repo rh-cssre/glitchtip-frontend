@@ -1,11 +1,18 @@
-import { MatIconModule } from "@angular/material/icon";
-import { Meta, moduleMetadata } from "@storybook/angular";
+import {
+  componentWrapperDecorator,
+  Meta,
+  moduleMetadata,
+} from "@storybook/angular";
+import { SharedModule } from "../shared.module";
 import { ToDoItemComponent } from "./to-do-item.component";
 
 export default {
   title: "shared/to-do-item",
   component: ToDoItemComponent,
-  decorators: [moduleMetadata({ imports: [MatIconModule] })],
+  decorators: [
+    moduleMetadata({ imports: [SharedModule] }),
+    componentWrapperDecorator((story) => `<mat-card>${story}</mat-card>`),
+  ],
 } as Meta;
 
 export const NotDone = () => ({

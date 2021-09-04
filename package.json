@@ -41,7 +41,7 @@
     "@browser-logos/opera": "^1.1.11",
     "@browser-logos/safari": "^2.0.0",
     "@browser-logos/safari-ios": "^1.0.15",
-    "@egoistdeveloper/operating-system-logos": "^1.0.0",
+    "@egoistdeveloper/operating-system-logos": "~1.0.0",
     "@sentry/angular": "^6.10.0",
     "@stripe/stripe-js": "^1.16.0",
     "date-fns": "^2.23.0",
