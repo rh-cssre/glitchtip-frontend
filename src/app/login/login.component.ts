@@ -6,8 +6,6 @@ import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SocialApp } from "../api/user/user.interfaces";
-import { AuthService } from "../api/auth/auth.service";
-import { ServerError } from "../shared/django.interfaces";
 
 @Component({
   selector: "gt-login",
@@ -15,8 +13,9 @@ import { ServerError } from "../shared/django.interfaces";
   styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-  loading = false;
-  error?: ServerError;
+  loading$ = this.loginService.loading$;
+  error$ = this.loginService.error$;
+  requiresMFA$ = this.loginService.requiresMFA$;
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [
@@ -31,7 +30,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private authService: AuthService,
     private oauthService: GlitchTipOAuthService,
     private settings: SettingsService,
     private acceptService: AcceptInviteService
@@ -47,6 +45,13 @@ export class LoginComponent implements OnInit {
         })
       )
       .subscribe();
+    this.error$.subscribe((error) => {
+      if (error?.email) {
+        this.email?.setErrors({ serverError: error.email });
+      } else if (error?.password) {
+        this.password?.setErrors({ serverError: error.password });
+      }
+    });
   }
 
   get email() {
@@ -71,26 +76,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.loading = true;
       this.loginService
         .login(this.form.value.email, this.form.value.password)
-        .subscribe(
-          () => {
-            this.authService.afterLogin();
-          },
-          (err) => {
-            this.loading = false;
-            if (err.status === 400 && err.error.non_field_errors) {
-              this.error = err.error;
-            } else if (err.status === 400 && err.error.email) {
-              this.email?.setErrors({ serverError: err.error.email });
-            } else if (err.status === 400 && err.error.password) {
-              this.password?.setErrors({ serverError: err.error.password });
-            } else {
-              this.error = { non_field_errors: ["Error"] };
-            }
-          }
-        );
+        .subscribe();
     }
   }
 }

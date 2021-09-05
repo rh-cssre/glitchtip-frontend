@@ -1,0 +1,22 @@
+<h1>Log in with authenticator app</h1>
+<mat-card-content>
+  Enter the code from the authenticator app on your mobile device. If you’ve
+  lost your device, you may enter one of your recovery codes.
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <gt-form-error [error]="error$ | async"></gt-form-error>
+    <mat-form-field>
+      <mat-label>6-digit Code</mat-label>
+      <input matInput formControlName="code" pattern="\d*" maxlength="6" />
+      <mat-error *ngIf="code?.invalid">
+        <span *ngIf="code?.errors?.required">Required</span>
+        <span *ngIf="code?.errors?.minlength || code?.errors?.maxlength"
+          >Code must be 6 digits</span
+        >
+      </mat-error>
+    </mat-form-field>
+    <div>
+      <button id="submit" mat-flat-button color="primary">Login</button>
+    </div>
+  </form>
+</mat-card-content>
