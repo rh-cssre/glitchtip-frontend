@@ -65,4 +65,28 @@ export class LoginService extends StatefulService<LoginState> {
       })
     );
   }
+
+  authenticateTOTP(code: string) {
+    const url = "/api/mfa/authenticate/totp/";
+    const data = {
+      otp: code,
+    };
+    this.setState({ loading: true, error: null });
+    return this.http.post(url, data).pipe(
+      tap(() => {
+        this.clearState();
+        this.authService.afterLogin();
+      }),
+      catchError((err) => {
+        let error: ServerError | null = null;
+        if (err.status === 400) {
+          error = { non_field_errors: err.error };
+        } else {
+          error = { non_field_errors: ["Error"] };
+        }
+        this.setState({ loading: false, error });
+        return EMPTY;
+      })
+    );
+  }
 }

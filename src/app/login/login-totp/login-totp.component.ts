@@ -24,5 +24,9 @@ export class LoginTotpComponent {
     return this.form.get("code");
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.form.valid && this.code) {
+      this.loginService.authenticateTOTP(this.code.value).subscribe();
+    }
+  }
 }
