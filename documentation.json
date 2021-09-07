@@ -2802,6 +2802,79 @@
             "methods": []
         },
         {
+            "name": "LoginResponse",
+            "id": "interface-LoginResponse-20574f9d6072a120762775b6d774c7df",
+            "file": "src/app/login/login.service.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "requires_mfa",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "valid_auth",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ValidAuth[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 163,
+            "methods": []
+        },
+        {
+            "name": "LoginState",
+            "id": "interface-LoginState-20574f9d6072a120762775b6d774c7df",
+            "file": "src/app/login/login.service.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "error",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ServerError | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "loading",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "validAuth",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ValidAuth[] | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 163,
+            "methods": []
+        },
+        {
             "name": "MainNavState",
             "id": "interface-MainNavState-f51baa13d926e1dac52946595d61ac1f",
             "file": "src/app/main-nav/main-nav.service.ts",
@@ -12569,10 +12642,108 @@
         },
         {
             "name": "LoginService",
-            "id": "injectable-LoginService-8d8c485091b1a31c86fdceb599d28e19",
+            "id": "injectable-LoginService-20574f9d6072a120762775b6d774c7df",
             "file": "src/app/login/login.service.ts",
-            "properties": [],
+            "properties": [
+                {
+                    "name": "error$",
+                    "defaultValue": "this.getState$.pipe(map((state) => state.error))",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 35
+                },
+                {
+                    "name": "loading$",
+                    "defaultValue": "this.getState$.pipe(map((state) => state.loading))",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 34
+                },
+                {
+                    "name": "requiresMFA$",
+                    "defaultValue": "this.getState$.pipe(map((state) => !!state.validAuth))",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 36
+                },
+                {
+                    "name": "getState$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Observable<TState>",
+                    "optional": false,
+                    "description": "",
+                    "line": 9,
+                    "inheritance": {
+                        "file": "StatefulService"
+                    }
+                },
+                {
+                    "name": "initialState",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TState",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "inheritance": {
+                        "file": "StatefulService"
+                    }
+                },
+                {
+                    "name": "state",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "BehaviorSubject<TState>",
+                    "optional": false,
+                    "description": "",
+                    "line": 8,
+                    "modifierKind": [
+                        121
+                    ],
+                    "inheritance": {
+                        "file": "StatefulService"
+                    }
+                }
+            ],
             "methods": [
+                {
+                    "name": "authenticateTOTP",
+                    "args": [
+                        {
+                            "name": "code",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 69,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "code",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
                 {
                     "name": "login",
                     "args": [
@@ -12592,7 +12763,7 @@
                     "optional": false,
                     "returnType": "any",
                     "typeParameters": [],
-                    "line": 13,
+                    "line": 41,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -12615,13 +12786,59 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "clearState",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "rawdescription": "\n\nSet state back to initial state\n",
+                    "description": "<p>Set state back to initial state</p>\n",
+                    "inheritance": {
+                        "file": "StatefulService"
+                    }
+                },
+                {
+                    "name": "setState",
+                    "args": [
+                        {
+                            "name": "newState",
+                            "type": "Partial<TState>",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 18,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "newState",
+                            "type": "Partial<TState>",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ],
+                    "inheritance": {
+                        "file": "StatefulService"
+                    }
                 }
             ],
             "deprecated": false,
             "deprecationMessage": "",
             "description": "",
             "rawdescription": "\n",
-            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { AuthState } from \"../api/auth/auth.service\";\n\nconst baseUrl = \"/rest-auth\";\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService {\n  constructor(private http: HttpClient) {}\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    return this.http.post<AuthState>(url, data);\n  }\n}\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -12633,9 +12850,15 @@
                         "type": "HttpClient",
                         "deprecated": false,
                         "deprecationMessage": ""
+                    },
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
                     }
                 ],
-                "line": 10,
+                "line": 36,
                 "jsdoctags": [
                     {
                         "name": "http",
@@ -12645,9 +12868,19 @@
                         "tagName": {
                             "text": "param"
                         }
+                    },
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
                     }
                 ]
             },
+            "extends": "StatefulService",
             "type": "injectable"
         },
         {
@@ -26356,7 +26589,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\nform {\n  padding-bottom: 8px;\n  .mat-form-field {\n    width: 88px;\n  }\n  app-loading-button {\n    margin-bottom: 8px;\n  }\n}\n\n// Move to global styles if we decide to implement in other places in app\n.tooltip {\n  text-decoration: underline;\n  text-decoration-style: dotted;\n  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);\n  cursor: help;\n}\n\n.mat-form-field {\n  margin-left: 12px;\n  margin-right: 12px;\n}\n\n.mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {\n  width: 150px;\n}\n\n.underline {\n  &::ng-deep .mat-button-toggle-label-content {\n    text-decoration: underline;\n  }\n}\n",
+                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\nform {\n  padding-bottom: 8px;\n  .mat-form-field {\n    width: 88px;\n  }\n  gt-loading-button {\n    margin-bottom: 8px;\n  }\n}\n\n// Move to global styles if we decide to implement in other places in app\n.tooltip {\n  text-decoration: underline;\n  text-decoration-style: dotted;\n  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);\n  cursor: help;\n}\n\n.mat-form-field {\n  margin-left: 12px;\n  margin-right: 12px;\n}\n\n.mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {\n  width: 150px;\n}\n\n.underline {\n  &::ng-deep .mat-button-toggle-label-content {\n    text-decoration: underline;\n  }\n}\n",
                     "styleUrl": "./alert-form.component.scss"
                 }
             ],
@@ -27977,7 +28210,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\n.exception {\n  margin-bottom: 16px;\n\n  .header-wrapper {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 8px;\n\n    @media screen and (max-width: $small - 1) {\n      flex-direction: column;\n    }\n  }\n  .text-wrapper {\n    display: flex;\n  }\n\n  .spacer {\n    margin-left: 8px;\n  }\n\n  .subtitle {\n    margin-bottom: 24px;\n  }\n\n  .yes {\n    border: 2px solid green;\n  }\n\n  .no {\n    border: 2px solid red;\n  }\n\n  .raw {\n    margin-top: 0;\n    margin-bottom: 0;\n  }\n\n  .full {\n    h2 {\n      margin-top: 0;\n      margin-bottom: 0;\n    }\n  }\n\n  mat-chip-list {\n    display: block;\n    margin-bottom: 24px;\n  }\n\n  mat-accordion::ng-deep .mat-expansion-panel-body {\n    padding-top: 16px;\n  }\n\n  mat-expansion-panel:not(:last-child) mat-expansion-panel-header {\n    margin-bottom: -1px;\n  }\n\n  mat-expansion-panel-header {\n    padding-top: 16px;\n    padding-bottom: 16px;\n    border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);\n\n    app-frame-title {\n      padding-right: 16px;\n    }\n  }\n\n  .disabled-panel {\n    color: mat.get-color-from-palette(mat.$gray-palette, 900);\n  }\n\n  .highlighted {\n    background: mat.get-color-from-palette(mat.$gray-palette, 100);\n  }\n}\n",
+                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\n.exception {\n  margin-bottom: 16px;\n\n  .header-wrapper {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 8px;\n\n    @media screen and (max-width: $small - 1) {\n      flex-direction: column;\n    }\n  }\n  .text-wrapper {\n    display: flex;\n  }\n\n  .spacer {\n    margin-left: 8px;\n  }\n\n  .subtitle {\n    margin-bottom: 24px;\n  }\n\n  .yes {\n    border: 2px solid green;\n  }\n\n  .no {\n    border: 2px solid red;\n  }\n\n  .raw {\n    margin-top: 0;\n    margin-bottom: 0;\n  }\n\n  .full {\n    h2 {\n      margin-top: 0;\n      margin-bottom: 0;\n    }\n  }\n\n  mat-chip-list {\n    display: block;\n    margin-bottom: 24px;\n  }\n\n  mat-accordion::ng-deep .mat-expansion-panel-body {\n    padding-top: 16px;\n  }\n\n  mat-expansion-panel:not(:last-child) mat-expansion-panel-header {\n    margin-bottom: -1px;\n  }\n\n  mat-expansion-panel-header {\n    padding-top: 16px;\n    padding-bottom: 16px;\n    border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);\n\n    gt-frame-title {\n      padding-right: 16px;\n    }\n  }\n\n  .disabled-panel {\n    color: mat.get-color-from-palette(mat.$gray-palette, 900);\n  }\n\n  .highlighted {\n    background: mat.get-color-from-palette(mat.$gray-palette, 100);\n  }\n}\n",
                     "styleUrl": "./entry-exception.component.scss"
                 }
             ],
@@ -28354,7 +28587,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\nsection {\n  margin-bottom: 16px;\n\n  h3 {\n    padding-top: 8px;\n  }\n}\n\n.header {\n  display: flex;\n  justify-content: space-between;\n\n  @media screen and (max-width: $small - 1) {\n    flex-direction: column-reverse;\n  }\n\n  .space {\n    margin-right: 16px;\n  }\n\n  p,\n  h2 {\n    margin-top: 0;\n    margin-bottom: 0;\n  }\n\n  .navigation-buttons {\n    @media screen and (max-width: $small - 1) {\n      margin: 0 auto 8px;\n    }\n  }\n}\n\n.tags {\n  margin-top: 16px;\n}\n\n.tags .spacer {\n  margin-left: 8px;\n}\n\napp-entry-request {\n  display: block;\n}\n\n.pseudo-chip-list {\n  margin: 4px 0 20px;\n  padding: 0;\n  overflow: hidden;\n\n  a {\n    display: inline-block;\n    width: 100%;\n    height: 100%;\n    text-decoration: none;\n  }\n}\n.pseudo-chip {\n  margin-top: 6px;\n  margin-right: 8px;\n  padding: 2px 12px;\n  border-radius: 16px;\n  border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 500);\n  background-color: #fefefe;\n  float: left;\n  list-style: none;\n  transition: 0.3s;\n\n  &:hover {\n    background: mat.get-color-from-palette(mat.$gray-palette, 100);\n  }\n}\n.pseudo-chip-key {\n  font-size: 0.8em;\n  padding-right: 10px;\n  opacity: 0.8;\n}\n.pseudo-chip-value {\n  vertical-align: -0.07em;\n}\n",
+                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\nsection {\n  margin-bottom: 16px;\n\n  h3 {\n    padding-top: 8px;\n  }\n}\n\n.header {\n  display: flex;\n  justify-content: space-between;\n\n  @media screen and (max-width: $small - 1) {\n    flex-direction: column-reverse;\n  }\n\n  .space {\n    margin-right: 16px;\n  }\n\n  p,\n  h2 {\n    margin-top: 0;\n    margin-bottom: 0;\n  }\n\n  .navigation-buttons {\n    @media screen and (max-width: $small - 1) {\n      margin: 0 auto 8px;\n    }\n  }\n}\n\n.tags {\n  margin-top: 16px;\n}\n\n.tags .spacer {\n  margin-left: 8px;\n}\n\ngt-entry-request {\n  display: block;\n}\n\n.pseudo-chip-list {\n  margin: 4px 0 20px;\n  padding: 0;\n  overflow: hidden;\n\n  a {\n    display: inline-block;\n    width: 100%;\n    height: 100%;\n    text-decoration: none;\n  }\n}\n.pseudo-chip {\n  margin-top: 6px;\n  margin-right: 8px;\n  padding: 2px 12px;\n  border-radius: 16px;\n  border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 500);\n  background-color: #fefefe;\n  float: left;\n  list-style: none;\n  transition: 0.3s;\n\n  &:hover {\n    background: mat.get-color-from-palette(mat.$gray-palette, 100);\n  }\n}\n.pseudo-chip-key {\n  font-size: 0.8em;\n  padding-right: 10px;\n  opacity: 0.8;\n}\n.pseudo-chip-value {\n  vertical-align: -0.07em;\n}\n",
                     "styleUrl": "./event-detail.component.scss"
                 }
             ],
@@ -29566,7 +29799,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@import \"variables\";\n\n.mat-h1 {\n  padding-right: 20px;\n}\n\n.issue-404 h1 {\n  text-align: left;\n}\n\nheader {\n  margin: -16px 0 5px;\n\n  @media screen and (max-width: $tablet - 1) {\n    margin-bottom: 20px;\n  }\n\n  .header-group {\n    display: flex;\n    justify-content: space-between;\n\n    @media screen and (max-width: $tablet - 1) {\n      flex-direction: column;\n    }\n  }\n\n  .button-row button {\n    margin-right: 8px;\n  }\n\n  app-issue-detail-title {\n    margin-right: 20px;\n  }\n}\n\ndl {\n  margin-top: 0;\n\n  > div {\n    margin-bottom: 15px;\n  }\n\n  // this was done to mimic a table I removed, design preferences\n  // aren't set in stone here\n  dt {\n    font-weight: 500;\n    opacity: 0.54;\n    margin: 2px 0;\n  }\n\n  dd {\n    margin: 0;\n  }\n}\n\n.event-detail-card {\n  margin-right: 16px;\n\n  @media screen and (max-width: $medium - 1) {\n    margin-right: 0;\n  }\n\n  > .tabbed-nav {\n    margin: -16px -16px 16px;\n  }\n}\n\nmat-grid-list {\n  height: 90vh;\n}\n\n.tags {\n  display: flex;\n  justify-content: space-between;\n}\n\n.row {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: 30px;\n\n  @media screen and (max-width: $medium - 1) {\n    flex-direction: column-reverse;\n  }\n\n  .left {\n    flex: 75%;\n    overflow: hidden;\n\n    @media screen and (max-width: $medium - 1) {\n      width: 100%;\n    }\n  }\n\n  .right {\n    flex: 25%;\n\n    @media screen and (max-width: $medium - 1) {\n      width: 100%;\n      margin-bottom: 30px;\n    }\n  }\n}\n\ntable.mat-table {\n  background: none;\n}\n\n.project-issues-link {\n  margin: 0 0 20px;\n}\n\n.report-badge > span {\n  text-overflow: initial;\n}\n",
+                    "data": "@import \"variables\";\n\n.mat-h1 {\n  padding-right: 20px;\n}\n\n.issue-404 h1 {\n  text-align: left;\n}\n\nheader {\n  margin: -16px 0 5px;\n\n  @media screen and (max-width: $tablet - 1) {\n    margin-bottom: 20px;\n  }\n\n  .header-group {\n    display: flex;\n    justify-content: space-between;\n\n    @media screen and (max-width: $tablet - 1) {\n      flex-direction: column;\n    }\n  }\n\n  .button-row button {\n    margin-right: 8px;\n  }\n\n  gt-issue-detail-title {\n    margin-right: 20px;\n  }\n}\n\ndl {\n  margin-top: 0;\n\n  > div {\n    margin-bottom: 15px;\n  }\n\n  // this was done to mimic a table I removed, design preferences\n  // aren't set in stone here\n  dt {\n    font-weight: 500;\n    opacity: 0.54;\n    margin: 2px 0;\n  }\n\n  dd {\n    margin: 0;\n  }\n}\n\n.event-detail-card {\n  margin-right: 16px;\n\n  @media screen and (max-width: $medium - 1) {\n    margin-right: 0;\n  }\n\n  > .tabbed-nav {\n    margin: -16px -16px 16px;\n  }\n}\n\nmat-grid-list {\n  height: 90vh;\n}\n\n.tags {\n  display: flex;\n  justify-content: space-between;\n}\n\n.row {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: 30px;\n\n  @media screen and (max-width: $medium - 1) {\n    flex-direction: column-reverse;\n  }\n\n  .left {\n    flex: 75%;\n    overflow: hidden;\n\n    @media screen and (max-width: $medium - 1) {\n      width: 100%;\n    }\n  }\n\n  .right {\n    flex: 25%;\n\n    @media screen and (max-width: $medium - 1) {\n      width: 100%;\n      margin-bottom: 30px;\n    }\n  }\n}\n\ntable.mat-table {\n  background: none;\n}\n\n.project-issues-link {\n  margin: 0 0 20px;\n}\n\n.report-badge > span {\n  text-overflow: initial;\n}\n",
                     "styleUrl": "./issue-detail.component.scss"
                 }
             ],
@@ -30907,7 +31140,7 @@
         },
         {
             "name": "LoginComponent",
-            "id": "component-LoginComponent-f799f9fdd05e222cecb329475488a64f",
+            "id": "component-LoginComponent-bd92ab390de566d45a928a4012b1eb43",
             "file": "src/app/login/login.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -30934,7 +31167,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 30
+                    "line": 29
                 },
                 {
                     "name": "enableUserRegistration$",
@@ -30944,16 +31177,17 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 29
+                    "line": 28
                 },
                 {
-                    "name": "error",
+                    "name": "error$",
+                    "defaultValue": "this.loginService.error$",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "type": "ServerError",
-                    "optional": true,
+                    "type": "",
+                    "optional": false,
                     "description": "",
-                    "line": 19
+                    "line": 17
                 },
                 {
                     "name": "form",
@@ -30963,11 +31197,21 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 20
+                    "line": 19
                 },
                 {
-                    "name": "loading",
-                    "defaultValue": "false",
+                    "name": "loading$",
+                    "defaultValue": "this.loginService.loading$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "requiresMFA$",
+                    "defaultValue": "this.loginService.requiresMFA$",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "",
@@ -30983,7 +31227,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 28
+                    "line": 27
                 }
             ],
             "methodsClass": [
@@ -30993,7 +31237,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 40,
+                    "line": 38,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -31010,7 +31254,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 60,
+                    "line": 65,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -31031,7 +31275,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 72,
+                    "line": 77,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -31043,11 +31287,11 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { FormGroup, FormControl, Validators } from \"@angular/forms\";\nimport { tap } from \"rxjs/operators\";\nimport { LoginService } from \"./login.service\";\nimport { GlitchTipOAuthService } from \"../api/oauth/oauth.service\";\nimport { SettingsService } from \"../api/settings.service\";\nimport { AcceptInviteService } from \"../api/accept/accept-invite.service\";\nimport { SocialApp } from \"../api/user/user.interfaces\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { ServerError } from \"../shared/django.interfaces\";\n\n@Component({\n  selector: \"gt-login\",\n  templateUrl: \"./login.component.html\",\n  styleUrls: [\"./login.component.scss\"],\n})\nexport class LoginComponent implements OnInit {\n  loading = false;\n  error?: ServerError;\n  form = new FormGroup({\n    email: new FormControl(\"\", [Validators.required, Validators.email]),\n    password: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(8),\n    ]),\n  });\n\n  socialApps$ = this.settings.socialApps$;\n  enableUserRegistration$ = this.settings.enableUserRegistration$;\n  acceptInfo$ = this.acceptService.acceptInfo$;\n\n  constructor(\n    private loginService: LoginService,\n    private authService: AuthService,\n    private oauthService: GlitchTipOAuthService,\n    private settings: SettingsService,\n    private acceptService: AcceptInviteService\n  ) {}\n\n  ngOnInit() {\n    this.acceptInfo$\n      .pipe(\n        tap((acceptInfo) => {\n          if (acceptInfo) {\n            this.form.patchValue({ email: acceptInfo.org_user.email });\n          }\n        })\n      )\n      .subscribe();\n  }\n\n  get email() {\n    return this.form.get(\"email\");\n  }\n\n  get password() {\n    return this.form.get(\"password\");\n  }\n\n  onSocialApp(socialApp: SocialApp) {\n    if (socialApp.provider === \"github\") {\n      this.oauthService.initGithubLogin(socialApp.client_id);\n    } else if (socialApp.provider === \"gitlab\") {\n      this.oauthService.initGitlabLogin(socialApp.client_id);\n    } else if (socialApp.provider === \"google\") {\n      this.oauthService.initGoogleLogin(socialApp.client_id);\n    } else if (socialApp.provider === \"microsoft\") {\n      this.oauthService.initMicrosoftLogin(socialApp.client_id);\n    }\n  }\n\n  onSubmit() {\n    if (this.form.valid) {\n      this.loading = true;\n      this.loginService\n        .login(this.form.value.email, this.form.value.password)\n        .subscribe(\n          () => {\n            this.authService.afterLogin();\n          },\n          (err) => {\n            this.loading = false;\n            if (err.status === 400 && err.error.non_field_errors) {\n              this.error = err.error;\n            } else if (err.status === 400 && err.error.email) {\n              this.email?.setErrors({ serverError: err.error.email });\n            } else if (err.status === 400 && err.error.password) {\n              this.password?.setErrors({ serverError: err.error.password });\n            } else {\n              this.error = { non_field_errors: [\"Error\"] };\n            }\n          }\n        );\n    }\n  }\n}\n",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { FormGroup, FormControl, Validators } from \"@angular/forms\";\nimport { tap } from \"rxjs/operators\";\nimport { LoginService } from \"./login.service\";\nimport { GlitchTipOAuthService } from \"../api/oauth/oauth.service\";\nimport { SettingsService } from \"../api/settings.service\";\nimport { AcceptInviteService } from \"../api/accept/accept-invite.service\";\nimport { SocialApp } from \"../api/user/user.interfaces\";\n\n@Component({\n  selector: \"gt-login\",\n  templateUrl: \"./login.component.html\",\n  styleUrls: [\"./login.component.scss\"],\n})\nexport class LoginComponent implements OnInit {\n  loading$ = this.loginService.loading$;\n  error$ = this.loginService.error$;\n  requiresMFA$ = this.loginService.requiresMFA$;\n  form = new FormGroup({\n    email: new FormControl(\"\", [Validators.required, Validators.email]),\n    password: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(8),\n    ]),\n  });\n\n  socialApps$ = this.settings.socialApps$;\n  enableUserRegistration$ = this.settings.enableUserRegistration$;\n  acceptInfo$ = this.acceptService.acceptInfo$;\n\n  constructor(\n    private loginService: LoginService,\n    private oauthService: GlitchTipOAuthService,\n    private settings: SettingsService,\n    private acceptService: AcceptInviteService\n  ) {}\n\n  ngOnInit() {\n    this.acceptInfo$\n      .pipe(\n        tap((acceptInfo) => {\n          if (acceptInfo) {\n            this.form.patchValue({ email: acceptInfo.org_user.email });\n          }\n        })\n      )\n      .subscribe();\n    this.error$.subscribe((error) => {\n      if (error?.email) {\n        this.email?.setErrors({ serverError: error.email });\n      } else if (error?.password) {\n        this.password?.setErrors({ serverError: error.password });\n      }\n    });\n  }\n\n  get email() {\n    return this.form.get(\"email\");\n  }\n\n  get password() {\n    return this.form.get(\"password\");\n  }\n\n  onSocialApp(socialApp: SocialApp) {\n    if (socialApp.provider === \"github\") {\n      this.oauthService.initGithubLogin(socialApp.client_id);\n    } else if (socialApp.provider === \"gitlab\") {\n      this.oauthService.initGitlabLogin(socialApp.client_id);\n    } else if (socialApp.provider === \"google\") {\n      this.oauthService.initGoogleLogin(socialApp.client_id);\n    } else if (socialApp.provider === \"microsoft\") {\n      this.oauthService.initMicrosoftLogin(socialApp.client_id);\n    }\n  }\n\n  onSubmit() {\n    if (this.form.valid) {\n      this.loginService\n        .login(this.form.value.email, this.form.value.password)\n        .subscribe();\n    }\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ".or {\n  margin-top: 16px;\n  margin-bottom: 16px;\n  text-align: center;\n}\n\n.margin {\n  margin-bottom: 8px;\n}\n",
+                    "data": ".or {\n  margin-top: 16px;\n  margin-bottom: 16px;\n  text-align: center;\n}\n\n.margin {\n  margin-bottom: 8px;\n}\n\n.logo-container {\n  text-align: center;\n  img {\n    width: 150px;\n  }\n}\n",
                     "styleUrl": "./login.component.scss"
                 }
             ],
@@ -31061,12 +31305,6 @@
                     {
                         "name": "loginService",
                         "type": "LoginService",
-                        "deprecated": false,
-                        "deprecationMessage": ""
-                    },
-                    {
-                        "name": "authService",
-                        "type": "AuthService",
                         "deprecated": false,
                         "deprecationMessage": ""
                     },
@@ -31089,20 +31327,11 @@
                         "deprecationMessage": ""
                     }
                 ],
-                "line": 30,
+                "line": 29,
                 "jsdoctags": [
                     {
                         "name": "loginService",
                         "type": "LoginService",
-                        "deprecated": false,
-                        "deprecationMessage": "",
-                        "tagName": {
-                            "text": "param"
-                        }
-                    },
-                    {
-                        "name": "authService",
-                        "type": "AuthService",
                         "deprecated": false,
                         "deprecationMessage": "",
                         "tagName": {
@@ -31148,7 +31377,7 @@
                         "name": "email",
                         "type": "",
                         "returnType": "",
-                        "line": 52
+                        "line": 57
                     }
                 },
                 "password": {
@@ -31157,11 +31386,121 @@
                         "name": "password",
                         "type": "",
                         "returnType": "",
-                        "line": 56
+                        "line": 61
                     }
                 }
             },
-            "templateData": "<div class=\"auth-form-wrapper\" cdkFocusRegionStart>\n  <mat-card class=\"auth-form\">\n    <h1>Login</h1>\n    <mat-card-content>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n        <gt-form-error [error]=\"error\"></gt-form-error>\n        <mat-form-field class=\"full-width\">\n          <input\n            matInput\n            autofocus\n            type=\"email\"\n            placeholder=\"Email\"\n            formControlName=\"email\"\n          />\n          <mat-error *ngIf=\"email?.errors\">\n            <span *ngIf=\"email?.errors?.required\"\n              >Your email is required to log in</span\n            >\n            <span *ngIf=\"email?.errors?.email\"\n              >Enter a valid email address</span\n            >\n            <span *ngIf=\"email?.errors?.serverError\">{{\n              email?.errors?.serverError\n            }}</span>\n          </mat-error>\n        </mat-form-field>\n        <mat-form-field class=\"full-width\">\n          <input\n            matInput\n            type=\"password\"\n            placeholder=\"Password\"\n            formControlName=\"password\"\n          />\n          <mat-error *ngIf=\"password?.errors\">\n            <span *ngIf=\"password?.errors?.minlength\"\n              >Your password should be at least 8 characters long</span\n            >\n            <span *ngIf=\"password?.errors?.required\"\n              >Your password is required to log in</span\n            >\n          </mat-error>\n        </mat-form-field>\n        <button id=\"submit\" class=\"full-width\" mat-flat-button color=\"primary\">\n          Log in\n        </button>\n      </form>\n      <ng-container *ngIf=\"socialApps$ | async as socialApps\">\n        <div *ngIf=\"socialApps.length\" class=\"or\">\n          <span class=\"mat-body-strong mat-body-2\">or</span>\n        </div>\n        <div class=\"o-auth\">\n          <button\n            *ngFor=\"let socialApp of socialApps\"\n            mat-stroked-button\n            class=\"full-width margin\"\n            (click)=\"onSocialApp(socialApp)\"\n          >\n            <gt-auth-svg\n              source=\"auth\"\n              text=\"Log in with {{ socialApp.name }}\"\n              [provider]=\"socialApp.provider\"\n            ></gt-auth-svg>\n          </button>\n        </div>\n      </ng-container>\n      <div class=\"sign-up\">\n        <p *ngIf=\"enableUserRegistration$ | async\" class=\"mat-body-1\">\n          New to GlitchTip? <a routerLink=\"../register\">Sign Up</a>\n        </p>\n        <p class=\"mat-body-1\">\n          <a routerLink=\"/reset-password\">Reset Password</a>\n        </p>\n      </div>\n    </mat-card-content>\n  </mat-card>\n</div>\n<div cdkFocusRegionEnd></div>\n"
+            "templateData": "<div class=\"auth-form-wrapper\">\n  <mat-card class=\"auth-form\">\n    <div class=\"logo-container\">\n      <img src=\"static/assets/images/glitchtip-logo-v1.svg\" alt=\"GlitchTip\" />\n    </div>\n    <ng-container *ngIf=\"requiresMFA$ | async; else do_login\">\n      <gt-login-totp></gt-login-totp>\n    </ng-container>\n    <ng-template #do_login>\n      <h1>Login</h1>\n      <mat-card-content>\n        <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n          <gt-form-error [error]=\"error$ | async\"></gt-form-error>\n          <mat-form-field class=\"full-width\">\n            <input\n              matInput\n              autofocus\n              type=\"email\"\n              placeholder=\"Email\"\n              formControlName=\"email\"\n            />\n            <mat-error *ngIf=\"email?.errors\">\n              <span *ngIf=\"email?.errors?.required\"\n                >Your email is required to log in</span\n              >\n              <span *ngIf=\"email?.errors?.email\"\n                >Enter a valid email address</span\n              >\n              <span *ngIf=\"email?.errors?.serverError\">{{\n                email?.errors?.serverError\n              }}</span>\n            </mat-error>\n          </mat-form-field>\n          <mat-form-field class=\"full-width\">\n            <input\n              matInput\n              type=\"password\"\n              placeholder=\"Password\"\n              formControlName=\"password\"\n            />\n            <mat-error *ngIf=\"password?.errors\">\n              <span *ngIf=\"password?.errors?.minlength\"\n                >Your password should be at least 8 characters long</span\n              >\n              <span *ngIf=\"password?.errors?.required\"\n                >Your password is required to log in</span\n              >\n            </mat-error>\n          </mat-form-field>\n          <button\n            id=\"submit\"\n            class=\"full-width\"\n            mat-flat-button\n            color=\"primary\"\n          >\n            Log in\n          </button>\n        </form>\n        <ng-container *ngIf=\"socialApps$ | async as socialApps\">\n          <div *ngIf=\"socialApps.length\" class=\"or\">\n            <span class=\"mat-body-strong mat-body-2\">or</span>\n          </div>\n          <div class=\"o-auth\">\n            <button\n              *ngFor=\"let socialApp of socialApps\"\n              mat-stroked-button\n              class=\"full-width margin\"\n              (click)=\"onSocialApp(socialApp)\"\n            >\n              <gt-auth-svg\n                source=\"auth\"\n                text=\"Log in with {{ socialApp.name }}\"\n                [provider]=\"socialApp.provider\"\n              ></gt-auth-svg>\n            </button>\n          </div>\n        </ng-container>\n        <div class=\"sign-up\">\n          <p *ngIf=\"enableUserRegistration$ | async\" class=\"mat-body-1\">\n            New to GlitchTip? <a routerLink=\"../register\">Sign Up</a>\n          </p>\n          <p class=\"mat-body-1\">\n            <a routerLink=\"/reset-password\">Reset Password</a>\n          </p>\n        </div>\n      </mat-card-content>\n    </ng-template>\n  </mat-card>\n</div>\n<div cdkFocusRegionEnd></div>\n"
+        },
+        {
+            "name": "LoginTotpComponent",
+            "id": "component-LoginTotpComponent-26833831213d6fb643833dc834cc20ab",
+            "file": "src/app/login/login-totp/login-totp.component.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "gt-login-totp",
+            "styleUrls": [
+                "./login-totp.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./login-totp.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "error$",
+                    "defaultValue": "this.loginService.error$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "form",
+                    "defaultValue": "new FormGroup({\n    code: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(6),\n      Validators.maxLength(6),\n    ]),\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 27,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, ChangeDetectionStrategy } from \"@angular/core\";\nimport { FormControl, FormGroup, Validators } from \"@angular/forms\";\nimport { LoginService } from \"../login.service\";\n\n@Component({\n  selector: \"gt-login-totp\",\n  templateUrl: \"./login-totp.component.html\",\n  styleUrls: [\"./login-totp.component.scss\"],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class LoginTotpComponent {\n  error$ = this.loginService.error$;\n  form = new FormGroup({\n    code: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(6),\n      Validators.maxLength(6),\n    ]),\n  });\n\n  constructor(private loginService: LoginService) {}\n\n  get code() {\n    return this.form.get(\"code\");\n  }\n\n  onSubmit() {\n    if (this.form.valid && this.code) {\n      this.loginService.authenticateTOTP(this.code.value).subscribe();\n    }\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".header-left {\n    text-align: left;\n}",
+                    "styleUrl": "./login-totp.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "loginService",
+                        "type": "LoginService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 19,
+                "jsdoctags": [
+                    {
+                        "name": "loginService",
+                        "type": "LoginService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "accessors": {
+                "code": {
+                    "name": "code",
+                    "getSignature": {
+                        "name": "code",
+                        "type": "",
+                        "returnType": "",
+                        "line": 23
+                    }
+                }
+            },
+            "templateData": "\n<mat-card-content>\n  <div>\n    <h1 class=\"header-left\">Log in with authenticator app</h1>\n    <div>Enter the code from the authenticator app on your mobile device. If you’ve lost your device, you may enter one of your recovery codes.\n    </div>\n    <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <gt-form-error [error]=\"error$ | async\"></gt-form-error>\n      <mat-form-field>\n        <mat-label>6-digit Code</mat-label>\n        <input matInput formControlName=\"code\" pattern=\"\\d*\" maxlength=\"6\" />\n        <mat-error *ngIf=\"code?.invalid\">\n          <span *ngIf=\"code?.errors?.required\">Required</span>\n          <span *ngIf=\"code?.errors?.minlength || code?.errors?.maxlength\"\n            >Code must be 6 digits</span\n          >\n        </mat-error>\n      </mat-form-field>\n      <div>\n        <button id=\"submit\" mat-flat-button color=\"primary\">Login</button>\n      </div>\n    </form>\n  </div>\n</mat-card-content>\n"
         },
         {
             "name": "MainNavComponent",
@@ -31644,7 +31983,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@import \"variables\";\n\n.mat-list-base .mat-list-item {\n  height: auto;\n  padding-top: 4px;\n  padding-bottom: 4px;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n\n  ::ng-deep .mat-list-item-content {\n    padding-left: 0;\n    padding-right: 0;\n    justify-content: space-between;\n    flex-wrap: wrap;\n  }\n}\n\n.email-info {\n  padding-top: 8px;\n  margin-bottom: 4px;\n\n  span {\n    margin-right: 16px;\n  }\n}\n\n.email-actions {\n  margin-top: 4px;\n  padding-bottom: 8px;\n}\n\nmat-chip-list {\n  display: inline-block;\n  margin-right: 15px;\n  pointer-events: none;\n  user-select: none;\n}\n\nmat-chip {\n  font-size: 0.8em;\n  padding: 0 10px;\n  min-height: 24px;\n}\n\n.delete-spinner-container {\n  display: inline-flex;\n  width: 40px;\n  height: 40px;\n  align-items: center;\n  justify-content: center;\n  vertical-align: middle;\n}\n\n.add-email-form-ui {\n  display: flex;\n  padding-top: 7px;\n\n  @media (max-width: $small - 1) {\n    flex-direction: column;\n  }\n\n  .mat-form-field {\n    flex: 1;\n  }\n\n  ::ng-deep .mat-form-field-wrapper {\n    max-width: 400px;\n  }\n\n  app-loading-button {\n    margin-top: 12px;\n    margin-left: 15px;\n\n    @media (max-width: $small - 1) {\n      margin-left: unset;\n      margin-top: 8px;\n    }\n  }\n}\n",
+                    "data": "@import \"variables\";\n\n.mat-list-base .mat-list-item {\n  height: auto;\n  padding-top: 4px;\n  padding-bottom: 4px;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n\n  ::ng-deep .mat-list-item-content {\n    padding-left: 0;\n    padding-right: 0;\n    justify-content: space-between;\n    flex-wrap: wrap;\n  }\n}\n\n.email-info {\n  padding-top: 8px;\n  margin-bottom: 4px;\n\n  span {\n    margin-right: 16px;\n  }\n}\n\n.email-actions {\n  margin-top: 4px;\n  padding-bottom: 8px;\n}\n\nmat-chip-list {\n  display: inline-block;\n  margin-right: 15px;\n  pointer-events: none;\n  user-select: none;\n}\n\nmat-chip {\n  font-size: 0.8em;\n  padding: 0 10px;\n  min-height: 24px;\n}\n\n.delete-spinner-container {\n  display: inline-flex;\n  width: 40px;\n  height: 40px;\n  align-items: center;\n  justify-content: center;\n  vertical-align: middle;\n}\n\n.add-email-form-ui {\n  display: flex;\n  padding-top: 7px;\n\n  @media (max-width: $small - 1) {\n    flex-direction: column;\n  }\n\n  .mat-form-field {\n    flex: 1;\n  }\n\n  ::ng-deep .mat-form-field-wrapper {\n    max-width: 400px;\n  }\n\n  gt-loading-button {\n    margin-top: 12px;\n    margin-left: 15px;\n\n    @media (max-width: $small - 1) {\n      margin-left: unset;\n      margin-top: 8px;\n    }\n  }\n}\n",
                     "styleUrl": "./manage-emails.component.scss"
                 }
             ],
@@ -33392,7 +33731,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@import \"variables\";\n\nmat-card-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-bottom: 12px;\n\n  &::ng-deep .mat-card-header-text {\n    margin-left: 0;\n  }\n\n  mat-card-title {\n    margin-bottom: 0;\n    margin-right: 8px;\n  }\n}\n\n.server-error {\n  padding-top: 16px;\n  text-align: center;\n}\n\nmat-form-field {\n  width: 100%;\n}\n\nul {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax((150px), 1fr));\n  grid-gap: 8px 16px;\n  margin-top: 0;\n  margin-bottom: 0;\n  padding-left: 0;\n\n  li {\n    list-style-type: none;\n  }\n}\n\n.checkbox-error {\n  font-size: 75%;\n}\n\napp-loading-button {\n  margin-top: 40px;\n}\n",
+                    "data": "@import \"variables\";\n\nmat-card-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-bottom: 12px;\n\n  &::ng-deep .mat-card-header-text {\n    margin-left: 0;\n  }\n\n  mat-card-title {\n    margin-bottom: 0;\n    margin-right: 8px;\n  }\n}\n\n.server-error {\n  padding-top: 16px;\n  text-align: center;\n}\n\nmat-form-field {\n  width: 100%;\n}\n\nul {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax((150px), 1fr));\n  grid-gap: 8px 16px;\n  margin-top: 0;\n  margin-bottom: 0;\n  padding-left: 0;\n\n  li {\n    list-style-type: none;\n  }\n}\n\n.checkbox-error {\n  font-size: 75%;\n}\n\ngt-loading-button {\n  margin-top: 40px;\n}\n",
                     "styleUrl": "./new-token.component.scss"
                 }
             ],
@@ -33854,7 +34193,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@import \"variables\";\n\nmat-card {\n  margin-bottom: 36px;\n  margin-top: 36px;\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n\n  form {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n\n    @media (max-width: $tablet - 1) {\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    mat-form-field {\n      width: 100%;\n      margin-right: 48px;\n    }\n  }\n}\n\n.remove-content {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  p {\n    padding-right: 16px;\n  }\n}\n\napp-loading-button ::ng-deep button {\n  width: 160px;\n}\n",
+                    "data": "@import \"variables\";\n\nmat-card {\n  margin-bottom: 36px;\n  margin-top: 36px;\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n\n  form {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n\n    @media (max-width: $tablet - 1) {\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    mat-form-field {\n      width: 100%;\n      margin-right: 48px;\n    }\n  }\n}\n\n.remove-content {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  p {\n    padding-right: 16px;\n  }\n}\n\ngt-loading-button ::ng-deep button {\n  width: 160px;\n}\n",
                     "styleUrl": "./organization.component.scss"
                 }
             ],
@@ -35392,7 +35731,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\nmat-card-header {\n  padding-bottom: 12px;\n}\n\nmat-card-title {\n  margin-left: -16px;\n}\n\n.mat-card-title {\n  margin-bottom: 0;\n}\n\n.error {\n  color: #f44336;\n  text-align: center;\n\n  span {\n    margin-left: 8px;\n    margin-right: 8px;\n  }\n}\n\n.new-alert {\n  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);\n  margin-left: -16px;\n  margin-right: -16px;\n  padding-left: 16px;\n  padding-right: 16px;\n  padding-bottom: 16px;\n}\n\n.new-alert-error {\n  margin-top: -10px;\n  margin-bottom: -10px;\n}\n\n.new-alert-actions {\n  display: flex;\n  justify-content: flex-end;\n\n  app-loading-button {\n    margin-right: 16px;\n  }\n}\n\n.no-alerts {\n  text-align: center;\n  padding-top: 24px;\n  padding-bottom: 16px;\n  margin-left: 16px;\n  margin-right: 16px;\n}\n\n.alert {\n  padding-bottom: 24px;\n}\n\n.alert-error {\n  margin-bottom: -21px;\n  padding-top: 16px;\n}\n\n.alert-header {\n  padding-top: 16px;\n}\n\n.alert-form-error {\n  margin-top: -21px;\n  margin-bottom: 0;\n}\n\n// Move to global styles if we decide to implement in other places in app\n.tooltip {\n  text-decoration: underline;\n  text-decoration-style: dotted;\n  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);\n  cursor: help;\n}\n\n.recipients-error {\n  text-align: left;\n  margin-top: -14px;\n  margin-bottom: -7px;\n}\n\n.no-recipients {\n  width: 50%;\n  padding: 8px 16px;\n  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);\n}\n\n.no-recipients-new {\n  background-color: #ffffff;\n}\n\n.recipients {\n  display: inline-block;\n  width: 50%;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n  padding: 8px 0;\n\n  &.border-top {\n    border-top: 1px solid rgba(0, 0, 0, 0.12);\n  }\n\n  .alert-type {\n    margin-left: 0;\n    margin-right: 8px;\n    font-size: 20px;\n    width: 20px;\n    height: 20px;\n  }\n\n  svg {\n    width: 24px;\n    height: 24px;\n    margin-right: 8px;\n  }\n\n  .trash {\n    margin-left: 16px;\n    width: 28px;\n    height: 28px;\n    line-height: 28px;\n\n    mat-icon {\n      font-size: 24px;\n      width: 24px;\n      height: 24px;\n    }\n  }\n}\n\n.initial-loading {\n  padding-top: 200px;\n  padding-bottom: 200px;\n\n  mat-progress-spinner {\n    margin-left: auto;\n    margin-right: auto;\n  }\n}\n\n.initial-load-error {\n  margin: unset;\n  padding: 24px 24px 8px 24px;\n}\n\n// .mat-stroked-button:hover {\n//   background-color: whitesmoke;\n//   opacity: 1;\n// }\n\n.mat-button.mat-primary .mat-button-focus-overlay {\n  background-color: transparent;\n}\n",
+                    "data": "@use '~@angular/material' as mat;\n@import \"variables\";\n\nmat-card-header {\n  padding-bottom: 12px;\n}\n\nmat-card-title {\n  margin-left: -16px;\n}\n\n.mat-card-title {\n  margin-bottom: 0;\n}\n\n.error {\n  color: #f44336;\n  text-align: center;\n\n  span {\n    margin-left: 8px;\n    margin-right: 8px;\n  }\n}\n\n.new-alert {\n  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);\n  margin-left: -16px;\n  margin-right: -16px;\n  padding-left: 16px;\n  padding-right: 16px;\n  padding-bottom: 16px;\n}\n\n.new-alert-error {\n  margin-top: -10px;\n  margin-bottom: -10px;\n}\n\n.new-alert-actions {\n  display: flex;\n  justify-content: flex-end;\n\n  gt-loading-button {\n    margin-right: 16px;\n  }\n}\n\n.no-alerts {\n  text-align: center;\n  padding-top: 24px;\n  padding-bottom: 16px;\n  margin-left: 16px;\n  margin-right: 16px;\n}\n\n.alert {\n  padding-bottom: 24px;\n}\n\n.alert-error {\n  margin-bottom: -21px;\n  padding-top: 16px;\n}\n\n.alert-header {\n  padding-top: 16px;\n}\n\n.alert-form-error {\n  margin-top: -21px;\n  margin-bottom: 0;\n}\n\n// Move to global styles if we decide to implement in other places in app\n.tooltip {\n  text-decoration: underline;\n  text-decoration-style: dotted;\n  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);\n  cursor: help;\n}\n\n.recipients-error {\n  text-align: left;\n  margin-top: -14px;\n  margin-bottom: -7px;\n}\n\n.no-recipients {\n  width: 50%;\n  padding: 8px 16px;\n  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);\n}\n\n.no-recipients-new {\n  background-color: #ffffff;\n}\n\n.recipients {\n  display: inline-block;\n  width: 50%;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n  padding: 8px 0;\n\n  &.border-top {\n    border-top: 1px solid rgba(0, 0, 0, 0.12);\n  }\n\n  .alert-type {\n    margin-left: 0;\n    margin-right: 8px;\n    font-size: 20px;\n    width: 20px;\n    height: 20px;\n  }\n\n  svg {\n    width: 24px;\n    height: 24px;\n    margin-right: 8px;\n  }\n\n  .trash {\n    margin-left: 16px;\n    width: 28px;\n    height: 28px;\n    line-height: 28px;\n\n    mat-icon {\n      font-size: 24px;\n      width: 24px;\n      height: 24px;\n    }\n  }\n}\n\n.initial-loading {\n  padding-top: 200px;\n  padding-bottom: 200px;\n\n  mat-progress-spinner {\n    margin-left: auto;\n    margin-right: auto;\n  }\n}\n\n.initial-load-error {\n  margin: unset;\n  padding: 24px 24px 8px 24px;\n}\n\n// .mat-stroked-button:hover {\n//   background-color: whitesmoke;\n//   opacity: 1;\n// }\n\n.mat-button.mat-primary .mat-button-focus-overlay {\n  background-color: transparent;\n}\n",
                     "styleUrl": "./project-alerts.component.scss"
                 }
             ],
@@ -35808,7 +36147,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@import \"variables\";\n\nmat-card {\n  margin-top: 20px;\n  margin-bottom: 20px;\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n\n  .note-padding {\n    padding-top: 0;\n  }\n}\n\n.project-form {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-top: 8px;\n\n  @media (max-width: $medium - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  mat-form-field {\n    width: 100%;\n    margin-right: 40px;\n\n    @media (max-width: $medium - 1) {\n      margin-right: 0;\n    }\n  }\n}\n\n.platform-form {\n  display: flex;\n\n  @media (min-width: $large) {\n    align-items: center;\n\n    .documentation-link {\n      margin-right: 40px;\n    }\n  }\n\n  @media (max-width: $large - 1) {\n    display: grid;\n    grid-template-columns: 1fr auto;\n    grid-template-rows: 75px 50px;\n    grid-template-areas:\n      \"topLeft rightCol\"\n      \"bottomLeft rightCol\";\n    column-gap: 0;\n    row-gap: 20px;\n    padding-top: 15px;\n\n    app-platform-picker {\n      grid-area: topLeft;\n    }\n\n    .documentation-link {\n      grid-area: bottomLeft;\n    }\n\n    app-loading-button {\n      grid-area: rightCol;\n      margin-top: 25px;\n    }\n  }\n\n  @media (max-width: $medium - 1) {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    row-gap: 0;\n  }\n}\n\n.remove-content {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  p {\n    padding-right: 16px;\n  }\n}\n\n.server-error {\n  display: block;\n}\n\napp-loading-button ::ng-deep button {\n  width: 140px;\n}\n",
+                    "data": "@import \"variables\";\n\nmat-card {\n  margin-top: 20px;\n  margin-bottom: 20px;\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n\n  .note-padding {\n    padding-top: 0;\n  }\n}\n\n.project-form {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-top: 8px;\n\n  @media (max-width: $medium - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  mat-form-field {\n    width: 100%;\n    margin-right: 40px;\n\n    @media (max-width: $medium - 1) {\n      margin-right: 0;\n    }\n  }\n}\n\n.platform-form {\n  display: flex;\n\n  @media (min-width: $large) {\n    align-items: center;\n\n    .documentation-link {\n      margin-right: 40px;\n    }\n  }\n\n  @media (max-width: $large - 1) {\n    display: grid;\n    grid-template-columns: 1fr auto;\n    grid-template-rows: 75px 50px;\n    grid-template-areas:\n      \"topLeft rightCol\"\n      \"bottomLeft rightCol\";\n    column-gap: 0;\n    row-gap: 20px;\n    padding-top: 15px;\n\n    gt-platform-picker {\n      grid-area: topLeft;\n    }\n\n    .documentation-link {\n      grid-area: bottomLeft;\n    }\n\n    gt-loading-button {\n      grid-area: rightCol;\n      margin-top: 25px;\n    }\n  }\n\n  @media (max-width: $medium - 1) {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    row-gap: 0;\n  }\n}\n\n.remove-content {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  p {\n    padding-right: 16px;\n  }\n}\n\n.server-error {\n  display: block;\n}\n\ngt-loading-button ::ng-deep button {\n  width: 140px;\n}\n",
                     "styleUrl": "./project-detail.component.scss"
                 }
             ],
@@ -36039,7 +36378,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "mat-card {\n  margin-bottom: 20px;\n}\n\nh1 {\n  margin-bottom: 0;\n}\n\nh2 {\n  margin: 0;\n  padding-top: 18px;\n  font-size: 1.2em;\n  font-weight: 500;\n}\n\n.loading {\n  height: 180px;\n}\n\n.mat-body-1 {\n  padding: 15px 0 0;\n}\n\nmat-list {\n  margin-left: -15px;\n  margin-right: -15px;\n}\n\nmat-list-item ::ng-deep .mat-list-item-content {\n  display: flex;\n  justify-content: space-between;\n}\n\napp-loading-button ::ng-deep button {\n  width: 100px;\n}\n",
+                    "data": "mat-card {\n  margin-bottom: 20px;\n}\n\nh1 {\n  margin-bottom: 0;\n}\n\nh2 {\n  margin: 0;\n  padding-top: 18px;\n  font-size: 1.2em;\n  font-weight: 500;\n}\n\n.loading {\n  height: 180px;\n}\n\n.mat-body-1 {\n  padding: 15px 0 0;\n}\n\nmat-list {\n  margin-left: -15px;\n  margin-right: -15px;\n}\n\nmat-list-item ::ng-deep .mat-list-item-content {\n  display: flex;\n  justify-content: space-between;\n}\n\ngt-loading-button ::ng-deep button {\n  width: 100px;\n}\n",
                     "styleUrl": "./project-environments.component.scss"
                 }
             ],
@@ -38577,7 +38916,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "mat-card {\n  margin-top: 24px;\n  margin-bottom: 24px;\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n}\n\nmat-list {\n  width: 100%;\n  padding-top: 0;\n}\n\nmat-error {\n  display: block;\n}\n\n.center-text {\n  text-align: center;\n}\n\n.mat-list-item {\n  display: flex;\n  justify-content: space-between;\n\n  &:nth-last-child(n + 2) {\n    border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n  }\n\n  ::ng-deep .mat-list-item-content {\n    width: 100%;\n    padding-left: 0;\n    padding-right: 0;\n  }\n}\n\napp-loading-button ::ng-deep button {\n  width: 110px;\n}\n",
+                    "data": "mat-card {\n  margin-top: 24px;\n  margin-bottom: 24px;\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n}\n\nmat-list {\n  width: 100%;\n  padding-top: 0;\n}\n\nmat-error {\n  display: block;\n}\n\n.center-text {\n  text-align: center;\n}\n\n.mat-list-item {\n  display: flex;\n  justify-content: space-between;\n\n  &:nth-last-child(n + 2) {\n    border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n  }\n\n  ::ng-deep .mat-list-item-content {\n    width: 100%;\n    padding-left: 0;\n    padding-right: 0;\n  }\n}\n\ngt-loading-button ::ng-deep button {\n  width: 110px;\n}\n",
                     "styleUrl": "./teams.component.scss"
                 }
             ],
@@ -38774,7 +39113,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "@import \"variables\";\n\n.mat-card {\n  margin: 24px 8px 8px 8px;\n\n  mat-card-header {\n    &::ng-deep .mat-card-header-text {\n      margin-left: 0;\n    }\n  }\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n}\n\nform {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-top: 8px;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  mat-form-field {\n    width: 100%;\n    margin-right: 40px;\n\n    @media (max-width: $tablet - 1) {\n      margin-right: 0;\n    }\n  }\n}\n\n.remove-content {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  p {\n    padding-right: 16px;\n  }\n}\n\n.server-error {\n  display: block;\n}\n\n.center-text {\n  text-align: center;\n}\n\napp-loading-button ::ng-deep button {\n  width: 120px;\n}\n",
+                    "data": "@import \"variables\";\n\n.mat-card {\n  margin: 24px 8px 8px 8px;\n\n  mat-card-header {\n    &::ng-deep .mat-card-header-text {\n      margin-left: 0;\n    }\n  }\n\n  mat-card-content {\n    padding-top: 16px;\n  }\n}\n\nform {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-top: 8px;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  mat-form-field {\n    width: 100%;\n    margin-right: 40px;\n\n    @media (max-width: $tablet - 1) {\n      margin-right: 0;\n    }\n  }\n}\n\n.remove-content {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n\n  @media (max-width: $tablet - 1) {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  p {\n    padding-right: 16px;\n  }\n}\n\n.server-error {\n  display: block;\n}\n\n.center-text {\n  text-align: center;\n}\n\ngt-loading-button ::ng-deep button {\n  width: 120px;\n}\n",
                     "styleUrl": "./team-settings.component.scss"
                 }
             ],
@@ -40068,13 +40407,13 @@
         },
         {
             "name": "LoginModule",
-            "id": "module-LoginModule-ac859cd52f80a34a622e4cb98c3bb66d",
+            "id": "module-LoginModule-42b0f84af16edaa6478004e82014e21e",
             "description": "",
             "deprecationMessage": "",
             "deprecated": false,
             "file": "src/app/login/login.module.ts",
             "methods": [],
-            "sourceCode": "import { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { MatInputModule } from \"@angular/material/input\";\nimport { MatPseudoCheckboxModule } from \"@angular/material/core\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\nimport { LoginComponent } from \"./login.component\";\nimport { LoginRoutingModule } from \"./login-routing.module\";\nimport { AuthModule } from \"../api/auth/auth.module\";\nimport { SharedModule } from \"../shared/shared.module\";\n\n@NgModule({\n  declarations: [LoginComponent],\n  imports: [\n    CommonModule,\n    LoginRoutingModule,\n    ReactiveFormsModule,\n    AuthModule,\n    MatInputModule,\n    MatPseudoCheckboxModule,\n    SharedModule,\n  ],\n})\nexport class LoginModule {}\n",
+            "sourceCode": "import { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { MatInputModule } from \"@angular/material/input\";\nimport { MatPseudoCheckboxModule } from \"@angular/material/core\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\nimport { LoginComponent } from \"./login.component\";\nimport { LoginRoutingModule } from \"./login-routing.module\";\nimport { AuthModule } from \"../api/auth/auth.module\";\nimport { SharedModule } from \"../shared/shared.module\";\nimport { LoginTotpComponent } from \"./login-totp/login-totp.component\";\n\n@NgModule({\n  declarations: [LoginComponent, LoginTotpComponent],\n  imports: [\n    CommonModule,\n    LoginRoutingModule,\n    ReactiveFormsModule,\n    AuthModule,\n    MatInputModule,\n    MatPseudoCheckboxModule,\n    SharedModule,\n  ],\n})\nexport class LoginModule {}\n",
             "children": [
                 {
                     "type": "providers",
@@ -40085,6 +40424,9 @@
                     "elements": [
                         {
                             "name": "LoginComponent"
+                        },
+                        {
+                            "name": "LoginTotpComponent"
                         }
                     ]
                 },
@@ -41695,6 +42037,16 @@
                 "name": "initialState",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/app/login/login.service.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "LoginState",
+                "defaultValue": "{\n  loading: false,\n  error: null,\n  validAuth: null,\n}"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/app/main-nav/main-nav.service.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -43109,6 +43461,17 @@
                 "deprecationMessage": "",
                 "description": "",
                 "kind": 183
+            },
+            {
+                "name": "ValidAuth",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "\"TOTP\" | \"FIDO2\"",
+                "file": "src/app/login/login.service.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 183
             }
         ],
         "enumerations": [],
@@ -43381,6 +43744,16 @@
                     "deprecationMessage": "",
                     "type": "string",
                     "defaultValue": "\"/rest-auth\""
+                },
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/login/login.service.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "LoginState",
+                    "defaultValue": "{\n  loading: false,\n  error: null,\n  validAuth: null,\n}"
                 }
             ],
             "src/app/register/register.service.ts": [
@@ -45291,6 +45664,19 @@
                     "subtype": "typealias",
                     "rawtype": "\"FIDO2\" | \"TOTP\" | \"Trusted Device\" | \"Backup Codes\"",
                     "file": "src/app/api/mfa/user-keys.service.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 183
+                }
+            ],
+            "src/app/login/login.service.ts": [
+                {
+                    "name": "ValidAuth",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "\"TOTP\" | \"FIDO2\"",
+                    "file": "src/app/login/login.service.ts",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "description": "",
@@ -48054,12 +48440,21 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/login/login-totp/login-totp.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoginTotpComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/login/login.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "LoginComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/11",
+                "coverageCount": "0/12",
                 "status": "low"
             },
             {
@@ -48067,8 +48462,26 @@
                 "type": "injectable",
                 "linktype": "injectable",
                 "name": "LoginService",
+                "coveragePercent": 8,
+                "coverageCount": "1/12",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/login.service.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "LoginResponse",
                 "coveragePercent": 0,
                 "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/login.service.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "LoginState",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
                 "status": "low"
             },
             {
@@ -48077,6 +48490,16 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "baseUrl",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/login/login.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"

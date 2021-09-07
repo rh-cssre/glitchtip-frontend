@@ -1,0 +1,26 @@
+.margin-set {
+    margin-left: 45px;
+    margin-right: 45px;
+    margin-bottom: 45px;
+}
+
+.contents-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+
+.instructions {
+    margin-top: 16px;
+    margin-bottom: 18px;
+}
+
+.error-center {
+    align-self: center;
+}
+
+.header-left {
+    text-align: left;
+}
