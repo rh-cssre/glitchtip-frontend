@@ -9,7 +9,7 @@ import {
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import * as QRCode from "qrcode";
 import { combineLatest } from "rxjs";
-import { delay, filter, tap } from "rxjs/operators";
+import { delay, filter, take, tap } from "rxjs/operators";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 
 @Component({
@@ -24,11 +24,19 @@ export class TOTPComponent implements OnInit, OnDestroy {
   TOTP$ = this.service.totp$;
   step$ = this.service.setupTOTPStage$;
   error$ = this.service.serverError$;
+  copiedCodes$ = this.service.copiedCodes$;
   codeForm = new FormGroup({
     code: new FormControl("", [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(6),
+    ]),
+  });
+  backupCodeForm = new FormGroup({
+    code: new FormControl("", [
+      Validators.required,
+      Validators.minLength(16),
+      Validators.maxLength(16),
     ]),
   });
 
@@ -82,5 +90,39 @@ export class TOTPComponent implements OnInit, OnDestroy {
     if (this.canvas) {
       QRCode.toCanvas(this.canvas.nativeElement, value);
     }
+  }
+
+  copyCodes() {
+    this.service.backupCodes$.pipe(take(1)).subscribe((codes) => {
+      if (codes) {
+        navigator.clipboard.writeText(codes.join("\n"));
+        this.service.setCopiedCodes();
+      }
+    });
+  }
+
+  downloadCodes() {
+    this.service.backupCodes$.pipe(take(1)).subscribe((codes) => {
+      if (codes) {
+        this.download("glitchtip-backup.txt", codes.join("\n"));
+        this.service.setCopiedCodes();
+      }
+    });
+  }
+
+  private download(filename: string, text: string) {
+    var element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+    );
+    element.setAttribute("download", filename);
+
+    element.style.display = "none";
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
   }
 }
