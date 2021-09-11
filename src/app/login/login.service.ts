@@ -34,6 +34,12 @@ export class LoginService extends StatefulService<LoginState> {
   loading$ = this.getState$.pipe(map((state) => state.loading));
   error$ = this.getState$.pipe(map((state) => state.error));
   requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));
+  hasFIDO2$ = this.getState$.pipe(
+    map((state) => state.validAuth?.includes("FIDO2"))
+  );
+  hasTOTP$ = this.getState$.pipe(
+    map((state) => state.validAuth?.includes("TOTP"))
+  );
   constructor(private http: HttpClient, private authService: AuthService) {
     super(initialState);
   }
@@ -81,6 +87,35 @@ export class LoginService extends StatefulService<LoginState> {
         let error: ServerError | null = null;
         if (err.status === 400) {
           error = { non_field_errors: err.error };
+        } else {
+          error = { non_field_errors: ["Error"] };
+        }
+        this.setState({ loading: false, error });
+        return EMPTY;
+      })
+    );
+  }
+
+  authenticateBackupCode(code: string) {
+    const url = "/api/mfa/authenticate/backup_codes/";
+    const data = {
+      code: code,
+    };
+    this.setState({ loading: true, error: null });
+    return this.http.post(url, data).pipe(
+      tap(() => {
+        this.clearState();
+        this.authService.afterLogin();
+      }),
+      catchError((err) => {
+        let error: ServerError | null = null;
+        if (err.status === 400) {
+          if (err.error.code) {
+            error = err.error;
+            console.log(error);
+          } else {
+            error = { non_field_errors: err.error };
+          }
         } else {
           error = { non_field_errors: ["Error"] };
         }

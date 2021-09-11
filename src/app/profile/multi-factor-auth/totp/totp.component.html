@@ -68,7 +68,7 @@
           <p class="mat-h3">
             Download or copy a list of backup codes. If you ever lose your
             phone, each of these recovery codes can be used one time to regain
-            accrss to your account. Print it out or save it someplace safe.
+            access to your account. Print it out or save it someplace safe.
           </p>
           <button mat-flat-button color="primary" (click)="downloadCodes()">
             Download
@@ -86,6 +86,7 @@
               mat-flat-button
               color="primary"
               [disabled]="!(copiedCodes$ | async)"
+              (click)="verifyBackupCode()"
             >
               Next
             </button>

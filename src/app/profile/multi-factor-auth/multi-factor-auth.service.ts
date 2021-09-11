@@ -82,6 +82,11 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     this.setState({ setupTOTPStage: setupTOTPStage + 1 });
   }
 
+  decrementTOTPStage() {
+    const setupTOTPStage = this.state.getValue().setupTOTPStage;
+    this.setState({ setupTOTPStage: setupTOTPStage - 1 });
+  }
+
   enableTOTP(code: string) {
     const state = this.state.getValue();
     this.setState({ serverError: {} });
@@ -131,20 +136,10 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     this.setState({ copiedCodes: true });
   }
 
-  verifyEnterCode(code: string) {
+  verifyBackupCode(code: string) {
     const state = this.state.getValue();
     if (state.backupCodes !== null && state.backupCodes.includes(code)) {
-      this.setState({ enteredCode: true, serverError: {} });
-    } else {
-      this.setState({ serverError: { non_field_errors: ["Invalid code"] } });
-    }
-  }
-
-  setBackupCodes() {
-    const state = this.state.getValue();
-    this.setState({ serverError: {} });
-    if (state.backupCodes) {
-      this.api
+      return this.api
         .backupCodesCreate({
           name: "Backup Codes",
           codes: state.backupCodes,
@@ -152,19 +147,15 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
         .pipe(
           tap(() =>
             this.setState({
-              backupCodes: null,
               setupTOTPStage: state.setupTOTPStage + 1,
+              backupCodes: null,
+              serverError: {},
             })
-          ),
-          catchError((err) => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.error) {
-                this.setState({ serverError: err.error });
-              }
-            }
-            return EMPTY;
-          })
+          )
         );
+    } else {
+      this.setState({ serverError: { non_field_errors: ["Invalid code"] } });
     }
+    return EMPTY;
   }
 }

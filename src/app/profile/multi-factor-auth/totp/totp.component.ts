@@ -64,6 +64,10 @@ export class TOTPComponent implements OnInit, OnDestroy {
     this.service.incrementTOTPStage();
   }
 
+  decrementStep() {
+    this.service.decrementTOTPStage();
+  }
+
   enableTOTP() {
     if (this.codeForm.valid) {
       const code = this.code;
@@ -108,6 +112,13 @@ export class TOTPComponent implements OnInit, OnDestroy {
         this.service.setCopiedCodes();
       }
     });
+  }
+
+  verifyBackupCode() {
+    const code = this.backupCodeForm.get("code")?.value;
+    if (this.backupCodeForm.valid && code) {
+      this.service.verifyBackupCode(code).subscribe();
+    }
   }
 
   private download(filename: string, text: string) {
