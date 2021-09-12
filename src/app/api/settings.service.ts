@@ -60,6 +60,9 @@ export class SettingsService {
     return this.retrieveSettings().pipe(
       tap((settings) => this.setSettings(settings)),
       tap((settings) => {
+        // tslint:disable:only-arrow-functions
+        // tslint:disable:space-before-function-paren
+        // tslint:disable:one-variable-per-declaration
         if (settings.plausibleDomain && settings.plausibleURL) {
           const g = document.createElement("script");
           const s = document.getElementsByTagName("script")[0];
@@ -95,9 +98,6 @@ export class SettingsService {
       }),
       tap((settings) => {
         if (settings.chatwootWebsiteToken) {
-          // tslint:disable:only-arrow-functions
-          // tslint:disable:space-before-function-paren
-          // tslint:disable:one-variable-per-declaration
           (function (d, t) {
             const BASE_URL = "https://app.chatwoot.com";
             const g: any = d.createElement(t),

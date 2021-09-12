@@ -20,7 +20,7 @@ import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
 
 let snackBarDuration = 4000;
-if ((window as any).Cypress) {
+if (window.Cypress) {
   // Speed up cypress tests
   snackBarDuration = 100;
 }

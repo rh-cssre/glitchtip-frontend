@@ -62,7 +62,7 @@ import "zone.js"; // Included with Angular CLI.
  */
 
 interface PlausibleOptions {
-  callback?: (event?: any) => void;
+  callback?: (event?: unknown) => void;
   props?: { [key: string]: string };
 }
 
@@ -71,5 +71,6 @@ type Plausible = (event: string, params?: PlausibleOptions) => void;
 declare global {
   interface Window {
     plausible?: Plausible;
+    Cypress?: unknown;
   }
 }
