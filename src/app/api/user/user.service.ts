@@ -37,22 +37,11 @@ export class UserService {
         exhaustMap(() =>
           this.retrieveUserDetails().pipe(
             tap((resp: User) => this.setUserDetails(resp)),
-            tap((resp: User) => this.matomoSetUserId(resp.id)),
             catchError(() => EMPTY)
           )
         )
       )
       .subscribe();
-  }
-
-  /**
-   * If Matomo is present, set user ID.
-   * app.glitchtip.com will further anonymize this and respects Do Not Track
-   */
-  matomoSetUserId(id: string) {
-    // tslint:disable:no-any
-    const _paq: any = (window as any)._paq;
-    _paq.push(["setUserId", id]);
   }
 
   /** Get and set current logged in user details from backend */

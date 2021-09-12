@@ -60,3 +60,16 @@ import "zone.js"; // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+interface PlausibleOptions {
+  callback?: (event?: any) => void;
+  props?: { [key: string]: string };
+}
+
+type Plausible = (event: string, params?: PlausibleOptions) => void;
+
+declare global {
+  interface Window {
+    plausible?: Plausible;
+  }
+}

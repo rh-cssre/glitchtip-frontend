@@ -10,8 +10,8 @@ interface SettingsState {
   billingEnabled: boolean;
   iPaidForGlitchTip: boolean | null;
   enableUserRegistration: boolean;
-  matomoURL: string | null;
-  matomoSiteId: string | null;
+  plausibleURL: string | null;
+  plausibleDomain: string | null;
   chatwootWebsiteToken: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
@@ -25,8 +25,8 @@ const initialState: SettingsState = {
   billingEnabled: false,
   iPaidForGlitchTip: null,
   enableUserRegistration: false,
-  matomoURL: null,
-  matomoSiteId: null,
+  plausibleURL: null,
+  plausibleDomain: null,
   chatwootWebsiteToken: null,
   stripePublicKey: null,
   sentryDSN: null,
@@ -60,25 +60,20 @@ export class SettingsService {
     return this.retrieveSettings().pipe(
       tap((settings) => this.setSettings(settings)),
       tap((settings) => {
-        if (settings.matomoSiteId && settings.matomoURL) {
-          // tslint:disable:no-any
-          const _PAQ = ((window as any)._paq = (window as any)._paq || []);
-          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-          _PAQ.push(["trackPageView"]);
-          _PAQ.push(["enableLinkTracking"]);
-          const u = settings.matomoURL;
-          _PAQ.push(["setTrackerUrl", u + "matomo.php"]);
-          _PAQ.push(["setSiteId", settings.matomoSiteId]);
-          _PAQ.push(["setDomains", ["glitchtip.com", "app.glitchtip.com"]]);
-          _PAQ.push(["enableCrossDomainLinking"]);
-          const d = document;
-          const g = d.createElement("script");
-          const s = d.getElementsByTagName("script")[0];
+        if (settings.plausibleDomain && settings.plausibleURL) {
+          const g = document.createElement("script");
+          const s = document.getElementsByTagName("script")[0];
           g.type = "text/javascript";
-          g.async = true;
           g.defer = true;
-          g.src = u + "matomo.js";
+          g.dataset.domain = settings.plausibleDomain;
+          g.src = settings.plausibleURL;
           s.parentNode!.insertBefore(g, s);
+          window.plausible =
+            window.plausible ||
+            function () {
+              ((window as any).plausible.q =
+                (window as any).plausible.q || []).push(arguments);
+            };
         }
       }),
       tap((settings) => {
