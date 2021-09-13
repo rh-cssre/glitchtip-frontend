@@ -94,7 +94,7 @@
             <button
               mat-flat-button
               color="primary"
-              [disabled]="!(copiedCodes$ | async)"
+              [disabled]="(copiedCodes$ | async) !== (true)"
               (click)="verifyBackupCode()"
             >
               Next

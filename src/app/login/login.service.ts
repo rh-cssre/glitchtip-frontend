@@ -99,7 +99,7 @@ export class LoginService extends StatefulService<LoginState> {
   authenticateBackupCode(code: string) {
     const url = "/api/mfa/authenticate/backup_codes/";
     const data = {
-      code: code,
+      code,
     };
     this.setState({ loading: true, error: null });
     return this.http.post(url, data).pipe(
