@@ -80,9 +80,16 @@
             Enter one of the backup codes to confirm that you have saved them:
           </p>
           <form [formGroup]="backupCodeForm">
+            <gt-form-error [error]="error$ | async"></gt-form-error>
             <mat-form-field>
               <mat-label>Backup code</mat-label>
-              <input matInput formControlName="code" />
+              <input matInput formControlName="backupCode" />
+              <mat-error *ngIf="backupCode?.invalid">
+                <span *ngIf="backupCode?.errors?.required">Required</span>
+                <span *ngIf="backupCode?.errors?.minlength || backupCode?.errors?.maxlength"
+                  >Code must be 16 digits</span
+                >
+              </mat-error>
             </mat-form-field>
             <button
               mat-flat-button

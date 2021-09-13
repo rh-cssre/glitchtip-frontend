@@ -33,7 +33,7 @@ export class TOTPComponent implements OnInit, OnDestroy {
     ]),
   });
   backupCodeForm = new FormGroup({
-    code: new FormControl("", [
+    backupCode: new FormControl("", [
       Validators.required,
       Validators.minLength(16),
       Validators.maxLength(16),
@@ -44,6 +44,10 @@ export class TOTPComponent implements OnInit, OnDestroy {
 
   get code() {
     return this.codeForm.get("code");
+  }
+
+  get backupCode() {
+    return this.backupCodeForm.get("backupCode");
   }
 
   ngOnInit() {
@@ -115,7 +119,7 @@ export class TOTPComponent implements OnInit, OnDestroy {
   }
 
   verifyBackupCode() {
-    const code = this.backupCodeForm.get("code")?.value;
+    const code = this.backupCodeForm.get("backupCode")?.value;
     if (this.backupCodeForm.valid && code) {
       this.service.verifyBackupCode(code).subscribe();
     }
