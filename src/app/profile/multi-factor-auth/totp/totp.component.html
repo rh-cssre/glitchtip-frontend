@@ -76,10 +76,12 @@
           <button mat-flat-button color="primary" (click)="copyCodes()">
             Copy
           </button>
-
+          <p class="mat-body-strong">
+            Enter one of the backup codes to confirm that you have saved them:
+          </p>
           <form [formGroup]="backupCodeForm">
             <mat-form-field>
-              <mat-label>Enter one Backup Code</mat-label>
+              <mat-label>Backup code</mat-label>
               <input matInput formControlName="code" />
             </mat-form-field>
             <button
