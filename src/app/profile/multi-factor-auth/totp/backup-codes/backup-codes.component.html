@@ -1,0 +1,43 @@
+<div *ngIf="TOTPKey$ | async; else initialInstructions">
+  <p class="mat-h3">
+    If you have lost your backup codes you can generate new ones, invalidating all
+    previous codes. <strong>Print out these new codes or save them someplace safe.</strong>
+  </p>
+</div>
+<ng-template #initialInstructions>
+  <p class="mat-h3">
+    Download or copy a list of backup codes. If you ever lose your
+    phone, each of these recovery codes can be used one time to regain
+    access to your account. Print it out or save it someplace safe.
+  </p>
+</ng-template>
+<button mat-flat-button color="primary" (click)="downloadCodes()">
+  Download
+</button>
+<button mat-flat-button color="primary" (click)="copyCodes()">
+  Copy
+</button>
+<p class="mat-body-strong">
+  Enter one of the backup codes to confirm that you have saved them:
+</p>
+<form [formGroup]="backupCodeForm">
+  <gt-form-error [error]="error$ | async"></gt-form-error>
+  <mat-form-field>
+    <mat-label>Backup code</mat-label>
+    <input matInput formControlName="backupCode" />
+    <mat-error *ngIf="backupCode?.invalid">
+      <span *ngIf="backupCode?.errors?.required">Required</span>
+      <span *ngIf="backupCode?.errors?.minlength || backupCode?.errors?.maxlength"
+        >Code must be 16 digits</span
+      >
+    </mat-error>
+  </mat-form-field>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="(copiedCodes$ | async) !== (true)"
+    (click)="verifyBackupCode()"
+  >
+    Next
+  </button>
+</form>
