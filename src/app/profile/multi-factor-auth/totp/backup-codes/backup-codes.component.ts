@@ -1,17 +1,17 @@
-import { 
-  Component, 
-  OnInit, 
+import {
+  Component,
+  OnInit,
   ChangeDetectionStrategy
-} from '@angular/core';
+} from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 // import { combineLatest } from "rxjs";
 import { take } from "rxjs/operators";
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
 
 @Component({
-  selector: 'gt-backup-codes',
-  templateUrl: './backup-codes.component.html',
-  styleUrls: ['./backup-codes.component.scss'],
+  selector: "gt-backup-codes",
+  templateUrl: "./backup-codes.component.html",
+  styleUrls: ["./backup-codes.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BackupCodesComponent implements OnInit {

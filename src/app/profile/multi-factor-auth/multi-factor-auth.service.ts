@@ -142,8 +142,8 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   setRegenCodes() {
-    this.setState({ regenCodes: true })
-    this.getBackupCodes().subscribe()
+    this.setState({ regenCodes: true });
+    this.getBackupCodes().subscribe();
   }
 
   verifyBackupCode(code: string) {
@@ -161,13 +161,13 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
                 regenCodes: false,
                 backupCodes: null,
                 serverError: {},
-              })
+              });
             } else {
               this.setState({
                 setupTOTPStage: state.setupTOTPStage + 1,
                 backupCodes: null,
                 serverError: {},
-              })
+              });
             }
           })
         );
