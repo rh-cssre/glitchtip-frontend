@@ -40,7 +40,7 @@
       [disabled]="(copiedCodes$ | async) !== (true)"
       (click)="verifyBackupCode()"
     >
-      Next
+      {{(regenCodes$ | async) ? 'Confirm' : 'Next'}}
     </button>
   </form>
 </div>
