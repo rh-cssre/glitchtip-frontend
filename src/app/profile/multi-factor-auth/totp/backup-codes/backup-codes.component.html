@@ -1,5 +1,6 @@
 <div *ngIf="TOTPKey$ | async;">
-  <p class="mat-h3">
+  <p class="mat-h3 mat-subheading-3"><strong>Regenerate backup codes</strong></p>
+  <p class="mat-h4">
     If you have lost your backup codes you can generate new ones, invalidating all
     previous codes. <strong>Print out these new codes or save them someplace safe.</strong>
   </p>
@@ -8,7 +9,7 @@
   </button>
 </div>
 <div *ngIf="(regenCodes$ | async) || (TOTPKey$ | async) === undefined">
-  <p *ngIf="(TOTPKey$ | async) === undefined" class="mat-h3">
+  <p *ngIf="(TOTPKey$ | async) === undefined" class="mat-h4">
     Download or copy a list of backup codes. If you ever lose your
     phone, each of these recovery codes can be used one time to regain
     access to your account. <strong>Print them out or save them someplace safe.</strong>
