@@ -11,11 +11,11 @@ mat-form-field {
     margin-right: 10px;
 }
 
-::ng-deep .mat-body-strong {
+:host ::ng-deep .mat-body-strong {
     margin-bottom: 0px;
 }
 
-::ng-deep .mat-flat-button {
+:host ::ng-deep .mat-flat-button {
     margin-top: 5px;
     margin-bottom: 10px;
     margin-right: 10px;

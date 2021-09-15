@@ -21,6 +21,7 @@ interface MFAState {
   copiedCodes: boolean;
   /** User has successfully entered one of the backup codes, confirming they have them */
   enteredCode: boolean;
+  regenCodes: boolean;
 }
 
 const initialState: MFAState = {
@@ -32,6 +33,7 @@ const initialState: MFAState = {
   backupCodes: null,
   copiedCodes: false,
   enteredCode: false,
+  regenCodes: false
 };
 
 @Injectable({
@@ -55,6 +57,9 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   );
   enteredCodeSuccess$ = this.getState$.pipe(
     map((state) => state.copiedCodes && state.enteredCode)
+  );
+  regenCodes$ = this.getState$.pipe(
+    map((state) => state.regenCodes)
   );
 
   constructor(private api: UserKeysService) {
@@ -136,6 +141,10 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     this.setState({ copiedCodes: true });
   }
 
+  setRegenCodes() {
+    this.setState({ regenCodes: true })
+  }
+
   verifyBackupCode(code: string) {
     const state = this.state.getValue();
     if (state.backupCodes !== null && state.backupCodes.includes(code)) {
@@ -145,12 +154,21 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
           codes: state.backupCodes,
         })
         .pipe(
-          tap(() =>
-            this.setState({
-              setupTOTPStage: state.setupTOTPStage + 1,
-              backupCodes: null,
-              serverError: {},
-            })
+          tap(() => {
+            if (state.regenCodes) {
+              this.setState({
+                regenCodes: false,
+                backupCodes: null,
+                serverError: {},
+              })
+            } else {
+              this.setState({
+                setupTOTPStage: state.setupTOTPStage + 1,
+                backupCodes: null,
+                serverError: {},
+              })
+            }
+          }
           )
         );
     } else {

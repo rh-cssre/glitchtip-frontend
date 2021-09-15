@@ -1,7 +1,7 @@
 import { 
   Component, 
   OnInit, 
-  ChangeDetectionStrategy 
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 // import { combineLatest } from "rxjs";
@@ -18,6 +18,7 @@ export class BackupCodesComponent implements OnInit {
   TOTPKey$ = this.service.TOTPKey$;
   error$ = this.service.serverError$;
   copiedCodes$ = this.service.copiedCodes$;
+  regenCodes$ = this.service.regenCodes$;
   backupCodeForm = new FormGroup({
     backupCode: new FormControl("", [
       Validators.required,
@@ -33,6 +34,10 @@ export class BackupCodesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  startRegenCodes() {
+    this.service.setRegenCodes();
   }
 
   copyCodes() {
