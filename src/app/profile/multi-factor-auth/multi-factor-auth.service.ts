@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
 import {
@@ -62,7 +63,10 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     map((state) => state.regenCodes)
   );
 
-  constructor(private api: UserKeysService) {
+  constructor(
+    private api: UserKeysService,
+    private snackBar: MatSnackBar,
+  ) {
     super(initialState);
   }
 
@@ -72,10 +76,16 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
       .pipe(tap((userKeys) => this.setState({ userKeys, initialLoad: true })));
   }
 
+  // Will need to rework snackbar messaging when FIDO2 is added.
   deleteKey(keyId: number) {
     return this.api
       .destroy(keyId.toString())
-      .pipe(exhaustMap(() => this.getUserKeys()));
+      .pipe(
+        exhaustMap(() => this.getUserKeys()),
+        tap(() =>
+          this.snackBar.open("TOTP authentication deactivated.")
+        )
+      );
   }
 
   incrementTOTPStage() {
@@ -157,6 +167,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
         .pipe(
           tap(() => {
             if (state.regenCodes) {
+              this.snackBar.open("Your new backup codes are now active.")
               this.setState({
                 regenCodes: false,
                 backupCodes: null,

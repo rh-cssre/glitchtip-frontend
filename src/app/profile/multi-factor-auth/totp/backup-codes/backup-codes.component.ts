@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-// import { combineLatest } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
 
@@ -27,7 +27,10 @@ export class BackupCodesComponent implements OnInit {
     ]),
   });
 
-  constructor(private service: MultiFactorAuthService) { }
+  constructor(
+    private service: MultiFactorAuthService,
+    private snackBar: MatSnackBar
+    ) {}
 
   get backupCode() {
     return this.backupCodeForm.get("backupCode");
@@ -45,6 +48,7 @@ export class BackupCodesComponent implements OnInit {
       if (codes) {
         navigator.clipboard.writeText(codes.join("\n"));
         this.service.setCopiedCodes();
+        this.snackBar.open("Backup codes copied to clipboard.")
       }
     });
   }
