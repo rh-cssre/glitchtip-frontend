@@ -2858,12 +2858,12 @@
         },
         {
             "name": "LoginResponse",
-            "id": "interface-LoginResponse-f305683dbdab4e07185b1676c79c70d7",
+            "id": "interface-LoginResponse-a1d687b03a86b16cab09c67d4d526615",
             "file": "src/app/login/login.service.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  hasFIDO2$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"FIDO2\"))\n  );\n  hasTOTP$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"TOTP\"))\n  );\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateBackupCode(code: string) {\n    const url = \"/api/mfa/authenticate/backup_codes/\";\n    const data = {\n      code: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          if (err.error.code) {\n            error = err.error;\n            console.log(error);\n          } else {\n            error = { non_field_errors: err.error };\n          }\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  hasFIDO2$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"FIDO2\"))\n  );\n  hasTOTP$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"TOTP\"))\n  );\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateBackupCode(code: string) {\n    const url = \"/api/mfa/authenticate/backup_codes/\";\n    const data = {\n      code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          if (err.error.code) {\n            error = err.error;\n            console.log(error);\n          } else {\n            error = { non_field_errors: err.error };\n          }\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
             "properties": [
                 {
                     "name": "requires_mfa",
@@ -2890,12 +2890,12 @@
         },
         {
             "name": "LoginState",
-            "id": "interface-LoginState-f305683dbdab4e07185b1676c79c70d7",
+            "id": "interface-LoginState-a1d687b03a86b16cab09c67d4d526615",
             "file": "src/app/login/login.service.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  hasFIDO2$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"FIDO2\"))\n  );\n  hasTOTP$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"TOTP\"))\n  );\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateBackupCode(code: string) {\n    const url = \"/api/mfa/authenticate/backup_codes/\";\n    const data = {\n      code: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          if (err.error.code) {\n            error = err.error;\n            console.log(error);\n          } else {\n            error = { non_field_errors: err.error };\n          }\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  hasFIDO2$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"FIDO2\"))\n  );\n  hasTOTP$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"TOTP\"))\n  );\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateBackupCode(code: string) {\n    const url = \"/api/mfa/authenticate/backup_codes/\";\n    const data = {\n      code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          if (err.error.code) {\n            error = err.error;\n            console.log(error);\n          } else {\n            error = { non_field_errors: err.error };\n          }\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
             "properties": [
                 {
                     "name": "error",
@@ -12725,7 +12725,7 @@
         },
         {
             "name": "LoginService",
-            "id": "injectable-LoginService-f305683dbdab4e07185b1676c79c70d7",
+            "id": "injectable-LoginService-a1d687b03a86b16cab09c67d4d526615",
             "file": "src/app/login/login.service.ts",
             "properties": [
                 {
@@ -12969,7 +12969,7 @@
             "deprecationMessage": "",
             "description": "",
             "rawdescription": "\n",
-            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  hasFIDO2$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"FIDO2\"))\n  );\n  hasTOTP$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"TOTP\"))\n  );\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateBackupCode(code: string) {\n    const url = \"/api/mfa/authenticate/backup_codes/\";\n    const data = {\n      code: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          if (err.error.code) {\n            error = err.error;\n            console.log(error);\n          } else {\n            error = { non_field_errors: err.error };\n          }\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { StatefulService } from \"../shared/stateful-service/stateful-service\";\nimport { AuthService } from \"../api/auth/auth.service\";\nimport { catchError, map, tap } from \"rxjs/operators\";\nimport { ServerError } from \"../shared/django.interfaces\";\nimport { EMPTY } from \"rxjs\";\n\nconst baseUrl = \"/rest-auth\";\n\ntype ValidAuth = \"TOTP\" | \"FIDO2\";\n\ninterface LoginResponse {\n  requires_mfa: boolean;\n  valid_auth: ValidAuth[];\n}\n\ninterface LoginState {\n  loading: boolean;\n  error: ServerError | null;\n  validAuth: ValidAuth[] | null;\n}\n\nconst initialState: LoginState = {\n  loading: false,\n  error: null,\n  validAuth: null,\n};\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class LoginService extends StatefulService<LoginState> {\n  loading$ = this.getState$.pipe(map((state) => state.loading));\n  error$ = this.getState$.pipe(map((state) => state.error));\n  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));\n  hasFIDO2$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"FIDO2\"))\n  );\n  hasTOTP$ = this.getState$.pipe(\n    map((state) => state.validAuth?.includes(\"TOTP\"))\n  );\n  constructor(private http: HttpClient, private authService: AuthService) {\n    super(initialState);\n  }\n\n  login(email: string, password: string) {\n    const url = baseUrl + \"/login/\";\n    const data = {\n      email,\n      password,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post<LoginResponse>(url, data).pipe(\n      tap((resp) => {\n        if (resp.requires_mfa) {\n          this.setState({ validAuth: resp.valid_auth });\n        } else {\n          this.authService.afterLogin();\n        }\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = err.error;\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateTOTP(code: string) {\n    const url = \"/api/mfa/authenticate/totp/\";\n    const data = {\n      otp: code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          error = { non_field_errors: err.error };\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n\n  authenticateBackupCode(code: string) {\n    const url = \"/api/mfa/authenticate/backup_codes/\";\n    const data = {\n      code,\n    };\n    this.setState({ loading: true, error: null });\n    return this.http.post(url, data).pipe(\n      tap(() => {\n        this.clearState();\n        this.authService.afterLogin();\n      }),\n      catchError((err) => {\n        let error: ServerError | null = null;\n        if (err.status === 400) {\n          if (err.error.code) {\n            error = err.error;\n            console.log(error);\n          } else {\n            error = { non_field_errors: err.error };\n          }\n        } else {\n          error = { non_field_errors: [\"Error\"] };\n        }\n        this.setState({ loading: false, error });\n        return EMPTY;\n      })\n    );\n  }\n}\n",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -27559,6 +27559,215 @@
             "templateData": "<ng-container *ngIf=\"(initialLoad$ | async) === true\" class=\"l-body\">\n  <mat-card>\n    <mat-card-header class=\"flex-space-between\">\n      <mat-card-title>Auth Tokens</mat-card-title>\n      <a\n        mat-flat-button\n        [routerLink]=\"['/profile', 'auth-tokens', 'new']\"\n        color=\"primary\"\n      >\n        Create New Token\n      </a>\n    </mat-card-header>\n    <mat-divider></mat-divider>\n    <mat-card-content class=\"content\">\n      <p>\n        Authentication tokens give you access to the GlitchTip API. You can\n        create these tokens as authentication to gain specific access around the\n        app.\n      </p>\n    </mat-card-content>\n  </mat-card>\n  <mat-card>\n    <mat-card-header>\n      <mat-card-title>Your Tokens</mat-card-title>\n    </mat-card-header>\n    <mat-divider></mat-divider>\n    <mat-card-content>\n      <ng-container *ngIf=\"(authTokens$ | async)?.length; else emptyState\">\n        <div\n          class=\"content-wrapper\"\n          *ngFor=\"let authToken of authTokens$ | async; let i = index\"\n        >\n          <h3 class=\"label\">{{ authToken.label }}</h3>\n          <div class=\"loading-wrapper\">\n            <gt-copy-input\n              class=\"token\"\n              [value]=\"authToken.token\"\n            ></gt-copy-input>\n            <gt-loading-button\n              (click)=\"deleteAuthToken(authToken.id)\"\n              [loading]=\"authToken.id === (deleteLoading$ | async)\"\n              buttonText=\"Delete\"\n              buttonStyle=\"stroked\"\n            >\n            </gt-loading-button>\n          </div>\n          <p class=\"scopes\">\n            <span class=\"mat-body-strong\">Scopes</span>\n            <span class=\"scopes__list-wrapper\">\n              <span *ngFor=\"let scope of authToken.scopes; let i = index\">{{\n                scope\n              }}</span></span\n            >\n          </p>\n          <mat-divider\n            *ngIf=\"(authTokens$ | async)?.length !== i + 1\"\n          ></mat-divider>\n        </div>\n      </ng-container>\n      <ng-template #emptyState>\n        <p class=\"empty-state\">\n          Once you create a token, it will show up here.\n        </p>\n      </ng-template>\n    </mat-card-content>\n  </mat-card>\n</ng-container>\n"
         },
         {
+            "name": "BackupCodesComponent",
+            "id": "component-BackupCodesComponent-f11c0ff85fa292e1f302c66a08318ee3",
+            "file": "src/app/profile/multi-factor-auth/totp/backup-codes/backup-codes.component.ts",
+            "changeDetection": "ChangeDetectionStrategy.OnPush",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "gt-backup-codes",
+            "styleUrls": [
+                "./backup-codes.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./backup-codes.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "backupCodeForm",
+                    "defaultValue": "new FormGroup({\n    backupCode: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(16),\n      Validators.maxLength(16),\n    ]),\n  })",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                },
+                {
+                    "name": "copiedCodes$",
+                    "defaultValue": "this.service.copiedCodes$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "error$",
+                    "defaultValue": "this.service.serverError$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "TOTPKey$",
+                    "defaultValue": "this.service.TOTPKey$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "copyCodes",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 38,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "download",
+                    "args": [
+                        {
+                            "name": "filename",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 63,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        120
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "filename",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "text",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "downloadCodes",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 47,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 35,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "verifyBackupCode",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 56,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { \n  Component, \n  OnInit, \n  ChangeDetectionStrategy\n} from '@angular/core';\nimport { FormControl, FormGroup, Validators } from \"@angular/forms\";\n// import { combineLatest } from \"rxjs\";\nimport { take } from \"rxjs/operators\";\nimport { MultiFactorAuthService } from \"../../multi-factor-auth.service\";\n\n@Component({\n  selector: 'gt-backup-codes',\n  templateUrl: './backup-codes.component.html',\n  styleUrls: ['./backup-codes.component.scss'],\n  changeDetection: ChangeDetectionStrategy.OnPush\n})\nexport class BackupCodesComponent implements OnInit {\n  TOTPKey$ = this.service.TOTPKey$;\n  error$ = this.service.serverError$;\n  copiedCodes$ = this.service.copiedCodes$;\n  backupCodeForm = new FormGroup({\n    backupCode: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(16),\n      Validators.maxLength(16),\n    ]),\n  });\n\n  constructor(private service: MultiFactorAuthService) { }\n\n  get backupCode() {\n    return this.backupCodeForm.get(\"backupCode\");\n  }\n\n  ngOnInit(): void {\n  }\n\n  copyCodes() {\n    this.service.backupCodes$.pipe(take(1)).subscribe((codes) => {\n      if (codes) {\n        navigator.clipboard.writeText(codes.join(\"\\n\"));\n        this.service.setCopiedCodes();\n      }\n    });\n  }\n\n  downloadCodes() {\n    this.service.backupCodes$.pipe(take(1)).subscribe((codes) => {\n      if (codes) {\n        this.download(\"glitchtip-backup.txt\", codes.join(\"\\n\"));\n        this.service.setCopiedCodes();\n      }\n    });\n  }\n\n  verifyBackupCode() {\n    const code = this.backupCodeForm.get(\"backupCode\")?.value;\n    if (this.backupCodeForm.valid && code) {\n      this.service.verifyBackupCode(code).subscribe();\n    }\n  }\n\n  private download(filename: string, text: string) {\n    const element = document.createElement(\"a\");\n    element.setAttribute(\n      \"href\",\n      \"data:text/plain;charset=utf-8,\" + encodeURIComponent(text)\n    );\n    element.setAttribute(\"download\", filename);\n\n    element.style.display = \"none\";\n    document.body.appendChild(element);\n\n    element.click();\n\n    document.body.removeChild(element);\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "mat-form-field {\n    margin-right: 10px;\n}\n\n::ng-deep .mat-body-strong {\n    margin-bottom: 0px;\n}\n\n::ng-deep .mat-flat-button {\n    margin-top: 5px;\n    margin-bottom: 10px;\n    margin-right: 10px;\n}",
+                    "styleUrl": "./backup-codes.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "service",
+                        "type": "MultiFactorAuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 27,
+                "jsdoctags": [
+                    {
+                        "name": "service",
+                        "type": "MultiFactorAuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "backupCode": {
+                    "name": "backupCode",
+                    "getSignature": {
+                        "name": "backupCode",
+                        "type": "",
+                        "returnType": "",
+                        "line": 31
+                    }
+                }
+            },
+            "templateData": "<div *ngIf=\"TOTPKey$ | async;\">\n  <button mat-stroked-button color=\"primary\">\n    Regenerate backup codes\n  </button>\n</div>\n<div>\n  <div *ngIf=\"TOTPKey$ | async; else initialInstructions\">\n    <p class=\"mat-h3\">\n      If you have lost your backup codes you can generate new ones, invalidating all\n      previous codes. <strong>Print out these new codes or save them someplace safe.</strong>\n    </p>\n  </div>\n  <ng-template #initialInstructions>\n    <p class=\"mat-h3\">\n      Download or copy a list of backup codes. If you ever lose your\n      phone, each of these recovery codes can be used one time to regain\n      access to your account. <strong>Print them out or save them someplace safe.</strong>\n    </p>\n  </ng-template>\n  <button mat-flat-button color=\"primary\" (click)=\"downloadCodes()\">\n    Download\n  </button>\n  <button mat-flat-button color=\"primary\" (click)=\"copyCodes()\">\n    Copy\n  </button>\n  <p class=\"mat-body-strong\">\n    Enter one of the backup codes to confirm that you have saved them:\n  </p>\n  <form [formGroup]=\"backupCodeForm\">\n    <gt-form-error [error]=\"error$ | async\"></gt-form-error>\n    <mat-form-field>\n      <mat-label>Backup code</mat-label>\n      <input matInput formControlName=\"backupCode\" />\n      <mat-error *ngIf=\"backupCode?.invalid\">\n        <span *ngIf=\"backupCode?.errors?.required\">Required</span>\n        <span *ngIf=\"backupCode?.errors?.minlength || backupCode?.errors?.maxlength\"\n          >Code must be 16 digits</span\n        >\n      </mat-error>\n    </mat-form-field>\n    <button\n      mat-flat-button\n      color=\"primary\"\n      [disabled]=\"(copiedCodes$ | async) !== (true)\"\n      (click)=\"verifyBackupCode()\"\n    >\n      Next\n    </button>\n  </form>\n</div>"
+        },
+        {
             "name": "ChangePasswordComponent",
             "id": "component-ChangePasswordComponent-930c9aaaf32c065dbfd19b6d687b0719",
             "file": "src/app/profile/change-password/change-password.component.ts",
@@ -39532,7 +39741,7 @@
         },
         {
             "name": "TOTPComponent",
-            "id": "component-TOTPComponent-d6cedbe735c09c1a17c6e5aec3676b1f",
+            "id": "component-TOTPComponent-9f5e50d7c3d2f7a6f9f7425ec29cc519",
             "file": "src/app/profile/multi-factor-auth/totp/totp.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
@@ -39640,22 +39849,12 @@
             ],
             "methodsClass": [
                 {
-                    "name": "copyCodes",
-                    "args": [],
-                    "optional": false,
-                    "returnType": "void",
-                    "typeParameters": [],
-                    "line": 99,
-                    "deprecated": false,
-                    "deprecationMessage": ""
-                },
-                {
                     "name": "decrementStep",
                     "args": [],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 67,
+                    "line": 59,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -39672,7 +39871,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 80,
+                    "line": 72,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -39749,7 +39948,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 71,
+                    "line": 63,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -39766,7 +39965,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 93,
+                    "line": 85,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -39800,7 +39999,7 @@
                     "optional": false,
                     "returnType": "\"false\" | \"doing\" | \"true\"",
                     "typeParameters": [],
-                    "line": 84,
+                    "line": 76,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -39872,7 +40071,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import {\n  Component,\n  ChangeDetectionStrategy,\n  ElementRef,\n  ViewChild,\n  OnInit,\n  OnDestroy,\n} from \"@angular/core\";\nimport { FormControl, FormGroup, Validators } from \"@angular/forms\";\nimport * as QRCode from \"qrcode\";\nimport { combineLatest } from \"rxjs\";\nimport { delay, filter, take, tap } from \"rxjs/operators\";\nimport { MultiFactorAuthService } from \"../multi-factor-auth.service\";\n\n@Component({\n  selector: \"gt-totp\",\n  templateUrl: \"./totp.component.html\",\n  styleUrls: [\"./totp.component.scss\"],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TOTPComponent implements OnInit, OnDestroy {\n  @ViewChild(\"canvas\", { static: false }) canvas: ElementRef | undefined;\n  TOTPKey$ = this.service.TOTPKey$;\n  TOTP$ = this.service.totp$;\n  step$ = this.service.setupTOTPStage$;\n  error$ = this.service.serverError$;\n  copiedCodes$ = this.service.copiedCodes$;\n  codeForm = new FormGroup({\n    code: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(6),\n      Validators.maxLength(6),\n    ]),\n  });\n  backupCodeForm = new FormGroup({\n    code: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(16),\n      Validators.maxLength(16),\n    ]),\n  });\n\n  constructor(private service: MultiFactorAuthService) {}\n\n  get code() {\n    return this.codeForm.get(\"code\");\n  }\n\n  ngOnInit() {\n    combineLatest([this.service.totp$, this.step$])\n      .pipe(\n        filter(([totp, step]) => step === 3 && totp !== null),\n        delay(0),\n        tap(([totp, _]) => this.generateQRCode(totp!.provisioning_uri))\n      )\n      .subscribe();\n  }\n\n  ngOnDestroy() {\n    this.service.clearState();\n  }\n\n  incrementStep() {\n    this.service.incrementTOTPStage();\n  }\n\n  decrementStep() {\n    this.service.decrementTOTPStage();\n  }\n\n  enableTOTP() {\n    if (this.codeForm.valid) {\n      const code = this.code;\n      if (code) {\n        this.service.enableTOTP(code.value).pipe().subscribe();\n      }\n    }\n  }\n\n  deleteKey(keyId: number) {\n    this.service.deleteKey(keyId).subscribe();\n  }\n\n  getStepIsDone(step: number, currentStep: number) {\n    if (currentStep < step) {\n      return \"false\";\n    } else if (currentStep === step) {\n      return \"doing\";\n    }\n    return \"true\";\n  }\n\n  generateQRCode(value: string) {\n    if (this.canvas) {\n      QRCode.toCanvas(this.canvas.nativeElement, value);\n    }\n  }\n\n  copyCodes() {\n    this.service.backupCodes$.pipe(take(1)).subscribe((codes) => {\n      if (codes) {\n        navigator.clipboard.writeText(codes.join(\"\\n\"));\n        this.service.setCopiedCodes();\n      }\n    });\n  }\n\n  downloadCodes() {\n    this.service.backupCodes$.pipe(take(1)).subscribe((codes) => {\n      if (codes) {\n        this.download(\"glitchtip-backup.txt\", codes.join(\"\\n\"));\n        this.service.setCopiedCodes();\n      }\n    });\n  }\n\n  verifyBackupCode() {\n    const code = this.backupCodeForm.get(\"code\")?.value;\n    if (this.backupCodeForm.valid && code) {\n      this.service.verifyBackupCode(code).subscribe();\n    }\n  }\n\n  private download(filename: string, text: string) {\n    var element = document.createElement(\"a\");\n    element.setAttribute(\n      \"href\",\n      \"data:text/plain;charset=utf-8,\" + encodeURIComponent(text)\n    );\n    element.setAttribute(\"download\", filename);\n\n    element.style.display = \"none\";\n    document.body.appendChild(element);\n\n    element.click();\n\n    document.body.removeChild(element);\n  }\n}\n",
+            "sourceCode": "import {\n  Component,\n  ChangeDetectionStrategy,\n  ElementRef,\n  ViewChild,\n  OnInit,\n  OnDestroy,\n} from \"@angular/core\";\nimport { FormControl, FormGroup, Validators } from \"@angular/forms\";\nimport * as QRCode from \"qrcode\";\nimport { combineLatest } from \"rxjs\";\nimport { delay, filter, tap } from \"rxjs/operators\";\nimport { MultiFactorAuthService } from \"../multi-factor-auth.service\";\n\n@Component({\n  selector: \"gt-totp\",\n  templateUrl: \"./totp.component.html\",\n  styleUrls: [\"./totp.component.scss\"],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class TOTPComponent implements OnInit, OnDestroy {\n  @ViewChild(\"canvas\", { static: false }) canvas: ElementRef | undefined;\n  TOTPKey$ = this.service.TOTPKey$;\n  TOTP$ = this.service.totp$;\n  step$ = this.service.setupTOTPStage$;\n  error$ = this.service.serverError$;\n  codeForm = new FormGroup({\n    code: new FormControl(\"\", [\n      Validators.required,\n      Validators.minLength(6),\n      Validators.maxLength(6),\n    ]),\n  });\n\n  constructor(private service: MultiFactorAuthService) {}\n\n  get code() {\n    return this.codeForm.get(\"code\");\n  }\n\n  ngOnInit() {\n    combineLatest([this.service.totp$, this.step$])\n      .pipe(\n        filter(([totp, step]) => step === 3 && totp !== null),\n        delay(0),\n        tap(([totp, _]) => this.generateQRCode(totp!.provisioning_uri))\n      )\n      .subscribe();\n  }\n\n  ngOnDestroy() {\n    this.service.clearState();\n  }\n\n  incrementStep() {\n    this.service.incrementTOTPStage();\n  }\n\n  decrementStep() {\n    this.service.decrementTOTPStage();\n  }\n\n  enableTOTP() {\n    if (this.codeForm.valid) {\n      const code = this.code;\n      if (code) {\n        this.service.enableTOTP(code.value).pipe().subscribe();\n      }\n    }\n  }\n\n  deleteKey(keyId: number) {\n    this.service.deleteKey(keyId).subscribe();\n  }\n\n  getStepIsDone(step: number, currentStep: number) {\n    if (currentStep < step) {\n      return \"false\";\n    } else if (currentStep === step) {\n      return \"doing\";\n    }\n    return \"true\";\n  }\n\n  generateQRCode(value: string) {\n    if (this.canvas) {\n      QRCode.toCanvas(this.canvas.nativeElement, value);\n    }\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -39922,7 +40121,7 @@
                     }
                 }
             },
-            "templateData": "<mat-card>\n  <mat-card-title>TOTP authentication</mat-card-title>\n  <mat-card-content>\n    <ng-container *ngIf=\"TOTPKey$ | async as TOTPKey; else TOTPDisabled\">\n      <p>TOTP authentication is currently enabled on your account.</p>\n      <button mat-flat-button color=\"primary\" (click)=\"deleteKey(TOTPKey.id)\">\n        Disable two-factor authentication\n      </button>\n    </ng-container>\n    <ng-template #TOTPDisabled>\n      <p class=\"mat-h3\">\n        Make your account more secure by requiring a time-based one time\n        password (TOTP) code after you log in.\n      </p>\n      <p class=\"mat-body-1\">\n        If you ever lose access to your codes, you can recover your account with\n        your <strong>backup code</strong>.\n      </p>\n\n      <div class=\"totp-process\" *ngIf=\"step$ | async as step\">\n        <div *ngIf=\"step === 1\">\n          <button mat-flat-button color=\"primary\" (click)=\"incrementStep()\">\n            Get Started\n          </button>\n        </div>\n        <gt-to-do-item\n          [isDone]=\"getStepIsDone(2, step)\"\n          title=\"Download authenticator app\"\n        ></gt-to-do-item>\n        <div>\n          <div *ngIf=\"step === 2\">\n            <div class=\"mat-h3\">\n              Download\n              <a\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                href=\"https://authy.com/download/\"\n                >Authy</a\n              >,\n              <a\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                href=\"https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2\"\n                >Google Authenticator</a\n              >,\n              <a\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                href=\"https://play.google.com/store/apps/details?id=me.jmh.authenticatorpro\"\n                >Authenticator Pro</a\n              >, or your favorite TOTP app on your mobile device.\n            </div>\n            <div class=\"mat-h4\">\n              Once you have the app running, proceed to the next step.\n            </div>\n            <div>\n              <button mat-flat-button color=\"primary\" (click)=\"incrementStep()\">\n                Next\n              </button>\n            </div>\n          </div>\n        </div>\n        <gt-to-do-item\n          [isDone]=\"getStepIsDone(3, step)\"\n          title=\"Save backup codes\"\n        ></gt-to-do-item>\n        <div *ngIf=\"step === 3\">\n          <p class=\"mat-h3\">\n            Download or copy a list of backup codes. If you ever lose your\n            phone, each of these recovery codes can be used one time to regain\n            access to your account. Print it out or save it someplace safe.\n          </p>\n          <button mat-flat-button color=\"primary\" (click)=\"downloadCodes()\">\n            Download\n          </button>\n          <button mat-flat-button color=\"primary\" (click)=\"copyCodes()\">\n            Copy\n          </button>\n          <p class=\"mat-body-strong\">\n            Enter one of the backup codes to confirm that you have saved them:\n          </p>\n          <form [formGroup]=\"backupCodeForm\">\n            <mat-form-field>\n              <mat-label>Backup code</mat-label>\n              <input matInput formControlName=\"code\" />\n              <mat-error *ngIf=\"code?.invalid\">\n                <span *ngIf=\"code?.errors?.required\">Required</span>\n                <span *ngIf=\"code?.errors?.minlength || code?.errors?.maxlength\">\n                  Code must be 16 characters\n                </span>\n                <span *ngFor=\"let serverError of code?.errors?.serverError\">{{\n                  serverError\n                }}</span>\n              </mat-error>\n            </mat-form-field>\n            <button\n              mat-flat-button\n              color=\"primary\"\n              [disabled]=\"!(copiedCodes$ | async)\"\n              (click)=\"verifyBackupCode()\"\n            >\n              Next\n            </button>\n          </form>\n        </div>\n        <gt-to-do-item\n          [isDone]=\"getStepIsDone(4, step)\"\n          title=\"Activate TOTP\"\n        ></gt-to-do-item>\n        <div *ngIf=\"step === 4\">\n          <div>\n            <p class=\"mat-h3\">\n              Scan the QR Code in your authenticator app or enter the code\n              below:\n            </p>\n          </div>\n          <canvas #canvas id=\"canvas\"></canvas>\n          <div *ngIf=\"TOTP$ | async as TOTP\">\n            <span class=\"totp-string\">{{ TOTP.secret_key }}</span>\n          </div>\n          <form [formGroup]=\"codeForm\" (ngSubmit)=\"enableTOTP()\">\n            <div>\n              <p class=\"mat-body-strong\">\n                Enter a six-digit password generated by your authenticator\n                app and submit this form to enable TOTP authentication:\n              </p>\n            </div>\n            <gt-form-error [error]=\"error$ | async\"></gt-form-error>\n            <mat-form-field>\n              <mat-label>6-digit Code</mat-label>\n              <input\n                matInput\n                formControlName=\"code\"\n                pattern=\"\\d*\"\n                maxlength=\"6\"\n              />\n              <mat-error *ngIf=\"code?.invalid\">\n                <span *ngIf=\"code?.errors?.required\">Required</span>\n                <span *ngIf=\"code?.errors?.minlength || code?.errors?.maxlength\"\n                  >Code must be 6 digits</span\n                >\n              </mat-error>\n            </mat-form-field>\n            <div>\n              <button id=\"submit\" mat-flat-button color=\"primary\">\n                Enable TOTP authentication\n              </button>\n            </div>\n          </form>\n        </div>\n      </div>\n    </ng-template>\n  </mat-card-content>\n</mat-card>\n"
+            "templateData": "<mat-card>\n  <mat-card-title>TOTP authentication</mat-card-title>\n  <mat-card-content>\n    <ng-container *ngIf=\"TOTPKey$ | async as TOTPKey; else TOTPDisabled\">\n      <p>TOTP authentication is currently enabled on your account.</p>\n      <button mat-flat-button color=\"primary\" (click)=\"deleteKey(TOTPKey.id)\">\n        Disable two-factor authentication\n      </button>\n      <gt-backup-codes></gt-backup-codes>\n    </ng-container>\n    <ng-template #TOTPDisabled>\n      <p class=\"mat-h3\">\n        Make your account more secure by requiring a time-based one time\n        password (TOTP) code after you log in.\n      </p>\n      <p class=\"mat-body-1\">\n        If you ever lose access to your codes, you can recover your account with\n        your <strong>backup code</strong>.\n      </p>\n\n      <div class=\"totp-process\" *ngIf=\"step$ | async as step\">\n        <div *ngIf=\"step === 1\">\n          <button mat-flat-button color=\"primary\" (click)=\"incrementStep()\">\n            Get Started\n          </button>\n        </div>\n        <gt-to-do-item\n          [isDone]=\"getStepIsDone(2, step)\"\n          title=\"Download authenticator app\"\n        ></gt-to-do-item>\n        <div>\n          <div *ngIf=\"step === 2\">\n            <div class=\"mat-h3\">\n              Download\n              <a\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                href=\"https://authy.com/download/\"\n                >Authy</a\n              >,\n              <a\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                href=\"https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2\"\n                >Google Authenticator</a\n              >,\n              <a\n                target=\"_blank\"\n                rel=\"noopener noreferrer\"\n                href=\"https://play.google.com/store/apps/details?id=me.jmh.authenticatorpro\"\n                >Authenticator Pro</a\n              >, or your favorite TOTP app on your mobile device.\n            </div>\n            <div class=\"mat-h4\">\n              Once you have the app running, proceed to the next step.\n            </div>\n            <div>\n              <button mat-flat-button color=\"primary\" (click)=\"incrementStep()\">\n                Next\n              </button>\n            </div>\n          </div>\n        </div>\n        <gt-to-do-item\n          [isDone]=\"getStepIsDone(3, step)\"\n          title=\"Save backup codes\"\n        ></gt-to-do-item>\n        <div *ngIf=\"step === 3\">\n        <gt-backup-codes></gt-backup-codes>\n        </div>\n        <gt-to-do-item\n          [isDone]=\"getStepIsDone(4, step)\"\n          title=\"Activate TOTP\"\n        ></gt-to-do-item>\n        <div *ngIf=\"step === 4\">\n          <div>\n            <p class=\"mat-h3\">\n              Scan the QR Code in your authenticator app or enter the code\n              below:\n            </p>\n          </div>\n          <canvas #canvas id=\"canvas\"></canvas>\n          <div *ngIf=\"TOTP$ | async as TOTP\">\n            <span class=\"totp-string\">{{ TOTP.secret_key }}</span>\n          </div>\n          <form [formGroup]=\"codeForm\" (ngSubmit)=\"enableTOTP()\">\n            <div>\n              <p class=\"mat-body-strong\">\n                Enter a six-digit password generated by your authenticator\n                app and submit this form to enable TOTP authentication:\n              </p>\n            </div>\n            <gt-form-error [error]=\"error$ | async\"></gt-form-error>\n            <mat-form-field>\n              <mat-label>6-digit Code</mat-label>\n              <input\n                matInput\n                formControlName=\"code\"\n                pattern=\"\\d*\"\n                maxlength=\"6\"\n              />\n              <mat-error *ngIf=\"code?.invalid\">\n                <span *ngIf=\"code?.errors?.required\">Required</span>\n                <span *ngIf=\"code?.errors?.minlength || code?.errors?.maxlength\"\n                  >Code must be 6 digits</span\n                >\n              </mat-error>\n            </mat-form-field>\n            <div>\n              <button id=\"submit\" mat-flat-button color=\"primary\">\n                Enable TOTP authentication\n              </button>\n            </div>\n          </form>\n        </div>\n      </div>\n    </ng-template>\n  </mat-card-content>\n</mat-card>\n"
         },
         {
             "name": "TransactionDetailComponent",
@@ -41148,13 +41347,13 @@
         },
         {
             "name": "ProfileModule",
-            "id": "module-ProfileModule-3a27dd158d9a07654423b919d2c94d1a",
+            "id": "module-ProfileModule-35f0d66847bddd38b9ecfaa55549f4d5",
             "description": "",
             "deprecationMessage": "",
             "deprecated": false,
             "file": "src/app/profile/profile.module.ts",
             "methods": [],
-            "sourceCode": "import { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\n\nimport { ProfileRoutingModule } from \"./profile-routing.module\";\nimport { ProfileComponent } from \"./profile.component\";\nimport { SharedModule } from \"../shared/shared.module\";\nimport { ChangePasswordComponent } from \"./change-password/change-password.component\";\nimport { ManageEmailsComponent } from \"./manage-emails/manage-emails.component\";\nimport { ConfirmEmailComponent } from \"./confirm-email/confirm-email.component\";\nimport { NotificationsComponent } from \"./notifications/notifications.component\";\nimport { AuthTokensComponent } from \"./auth-tokens/auth-tokens.component\";\nimport { NewTokenComponent } from \"./auth-tokens/new-token/new-token.component\";\nimport { SocialAuthComponent } from \"./social-auth/social-auth.component\";\nimport { AccountComponent } from \"./account/account.component\";\nimport { MultiFactorAuthComponent } from \"./multi-factor-auth/multi-factor-auth.component\";\nimport { TOTPComponent } from \"./multi-factor-auth/totp/totp.component\";\nimport { Fido2Component } from \"./multi-factor-auth/fido2/fido2.component\";\n\n@NgModule({\n  declarations: [\n    ProfileComponent,\n    ChangePasswordComponent,\n    ManageEmailsComponent,\n    ConfirmEmailComponent,\n    NotificationsComponent,\n    AuthTokensComponent,\n    NewTokenComponent,\n    SocialAuthComponent,\n    AccountComponent,\n    MultiFactorAuthComponent,\n    TOTPComponent,\n    Fido2Component,\n  ],\n  imports: [\n    CommonModule,\n    ProfileRoutingModule,\n    SharedModule,\n    ReactiveFormsModule,\n  ],\n})\nexport class ProfileModule {}\n",
+            "sourceCode": "import { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\n\nimport { ProfileRoutingModule } from \"./profile-routing.module\";\nimport { ProfileComponent } from \"./profile.component\";\nimport { SharedModule } from \"../shared/shared.module\";\nimport { ChangePasswordComponent } from \"./change-password/change-password.component\";\nimport { ManageEmailsComponent } from \"./manage-emails/manage-emails.component\";\nimport { ConfirmEmailComponent } from \"./confirm-email/confirm-email.component\";\nimport { NotificationsComponent } from \"./notifications/notifications.component\";\nimport { AuthTokensComponent } from \"./auth-tokens/auth-tokens.component\";\nimport { NewTokenComponent } from \"./auth-tokens/new-token/new-token.component\";\nimport { SocialAuthComponent } from \"./social-auth/social-auth.component\";\nimport { AccountComponent } from \"./account/account.component\";\nimport { MultiFactorAuthComponent } from \"./multi-factor-auth/multi-factor-auth.component\";\nimport { TOTPComponent } from \"./multi-factor-auth/totp/totp.component\";\nimport { Fido2Component } from \"./multi-factor-auth/fido2/fido2.component\";\nimport { BackupCodesComponent } from './multi-factor-auth/totp/backup-codes/backup-codes.component';\n\n@NgModule({\n  declarations: [\n    ProfileComponent,\n    ChangePasswordComponent,\n    ManageEmailsComponent,\n    ConfirmEmailComponent,\n    NotificationsComponent,\n    AuthTokensComponent,\n    NewTokenComponent,\n    SocialAuthComponent,\n    AccountComponent,\n    MultiFactorAuthComponent,\n    TOTPComponent,\n    Fido2Component,\n    BackupCodesComponent,\n  ],\n  imports: [\n    CommonModule,\n    ProfileRoutingModule,\n    SharedModule,\n    ReactiveFormsModule,\n  ],\n})\nexport class ProfileModule {}\n",
             "children": [
                 {
                     "type": "providers",
@@ -41168,6 +41367,9 @@
                         },
                         {
                             "name": "AuthTokensComponent"
+                        },
+                        {
+                            "name": "BackupCodesComponent"
                         },
                         {
                             "name": "ChangePasswordComponent"
@@ -49202,6 +49404,15 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/profile/multi-factor-auth/totp/backup-codes/backup-codes.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "BackupCodesComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/11",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/profile/multi-factor-auth/totp/test-data.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
@@ -49217,7 +49428,7 @@
                 "linktype": "component",
                 "name": "TOTPComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/22",
+                "coverageCount": "0/16",
                 "status": "low"
             },
             {

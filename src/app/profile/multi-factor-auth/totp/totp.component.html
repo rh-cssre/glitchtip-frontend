@@ -6,6 +6,7 @@
       <button mat-flat-button color="primary" (click)="deleteKey(TOTPKey.id)">
         Disable two-factor authentication
       </button>
+      <gt-backup-codes></gt-backup-codes>
     </ng-container>
     <ng-template #TOTPDisabled>
       <p class="mat-h3">
@@ -14,7 +15,7 @@
       </p>
       <p class="mat-body-1">
         If you ever lose access to your codes, you can recover your account with
-        your <strong>backup code</strong>.
+        your <strong>backup codes</strong>.
       </p>
 
       <div class="totp-process" *ngIf="step$ | async as step">
@@ -65,41 +66,7 @@
           title="Save backup codes"
         ></gt-to-do-item>
         <div *ngIf="step === 3">
-          <p class="mat-h3">
-            Download or copy a list of backup codes. If you ever lose your
-            phone, each of these recovery codes can be used one time to regain
-            access to your account. Print it out or save it someplace safe.
-          </p>
-          <button mat-flat-button color="primary" (click)="downloadCodes()">
-            Download
-          </button>
-          <button mat-flat-button color="primary" (click)="copyCodes()">
-            Copy
-          </button>
-          <p class="mat-body-strong">
-            Enter one of the backup codes to confirm that you have saved them:
-          </p>
-          <form [formGroup]="backupCodeForm">
-            <gt-form-error [error]="error$ | async"></gt-form-error>
-            <mat-form-field>
-              <mat-label>Backup code</mat-label>
-              <input matInput formControlName="backupCode" />
-              <mat-error *ngIf="backupCode?.invalid">
-                <span *ngIf="backupCode?.errors?.required">Required</span>
-                <span *ngIf="backupCode?.errors?.minlength || backupCode?.errors?.maxlength"
-                  >Code must be 16 digits</span
-                >
-              </mat-error>
-            </mat-form-field>
-            <button
-              mat-flat-button
-              color="primary"
-              [disabled]="(copiedCodes$ | async) !== (true)"
-              (click)="verifyBackupCode()"
-            >
-              Next
-            </button>
-          </form>
+        <gt-backup-codes></gt-backup-codes>
         </div>
         <gt-to-do-item
           [isDone]="getStepIsDone(4, step)"

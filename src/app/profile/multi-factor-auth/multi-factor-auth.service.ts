@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
 import {
@@ -21,6 +22,7 @@ interface MFAState {
   copiedCodes: boolean;
   /** User has successfully entered one of the backup codes, confirming they have them */
   enteredCode: boolean;
+  regenCodes: boolean;
 }
 
 const initialState: MFAState = {
@@ -32,6 +34,7 @@ const initialState: MFAState = {
   backupCodes: null,
   copiedCodes: false,
   enteredCode: false,
+  regenCodes: false
 };
 
 @Injectable({
@@ -56,8 +59,14 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   enteredCodeSuccess$ = this.getState$.pipe(
     map((state) => state.copiedCodes && state.enteredCode)
   );
+  regenCodes$ = this.getState$.pipe(
+    map((state) => state.regenCodes)
+  );
 
-  constructor(private api: UserKeysService) {
+  constructor(
+    private api: UserKeysService,
+    private snackBar: MatSnackBar,
+  ) {
     super(initialState);
   }
 
@@ -67,10 +76,16 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
       .pipe(tap((userKeys) => this.setState({ userKeys, initialLoad: true })));
   }
 
+  // Will need to rework snackbar messaging when FIDO2 is added.
   deleteKey(keyId: number) {
     return this.api
       .destroy(keyId.toString())
-      .pipe(exhaustMap(() => this.getUserKeys()));
+      .pipe(
+        exhaustMap(() => this.getUserKeys()),
+        tap(() =>
+          this.snackBar.open("TOTP authentication deactivated.")
+        )
+      );
   }
 
   incrementTOTPStage() {
@@ -136,6 +151,11 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     this.setState({ copiedCodes: true });
   }
 
+  setRegenCodes() {
+    this.setState({ regenCodes: true });
+    this.getBackupCodes().subscribe();
+  }
+
   verifyBackupCode(code: string) {
     const state = this.state.getValue();
     if (state.backupCodes !== null && state.backupCodes.includes(code)) {
@@ -145,13 +165,22 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
           codes: state.backupCodes,
         })
         .pipe(
-          tap(() =>
-            this.setState({
-              setupTOTPStage: state.setupTOTPStage + 1,
-              backupCodes: null,
-              serverError: {},
-            })
-          )
+          tap(() => {
+            if (state.regenCodes) {
+              this.snackBar.open("Your new backup codes are now active.");
+              this.setState({
+                regenCodes: false,
+                backupCodes: null,
+                serverError: {},
+              });
+            } else {
+              this.setState({
+                setupTOTPStage: state.setupTOTPStage + 1,
+                backupCodes: null,
+                serverError: {},
+              });
+            }
+          })
         );
     } else {
       this.setState({ serverError: { non_field_errors: ["Invalid code"] } });
