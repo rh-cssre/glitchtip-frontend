@@ -18,6 +18,17 @@ export interface TOTPResponse {
   secret_key: string;
 }
 
+export type BackupCodes = string[];
+
+interface BackUpGenerateResponse {
+  codes: BackupCodes;
+}
+
+interface BackUpCodesRequest {
+  name: string;
+  codes: BackupCodes;
+}
+
 interface TOTPRequest {
   answer: string;
   secret_key: string;
@@ -35,6 +46,7 @@ export class UserKeysService extends APIBaseService {
   readonly url = "/api/mfa/user_keys/";
   readonly fido2Url = this.url + "fido2/";
   readonly totpUrl = this.url + "totp/";
+  readonly backupCodesUrl = this.url + "backup_codes/";
 
   constructor(protected http: HttpClient) {
     super(http);
@@ -66,5 +78,13 @@ export class UserKeysService extends APIBaseService {
 
   totpCreate(data: TOTPRequest) {
     return this.http.post<unknown>(this.totpUrl, data);
+  }
+
+  backupCodes() {
+    return this.http.get<BackUpGenerateResponse>(this.backupCodesUrl);
+  }
+
+  backupCodesCreate(data: BackUpCodesRequest) {
+    return this.http.post<UserKey>(this.backupCodesUrl, data);
   }
 }
