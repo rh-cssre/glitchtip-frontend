@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MultiFactorAuthComponent } from "./multi-factor-auth.component";
 
 describe("MultiFactorAuthComponent", () => {
@@ -10,7 +10,10 @@ describe("MultiFactorAuthComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MultiFactorAuthComponent],
-      imports: [HttpClientTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule
+      ],
     }).compileComponents();
   });
 

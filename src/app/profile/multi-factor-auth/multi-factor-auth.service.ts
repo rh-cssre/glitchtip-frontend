@@ -167,7 +167,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
         .pipe(
           tap(() => {
             if (state.regenCodes) {
-              this.snackBar.open("Your new backup codes are now active.")
+              this.snackBar.open("Your new backup codes are now active.");
               this.setState({
                 regenCodes: false,
                 backupCodes: null,

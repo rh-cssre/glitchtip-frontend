@@ -48,7 +48,7 @@ export class BackupCodesComponent implements OnInit {
       if (codes) {
         navigator.clipboard.writeText(codes.join("\n"));
         this.service.setCopiedCodes();
-        this.snackBar.open("Backup codes copied to clipboard.")
+        this.snackBar.open("Backup codes copied to clipboard.");
       }
     });
   }

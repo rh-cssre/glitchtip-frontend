@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { of } from "rxjs";
 import { SharedModule } from "src/app/shared/shared.module";
 import { totpUserKey } from "./test-data";
@@ -12,7 +13,11 @@ describe("TotpComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TOTPComponent],
-      imports: [HttpClientTestingModule, SharedModule],
+      imports: [
+        HttpClientTestingModule,
+        SharedModule,
+        MatSnackBarModule
+      ],
     }).compileComponents();
   });
 
