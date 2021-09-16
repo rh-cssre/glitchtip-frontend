@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../login.service";
 
@@ -8,17 +8,26 @@ import { LoginService } from "../login.service";
   styleUrls: ["./login-totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginTotpComponent {
+export class LoginTotpComponent implements OnInit {
   error$ = this.loginService.error$;
+  hasFIDO2$ = this.loginService.hasFIDO2$;
   form = new FormGroup({
     code: new FormControl("", [
       Validators.required,
       Validators.minLength(6),
-      Validators.maxLength(6),
+      Validators.maxLength(16),
     ]),
   });
 
   constructor(private loginService: LoginService) {}
+
+  ngOnInit() {
+    this.error$.subscribe((error) => {
+      if (error?.code) {
+        this.code?.setErrors({ serverError: error.code });
+      }
+    });
+  }
 
   get code() {
     return this.form.get("code");
@@ -26,7 +35,12 @@ export class LoginTotpComponent {
 
   onSubmit() {
     if (this.form.valid && this.code) {
-      this.loginService.authenticateTOTP(this.code.value).subscribe();
+      const code: string = this.code.value;
+      if (code.length === 6) {
+        this.loginService.authenticateTOTP(code).subscribe();
+      } else {
+        this.loginService.authenticateBackupCode(code).subscribe();
+      }
     }
   }
 }
