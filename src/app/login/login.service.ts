@@ -1,19 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { StatefulService } from "../shared/stateful-service/stateful-service";
-import { AuthService } from "../api/auth/auth.service";
-import { catchError, map, tap } from "rxjs/operators";
-import { ServerError } from "../shared/django.interfaces";
 import { EMPTY } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
+import { StatefulService } from "../shared/stateful-service/stateful-service";
+import { ServerError } from "../shared/django.interfaces";
+import { AuthService } from "../api/auth/auth.service";
+import { LoginResponse, ValidAuth } from "../api/auth/auth.interfaces";
 
 const baseUrl = "/rest-auth";
-
-type ValidAuth = "TOTP" | "FIDO2";
-
-interface LoginResponse {
-  requires_mfa: boolean;
-  valid_auth: ValidAuth[];
-}
 
 interface LoginState {
   loading: boolean;
@@ -54,7 +48,7 @@ export class LoginService extends StatefulService<LoginState> {
     return this.http.post<LoginResponse>(url, data).pipe(
       tap((resp) => {
         if (resp.requires_mfa) {
-          this.setState({ validAuth: resp.valid_auth });
+          this.promptForMFA(resp.valid_auth);
         } else {
           this.authService.afterLogin();
         }
@@ -70,6 +64,10 @@ export class LoginService extends StatefulService<LoginState> {
         return EMPTY;
       })
     );
+  }
+
+  promptForMFA(validAuth: ValidAuth[]) {
+    this.setState({ validAuth, loading: false, error: null });
   }
 
   authenticateTOTP(code: string) {

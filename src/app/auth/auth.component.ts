@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router, ParamMap } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { AuthService } from "../api/auth/auth.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { LoginResponse } from "../api/auth/auth.interfaces";
+import { LoginService } from "../login/login.service";
 
 @Component({
   selector: "gt-auth",
@@ -21,7 +23,8 @@ export class AuthComponent implements OnInit {
     private router: Router,
     private oauthService: GlitchTipOAuthService,
     private authService: AuthService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private loginService: LoginService
   ) {
     authService.isLoggedIn.subscribe(
       (isLoggedIn) => (this.isLoggedIn = isLoggedIn)
@@ -52,7 +55,7 @@ export class AuthComponent implements OnInit {
           this.oauthService
             .gitlabLogin(accessToken, this.isLoggedIn)
             .pipe(
-              tap(() => this.loginSuccess()),
+              tap((resp) => this.loginSuccess(resp)),
               catchError((error: HttpErrorResponse) => {
                 this.processSocialAuthErrorResponse(error);
                 return EMPTY;
@@ -63,7 +66,7 @@ export class AuthComponent implements OnInit {
           this.oauthService
             .googleLogin(accessToken, this.isLoggedIn)
             .pipe(
-              tap(() => this.loginSuccess()),
+              tap((resp) => this.loginSuccess(resp)),
               catchError((error: HttpErrorResponse) => {
                 this.processSocialAuthErrorResponse(error);
                 return EMPTY;
@@ -74,7 +77,7 @@ export class AuthComponent implements OnInit {
           this.oauthService
             .microsoftLogin(accessToken, this.isLoggedIn)
             .pipe(
-              tap(() => this.loginSuccess()),
+              tap((resp) => this.loginSuccess(resp)),
               catchError((error: HttpErrorResponse) => {
                 this.processSocialAuthErrorResponse(error);
                 return EMPTY;
@@ -90,7 +93,7 @@ export class AuthComponent implements OnInit {
           this.oauthService
             .githubLogin(code, this.isLoggedIn)
             .pipe(
-              tap(() => this.loginSuccess()),
+              tap((resp) => this.loginSuccess(resp)),
               catchError((error: HttpErrorResponse) => {
                 this.processSocialAuthErrorResponse(error);
                 return EMPTY;
@@ -124,11 +127,16 @@ export class AuthComponent implements OnInit {
   }
 
   /** On success for any oauth client, set auth data and redirect to home */
-  private loginSuccess() {
+  private loginSuccess(response: LoginResponse) {
     if (this.isLoggedIn) {
       this.router.navigate(["profile"]);
     } else {
-      this.authService.afterLogin();
+      if (response.requires_mfa) {
+        this.loginService.promptForMFA(response.valid_auth);
+        this.router.navigate(["/login"]);
+      } else {
+        this.authService.afterLogin();
+      }
     }
   }
 }
