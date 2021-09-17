@@ -3,14 +3,11 @@ import { HttpClient } from "@angular/common/http";
 
 import { getOAuthConfig } from "./social";
 import { OAuthProvider } from "./oauth.interfaces";
+import { LoginResponse } from "../auth/auth.interfaces";
 
 interface RestAuthConnectData {
   access_token?: string;
   code?: string;
-}
-
-interface RestAuthLoginResp {
-  key: string;
 }
 
 @Injectable({
@@ -29,7 +26,7 @@ export class GlitchTipOAuthService {
     if (isConnect) {
       url += "connect/";
     }
-    return this.http.post<RestAuthLoginResp>(url, data);
+    return this.http.post<LoginResponse>(url, data);
   }
 
   microsoftLogin(accessToken: string, isConnect: boolean) {
@@ -40,7 +37,7 @@ export class GlitchTipOAuthService {
     if (isConnect) {
       url += "connect/";
     }
-    return this.http.post<RestAuthLoginResp>(url, data);
+    return this.http.post<LoginResponse>(url, data);
   }
 
   googleLogin(accessToken: string, isConnect: boolean) {
@@ -51,7 +48,7 @@ export class GlitchTipOAuthService {
     if (isConnect) {
       url += "connect/";
     }
-    return this.http.post<RestAuthLoginResp>(url, data);
+    return this.http.post<LoginResponse>(url, data);
   }
 
   gitlabLogin(accessToken: string, isConnect: boolean) {
@@ -62,7 +59,7 @@ export class GlitchTipOAuthService {
     if (isConnect) {
       url += "connect/";
     }
-    return this.http.post<RestAuthLoginResp>(url, data);
+    return this.http.post<LoginResponse>(url, data);
   }
 
   initGitlabLogin(clientId: string) {
