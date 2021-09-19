@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { loadStripe } from "@stripe/stripe-js";
+import { EMPTY } from "rxjs";
 import { tap, exhaustMap, withLatestFrom } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
 import {
@@ -7,9 +9,7 @@ import {
   StripeBillingPortalSession,
 } from "./stripe.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { loadStripe } from "@stripe/stripe-js";
 import { SettingsService } from "src/app/api/settings.service";
-import { EMPTY } from "rxjs";
 
 @Injectable({
   providedIn: "root",

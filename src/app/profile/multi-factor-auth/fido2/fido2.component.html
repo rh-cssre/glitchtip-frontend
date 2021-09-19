@@ -2,9 +2,28 @@
   <mat-card-title>Register Universal 2nd Factor (U2F) device</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
-    Keys:
-    <ng-container *ngFor="let key of userKeys$ | async">
-      {{ key.name }}
-    </ng-container>
+    <p>Set up a U2F device as a second factor to sign in.</p>
+    <p>
+      Not all browsers support U2F devices. Therefore, we require that you set
+      up an authenticator app first. That way you'll always be able to sign in -
+      even when you're using an unsupported browser.
+    </p>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="addFIDO2Key()"
+      [disabled]="!(totpEnabled$ | async)"
+    >
+      Set up new device
+    </button>
+    <p *ngIf="!(totpEnabled$ | async)">
+      You need to register an authenticator app before you can set up a device.
+    </p>
+    <div>
+      <h3>U2F devices ({{ (userKeys$ | async)?.length }}):</h3>
+      <ng-container *ngFor="let key of userKeys$ | async">
+        {{ key.name }}
+      </ng-container>
+    </div>
   </mat-card-content>
 </mat-card>

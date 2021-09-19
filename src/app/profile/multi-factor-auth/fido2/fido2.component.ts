@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { map } from "rxjs/operators";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 
 @Component({
@@ -9,5 +10,8 @@ import { MultiFactorAuthService } from "../multi-factor-auth.service";
 })
 export class Fido2Component {
   userKeys$ = this.service.FIDO2Keys$;
+  totpEnabled$ = this.service.TOTPKey$.pipe(map((key) => !!key));
   constructor(private service: MultiFactorAuthService) {}
+
+  addFIDO2Key() {}
 }
