@@ -20,6 +20,7 @@ const popular = [
 const frontend = [
   "javascript",
   "javascript-react",
+  "javascript-nextjs",
   "javascript-angular",
   "javascript-angularjs",
   "javascript-backbone",

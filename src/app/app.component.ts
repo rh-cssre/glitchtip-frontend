@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, RoutesRecognized, NavigationEnd } from "@angular/router";
+import { Title } from "@angular/platform-browser";
+import { Router, RoutesRecognized } from "@angular/router";
 import { map, filter, take, exhaustMap, tap } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { AuthService } from "./api/auth/auth.service";
 import { OrganizationsService } from "./api/organizations/organizations.service";
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "gt-root",

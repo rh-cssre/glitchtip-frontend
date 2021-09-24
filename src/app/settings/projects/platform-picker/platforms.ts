@@ -187,6 +187,13 @@ export const platforms: Platform[] = [
         link: "https://docs.sentry.io/platforms/javascript/react/",
       },
       {
+        id: "javascript-nextjs",
+        name: "Next.js",
+        type: "framework",
+        link:
+          "https://github.com/getsentry/sentry-javascript/tree/master/packages/nextjs",
+      },
+      {
         id: "javascript-vue",
         name: "Vue",
         type: "framework",
