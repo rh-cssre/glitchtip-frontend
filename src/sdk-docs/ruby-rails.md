@@ -7,46 +7,17 @@ We support Rails 4 and newer.
 Install the SDK via Rubygems by adding it to your `Gemfile`:
 
 ```ruby
-gem "sentry-raven"
+gem "sentry-ruby"
+gem "sentry-rails"
 ```
 
 ### Configuration
 
-Open up `config/application.rb` and configure the DSN, and any other settings you need:
+Create the file `config/initializers/sentry.rb` and configure the DSN, and any other settings you need:
 
 ```ruby
-Raven.configure do |config|
-  config.dsn = 'your DSN here'
+Sentry.init do |config|
+  config.dsn = 'YOUR_DSN_HERE'
+  config.breadcrumbs_logger = [:active_support_logger, :http_logger]
 end
 ```
-
-If you have added items to [Rails’ log filtering](http://guides.rubyonrails.org/action_controller_overview.html#parameters-filtering), you can also make sure that those items are not sent to GlitchTip:
-
-```ruby
-# in your application.rb:
-config.filter_parameters << :password
-
-# in an initializer, like glitchtip.rb
-Raven.configure do |config|
-  config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
-end
-```
-
-### Params and sessions
-
-```ruby
-class ApplicationController < ActionController::Base
-  before_action :set_raven_context
-
-  private
-
-  def set_raven_context
-    Raven.user_context(id: session[:current_user_id]) # or anything else in session
-    Raven.extra_context(params: params.to_unsafe_h, url: request.url)
-  end
-end
-```
-
-### Caveats
-
-Currently, custom exception applications (config.exceptions_app) are not supported. If you are using a custom exception app, you must manually integrate Raven yourself.
