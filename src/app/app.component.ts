@@ -44,16 +44,6 @@ export class AppComponent implements OnInit {
     this.settings.getSettings().subscribe();
 
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // tslint:disable:no-any
-        const _paq: any = (window as any)._paq;
-        if (_paq) {
-          const origin = location.origin;
-          _paq.push(["setCustomUrl", origin + event.url]);
-          _paq.push(["trackPageView"]);
-        }
-      }
-
       if (event instanceof RoutesRecognized && event.state.root.firstChild) {
         const params = event.state.root.firstChild.params;
         const orgSlug = params["org-slug"];
