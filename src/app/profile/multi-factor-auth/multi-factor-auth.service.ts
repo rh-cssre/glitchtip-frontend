@@ -23,6 +23,7 @@ interface MFAState {
   /** User has successfully entered one of the backup codes, confirming they have them */
   enteredCode: boolean;
   regenCodes: boolean;
+  credential: PublicKeyCredential | null;
 }
 
 const initialState: MFAState = {
@@ -34,7 +35,8 @@ const initialState: MFAState = {
   backupCodes: null,
   copiedCodes: false,
   enteredCode: false,
-  regenCodes: false
+  regenCodes: false,
+  credential: null
 };
 
 @Injectable({
@@ -187,4 +189,30 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     }
     return EMPTY;
   }
+
+  activateFido2() {
+    return this.api.fido2().pipe(
+      exhaustMap(async options => {
+        const credResult = await navigator.credentials.create(options);
+        if (credResult == null) {
+          this.setState({ serverError: {non_field_errors: ["Device registration was unsuccessful."]}});
+          return EMPTY
+        } else {
+          this.setState({ credential: <PublicKeyCredential>credResult })
+          return EMPTY;
+        }
+      })
+    )
+  }
+
+  registerFido2(name: string) {
+    const state = this.state.getValue();
+    if (state.credential) {
+      const attestationResponse = <AuthenticatorAttestationResponse>state.credential.response;
+      this.api.fido2Create(attestationResponse, name).pipe()
+    }
+
+  }
 }
+
+

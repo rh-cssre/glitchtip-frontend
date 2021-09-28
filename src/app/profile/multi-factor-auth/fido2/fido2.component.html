@@ -1,10 +1,19 @@
 <mat-card>
-  <mat-card-title>Register Universal 2nd Factor (U2F) device</mat-card-title>
+  <mat-card-title>Register Security Key</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
-    Keys:
-    <ng-container *ngFor="let key of userKeys$ | async">
-      {{ key.name }}
-    </ng-container>
+  <form [formGroup]="fido2Form">
+    <mat-form-field>
+      <input matInput formControlName="fido2Code" />
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]=""
+      (click)=""
+    >
+      Register
+    </button>
   </mat-card-content>
 </mat-card>
