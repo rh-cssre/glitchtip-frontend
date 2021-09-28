@@ -17,4 +17,16 @@ export class Fido2Component {
     ]),
   });
   constructor(private service: MultiFactorAuthService) {}
+
+  activateFido2() {
+    this.service.activateFido2();
+  }
+
+  registerFido2() {
+    const name = this.fido2Form.get("fido2Code")?.value;
+    if (this.fido2Form.valid && name) {
+      this.service.registerFido2(name);
+    }
+  }
+
 }

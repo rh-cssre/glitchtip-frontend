@@ -195,7 +195,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
       exhaustMap(async options => {
         const credResult = await navigator.credentials.create(options);
         if (credResult == null) {
-          this.setState({ serverError: {non_field_errors: ["Device registration was unsuccessful."]}});
+          this.setState({ serverError: { non_field_errors: ["Device registration was unsuccessful."] } });
           return EMPTY
         } else {
           this.setState({ credential: <PublicKeyCredential>credResult })
@@ -209,9 +209,12 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     const state = this.state.getValue();
     if (state.credential) {
       const attestationResponse = <AuthenticatorAttestationResponse>state.credential.response;
-      this.api.fido2Create(attestationResponse, name).pipe()
+      this.api.fido2Create(attestationResponse, name).pipe(
+        tap(() => {
+          this.clearState();
+          this.getUserKeys().subscribe();
+        }))
     }
-
   }
 }
 
