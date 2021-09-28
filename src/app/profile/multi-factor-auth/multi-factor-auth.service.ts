@@ -209,12 +209,13 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     const state = this.state.getValue();
     if (state.credential) {
       const attestationResponse = <AuthenticatorAttestationResponse>state.credential.response;
-      this.api.fido2Create(attestationResponse, name).pipe(
+      return this.api.fido2Create(attestationResponse, name).pipe(
         tap(() => {
           this.clearState();
           this.getUserKeys().subscribe();
         }))
     }
+    return EMPTY
   }
 }
 

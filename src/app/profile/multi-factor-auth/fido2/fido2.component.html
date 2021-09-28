@@ -6,22 +6,22 @@
     mat-flat-button
     color="primary"
     (click)="activateFido2()"
-  >
-    Register
-  </button>
-    
-  <form [formGroup]="fido2Form">
-    <mat-form-field>
-      <input matInput formControlName="fido2Code" />
-    </mat-form-field>
-
-    <button
-      mat-flat-button
-      color="primary"
-      [disabled]=""
-      (click)="registerFido2()"
     >
-      Register
+    Activate
     </button>
+    
+    <form [formGroup]="fido2Form">
+      <mat-form-field>
+        <input matInput formControlName="fido2Code" />
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="registerFido2()"
+      >
+        Register
+      </button>
+    </form>
   </mat-card-content>
 </mat-card>

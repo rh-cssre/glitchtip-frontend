@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { EMPTY } from "rxjs";
 
 @Component({
   selector: "gt-fido2",
@@ -19,13 +20,17 @@ export class Fido2Component {
   constructor(private service: MultiFactorAuthService) {}
 
   activateFido2() {
-    this.service.activateFido2();
+    this.service.activateFido2().subscribe();
   }
 
   registerFido2() {
     const name = this.fido2Form.get("fido2Code")?.value;
     if (this.fido2Form.valid && name) {
-      this.service.registerFido2(name);
+      console.log("valid!")
+      this.service.registerFido2(name).subscribe();
+      return EMPTY;
+    } else {
+      return EMPTY;
     }
   }
 

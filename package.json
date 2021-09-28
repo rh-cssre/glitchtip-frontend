@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check",
+    "startssl": "ng serve --host 0.0.0.0 --disable-host-check --ssl true",
     "start-prod-no-static": "ng serve --c prod-no-static",
     "build": "ng build",
     "build-prod": "ng build -c prod-no-static,production --deploy-url static/ --progress false",

@@ -85,7 +85,11 @@ export class UserKeysService extends APIBaseService {
       clientDataJSON: new Uint8Array(attResponse.clientDataJSON),
       name
     });
-    return this.http.post<UserKey>(this.fido2Url, request);
+    return this.http.post<UserKey>(this.fido2Url, request.buffer, {
+      headers: {
+        "Content-Type": "application/cbor",
+      }
+    });
   }
 
   totp() {
