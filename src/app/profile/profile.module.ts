@@ -17,6 +17,7 @@ import { MultiFactorAuthComponent } from "./multi-factor-auth/multi-factor-auth.
 import { TOTPComponent } from "./multi-factor-auth/totp/totp.component";
 import { Fido2Component } from "./multi-factor-auth/fido2/fido2.component";
 import { BackupCodesComponent } from "./multi-factor-auth/totp/backup-codes/backup-codes.component";
+import { WizardComponent } from "./wizard/wizard.component";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { BackupCodesComponent } from "./multi-factor-auth/totp/backup-codes/back
     TOTPComponent,
     Fido2Component,
     BackupCodesComponent,
+    WizardComponent,
   ],
   imports: [
     CommonModule,

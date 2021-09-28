@@ -74,6 +74,11 @@ export const routes: Routes = [
     pathMatch: "full",
   },
   {
+    path: "account/settings/wizard/:hash",
+    redirectTo: "profile/wizard/:hash",
+    pathMatch: "full",
+  },
+  {
     path: ":org-slug",
     canActivate: [IsLoggedInGuard],
     children: [

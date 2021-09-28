@@ -7,6 +7,7 @@ import { NewTokenComponent } from "./auth-tokens/new-token/new-token.component";
 import { NotificationsComponent } from "./notifications/notifications.component";
 import { AccountComponent } from "./account/account.component";
 import { MultiFactorAuthComponent } from "./multi-factor-auth/multi-factor-auth.component";
+import { WizardComponent } from "./wizard/wizard.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: "", component: AccountComponent },
       { path: "notifications", component: NotificationsComponent },
       { path: "multi-factor-auth", component: MultiFactorAuthComponent },
+      { path: "wizard/:hash", component: WizardComponent },
     ],
   },
   {
