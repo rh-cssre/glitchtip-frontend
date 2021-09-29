@@ -8,9 +8,10 @@ import { LoginRoutingModule } from "./login-routing.module";
 import { AuthModule } from "../api/auth/auth.module";
 import { SharedModule } from "../shared/shared.module";
 import { LoginTotpComponent } from "./login-totp/login-totp.component";
+import { LoginFido2Component } from "./login-fido2/login-fido2.component";
 
 @NgModule({
-  declarations: [LoginComponent, LoginTotpComponent],
+  declarations: [LoginComponent, LoginTotpComponent, LoginFido2Component],
   imports: [
     CommonModule,
     LoginRoutingModule,
