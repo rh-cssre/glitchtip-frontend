@@ -86,14 +86,12 @@ export class LoginService extends StatefulService<LoginState> {
       }), exhaustMap(async options => {
         const credResult = await navigator.credentials.get(options);
         if (credResult == null) {
-          console.log("null")
           throw Error;
         } else {
           return <PublicKeyCredential>credResult;
         }
       }), map(resp => {
         if (resp === undefined) {
-          console.log("resp undefined")
           throw Error;
         } else {
           const assertionResponse = <AuthenticatorAssertionResponse>resp.response;
@@ -108,7 +106,6 @@ export class LoginService extends StatefulService<LoginState> {
         }
       }), exhaustMap(body => {
         if (body === undefined) {
-          console.log("undefined")
           throw Error
         } else {
           console.log("should post")
