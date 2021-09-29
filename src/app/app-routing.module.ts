@@ -91,6 +91,14 @@ export const routes: Routes = [
         },
       },
       {
+        path: "uptime-monitors",
+        loadChildren: () =>
+          import("./uptime/uptime.module").then((m) => m.UptimeModule),
+        data: {
+          title: "Uptime Monitors",
+        },
+      },
+      {
         path: "projects",
         loadChildren: () =>
           import("./projects/projects.module").then((m) => m.ProjectsModule),
