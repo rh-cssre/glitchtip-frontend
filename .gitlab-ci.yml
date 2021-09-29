@@ -45,7 +45,7 @@ test-e2e:
       alias: backend
       command: ["./bin/run-migrate-and-runserver.sh"]
   image:
-    name: cypress/included:8.0.0
+    name: cypress/included:8.5.0
     entrypoint: [""]
   script:
     - npm ci --cache .npm --prefer-offline
