@@ -1,6 +1,11 @@
 <section
 class="l-body l-body--full-width mat-elevation-z0"
 >
-<p>monitor-list works!</p>
+<div *ngIf="(monitors$ | async) as monitors"> 
+    <div *ngFor="let monitor of monitors">
+        {{ monitor.name }}
+        {{ monitor.url }}
+    </div>
+</div>
 </section>
 
