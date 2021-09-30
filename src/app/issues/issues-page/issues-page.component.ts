@@ -48,6 +48,7 @@ export class IssuesPageComponent
     map((state) => state.pagination.loading)
   );
   searchHits$ = this.issuesService.searchHits$;
+  searchDirectHit$ = this.issuesService.searchDirectHit$;
   form = new FormGroup({
     query: new FormControl(""),
   });
@@ -101,6 +102,7 @@ export class IssuesPageComponent
   orgEnvironmentSubscription: Subscription;
   projectEnvironmentSubscription: Subscription;
   resetEnvironmentSubscription: Subscription;
+  searchDirectHitSubscription: Subscription;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
     other: "# events",
@@ -299,6 +301,20 @@ export class IssuesPageComponent
         })
       )
       .subscribe();
+
+    this.searchDirectHitSubscription = this.searchDirectHit$.subscribe(
+      (directHit) => {
+        this.router.navigate(
+          [directHit.id, "events", directHit.matchingEventId],
+          {
+            relativeTo: this.route,
+            queryParams: { query: null },
+            queryParamsHandling: "merge",
+            replaceUrl: true, // so the browser back button works
+          }
+        );
+      }
+    );
   }
 
   ngOnInit() {
@@ -330,6 +346,7 @@ export class IssuesPageComponent
     this.orgEnvironmentSubscription.unsubscribe();
     this.projectEnvironmentSubscription.unsubscribe();
     this.resetEnvironmentSubscription.unsubscribe();
+    this.searchDirectHitSubscription.unsubscribe();
     this.issuesService.clearState();
     this.environmentsService.clearState();
   }
