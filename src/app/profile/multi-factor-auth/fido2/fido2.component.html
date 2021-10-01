@@ -2,26 +2,83 @@
   <mat-card-title>Register Security Key</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <button
-    mat-flat-button
-    color="primary"
-    (click)="activateFido2()"
-    >
-    Activate
-    </button>
-    
-    <form [formGroup]="fido2Form">
-      <mat-form-field>
-        <input matInput formControlName="fido2Code" />
-      </mat-form-field>
+    <p>Set up a hardware device as a second factor to sign in.</p>
+    <ng-container *ngIf="
+    ((setupFIDO2Stage$ | async) === 0) || ((setupFIDO2Stage$ | async) === 1)"
+    ><ng-container *ngIf="(TOTPKey$ | async) else needTotp">
+        <p>
+          To add a security key to your account, plug it in,
+          click the button below and follow the prompt from your browser.
+        </p>
+      </ng-container>
+      <ng-template #needTotp>
+        <p>
+          Not all browsers support security keys. Therefore, we require that 
+          you set up a TOTP authenticator app first. That way you'll always be 
+          able to sign in - even when you're using an unsupported browser.
+        </p>
+      </ng-template>
+      <div *ngIf="error$ | async" class="activation-error">
+        <gt-form-error [error]="error$ | async"></gt-form-error>
+      </div>
+      <gt-loading-button
+      buttonText="Set up new device"
+      [loading]="(setupFIDO2Stage$ | async) === 1"
+      (click)="activateFido2()"
+      [disabled]="!(TOTPKey$ | async)"
+      buttonStyle="flat"
+      ></gt-loading-button>
+    </ng-container>
+    <ng-container *ngIf="(setupFIDO2Stage$ | async) === 2">
+      <p>
+        Provide a name for your device to complete registration.
+      </p>
+      <form [formGroup]="fido2Form">
+        <mat-form-field>
+          <input matInput formControlName="fido2Code"/>
+          <mat-error *ngIf="fido2Code?.invalid">
+            <span *ngIf="fido2Code?.errors?.required">Required</span>
+          </mat-error>
+        </mat-form-field>
 
-      <button
-        mat-flat-button
-        color="primary"
-        (click)="registerFido2()"
-      >
-        Register
-      </button>
-    </form>
+        <button
+          class="register-button"
+          mat-flat-button
+          color="primary"
+          (click)="registerFido2()"
+        >
+          Register
+        </button>
+      </form>
+    </ng-container>
   </mat-card-content>
+  <ng-container *ngIf="(FIDO2Keys$ | async)!.length > 0">
+  <p><strong>Security keys</strong></p>
+  <div class="mat-body-strong">
+  <div class="key_headings">
+    
+      <div>Name</div>
+      <div>Last used</div>
+  </div>
+</div>
+  <div class="key_row" *ngFor="let key of (FIDO2Keys$ | async)"> 
+      <div class="cell">
+          <div>{{ key.name }}</div>
+      </div>
+      <div class="cell">
+          <div>{{ key.last_used ? (key.last_used | date: 'MM-dd-yyyy') : 'Not yet used' }}</div>
+      </div>
+      <div class="button_cell">
+        <button
+        class="trash"
+        mat-icon-button
+        color="primary"
+        attr.aria-label="Delete {{ key.name }}"
+        (click)="deleteFido2Key(key.id)"
+      >
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+      </div>
+  </div>
+  </ng-container>
 </mat-card>

@@ -10,7 +10,10 @@ import { EMPTY } from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Fido2Component {
-  userKeys$ = this.service.FIDO2Keys$;
+  TOTPKey$ = this.service.TOTPKey$;
+  FIDO2Keys$ = this.service.FIDO2Keys$;
+  setupFIDO2Stage$ = this.service.setupFIDO2Stage$;
+  error$ = this.service.serverError$
   fido2Form = new FormGroup({
     fido2Code: new FormControl("", [
       Validators.required,
@@ -18,6 +21,10 @@ export class Fido2Component {
     ]),
   });
   constructor(private service: MultiFactorAuthService) {}
+
+  get fido2Code() {
+    return this.fido2Form.get("fido2Code");
+  } 
 
   activateFido2() {
     this.service.activateFido2().subscribe();
@@ -34,4 +41,7 @@ export class Fido2Component {
     }
   }
 
+  deleteFido2Key(keyId: number) {
+    this.service.deleteKey(keyId, "FIDO2").subscribe()
+  }
 }
