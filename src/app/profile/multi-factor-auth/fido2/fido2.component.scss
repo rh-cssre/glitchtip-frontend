@@ -30,8 +30,6 @@ mat-card {
   background-color: #E5E5E5;
   padding-left: 7px;
   padding-right: 7px;
-  padding-top: 10px;
-  padding-bottom: 5px;
 }
 
 .key_row {
@@ -41,7 +39,6 @@ mat-card {
   border: 1px solid black;
   padding-left: 7px;
   padding-right: 7px;
-  padding-top: 2px;
   margin-bottom: -1px;
 }
 
@@ -52,6 +49,18 @@ mat-card {
   align-items: flex-start;
 }
 
+.key-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .button_cell {
   justify-self: right;
+}
+
+
+
+.negative-margin {
+  margin-top: -12px;
 }

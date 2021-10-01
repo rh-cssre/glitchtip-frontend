@@ -53,17 +53,17 @@
     </ng-container>
   </mat-card-content>
   <ng-container *ngIf="(FIDO2Keys$ | async)!.length > 0">
-  <p><strong>Security keys</strong></p>
-  <div class="mat-body-strong">
-  <div class="key_headings">
-    
-      <div>Name</div>
-      <div>Last used</div>
+  <p class="mat-body-strong">Security keys</p>
+  <div class="negative-margin"><div class="mat-body-strong">
+    <div class="key_headings">
+        <div>Name</div>
+        <div>Last used</div>
+    </div>
   </div>
 </div>
   <div class="key_row" *ngFor="let key of (FIDO2Keys$ | async)"> 
       <div class="cell">
-          <div>{{ key.name }}</div>
+          <div class="key-name">{{ key.name }}</div>
       </div>
       <div class="cell">
           <div>{{ key.last_used ? (key.last_used | date: 'MM-dd-yyyy') : 'Not yet used' }}</div>
