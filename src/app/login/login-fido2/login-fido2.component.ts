@@ -9,15 +9,23 @@ import { LoginService } from "../login.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFido2Component implements OnInit {
+  useTOTP$ = this.loginService.useTOTP$;
+  error$ = this.loginService.error$;
+  authInProg$ = this.loginService.authInProg$;
 
 
   constructor(private loginService: LoginService) {}
+
+  switchMethod() {
+    this.loginService.switchMethod()
+  }
 
   ngOnInit() {
     this.loginService.authenticateFIDO2().subscribe()
   }
 
+  retryAuth() {
+    this.loginService.authenticateFIDO2().subscribe()
+  }
   
 }
-
-// private loginService: LoginService

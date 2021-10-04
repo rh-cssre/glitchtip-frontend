@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   error$ = this.loginService.error$;
   requiresMFA$ = this.loginService.requiresMFA$;
   hasFido2$ = this.loginService.hasFIDO2$
+  useTOTP$ = this.loginService.useTOTP$
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [

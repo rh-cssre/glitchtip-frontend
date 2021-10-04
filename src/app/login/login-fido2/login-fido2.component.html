@@ -1,1 +1,19 @@
-<p>FIDO'D!</p>
+<div class="margin-set">
+    <h1 class="header-left">Log in with security key</h1>
+    <mat-card-content class="contents-left">
+      <div class="instructions">
+        Plug in your security key and follow the prompt from your 
+        browser to finish logging in.
+      </div>
+        <gt-form-error [error]="error$ | async"></gt-form-error>
+        <div class="auth-button">
+            <gt-loading-button
+            buttonText="Retry"
+            [loading]="(authInProg$ | async)!"
+            (click)="retryAuth()"
+            buttonStyle="flat"
+            ></gt-loading-button>
+        </div>
+      <a [routerLink]="" (click)="switchMethod()">Log in with authenticator app instead</a>
+    </mat-card-content>
+  </div>

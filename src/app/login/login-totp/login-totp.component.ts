@@ -33,6 +33,10 @@ export class LoginTotpComponent implements OnInit {
     return this.form.get("code");
   }
 
+  switchMethod() {
+    this.loginService.switchMethod()
+  }
+
   onSubmit() {
     if (this.form.valid && this.code) {
       const code: string = this.code.value;

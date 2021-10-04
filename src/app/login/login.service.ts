@@ -14,12 +14,16 @@ interface LoginState {
   loading: boolean;
   error: ServerError | null;
   validAuth: ValidAuth[] | null;
+  useTOTP: boolean;
+  authInProg: boolean;
 }
 
 const initialState: LoginState = {
   loading: false,
   error: null,
   validAuth: null,
+  useTOTP: false,
+  authInProg: false
 };
 
 @Injectable({
@@ -35,6 +39,8 @@ export class LoginService extends StatefulService<LoginState> {
   hasTOTP$ = this.getState$.pipe(
     map((state) => state.validAuth?.includes("TOTP"))
   );
+  authInProg$ = this.getState$.pipe(map((state) => state.authInProg));
+  useTOTP$ = this.getState$.pipe(map((state) => state.useTOTP));
   constructor(private http: HttpClient, private authService: AuthService) {
     super(initialState);
   }
@@ -71,9 +77,15 @@ export class LoginService extends StatefulService<LoginState> {
     this.setState({ validAuth, loading: false, error: null });
   }
 
+  switchMethod() {
+    const currentVal = this.state.value.useTOTP
+    console.log("switch")
+    this.setState({ useTOTP: !currentVal })
+  }
+
   authenticateFIDO2() {
     const url = "/api/mfa/authenticate/fido2/"
-    this.setState({ loading: true, error: null })
+    this.setState({ loading: true, error: null, authInProg: true })
     return this.http.get(url, {
       headers: {
         Accept: "application/octet-stream"
@@ -108,7 +120,6 @@ export class LoginService extends StatefulService<LoginState> {
         if (body === undefined) {
           throw Error
         } else {
-          console.log("should post")
           return this.http.post(url, body.buffer, {
             headers: {
               "content-type": "application/cbor",
@@ -121,11 +132,11 @@ export class LoginService extends StatefulService<LoginState> {
       }), catchError(err => {
         let error: ServerError | null = null;
         if (err.status === 400) {
-          error = { non_field_errors: err.error };
+          error = { fido2error: err.error };
         } else {
-          error = { non_field_errors: ["Security key authentication was unsuccessful."] };
+          error = { fido2error: ["Security key authentication was unsuccessful."] };
         }
-        this.setState({ loading: false, error });
+        this.setState({ loading: false, error, authInProg: false });
         return EMPTY;
       })
     )

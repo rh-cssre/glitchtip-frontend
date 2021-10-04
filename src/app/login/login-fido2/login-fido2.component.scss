@@ -1,0 +1,26 @@
+.margin-set {
+    margin-left: 45px;
+    margin-right: 45px;
+    margin-bottom: 45px;
+}
+
+.contents-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+
+.header-left {
+    text-align: left;
+}
+
+.instructions {
+    margin-top: 16px;
+    margin-bottom: 18px;
+}
+
+.auth-button {
+    margin-bottom: 10px;
+}
