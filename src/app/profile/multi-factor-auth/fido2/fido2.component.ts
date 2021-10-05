@@ -17,7 +17,7 @@ export class Fido2Component {
   fido2Form = new FormGroup({
     fido2Code: new FormControl("", [
       Validators.required,
-      Validators.maxLength(16),
+      Validators.maxLength(200),
     ]),
   });
   constructor(private service: MultiFactorAuthService) {}

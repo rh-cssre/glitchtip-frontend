@@ -62,22 +62,20 @@
 </div>
   <div class="key_row" *ngFor="let key of (FIDO2Keys$ | async)"> 
       <div class="cell">
-          <div class="key-name">{{ key.name }}</div>
+          <span [matTooltip]="key.name">{{ key.name }}</span>
       </div>
-      <div class="cell">
-          <div>{{ key.last_used ? (key.last_used | date: 'MM-dd-yyyy') : 'Not yet used' }}</div>
+      <div class="cell">  
+        {{ key.last_used ? (key.last_used | date: 'MM-dd-yyyy') : 'Not yet used' }}
       </div>
-      <div class="button_cell">
-        <button
-        class="trash"
-        mat-icon-button
-        color="primary"
-        attr.aria-label="Delete {{ key.name }}"
-        (click)="deleteFido2Key(key.id)"
+      <button
+      class="trash"
+      mat-icon-button
+      color="primary"
+      attr.aria-label="Delete {{ key.name }}"
+      (click)="deleteFido2Key(key.id)"
       >
-        <mat-icon>delete_outline</mat-icon>
+      <mat-icon>delete_outline</mat-icon>
       </button>
-      </div>
   </div>
   </ng-container>
 </mat-card>

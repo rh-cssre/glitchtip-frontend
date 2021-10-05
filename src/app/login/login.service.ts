@@ -80,7 +80,7 @@ export class LoginService extends StatefulService<LoginState> {
   switchMethod() {
     const currentVal = this.state.value.useTOTP
     console.log("switch")
-    this.setState({ useTOTP: !currentVal })
+    this.setState({ useTOTP: !currentVal, error: null })
   }
 
   authenticateFIDO2() {
@@ -131,12 +131,14 @@ export class LoginService extends StatefulService<LoginState> {
         this.authService.afterLogin();
       }), catchError(err => {
         let error: ServerError | null = null;
-        if (err.status === 400) {
-          error = { fido2error: err.error };
-        } else {
-          error = { fido2error: ["Security key authentication was unsuccessful."] };
-        }
-        this.setState({ loading: false, error, authInProg: false });
+        if (this.state.value.useTOTP === false) {
+          if (err.status === 400) {
+            error = { non_field_errors: err.error };
+          } else {
+            error = { non_field_errors: ["Security key authentication was unsuccessful."] };
+          }
+          this.setState({ loading: false, error, authInProg: false });
+          }
         return EMPTY;
       })
     )

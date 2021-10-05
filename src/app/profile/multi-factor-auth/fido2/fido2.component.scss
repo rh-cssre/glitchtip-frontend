@@ -26,7 +26,7 @@ mat-card {
 
 .key_headings {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1.7fr 1fr .3fr;
   background-color: #E5E5E5;
   padding-left: 7px;
   padding-right: 7px;
@@ -34,32 +34,26 @@ mat-card {
 
 .key_row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  justify-content: space-between;
+  align-items: center;
+  grid-template-columns: 1.7fr 1fr .3fr;
   border: 1px solid black;
-  padding-left: 7px;
-  padding-right: 7px;
   margin-bottom: -1px;
+  padding-left: 7px;
 }
 
 .cell {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
-}
-
-.key-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 100%;
 }
 
-.button_cell {
+.trash {
   justify-self: right;
+  min-width: 0;
+  max-width: 100%;
 }
-
-
 
 .negative-margin {
   margin-top: -12px;
