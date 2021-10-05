@@ -36,6 +36,6 @@ describe("TotpComponent", () => {
     component.TOTPKey$ = of(totpUserKey);
     fixture.detectChanges();
     const button: HTMLElement = fixture.nativeElement.querySelector("button");
-    expect(button.innerText).toContain("Disable two-factor");
+    expect(button.innerText).toContain("Disable TOTP");
   });
 });
