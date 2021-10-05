@@ -13,18 +13,17 @@ export class Fido2Component {
   TOTPKey$ = this.service.TOTPKey$;
   FIDO2Keys$ = this.service.FIDO2Keys$;
   setupFIDO2Stage$ = this.service.setupFIDO2Stage$;
-  error$ = this.service.serverError$
+  error$ = this.service.serverError$;
   fido2Form = new FormGroup({
     fido2Code: new FormControl("", [
       Validators.required,
-      Validators.maxLength(200),
     ]),
   });
   constructor(private service: MultiFactorAuthService) {}
 
   get fido2Code() {
     return this.fido2Form.get("fido2Code");
-  } 
+  }
 
   activateFido2() {
     this.service.activateFido2().subscribe();
@@ -33,7 +32,6 @@ export class Fido2Component {
   registerFido2() {
     const name = this.fido2Form.get("fido2Code")?.value;
     if (this.fido2Form.valid && name) {
-      console.log("valid!")
       this.service.registerFido2(name).subscribe();
       return EMPTY;
     } else {
@@ -42,6 +40,14 @@ export class Fido2Component {
   }
 
   deleteFido2Key(keyId: number) {
-    this.service.deleteKey(keyId, "FIDO2").subscribe()
+    this.service.deleteKey(keyId, "FIDO2").subscribe();
   }
+
+  formatDate(lastUsed: string) {
+    if (lastUsed) {
+      const date = new Date(lastUsed);
+      return date.toLocaleDateString();
+    } else {
+      return "Not yet used";
+    }}
 }

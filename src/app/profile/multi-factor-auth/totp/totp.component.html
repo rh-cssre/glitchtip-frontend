@@ -4,7 +4,7 @@
     <ng-container *ngIf="TOTPKey$ | async as TOTPKey; else TOTPDisabled">
       <p>TOTP authentication is currently enabled on your account.</p>
       <button mat-flat-button color="primary" (click)="deleteKey(TOTPKey.id)">
-        Disable two-factor authentication
+        Disable TOTP
       </button>
       <gt-backup-codes></gt-backup-codes>
     </ng-container>
@@ -108,7 +108,7 @@
             </mat-form-field>
             <div>
               <button id="submit" mat-flat-button color="primary">
-                Enable TOTP authentication
+                Enable TOTP
               </button>
             </div>
           </form>

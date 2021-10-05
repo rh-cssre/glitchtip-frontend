@@ -34,7 +34,7 @@ export class LoginTotpComponent implements OnInit {
   }
 
   switchMethod() {
-    this.loginService.switchMethod()
+    this.loginService.switchMethod();
   }
 
   onSubmit() {

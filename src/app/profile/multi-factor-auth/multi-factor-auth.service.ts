@@ -91,9 +91,9 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
         exhaustMap(() => this.getUserKeys()),
         tap(() => {
           if (keyType === "TOTP") {
-            this.snackBar.open("TOTP authentication deactivated.")
+            this.snackBar.open("TOTP authentication deactivated.");
           } else {
-            this.snackBar.open("Security key removed.")
+            this.snackBar.open("Security key removed.");
         }})
       );
   }
@@ -199,39 +199,39 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   activateFido2() {
-    this.setState({ serverError: {} })
+    this.setState({ serverError: {} });
     this.setState({ setupFIDO2Stage: 1 });
     return this.api.fido2().pipe(
       exhaustMap(async options => {
         return await navigator.credentials.create(options);
       }), map((credResult) => {
         if (credResult === null) {
-          return throwError
+          return throwError;
         } else {
-          this.setState({ credential: <PublicKeyCredential>credResult })
+          this.setState({ credential: credResult as PublicKeyCredential });
           this.setState({ setupFIDO2Stage: 2 });
           return EMPTY;
         }
       }), catchError(err => {
         this.setState({ serverError: { non_field_errors: ["Device activation was unsuccessful."] } });
         this.setState({ setupFIDO2Stage: 0 });
-        return EMPTY
+        return EMPTY;
       })
-    )
+    );
   }
 
   registerFido2(name: string) {
     const state = this.state.getValue();
     if (state.credential) {
-      const attestationResponse = <AuthenticatorAttestationResponse>state.credential.response;
+      const attestationResponse = state.credential.response as AuthenticatorAttestationResponse;
       return this.api.fido2Create(attestationResponse, name).pipe(
         tap(() => {
           this.clearState();
           this.snackBar.open("Your security key has been registered.");
           this.getUserKeys().subscribe();
-        }))
+        }));
     }
-    return EMPTY
+    return EMPTY;
   }
 }
 

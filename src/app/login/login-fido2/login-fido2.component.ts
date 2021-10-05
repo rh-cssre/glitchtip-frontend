@@ -17,15 +17,15 @@ export class LoginFido2Component implements OnInit {
   constructor(private loginService: LoginService) {}
 
   switchMethod() {
-    this.loginService.switchMethod()
+    this.loginService.switchMethod();
   }
 
   ngOnInit() {
-    this.loginService.authenticateFIDO2().subscribe()
+    this.loginService.authenticateFIDO2().subscribe();
   }
 
   retryAuth() {
-    this.loginService.authenticateFIDO2().subscribe()
+    this.loginService.authenticateFIDO2().subscribe();
   }
-  
+
 }

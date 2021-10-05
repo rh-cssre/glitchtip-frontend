@@ -78,14 +78,13 @@ export class LoginService extends StatefulService<LoginState> {
   }
 
   switchMethod() {
-    const currentVal = this.state.value.useTOTP
-    console.log("switch")
-    this.setState({ useTOTP: !currentVal, error: null })
+    const currentVal = this.state.value.useTOTP;
+    this.setState({ useTOTP: !currentVal, error: null });
   }
 
   authenticateFIDO2() {
-    const url = "/api/mfa/authenticate/fido2/"
-    this.setState({ loading: true, error: null, authInProg: true })
+    const url = "/api/mfa/authenticate/fido2/";
+    this.setState({ loading: true, error: null, authInProg: true });
     return this.http.get(url, {
       headers: {
         Accept: "application/octet-stream"
@@ -94,19 +93,19 @@ export class LoginService extends StatefulService<LoginState> {
     }).pipe(
       map(response => {
         const converted = new Uint8Array(response);
-        return decode(converted)
+        return decode(converted);
       }), exhaustMap(async options => {
         const credResult = await navigator.credentials.get(options);
         if (credResult == null) {
           throw Error;
         } else {
-          return <PublicKeyCredential>credResult;
+          return credResult as PublicKeyCredential;
         }
       }), map(resp => {
         if (resp === undefined) {
           throw Error;
         } else {
-          const assertionResponse = <AuthenticatorAssertionResponse>resp.response;
+          const assertionResponse = resp.response as AuthenticatorAssertionResponse;
           return encode({
             credentialId: new Uint8Array(resp.rawId),
             authenticatorData: new Uint8Array(
@@ -118,13 +117,13 @@ export class LoginService extends StatefulService<LoginState> {
         }
       }), exhaustMap(body => {
         if (body === undefined) {
-          throw Error
+          throw Error;
         } else {
           return this.http.post(url, body.buffer, {
             headers: {
               "content-type": "application/cbor",
             }
-          })
+          });
         }
       }), tap(() => {
         this.clearState();
@@ -141,7 +140,7 @@ export class LoginService extends StatefulService<LoginState> {
           }
         return EMPTY;
       })
-    )
+    );
   }
 
   authenticateTOTP(code: string) {
@@ -184,7 +183,6 @@ export class LoginService extends StatefulService<LoginState> {
         if (err.status === 400) {
           if (err.error.code) {
             error = err.error;
-            console.log(error);
           } else {
             error = { non_field_errors: err.error };
           }
