@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-// import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../login.service";
 
 @Component({
