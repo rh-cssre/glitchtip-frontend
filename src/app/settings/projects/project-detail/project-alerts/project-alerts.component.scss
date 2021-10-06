@@ -41,6 +41,11 @@ mat-card-title {
   display: flex;
   justify-content: flex-end;
 
+  @media screen and (max-width: $medium - 1) {
+    padding-top: 10px;
+    justify-content: flex-start;
+  }
+
   gt-loading-button {
     margin-right: 16px;
   }
@@ -113,7 +118,7 @@ mat-card-title {
   }
 
   .alert-type {
-    margin-left: 0;
+    padding-left: 2px;
     margin-right: 8px;
     font-size: 20px;
     width: 24px;
