@@ -46,23 +46,32 @@
             "
           >
             <div class="recipients" [class.border-top]="recipientIndex === 0">
-              <div class="flex-common">
-                <div class="flex-common">
-                  <span
-                    *ngIf="recipient.recipientType === 'email'"
-                    class="flex-common"
-                    ><mat-icon class="alert-type">email</mat-icon>
-                    Send an email to team members on this project.
-                  </span>
-                  <span
-                    *ngIf="recipient.recipientType === 'webhook'"
-                    class="flex-common"
-                    ><svg class="slack">
-                      <use xlink:href="#webhook"></use>
-                    </svg>
-                    {{ recipient.url }}
+              <ng-container *ngIf="recipient.recipientType === 'email'">
+                <mat-icon class="alert-type">email</mat-icon>
+                <div class="recipient-info">
+                  <span 
+                    class="tooltip"
+                    matTooltip="Send an email to team members on this project."
+                    matTooltipClass="tt-wrapping"
+                    >Send an email to team members on this project.
                   </span>
                 </div>
+              </ng-container>
+              <ng-container *ngIf="recipient.recipientType === 'webhook'"> 
+                <div class="svg-box">
+                  <svg class="svg">
+                    <use xlink:href="#webhook"></use>
+                  </svg>
+                </div>
+                <div class="recipient-info">
+                  <span 
+                    class="tooltip"
+                    matTooltip="{{ recipient.url }}"
+                    matTooltipClass="tt-wrapping"
+                    >{{ recipient.url }}
+                  </span>
+                </div>
+              </ng-container>
                 <button
                   class="trash"
                   mat-icon-button
@@ -72,8 +81,7 @@
                 >
                   <mat-icon>delete_outline</mat-icon>
                 </button>
-              </div>
-            </div>
+            </div>  
           </li>
         </ul>
         <button
@@ -156,13 +164,17 @@
               *ngFor="
                 let recipient of alert.alertRecipients;
                 let recipientIndex = index
-              "
-            >
+            ">
               <div class="recipients" [class.border-top]="recipientIndex === 0">
                 <ng-container *ngIf="recipient.recipientType === 'email'">
                   <mat-icon class="alert-type">email</mat-icon>
                   <div class="recipient-info">
-                    Send an email to team members on this project.
+                    <span 
+                      class="tooltip"
+                      matTooltip="Send an email to team members on this project."
+                      matTooltipClass="tt-wrapping"
+                      >Send an email to team members on this project.
+                    </span>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="recipient.recipientType === 'webhook'"> 
@@ -172,7 +184,12 @@
                     </svg>
                   </div>
                   <div class="recipient-info">
-                    {{ recipient.url }}
+                    <span 
+                      class="tooltip"
+                      matTooltip="{{ recipient.url }}"
+                      matTooltipClass="tt-wrapping"
+                      >{{ recipient.url }}
+                    </span>
                   </div>
                 </ng-container>
                 <ng-container

@@ -137,6 +137,14 @@ mat-card-title {
     margin-right: 8px;
   }
 
+  .recipient-info {
+    display: block;
+    width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   .trash {
     justify-self: flex-end;
     margin-left: 16px;
@@ -167,28 +175,6 @@ mat-card-title {
   padding: 24px 24px 8px 24px;
 }
 
-// .mat-stroked-button:hover {
-//   background-color: whitesmoke;
-//   opacity: 1;
-// }
-
 .mat-button.mat-primary .mat-button-focus-overlay {
   background-color: transparent;
-}
-
-.recipient-info {
-  display: block;
-  width: 80%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  // overflow-wrap: break-word;
-}
-
-.flex-something {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center; 
-
 }
