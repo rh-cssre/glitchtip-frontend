@@ -2,8 +2,13 @@ import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { combineLatest, Observable, EMPTY } from "rxjs";
-import { tap, catchError, map, take } from "rxjs/operators";
-import { Issue, IssueWithSelected, IssueStatus } from "./interfaces";
+import { tap, catchError, map, take, filter } from "rxjs/operators";
+import {
+  Issue,
+  IssueWithSelected,
+  IssueWithMatchingEvent,
+  IssueStatus,
+} from "./interfaces";
 import { IssuesAPIService } from "../api/issues/issues-api.service";
 import {
   initialPaginationState,
@@ -15,6 +20,7 @@ import { OrganizationAPIService } from "../api/organizations/organizations-api.s
 
 export interface IssuesState extends PaginationStatefulServiceState {
   issues: Issue[];
+  directHit?: IssueWithMatchingEvent;
   selectedIssues: number[];
   organizationEnvironments: Environment[];
   selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
@@ -58,6 +64,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   );
   readonly searchHits$ = this.getState$.pipe(
     map((state) => state.pagination.hits)
+  );
+  readonly searchDirectHit$ = this.getState$.pipe(
+    map((state) => state.directHit),
+    filter((directHit): directHit is IssueWithMatchingEvent => !!directHit)
   );
   readonly thereAreSelectedIssues$ = this.selectedIssues$.pipe(
     map((selectedIssues) => selectedIssues.length > 0)
@@ -135,7 +145,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     } else {
       selectedIssues = state.selectedIssues.concat([issueId]);
     }
-    this.state.next({ ...state, selectedIssues });
+    this.state.next({ ...state, selectedIssues, directHit: undefined });
   }
 
   toggleSelectAll() {
@@ -143,12 +153,14 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     if (state.issues.length === state.selectedIssues.length) {
       this.state.next({
         ...state,
+        directHit: undefined,
         selectedIssues: [],
       });
       this.clearBulkProjectUpdate();
     } else {
       this.state.next({
         ...state,
+        directHit: undefined,
         selectedIssues: state.issues.map((issue) => issue.id),
       });
     }
@@ -214,7 +226,19 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       )
       .pipe(
         tap((res) => {
-          this.setStateAndPagination({ issues: res.body! }, res);
+          let directHit: IssueWithMatchingEvent | undefined;
+          if (
+            res.headers.has("x-sentry-direct-hit") &&
+            res.headers.get("x-sentry-direct-hit") === "1" &&
+            res.body![0] &&
+            (res.body![0] as IssueWithMatchingEvent).matchingEventId
+          ) {
+            directHit = res.body![0] as IssueWithMatchingEvent;
+          }
+          this.setStateAndPagination(
+            { issues: res.body!, directHit: directHit },
+            res
+          );
         }),
         catchError((err: HttpErrorResponse) => {
           this.setIssuesError(err);
@@ -248,6 +272,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     const state = this.state.getValue();
     this.state.next({
       ...state,
+      directHit: undefined,
       selectedProjectInfo: {},
     });
   }
@@ -260,6 +285,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     const state = this.state.getValue();
     this.state.next({
       ...state,
+      directHit: undefined,
       selectedProjectInfo: { orgSlug, projectId, query },
     });
   }
@@ -267,6 +293,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   private setClearErrors() {
     const state = this.state.getValue();
     this.setState({
+      directHit: undefined,
       errors: [],
       pagination: { ...state.pagination, loading: false },
     });
@@ -276,6 +303,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     const state = this.state.getValue();
     this.state.next({
       ...state,
+      directHit: undefined,
       issues: state.issues.map((issue) =>
         issueIds.includes(issue.id) ? { ...issue, status } : issue
       ),
@@ -286,6 +314,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   private setIssuesError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
+      directHit: undefined,
       errors: this.updateErrorMessage(errors),
       pagination: {
         ...state.pagination,
@@ -300,7 +329,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       .retrieveOrganizationEnvironments(orgSlug)
       .pipe(
         tap((environments) => {
-          this.setState({ organizationEnvironments: environments });
+          this.setState({
+            directHit: undefined,
+            organizationEnvironments: environments,
+          });
         })
       );
   }
