@@ -4,7 +4,12 @@
       <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
     </div>
     <ng-container *ngIf="requiresMFA$ | async; else do_login">
-      <gt-login-totp></gt-login-totp>
+      <ng-container *ngIf="(hasFido2$ | async) === false || (useTOTP$ | async) else fido2">
+        <gt-login-totp></gt-login-totp>
+      </ng-container>
+      <ng-template #fido2>
+        <gt-login-fido2></gt-login-fido2>
+      </ng-template>
     </ng-container>
     <ng-template #do_login>
       <h1>Login</h1>

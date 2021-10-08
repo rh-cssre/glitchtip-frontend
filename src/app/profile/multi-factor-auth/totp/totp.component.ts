@@ -71,7 +71,7 @@ export class TOTPComponent implements OnInit, OnDestroy {
   }
 
   deleteKey(keyId: number) {
-    this.service.deleteKey(keyId).subscribe();
+    this.service.deleteKey(keyId, "TOTP").subscribe();
   }
 
   getStepIsDone(step: number, currentStep: number) {

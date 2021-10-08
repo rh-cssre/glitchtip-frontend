@@ -5,7 +5,7 @@
     previous codes. <strong>Print out these new codes or save them someplace safe.</strong>
   </p>
   <button *ngIf="(regenCodes$ | async) === false" mat-stroked-button color="primary" (click)="startRegenCodes()">
-    Regenerate backup codes
+    Regenerate codes
   </button>
 </div>
 <div *ngIf="(regenCodes$ | async) || (TOTPKey$ | async) === undefined">

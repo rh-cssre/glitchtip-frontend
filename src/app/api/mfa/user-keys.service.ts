@@ -1,6 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
+import { map } from "rxjs/operators";
+import { decode, encode } from "cborg";
 
 type UserKeyType = "FIDO2" | "TOTP" | "Trusted Device" | "Backup Codes";
 
@@ -65,11 +67,29 @@ export class UserKeysService extends APIBaseService {
 
   fido2() {
     // Should use cbor
-    return this.http.get<unknown>(this.fido2Url);
+    return this.http.get(this.fido2Url, {
+      headers: {
+        Accept: "application/octet-stream"
+      },
+      responseType: "arraybuffer"
+    })
+    .pipe(map(response => {
+      const converted = new Uint8Array(response);
+      return decode(converted);
+    }));
   }
 
-  fido2Create(data: unknown) {
-    return this.http.post<unknown>(this.fido2Url, data);
+  fido2Create(attResponse: AuthenticatorAttestationResponse, name: string) {
+    const request = encode({
+      attestationObject: new Uint8Array(attResponse.attestationObject),
+      clientDataJSON: new Uint8Array(attResponse.clientDataJSON),
+      name
+    });
+    return this.http.post<UserKey>(this.fido2Url, request.buffer, {
+      headers: {
+        "Content-Type": "application/cbor",
+      }
+    });
   }
 
   totp() {
