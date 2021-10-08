@@ -41,6 +41,11 @@ mat-card-title {
   display: flex;
   justify-content: flex-end;
 
+  @media screen and (max-width: $medium - 1) {
+    padding-top: 10px;
+    justify-content: flex-start;
+  }
+
   gt-loading-button {
     margin-right: 16px;
   }
@@ -97,21 +102,33 @@ mat-card-title {
 }
 
 .recipients {
-  display: inline-block;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   width: 50%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding: 8px 0;
+
+  @media screen and (max-width: $large - 1) {
+    width: 100%;
+  }
 
   &.border-top {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
   }
 
   .alert-type {
-    margin-left: 0;
+    padding-left: 2px;
     margin-right: 8px;
     font-size: 20px;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .svg-box {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
   }
 
   svg {
@@ -120,7 +137,16 @@ mat-card-title {
     margin-right: 8px;
   }
 
+  .recipient-info {
+    display: block;
+    width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   .trash {
+    justify-self: flex-end;
     margin-left: 16px;
     width: 28px;
     height: 28px;
@@ -148,11 +174,6 @@ mat-card-title {
   margin: unset;
   padding: 24px 24px 8px 24px;
 }
-
-// .mat-stroked-button:hover {
-//   background-color: whitesmoke;
-//   opacity: 1;
-// }
 
 .mat-button.mat-primary .mat-button-focus-overlay {
   background-color: transparent;
