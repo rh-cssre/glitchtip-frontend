@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
   loading = false;
   error = "";
+  tags = "";
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password1: new FormControl("", [
@@ -40,6 +41,8 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.tags = window.location.search;
+
     this.acceptInfo$
       .pipe(
         tap((acceptInfo) => {
@@ -71,7 +74,8 @@ export class RegisterComponent implements OnInit {
         .register(
           this.form.value.email,
           this.form.value.password1,
-          this.form.value.password2
+          this.form.value.password2,
+          this.tags
         )
         .subscribe(
           () => {
