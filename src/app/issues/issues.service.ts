@@ -236,7 +236,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
             directHit = res.body![0] as IssueWithMatchingEvent;
           }
           this.setStateAndPagination(
-            { issues: res.body!, directHit: directHit },
+            { issues: res.body!, directHit },
             res
           );
         }),

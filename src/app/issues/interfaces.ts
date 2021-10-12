@@ -220,7 +220,7 @@ export interface IssueWithSelected extends Issue {
 
 export interface IssueWithMatchingEvent extends Issue {
   matchingEventId: string;
-};
+}
 
 type StatsPeriod = "24h" | "14d" | "30d" | "";
 
