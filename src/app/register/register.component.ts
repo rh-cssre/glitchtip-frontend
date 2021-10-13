@@ -41,7 +41,12 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.tags = window.location.search;
+    const allParams = new URLSearchParams(window.location.search)
+    allParams.forEach( (value, key) => {
+      if (!key.startsWith("utm")){
+          allParams.delete(key)}
+      })
+    this.tags = "?" + allParams.toString() 
 
     this.acceptInfo$
       .pipe(
