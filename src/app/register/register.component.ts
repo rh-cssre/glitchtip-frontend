@@ -7,6 +7,7 @@ import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SettingsService } from "../api/settings.service";
 import { SocialApp } from "../api/user/user.interfaces";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
+import { getUTM, setStorageWithExpiry } from "../shared/shared.utils";
 
 @Component({
   selector: "gt-register",
@@ -17,6 +18,7 @@ export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
   loading = false;
   error = "";
+  tags = "";
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password1: new FormControl("", [
@@ -40,6 +42,8 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.tags = getUTM().toString();
+
     this.acceptInfo$
       .pipe(
         tap((acceptInfo) => {
@@ -71,7 +75,8 @@ export class RegisterComponent implements OnInit {
         .register(
           this.form.value.email,
           this.form.value.password1,
-          this.form.value.password2
+          this.form.value.password2,
+          this.tags
         )
         .subscribe(
           () => {
@@ -102,6 +107,11 @@ export class RegisterComponent implements OnInit {
   }
 
   onSocialApp(socialApp: SocialApp) {
+    const utm = getUTM().toString();
+    if (utm) {
+      setStorageWithExpiry("register", utm, 5 * 60 * 1000);
+    }
+
     if (socialApp.provider === "github") {
       this.oauthService.initGithubLogin(socialApp.client_id);
     } else if (socialApp.provider === "gitlab") {

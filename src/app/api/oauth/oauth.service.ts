@@ -4,10 +4,12 @@ import { HttpClient } from "@angular/common/http";
 import { getOAuthConfig } from "./social";
 import { OAuthProvider } from "./oauth.interfaces";
 import { LoginResponse } from "../auth/auth.interfaces";
+import { getStorageWithExpiry } from "src/app/shared/shared.utils";
 
 interface RestAuthConnectData {
   access_token?: string;
   code?: string;
+  tags?: string | null;
 }
 
 @Injectable({
@@ -18,9 +20,14 @@ export class GlitchTipOAuthService {
 
   constructor(private http: HttpClient) {}
 
+  getAnalyticsTags() {
+    return getStorageWithExpiry("register");
+  }
+
   githubLogin(code: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       code,
+      tags: this.getAnalyticsTags(),
     };
     let url = this.baseUrl + "/github/";
     if (isConnect) {
@@ -32,6 +39,7 @@ export class GlitchTipOAuthService {
   microsoftLogin(accessToken: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       access_token: accessToken,
+      tags: this.getAnalyticsTags(),
     };
     let url = this.baseUrl + "/microsoft/";
     if (isConnect) {
@@ -43,6 +51,7 @@ export class GlitchTipOAuthService {
   googleLogin(accessToken: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       access_token: accessToken,
+      tags: this.getAnalyticsTags(),
     };
     let url = this.baseUrl + "/google/";
     if (isConnect) {
@@ -54,6 +63,7 @@ export class GlitchTipOAuthService {
   gitlabLogin(accessToken: string, isConnect: boolean) {
     const data: RestAuthConnectData = {
       access_token: accessToken,
+      tags: this.getAnalyticsTags(),
     };
     let url = this.baseUrl + "/gitlab/";
     if (isConnect) {
