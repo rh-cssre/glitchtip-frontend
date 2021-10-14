@@ -7,6 +7,7 @@ import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SettingsService } from "../api/settings.service";
 import { SocialApp } from "../api/user/user.interfaces";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
+import { getUTM, setStorageWithExpiry } from "../shared/shared.utils";
 
 @Component({
   selector: "gt-register",
@@ -41,13 +42,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const allParams = new URLSearchParams(window.location.search);
-    allParams.forEach( (value, key) => {
-      if (!key.startsWith("utm")){
-          allParams.delete(key);
-        }
-      });
-    this.tags = allParams.toString();
+    this.tags = getUTM().toString();
 
     this.acceptInfo$
       .pipe(
@@ -112,6 +107,11 @@ export class RegisterComponent implements OnInit {
   }
 
   onSocialApp(socialApp: SocialApp) {
+    const utm = getUTM().toString();
+    if (utm) {
+      setStorageWithExpiry("register", utm, 5 * 60 * 1000);
+    }
+
     if (socialApp.provider === "github") {
       this.oauthService.initGithubLogin(socialApp.client_id);
     } else if (socialApp.provider === "gitlab") {

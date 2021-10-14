@@ -87,3 +87,38 @@ export function generateIconPath(icon: string): string {
   const annotatedIconString = generateClassName(icon);
   return iconDictionary[annotatedIconString];
 }
+
+export const getUTM = () => {
+  const allParams = new URLSearchParams(window.location.search);
+
+  allParams.forEach((value, key) => {
+    if (!key.startsWith("utm")) {
+      allParams.delete(key);
+    }
+  });
+  return allParams;
+};
+
+/** Set local storage value with ttl expiry in seconds */
+export function setStorageWithExpiry(key: string, value: string, ttl: number) {
+  const now = new Date();
+  const item = {
+    value: value,
+    expiry: now.getTime() + ttl,
+  };
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+export function getStorageWithExpiry(key: string): null | string {
+  const itemStr = localStorage.getItem(key);
+  if (!itemStr) {
+    return null;
+  }
+  const item = JSON.parse(itemStr);
+  const now = new Date();
+  if (now.getTime() > item.expiry) {
+    localStorage.removeItem(key);
+    return null;
+  }
+  return item.value;
+}
