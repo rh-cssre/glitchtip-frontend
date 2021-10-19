@@ -1,11 +1,39 @@
 <section
 class="l-body l-body--full-width mat-elevation-z0"
 >
-<div *ngIf="(monitors$ | async) as monitors"> 
-    <div *ngFor="let monitor of monitors">
-        {{ monitor.name }}
-        {{ monitor.url }}
+    <div *ngIf="monitors$ | async as monitors" class="wrapper">
+        <table
+        mat-table
+        [dataSource]="monitors$"
+        class="mat-elevation-z2"
+        >
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *MatHeaderCellDef>Name</th>
+                <td 
+                    mat-cell *matCellDef="let monitor"
+                    class="status-color status-color--{{ monitor.isUp }}"
+                >
+                        {{ monitor.name }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="url">
+                <th mat-header-cell *MatHeaderCellDef>URL</th>
+                <td mat-cell *matCellDef="let monitor"> {{ monitor.url }}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *MatHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let monitor"> {{ monitor.isUp }}</td>
+            </ng-container>
+            <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
     </div>
-</div>
+
+<!-- <div *ngIf="(monitors$ | async) as monitors"> 
+    <div *ngFor="let monitor of monitors">
+        <p>{{ monitor.name }}</p>
+        <p>{{ monitor.url }}</p>
+    </div>
+</div> -->
 </section>
 

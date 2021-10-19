@@ -20,6 +20,7 @@ import { UptimeService } from "../uptime.service";
 export class MonitorListComponent implements OnInit {
   monitors$ = this.uptimeService.monitors$
   routerEventSubscription: Subscription;
+  displayedColumns: string[] = ['name', 'url', 'status'];
   navigationEnd$ = this.router.events.pipe(
     filter((event) => event instanceof NavigationEnd),
     withLatestFrom(this.route.params),

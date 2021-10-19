@@ -1,0 +1,29 @@
+@import "variables";
+
+table {
+    width: 100%;
+  }
+
+.wrapper {
+    width: 100%;
+}
+
+.status-color {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--true:after {
+    background-color: #54A65A;
+  }
+
+  &--false:after {
+    background-color: $amaranth;
+  }
+}

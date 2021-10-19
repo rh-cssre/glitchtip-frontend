@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 
 import { UptimeRoutingModule } from "./uptime-routing.module";
 import { MonitorListComponent } from "./monitor-list/monitor-list.component";
+import {MatTableModule} from '@angular/material/table';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { MonitorListComponent } from "./monitor-list/monitor-list.component";
   ],
   imports: [
     CommonModule,
-    UptimeRoutingModule
+    UptimeRoutingModule,
+    MatTableModule
   ]
 })
 export class UptimeModule { }
