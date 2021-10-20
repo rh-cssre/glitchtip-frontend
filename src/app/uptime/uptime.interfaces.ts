@@ -3,5 +3,5 @@ export interface Monitor {
     name: string,
     url: string,
     isUp: boolean,
-    lastChange: 
+    lastChange: string | null,
 }

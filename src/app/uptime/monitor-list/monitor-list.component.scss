@@ -2,10 +2,52 @@
 
 table {
     width: 100%;
-  }
+}
 
 .wrapper {
     width: 100%;
+}
+
+.monitor-name {
+  width: 500px;
+
+  @media screen and (max-width: $large - 1) {
+    width: 300px;
+  }
+  @media screen and (max-width: $medium - 1) {
+    width: 200px;
+  }
+  @media screen and (max-width: $tablet - 1) {
+    width: 160px;
+  }
+  @media screen and (max-width: $small - 1) {
+    width: 120px;
+  }
+
+  a {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+}
+
+.monitor-url {
+
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.url-box {
+  width: 250px;
+}
+
+.url-string {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
 }
 
 .status-color {
