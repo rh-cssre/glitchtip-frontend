@@ -8,8 +8,9 @@ import {
   // tap,
   // mergeMap,
 } from "rxjs/operators";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { Subscription } from "rxjs";
-import { UptimeService } from "../uptime.service";
+import { UptimeService, UptimeState } from "../uptime.service";
 
 @Component({
   selector: "gt-monitor-list",
@@ -17,7 +18,9 @@ import { UptimeService } from "../uptime.service";
   styleUrls: ["./monitor-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MonitorListComponent implements OnInit {
+export class MonitorListComponent
+extends PaginationBaseComponent<UptimeState, UptimeService>
+implements OnInit {
   monitors$ = this.uptimeService.monitors$
   routerEventSubscription: Subscription;
   displayedColumns: string[] = ['statusColor', 'name', 'url', 'status'];
@@ -34,7 +37,8 @@ export class MonitorListComponent implements OnInit {
     private uptimeService: UptimeService,
     private router: Router,
     private route: ActivatedRoute,
-  ) { 
+  ) {
+    super(uptimeService)
 
     this.uptimeService.monitors$.subscribe()
     this.routerEventSubscription = this.navigationEnd$.subscribe(

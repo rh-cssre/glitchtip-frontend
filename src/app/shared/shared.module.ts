@@ -9,7 +9,7 @@ import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "./material.module";
-import { DaysAgoPipe, DaysOldPipe } from "./days-ago.pipe";
+import { DaysAgoPipe, DaysOldPipe, TimeForPipe } from "./days-ago.pipe";
 import { ProjectCardComponent } from "./project-card/project-card.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EmptyProjectsComponent } from "./project-card/empty-projects/empty-projects.component";
@@ -24,6 +24,7 @@ import { FormErrorComponent } from "./forms/form-error/form-error.component";
 @NgModule({
   imports: [CommonModule, MaterialModule, RouterModule, ReactiveFormsModule],
   declarations: [
+    TimeForPipe,
     DaysAgoPipe,
     DaysOldPipe,
     ProjectCardComponent,
@@ -38,6 +39,7 @@ import { FormErrorComponent } from "./forms/form-error/form-error.component";
     FormErrorComponent,
   ],
   exports: [
+    TimeForPipe,
     DaysAgoPipe,
     DaysOldPipe,
     ProjectCardComponent,

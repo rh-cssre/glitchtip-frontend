@@ -1,22 +1,27 @@
 import { Injectable } from "@angular/core";
 import { map, tap } from "rxjs/operators"
-import { StatefulService } from "../shared/stateful-service/stateful-service";
+import { 
+  initialPaginationState,
+  PaginationStatefulService,
+  PaginationStatefulServiceState 
+} from "../shared/stateful-service/pagination-stateful-service";
 import { Monitor } from "./uptime.interfaces";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service"
 
-interface UptimeState {
+export interface UptimeState extends PaginationStatefulServiceState{
   monitors: Monitor[]
 }
 
 const initialState: UptimeState = {
-  monitors: []
+  monitors: [],
+  pagination: initialPaginationState,
 }
 
 @Injectable({
   providedIn: "root"
 })
 
-export class UptimeService extends StatefulService<UptimeState> {
+export class UptimeService extends PaginationStatefulService<UptimeState> {
   monitors$ = this.getState$.pipe(map((state) => state.monitors));
 
   constructor(
