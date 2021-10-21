@@ -1,4 +1,5 @@
-export interface Monitor { 
+export interface Monitor {
+    id: string,
     monitor_type: string,
     name: string,
     url: string,

@@ -22,6 +22,9 @@ export class MonitorListComponent
 extends PaginationBaseComponent<UptimeState, UptimeService>
 implements OnInit {
   monitors$ = this.uptimeService.monitors$
+  loading$ = this.uptimeService.getState$.pipe(
+    map((state) => state.pagination.loading)
+  );
   routerEventSubscription: Subscription;
   displayedColumns: string[] = ['statusColor', 'name', 'url', 'status'];
   navigationEnd$ = this.router.events.pipe(

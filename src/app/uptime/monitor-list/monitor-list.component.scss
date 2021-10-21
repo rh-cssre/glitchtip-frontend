@@ -1,5 +1,7 @@
 @import "variables";
 
+$iconWidth: 56px;
+
 table {
     width: 100%;
 }
@@ -67,5 +69,22 @@ table {
 
   &--false:after {
     background-color: $amaranth;
+  }
+}
+
+.footer {
+  text-align: right;
+
+  mat-icon {
+    font-size: 35px;
+    height: $iconWidth;
+    width: $iconWidth;
+    line-height: $iconWidth;
+  }
+}
+
+.spinner-container {
+  mat-progress-spinner {
+    margin: 30px auto;
   }
 }
