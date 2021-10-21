@@ -29,10 +29,11 @@ implements OnInit {
   displayedColumns: string[] = ['statusColor', 'name', 'url', 'status'];
   navigationEnd$ = this.router.events.pipe(
     filter((event) => event instanceof NavigationEnd),
-    withLatestFrom(this.route.params),
-    map(([event, params]) => {
+    withLatestFrom(this.route.params, this.route.queryParams),
+    map(([event, params, queryParams]) => {
       const orgSlug: string | undefined = params["org-slug"];
-      return { orgSlug };
+      const cursor: string | undefined = queryParams.cursor;
+      return { orgSlug, cursor };
     })
   );
 
@@ -45,10 +46,11 @@ implements OnInit {
 
     this.uptimeService.monitors$.subscribe()
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug }) => {
+      ({ orgSlug, cursor }) => {
         if (orgSlug) {
           this.uptimeService.getMonitors(
             orgSlug,
+            cursor
           );
         }
       }

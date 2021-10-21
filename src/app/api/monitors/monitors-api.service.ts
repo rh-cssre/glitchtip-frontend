@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { APIBaseService } from "../api-base.service";
 import { Monitor } from "src/app/uptime/uptime.interfaces";
 
@@ -13,13 +13,17 @@ export class MonitorsAPIService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug?: string) {
+  list(organizationSlug?: string, cursor?: string) {
+    let httpParams = new HttpParams();
     const url = organizationSlug
       ? `${baseUrl}/organizations/${organizationSlug}/monitors/`
       : this.url;
-
+      if (cursor) {
+        httpParams = httpParams.set("cursor", cursor);
+      }
       return this.http.get<Monitor[]>(url, {
         observe: "response",
+        params: httpParams,
       });
   }
 

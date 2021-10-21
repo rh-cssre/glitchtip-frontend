@@ -32,22 +32,27 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
 
   getMonitors(
     orgSlug: string,
+    cursor?: string | undefined
   ) {
     this.retrieveMonitors(
       orgSlug,
+      cursor,
     ).toPromise();
   }
 
+
   private retrieveMonitors(
     organizationSlug?: string,
+    cursor?: string | undefined
   ) {
     return this.monitorsAPIService
       .list(
-        organizationSlug
+        organizationSlug,
+        cursor
       )
       .pipe(
         tap((res) => {
-          this.setState({ monitors: res.body! })
+          this.setStateAndPagination({ monitors: res.body! }, res)
       }))
   }
 }
