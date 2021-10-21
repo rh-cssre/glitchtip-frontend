@@ -2,6 +2,22 @@
 class="l-body l-body--full-width mat-elevation-z0"
 *ngIf="paginator$ | async as paginator"
 >
+    <header class="page-header">
+        <h1 class="mat-display-1">
+        Uptime Monitors
+        <ng-container *ngIf="monitors$ | async as monitors">
+            ({{ monitors.length }})
+        </ng-container>
+        </h1>
+        <a
+        mat-stroked-button
+        color="primary"
+        [routerLink]="[]"
+        >
+            <mat-icon>add</mat-icon>
+            Add monitor
+        </a>
+    </header>
     <div *ngIf="monitors$ | async as monitors" class="wrapper">
         <table
         mat-table

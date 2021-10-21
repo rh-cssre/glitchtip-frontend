@@ -5,8 +5,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata } from "@storybook/angular";
 import { withKnobs, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
-
-import { Monitor } from "../uptime.interfaces";
 import { MaterialModule } from "../../shared/material.module";
 import { MonitorListComponent } from "./monitor-list.component";
 import { MatTableModule } from "@angular/material/table";
