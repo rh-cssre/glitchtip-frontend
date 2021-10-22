@@ -92,6 +92,8 @@ export const monitorListItem = () => {
   const statesDefaultValue = "normal";
   const statesOptions = {
     "Normal": statesDefaultValue,
+    "No monitors": "nomonitors",
+    "Paginated monitors": "paginatedList",
     "Loading": "loading",
   };
   const states = select("States", statesOptions, statesDefaultValue);
@@ -103,18 +105,28 @@ export const monitorListItem = () => {
   const pageStateConfig: any = {
     normal: {
       ...sensibleDefaults,
+      monitorCount: 8,
+    },
+    nomonitors: {
+      ...sensibleDefaults,
+      monitorCount: 0,
+    },
+    paginatedList: {
+      ...sensibleDefaults,
+      monitorCount: 52,
     },
     loading: {
       ...sensibleDefaults,
       loading: true,
+      monitorCount: 8,
     },
   };
-
+  issues$: of
   return {
     component: MonitorListComponent,
     props: {
       loading$: of(pageStateConfig[states].loading),
-      monitors$: of(sampleMonitors),
+      monitors$: of(sampleMonitors.slice(0, pageStateConfig[states].monitorCount)),
     },
   };
 };
