@@ -58,7 +58,6 @@ implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.route.params)
   }
   
 }

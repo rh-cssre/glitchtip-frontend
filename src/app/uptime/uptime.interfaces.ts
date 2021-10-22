@@ -3,6 +3,6 @@ export interface Monitor {
     monitor_type: string,
     name: string,
     url: string,
-    isUp: boolean,
-    lastChange: string | null,
+    is_up: boolean,
+    last_change: string | null,
 }
