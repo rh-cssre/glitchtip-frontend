@@ -62,7 +62,8 @@ class="l-body l-body--full-width mat-elevation-z0"
                         {{ monitor.last_change | timeFor }}
                     </ng-container>
                     <ng-template #notYet>
-                        <span>Not yet live</span>
+                        <span *ngIf="monitor.is_up">Up</span>
+                        <span *ngIf="!monitor.is_up">Down</span>
                     </ng-template>
                 </td>
             </ng-container>
