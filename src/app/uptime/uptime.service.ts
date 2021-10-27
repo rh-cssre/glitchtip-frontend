@@ -6,15 +6,19 @@ import {
   PaginationStatefulServiceState 
 } from "../shared/stateful-service/pagination-stateful-service";
 import { Monitor } from "./uptime.interfaces";
-import { MonitorsAPIService } from "../api/monitors/monitors-api.service"
+import { Environment } from "../api/organizations/organizations.interface";
+import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
+import { ProjectsAPIService } from "../api/projects/projects-api.service";
 
 export interface UptimeState extends PaginationStatefulServiceState{
-  monitors: Monitor[]
+  monitors: Monitor[],
+  projectEnvironments: Environment[]
 }
 
 const initialState: UptimeState = {
   monitors: [],
   pagination: initialPaginationState,
+  projectEnvironments: [],
 }
 
 @Injectable({
@@ -23,9 +27,11 @@ const initialState: UptimeState = {
 
 export class UptimeService extends PaginationStatefulService<UptimeState> {
   monitors$ = this.getState$.pipe(map((state) => state.monitors));
+  projectEnvironments$ = this.getState$.pipe(map((state) => state.projectEnvironments));
 
   constructor(
-    private monitorsAPIService: MonitorsAPIService
+    private monitorsAPIService: MonitorsAPIService,
+    private projectsAPIService: ProjectsAPIService
   ) {
     super(initialState)
   }
@@ -53,6 +59,32 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ monitors: res.body! }, res)
+      }))
+  }
+
+  getProjectEnvironments(
+    orgSlug: string,
+    projectSlug: string
+  ) {
+    this.retrieveProjectEnvironments(
+      orgSlug,
+      projectSlug,
+    ).toPromise();
+  }
+
+
+  private retrieveProjectEnvironments(
+    orgSlug: string,
+    projectSlug: string
+  ) {
+    return this.projectsAPIService
+      .listEnvironments(
+        orgSlug,
+        projectSlug
+      )
+      .pipe(
+        tap((res) => {
+          this.setState({ projectEnvironments: res })
       }))
   }
 }
