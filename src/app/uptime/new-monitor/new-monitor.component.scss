@@ -16,27 +16,68 @@ form {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-  }
-
-// Move to global styles if we decide to implement in other places in app
-.tooltip {
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
-  cursor: help;
 }
 
-.mat-form-field {
-  margin-left: 12px;
-  margin-right: 12px;
+.url-spacing {
+margin-top: 10px;
 }
 
-// .mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {
-//   width: 150px;
-// }
+.associations {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 900px;
+    margin-top: 10px;
 
-// .underline {
-//   &::ng-deep .mat-button-toggle-label-content {
-//     text-decoration: underline;
-//   }
-// }
+    @media screen and (max-width: $large - 1) {
+        width: auto;
+      }
+
+    div {
+        width: 354px;
+        margin-right: 16px;
+    }
+}
+
+.advanced {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 700px;
+    margin-top: 10px;
+
+    @media screen and (max-width: $medium - 1) {
+        width: auto;
+      }
+
+    div {
+        width: 170px;
+        margin-right: 16px;
+    }
+
+    .help-text {
+        display: flex;
+        justify-content: flex-start;
+        width: 370px;
+        padding-bottom: 20px;
+        position: relative;                 
+        bottom: 0;                         
+        left: 0;
+        margin-bottom: 0;
+
+        @media screen and (max-width: $tablet - 1) {
+            width: 300px;
+          }
+    }
+}
+
+.mat-caption {
+    position: relative;                 
+    bottom: 0;                         
+    left: 0;
+    margin-bottom: 0;
+}
+
+.submit {
+    margin-top: 10px;
+}

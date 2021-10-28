@@ -6,127 +6,182 @@
       <mat-card-content>
         <form [formGroup]="newMonitorForm" (ngSubmit)="onSubmit()">
             <div>
-                <!-- <mat-error *ngIf="error">{{ error }}</mat-error> -->
                 <mat-form-field class="monitor-name">
-                <input matInput formControlName="name" placeholder="Monitor Name" />
-                <!-- <mat-error>
-                    <span *ngIf="name?.errors?.required">Enter a monitor name</span>
-                </mat-error> -->
+                <input 
+                    matInput
+                    formControlName="name"
+                    placeholder="Monitor Name"
+                    required
+                    [errorStateMatcher]="matcher"
+                />
+                <mat-error>
+                    <span *ngIf="formName?.errors?.required">Enter a monitor name</span>
+                </mat-error>
                 </mat-form-field>
             </div>
-            <div>
+            <div class="url-spacing">
                 <mat-form-field>
-                    <input matInput formControlName="url" placeholder="Site URL" />
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field>
-                    <mat-label>Interval (seconds)</mat-label>
                     <input
                     matInput
-                    min="0"
-                    type="number"
-                    default="60"
-                    autocomplete="off"
-                    formControlName="interval"
-                    placeholder="60"
+                    formControlName="url"
+                    placeholder="Site URL"
+                    required
+                    [errorStateMatcher]="matcher"
                     />
-                    <!-- [errorStateMatcher]="newAlert ? newFormMatcher : matcher" -->
-                    <!-- <mat-error *ngIf="projectFormQuantity?.errors">
-                    <span *ngIf="projectFormQuantity?.errors?.min"
-                        >The quantity needs to be greater than or equal to 0.</span
-                    >
-                    <span *ngIf="projectFormQuantity?.errors?.invalidNumber"
-                        >Enter a number.
-                    </span>
-                    <span *ngIf="projectFormQuantity?.errors?.required"
-                        >This field is required.</span
-                    >
-                    </mat-error> -->
+                    <mat-error>
+                        <span *ngIf="formUrl?.errors?.required">Enter a url</span>
+                    </mat-error>
                 </mat-form-field>
             </div>
-            <div>
-                <mat-form-field>
-                    <mat-label>Monitor type</mat-label>
-                    <mat-select
-                    formControlName="monitorType"
-                    >
-                    <mat-option
-                        *ngFor="let monitorType of monitorTypes"
-                        [value]="monitorType"
-                    >
-                        {{ monitorType }}
-                    </mat-option>
-                    </mat-select>
-                </mat-form-field>
+            <div class="associations">
+                <div>
+                    <mat-form-field>
+                        <mat-label>Associated Project</mat-label>
+                        <mat-select
+                        formControlName="project"
+                        (selectionChange)="projectSelected()"
+                        > 
+                        <ng-container *ngIf="orgProjects$ | async as orgProjects">
+                            <mat-option value=null>None</mat-option>
+                            <mat-option
+                                *ngFor="let orgProject of orgProjects"
+                                [value]="orgProject.slug"
+                            >
+                                {{ orgProject.name }}
+                            </mat-option>
+                        </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field *ngIf="projectEnvironments$ | async as projectEnvironments">
+                        <mat-label>Environment</mat-label>
+                        <mat-select
+                        formControlName="environment"
+                        [disabled]="projectEnvironments.length < 1"
+                        [value]="selectedEnvironment"
+                        > 
+                        <ng-container >
+                            <mat-option value=null>None</mat-option>
+                            <mat-option
+                                *ngFor="let projectEnvironment of projectEnvironments"
+                                [value]="projectEnvironment.id"
+                            >
+                                {{ projectEnvironment.name }}
+                            </mat-option>
+                        </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
             </div>
-            <div>
-                <mat-form-field>
-                    <mat-label>Expected Status</mat-label>
-                    <input
-                    matInput
-                    min="0"
-                    max="1000"
-                    type="number"
-                    default="200"
-                    autocomplete="off"
-                    formControlName="expectedStatus"
-                    placeholder="Status code"
-                    
-                    />
-                    <!-- [errorStateMatcher]="newAlert ? newFormMatcher : matcher" -->
-                    <!-- <mat-error *ngIf="projectFormQuantity?.errors">
-                    <span *ngIf="projectFormQuantity?.errors?.min"
-                        >The quantity needs to be greater than or equal to 0.</span
-                    >
-                    <span *ngIf="projectFormQuantity?.errors?.invalidNumber"
-                        >Enter a number.
-                    </span>
-                    <span *ngIf="projectFormQuantity?.errors?.required"
-                        >This field is required.</span
-                    >
-                    </mat-error> -->
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field>
-                    <mat-label>Associated Project</mat-label>
-                    <mat-select
-                    formControlName="project"
-                    (selectionChange)="projectSelected()"
-                    > 
-                    <ng-container *ngIf="orgProjects$ | async as orgProjects">
-                        <mat-option value="">None</mat-option>
-                        <mat-option
-                            *ngFor="let orgProject of orgProjects"
-                            [value]="orgProject.slug"
+            <div class="advanced">
+                <div>
+                    <mat-form-field>
+                        <mat-label>Monitor type</mat-label>
+                        <mat-select
+                        formControlName="monitorType"
+                        required
+                        [errorStateMatcher]="matcher"
                         >
-                            {{ orgProject.name }}
-                        </mat-option>
-                    </ng-container>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div>
-                <mat-form-field *ngIf="projectEnvironments$ | async as projectEnvironments">
-                    <mat-label>Environment</mat-label>
-                    <mat-select
-                    formControlName="environment"
-                    [disabled]="projectEnvironments.length < 1"
-                    > 
-                    <ng-container >
-                        <mat-option value="None">None</mat-option>
                         <mat-option
-                            *ngFor="let projectEnvironment of projectEnvironments"
-                            [value]="projectEnvironment.id"
+                            *ngFor="let monitorType of monitorTypes"
+                            [value]="monitorType"
                         >
-                            {{ projectEnvironment.name }}
+                            {{ monitorType }}
                         </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <span *ngIf="formMonitorType?.errors?.required">Choose a monitor type</span>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="help-text">
+                    <ng-container *ngIf="formMonitorType?.value === 'Ping'">
+                        <p class="mat-caption">
+                            GlitchTip will "ping" the specified URL using an 
+                            HTTP HEAD request with no payload.
+                        </p>
                     </ng-container>
-                    </mat-select>
-                </mat-form-field>
+                    <ng-container *ngIf="formMonitorType?.value === 'POST'">
+                        <p class="mat-caption">
+                            GlitchTip will send an HTTP GET request to the specified URL.
+                            If the expected response is not received, the site will be marked as Down.
+                        </p>
+                    </ng-container>
+                    <ng-container *ngIf="formMonitorType?.value === 'GET'">
+                        <p class="mat-caption">
+                            GlitchTip will send an HTTP POST request to the specified URL.
+                            If the expected response is not received, the site will be marked as Down.
+                        </p>
+                    </ng-container>
+                    <ng-container *ngIf="formMonitorType?.value === 'Heartbeat'">
+                        <p class="mat-caption">
+                            GlitchTip will await requests from your site 
+                            to ensure it is active. If it doesn't receive 
+                            the request, the site will be marked as Down.
+                        </p>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="advanced">
+                <div>
+                    <mat-form-field>
+                        <mat-label>Expected Status</mat-label>
+                        <input
+                        matInput
+                        min="0"
+                        max="1000"
+                        type="number"
+                        default="200"
+                        autocomplete="off"
+                        formControlName="expectedStatus"
+                        placeholder="Status code"
+                        required 
+                        [errorStateMatcher]="matcher"
+                        />
+                        <mat-error *ngIf="formExpectedStatus?.errors">
+                        <span *ngIf="formExpectedStatus?.errors?.min"
+                            >The quantity needs to be greater than or equal to 100.</span
+                        >
+                        <span *ngIf=
+                            "formExpectedStatus?.errors?.invalidNumber
+                            || formExpectedStatus?.errors?.required
+                            "
+                            >Enter a status code number.
+                        </span>
+                        </mat-error>
+                    </mat-form-field>
+                </div>    
+                <div>
+                    <mat-form-field>
+                        <mat-label>Interval (seconds)</mat-label>
+                        <input
+                        matInput
+                        min="0"
+                        type="number"
+                        default="60"
+                        autocomplete="off"
+                        formControlName="interval"
+                        placeholder="60"
+                        required
+                        [errorStateMatcher]="matcher"
+                        />
+                        <mat-error *ngIf="formInterval?.errors">
+                            <span *ngIf="formInterval?.errors?.min"
+                                >The number needs to be greater than or equal to 1.</span
+                            >
+                            <span *ngIf=
+                                "formInterval?.errors?.invalidNumber
+                                || formInterval?.errors?.required
+                                "
+                                >Enter a number.
+                            </span>
+                            </mat-error>
+                    </mat-form-field>
+                </div>
             </div>
           <gt-loading-button
+            class="submit"
             id="create-project-submit"
             [loading]="false"
             buttonText="Create Monitor"

@@ -4,13 +4,11 @@ import {
   FormControl,
   Validators,
   AbstractControl,
-  ValidationErrors,
-  // FormGroupDirective,
-  // NgForm,
+  ValidationErrors
 } from "@angular/forms";
-import { tap } from "rxjs/operators"
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
+import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
 function numberValidator(control: AbstractControl): ValidationErrors | null {
   if (typeof control.value === "number") {
@@ -18,10 +16,8 @@ function numberValidator(control: AbstractControl): ValidationErrors | null {
   }
   return { invalidNumber: true };
 }
-
-const urlReg = new RegExp(
-  /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
-);
+const pattern = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&/=]*)?/gi
+const urlReg = new RegExp(pattern);
 
 @Component({
   selector: "gt-new-monitor",
@@ -31,14 +27,16 @@ const urlReg = new RegExp(
 })
 
 export class NewMonitorComponent implements OnInit {
-  
+
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   projectEnvironments$ = this.uptimeService.projectEnvironments$;
 
-  monitorTypes = ['Ping', 'GET', 'POST', 'SSL', 'Heartbeat']
-  
+  monitorTypes = ['Ping', 'GET', 'POST', 'Heartbeat']
+
+  selectedEnvironment = "";
+
   newMonitorForm = new FormGroup({
-    monitorType: new FormControl("", [
+    monitorType: new FormControl("Ping", [
       Validators.required,
     ]),
     name: new FormControl("", [
@@ -49,20 +47,36 @@ export class NewMonitorComponent implements OnInit {
       //Not working?
       Validators.pattern(urlReg),
     ]),
-    expectedStatus: new FormControl("200", [
+    expectedStatus: new FormControl(200, [
       Validators.required,
+      Validators.min(100),
       numberValidator
     ]),
     interval: new FormControl("60", [
       Validators.required,
+      Validators.min(1),
     ]),
     project: new FormControl(""),
     environment: new FormControl(""),
-    
-    //Environment
-    //Project
-    //Organization
   });
+
+  formName = this.newMonitorForm.get(
+    "name"
+  ) as FormControl
+  formMonitorType = this.newMonitorForm.get(
+    "monitorType"
+  ) as FormControl
+  formUrl = this.newMonitorForm.get(
+    "url"
+  ) as FormControl
+  formExpectedStatus = this.newMonitorForm.get(
+    "expectedStatus"
+  ) as FormControl
+  formInterval = this.newMonitorForm.get(
+    "interval"
+  ) as FormControl
+  
+  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private organizationsService: OrganizationsService,
@@ -76,26 +90,22 @@ export class NewMonitorComponent implements OnInit {
     console.log("submitted")
   }
 
-  projectSelected () {
+  projectSelected() {
     const selectedProject = this.newMonitorForm.get('project')?.value
     if (selectedProject) {
-      this.organizationsService.activeOrganizationSlug$.pipe(
-        tap(orgSlug => {
-          this.organizationsService.
+      this.organizationsService.activeOrganizationSlug$.subscribe(
+        (orgSlug => {
+          if (orgSlug) {
+            this.newMonitorForm.get('environment')?.setValue("");
+            this.selectedEnvironment = "";
+            this.uptimeService.getProjectEnvironments(
+              orgSlug,
+              selectedProject
+            );
+          }
         })
       )
-    }
+    };
   }
-
-  // this.routerEventSubscription = this.navigationEnd$.subscribe(
-  //   ({ orgSlug, cursor }) => {
-  //     if (orgSlug) {
-  //       this.uptimeService.getMonitors(
-  //         orgSlug,
-  //         cursor
-  //       );
-  //     }
-  //   }
-  // );
 
 }
