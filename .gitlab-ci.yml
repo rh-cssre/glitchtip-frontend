@@ -39,6 +39,7 @@ test-e2e:
   stage: test
   variables:
     ENABLE_OPEN_USER_REGISTRATION: "true"
+    CELERY_TASK_ALWAYS_EAGER: "true"
   services:
     - postgres
     - name: registry.gitlab.com/glitchtip/glitchtip-backend:master
