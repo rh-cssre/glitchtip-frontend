@@ -15,16 +15,14 @@ export class MonitorsAPIService extends APIBaseService {
 
   list(organizationSlug?: string, cursor?: string) {
     let httpParams = new HttpParams();
-    const url = organizationSlug
-      ? `${baseUrl}/organizations/${organizationSlug}/monitors/`
-      : this.url;
-      if (cursor) {
-        httpParams = httpParams.set("cursor", cursor);
-      }
-      return this.http.get<Monitor[]>(url, {
-        observe: "response",
-        params: httpParams,
-      });
+    if (cursor) {
+      httpParams = httpParams.set("cursor", cursor);
+    }
+    return this.http.get<Monitor[]>(
+      this.listURL(organizationSlug), {
+      observe: "response",
+      params: httpParams,
+    });
   }
 
   retrieve(id: string) {
@@ -34,4 +32,10 @@ export class MonitorsAPIService extends APIBaseService {
   destroy(id: string) {
     return this.http.delete(this.detailURL(id));
   }
+
+  protected listURL(organizationSlug?: string) {
+    return `${baseUrl}/organizations/${organizationSlug}/monitors/`;
+  }
 }
+
+

@@ -1,8 +1,11 @@
 export interface Monitor {
     id: string,
-    monitor_type: string,
+    monitorType: string,
     name: string,
     url: string,
-    is_up: boolean,
-    last_change: string | null,
+    expectedStatus: number;
+    interval: string;
+    project: number;
+    isUp: boolean,
+    lastChange: string | null,
 }
