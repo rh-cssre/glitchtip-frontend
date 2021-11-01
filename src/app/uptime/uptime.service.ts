@@ -5,7 +5,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState 
 } from "../shared/stateful-service/pagination-stateful-service";
-import { Monitor } from "./uptime.interfaces";
+import { Monitor, NewMonitor } from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { ProjectsAPIService } from "../api/projects/projects-api.service";
@@ -34,6 +34,14 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     private projectsAPIService: ProjectsAPIService
   ) {
     super(initialState)
+  }
+
+  createMonitor(monitor: NewMonitor, orgSlug: string) {
+    return this.monitorsAPIService
+    .createMonitor(orgSlug, monitor)
+    .pipe(
+      tap(() => console.log("some handling stuff"))
+    )
   }
 
   getMonitors(

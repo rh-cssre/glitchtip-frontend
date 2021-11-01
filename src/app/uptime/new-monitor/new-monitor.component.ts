@@ -6,6 +6,8 @@ import {
   AbstractControl,
   ValidationErrors
 } from "@angular/forms";
+import { catchError, tap } from "rxjs/operators";
+import { EMPTY } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
@@ -23,17 +25,20 @@ const urlReg = new RegExp(pattern);
   selector: "gt-new-monitor",
   templateUrl: "./new-monitor.component.html",
   styleUrls: ["./new-monitor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class NewMonitorComponent implements OnInit {
 
+  orgSlug?: string | null;
+  error = "";
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   projectEnvironments$ = this.uptimeService.projectEnvironments$;
 
   monitorTypes = ['Ping', 'GET', 'POST', 'Heartbeat']
-
   selectedEnvironment = "";
+  environmentsDisabled = false;
+  loading = false;
 
   newMonitorForm = new FormGroup({
     monitorType: new FormControl("Ping", [
@@ -75,7 +80,8 @@ export class NewMonitorComponent implements OnInit {
   formInterval = this.newMonitorForm.get(
     "interval"
   ) as FormControl
-  
+  formProject = this.newMonitorForm.get("project")
+
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
@@ -84,28 +90,49 @@ export class NewMonitorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.organizationsService.activeOrganizationSlug$
+      .subscribe((orgSlug) => {
+        this.orgSlug = orgSlug
+      })
+  }
+
+  disableEnvironments() {
+    this.environmentsDisabled = true;
+  }
+
+  projectSelected(projectSlug: string) {
+    if (this.orgSlug) {
+      this.newMonitorForm.get('environment')?.setValue("");
+      this.selectedEnvironment = "";
+      this.environmentsDisabled = false;
+      this.uptimeService.getProjectEnvironments(
+        this.orgSlug,
+        projectSlug
+      );
+    }
   }
 
   onSubmit() {
-    console.log("submitted")
-  }
-
-  projectSelected() {
-    const selectedProject = this.newMonitorForm.get('project')?.value
-    if (selectedProject) {
-      this.organizationsService.activeOrganizationSlug$.subscribe(
-        (orgSlug => {
-          if (orgSlug) {
-            this.newMonitorForm.get('environment')?.setValue("");
-            this.selectedEnvironment = "";
-            this.uptimeService.getProjectEnvironments(
-              orgSlug,
-              selectedProject
-            );
-          }
+    if (this.newMonitorForm.valid && this.orgSlug) {
+      this.loading = true;
+      this.uptimeService.createMonitor(
+        this.newMonitorForm.value,
+        this.orgSlug
+      )
+      .pipe(
+        tap(() => {
+          this.loading = false
+          console.log(this.loading)
+        }
+        ),
+        catchError((err) => {
+          this.loading = false;
+          this.error = `${err.statusText}: ${err.status}`;
+          return EMPTY;
         })
       )
-    };
+      .subscribe();
+    }
   }
 
 }

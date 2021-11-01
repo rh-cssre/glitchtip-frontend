@@ -6,6 +6,16 @@ export interface Monitor {
     expectedStatus: number;
     interval: string;
     project: number;
-    isUp: boolean,
-    lastChange: string | null,
+    isUp?: boolean,
+    lastChange?: string | null,
+}
+
+export interface NewMonitor {
+    monitorType: string,
+    name: string,
+    url: string,
+    expectedStatus: number;
+    interval: string;
+    projectId: number;
+    environment: number;
 }

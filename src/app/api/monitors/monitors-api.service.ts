@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { APIBaseService } from "../api-base.service";
-import { Monitor } from "src/app/uptime/uptime.interfaces";
+import { Monitor, NewMonitor } from "src/app/uptime/uptime.interfaces";
 
 @Injectable({
   providedIn: "root"
@@ -23,6 +23,11 @@ export class MonitorsAPIService extends APIBaseService {
       observe: "response",
       params: httpParams,
     });
+  }
+
+  createMonitor(organizationSlug: string, data: NewMonitor) {
+    console.log("sending")
+    return this.http.post<Monitor>(this.listURL(organizationSlug), data)
   }
 
   retrieve(id: string) {
