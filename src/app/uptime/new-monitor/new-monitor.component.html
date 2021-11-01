@@ -32,6 +32,9 @@
                     <mat-error>
                         <span *ngIf="formUrl?.errors?.required">Enter a url</span>
                     </mat-error>
+                    <mat-error>
+                        <span *ngIf="formUrl?.errors?.pattern">Enter a valid url</span>
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="associations">
