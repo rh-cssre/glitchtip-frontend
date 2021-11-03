@@ -8,12 +8,14 @@ import { MaterialModule } from "../shared/material.module";
 import { SharedModule } from "../shared/shared.module";
 import { NewMonitorComponent } from "./new-monitor/new-monitor.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MonitorDetailComponent } from "./monitor-detail/monitor-detail.component";
 
 
 @NgModule({
   declarations: [
     MonitorListComponent,
-    NewMonitorComponent
+    NewMonitorComponent,
+    MonitorDetailComponent
   ],
   imports: [
     CommonModule,

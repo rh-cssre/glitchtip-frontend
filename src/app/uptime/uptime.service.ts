@@ -13,12 +13,14 @@ import { ProjectsAPIService } from "../api/projects/projects-api.service";
 export interface UptimeState extends PaginationStatefulServiceState{
   monitors: Monitor[],
   projectEnvironments: Environment[]
+  monitorDetails: Monitor | null;
 }
 
 const initialState: UptimeState = {
   monitors: [],
   pagination: initialPaginationState,
   projectEnvironments: [],
+  monitorDetails: null
 }
 
 @Injectable({
@@ -28,6 +30,9 @@ const initialState: UptimeState = {
 export class UptimeService extends PaginationStatefulService<UptimeState> {
   monitors$ = this.getState$.pipe(map((state) => state.monitors));
   projectEnvironments$ = this.getState$.pipe(map((state) => state.projectEnvironments));
+  readonly activeMonitor$ = this.getState$.pipe(
+    map((data) => data.monitorDetails)
+  );
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
@@ -56,7 +61,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
 
 
   private retrieveMonitors(
-    organizationSlug?: string,
+    organizationSlug: string,
     cursor?: string | undefined
   ) {
     return this.monitorsAPIService
@@ -95,4 +100,32 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           this.setState({ projectEnvironments: res })
       }))
   }
+
+  retrieveMonitorDetails(organizationSlug?: string, monitorId?: string) {
+    if (organizationSlug && monitorId) {
+    this.monitorsAPIService
+      .retrieve(organizationSlug, monitorId)
+      .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
+      .subscribe();
+    }
+  }
+
+
+  private setActiveMonitor(monitor: Monitor) {
+    this.setState({
+      monitorDetails: monitor,
+    });
+  }
+  // retrieveProjectDetail(organizationSlug: string, projectSlug: string) {
+  //   this.projectsAPIService
+  //     .retrieve(organizationSlug, projectSlug)
+  //     .pipe(tap((activeProject) => this.setActiveProject(activeProject)))
+  //     .subscribe();
+  // }
 }
+
+// private setActiveProject(projectDetail: ProjectDetail) {
+//   this.setState({
+//     projectDetail,
+//   });
+// }

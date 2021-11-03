@@ -4,7 +4,9 @@
     </header>
     <mat-card>
       <mat-card-content>
-        <mat-error *ngIf="error">{{ error }}</mat-error>
+        <div class="form-center">
+            <mat-error *ngIf="error">{{ error }}</mat-error>
+        </div>
         <form [formGroup]="newMonitorForm" (ngSubmit)="onSubmit()">
             <div>
                 <mat-form-field class="monitor-name">

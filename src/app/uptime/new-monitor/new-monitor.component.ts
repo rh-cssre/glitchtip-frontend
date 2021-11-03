@@ -6,10 +6,12 @@ import {
   AbstractControl,
   ValidationErrors
 } from "@angular/forms";
+import { Router } from "@angular/router";
 import { catchError, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
 function numberValidator(control: AbstractControl): ValidationErrors | null {
@@ -49,7 +51,6 @@ export class NewMonitorComponent implements OnInit {
     ]),
     url: new FormControl("", [
       Validators.required,
-      //Not working?
       Validators.pattern(urlReg),
     ]),
     expectedStatus: new FormControl(200, [
@@ -80,13 +81,14 @@ export class NewMonitorComponent implements OnInit {
   formInterval = this.newMonitorForm.get(
     "interval"
   ) as FormControl
-  formProject = this.newMonitorForm.get("project")
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private organizationsService: OrganizationsService,
-    private uptimeService: UptimeService
+    private uptimeService: UptimeService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -120,9 +122,10 @@ export class NewMonitorComponent implements OnInit {
         this.orgSlug
       )
       .pipe(
-        tap(() => {
+        tap((monitor) => {
           this.loading = false
-          console.log(this.loading)
+          this.snackBar.open(`${monitor.name} has been created`);
+          this.router.navigate([this.orgSlug, "uptime-monitors", monitor.id]);
         }
         ),
         catchError((err) => {
@@ -136,3 +139,16 @@ export class NewMonitorComponent implements OnInit {
   }
 
 }
+
+// .pipe(
+//   tap(() => (this.loading = false)),
+//   exhaustMap((project) =>
+//     this.orgService.refreshOrganizationDetail().pipe(
+//       tap((organization) => {
+//         this.snackBar.open(`${project.name} has been created`);
+//         this.router.navigate([organization.slug, "issues"], {
+//           queryParams: { project: project.id },
+//         });
+//       })
+//     )
+//   ),

@@ -13,7 +13,7 @@ export class MonitorsAPIService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug?: string, cursor?: string) {
+  list(organizationSlug: string, cursor?: string) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
@@ -26,21 +26,29 @@ export class MonitorsAPIService extends APIBaseService {
   }
 
   createMonitor(organizationSlug: string, data: NewMonitor) {
-    console.log("sending")
     return this.http.post<Monitor>(this.listURL(organizationSlug), data)
   }
 
-  retrieve(id: string) {
-    return this.http.get<Monitor>(this.detailURL(id));
+  retrieve(organizationSlug: string, monitorId: string) {
+    return this.http.get<Monitor>(this.detailURL(organizationSlug, monitorId));
   }
 
-  destroy(id: string) {
-    return this.http.delete(this.detailURL(id));
+  destroy(organizationSlug: string, monitorId: string) {
+    return this.http.delete(this.detailURL(organizationSlug, monitorId));
   }
 
-  protected listURL(organizationSlug?: string) {
+  protected listURL(organizationSlug: string) {
     return `${baseUrl}/organizations/${organizationSlug}/monitors/`;
   }
+
+  protected detailURL(
+    organizationSlug:string,
+    monitorId: string
+  ) {
+    return `${this.listURL(organizationSlug)}/${monitorId}`
+  }
 }
+
+
 
 
