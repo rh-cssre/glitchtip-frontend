@@ -91,7 +91,7 @@
                         >
                         <mat-option
                             *ngFor="let monitorType of monitorTypes"
-                            [value]="monitorType"
+                            [value]="monitorType | lowercase"
                         >
                             {{ monitorType }}
                         </mat-option>

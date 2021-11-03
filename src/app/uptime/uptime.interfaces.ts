@@ -6,6 +6,9 @@ export interface Monitor {
     expectedStatus: number;
     interval: string;
     project: number;
+    projectName: string,
+    environment: number;
+    envName: string;
     isUp?: boolean,
     lastChange?: string | null,
 }

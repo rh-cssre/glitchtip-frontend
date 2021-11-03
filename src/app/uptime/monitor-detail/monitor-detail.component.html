@@ -1,3 +1,94 @@
-<ng-container *ngIf="monitor$ | async as monitor">
-<p>{{monitor.name}}</p>
-</ng-container>
+<section class="l-body">
+    <ng-container *ngIf="monitor$ | async as monitor">
+    <header class="page-header">
+      <h1 class="mat-display-1">Uptime details for {{ monitor.name }}</h1>
+    </header>
+    <mat-card>
+        <mat-card-title>
+            <ng-container *ngIf="monitor.lastChange; else notYet">
+                <span *ngIf="monitor.isUp">Up</span>
+                <span *ngIf="!monitor.isUp">Down</span>
+                {{ monitor.lastChange | timeFor }}
+            </ng-container>
+            <ng-template #notYet>
+                <span *ngIf="monitor.isUp">Up</span>
+                <span *ngIf="!monitor.isUp">Down</span>
+            </ng-template>
+        </mat-card-title>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <form>
+            <mat-form-field class="full-width">
+            <input
+                matInput
+                readonly
+                placeholder="Site URL"
+                value="{{ monitor.url }}"
+            />
+            </mat-form-field>
+            <div *ngIf="monitor.project || monitor.monitorType" class="associations">
+                <div>
+                    <mat-form-field *ngIf="monitor.projectName" class="full-width">
+                        <input
+                            matInput
+                            readonly
+                            placeholder="Associated Project"
+                            value="{{ monitor.projectName }}"
+                        />
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field *ngIf="monitor.envName" class="full-width">
+                        <input
+                            matInput
+                            readonly
+                            placeholder="Environment"
+                            value="{{ monitor.envName }}"
+                        />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="advanced">
+                <div>
+                <mat-form-field class="full-width">
+                    <input
+                        matInput
+                        readonly
+                        placeholder="Monitor Type"
+                        value="{{ monitor.monitorType }}"
+                    />
+                </mat-form-field>
+                </div>
+                <div>
+                <mat-form-field class="full-width">
+                    <input
+                        matInput
+                        readonly
+                        placeholder="Expected Status"
+                        value="{{ monitor.expectedStatus }}"
+                    />
+                </mat-form-field>
+                </div>
+                <div>
+                <mat-form-field class="full-width">
+                    <input
+                        matInput
+                        readonly
+                        placeholder="Interval (hh:mm:ss)"
+                        value="{{ monitor.interval }}"
+                    />
+                </mat-form-field>
+                </div>
+            </div>
+            <button
+            mat-stroked-button
+            color="primary"
+            [disabled]="false"
+            >
+            Edit
+            </button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    </ng-container>
+</section>

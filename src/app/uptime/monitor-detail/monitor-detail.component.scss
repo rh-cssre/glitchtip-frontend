@@ -1,0 +1,43 @@
+@import "variables";
+
+mat-card-header {
+    color: #54A65A;
+}
+
+mat-card-content {
+    padding-top: 10px;
+}
+
+.associations {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 900px;
+    margin-top: 10px;
+
+    @media screen and (max-width: $large - 1) {
+        width: auto;
+      }
+
+    div {
+        width: 354px;
+        margin-right: 16px;
+    }
+}
+
+.advanced {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 700px;
+    margin-top: 10px;
+
+    @media screen and (max-width: $medium - 1) {
+        width: auto;
+      }
+
+    div {
+        width: 170px;
+        margin-right: 16px;
+    }
+}

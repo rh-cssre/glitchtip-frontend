@@ -37,13 +37,14 @@ export class NewMonitorComponent implements OnInit {
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   projectEnvironments$ = this.uptimeService.projectEnvironments$;
 
+  // monitor type cases converted to lowercase as form value
   monitorTypes = ['Ping', 'GET', 'POST', 'Heartbeat']
   selectedEnvironment = "";
   environmentsDisabled = false;
   loading = false;
 
   newMonitorForm = new FormGroup({
-    monitorType: new FormControl("Ping", [
+    monitorType: new FormControl("ping", [
       Validators.required,
     ]),
     name: new FormControl("", [
@@ -139,16 +140,3 @@ export class NewMonitorComponent implements OnInit {
   }
 
 }
-
-// .pipe(
-//   tap(() => (this.loading = false)),
-//   exhaustMap((project) =>
-//     this.orgService.refreshOrganizationDetail().pipe(
-//       tap((organization) => {
-//         this.snackBar.open(`${project.name} has been created`);
-//         this.router.navigate([organization.slug, "issues"], {
-//           queryParams: { project: project.id },
-//         });
-//       })
-//     )
-//   ),
