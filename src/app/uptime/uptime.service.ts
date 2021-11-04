@@ -44,9 +44,6 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   createMonitor(monitor: NewMonitor, orgSlug: string) {
     return this.monitorsAPIService
     .createMonitor(orgSlug, monitor)
-    .pipe(
-      tap(() => console.log("some handling stuff"))
-    )
   }
 
   getMonitors(
@@ -116,16 +113,6 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       monitorDetails: monitor,
     });
   }
-  // retrieveProjectDetail(organizationSlug: string, projectSlug: string) {
-  //   this.projectsAPIService
-  //     .retrieve(organizationSlug, projectSlug)
-  //     .pipe(tap((activeProject) => this.setActiveProject(activeProject)))
-  //     .subscribe();
-  // }
+
 }
 
-// private setActiveProject(projectDetail: ProjectDetail) {
-//   this.setState({
-//     projectDetail,
-//   });
-// }

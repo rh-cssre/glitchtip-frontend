@@ -10,23 +10,6 @@ mat-card {
     }
 }
 
-// .title {
-//     display: flex;
-//     justify-content: space-between;
-//     flex-wrap: wrap;
-//     align-items: flex-end;
-//     width: 100%;
-//     margin-top: 10px;
-
-//     @media screen and (max-width: $large - 1) {
-//         width: auto;
-//       }
-
-//     div {
-//         width: 354px;
-//     }
-// }
-
 .associations {
     display: flex;
     justify-content: flex-start;
@@ -62,6 +45,7 @@ mat-card {
 }
 
 // Duplicating these because :after requires content and this is just an empty div
+// It's not a graceful solution at all. But the indicator is temporary anyways.
 
 .status-indicator--true {
     width: 100%;
@@ -69,6 +53,11 @@ mat-card {
 }
 
 .status-indicator--false {
+    width: 100%;
+    border-top: 8px solid $amaranth;
+}
+
+.status-indicator-- {
     width: 100%;
     border-top: 8px solid $amaranth;
 }
