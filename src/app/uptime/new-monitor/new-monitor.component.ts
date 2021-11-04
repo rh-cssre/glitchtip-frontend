@@ -37,14 +37,13 @@ export class NewMonitorComponent implements OnInit {
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   projectEnvironments$ = this.uptimeService.projectEnvironments$;
 
-  // monitor type cases converted to lowercase as form value
   monitorTypes = ['Ping', 'GET', 'POST', 'Heartbeat']
   selectedEnvironment = "";
   environmentsDisabled = false;
   loading = false;
 
   newMonitorForm = new FormGroup({
-    monitorType: new FormControl("ping", [
+    monitorType: new FormControl("Ping", [
       Validators.required,
     ]),
     name: new FormControl("", [
