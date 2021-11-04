@@ -1,11 +1,30 @@
 @import "variables";
 
-mat-card-header {
-    color: #54A65A;
+
+mat-card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  
+    mat-card-content {
+      padding-top: 16px;
+    }
 }
 
-mat-card-content {
-    padding-top: 10px;
+.title {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    width: 100%;
+    margin-top: 10px;
+
+    @media screen and (max-width: $large - 1) {
+        width: auto;
+      }
+
+    div {
+        width: 354px;
+    }
 }
 
 .associations {
@@ -40,4 +59,20 @@ mat-card-content {
         width: 170px;
         margin-right: 16px;
     }
+}
+
+
+// Duplicating these because :after requires content and this is just an empty div
+.status-indicator--true {
+    background-color: #54A65A;
+    height: 40px;
+    width: 200px;
+    border-radius: 20px;
+}
+
+.status-indicator--false {
+    background-color: $amaranth;
+    height: 40px;
+    width: 200px;
+    border-radius: 20px;
 }

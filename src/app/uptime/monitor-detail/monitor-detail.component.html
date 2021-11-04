@@ -5,15 +5,18 @@
     </header>
     <mat-card>
         <mat-card-title>
-            <ng-container *ngIf="monitor.lastChange; else notYet">
-                <span *ngIf="monitor.isUp">Up</span>
-                <span *ngIf="!monitor.isUp">Down</span>
-                {{ monitor.lastChange | timeFor }}
-            </ng-container>
-            <ng-template #notYet>
-                <span *ngIf="monitor.isUp">Up</span>
-                <span *ngIf="!monitor.isUp">Down</span>
-            </ng-template>
+            <div class="title">
+                <ng-container *ngIf="monitor.lastChange; else notYet">
+                    <span *ngIf="monitor.isUp">Up</span>
+                    <span *ngIf="!monitor.isUp">Down</span>
+                    {{ monitor.lastChange | timeFor }}
+                </ng-container>
+                <ng-template #notYet>
+                    <span *ngIf="monitor.isUp">Up</span>
+                    <span *ngIf="!monitor.isUp">Down</span>
+                </ng-template>
+                <div class="status-indicator--{{monitor.isUp}}"></div>
+            </div>
         </mat-card-title>
         <mat-divider></mat-divider>
         <mat-card-content>
@@ -89,6 +92,16 @@
             </button>
             </form>
         </mat-card-content>
+    </mat-card>
+    <mat-card class="heartbeat-card" *ngIf="monitor.monitorType === 'heartbeat'">
+        <mat-card-title>Heartbeat URL endpoint</mat-card-title>
+        <mat-divider></mat-divider>
+        <p>Configure your project to send a POST request with no content to the following URL at your specified interval. 
+        If GlitchTip does not receive this request within the interval, your site status will be marked as down.</p>
+        <gt-copy-input
+            [value]="monitor.heartbeatEndpoint!"
+            placeholder="Endpoint URL"
+        ></gt-copy-input>
     </mat-card>
     </ng-container>
 </section>

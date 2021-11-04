@@ -11,6 +11,7 @@ export interface Monitor {
     envName: string;
     isUp?: boolean,
     lastChange?: string | null,
+    heartbeatEndpoint: string | null,
 }
 
 export interface NewMonitor {
