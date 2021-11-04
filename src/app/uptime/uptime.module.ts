@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { UptimeRoutingModule } from "./uptime-routing.module";
 import { MonitorListComponent } from "./monitor-list/monitor-list.component";
 import {MatTableModule} from "@angular/material/table";
@@ -23,7 +22,6 @@ import { MonitorDetailComponent } from "./monitor-detail/monitor-detail.componen
     MatTableModule,
     MaterialModule,
     SharedModule,
-    MatProgressBarModule,
     FormsModule,
     ReactiveFormsModule
   ]

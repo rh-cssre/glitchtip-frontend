@@ -5,7 +5,6 @@
     </header>
     <mat-card>
         <mat-card-title>
-            <div class="title">
                 <ng-container *ngIf="monitor.lastChange; else notYet">
                     <span *ngIf="monitor.isUp">Up</span>
                     <span *ngIf="!monitor.isUp">Down</span>
@@ -15,10 +14,8 @@
                     <span *ngIf="monitor.isUp">Up</span>
                     <span *ngIf="!monitor.isUp">Down</span>
                 </ng-template>
-                <div class="status-indicator--{{monitor.isUp}}"></div>
-            </div>
         </mat-card-title>
-        <mat-divider></mat-divider>
+        <div class="status-indicator--{{ monitor.isUp}}"></div>
         <mat-card-content>
             <form>
             <mat-form-field class="full-width">

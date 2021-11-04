@@ -10,22 +10,22 @@ mat-card {
     }
 }
 
-.title {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    width: 100%;
-    margin-top: 10px;
+// .title {
+//     display: flex;
+//     justify-content: space-between;
+//     flex-wrap: wrap;
+//     align-items: flex-end;
+//     width: 100%;
+//     margin-top: 10px;
 
-    @media screen and (max-width: $large - 1) {
-        width: auto;
-      }
+//     @media screen and (max-width: $large - 1) {
+//         width: auto;
+//       }
 
-    div {
-        width: 354px;
-    }
-}
+//     div {
+//         width: 354px;
+//     }
+// }
 
 .associations {
     display: flex;
@@ -61,18 +61,14 @@ mat-card {
     }
 }
 
-
 // Duplicating these because :after requires content and this is just an empty div
+
 .status-indicator--true {
-    background-color: #54A65A;
-    height: 40px;
-    width: 200px;
-    border-radius: 20px;
+    width: 100%;
+    border-top: 8px solid #54A65A;
 }
 
 .status-indicator--false {
-    background-color: $amaranth;
-    height: 40px;
-    width: 200px;
-    border-radius: 20px;
+    width: 100%;
+    border-top: 8px solid $amaranth;
 }

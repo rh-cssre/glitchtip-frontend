@@ -34,7 +34,7 @@ class="l-body l-body--full-width mat-elevation-z0"
                         mat-cell *matCellDef="let monitor"
                     >
                         <div class="monitor-name">
-                            <a [matTooltip]="monitor.name" [routerLink]="">{{ monitor.name }}</a>
+                            <a [matTooltip]="monitor.name" [routerLink]="[monitor.id]">{{ monitor.name }}</a>
                         </div>
                     </td>
                 </ng-container>
