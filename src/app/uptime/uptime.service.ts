@@ -71,6 +71,31 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           this.setStateAndPagination({ monitors: res.body! }, res)
       }))
   }
+  
+  editMonitor(
+    orgSlug: string,
+    monitorId: string,
+    data: Partial<Monitor>
+  ) {
+    return this.updateMonitor(
+      orgSlug,
+      monitorId,
+      data
+    );
+  }
+
+  private updateMonitor(
+    orgSlug: string,
+    monitorId: string,
+    data: Partial<Monitor>
+  ) {
+    return this.monitorsAPIService
+      .update(
+        orgSlug,
+        monitorId,
+        data
+      )
+  }
 
   getProjectEnvironments(
     orgSlug: string,

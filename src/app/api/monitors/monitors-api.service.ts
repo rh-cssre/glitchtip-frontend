@@ -37,6 +37,17 @@ export class MonitorsAPIService extends APIBaseService {
     return this.http.delete(this.detailURL(organizationSlug, monitorId));
   }
 
+  update(
+    organizationSlug: string,
+    monitorId: string,
+    data: Partial<Monitor>
+  ) {
+    return this.http.put<Monitor>(
+      this.detailURL(organizationSlug, monitorId),
+      data
+    );
+  }
+
   protected listURL(organizationSlug: string) {
     return `${baseUrl}/organizations/${organizationSlug}/monitors/`;
   }
@@ -45,7 +56,7 @@ export class MonitorsAPIService extends APIBaseService {
     organizationSlug:string,
     monitorId: string
   ) {
-    return `${this.listURL(organizationSlug)}/${monitorId}`
+    return `${this.listURL(organizationSlug)}/${monitorId}/`
   }
 }
 
