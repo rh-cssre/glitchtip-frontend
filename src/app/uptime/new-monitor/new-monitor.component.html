@@ -90,10 +90,10 @@
                         [errorStateMatcher]="matcher"
                         >
                         <mat-option
-                            *ngFor="let monitorType of monitorTypes"
-                            [value]="monitorType"
+                            *ngFor="let type of typeChoices"
+                            [value]="type.value"
                         >
-                            {{ monitorType }}
+                            {{ type.name }}
                         </mat-option>
                         </mat-select>
                         <mat-error>
@@ -102,25 +102,25 @@
                     </mat-form-field>
                 </div>
                 <div class="help-text">
-                    <ng-container *ngIf="formMonitorType?.value === 'Ping'">
+                    <ng-container *ngIf="formMonitorType?.value === 'ping'">
                         <p class="mat-caption">
                             GlitchTip will "ping" the specified URL using an 
                             HTTP HEAD request with no payload.
                         </p>
                     </ng-container>
-                    <ng-container *ngIf="formMonitorType?.value === 'POST'">
+                    <ng-container *ngIf="formMonitorType?.value === 'post'">
                         <p class="mat-caption">
                             GlitchTip will send an HTTP GET request to the specified URL.
                             If the expected response is not received, the site will be marked as Down.
                         </p>
                     </ng-container>
-                    <ng-container *ngIf="formMonitorType?.value === 'GET'">
+                    <ng-container *ngIf="formMonitorType?.value === 'get'">
                         <p class="mat-caption">
                             GlitchTip will send an HTTP POST request to the specified URL.
                             If the expected response is not received, the site will be marked as Down.
                         </p>
                     </ng-container>
-                    <ng-container *ngIf="formMonitorType?.value === 'Heartbeat'">
+                    <ng-container *ngIf="formMonitorType?.value === 'heartbeat'">
                         <p class="mat-caption">
                             GlitchTip will await requests from your site 
                             to ensure it is active. If it doesn't receive 

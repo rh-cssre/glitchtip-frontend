@@ -37,13 +37,18 @@ export class NewMonitorComponent implements OnInit {
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   projectEnvironments$ = this.uptimeService.projectEnvironments$;
 
-  monitorTypes = ['Ping', 'GET', 'POST', 'Heartbeat']
+  typeChoices = [
+    {name: 'Ping', value: 'ping'}, 
+    {name: 'GET', value: "get"}, 
+    {name: 'POST', value: 'post'},
+    {name: 'Heartbeat', value: 'heartbeat'}
+  ]
   selectedEnvironment = "";
   environmentsDisabled = false;
   loading = false;
 
   newMonitorForm = new FormGroup({
-    monitorType: new FormControl("Ping", [
+    monitorType: new FormControl("ping", [
       Validators.required,
     ]),
     name: new FormControl("", [

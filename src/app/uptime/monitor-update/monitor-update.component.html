@@ -92,10 +92,10 @@
                             [errorStateMatcher]="matcher"
                             >
                             <mat-option
-                                *ngFor="let monitorType of monitorTypes"
-                                [value]="monitorType"
+                                *ngFor="let type of typeChoices"
+                                [value]="type.value"
                             >
-                                {{ monitorType }}
+                                {{ type.name }}
                             </mat-option>
                             </mat-select>
                             <mat-error>

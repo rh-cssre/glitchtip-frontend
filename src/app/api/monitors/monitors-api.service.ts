@@ -49,7 +49,7 @@ export class MonitorsAPIService extends APIBaseService {
   }
 
   protected listURL(organizationSlug: string) {
-    return `${baseUrl}/organizations/${organizationSlug}/monitors/`;
+    return `${baseUrl}/organizations/${organizationSlug}/monitors`;
   }
 
   protected detailURL(
