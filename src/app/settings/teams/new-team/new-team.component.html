@@ -4,7 +4,13 @@
     <mat-dialog-content class="mat-typography">
       <p class="description">
         Your team slug can only consist of letters, numbers, underscores and/or
-        hyphens.
+        hyphens. GlitchTip teams are for managing event notifications. View permissions are handled through 
+        <a 
+          target="_blank"
+          [routerLink]="[this.data.orgSlug, 'settings', 'members']"
+        >
+          organization membership.
+        </a>
       </p>
       <mat-error class="error mat-caption">
         <span *ngFor="let error of errors">{{ error }}</span>
