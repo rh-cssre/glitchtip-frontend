@@ -4,10 +4,10 @@
     <mat-dialog-content class="mat-typography">
       <p class="description">
         Your team slug can only consist of letters, numbers, underscores and/or
-        hyphens. GlitchTip teams are for managing event notifications. View permissions are handled through 
+        hyphens. GlitchTip teams are for managing issue notifications and workflow. View permissions are handled through 
         <a 
           target="_blank"
-          [routerLink]="[this.data.orgSlug, 'settings', 'members']"
+          [routerLink]="[data.orgSlug, 'settings', 'members']"
         >
           organization membership.
         </a>

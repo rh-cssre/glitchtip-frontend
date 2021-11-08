@@ -12,6 +12,15 @@
   </header>
   <mat-card>
     <mat-card-title>Your Teams</mat-card-title>
+    <p class="description">
+      GlitchTip teams are for managing issue notifications and workflow. View permissions are handled through 
+      <a 
+        target="_blank"
+        routerLink="../members"
+      >
+        organization membership.
+      </a>
+    </p>
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams">
