@@ -11,7 +11,7 @@ describe("Create New Team", () => {
   it("should add and update teams", () => {
     cy.visit(`/${organization.slug}/settings/teams`);
     cy.get("#new-team").click();
-    cy.get("input[formcontrolname=slug]").type(newTeam.slug);
+    cy.get("input[formcontrolname=slug]").type(newTeam.slug, {force: true});
     cy.get("#create-team-submit").click();
     cy.contains(`#${newTeam.slug}`);
   });
@@ -20,7 +20,8 @@ describe("Create New Team", () => {
     cy.visit(`/${organization.slug}/settings/teams`);
     cy.get("#new-team").click();
     cy.get("input[formcontrolname=slug]").type(
-      newTeam.slug + " invalid ch@r@cter$"
+      newTeam.slug + " invalid ch@r@cter$",
+      {force: true}
     );
     cy.get("#create-team-submit").click();
     cy.contains("consisting of letters, numbers, underscores or hyphens.");
