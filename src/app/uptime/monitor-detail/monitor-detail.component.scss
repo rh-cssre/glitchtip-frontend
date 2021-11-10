@@ -44,6 +44,21 @@ mat-card {
     }
 }
 
+.remove-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    @media (max-width: $tablet - 1) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    p {
+      padding-right: 16px;
+    }
+  }
+
 // Duplicating these because :after requires content and this is just an empty div
 // It's not a graceful solution at all. But the indicator is temporary anyways.
 

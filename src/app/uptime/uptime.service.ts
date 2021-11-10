@@ -1,26 +1,32 @@
 import { Injectable } from "@angular/core";
-import { map, tap } from "rxjs/operators"
-import { 
+import { map, tap, catchError } from "rxjs/operators";
+import { EMPTY } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import {
   initialPaginationState,
   PaginationStatefulService,
-  PaginationStatefulServiceState 
+  PaginationStatefulServiceState
 } from "../shared/stateful-service/pagination-stateful-service";
 import { Monitor, NewMonitor } from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { ProjectsAPIService } from "../api/projects/projects-api.service";
 
-export interface UptimeState extends PaginationStatefulServiceState{
+
+export interface UptimeState extends PaginationStatefulServiceState {
   monitors: Monitor[],
-  projectEnvironments: Environment[]
-  monitorDetails: Monitor | null;
+  projectEnvironments: Environment[],
+  monitorDetails: Monitor | null,
+  deleteLoading: boolean
 }
 
 const initialState: UptimeState = {
   monitors: [],
   pagination: initialPaginationState,
   projectEnvironments: [],
-  monitorDetails: null
+  monitorDetails: null,
+  deleteLoading: false
 }
 
 @Injectable({
@@ -29,6 +35,7 @@ const initialState: UptimeState = {
 
 export class UptimeService extends PaginationStatefulService<UptimeState> {
   monitors$ = this.getState$.pipe(map((state) => state.monitors));
+  deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   projectEnvironments$ = this.getState$.pipe(map((state) => state.projectEnvironments));
   readonly activeMonitor$ = this.getState$.pipe(
     map((data) => data.monitorDetails)
@@ -36,14 +43,16 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
-    private projectsAPIService: ProjectsAPIService
+    private projectsAPIService: ProjectsAPIService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     super(initialState)
   }
 
   createMonitor(monitor: NewMonitor, orgSlug: string) {
     return this.monitorsAPIService
-    .createMonitor(orgSlug, monitor)
+      .createMonitor(orgSlug, monitor)
   }
 
   getMonitors(
@@ -69,9 +78,9 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ monitors: res.body! }, res)
-      }))
+        }))
   }
-  
+
   editMonitor(
     orgSlug: string,
     monitorId: string,
@@ -120,15 +129,15 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .pipe(
         tap((res) => {
           this.setState({ projectEnvironments: res })
-      }))
+        }))
   }
 
   retrieveMonitorDetails(organizationSlug?: string, monitorId?: string) {
     if (organizationSlug && monitorId) {
-    this.monitorsAPIService
-      .retrieve(organizationSlug, monitorId)
-      .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
-      .subscribe();
+      this.monitorsAPIService
+        .retrieve(organizationSlug, monitorId)
+        .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
+        .subscribe();
     }
   }
 
@@ -139,5 +148,30 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     });
   }
 
+  deleteMonitor(orgSlug: string, monitorId: string) {
+    this.setState({
+      deleteLoading: true,
+    });
+    this.monitorsAPIService
+      .destroy(orgSlug, monitorId)
+      .pipe(
+        tap(() => {
+          this.setState({
+            deleteLoading: false,
+          });
+          this.snackBar.open("Monitor has been deleted.")
+          this.router.navigate([orgSlug, "uptime-monitors"])
+        }),
+        catchError((_) => {
+          this.setState({
+            deleteLoading: false,
+          });
+          this.snackBar.open(
+            `There was an error deleting this issue. Please try again.`
+          );
+          return EMPTY;
+        })
+      ).subscribe()
+  }
 }
 

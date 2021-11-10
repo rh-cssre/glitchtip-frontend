@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { UptimeService } from "../uptime.service";
-import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
-import { Subscription } from "rxjs";
-import { filter, withLatestFrom, map } from "rxjs/operators";
+import { ActivatedRoute } from "@angular/router";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
 
 @Component({
@@ -12,39 +12,50 @@ import { filter, withLatestFrom, map } from "rxjs/operators";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonitorDetailComponent implements OnInit {
-  monitor$ = this.uptimeService.activeMonitor$
+  monitor$ = this.uptimeService.activeMonitor$;
+  deleteLoading$ = this.uptimeService.deleteLoading$;
+  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
+  monitorId$ = this.route.paramMap.pipe(map((params) => params.get("monitor-id")))
 
-  routerEventSubscription: Subscription;
-  navigationEnd$ = this.router.events.pipe(
-    filter((event) => event instanceof NavigationEnd),
-    withLatestFrom(this.route.params),
-    map(([event, params]) => {
-      const orgSlug: string | undefined = params["org-slug"];
-      const id: string | undefined = params["monitor-id"];
-      return { orgSlug, id };
-    })
-  );
 
   constructor(
     private uptimeService: UptimeService,
-    private router: Router,
+    // private router: Router,
     private route: ActivatedRoute,
   ) {
 
-    this.uptimeService.activeMonitor$.subscribe()
-    this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, id }) => {
-        if (orgSlug) {
-          this.uptimeService.retrieveMonitorDetails(
-            orgSlug,
-            id
-          );
-        }
-      }
-    );
+
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    combineLatest([this.orgSlug$, this.monitorId$])
+      .pipe(
+        map(([orgSlug, monitorId]) => {
+          if (orgSlug && monitorId) {
+            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId)
+          }
+        })
+      )
+      .toPromise()
+  }
+
+
+  deleteMonitor() {
+    if (
+      window.confirm(
+        `Are you sure you want to remove this monitor? You will lose all of its uptime check history.`
+      )
+    ) {
+      combineLatest([this.orgSlug$, this.monitorId$])
+        .pipe(
+          map(([orgSlug, monitorId]) => {
+            if (orgSlug && monitorId) {
+              this.uptimeService.deleteMonitor(orgSlug, monitorId)
+            }
+          })
+        )
+        .toPromise()
+    }
   }
 
 }
