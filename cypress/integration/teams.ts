@@ -20,8 +20,7 @@ describe("Create New Team", () => {
     cy.visit(`/${organization.slug}/settings/teams`);
     cy.get("#new-team").click();
     cy.get("input[formcontrolname=slug]").type(
-      newTeam.slug + " invalid ch@r@cter$",
-      {force: true}
+      newTeam.slug + " invalid ch@r@cter$"
     );
     cy.get("#create-team-submit").click();
     cy.contains("consisting of letters, numbers, underscores or hyphens.");
