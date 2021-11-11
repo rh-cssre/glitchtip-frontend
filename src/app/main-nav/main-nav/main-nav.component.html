@@ -76,6 +76,14 @@
         Issues
       </a>
       <a
+      mat-list-item
+      [disabled]="!activeOrganizationLoaded"
+      [routerLink]="[activeOrganizationSlug, 'uptime-monitors']"
+      routerLinkActive="active-route"
+    >
+      Uptime Monitors
+    </a>
+      <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
         [routerLink]="[activeOrganizationSlug, 'performance']"
