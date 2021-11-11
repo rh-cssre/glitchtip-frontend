@@ -1,6 +1,20 @@
 @import "variables";
 
 
+header {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    width: min-content;
+  }
+
+  h1 {
+    margin-top: 20px;
+    margin-bottom: 0px;
+  }
+}
+
 mat-card {
     margin-top: 20px;
     margin-bottom: 20px;

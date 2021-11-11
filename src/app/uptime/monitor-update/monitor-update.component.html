@@ -1,6 +1,13 @@
 <section class="l-body">
-    <header class="page-header">
-      <h1 class="mat-display-1">Create a New Uptime Monitor</h1>
+    <header>
+        <a
+        mat-stroked-button
+        [routerLink]="['..']"
+        >
+            <mat-icon>keyboard_arrow_left</mat-icon>
+            View monitor details
+        </a>
+        <h1 class="mat-display-1">Create a New Uptime Monitor</h1>
     </header>
     <ng-container *ngIf="monitor$ | async as monitor">
         <mat-card>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import {
   map,
@@ -20,7 +20,7 @@ import { UptimeService, UptimeState } from "../uptime.service";
 })
 export class MonitorListComponent
 extends PaginationBaseComponent<UptimeState, UptimeService>
-implements OnInit {
+implements OnDestroy {
   monitors$ = this.uptimeService.monitors$
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
@@ -44,7 +44,6 @@ implements OnInit {
   ) {
     super(uptimeService)
 
-    this.uptimeService.monitors$.subscribe()
     this.routerEventSubscription = this.navigationEnd$.subscribe(
       ({ orgSlug, cursor }) => {
         if (orgSlug) {
@@ -57,7 +56,8 @@ implements OnInit {
     );
   }
 
-  ngOnInit(): void {
+  ngOnDestroy() {
+    this.routerEventSubscription.unsubscribe();
   }
   
 }
