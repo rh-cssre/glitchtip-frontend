@@ -11,12 +11,11 @@ import {
 import { Monitor, NewMonitor } from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
-import { ProjectsAPIService } from "../api/projects/projects-api.service";
 
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: Monitor[],
-  projectEnvironments: Environment[],
+  orgEnvironments: Environment[],
   monitorDetails: Monitor | null,
   deleteLoading: boolean
 }
@@ -24,7 +23,7 @@ export interface UptimeState extends PaginationStatefulServiceState {
 const initialState: UptimeState = {
   monitors: [],
   pagination: initialPaginationState,
-  projectEnvironments: [],
+  orgEnvironments: [],
   monitorDetails: null,
   deleteLoading: false
 }
@@ -36,14 +35,13 @@ const initialState: UptimeState = {
 export class UptimeService extends PaginationStatefulService<UptimeState> {
   monitors$ = this.getState$.pipe(map((state) => state.monitors));
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
-  projectEnvironments$ = this.getState$.pipe(map((state) => state.projectEnvironments));
+  orgEnvironments$ = this.getState$.pipe(map((state) => state.orgEnvironments));
   readonly activeMonitor$ = this.getState$.pipe(
     map((data) => data.monitorDetails)
   );
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
-    private projectsAPIService: ProjectsAPIService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -104,32 +102,6 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
         monitorId,
         data
       )
-  }
-
-  getProjectEnvironments(
-    orgSlug: string,
-    projectSlug: string
-  ) {
-    this.retrieveProjectEnvironments(
-      orgSlug,
-      projectSlug,
-    ).toPromise();
-  }
-
-
-  private retrieveProjectEnvironments(
-    orgSlug: string,
-    projectSlug: string
-  ) {
-    return this.projectsAPIService
-      .listEnvironments(
-        orgSlug,
-        projectSlug
-      )
-      .pipe(
-        tap((res) => {
-          this.setState({ projectEnvironments: res })
-        }))
   }
 
   retrieveMonitorDetails(organizationSlug?: string, monitorId?: string) {

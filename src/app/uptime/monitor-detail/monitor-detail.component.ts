@@ -20,7 +20,6 @@ export class MonitorDetailComponent implements OnInit {
 
   constructor(
     private uptimeService: UptimeService,
-    // private router: Router,
     private route: ActivatedRoute,
   ) {
 

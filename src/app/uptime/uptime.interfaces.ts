@@ -5,13 +5,11 @@ export interface Monitor {
     url: string,
     expectedStatus: number;
     interval: string;
-    project: number;
-    projectName: string,
-    environment: number;
-    envName: string;
+    project?: number;
+    projectName?: string,
     isUp?: boolean,
     lastChange?: string | null,
-    heartbeatEndpoint: string | null,
+    heartbeatEndpoint?: string | null,
 }
 
 export interface NewMonitor {
@@ -21,5 +19,4 @@ export interface NewMonitor {
     expectedStatus: number;
     interval: string;
     projectId: number;
-    environment: number;
 }

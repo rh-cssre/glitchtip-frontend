@@ -35,7 +35,20 @@ export class NewMonitorComponent implements OnInit {
   orgSlug?: string | null;
   error = "";
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
-  projectEnvironments$ = this.uptimeService.projectEnvironments$;
+  projEnvironments$ = this.uptimeService.orgEnvironments$
+    .pipe(
+
+    );
+
+  // organizationEnvironments$ = combineLatest([
+  //   this.appliedProjectCount$,
+  //   this.issuesService.organizationEnvironmentsProcessed$,
+  //   this.environmentsService.visibleEnvironments$,
+  // ]).pipe(
+  //   map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
+  //     appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
+  //   )
+  // );
 
   typeChoices = [
     {name: 'Ping', value: 'ping'}, 
@@ -43,8 +56,6 @@ export class NewMonitorComponent implements OnInit {
     {name: 'POST', value: 'post'},
     {name: 'Heartbeat', value: 'heartbeat'}
   ]
-  selectedEnvironment = "";
-  environmentsDisabled = false;
   loading = false;
 
   newMonitorForm = new FormGroup({
@@ -68,7 +79,6 @@ export class NewMonitorComponent implements OnInit {
       Validators.min(1),
     ]),
     project: new FormControl(""),
-    environment: new FormControl(""),
   });
 
   formName = this.newMonitorForm.get(
@@ -101,22 +111,6 @@ export class NewMonitorComponent implements OnInit {
       .subscribe((orgSlug) => {
         this.orgSlug = orgSlug
       })
-  }
-
-  disableEnvironments() {
-    this.environmentsDisabled = true;
-  }
-
-  projectSelected(projectSlug: string) {
-    if (this.orgSlug) {
-      this.newMonitorForm.get('environment')?.setValue("");
-      this.selectedEnvironment = "";
-      this.environmentsDisabled = false;
-      this.uptimeService.getProjectEnvironments(
-        this.orgSlug,
-        projectSlug
-      );
-    }
   }
 
   onSubmit() {

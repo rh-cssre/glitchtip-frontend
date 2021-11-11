@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -33,8 +33,7 @@ const urlReg = new RegExp(pattern);
 @Component({
   selector: "gt-monitor-update",
   templateUrl: "./monitor-update.component.html",
-  styleUrls: ["./monitor-update.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ["./monitor-update.component.scss"]
 })
 
 export class MonitorUpdateComponent implements OnInit {
@@ -43,7 +42,6 @@ export class MonitorUpdateComponent implements OnInit {
   monitor$ = this.uptimeService.activeMonitor$
   error = "";
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
-  projectEnvironments$ = this.uptimeService.projectEnvironments$;
 
   typeChoices = [
     {name: 'Ping', value: 'ping'}, 
@@ -52,7 +50,6 @@ export class MonitorUpdateComponent implements OnInit {
     {name: 'Heartbeat', value: 'heartbeat'}
   ]
   selectedEnvironment = "";
-  environmentsDisabled = false;
   loading = false;
 
   monitorEditForm = new FormGroup({
@@ -71,12 +68,12 @@ export class MonitorUpdateComponent implements OnInit {
       Validators.min(100),
       numberValidator
     ]),
-    interval: new FormControl("60", [
+    interval: new FormControl(60, [
       Validators.required,
       Validators.min(1),
+      Validators.max(86399)
     ]),
     project: new FormControl(""),
-    environment: new FormControl(""),
   });
 
   formName = this.monitorEditForm.get(
@@ -97,9 +94,6 @@ export class MonitorUpdateComponent implements OnInit {
   formProject = this.monitorEditForm.get(
     "project"
   ) as FormControl
-  formEnvironment = this.monitorEditForm.get(
-    "environment"
-  ) as FormControl
 
 
   matcher = new LessAnnoyingErrorStateMatcher();
@@ -111,8 +105,6 @@ export class MonitorUpdateComponent implements OnInit {
     private organizationsService: OrganizationsService,
     private snackBar: MatSnackBar
   ) {
-
-
   }
 
   ngOnInit() {
@@ -138,42 +130,28 @@ export class MonitorUpdateComponent implements OnInit {
         first(),
         tap((data) => {
           this.formName.patchValue(data!.name,);
-          this.formMonitorType.patchValue(data!.monitorType,);
-          this.formUrl.patchValue(data!.url,);
-          this.formExpectedStatus.patchValue(data!.expectedStatus,);
-          this.formInterval.patchValue(data!.interval);
-          this.formProject.patchValue(data!.project,);
-          this.formEnvironment.patchValue(data!.environment);
-
-          if (data!.project && this.orgSlug) {
-            this.orgProjects$.subscribe(orgProjects => {
-              const something = orgProjects?.filter(project => project.id === data!.project)
-
-              if (something && this.orgSlug) {
-                this.uptimeService.getProjectEnvironments(this.orgSlug, something[0].slug)
-              }
-            })
-          }
+          this.formMonitorType.patchValue(data!.monitorType);
+          this.formUrl.patchValue(data!.url);
+          this.formExpectedStatus.patchValue(data!.expectedStatus);
+          this.formInterval.patchValue(this.toSeconds(data!.interval));
+          this.formProject.patchValue(data!.project);
         })
       )
       .subscribe();
   }
 
-
-  disableEnvironments() {
-    this.environmentsDisabled = true;
-  }
-
-  projectSelected(projectSlug: string) {
-    if (this.orgSlug) {
-      this.monitorEditForm.get('environment')?.setValue("");
-      this.selectedEnvironment = "";
-      this.environmentsDisabled = false;
-      this.uptimeService.getProjectEnvironments(
-        this.orgSlug,
-        projectSlug
-      );
+  toSeconds(interval: string) {
+    let seconds = 0
+    if (interval.includes(" ")) {
+      seconds += parseInt(interval.split(" ")[0])
+      interval = interval.split(" ")[1]
     }
+    let splitInterval = interval.split(":")
+    seconds += parseInt(splitInterval[0]) * 3600
+    seconds += parseInt(splitInterval[1]) * 60
+    seconds += parseInt(splitInterval[2])
+
+    return seconds
   }
 
   onSubmit() {
@@ -192,6 +170,7 @@ export class MonitorUpdateComponent implements OnInit {
           }
           ),
           catchError((err) => {
+            console.log("failed")
             this.loading = false;
             this.error = `${err.statusText}: ${err.status}`;
             return EMPTY;
