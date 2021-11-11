@@ -51,15 +51,15 @@ export class NewMonitorComponent implements OnInit {
   // );
 
   typeChoices = [
-    {name: 'Ping', value: 'ping'}, 
-    {name: 'GET', value: "get"}, 
-    {name: 'POST', value: 'post'},
-    {name: 'Heartbeat', value: 'heartbeat'}
+    'Ping',
+    'GET',
+    'POST',
+    'Heartbeat'
   ]
   loading = false;
 
   newMonitorForm = new FormGroup({
-    monitorType: new FormControl("ping", [
+    monitorType: new FormControl("Ping", [
       Validators.required,
     ]),
     name: new FormControl("", [

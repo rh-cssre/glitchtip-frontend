@@ -44,10 +44,10 @@ export class MonitorUpdateComponent implements OnInit {
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
 
   typeChoices = [
-    {name: 'Ping', value: 'ping'}, 
-    {name: 'GET', value: "get"}, 
-    {name: 'POST', value: 'post'},
-    {name: 'Heartbeat', value: 'heartbeat'}
+    'Ping',
+    'GET',
+    'POST',
+    'Heartbeat'
   ]
   selectedEnvironment = "";
   loading = false;
@@ -170,7 +170,6 @@ export class MonitorUpdateComponent implements OnInit {
           }
           ),
           catchError((err) => {
-            console.log("failed")
             this.loading = false;
             this.error = `${err.statusText}: ${err.status}`;
             return EMPTY;
