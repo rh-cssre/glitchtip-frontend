@@ -2,9 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormControl,
-  Validators,
-  AbstractControl,
-  ValidationErrors
+  Validators
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { EMPTY } from "rxjs";
@@ -19,16 +17,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-
-function numberValidator(control: AbstractControl): ValidationErrors | null {
-  if (typeof control.value === "number") {
-    return null;
-  }
-  return { invalidNumber: true };
-}
-
-const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&=]*)/gi
-const urlReg = new RegExp(pattern);
+import { urlValidator, numberValidator } from "src/app/shared/validators"
 
 @Component({
   selector: "gt-monitor-update",
@@ -61,7 +50,7 @@ export class MonitorUpdateComponent implements OnInit {
     ]),
     url: new FormControl("", [
       Validators.required,
-      Validators.pattern(urlReg),
+      urlValidator
     ]),
     expectedStatus: new FormControl(200, [
       Validators.required,

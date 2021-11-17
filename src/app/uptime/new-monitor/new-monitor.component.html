@@ -1,6 +1,13 @@
 <section class="l-body">
-    <header class="page-header">
-      <h1 class="mat-display-1">Create a New Uptime Monitor</h1>
+    <header>
+        <a
+        mat-stroked-button
+        [routerLink]="['..']"
+        >
+            <mat-icon>keyboard_arrow_left</mat-icon>
+            View all uptime monitors
+        </a>
+        <h1 class="mat-display-1">Create a New Uptime Monitor</h1>
     </header>
     <mat-card>
       <mat-card-content>
@@ -35,7 +42,7 @@
                         <span *ngIf="formUrl?.errors?.required">Enter a url</span>
                     </mat-error>
                     <mat-error>
-                        <span *ngIf="formUrl?.errors?.pattern">Enter a valid url</span>
+                        <span *ngIf="formUrl?.errors?.invalidUrl">Enter a valid url</span>
                     </mat-error>
                 </mat-form-field>
             </div>

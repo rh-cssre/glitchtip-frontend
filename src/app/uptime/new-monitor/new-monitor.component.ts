@@ -3,8 +3,6 @@ import {
   FormGroup,
   FormControl,
   Validators,
-  AbstractControl,
-  ValidationErrors
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { catchError, tap } from "rxjs/operators";
@@ -13,15 +11,8 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { UptimeService } from "../uptime.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
+import { urlValidator, numberValidator } from "src/app/shared/validators"
 
-function numberValidator(control: AbstractControl): ValidationErrors | null {
-  if (typeof control.value === "number") {
-    return null;
-  }
-  return { invalidNumber: true };
-}
-const pattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&=]*)/gi
-const urlReg = new RegExp(pattern);
 
 @Component({
   selector: "gt-new-monitor",
@@ -40,16 +31,6 @@ export class NewMonitorComponent implements OnInit {
 
     );
 
-  // organizationEnvironments$ = combineLatest([
-  //   this.appliedProjectCount$,
-  //   this.issuesService.organizationEnvironmentsProcessed$,
-  //   this.environmentsService.visibleEnvironments$,
-  // ]).pipe(
-  //   map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
-  //     appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
-  //   )
-  // );
-
   typeChoices = [
     'Ping',
     'GET',
@@ -67,7 +48,7 @@ export class NewMonitorComponent implements OnInit {
     ]),
     url: new FormControl("", [
       Validators.required,
-      Validators.pattern(urlReg),
+      urlValidator
     ]),
     expectedStatus: new FormControl(200, [
       Validators.required,
