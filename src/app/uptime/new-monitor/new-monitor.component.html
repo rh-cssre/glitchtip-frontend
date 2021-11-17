@@ -65,6 +65,11 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+                <div class="help-text">
+                    <p class="mat-caption">
+                        Uptime email notification settings are based on the settings of the associated project.
+                    </p>
+                </div>
             </div>
             <div class="advanced">
                 <div>
@@ -88,25 +93,25 @@
                     </mat-form-field>
                 </div>
                 <div class="help-text">
-                    <ng-container *ngIf="formMonitorType?.value === 'ping'">
+                    <ng-container *ngIf="formMonitorType?.value === 'Ping'">
                         <p class="mat-caption">
                             GlitchTip will "ping" the specified URL using an 
                             HTTP HEAD request with no payload.
                         </p>
                     </ng-container>
-                    <ng-container *ngIf="formMonitorType?.value === 'post'">
+                    <ng-container *ngIf="formMonitorType?.value === 'POST'">
                         <p class="mat-caption">
                             GlitchTip will send an HTTP GET request to the specified URL.
                             If the expected response is not received, the site will be marked as Down.
                         </p>
                     </ng-container>
-                    <ng-container *ngIf="formMonitorType?.value === 'get'">
+                    <ng-container *ngIf="formMonitorType?.value === 'GET'">
                         <p class="mat-caption">
                             GlitchTip will send an HTTP POST request to the specified URL.
                             If the expected response is not received, the site will be marked as Down.
                         </p>
                     </ng-container>
-                    <ng-container *ngIf="formMonitorType?.value === 'heartbeat'">
+                    <ng-container *ngIf="formMonitorType?.value === 'Heartbeat'">
                         <p class="mat-caption">
                             GlitchTip will await requests from your site 
                             to ensure it is active. If it doesn't receive 

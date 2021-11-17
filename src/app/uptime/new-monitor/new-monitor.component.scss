@@ -53,6 +53,10 @@ margin-top: 10px;
     div {
         width: 354px;
         margin-right: 16px;
+
+        @media screen and (max-width: $large - 1) {
+          width: 170px;
+        }
     }
 }
 
@@ -72,19 +76,20 @@ margin-top: 10px;
         margin-right: 16px;
     }
 
-    .help-text {
-        display: flex;
-        justify-content: flex-start;
-        width: 370px;
-        padding-bottom: 20px;
-        position: relative;                 
-        bottom: 0;                         
-        left: 0;
-        margin-bottom: 0;
+}
 
-        @media screen and (max-width: $tablet - 1) {
-            width: 300px;
-          }
+.help-text {
+  display: flex;
+  justify-content: flex-start;
+  width: 370px;
+  padding-bottom: 20px;
+  position: relative;                 
+  bottom: 0;                         
+  left: 0;
+  margin-bottom: 0;
+
+  @media screen and (max-width: $tablet - 1) {
+      width: 300px;
     }
 }
 
