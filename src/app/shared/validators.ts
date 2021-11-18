@@ -1,13 +1,14 @@
 import { AbstractControl, ValidationErrors } from "@angular/forms";
 
 export function urlValidator(control: AbstractControl): ValidationErrors | null {
-  let validUrl = true;
+  let validationCheck = null;
   try {
-    new URL(control.value)
+    validationCheck = new URL(control.value);
+    return null;
   } catch {
-    validUrl = false;
+    validationCheck = { invalidUrl: true };
+    return validationCheck;
   }
-  return validUrl ? null : { invalidUrl: true };
 }
 
 export function numberValidator(control: AbstractControl): ValidationErrors | null {

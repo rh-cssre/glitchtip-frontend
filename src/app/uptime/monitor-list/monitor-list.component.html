@@ -45,7 +45,9 @@ class="l-body l-body--full-width mat-elevation-z0"
                     class="monitor-url"
                     > 
                         <div class="url-box">
-                            <span [matTooltip]="monitor.url" class="url-string">{{ monitor.url }}</span>
+                            <span [matTooltip]="monitor.url" class="url-string">
+                                <a href="{{ monitor.url }}">{{ monitor.url }}</a>
+                            </span>
                         </div>
                     </td>
                 </ng-container>

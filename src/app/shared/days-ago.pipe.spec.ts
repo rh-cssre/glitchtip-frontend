@@ -25,6 +25,6 @@ fdescribe("DaysAgoPipe, DaysOldPipe and TimeForPipe", () => {
   it("an invalid date does not transform the value", () => {
     expect(daysAgoPipe.transform("fake")).toBe("");
     expect(daysOldPipe.transform("fake")).toBe("");
-    expect(timeForPipe.transform("fake")).toBe("")
+    expect(timeForPipe.transform("fake")).toBe("");
   });
 });

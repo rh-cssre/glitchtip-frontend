@@ -26,7 +26,7 @@ export class MonitorsAPIService extends APIBaseService {
   }
 
   createMonitor(organizationSlug: string, data: NewMonitor) {
-    return this.http.post<Monitor>(this.listURL(organizationSlug), data)
+    return this.http.post<Monitor>(this.listURL(organizationSlug), data);
   }
 
   retrieve(organizationSlug: string, monitorId: string) {
@@ -53,10 +53,10 @@ export class MonitorsAPIService extends APIBaseService {
   }
 
   protected detailURL(
-    organizationSlug:string,
+    organizationSlug: string,
     monitorId: string
   ) {
-    return `${this.listURL(organizationSlug)}${monitorId}/`
+    return `${this.listURL(organizationSlug)}${monitorId}/`;
   }
 }
 

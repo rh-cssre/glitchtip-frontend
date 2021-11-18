@@ -17,7 +17,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { urlValidator, numberValidator } from "src/app/shared/validators"
+import { urlValidator, numberValidator } from "src/app/shared/validators";
 
 @Component({
   selector: "gt-monitor-update",
@@ -28,16 +28,16 @@ import { urlValidator, numberValidator } from "src/app/shared/validators"
 export class MonitorUpdateComponent implements OnInit, OnDestroy {
   orgSlug?: string | null;
   monitorId?: string | null;
-  monitor$ = this.uptimeService.activeMonitor$
+  monitor$ = this.uptimeService.activeMonitor$;
   error = "";
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
 
   typeChoices = [
-    'Ping',
-    'GET',
-    'POST',
-    'Heartbeat'
-  ]
+    "Ping",
+    "GET",
+    "POST",
+    "Heartbeat"
+  ];
   selectedEnvironment = "";
   loading = false;
 
@@ -67,22 +67,22 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   formName = this.monitorEditForm.get(
     "name"
-  ) as FormControl
+  ) as FormControl;
   formMonitorType = this.monitorEditForm.get(
     "monitorType"
-  ) as FormControl
+  ) as FormControl;
   formUrl = this.monitorEditForm.get(
     "url"
-  ) as FormControl
+  ) as FormControl;
   formExpectedStatus = this.monitorEditForm.get(
     "expectedStatus"
-  ) as FormControl
+  ) as FormControl;
   formInterval = this.monitorEditForm.get(
     "interval"
-  ) as FormControl
+  ) as FormControl;
   formProject = this.monitorEditForm.get(
     "project"
-  ) as FormControl
+  ) as FormControl;
 
 
   matcher = new LessAnnoyingErrorStateMatcher();
@@ -118,7 +118,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         filter((data) => !!data),
         first(),
         tap((data) => {
-          this.formName.patchValue(data!.name,);
+          this.formName.patchValue(data!.name);
           this.formMonitorType.patchValue(data!.monitorType);
           this.formUrl.patchValue(data!.url);
           this.formExpectedStatus.patchValue(data!.expectedStatus);
@@ -130,21 +130,21 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.uptimeService.clearState()
+    this.uptimeService.clearState();
   }
 
   toSeconds(interval: string) {
-    let seconds = 0
+    let seconds = 0;
     if (interval.includes(" ")) {
-      seconds += parseInt(interval.split(" ")[0])
-      interval = interval.split(" ")[1]
+      seconds += parseInt(interval.split(" ")[0], 10) * 86400;
+      interval = interval.split(" ")[1];
     }
-    let splitInterval = interval.split(":")
-    seconds += parseInt(splitInterval[0]) * 3600
-    seconds += parseInt(splitInterval[1]) * 60
-    seconds += parseInt(splitInterval[2])
+    const splitInterval = interval.split(":");
+    seconds += parseInt(splitInterval[0], 10) * 3600;
+    seconds += parseInt(splitInterval[1], 10) * 60;
+    seconds += parseInt(splitInterval[2], 10);
 
-    return seconds
+    return seconds;
   }
 
   onSubmit() {
@@ -157,7 +157,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
       )
         .pipe(
           tap((monitor) => {
-            this.loading = false
+            this.loading = false;
             this.snackBar.open(`${monitor.name} has been updated`);
             this.router.navigate([this.orgSlug, "uptime-monitors", monitor.id]);
           }

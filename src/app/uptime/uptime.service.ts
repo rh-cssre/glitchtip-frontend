@@ -14,10 +14,10 @@ import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 
 
 export interface UptimeState extends PaginationStatefulServiceState {
-  monitors: Monitor[],
-  orgEnvironments: Environment[],
-  monitorDetails: Monitor | null,
-  deleteLoading: boolean
+  monitors: Monitor[];
+  orgEnvironments: Environment[];
+  monitorDetails: Monitor | null;
+  deleteLoading: boolean;
 }
 
 const initialState: UptimeState = {
@@ -26,7 +26,7 @@ const initialState: UptimeState = {
   orgEnvironments: [],
   monitorDetails: null,
   deleteLoading: false
-}
+};
 
 @Injectable({
   providedIn: "root"
@@ -45,12 +45,12 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     private snackBar: MatSnackBar,
     private router: Router
   ) {
-    super(initialState)
+    super(initialState);
   }
 
   createMonitor(monitor: NewMonitor, orgSlug: string) {
     return this.monitorsAPIService
-      .createMonitor(orgSlug, monitor)
+      .createMonitor(orgSlug, monitor);
   }
 
   getMonitors(
@@ -75,8 +75,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       )
       .pipe(
         tap((res) => {
-          this.setStateAndPagination({ monitors: res.body! }, res)
-        }))
+          this.setStateAndPagination({ monitors: res.body! }, res);
+        }));
   }
 
   editMonitor(
@@ -101,7 +101,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
         orgSlug,
         monitorId,
         data
-      )
+      );
   }
 
   retrieveMonitorDetails(organizationSlug?: string, monitorId?: string) {
@@ -131,8 +131,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           this.setState({
             deleteLoading: false,
           });
-          this.snackBar.open("Monitor has been deleted.")
-          this.router.navigate([orgSlug, "uptime-monitors"])
+          this.snackBar.open("Monitor has been deleted.");
+          this.router.navigate([orgSlug, "uptime-monitors"]);
         }),
         catchError((_) => {
           this.setState({
@@ -143,7 +143,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           );
           return EMPTY;
         })
-      ).subscribe()
+      ).subscribe();
   }
 
   clearState() {

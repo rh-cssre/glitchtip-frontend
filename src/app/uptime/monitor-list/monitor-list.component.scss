@@ -75,6 +75,11 @@ table {
   &--false:after {
     background-color: $amaranth;
   }
+
+  // For monitors that do not yet have a check, which we currently mark as meaning 'Down'
+  &--:after {
+    background-color: $amaranth;
+  }
 }
 
 .footer {

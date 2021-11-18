@@ -11,7 +11,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { UptimeService } from "../uptime.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { urlValidator, numberValidator } from "src/app/shared/validators"
+import { urlValidator, numberValidator } from "src/app/shared/validators";
 
 
 @Component({
@@ -28,11 +28,11 @@ export class NewMonitorComponent implements OnInit {
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
 
   typeChoices = [
-    'Ping',
-    'GET',
-    'POST',
-    'Heartbeat'
-  ]
+    "Ping",
+    "GET",
+    "POST",
+    "Heartbeat"
+  ];
   loading = false;
 
   newMonitorForm = new FormGroup({
@@ -60,19 +60,19 @@ export class NewMonitorComponent implements OnInit {
 
   formName = this.newMonitorForm.get(
     "name"
-  ) as FormControl
+  ) as FormControl;
   formMonitorType = this.newMonitorForm.get(
     "monitorType"
-  ) as FormControl
+  ) as FormControl;
   formUrl = this.newMonitorForm.get(
     "url"
-  ) as FormControl
+  ) as FormControl;
   formExpectedStatus = this.newMonitorForm.get(
     "expectedStatus"
-  ) as FormControl
+  ) as FormControl;
   formInterval = this.newMonitorForm.get(
     "interval"
-  ) as FormControl
+  ) as FormControl;
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
@@ -86,8 +86,8 @@ export class NewMonitorComponent implements OnInit {
   ngOnInit(): void {
     this.organizationsService.activeOrganizationSlug$
       .subscribe((orgSlug) => {
-        this.orgSlug = orgSlug
-      })
+        this.orgSlug = orgSlug;
+      });
   }
 
   onSubmit() {
@@ -99,7 +99,7 @@ export class NewMonitorComponent implements OnInit {
       )
       .pipe(
         tap((monitor) => {
-          this.loading = false
+          this.loading = false;
           this.snackBar.open(`${monitor.name} has been created`);
           this.router.navigate([this.orgSlug, "uptime-monitors", monitor.id]);
         }

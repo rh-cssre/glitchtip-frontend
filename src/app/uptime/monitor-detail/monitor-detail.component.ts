@@ -15,7 +15,7 @@ export class MonitorDetailComponent implements OnInit, OnDestroy {
   monitor$ = this.uptimeService.activeMonitor$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
-  monitorId$ = this.route.paramMap.pipe(map((params) => params.get("monitor-id")))
+  monitorId$ = this.route.paramMap.pipe(map((params) => params.get("monitor-id")));
 
 
   constructor(
@@ -31,15 +31,15 @@ export class MonitorDetailComponent implements OnInit, OnDestroy {
       .pipe(
         map(([orgSlug, monitorId]) => {
           if (orgSlug && monitorId) {
-            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId)
+            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
           }
         })
       )
-      .toPromise()
+      .toPromise();
   }
 
   ngOnDestroy() {
-    this.uptimeService.clearState()
+    this.uptimeService.clearState();
   }
 
 
@@ -53,11 +53,11 @@ export class MonitorDetailComponent implements OnInit, OnDestroy {
         .pipe(
           map(([orgSlug, monitorId]) => {
             if (orgSlug && monitorId) {
-              this.uptimeService.deleteMonitor(orgSlug, monitorId)
+              this.uptimeService.deleteMonitor(orgSlug, monitorId);
             }
           })
         )
-        .toPromise()
+        .toPromise();
     }
   }
 

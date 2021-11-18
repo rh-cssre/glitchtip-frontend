@@ -8,7 +8,7 @@ import {
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator } from "src/app/shared/validators"
+import { numberValidator } from "src/app/shared/validators";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(

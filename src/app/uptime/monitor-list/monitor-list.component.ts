@@ -21,12 +21,12 @@ import { UptimeService, UptimeState } from "../uptime.service";
 export class MonitorListComponent
 extends PaginationBaseComponent<UptimeState, UptimeService>
 implements OnDestroy {
-  monitors$ = this.uptimeService.monitors$
+  monitors$ = this.uptimeService.monitors$;
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
   routerEventSubscription: Subscription;
-  displayedColumns: string[] = ['statusColor', 'name', 'url', 'status'];
+  displayedColumns: string[] = ["statusColor", "name", "url", "status"];
   navigationEnd$ = this.router.events.pipe(
     filter((event) => event instanceof NavigationEnd),
     withLatestFrom(this.route.params, this.route.queryParams),
@@ -42,7 +42,7 @@ implements OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    super(uptimeService)
+    super(uptimeService);
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
       ({ orgSlug, cursor }) => {
@@ -58,7 +58,6 @@ implements OnDestroy {
 
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
-    this.uptimeService.clearState()
+    this.uptimeService.clearState();
   }
-  
 }
