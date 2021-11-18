@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -25,7 +25,7 @@ import { urlValidator, numberValidator } from "src/app/shared/validators"
   styleUrls: ["./monitor-update.component.scss"]
 })
 
-export class MonitorUpdateComponent implements OnInit {
+export class MonitorUpdateComponent implements OnInit, OnDestroy {
   orgSlug?: string | null;
   monitorId?: string | null;
   monitor$ = this.uptimeService.activeMonitor$
@@ -42,7 +42,7 @@ export class MonitorUpdateComponent implements OnInit {
   loading = false;
 
   monitorEditForm = new FormGroup({
-    monitorType: new FormControl("ping", [
+    monitorType: new FormControl("Ping", [
       Validators.required,
     ]),
     name: new FormControl("", [
@@ -127,6 +127,10 @@ export class MonitorUpdateComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.uptimeService.clearState()
   }
 
   toSeconds(interval: string) {

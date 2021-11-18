@@ -26,10 +26,6 @@ export class NewMonitorComponent implements OnInit {
   orgSlug?: string | null;
   error = "";
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
-  projEnvironments$ = this.uptimeService.orgEnvironments$
-    .pipe(
-
-    );
 
   typeChoices = [
     'Ping',

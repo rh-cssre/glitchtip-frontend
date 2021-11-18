@@ -24,68 +24,17 @@
         </mat-card-title>
         <div class="status-indicator status-indicator--{{ monitor.isUp}}"></div>
         <mat-card-content>
-            <form>
-            <mat-form-field class="full-width">
-            <input
-                matInput
-                readonly
-                placeholder="Site URL"
-                value="{{ monitor.url }}"
-            />
-            </mat-form-field>
-            <div *ngIf="monitor.project || monitor.monitorType" class="associations">
-                <div>
-                    <mat-form-field *ngIf="monitor.projectName" class="full-width">
-                        <input
-                            matInput
-                            readonly
-                            placeholder="Associated Project"
-                            value="{{ monitor.projectName }}"
-                        />
-                    </mat-form-field>
-                </div>
+            <div>
+                <a href="{{ monitor.url }}">{{ monitor.url }}</a>
+                <button
+                mat-flat-button
+                color="primary"
+                [disabled]="false"
+                [routerLink]="['./update']"
+                >
+                Settings
+                </button>
             </div>
-            <div class="advanced">
-                <div>
-                <mat-form-field class="full-width">
-                    <input
-                        matInput
-                        readonly
-                        placeholder="Monitor Type"
-                        value="{{ monitor.monitorType }}"
-                    />
-                </mat-form-field>
-                </div>
-                <div>
-                <mat-form-field class="full-width">
-                    <input
-                        matInput
-                        readonly
-                        placeholder="Expected Status"
-                        value="{{ monitor.expectedStatus }}"
-                    />
-                </mat-form-field>
-                </div>
-                <div>
-                <mat-form-field class="full-width">
-                    <input
-                        matInput
-                        readonly
-                        placeholder="Interval (hh:mm:ss)"
-                        value="{{ monitor.interval }}"
-                    />
-                </mat-form-field>
-                </div>
-            </div>
-            <button
-            mat-stroked-button
-            color="primary"
-            [disabled]="false"
-            [routerLink]="['./update']"
-            >
-            Update
-            </button>
-            </form>
         </mat-card-content>
     </mat-card>
     <mat-card class="heartbeat-card" *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint">

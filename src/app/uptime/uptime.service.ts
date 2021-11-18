@@ -145,5 +145,9 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
         })
       ).subscribe()
   }
+
+  clearState() {
+    this.state.next(initialState);
+  }
 }
 

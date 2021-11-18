@@ -58,6 +58,7 @@ implements OnDestroy {
 
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
+    this.uptimeService.clearState()
   }
   
 }

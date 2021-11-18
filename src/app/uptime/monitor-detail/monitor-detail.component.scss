@@ -22,40 +22,16 @@ mat-card {
   
     mat-card-content {
       padding-top: 16px;
-    }
-}
 
-.associations {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    width: 900px;
-    margin-top: 10px;
+      div {
+        display: flex;
+        flex-direction: column;
 
-    @media screen and (max-width: $large - 1) {
-        width: auto;
+        button {
+          margin-top: 10px;
+          width: fit-content;
+        }
       }
-
-    div {
-        width: 354px;
-        margin-right: 16px;
-    }
-}
-
-.advanced {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    width: 700px;
-    margin-top: 10px;
-
-    @media screen and (max-width: $medium - 1) {
-        width: auto;
-      }
-
-    div {
-        width: 170px;
-        margin-right: 16px;
     }
 }
 

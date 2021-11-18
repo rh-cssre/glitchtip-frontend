@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { UptimeService } from "../uptime.service";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest } from "rxjs";
@@ -11,7 +11,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MonitorDetailComponent implements OnInit {
+export class MonitorDetailComponent implements OnInit, OnDestroy {
   monitor$ = this.uptimeService.activeMonitor$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
@@ -36,6 +36,10 @@ export class MonitorDetailComponent implements OnInit {
         })
       )
       .toPromise()
+  }
+
+  ngOnDestroy() {
+    this.uptimeService.clearState()
   }
 
 

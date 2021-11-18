@@ -98,13 +98,13 @@
                         </ng-container>
                         <ng-container *ngIf="formMonitorType?.value === 'POST'">
                             <p class="mat-caption">
-                                GlitchTip will send an HTTP GET request to the specified URL.
+                                GlitchTip will send an HTTP POST request to the specified URL.
                                 If the expected response is not received, the site will be marked as Down.
                             </p>
                         </ng-container>
                         <ng-container *ngIf="formMonitorType?.value === 'GET'">
                             <p class="mat-caption">
-                                GlitchTip will send an HTTP POST request to the specified URL.
+                                GlitchTip will send an HTTP GET request to the specified URL.
                                 If the expected response is not received, the site will be marked as Down.
                             </p>
                         </ng-container>
@@ -179,7 +179,7 @@
                 class="submit"
                 id="create-project-submit"
                 [loading]="loading"
-                buttonText="Update"
+                buttonText="Update Monitor"
             >
             </gt-loading-button>
             </form> </mat-card-content
