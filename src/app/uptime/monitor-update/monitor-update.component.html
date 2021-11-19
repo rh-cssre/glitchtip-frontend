@@ -18,7 +18,8 @@
             <form [formGroup]="monitorEditForm" (ngSubmit)="onSubmit()">
                 <div>
                     <mat-form-field class="monitor-name">
-                    <input 
+                    <input
+                        id="monitor-name"
                         matInput
                         formControlName="name"
                         placeholder="Monitor Name"
@@ -177,7 +178,6 @@
                 </div>
             <gt-loading-button
                 class="submit"
-                id="create-project-submit"
                 [loading]="loading"
                 buttonText="Update Monitor"
             >

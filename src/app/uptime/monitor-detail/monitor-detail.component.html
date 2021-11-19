@@ -27,6 +27,7 @@
             <div>
                 <a href="{{ monitor.url }}">{{ monitor.url }}</a>
                 <button
+                id="monitor-settings"
                 mat-flat-button
                 color="primary"
                 [disabled]="false"
@@ -37,7 +38,7 @@
             </div>
         </mat-card-content>
     </mat-card>
-    <mat-card class="heartbeat-card" *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint">
+    <mat-card id="heartbeat-endpoint" class="heartbeat-card" *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint">
         <mat-card-title>Heartbeat URL endpoint</mat-card-title>
         <mat-divider></mat-divider>
         <p>Configure your project to send a POST request with no content to the following URL at your specified interval. 
