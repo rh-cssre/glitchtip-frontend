@@ -4,7 +4,7 @@ export interface NewMonitor {
     url: string;
     expectedStatus: number;
     interval: string;
-    projectId?: number;
+    project?: number;
 }
 
 export interface MonitorDetail extends NewMonitor {

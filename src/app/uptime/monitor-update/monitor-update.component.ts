@@ -123,7 +123,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formUrl.patchValue(data!.url);
           this.formExpectedStatus.patchValue(data!.expectedStatus);
           this.formInterval.patchValue(this.toSeconds(data!.interval));
-          this.formProject.patchValue(data!.projectId);
+          this.formProject.patchValue(data!.project);
+          console.log(data!.project)
         })
       )
       .subscribe();
