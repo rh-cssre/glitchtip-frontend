@@ -1,6 +1,6 @@
-import { Monitor } from "./uptime.interfaces";
+import { MonitorDetail } from "./uptime.interfaces";
 
-export const sampleMonitors: Monitor[] = [
+export const sampleMonitors: MonitorDetail[] = [
     {
         id: "1",
         monitorType: "Heartbeat",

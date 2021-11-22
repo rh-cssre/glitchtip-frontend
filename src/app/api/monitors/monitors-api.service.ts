@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { APIBaseService } from "../api-base.service";
-import { Monitor, NewMonitor } from "src/app/uptime/uptime.interfaces";
+import { MonitorDetail, NewMonitor } from "src/app/uptime/uptime.interfaces";
 
 @Injectable({
   providedIn: "root"
@@ -18,7 +18,7 @@ export class MonitorsAPIService extends APIBaseService {
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
     }
-    return this.http.get<Monitor[]>(
+    return this.http.get<MonitorDetail[]>(
       this.listURL(organizationSlug), {
       observe: "response",
       params: httpParams,
@@ -26,11 +26,11 @@ export class MonitorsAPIService extends APIBaseService {
   }
 
   createMonitor(organizationSlug: string, data: NewMonitor) {
-    return this.http.post<Monitor>(this.listURL(organizationSlug), data);
+    return this.http.post<MonitorDetail>(this.listURL(organizationSlug), data);
   }
 
   retrieve(organizationSlug: string, monitorId: string) {
-    return this.http.get<Monitor>(this.detailURL(organizationSlug, monitorId));
+    return this.http.get<MonitorDetail>(this.detailURL(organizationSlug, monitorId));
   }
 
   destroy(organizationSlug: string, monitorId: string) {
@@ -40,9 +40,9 @@ export class MonitorsAPIService extends APIBaseService {
   update(
     organizationSlug: string,
     monitorId: string,
-    data: Partial<Monitor>
+    data: Partial<MonitorDetail>
   ) {
-    return this.http.put<Monitor>(
+    return this.http.put<MonitorDetail>(
       this.detailURL(organizationSlug, monitorId),
       data
     );
