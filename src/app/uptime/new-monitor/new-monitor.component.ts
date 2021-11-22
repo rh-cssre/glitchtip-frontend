@@ -4,12 +4,8 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
-import { Router } from "@angular/router";
-import { catchError, tap } from "rxjs/operators";
-import { EMPTY } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { urlValidator, numberValidator } from "src/app/shared/validators";
 
@@ -24,8 +20,10 @@ import { urlValidator, numberValidator } from "src/app/shared/validators";
 export class NewMonitorComponent implements OnInit {
 
   orgSlug?: string | null;
-  error = "";
+  error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
+  loading$ = this.uptimeService.createLoading$;
+
 
   typeChoices = [
     "Ping",
@@ -33,7 +31,7 @@ export class NewMonitorComponent implements OnInit {
     "POST",
     "Heartbeat"
   ];
-  loading = false;
+
 
   newMonitorForm = new FormGroup({
     monitorType: new FormControl("Ping", [
@@ -80,8 +78,6 @@ export class NewMonitorComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private uptimeService: UptimeService,
-    private router: Router,
-    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -92,26 +88,10 @@ export class NewMonitorComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.newMonitorForm.valid && this.orgSlug) {
-      this.loading = true;
+    if (this.newMonitorForm.valid) {
       this.uptimeService.createMonitor(
         this.newMonitorForm.value,
-        this.orgSlug
       )
-      .pipe(
-        tap((monitor) => {
-          this.loading = false;
-          this.snackBar.open(`${monitor.name} has been created`);
-          this.router.navigate([this.orgSlug, "uptime-monitors", monitor.id]);
-        }
-        ),
-        catchError((err) => {
-          this.loading = false;
-          this.error = `${err.statusText}: ${err.status}`;
-          return EMPTY;
-        })
-      )
-      .subscribe();
     }
   }
 

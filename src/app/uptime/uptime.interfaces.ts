@@ -1,5 +1,5 @@
 export interface NewMonitor {
-    monitorType: string;
+    monitorType: "Ping" | "GET" | "POST" | "Heartbeat"
     name: string;
     url: string;
     expectedStatus: number;

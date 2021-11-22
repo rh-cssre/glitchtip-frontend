@@ -12,7 +12,7 @@
     <mat-card>
       <mat-card-content>
         <div class="form-center">
-            <mat-error *ngIf="error">{{ error }}</mat-error>
+            <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
         </div>
         <form [formGroup]="newMonitorForm" (ngSubmit)="onSubmit()">
             <div>
@@ -189,7 +189,7 @@
           <gt-loading-button
             class="submit"
             id="monitor-submit"
-            [loading]="loading === true"
+            [loading]="(loading$ | async) === true"
             buttonText="Create Monitor"
           >
           </gt-loading-button>

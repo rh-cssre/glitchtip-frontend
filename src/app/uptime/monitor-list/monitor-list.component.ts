@@ -3,10 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import {
   map,
   filter,
-  withLatestFrom,
-  // distinctUntilChanged,
-  // tap,
-  // mergeMap,
+  withLatestFrom
 } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { Subscription } from "rxjs";

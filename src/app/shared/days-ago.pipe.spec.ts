@@ -1,6 +1,6 @@
 import { DaysAgoPipe, DaysOldPipe, TimeForPipe } from "./days-ago.pipe";
 
-fdescribe("DaysAgoPipe, DaysOldPipe and TimeForPipe", () => {
+describe("DaysAgoPipe, DaysOldPipe and TimeForPipe", () => {
   const daysAgoPipe = new DaysAgoPipe();
   const daysOldPipe = new DaysOldPipe();
   const timeForPipe = new TimeForPipe();
