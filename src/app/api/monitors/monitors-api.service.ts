@@ -5,7 +5,7 @@ import { APIBaseService } from "../api-base.service";
 import { MonitorDetail, MonitorInput } from "src/app/uptime/uptime.interfaces";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class MonitorsAPIService extends APIBaseService {
   readonly url = baseUrl + "/monitors/";
@@ -18,8 +18,7 @@ export class MonitorsAPIService extends APIBaseService {
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
     }
-    return this.http.get<MonitorDetail[]>(
-      this.listURL(organizationSlug), {
+    return this.http.get<MonitorDetail[]>(this.listURL(organizationSlug), {
       observe: "response",
       params: httpParams,
     });
@@ -30,18 +29,16 @@ export class MonitorsAPIService extends APIBaseService {
   }
 
   retrieve(organizationSlug: string, monitorId: string) {
-    return this.http.get<MonitorDetail>(this.detailURL(organizationSlug, monitorId));
+    return this.http.get<MonitorDetail>(
+      this.detailURL(organizationSlug, monitorId)
+    );
   }
 
   destroy(organizationSlug: string, monitorId: string) {
     return this.http.delete(this.detailURL(organizationSlug, monitorId));
   }
 
-  update(
-    organizationSlug: string,
-    monitorId: string,
-    data: MonitorInput
-  ) {
+  update(organizationSlug: string, monitorId: string, data: MonitorInput) {
     return this.http.put<MonitorDetail>(
       this.detailURL(organizationSlug, monitorId),
       data
@@ -52,14 +49,7 @@ export class MonitorsAPIService extends APIBaseService {
     return `${baseUrl}/organizations/${organizationSlug}/monitors/`;
   }
 
-  protected detailURL(
-    organizationSlug: string,
-    monitorId: string
-  ) {
+  protected detailURL(organizationSlug: string, monitorId: string) {
     return `${this.listURL(organizationSlug)}${monitorId}/`;
   }
 }
-
-
-
-

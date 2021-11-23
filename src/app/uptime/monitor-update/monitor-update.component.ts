@@ -6,6 +6,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { urlRegex, numberValidator } from "src/app/shared/validators";
+import { MonitorType } from "../uptime.interfaces";
 
 @Component({
   selector: "gt-monitor-update",
@@ -18,7 +19,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
 
-  typeChoices = ["Ping", "GET", "POST", "Heartbeat"];
+  typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
   monitorEditForm = new FormGroup({
     monitorType: new FormControl("Ping", [Validators.required]),
@@ -37,7 +38,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
       Validators.min(1),
       Validators.max(86399),
     ]),
-    project: new FormControl(""),
+    project: new FormControl(null),
   });
 
   formName = this.monitorEditForm.get("name") as FormControl;

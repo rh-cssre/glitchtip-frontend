@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { map, tap, catchError, filter, mergeMap, take } from "rxjs/operators";
+import { map, tap, catchError, filter, take } from "rxjs/operators";
 import { EMPTY, combineLatest } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
@@ -165,20 +165,17 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     return this.monitorsAPIService.update(orgSlug, monitorId, data);
   }
 
-  retrieveMonitorDetails(monitorId?: string) {
+  retrieveMonitorDetails(monitorId: string) {
     this.organizationsService.activeOrganizationSlug$
       .pipe(
         filter((orgSlug) => !!orgSlug),
-        mergeMap((orgSlug) => {
-          if (monitorId) {
+        tap((orgSlug) => {
             this.monitorsAPIService
               .retrieve(orgSlug!, monitorId)
               .pipe(
                 tap((activeMonitor) => this.setActiveMonitor(activeMonitor))
               )
-              .subscribe();
-          }
-          return EMPTY;
+              .toPromise();
         })
       )
       .toPromise();
