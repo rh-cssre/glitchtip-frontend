@@ -1,0 +1,99 @@
+@import "variables";
+
+$iconWidth: 56px;
+
+.top-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+table {
+  width: 100%;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.monitor-name {
+  width: 500px;
+
+  @media screen and (max-width: $large - 1) {
+    width: 300px;
+  }
+  @media screen and (max-width: $medium - 1) {
+    width: 200px;
+  }
+  @media screen and (max-width: $tablet - 1) {
+    width: 160px;
+  }
+  @media screen and (max-width: $small - 1) {
+    width: 120px;
+  }
+
+  a {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+}
+
+.monitor-url {
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.url-box {
+  width: 250px;
+}
+
+.url-string {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+}
+
+.status-color {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--true:after {
+    background-color: #54a65a;
+  }
+
+  &--false:after {
+    background-color: $amaranth;
+  }
+
+  // For monitors that do not yet have a check, which we currently mark as meaning 'Down'
+  &--:after {
+    background-color: $amaranth;
+  }
+}
+
+.footer {
+  text-align: right;
+
+  mat-icon {
+    font-size: 35px;
+    height: $iconWidth;
+    width: $iconWidth;
+    line-height: $iconWidth;
+  }
+}
+
+.spinner-container {
+  mat-progress-spinner {
+    margin: 30px auto;
+  }
+}

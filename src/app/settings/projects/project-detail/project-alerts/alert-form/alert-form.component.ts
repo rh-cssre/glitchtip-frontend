@@ -3,20 +3,12 @@ import {
   FormGroup,
   FormControl,
   Validators,
-  AbstractControl,
-  ValidationErrors,
   FormGroupDirective,
   NgForm,
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-
-function numberValidator(control: AbstractControl): ValidationErrors | null {
-  if (typeof control.value === "number") {
-    return null;
-  }
-  return { invalidNumber: true };
-}
+import { numberValidator } from "src/app/shared/validators";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
