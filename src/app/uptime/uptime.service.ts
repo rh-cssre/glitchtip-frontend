@@ -69,15 +69,15 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
             this.monitorsAPIService
               .createMonitor(orgSlug, monitor)
               .pipe(
-                tap((monitor) => {
+                tap((newMonitor) => {
                   this.setState({
                     createLoading: false,
                   });
-                  this.snackBar.open(`${monitor.name} has been created`);
+                  this.snackBar.open(`${newMonitor.name} has been created`);
                   this.router.navigate([
                     orgSlug,
                     "uptime-monitors",
-                    monitor.id,
+                    newMonitor.id,
                   ]);
                 }),
                 catchError((err) => {
@@ -126,30 +126,32 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           this.setState({
             editLoading: true,
           });
-          this.updateMonitor(orgSlug!, monitor!.id, data).pipe(
-            tap((updatedMonitor) => {
-              this.setState({
-                editLoading: false,
-              });
-              this.snackBar.open(`${updatedMonitor.name} has been updated`);
-              this.router.navigate([
-                orgSlug,
-                "uptime-monitors",
-                updatedMonitor.id,
-              ]);
-            }),
-            catchError((err) => {
-              this.setState({
-                editLoading: false,
-              });
-              if (err instanceof HttpErrorResponse) {
+          this.updateMonitor(orgSlug!, monitor!.id, data)
+            .pipe(
+              tap((updatedMonitor) => {
                 this.setState({
-                  error: err.message,
+                  editLoading: false,
                 });
-              }
-              return EMPTY;
-            })
-          ).toPromise()
+                this.snackBar.open(`${updatedMonitor.name} has been updated`);
+                this.router.navigate([
+                  orgSlug,
+                  "uptime-monitors",
+                  updatedMonitor.id,
+                ]);
+              }),
+              catchError((err) => {
+                this.setState({
+                  editLoading: false,
+                });
+                if (err instanceof HttpErrorResponse) {
+                  this.setState({
+                    error: err.message,
+                  });
+                }
+                return EMPTY;
+              })
+            )
+            .toPromise();
         })
       )
       .toPromise();
@@ -201,26 +203,26 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
             editLoading: true,
           });
           this.monitorsAPIService
-          .destroy(orgSlug!, monitor!.id)
-          .pipe(
-            tap(() => {
-              this.setState({
-                deleteLoading: false,
-              });
-              this.snackBar.open("Monitor has been deleted.");
-              this.router.navigate([orgSlug, "uptime-monitors"]);
-            }),
-            catchError((_) => {
-              this.setState({
-                deleteLoading: false,
-              });
-              this.snackBar.open(
-                `There was an error deleting this issue. Please try again.`
-              );
-              return EMPTY;
-            })
-          )
-          .toPromise()
+            .destroy(orgSlug!, monitor!.id)
+            .pipe(
+              tap(() => {
+                this.setState({
+                  deleteLoading: false,
+                });
+                this.snackBar.open("Monitor has been deleted.");
+                this.router.navigate([orgSlug, "uptime-monitors"]);
+              }),
+              catchError((_) => {
+                this.setState({
+                  deleteLoading: false,
+                });
+                this.snackBar.open(
+                  `There was an error deleting this issue. Please try again.`
+                );
+                return EMPTY;
+              })
+            )
+            .toPromise();
         })
       )
       .toPromise();

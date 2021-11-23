@@ -1,10 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import {
-  map,
-  filter,
-  withLatestFrom
-} from "rxjs/operators";
+import { map, filter, withLatestFrom } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { Subscription } from "rxjs";
 import { UptimeService, UptimeState } from "../uptime.service";
@@ -13,11 +9,11 @@ import { UptimeService, UptimeState } from "../uptime.service";
   selector: "gt-monitor-list",
   templateUrl: "./monitor-list.component.html",
   styleUrls: ["./monitor-list.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonitorListComponent
-extends PaginationBaseComponent<UptimeState, UptimeService>
-implements OnDestroy {
+  extends PaginationBaseComponent<UptimeState, UptimeService>
+  implements OnDestroy {
   monitors$ = this.uptimeService.monitors$;
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
@@ -37,17 +33,14 @@ implements OnDestroy {
   constructor(
     private uptimeService: UptimeService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     super(uptimeService);
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
       ({ orgSlug, cursor }) => {
         if (orgSlug) {
-          this.uptimeService.getMonitors(
-            orgSlug,
-            cursor
-          );
+          this.uptimeService.getMonitors(orgSlug, cursor);
         }
       }
     );

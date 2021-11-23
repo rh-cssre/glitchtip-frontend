@@ -21,9 +21,9 @@ export default {
         BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        MatTableModule
+        MatTableModule,
       ],
-      declarations: [ TimeForPipe ],
+      declarations: [TimeForPipe],
     }),
     withKnobs,
   ],
@@ -32,10 +32,10 @@ export default {
 export const monitorListItem = () => {
   const statesDefaultValue = "normal";
   const statesOptions = {
-    "Normal": statesDefaultValue,
+    Normal: statesDefaultValue,
     "No monitors": "nomonitors",
     "Paginated monitors": "paginatedList",
-    "Loading": "loading",
+    Loading: "loading",
   };
   const states = select("States", statesOptions, statesDefaultValue);
 
@@ -62,12 +62,14 @@ export const monitorListItem = () => {
       monitorCount: 8,
     },
   };
-  issues$: of
+  issues$: of;
   return {
     component: MonitorListComponent,
     props: {
       loading$: of(pageStateConfig[states].loading),
-      monitors$: of(sampleMonitors.slice(0, pageStateConfig[states].monitorCount)),
+      monitors$: of(
+        sampleMonitors.slice(0, pageStateConfig[states].monitorCount)
+      ),
     },
   };
 };
@@ -86,5 +88,3 @@ monitorListItem.story = {
 monitorListItem.story = {
   parameters: {},
 };
-
-

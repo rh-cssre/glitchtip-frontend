@@ -1,70 +1,76 @@
 <section class="l-body">
-    <ng-container *ngIf="monitor$ | async as monitor">
+  <ng-container *ngIf="monitor$ | async as monitor">
     <header>
-        <a
-        mat-stroked-button
-        [routerLink]="['..']"
-        >
-            <mat-icon>keyboard_arrow_left</mat-icon>
-            View all uptime monitors
-        </a>
-        <h1 class="mat-display-1">Uptime details for {{ monitor.name }}</h1>
+      <a mat-stroked-button [routerLink]="['..']">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        View all uptime monitors
+      </a>
+      <h1 class="mat-display-1">Uptime details for {{ monitor.name }}</h1>
     </header>
     <mat-card>
-        <mat-card-title>
-                <ng-container *ngIf="monitor.lastChange; else notYet">
-                    <span *ngIf="monitor.isUp">Up</span>
-                    <span *ngIf="!monitor.isUp">Down</span>
-                    {{ monitor.lastChange | timeFor }}
-                </ng-container>
-                <ng-template #notYet>
-                    <span *ngIf="monitor.isUp">Up</span>
-                    <span *ngIf="!monitor.isUp">Down</span>
-                </ng-template>
-        </mat-card-title>
-        <div class="status-indicator status-indicator--{{ monitor.isUp}}"></div>
-        <mat-card-content>
-            <div>
-                <a href="{{ monitor.url }}">{{ monitor.url }}</a>
-                <button
-                id="monitor-settings"
-                mat-flat-button
-                color="primary"
-                [disabled]="false"
-                [routerLink]="['./update']"
-                >
-                Settings
-                </button>
-            </div>
-        </mat-card-content>
+      <mat-card-title>
+        <ng-container *ngIf="monitor.lastChange; else notYet">
+          <span *ngIf="monitor.isUp">Up</span>
+          <span *ngIf="!monitor.isUp">Down</span>
+          {{ monitor.lastChange | timeFor }}
+        </ng-container>
+        <ng-template #notYet>
+          <span *ngIf="monitor.isUp">Up</span>
+          <span *ngIf="!monitor.isUp">Down</span>
+        </ng-template>
+      </mat-card-title>
+      <div class="status-indicator status-indicator--{{ monitor.isUp }}"></div>
+      <mat-card-content>
+        <div>
+          <a href="{{ monitor.url }}">{{ monitor.url }}</a>
+          <button
+            id="monitor-settings"
+            mat-flat-button
+            color="primary"
+            [disabled]="false"
+            [routerLink]="['./update']"
+          >
+            Settings
+          </button>
+        </div>
+      </mat-card-content>
     </mat-card>
-    <mat-card id="heartbeat-endpoint" class="heartbeat-card" *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint">
-        <mat-card-title>Heartbeat URL endpoint</mat-card-title>
-        <mat-divider></mat-divider>
-        <p>Configure your project to send a POST request with no content to the following URL at your specified interval. 
-        If GlitchTip does not receive this request within the interval, your site status will be marked as down.</p>
-        <gt-copy-input
-            [value]="monitor.heartbeatEndpoint"
-            placeholder="Endpoint URL"
-        ></gt-copy-input>
+    <mat-card
+      id="heartbeat-endpoint"
+      class="heartbeat-card"
+      *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint"
+    >
+      <mat-card-title>Heartbeat URL endpoint</mat-card-title>
+      <mat-divider></mat-divider>
+      <p>
+        Configure your project to send a POST request with no content to the
+        following URL at your specified interval. If GlitchTip does not receive
+        this request within the interval, your site status will be marked as
+        down.
+      </p>
+      <gt-copy-input
+        [value]="monitor.heartbeatEndpoint"
+        placeholder="Endpoint URL"
+      ></gt-copy-input>
     </mat-card>
     <mat-card>
-        <mat-card-title>Delete Monitor</mat-card-title>
-        <mat-divider></mat-divider>
-        <mat-card-content class="remove-content">
-          <div>
-            <p>
-              By deleting this monitor, you will remove all of its uptime check history.
-            </p>
-          </div>
-          <gt-loading-button
-            (click)="deleteMonitor()"
-            buttonText="Delete Monitor"
-            [loading]="(deleteLoading$ | async)!"
-            id="delete-monitor"
-          >
-          </gt-loading-button>
-        </mat-card-content>
-      </mat-card>
-    </ng-container>
+      <mat-card-title>Delete Monitor</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content class="remove-content">
+        <div>
+          <p>
+            By deleting this monitor, you will remove all of its uptime check
+            history.
+          </p>
+        </div>
+        <gt-loading-button
+          (click)="deleteMonitor()"
+          buttonText="Delete Monitor"
+          [loading]="(deleteLoading$ | async)!"
+          id="delete-monitor"
+        >
+        </gt-loading-button>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
 </section>

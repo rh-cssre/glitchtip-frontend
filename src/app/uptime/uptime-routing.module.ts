@@ -6,8 +6,8 @@ import { MonitorDetailComponent } from "./monitor-detail/monitor-detail.componen
 import { MonitorUpdateComponent } from "./monitor-update/monitor-update.component";
 
 const routes: Routes = [
-  { path: "", component: MonitorListComponent},
-  { path: "new", component: NewMonitorComponent},
+  { path: "", component: MonitorListComponent },
+  { path: "new", component: NewMonitorComponent },
   {
     path: ":monitor-id",
     component: MonitorDetailComponent,
@@ -20,6 +20,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UptimeRoutingModule { }
+export class UptimeRoutingModule {}

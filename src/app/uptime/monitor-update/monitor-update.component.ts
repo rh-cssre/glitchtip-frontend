@@ -1,15 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormControl,
-  Validators
-} from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import {
-  tap,
-  filter,
-  first
-} from "rxjs/operators";
+import { tap, filter, first } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
@@ -18,74 +10,52 @@ import { urlRegex, numberValidator } from "src/app/shared/validators";
 @Component({
   selector: "gt-monitor-update",
   templateUrl: "./monitor-update.component.html",
-  styleUrls: ["./monitor-update.component.scss"]
+  styleUrls: ["./monitor-update.component.scss"],
 })
-
 export class MonitorUpdateComponent implements OnInit, OnDestroy {
   monitor$ = this.uptimeService.activeMonitor$;
   loading$ = this.uptimeService.editLoading$;
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
 
-  typeChoices = [
-    "Ping",
-    "GET",
-    "POST",
-    "Heartbeat"
-  ];
+  typeChoices = ["Ping", "GET", "POST", "Heartbeat"];
 
   monitorEditForm = new FormGroup({
-    monitorType: new FormControl("Ping", [
-      Validators.required,
-    ]),
-    name: new FormControl("", [
-      Validators.required,
-    ]),
+    monitorType: new FormControl("Ping", [Validators.required]),
+    name: new FormControl("", [Validators.required]),
     url: new FormControl("", [
       Validators.required,
-      Validators.pattern(urlRegex)
+      Validators.pattern(urlRegex),
     ]),
     expectedStatus: new FormControl(200, [
       Validators.required,
       Validators.min(100),
-      numberValidator
+      numberValidator,
     ]),
     interval: new FormControl(60, [
       Validators.required,
       Validators.min(1),
-      Validators.max(86399)
+      Validators.max(86399),
     ]),
     project: new FormControl(""),
   });
 
-  formName = this.monitorEditForm.get(
-    "name"
-  ) as FormControl;
-  formMonitorType = this.monitorEditForm.get(
-    "monitorType"
-  ) as FormControl;
-  formUrl = this.monitorEditForm.get(
-    "url"
-  ) as FormControl;
+  formName = this.monitorEditForm.get("name") as FormControl;
+  formMonitorType = this.monitorEditForm.get("monitorType") as FormControl;
+  formUrl = this.monitorEditForm.get("url") as FormControl;
   formExpectedStatus = this.monitorEditForm.get(
     "expectedStatus"
   ) as FormControl;
-  formInterval = this.monitorEditForm.get(
-    "interval"
-  ) as FormControl;
-  formProject = this.monitorEditForm.get(
-    "project"
-  ) as FormControl;
-
+  formInterval = this.monitorEditForm.get("interval") as FormControl;
+  formProject = this.monitorEditForm.get("project") as FormControl;
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private uptimeService: UptimeService,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService,
-  ) {
-  }
+    private organizationsService: OrganizationsService
+  ) {}
 
   ngOnInit() {
     this.route.params
@@ -96,7 +66,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
             this.uptimeService.retrieveMonitorDetails(monitorId);
           }
         })
-      ).toPromise()
+      )
+      .toPromise();
 
     this.monitor$
       .pipe(
@@ -134,10 +105,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.monitorEditForm.valid) {
-      this.uptimeService.editMonitor(
-        this.monitorEditForm.value,
-      )
+      this.uptimeService.editMonitor(this.monitorEditForm.value);
     }
   }
-
 }

@@ -8,11 +8,11 @@ $iconWidth: 56px;
 }
 
 table {
-    width: 100%;
+  width: 100%;
 }
 
 .wrapper {
-    width: 100%;
+  width: 100%;
 }
 
 .monitor-name {
@@ -40,7 +40,6 @@ table {
 }
 
 .monitor-url {
-
   @media screen and (max-width: $tablet - 1) {
     display: none;
   }
@@ -69,7 +68,7 @@ table {
   }
 
   &--true:after {
-    background-color: #54A65A;
+    background-color: #54a65a;
   }
 
   &--false:after {
