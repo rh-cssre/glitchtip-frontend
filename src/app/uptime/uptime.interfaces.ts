@@ -1,4 +1,4 @@
-export interface NewMonitor {
+export interface MonitorInput {
     monitorType: "Ping" | "GET" | "POST" | "Heartbeat"
     name: string;
     url: string;
@@ -7,7 +7,7 @@ export interface NewMonitor {
     project?: number;
 }
 
-export interface MonitorDetail extends NewMonitor {
+export interface MonitorDetail extends MonitorInput {
     id: string;
     projectName?: string;
     isUp?: boolean;

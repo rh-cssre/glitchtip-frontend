@@ -8,7 +8,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
-import { MonitorDetail, NewMonitor } from "./uptime.interfaces";
+import { MonitorDetail, MonitorInput } from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { OrganizationsService } from "../api/organizations/organizations.service";
@@ -58,7 +58,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     super(initialState);
   }
 
-  createMonitor(monitor: NewMonitor) {
+  createMonitor(monitor: MonitorInput) {
     this.organizationsService.activeOrganizationSlug$
       .pipe(
         tap((orgSlug) => {
@@ -114,7 +114,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     );
   }
 
-  editMonitor(data: Partial<MonitorDetail>) {
+  editMonitor(data: MonitorInput) {
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
       this.activeMonitor$,
@@ -158,7 +158,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   private updateMonitor(
     orgSlug: string,
     monitorId: string,
-    data: Partial<MonitorDetail>
+    data: MonitorInput
   ) {
     return this.monitorsAPIService.update(orgSlug, monitorId, data);
   }

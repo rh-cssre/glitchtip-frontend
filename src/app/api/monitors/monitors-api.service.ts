@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { APIBaseService } from "../api-base.service";
-import { MonitorDetail, NewMonitor } from "src/app/uptime/uptime.interfaces";
+import { MonitorDetail, MonitorInput } from "src/app/uptime/uptime.interfaces";
 
 @Injectable({
   providedIn: "root"
@@ -25,7 +25,7 @@ export class MonitorsAPIService extends APIBaseService {
     });
   }
 
-  createMonitor(organizationSlug: string, data: NewMonitor) {
+  createMonitor(organizationSlug: string, data: MonitorInput) {
     return this.http.post<MonitorDetail>(this.listURL(organizationSlug), data);
   }
 
@@ -40,7 +40,7 @@ export class MonitorsAPIService extends APIBaseService {
   update(
     organizationSlug: string,
     monitorId: string,
-    data: Partial<MonitorDetail>
+    data: MonitorInput
   ) {
     return this.http.put<MonitorDetail>(
       this.detailURL(organizationSlug, monitorId),

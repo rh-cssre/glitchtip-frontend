@@ -50,8 +50,7 @@ mat-card {
     }
   }
 
-// Duplicating these because :after requires content and this is just an empty div
-// It's not a graceful solution at all. But the indicator is temporary anyways.
+// Duplicating these because :after not available without content
 
 .status-indicator--true {
     width: 100%;

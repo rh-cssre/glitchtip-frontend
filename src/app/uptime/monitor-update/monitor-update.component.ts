@@ -22,8 +22,6 @@ import { urlValidator, numberValidator } from "src/app/shared/validators";
 })
 
 export class MonitorUpdateComponent implements OnInit, OnDestroy {
-  orgSlug?: string | null;
-  monitorId?: string | null;
   monitor$ = this.uptimeService.activeMonitor$;
   loading$ = this.uptimeService.editLoading$;
   error$ = this.uptimeService.error$;
@@ -35,8 +33,6 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     "POST",
     "Heartbeat"
   ];
-  selectedEnvironment = "";
-  loading = false;
 
   monitorEditForm = new FormGroup({
     monitorType: new FormControl("Ping", [
