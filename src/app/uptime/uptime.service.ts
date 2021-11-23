@@ -86,7 +86,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
                   });
                   if (err instanceof HttpErrorResponse) {
                     this.setState({
-                      error: err.error,
+                      error: err.message,
                     });
                   }
                   return EMPTY;
@@ -144,7 +144,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
               });
               if (err instanceof HttpErrorResponse) {
                 this.setState({
-                  error: err.error,
+                  error: err.message,
                 });
               }
               return EMPTY;
@@ -225,33 +225,6 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       )
       .toPromise();
   }
-
-  // deleteMonitor(orgSlug: string, monitorId: string) {
-  //   this.setState({
-  //     deleteLoading: true,
-  //   });
-  //   this.monitorsAPIService
-  //     .destroy(orgSlug, monitorId)
-  //     .pipe(
-  //       tap(() => {
-  //         this.setState({
-  //           deleteLoading: false,
-  //         });
-  //         this.snackBar.open("Monitor has been deleted.");
-  //         this.router.navigate([orgSlug, "uptime-monitors"]);
-  //       }),
-  //       catchError((_) => {
-  //         this.setState({
-  //           deleteLoading: false,
-  //         });
-  //         this.snackBar.open(
-  //           `There was an error deleting this issue. Please try again.`
-  //         );
-  //         return EMPTY;
-  //       })
-  //     )
-  //     .subscribe();
-  // }
 
   clearState() {
     this.state.next(initialState);

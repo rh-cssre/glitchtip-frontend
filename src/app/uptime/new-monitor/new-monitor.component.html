@@ -12,7 +12,7 @@
     <mat-card>
       <mat-card-content>
         <div class="form-center">
-            <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
+            <mat-error *ngIf="error$ | async">{{ error$ | async }}</mat-error>
         </div>
         <form [formGroup]="newMonitorForm" (ngSubmit)="onSubmit()">
             <div>
@@ -44,7 +44,7 @@
                         <span *ngIf="formUrl?.errors?.required">Enter a url</span>
                     </mat-error>
                     <mat-error>
-                        <span *ngIf="formUrl?.errors?.invalidUrl">Enter a valid URL</span>
+                        <span *ngIf="formUrl?.errors?.pattern">Enter a valid URL with protocol (ex. https://example.com)</span>
                     </mat-error>
                 </mat-form-field>
             </div>

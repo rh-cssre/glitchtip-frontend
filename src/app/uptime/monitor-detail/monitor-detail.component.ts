@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { UptimeService } from "../uptime.service";
 import { ActivatedRoute } from "@angular/router";
-import { map, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -17,10 +17,6 @@ import { map, tap } from "rxjs/operators";
 export class MonitorDetailComponent implements OnInit, OnDestroy {
   monitor$ = this.uptimeService.activeMonitor$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
-  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
-  monitorId$ = this.route.paramMap.pipe(
-    map((params) => params.get("monitor-id"))
-  );
 
   constructor(
     private uptimeService: UptimeService,

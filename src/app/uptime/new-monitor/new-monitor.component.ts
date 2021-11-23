@@ -7,8 +7,7 @@ import {
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { urlValidator, numberValidator } from "src/app/shared/validators";
-
+import { numberValidator, urlRegex } from "src/app/shared/validators";
 
 @Component({
   selector: "gt-new-monitor",
@@ -39,9 +38,9 @@ export class NewMonitorComponent {
     name: new FormControl("", [
       Validators.required,
     ]),
-    url: new FormControl("", [
+    url: new FormControl("https://", [
       Validators.required,
-      urlValidator
+      Validators.pattern(urlRegex)
     ]),
     expectedStatus: new FormControl(200, [
       Validators.required,
