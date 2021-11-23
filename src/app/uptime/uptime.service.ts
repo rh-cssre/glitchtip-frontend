@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { map, tap, catchError } from "rxjs/operators";
-import { EMPTY } from "rxjs";
+import { map, tap, catchError, filter, mergeMap, take } from "rxjs/operators";
+import { EMPTY, combineLatest } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import {
@@ -18,6 +18,7 @@ export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
   orgEnvironments: Environment[];
   monitorDetails: MonitorDetail | null;
+  editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
   error: string;
@@ -28,6 +29,7 @@ const initialState: UptimeState = {
   pagination: initialPaginationState,
   orgEnvironments: [],
   monitorDetails: null,
+  editLoading: false,
   createLoading: false,
   deleteLoading: false,
   error: "",
@@ -38,6 +40,7 @@ const initialState: UptimeState = {
 })
 export class UptimeService extends PaginationStatefulService<UptimeState> {
   monitors$ = this.getState$.pipe(map((state) => state.monitors));
+  editLoading$ = this.getState$.pipe(map((state) => state.editLoading));
   createLoading$ = this.getState$.pipe(map((state) => state.createLoading));
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   error$ = this.getState$.pipe(map((state) => state.error));
@@ -111,12 +114,45 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     );
   }
 
-  editMonitor(
-    orgSlug: string,
-    monitorId: string,
-    data: Partial<MonitorDetail>
-  ) {
-    return this.updateMonitor(orgSlug, monitorId, data);
+  editMonitor(data: Partial<MonitorDetail>) {
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.activeMonitor$,
+    ])
+      .pipe(
+        take(1),
+        filter(([orgSlug, monitor]) => !!orgSlug && !!monitor),
+        tap(([orgSlug, monitor]) => {
+          this.setState({
+            editLoading: true,
+          });
+          this.updateMonitor(orgSlug!, monitor!.id, data).pipe(
+            tap((updatedMonitor) => {
+              this.setState({
+                editLoading: false,
+              });
+              this.snackBar.open(`${updatedMonitor.name} has been updated`);
+              this.router.navigate([
+                orgSlug,
+                "uptime-monitors",
+                updatedMonitor.id,
+              ]);
+            }),
+            catchError((err) => {
+              this.setState({
+                editLoading: false,
+              });
+              if (err instanceof HttpErrorResponse) {
+                this.setState({
+                  error: err.error,
+                });
+              }
+              return EMPTY;
+            })
+          ).toPromise()
+        })
+      )
+      .toPromise();
   }
 
   private updateMonitor(
@@ -127,13 +163,23 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     return this.monitorsAPIService.update(orgSlug, monitorId, data);
   }
 
-  retrieveMonitorDetails(organizationSlug?: string, monitorId?: string) {
-    if (organizationSlug && monitorId) {
-      this.monitorsAPIService
-        .retrieve(organizationSlug, monitorId)
-        .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
-        .subscribe();
-    }
+  retrieveMonitorDetails(monitorId?: string) {
+    this.organizationsService.activeOrganizationSlug$
+      .pipe(
+        filter((orgSlug) => !!orgSlug),
+        mergeMap((orgSlug) => {
+          if (monitorId) {
+            this.monitorsAPIService
+              .retrieve(orgSlug!, monitorId)
+              .pipe(
+                tap((activeMonitor) => this.setActiveMonitor(activeMonitor))
+              )
+              .subscribe();
+          }
+          return EMPTY;
+        })
+      )
+      .toPromise();
   }
 
   private setActiveMonitor(monitor: MonitorDetail) {
@@ -142,32 +188,70 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     });
   }
 
-  deleteMonitor(orgSlug: string, monitorId: string) {
-    this.setState({
-      deleteLoading: true,
-    });
-    this.monitorsAPIService
-      .destroy(orgSlug, monitorId)
+  deleteMonitor() {
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.activeMonitor$,
+    ])
       .pipe(
-        tap(() => {
+        take(1),
+        filter(([orgSlug, monitor]) => !!orgSlug && !!monitor),
+        tap(([orgSlug, monitor]) => {
           this.setState({
-            deleteLoading: false,
+            editLoading: true,
           });
-          this.snackBar.open("Monitor has been deleted.");
-          this.router.navigate([orgSlug, "uptime-monitors"]);
-        }),
-        catchError((_) => {
-          this.setState({
-            deleteLoading: false,
-          });
-          this.snackBar.open(
-            `There was an error deleting this issue. Please try again.`
-          );
-          return EMPTY;
+          this.monitorsAPIService
+          .destroy(orgSlug!, monitor!.id)
+          .pipe(
+            tap(() => {
+              this.setState({
+                deleteLoading: false,
+              });
+              this.snackBar.open("Monitor has been deleted.");
+              this.router.navigate([orgSlug, "uptime-monitors"]);
+            }),
+            catchError((_) => {
+              this.setState({
+                deleteLoading: false,
+              });
+              this.snackBar.open(
+                `There was an error deleting this issue. Please try again.`
+              );
+              return EMPTY;
+            })
+          )
+          .toPromise()
         })
       )
-      .subscribe();
+      .toPromise();
   }
+
+  // deleteMonitor(orgSlug: string, monitorId: string) {
+  //   this.setState({
+  //     deleteLoading: true,
+  //   });
+  //   this.monitorsAPIService
+  //     .destroy(orgSlug, monitorId)
+  //     .pipe(
+  //       tap(() => {
+  //         this.setState({
+  //           deleteLoading: false,
+  //         });
+  //         this.snackBar.open("Monitor has been deleted.");
+  //         this.router.navigate([orgSlug, "uptime-monitors"]);
+  //       }),
+  //       catchError((_) => {
+  //         this.setState({
+  //           deleteLoading: false,
+  //         });
+  //         this.snackBar.open(
+  //           `There was an error deleting this issue. Please try again.`
+  //         );
+  //         return EMPTY;
+  //       })
+  //     )
+  //     .subscribe();
+  // }
 
   clearState() {
     this.state.next(initialState);

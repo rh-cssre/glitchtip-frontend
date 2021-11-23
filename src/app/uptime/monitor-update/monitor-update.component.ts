@@ -4,16 +4,12 @@ import {
   FormControl,
   Validators
 } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
-import { EMPTY } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 import {
-  map,
-  catchError,
   tap,
   filter,
   first
 } from "rxjs/operators";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
@@ -29,7 +25,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   orgSlug?: string | null;
   monitorId?: string | null;
   monitor$ = this.uptimeService.activeMonitor$;
-  error = "";
+  loading$ = this.uptimeService.editLoading$;
+  error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
 
   typeChoices = [
@@ -89,29 +86,21 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   constructor(
     private uptimeService: UptimeService,
-    private router: Router,
     private route: ActivatedRoute,
     private organizationsService: OrganizationsService,
-    private snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit() {
     this.route.params
       .pipe(
-        map((params) => {
-          const orgSlug: string | undefined = params["org-slug"];
-          const monitorId: string | undefined = params["monitor-id"];
-          this.orgSlug = orgSlug;
-          this.monitorId = monitorId;
-          return { orgSlug, monitorId };
+        tap((params) => {
+          const monitorId = params["monitor-id"];
+          if (monitorId) {
+            this.uptimeService.retrieveMonitorDetails(monitorId);
+          }
         })
-      )
-      .subscribe(({ orgSlug, monitorId }) => {
-        if (orgSlug && monitorId) {
-          this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
-        }
-      });
+      ).toPromise()
 
     this.monitor$
       .pipe(
@@ -148,27 +137,10 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.monitorEditForm.valid && this.orgSlug) {
-      this.loading = true;
+    if (this.monitorEditForm.valid) {
       this.uptimeService.editMonitor(
-        this.orgSlug,
-        this.monitorId!,
         this.monitorEditForm.value,
       )
-        .pipe(
-          tap((monitor) => {
-            this.loading = false;
-            this.snackBar.open(`${monitor.name} has been updated`);
-            this.router.navigate([this.orgSlug, "uptime-monitors", monitor.id]);
-          }
-          ),
-          catchError((err) => {
-            this.loading = false;
-            this.error = `${err.statusText}: ${err.status}`;
-            return EMPTY;
-          })
-        )
-        .subscribe();
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -14,12 +14,11 @@ import { urlValidator, numberValidator } from "src/app/shared/validators";
   selector: "gt-new-monitor",
   templateUrl: "./new-monitor.component.html",
   styleUrls: ["./new-monitor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class NewMonitorComponent implements OnInit {
+export class NewMonitorComponent {
 
-  orgSlug?: string | null;
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   loading$ = this.uptimeService.createLoading$;
@@ -79,13 +78,6 @@ export class NewMonitorComponent implements OnInit {
     private organizationsService: OrganizationsService,
     private uptimeService: UptimeService,
   ) { }
-
-  ngOnInit(): void {
-    this.organizationsService.activeOrganizationSlug$
-      .subscribe((orgSlug) => {
-        this.orgSlug = orgSlug;
-      });
-  }
 
   onSubmit() {
     if (this.newMonitorForm.valid) {
