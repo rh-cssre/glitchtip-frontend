@@ -55,7 +55,7 @@
               <mat-label>Associated Project</mat-label>
               <mat-select id="associated-project" formControlName="project">
                 <ng-container *ngIf="orgProjects$ | async as orgProjects">
-                  <mat-option value="null">None</mat-option>
+                  <mat-option value="">None</mat-option>
                   <mat-option
                     *ngFor="let orgProject of orgProjects"
                     [value]="orgProject.id"
