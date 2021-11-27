@@ -23,7 +23,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   monitorEditForm = new FormGroup({
     monitorType: new FormControl("Ping", [Validators.required]),
-    name: new FormControl("", [Validators.required]),
+    name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
     url: new FormControl("", [
       Validators.required,
       Validators.pattern(urlRegex),

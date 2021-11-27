@@ -21,7 +21,7 @@ export class NewMonitorComponent {
 
   newMonitorForm = new FormGroup({
     monitorType: new FormControl("Ping", [Validators.required]),
-    name: new FormControl("", [Validators.required]),
+    name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
     url: new FormControl("https://", [
       Validators.required,
       Validators.pattern(urlRegex),

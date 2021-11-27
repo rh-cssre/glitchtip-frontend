@@ -77,7 +77,7 @@ table {
 
   // For monitors that do not yet have a check, which we currently mark as meaning 'Down'
   &--:after {
-    background-color: $amaranth;
+    background-color: gray;
   }
 }
 

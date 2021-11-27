@@ -19,6 +19,7 @@
               matInput
               formControlName="name"
               placeholder="Monitor Name"
+              maxlength="200"
               required
               [errorStateMatcher]="matcher"
             />
@@ -26,6 +27,10 @@
               <span *ngIf="formName?.errors?.required"
                 >Enter a monitor name</span
               >
+              <span *ngIf="formName?.errors?.maxlength">
+                Name may not be more than
+                {{ formName.errors?.maxlength.requiredLength }} characters
+              </span>
             </mat-error>
           </mat-form-field>
         </div>

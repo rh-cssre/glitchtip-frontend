@@ -9,20 +9,17 @@
     </header>
     <mat-card>
       <mat-card-title>
-        <ng-container *ngIf="monitor.lastChange; else notYet">
-          <span *ngIf="monitor.isUp">Up</span>
-          <span *ngIf="!monitor.isUp">Down</span>
+        <span *ngIf="monitor.isUp">Up</span>
+        <span *ngIf="monitor.isUp === false">Down</span>
+        <span *ngIf="monitor.isUp === null">No data</span>
+        <ng-container *ngIf="monitor.lastChange">
           {{ monitor.lastChange | timeFor }}
         </ng-container>
-        <ng-template #notYet>
-          <span *ngIf="monitor.isUp">Up</span>
-          <span *ngIf="!monitor.isUp">Down</span>
-        </ng-template>
       </mat-card-title>
       <div class="status-indicator status-indicator--{{ monitor.isUp }}"></div>
       <mat-card-content>
         <div>
-          <a href="{{ monitor.url }}">{{ monitor.url }}</a>
+          <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
           <button
             id="monitor-settings"
             mat-flat-button
