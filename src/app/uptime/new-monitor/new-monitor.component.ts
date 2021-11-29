@@ -23,8 +23,8 @@ export class NewMonitorComponent {
     monitorType: new FormControl("Ping", [Validators.required]),
     name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
     url: new FormControl("https://", [
-      Validators.required,
       Validators.pattern(urlRegex),
+      Validators.required,
     ]),
     expectedStatus: new FormControl(200, [
       Validators.required,
@@ -51,6 +51,21 @@ export class NewMonitorComponent {
     private organizationsService: OrganizationsService,
     private uptimeService: UptimeService
   ) {}
+
+  updateRequiredFields() {
+    if (this.formMonitorType.value === "Heartbeat") {
+      this.formUrl.clearValidators();
+      this.formUrl.setValue("");
+    } else {
+      this.formUrl.setValidators([
+        Validators.pattern(urlRegex),
+        Validators.required,
+      ]);
+      if (this.formUrl.value === "") {
+        this.formUrl.setValue("https://");
+      }
+    }
+  }
 
   onSubmit() {
     if (this.newMonitorForm.valid) {

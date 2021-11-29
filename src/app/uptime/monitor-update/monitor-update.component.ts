@@ -104,6 +104,21 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     return seconds;
   }
 
+  updateRequiredFields() {
+    if (this.formMonitorType.value === "Heartbeat") {
+      this.formUrl.clearValidators();
+      this.formUrl.setValue("");
+    } else {
+      this.formUrl.setValidators([
+        Validators.pattern(urlRegex),
+        Validators.required,
+      ]);
+      if (this.formUrl.value === "") {
+        this.formUrl.setValue("https://");
+      }
+    }
+  }
+
   onSubmit() {
     if (this.monitorEditForm.valid) {
       this.uptimeService.editMonitor(this.monitorEditForm.value);
