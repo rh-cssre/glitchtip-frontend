@@ -76,7 +76,6 @@ form {
     display: flex;
     justify-content: flex-start;
     width: 370px;
-    padding-bottom: 20px;
     position: relative;
     bottom: 0;
     left: 0;
@@ -84,6 +83,10 @@ form {
 
     @media screen and (max-width: $tablet - 1) {
       width: 300px;
+
+      p {
+        margin-top: 0;
+      }
     }
   }
 }

@@ -6,6 +6,12 @@ import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-erro
 import { numberValidator, urlRegex } from "src/app/shared/validators";
 import { MonitorType } from "../uptime.interfaces";
 
+const defaultUrlValidators = [
+  Validators.pattern(urlRegex),
+  Validators.required,
+  Validators.maxLength(2000),
+];
+
 @Component({
   selector: "gt-new-monitor",
   templateUrl: "./new-monitor.component.html",
@@ -22,10 +28,7 @@ export class NewMonitorComponent {
   newMonitorForm = new FormGroup({
     monitorType: new FormControl("Ping", [Validators.required]),
     name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
-    url: new FormControl("https://", [
-      Validators.required,
-      Validators.pattern(urlRegex),
-    ]),
+    url: new FormControl("https://", defaultUrlValidators),
     expectedStatus: new FormControl(200, [
       Validators.required,
       Validators.min(100),
@@ -51,6 +54,18 @@ export class NewMonitorComponent {
     private organizationsService: OrganizationsService,
     private uptimeService: UptimeService
   ) {}
+
+  updateRequiredFields() {
+    if (this.formMonitorType.value === "Heartbeat") {
+      this.formUrl.clearValidators();
+      this.formUrl.setValue("");
+    } else {
+      this.formUrl.setValidators(defaultUrlValidators);
+      if (this.formUrl.value === "") {
+        this.formUrl.setValue("https://");
+      }
+    }
+  }
 
   onSubmit() {
     if (this.newMonitorForm.valid) {
