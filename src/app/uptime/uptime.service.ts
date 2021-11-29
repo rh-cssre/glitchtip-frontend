@@ -86,7 +86,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
                   });
                   if (err instanceof HttpErrorResponse) {
                     this.setState({
-                      error: err.message,
+                      error: `${err.statusText}: ${err.status}`,
                     });
                   }
                   return EMPTY;
@@ -145,7 +145,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
                 });
                 if (err instanceof HttpErrorResponse) {
                   this.setState({
-                    error: err.message,
+                    error: `${err.statusText}: ${err.status}`,
                   });
                 }
                 return EMPTY;

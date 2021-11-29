@@ -87,26 +87,30 @@
             </div>
           </div>
           <ng-container *ngIf="formMonitorType?.value !== 'Heartbeat'">
-          <div class="url-spacing">
-            <mat-form-field>
-              <input
-                matInput
-                formControlName="url"
-                placeholder="Site URL"
-                required
-                [errorStateMatcher]="matcher"
-              />
-              <mat-error>
-                <span *ngIf="formUrl?.errors?.required">Enter a url</span>
-              </mat-error>
-              <mat-error>
-                <span *ngIf="formUrl?.errors?.pattern"
-                  >Enter a valid URL with protocol (ex.
-                  https://example.com)</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </div>
+            <div class="url-spacing">
+              <mat-form-field>
+                <input
+                  matInput
+                  formControlName="url"
+                  placeholder="Site URL"
+                  required
+                  [errorStateMatcher]="matcher"
+                />
+                <mat-error>
+                  <span *ngIf="formUrl?.errors?.required">Enter a url</span>
+                </mat-error>
+                <mat-error>
+                  <span *ngIf="formUrl?.errors?.pattern"
+                    >Enter a valid URL with protocol (ex.
+                    https://example.com)</span
+                  >
+                  <span *ngIf="formUrl?.errors?.maxlength">
+                    URL may not be more than
+                    {{ formUrl.errors?.maxlength.requiredLength }} characters
+                  </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
           </ng-container>
           <div class="associations">
             <div>

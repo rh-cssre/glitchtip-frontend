@@ -67,7 +67,7 @@
               <p class="mat-caption">
                 GlitchTip will send an HTTP POST request to the specified URL.
                 If the expected response is not received, the site will be
-                marked as Down.                
+                marked as Down.
               </p>
             </ng-container>
             <ng-container *ngIf="formMonitorType?.value === 'GET'">
@@ -87,26 +87,31 @@
           </div>
         </div>
         <ng-container *ngIf="formMonitorType?.value !== 'Heartbeat'">
-        <div class="url-spacing">
-          <mat-form-field>
-            <input
-              id="monitor-url"
-              matInput
-              formControlName="url"
-              placeholder="Site URL"
-              required
-              [errorStateMatcher]="matcher"
-            />
-            <mat-error>
-              <span *ngIf="formUrl?.errors?.required">Enter a url</span>
-            </mat-error>
-            <mat-error>
-              <span *ngIf="formUrl?.errors?.pattern"
-                >Enter a valid URL with protocol (ex. https://example.com)</span
-              >
-            </mat-error>
-          </mat-form-field>
-        </div>
+          <div class="url-spacing">
+            <mat-form-field>
+              <input
+                id="monitor-url"
+                matInput
+                formControlName="url"
+                placeholder="Site URL"
+                required
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error>
+                <span *ngIf="formUrl?.errors?.required">Enter a url</span>
+              </mat-error>
+              <mat-error>
+                <span *ngIf="formUrl?.errors?.pattern"
+                  >Enter a valid URL with protocol (ex.
+                  https://example.com)</span
+                >
+                <span *ngIf="formUrl?.errors?.maxlength">
+                  URL may not be more than
+                  {{ formUrl.errors?.maxlength.requiredLength }} characters
+                </span>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </ng-container>
         <div class="associations">
           <div>
