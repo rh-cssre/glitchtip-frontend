@@ -12,6 +12,8 @@ header {
   h1 {
     margin-top: 20px;
     margin-bottom: 0px;
+    text-overflow: wrap;
+    overflow-wrap: break-word;
   }
 }
 
@@ -25,12 +27,21 @@ mat-card {
     div {
       display: flex;
       flex-direction: column;
+      width: 100%;
 
       button {
         margin-top: 10px;
         width: fit-content;
       }
     }
+  }
+}
+
+.url-display {
+  a {
+    display: inline-block;
+    text-overflow: wrap;
+    overflow-wrap: break-word;
   }
 }
 

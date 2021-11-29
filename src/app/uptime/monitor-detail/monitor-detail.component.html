@@ -19,7 +19,9 @@
       <div class="status-indicator status-indicator--{{ monitor.isUp }}"></div>
       <mat-card-content>
         <div>
-          <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
+          <div class="url-display">
+            <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
+          </div>
           <button
             id="monitor-settings"
             mat-flat-button
