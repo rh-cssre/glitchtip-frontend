@@ -71,22 +71,22 @@ form {
     width: 170px;
     margin-right: 16px;
   }
+}
 
-  .help-text {
-    display: flex;
-    justify-content: flex-start;
-    width: 370px;
-    position: relative;
-    bottom: 0;
-    left: 0;
-    margin-bottom: 0;
+.help-text {
+  display: flex;
+  justify-content: flex-start;
+  width: 370px;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0;
 
-    @media screen and (max-width: $tablet - 1) {
-      width: 300px;
+  @media screen and (max-width: $tablet - 1) {
+    width: 300px;
 
-      p {
-        margin-top: 0;
-      }
+    p {
+      margin-top: 0;
     }
   }
 }
