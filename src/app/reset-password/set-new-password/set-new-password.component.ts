@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { ResetPasswordService } from "src/app/api/reset-password/reset-password.service";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs/operators";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { map } from "rxjs/operators";
+import { ResetPasswordService } from "src/app/api/reset-password/reset-password.service";
 
 @Component({
   selector: "gt-set-new-password",
@@ -10,7 +10,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
   styleUrls: ["./set-new-password.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetNewPasswordComponent implements OnInit {
+export class SetNewPasswordComponent {
   params$ = this.activatedRoute.params.pipe(
     map((params) => ({ uid: params.uidb64, token: params.token }))
   );
@@ -39,8 +39,6 @@ export class SetNewPasswordComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private resetService: ResetPasswordService
   ) {}
-
-  ngOnInit(): void {}
 
   onSubmit() {
     if (this.form.valid) {

@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy
 } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -14,7 +13,7 @@ import { MultiFactorAuthService } from "../../multi-factor-auth.service";
   styleUrls: ["./backup-codes.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BackupCodesComponent implements OnInit {
+export class BackupCodesComponent {
   TOTPKey$ = this.service.TOTPKey$;
   error$ = this.service.serverError$;
   copiedCodes$ = this.service.copiedCodes$;
@@ -34,9 +33,6 @@ export class BackupCodesComponent implements OnInit {
 
   get backupCode() {
     return this.backupCodeForm.get("backupCode");
-  }
-
-  ngOnInit(): void {
   }
 
   startRegenCodes() {
