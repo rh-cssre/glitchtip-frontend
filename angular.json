@@ -9,15 +9,6 @@
         "@schematics/angular:component": {
           "style": "scss"
         },
-        "@schematics/angular:class": {
-        },
-        "@schematics/angular:module": {
-        },
-        "@schematics/angular:service": {
-        },
-        "@schematics/angular:directive": {
-          "prefix": "gt"
-        },
         "@schematics/angular:application": {
           "strict": true
         }
@@ -60,11 +51,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/glitchtip-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               {
@@ -91,18 +83,12 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "./src/assets/styles"
               ]
             },
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            "scripts": []
           },
           "configurations": {
             "prod-no-static": {
@@ -112,33 +98,33 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": {
-                "scripts": true,
-                "styles": {
-                  "minify": true,
-                  "inlineCritical": false
-                },
-                "fonts": true
-              },
-              "outputHashing": "all",
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
+              "outputHashing": "all"
+            },
+            "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "3kb",
+                  "maximumError": "6kb"
                 }
-              ]
-            },
-            "production": {
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": {
+                "styles": {
+                  "inlineCritical": false
+                }
+              },
+              "outputHashing": "all",
               "assets": [
                 "src/favicon.ico",
                 "src/assets",
@@ -169,17 +155,17 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "glitchtip-frontend:build",
             "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {
               "browserTarget": "glitchtip-frontend:build:production"
             },
-            "prod-no-static": {
-              "browserTarget": "glitchtip-frontend:build:prod-no-static"
+            "development": {
+              "browserTarget": "glitchtip-frontend:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -194,6 +180,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -201,24 +188,16 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "./src/assets/styles"
               ]
-            }
+            },
+            "scripts": []
           }
         }
       }
     }
   },
-  "defaultProject": "glitchtip-frontend",
-  "schematics": {
-    "@schematics/angular:component": {
-      "changeDetection": "OnPush"
-    }
-  },
-  "cli": {
-    "analytics": "c7f39e0d-2c15-4afb-8516-838f6c815966"
-  }
+  "defaultProject": "glitchtip-frontend"
 }
