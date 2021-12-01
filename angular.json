@@ -7,20 +7,15 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "lintFix": true
+          "style": "scss"
         },
         "@schematics/angular:class": {
-          "lintFix": true
         },
         "@schematics/angular:module": {
-          "lintFix": true
         },
         "@schematics/angular:service": {
-          "lintFix": true
         },
         "@schematics/angular:directive": {
-          "lintFix": true,
           "prefix": "gt"
         },
         "@schematics/angular:application": {
@@ -31,6 +26,37 @@
       "sourceRoot": "src",
       "prefix": "gt",
       "architect": {
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "browserTarget": "glitchtip-frontend:build:development",
+            "port": 6006,
+            "compodoc": false,
+            "styles": [
+              "src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./src/assets/styles"
+              ]
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "browserTarget": "glitchtip-frontend:build:development",
+            "compodoc": false,
+            "styles": [
+              "src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./src/assets/styles"
+              ]
+            }
+          }
+        },
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -128,8 +154,17 @@
                   "output": "./assets/images/os-logos"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -172,18 +207,6 @@
                 "./src/assets/styles"
               ]
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }
