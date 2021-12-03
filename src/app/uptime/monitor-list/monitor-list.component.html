@@ -26,10 +26,14 @@
         </ng-container>
         <ng-container matColumnDef="name">
           <td mat-cell *matCellDef="let monitor">
-            <div class="monitor-name">
+            <div
+              class="monitor-name"
+              (mouseover)="checkIfTooltipIsNecessary($event)"
+            >
               <a
                 [matTooltip]="monitor.name"
                 matTooltipPosition="above"
+                [matTooltipDisabled]="tooltipDisabled"
                 [routerLink]="[monitor.id]"
                 >{{ monitor.name }}</a
               >
@@ -38,17 +42,19 @@
         </ng-container>
         <ng-container matColumnDef="url">
           <td mat-cell *matCellDef="let monitor" class="monitor-url">
-            <div class="url-box">
-              <span>
-                <a
-                  class="url-string"
-                  [matTooltip]="monitor.url"
-                  matTooltipPosition="above"
-                  href="{{ monitor.url }}"
-                  target="_blank"
-                  >{{ monitor.url }}</a
-                >
-              </span>
+            <div
+              class="url-box"
+              (mouseover)="checkIfTooltipIsNecessary($event)"
+            >
+              <a
+                class="url-string"
+                [matTooltip]="monitor.url"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="tooltipDisabled"
+                href="{{ monitor.url }}"
+                target="_blank"
+                >{{ monitor.url }}</a
+              >
             </div>
           </td>
         </ng-container>

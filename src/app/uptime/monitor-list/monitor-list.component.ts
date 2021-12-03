@@ -4,6 +4,7 @@ import { map, filter, withLatestFrom } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { Subscription } from "rxjs";
 import { UptimeService, UptimeState } from "../uptime.service";
+import { checkForOverflow } from "src/app/shared/shared.utils";
 
 @Component({
   selector: "gt-monitor-list",
@@ -14,6 +15,8 @@ import { UptimeService, UptimeState } from "../uptime.service";
 export class MonitorListComponent
   extends PaginationBaseComponent<UptimeState, UptimeService>
   implements OnDestroy {
+  tooltipDisabled = false;
+
   monitors$ = this.uptimeService.monitors$;
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
@@ -44,6 +47,10 @@ export class MonitorListComponent
         }
       }
     );
+  }
+
+  checkIfTooltipIsNecessary($event: Event) {
+    this.tooltipDisabled = checkForOverflow($event);
   }
 
   ngOnDestroy() {

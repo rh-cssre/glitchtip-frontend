@@ -122,3 +122,20 @@ export function getStorageWithExpiry(key: string): null | string {
   }
   return item.value;
 }
+
+/** For dynamically hiding tooltip based on screen size
+ * See uptime monitor list component for assumed html structure
+ */
+export function checkForOverflow($event: Event) {
+  const target = $event.target as HTMLElement;
+  if (target.parentElement) {
+    const maxWidth = target.parentElement!.offsetWidth;
+    const span =
+      target.tagName === "DIV"
+        ? (target.firstElementChild as HTMLElement)
+        : target;
+    const textWidth = span ? span.offsetWidth : -1;
+    return textWidth >= maxWidth ? false : true;
+  }
+  return true;
+}
