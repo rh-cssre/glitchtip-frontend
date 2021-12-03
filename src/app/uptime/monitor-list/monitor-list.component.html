@@ -27,19 +27,27 @@
         <ng-container matColumnDef="name">
           <td mat-cell *matCellDef="let monitor">
             <div class="monitor-name">
-              <a [matTooltip]="monitor.name" [routerLink]="[monitor.id]">{{
-                monitor.name
-              }}</a>
+              <a
+                [matTooltip]="monitor.name"
+                matTooltipPosition="above"
+                [routerLink]="[monitor.id]"
+                >{{ monitor.name }}</a
+              >
             </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="url">
           <td mat-cell *matCellDef="let monitor" class="monitor-url">
             <div class="url-box">
-              <span [matTooltip]="monitor.url" class="url-string">
-                <a href="{{ monitor.url }}" target="_blank">{{
-                  monitor.url
-                }}</a>
+              <span>
+                <a
+                  class="url-string"
+                  [matTooltip]="monitor.url"
+                  matTooltipPosition="above"
+                  href="{{ monitor.url }}"
+                  target="_blank"
+                  >{{ monitor.url }}</a
+                >
               </span>
             </div>
           </td>
