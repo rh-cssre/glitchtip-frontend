@@ -124,7 +124,7 @@ export function getStorageWithExpiry(key: string): null | string {
 }
 
 /** For dynamically hiding tooltip based on screen size
- * See uptime monitor list component for assumed html structure
+ * See uptime monitor list component for assumed html/css structure
  */
 export function checkForOverflow($event: Event) {
   const target = $event.target as HTMLElement;
