@@ -1,5 +1,26 @@
+@import "variables";
+
 .spacing {
   display: block;
   margin-top: 32px;
   margin-bottom: 32px;
+}
+
+.remove-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: $tablet - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  p {
+    padding-right: 16px;
+  }
+}
+
+gt-loading-button ::ng-deep button {
+  width: 160px;
 }
