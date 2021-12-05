@@ -17,37 +17,6 @@
       "sourceRoot": "src",
       "prefix": "gt",
       "architect": {
-        "storybook": {
-          "builder": "@storybook/angular:start-storybook",
-          "options": {
-            "browserTarget": "glitchtip-frontend:build:development",
-            "port": 6006,
-            "compodoc": false,
-            "styles": [
-              "src/styles.scss"
-            ],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "./src/assets/styles"
-              ]
-            }
-          }
-        },
-        "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
-          "options": {
-            "browserTarget": "glitchtip-frontend:build:development",
-            "compodoc": false,
-            "styles": [
-              "src/styles.scss"
-            ],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "./src/assets/styles"
-              ]
-            }
-          }
-        },
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
