@@ -27,7 +27,7 @@
         buttonText="Set up new device"
         [loading]="(setupFIDO2Stage$ | async) === 1"
         (click)="activateFido2()"
-        [disabled]="!(TOTPKey$ | async)"
+        [disabled]="(TOTPKey$ | async) === undefined"
         buttonStyle="flat"
       ></gt-loading-button>
     </ng-container>
