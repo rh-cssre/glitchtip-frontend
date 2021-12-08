@@ -52,14 +52,22 @@ mat-chip {
 
 .add-email-form-ui {
   display: flex;
+  justify-content: space-between;
   padding-top: 7px;
 
-  @media (max-width: $small - 1) {
+
+
+  @media (max-width: $large - 1) {
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: $medium - 1) {
     flex-direction: column;
   }
 
   .mat-form-field {
     flex: 1;
+    margin-right: 15px;
   }
 
   ::ng-deep .mat-form-field-wrapper {
@@ -68,10 +76,8 @@ mat-chip {
 
   gt-loading-button {
     margin-top: 12px;
-    margin-left: 15px;
 
-    @media (max-width: $small - 1) {
-      margin-left: unset;
+    @media (max-width: $medium - 1) {
       margin-top: 8px;
     }
   }
