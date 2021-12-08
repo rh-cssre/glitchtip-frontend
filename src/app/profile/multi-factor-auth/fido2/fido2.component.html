@@ -3,39 +3,39 @@
   <mat-divider></mat-divider>
   <mat-card-content>
     <p>Set up a hardware device as a second factor to sign in.</p>
-    <ng-container *ngIf="
-    ((setupFIDO2Stage$ | async) === 0) || ((setupFIDO2Stage$ | async) === 1)"
-    ><ng-container *ngIf="(TOTPKey$ | async) else needTotp">
+    <ng-container
+      *ngIf="
+        (setupFIDO2Stage$ | async) === 0 || (setupFIDO2Stage$ | async) === 1
+      "
+      ><ng-container *ngIf="TOTPKey$ | async; else needTotp">
         <p>
-          To add a security key to your account, plug it in,
-          click the button below and follow the prompt from your browser.
+          To add a security key to your account, plug it in, click the button
+          below and follow the prompt from your browser.
         </p>
       </ng-container>
       <ng-template #needTotp>
         <p>
-          Not all browsers support security keys. Therefore, we require that 
-          you set up a TOTP authenticator app first. That way you'll always be 
-          able to sign in - even when you're using an unsupported browser.
+          Not all browsers support security keys. Therefore, we require that you
+          set up a TOTP authenticator app first. That way you'll always be able
+          to sign in - even when you're using an unsupported browser.
         </p>
       </ng-template>
       <div *ngIf="error$ | async" class="activation-error">
         <gt-form-error [error]="error$ | async"></gt-form-error>
       </div>
       <gt-loading-button
-      buttonText="Set up new device"
-      [loading]="(setupFIDO2Stage$ | async) === 1"
-      (click)="activateFido2()"
-      [disabled]="!(TOTPKey$ | async)"
-      buttonStyle="flat"
+        buttonText="Set up new device"
+        [loading]="(setupFIDO2Stage$ | async) === 1"
+        (click)="activateFido2()"
+        [disabled]="!(TOTPKey$ | async)"
+        buttonStyle="flat"
       ></gt-loading-button>
     </ng-container>
     <ng-container *ngIf="(setupFIDO2Stage$ | async) === 2">
-      <p>
-        Provide a name for your device to complete registration.
-      </p>
+      <p>Provide a name for your device to complete registration.</p>
       <form [formGroup]="fido2Form">
         <mat-form-field>
-          <input matInput formControlName="fido2Code"/>
+          <input matInput formControlName="fido2Code" />
           <mat-error *ngIf="fido2Code?.invalid">
             <span *ngIf="fido2Code?.errors?.required">Required</span>
           </mat-error>
@@ -52,29 +52,41 @@
     </ng-container>
   </mat-card-content>
   <ng-container *ngIf="(FIDO2Keys$ | async)!.length > 0">
-  <p class="mat-body-strong">Security keys</p>
-  <div class="negative-margin"><div class="mat-body-strong">
-    <div class="key_headings">
-        <div>Name</div>
-        <div>Last used</div>
+    <p class="mat-body-strong">Security keys</p>
+    <div class="negative-margin">
+      <div class="mat-body-strong">
+        <div class="key_headings">
+          <div>Name</div>
+          <div>Last used</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-  <div class="key_row" *ngFor="let key of (FIDO2Keys$ | async)"> 
-    <div class="cell">
-        <span [matTooltip]="key.name">{{ key.name }}</span>
-    </div>
-    <div class="cell">  
-      <span [matTooltip]="formatDate(key.last_used)">{{formatDate(key.last_used)}}</span>
-    </div>
-    <button
-      class="trash"
-      mat-icon-button
-      color="primary"
-      attr.aria-label="Delete {{ key.name }}"
-      (click)="deleteFido2Key(key.id)">
+    <div class="key_row" *ngFor="let key of FIDO2Keys$ | async">
+      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+        <span
+          [matTooltip]="key.name"
+          matTooltipPosition="above"
+          [matTooltipDisabled]="tooltipDisabled"
+          >{{ key.name }}</span
+        >
+      </div>
+      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+        <span
+          [matTooltip]="formatDate(key.last_used)"
+          matTooltipPosition="above"
+          [matTooltipDisabled]="tooltipDisabled"
+          >{{ formatDate(key.last_used) }}</span
+        >
+      </div>
+      <button
+        class="trash"
+        mat-icon-button
+        color="primary"
+        attr.aria-label="Delete {{ key.name }}"
+        (click)="deleteFido2Key(key.id)"
+      >
         <mat-icon>delete_outline</mat-icon>
-    </button>
-  </div>
+      </button>
+    </div>
   </ng-container>
 </mat-card>
