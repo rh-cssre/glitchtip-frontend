@@ -2,11 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { EMPTY } from "rxjs";
 import { catchError, map, tap, exhaustMap } from "rxjs/operators";
+import { encode, decode } from "cborg";
 import { StatefulService } from "../shared/stateful-service/stateful-service";
 import { ServerError } from "../shared/django.interfaces";
 import { AuthService } from "../api/auth/auth.service";
 import { LoginResponse, ValidAuth } from "../api/auth/auth.interfaces";
-import { encode, decode } from "cborg";
 
 const baseUrl = "/rest-auth";
 
@@ -23,7 +23,7 @@ const initialState: LoginState = {
   error: null,
   validAuth: null,
   useTOTP: false,
-  authInProg: false
+  authInProg: false,
 };
 
 @Injectable({
@@ -85,62 +85,74 @@ export class LoginService extends StatefulService<LoginState> {
   authenticateFIDO2() {
     const url = "/api/mfa/authenticate/fido2/";
     this.setState({ loading: true, error: null, authInProg: true });
-    return this.http.get(url, {
-      headers: {
-        Accept: "application/octet-stream"
-      },
-      responseType: "arraybuffer"
-    }).pipe(
-      map(response => {
-        const converted = new Uint8Array(response);
-        return decode(converted);
-      }), exhaustMap(async options => {
-        const credResult = await navigator.credentials.get(options);
-        if (credResult == null) {
-          throw Error;
-        } else {
-          return credResult as PublicKeyCredential;
-        }
-      }), map(resp => {
-        if (resp === undefined) {
-          throw Error;
-        } else {
-          const assertionResponse = resp.response as AuthenticatorAssertionResponse;
-          return encode({
-            credentialId: new Uint8Array(resp.rawId),
-            authenticatorData: new Uint8Array(
-              assertionResponse.authenticatorData
-            ),
-            clientDataJSON: new Uint8Array(assertionResponse.clientDataJSON),
-            signature: new Uint8Array(assertionResponse.signature),
-          });
-        }
-      }), exhaustMap(body => {
-        if (body === undefined) {
-          throw Error;
-        } else {
-          return this.http.post(url, body.buffer, {
-            headers: {
-              "content-type": "application/cbor",
-            }
-          });
-        }
-      }), tap(() => {
-        this.clearState();
-        this.authService.afterLogin();
-      }), catchError(err => {
-        let error: ServerError | null = null;
-        if (this.state.value.useTOTP === false) {
-          if (err.status === 400) {
-            error = { non_field_errors: err.error };
-          } else {
-            error = { non_field_errors: ["Security key authentication was unsuccessful."] };
-          }
-          this.setState({ loading: false, error, authInProg: false });
-          }
-        return EMPTY;
+    return this.http
+      .get(url, {
+        headers: {
+          Accept: "application/octet-stream",
+        },
+        responseType: "arraybuffer",
       })
-    );
+      .pipe(
+        map((response) => {
+          const converted = new Uint8Array(response);
+          return decode(converted);
+        }),
+        exhaustMap(async (options) => {
+          const credResult = await navigator.credentials.get(options);
+          if (credResult == null) {
+            throw Error;
+          } else {
+            return credResult as PublicKeyCredential;
+          }
+        }),
+        map((resp) => {
+          if (resp === undefined) {
+            throw Error;
+          } else {
+            const assertionResponse =
+              resp.response as AuthenticatorAssertionResponse;
+            return encode({
+              credentialId: new Uint8Array(resp.rawId),
+              authenticatorData: new Uint8Array(
+                assertionResponse.authenticatorData
+              ),
+              clientDataJSON: new Uint8Array(assertionResponse.clientDataJSON),
+              signature: new Uint8Array(assertionResponse.signature),
+            });
+          }
+        }),
+        exhaustMap((body) => {
+          if (body === undefined) {
+            throw Error;
+          } else {
+            return this.http.post(url, body.buffer, {
+              headers: {
+                "content-type": "application/cbor",
+              },
+            });
+          }
+        }),
+        tap(() => {
+          this.clearState();
+          this.authService.afterLogin();
+        }),
+        catchError((err) => {
+          let error: ServerError | null = null;
+          if (this.state.value.useTOTP === false) {
+            if (err.status === 400) {
+              error = { non_field_errors: err.error };
+            } else {
+              error = {
+                non_field_errors: [
+                  "Security key authentication was unsuccessful.",
+                ],
+              };
+            }
+            this.setState({ loading: false, error, authInProg: false });
+          }
+          return EMPTY;
+        })
+      );
   }
 
   authenticateTOTP(code: string) {

@@ -53,6 +53,10 @@ export class UserService {
     return this.http.get<User>(this.url);
   }
 
+  deleteUser() {
+    return this.http.delete(this.url);
+  }
+
   disconnectSocialAccount(accountId: number) {
     this.setDisconnectLoading(accountId);
     this.http
