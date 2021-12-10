@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { EMPTY } from "rxjs";
+import { checkForOverflow } from "src/app/shared/shared.utils";
 
 @Component({
   selector: "gt-fido2",
@@ -10,6 +11,8 @@ import { EMPTY } from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Fido2Component {
+  tooltipDisabled = false;
+
   TOTPKey$ = this.service.TOTPKey$;
   FIDO2Keys$ = this.service.FIDO2Keys$;
   setupFIDO2Stage$ = this.service.setupFIDO2Stage$;
@@ -50,4 +53,8 @@ export class Fido2Component {
     } else {
       return "Not yet used";
     }}
+
+  checkIfTooltipIsNecessary($event: Event) {
+    this.tooltipDisabled = checkForOverflow($event);
+  }
 }

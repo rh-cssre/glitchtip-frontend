@@ -36,6 +36,7 @@ table {
     text-overflow: ellipsis;
     overflow: hidden;
     display: block;
+    max-width: fit-content;
   }
 }
 
@@ -54,6 +55,7 @@ table {
   text-overflow: ellipsis;
   overflow: hidden;
   display: block;
+  max-width: fit-content;
 }
 
 .status-color {

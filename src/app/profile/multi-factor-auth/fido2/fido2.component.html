@@ -62,13 +62,21 @@
       </div>
     </div>
     <div class="key_row" *ngFor="let key of FIDO2Keys$ | async">
-      <div class="cell">
-        <span [matTooltip]="key.name">{{ key.name }}</span>
+      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+        <span
+          [matTooltip]="key.name"
+          matTooltipPosition="above"
+          [matTooltipDisabled]="tooltipDisabled"
+          >{{ key.name }}</span
+        >
       </div>
-      <div class="cell">
-        <span [matTooltip]="formatDate(key.last_used)">{{
-          formatDate(key.last_used)
-        }}</span>
+      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+        <span
+          [matTooltip]="formatDate(key.last_used)"
+          matTooltipPosition="above"
+          [matTooltipDisabled]="tooltipDisabled"
+          >{{ formatDate(key.last_used) }}</span
+        >
       </div>
       <button
         class="trash"

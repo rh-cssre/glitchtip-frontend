@@ -41,11 +41,16 @@ mat-card {
 }
 
 .cell {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   min-width: 0;
   max-width: 100%;
+
+  span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    max-width: fit-content;
+  }
 }
 
 .trash {
