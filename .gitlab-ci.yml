@@ -25,13 +25,9 @@ stages:
 test:
   stage: test
   image: registry.gitlab.com/dasch8/angular-ci:latest
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-dasch8
-    paths:
-      - .npm/
   script:
     - apk add --no-cache git
-    - npm ci --cache .npm --prefer-offline
+    - npm ci
     - npm run lint
     - npm run test -- --progress false --watch=false --browsers=Chromium_CI
 
@@ -49,13 +45,9 @@ test-e2e:
     name: cypress/included:8.7.0
     entrypoint: [""]
   script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci
     - cp src/proxy.conf.ci.json src/proxy.conf.json
     - npm run e2e
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
   except:
     - tags
   artifacts:
