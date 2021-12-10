@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, EMPTY, combineLatest, Observable } from "rxjs";
 import {
@@ -101,10 +101,16 @@ export class MembersService {
                 }
                 return EMPTY;
               }),
-              catchError(() => {
-                this.snackBar.open(
-                  `Error attempting to remove ${member.email} from organization`
-                );
+              catchError((err) => {
+                let message = `Error attempting to remove ${member.email} from organization`;
+                if (
+                  err instanceof HttpErrorResponse &&
+                  err.status === 403 &&
+                  err.error?.detail
+                ) {
+                  message += `. ${err.error.detail}"`;
+                }
+                this.snackBar.open(message);
                 return EMPTY;
               })
             );
