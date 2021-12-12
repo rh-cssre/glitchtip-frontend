@@ -46,7 +46,7 @@ export class UserService {
 
   /** Get and set current logged in user details from backend */
   getUserDetails() {
-    this.getUserDetailsAction.next();
+    this.getUserDetailsAction.next(undefined);
   }
 
   private retrieveUserDetails() {

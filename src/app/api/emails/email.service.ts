@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject, Subject, EMPTY } from "rxjs";
-import { EmailAddress } from "./email.interfaces";
-import { tap, map, catchError } from "rxjs/operators";
-import { baseUrl } from "../../constants";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { BehaviorSubject, Subject, EMPTY } from "rxjs";
+import { tap, map, catchError } from "rxjs/operators";
+import { EmailAddress } from "./email.interfaces";
+import { baseUrl } from "../../constants";
 
 type LoadingStateNames =
   | "add"
@@ -89,7 +89,7 @@ export class EmailService {
       .pipe(
         tap((response: EmailAddress) => {
           this.setNewEmailAddress(response);
-          this.resetFormSubject.next();
+          this.resetFormSubject.next(undefined);
           this.resetLoadingAdd();
           this.setAddEmailError("");
         }),
