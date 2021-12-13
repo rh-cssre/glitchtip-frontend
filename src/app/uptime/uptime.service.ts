@@ -170,18 +170,10 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     return this.monitorsAPIService.update(orgSlug, monitorId, data);
   }
 
-  retrieveMonitorDetails(monitorId: string) {
-    this.organizationsService.activeOrganizationSlug$
-      .pipe(
-        take(1),
-        filter((orgSlug) => !!orgSlug),
-        tap((orgSlug) => {
-          this.monitorsAPIService
-            .retrieve(orgSlug!, monitorId)
-            .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
-            .toPromise();
-        })
-      )
+  retrieveMonitorDetails(orgSlug: string, monitorId: string) {
+    this.monitorsAPIService
+      .retrieve(orgSlug, monitorId)
+      .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
       .toPromise();
   }
 
@@ -198,14 +190,14 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
             .list(orgSlug!, monitor!.id)
             .pipe(
               tap((res) => {
-                console.log(res.body)
+                console.log(res.body);
                 this.setStateAndPagination(
                   {
                     monitorChecks: res.body!,
                   },
                   res
-                )
-                })
+                );
+              })
             )
             .toPromise();
         })

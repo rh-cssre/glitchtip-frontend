@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { tap, filter, first } from "rxjs/operators";
+import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
@@ -62,12 +63,15 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.params
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.route.params,
+    ])
       .pipe(
-        tap((params) => {
+        tap(([orgSlug, params]) => {
           const monitorId = params["monitor-id"];
-          if (monitorId) {
-            this.uptimeService.retrieveMonitorDetails(monitorId);
+          if (orgSlug && monitorId) {
+            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
           }
         })
       )

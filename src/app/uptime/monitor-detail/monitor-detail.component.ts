@@ -7,6 +7,8 @@ import {
 import { UptimeService } from "../uptime.service";
 import { ActivatedRoute } from "@angular/router";
 import { tap } from "rxjs/operators";
+import { combineLatest } from "rxjs";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -19,17 +21,21 @@ export class MonitorDetailComponent implements OnInit, OnDestroy {
   deleteLoading$ = this.uptimeService.deleteLoading$;
 
   constructor(
+    private organizationsService: OrganizationsService,
     private uptimeService: UptimeService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.route.params
+    combineLatest([
+      this.organizationsService.activeOrganizationSlug$,
+      this.route.params,
+    ])
       .pipe(
-        tap((params) => {
+        tap(([orgSlug, params]) => {
           const monitorId = params["monitor-id"];
-          if (monitorId) {
-            this.uptimeService.retrieveMonitorDetails(monitorId);
+          if (orgSlug && monitorId) {
+            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
           }
         })
       )
