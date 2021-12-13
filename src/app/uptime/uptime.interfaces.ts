@@ -1,4 +1,12 @@
 export type MonitorType = "Ping" | "GET" | "POST" | "Heartbeat";
+export enum DownReason {
+  UNKNOWN = 0,
+  TIMEOUT = 1,
+  STATUS = 2,
+  BODY = 3,
+  SSL = 4,
+  NETWORK = 5
+}
 
 export interface MonitorInput {
   monitorType: MonitorType;
@@ -15,4 +23,11 @@ export interface MonitorDetail extends MonitorInput {
   isUp: boolean | null;
   lastChange: string | null;
   heartbeatEndpoint: string | null;
+}
+
+export interface MonitorCheck {
+  isUp: boolean;
+  startCheck: string;
+  reason: DownReason;
+  responseTime: string;
 }
