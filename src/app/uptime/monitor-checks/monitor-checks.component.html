@@ -44,7 +44,7 @@
         <ng-container matColumnDef="responseTime">
           <th mat-header-cell *matHeaderCellDef>Response time</th>
           <td mat-cell *matCellDef="let monitorCheck" class="responseTime">
-            <span>{{ monitorCheck.responseTime }}</span>
+            <span>{{ monitorCheck.responseTime | secondsOrMS }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="startCheck">
