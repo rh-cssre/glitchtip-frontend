@@ -1,9 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { combineLatest, Subscription } from "rxjs";
-import { map, filter, distinctUntilChanged } from "rxjs/operators";
-import { OrganizationsService } from "../api/organizations/organizations.service";
-import { PaginationBaseComponent } from "../shared/stateful-service/pagination-stateful-service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { map, withLatestFrom } from "rxjs/operators";
+import { PaginationBaseComponent } from "../shared/stateful-service/pagination-base.component";
 import { PerformanceState, PerformanceService } from "./performance.service";
 
 @Component({
@@ -14,7 +13,8 @@ import { PerformanceState, PerformanceService } from "./performance.service";
 })
 export class PerformanceComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>
-  implements OnDestroy {
+  implements OnDestroy
+{
   displayedColumns = ["transaction", "time", "date", "daysAgo"];
 
   sub: Subscription | null = null;
@@ -27,21 +27,17 @@ export class PerformanceComponent
 
   constructor(
     protected service: PerformanceService,
-    private organizationsService: OrganizationsService,
-    private route: ActivatedRoute
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
-    super(service);
-    this.sub = combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.route.queryParams,
-    ])
+    super(service, router, route);
+    this.sub = this.cursorNavigationEnd$
       .pipe(
-        map(([slug, queryParams]) => {
-          const cursor: string | undefined = queryParams.cursor;
+        withLatestFrom(this.route.params),
+        map(([cursor, params]) => {
+          const slug: string | undefined = params["org-slug"];
           return { slug, cursor };
-        }),
-        filter(({ slug, cursor }) => !!slug),
-        distinctUntilChanged()
+        })
       )
       .subscribe(({ slug, cursor }) => {
         this.service.getTransactions(slug!, cursor);

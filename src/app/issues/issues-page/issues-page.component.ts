@@ -7,7 +7,7 @@ import {
 import { formatDate } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Subscription, combineLatest, EMPTY } from "rxjs";
 import {
   map,
@@ -20,7 +20,7 @@ import {
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 
 export const sorts = {
@@ -42,7 +42,8 @@ export const sorts = {
 })
 export class IssuesPageComponent
   extends PaginationBaseComponent<IssuesState, IssuesService>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   displayedColumns: string[] = ["select", "title", "events"];
   loading$ = this.issuesService.getState$.pipe(
     map((state) => state.pagination.loading)
@@ -74,15 +75,13 @@ export class IssuesPageComponent
   thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
   selectedProjectInfo$ = this.issuesService.selectedProjectInfo$;
   numberOfSelectedIssues$ = this.issuesService.numberOfSelectedIssues$;
-  activeOrganizationProjects$ = this.organizationsService
-    .activeOrganizationProjects$;
+  activeOrganizationProjects$ =
+    this.organizationsService.activeOrganizationProjects$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
-  navigationEnd$ = this.router.events.pipe(
-    filter((event) => event instanceof NavigationEnd),
+  navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
-    map(([event, params, queryParams]) => {
+    map(([cursor, params, queryParams]) => {
       const orgSlug: string | undefined = params["org-slug"];
-      const cursor: string | undefined = queryParams.cursor;
       const query: string | undefined = queryParams.query;
       let project: string[] | null = null;
       if (typeof queryParams.project === "string") {
@@ -206,12 +205,12 @@ export class IssuesPageComponent
 
   constructor(
     private issuesService: IssuesService,
-    private router: Router,
-    private route: ActivatedRoute,
+    protected router: Router,
+    protected route: ActivatedRoute,
     private organizationsService: OrganizationsService,
     private environmentsService: ProjectEnvironmentsService
   ) {
-    super(issuesService);
+    super(issuesService, router, route);
 
     this.issues$.subscribe((resp) =>
       resp.length === 0
@@ -323,8 +322,8 @@ export class IssuesPageComponent
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
       const sort: string | undefined = this.route.snapshot.queryParams.sort;
-      const environment: string | undefined = this.route.snapshot.queryParams
-        .environment;
+      const environment: string | undefined =
+        this.route.snapshot.queryParams.environment;
       this.form.setValue({
         query: query !== undefined ? query : "is:unresolved",
       });

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { map, filter, withLatestFrom } from "rxjs/operators";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { map, withLatestFrom } from "rxjs/operators";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { Subscription } from "rxjs";
 import { UptimeService, UptimeState } from "../uptime.service";
 import { checkForOverflow } from "src/app/shared/shared.utils";
@@ -14,7 +14,8 @@ import { checkForOverflow } from "src/app/shared/shared.utils";
 })
 export class MonitorListComponent
   extends PaginationBaseComponent<UptimeState, UptimeService>
-  implements OnDestroy {
+  implements OnDestroy
+{
   tooltipDisabled = false;
 
   monitors$ = this.uptimeService.monitors$;
@@ -23,10 +24,9 @@ export class MonitorListComponent
   );
   routerEventSubscription: Subscription;
   displayedColumns: string[] = ["statusColor", "name", "url", "status"];
-  navigationEnd$ = this.router.events.pipe(
-    filter((event) => event instanceof NavigationEnd),
+  navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
-    map(([event, params, queryParams]) => {
+    map(([_, params, queryParams]) => {
       const orgSlug: string | undefined = params["org-slug"];
       const cursor: string | undefined = queryParams.cursor;
       return { orgSlug, cursor };
@@ -35,10 +35,10 @@ export class MonitorListComponent
 
   constructor(
     private uptimeService: UptimeService,
-    private router: Router,
-    private route: ActivatedRoute
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
-    super(uptimeService);
+    super(uptimeService, router, route);
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
       ({ orgSlug, cursor }) => {
