@@ -177,7 +177,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .toPromise();
   }
 
-  retrieveMonitorChecks() {
+  retrieveMonitorChecks(cursor?: string | undefined) {
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
       this.activeMonitor$,
@@ -187,7 +187,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
         filter(([orgSlug, monitor]) => !!orgSlug && !!monitor),
         tap(([orgSlug, monitor]) => {
           this.monitorChecksAPIService
-            .list(orgSlug!, monitor!.id)
+            .list(orgSlug!, monitor!.id, cursor)
             .pipe(
               tap((res) => {
                 console.log(res.body);

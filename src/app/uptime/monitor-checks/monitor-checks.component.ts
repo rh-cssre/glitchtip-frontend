@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { map } from "rxjs/operators";
+import { ActivatedRoute } from "@angular/router";
+import { map, tap } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { UptimeService, UptimeState } from "../uptime.service";
 import { MonitorDetail, DownReason } from "../uptime.interfaces";
@@ -13,47 +14,62 @@ export class MonitorChecksComponent
   extends PaginationBaseComponent<UptimeState, UptimeService>
   implements OnInit
 {
-  displayedColumns: string[] = ["status", "reason", "responseTime", "startCheck"];
+  displayedColumns: string[] = [
+    "status",
+    "reason",
+    "responseTime",
+    "startCheck",
+  ];
   @Input() monitor?: MonitorDetail;
   monitorChecks$ = this.uptimeService.monitorChecks$;
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
 
-  constructor(private uptimeService: UptimeService) { 
+  constructor(
+    private uptimeService: UptimeService,
+    private route: ActivatedRoute
+  ) {
     super(uptimeService);
   }
 
-  convertReasonText(reason: DownReason){
-    let readable = ""
+  convertReasonText(reason: DownReason) {
+    let readable = "";
     switch (reason) {
       case DownReason.UNKNOWN:
-        readable = "Unknown"
-        break
+        readable = "Unknown";
+        break;
       case DownReason.TIMEOUT:
-        readable = "Timeout"
-        break
+        readable = "Timeout";
+        break;
       case DownReason.STATUS:
-        readable = "Wrong status code"
-        break
+        readable = "Wrong status code";
+        break;
       case DownReason.BODY:
-        readable = "Expected response not found"
-        break
+        readable = "Expected response not found";
+        break;
       case DownReason.SSL:
-        readable = "SSL error"
-        break
+        readable = "SSL error";
+        break;
       case DownReason.NETWORK:
-        readable = "Network error"
+        readable = "Network error";
     }
-    return readable
+    return readable;
   }
 
   formatDate(startCheck: string) {
-      let date = new Date(startCheck);
-      return date.toLocaleDateString();
-    }
+    let date = new Date(startCheck);
+    return date.toLocaleDateString();
+  }
 
   ngOnInit() {
-    this.uptimeService.retrieveMonitorChecks();
+    this.route.queryParams
+      .pipe(
+        tap((params) => {
+          const cursor = params["cursor"];
+          this.uptimeService.retrieveMonitorChecks(cursor);
+        })
+      )
+      .toPromise();
   }
 }
