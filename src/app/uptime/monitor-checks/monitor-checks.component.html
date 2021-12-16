@@ -9,8 +9,8 @@
             *matCellDef="let monitorCheck"
             class="status-color status-color--{{ monitorCheck.isUp }}"
           >
-              <span *ngIf="monitorCheck.isUp">Up</span>
-              <span *ngIf="monitorCheck.isUp === false">Down</span>
+            <span *ngIf="monitorCheck.isUp">Up</span>
+            <span *ngIf="monitorCheck.isUp === false">Down</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="reason">
@@ -23,7 +23,7 @@
               <ng-container
                 *ngIf="
                   monitorCheck.reason === null &&
-                  monitor?.monitorType === 'Heartbeat';
+                    monitor?.monitorType === 'Heartbeat';
                   else reason
                 "
               >
@@ -40,13 +40,20 @@
         <ng-container matColumnDef="responseTime">
           <th mat-header-cell *matHeaderCellDef>Response time</th>
           <td mat-cell *matCellDef="let monitorCheck">
-            <span>{{ monitorCheck.responseTime | secondsOrMS }}</span>
+            <ng-container
+              *ngIf="monitor?.monitorType === 'Heartbeat'; else time"
+            >
+              <span>-</span>
+            </ng-container>
+            <ng-template #time>
+              <span>{{ monitorCheck.responseTime | secondsOrMS }}</span>
+            </ng-template>
           </td>
         </ng-container>
         <ng-container matColumnDef="startCheck">
           <th mat-header-cell *matHeaderCellDef>Time</th>
           <td mat-cell *matCellDef="let monitorCheck">
-              <span>{{ monitorCheck.startCheck | date: "short" }}</span>
+            <span>{{ monitorCheck.startCheck | date: "short" }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="pagination">
