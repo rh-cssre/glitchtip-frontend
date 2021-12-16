@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { map, tap } from "rxjs/operators";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { Component, OnDestroy, Input } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { map } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { PaginationBaseComponent } from "../../shared/stateful-service/pagination-base.component";
 import { UptimeService, UptimeState } from "../uptime.service";
 import { MonitorDetail, DownReason } from "../uptime.interfaces";
 
@@ -12,7 +13,7 @@ import { MonitorDetail, DownReason } from "../uptime.interfaces";
 })
 export class MonitorChecksComponent
   extends PaginationBaseComponent<UptimeState, UptimeService>
-  implements OnInit
+  implements OnDestroy
 {
   displayedColumns: string[] = [
     "status",
@@ -25,12 +26,20 @@ export class MonitorChecksComponent
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
+  routerEventSubscription: Subscription;
 
   constructor(
     private uptimeService: UptimeService,
-    private route: ActivatedRoute
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
-    super(uptimeService);
+    super(uptimeService, router, route);
+
+    this.routerEventSubscription = this.cursorNavigationEnd$.subscribe(
+      (cursor) => {
+        this.uptimeService.retrieveMonitorChecks(cursor);
+      }
+    );
   }
 
   convertReasonText(reason: DownReason) {
@@ -62,14 +71,7 @@ export class MonitorChecksComponent
     return date.toLocaleDateString();
   }
 
-  ngOnInit() {
-    this.route.queryParams
-      .pipe(
-        tap((params) => {
-          const cursor = params["cursor"];
-          this.uptimeService.retrieveMonitorChecks(cursor);
-        })
-      )
-      .toPromise();
+  ngOnDestroy(): void {
+    this.routerEventSubscription.unsubscribe();
   }
 }
