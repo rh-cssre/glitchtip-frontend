@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 import { Subscription, combineLatest } from "rxjs";
 import { IssueDetailService } from "../issue-detail/issue-detail.service";
@@ -7,7 +7,7 @@ import {
   UserReportsState,
   UserReportsService,
 } from "src/app/api/user-reports/user-reports.service";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 
 @Component({
   selector: "gt-user-reports-issue",
@@ -17,7 +17,8 @@ import { PaginationBaseComponent } from "src/app/shared/stateful-service/paginat
 })
 export class UserReportsIssueComponent
   extends PaginationBaseComponent<UserReportsState, UserReportsService>
-  implements OnDestroy {
+  implements OnDestroy
+{
   issueId$ = this.issueService.issue$.pipe(map((issue) => issue?.id));
   reports$ = this.userReportService.reports$;
   errorReports$ = this.userReportService.errors$;
@@ -27,16 +28,16 @@ export class UserReportsIssueComponent
   constructor(
     private issueService: IssueDetailService,
     private userReportService: UserReportsService,
-    private route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected router: Router
   ) {
-    super(userReportService);
+    super(userReportService, router, route);
     this.routerEventSubscription = combineLatest([
-      this.route.queryParams,
+      this.cursorNavigationEnd$,
       this.issueId$,
     ])
       .pipe(
-        map(([queryParams, issueId]) => {
-          const cursor: string | undefined = queryParams.cursor;
+        map(([cursor, issueId]) => {
           return { issueId, cursor };
         }),
         tap(({ issueId, cursor }) => {

@@ -1,7 +1,5 @@
 import { HttpResponse } from "@angular/common/http";
-import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { urlParamsToObject } from "src/app/issues/utils";
 import { StatefulService } from "./stateful-service";
 
 /**
@@ -89,7 +87,7 @@ export abstract class PaginationStatefulService<
 /**
  * Component level interface for paging needs
  */
-interface Paginator extends PaginationState {
+export interface Paginator extends PaginationState {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   nextPageParams: {
@@ -100,27 +98,4 @@ interface Paginator extends PaginationState {
   } | null;
   /** Human readable object count string that appends "+" to indicate max hits */
   count: string | undefined;
-}
-
-export abstract class PaginationBaseComponent<
-  TState extends PaginationStatefulServiceState,
-  TService extends PaginationStatefulService<TState>
-> {
-  paginator$: Observable<Paginator>;
-
-  constructor(protected service: TService) {
-    this.paginator$ = service.pagination$.pipe(
-      map((pagination) => ({
-        ...pagination,
-        hasNextPage: !!pagination.nextPageURL,
-        hasPreviousPage: !!pagination.previousPageURL,
-        nextPageParams: urlParamsToObject(pagination.nextPageURL),
-        previousPageParams: urlParamsToObject(pagination.previousPageURL),
-        count:
-          pagination.hits && pagination.hits === pagination.maxHits
-            ? pagination.hits.toString() + "+"
-            : pagination.hits?.toString(),
-      }))
-    );
-  }
 }
