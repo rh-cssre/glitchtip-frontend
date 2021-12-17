@@ -36,6 +36,9 @@
     </mat-card>
     <gt-monitor-checks
     [monitor]="monitor"
+    [monitorChecks]="monitorChecks$ | async"
+    [loading]="loading$ | async"
+    [paginator]="paginator$ | async" 
     ></gt-monitor-checks>
     <mat-card
       id="heartbeat-endpoint"

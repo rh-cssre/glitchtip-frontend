@@ -1,20 +1,13 @@
-import { Component, OnDestroy, Input } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { map } from "rxjs/operators";
-import { Subscription } from "rxjs";
-import { PaginationBaseComponent } from "../../shared/stateful-service/pagination-base.component";
-import { UptimeService, UptimeState } from "../uptime.service";
-import { MonitorDetail, DownReason } from "../uptime.interfaces";
+import { Component, OnDestroy, Input, OnInit } from "@angular/core";
+import { Paginator } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { MonitorDetail, DownReason, MonitorCheck } from "../uptime.interfaces";
 
 @Component({
   selector: "gt-monitor-checks",
   templateUrl: "./monitor-checks.component.html",
   styleUrls: ["./monitor-checks.component.scss"],
 })
-export class MonitorChecksComponent
-  extends PaginationBaseComponent<UptimeState, UptimeService>
-  implements OnDestroy
-{
+export class MonitorChecksComponent implements OnDestroy, OnInit {
   displayedColumns: string[] = [
     "status",
     "reason",
@@ -22,25 +15,11 @@ export class MonitorChecksComponent
     "startCheck",
   ];
   @Input() monitor?: MonitorDetail;
-  monitorChecks$ = this.uptimeService.monitorChecks$;
-  loading$ = this.uptimeService.getState$.pipe(
-    map((state) => state.pagination.loading)
-  );
-  routerEventSubscription: Subscription;
+  @Input() monitorChecks?: MonitorCheck[] | null;
+  @Input() loading?: boolean | null;
+  @Input() paginator?: Paginator | null;
 
-  constructor(
-    private uptimeService: UptimeService,
-    protected router: Router,
-    protected route: ActivatedRoute
-  ) {
-    super(uptimeService, router, route);
-
-    this.routerEventSubscription = this.cursorNavigationEnd$.subscribe(
-      (cursor) => {
-        this.uptimeService.retrieveMonitorChecks(cursor);
-      }
-    );
-  }
+  constructor() {}
 
   convertReasonText(reason: DownReason) {
     let readable = "";
@@ -71,7 +50,12 @@ export class MonitorChecksComponent
     return date.toLocaleDateString();
   }
 
-  ngOnDestroy(): void {
-    this.routerEventSubscription.unsubscribe();
+  ngOnInit(): void {
+      console.log(this.monitorChecks)
+      console.log(this.loading)
+      console.log(this.monitor)
+      console.log(this.paginator)
   }
+
+  ngOnDestroy(): void {}
 }

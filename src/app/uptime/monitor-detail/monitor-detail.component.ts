@@ -4,11 +4,12 @@ import {
   OnDestroy,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { UptimeService } from "../uptime.service";
-import { ActivatedRoute } from "@angular/router";
-import { tap } from "rxjs/operators";
-import { combineLatest } from "rxjs";
+import { UptimeState, UptimeService } from "../uptime.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { tap, map } from "rxjs/operators";
+import { combineLatest, Subscription } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -16,15 +17,33 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MonitorDetailComponent implements OnInit, OnDestroy {
+export class MonitorDetailComponent
+  extends PaginationBaseComponent<UptimeState, UptimeService>
+  implements OnInit, OnDestroy
+{
   monitor$ = this.uptimeService.activeMonitor$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
+  monitorChecks$ = this.uptimeService.monitorChecks$;
+  loading$ = this.uptimeService.getState$.pipe(
+    map((state) => state.pagination.loading)
+  );
+
+  routerEventSubscription: Subscription;
 
   constructor(
     private organizationsService: OrganizationsService,
     private uptimeService: UptimeService,
-    private route: ActivatedRoute
-  ) {}
+    protected router: Router,
+    protected route: ActivatedRoute
+  ) {
+    super(uptimeService, router, route);
+
+    this.routerEventSubscription = this.cursorNavigationEnd$.subscribe(
+      (cursor) => {
+        this.uptimeService.retrieveMonitorChecks(cursor);
+      }
+    );
+  }
 
   ngOnInit() {
     combineLatest([
@@ -44,6 +63,7 @@ export class MonitorDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.uptimeService.clearState();
+    this.routerEventSubscription.unsubscribe();
   }
 
   deleteMonitor() {

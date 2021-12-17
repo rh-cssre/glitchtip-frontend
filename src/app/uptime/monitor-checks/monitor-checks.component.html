@@ -1,5 +1,5 @@
-<ng-container *ngIf="paginator$ | async as paginator">
-  <ng-container *ngIf="monitorChecks$ | async as monitorChecks">
+<ng-container *ngIf="paginator">
+  <ng-container *ngIf="monitorChecks">
     <ng-container *ngIf="monitorChecks.length > 0">
       <table mat-table [dataSource]="monitorChecks" class="mat-elevation-z2">
         <ng-container matColumnDef="status">
@@ -64,7 +64,7 @@
             [attr.colspan]="displayedColumns.length"
             class="footer"
           >
-            <ng-container *ngIf="(loading$ | async) === false">
+            <ng-container *ngIf="loading === false">
               <button
                 [routerLink]="[]"
                 [queryParams]="paginator.previousPageParams || {}"
@@ -84,7 +84,7 @@
                 <mat-icon>keyboard_arrow_right</mat-icon>
               </button>
             </ng-container>
-            <div *ngIf="loading$ | async" class="spinner-container">
+            <div *ngIf="loading" class="spinner-container">
               <mat-progress-spinner
                 [diameter]="33"
                 color="primary"
