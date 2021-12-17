@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { tap, exhaustMap, withLatestFrom } from "rxjs/operators";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { tap, exhaustMap, withLatestFrom, map } from "rxjs/operators";
 import { baseUrl } from "src/app/constants";
 import {
   StripeCheckoutSession,
@@ -9,19 +9,32 @@ import {
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { loadStripe } from "@stripe/stripe-js";
 import { SettingsService } from "src/app/api/settings.service";
-import { EMPTY } from "rxjs";
+import { EMPTY, catchError } from "rxjs";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+
+export interface StripeState {
+  error: string | null;
+}
+
+const initialState: StripeState = {
+  error: null,
+};
 
 @Injectable({
   providedIn: "root",
 })
-export class StripeService {
+export class StripeService extends StatefulService<StripeState> {
   activeOrganizationId$ = this.organizationService.activeOrganizationId$;
   stripePublicKey$ = this.settingsService.stripePublicKey$;
+
+  readonly error$ = this.getState$.pipe(map((state) => state.error));
   constructor(
     private http: HttpClient,
     private organizationService: OrganizationsService,
     private settingsService: SettingsService
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   redirectToSubscriptionCheckout(plan: string) {
     return this.activeOrganizationId$
@@ -67,7 +80,18 @@ export class StripeService {
           this.createBillingPortal(organization!).pipe(
             tap((resp) => (window.location.href = resp.url))
           )
-        )
+        ),
+        catchError((err: HttpErrorResponse) => {
+          if (err.status === 400) {
+            this.setState({
+              error:
+                "Only organization owners can manage subscription settings.",
+            });
+          } else {
+            this.setState({ error: err.statusText });
+          }
+          return EMPTY;
+        })
       )
       .toPromise();
   }
@@ -78,5 +102,9 @@ export class StripeService {
       organization,
     };
     return this.http.post<StripeBillingPortalSession>(url, data);
+  }
+
+  clearState() {
+    this.state.next(initialState);
   }
 }

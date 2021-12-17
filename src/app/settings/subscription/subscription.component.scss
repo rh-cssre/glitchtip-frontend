@@ -3,6 +3,11 @@ mat-card {
   margin-bottom: 24px;
 }
 
+mat-error {
+  margin-bottom: 10px;
+  display: block;
+}
+
 .progress-bar {
   position: relative;
   margin: -10px 0 20px;

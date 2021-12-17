@@ -101,6 +101,7 @@
               <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
               >.
             </p>
+            <mat-error>{{ error$ | async}}</mat-error>
             <button
               mat-flat-button
               color="primary"
