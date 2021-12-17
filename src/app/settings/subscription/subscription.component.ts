@@ -19,6 +19,7 @@ export class SubscriptionComponent implements OnDestroy {
   projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
+  error$ = this.stripe.error$;
   totalEventsAllowed$ = this.subscription$.pipe(
     map((subscription) =>
       subscription && subscription.plan.product.metadata
@@ -58,5 +59,6 @@ export class SubscriptionComponent implements OnDestroy {
   ngOnDestroy() {
     this.routerSubscription.unsubscribe();
     this.service.clearState();
+    this.stripe.clearState();
   }
 }
