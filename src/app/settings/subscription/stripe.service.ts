@@ -81,14 +81,18 @@ export class StripeService extends StatefulService<StripeState> {
             tap((resp) => (window.location.href = resp.url))
           )
         ),
-        catchError((err: HttpErrorResponse) => {
-          if (err.status === 400) {
-            this.setState({
-              error:
-                "Only organization owners can manage subscription settings.",
-            });
+        catchError((err) => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 400) {
+              this.setState({
+                error:
+                  "Only organization owners can manage subscription settings.",
+              });
+            } else {
+              this.setState({ error: err.statusText });
+            }
           } else {
-            this.setState({ error: err.statusText });
+            this.setState({ error: "Unknown Error" });
           }
           return EMPTY;
         })
