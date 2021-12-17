@@ -17,7 +17,7 @@ export interface StripeState {
 }
 
 const initialState: StripeState = {
-  error: null
+  error: null,
 };
 
 @Injectable({
@@ -33,7 +33,7 @@ export class StripeService extends StatefulService<StripeState> {
     private organizationService: OrganizationsService,
     private settingsService: SettingsService
   ) {
-    super(initialState)
+    super(initialState);
   }
 
   redirectToSubscriptionCheckout(plan: string) {
@@ -83,11 +83,14 @@ export class StripeService extends StatefulService<StripeState> {
         ),
         catchError((err: HttpErrorResponse) => {
           if (err.status === 400) {
-            this.setState({error: "Only organization owners can manage subscription settings."})
+            this.setState({
+              error:
+                "Only organization owners can manage subscription settings.",
+            });
           } else {
-            this.setState({error: err.statusText})
+            this.setState({ error: err.statusText });
           }
-          return EMPTY
+          return EMPTY;
         })
       )
       .toPromise();
