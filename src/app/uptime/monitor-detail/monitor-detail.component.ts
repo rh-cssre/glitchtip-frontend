@@ -1,14 +1,12 @@
 import {
   Component,
-  OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { UptimeState, UptimeService } from "../uptime.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { tap, map } from "rxjs/operators";
-import { combineLatest, Subscription } from "rxjs";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { map, withLatestFrom } from "rxjs/operators";
+import { Subscription } from "rxjs";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 
 @Component({
@@ -19,7 +17,7 @@ import { PaginationBaseComponent } from "src/app/shared/stateful-service/paginat
 })
 export class MonitorDetailComponent
   extends PaginationBaseComponent<UptimeState, UptimeService>
-  implements OnInit, OnDestroy
+  implements OnDestroy
 {
   monitor$ = this.uptimeService.activeMonitor$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
@@ -27,38 +25,33 @@ export class MonitorDetailComponent
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
+  navigationEnd$ = this.cursorNavigationEnd$.pipe(
+    withLatestFrom(this.route.params, this.route.queryParams),
+    map(([_, params, queryParams]) => {
+      const orgSlug: string | undefined = params["org-slug"];
+      const monitorId: string | undefined = params["monitor-id"]
+      const cursor: string | undefined = queryParams.cursor;
+      return { orgSlug, monitorId, cursor };
+    })
+  );
 
   routerEventSubscription: Subscription;
 
   constructor(
-    private organizationsService: OrganizationsService,
     private uptimeService: UptimeService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
     super(uptimeService, router, route);
 
-    this.routerEventSubscription = this.cursorNavigationEnd$.subscribe(
-      (cursor) => {
-        this.uptimeService.retrieveMonitorChecks(cursor);
+    this.routerEventSubscription = this.navigationEnd$.subscribe(
+      ({orgSlug, monitorId, cursor}) => {
+        if (orgSlug && monitorId) {
+          this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
+          this.uptimeService.retrieveMonitorChecks(orgSlug, monitorId, cursor)
+        }
       }
     );
-  }
-
-  ngOnInit() {
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.route.params,
-    ])
-      .pipe(
-        tap(([orgSlug, params]) => {
-          const monitorId = params["monitor-id"];
-          if (orgSlug && monitorId) {
-            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
-          }
-        })
-      )
-      .toPromise();
   }
 
   ngOnDestroy() {

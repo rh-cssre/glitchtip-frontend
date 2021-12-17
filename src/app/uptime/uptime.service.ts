@@ -177,32 +177,31 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .toPromise();
   }
 
-  retrieveMonitorChecks(cursor?: string | undefined) {
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.activeMonitor$,
-    ])
+  retrieveMonitorChecks(
+    orgSlug: string,
+    monitorId: string,
+    cursor?: string | undefined
+  ) {
+    this.startPaginatedLoading();
+    this.monitorChecksAPIService
+      .list(orgSlug, monitorId, cursor)
       .pipe(
-        take(1),
-        filter(([orgSlug, monitor]) => !!orgSlug && !!monitor),
-        tap(([orgSlug, monitor]) => {
-          this.monitorChecksAPIService
-            .list(orgSlug!, monitor!.id, cursor)
-            .pipe(
-              tap((res) => {
-                console.log(res.body);
-                this.setStateAndPagination(
-                  {
-                    monitorChecks: res.body!,
-                  },
-                  res
-                );
-              })
-            )
-            .toPromise();
+        tap((res) => {
+          console.log(res.body);
+          this.setStateAndPagination(
+            {
+              monitorChecks: res.body!,
+            },
+            res
+          );
         })
       )
       .toPromise();
+  }
+
+  startPaginatedLoading() {
+    const state = this.state.getValue();
+    this.setState({ pagination: {...state.pagination, loading: true}})
   }
 
   private setActiveMonitor(monitor: MonitorDetail) {
