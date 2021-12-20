@@ -1,6 +1,6 @@
 import { SecondsOrMSPipe } from "./seconds-or-ms.pipe";
 
-fdescribe("SecondsOrMSPipe", () => {
+describe("SecondsOrMSPipe", () => {
   const secondsOrMSPipe = new SecondsOrMSPipe
 
   it("create an instance", () => {
