@@ -66,6 +66,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   createMonitor(monitor: MonitorInput) {
     this.organizationsService.activeOrganizationSlug$
       .pipe(
+        take(1),
         tap((orgSlug) => {
           if (orgSlug) {
             this.setState({
