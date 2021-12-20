@@ -1,0 +1,59 @@
+@import "variables";
+
+$iconWidth: 56px;
+
+table {
+  width: 100%;
+}
+
+.mat-column-status {
+  padding-right: 10px;
+}
+
+.mat-column-reason {
+  padding-right: 10px;
+}
+
+.mat-column-responseTime {
+  padding-right: 75px;
+  @media screen and (max-width: $small - 1) {
+    display: none;
+  }
+}
+
+.status-color {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--true:after {
+    background-color: #54a65a;
+  }
+
+  &--false:after {
+    background-color: $amaranth;
+  }
+}
+
+.footer {
+  text-align: right;
+
+  mat-icon {
+    font-size: 35px;
+    height: $iconWidth;
+    width: $iconWidth;
+    line-height: $iconWidth;
+  }
+}
+
+.spinner-container {
+  mat-progress-spinner {
+    margin: 30px auto;
+  }
+}

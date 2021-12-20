@@ -1,12 +1,9 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectionStrategy,
-} from "@angular/core";
-import { UptimeService } from "../uptime.service";
-import { ActivatedRoute } from "@angular/router";
-import { tap } from "rxjs/operators";
+import { Component, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { UptimeState, UptimeService } from "../uptime.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { map, withLatestFrom } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -14,39 +11,46 @@ import { tap } from "rxjs/operators";
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MonitorDetailComponent implements OnInit, OnDestroy {
+export class MonitorDetailComponent
+  extends PaginationBaseComponent<UptimeState, UptimeService>
+  implements OnDestroy
+{
   monitor$ = this.uptimeService.activeMonitor$;
-  deleteLoading$ = this.uptimeService.deleteLoading$;
+  monitorChecks$ = this.uptimeService.monitorChecks$;
+  loading$ = this.uptimeService.getState$.pipe(
+    map((state) => state.pagination.loading)
+  );
+  navigationEnd$ = this.cursorNavigationEnd$.pipe(
+    withLatestFrom(this.route.params, this.route.queryParams),
+    map(([_, params, queryParams]) => {
+      const orgSlug: string | undefined = params["org-slug"];
+      const monitorId: string | undefined = params["monitor-id"];
+      const cursor: string | undefined = queryParams.cursor;
+      return { orgSlug, monitorId, cursor };
+    })
+  );
+
+  routerEventSubscription: Subscription;
 
   constructor(
     private uptimeService: UptimeService,
-    private route: ActivatedRoute
-  ) {}
+    protected router: Router,
+    protected route: ActivatedRoute
+  ) {
+    super(uptimeService, router, route);
 
-  ngOnInit() {
-    this.route.params
-      .pipe(
-        tap((params) => {
-          const monitorId = params["monitor-id"];
-          if (monitorId) {
-            this.uptimeService.retrieveMonitorDetails(monitorId);
-          }
-        })
-      )
-      .toPromise();
+    this.routerEventSubscription = this.navigationEnd$.subscribe(
+      ({ orgSlug, monitorId, cursor }) => {
+        if (orgSlug && monitorId) {
+          this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
+          this.uptimeService.retrieveMonitorChecks(orgSlug, monitorId, cursor);
+        }
+      }
+    );
   }
 
   ngOnDestroy() {
     this.uptimeService.clearState();
-  }
-
-  deleteMonitor() {
-    if (
-      window.confirm(
-        `Are you sure you want to remove this monitor? You will lose all of its uptime check history.`
-      )
-    ) {
-      this.uptimeService.deleteMonitor();
-    }
+    this.routerEventSubscription.unsubscribe();
   }
 }

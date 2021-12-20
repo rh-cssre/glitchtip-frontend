@@ -45,21 +45,6 @@ mat-card {
   }
 }
 
-.remove-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media (max-width: $tablet - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  p {
-    padding-right: 16px;
-  }
-}
-
 // Duplicating these because :after not available without content
 
 .status-indicator--true {

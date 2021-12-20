@@ -22,6 +22,10 @@ describe("List, add, update and delete uptime Monitors", () => {
     it("should delete a monitor and not see that monitor on list", () => {
         cy.visit(`/${organization.slug}/uptime-monitors/`);
         cy.contains("cytestmonitor").click();
+        cy.get('#monitor-settings').click(); 
+        cy.on('window:confirm', (text) => {
+            expect(text).to.contains('Are you sure you want to remove this monitor?');
+          });
         cy.get('#delete-monitor').contains('Delete Monitor').click();
         cy.contains("cytestmonitor").should('not.exist');
       });

@@ -205,5 +205,24 @@
           </gt-loading-button>
         </form> </mat-card-content
     ></mat-card>
+    <mat-card class="delete">
+      <mat-card-title>Delete Monitor</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content class="remove-content">
+        <div>
+          <p>
+            By deleting this monitor, you will remove all of its uptime check
+            history.
+          </p>
+        </div>
+        <gt-loading-button
+          (click)="deleteMonitor()"
+          buttonText="Delete Monitor"
+          [loading]="(deleteLoading$ | async)!"
+          id="delete-monitor"
+        >
+        </gt-loading-button>
+      </mat-card-content>
+    </mat-card>
   </ng-container>
 </section>

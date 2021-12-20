@@ -101,3 +101,23 @@ form {
 .submit {
   margin-top: 20px;
 }
+
+.delete {
+  margin-top: 20px;
+
+  .remove-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    @media (max-width: $tablet - 1) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    p {
+      padding-right: 16px;
+    }
+  }
+}
+
