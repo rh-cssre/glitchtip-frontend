@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Paginator } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { MonitorDetail, DownReason, MonitorCheck } from "../uptime.interfaces";
 
@@ -7,7 +7,7 @@ import { MonitorDetail, DownReason, MonitorCheck } from "../uptime.interfaces";
   templateUrl: "./monitor-checks.component.html",
   styleUrls: ["./monitor-checks.component.scss"],
 })
-export class MonitorChecksComponent implements OnDestroy, OnInit {
+export class MonitorChecksComponent {
   displayedColumns: string[] = [
     "status",
     "reason",
@@ -49,13 +49,4 @@ export class MonitorChecksComponent implements OnDestroy, OnInit {
     let date = new Date(startCheck);
     return date.toLocaleDateString();
   }
-
-  ngOnInit(): void {
-      console.log(this.monitorChecks)
-      console.log(this.loading)
-      console.log(this.monitor)
-      console.log(this.paginator)
-  }
-
-  ngOnDestroy(): void {}
 }

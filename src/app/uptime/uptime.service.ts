@@ -188,7 +188,6 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .list(orgSlug, monitorId, cursor)
       .pipe(
         tap((res) => {
-          console.log(res.body);
           this.setStateAndPagination(
             {
               monitorChecks: res.body!,
