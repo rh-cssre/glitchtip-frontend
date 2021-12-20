@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { baseUrl } from "../../constants";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { APIBaseService } from "../api-base.service";
+import { baseUrl } from "../../constants";
 import { MonitorDetail, MonitorInput } from "src/app/uptime/uptime.interfaces";
 
 @Injectable({

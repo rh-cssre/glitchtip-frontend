@@ -22,27 +22,22 @@ export class MonitorChecksComponent {
   constructor() {}
 
   convertReasonText(reason: DownReason) {
-    let readable = "";
     switch (reason) {
       case DownReason.UNKNOWN:
-        readable = "Unknown";
-        break;
+        return "Unknown";
       case DownReason.TIMEOUT:
-        readable = "Timeout";
-        break;
+        return "Timeout";
       case DownReason.STATUS:
-        readable = "Wrong status code";
-        break;
+        return "Wrong status code";
       case DownReason.BODY:
-        readable = "Expected response not found";
-        break;
+        return "Expected response not found";
       case DownReason.SSL:
-        readable = "SSL error";
-        break;
+        return "SSL error";
       case DownReason.NETWORK:
-        readable = "Network error";
+        return "Network error";
+      default:
+        return "Unknown";
     }
-    return readable;
   }
 
   formatDate(startCheck: string) {
