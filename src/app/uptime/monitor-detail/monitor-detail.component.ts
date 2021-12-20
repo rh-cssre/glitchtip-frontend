@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+import { Component, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { UptimeState, UptimeService } from "../uptime.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, withLatestFrom } from "rxjs/operators";
@@ -20,7 +16,6 @@ export class MonitorDetailComponent
   implements OnDestroy
 {
   monitor$ = this.uptimeService.activeMonitor$;
-  deleteLoading$ = this.uptimeService.deleteLoading$;
   monitorChecks$ = this.uptimeService.monitorChecks$;
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
@@ -29,7 +24,7 @@ export class MonitorDetailComponent
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
       const orgSlug: string | undefined = params["org-slug"];
-      const monitorId: string | undefined = params["monitor-id"]
+      const monitorId: string | undefined = params["monitor-id"];
       const cursor: string | undefined = queryParams.cursor;
       return { orgSlug, monitorId, cursor };
     })
@@ -45,10 +40,10 @@ export class MonitorDetailComponent
     super(uptimeService, router, route);
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({orgSlug, monitorId, cursor}) => {
+      ({ orgSlug, monitorId, cursor }) => {
         if (orgSlug && monitorId) {
           this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
-          this.uptimeService.retrieveMonitorChecks(orgSlug, monitorId, cursor)
+          this.uptimeService.retrieveMonitorChecks(orgSlug, monitorId, cursor);
         }
       }
     );
@@ -57,15 +52,5 @@ export class MonitorDetailComponent
   ngOnDestroy() {
     this.uptimeService.clearState();
     this.routerEventSubscription.unsubscribe();
-  }
-
-  deleteMonitor() {
-    if (
-      window.confirm(
-        `Are you sure you want to remove this monitor? You will lose all of its uptime check history.`
-      )
-    ) {
-      this.uptimeService.deleteMonitor();
-    }
   }
 }

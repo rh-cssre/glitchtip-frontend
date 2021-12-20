@@ -25,6 +25,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   loading$ = this.uptimeService.editLoading$;
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
+  deleteLoading$ = this.uptimeService.deleteLoading$;
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -126,6 +127,16 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.monitorEditForm.valid) {
       this.uptimeService.editMonitor(this.monitorEditForm.value);
+    }
+  }
+
+  deleteMonitor() {
+    if (
+      window.confirm(
+        `Are you sure you want to remove this monitor? You will lose all of its uptime check history.`
+      )
+    ) {
+      this.uptimeService.deleteMonitor();
     }
   }
 }
