@@ -14,7 +14,7 @@ import { SharedModule } from "src/app/shared/shared.module";
 
 import { NewRecipientComponent } from "./new-recipient.component";
 
-describe("NewRecipientComponent", () => {
+fdescribe("NewRecipientComponent", () => {
   let component: NewRecipientComponent;
   let fixture: ComponentFixture<NewRecipientComponent>;
 
@@ -56,7 +56,7 @@ describe("NewRecipientComponent", () => {
     fixture.detectChanges();
     expect(component.url.errors).toBeTruthy();
 
-    component.url.setValue("example.com");
+    component.url.setValue("https://example.com");
     fixture.detectChanges();
     expect(component.url.errors).toBeFalsy();
 
