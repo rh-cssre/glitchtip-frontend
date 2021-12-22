@@ -26,6 +26,16 @@
         ></gt-entry-data>
       </dl>
     </div>
+    <section *ngIf="request?.query_string">
+      <h3>Query String</h3>
+      <dl>
+        <gt-entry-data
+          *ngFor="let query of request?.query_string"
+          [key]="query[0]"
+          [value]="query[1]"
+        ></gt-entry-data>
+      </dl>
+    </section>
     <section *ngIf="request?.headers">
       <h3>Headers</h3>
       <dl>
