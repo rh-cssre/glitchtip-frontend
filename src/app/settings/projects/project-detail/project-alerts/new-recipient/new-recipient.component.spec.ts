@@ -14,7 +14,7 @@ import { SharedModule } from "src/app/shared/shared.module";
 
 import { NewRecipientComponent } from "./new-recipient.component";
 
-fdescribe("NewRecipientComponent", () => {
+describe("NewRecipientComponent", () => {
   let component: NewRecipientComponent;
   let fixture: ComponentFixture<NewRecipientComponent>;
 
