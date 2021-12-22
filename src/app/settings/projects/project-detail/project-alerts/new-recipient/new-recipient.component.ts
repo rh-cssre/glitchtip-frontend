@@ -3,6 +3,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "../project-alerts.service";
+import { urlRegex } from "src/app/shared/validators";
 
 @Component({
   selector: "gt-new-recipient",
@@ -21,7 +22,7 @@ export class NewRecipientComponent implements OnInit {
 
   recipientForm = new FormGroup({
     recipientType: new FormControl("", [Validators.required]),
-    url: new FormControl(""),
+    url: new FormControl("https://"),
   });
 
   recipientType = this.recipientForm.get("recipientType") as FormControl;
@@ -41,13 +42,9 @@ export class NewRecipientComponent implements OnInit {
     this.recipientType.valueChanges.subscribe((type: RecipientType) => {
       this.url.clearValidators();
       if (type === "webhook") {
-        // https://stackoverflow.com/a/3809435/443457
-        const urlReg = new RegExp(
-          /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
-        );
         this.url.setValidators([
           Validators.required,
-          Validators.pattern(urlReg),
+          Validators.pattern(urlRegex),
         ]);
       }
       this.url.updateValueAndValidity();

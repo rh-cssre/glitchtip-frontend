@@ -56,7 +56,7 @@ describe("NewRecipientComponent", () => {
     fixture.detectChanges();
     expect(component.url.errors).toBeTruthy();
 
-    component.url.setValue("example.com");
+    component.url.setValue("https://example.com");
     fixture.detectChanges();
     expect(component.url.errors).toBeFalsy();
 
