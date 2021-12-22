@@ -31,7 +31,8 @@
           <input matInput type="url" formControlName="url" placeholder="URL" />
           <mat-error *ngIf="url?.errors">
             <span *ngIf="url?.errors?.required || url?.errors?.pattern"
-              >Enter a valid URL</span
+              >Enter a valid URL with protocol (ex.
+              https://example.com)</span
             >
           </mat-error>
         </mat-form-field>
