@@ -14,12 +14,15 @@ import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.service";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-alerts.service";
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
   monitorChecks: MonitorCheck[];
   orgEnvironments: Environment[];
   monitorDetails: MonitorDetail | null;
+  configuredAlerts: number | null;
+  associatedProjectSlug: string | null;
   editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
@@ -32,6 +35,8 @@ const initialState: UptimeState = {
   pagination: initialPaginationState,
   orgEnvironments: [],
   monitorDetails: null,
+  configuredAlerts: null,
+  associatedProjectSlug: null,
   editLoading: false,
   createLoading: false,
   deleteLoading: false,
@@ -49,14 +54,18 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   error$ = this.getState$.pipe(map((state) => state.error));
   orgEnvironments$ = this.getState$.pipe(map((state) => state.orgEnvironments));
+  configuredAlerts$ = this.getState$.pipe(map((state) => state.configuredAlerts));
+  associatedProjectSlug$ = this.getState$.pipe(map((state) => state.associatedProjectSlug));
   readonly activeMonitor$ = this.getState$.pipe(
     map((data) => data.monitorDetails)
   );
+  
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
     private monitorChecksAPIService: MonitorChecksAPIService,
     private organizationsService: OrganizationsService,
+    private projectAlertsService: ProjectAlertsAPIService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -174,7 +183,14 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   retrieveMonitorDetails(orgSlug: string, monitorId: string) {
     this.monitorsAPIService
       .retrieve(orgSlug, monitorId)
-      .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
+      .pipe(
+        tap((activeMonitor) => {
+          this.setActiveMonitor(activeMonitor);
+          if (activeMonitor.project) {
+            this.countConfiguredAlerts(orgSlug, activeMonitor.project);
+          }
+        })
+      )
       .toPromise();
   }
 
@@ -199,9 +215,34 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .toPromise();
   }
 
+  countConfiguredAlerts(orgSlug: string, projectId: number) {
+    this.organizationsService.activeOrganization$
+      .pipe(
+        take(1),
+        tap((orgDetail) => {
+          const projectSlug = orgDetail?.projects.filter(
+            (project) => project.id === projectId
+          )[0]?.slug;
+          console.log(projectSlug)
+          if (projectSlug) {
+            this.projectAlertsService.list(orgSlug, projectSlug).pipe(
+              tap((projectAlerts) => {
+                this.setState({
+                  associatedProjectSlug: projectSlug,
+                  configuredAlerts: projectAlerts.length,
+                });
+                console.log(projectAlerts.length);
+              })
+            ).toPromise();
+          }
+        })
+      )
+      .toPromise();
+  }
+
   startPaginatedLoading() {
     const state = this.state.getValue();
-    this.setState({ pagination: {...state.pagination, loading: true}})
+    this.setState({ pagination: { ...state.pagination, loading: true } });
   }
 
   private setActiveMonitor(monitor: MonitorDetail) {

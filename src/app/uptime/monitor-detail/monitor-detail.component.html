@@ -34,6 +34,63 @@
         </div>
       </mat-card-content>
     </mat-card>
+    <mat-card>
+      <mat-card-title>Alerts</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <ng-container *ngIf="monitor.projectName; else noProject">
+          <ng-container
+            *ngIf="configuredAlerts$ | async as configuredAlerts; else noAlerts"
+          >
+            <ng-container
+              *ngIf="associatedProjectSlug$ | async as associatedProjectSlug"
+            >
+              <p>
+                This monitor is associated with the
+                <b>{{ monitor.projectName }}</b> project. There are
+                {{ configuredAlerts }} alerts set up for this project. Visit the
+                <a
+                  [routerLink]="[
+                    '../../settings/projects/',
+                    associatedProjectSlug
+                  ]"
+                  >project settings</a
+                >
+                page to change your alerts.
+              </p>
+            </ng-container>
+          </ng-container>
+          <ng-template #noAlerts>
+            <ng-container
+              *ngIf="associatedProjectSlug$ | async as associatedProjectSlug"
+            >
+              <p>
+                This monitor is associated with the
+                <b>{{ monitor.projectName }}</b> project. This project has no
+                alerts configured, so no notifications will be sent for monitor
+                events. Visit the
+                <a
+                  [routerLink]="[
+                    '../../settings/projects/',
+                    associatedProjectSlug
+                  ]"
+                  >project settings</a
+                >
+                page to configure alerts.
+              </p>
+            </ng-container>
+          </ng-template>
+        </ng-container>
+        <ng-template #noProject
+          ><p>
+            There is no project associated with this monitor, so no
+            notifications will be sent for monitor events. Visit the
+            <a [routerLink]="['./update']">monitor settings</a> page to
+            associate this monitor with a project.
+          </p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
     <gt-monitor-checks
       [monitor]="monitor"
       [monitorChecks]="monitorChecks$ | async"

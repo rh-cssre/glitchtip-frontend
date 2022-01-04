@@ -20,6 +20,8 @@ export class MonitorDetailComponent
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
+  configuredAlerts$ = this.uptimeService.configuredAlerts$;
+  associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$; 
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
