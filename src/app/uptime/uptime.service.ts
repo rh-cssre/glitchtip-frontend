@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { map, tap, catchError, filter, take } from "rxjs/operators";
-import { EMPTY, combineLatest } from "rxjs";
+import { EMPTY, combineLatest, lastValueFrom } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import {
@@ -54,12 +54,15 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   error$ = this.getState$.pipe(map((state) => state.error));
   orgEnvironments$ = this.getState$.pipe(map((state) => state.orgEnvironments));
-  configuredAlerts$ = this.getState$.pipe(map((state) => state.configuredAlerts));
-  associatedProjectSlug$ = this.getState$.pipe(map((state) => state.associatedProjectSlug));
+  configuredAlerts$ = this.getState$.pipe(
+    map((state) => state.configuredAlerts)
+  );
+  associatedProjectSlug$ = this.getState$.pipe(
+    map((state) => state.associatedProjectSlug)
+  );
   readonly activeMonitor$ = this.getState$.pipe(
     map((data) => data.monitorDetails)
   );
-  
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
@@ -216,28 +219,29 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   }
 
   countConfiguredAlerts(orgSlug: string, projectId: number) {
-    this.organizationsService.activeOrganization$
-      .pipe(
+    lastValueFrom(
+      this.organizationsService.activeOrganization$.pipe(
+        filter((orgDetail) => !!orgDetail),
         take(1),
         tap((orgDetail) => {
-          const projectSlug = orgDetail?.projects.filter(
+          const projectSlug = orgDetail?.projects.find(
             (project) => project.id === projectId
-          )[0]?.slug;
-          console.log(projectSlug)
+          )?.slug;
           if (projectSlug) {
-            this.projectAlertsService.list(orgSlug, projectSlug).pipe(
-              tap((projectAlerts) => {
-                this.setState({
-                  associatedProjectSlug: projectSlug,
-                  configuredAlerts: projectAlerts.length,
-                });
-                console.log(projectAlerts.length);
-              })
-            ).toPromise();
+            lastValueFrom(
+              this.projectAlertsService.list(orgSlug, projectSlug).pipe(
+                tap((projectAlerts) => {
+                  this.setState({
+                    associatedProjectSlug: projectSlug,
+                    configuredAlerts: projectAlerts.length,
+                  });
+                })
+              )
+            );
           }
         })
       )
-      .toPromise();
+    );
   }
 
   startPaginatedLoading() {
