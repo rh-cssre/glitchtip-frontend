@@ -100,7 +100,7 @@ deploy-staging:
     entrypoint: [""]
   # needs: ["build-docker", "test-e2e"]
   script:
-    - helm repo add glitchtip https://glitchtip.gitlab.io/glitchtip-helm-chart/
+    - helm repo add glitchtip https://gitlab.com/api/v4/projects/16325141/packages/helm/stable
     - helm upgrade glitchtip-staging glitchtip/glitchtip --set-string image.tag=${CI_COMMIT_SHORT_SHA} --reuse-values
   environment:
     name: staging
