@@ -52,9 +52,9 @@ export class LoginService extends StatefulService<LoginState> {
       password,
     };
     this.setState({ loading: true, error: null });
-    return this.http.post<LoginResponse>(url, data).pipe(
+    return this.http.post<LoginResponse | null>(url, data).pipe(
       tap((resp) => {
-        if (resp.requires_mfa) {
+        if (resp?.requires_mfa) {
           this.promptForMFA(resp.valid_auth);
         } else {
           this.authService.afterLogin();
