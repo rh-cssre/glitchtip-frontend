@@ -127,11 +127,11 @@ export class AuthComponent implements OnInit {
   }
 
   /** On success for any oauth client, set auth data and redirect to home */
-  private loginSuccess(response: LoginResponse) {
+  private loginSuccess(response: LoginResponse | null) {
     if (this.isLoggedIn) {
       this.router.navigate(["profile"]);
     } else {
-      if (response.requires_mfa) {
+      if (response?.requires_mfa) {
         this.loginService.promptForMFA(response.valid_auth);
         this.router.navigate(["/login"]);
       } else {

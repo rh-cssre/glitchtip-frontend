@@ -57,7 +57,7 @@ export class GlitchTipOAuthService {
     if (isConnect) {
       url += "connect/";
     }
-    return this.http.post<LoginResponse>(url, data);
+    return this.http.post<LoginResponse | null>(url, data);
   }
 
   gitlabLogin(accessToken: string, isConnect: boolean) {
