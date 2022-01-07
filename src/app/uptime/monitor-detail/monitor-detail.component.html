@@ -47,8 +47,11 @@
             >
               <p>
                 This monitor is associated with the
-                <b>{{ monitor.projectName }}</b> project. There are
-                {{ configuredAlerts }} alerts set up for this project. Visit the
+                <b>{{ monitor.projectName }}</b> project. There
+                {{
+                  configuredAlerts | i18nPlural: alertCountPluralMapping
+                }}
+                set up for this project. Visit the
                 <a
                   [routerLink]="[
                     '../../settings/projects/',

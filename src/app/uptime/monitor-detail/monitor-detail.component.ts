@@ -32,6 +32,11 @@ export class MonitorDetailComponent
     })
   );
 
+  alertCountPluralMapping: { [k: string]: string } = {
+    "=1": "is 1 alert",
+    other: "are # alerts",
+  };
+
   routerEventSubscription: Subscription;
 
   constructor(
