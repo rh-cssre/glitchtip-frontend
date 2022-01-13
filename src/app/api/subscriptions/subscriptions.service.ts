@@ -7,12 +7,13 @@ import {
   Subscription,
   Product,
   CreateSubscriptionResp,
+  EventsCount,
 } from "./subscriptions.interfaces";
 import { baseUrl } from "src/app/constants";
 
 interface SubscriptionsState {
   subscription: Subscription | null;
-  eventsCount: number | null;
+  eventsCount: EventsCount | null;
   products: Product[] | null;
 }
 
@@ -71,7 +72,7 @@ export class SubscriptionsService {
    * @param slug Organization Slug for requested subscription event count
    */
   retrieveSubscriptionCount(slug: string) {
-    return this.http.get<number>(`${this.url}${slug}/events_count/`).pipe(
+    return this.http.get<EventsCount>(`${this.url}${slug}/events_count/`).pipe(
       tap((count) => this.setSubscriptionCount(count)),
       catchError((error) => {
         return EMPTY;
@@ -141,7 +142,14 @@ export class SubscriptionsService {
     this.state.next({ ...this.state.getValue(), subscription });
   }
 
-  private setSubscriptionCount(eventsCount: number) {
+  private setSubscriptionCount(eventsCount: EventsCount) {
+    if (eventsCount) {
+      eventsCount.total = 0;
+      eventsCount.total +=
+        eventsCount.eventCount! +
+        eventsCount.transactionEventCount! +
+        eventsCount.uptimeCheckEventCount!;
+    }
     this.state.next({ ...this.state.getValue(), eventsCount });
   }
 }

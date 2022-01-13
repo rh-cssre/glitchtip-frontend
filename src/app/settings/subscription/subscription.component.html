@@ -42,27 +42,52 @@
             <ng-container>
               <mat-card-subtitle>Details</mat-card-subtitle>
               <h3>{{ subscription.plan.product.name }}</h3>
-
+              {{ subscription.plan.product.description }}
               <div
-                class="progress-bar"
+                class="visualization"
                 *ngIf="eventsPercent$ | async as eventsPercent"
               >
                 <div class="total-events">
                   {{ totalEventsAllowed$ | async }}
                 </div>
-                <mat-progress-bar [value]="eventsPercent"></mat-progress-bar>
-                <div
-                  class="event-count"
-                  [class.event-count--left]="eventsPercent < 25"
-                  [class.event-count--right]="eventsPercent > 75"
-                  style="left: {{ eventsPercent < 100 ? eventsPercent : 100 }}%"
-                >
-                  {{ eventsCount$ | async }}
+                <div class="display-bar">
+                  <div
+                    class="uptime-event"
+                    style="width: {{ eventsPercent.uptimeEvents }}%"
+                  ></div>
+                  <div
+                    class="error-event"
+                    style="width: {{ eventsPercent.errorEvents }}%"
+                  ></div>
                 </div>
+                <ng-container *ngIf="eventsCount$ | async as count">
+                  <div
+                    class="event-count"
+                    [class.event-count--left]="eventsPercent.total < 25"
+                    [class.event-count--right]="eventsPercent.total > 75"
+                    style="left: {{
+                      eventsPercent.total < 100 ? eventsPercent.total : 100
+                    }}%"
+                  >
+                    {{ count.total }}
+                  </div>
+                  <div>
+                    <ul>
+                      <li>
+                        <b class="uptime">Uptime events:</b>
+                        {{ count.uptimeCheckEventCount }}
+                      </li>
+                      <li>
+                        <b class="error">Error events:</b>
+                        {{ count.eventCount }}
+                      </li>
+                      <li>
+                        Total events used in billing period: {{ count.total }}
+                      </li>
+                    </ul>
+                  </div>
+                </ng-container>
               </div>
-
-              {{ subscription.plan.product.description }}
-
               <ul>
                 <li class="mat-body-1">
                   Start date for this plan: {{ subscription.start_date | date }}
@@ -90,9 +115,6 @@
                   {{ subscription.current_period_start | date }} to
                   {{ subscription.current_period_end | date }}
                 </li>
-                <li>
-                  Events used in billing period: {{ eventsCount$ | async }}
-                </li>
               </ul>
             </ng-container>
             <p class="mat-body-1">
@@ -101,7 +123,7 @@
               <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
               >.
             </p>
-            <mat-error>{{ error$ | async}}</mat-error>
+            <mat-error>{{ error$ | async }}</mat-error>
             <button
               mat-flat-button
               color="primary"
