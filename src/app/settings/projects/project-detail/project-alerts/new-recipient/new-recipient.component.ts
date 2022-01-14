@@ -14,6 +14,7 @@ import { urlRegex } from "src/app/shared/validators";
 export class NewRecipientComponent implements OnInit {
   recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
   emailSelected$ = this.alertsService.emailSelected$;
+  recipientError$ = this.alertsService.recipientError$;
 
   recipientOptions = [
     { viewValue: "Email", value: "email" },

@@ -31,8 +31,7 @@
           <input matInput type="url" formControlName="url" placeholder="URL" />
           <mat-error *ngIf="url?.errors">
             <span *ngIf="url?.errors?.required || url?.errors?.pattern"
-              >Enter a valid URL with protocol (ex.
-              https://example.com)</span
+              >Enter a valid URL with protocol (ex. https://example.com)</span
             >
           </mat-error>
         </mat-form-field>
@@ -42,6 +41,12 @@
         </p>
         <p class="default" *ngSwitchDefault>
           Select an alert type to get started.
+        </p>
+        <p
+          *ngIf="recipientError$ | async as error"
+          class="error recipients-error"
+        >
+          {{ error }}
         </p>
       </div>
     </mat-dialog-content>
