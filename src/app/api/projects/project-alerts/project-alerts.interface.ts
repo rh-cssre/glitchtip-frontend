@@ -1,6 +1,13 @@
+// export interface NewProjectAlert {
+//   timespan_minutes: number;
+//   quantity: number;
+//   alertRecipients: NewAlertRecipient[];
+// }
+
 export interface NewProjectAlert {
-  timespan_minutes: number;
-  quantity: number;
+  timespan_minutes: number | null;
+  quantity: number | null;
+  uptime: boolean;
   alertRecipients: NewAlertRecipient[];
 }
 

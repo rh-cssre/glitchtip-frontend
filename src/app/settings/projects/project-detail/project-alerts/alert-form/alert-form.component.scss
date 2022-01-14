@@ -3,12 +3,22 @@
 
 form {
   padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   .mat-form-field {
     width: 88px;
   }
   gt-loading-button {
     margin-bottom: 8px;
   }
+}
+
+.option-text {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 // Move to global styles if we decide to implement in other places in app

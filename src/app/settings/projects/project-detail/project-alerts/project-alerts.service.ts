@@ -231,6 +231,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
             const data: NewProjectAlert = {
               timespan_minutes: timeQuantity.timespan_minutes,
               quantity: timeQuantity.quantity,
+              uptimeAlert: 
               alertRecipients: recipients,
             };
             return this.projectAlertsAPIService

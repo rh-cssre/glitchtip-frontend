@@ -26,8 +26,9 @@ export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
 })
 export class AlertFormComponent implements OnInit {
   @Input() loading: boolean | null = false;
-  @Input() timespan = 1;
-  @Input() quantity = 1;
+  @Input() toggleIssueAlerts: boolean = false;
+  @Input() timespan: number | null = 1;
+  @Input() quantity: number | null = 1;
   @Output() alertSubmit = new EventEmitter<{
     timespan_minutes: number;
     quantity: number;
@@ -45,6 +46,7 @@ export class AlertFormComponent implements OnInit {
       numberValidator,
       Validators.required,
     ]),
+    enableUptimeAlerts: new FormControl("")
   });
 
   projectFormTimespan = this.projectAlertForm.get(
@@ -61,6 +63,7 @@ export class AlertFormComponent implements OnInit {
     this.projectAlertForm.setValue({
       timespan_minutes: this.timespan,
       quantity: this.quantity,
+      enableUptimeAlerts: true,
     });
   }
 

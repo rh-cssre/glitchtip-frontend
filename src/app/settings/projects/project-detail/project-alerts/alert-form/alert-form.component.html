@@ -3,14 +3,16 @@
   (ngSubmit)="onSubmit()"
   [formGroup]="projectAlertForm"
 >
-  <div>
-    <span
-      >If&nbsp;an&nbsp;<span
-        class="tooltip"
-        matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
-        >event</span
-      >&nbsp;happens</span
-    >
+  <div class="option-text">
+    <mat-checkbox>
+      <span>
+        If&nbsp;an&nbsp;<span
+          class="tooltip"
+          matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
+          >event</span
+        >&nbsp;happens</span
+      >
+    </mat-checkbox>
     <mat-form-field>
       <mat-label>Quantity</mat-label>
       <input
@@ -67,6 +69,9 @@
       >minute<span *ngIf="projectFormTimespan?.value !== 1">s</span
       >,&nbsp;send&nbsp;an&nbsp;email.</span
     >
+  </div>
+  <div class="option-text">
+    <mat-checkbox>If an uptime monitor is triggered.</mat-checkbox>
   </div>
 
   <gt-loading-button
