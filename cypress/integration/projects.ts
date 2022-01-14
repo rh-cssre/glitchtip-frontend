@@ -99,3 +99,28 @@ describe("Edit and Delete a project", () => {
     );
   });
 });
+
+describe("Add and edit alerts", () => {
+  beforeEach(() => {
+    seedBackend(true);
+    requestLogin();
+    cy.visit(`/${organization.slug}/settings/projects/${project.slug}`);
+  });
+
+  it("should add a project alert, remove email recipient, add email recipient back", () => {
+    cy.get("#create-new-alert").click();
+    cy.get("#quantity").clear().type("2");
+    cy.get('button').contains("submit").click();
+    cy.contains("Remove Alert 1");
+    cy.get("#quantity").should('have.value', '2');
+
+    cy.get("#delete-recipient").click()
+    cy.contains("This alert isn't being sent anywhere.")
+
+    cy.get('button').contains("Add An Alert Recipient").click()
+    cy.get("#recipient-type").click().get('mat-option').contains('Email').click()
+    cy.get('button').contains("Add Recipient").click()
+    cy.contains("Send an email to team members on this project.")
+  });
+
+});

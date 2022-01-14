@@ -3,6 +3,7 @@
     <mat-card-title>Project Alerts</mat-card-title>
     <button
       mat-flat-button
+      id="create-new-alert"
       color="primary"
       (click)="openNewAlert()"
       [disabled]="(newAlertOpen$ | async) === true"
@@ -206,6 +207,7 @@
                 <ng-template #notLoading>
                   <button
                     class="trash"
+                    id="delete-recipient"
                     mat-icon-button
                     color="primary"
                     attr.aria-label="Delete Alert {{ i + 0 }}"

@@ -8,7 +8,7 @@
     <mat-dialog-content class="mat-typography">
       <mat-form-field class="type">
         <mat-label>Recipient Type</mat-label>
-        <mat-select [formControl]="recipientType">
+        <mat-select id="recipient-type" [formControl]="recipientType">
           <mat-option
             *ngFor="
               let recipient of selectOptions(
