@@ -613,8 +613,6 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       recipientDialogState: {
         ...recipientDialogState,
         recipientError: `${err.statusText} : ${err.status}`,
-        recipientDialogOpen: true,
-        activeAlert: null,
       },
     });
   }
