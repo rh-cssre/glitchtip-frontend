@@ -50,7 +50,7 @@
               <ng-container *ngIf="recipient.recipientType === 'email'">
                 <mat-icon class="alert-type">email</mat-icon>
                 <div class="recipient-info">
-                  <span 
+                  <span
                     class="tooltip"
                     matTooltip="Send an email to team members on this project."
                     matTooltipClass="tt-wrapping"
@@ -58,14 +58,14 @@
                   </span>
                 </div>
               </ng-container>
-              <ng-container *ngIf="recipient.recipientType === 'webhook'"> 
+              <ng-container *ngIf="recipient.recipientType === 'webhook'">
                 <div class="svg-box">
                   <svg class="svg">
                     <use xlink:href="#webhook"></use>
                   </svg>
                 </div>
                 <div class="recipient-info">
-                  <span 
+                  <span
                     class="tooltip"
                     matTooltip="{{ recipient.url }}"
                     matTooltipClass="tt-wrapping"
@@ -73,16 +73,16 @@
                   </span>
                 </div>
               </ng-container>
-                <button
-                  class="trash"
-                  mat-icon-button
-                  color="primary"
-                  attr.aria-label="Delete Alert For {{ recipient.url }}"
-                  (click)="removeNewAlertRecipient(recipient.url)"
-                >
-                  <mat-icon>delete_outline</mat-icon>
-                </button>
-            </div>  
+              <button
+                class="trash"
+                mat-icon-button
+                color="primary"
+                attr.aria-label="Delete Alert For {{ recipient.url }}"
+                (click)="removeNewAlertRecipient(recipient.url)"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
           </li>
         </ul>
         <button
@@ -165,12 +165,13 @@
               *ngFor="
                 let recipient of alert.alertRecipients;
                 let recipientIndex = index
-            ">
+              "
+            >
               <div class="recipients" [class.border-top]="recipientIndex === 0">
                 <ng-container *ngIf="recipient.recipientType === 'email'">
                   <mat-icon class="alert-type">email</mat-icon>
                   <div class="recipient-info">
-                    <span 
+                    <span
                       class="tooltip"
                       matTooltip="Send an email to team members on this project."
                       matTooltipClass="tt-wrapping"
@@ -178,14 +179,14 @@
                     </span>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="recipient.recipientType === 'webhook'"> 
+                <ng-container *ngIf="recipient.recipientType === 'webhook'">
                   <div class="svg-box">
                     <svg class="svg">
                       <use xlink:href="#webhook"></use>
                     </svg>
                   </div>
                   <div class="recipient-info">
-                    <span 
+                    <span
                       class="tooltip"
                       matTooltip="{{ recipient.url }}"
                       matTooltipClass="tt-wrapping"
@@ -197,7 +198,8 @@
                   *ngIf="
                     (deleteRecipientLoading$ | async) === recipient.pk;
                     else notLoading
-                  ">
+                  "
+                >
                   <mat-progress-spinner
                     [diameter]="20"
                     color="primary"
