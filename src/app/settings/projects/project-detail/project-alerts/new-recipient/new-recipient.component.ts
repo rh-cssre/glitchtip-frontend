@@ -23,7 +23,7 @@ export class NewRecipientComponent implements OnInit {
 
   recipientForm = new FormGroup({
     recipientType: new FormControl("", [Validators.required]),
-    url: new FormControl("https://"),
+    url: new FormControl(""),
   });
 
   recipientType = this.recipientForm.get("recipientType") as FormControl;
@@ -43,10 +43,13 @@ export class NewRecipientComponent implements OnInit {
     this.recipientType.valueChanges.subscribe((type: RecipientType) => {
       this.url.clearValidators();
       if (type === "webhook") {
+        this.url.setValue("https://")
         this.url.setValidators([
           Validators.required,
           Validators.pattern(urlRegex),
         ]);
+      } else if (type === "email") {
+        this.url.setValue("")
       }
       this.url.updateValueAndValidity();
     });
