@@ -134,7 +134,11 @@ export class SubscriptionsService {
       .toPromise();
   }
 
-  totalEvents(eventsCount: EventsCount | null) {
+  clearState() {
+    this.state.next(initialState);
+  }
+
+  private totalEvents(eventsCount: EventsCount | null) {
     let total = 0;
     if (eventsCount) {
       total +=
@@ -149,10 +153,6 @@ export class SubscriptionsService {
     } else {
       return eventsCount;
     }
-  }
-
-  clearState() {
-    this.state.next(initialState);
   }
 
   private setProducts(products: Product[]) {
