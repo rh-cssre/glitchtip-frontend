@@ -27,7 +27,7 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   updateTimespanQuantityError$ =
     this.alertsService.updateTimespanQuantityError$;
   deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
-  recipientError$ = this.alertsService.recipientError$;
+  deleteRecipientError$ = this.alertsService.deleteRecipientError$;
   newAlertOpen$ = this.alertsService.newAlertOpen$;
   recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
   newAlertLoading$ = this.alertsService.newAlertLoading$;

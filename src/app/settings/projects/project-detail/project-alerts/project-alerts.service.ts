@@ -46,6 +46,7 @@ interface ProjectAlertState {
   updateTimespanQuantityLoading: number | null;
   updateTimespanQuantityError: { error: string; pk: number } | null;
   deleteRecipientLoading: number | null;
+  deleteRecipientError: string | null;
 }
 
 const initialNewAlertState = {
@@ -73,6 +74,7 @@ const initialState: ProjectAlertState = {
   updateTimespanQuantityLoading: null,
   updateTimespanQuantityError: null,
   deleteRecipientLoading: null,
+  deleteRecipientError: null,
 };
 
 @Injectable({
@@ -142,6 +144,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   );
   readonly deleteRecipientLoading$ = this.getState$.pipe(
     map((data) => data.deleteRecipientLoading)
+  );
+  readonly deleteRecipientError$ = this.getState$.pipe(
+    map((data) => data.deleteRecipientError)
   );
 
   constructor(
@@ -529,6 +534,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       recipientDialogState: {
         ...recipientDialogState,
         recipientDialogOpen: false,
+        recipientError: null,
         activeAlert: null,
       },
     });
@@ -540,6 +546,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       recipientDialogState: {
         ...recipientDialogState,
         recipientDialogOpen: true,
+        recipientError: null,
         activeAlert: alert,
       },
     });
@@ -631,6 +638,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         activeAlert: null,
       },
       deleteRecipientLoading: null,
+      deleteRecipientError: null,
     });
 
     this.setState({});
@@ -650,12 +658,8 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   }
 
   private setDeleteRecipientError(err: HttpErrorResponse) {
-    const recipientDialogState = this.state.getValue().recipientDialogState;
     this.setState({
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientError: `${err.statusText} : ${err.status}`,
-      },
+      deleteRecipientError: `${err.statusText} : ${err.status}`,
       deleteRecipientLoading: null,
     });
   }

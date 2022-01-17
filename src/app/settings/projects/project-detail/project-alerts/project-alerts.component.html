@@ -151,7 +151,7 @@
           ></gt-alert-form>
           <h4 class="mat-body-strong">Recipients:</h4>
           <p
-            *ngIf="recipientError$ | async as error"
+            *ngIf="deleteRecipientError$ | async as error"
             class="error recipients-error"
           >
             {{ error }}
