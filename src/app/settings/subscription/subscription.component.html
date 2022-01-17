@@ -60,7 +60,7 @@
                     style="width: {{ eventsPercent.errorEvents }}%"
                   ></div>
                 </div>
-                <ng-container *ngIf="eventsCount$ | async as count">
+                <ng-container *ngIf="eventsCountWithTotal$ | async as count">
                   <div
                     class="event-count"
                     [class.event-count--left]="eventsPercent.total < 25"

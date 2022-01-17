@@ -44,7 +44,6 @@ export interface CreateSubscriptionResp {
 }
 
 export interface EventsCount {
-  total: number | null;
   eventCount: number | null;
   transactionEventCount: number | null;
   uptimeCheckEventCount: number | null;

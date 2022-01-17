@@ -11,6 +11,10 @@ import {
 } from "./subscriptions.interfaces";
 import { baseUrl } from "src/app/constants";
 
+interface EventsCountWithTotal extends EventsCount {
+  total: number | null;
+}
+
 interface SubscriptionsState {
   subscription: Subscription | null;
   eventsCount: EventsCount | null;
@@ -36,8 +40,8 @@ export class SubscriptionsService {
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
   );
-  readonly eventsCount$ = this.getState$.pipe(
-    map((state) => state.eventsCount)
+  readonly eventsCountWithTotal$ = this.getState$.pipe(
+    map((state) => this.totalEvents(state.eventsCount))
   );
   readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
   readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
@@ -130,6 +134,23 @@ export class SubscriptionsService {
       .toPromise();
   }
 
+  totalEvents(eventsCount: EventsCount | null) {
+    let total = 0;
+    if (eventsCount) {
+      total +=
+        eventsCount.eventCount! +
+        eventsCount.transactionEventCount! +
+        eventsCount.uptimeCheckEventCount!;
+
+      return <EventsCountWithTotal>{
+        ...eventsCount,
+        total,
+      };
+    } else {
+      return eventsCount;
+    }
+  }
+
   clearState() {
     this.state.next(initialState);
   }
@@ -143,13 +164,6 @@ export class SubscriptionsService {
   }
 
   private setSubscriptionCount(eventsCount: EventsCount) {
-    if (eventsCount) {
-      eventsCount.total = 0;
-      eventsCount.total +=
-        eventsCount.eventCount! +
-        eventsCount.transactionEventCount! +
-        eventsCount.uptimeCheckEventCount!;
-    }
     this.state.next({ ...this.state.getValue(), eventsCount });
   }
 }

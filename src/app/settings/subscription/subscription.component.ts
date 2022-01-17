@@ -20,7 +20,7 @@ interface Percentages {
 })
 export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
-  eventsCount$ = this.service.eventsCount$;
+  eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
@@ -35,7 +35,7 @@ export class SubscriptionComponent implements OnDestroy {
   );
   eventsPercent$ = combineLatest([
     this.totalEventsAllowed$,
-    this.eventsCount$,
+    this.eventsCountWithTotal$,
   ]).pipe(
     filter(([eventsAllowed, events]) => !!eventsAllowed && !!events),
     map(([eventsAllowed, events]) => {
