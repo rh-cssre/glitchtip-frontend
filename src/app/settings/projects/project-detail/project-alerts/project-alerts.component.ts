@@ -7,6 +7,7 @@ import { ProjectAlertsService } from "./project-alerts.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
+import { distinctUntilChanged } from "rxjs";
 
 @Component({
   selector: "gt-project-alerts",
@@ -21,12 +22,12 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   initialLoadError$ = this.alertsService.initialLoadError$;
   removeAlertLoading$ = this.alertsService.removeAlertLoading$;
   removeAlertError$ = this.alertsService.removeAlertError$;
-  updateTimespanQuantityLoading$ = this.alertsService
-    .updateTimespanQuantityLoading$;
-  updateTimespanQuantityError$ = this.alertsService
-    .updateTimespanQuantityError$;
+  updateTimespanQuantityLoading$ =
+    this.alertsService.updateTimespanQuantityLoading$;
+  updateTimespanQuantityError$ =
+    this.alertsService.updateTimespanQuantityError$;
   deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
-  recipientError$ = this.alertsService.recipientError$;
+  deleteRecipientError$ = this.alertsService.deleteRecipientError$;
   newAlertOpen$ = this.alertsService.newAlertOpen$;
   recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
   newAlertLoading$ = this.alertsService.newAlertLoading$;
@@ -40,9 +41,9 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.alertsService.listProjectAlerts();
 
-    this.recipientDialogOpen$.subscribe(
-      (resp) => resp && this.dialog.open(NewRecipientComponent)
-    );
+    this.recipientDialogOpen$
+      .pipe(distinctUntilChanged())
+      .subscribe((resp) => resp && this.dialog.open(NewRecipientComponent));
   }
 
   ngOnDestroy() {

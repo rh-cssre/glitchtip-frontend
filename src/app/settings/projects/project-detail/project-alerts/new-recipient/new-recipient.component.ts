@@ -14,6 +14,7 @@ import { urlRegex } from "src/app/shared/validators";
 export class NewRecipientComponent implements OnInit {
   recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
   emailSelected$ = this.alertsService.emailSelected$;
+  recipientError$ = this.alertsService.recipientError$;
 
   recipientOptions = [
     { viewValue: "Email", value: "email" },
@@ -22,7 +23,7 @@ export class NewRecipientComponent implements OnInit {
 
   recipientForm = new FormGroup({
     recipientType: new FormControl("", [Validators.required]),
-    url: new FormControl("https://"),
+    url: new FormControl(""),
   });
 
   recipientType = this.recipientForm.get("recipientType") as FormControl;
@@ -42,10 +43,13 @@ export class NewRecipientComponent implements OnInit {
     this.recipientType.valueChanges.subscribe((type: RecipientType) => {
       this.url.clearValidators();
       if (type === "webhook") {
+        this.url.setValue("https://")
         this.url.setValidators([
           Validators.required,
           Validators.pattern(urlRegex),
         ]);
+      } else if (type === "email") {
+        this.url.setValue("")
       }
       this.url.updateValueAndValidity();
     });
