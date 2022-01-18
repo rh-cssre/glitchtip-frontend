@@ -40,7 +40,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     ]),
     interval: new FormControl(60, [
       Validators.required,
-      Validators.min(1),
+      Validators.min(60),
       Validators.max(86399),
     ]),
     project: new FormControl(null),
