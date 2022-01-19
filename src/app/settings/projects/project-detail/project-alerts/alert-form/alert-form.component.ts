@@ -26,7 +26,6 @@ export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
 })
 export class AlertFormComponent implements OnInit {
   @Input() loading: boolean | null = false;
-  @Input() toggleIssueAlerts: boolean = false;
   @Input() timespan: number | null = 1;
   @Input() quantity: number | null = 1;
   @Input() uptime: boolean | null = false;
@@ -37,19 +36,20 @@ export class AlertFormComponent implements OnInit {
   }>();
   @Input() newAlert: boolean | undefined = false;
 
+  intervalValidators = [
+    Validators.min(0),
+    numberValidator,
+    Validators.required,
+  ];
+
   projectAlertForm = new FormGroup({
-    timespan_minutes: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-    quantity: new FormControl("", [
-      Validators.min(0),
-      numberValidator,
-      Validators.required,
-    ]),
-    uptime: new FormControl("")
+    timespan_minutes: new FormControl(""),
+    quantity: new FormControl(""),
+    uptime: new FormControl(""),
   });
+
+  errorAlertsOn: boolean = true;
+  errorAlertsOnInitial: boolean = true;
 
   projectFormTimespan = this.projectAlertForm.get(
     "timespan_minutes"
@@ -64,18 +64,59 @@ export class AlertFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectAlertForm.setValue({
-      timespan_minutes: this.timespan,
-      quantity: this.quantity,
+      timespan_minutes: this.timespan ? this.timespan : "",
+      quantity: this.quantity ? this.quantity : "",
       uptime: this.uptime,
     });
+
+    this.errorAlertsOn = !this.timespan && !this.quantity ? false : true;
+    this.errorAlertsOnInitial = !this.timespan && !this.quantity ? false : true;
+
+    if (this.errorAlertsOn) {
+      this.initializeIntervalValidation();
+    }
+  }
+
+  toggleErrorAlerts(): void {
+    this.errorAlertsOn = !this.errorAlertsOn;
+
+    if (!this.errorAlertsOn) {
+      this.projectFormQuantity.clearValidators();
+      this.projectFormQuantity.setValue("");
+      this.projectFormTimespan.clearValidators();
+      this.projectFormTimespan.setValue("");
+      this.projectAlertForm.updateValueAndValidity()
+    } else {
+      this.initializeIntervalValidation();
+      this.projectFormQuantity.setValue(1);
+      this.projectFormTimespan.setValue(1);
+      this.projectAlertForm.updateValueAndValidity();
+    }
+  }
+
+  toggleFromInput(): void {
+    if (!this.errorAlertsOn) {
+      this.errorAlertsOn = true;
+      this.initializeIntervalValidation();
+      this.projectFormQuantity.setValue(1);
+      this.projectFormTimespan.setValue(1);
+      this.projectFormTimespan.updateValueAndValidity()
+    }
+  }
+
+  initializeIntervalValidation(): void {
+    this.projectFormQuantity.setValidators(this.intervalValidators);
+    this.projectFormTimespan.setValidators(this.intervalValidators);
   }
 
   onSubmit(): void {
     if (this.projectAlertForm.valid) {
       this.alertSubmit.emit({
-        timespan_minutes: this.projectFormTimespan.value,
-        quantity: this.projectFormQuantity.value,
-        uptime: this.projectFormUptime.value
+        timespan_minutes: this.errorAlertsOn
+          ? this.projectFormTimespan.value
+          : null,
+        quantity: this.errorAlertsOn ? this.projectFormQuantity.value : null,
+        uptime: this.projectFormUptime.value,
       });
     }
   }
