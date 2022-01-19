@@ -7,12 +7,13 @@ import {
   Subscription,
   Product,
   CreateSubscriptionResp,
+  EventsCount,
 } from "./subscriptions.interfaces";
 import { baseUrl } from "src/app/constants";
 
 interface SubscriptionsState {
   subscription: Subscription | null;
-  eventsCount: number | null;
+  eventsCount: EventsCount | null;
   products: Product[] | null;
 }
 
@@ -35,9 +36,25 @@ export class SubscriptionsService {
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
   );
-  readonly eventsCount$ = this.getState$.pipe(
-    map((state) => state.eventsCount)
+  readonly eventsCountWithTotal$ = this.getState$.pipe(
+    map((state) => {
+      let total = 0;
+      if (state.eventsCount) {
+        total +=
+          state.eventsCount.eventCount! +
+          state.eventsCount.transactionEventCount! +
+          state.eventsCount.uptimeCheckEventCount!;
+
+        return {
+          ...state.eventsCount,
+          total,
+        };
+      } else {
+        return state.eventsCount;
+      }
+    })
   );
+
   readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
   readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
     map((plans) => {
@@ -71,7 +88,7 @@ export class SubscriptionsService {
    * @param slug Organization Slug for requested subscription event count
    */
   retrieveSubscriptionCount(slug: string) {
-    return this.http.get<number>(`${this.url}${slug}/events_count/`).pipe(
+    return this.http.get<EventsCount>(`${this.url}${slug}/events_count/`).pipe(
       tap((count) => this.setSubscriptionCount(count)),
       catchError((error) => {
         return EMPTY;
@@ -141,7 +158,7 @@ export class SubscriptionsService {
     this.state.next({ ...this.state.getValue(), subscription });
   }
 
-  private setSubscriptionCount(eventsCount: number) {
+  private setSubscriptionCount(eventsCount: EventsCount) {
     this.state.next({ ...this.state.getValue(), eventsCount });
   }
 }

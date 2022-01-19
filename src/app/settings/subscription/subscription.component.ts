@@ -7,6 +7,12 @@ import { environment } from "../../../environments/environment";
 import { StripeService } from "./stripe.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 
+interface Percentages {
+  total: number;
+  errorEvents: number;
+  uptimeEvents: number;
+}
+
 @Component({
   templateUrl: "./subscription.component.html",
   styleUrls: ["./subscription.component.scss"],
@@ -14,7 +20,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 })
 export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
-  eventsCount$ = this.service.eventsCount$;
+  eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   projectsCount$ = this.orgService.projectsCount$;
   routerSubscription: Subscription;
@@ -29,10 +35,16 @@ export class SubscriptionComponent implements OnDestroy {
   );
   eventsPercent$ = combineLatest([
     this.totalEventsAllowed$,
-    this.eventsCount$,
+    this.eventsCountWithTotal$,
   ]).pipe(
     filter(([eventsAllowed, events]) => !!eventsAllowed && !!events),
-    map(([eventsAllowed, events]) => (events! / eventsAllowed!) * 100)
+    map(([eventsAllowed, events]) => {
+      return <Percentages>{
+        total: (events?.total! / eventsAllowed!) * 100,
+        errorEvents: (events?.eventCount! / eventsAllowed!) * 100,
+        uptimeEvents: (events?.uptimeCheckEventCount! / eventsAllowed!) * 100,
+      };
+    })
   );
 
   constructor(
