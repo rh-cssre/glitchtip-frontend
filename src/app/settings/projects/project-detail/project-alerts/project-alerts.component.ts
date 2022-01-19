@@ -76,17 +76,19 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateTimespanQuantity(
+  updateProperties(
     event: {
       timespan_minutes: number;
       quantity: number;
+      uptime: boolean,
     },
     alert: ProjectAlert
   ): void {
     if (alert.pk) {
-      this.alertsService.updateTimespanQuantity(
+      this.alertsService.updateAlertProperties(
         event.timespan_minutes,
         event.quantity,
+        event.uptime,
         alert.pk,
         alert.alertRecipients
       );
@@ -97,10 +99,13 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     this.alertsService.deleteAlertRecipient(recipient, alert);
   }
 
-  newAlertTimespanQuantity(event: {
-    timespan_minutes: number;
-    quantity: number;
-  }) {
+  newAlertProperties(
+    event: {
+      timespan_minutes: number;
+      quantity: number;
+      uptime: boolean;
+    },
+  ) {
     this.alertsService.createNewAlert(event);
   }
 

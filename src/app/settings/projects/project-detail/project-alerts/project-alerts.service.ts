@@ -217,7 +217,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     this.setRemoveNewAlertRecipient(url);
   }
 
-  createNewAlert(timeQuantity: { timespan_minutes: number; quantity: number }) {
+  createNewAlert(properties: { timespan_minutes: number; quantity: number, uptime: boolean }) {
     this.setNewAlertLoading();
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
@@ -227,11 +227,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       .pipe(
         take(1),
         exhaustMap(([orgSlug, projectSlug, recipients]) => {
-          if (orgSlug && projectSlug && timeQuantity && recipients !== null) {
+          if (orgSlug && projectSlug && properties && recipients !== null) {
             const data: NewProjectAlert = {
-              timespan_minutes: timeQuantity.timespan_minutes,
-              quantity: timeQuantity.quantity,
-              uptimeAlert: 
+              timespan_minutes: properties.timespan_minutes,
+              quantity: properties.quantity,
+              uptime: properties.uptime,
               alertRecipients: recipients,
             };
             return this.projectAlertsAPIService
@@ -283,9 +283,10 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       .subscribe();
   }
 
-  updateTimespanQuantity(
+  updateAlertProperties(
     newTimespan: number,
     newQuantity: number,
+    uptime: boolean,
     id: number,
     recipients: AlertRecipient[]
   ) {
@@ -294,6 +295,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       pk: id,
       timespan_minutes: newTimespan,
       quantity: newQuantity,
+      uptime,
       alertRecipients: recipients,
     };
     combineLatest([
@@ -308,7 +310,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
               .update(id.toString(), data, orgSlug, projectSlug)
               .pipe(
                 tap((resp) => {
-                  this.setUpdateTimespanQuantity(resp);
+                  this.setUpdateAlertProperties(resp);
                   this.snackBar.open(`Success: Your alert has been updated`);
                 })
               );
@@ -346,6 +348,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
             const data = {
               timespan_minutes: activeAlert.timespan_minutes,
               quantity: activeAlert.quantity,
+              uptime: activeAlert.uptime,
               alertRecipients: recipientsWithoutPK,
             };
             return this.projectAlertsAPIService
@@ -584,7 +587,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     });
   }
 
-  private setUpdateTimespanQuantity(updatedAlert: ProjectAlert) {
+  private setUpdateAlertProperties(updatedAlert: ProjectAlert) {
     const state = this.state.getValue();
     this.setState({
       projectAlerts: this.findAndReplaceAlert(
@@ -677,6 +680,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
           ...alert,
           timespan_minutes: newAlert.timespan_minutes,
           quantity: newAlert.quantity,
+          uptime: newAlert.uptime
         };
       } else return alert;
     });

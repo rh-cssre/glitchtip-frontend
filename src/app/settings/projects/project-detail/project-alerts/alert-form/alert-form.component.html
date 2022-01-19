@@ -70,16 +70,18 @@
       >,&nbsp;send&nbsp;an&nbsp;email.</span
     >
   </div>
-  <div class="option-text">
-    <mat-checkbox>If an uptime monitor is triggered.</mat-checkbox>
-  </div>
+
+    <div class="option-text">
+      <mat-checkbox formControlName="uptime">If an uptime monitor is triggered.</mat-checkbox>
+    </div>
 
   <gt-loading-button
     *ngIf="!newAlert"
     buttonText="Update"
     [disabled]="
       projectFormTimespan?.value === timespan &&
-      projectFormQuantity?.value === quantity
+      projectFormQuantity?.value === quantity &&
+      projectFormUptime?.value === uptime
     "
     buttonStyle="basic"
     [loading]="loading === true"

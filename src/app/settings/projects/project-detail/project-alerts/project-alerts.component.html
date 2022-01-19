@@ -29,7 +29,7 @@
         <gt-alert-form
           #newAlert
           [newAlert]="true"
-          (alertSubmit)="newAlertTimespanQuantity($event)"
+          (alertSubmit)="newAlertProperties($event)"
         ></gt-alert-form>
         <h4 class="mat-body-strong">Recipients:</h4>
         <p
@@ -147,7 +147,8 @@
             [loading]="(updateTimespanQuantityLoading$ | async) === alert.pk"
             [timespan]="alert.timespan_minutes"
             [quantity]="alert.quantity"
-            (alertSubmit)="updateTimespanQuantity($event, alert)"
+            [uptime]="alert.uptime"
+            (alertSubmit)="updateProperties($event, alert)"
           ></gt-alert-form>
           <h4 class="mat-body-strong">Recipients:</h4>
           <p

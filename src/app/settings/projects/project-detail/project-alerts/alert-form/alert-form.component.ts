@@ -29,9 +29,11 @@ export class AlertFormComponent implements OnInit {
   @Input() toggleIssueAlerts: boolean = false;
   @Input() timespan: number | null = 1;
   @Input() quantity: number | null = 1;
+  @Input() uptime: boolean | null = false;
   @Output() alertSubmit = new EventEmitter<{
     timespan_minutes: number;
     quantity: number;
+    uptime: boolean;
   }>();
   @Input() newAlert: boolean | undefined = false;
 
@@ -46,13 +48,14 @@ export class AlertFormComponent implements OnInit {
       numberValidator,
       Validators.required,
     ]),
-    enableUptimeAlerts: new FormControl("")
+    uptime: new FormControl("")
   });
 
   projectFormTimespan = this.projectAlertForm.get(
     "timespan_minutes"
   ) as FormControl;
   projectFormQuantity = this.projectAlertForm.get("quantity") as FormControl;
+  projectFormUptime = this.projectAlertForm.get("uptime") as FormControl;
 
   matcher = new LessAnnoyingErrorStateMatcher();
   newFormMatcher = new NewAlertErrorStateMatcher();
@@ -63,7 +66,7 @@ export class AlertFormComponent implements OnInit {
     this.projectAlertForm.setValue({
       timespan_minutes: this.timespan,
       quantity: this.quantity,
-      enableUptimeAlerts: true,
+      uptime: this.uptime,
     });
   }
 
@@ -72,6 +75,7 @@ export class AlertFormComponent implements OnInit {
       this.alertSubmit.emit({
         timespan_minutes: this.projectFormTimespan.value,
         quantity: this.projectFormQuantity.value,
+        uptime: this.projectFormUptime.value
       });
     }
   }
