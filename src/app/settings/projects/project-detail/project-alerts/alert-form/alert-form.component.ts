@@ -90,8 +90,8 @@ export class AlertFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectAlertForm.setValue({
-      timespan_minutes: this.timespan ? this.timespan : "",
-      quantity: this.quantity ? this.quantity : "",
+      timespan_minutes: this.timespan,
+      quantity: this.quantity,
       optionsGroup: {
         uptime: this.uptime,
         errorAlert: this.errorAlert,
