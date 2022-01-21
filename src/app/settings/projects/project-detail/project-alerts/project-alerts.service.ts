@@ -9,6 +9,7 @@ import {
   take,
   catchError,
   exhaustMap,
+  distinctUntilChanged,
 } from "rxjs/operators";
 import { OrganizationsService } from "../../../../api/organizations/organizations.service";
 import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
@@ -43,8 +44,8 @@ interface ProjectAlertState {
   // current alerts
   removeAlertLoading: number | null;
   removeAlertError: { error: string; pk: number } | null;
-  updateTimespanQuantityLoading: number | null;
-  updateTimespanQuantityError: { error: string; pk: number } | null;
+  updatePropertiesLoading: number | null;
+  updatePropertiesError: { error: string; pk: number } | null;
   deleteRecipientLoading: number | null;
   deleteRecipientError: string | null;
 }
@@ -71,8 +72,8 @@ const initialState: ProjectAlertState = {
   // current alerts
   removeAlertLoading: null,
   removeAlertError: null,
-  updateTimespanQuantityLoading: null,
-  updateTimespanQuantityError: null,
+  updatePropertiesLoading: null,
+  updatePropertiesError: null,
   deleteRecipientLoading: null,
   deleteRecipientError: null,
 };
@@ -85,8 +86,17 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   readonly initialLoadError$ = this.getState$.pipe(
     map((data) => data.initialLoadError)
   );
-  readonly projectAlert$ = this.getState$.pipe(
-    map((data) => data.projectAlerts)
+  readonly projectAlerts$ = this.getState$.pipe(
+    map((data) => data.projectAlerts),
+    distinctUntilChanged(),
+    map((alerts) =>
+      alerts?.map((alert) => {
+        return {
+          ...alert,
+          errorAlert: !alert.timespan_minutes && !alert.quantity ? false : true,
+        };
+      })
+    )
   );
 
   /** New Alert */
@@ -136,11 +146,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   readonly removeAlertError$ = this.getState$.pipe(
     map((data) => data.removeAlertError)
   );
-  readonly updateTimespanQuantityLoading$ = this.getState$.pipe(
-    map((data) => data.updateTimespanQuantityLoading)
+  readonly updatePropertiesLoading$ = this.getState$.pipe(
+    map((data) => data.updatePropertiesLoading)
   );
-  readonly updateTimespanQuantityError$ = this.getState$.pipe(
-    map((data) => data.updateTimespanQuantityError)
+  readonly updatePropertiesError$ = this.getState$.pipe(
+    map((data) => data.updatePropertiesError)
   );
   readonly deleteRecipientLoading$ = this.getState$.pipe(
     map((data) => data.deleteRecipientLoading)
@@ -217,7 +227,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     this.setRemoveNewAlertRecipient(url);
   }
 
-  createNewAlert(properties: { timespan_minutes: number; quantity: number, uptime: boolean }) {
+  createNewAlert(properties: {
+    timespan_minutes: number;
+    quantity: number;
+    uptime: boolean;
+  }) {
     this.setNewAlertLoading();
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
@@ -290,7 +304,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     id: number,
     recipients: AlertRecipient[]
   ) {
-    this.setUpdateTimespanQuantityLoading(id);
+    this.setUpdatePropertiesLoading(id);
     const data: ProjectAlert = {
       pk: id,
       timespan_minutes: newTimespan,
@@ -318,7 +332,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
           return EMPTY;
         }),
         catchError((err: HttpErrorResponse) => {
-          this.setUpdateTimespanQuantityError(err, id);
+          this.setUpdatePropertiesError(err, id);
           return EMPTY;
         })
       )
@@ -337,14 +351,15 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         exhaustMap(([activeAlert, orgSlug, projectSlug]) => {
           if (activeAlert && orgSlug && projectSlug) {
             activeErrorPk = activeAlert.pk;
-            const recipientsWithoutPK: NewAlertRecipient[] = activeAlert.alertRecipients
-              .map((recipient) => {
-                return {
-                  recipientType: recipient.recipientType,
-                  url: recipient.url,
-                };
-              })
-              .concat([newRecipient]);
+            const recipientsWithoutPK: NewAlertRecipient[] =
+              activeAlert.alertRecipients
+                .map((recipient) => {
+                  return {
+                    recipientType: recipient.recipientType,
+                    url: recipient.url,
+                  };
+                })
+                .concat([newRecipient]);
             const data = {
               timespan_minutes: activeAlert.timespan_minutes,
               quantity: activeAlert.quantity,
@@ -594,24 +609,24 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         state.projectAlerts,
         updatedAlert
       ),
-      updateTimespanQuantityLoading: null,
-      updateTimespanQuantityError: null,
+      updatePropertiesLoading: null,
+      updatePropertiesError: null,
     });
   }
 
-  private setUpdateTimespanQuantityLoading(pk: number) {
+  private setUpdatePropertiesLoading(pk: number) {
     this.setState({
-      updateTimespanQuantityLoading: pk,
-      updateTimespanQuantityError: null,
+      updatePropertiesLoading: pk,
+      updatePropertiesError: null,
     });
   }
 
-  private setUpdateTimespanQuantityError(err: HttpErrorResponse, id: number) {
+  private setUpdatePropertiesError(err: HttpErrorResponse, id: number) {
     const state = this.state.getValue();
     this.setState({
-      updateTimespanQuantityLoading: null,
-      updateTimespanQuantityError: {
-        ...state.updateTimespanQuantityError,
+      updatePropertiesLoading: null,
+      updatePropertiesError: {
+        ...state.updatePropertiesError,
         error: `${err.statusText} : ${err.status}`,
         pk: id,
       },
@@ -680,7 +695,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
           ...alert,
           timespan_minutes: newAlert.timespan_minutes,
           quantity: newAlert.quantity,
-          uptime: newAlert.uptime
+          uptime: newAlert.uptime,
         };
       } else return alert;
     });

@@ -1,10 +1,20 @@
+<p
+  *ngIf="projectFormOptionsGroup?.errors?.selectionRequired"
+  class="error alert-form-error"
+>
+  Please choose at least one.
+</p>
+
 <form
   class="flex-common"
   (ngSubmit)="onSubmit()"
   [formGroup]="projectAlertForm"
 >
   <div class="option-text">
-    <mat-checkbox [checked]="errorAlertsOn" (change)="toggleErrorAlerts()">
+    <mat-checkbox
+      [checked]="projectFormErrorAlert.value"
+      (change)="toggleErrorAlerts()"
+    >
       <span>
         If&nbsp;an&nbsp;<span
           class="tooltip"
@@ -72,7 +82,7 @@
     >
   </div>
 
-  <div class="option-text">
+  <div class="option-text" formGroupName="optionsGroup">
     <mat-checkbox formControlName="uptime"
       >If an uptime monitor is triggered.</mat-checkbox
     >
@@ -84,8 +94,7 @@
     [disabled]="
       projectFormTimespan?.value === timespan &&
       projectFormQuantity?.value === quantity &&
-      projectFormUptime?.value === uptime &&
-      errorAlertsOn === errorAlertsOnInitial
+      projectFormUptime?.value === uptime
     "
     buttonStyle="basic"
     [loading]="loading === true"

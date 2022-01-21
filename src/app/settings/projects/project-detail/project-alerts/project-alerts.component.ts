@@ -16,16 +16,14 @@ import { distinctUntilChanged } from "rxjs";
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
   @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
-  projectAlerts$ = this.alertsService.projectAlert$;
+  projectAlerts$ = this.alertsService.projectAlerts$;
   newProjectAlertRecipients$ = this.alertsService.newProjectAlertRecipients$;
   initialLoad$ = this.alertsService.initialLoad$;
   initialLoadError$ = this.alertsService.initialLoadError$;
   removeAlertLoading$ = this.alertsService.removeAlertLoading$;
   removeAlertError$ = this.alertsService.removeAlertError$;
-  updateTimespanQuantityLoading$ =
-    this.alertsService.updateTimespanQuantityLoading$;
-  updateTimespanQuantityError$ =
-    this.alertsService.updateTimespanQuantityError$;
+  updatePropertiesLoading$ = this.alertsService.updatePropertiesLoading$;
+  updatePropertiesError$ = this.alertsService.updatePropertiesError$;
   deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
   deleteRecipientError$ = this.alertsService.deleteRecipientError$;
   newAlertOpen$ = this.alertsService.newAlertOpen$;
@@ -80,7 +78,7 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     event: {
       timespan_minutes: number;
       quantity: number;
-      uptime: boolean,
+      uptime: boolean;
     },
     alert: ProjectAlert
   ): void {
@@ -99,13 +97,11 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     this.alertsService.deleteAlertRecipient(recipient, alert);
   }
 
-  newAlertProperties(
-    event: {
-      timespan_minutes: number;
-      quantity: number;
-      uptime: boolean;
-    },
-  ) {
+  newAlertProperties(event: {
+    timespan_minutes: number;
+    quantity: number;
+    uptime: boolean;
+  }) {
     this.alertsService.createNewAlert(event);
   }
 

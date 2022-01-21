@@ -5,6 +5,9 @@ import {
   Validators,
   FormGroupDirective,
   NgForm,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
@@ -19,6 +22,17 @@ export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+export const selectionRequiredValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const errorAlert = control.get("errorAlert");
+  const uptime = control.get("uptime");
+
+  return errorAlert?.value || uptime?.value
+    ? null
+    : { selectionRequired: true };
+};
+
 @Component({
   selector: "gt-alert-form",
   templateUrl: "./alert-form.component.html",
@@ -29,6 +43,7 @@ export class AlertFormComponent implements OnInit {
   @Input() timespan: number | null = 1;
   @Input() quantity: number | null = 1;
   @Input() uptime: boolean | null = false;
+  @Input() errorAlert: boolean = true;
   @Output() alertSubmit = new EventEmitter<{
     timespan_minutes: number;
     quantity: number;
@@ -43,19 +58,30 @@ export class AlertFormComponent implements OnInit {
   ];
 
   projectAlertForm = new FormGroup({
+    optionsGroup: new FormGroup(
+      {
+        uptime: new FormControl(""),
+        errorAlert: new FormControl(""),
+      },
+      selectionRequiredValidator
+    ),
     timespan_minutes: new FormControl(""),
     quantity: new FormControl(""),
-    uptime: new FormControl(""),
   });
-
-  errorAlertsOn: boolean = true;
-  errorAlertsOnInitial: boolean = true;
 
   projectFormTimespan = this.projectAlertForm.get(
     "timespan_minutes"
   ) as FormControl;
   projectFormQuantity = this.projectAlertForm.get("quantity") as FormControl;
-  projectFormUptime = this.projectAlertForm.get("uptime") as FormControl;
+  projectFormUptime = this.projectAlertForm.get(
+    "optionsGroup.uptime"
+  ) as FormControl;
+  projectFormErrorAlert = this.projectAlertForm.get(
+    "optionsGroup.errorAlert"
+  ) as FormControl;
+  projectFormOptionsGroup = this.projectAlertForm.get(
+    "optionsGroup"
+  ) as FormGroup;
 
   matcher = new LessAnnoyingErrorStateMatcher();
   newFormMatcher = new NewAlertErrorStateMatcher();
@@ -66,42 +92,46 @@ export class AlertFormComponent implements OnInit {
     this.projectAlertForm.setValue({
       timespan_minutes: this.timespan ? this.timespan : "",
       quantity: this.quantity ? this.quantity : "",
-      uptime: this.uptime,
+      optionsGroup: {
+        uptime: this.uptime,
+        errorAlert: this.errorAlert,
+      },
     });
 
-    this.errorAlertsOn = !this.timespan && !this.quantity ? false : true;
-    this.errorAlertsOnInitial = !this.timespan && !this.quantity ? false : true;
-
-    if (this.errorAlertsOn) {
+    if (this.errorAlert) {
       this.initializeIntervalValidation();
     }
   }
 
   toggleErrorAlerts(): void {
-    this.errorAlertsOn = !this.errorAlertsOn;
+    this.projectFormErrorAlert.setValue(!this.projectFormErrorAlert.value);
 
-    if (!this.errorAlertsOn) {
+    if (!this.projectFormErrorAlert.value) {
       this.projectFormQuantity.clearValidators();
       this.projectFormQuantity.setValue("");
       this.projectFormTimespan.clearValidators();
       this.projectFormTimespan.setValue("");
-      this.projectAlertForm.updateValueAndValidity()
     } else {
       this.initializeIntervalValidation();
       this.projectFormQuantity.setValue(1);
       this.projectFormTimespan.setValue(1);
-      this.projectAlertForm.updateValueAndValidity();
     }
+
+    this.projectAlertForm.updateValueAndValidity();
   }
 
   toggleFromInput(): void {
-    if (!this.errorAlertsOn) {
-      this.errorAlertsOn = true;
+    if (!this.projectFormErrorAlert.value) {
+      this.projectFormErrorAlert.setValue(true);
       this.initializeIntervalValidation();
       this.projectFormQuantity.setValue(1);
       this.projectFormTimespan.setValue(1);
-      this.projectFormTimespan.updateValueAndValidity()
+      this.projectFormTimespan.updateValueAndValidity();
     }
+  }
+
+  toggleUptime(): void {
+    this.projectFormUptime.setValue(!this.projectFormUptime.value);
   }
 
   initializeIntervalValidation(): void {
@@ -112,10 +142,12 @@ export class AlertFormComponent implements OnInit {
   onSubmit(): void {
     if (this.projectAlertForm.valid) {
       this.alertSubmit.emit({
-        timespan_minutes: this.errorAlertsOn
+        timespan_minutes: this.projectFormErrorAlert.value
           ? this.projectFormTimespan.value
           : null,
-        quantity: this.errorAlertsOn ? this.projectFormQuantity.value : null,
+        quantity: this.projectFormErrorAlert.value
+          ? this.projectFormQuantity.value
+          : null,
         uptime: this.projectFormUptime.value,
       });
     }

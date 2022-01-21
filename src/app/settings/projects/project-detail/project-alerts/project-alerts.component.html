@@ -137,17 +137,18 @@
             </gt-loading-button>
           </div>
           <p
-            *ngIf="(updateTimespanQuantityError$ | async)?.pk === alert.pk"
+            *ngIf="(updatePropertiesError$ | async)?.pk === alert.pk"
             class="error alert-form-error"
           >
-            {{ (updateTimespanQuantityError$ | async)?.error }}
+            {{ (updatePropertiesError$ | async)?.error }}
           </p>
           <gt-alert-form
             [newAlert]="false"
-            [loading]="(updateTimespanQuantityLoading$ | async) === alert.pk"
+            [loading]="(updatePropertiesLoading$ | async) === alert.pk"
             [timespan]="alert.timespan_minutes"
             [quantity]="alert.quantity"
             [uptime]="alert.uptime"
+            [errorAlert]="alert.errorAlert"
             (alertSubmit)="updateProperties($event, alert)"
           ></gt-alert-form>
           <h4 class="mat-body-strong">Recipients:</h4>
