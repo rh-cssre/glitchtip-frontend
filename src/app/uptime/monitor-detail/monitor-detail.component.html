@@ -40,7 +40,7 @@
       <mat-card-content>
         <ng-container *ngIf="monitor.projectName; else noProject">
           <ng-container
-            *ngIf="configuredAlerts$ | async as configuredAlerts; else noAlerts"
+            *ngIf="uptimeAlertCount$ | async as uptimeAlertCount; else noAlerts"
           >
             <ng-container
               *ngIf="associatedProjectSlug$ | async as associatedProjectSlug"
@@ -48,7 +48,7 @@
               <p>
                 This monitor is associated with the
                 <b>{{ monitor.projectName }}</b> project. There
-                {{ configuredAlerts | i18nPlural: alertCountPluralMapping }}
+                {{ uptimeAlertCount | i18nPlural: alertCountPluralMapping }}
                 set up for this project. Visit the
                 <a
                   [routerLink]="[

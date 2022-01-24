@@ -21,7 +21,7 @@ export interface UptimeState extends PaginationStatefulServiceState {
   monitorChecks: MonitorCheck[];
   orgEnvironments: Environment[];
   monitorDetails: MonitorDetail | null;
-  configuredAlerts: number | null;
+  uptimeAlertCount: number | null;
   associatedProjectSlug: string | null;
   editLoading: boolean;
   createLoading: boolean;
@@ -36,7 +36,7 @@ const initialState: UptimeState = {
   pagination: initialPaginationState,
   orgEnvironments: [],
   monitorDetails: null,
-  configuredAlerts: null,
+  uptimeAlertCount: null,
   associatedProjectSlug: null,
   editLoading: false,
   createLoading: false,
@@ -56,8 +56,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   error$ = this.getState$.pipe(map((state) => state.error));
   orgEnvironments$ = this.getState$.pipe(map((state) => state.orgEnvironments));
-  configuredAlerts$ = this.getState$.pipe(
-    map((state) => state.configuredAlerts)
+  uptimeAlertCount$ = this.getState$.pipe(
+    map((state) => state.uptimeAlertCount)
   );
   associatedProjectSlug$ = this.getState$.pipe(
     map((state) => state.associatedProjectSlug)
@@ -192,7 +192,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
         tap((activeMonitor) => {
           this.setActiveMonitor(activeMonitor);
           if (activeMonitor.project) {
-            this.countConfiguredAlerts(orgSlug, activeMonitor.project);
+            this.countUptimeAlerts(orgSlug, activeMonitor.project);
           }
         })
       )
@@ -220,7 +220,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .toPromise();
   }
 
-  countConfiguredAlerts(orgSlug: string, projectId: number) {
+  countUptimeAlerts(orgSlug: string, projectId: number) {
     lastValueFrom(
       this.organizationsService.activeOrganization$.pipe(
         filter((orgDetail) => !!orgDetail),
@@ -235,7 +235,9 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
                 tap((projectAlerts) => {
                   this.setState({
                     associatedProjectSlug: projectSlug,
-                    configuredAlerts: projectAlerts.length,
+                    uptimeAlertCount: projectAlerts.filter(
+                      (alert) => alert.uptime === true
+                    ).length,
                   });
                 })
               )
