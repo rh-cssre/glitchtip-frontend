@@ -26,6 +26,7 @@ export interface UptimeState extends PaginationStatefulServiceState {
   editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
+  availableAlerts: number | null;
   error: string;
 }
 
@@ -40,6 +41,7 @@ const initialState: UptimeState = {
   editLoading: false,
   createLoading: false,
   deleteLoading: false,
+  availableAlerts: null,
   error: "",
 };
 
