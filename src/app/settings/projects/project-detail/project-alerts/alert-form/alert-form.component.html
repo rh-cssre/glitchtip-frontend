@@ -12,7 +12,7 @@
 >
   <div>
     <mat-checkbox
-      id="error-check"
+      data-cy="error-check"
       [checked]="projectFormErrorAlert.value"
       (change)="toggleErrorAlerts()"
     >
@@ -28,7 +28,7 @@
       <mat-label>Quantity</mat-label>
       <input
         matInput
-        id="quantity"
+        data-cy="quantity"
         min="0"
         max="10000"
         type="number"
@@ -84,12 +84,12 @@
     >
 
     <div class="uptime-option" formGroupName="optionsGroup">
-      <mat-checkbox id="uptime-check" formControlName="uptime"
+      <mat-checkbox data-cy="uptime-check" formControlName="uptime"
         >If an uptime monitor is triggered.</mat-checkbox
       >
     </div>
   </div>
-  <div class="update" id="update-container">
+  <div class="update" data-cy="update-container">
     <gt-loading-button
       *ngIf="!newAlert"
       buttonText="Update"
