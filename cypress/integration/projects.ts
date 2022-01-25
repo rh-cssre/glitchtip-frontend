@@ -109,18 +109,40 @@ describe("Add and edit alerts", () => {
 
   it("should add a project alert, remove email recipient, add email recipient back", () => {
     cy.get("#create-new-alert").click();
-    cy.get("#quantity").clear().type("2");
-    cy.get('button').contains("submit").click();
+    cy.get("[data-cy=quantity]").clear().type("2");
+    cy.get("button").contains("submit").click();
     cy.contains("Remove Alert 1");
-    cy.get("#quantity").should('have.value', '2');
+    cy.get("[data-cy=quantity]").should("have.value", "2");
 
-    cy.get("#delete-recipient").click()
-    cy.contains("This alert isn't being sent anywhere.")
+    cy.get("#delete-recipient").click();
+    cy.contains("This alert isn't being sent anywhere.");
 
-    cy.get('button').contains("Add An Alert Recipient").click()
-    cy.get("#recipient-type").click().get('mat-option').contains('Email').click()
-    cy.get('button').contains("Add Recipient").click()
-    cy.contains("Send an email to team members on this project.")
+    cy.get("button").contains("Add An Alert Recipient").click();
+    cy.get("#recipient-type")
+      .click()
+      .get("mat-option")
+      .contains("Email")
+      .click();
+    cy.get("button").contains("Add Recipient").click();
+    cy.contains("Send an email to team members on this project.");
   });
 
+  it("should add an alert for uptime notifications, then update it to work for error notifications", () => {
+    cy.get("#create-new-alert").click();
+    cy.get("[data-cy=error-check]").click();
+    cy.contains("Please select events or uptime monitor triggers for your alert.");
+    cy.get("[data-cy=uptime-check]").click();
+    cy.get("button").contains("submit").click();
+    cy.contains("Success! Your new alert has been added.");
+
+    cy.get("[data-cy=error-check]").find("input").should("not.be.checked");
+    cy.get("[data-cy=uptime-check]").find("input").should("be.checked");
+
+    cy.get("[data-cy=error-check]").click();
+    cy.get("[data-cy=update-container]").contains("Update").click();
+    cy.contains("Success: Your alert has been updated");
+
+    cy.get("[data-cy=error-check]").find("input").should("be.checked");
+    cy.get("[data-cy=uptime-check]").find("input").should("be.checked");
+  });
 });

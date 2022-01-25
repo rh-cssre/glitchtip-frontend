@@ -16,16 +16,14 @@ import { distinctUntilChanged } from "rxjs";
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
   @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
-  projectAlerts$ = this.alertsService.projectAlert$;
+  projectAlerts$ = this.alertsService.projectAlerts$;
   newProjectAlertRecipients$ = this.alertsService.newProjectAlertRecipients$;
   initialLoad$ = this.alertsService.initialLoad$;
   initialLoadError$ = this.alertsService.initialLoadError$;
   removeAlertLoading$ = this.alertsService.removeAlertLoading$;
   removeAlertError$ = this.alertsService.removeAlertError$;
-  updateTimespanQuantityLoading$ =
-    this.alertsService.updateTimespanQuantityLoading$;
-  updateTimespanQuantityError$ =
-    this.alertsService.updateTimespanQuantityError$;
+  updatePropertiesLoading$ = this.alertsService.updatePropertiesLoading$;
+  updatePropertiesError$ = this.alertsService.updatePropertiesError$;
   deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
   deleteRecipientError$ = this.alertsService.deleteRecipientError$;
   newAlertOpen$ = this.alertsService.newAlertOpen$;
@@ -76,17 +74,19 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateTimespanQuantity(
+  updateProperties(
     event: {
       timespan_minutes: number;
       quantity: number;
+      uptime: boolean;
     },
     alert: ProjectAlert
   ): void {
     if (alert.pk) {
-      this.alertsService.updateTimespanQuantity(
+      this.alertsService.updateAlertProperties(
         event.timespan_minutes,
         event.quantity,
+        event.uptime,
         alert.pk,
         alert.alertRecipients
       );
@@ -97,9 +97,10 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     this.alertsService.deleteAlertRecipient(recipient, alert);
   }
 
-  newAlertTimespanQuantity(event: {
+  newAlertProperties(event: {
     timespan_minutes: number;
     quantity: number;
+    uptime: boolean;
   }) {
     this.alertsService.createNewAlert(event);
   }
