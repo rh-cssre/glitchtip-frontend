@@ -20,6 +20,9 @@ export class MonitorDetailComponent
   loading$ = this.uptimeService.getState$.pipe(
     map((state) => state.pagination.loading)
   );
+  uptimeAlertCount$ = this.uptimeService.uptimeAlertCount$;
+  alertCountLoading$ = this.uptimeService.alertCountLoading$
+  associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
@@ -29,6 +32,11 @@ export class MonitorDetailComponent
       return { orgSlug, monitorId, cursor };
     })
   );
+
+  alertCountPluralMapping: { [k: string]: string } = {
+    "=1": "is 1 uptime alert",
+    other: "are # uptime alerts",
+  };
 
   routerEventSubscription: Subscription;
 

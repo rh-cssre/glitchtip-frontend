@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { map, tap, catchError, filter, take } from "rxjs/operators";
-import { EMPTY, combineLatest } from "rxjs";
+import { EMPTY, combineLatest, lastValueFrom } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import {
@@ -14,12 +14,15 @@ import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.service";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-alerts.service";
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
   monitorChecks: MonitorCheck[];
   orgEnvironments: Environment[];
   monitorDetails: MonitorDetail | null;
+  uptimeAlertCount: number | null;
+  alertCountLoading: boolean;
   editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
@@ -32,6 +35,8 @@ const initialState: UptimeState = {
   pagination: initialPaginationState,
   orgEnvironments: [],
   monitorDetails: null,
+  uptimeAlertCount: null,
+  alertCountLoading: true,
   editLoading: false,
   createLoading: false,
   deleteLoading: false,
@@ -49,14 +54,30 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   error$ = this.getState$.pipe(map((state) => state.error));
   orgEnvironments$ = this.getState$.pipe(map((state) => state.orgEnvironments));
+  uptimeAlertCount$ = this.getState$.pipe(
+    map((state) => state.uptimeAlertCount)
+  );
+  readonly alertCountLoading$ = this.getState$.pipe(
+    map((data) => data.alertCountLoading)
+  );
   readonly activeMonitor$ = this.getState$.pipe(
     map((data) => data.monitorDetails)
+  );
+  associatedProjectSlug$ = combineLatest([
+    this.organizationsService.activeOrganizationProjects$,
+    this.activeMonitor$,
+  ]).pipe(
+    map(
+      ([projects, monitor]) =>
+        projects?.find((project) => project.id === monitor?.project)?.slug
+    )
   );
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
     private monitorChecksAPIService: MonitorChecksAPIService,
     private organizationsService: OrganizationsService,
+    private projectAlertsService: ProjectAlertsAPIService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -172,9 +193,23 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   }
 
   retrieveMonitorDetails(orgSlug: string, monitorId: string) {
+    this.setState({
+      alertCountLoading: true
+    })
     this.monitorsAPIService
       .retrieve(orgSlug, monitorId)
-      .pipe(tap((activeMonitor) => this.setActiveMonitor(activeMonitor)))
+      .pipe(
+        tap((activeMonitor) => {
+          this.setActiveMonitor(activeMonitor);
+          if (activeMonitor.project) {
+            this.countUptimeAlerts(orgSlug);
+          } else {
+            this.setState({
+              alertCountLoading: false
+            })
+          }
+        })
+      )
       .toPromise();
   }
 
@@ -199,9 +234,34 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .toPromise();
   }
 
+  countUptimeAlerts(orgSlug: string) {
+    lastValueFrom(
+      this.associatedProjectSlug$.pipe(
+        filter((projectSlug) => !!projectSlug),
+        take(1),
+        tap((projectSlug) => {
+          if (projectSlug) {
+            lastValueFrom(
+              this.projectAlertsService.list(orgSlug, projectSlug).pipe(
+                tap((projectAlerts) => {
+                  this.setState({
+                    uptimeAlertCount: projectAlerts.filter(
+                      (alert) => alert.uptime === true
+                    ).length,
+                    alertCountLoading: false,
+                  });
+                })
+              )
+            );
+          }
+        })
+      )
+    );
+  }
+
   startPaginatedLoading() {
     const state = this.state.getValue();
-    this.setState({ pagination: {...state.pagination, loading: true}})
+    this.setState({ pagination: { ...state.pagination, loading: true } });
   }
 
   private setActiveMonitor(monitor: MonitorDetail) {
