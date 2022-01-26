@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { map, tap, catchError, filter, take } from "rxjs/operators";
-import { EMPTY, combineLatest, lastValueFrom, withLatestFrom } from "rxjs";
+import { EMPTY, combineLatest, lastValueFrom } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import {
@@ -22,6 +22,7 @@ export interface UptimeState extends PaginationStatefulServiceState {
   orgEnvironments: Environment[];
   monitorDetails: MonitorDetail | null;
   uptimeAlertCount: number | null;
+  alertCountLoading: boolean;
   editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
@@ -35,6 +36,7 @@ const initialState: UptimeState = {
   orgEnvironments: [],
   monitorDetails: null,
   uptimeAlertCount: null,
+  alertCountLoading: true,
   editLoading: false,
   createLoading: false,
   deleteLoading: false,
@@ -55,19 +57,21 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   uptimeAlertCount$ = this.getState$.pipe(
     map((state) => state.uptimeAlertCount)
   );
+  readonly alertCountLoading$ = this.getState$.pipe(
+    map((data) => data.alertCountLoading)
+  );
   readonly activeMonitor$ = this.getState$.pipe(
     map((data) => data.monitorDetails)
   );
-  associatedProjectSlug$ =
-    this.organizationsService.activeOrganizationProjects$.pipe(
-      filter((orgProjects) => !!orgProjects),
-      take(1),
-      withLatestFrom(this.activeMonitor$),
-      map(
-        ([projects, monitor]) =>
-          projects?.find((project) => project.id === monitor?.project)?.slug
-      )
-    );
+  associatedProjectSlug$ = combineLatest([
+    this.organizationsService.activeOrganizationProjects$,
+    this.activeMonitor$,
+  ]).pipe(
+    map(
+      ([projects, monitor]) =>
+        projects?.find((project) => project.id === monitor?.project)?.slug
+    )
+  );
 
   constructor(
     private monitorsAPIService: MonitorsAPIService,
@@ -189,6 +193,9 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   }
 
   retrieveMonitorDetails(orgSlug: string, monitorId: string) {
+    this.setState({
+      alertCountLoading: true
+    })
     this.monitorsAPIService
       .retrieve(orgSlug, monitorId)
       .pipe(
@@ -196,6 +203,10 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           this.setActiveMonitor(activeMonitor);
           if (activeMonitor.project) {
             this.countUptimeAlerts(orgSlug);
+          } else {
+            this.setState({
+              alertCountLoading: false
+            })
           }
         })
       )
@@ -226,6 +237,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   countUptimeAlerts(orgSlug: string) {
     lastValueFrom(
       this.associatedProjectSlug$.pipe(
+        filter((projectSlug) => !!projectSlug),
+        take(1),
         tap((projectSlug) => {
           if (projectSlug) {
             lastValueFrom(
@@ -235,6 +248,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
                     uptimeAlertCount: projectAlerts.filter(
                       (alert) => alert.uptime === true
                     ).length,
+                    alertCountLoading: false,
                   });
                 })
               )
