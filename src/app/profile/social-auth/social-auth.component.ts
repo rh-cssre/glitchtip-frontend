@@ -31,16 +31,7 @@ export class SocialAuthComponent implements OnInit {
     // No connection for GitHub because it doesn't allow for multiple redirect URI's
     // Can connect to GitHub on the log in page
     const socialApp: SocialApp = this.account.value;
-    switch (socialApp.provider) {
-      case "gitlab":
-        return this.oauthService.initGitlabLogin(socialApp.client_id, socialApp.authorize_url);
-      case "google":
-        return this.oauthService.initGoogleLogin(socialApp.client_id, socialApp.authorize_url);
-      case "microsoft":
-        return this.oauthService.initMicrosoftLogin(socialApp.client_id, socialApp.authorize_url);
-      case "github":
-        return this.oauthService.initGithubLogin(socialApp.client_id, socialApp.authorize_url);
-    }
+    this.oauthService.initOAuthLogin(socialApp);
   }
 
   disconnect(socialAccountId: number) {

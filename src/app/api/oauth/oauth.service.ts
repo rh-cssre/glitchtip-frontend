@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-import { getOAuthConfig } from "./social";
-import { OAuthProvider } from "./oauth.interfaces";
 import { LoginResponse } from "../auth/auth.interfaces";
 import { getStorageWithExpiry } from "src/app/shared/shared.utils";
+import { SocialApp } from "../user/user.interfaces";
 
 interface RestAuthConnectData {
   access_token?: string;
@@ -72,34 +71,33 @@ export class GlitchTipOAuthService {
     return this.http.post<LoginResponse>(url, data);
   }
 
-  initGitlabLogin(clientId: string, authorizeUrl: string) {
-    this.initOAuthLogin(clientId, authorizeUrl, "gitlab");
-  }
+  // initGitlabLogin(clientId: string, authorizeUrl: string) {
+  //   this.initOAuthLogin(clientId, authorizeUrl, "gitlab");
+  // }
 
-  initGithubLogin(clientId: string, authorizeUrl: string) {
-    this.initOAuthLogin(clientId, authorizeUrl, "github");
-  }
+  // initGithubLogin(clientId: string, authorizeUrl: string) {
+  //   this.initOAuthLogin(clientId, authorizeUrl, "github");
+  // }
 
-  initGoogleLogin(clientId: string, authorizeUrl: string) {
-    this.initOAuthLogin(clientId, authorizeUrl, "google");
-  }
+  // initGoogleLogin(clientId: string, authorizeUrl: string) {
+  //   this.initOAuthLogin(clientId, authorizeUrl, "google");
+  // }
 
-  initMicrosoftLogin(clientId: string, authorizeUrl: string) {
-    this.initOAuthLogin(clientId, authorizeUrl, "microsoft");
-  }
+  // initMicrosoftLogin(clientId: string, authorizeUrl: string) {
+  //   this.initOAuthLogin(clientId, authorizeUrl, "microsoft");
+  // }
 
-  /** Redirect user to OAuth provider auth URL */
-  private initOAuthLogin(clientId: string, authorizeUrl: string, provider: OAuthProvider) {
-    const config = getOAuthConfig(provider);
-    if (config) {
+  // /** Redirect user to OAuth provider auth URL */
+  initOAuthLogin(socialApp: SocialApp) {
       const params = new URLSearchParams({
         response_type: "token",
-        client_id: clientId,
-        redirect_uri: window.location.origin + "/auth/" + provider,
-        scope: config.scope,
+        client_id: socialApp.client_id,
+        redirect_uri: window.location.origin + "/auth/" + socialApp.provider,
+        scope: socialApp.scopes.join(" "),
       });
-      const url = `${authorizeUrl}?${params.toString()}`;
+      const url = `${socialApp.authorize_url}?${params.toString()}`;
       window.location.href = url;
     }
   }
-}
+
+// clientId: string, authorizeUrl: string, scopes: string[], provider: OAuthProvider

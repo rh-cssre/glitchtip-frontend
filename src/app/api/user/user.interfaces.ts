@@ -12,10 +12,11 @@ export interface SocialAccount {
 }
 
 export interface SocialApp {
-  provider: OAuthProvider;
+  provider: string;
   name: string;
   client_id: string;
   authorize_url: string;
+  scopes: string[];
 }
 
 export interface User {
