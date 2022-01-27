@@ -72,24 +72,24 @@ export class GlitchTipOAuthService {
     return this.http.post<LoginResponse>(url, data);
   }
 
-  initGitlabLogin(clientId: string) {
-    this.initOAuthLogin(clientId, "gitlab");
+  initGitlabLogin(clientId: string, authorizeUrl: string) {
+    this.initOAuthLogin(clientId, authorizeUrl, "gitlab");
   }
 
-  initGithubLogin(clientId: string) {
-    this.initOAuthLogin(clientId, "github");
+  initGithubLogin(clientId: string, authorizeUrl: string) {
+    this.initOAuthLogin(clientId, authorizeUrl, "github");
   }
 
-  initGoogleLogin(clientId: string) {
-    this.initOAuthLogin(clientId, "google");
+  initGoogleLogin(clientId: string, authorizeUrl: string) {
+    this.initOAuthLogin(clientId, authorizeUrl, "google");
   }
 
-  initMicrosoftLogin(clientId: string) {
-    this.initOAuthLogin(clientId, "microsoft");
+  initMicrosoftLogin(clientId: string, authorizeUrl: string) {
+    this.initOAuthLogin(clientId, authorizeUrl, "microsoft");
   }
 
   /** Redirect user to OAuth provider auth URL */
-  private initOAuthLogin(clientId: string, provider: OAuthProvider) {
+  private initOAuthLogin(clientId: string, authorizeUrl: string, provider: OAuthProvider) {
     const config = getOAuthConfig(provider);
     if (config) {
       const params = new URLSearchParams({
@@ -98,7 +98,7 @@ export class GlitchTipOAuthService {
         redirect_uri: window.location.origin + "/auth/" + provider,
         scope: config.scope,
       });
-      const url = `${config.loginURL}?${params.toString()}`;
+      const url = `${authorizeUrl}?${params.toString()}`;
       window.location.href = url;
     }
   }

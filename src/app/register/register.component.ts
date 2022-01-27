@@ -113,13 +113,13 @@ export class RegisterComponent implements OnInit {
     }
 
     if (socialApp.provider === "github") {
-      this.oauthService.initGithubLogin(socialApp.client_id);
+      this.oauthService.initGithubLogin(socialApp.client_id, socialApp.authorize_url);
     } else if (socialApp.provider === "gitlab") {
-      this.oauthService.initGitlabLogin(socialApp.client_id);
+      this.oauthService.initGitlabLogin(socialApp.client_id, socialApp.authorize_url);
     } else if (socialApp.provider === "google") {
-      this.oauthService.initGoogleLogin(socialApp.client_id);
+      this.oauthService.initGoogleLogin(socialApp.client_id, socialApp.authorize_url);
     } else if (socialApp.provider === "microsoft") {
-      this.oauthService.initMicrosoftLogin(socialApp.client_id);
+      this.oauthService.initMicrosoftLogin(socialApp.client_id, socialApp.authorize_url);
     }
   }
 }
