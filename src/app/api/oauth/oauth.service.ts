@@ -71,33 +71,15 @@ export class GlitchTipOAuthService {
     return this.http.post<LoginResponse>(url, data);
   }
 
-  // initGitlabLogin(clientId: string, authorizeUrl: string) {
-  //   this.initOAuthLogin(clientId, authorizeUrl, "gitlab");
-  // }
-
-  // initGithubLogin(clientId: string, authorizeUrl: string) {
-  //   this.initOAuthLogin(clientId, authorizeUrl, "github");
-  // }
-
-  // initGoogleLogin(clientId: string, authorizeUrl: string) {
-  //   this.initOAuthLogin(clientId, authorizeUrl, "google");
-  // }
-
-  // initMicrosoftLogin(clientId: string, authorizeUrl: string) {
-  //   this.initOAuthLogin(clientId, authorizeUrl, "microsoft");
-  // }
-
   // /** Redirect user to OAuth provider auth URL */
   initOAuthLogin(socialApp: SocialApp) {
-      const params = new URLSearchParams({
-        response_type: "token",
-        client_id: socialApp.client_id,
-        redirect_uri: window.location.origin + "/auth/" + socialApp.provider,
-        scope: socialApp.scopes.join(" "),
-      });
-      const url = `${socialApp.authorize_url}?${params.toString()}`;
-      window.location.href = url;
-    }
+    const params = new URLSearchParams({
+      response_type: "token",
+      client_id: socialApp.client_id,
+      redirect_uri: window.location.origin + "/auth/" + socialApp.provider,
+      scope: socialApp.scopes.join(" "),
+    });
+    const url = `${socialApp.authorize_url}?${params.toString()}`;
+    window.location.href = url;
   }
-
-// clientId: string, authorizeUrl: string, scopes: string[], provider: OAuthProvider
+}
