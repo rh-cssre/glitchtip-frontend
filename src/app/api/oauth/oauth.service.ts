@@ -23,48 +23,25 @@ export class GlitchTipOAuthService {
     return getStorageWithExpiry("register");
   }
 
-  githubLogin(code: string, isConnect: boolean) {
-    const data: RestAuthConnectData = {
-      code,
-      tags: this.getAnalyticsTags(),
-    };
-    let url = this.baseUrl + "/github/";
-    if (isConnect) {
-      url += "connect/";
+  completeOAuthLogin(
+    provider: string,
+    isConnect: boolean,
+    accessToken: string | null,
+    code: string | null
+  ) {
+    let data: RestAuthConnectData = {};
+    if (accessToken) {
+      data = {
+        access_token: accessToken,
+        tags: this.getAnalyticsTags(),
+      };
+    } else if (code) {
+      data = {
+        code,
+        tags: this.getAnalyticsTags(),
+      };
     }
-    return this.http.post<LoginResponse>(url, data);
-  }
-
-  microsoftLogin(accessToken: string, isConnect: boolean) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-      tags: this.getAnalyticsTags(),
-    };
-    let url = this.baseUrl + "/microsoft/";
-    if (isConnect) {
-      url += "connect/";
-    }
-    return this.http.post<LoginResponse>(url, data);
-  }
-
-  googleLogin(accessToken: string, isConnect: boolean) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-      tags: this.getAnalyticsTags(),
-    };
-    let url = this.baseUrl + "/google/";
-    if (isConnect) {
-      url += "connect/";
-    }
-    return this.http.post<LoginResponse | null>(url, data);
-  }
-
-  gitlabLogin(accessToken: string, isConnect: boolean) {
-    const data: RestAuthConnectData = {
-      access_token: accessToken,
-      tags: this.getAnalyticsTags(),
-    };
-    let url = this.baseUrl + "/gitlab/";
+    let url = this.baseUrl + "/" + provider + "/";
     if (isConnect) {
       url += "connect/";
     }
