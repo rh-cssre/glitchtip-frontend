@@ -15,6 +15,8 @@ export interface SocialApp {
   provider: OAuthProvider;
   name: string;
   client_id: string;
+  authorize_url: string;
+  scopes: string[];
 }
 
 export interface User {

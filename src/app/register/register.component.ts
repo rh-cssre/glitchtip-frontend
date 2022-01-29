@@ -112,14 +112,6 @@ export class RegisterComponent implements OnInit {
       setStorageWithExpiry("register", utm, 5 * 60 * 1000);
     }
 
-    if (socialApp.provider === "github") {
-      this.oauthService.initGithubLogin(socialApp.client_id);
-    } else if (socialApp.provider === "gitlab") {
-      this.oauthService.initGitlabLogin(socialApp.client_id);
-    } else if (socialApp.provider === "google") {
-      this.oauthService.initGoogleLogin(socialApp.client_id);
-    } else if (socialApp.provider === "microsoft") {
-      this.oauthService.initMicrosoftLogin(socialApp.client_id);
-    }
+    this.oauthService.initOAuthLogin(socialApp)
   }
 }

@@ -48,60 +48,19 @@ export class AuthComponent implements OnInit {
     query: ParamMap
   ) {
     // Various services return tokens in slightly different ways
-    if (fragment) {
-      const accessToken = new URLSearchParams(fragment).get("access_token");
-      if (accessToken) {
-        if (provider === "gitlab") {
-          this.oauthService
-            .gitlabLogin(accessToken, this.isLoggedIn)
-            .pipe(
-              tap((resp) => this.loginSuccess(resp)),
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        } else if (provider === "google") {
-          this.oauthService
-            .googleLogin(accessToken, this.isLoggedIn)
-            .pipe(
-              tap((resp) => this.loginSuccess(resp)),
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        } else if (provider === "microsoft") {
-          this.oauthService
-            .microsoftLogin(accessToken, this.isLoggedIn)
-            .pipe(
-              tap((resp) => this.loginSuccess(resp)),
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        }
-      }
-    } else if (query) {
-      const code = query.get("code");
-      if (code) {
-        if (provider === "github") {
-          this.oauthService
-            .githubLogin(code, this.isLoggedIn)
-            .pipe(
-              tap((resp) => this.loginSuccess(resp)),
-              catchError((error: HttpErrorResponse) => {
-                this.processSocialAuthErrorResponse(error);
-                return EMPTY;
-              })
-            )
-            .toPromise();
-        }
-      }
+    const accessToken = new URLSearchParams(fragment).get("access_token");
+    const code = query.get("code");
+    if (accessToken || code) {
+      this.oauthService
+        .completeOAuthLogin(provider, this.isLoggedIn, accessToken, code)
+        .pipe(
+          tap((resp) => this.loginSuccess(resp)),
+          catchError((error: HttpErrorResponse) => {
+            this.processSocialAuthErrorResponse(error);
+            return EMPTY;
+          })
+        )
+        .toPromise();
     } else {
       this.notEnoughQueryData();
     }
