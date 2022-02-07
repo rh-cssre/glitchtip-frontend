@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { tap, withLatestFrom } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "../api/settings.service";
+import { UserService } from "../api/user/user.service";
 
 @Component({
   selector: "gt-new-organizations",
@@ -13,6 +14,7 @@ import { SettingsService } from "../api/settings.service";
 export class NewOrganizationsComponent {
   organizationCount$ = this.organizationsService.organizationCount$;
   enableUserRegistration$ = this.settingsService.enableUserRegistration$;
+  userDetails$ = this.userService.userDetails$;
   loading = false;
   error: string | undefined;
   form = new FormGroup({
@@ -21,6 +23,7 @@ export class NewOrganizationsComponent {
   constructor(
     private organizationsService: OrganizationsService,
     private settingsService: SettingsService,
+    private userService: UserService,
     private router: Router
   ) {}
 
