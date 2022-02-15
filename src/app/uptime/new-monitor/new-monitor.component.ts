@@ -1,10 +1,13 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { map, lastValueFrom, filter, take, tap } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { numberValidator, urlRegex } from "src/app/shared/validators";
 import { MonitorType } from "../uptime.interfaces";
+import { SettingsService } from "src/app/api/settings.service";
 
 const defaultUrlValidators = [
   Validators.pattern(urlRegex),
@@ -18,10 +21,17 @@ const defaultUrlValidators = [
   styleUrls: ["./new-monitor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewMonitorComponent {
+export class NewMonitorComponent implements OnInit {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   loading$ = this.uptimeService.createLoading$;
+  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.plan.product.metadata
+        ? parseInt(subscription.plan.product.metadata.events, 10)
+        : null
+    )
+  );
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -48,12 +58,41 @@ export class NewMonitorComponent {
   formExpectedStatus = this.newMonitorForm.get("expectedStatus") as FormControl;
   formInterval = this.newMonitorForm.get("interval") as FormControl;
 
+  intervalPerMonth = 2592000 / this.formInterval.value 
+
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private organizationsService: OrganizationsService,
+    private settingsService: SettingsService,
+    private subscriptionsService: SubscriptionsService,
     private uptimeService: UptimeService
   ) {}
+
+  ngOnInit(): void {
+    lastValueFrom(this.settingsService.billingEnabled$.pipe(
+      tap(billingEnabled => {
+        if (billingEnabled) {
+          lastValueFrom(
+            this.organizationsService.activeOrganizationSlug$.pipe(
+              filter((slug) => !!slug),
+              take(1),
+              tap((slug) => {
+                if (slug) {
+                  lastValueFrom(this.subscriptionsService.retrieveSubscription(slug));
+                }
+              })
+            )
+          );
+        }
+      })
+    )) 
+  }
+
+  updateIntervalPerMonth() {
+    this.intervalPerMonth = 2592000 / this.formInterval.value 
+  }
+
 
   updateRequiredFields() {
     if (this.formMonitorType.value === "Heartbeat") {
