@@ -1,13 +1,12 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { map, lastValueFrom, filter, take, tap } from "rxjs";
+import { map } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { numberValidator, urlRegex } from "src/app/shared/validators";
 import { MonitorType } from "../uptime.interfaces";
-import { SettingsService } from "src/app/api/settings.service";
 
 const defaultUrlValidators = [
   Validators.pattern(urlRegex),
@@ -64,29 +63,12 @@ export class NewMonitorComponent implements OnInit {
 
   constructor(
     private organizationsService: OrganizationsService,
-    private settingsService: SettingsService,
     private subscriptionsService: SubscriptionsService,
     private uptimeService: UptimeService
   ) {}
 
   ngOnInit(): void {
-    lastValueFrom(this.settingsService.billingEnabled$.pipe(
-      tap(billingEnabled => {
-        if (billingEnabled) {
-          lastValueFrom(
-            this.organizationsService.activeOrganizationSlug$.pipe(
-              filter((slug) => !!slug),
-              take(1),
-              tap((slug) => {
-                if (slug) {
-                  lastValueFrom(this.subscriptionsService.retrieveSubscription(slug));
-                }
-              })
-            )
-          );
-        }
-      })
-    )) 
+    this.uptimeService.callSubscriptionDetails()
   }
 
   updateIntervalPerMonth() {

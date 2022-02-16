@@ -46,7 +46,7 @@ form {
   width: 900px;
   margin-top: 10px;
 
-  @media screen and (max-width: $large - 1) {
+  @media screen and (max-width: $medium - 1) {
     width: auto;
   }
 
@@ -54,7 +54,7 @@ form {
     width: 354px;
     margin-right: 16px;
 
-    @media screen and (max-width: $large - 1) {
+    @media screen and (max-width: $medium - 1) {
       width: 170px;
     }
   }

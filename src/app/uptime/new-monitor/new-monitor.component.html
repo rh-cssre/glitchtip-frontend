@@ -35,7 +35,7 @@
           </mat-form-field>
         </div>
         <div class="advanced">
-          <div>
+          <div class="form-field">
             <mat-form-field>
               <mat-label>Monitor type</mat-label>
               <mat-select
@@ -203,14 +203,32 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="help-text">
-            <p class="mat-caption">
-              This will use approximately
-              {{ intervalPerMonth | number: "1.0-0" }} events per month out of
-              the {{ totalEventsAllowed$ | async | number: "1.0-0" }} events
-              allowed under your organization's subscription.
-            </p>
-          </div>
+          <ng-container
+            *ngIf="totalEventsAllowed$ | async as totalEventsAllowed"
+          >
+            <div class="help-text">
+              <p class="mat-caption">
+                <ng-container
+                  *ngIf="
+                    intervalPerMonth <= totalEventsAllowed;
+                    else limitExceeded
+                  "
+                >
+                  This will use approximately
+                  {{ intervalPerMonth | number: "1.0-0" }} events per month out
+                  of the {{ totalEventsAllowed | number: "1.0-0" }} events your
+                  organization's subscription allows for.
+                </ng-container>
+                <ng-template #limitExceeded>
+                  This will use approximately
+                  {{ intervalPerMonth | number: "1.0-0" }} events per month,
+                  exceeding the
+                  {{ totalEventsAllowed | number: "1.0-0" }} events your
+                  organization's subscription allows for.
+                </ng-template>
+              </p>
+            </div>
+          </ng-container>
         </div>
         <gt-loading-button
           class="submit"
@@ -219,8 +237,6 @@
           buttonText="Create Monitor"
         >
         </gt-loading-button>
-      </form>
-      {{ intervalPerMonth | number: "1.0-0" }}
-    </mat-card-content></mat-card
-  >
+      </form> </mat-card-content
+  ></mat-card>
 </section>
