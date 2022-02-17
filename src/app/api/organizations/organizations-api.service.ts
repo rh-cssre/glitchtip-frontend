@@ -42,7 +42,7 @@ export class OrganizationAPIService extends APIBaseService {
         return {
           ...apiOrgDetail,
           projects,
-        };
+        } as OrganizationDetail;
       })
     );
   }
