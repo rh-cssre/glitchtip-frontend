@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs";
 import {
   Organization,
   OrganizationDetail,
+  APIOrganizationDetail,
   OrganizationNew,
   Environment,
 } from "./organizations.interface";
@@ -23,7 +25,18 @@ export class OrganizationAPIService extends APIBaseService {
   }
 
   retrieve(id: string) {
-    return this.http.get<OrganizationDetail>(this.detailURL(id));
+    return this.http.get<APIOrganizationDetail>(this.detailURL(id)).pipe(
+      map((APIOrgDetail) => {
+        const projects = APIOrgDetail.projects.map((project) => ({
+          ...project,
+          id: parseInt(project.id, 10),
+        }));
+        return {
+          ...APIOrgDetail,
+          projects,
+        };
+      })
+    );
   }
 
   create(obj: OrganizationNew) {

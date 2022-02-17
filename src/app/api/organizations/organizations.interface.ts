@@ -18,6 +18,12 @@ export interface Organization extends OrganizationNew {
 }
 
 // tslint:disable-next-line:no-empty-interface
+export interface APIOrganizationDetail extends Organization {
+  projects: APIOrganizationProject[];
+  teams: Team[];
+}
+
+// tslint:disable-next-line:no-empty-interface
 export interface OrganizationDetail extends Organization {
   projects: OrganizationProject[];
   teams: Team[];
@@ -31,6 +37,14 @@ interface OrgStatus {
 export interface Avatar {
   avatarType: string;
   avatarUuid: string | null;
+}
+
+export interface APIOrganizationProject {
+  name: string;
+  slug: string;
+  platform: string | null;
+  id: string;
+  isMember: boolean;
 }
 
 export interface OrganizationProject {
