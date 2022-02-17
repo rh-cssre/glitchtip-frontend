@@ -69,6 +69,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
       this.route.params,
     ])
       .pipe(
+        filter(([orgSlug, params]) => !!orgSlug && !!params),
         take(1),
         tap(([orgSlug, params]) => {
           const monitorId = params["monitor-id"];
