@@ -32,7 +32,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   monitorEditForm = new FormGroup({
     monitorType: new FormControl("Ping", [Validators.required]),
     name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
-    url: new FormControl("", defaultUrlValidators),
+    url: new FormControl(""),
     expectedStatus: new FormControl(200, [
       Validators.required,
       Validators.min(100),
@@ -69,6 +69,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
       this.route.params,
     ])
       .pipe(
+        filter(([orgSlug, params]) => !!orgSlug && !!params),
         take(1),
         tap(([orgSlug, params]) => {
           const monitorId = params["monitor-id"];
@@ -90,6 +91,10 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formExpectedStatus.patchValue(data!.expectedStatus);
           this.formInterval.patchValue(this.toSeconds(data!.interval));
           this.formProject.patchValue(data!.project);
+
+          if (this.formMonitorType.value !== "Heartbeat") {
+            this.formUrl.setValidators(defaultUrlValidators);
+          }
         })
       )
       .subscribe();
