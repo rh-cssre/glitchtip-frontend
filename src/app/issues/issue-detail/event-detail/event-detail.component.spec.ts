@@ -1,4 +1,5 @@
 // tslint:disable:no-any
+import { Component, Input } from "@angular/core";
 import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -9,6 +10,28 @@ import { EntryRequestComponent } from "./entry-request/entry-request.component";
 import { EntryDataComponent } from "../../../shared/entry-data/entry-data.component";
 import { IssueDetailService } from "../issue-detail.service";
 import dotnetEvent from "./test-data/dotnet-event.json";
+
+@Component({selector: 'gt-contexts', template: ''})
+class ContextsStub {
+}
+
+@Component({selector: 'gt-entry-message', template: ''})
+class EntryMessageStub {
+}
+
+@Component({selector: 'gt-entry-exception', template: ''})
+class EntryExceptionStub {
+  @Input() eventTitle: any;
+  @Input() eventPlatform: any;
+}
+
+@Component({selector: 'gt-entry-csp', template: ''})
+class EntryCspStub {
+}
+
+@Component({selector: 'gt-entry-breadcrumbs', template: ''})
+class EntryBreadcrumbsStub {
+}
 
 describe("EventDetailComponent", () => {
   let component: EventDetailComponent;
@@ -22,6 +45,11 @@ describe("EventDetailComponent", () => {
           EventDetailComponent,
           EntryRequestComponent,
           EntryDataComponent,
+          EntryCspStub,
+          EntryExceptionStub,
+          EntryMessageStub,
+          ContextsStub,
+          EntryBreadcrumbsStub,
         ],
         imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule],
       }).compileComponents();
