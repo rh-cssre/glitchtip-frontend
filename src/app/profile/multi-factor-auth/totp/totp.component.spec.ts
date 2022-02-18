@@ -8,7 +8,7 @@ import { totpUserKey } from "./test-data";
 import { TOTPComponent } from "./totp.component";
 
 @Component({selector: 'gt-backup-codes', template: ''})
-class BackupCodesStub {
+class BackupCodesStubComponent {
  @Input() error: any;
 }
 
@@ -18,7 +18,7 @@ describe("TotpComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TOTPComponent, BackupCodesStub],
+      declarations: [TOTPComponent, BackupCodesStubComponent],
       imports: [
         HttpClientTestingModule,
         SharedModule,
