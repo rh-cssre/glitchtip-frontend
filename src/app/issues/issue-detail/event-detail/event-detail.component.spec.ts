@@ -12,25 +12,25 @@ import { IssueDetailService } from "../issue-detail.service";
 import dotnetEvent from "./test-data/dotnet-event.json";
 
 @Component({selector: 'gt-contexts', template: ''})
-class ContextsStub {
+class ContextsStubComponent {
 }
 
 @Component({selector: 'gt-entry-message', template: ''})
-class EntryMessageStub {
+class EntryMessageStubComponent {
 }
 
 @Component({selector: 'gt-entry-exception', template: ''})
-class EntryExceptionStub {
+class EntryExceptionStubComponent {
   @Input() eventTitle: any;
   @Input() eventPlatform: any;
 }
 
 @Component({selector: 'gt-entry-csp', template: ''})
-class EntryCspStub {
+class EntryCspStubComponent {
 }
 
 @Component({selector: 'gt-entry-breadcrumbs', template: ''})
-class EntryBreadcrumbsStub {
+class EntryBreadcrumbsStubComponent {
 }
 
 describe("EventDetailComponent", () => {
@@ -45,11 +45,11 @@ describe("EventDetailComponent", () => {
           EventDetailComponent,
           EntryRequestComponent,
           EntryDataComponent,
-          EntryCspStub,
-          EntryExceptionStub,
-          EntryMessageStub,
-          ContextsStub,
-          EntryBreadcrumbsStub,
+          EntryCspStubComponent,
+          EntryExceptionStubComponent,
+          EntryMessageStubComponent,
+          ContextsStubComponent,
+          EntryBreadcrumbsStubComponent,
         ],
         imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule],
       }).compileComponents();

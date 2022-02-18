@@ -10,7 +10,7 @@ import { LoginComponent } from "./login.component";
 import { MaterialModule } from "../shared/material.module";
 
 @Component({selector: 'gt-form-error', template: ''})
-class FormErrorStub {
+class FormErrorStubComponent {
   @Input() error: any;
 }
 
@@ -28,7 +28,7 @@ describe("LoginComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [LoginComponent, FormErrorStub],
+        declarations: [LoginComponent, FormErrorStubComponent],
         imports: [
           NoopAnimationsModule,
           ReactiveFormsModule,
