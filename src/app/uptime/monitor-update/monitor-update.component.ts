@@ -36,7 +36,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     )
   );
 
-  intervalPerMonth: number | null = null
+  intervalPerMonth: number | null = null;
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -72,7 +72,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     private uptimeService: UptimeService,
     private route: ActivatedRoute,
     private organizationsService: OrganizationsService,
-    private subscriptionsService: SubscriptionsService,
+    private subscriptionsService: SubscriptionsService
   ) {}
 
   ngOnInit() {
@@ -105,7 +105,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formInterval.patchValue(this.toSeconds(data!.interval));
           this.formProject.patchValue(data!.project);
 
-          this.updateIntervalPerMonth()
+          this.updateIntervalPerMonth();
 
           if (this.formMonitorType.value !== "Heartbeat") {
             this.formUrl.setValidators(defaultUrlValidators);
@@ -113,7 +113,6 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
-
   }
 
   ngOnDestroy() {
@@ -135,7 +134,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   }
 
   updateIntervalPerMonth() {
-    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value) 
+    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value);
   }
 
   updateRequiredFields() {

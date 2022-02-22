@@ -57,7 +57,7 @@ export class NewMonitorComponent implements OnInit {
   formExpectedStatus = this.newMonitorForm.get("expectedStatus") as FormControl;
   formInterval = this.newMonitorForm.get("interval") as FormControl;
 
-  intervalPerMonth = 2592000 / this.formInterval.value 
+  intervalPerMonth = 2592000 / this.formInterval.value;
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
@@ -68,13 +68,12 @@ export class NewMonitorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.uptimeService.callSubscriptionDetails()
+    this.uptimeService.callSubscriptionDetails();
   }
 
   updateIntervalPerMonth() {
-    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value) 
+    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value);
   }
-
 
   updateRequiredFields() {
     if (this.formMonitorType.value === "Heartbeat") {
