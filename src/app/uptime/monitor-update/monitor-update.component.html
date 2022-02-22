@@ -40,7 +40,6 @@
               <mat-form-field>
                 <mat-label>Monitor type</mat-label>
                 <mat-select
-                  id="monitor-type"
                   formControlName="monitorType"
                   required
                   [errorStateMatcher]="matcher"
@@ -73,9 +72,9 @@
               </ng-container>
               <ng-container *ngIf="formMonitorType?.value === 'GET'">
                 <p class="mat-caption">
-                  GlitchTip will send an HTTP GET request to the specified URL. If
-                  the expected response is not received, the site will be marked
-                  as Down.
+                  GlitchTip will send an HTTP GET request to the specified URL.
+                  If the expected response is not received, the site will be
+                  marked as Down.
                 </p>
               </ng-container>
               <ng-container *ngIf="formMonitorType?.value === 'Heartbeat'">
@@ -91,7 +90,6 @@
             <div class="url-spacing">
               <mat-form-field>
                 <input
-                  id="monitor-url"
                   matInput
                   formControlName="url"
                   placeholder="Site URL"
@@ -118,7 +116,7 @@
             <div class="form-field">
               <mat-form-field>
                 <mat-label>Associated Project</mat-label>
-                <mat-select id="associated-project" formControlName="project">
+                <mat-select formControlName="project">
                   <ng-container *ngIf="orgProjects$ | async as orgProjects">
                     <mat-option value="">None</mat-option>
                     <mat-option
@@ -143,12 +141,10 @@
               <mat-form-field>
                 <mat-label>Expected Status</mat-label>
                 <input
-                  id="expected-status"
                   matInput
                   min="0"
                   max="1000"
                   type="number"
-                  default="200"
                   autocomplete="off"
                   formControlName="expectedStatus"
                   placeholder="Status code"
@@ -157,14 +153,15 @@
                 />
                 <mat-error *ngIf="formExpectedStatus?.errors">
                   <span *ngIf="formExpectedStatus?.errors?.min"
-                    >The quantity needs to be greater than or equal to 100.</span
+                    >The quantity needs to be greater than or equal to
+                    100.</span
                   >
                   <span
                     *ngIf="
                       formExpectedStatus?.errors?.invalidNumber ||
                       formExpectedStatus?.errors?.required
                     "
-                    >Enter a status code number
+                    >Enter a status code number.
                   </span>
                 </mat-error>
               </mat-form-field>
@@ -175,11 +172,9 @@
               <mat-form-field>
                 <mat-label>Interval (seconds)</mat-label>
                 <input
-                  id="interval"
                   matInput
                   min="0"
                   type="number"
-                  default="60"
                   autocomplete="off"
                   formControlName="interval"
                   placeholder="60"
@@ -212,14 +207,14 @@
                   <ng-container
                     *ngIf="
                       intervalPerMonth &&
-                      intervalPerMonth <= totalEventsAllowed;
+                        intervalPerMonth <= totalEventsAllowed;
                       else limitExceeded
                     "
                   >
                     This will use approximately
-                    {{ intervalPerMonth | number: "1.0-0" }} events per month out
-                    of the {{ totalEventsAllowed | number: "1.0-0" }} events your
-                    organization's subscription allows for.
+                    {{ intervalPerMonth | number: "1.0-0" }} events per month
+                    out of the {{ totalEventsAllowed | number: "1.0-0" }} events
+                    your organization's subscription allows for.
                   </ng-container>
                   <ng-template #limitExceeded>
                     This will use approximately
