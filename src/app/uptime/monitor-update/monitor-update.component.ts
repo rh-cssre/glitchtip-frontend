@@ -105,6 +105,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formInterval.patchValue(this.toSeconds(data!.interval));
           this.formProject.patchValue(data!.project);
 
+          this.updateIntervalPerMonth()
+
           if (this.formMonitorType.value !== "Heartbeat") {
             this.formUrl.setValidators(defaultUrlValidators);
           }
@@ -112,7 +114,6 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-      this.updateIntervalPerMonth()
   }
 
   ngOnDestroy() {
@@ -134,7 +135,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   }
 
   updateIntervalPerMonth() {
-    this.intervalPerMonth = 2592000 / this.formInterval.value 
+    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value) 
   }
 
   updateRequiredFields() {
