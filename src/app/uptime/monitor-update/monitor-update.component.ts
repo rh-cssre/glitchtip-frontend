@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { tap, filter, first, take } from "rxjs/operators";
+import { tap, filter, first, take, map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { urlRegex, numberValidator } from "src/app/shared/validators";
@@ -26,6 +27,16 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
+
+  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.plan?.product.metadata
+        ? parseInt(subscription.plan.product.metadata.events, 10)
+        : null
+    )
+  );
+
+  intervalPerMonth: number | null = null
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -60,7 +71,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   constructor(
     private uptimeService: UptimeService,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private subscriptionsService: SubscriptionsService,
   ) {}
 
   ngOnInit() {
@@ -75,6 +87,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           const monitorId = params["monitor-id"];
           if (orgSlug && monitorId) {
             this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
+            this.uptimeService.callSubscriptionDetails();
           }
         })
       )
@@ -98,6 +111,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+      this.updateIntervalPerMonth()
   }
 
   ngOnDestroy() {
@@ -116,6 +131,10 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     seconds += parseInt(splitInterval[2], 10);
 
     return seconds;
+  }
+
+  updateIntervalPerMonth() {
+    this.intervalPerMonth = 2592000 / this.formInterval.value 
   }
 
   updateRequiredFields() {

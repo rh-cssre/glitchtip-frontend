@@ -26,8 +26,8 @@ export class NewMonitorComponent implements OnInit {
   loading$ = this.uptimeService.createLoading$;
   totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
     map((subscription) =>
-      subscription && subscription.plan.product.metadata
-        ? parseInt(subscription.plan.product.metadata.events, 10)
+      subscription && subscription.plan?.product.metadata
+        ? parseInt(subscription.plan?.product.metadata.events, 10)
         : null
     )
   );
@@ -72,7 +72,7 @@ export class NewMonitorComponent implements OnInit {
   }
 
   updateIntervalPerMonth() {
-    this.intervalPerMonth = 2592000 / this.formInterval.value 
+    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value) 
   }
 
 
