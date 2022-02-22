@@ -34,7 +34,7 @@ export interface Subscription {
     | "past_due"
     | "trialing"
     | "unpaid";
-  plan: Plan;
+  plan: Plan | null;
 }
 
 export interface CreateSubscriptionResp {

@@ -28,7 +28,7 @@ export class SubscriptionComponent implements OnDestroy {
   error$ = this.stripe.error$;
   totalEventsAllowed$ = this.subscription$.pipe(
     map((subscription) =>
-      subscription && subscription.plan.product.metadata
+      subscription && subscription.plan?.product.metadata
         ? parseInt(subscription.plan.product.metadata.events, 10)
         : null
     )
