@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { LoginService } from "./login.service";
+import { AuthService } from "../api/auth/auth.service";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
@@ -34,7 +36,9 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private oauthService: GlitchTipOAuthService,
     private settings: SettingsService,
-    private acceptService: AcceptInviteService
+    private acceptService: AcceptInviteService,
+    private authService: AuthService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -70,6 +74,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
+      const nextUrl = this.route.snapshot.queryParamMap.get("next");
+      if (nextUrl) {
+        this.authService.setRedirectUrl(nextUrl)
+      }
       this.loginService
         .login(this.form.value.email, this.form.value.password)
         .subscribe();
