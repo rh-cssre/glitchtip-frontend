@@ -1,3 +1,4 @@
+import { Component, Input } from "@angular/core";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
@@ -6,13 +7,18 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { totpUserKey } from "./test-data";
 import { TOTPComponent } from "./totp.component";
 
+@Component({selector: 'gt-backup-codes', template: ''})
+class BackupCodesStubComponent {
+ @Input() error: any;
+}
+
 describe("TotpComponent", () => {
   let component: TOTPComponent;
   let fixture: ComponentFixture<TOTPComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TOTPComponent],
+      declarations: [TOTPComponent, BackupCodesStubComponent],
       imports: [
         HttpClientTestingModule,
         SharedModule,

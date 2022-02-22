@@ -9,7 +9,7 @@ import {
 
 import { OrganizationsService } from "./organizations.service";
 import { Organization } from "./organizations.interface";
-import { organizationList } from "./organization-test-data";
+import { organizationList, testOrgDetail } from "./organization-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
 import { routes } from "src/app/app-routing.module";
 
@@ -101,7 +101,7 @@ describe("OrganizationsService", () => {
     const req = httpTestingController.expectOne(
       `/api/0/organizations/${organizationList[1].slug}/`
     );
-    req.flush(organizationList[1]);
+    req.flush(testOrgDetail);
     expect(navigateSpy).toHaveBeenCalledWith([organizationList[1].slug]);
   });
 });
