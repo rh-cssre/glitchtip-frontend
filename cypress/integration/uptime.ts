@@ -7,13 +7,15 @@ describe("List, add, update and delete uptime Monitors", () => {
         requestLogin();
     });
   
-    it("Should list a single monitor, then update that monitor and see updated monitor on list", () => {
+    it("Should list a single monitor, see alert info for that monitor, then update that monitor and see updated monitor on list", () => {
         cy.visit(`/${organization.slug}/uptime-monitors/`);
         cy.contains("cytestmonitor").click();
+        cy.wait(1000);
         cy.contains("Uptime details for cytestmonitor");
+        cy.contains("This project has no uptime alerts configured");
         cy.get('#monitor-settings').click();
         cy.get('#monitor-name').should('have.value', "cytestmonitor")
-        .clear().type("new name");
+            .clear().type("new name");
         cy.get('button').contains('Update Monitor').click();
         cy.visit(`/${organization.slug}/uptime-monitors/`);
         cy.contains("new name");
