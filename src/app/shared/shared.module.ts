@@ -21,6 +21,7 @@ import { ProjectListComponent } from "./project-list/project-list.component";
 import { CopyInputComponent } from "./copy-input/copy-input.component";
 import { ToDoItemComponent } from "./to-do-item/to-do-item.component";
 import { FormErrorComponent } from "./forms/form-error/form-error.component";
+import { EventInfoComponent } from "./event-info/event-info.component";
 
 @NgModule({
   imports: [CommonModule, MaterialModule, RouterModule, ReactiveFormsModule],
@@ -39,6 +40,7 @@ import { FormErrorComponent } from "./forms/form-error/form-error.component";
     CopyInputComponent,
     ToDoItemComponent,
     FormErrorComponent,
+    EventInfoComponent,
   ],
   exports: [
     TimeForPipe,
@@ -56,6 +58,7 @@ import { FormErrorComponent } from "./forms/form-error/form-error.component";
     CopyInputComponent,
     ToDoItemComponent,
     FormErrorComponent,
+    EventInfoComponent,
   ],
 })
 export class SharedModule {}
