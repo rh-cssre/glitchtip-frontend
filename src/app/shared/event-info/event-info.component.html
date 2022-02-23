@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-title>Events</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <p>
+      Events are the unit of measure for tracking GlitchTip usage. An
+      organization's maximum number of events per month is determined by its
+      subscription type. There are three kinds of events:
+    </p>
+    <ul>
+      <li>
+        <b>Errors:</b> Each time your app sends an error report to GlitchTip
+      </li>
+      <li>
+        <b>Uptime:</b> Whenever GlitchTip checks the status of your app or your
+        app sends a request to GlitchTip to report its own status
+      </li>
+      <li>
+        <b>Performance:</b> Each time your app sends a performance status report
+        to GlitchTip
+      </li>
+    </ul>
+  </mat-card-content>
+  <button *ngIf="dialog" mat-flat-button color="primary">Close</button>
+</mat-card>
