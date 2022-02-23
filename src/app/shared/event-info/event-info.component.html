@@ -1,7 +1,5 @@
-<mat-card>
-  <mat-card-title>Events</mat-card-title>
-  <mat-divider></mat-divider>
-  <mat-card-content>
+<div class="mat-typography">
+    <h2 *ngIf="dialog">Events</h2>
     <p>
       Events are the unit of measure for tracking GlitchTip usage. An
       organization's maximum number of events per month is determined by its
@@ -20,6 +18,5 @@
         to GlitchTip
       </li>
     </ul>
-  </mat-card-content>
-  <button *ngIf="dialog" mat-flat-button color="primary">Close</button>
-</mat-card>
+  <button *ngIf="dialog" mat-flat-button color="primary" (click)="closeDialog()">Close</button>
+</div>
