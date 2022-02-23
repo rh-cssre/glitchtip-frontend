@@ -69,10 +69,9 @@ export class NewMonitorComponent implements OnInit {
 
   ngOnInit(): void {
     this.uptimeService.callSubscriptionDetails();
-  }
-
-  updateIntervalPerMonth() {
-    this.intervalPerMonth = Math.floor(2592000 / this.formInterval.value);
+    this.formInterval.valueChanges.subscribe((interval) => {
+      this.intervalPerMonth = Math.floor(2592000 / interval);
+    });
   }
 
   updateRequiredFields() {
