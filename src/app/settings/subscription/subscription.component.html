@@ -160,7 +160,7 @@
     </mat-card>
     <mat-card
       *ngIf="
-        (projectsCount$ | async) === 0 &&
+        (promptForProject$ | async) &&
         subscription.status !== null &&
         subscription.status !== 'canceled'
       "
