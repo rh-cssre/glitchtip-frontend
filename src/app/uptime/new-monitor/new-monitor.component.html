@@ -214,14 +214,21 @@
                   "
                 >
                   This will use approximately
-                  {{ intervalPerMonth | number: "1.0-0" }} events per month out
-                  of the {{ totalEventsAllowed | number: "1.0-0" }} events your
+                  {{ intervalPerMonth | number: "1.0-0" }}
+                  <a [routerLink]="[]" (click)="openEventInfoDialog()"
+                    >events</a
+                  >
+                  per month out of the
+                  {{ totalEventsAllowed | number: "1.0-0" }} events your
                   organization's subscription allows for.
                 </ng-container>
                 <ng-template #limitExceeded>
                   This will use approximately
-                  {{ intervalPerMonth | number: "1.0-0" }} events per month,
-                  exceeding the
+                  {{ intervalPerMonth | number: "1.0-0" }}
+                  <a [routerLink]="[]" (click)="openEventInfoDialog()"
+                    >events</a
+                  >
+                  per month, exceeding the
                   {{ totalEventsAllowed | number: "1.0-0" }} events your
                   organization's subscription allows for.
                 </ng-template>
