@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
 import { tap, filter, first, take, map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -8,6 +9,7 @@ import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.se
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { urlRegex, numberValidator } from "src/app/shared/validators";
+import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
 
 const defaultUrlValidators = [
@@ -72,7 +74,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
     private uptimeService: UptimeService,
     private route: ActivatedRoute,
     private organizationsService: OrganizationsService,
-    private subscriptionsService: SubscriptionsService
+    private subscriptionsService: SubscriptionsService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -145,6 +148,12 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         this.formUrl.setValue("https://");
       }
     }
+  }
+
+  openEventInfoDialog() {
+    this.dialog.open(EventInfoComponent, {
+      maxWidth: "300px",
+    });
   }
 
   onSubmit() {
