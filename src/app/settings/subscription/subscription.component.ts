@@ -22,7 +22,24 @@ export class SubscriptionComponent implements OnDestroy {
   subscription$ = this.service.subscription$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
-  projectsCount$ = this.orgService.projectsCount$;
+  promptForProject$ = combineLatest([
+    this.orgService.activeOrganizationLoaded$,
+    this.orgService.projectsCount$,
+    this.service.subscription$,
+  ]).pipe(
+    map(([status, count, subscription]) => {
+      if (subscription) {
+        return status &&
+          count === 0 &&
+          subscription.status !== null &&
+          subscription.status !== "canceled"
+          ? true
+          : false;
+      } else {
+        return false;
+      }
+    })
+  );
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
   error$ = this.stripe.error$;
