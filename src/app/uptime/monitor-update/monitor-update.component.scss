@@ -39,24 +39,7 @@ form {
   margin-top: 10px;
 }
 
-.associations {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  width: 900px;
-  margin-top: 10px;
-
-  @media screen and (max-width: $large - 1) {
-    width: auto;
-  }
-
-  div {
-    width: 354px;
-    margin-right: 16px;
-  }
-}
-
-.advanced {
+.short-field {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
@@ -67,7 +50,7 @@ form {
     width: auto;
   }
 
-  div {
+  .form-field {
     width: 170px;
     margin-right: 16px;
   }
@@ -83,19 +66,12 @@ form {
   margin-bottom: 0;
 
   @media screen and (max-width: $tablet - 1) {
-    width: 300px;
+    width: 170px;
 
     p {
       margin-top: 0;
     }
   }
-}
-
-.mat-caption {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  margin-bottom: 0;
 }
 
 .submit {

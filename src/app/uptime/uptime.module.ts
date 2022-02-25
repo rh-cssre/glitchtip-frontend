@@ -2,15 +2,15 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { UptimeRoutingModule } from "./uptime-routing.module";
 import { MonitorListComponent } from "./monitor-list/monitor-list.component";
-import {MatTableModule} from "@angular/material/table";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatTableModule } from "@angular/material/table";
 import { MaterialModule } from "../shared/material.module";
 import { SharedModule } from "../shared/shared.module";
 import { NewMonitorComponent } from "./new-monitor/new-monitor.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MonitorDetailComponent } from "./monitor-detail/monitor-detail.component";
 import { MonitorUpdateComponent } from "./monitor-update/monitor-update.component";
-import { MonitorChecksComponent } from './monitor-checks/monitor-checks.component';
-
+import { MonitorChecksComponent } from "./monitor-checks/monitor-checks.component";
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { MonitorChecksComponent } from './monitor-checks/monitor-checks.componen
     NewMonitorComponent,
     MonitorDetailComponent,
     MonitorUpdateComponent,
-    MonitorChecksComponent
+    MonitorChecksComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +27,8 @@ import { MonitorChecksComponent } from './monitor-checks/monitor-checks.componen
     MaterialModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    MatDialogModule,
+  ],
 })
-export class UptimeModule { }
+export class UptimeModule {}

@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { tap, filter, first, take } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { tap, filter, first, take, map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { UptimeService } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { urlRegex, numberValidator } from "src/app/shared/validators";
+import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
 
 const defaultUrlValidators = [
@@ -26,6 +29,16 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   deleteLoading$ = this.uptimeService.deleteLoading$;
+
+  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.plan?.product.metadata
+        ? parseInt(subscription.plan.product.metadata.events, 10)
+        : null
+    )
+  );
+
+  intervalPerMonth: number | null = null;
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -60,7 +73,9 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   constructor(
     private uptimeService: UptimeService,
     private route: ActivatedRoute,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
+    private subscriptionsService: SubscriptionsService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -75,10 +90,15 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           const monitorId = params["monitor-id"];
           if (orgSlug && monitorId) {
             this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
+            this.uptimeService.callSubscriptionDetails();
           }
         })
       )
       .toPromise();
+    
+    this.formInterval.valueChanges.subscribe((interval) => {
+      this.intervalPerMonth = Math.floor(2592000 / interval);
+    });
 
     this.monitor$
       .pipe(
@@ -128,6 +148,12 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         this.formUrl.setValue("https://");
       }
     }
+  }
+
+  openEventInfoDialog() {
+    this.dialog.open(EventInfoComponent, {
+      maxWidth: "300px",
+    });
   }
 
   onSubmit() {

@@ -15,6 +15,8 @@ import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.serv
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-alerts.service";
+import { SettingsService } from "../api/settings.service";
+import { SubscriptionsService } from "../api/subscriptions/subscriptions.service";
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
@@ -78,6 +80,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     private monitorChecksAPIService: MonitorChecksAPIService,
     private organizationsService: OrganizationsService,
     private projectAlertsService: ProjectAlertsAPIService,
+    private settingsService: SettingsService,
+    private subscriptionsService: SubscriptionsService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -124,6 +128,26 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
         })
       )
       .toPromise();
+  }
+
+  callSubscriptionDetails() { 
+    lastValueFrom(this.settingsService.billingEnabled$.pipe(
+      tap(billingEnabled => {
+        if (billingEnabled) {
+          lastValueFrom(
+            this.organizationsService.activeOrganizationSlug$.pipe(
+              filter((slug) => !!slug),
+              take(1),
+              tap((slug) => {
+                if (slug) {
+                  lastValueFrom(this.subscriptionsService.retrieveSubscription(slug));
+                }
+              })
+            )
+          );
+        }
+      })
+    ))
   }
 
   getMonitors(orgSlug: string, cursor?: string | undefined) {

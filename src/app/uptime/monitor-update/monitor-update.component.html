@@ -20,7 +20,7 @@
                 matInput
                 formControlName="name"
                 placeholder="Monitor Name"
-                [value]="monitor.name"
+                maxlength="200"
                 required
                 [errorStateMatcher]="matcher"
               />
@@ -35,8 +35,8 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="advanced">
-            <div>
+          <div class="short-field">
+            <div class="form-field">
               <mat-form-field>
                 <mat-label>Monitor type</mat-label>
                 <mat-select
@@ -112,8 +112,8 @@
               </mat-form-field>
             </div>
           </ng-container>
-          <div class="associations">
-            <div>
+          <div class="short-field">
+            <div class="form-field">
               <mat-form-field>
                 <mat-label>Associated Project</mat-label>
                 <mat-select formControlName="project">
@@ -136,8 +136,8 @@
               </p>
             </div>
           </div>
-          <div class="advanced">
-            <div>
+          <div class="short-field">
+            <div class="form-field">
               <mat-form-field>
                 <mat-label>Expected Status</mat-label>
                 <input
@@ -166,7 +166,9 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div>
+          </div>
+          <div class="short-field">
+            <div class="form-field">
               <mat-form-field>
                 <mat-label>Interval (seconds)</mat-label>
                 <input
@@ -196,6 +198,40 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <ng-container
+              *ngIf="totalEventsAllowed$ | async as totalEventsAllowed"
+            >
+              <div class="help-text">
+                <p class="mat-caption">
+                  <ng-container
+                    *ngIf="
+                      intervalPerMonth &&
+                        intervalPerMonth <= totalEventsAllowed;
+                      else limitExceeded
+                    "
+                  >
+                    This will use approximately
+                    {{ intervalPerMonth | number: "1.0-0" }}
+                    <a [routerLink]="[]" (click)="openEventInfoDialog()"
+                      >events</a
+                    >
+                    per month out of the
+                    {{ totalEventsAllowed | number: "1.0-0" }} events your
+                    organization's subscription allows for.
+                  </ng-container>
+                  <ng-template #limitExceeded>
+                    This will use approximately
+                    {{ intervalPerMonth | number: "1.0-0" }}
+                    <a [routerLink]="[]" (click)="openEventInfoDialog()"
+                      >events</a
+                    >
+                    per month, exceeding the
+                    {{ totalEventsAllowed | number: "1.0-0" }} events your
+                    organization's subscription allows for.
+                  </ng-template>
+                </p>
+              </div>
+            </ng-container>
           </div>
           <gt-loading-button
             class="submit"

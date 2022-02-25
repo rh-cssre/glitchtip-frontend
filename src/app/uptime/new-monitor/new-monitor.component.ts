@@ -1,9 +1,13 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { map } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { numberValidator, urlRegex } from "src/app/shared/validators";
+import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
 
 const defaultUrlValidators = [
@@ -18,10 +22,17 @@ const defaultUrlValidators = [
   styleUrls: ["./new-monitor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewMonitorComponent {
+export class NewMonitorComponent implements OnInit {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   loading$ = this.uptimeService.createLoading$;
+  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.plan?.product.metadata
+        ? parseInt(subscription.plan?.product.metadata.events, 10)
+        : null
+    )
+  );
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -48,12 +59,23 @@ export class NewMonitorComponent {
   formExpectedStatus = this.newMonitorForm.get("expectedStatus") as FormControl;
   formInterval = this.newMonitorForm.get("interval") as FormControl;
 
+  intervalPerMonth = 2592000 / this.formInterval.value;
+
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private organizationsService: OrganizationsService,
-    private uptimeService: UptimeService
+    private subscriptionsService: SubscriptionsService,
+    private uptimeService: UptimeService,
+    public dialog: MatDialog
   ) {}
+
+  ngOnInit(): void {
+    this.uptimeService.callSubscriptionDetails();
+    this.formInterval.valueChanges.subscribe((interval) => {
+      this.intervalPerMonth = Math.floor(2592000 / interval);
+    });
+  }
 
   updateRequiredFields() {
     if (this.formMonitorType.value === "Heartbeat") {
@@ -65,6 +87,12 @@ export class NewMonitorComponent {
         this.formUrl.setValue("https://");
       }
     }
+  }
+
+  openEventInfoDialog() {
+    this.dialog.open(EventInfoComponent, {
+      maxWidth: "300px",
+    });
   }
 
   onSubmit() {
