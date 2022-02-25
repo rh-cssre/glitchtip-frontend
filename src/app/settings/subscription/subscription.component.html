@@ -158,13 +158,7 @@
         </div>
       </mat-card-content>
     </mat-card>
-    <mat-card
-      *ngIf="
-        (promptForProject$ | async) &&
-        subscription.status !== null &&
-        subscription.status !== 'canceled'
-      "
-    >
+    <mat-card *ngIf="promptForProject$ | async">
       <mat-card-content>
         <p>
           Now that you have an organization and a subscription, create a
