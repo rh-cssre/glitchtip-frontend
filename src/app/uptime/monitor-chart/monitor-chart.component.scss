@@ -1,0 +1,25 @@
+@import "variables";
+
+div {
+    display: flex;
+    flex-direction: row;
+
+    div{
+        border-radius: 40%;
+        min-height: 15px;
+        min-width: 7px;
+        margin: 2px
+    }
+} 
+
+.up-check{
+    background-color: #54a65a;
+}
+
+.down-check{
+    background-color: $amaranth
+}
+
+.no-check {
+    background-color: rgba(0, 0, 0, 0.26)
+}

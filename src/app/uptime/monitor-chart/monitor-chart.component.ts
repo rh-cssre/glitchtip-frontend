@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MonitorCheck } from '../uptime.interfaces';
 
 @Component({
@@ -6,8 +6,15 @@ import { MonitorCheck } from '../uptime.interfaces';
   templateUrl: './monitor-chart.component.html',
   styleUrls: ['./monitor-chart.component.scss']
 })
-export class MonitorChartComponent {
+export class MonitorChartComponent implements OnInit {
 
-  @Input() data?: MonitorCheck[];
+  @Input() data: (MonitorCheck | false)[] = [];
+
+  constructor(
+  ) {}
+  ngOnInit(): void {
+    while (this.data.length < 60) {
+      this.data.unshift(false)
+  }}
 
 }
