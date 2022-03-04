@@ -1,1 +1,9 @@
-<p>monitor-chart works!</p>
+<div>
+<ng-container *ngFor="let datapoint of data">
+    <ng-container *ngIf="datapoint">
+        <div class="up-check" *ngIf="datapoint.isUp"></div>
+        <div class="down-check" *ngIf="datapoint.isUp === false"></div>
+    </ng-container>
+    <div class="no-check" *ngIf="datapoint === false"></div>
+</ng-container>
+</div>
