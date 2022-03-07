@@ -14,7 +14,7 @@ export class MonitorChartComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     while (this.data.length < 60) {
-      this.data.unshift(false)
+      this.data.push(false)
   }}
 
 }

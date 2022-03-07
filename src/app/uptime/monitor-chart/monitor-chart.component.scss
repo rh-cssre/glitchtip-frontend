@@ -3,12 +3,16 @@
 div {
     display: flex;
     flex-direction: row;
+    height: 25px;
+    flex-flow: row-reverse wrap;
+    justify-content: flex-end;
+    overflow: hidden;
 
     div{
         border-radius: 40%;
-        min-height: 15px;
-        min-width: 7px;
-        margin: 2px
+        min-height: 14px;
+        min-width: 10px;
+        margin-right: 7px;
     }
 } 
 
