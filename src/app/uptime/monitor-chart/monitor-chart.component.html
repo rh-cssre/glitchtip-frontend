@@ -1,9 +1,21 @@
 <div>
-<ng-container *ngFor="let datapoint of data">
+  <ng-container *ngFor="let datapoint of data">
     <ng-container *ngIf="datapoint">
-        <div class="up-check" *ngIf="datapoint.isUp"></div>
-        <div class="down-check" *ngIf="datapoint.isUp === false"></div>
+      <div
+        class="up-check"
+        *ngIf="datapoint.isUp"
+        matTooltip="Up at {{ datapoint.startCheck | date: 'short' }}"
+        matTooltipPosition="above"
+      ></div>
+      <div
+        class="down-check"
+        *ngIf="datapoint.isUp === false"
+        matTooltip="{{
+          datapoint.reason ? convertReasonText(datapoint.reason) : 'Down'
+        }} at {{ datapoint.startCheck | date: 'short' }}"
+        matTooltipPosition="above"
+      ></div>
     </ng-container>
     <div class="no-check" *ngIf="datapoint === false"></div>
-</ng-container>
+  </ng-container>
 </div>
