@@ -16,19 +16,19 @@ table {
 }
 
 .monitor-name {
-  width: 500px;
+  width: 400px;
 
   @media screen and (max-width: $large - 1) {
-    width: 300px;
-  }
-  @media screen and (max-width: $medium - 1) {
     width: 200px;
   }
+  @media screen and (max-width: $medium - 1) {
+    width: 100px;
+  }
   @media screen and (max-width: $tablet - 1) {
-    width: 160px;
+    width: 140px;
   }
   @media screen and (max-width: $small - 1) {
-    width: 120px;
+    width: 100px;
   }
 
   a {
@@ -92,6 +92,10 @@ table {
     width: $iconWidth;
     line-height: $iconWidth;
   }
+}
+
+.chart {
+  width: 5px
 }
 
 .spinner-container {
