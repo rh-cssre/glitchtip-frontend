@@ -20,6 +20,7 @@ export interface MonitorInput {
 export interface MonitorDetail extends MonitorInput {
   id: string;
   projectName: string | null;
+  checks: MonitorCheck[];
   isUp: boolean | null;
   lastChange: string | null;
   heartbeatEndpoint: string | null;

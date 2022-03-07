@@ -365,7 +365,7 @@ export const mixedChecks: MonitorCheck[] = [
 
 export const fewChecks: MonitorCheck[] = [
   {
-    isUp: true,
+    isUp: false,
     startCheck: "2022-03-04T14:12:29.331590Z",
     reason: null,
     responseTime: "00:00:00.064228",
