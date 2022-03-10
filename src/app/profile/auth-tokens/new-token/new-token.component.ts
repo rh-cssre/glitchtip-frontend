@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormArray,
@@ -14,7 +14,9 @@ import { AuthTokensService } from "../auth-tokens.service";
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
 })
-export class NewTokenComponent implements OnDestroy {
+export class NewTokenComponent implements OnInit, OnDestroy {
+  @ViewChild("selectAllCheckbox") selectAllCheckbox?: MatCheckbox;
+
   createLoading$ = this.authTokensService.createLoading$;
   createError$ = this.authTokensService.createError$;
   createErrorLabel$ = this.authTokensService.createErrorLabel$;
@@ -40,9 +42,6 @@ export class NewTokenComponent implements OnDestroy {
     "member:admin",
   ];
 
-  allScopesSelected: boolean = false;
-  allScopesIndeterminate: boolean = false;
-
   get scopes() {
     return this.form.controls.scopes as FormArray;
   }
@@ -64,21 +63,25 @@ export class NewTokenComponent implements OnDestroy {
     this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
   }
 
-  bulkModifyScopes(checkbox: MatCheckbox) {
-    const selectAll = !this.allScopesSelected && !this.allScopesIndeterminate;
-    this.scopes.setValue(Array.from(this.scopeOptions, () => selectAll));
-    this.updateSelectedScopes();
-    checkbox.checked = this.allScopesSelected;
-    checkbox.indeterminate = this.allScopesIndeterminate;
+  ngOnInit(): void {
+    this.scopes.valueChanges.subscribe((values: boolean[]) => {
+      if (this.selectAllCheckbox) {
+        this.selectAllCheckbox.checked = values.every(
+          (value) => value === true
+        );
+        this.selectAllCheckbox.indeterminate =
+          !this.selectAllCheckbox.checked &&
+          values.filter((value) => value === true).length > 0;
+      }
+    });
   }
 
-  updateSelectedScopes() {
-    this.allScopesSelected = this.form.value.scopes.every(
-      (value: boolean) => value === true
-    );
-    this.allScopesIndeterminate =
-      this.form.value.scopes.filter((value: boolean) => value === true).length >
-        0 && !this.allScopesSelected;
+  bulkModifyScopes() {
+    if (this.scopes.value.every((value: boolean) => value === false)) {
+      this.scopes.setValue(Array.from(this.scopeOptions, () => true));
+    } else {
+      this.scopes.setValue(Array.from(this.scopeOptions, () => false));
+    }
   }
 
   ngOnDestroy() {
