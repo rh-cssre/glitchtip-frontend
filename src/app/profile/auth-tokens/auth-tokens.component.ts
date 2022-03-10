@@ -22,6 +22,7 @@ export class AuthTokensComponent implements OnInit, OnDestroy {
   }
 
   deleteAuthToken(id: string) {
-    this.authTokensService.deleteAuthToken(id);
+    if (window.confirm("Are you sure you want to delete this authentication token?"))
+      this.authTokensService.deleteAuthToken(id);
   }
 }
