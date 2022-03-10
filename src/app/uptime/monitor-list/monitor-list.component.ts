@@ -23,7 +23,7 @@ export class MonitorListComponent
     map((state) => state.pagination.loading)
   );
   routerEventSubscription: Subscription;
-  displayedColumns: string[] = ["statusColor", "name", "chart", "url", "status"];
+  displayedColumns: string[] = ["statusColor", "name", "url", "status"];
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
