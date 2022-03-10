@@ -13,6 +13,7 @@ export class MonitorChartComponent implements OnInit {
 
   constructor(
   ) {}
+  // Push false values into array of checks so chart line stays a uniform length  
   ngOnInit(): void {
     while (this.data.length < 60) {
       this.data.push(false)
