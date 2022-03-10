@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormArray,
@@ -6,6 +6,7 @@ import {
   Validators,
   FormBuilder,
 } from "@angular/forms";
+import { MatCheckbox } from "@angular/material/checkbox";
 import { AuthTokensService } from "../auth-tokens.service";
 
 @Component({
@@ -13,7 +14,9 @@ import { AuthTokensService } from "../auth-tokens.service";
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
 })
-export class NewTokenComponent implements OnDestroy {
+export class NewTokenComponent implements OnInit, OnDestroy {
+  @ViewChild("selectAllCheckbox") selectAllCheckbox?: MatCheckbox;
+
   createLoading$ = this.authTokensService.createLoading$;
   createError$ = this.authTokensService.createError$;
   createErrorLabel$ = this.authTokensService.createErrorLabel$;
@@ -58,6 +61,27 @@ export class NewTokenComponent implements OnDestroy {
 
     /* Set scopeOptions to scopes FormArray **/
     this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
+  }
+
+  ngOnInit(): void {
+    this.scopes.valueChanges.subscribe((values: boolean[]) => {
+      if (this.selectAllCheckbox) {
+        this.selectAllCheckbox.checked = values.every(
+          (value) => value === true
+        );
+        this.selectAllCheckbox.indeterminate =
+          !this.selectAllCheckbox.checked &&
+          values.filter((value) => value === true).length > 0;
+      }
+    });
+  }
+
+  bulkModifyScopes() {
+    if (this.scopes.value.every((value: boolean) => value === false)) {
+      this.scopes.setValue(Array.from(this.scopeOptions, () => true));
+    } else {
+      this.scopes.setValue(Array.from(this.scopeOptions, () => false));
+    }
   }
 
   ngOnDestroy() {

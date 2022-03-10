@@ -34,6 +34,13 @@
         </mat-form-field>
         <h2>Scopes</h2>
         <p>Set the kind of access you want this token to have to your app.</p>
+        <mat-checkbox
+          class="select-all"
+          #selectAllCheckbox
+          (change)="bulkModifyScopes()"
+        >
+          <b>Full Access</b>
+        </mat-checkbox>
         <ul>
           <li
             formArrayName="scopes"
