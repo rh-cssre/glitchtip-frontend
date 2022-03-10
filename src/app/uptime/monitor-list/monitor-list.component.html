@@ -40,13 +40,6 @@
             </div>
           </td>
         </ng-container>
-        <ng-container matColumnDef="chart">
-          <div class="chart">
-            <td mat-cell *matCellDef="let monitor">
-              <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
-            </td>
-          </div>
-        </ng-container>
         <ng-container matColumnDef="url">
           <td mat-cell *matCellDef="let monitor" class="monitor-url">
             <div
