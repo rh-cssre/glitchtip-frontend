@@ -37,9 +37,7 @@
         <mat-checkbox
           class="select-all"
           #selectAllCheckbox
-          (change)="bulkModifyScopes(selectAllCheckbox)"
-          [checked]="allScopesSelected"
-          [indeterminate]="allScopesIndeterminate"
+          (change)="bulkModifyScopes()"
         >
           <b>Full Access</b>
         </mat-checkbox>
@@ -48,10 +46,7 @@
             formArrayName="scopes"
             *ngFor="let scope of scopes.controls; let i = index"
           >
-            <mat-checkbox
-              [formControlName]="i"
-              (change)="updateSelectedScopes()"
-            >
+            <mat-checkbox [formControlName]="i">
               {{ scopeOptions[i] }}
             </mat-checkbox>
           </li>
