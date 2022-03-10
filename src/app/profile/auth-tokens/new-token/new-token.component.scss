@@ -25,6 +25,10 @@ mat-form-field {
   width: 100%;
 }
 
+.select-all {
+  margin-bottom: 8px
+}
+
 ul {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax((150px), 1fr));

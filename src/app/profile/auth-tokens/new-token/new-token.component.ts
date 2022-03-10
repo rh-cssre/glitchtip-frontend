@@ -6,6 +6,7 @@ import {
   Validators,
   FormBuilder,
 } from "@angular/forms";
+import { MatCheckbox } from "@angular/material/checkbox";
 import { AuthTokensService } from "../auth-tokens.service";
 
 @Component({
@@ -39,6 +40,9 @@ export class NewTokenComponent implements OnDestroy {
     "member:admin",
   ];
 
+  allScopesSelected: boolean = false;
+  allScopesIndeterminate: boolean = false;
+
   get scopes() {
     return this.form.controls.scopes as FormArray;
   }
@@ -58,6 +62,23 @@ export class NewTokenComponent implements OnDestroy {
 
     /* Set scopeOptions to scopes FormArray **/
     this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
+  }
+
+  bulkModifyScopes(checkbox: MatCheckbox) {
+    const selectAll = !this.allScopesSelected && !this.allScopesIndeterminate;
+    this.scopes.setValue(Array.from(this.scopeOptions, () => selectAll));
+    this.updateSelectedScopes();
+    checkbox.checked = this.allScopesSelected;
+    checkbox.indeterminate = this.allScopesIndeterminate;
+  }
+
+  updateSelectedScopes() {
+    this.allScopesSelected = this.form.value.scopes.every(
+      (value: boolean) => value === true
+    );
+    this.allScopesIndeterminate =
+      this.form.value.scopes.filter((value: boolean) => value === true).length >
+        0 && !this.allScopesSelected;
   }
 
   ngOnDestroy() {
