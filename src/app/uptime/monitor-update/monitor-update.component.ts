@@ -11,6 +11,7 @@ import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-erro
 import { urlRegex, numberValidator } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
+import { timedeltaToSeconds } from "../uptime.utils"
 
 const defaultUrlValidators = [
   Validators.pattern(urlRegex),
@@ -109,7 +110,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formMonitorType.patchValue(data!.monitorType);
           this.formUrl.patchValue(data!.url);
           this.formExpectedStatus.patchValue(data!.expectedStatus);
-          this.formInterval.patchValue(this.toSeconds(data!.interval));
+          this.formInterval.patchValue(timedeltaToSeconds(data!.interval));
           this.formProject.patchValue(data!.project);
 
           if (this.formMonitorType.value !== "Heartbeat") {
@@ -122,20 +123,6 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.uptimeService.clearState();
-  }
-
-  toSeconds(interval: string) {
-    let seconds = 0;
-    if (interval.includes(" ")) {
-      seconds += parseInt(interval.split(" ")[0], 10) * 86400;
-      interval = interval.split(" ")[1];
-    }
-    const splitInterval = interval.split(":");
-    seconds += parseInt(splitInterval[0], 10) * 3600;
-    seconds += parseInt(splitInterval[1], 10) * 60;
-    seconds += parseInt(splitInterval[2], 10);
-
-    return seconds;
   }
 
   updateRequiredFields() {
