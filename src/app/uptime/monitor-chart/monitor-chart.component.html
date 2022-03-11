@@ -16,6 +16,8 @@
         matTooltipPosition="above"
       ></div>
     </ng-container>
-    <div class="no-check" *ngIf="datapoint === false"></div>
+  </ng-container>
+  <ng-container *ngFor="let emptyCheck of emptyChecks">
+    <div class="no-check"></div>
   </ng-container>
 </div>
