@@ -21,7 +21,7 @@ export class MonitorChecksComponent {
   @Input() paginator?: Paginator | null;
 
   constructor() {}
-  
+
   convertReasonText(reason: DownReason) {
     if (reasonTextConversions[reason]) {
       return reasonTextConversions[reason];

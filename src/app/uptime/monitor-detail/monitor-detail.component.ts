@@ -22,7 +22,7 @@ export class MonitorDetailComponent
     map((state) => state.pagination.loading)
   );
   uptimeAlertCount$ = this.uptimeService.uptimeAlertCount$;
-  alertCountLoading$ = this.uptimeService.alertCountLoading$
+  alertCountLoading$ = this.uptimeService.alertCountLoading$;
   associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),

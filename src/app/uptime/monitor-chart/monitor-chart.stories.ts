@@ -38,4 +38,3 @@ export const FewChecks = Template.bind({});
 FewChecks.args = {
   data: fewChecks,
 };
-
