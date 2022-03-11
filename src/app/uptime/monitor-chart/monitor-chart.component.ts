@@ -1,23 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MonitorCheck } from '../uptime.interfaces';
-import { DownReason } from '../uptime.interfaces';
+import { Component, Input } from "@angular/core";
+import { MonitorCheck } from "../uptime.interfaces";
+import { DownReason } from "../uptime.interfaces";
 
 @Component({
-  selector: 'gt-monitor-chart',
-  templateUrl: './monitor-chart.component.html',
-  styleUrls: ['./monitor-chart.component.scss']
+  selector: "gt-monitor-chart",
+  templateUrl: "./monitor-chart.component.html",
+  styleUrls: ["./monitor-chart.component.scss"],
 })
-export class MonitorChartComponent implements OnInit {
+export class MonitorChartComponent {
+  @Input() data: MonitorCheck[] = [];
 
-  @Input() data: (MonitorCheck | false)[] = [];
+  constructor() {}
 
-  constructor(
-  ) {}
-  // Push false values into array of checks so chart line stays a uniform length  
-  ngOnInit(): void {
-    while (this.data.length < 60) {
-      this.data.push(false)
-  }}
+  get emptyChecks() {
+    if (this.data.length < 60) {
+      return new Array(60 - this.data.length);
+    } else {
+      return [];
+    }
+  }
 
   convertReasonText(reason: DownReason) {
     switch (reason) {
