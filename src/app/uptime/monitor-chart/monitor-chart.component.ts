@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { MonitorCheck } from "../uptime.interfaces";
 import { DownReason } from "../uptime.interfaces";
+import { reasonTextConversions } from "../uptime.utils";
 
 @Component({
   selector: "gt-monitor-chart",
@@ -21,19 +22,10 @@ export class MonitorChartComponent {
   }
 
   convertReasonText(reason: DownReason) {
-    switch (reason) {
-      case DownReason.TIMEOUT:
-        return "Timeout";
-      case DownReason.STATUS:
-        return "Wrong status code";
-      case DownReason.BODY:
-        return "Expected response not found";
-      case DownReason.SSL:
-        return "SSL error";
-      case DownReason.NETWORK:
-        return "Network error";
-      default:
-        return "Down";
+    if (!reasonTextConversions[reason] || reason === DownReason.UNKNOWN) {
+      return "Down";
+    } else {
+      return reasonTextConversions[reason];
     }
   }
 }

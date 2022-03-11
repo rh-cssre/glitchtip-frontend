@@ -1,3 +1,5 @@
+import { DownReason } from "./uptime.interfaces";
+
 export function timedeltaToSeconds(interval: string) {
     let seconds = 0;
     if (interval.includes(" ")) {
@@ -11,3 +13,12 @@ export function timedeltaToSeconds(interval: string) {
 
     return seconds;
   }
+
+export const reasonTextConversions = {
+  [DownReason.UNKNOWN]: "Unknown",
+  [DownReason.TIMEOUT]: "Timeout",
+  [DownReason.STATUS]: "Wrong status code",
+  [DownReason.BODY]: "Expected response not found",
+  [DownReason.SSL]: "SSL error",
+  [DownReason.NETWORK]: "Network error",
+};
