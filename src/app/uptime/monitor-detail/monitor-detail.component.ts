@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { map, withLatestFrom } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import { timedeltaToSeconds } from "../uptime.utils";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -21,7 +22,7 @@ export class MonitorDetailComponent
     map((state) => state.pagination.loading)
   );
   uptimeAlertCount$ = this.uptimeService.uptimeAlertCount$;
-  alertCountLoading$ = this.uptimeService.alertCountLoading$
+  alertCountLoading$ = this.uptimeService.alertCountLoading$;
   associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
@@ -56,6 +57,8 @@ export class MonitorDetailComponent
       }
     );
   }
+
+  convertTimeDelta = timedeltaToSeconds;
 
   ngOnDestroy() {
     this.uptimeService.clearState();

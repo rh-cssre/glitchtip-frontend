@@ -1,0 +1,23 @@
+<div>
+  <ng-container *ngFor="let datapoint of data">
+    <ng-container *ngIf="datapoint">
+      <div
+        class="up-check"
+        *ngIf="datapoint.isUp"
+        matTooltip="Up at {{ datapoint.startCheck | date: 'short' }}"
+        matTooltipPosition="above"
+      ></div>
+      <div
+        class="down-check"
+        *ngIf="datapoint.isUp === false"
+        matTooltip="{{
+          datapoint.reason ? convertReasonText(datapoint.reason) : 'Down'
+        }} at {{ datapoint.startCheck | date: 'short' }}"
+        matTooltipPosition="above"
+      ></div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngFor="let emptyCheck of emptyChecks">
+    <div class="no-check"></div>
+  </ng-container>
+</div>

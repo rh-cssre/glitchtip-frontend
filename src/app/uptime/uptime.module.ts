@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MonitorDetailComponent } from "./monitor-detail/monitor-detail.component";
 import { MonitorUpdateComponent } from "./monitor-update/monitor-update.component";
 import { MonitorChecksComponent } from "./monitor-checks/monitor-checks.component";
+import { MonitorChartComponent } from './monitor-chart/monitor-chart.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { MonitorChecksComponent } from "./monitor-checks/monitor-checks.componen
     MonitorDetailComponent,
     MonitorUpdateComponent,
     MonitorChecksComponent,
+    MonitorChartComponent,
   ],
   imports: [
     CommonModule,

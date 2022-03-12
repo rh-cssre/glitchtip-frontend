@@ -16,8 +16,11 @@
           {{ monitor.lastChange | timeFor }}
         </ng-container>
       </mat-card-title>
-      <div class="status-indicator status-indicator--{{ monitor.isUp }}"></div>
-      <mat-card-content>
+      <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
+      <div class="mat-caption">
+        Uptime check interval: {{ convertTimeDelta(monitor.interval) | number }} seconds
+      </div>
+      <mat-card-content class="reduced-padding">
         <div>
           <div class="url-display">
             <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>

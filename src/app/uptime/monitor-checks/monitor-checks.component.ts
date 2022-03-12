@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { Paginator } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { MonitorDetail, DownReason, MonitorCheck } from "../uptime.interfaces";
+import { reasonTextConversions } from "../uptime.utils";
 
 @Component({
   selector: "gt-monitor-checks",
@@ -22,21 +23,10 @@ export class MonitorChecksComponent {
   constructor() {}
 
   convertReasonText(reason: DownReason) {
-    switch (reason) {
-      case DownReason.UNKNOWN:
-        return "Unknown";
-      case DownReason.TIMEOUT:
-        return "Timeout";
-      case DownReason.STATUS:
-        return "Wrong status code";
-      case DownReason.BODY:
-        return "Expected response not found";
-      case DownReason.SSL:
-        return "SSL error";
-      case DownReason.NETWORK:
-        return "Network error";
-      default:
-        return "Unknown";
+    if (reasonTextConversions[reason]) {
+      return reasonTextConversions[reason];
+    } else {
+      return "Unknown";
     }
   }
 

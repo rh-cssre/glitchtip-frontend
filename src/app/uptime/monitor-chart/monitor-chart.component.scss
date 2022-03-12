@@ -1,0 +1,29 @@
+@import "variables";
+
+div {
+    display: flex;
+    flex-direction: row;
+    height: 25px;
+    flex-flow: row-reverse wrap;
+    justify-content: flex-end;
+    overflow: hidden;
+
+    div{
+        border-radius: 4px;
+        min-height: 14px;
+        min-width: 10px;
+        margin-right: 7px;
+    }
+} 
+
+.up-check{
+    background-color: #54a65a;
+}
+
+.down-check{
+    background-color: $amaranth
+}
+
+.no-check {
+    background-color: rgba(0, 0, 0, 0.26)
+}
