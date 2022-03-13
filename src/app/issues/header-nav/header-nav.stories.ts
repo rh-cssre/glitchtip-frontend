@@ -3,7 +3,6 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs } from "@storybook/addon-knobs";
 import { of } from "rxjs";
 
 import { HeaderNavComponent } from "./header-nav.component";
@@ -22,7 +21,6 @@ export default {
         HttpClientTestingModule,
       ],
     }),
-    withKnobs,
   ],
 };
 
