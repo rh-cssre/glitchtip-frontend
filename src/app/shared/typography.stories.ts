@@ -2,7 +2,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs } from "@storybook/addon-knobs";
 
 import { MaterialModule } from "./material.module";
 
@@ -17,7 +16,6 @@ export default {
         HttpClientTestingModule,
       ],
     }),
-    withKnobs,
   ],
 };
 
