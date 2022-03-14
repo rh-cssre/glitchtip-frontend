@@ -15,8 +15,10 @@ table {
   width: 100%;
 }
 
-.monitor-name {
+.name-and-url {
   width: 500px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
   @media screen and (max-width: $large - 1) {
     width: 300px;
@@ -27,9 +29,6 @@ table {
   @media screen and (max-width: $tablet - 1) {
     width: 160px;
   }
-  @media screen and (max-width: $small - 1) {
-    width: 120px;
-  }
 
   a {
     white-space: nowrap;
@@ -38,24 +37,30 @@ table {
     display: block;
     max-width: fit-content;
   }
-}
 
-.monitor-url {
-  @media screen and (max-width: $tablet - 1) {
-    display: none;
+  div {
+    width: inherit;
+
+    .mat-caption {
+      color: inherit;
+    }
   }
 }
 
-.url-box {
-  width: 250px;
+.chart-container{
+  @media screen and (max-width: $small - 1) {
+    display: none;
+  }
+
+  .monitor-chart{
+    margin-left: 10px;
+  }
 }
 
-.url-string {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
-  max-width: fit-content;
+.status {
+  @media screen and (max-width: $small - 1) {
+    padding-left: 40px;
+  }
 }
 
 .status-color {
@@ -77,7 +82,7 @@ table {
     background-color: $amaranth;
   }
 
-  // For monitors that do not yet have a check, which we currently mark as meaning 'Down'
+  // For monitors that do not yet have a check
   &--:after {
     background-color: gray;
   }
