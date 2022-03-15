@@ -2,7 +2,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { boolean, withKnobs } from "@storybook/addon-knobs";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs";
 
@@ -22,95 +21,72 @@ export default {
         SharedModule,
       ],
       declarations: [],
-    }),
-    withKnobs,
+    })
   ],
 };
 
 export const contexts = () => {
-  const options = [];
-  let user = boolean("User", true);
-  user
-    ? options.push({
-        title: "em@jay.com",
-        subtitle: "EmJay117",
-        key: "Username",
-        type: "user",
-        icon: null,
-        matIcon: "account_circle",
-      })
-    : null;
-
-  let browser = boolean("Browser", true);
-  browser
-    ? options.push({
-        title: "FireFox",
-        subtitle: "11.7",
-        key: "Version",
-        type: "browser",
-        icon: "static/assets/images/browser-svgs/firefox/firefox.svg",
-        matIcon: null,
-      })
-    : null;
-
-  let runtime = boolean("Runtime", true);
-  runtime
-    ? options.push({
-        title: "CPython",
-        subtitle: "3.8.0",
-        key: "Version",
-        type: "runtime",
-        icon: "static/assets/images/logos/48x48/cpython.png",
-        matIcon: null,
-      })
-    : null;
-
-  let os = boolean("OS", true);
-  os
-    ? options.push({
-        title: "Ubuntu",
-        subtitle: "20.0.4",
-        key: "Version",
-        type: "os",
-        icon: "static/assets/images/os-logos/ubuntu.png",
-        matIcon: null,
-      })
-    : null;
-
-  let device = boolean("Device", true);
-  device
-    ? options.push({
-        title: "Red Ryder",
-        subtitle: "amd64",
-        key: "Arch",
-        type: "device",
-        icon: null,
-        matIcon: "devices_other",
-      })
-    : null;
-
-  let gpu = boolean("GPU", true);
-  gpu
-    ? options.push({
-        title: "Graphic",
-        subtitle: "a vendor",
-        key: "Vendor",
-        type: "gpu",
-        icon: null,
-        matIcon: null,
-      })
-    : null;
+  const fullContext = [
+    {
+      title: "em@jay.com",
+      subtitle: "EmJay117",
+      key: "Username",
+      type: "user",
+      icon: null,
+      matIcon: "account_circle",
+    },
+    {
+      title: "FireFox",
+      subtitle: "11.7",
+      key: "Version",
+      type: "browser",
+      icon: "static/assets/images/browser-svgs/firefox/firefox.svg",
+      matIcon: null,
+    },
+    {
+      title: "CPython",
+      subtitle: "3.8.0",
+      key: "Version",
+      type: "runtime",
+      icon: "static/assets/images/logos/48x48/cpython.png",
+      matIcon: null,
+    },
+    {
+      title: "Ubuntu",
+      subtitle: "20.0.4",
+      key: "Version",
+      type: "os",
+      icon: "static/assets/images/os-logos/ubuntu.png",
+      matIcon: null,
+    },
+    {
+      title: "Red Ryder",
+      subtitle: "amd64",
+      key: "Arch",
+      type: "device",
+      icon: null,
+      matIcon: "devices_other",
+    },
+    {
+      title: "Graphic",
+      subtitle: "a vendor",
+      key: "Vendor",
+      type: "gpu",
+      icon: null,
+      matIcon: null,
+    },
+  ];
 
   return {
     component: ContextsComponent,
     props: {
-      specialContexts$: of(options),
+      specialContexts$: of(fullContext),
     },
   };
 };
 
 contexts.story = {
-  name: "Event Detail Contexts",
+  name: "Event Detail Full Context",
 };
 
 export const unknownContexts = () => {
