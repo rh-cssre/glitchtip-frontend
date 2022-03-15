@@ -1,8 +1,7 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, boolean, text } from "@storybook/addon-knobs";
+import { moduleMetadata, Story } from "@storybook/angular";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ProfileComponent } from "./profile.component";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
@@ -13,6 +12,7 @@ import { of } from "rxjs";
 
 export default {
   title: "Profile/Profile",
+  component: ChangePasswordComponent,
   decorators: [
     moduleMetadata({
       imports: [
@@ -25,13 +25,22 @@ export default {
       providers: [GlitchTipOAuthService, UserService],
       declarations: [ProfileComponent, ChangePasswordComponent],
     }),
-    withKnobs,
   ],
+  argTypes: {
+    loading: {
+      options: [true, false],
+    },
+    hasError: {
+      options: [true, false],
+    },
+    hasPasswordAuth: {
+      options: [true, false],
+    }
+  }
 };
 
-export const changepw = () => {
-  const loadingBoolean = boolean("Loading", false);
-  const errorText = text("Server Error Message", "");
+export const Template: Story = (args) => {
+  const { loading, hasError, hasPasswordAuth } = args
   const user = {
     username: "rain@bow.com",
     lastLogin: "2020-11-24T20:52:03.864975Z",
@@ -42,19 +51,21 @@ export const changepw = () => {
     isActive: true,
     name: "",
     dateJoined: "2020-08-18T13:18:51.432490Z",
-    hasPasswordAuth: boolean("Has Password Auth", true),
+    hasPasswordAuth: hasPasswordAuth,
     email: "rain@bow.com",
   };
   return {
-    component: ChangePasswordComponent,
     props: {
-      loading: loadingBoolean,
-      error: errorText,
+      loading,
+      error: hasError ? "Server Error Message" : null,
       user$: of(user),
     },
   };
 };
 
-changepw.story = {
-  name: "Change Password",
+export const ChangePassword = Template.bind({});
+ChangePassword.args = {
+  loading: false,
+  hasError: false,
+  hasPasswordAuth: true
 };

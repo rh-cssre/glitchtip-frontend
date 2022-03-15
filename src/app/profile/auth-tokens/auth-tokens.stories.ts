@@ -26,7 +26,6 @@ export default {
   argTypes: {
     authTokens: {
       options: [true, false],
-      control: { type: "select" },
     },
     deleteLoading: {
       options: ["First", "Second", "Third", "None"],
@@ -34,7 +33,6 @@ export default {
     },
     initialLoad: {
       options: [true, false],
-      control: { type: "select" },
     },
   },
 };
@@ -99,8 +97,8 @@ export const Template: Story = (args) => {
   };
 };
 
-export const ExampleStory = Template.bind({});
-ExampleStory.args = {
+export const AuthTokenDefault = Template.bind({});
+AuthTokenDefault.args = {
   authTokens: true,
   deleteLoading: "none",
   initialLoad: true,
