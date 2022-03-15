@@ -19,24 +19,23 @@ export default {
         SharedModule,
       ],
       declarations: [IssueDetailTitleComponent],
-    })
+    }),
   ],
   argTypes: {
     issueType: {
-      options: ['error', 'csp', 'expectct', 'whatever'],
-      control: { type: 'select'}
+      options: ["error", "csp", "expectct", "whatever"],
+      control: { type: "select" },
     },
     culprit: {
-      options: ['this is the culprit', '']
+      options: ["this is the culprit", ""],
     },
     metadata: {
       table: {
         disable: true,
-      }
-    }
-  }
+      },
+    },
+  },
 };
-
 
 const issueMetadata: any = {
   directive: "metadata directive",
@@ -52,12 +51,12 @@ const issueMetadata: any = {
 export const Template: Story = (args) => ({
   props: {
     ...args,
-    metadata: issueMetadata
+    metadata: issueMetadata,
   },
-})
+});
 
 export const Default = Template.bind({});
 Default.args = {
   issueType: "error",
   culprit: "this is the culprit",
-}
+};
