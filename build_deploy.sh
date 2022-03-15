@@ -32,6 +32,8 @@ install_dependencies() {
 }
 
 build_and_push(){
+    npm run build-prod
+    
     # build the image
     docker build  --no-cache \
                 --force-rm \
