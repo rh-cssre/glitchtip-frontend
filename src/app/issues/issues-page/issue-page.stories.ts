@@ -6,7 +6,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
 import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, select } from "@storybook/addon-knobs";
 import { of } from "rxjs";
 
 import { IssuesPageComponent } from "./issues-page.component";
@@ -22,6 +21,7 @@ import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
 
 export default {
   title: "Issues/Issues Page",
+  component: IssuesPageComponent,
   decorators: [
     moduleMetadata({
       imports: [
@@ -44,7 +44,6 @@ export default {
         DaysAgoPipe,
       ],
     }),
-    withKnobs,
   ],
 };
 
@@ -100,139 +99,159 @@ const sampleProjects = [
   },
 ];
 
-export const issueListItem = () => {
-  const statesDefaultValue = "normal";
-  const statesOptions = {
-    "Normal, all projects": statesDefaultValue,
-    "Normal, one project applied": "normalOneProjectApplied",
-    "Initial Load": "initialLoad",
-    "Loading with URL params (page change is a common use case)": "loading",
-    "Loading without URL Params (should only be happening when issue length is 0)":
-      "loadingWithoutParams",
-    "Normal, some issues selected (checkboxes for issues won't check in storybook)":
-      "normalIssuesSelected",
-    "Normal, all issues selected (checkboxes for issues won't check in storybook)":
-      "normalIssuesAllSelected",
-    "Organization Has No Projects": "orgHasNoProjects",
-    "No Issues because there are URL params (for example, search query is applied)":
-      "noIssuesUrlParams",
-    "No Issues": "noIssues",
-    "No Issues, multiple projects": "noIssuesMultipleProjects",
-    "No Issues because you're not on the team, single project":
-      "noIssuesNotOnTeamSingleProject",
-    "No Issues because you're not on the team, multiple projects":
-      "noIssuesNotOnTeamMultipleProjects",
-    "Some issues show, but you're not on the team for some of the projects":
-      "someIssuesButNotOnTeamForAll",
-  };
-  const states = select("States", statesOptions, statesDefaultValue);
-
-  const sensibleDefaults = {
-    initialLoadComplete: true,
-    loading: false,
-    issueLength: issueList.length,
-    orgHasAProject: true,
-    appliedProjectCount: 0,
-    urlHasParam: false,
-    projectsWhereAdminIsNotOnTheTeam: [],
-    thereAreSelectedIssues: false,
-    areAllSelected: false,
-    userNotInSomeTeams: false,
-  };
-
-  const pageStateConfig: any = {
-    normal: {
-      ...sensibleDefaults,
-    },
-    normalOneProjectApplied: {
-      ...sensibleDefaults,
-      appliedProjectCount: 1,
-    },
-    normalIssuesSelected: {
-      ...sensibleDefaults,
-      thereAreSelectedIssues: true,
-    },
-    normalIssuesAllSelected: {
-      ...sensibleDefaults,
-      thereAreSelectedIssues: true,
-      areAllSelected: true,
-    },
-    initialLoad: {
-      ...sensibleDefaults,
-      issueLength: 0,
-      initialLoadComplete: false,
-      loading: true,
-    },
-    loading: {
-      ...sensibleDefaults,
-      initialLoadComplete: false,
-      loading: true,
-      urlHasParam: true,
-    },
-    loadingWithoutParams: {
-      ...sensibleDefaults,
-      initialLoadComplete: false,
-      loading: true,
-      issueLength: 0,
-    },
-    orgHasNoProjects: {
-      ...sensibleDefaults,
-      issueLength: 0,
-      orgHasAProject: false,
-    },
-    noIssues: {
-      ...sensibleDefaults,
-      issueLength: 0,
-    },
-    noIssuesMultipleProjects: {
-      ...sensibleDefaults,
-      issueLength: 0,
-      appliedProjectCount: 4,
-    },
-    noIssuesUrlParams: {
-      ...sensibleDefaults,
-      issueLength: 0,
-      urlHasParam: true,
-    },
-    noIssuesNotOnTeamSingleProject: {
-      ...sensibleDefaults,
-      issueLength: 0,
-      projectsWhereAdminIsNotOnTheTeam: [sampleProjects[1]],
-    },
-    noIssuesNotOnTeamMultipleProjects: {
-      ...sensibleDefaults,
-      issueLength: 0,
-      appliedProjectCount: 4,
-      projectsWhereAdminIsNotOnTheTeam: [sampleProjects[1], sampleProjects[4]],
-    },
-    someIssuesButNotOnTeamForAll: {
-      ...sensibleDefaults,
-      issueLength: 4,
-      userNotInSomeTeams: true,
-    },
-  };
-
-  return {
-    component: IssuesPageComponent,
-    props: {
-      // initialLoadComplete$: of(pageStateConfig[states].initialLoadComplete),
-      loading$: of(pageStateConfig[states].loading),
-      appliedProjectCount$: of(pageStateConfig[states].appliedProjectCount),
-      areAllSelected$: of(pageStateConfig[states].areAllSelected),
-      thereAreSelectedIssues$: of(
-        pageStateConfig[states].thereAreSelectedIssues
-      ),
-      // orgHasAProject$: of(pageStateConfig[states].orgHasAProject),
-      projectsFromParams$: of([2, 3, 4]),
-      // projectsWhereAdminIsNotOnTheTeam$: of(
-      //   pageStateConfig[states].projectsWhereAdminIsNotOnTheTeam
-      // ),
-      issues$: of(issueList.slice(0, pageStateConfig[states].issueLength)),
-      // userNotInSomeTeams$: of(pageStateConfig[states].userNotInSomeTeams),
-    },
-  };
+const sensibleDefaults = {
+  initialLoadComplete: true,
+  loading: false,
+  issueLength: issueList.length,
+  orgHasAProject: true,
+  appliedProjectCount: 0,
+  urlHasParam: false,
+  projectsWhereAdminIsNotOnTheTeam: [],
+  thereAreSelectedIssues: false,
+  areAllSelected: false,
+  userNotInSomeTeams: false,
 };
 
-issueListItem.story = {
-  name: "Issues Page",
+const pageStateConfig: any = {
+  normal: {
+    ...sensibleDefaults,
+  },
+  normalOneProjectApplied: {
+    ...sensibleDefaults,
+    appliedProjectCount: 1,
+  },
+  normalIssuesSelected: {
+    ...sensibleDefaults,
+    thereAreSelectedIssues: true,
+  },
+  normalIssuesAllSelected: {
+    ...sensibleDefaults,
+    thereAreSelectedIssues: true,
+    areAllSelected: true,
+  },
+  initialLoad: {
+    ...sensibleDefaults,
+    issueLength: 0,
+    initialLoadComplete: false,
+    loading: true,
+  },
+  loading: {
+    ...sensibleDefaults,
+    initialLoadComplete: false,
+    loading: true,
+    urlHasParam: true,
+  },
+  loadingWithoutParams: {
+    ...sensibleDefaults,
+    initialLoadComplete: false,
+    loading: true,
+    issueLength: 0,
+  },
+  orgHasNoProjects: {
+    ...sensibleDefaults,
+    issueLength: 0,
+    orgHasAProject: false,
+  },
+  noIssues: {
+    ...sensibleDefaults,
+    issueLength: 0,
+  },
+  noIssuesMultipleProjects: {
+    ...sensibleDefaults,
+    issueLength: 0,
+    appliedProjectCount: 4,
+  },
+  noIssuesUrlParams: {
+    ...sensibleDefaults,
+    issueLength: 0,
+    urlHasParam: true,
+  },
+  noIssuesNotOnTeamSingleProject: {
+    ...sensibleDefaults,
+    issueLength: 0,
+    projectsWhereAdminIsNotOnTheTeam: [sampleProjects[1]],
+  },
+  noIssuesNotOnTeamMultipleProjects: {
+    ...sensibleDefaults,
+    issueLength: 0,
+    appliedProjectCount: 4,
+    projectsWhereAdminIsNotOnTheTeam: [sampleProjects[1], sampleProjects[4]],
+  },
+  someIssuesButNotOnTeamForAll: {
+    ...sensibleDefaults,
+    issueLength: 4,
+    userNotInSomeTeams: true,
+  },
+};
+
+function selectProps(stateSelection: string) {
+  const state = pageStateConfig[stateSelection];
+  return {
+    props: {
+      loading$: of(state.loading),
+      appliedProjectCount$: of(state.appliedProjectCount),
+      areAllSelected$: of(state.areAllSelected),
+      thereAreSelectedIssues$: of(state.thereAreSelectedIssues),
+      projectsFromParams$: of([2, 3, 4]),
+      issues$: of(issueList.slice(0, state.issueLength)),
+    },
+  };
+}
+
+export const Normal = () => {
+  return selectProps("normal");
+};
+
+export const NormalOneProjectApplied = () => {
+  return selectProps("normalOneProjectApplied")
+};
+
+export const InitialLoad = () => {
+  return selectProps("initialLoad")
+};
+
+export const Loading = () => {
+  return selectProps("loading")
+};
+
+// Should only be happening when issue length is 0
+export const LoadingWithoutParams = () => {
+  return selectProps("loadingWithoutParams")
+};
+
+// Checkboxes for issues won't check in storybook
+export const NormalIssuesSelected = () => {
+  return selectProps("normalIssuesSelected")
+};
+
+export const normalIssuesAllSelected = () => {
+  return selectProps("normalIssuesAllSelected")
+};
+
+export const OrgHasNoProjects = () => {
+  return selectProps("orgHasNoProjects")
+};
+
+export const NoIssuesUrlParams = () => {
+  return selectProps("noIssuesUrlParams")
+};
+
+export const NoIssues = () => {
+  return selectProps("noIssues")
+};
+
+export const NoIssuesMultipleProjects = () => {
+  return selectProps("noIssuesMultipleProjects")
+};
+
+export const NoIssuesNotOnTeamSingleProject = () => {
+  return selectProps("noIssuesNotOnTeamSingleProject")
+};
+
+export const NoIssuesNotOnTeamMultipleProjects = () => {
+  return selectProps("noIssuesNotOnTeamMultipleProjects")
+};
+
+export const SomeIssuesButNotOnTeamForAll = () => {
+  return selectProps("someIssuesButNotOnTeamForAll")
 };
