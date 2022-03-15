@@ -38,7 +38,7 @@ export default {
 };
 
 export const Template: Story = (args) => {
-  const { authTokens, deleteLoading, initialLoad } = args
+  const { authTokens, deleteLoading, initialLoad } = args;
 
   const authTokenData = [
     {
@@ -86,7 +86,12 @@ export const Template: Story = (args) => {
     return choice ? authTokenData : [];
   }
 
-  const deleteLoadingOptions: {[index: string]:any} = { 'First': 26, 'Second': 25, 'Third': 24, 'None': null };
+  const deleteLoadingOptions: { [index: string]: any } = {
+    First: 26,
+    Second: 25,
+    Third: 24,
+    None: null,
+  };
 
   return {
     props: {

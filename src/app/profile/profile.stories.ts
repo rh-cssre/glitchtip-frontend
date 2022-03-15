@@ -35,12 +35,12 @@ export default {
     },
     hasPasswordAuth: {
       options: [true, false],
-    }
-  }
+    },
+  },
 };
 
 export const Template: Story = (args) => {
-  const { loading, hasError, hasPasswordAuth } = args
+  const { loading, hasError, hasPasswordAuth } = args;
   const user = {
     username: "rain@bow.com",
     lastLogin: "2020-11-24T20:52:03.864975Z",
@@ -67,5 +67,5 @@ export const ChangePassword = Template.bind({});
 ChangePassword.args = {
   loading: false,
   hasError: false,
-  hasPasswordAuth: true
+  hasPasswordAuth: true,
 };

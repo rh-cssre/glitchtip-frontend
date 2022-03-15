@@ -203,55 +203,55 @@ export const Normal = () => {
 };
 
 export const NormalOneProjectApplied = () => {
-  return selectProps("normalOneProjectApplied")
+  return selectProps("normalOneProjectApplied");
 };
 
 export const InitialLoad = () => {
-  return selectProps("initialLoad")
+  return selectProps("initialLoad");
 };
 
 export const Loading = () => {
-  return selectProps("loading")
+  return selectProps("loading");
 };
 
 // Should only be happening when issue length is 0
 export const LoadingWithoutParams = () => {
-  return selectProps("loadingWithoutParams")
+  return selectProps("loadingWithoutParams");
 };
 
 // Checkboxes for issues won't check in storybook
 export const NormalIssuesSelected = () => {
-  return selectProps("normalIssuesSelected")
+  return selectProps("normalIssuesSelected");
 };
 
 export const normalIssuesAllSelected = () => {
-  return selectProps("normalIssuesAllSelected")
+  return selectProps("normalIssuesAllSelected");
 };
 
 export const OrgHasNoProjects = () => {
-  return selectProps("orgHasNoProjects")
+  return selectProps("orgHasNoProjects");
 };
 
 export const NoIssuesUrlParams = () => {
-  return selectProps("noIssuesUrlParams")
+  return selectProps("noIssuesUrlParams");
 };
 
 export const NoIssues = () => {
-  return selectProps("noIssues")
+  return selectProps("noIssues");
 };
 
 export const NoIssuesMultipleProjects = () => {
-  return selectProps("noIssuesMultipleProjects")
+  return selectProps("noIssuesMultipleProjects");
 };
 
 export const NoIssuesNotOnTeamSingleProject = () => {
-  return selectProps("noIssuesNotOnTeamSingleProject")
+  return selectProps("noIssuesNotOnTeamSingleProject");
 };
 
 export const NoIssuesNotOnTeamMultipleProjects = () => {
-  return selectProps("noIssuesNotOnTeamMultipleProjects")
+  return selectProps("noIssuesNotOnTeamMultipleProjects");
 };
 
 export const SomeIssuesButNotOnTeamForAll = () => {
-  return selectProps("someIssuesButNotOnTeamForAll")
+  return selectProps("someIssuesButNotOnTeamForAll");
 };
