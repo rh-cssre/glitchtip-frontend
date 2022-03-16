@@ -1,8 +1,7 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, select } from "@storybook/addon-knobs";
+import { moduleMetadata, Story } from "@storybook/angular";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { GlitchTipOAuthService } from "../../api/oauth/oauth.service";
 import { UserService } from "../../api/user/user.service";
@@ -13,6 +12,7 @@ import { SettingsService } from "src/app/api/settings.service";
 
 export default {
   title: "Profile/Social Auth",
+  component: SocialAuthComponent,
   decorators: [
     moduleMetadata({
       imports: [
@@ -25,20 +25,25 @@ export default {
       providers: [GlitchTipOAuthService, UserService, SettingsService],
       declarations: [SocialAuthComponent],
     }),
-    withKnobs,
   ],
+  argTypes: {
+    loading: {
+      options: ["First", "Second", "None"],
+      control: { type: "select" },
+    },
+  },
 };
 
-export const socialAuth = () => {
-  const loadingBoolean = select(
-    "loading",
-    { first: 3, second: 4, null: null },
-    null
-  );
+export const socialAuth: Story = (args) => {
+  const { loading } = args;
+  const loadingOptions: { [index: string]: any } = {
+    First: 3,
+    Second: 4,
+    None: null,
+  };
   return {
-    component: SocialAuthComponent,
     props: {
-      disconnectLoading$: of(loadingBoolean),
+      disconnectLoading$: of(loadingOptions[loading]),
       user$: of({
         username: "rain@bow.com",
         lastLogin: "2020-10-29T15:51:52.193929Z",
