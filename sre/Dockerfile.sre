@@ -1,0 +1,20 @@
+# Single File for Building GlitchTip Image
+
+FROM node:alpine3.15 as build-frontend
+
+WORKDIR /code
+ADD . .
+
+RUN ["npm", "ci", "--no-audit", "--no-fund", "--loglevel=error"]
+RUN ["npm", "run", "build-prod", "--loglevel=error"]
+
+
+FROM registry.gitlab.com/glitchtip/glitchtip-backend:master
+
+ARG GLITCHTIP_VERSION=local
+ENV GLITCHTIP_VERSION ${GLITCHTIP_VERSION}
+WORKDIR /code
+
+COPY --from=build-frontend /code/dist/ /code/dist
+
+RUN SECRET_KEY=ci DATABASE_URL="sqlite:////tmp/my-tmp-sqlite.db" ./manage.py collectstatic --noinput
