@@ -1,6 +1,7 @@
 #!/bin/bash
 set -exv
 
+# Environment Variables
 BASE_IMG="glitchtip"
 QUAY_IMAGE="quay.io/cs-sre/${BASE_IMG}"
 IMG="${BASE_IMG}:latest"
