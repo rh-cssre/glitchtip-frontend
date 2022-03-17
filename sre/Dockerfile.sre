@@ -2,9 +2,7 @@
 
 FROM registry.access.redhat.com/ubi8/nodejs-16-minimal:1-21 as build-frontend
 
-WORKDIR /code
 ADD . .
-
 RUN ["npm", "ci", "--no-audit", "--no-fund", "--loglevel=error"]
 RUN ["npm", "run", "build-prod", "--loglevel=error"]
 
@@ -15,6 +13,6 @@ ARG GLITCHTIP_VERSION=local
 ENV GLITCHTIP_VERSION ${GLITCHTIP_VERSION}
 WORKDIR /code
 
-COPY --from=build-frontend /code/dist/ /code/dist
+COPY --from=build-frontend /opt/app-root/src/dist/ /code/dist
 
 RUN SECRET_KEY=ci DATABASE_URL="sqlite:////tmp/my-tmp-sqlite.db" ./manage.py collectstatic --noinput
