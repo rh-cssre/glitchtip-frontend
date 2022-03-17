@@ -5,8 +5,10 @@ set -exv
 BASE_IMG="glitchtip"
 QUAY_IMAGE="quay.io/cs-sre/${BASE_IMG}"
 IMG="${BASE_IMG}:latest"
+GIT_HASH=`{git rev-parse --short HEAD}`
 
-docker build . -f sre/Dockerfile.sre -t glitchtip
+# Build Image
+docker build . -f sre/Dockerfile.sre -t ${IMG}
 
 build_and_push(){
 
