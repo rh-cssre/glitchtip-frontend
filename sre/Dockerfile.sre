@@ -1,6 +1,6 @@
 # Single File for Building GlitchTip Image
 
-FROM node:alpine3.15 as build-frontend
+FROM registry.access.redhat.com/ubi8/nodejs-16-minimal:1-21 as build-frontend
 
 WORKDIR /code
 ADD . .
