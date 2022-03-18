@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Job
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+    kompose.version: 1.22.0 (HEAD)
+  labels:
+    io.kompose.service: migrate
+  name: migrate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: migrate
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+        kompose.version: 1.22.0 (HEAD)
+      labels:
+        io.kompose.service: migrate
+    spec:
+      containers:
+        - args:
+            - ./manage.py
+            - migrate
+          env:
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@postgres:5432/postgres # fill me here
+            - name: PORT
+              value: "5432"
+            - name: SECRET_KEY
+              value: postgres
+          image: quay.io/cs-sre/glitchtip:e2e9dda
+          name: migrate
+          resources:
+            requests:
+              cpu: 1m
+              memory: 100Mi
+            limits:
+              memory: 200Mi
+              cpu: 100m
+      restartPolicy: Always
+status: {}

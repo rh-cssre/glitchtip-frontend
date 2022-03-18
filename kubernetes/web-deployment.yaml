@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+    kompose.version: 1.22.0 (HEAD)
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+        kompose.version: 1.22.0 (HEAD)
+      labels:
+        io.kompose.service: web
+    spec:
+      containers:
+        - env:
+            - name: DATABASE_URL
+              value: postgres://postgres:postgres@postgres:5432/postgres
+            - name: PORT
+              value: "8000"
+            - name: SECRET_KEY
+              value: postgres
+            - name: I_PAID_FOR_GLITCHTIP
+              value: "True"
+            - name: ENABLE_OPEN_USER_REGISTRATION
+              value: "True"
+            - name: GLITCHTIP_DOMAIN
+              value: >-
+                https://glitchtip-demo-redhat-glitchtip.apps.rhmi2-cssre2.x9f2.p1.openshiftapps.com
+            - name: DEFAULT_FROM_EMAIL
+              value: no-reply@devshift.net
+            - name: EMAIL_URL
+              value: smtp+tls://smtp-user:smtp-password@email-smtp.eu-west-1.amazonaws.com:587
+          image: quay.io/cs-sre/glitchtip:e2e9dda
+          name: web
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: "3"
+              memory: 800M
+            limits:
+              memory: 2G
+              cpu: "5"
+      restartPolicy: Always
+status: {}
