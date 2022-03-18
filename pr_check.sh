@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# This Job Runs End to End Tests
+# This Job runs Unit Tests
 
 # TODO
-# 1. Run the backend server. From the backend repo run `docker-compose up`. Do not enable Stripe.
-# 2. Run the frontend development server `npm start`
-# 3. Run Cypress `npm run cy:open`
+# Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 echo "Skipped running Tests."
