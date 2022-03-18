@@ -1,12 +1,12 @@
 apiVersion: v1
 data:
-  ENABLE_SOCIAL_AUTH: # True or False
-  GLITCHTIP_DOMAIN: # add route url create for glitchtip
+  ENABLE_SOCIAL_AUTH: "" # True or False
+  GLITCHTIP_DOMAIN: "" # add route url create for glitchtip
 kind: ConfigMap
 metadata:
-  annotations:
+  annotations: {}
   labels:
     app.kubernetes.io/instance: glitchtip
     app.kubernetes.io/name: glitchtip
   name: glitchtip
-  namespace: # add you namesspace
+  namespace: "YOUR_CUSTOM_NAMESPACE"
