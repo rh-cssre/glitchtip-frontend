@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: batch/v1
 kind: Job
 metadata:
   annotations:
@@ -8,11 +8,6 @@ metadata:
     io.kompose.service: migrate
   name: migrate
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      io.kompose.service: migrate
-  strategy: {}
   template:
     metadata:
       annotations:
@@ -22,10 +17,7 @@ spec:
         io.kompose.service: migrate
     spec:
       containers:
-        - args:
-            - ./manage.py
-            - migrate
-          env:
+        - env:
             - name: DATABASE_URL
               value: postgres://postgres:postgres@postgres:5432/postgres # fill me here
             - name: PORT
@@ -33,6 +25,7 @@ spec:
             - name: SECRET_KEY
               value: postgres
           image: quay.io/cs-sre/glitchtip:e2e9dda
+          command: ["python3", "./manage.py", "migrate"]
           name: migrate
           resources:
             requests:
@@ -41,5 +34,5 @@ spec:
             limits:
               memory: 200Mi
               cpu: 100m
-      restartPolicy: Always
+      restartPolicy: OnFailure
 status: {}
