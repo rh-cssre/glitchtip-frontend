@@ -1,8 +1,7 @@
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata } from "@storybook/angular";
-import { withKnobs, boolean, select } from "@storybook/addon-knobs";
+import { moduleMetadata, Story } from "@storybook/angular";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs";
 import { SharedModule } from "src/app/shared/shared.module";
@@ -11,6 +10,7 @@ import { AuthTokensComponent } from "./auth-tokens.component";
 
 export default {
   title: "Profile/Auth Tokens",
+  component: AuthTokensComponent,
   decorators: [
     moduleMetadata({
       imports: [
@@ -22,11 +22,24 @@ export default {
       ],
       declarations: [ProfileComponent],
     }),
-    withKnobs,
   ],
+  argTypes: {
+    authTokens: {
+      options: [true, false],
+    },
+    deleteLoading: {
+      options: ["First", "Second", "Third", "None"],
+      type: ["select"],
+    },
+    initialLoad: {
+      options: [true, false],
+    },
+  },
 };
 
-export const authTokens = () => {
+export const Template: Story = (args) => {
+  const { authTokens, deleteLoading, initialLoad } = args;
+
   const authTokenData = [
     {
       scopes: ["project:read"],
@@ -68,26 +81,30 @@ export const authTokens = () => {
       id: 24,
     },
   ];
-  const statesOptions = {
-    empty: [],
-    hasTokens: authTokenData,
+
+  function selectTokens(choice: boolean) {
+    return choice ? authTokenData : [];
+  }
+
+  const deleteLoadingOptions: { [index: string]: any } = {
+    First: 26,
+    Second: 25,
+    Third: 24,
+    None: null,
   };
+
   return {
-    component: AuthTokensComponent,
     props: {
-      authTokens$: of(select("States", statesOptions as any, [])),
-      deleteLoading$: of(
-        select(
-          "loading",
-          { first: 24, second: 25, third: 26, none: null },
-          null
-        )
-      ),
-      initialLoad$: of(boolean("Initial Load", true)),
+      authTokens$: of(selectTokens(authTokens)),
+      deleteLoading$: of(deleteLoadingOptions[deleteLoading]),
+      initialLoad$: of(initialLoad),
     },
   };
 };
 
-authTokens.story = {
-  name: "Auth Tokens",
+export const AuthTokenDefault = Template.bind({});
+AuthTokenDefault.args = {
+  authTokens: true,
+  deleteLoading: "none",
+  initialLoad: true,
 };
