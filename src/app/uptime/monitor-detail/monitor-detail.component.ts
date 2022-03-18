@@ -23,6 +23,7 @@ export class MonitorDetailComponent
   uptimeAlertCount$ = this.uptimeService.uptimeAlertCount$;
   alertCountLoading$ = this.uptimeService.alertCountLoading$;
   associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$;
+  activeMonitorRecentChecksSeries$ = this.uptimeService.activeMonitorRecentChecksSeries$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {

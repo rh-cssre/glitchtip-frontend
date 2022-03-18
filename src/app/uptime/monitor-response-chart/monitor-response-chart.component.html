@@ -1,28 +1,33 @@
-<div>
-  <div #containerRef (window:resize)="onResize()" class="spectre-line-chart">
-    <ngx-charts-area-chart
-      [view]="view"
-      [scheme]="colorScheme"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      [xAxis]="xAxis"
-      [yAxis]="yAxis"
-      [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel"
-      [gradient]="true"
-      [xScaleMin]="xScaleMin"
-      [xScaleMax]="xScaleMax"
-      [results]="data"
-    >
-    <ng-template #tooltipTemplate let-model="model">
+<div *ngIf="activeMonitorRecentChecksSeries$ | async as data">
+  <ng-container *ngIf="yScaleDimensions$ | async as dimensions">
+    <div #containerRef (window:resize)="onResize()" class="spectre-line-chart">
+      <ngx-charts-area-chart
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxis]="true"
+        [yAxis]="true"
+        xAxisLabel="Check Time"
+        yAxisLabel="Response Time (ms)"
+        [gradient]="true"
+        [view]="view"
+        [customColors]="customColors"
+        [xScaleMin]="xScaleMin"
+        [xScaleMax]="xScaleMax"
+        [yScaleMin]="dimensions.yScaleMin"
+        [yScaleMax]="dimensions.yScaleMax"
+        [results]="data"
+      >
+      <ng-template #tooltipTemplate let-model="model">
         {{ model.name | date:'short'}}<br>
-      {{ model.value }}ms
-    </ng-template>
-    <ng-template #seriesTooltipTemplate let-model="model">
-      {{model[0].value }}ms
-    </ng-template>
-    </ngx-charts-area-chart>
-  </div>
+        {{ model.value }}ms
+      </ng-template>
+      <ng-template #seriesTooltipTemplate let-model="model">
+        {{ model[0].name | date:'short'}}<br>
+        {{model[0].value }}ms
+      </ng-template>
+      </ngx-charts-area-chart>
+    </div>
+  </ng-container>
 </div>
 
 

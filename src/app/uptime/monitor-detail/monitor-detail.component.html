@@ -38,13 +38,12 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>      
+    <mat-card *ngIf="activeMonitorRecentChecksSeries$ | async">      
       <mat-card-title>Response Time</mat-card-title>
       <mat-divider></mat-divider>
       <mat-card-content>
         <div class="response-chart">
           <gt-monitor-response-chart
-            [raw]="monitor.checks"
           ></gt-monitor-response-chart>
         </div>
       </mat-card-content>
