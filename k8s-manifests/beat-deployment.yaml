@@ -42,7 +42,7 @@ spec:
                 name: glitchtip
             - configMapRef:
                 name: glitchtip
-          image: glitchtip/glitchtip:latest
+          image: quay.io/cs-sre/glitchtip
           imagePullPolicy: Always
           name: glitchtip
           resources:
