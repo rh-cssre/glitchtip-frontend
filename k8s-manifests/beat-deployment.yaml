@@ -28,33 +28,32 @@ spec:
         checksum/configmap: c36b4a904599bc6018fbe7b70fd4af68206e1da903c112aa632fad44ecce8b6d
         checksum/secret: c051ebe5bed83572a6f565fd9d4043eb12cd034aedfcfd6c11f639d530c64bf7
         tag: latest
-      creationTimestamp: null
       labels:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
         app.kubernetes.io/name: glitchtip
     spec:
       containers:
-      - env:
-        - name: SERVER_ROLE
-          value: beat
-        envFrom:
-        - secretRef:
-            name: glitchtip
-        - configMapRef:
-            name: glitchtip
-        image: glitchtip/glitchtip:latest
-        imagePullPolicy: Always
-        name: glitchtip
-        resources:
-          limits:
-            cpu: 50m
-            memory: 96Mi
-          requests:
-            cpu: 1m
-            memory: 32Mi
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
+        - env:
+            - name: SERVER_ROLE
+              value: beat
+          envFrom:
+            - secretRef:
+                name: glitchtip
+            - configMapRef:
+                name: glitchtip
+          image: glitchtip/glitchtip:latest
+          imagePullPolicy: Always
+          name: glitchtip
+          resources:
+            limits:
+              cpu: 50m
+              memory: 96Mi
+            requests:
+              cpu: 1m
+              memory: 32Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
