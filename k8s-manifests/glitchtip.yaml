@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  DATABASE_URL: example.com # you database connection details
+  REDIS_URL: redis://:@glitchtip-redis-master:6379/0 # you redis or elasticache connection details 
+  SECRET_KEY: #password
+kind: Secret
+metadata:
+  annotations:
+  labels:
+    app.kubernetes.io/instance: glitchtip
+    app.kubernetes.io/name: glitchtip
+    app.kubernetes.io/version: 1.0.0
+  name: glitchtip
+  namespace: 
+type: Opaque
