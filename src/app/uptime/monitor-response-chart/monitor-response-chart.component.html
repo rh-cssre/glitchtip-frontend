@@ -1,20 +1,20 @@
 <div *ngIf="activeMonitorRecentChecksSeries$ | async as data">
-  <ng-container *ngIf="yScaleDimensions$ | async as dimensions">
+  <ng-container *ngIf="responseChartScale$ | async as scale">
     <div #containerRef (window:resize)="onResize()" class="spectre-line-chart">
       <ngx-charts-area-chart
         [showXAxisLabel]="true"
         [showYAxisLabel]="true"
         [xAxis]="true"
         [yAxis]="true"
-        xAxisLabel="Check Time"
-        yAxisLabel="Response Time (ms)"
         [gradient]="true"
         [view]="view"
+        xAxisLabel="Check Time"
+        yAxisLabel="Response Time (ms)"
         [customColors]="customColors"
-        [xScaleMin]="xScaleMin"
-        [xScaleMax]="xScaleMax"
-        [yScaleMin]="dimensions.yScaleMin"
-        [yScaleMax]="dimensions.yScaleMax"
+        [xScaleMin]="scale.xScaleMin"
+        [xScaleMax]="scale.xScaleMax"
+        [yScaleMin]="scale.yScaleMin"
+        [yScaleMax]="scale.yScaleMax"
         [results]="data"
       >
       <ng-template #tooltipTemplate let-model="model">

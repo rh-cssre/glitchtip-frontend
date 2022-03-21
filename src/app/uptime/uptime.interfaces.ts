@@ -1,4 +1,4 @@
-import { Series } from "@swimlane/ngx-charts";
+import { Series, DataItem } from "@swimlane/ngx-charts";
 
 export type MonitorType = "Ping" | "GET" | "POST" | "Heartbeat";
 export enum DownReason {
@@ -35,6 +35,10 @@ export interface MonitorCheck {
   responseTime: string | null;
 }
 
-export interface ResponseTimeSeries extends Omit<Series, 'name'> {
+export interface ResponseTimeDataItem extends Omit<DataItem, 'name'> {
   name: Date
+}
+
+export interface ResponseTimeSeries extends Omit<Series, 'series'> {
+  series: ResponseTimeDataItem[]
 }

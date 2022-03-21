@@ -8,7 +8,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
-import { MonitorCheck, MonitorDetail, MonitorInput } from "./uptime.interfaces";
+import { MonitorCheck, MonitorDetail, MonitorInput, ResponseTimeSeries } from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.service";
@@ -18,7 +18,6 @@ import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-
 import { SettingsService } from "../api/settings.service";
 import { SubscriptionsService } from "../api/subscriptions/subscriptions.service";
 import { timedeltaToSecondsOrMS } from "./uptime.utils";
-import { Series } from "@swimlane/ngx-charts";
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
@@ -375,7 +374,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
           name: input[0].isUp ? "Up" : "Down",
           series: [],
         },
-      ] as Series[]
+      ] as ResponseTimeSeries[]
     );
   }
 }

@@ -6,7 +6,7 @@ import {
   AfterViewInit,
 } from "@angular/core";
 import { UptimeService } from "../uptime.service";
-import { map, tap } from "rxjs";
+import { map } from "rxjs";
 
 @Component({
   selector: "gt-monitor-response-chart",
@@ -17,33 +17,32 @@ export class MonitorResponseChartComponent implements OnInit, AfterViewInit {
   @ViewChild("containerRef") containerRef?: ElementRef;
   activeMonitorRecentChecksSeries$ =
     this.uptimeService.activeMonitorRecentChecksSeries$;
-  yScaleDimensions$ = this.uptimeService.activeMonitorRecentChecksSeries$.pipe(
-    map((series) => {
-      let yScaleMax = 20;
-      let currentTime = new Date()
-      currentTime.setHours(currentTime.getHours() - 1)
-      series?.forEach((subseries) => {
-        subseries.series.forEach((dataItem) => {
-          if (dataItem.value > yScaleMax) {
-            yScaleMax = dataItem.value;
-          }
-          // if (dataItem.name < currentTime){
-          //   currentTime = dataItem.name
-          // }
+  responseChartScale$ =
+    this.uptimeService.activeMonitorRecentChecksSeries$.pipe(
+      map((series) => {
+        let yScaleMax = 20;
+        let xScaleMin = new Date();
+        xScaleMin.setHours(xScaleMin.getHours() - 1);
+        series?.forEach((subseries) => {
+          subseries.series.forEach((dataItem) => {
+            if (dataItem.value > yScaleMax) {
+              yScaleMax = dataItem.value;
+            }
+            if (dataItem.name < xScaleMin) {
+              xScaleMin = dataItem.name;
+            }
+          });
         });
-      });
-      return {
-        yScaleMax,
-        yScaleMin: 0 - yScaleMax / 4,
-
-        xScaleMax: new Date().getTime(), 
-      };
-    })
-  );
+        return {
+          yScaleMax,
+          yScaleMin: 0 - yScaleMax / 4,
+          xScaleMin,
+          xScaleMax: new Date().getTime(),
+        };
+      })
+    );
 
   view: [number, number] = [0, 0];
-  xScaleMin = new Date().getTime() - 1 * 60 * 60 * 1000;
-  xScaleMax = new Date().getTime();
   customColors = [
     { name: "Up", value: "#54a65a" },
     { name: "Down", value: "#e22a46" },
@@ -52,7 +51,6 @@ export class MonitorResponseChartComponent implements OnInit, AfterViewInit {
   constructor(private uptimeService: UptimeService) {}
 
   ngOnInit(): void {
-    this.uptimeService.activeMonitorRecentChecksSeries$.pipe(tap((series) => console.log(series)))
   }
 
   ngAfterViewInit(): void {
