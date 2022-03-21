@@ -20,7 +20,7 @@ objects:
       name: beat
     spec:
       progressDeadlineSeconds: 600
-      replicas: ${BEAT_REPLICAS}
+      replicas: ${{BEAT_REPLICAS}}
       revisionHistoryLimit: 10
       selector:
         matchLabels:
@@ -57,11 +57,11 @@ objects:
               name: glitchtip
               resources:
                 limits:
-                  cpu: ${BEAT_CPU_LIMITS}
-                  memory: ${BEAT_MEMORY_LIMITS}
+                  cpu: ${{BEAT_CPU_LIMITS}}
+                  memory: ${{BEAT_MEMORY_LIMITS}}
                 requests:
-                  cpu: ${BEAT_CPU_REQUESTS}
-                  memory: ${BEAT_MEMORY_REQUESTS}
+                  cpu: ${{BEAT_CPU_REQUESTS}}
+                  memory: ${{BEAT_MEMORY_REQUESTS}}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
           dnsPolicy: ClusterFirst
@@ -133,11 +133,11 @@ objects:
               name: migrate
               resources:
                 requests:
-                  cpu: ${MIGRATION_JOB_CPU_REQUESTS}
-                  memory: ${MIGRATION_JOB_MEMORY_REQUESTS}
+                  cpu: ${{MIGRATION_JOB_CPU_REQUESTS}}
+                  memory: ${{MIGRATION_JOB_MEMORY_REQUESTS}}
                 limits:
-                  memory: ${MIGRATION_JOB_MEMORY_LIMITS}
-                  cpu: ${MIGRATION_JOB_CPU_LIMITS}
+                  memory: ${{MIGRATION_JOB_MEMORY_LIMITS}}
+                  cpu: ${{MIGRATION_JOB_CPU_LIMITS}}
           restartPolicy: OnFailure
 
   # ------- WEB DEPLOYMENT JOB --------------------
@@ -152,7 +152,7 @@ objects:
         io.kompose.service: web
       name: web
     spec:
-      replicas: ${GT_WEB_REPLICAS}
+      replicas: ${{GT_WEB_REPLICAS}}
       selector:
         matchLabels:
           io.kompose.service: web
@@ -189,11 +189,11 @@ objects:
                 - containerPort: ${GT_APP_PORT}
               resources:
                 requests:
-                  cpu: ${GT_WEB_CPU_REQUESTS}
-                  memory: ${GT_WEB_MEMORY_REQUESTS}
+                  cpu: ${{GT_WEB_CPU_REQUESTS}}
+                  memory: ${{GT_WEB_MEMORY_REQUESTS}}
                 limits:
-                  memory: ${GT_WEB_MEMORY_LIMITS}
-                  cpu: ${GT_WEB_CPU_LIMITS}
+                  memory: ${{GT_WEB_MEMORY_LIMITS}}
+                  cpu: ${{GT_WEB_CPU_LIMITS}}
           restartPolicy: Always
 
   # ---------- GT WEB SERVICE -----------
@@ -227,7 +227,7 @@ objects:
         io.kompose.service: worker
       name: worker
     spec:
-      replicas: ${GT_WORKER_REPLICAS}
+      replicas: ${{GT_WORKER_REPLICAS}}
       selector:
         matchLabels:
           io.kompose.service: worker
@@ -260,11 +260,11 @@ objects:
               name: worker
               resources:
                 requests:
-                  cpu: ${GT_WORKER_CPU_REQUESTS}
-                  memory: ${GT_WORKER_MEMORY_REQUESTS}
+                  cpu: ${{GT_WORKER_CPU_REQUESTS}}
+                  memory: ${{GT_WORKER_MEMORY_REQUESTS}}
                 limits:
-                  memory: ${GT_WORKER_MEMORY_LIMITS}
-                  cpu: ${GT_WORKER_CPU_LIMITS}
+                  memory: ${{GT_WORKER_MEMORY_LIMITS}}
+                  cpu: ${{GT_WORKER_CPU_LIMITS}}
           restartPolicy: Always
 
 parameters:
