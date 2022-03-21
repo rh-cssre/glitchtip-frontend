@@ -457,3 +457,4 @@ parameters:
   required: true
   name: GT_WORKER_REPLICAS
   value: "1"
+  
