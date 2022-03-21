@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 labels:
   template: glitchtip
@@ -91,64 +91,6 @@ objects:
       name: glitchtip-secrets
     type: Opaque
 
-  # -----------DB MIGRATION JOB -------------------
-
-  - apiVersion: batch/v1
-    kind: Job
-    metadata:
-      labels:
-        glitchtip: migrate
-      name: migrate
-    spec:
-      template:
-        metadata:
-          labels:
-            glitchtip: migrate
-        spec:
-          containers:
-            - env:
-                - name: REDIS_HOST
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${EC_SECRET_NAME}
-                      key: db.endpoint
-                - name: REDIS_PORT
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${EC_SECRET_NAME}
-                      key: db.host
-                - name: REDIS_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${EC_SECRET_NAME}
-                      key: db.auth_token
-                - name: DATABASE_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${RDS_SECRET_NAME}
-                      key: db.host
-                - name: PORT
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${RDS_SECRET_NAME}
-                      key: db.port
-                - name: SECRET_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${RDS_SECRET_NAME}
-                      key: db.password
-              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
-              command: ["python3", "./manage.py", "migrate"]
-              name: migrate
-              resources:
-                requests:
-                  cpu: ${{MIGRATION_JOB_CPU_REQUESTS}}
-                  memory: ${{MIGRATION_JOB_MEMORY_REQUESTS}}
-                limits:
-                  memory: ${{MIGRATION_JOB_MEMORY_LIMITS}}
-                  cpu: ${{MIGRATION_JOB_CPU_LIMITS}}
-          restartPolicy: OnFailure
-
   # ------- WEB DEPLOYMENT JOB --------------------
 
   - apiVersion: apps/v1
@@ -162,12 +104,26 @@ objects:
       selector:
         matchLabels:
           glitchtip: web
-      strategy: {}
       template:
         metadata:
           labels:
             glitchtip: web
         spec:
+          initContainers:
+            - name: init-migration
+              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
+              command: ["python3", "./manage.py", "migrate"]
+            - env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.host
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.password
           containers:
             - env:
                 - name: DATABASE_URL
@@ -335,12 +291,6 @@ parameters:
     name: BEAT_MEMORY_REQUESTS
     value: "32Mi"
 
-  - description: MIGRATION_JOB_MEMORY_REQUESTS
-    displayName: MIGRATION_JOB_MEMORY_REQUESTS
-    required: true
-    name: MIGRATION_JOB_MEMORY_REQUESTS
-    value: "100Mi"
-
   - description: GT_WEB_MEMORY_REQUESTS
     displayName: GT_WEB_MEMORY_REQUESTS
     required: true
@@ -360,12 +310,6 @@ parameters:
     name: BEAT_MEMORY_LIMITS
     value: "96Mi"
 
-  - description: MIGRATION_JOB_MEMORY_LIMITS
-    displayName: MIGRATION_JOB_MEMORY_LIMITS
-    required: true
-    name: MIGRATION_JOB_MEMORY_LIMITS
-    value: "200Mi"
-
   - description: GT_WEB_MEMORY_LIMITS
     displayName: GT_WEB_MEMORY_LIMITS
     required: true
@@ -383,12 +327,6 @@ parameters:
     displayName: BEAT_CPU_REQUESTS
     required: true
     name: BEAT_CPU_REQUESTS
-    value: "1m"
-
-  - description: MIGRATION_JOB_CPU_REQUESTS
-    displayName: MIGRATION_JOB_CPU_REQUESTS
-    required: true
-    name: MIGRATION_JOB_CPU_REQUESTS
     value: "1m"
 
   - description: GT_WEB_CPU_REQUESTS
