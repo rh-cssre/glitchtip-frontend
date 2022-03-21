@@ -1,459 +1,466 @@
-# ---- BEAT DEPLOYMENT ------
-
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    annotations:
-      deployment.kubernetes.io/revision: "1"
-    labels:
-      app.kubernetes.io/component: beat
-      app.kubernetes.io/instance: glitchtip
-      app.kubernetes.io/name: glitchtip
-    name: beat
-  spec:
-    progressDeadlineSeconds: 600
-    replicas: ${BEAT_REPLICAS}
-    revisionHistoryLimit: 10
-    selector:
-      matchLabels:
+apiVersion: v1
+kind: Template
+labels:
+  template: glitchtip
+metadata:
+  name: glitchtip
+  annotations:
+    description: glitchtip
+objects:
+  # ---- BEAT DEPLOYMENT ------
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "1"
+      labels:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
         app.kubernetes.io/name: glitchtip
-    strategy:
-      rollingUpdate:
-        maxSurge: 25%
-        maxUnavailable: 25%
-      type: RollingUpdate
-    template:
-      metadata:
-        annotations:
-          checksum/configmap: c36b4a904599bc6018fbe7b70fd4af68206e1da903c112aa632fad44ecce8b6d
-          checksum/secret: c051ebe5bed83572a6f565fd9d4043eb12cd034aedfcfd6c11f639d530c64bf7
-          tag: latest
-        labels:
+      name: beat
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: ${BEAT_REPLICAS}
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
           app.kubernetes.io/component: beat
           app.kubernetes.io/instance: glitchtip
           app.kubernetes.io/name: glitchtip
-      spec:
-        containers:
-          - env:
-              - name: SERVER_ROLE
-                value: beat
-            envFrom:
-              - secretRef:
-                  name: glitchtip
-              - configMapRef:
-                  name: glitchtip
-            image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
-            imagePullPolicy: Always
-            name: glitchtip
-            resources:
-              limits:
-                cpu: ${BEAT_CPU_LIMITS}
-                memory: ${BEAT_MEMORY_LIMITS}
-              requests:
-                cpu: ${BEAT_CPU_REQUESTS}
-                memory: ${BEAT_MEMORY_REQUESTS}
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        schedulerName: default-scheduler
-        terminationGracePeriodSeconds: 30
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          annotations:
+            checksum/configmap: c36b4a904599bc6018fbe7b70fd4af68206e1da903c112aa632fad44ecce8b6d
+            checksum/secret: c051ebe5bed83572a6f565fd9d4043eb12cd034aedfcfd6c11f639d530c64bf7
+            tag: latest
+          labels:
+            app.kubernetes.io/component: beat
+            app.kubernetes.io/instance: glitchtip
+            app.kubernetes.io/name: glitchtip
+        spec:
+          containers:
+            - env:
+                - name: SERVER_ROLE
+                  value: beat
+              envFrom:
+                - secretRef:
+                    name: glitchtip
+                - configMapRef:
+                    name: glitchtip
+              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
+              imagePullPolicy: Always
+              name: glitchtip
+              resources:
+                limits:
+                  cpu: ${BEAT_CPU_LIMITS}
+                  memory: ${BEAT_MEMORY_LIMITS}
+                requests:
+                  cpu: ${BEAT_CPU_REQUESTS}
+                  memory: ${BEAT_MEMORY_REQUESTS}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
 
-# -------- CONFIG MAP ----------
+  # -------- CONFIG MAP ----------
 
-- apiVersion: v1
-  kind: ConfigMap
-  data:
-    ENABLE_SOCIAL_AUTH: ${ENABLE_SOCIAL_AUTH}
-    GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN}
-  metadata:
-    annotations: {}
-    labels:
-      app.kubernetes.io/instance: glitchtip
-      app.kubernetes.io/name: glitchtip
-    name: glitchtip
+  - apiVersion: v1
+    kind: ConfigMap
+    data:
+      ENABLE_SOCIAL_AUTH: ${ENABLE_SOCIAL_AUTH}
+      GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN}
+    metadata:
+      annotations: {}
+      labels:
+        app.kubernetes.io/instance: glitchtip
+        app.kubernetes.io/name: glitchtip
+      name: glitchtip
 
-# ---------- GT SECRET -----------
+  # ---------- GT SECRET -----------
 
-- apiVersion: v1
-  kind: Secret
-  data:
-    DATABASE_URL: ${DATABASE_URL} 
-    REDIS_URL:  ${REDIS_URL} 
-    SECRET_KEY: ${DB_SECRET_KEY}
-  metadata:
-    annotations: { add_annotation }
-    labels:
-      app.kubernetes.io/instance: glitchtip
-      app.kubernetes.io/name: glitchtip
-      app.kubernetes.io/version: 1.0.0
-    name: glitchtip
-  type: Opaque
+  - apiVersion: v1
+    kind: Secret
+    data:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      SECRET_KEY: ${DB_SECRET_KEY}
+    metadata:
+      annotations: { add_annotation }
+      labels:
+        app.kubernetes.io/instance: glitchtip
+        app.kubernetes.io/name: glitchtip
+        app.kubernetes.io/version: 1.0.0
+      name: glitchtip
+    type: Opaque
 
-# -----------DB MIGRATION JOB -------------------
+  # -----------DB MIGRATION JOB -------------------
 
-- apiVersion: batch/v1
-  kind: Job
-  metadata:
-    annotations:
-      kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-      kompose.version: 1.22.0 (HEAD)
-    labels:
-      io.kompose.service: migrate
-    name: migrate
-  spec:
-    template:
-      metadata:
-        annotations:
-          kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-          kompose.version: 1.22.0 (HEAD)
-        labels:
-          io.kompose.service: migrate
-      spec:
-        containers:
-          - env:
-              - name: DATABASE_URL
-                value: ${DATABASE_URL}
-              - name: PORT
-                value: ${DB_PORT}
-              - name: SECRET_KEY
-                value: ${DB_SECRET_KEY}
-            image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
-            command: ["python3", "./manage.py", "migrate"]
-            name: migrate
-            resources:
-              requests:
-                cpu: ${MIGRATION_JOB_CPU_REQUESTS}
-                memory: ${MIGRATION_JOB_MEMORY_REQUESTS}
-              limits:
-                memory: ${MIGRATION_JOB_MEMORY_LIMITS}
-                cpu: ${MIGRATION_JOB_CPU_LIMITS}
-        restartPolicy: OnFailure
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+        kompose.version: 1.22.0 (HEAD)
+      labels:
+        io.kompose.service: migrate
+      name: migrate
+    spec:
+      template:
+        metadata:
+          annotations:
+            kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+            kompose.version: 1.22.0 (HEAD)
+          labels:
+            io.kompose.service: migrate
+        spec:
+          containers:
+            - env:
+                - name: DATABASE_URL
+                  value: ${DATABASE_URL}
+                - name: PORT
+                  value: ${DB_PORT}
+                - name: SECRET_KEY
+                  value: ${DB_SECRET_KEY}
+              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
+              command: ["python3", "./manage.py", "migrate"]
+              name: migrate
+              resources:
+                requests:
+                  cpu: ${MIGRATION_JOB_CPU_REQUESTS}
+                  memory: ${MIGRATION_JOB_MEMORY_REQUESTS}
+                limits:
+                  memory: ${MIGRATION_JOB_MEMORY_LIMITS}
+                  cpu: ${MIGRATION_JOB_CPU_LIMITS}
+          restartPolicy: OnFailure
 
-# ------- WEB DEPLOYMENT JOB --------------------
+  # ------- WEB DEPLOYMENT JOB --------------------
 
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    annotations:
-      kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-      kompose.version: 1.22.0 (HEAD)
-    labels:
-      io.kompose.service: web
-    name: web
-  spec:
-    replicas: ${GT_WEB_REPLICAS}
-    selector:
-      matchLabels:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+        kompose.version: 1.22.0 (HEAD)
+      labels:
         io.kompose.service: web
-    strategy: {}
-    template:
-      metadata:
-        annotations:
-          kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-          kompose.version: 1.22.0 (HEAD)
-        labels:
+      name: web
+    spec:
+      replicas: ${GT_WEB_REPLICAS}
+      selector:
+        matchLabels:
           io.kompose.service: web
-      spec:
-        containers:
-          - env:
-              - name: DATABASE_URL
-                value: ${DATABASE_URL}
-              - name: PORT
-                value: ${GT_APP_PORT}
-              - name: SECRET_KEY
-                value: ${DB_SECRET_KEY}
-              - name: I_PAID_FOR_GLITCHTIP
-                value: "${I_PAID_FOR_GLITCHTIP}"
-              - name: ENABLE_OPEN_USER_REGISTRATION
-                value: "${ENABLE_OPEN_USER_REGISTRATION}"
-              - name: GLITCHTIP_DOMAIN
-                value: ${GLITCHTIP_DOMAIN}
-              - name: DEFAULT_FROM_EMAIL
-                value: ${DEFAULT_FROM_EMAIL}
-              - name: EMAIL_URL
-                value: ${EMAIL_URL}
-            image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
-            name: web
-            ports:
-              - containerPort: ${GT_APP_PORT}
-            resources:
-              requests:
-                cpu: ${GT_WEB_CPU_REQUESTS}
-                memory:  ${GT_WEB_MEMORY_REQUESTS}
-              limits:
-                memory: ${GT_WEB_MEMORY_LIMITS}
-                cpu: ${GT_WEB_CPU_LIMITS}
-        restartPolicy: Always
+      strategy: {}
+      template:
+        metadata:
+          annotations:
+            kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+            kompose.version: 1.22.0 (HEAD)
+          labels:
+            io.kompose.service: web
+        spec:
+          containers:
+            - env:
+                - name: DATABASE_URL
+                  value: ${DATABASE_URL}
+                - name: PORT
+                  value: ${GT_APP_PORT}
+                - name: SECRET_KEY
+                  value: ${DB_SECRET_KEY}
+                - name: I_PAID_FOR_GLITCHTIP
+                  value: "${I_PAID_FOR_GLITCHTIP}"
+                - name: ENABLE_OPEN_USER_REGISTRATION
+                  value: "${ENABLE_OPEN_USER_REGISTRATION}"
+                - name: GLITCHTIP_DOMAIN
+                  value: ${GLITCHTIP_DOMAIN}
+                - name: DEFAULT_FROM_EMAIL
+                  value: ${DEFAULT_FROM_EMAIL}
+                - name: EMAIL_URL
+                  value: ${EMAIL_URL}
+              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
+              name: web
+              ports:
+                - containerPort: ${GT_APP_PORT}
+              resources:
+                requests:
+                  cpu: ${GT_WEB_CPU_REQUESTS}
+                  memory: ${GT_WEB_MEMORY_REQUESTS}
+                limits:
+                  memory: ${GT_WEB_MEMORY_LIMITS}
+                  cpu: ${GT_WEB_CPU_LIMITS}
+          restartPolicy: Always
 
-# ---------- GT WEB SERVICE -----------
+  # ---------- GT WEB SERVICE -----------
 
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-      kompose.version: 1.22.0 (HEAD)
-    labels:
-      io.kompose.service: web
-    name: web
-  spec:
-    ports:
-      - name: "8000"
-        port: ${GT_APP_PORT}
-        targetPort: ${GT_APP_PORT}
-    selector:
-      io.kompose.service: web
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+        kompose.version: 1.22.0 (HEAD)
+      labels:
+        io.kompose.service: web
+      name: web
+    spec:
+      ports:
+        - name: "8000"
+          port: ${GT_APP_PORT}
+          targetPort: ${GT_APP_PORT}
+      selector:
+        io.kompose.service: web
 
-# --------- WORKER DEPLOYMENT --------------
+  # --------- WORKER DEPLOYMENT --------------
 
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    annotations:
-      kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-      kompose.version: 1.22.0 (HEAD)
-    labels:
-      io.kompose.service: worker
-    name: worker
-  spec:
-    replicas: ${GT_WORKER_REPLICAS}
-    selector:
-      matchLabels:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+        kompose.version: 1.22.0 (HEAD)
+      labels:
         io.kompose.service: worker
-    strategy: {}
-    template:
-      metadata:
-        annotations:
-          kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-          kompose.version: 1.22.0 (HEAD)
-        labels:
+      name: worker
+    spec:
+      replicas: ${GT_WORKER_REPLICAS}
+      selector:
+        matchLabels:
           io.kompose.service: worker
-      spec:
-        containers:
-          - args:
-              - celery
-              - -A
-              - glitchtip
-              - worker
-              - -B
-              - -l
-              - INFO
-            env:
-              - name: DATABASE_URL
-                value: ${DATABASE_URL}
-              - name: PORT
-                value: ${GT_APP_PORT}
-              - name: SECRET_KEY
-                value: postgres
-            image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
-            name: worker
-            resources:
-              requests:
-                cpu: ${GT_WORKER_CPU_REQUESTS}
-                memory: ${GT_WORKER_MEMORY_REQUESTS}
-              limits:
-                memory: ${GT_WORKER_MEMORY_LIMITS}
-                cpu: ${GT_WORKER_CPU_LIMITS}
-        restartPolicy: Always
-
+      strategy: {}
+      template:
+        metadata:
+          annotations:
+            kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
+            kompose.version: 1.22.0 (HEAD)
+          labels:
+            io.kompose.service: worker
+        spec:
+          containers:
+            - args:
+                - celery
+                - -A
+                - glitchtip
+                - worker
+                - -B
+                - -l
+                - INFO
+              env:
+                - name: DATABASE_URL
+                  value: ${DATABASE_URL}
+                - name: PORT
+                  value: ${GT_APP_PORT}
+                - name: SECRET_KEY
+                  value: postgres
+              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
+              name: worker
+              resources:
+                requests:
+                  cpu: ${GT_WORKER_CPU_REQUESTS}
+                  memory: ${GT_WORKER_MEMORY_REQUESTS}
+                limits:
+                  memory: ${GT_WORKER_MEMORY_LIMITS}
+                  cpu: ${GT_WORKER_CPU_LIMITS}
+          restartPolicy: Always
 
 parameters:
-- description: Image tag
-  displayName: Image tag
-  required: true
-  name: IMAGE_TAG
-  value: "latest" 
+  - description: Image tag
+    displayName: Image tag
+    required: true
+    name: IMAGE_TAG
+    value: "latest"
 
-- description: Registry Image to use
-  displayName: Registry image
-  required: true
-  name: REGISTRY_IMAGE
-  value: "quay.io/cs-sre/glitchtip"
+  - description: Registry Image to use
+    displayName: Registry image
+    required: true
+    name: REGISTRY_IMAGE
+    value: "quay.io/cs-sre/glitchtip"
 
-- description: Database connection details
-  displayName: DATABASE_URL
-  required: true
-  name: DATABASE_URL
-  value: "postgres://postgres:postgres@postgres:5432/postgres"
+  - description: Database connection details
+    displayName: DATABASE_URL
+    required: true
+    name: DATABASE_URL
+    value: "postgres://postgres:postgres@postgres:5432/postgres"
 
-- description: Glitchtip Application exposed port
-  displayName: GT_APP_PORT
-  required: true
-  name: GT_APP_PORT
-  value: "8000"
+  - description: Glitchtip Application exposed port
+    displayName: GT_APP_PORT
+    required: true
+    name: GT_APP_PORT
+    value: "8000"
 
-- description: Route url created for glitchtip
-  displayName: GLITCHTIP_DOMAIN
-  required: true
-  name: GLITCHTIP_DOMAIN
-  value: "https://glitchtip-demo-redhat-glitchtip.apps.rhmi2-cssre2.x9f2.p1.openshiftapps.com"
-  
-- description: DEFAULT_FROM_EMAIL
-  displayName: DEFAULT_FROM_EMAIL
-  required: true
-  name: DEFAULT_FROM_EMAIL
-  value: "no-reply@devshift.net"
+  - description: Route url created for glitchtip
+    displayName: GLITCHTIP_DOMAIN
+    required: true
+    name: GLITCHTIP_DOMAIN
+    value: "https://glitchtip-demo-redhat-glitchtip.apps.rhmi2-cssre2.x9f2.p1.openshiftapps.com"
 
-- description: EMAIL_URL
-  displayName: EMAIL_URL
-  required: true
-  name: EMAIL_URL
-  value: "smtp+tls://smtp-user:smtp-password@email-smtp.eu-west-1.amazonaws.com:587"
+  - description: DEFAULT_FROM_EMAIL
+    displayName: DEFAULT_FROM_EMAIL
+    required: true
+    name: DEFAULT_FROM_EMAIL
+    value: "no-reply@devshift.net"
 
-- description: ENABLE_OPEN_USER_REGISTRATION
-  displayName: ENABLE_OPEN_USER_REGISTRATION
-  required: true
-  name: ENABLE_OPEN_USER_REGISTRATION
-  value: "True"
+  - description: EMAIL_URL
+    displayName: EMAIL_URL
+    required: true
+    name: EMAIL_URL
+    value: "smtp+tls://smtp-user:smtp-password@email-smtp.eu-west-1.amazonaws.com:587"
 
-- description: I_PAID_FOR_GLITCHTIP
-  displayName: I_PAID_FOR_GLITCHTIP
-  required: true
-  name: I_PAID_FOR_GLITCHTIP
-  value: "True"
+  - description: ENABLE_OPEN_USER_REGISTRATION
+    displayName: ENABLE_OPEN_USER_REGISTRATION
+    required: true
+    name: ENABLE_OPEN_USER_REGISTRATION
+    value: "True"
 
-- description: DB_SECRET_KEY
-  displayName: DB_SECRET_KEY
-  required: true
-  name: DB_SECRET_KEY
-  value: "postgres"
+  - description: I_PAID_FOR_GLITCHTIP
+    displayName: I_PAID_FOR_GLITCHTIP
+    required: true
+    name: I_PAID_FOR_GLITCHTIP
+    value: "True"
 
-- description: DB_PORT
-  displayName: DB_PORT
-  required: true
-  name: DB_PORT
-  value: "5432"
+  - description: DB_SECRET_KEY
+    displayName: DB_SECRET_KEY
+    required: true
+    name: DB_SECRET_KEY
+    value: "postgres"
 
-- description: Redis or elasticache connection details
-  displayName: REDIS_URL
-  required: true
-  name: REDIS_URL
-  value: "redis://:@glitchtip-redis-master:6379/0"
+  - description: DB_PORT
+    displayName: DB_PORT
+    required: true
+    name: DB_PORT
+    value: "5432"
 
-- description: ENABLE DISABLE SOCIAL_AUTH
-  displayName: ENABLE_SOCIAL_AUTH
-  required: true
-  name: ENABLE_SOCIAL_AUTH
-  value: "True"
+  - description: Redis or elasticache connection details
+    displayName: REDIS_URL
+    required: true
+    name: REDIS_URL
+    value: "redis://:@glitchtip-redis-master:6379/0"
 
-# MEMORY REQUESTS
-- description: BEAT_MEMORY_REQUESTS
-  displayName: BEAT_MEMORY_REQUESTS
-  required: true
-  name: BEAT_MEMORY_REQUESTS
-  value: "32Mi"
+  - description: ENABLE DISABLE SOCIAL_AUTH
+    displayName: ENABLE_SOCIAL_AUTH
+    required: true
+    name: ENABLE_SOCIAL_AUTH
+    value: "True"
 
-- description: MIGRATION_JOB_MEMORY_REQUESTS
-  displayName: MIGRATION_JOB_MEMORY_REQUESTS
-  required: true
-  name: MIGRATION_JOB_MEMORY_REQUESTS
-  value: "100Mi"
+  # MEMORY REQUESTS
+  - description: BEAT_MEMORY_REQUESTS
+    displayName: BEAT_MEMORY_REQUESTS
+    required: true
+    name: BEAT_MEMORY_REQUESTS
+    value: "32Mi"
 
-- description: GT_WEB_MEMORY_REQUESTS
-  displayName: GT_WEB_MEMORY_REQUESTS
-  required: true
-  name: GT_WEB_MEMORY_REQUESTS
-  value: "800M"
+  - description: MIGRATION_JOB_MEMORY_REQUESTS
+    displayName: MIGRATION_JOB_MEMORY_REQUESTS
+    required: true
+    name: MIGRATION_JOB_MEMORY_REQUESTS
+    value: "100Mi"
 
-- description: GT_WORKER_MEMORY_REQUESTS
-  displayName: GT_WORKER_MEMORY_REQUESTS
-  required: true
-  name: GT_WORKER_MEMORY_REQUESTS
-  value: "500M"
+  - description: GT_WEB_MEMORY_REQUESTS
+    displayName: GT_WEB_MEMORY_REQUESTS
+    required: true
+    name: GT_WEB_MEMORY_REQUESTS
+    value: "800M"
 
-# MEMORY LIMITS
-- description: BEAT_MEMORY_LIMITS
-  displayName: BEAT_MEMORY_LIMITS
-  required: true
-  name: BEAT_MEMORY_LIMITS
-  value: "96Mi"
+  - description: GT_WORKER_MEMORY_REQUESTS
+    displayName: GT_WORKER_MEMORY_REQUESTS
+    required: true
+    name: GT_WORKER_MEMORY_REQUESTS
+    value: "500M"
 
-- description: MIGRATION_JOB_MEMORY_LIMITS
-  displayName: MIGRATION_JOB_MEMORY_LIMITS
-  required: true
-  name: MIGRATION_JOB_MEMORY_LIMITS
-  value: "200Mi"
+  # MEMORY LIMITS
+  - description: BEAT_MEMORY_LIMITS
+    displayName: BEAT_MEMORY_LIMITS
+    required: true
+    name: BEAT_MEMORY_LIMITS
+    value: "96Mi"
 
-- description: GT_WEB_MEMORY_LIMITS
-  displayName: GT_WEB_MEMORY_LIMITS
-  required: true
-  name: GT_WEB_MEMORY_LIMITS
-  value: "2G"
+  - description: MIGRATION_JOB_MEMORY_LIMITS
+    displayName: MIGRATION_JOB_MEMORY_LIMITS
+    required: true
+    name: MIGRATION_JOB_MEMORY_LIMITS
+    value: "200Mi"
 
-- description: GT_WORKER_MEMORY_LIMITS
-  displayName: GT_WORKER_MEMORY_LIMITS
-  required: true
-  name: GT_WORKER_MEMORY_LIMITS
-  value: "1G"
+  - description: GT_WEB_MEMORY_LIMITS
+    displayName: GT_WEB_MEMORY_LIMITS
+    required: true
+    name: GT_WEB_MEMORY_LIMITS
+    value: "2G"
 
-# CPU REQUESTS
-- description: BEAT_CPU_REQUESTS
-  displayName: BEAT_CPU_REQUESTS
-  required: true
-  name: BEAT_CPU_REQUESTS
-  value: "1m"
+  - description: GT_WORKER_MEMORY_LIMITS
+    displayName: GT_WORKER_MEMORY_LIMITS
+    required: true
+    name: GT_WORKER_MEMORY_LIMITS
+    value: "1G"
 
-- description: MIGRATION_JOB_CPU_REQUESTS
-  displayName: MIGRATION_JOB_CPU_REQUESTS
-  required: true
-  name: MIGRATION_JOB_CPU_REQUESTS
-  value: "1m"
+  # CPU REQUESTS
+  - description: BEAT_CPU_REQUESTS
+    displayName: BEAT_CPU_REQUESTS
+    required: true
+    name: BEAT_CPU_REQUESTS
+    value: "1m"
 
-- description: GT_WEB_CPU_REQUESTS
-  displayName: GT_WEB_CPU_REQUESTS
-  required: true
-  name: GT_WEB_CPU_REQUESTS
-  value: "3"
+  - description: MIGRATION_JOB_CPU_REQUESTS
+    displayName: MIGRATION_JOB_CPU_REQUESTS
+    required: true
+    name: MIGRATION_JOB_CPU_REQUESTS
+    value: "1m"
 
-- description: GT_WORKER_CPU_REQUESTS
-  displayName: GT_WORKER_CPU_REQUESTS
-  required: true
-  name: GT_WORKER_CPU_REQUESTS
-  value: "100m"
+  - description: GT_WEB_CPU_REQUESTS
+    displayName: GT_WEB_CPU_REQUESTS
+    required: true
+    name: GT_WEB_CPU_REQUESTS
+    value: "3"
 
-# CPU LIMITS
-- description: BEAT_CPU_LIMITS
-  displayName: BEAT_CPU_LIMITS
-  required: true
-  name: BEAT_CPU_LIMITS
-  value: "50m"
+  - description: GT_WORKER_CPU_REQUESTS
+    displayName: GT_WORKER_CPU_REQUESTS
+    required: true
+    name: GT_WORKER_CPU_REQUESTS
+    value: "100m"
 
-- description: MIGRATION_JOB_CPU_LIMITS
-  displayName: MIGRATION_JOB_CPU_LIMITS
-  required: true
-  name: MIGRATION_JOB_CPU_LIMITS
-  value: "100m"
+  # CPU LIMITS
+  - description: BEAT_CPU_LIMITS
+    displayName: BEAT_CPU_LIMITS
+    required: true
+    name: BEAT_CPU_LIMITS
+    value: "50m"
 
-- description: GT_WEB_CPU_LIMITS
-  displayName: GT_WEB_CPU_LIMITS
-  required: true
-  name: GT_WEB_CPU_LIMITS
-  value: "5"
+  - description: MIGRATION_JOB_CPU_LIMITS
+    displayName: MIGRATION_JOB_CPU_LIMITS
+    required: true
+    name: MIGRATION_JOB_CPU_LIMITS
+    value: "100m"
 
-- description: GT_WORKER_CPU_LIMITS
-  displayName: GT_WORKER_CPU_LIMITS
-  required: true
-  name: GT_WORKER_CPU_LIMITS
-  value: "200m"
+  - description: GT_WEB_CPU_LIMITS
+    displayName: GT_WEB_CPU_LIMITS
+    required: true
+    name: GT_WEB_CPU_LIMITS
+    value: "5"
 
-# REPLICAS
-- description: BEAT_REPLICAS
-  displayName: BEAT_REPLICAS
-  required: true
-  name: BEAT_REPLICAS
-  value: "1"
+  - description: GT_WORKER_CPU_LIMITS
+    displayName: GT_WORKER_CPU_LIMITS
+    required: true
+    name: GT_WORKER_CPU_LIMITS
+    value: "200m"
 
-- description: GT_WEB_REPLICAS
-  displayName: GT_WEB_REPLICAS
-  required: true
-  name: GT_WEB_REPLICAS
-  value: "2"
+  # REPLICAS
+  - description: BEAT_REPLICAS
+    displayName: BEAT_REPLICAS
+    required: true
+    name: BEAT_REPLICAS
+    value: "1"
 
-- description: GT_WORKER_REPLICAS
-  displayName: GT_WORKER_REPLICAS
-  required: true
-  name: GT_WORKER_REPLICAS
-  value: "1"
+  - description: GT_WEB_REPLICAS
+    displayName: GT_WEB_REPLICAS
+    required: true
+    name: GT_WEB_REPLICAS
+    value: "2"
+
+  - description: GT_WORKER_REPLICAS
+    displayName: GT_WORKER_REPLICAS
+    required: true
+    name: GT_WORKER_REPLICAS
+    value: "1"
