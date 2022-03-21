@@ -34,10 +34,6 @@ objects:
         type: RollingUpdate
       template:
         metadata:
-          annotations:
-            checksum/configmap: c36b4a904599bc6018fbe7b70fd4af68206e1da903c112aa632fad44ecce8b6d
-            checksum/secret: c051ebe5bed83572a6f565fd9d4043eb12cd034aedfcfd6c11f639d530c64bf7
-            tag: latest
           labels:
             app.kubernetes.io/component: beat
             app.kubernetes.io/instance: glitchtip
@@ -74,30 +70,25 @@ objects:
   - apiVersion: v1
     kind: ConfigMap
     data:
-      ENABLE_SOCIAL_AUTH: ${ENABLE_SOCIAL_AUTH}
       GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN}
     metadata:
       annotations: {}
       labels:
         app.kubernetes.io/instance: glitchtip
         app.kubernetes.io/name: glitchtip
-      name: glitchtip
+      name: glitchtip-configmap
 
   # ---------- GT SECRET -----------
 
   - apiVersion: v1
     kind: Secret
     data:
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: ${REDIS_URL}
-      SECRET_KEY: ${DB_SECRET_KEY}
+      EMAIL_URL: ${EMAIL_URL}
     metadata:
-      annotations: { add_annotation }
       labels:
         app.kubernetes.io/instance: glitchtip
         app.kubernetes.io/name: glitchtip
-        app.kubernetes.io/version: 1.0.0
-      name: glitchtip
+      name: glitchtip-secrets
     type: Opaque
 
   # -----------DB MIGRATION JOB -------------------
@@ -105,29 +96,47 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-        kompose.version: 1.22.0 (HEAD)
       labels:
-        io.kompose.service: migrate
+        glitchtip: migrate
       name: migrate
     spec:
       template:
         metadata:
-          annotations:
-            kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-            kompose.version: 1.22.0 (HEAD)
           labels:
-            io.kompose.service: migrate
+            glitchtip: migrate
         spec:
           containers:
             - env:
+                - name: REDIS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${EC_SECRET_NAME}
+                      key: db.endpoint
+                - name: REDIS_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${EC_SECRET_NAME}
+                      key: db.host
+                - name: REDIS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${EC_SECRET_NAME}
+                      key: db.auth_token
                 - name: DATABASE_URL
-                  value: ${DATABASE_URL}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.host
                 - name: PORT
-                  value: ${DB_PORT}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.port
                 - name: SECRET_KEY
-                  value: ${DB_SECRET_KEY}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.password
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command: ["python3", "./manage.py", "migrate"]
               name: migrate
@@ -145,44 +154,50 @@ objects:
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-        kompose.version: 1.22.0 (HEAD)
       labels:
-        io.kompose.service: web
+        glitchtip: web
       name: web
     spec:
       replicas: ${{GT_WEB_REPLICAS}}
       selector:
         matchLabels:
-          io.kompose.service: web
+          glitchtip: web
       strategy: {}
       template:
         metadata:
-          annotations:
-            kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-            kompose.version: 1.22.0 (HEAD)
           labels:
-            io.kompose.service: web
+            glitchtip: web
         spec:
           containers:
             - env:
                 - name: DATABASE_URL
-                  value: ${DATABASE_URL}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.host
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.password
                 - name: PORT
                   value: ${GT_APP_PORT}
-                - name: SECRET_KEY
-                  value: ${DB_SECRET_KEY}
                 - name: I_PAID_FOR_GLITCHTIP
                   value: "${I_PAID_FOR_GLITCHTIP}"
                 - name: ENABLE_OPEN_USER_REGISTRATION
                   value: "${ENABLE_OPEN_USER_REGISTRATION}"
                 - name: GLITCHTIP_DOMAIN
-                  value: ${GLITCHTIP_DOMAIN}
+                  valueFrom:
+                    configMapKeyRef:
+                      name: glitchtip-configmap
+                      key: GLITCHTIP_DOMAIN
                 - name: DEFAULT_FROM_EMAIL
                   value: ${DEFAULT_FROM_EMAIL}
                 - name: EMAIL_URL
-                  value: ${EMAIL_URL}
+                  valueFrom:
+                    secretKeyRef:
+                      name: glitchtip-secrets
+                      key: EMAIL_URL
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: web
               ports:
@@ -201,11 +216,8 @@ objects:
   - apiVersion: v1
     kind: Service
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-        kompose.version: 1.22.0 (HEAD)
       labels:
-        io.kompose.service: web
+        glitchtip: web
       name: web
     spec:
       ports:
@@ -213,32 +225,26 @@ objects:
           port: ${GT_APP_PORT}
           targetPort: ${GT_APP_PORT}
       selector:
-        io.kompose.service: web
+        glitchtip: web
 
   # --------- WORKER DEPLOYMENT --------------
 
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-        kompose.version: 1.22.0 (HEAD)
       labels:
-        io.kompose.service: worker
+        glitchtip: worker
       name: worker
     spec:
       replicas: ${{GT_WORKER_REPLICAS}}
       selector:
         matchLabels:
-          io.kompose.service: worker
+          glitchtip: worker
       strategy: {}
       template:
         metadata:
-          annotations:
-            kompose.cmd: kompose convert -f docker-compose.sample.yaml --controller deployment --out k8s-manifests
-            kompose.version: 1.22.0 (HEAD)
           labels:
-            io.kompose.service: worker
+            glitchtip: worker
         spec:
           containers:
             - args:
@@ -251,11 +257,17 @@ objects:
                 - INFO
               env:
                 - name: DATABASE_URL
-                  value: ${DATABASE_URL}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.host
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.password
                 - name: PORT
                   value: ${GT_APP_PORT}
-                - name: SECRET_KEY
-                  value: postgres
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
               resources:
@@ -279,12 +291,6 @@ parameters:
     required: true
     name: REGISTRY_IMAGE
     value: "quay.io/cs-sre/glitchtip"
-
-  - description: Database connection details
-    displayName: DATABASE_URL
-    required: true
-    name: DATABASE_URL
-    value: "postgres://postgres:postgres@postgres:5432/postgres"
 
   - description: Glitchtip Application exposed port
     displayName: GT_APP_PORT
@@ -320,30 +326,6 @@ parameters:
     displayName: I_PAID_FOR_GLITCHTIP
     required: true
     name: I_PAID_FOR_GLITCHTIP
-    value: "True"
-
-  - description: DB_SECRET_KEY
-    displayName: DB_SECRET_KEY
-    required: true
-    name: DB_SECRET_KEY
-    value: "postgres"
-
-  - description: DB_PORT
-    displayName: DB_PORT
-    required: true
-    name: DB_PORT
-    value: "5432"
-
-  - description: Redis or elasticache connection details
-    displayName: REDIS_URL
-    required: true
-    name: REDIS_URL
-    value: "redis://:@glitchtip-redis-master:6379/0"
-
-  - description: ENABLE DISABLE SOCIAL_AUTH
-    displayName: ENABLE_SOCIAL_AUTH
-    required: true
-    name: ENABLE_SOCIAL_AUTH
     value: "True"
 
   # MEMORY REQUESTS
@@ -464,3 +446,11 @@ parameters:
     required: true
     name: GT_WORKER_REPLICAS
     value: "1"
+
+  - description: Elastic cache secret name
+    name: EC_SECRET_NAME
+    value: glitchtip-elasticache
+
+  - description: RDS secret name
+    name: RDS_SECRET_NAME
+    value: glitchtip-rds
