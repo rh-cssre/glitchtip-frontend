@@ -23,7 +23,7 @@ export class MonitorDetailComponent
   uptimeAlertCount$ = this.uptimeService.uptimeAlertCount$;
   alertCountLoading$ = this.uptimeService.alertCountLoading$;
   associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$;
-  activeMonitorRecentChecksSeries$ = this.uptimeService.activeMonitorRecentChecksSeries$;
+
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
@@ -31,6 +31,32 @@ export class MonitorDetailComponent
       const monitorId: string | undefined = params["monitor-id"];
       const cursor: string | undefined = queryParams.cursor;
       return { orgSlug, monitorId, cursor };
+    })
+  );
+  
+    activeMonitorRecentChecksSeries$ = this.uptimeService.activeMonitorRecentChecksSeries$;
+  responseChartScale$ =
+  this.uptimeService.activeMonitorRecentChecksSeries$.pipe(
+    map((series) => {
+      let yScaleMax = 20;
+      let xScaleMin = new Date();
+      xScaleMin.setHours(xScaleMin.getHours() - 1);
+      series?.forEach((subseries) => {
+        subseries.series.forEach((dataItem) => {
+          if (dataItem.value > yScaleMax) {
+            yScaleMax = dataItem.value;
+          }
+          if (dataItem.name < xScaleMin) {
+            xScaleMin = dataItem.name;
+          }
+        });
+      });
+      return {
+        yScaleMax,
+        yScaleMin: 0 - yScaleMax / 4,
+        xScaleMin,
+        xScaleMax: new Date(),
+      };
     })
   );
 

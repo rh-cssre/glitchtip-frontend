@@ -1,5 +1,5 @@
-<div *ngIf="activeMonitorRecentChecksSeries$ | async as data">
-  <ng-container *ngIf="responseChartScale$ | async as scale">
+<ng-container *ngIf="data">
+  <ng-container *ngIf="scale">
     <div #containerRef (window:resize)="onResize()" class="spectre-line-chart">
       <ngx-charts-area-chart
         [showXAxisLabel]="true"
@@ -28,6 +28,6 @@
       </ngx-charts-area-chart>
     </div>
   </ng-container>
-</div>
+</ng-container>
 
 
