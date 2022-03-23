@@ -8,7 +8,12 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
-import { MonitorCheck, MonitorDetail, MonitorInput, ResponseTimeSeries } from "./uptime.interfaces";
+import {
+  MonitorCheck,
+  MonitorDetail,
+  MonitorInput,
+  ResponseTimeSeries,
+} from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.service";
@@ -76,7 +81,9 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     )
   );
   activeMonitorRecentChecksSeries$ = this.activeMonitor$.pipe(
-    map((monitor) => monitor?.checks ? this.convertChecksToSeries(monitor.checks) : null)
+    map((monitor) =>
+      monitor?.checks ? this.convertChecksToSeries(monitor.checks) : null
+    )
   );
 
   constructor(
@@ -347,7 +354,9 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   formatData(check: MonitorCheck) {
     return {
       name: new Date(check.startCheck),
-      value: check.responseTime ? timedeltaToSecondsOrMS(check.responseTime, false) : 0,
+      value: check.responseTime
+        ? timedeltaToSecondsOrMS(check.responseTime, false)
+        : 0,
     };
   }
 

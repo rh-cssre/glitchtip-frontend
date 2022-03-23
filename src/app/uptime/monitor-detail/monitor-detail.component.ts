@@ -54,7 +54,7 @@ export class MonitorDetailComponent
         });
         return {
           yScaleMax,
-          yScaleMin: 0 - yScaleMax / 4,
+          yScaleMin: 0 - yScaleMax / 5,
           xScaleMin,
         };
       })
