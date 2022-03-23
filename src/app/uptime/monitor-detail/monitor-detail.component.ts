@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { map, withLatestFrom } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
-import { timedeltaToSeconds } from "../uptime.utils";
+import { timedeltaToSecondsOrMS } from "src/app/shared/shared.utils";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -58,7 +58,7 @@ export class MonitorDetailComponent
     );
   }
 
-  convertTimeDelta = timedeltaToSeconds;
+  convertTimeDelta = timedeltaToSecondsOrMS;
 
   ngOnDestroy() {
     this.uptimeService.clearState();
