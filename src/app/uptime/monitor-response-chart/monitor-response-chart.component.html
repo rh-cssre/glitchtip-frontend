@@ -1,8 +1,8 @@
 <ng-container *ngIf="data">
   <ng-container *ngIf="scale">
-    <div #containerRef (window:resize)="onResize()" class="spectre-line-chart">
+    <div #containerRef (window:resize)="resizeChart()" class="spectre-line-chart">
       <ngx-charts-area-chart
-        [showXAxisLabel]="true"
+        [showXAxisLabel]="false"
         [showYAxisLabel]="true"
         [xAxis]="true"
         [yAxis]="true"

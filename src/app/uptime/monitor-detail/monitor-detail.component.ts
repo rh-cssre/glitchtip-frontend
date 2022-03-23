@@ -1,9 +1,10 @@
 import { Component, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { UptimeState, UptimeService } from "../uptime.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, withLatestFrom } from "rxjs/operators";
+import { debounceTime, map, withLatestFrom } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import { MainNavService } from "src/app/main-nav/main-nav.service";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -59,6 +60,8 @@ export class MonitorDetailComponent
         };
       })
     );
+    // Passed in to chart component only to trigger change detection
+    navOpen$ = this.mainNavService.navOpen$.pipe(debounceTime(400))
 
   alertCountPluralMapping: { [k: string]: string } = {
     "=1": "is 1 uptime alert",
@@ -68,6 +71,7 @@ export class MonitorDetailComponent
   routerEventSubscription: Subscription;
 
   constructor(
+    private mainNavService: MainNavService,
     private uptimeService: UptimeService,
     protected router: Router,
     protected route: ActivatedRoute
