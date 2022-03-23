@@ -56,12 +56,11 @@ export class MonitorDetailComponent
           yScaleMax,
           yScaleMin: 0 - yScaleMax / 4,
           xScaleMin,
-          xScaleMax: new Date(),
         };
       })
     );
-    // Passed in to chart component only to trigger change detection
-    navOpen$ = this.mainNavService.navOpen$.pipe(debounceTime(400))
+  // Passed in to chart component only to trigger change detection
+  navOpen$ = this.mainNavService.navOpen$.pipe(debounceTime(400));
 
   alertCountPluralMapping: { [k: string]: string } = {
     "=1": "is 1 uptime alert",

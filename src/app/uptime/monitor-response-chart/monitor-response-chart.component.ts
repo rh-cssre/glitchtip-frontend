@@ -5,7 +5,7 @@ import {
   ElementRef,
   AfterViewInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from "@angular/core";
 import { ResponseTimeSeries } from "../uptime.interfaces";
 
@@ -21,9 +21,8 @@ export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
     yScaleMin: number;
     yScaleMax: number;
     xScaleMin: Date;
-    xScaleMax: Date;
   };
-  @Input() navOpen?: boolean | null; 
+  @Input() navOpen?: boolean | null;
 
   view: [number, number] = [0, 0];
   customColors = [
@@ -32,12 +31,12 @@ export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
   ];
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-    this.resizeChart()
+    console.log(changes);
+    this.resizeChart();
   }
 
   ngAfterViewInit(): void {
-    this.resizeChart()
+    this.resizeChart();
   }
 
   resizeChart() {

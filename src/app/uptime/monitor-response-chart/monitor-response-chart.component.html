@@ -1,6 +1,10 @@
 <ng-container *ngIf="data">
   <ng-container *ngIf="scale">
-    <div #containerRef (window:resize)="resizeChart()" class="spectre-line-chart">
+    <div
+      #containerRef
+      (window:resize)="resizeChart()"
+      class="spectre-line-chart"
+    >
       <ngx-charts-area-chart
         [showXAxisLabel]="false"
         [showYAxisLabel]="true"
@@ -12,22 +16,19 @@
         yAxisLabel="Response Time (ms)"
         [customColors]="customColors"
         [xScaleMin]="scale.xScaleMin"
-        [xScaleMax]="scale.xScaleMax"
         [yScaleMin]="scale.yScaleMin"
         [yScaleMax]="scale.yScaleMax"
         [results]="data"
       >
-      <ng-template #tooltipTemplate let-model="model">
-        {{ model.name | date:'short'}}<br>
-        {{ model.value }}ms
-      </ng-template>
-      <ng-template #seriesTooltipTemplate let-model="model">
-        {{ model[0].name | date:'short'}}<br>
-        {{model[0].value }}ms
-      </ng-template>
+        <ng-template #tooltipTemplate let-model="model">
+          {{ model.name | date: "short" }}<br />
+          {{ model.value }}ms
+        </ng-template>
+        <ng-template #seriesTooltipTemplate let-model="model">
+          {{ model[0].name | date: "short" }}<br />
+          {{ model[0].value }}ms
+        </ng-template>
       </ngx-charts-area-chart>
     </div>
   </ng-container>
 </ng-container>
-
-
