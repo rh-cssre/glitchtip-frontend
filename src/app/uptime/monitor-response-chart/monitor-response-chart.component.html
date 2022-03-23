@@ -3,7 +3,7 @@
     <div
       #containerRef
       (window:resize)="resizeChart()"
-      class="spectre-line-chart"
+      class="chart-container"
     >
       <ngx-charts-area-chart
         [showXAxisLabel]="false"
@@ -12,7 +12,6 @@
         [yAxis]="true"
         [gradient]="true"
         [view]="view"
-        xAxisLabel="Check Time"
         yAxisLabel="Response Time (ms)"
         [customColors]="customColors"
         [xScaleMin]="scale.xScaleMin"
