@@ -138,6 +138,8 @@ objects:
                       key: db.password
                 - name: PORT
                   value: ${GT_APP_PORT}
+                - name: ENABLE_OBSERVABILITY_API
+                  value: "Ture"
                 - name: I_PAID_FOR_GLITCHTIP
                   value: "${I_PAID_FOR_GLITCHTIP}"
                 - name: ENABLE_OPEN_USER_REGISTRATION
