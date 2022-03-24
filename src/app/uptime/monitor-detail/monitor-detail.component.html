@@ -18,7 +18,7 @@
       </mat-card-title>
       <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
       <div class="mat-caption">
-        Uptime check interval: {{ convertTimeDelta(monitor.interval) | number }} seconds
+        Uptime check interval: {{ monitor.interval | secondsOrMS :true }}
       </div>
       <mat-card-content class="reduced-padding">
         <div>

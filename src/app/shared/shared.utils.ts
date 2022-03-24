@@ -1,3 +1,5 @@
+import { captureException } from "@sentry/angular";
+
 // tslint:disable:max-line-length
 
 /**
@@ -140,10 +142,7 @@ export function checkForOverflow($event: Event) {
   return true;
 }
 
-export function timedeltaToSecondsOrMS(
-  value: string,
-  toSeconds: boolean = true
-) {
+export function timedeltaToMS(value: string) {
   let milliseconds = 0;
   if (value.includes(" ")) {
     milliseconds += parseInt(value.split(" ")[0], 10) * 86400000;
@@ -153,9 +152,9 @@ export function timedeltaToSecondsOrMS(
   milliseconds += parseInt(splitValue[0], 10) * 3600000;
   milliseconds += parseInt(splitValue[1], 10) * 60000;
   milliseconds += parseFloat(splitValue[2]) * 1000;
-  if (toSeconds) {
-    return Math.round(milliseconds / 1000);
-  } else {
-    return Math.round(milliseconds);
+  if (isNaN(milliseconds)) {
+    captureException(Error("Provided string was not a valid timedelta"))
+    return 0
   }
+  return Math.round(milliseconds);
 }
