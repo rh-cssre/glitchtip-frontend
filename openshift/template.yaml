@@ -258,7 +258,7 @@ parameters:
     displayName: GLITCHTIP_DOMAIN
     required: true
     name: GLITCHTIP_DOMAIN
-    value: "https://glitchtip-demo-redhat-glitchtip.apps.rhmi2-cssre2.x9f2.p1.openshiftapps.com"
+    value: "https://glitchtip.stage.devshift.net"
 
   - description: DEFAULT_FROM_EMAIL
     displayName: DEFAULT_FROM_EMAIL
