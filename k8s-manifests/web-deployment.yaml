@@ -35,7 +35,7 @@ spec:
               value: "True"
             - name: GLITCHTIP_DOMAIN
               value: >-
-                https://glitchtip-demo-redhat-glitchtip.apps.rhmi2-cssre2.x9f2.p1.openshiftapps.com
+                https://glitchtip.stage.devshift.net
             - name: DEFAULT_FROM_EMAIL
               value: no-reply@devshift.net
             - name: EMAIL_URL
