@@ -31,7 +31,6 @@ export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
   ];
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     this.resizeChart();
   }
 
