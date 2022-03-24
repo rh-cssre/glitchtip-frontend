@@ -1,10 +1,6 @@
 <ng-container *ngIf="data">
   <ng-container *ngIf="scale">
-    <div
-      #containerRef
-      (window:resize)="resizeChart()"
-      class="chart-container"
-    >
+    <div #containerRef class="chart-container">
       <ngx-charts-area-chart
         [showXAxisLabel]="false"
         [showYAxisLabel]="true"

@@ -6,6 +6,7 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
+  HostListener
 } from "@angular/core";
 import { ResponseTimeSeries } from "../uptime.interfaces";
 
@@ -15,7 +16,6 @@ import { ResponseTimeSeries } from "../uptime.interfaces";
   styleUrls: ["./monitor-response-chart.component.scss"],
 })
 export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
-  @ViewChild("containerRef") containerRef?: ElementRef;
   @Input() data?: ResponseTimeSeries[] | null;
   @Input() scale?: {
     yScaleMin: number;
@@ -23,6 +23,12 @@ export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
     xScaleMin: Date;
   };
   @Input() navOpen?: boolean | null;
+
+  @ViewChild("containerRef") containerRef?: ElementRef;
+  @HostListener("window:resize")
+  windowResize() {
+    this.resizeChart()
+  }
 
   view: [number, number] = [0, 0];
   customColors = [
