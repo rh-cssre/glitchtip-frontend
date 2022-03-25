@@ -22,7 +22,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-alerts.service";
 import { SettingsService } from "../api/settings.service";
 import { SubscriptionsService } from "../api/subscriptions/subscriptions.service";
-import { timedeltaToSecondsOrMS } from "src/app/shared/shared.utils";
+import { timedeltaToMS } from "src/app/shared/shared.utils";
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
@@ -355,7 +355,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     return {
       name: new Date(check.startCheck),
       value: check.responseTime
-        ? timedeltaToSecondsOrMS(check.responseTime, false)
+        ? timedeltaToMS(check.responseTime)
         : 0,
     };
   }
