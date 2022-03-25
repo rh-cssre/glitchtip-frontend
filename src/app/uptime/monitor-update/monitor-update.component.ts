@@ -96,7 +96,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         })
       )
       .toPromise();
-    
+
     this.formInterval.valueChanges.subscribe((interval) => {
       this.intervalPerMonth = Math.floor(2592000 / interval);
     });
@@ -110,7 +110,9 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formMonitorType.patchValue(data!.monitorType);
           this.formUrl.patchValue(data!.url);
           this.formExpectedStatus.patchValue(data!.expectedStatus);
-          this.formInterval.patchValue(Math.round(timedeltaToMS(data!.interval) / 1000));
+          this.formInterval.patchValue(
+            Math.round(timedeltaToMS(data!.interval) / 1000)
+          );
           this.formProject.patchValue(data!.project);
 
           if (this.formMonitorType.value !== "Heartbeat") {

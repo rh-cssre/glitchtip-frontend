@@ -1,5 +1,3 @@
-import { captureException } from "@sentry/angular";
-
 // tslint:disable:max-line-length
 
 /**
@@ -153,8 +151,7 @@ export function timedeltaToMS(value: string) {
   milliseconds += parseInt(splitValue[1], 10) * 60000;
   milliseconds += parseFloat(splitValue[2]) * 1000;
   if (isNaN(milliseconds)) {
-    captureException(Error("Provided string was not a valid timedelta"))
-    return 0
+    throw Error("Provided string was not a valid timedelta");
   }
   return Math.round(milliseconds);
 }
