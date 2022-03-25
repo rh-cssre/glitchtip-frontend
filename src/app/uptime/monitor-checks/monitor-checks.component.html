@@ -50,7 +50,7 @@
               <span>-</span>
             </ng-container>
             <ng-template #time>
-              <span>{{ monitorCheck.responseTime | secondsOrMS }}</span>
+              <span>{{ monitorCheck.responseTime | humanizeDuration }}</span>
             </ng-template>
           </td>
         </ng-container>
