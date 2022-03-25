@@ -4,10 +4,12 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  OnChanges,
-  SimpleChanges,
-  HostListener
+  HostListener,
+  OnInit,
+  ChangeDetectorRef,
+  OnDestroy,
 } from "@angular/core";
+import { debounceTime, fromEvent, Subscription } from "rxjs";
 import { ResponseTimeSeries } from "../uptime.interfaces";
 
 @Component({
@@ -15,29 +17,37 @@ import { ResponseTimeSeries } from "../uptime.interfaces";
   templateUrl: "./monitor-response-chart.component.html",
   styleUrls: ["./monitor-response-chart.component.scss"],
 })
-export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
+export class MonitorResponseChartComponent
+  implements AfterViewInit, OnInit, OnDestroy
+{
   @Input() data?: ResponseTimeSeries[] | null;
   @Input() scale?: {
     yScaleMin: number;
     yScaleMax: number;
     xScaleMin: Date;
   };
-  @Input() navOpen?: boolean | null;
 
   @ViewChild("containerRef") containerRef?: ElementRef;
   @HostListener("window:resize")
   windowResize() {
-    this.resizeChart()
+    this.resizeChart();
   }
 
+  delayedResize$?: Subscription;
   view: [number, number] = [0, 0];
   customColors = [
     { name: "Up", value: "#54a65a" },
     { name: "Down", value: "#e22a46" },
   ];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.resizeChart();
+  constructor(private changeDetector: ChangeDetectorRef) {}
+  ngOnInit(): void {
+    this.delayedResize$ = fromEvent(window, "resize")
+      .pipe(debounceTime(400))
+      .subscribe(() => {
+        this.resizeChart();
+        this.changeDetector.detectChanges();
+      });
   }
 
   ngAfterViewInit(): void {
@@ -48,5 +58,9 @@ export class MonitorResponseChartComponent implements AfterViewInit, OnChanges {
     if (this.containerRef) {
       this.view = [this.containerRef.nativeElement.offsetWidth, 250];
     }
+  }
+
+  ngOnDestroy(): void {
+    this.delayedResize$?.unsubscribe();
   }
 }
