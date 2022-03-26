@@ -45,9 +45,9 @@ objects:
                   value: beat
               envFrom:
                 - secretRef:
-                    name: glitchtip
+                    name: glitchtip-secrets
                 - configMapRef:
-                    name: glitchtip
+                    name: glitchtip-configmap
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               imagePullPolicy: Always
               name: glitchtip
