@@ -69,16 +69,26 @@ objects:
             - env:
                 - name: SERVER_ROLE
                   value: beat
-                - name: DATABASE_URL
+                - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.host
-                - name: SECRET_KEY
+                - name: DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.password
+                - name: DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.name
+                - name: DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.user
                 - name: PORT
                   value: ${GT_APP_PORT}
               envFrom:
@@ -124,28 +134,48 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command: ["python3", "./manage.py", "migrate"]
               env:
-                - name: DATABASE_URL
+                - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.host
-                - name: SECRET_KEY
+                - name: DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.password
+                - name: DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.name
+                - name: DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.user
           containers:
             - env:
-                - name: DATABASE_URL
+                - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.host
-                - name: SECRET_KEY
+                - name: DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.password
+                - name: DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.name
+                - name: DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.user
                 - name: PORT
                   value: ${GT_APP_PORT}
                 - name: ENABLE_OBSERVABILITY_API
@@ -220,16 +250,26 @@ objects:
                 - -l
                 - INFO
               env:
-                - name: DATABASE_URL
+                - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.host
-                - name: SECRET_KEY
+                - name: DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${RDS_SECRET_NAME}
                       key: db.password
+                - name: DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.name
+                - name: DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.user
                 - name: PORT
                   value: ${GT_APP_PORT}
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
