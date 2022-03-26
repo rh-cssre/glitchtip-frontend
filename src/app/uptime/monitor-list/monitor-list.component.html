@@ -24,37 +24,36 @@
             class="status-color status-color--{{ monitor.isUp }}"
           ></td>
         </ng-container>
-        <ng-container matColumnDef="name">
+        <ng-container matColumnDef="name-and-url">
           <td mat-cell *matCellDef="let monitor">
-            <div
-              class="monitor-name"
-              (mouseover)="checkIfTooltipIsNecessary($event)"
-            >
-              <a
-                [matTooltip]="monitor.name"
-                matTooltipPosition="above"
-                [matTooltipDisabled]="tooltipDisabled"
-                [routerLink]="[monitor.id]"
-                >{{ monitor.name }}</a
-              >
+            <div class="name-and-url">
+              <div (mouseover)="checkIfTooltipIsNecessary($event)">
+                <a
+                  [matTooltip]="monitor.name"
+                  matTooltipPosition="above"
+                  [matTooltipDisabled]="tooltipDisabled"
+                  [routerLink]="[monitor.id]"
+                  >{{ monitor.name }}</a
+                >
+              </div>
+              <div (mouseover)="checkIfTooltipIsNecessary($event)">
+                <a
+                  href="{{ monitor.url }}"
+                  target="_blank"
+                  class="mat-caption"
+                  [matTooltip]="monitor.url"
+                  matTooltipPosition="above"
+                  [matTooltipDisabled]="tooltipDisabled"
+                  >{{ monitor.url }}
+                </a>
+              </div>
             </div>
           </td>
         </ng-container>
-        <ng-container matColumnDef="url">
-          <td mat-cell *matCellDef="let monitor" class="monitor-url">
-            <div
-              class="url-box"
-              (mouseover)="checkIfTooltipIsNecessary($event)"
-            >
-              <a
-                class="url-string"
-                [matTooltip]="monitor.url"
-                matTooltipPosition="above"
-                [matTooltipDisabled]="tooltipDisabled"
-                href="{{ monitor.url }}"
-                target="_blank"
-                >{{ monitor.url }}</a
-              >
+        <ng-container matColumnDef="check-chart">
+          <td mat-cell *matCellDef="let monitor" class="chart-container">
+            <div class="monitor-chart">  
+            <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
             </div>
           </td>
         </ng-container>
