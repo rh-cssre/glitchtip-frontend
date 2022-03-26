@@ -17,7 +17,7 @@ objects:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
         app.kubernetes.io/name: glitchtip
-      name: beat
+      name: glitchtip-beat
     spec:
       progressDeadlineSeconds: 600
       replicas: ${{BEAT_REPLICAS}}
@@ -98,7 +98,7 @@ objects:
     metadata:
       labels:
         glitchtip: web
-      name: web
+      name: glitchtip-web
     spec:
       replicas: ${{GT_WEB_REPLICAS}}
       selector:
@@ -159,7 +159,7 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: web
               ports:
-                - containerPort: ${GT_APP_PORT}
+                - containerPort: ${{GT_APP_PORT}}
               resources:
                 requests:
                   cpu: ${{GT_WEB_CPU_REQUESTS}}
@@ -176,12 +176,12 @@ objects:
     metadata:
       labels:
         glitchtip: web
-      name: web
+      name: glitchtip-web
     spec:
       ports:
         - name: "8000"
-          port: ${GT_APP_PORT}
-          targetPort: ${GT_APP_PORT}
+          port: ${{GT_APP_PORT}}
+          targetPort: ${{GT_APP_PORT}}
       selector:
         glitchtip: web
 
@@ -192,7 +192,7 @@ objects:
     metadata:
       labels:
         glitchtip: worker
-      name: worker
+      name: glitchtip-worker
     spec:
       replicas: ${{GT_WORKER_REPLICAS}}
       selector:
