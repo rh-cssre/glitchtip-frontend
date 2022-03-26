@@ -341,7 +341,7 @@ parameters:
     displayName: GT_WEB_CPU_REQUESTS
     required: true
     name: GT_WEB_CPU_REQUESTS
-    value: "3"
+    value: "1"
 
   - description: GT_WORKER_CPU_REQUESTS
     displayName: GT_WORKER_CPU_REQUESTS
@@ -385,7 +385,7 @@ parameters:
     displayName: GT_WEB_REPLICAS
     required: true
     name: GT_WEB_REPLICAS
-    value: "2"
+    value: "3"
 
   - description: GT_WORKER_REPLICAS
     displayName: GT_WORKER_REPLICAS
