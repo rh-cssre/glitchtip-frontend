@@ -7,6 +7,32 @@ metadata:
   annotations:
     description: glitchtip
 objects:
+  # -------- CONFIG MAP ----------
+
+  - apiVersion: v1
+    kind: ConfigMap
+    data:
+      GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN}
+    metadata:
+      annotations: {}
+      labels:
+        app.kubernetes.io/instance: glitchtip
+        app.kubernetes.io/name: glitchtip
+      name: glitchtip-configmap
+
+  # ---------- GT SECRET -----------
+
+  - apiVersion: v1
+    kind: Secret
+    data:
+      EMAIL_URL: ${EMAIL_URL}
+    metadata:
+      labels:
+        app.kubernetes.io/instance: glitchtip
+        app.kubernetes.io/name: glitchtip
+      name: glitchtip-secrets
+    type: Opaque
+
   # ---- BEAT DEPLOYMENT ------
   - apiVersion: apps/v1
     kind: Deployment
@@ -43,9 +69,24 @@ objects:
             - env:
                 - name: SERVER_ROLE
                   value: beat
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.host
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.password
+                - name: PORT
+                  value: ${GT_APP_PORT}
+                - name: EMAIL_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: glitchtip-secrets
+                      key: EMAIL_URL
               envFrom:
-                - secretRef:
-                    name: glitchtip-secrets
                 - configMapRef:
                     name: glitchtip-configmap
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
@@ -64,32 +105,6 @@ objects:
           restartPolicy: Always
           schedulerName: default-scheduler
           terminationGracePeriodSeconds: 30
-
-  # -------- CONFIG MAP ----------
-
-  - apiVersion: v1
-    kind: ConfigMap
-    data:
-      GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN}
-    metadata:
-      annotations: {}
-      labels:
-        app.kubernetes.io/instance: glitchtip
-        app.kubernetes.io/name: glitchtip
-      name: glitchtip-configmap
-
-  # ---------- GT SECRET -----------
-
-  - apiVersion: v1
-    kind: Secret
-    data:
-      EMAIL_URL: ${EMAIL_URL}
-    metadata:
-      labels:
-        app.kubernetes.io/instance: glitchtip
-        app.kubernetes.io/name: glitchtip
-      name: glitchtip-secrets
-    type: Opaque
 
   # ------- WEB DEPLOYMENT JOB --------------------
 
