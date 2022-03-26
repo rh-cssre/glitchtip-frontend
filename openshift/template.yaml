@@ -22,16 +22,16 @@ objects:
 
   # ---------- GT SECRET -----------
 
-  - apiVersion: v1
-    kind: Secret
-    data:
-      EMAIL_URL: ${EMAIL_URL}
-    metadata:
-      labels:
-        app.kubernetes.io/instance: glitchtip
-        app.kubernetes.io/name: glitchtip
-      name: glitchtip-secrets
-    type: Opaque
+  # - apiVersion: v1
+  #   kind: Secret
+  #   data:
+  #     EMAIL_URL: ${EMAIL_URL}
+  #   metadata:
+  #     labels:
+  #       app.kubernetes.io/instance: glitchtip
+  #       app.kubernetes.io/name: glitchtip
+  #     name: glitchtip-secrets
+  #   type: Opaque
 
   # ---- BEAT DEPLOYMENT ------
   - apiVersion: apps/v1
@@ -81,11 +81,6 @@ objects:
                       key: db.password
                 - name: PORT
                   value: ${GT_APP_PORT}
-                - name: EMAIL_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: glitchtip-secrets
-                      key: EMAIL_URL
               envFrom:
                 - configMapRef:
                     name: glitchtip-configmap
@@ -167,10 +162,7 @@ objects:
                 - name: DEFAULT_FROM_EMAIL
                   value: ${DEFAULT_FROM_EMAIL}
                 - name: EMAIL_URL
-                  valueFrom:
-                    secretKeyRef:
-                      name: glitchtip-secrets
-                      key: EMAIL_URL
+                  value: ${EMAIL_URL}
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: web
               ports:
