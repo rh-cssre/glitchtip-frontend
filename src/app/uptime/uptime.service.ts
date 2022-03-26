@@ -8,7 +8,12 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
-import { MonitorCheck, MonitorDetail, MonitorInput } from "./uptime.interfaces";
+import {
+  MonitorCheck,
+  MonitorDetail,
+  MonitorInput,
+  ResponseTimeSeries,
+} from "./uptime.interfaces";
 import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.service";
@@ -17,6 +22,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-alerts.service";
 import { SettingsService } from "../api/settings.service";
 import { SubscriptionsService } from "../api/subscriptions/subscriptions.service";
+import { timedeltaToMS } from "src/app/shared/shared.utils";
 
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
@@ -72,6 +78,11 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
     map(
       ([projects, monitor]) =>
         projects?.find((project) => project.id === monitor?.project)?.slug
+    )
+  );
+  activeMonitorRecentChecksSeries$ = this.activeMonitor$.pipe(
+    map((monitor) =>
+      monitor?.checks ? this.convertChecksToSeries(monitor.checks) : null
     )
   );
 
@@ -130,24 +141,28 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
       .toPromise();
   }
 
-  callSubscriptionDetails() { 
-    lastValueFrom(this.settingsService.billingEnabled$.pipe(
-      tap(billingEnabled => {
-        if (billingEnabled) {
-          lastValueFrom(
-            this.organizationsService.activeOrganizationSlug$.pipe(
-              filter((slug) => !!slug),
-              take(1),
-              tap((slug) => {
-                if (slug) {
-                  lastValueFrom(this.subscriptionsService.retrieveSubscription(slug));
-                }
-              })
-            )
-          );
-        }
-      })
-    ))
+  callSubscriptionDetails() {
+    lastValueFrom(
+      this.settingsService.billingEnabled$.pipe(
+        tap((billingEnabled) => {
+          if (billingEnabled) {
+            lastValueFrom(
+              this.organizationsService.activeOrganizationSlug$.pipe(
+                filter((slug) => !!slug),
+                take(1),
+                tap((slug) => {
+                  if (slug) {
+                    lastValueFrom(
+                      this.subscriptionsService.retrieveSubscription(slug)
+                    );
+                  }
+                })
+              )
+            );
+          }
+        })
+      )
+    );
   }
 
   getMonitors(orgSlug: string, cursor?: string | undefined) {
@@ -218,8 +233,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
 
   retrieveMonitorDetails(orgSlug: string, monitorId: string) {
     this.setState({
-      alertCountLoading: true
-    })
+      alertCountLoading: true,
+    });
     this.monitorsAPIService
       .retrieve(orgSlug, monitorId)
       .pipe(
@@ -229,8 +244,8 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
             this.countUptimeAlerts(orgSlug);
           } else {
             this.setState({
-              alertCountLoading: false
-            })
+              alertCountLoading: false,
+            });
           }
         })
       )
@@ -334,5 +349,41 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
 
   clearState() {
     this.state.next(initialState);
+  }
+
+  formatData(check: MonitorCheck) {
+    return {
+      name: new Date(check.startCheck),
+      value: check.responseTime
+        ? timedeltaToMS(check.responseTime)
+        : 0,
+    };
+  }
+
+  convertChecksToSeries(input: MonitorCheck[]) {
+    return input.reduce(
+      (resultArray, check) => {
+        const lastEntry = resultArray[resultArray.length - 1];
+        if (
+          !lastEntry.series.length ||
+          (lastEntry.name === "Up" && check.isUp) ||
+          (lastEntry.name === "Down" && !check.isUp)
+        ) {
+          lastEntry.series.push(this.formatData(check));
+        } else {
+          resultArray.push({
+            name: check.isUp ? "Up" : "Down",
+            series: [this.formatData(check)],
+          });
+        }
+        return resultArray;
+      },
+      [
+        {
+          name: input[0].isUp ? "Up" : "Down",
+          series: [],
+        },
+      ] as ResponseTimeSeries[]
+    );
   }
 }
