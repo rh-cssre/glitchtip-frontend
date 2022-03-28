@@ -69,6 +69,21 @@ objects:
             - env:
                 - name: SERVER_ROLE
                   value: beat
+                - name: REDIS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.endpoint
+                - name: REDIS_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.port
+                - name: REDIS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.auth_token
                 - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
@@ -134,6 +149,21 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command: ["python3", "./manage.py", "migrate"]
               env:
+                - name: REDIS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.endpoint
+                - name: REDIS_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.port
+                - name: REDIS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.auth_token
                 - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
@@ -250,6 +280,21 @@ objects:
                 - -l
                 - INFO
               env:
+                - name: REDIS_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.endpoint
+                - name: REDIS_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.port
+                - name: REDIS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.auth_token
                 - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
@@ -440,3 +485,7 @@ parameters:
   - description: RDS secret name
     name: RDS_SECRET_NAME
     value: glitchtip-rds
+
+  - description: Redis secret name
+    name: REDIS_SECRET_NAME
+    value: glitchtip-elasticache
