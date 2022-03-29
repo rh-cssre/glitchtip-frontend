@@ -11,8 +11,7 @@ FROM registry.gitlab.com/glitchtip/glitchtip-backend:master
 
 ARG GLITCHTIP_VERSION=local
 ENV GLITCHTIP_VERSION ${GLITCHTIP_VERSION}
-WORKDIR /code
 
-COPY --from=build-frontend /opt/app-root/src/dist/ /code/dist
+COPY --from=build-frontend /opt/app-root/src/dist/glitchtip-frontend /code/dist
 
 RUN SECRET_KEY=ci DATABASE_URL="sqlite:////tmp/my-tmp-sqlite.db" ./manage.py collectstatic --noinput
