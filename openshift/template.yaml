@@ -281,7 +281,7 @@ objects:
                 - name: REDIS_HOST
                   valueFrom:
                     secretKeyRef:
-                      name: ${REDIS_SECRET_NAME}
+                      name: redis-credentials
                       key: redis.url
                 - name: REDIS_PORT
                   valueFrom:
