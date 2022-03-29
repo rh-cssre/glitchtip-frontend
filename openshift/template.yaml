@@ -21,7 +21,6 @@ objects:
       name: glitchtip-configmap
 
   # ---------- GT SECRET -----------
-
   # - apiVersion: v1
   #   kind: Secret
   #   data:
@@ -32,6 +31,19 @@ objects:
   #       app.kubernetes.io/name: glitchtip
   #     name: glitchtip-secrets
   #   type: Opaque
+  # TODO: Remove "redis-credentials" Secret and its references.
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: redis-credentials
+      annotations:
+        qontract.recycle: "true"
+    type: Opaque
+    stringData:
+      redis.url: "rediss://:{{{ vault('app-sre/integrations-output/terraform-resources/app-sre-stage-01/glitchtip-stage/glitchtip-elasticache', 'db.auth_token') }}}@{{{ vault('app-sre/integrations-output/terraform-resources/app-sre-stage-01/glitchtip-stage/glitchtip-elasticache', 'db.endpoint') }}}:{{{ vault('app-sre/integrations-output/terraform-resources/app-sre-stage-01/glitchtip-stage/glitchtip-elasticache', 'db.port') }}}"
+    # temporary solution until solution in design doc
+    # https://gitlab.cee.redhat.com/service/app-interface/-/blob/master/docs/app-sre/design-docs/terraform-output-secret-format.md
+    # has been implemented
 
   # ---- BEAT DEPLOYMENT ------
   - apiVersion: apps/v1
@@ -69,11 +81,11 @@ objects:
             - env:
                 - name: SERVER_ROLE
                   value: beat
-                - name: REDIS_HOST
+                - name: REDIS_URL
                   valueFrom:
                     secretKeyRef:
-                      name: ${REDIS_SECRET_NAME}
-                      key: db.endpoint
+                      name: redis-credentials
+                      key: redis.url
                 - name: REDIS_PORT
                   valueFrom:
                     secretKeyRef:
@@ -149,21 +161,6 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command: ["python3", "./manage.py", "migrate"]
               env:
-                - name: REDIS_HOST
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${REDIS_SECRET_NAME}
-                      key: db.endpoint
-                - name: REDIS_PORT
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${REDIS_SECRET_NAME}
-                      key: db.port
-                - name: REDIS_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${REDIS_SECRET_NAME}
-                      key: db.auth_token
                 - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
@@ -186,6 +183,21 @@ objects:
                       key: db.user
           containers:
             - env:
+                - name: REDIS_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: redis-credentials
+                      key: redis.url
+                - name: REDIS_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.port
+                - name: REDIS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REDIS_SECRET_NAME}
+                      key: db.auth_token
                 - name: DATABASE_HOST
                   valueFrom:
                     secretKeyRef:
@@ -280,11 +292,11 @@ objects:
                 - -l
                 - INFO
               env:
-                - name: REDIS_HOST
+                - name: REDIS_URL
                   valueFrom:
                     secretKeyRef:
-                      name: ${REDIS_SECRET_NAME}
-                      key: db.endpoint
+                      name: redis-credentials
+                      key: redis.url
                 - name: REDIS_PORT
                   valueFrom:
                     secretKeyRef:
