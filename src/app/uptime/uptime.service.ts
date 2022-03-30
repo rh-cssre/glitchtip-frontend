@@ -82,7 +82,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   );
   activeMonitorRecentChecksSeries$ = this.activeMonitor$.pipe(
     map((monitor) =>
-      monitor?.checks ? this.convertChecksToSeries(monitor.checks) : null
+      monitor?.checks.length ? this.convertChecksToSeries(monitor.checks) : null
     )
   );
 
