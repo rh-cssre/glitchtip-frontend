@@ -11,7 +11,7 @@ export interface Span {
   data?: JsonArrayOrObject | null;
 }
 
-export interface TransactionBase {
+interface TransactionBase {
   transaction: string;
   op: string;
   method: string | null;
