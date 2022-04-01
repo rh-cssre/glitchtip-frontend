@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Transaction } from "./transactions.interfaces";
+import { Transaction, TransactionDetail } from "./transactions.interfaces";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
 
@@ -26,7 +26,9 @@ export class TransactionsService extends APIBaseService {
   }
 
   retrieve(organizationSlug: string, id: string) {
-    return this.http.get<Transaction>(this.detailURL(organizationSlug, id));
+    return this.http.get<TransactionDetail>(
+      this.detailURL(organizationSlug, id)
+    );
   }
 
   destroy(organizationSlug: string, id: string) {

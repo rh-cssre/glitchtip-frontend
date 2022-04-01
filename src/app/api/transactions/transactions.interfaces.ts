@@ -23,7 +23,7 @@ export interface Transaction extends TransactionBase {
   startTimestamp: string;
 }
 
-export interface TransactionDetail extends TransactionBase {
+export interface TransactionDetail extends Transaction {
   spans: Span[]
 }
 
@@ -33,6 +33,6 @@ export interface TransactionGroup extends TransactionBase{
   transactionCount: number;
 }
 
-export interface TransactionWithDelta extends Transaction {
+export interface TransactionWithDelta extends TransactionDetail {
   delta: number;
 }
