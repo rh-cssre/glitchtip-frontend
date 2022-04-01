@@ -1,3 +1,5 @@
+import { JsonArrayOrObject } from "src/app/interface-primitives";
+
 export interface Span {
   spanId: string;
   parentSpanId: string;
@@ -6,7 +8,7 @@ export interface Span {
   startTimestamp: string;
   timestamp: string;
   tags?: { [key: string]: string | null } | null;
-  data?: { [key: string]: string | null } | null;
+  data?: JsonArrayOrObject | null;
 }
 
 export interface TransactionBase {
