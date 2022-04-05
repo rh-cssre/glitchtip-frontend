@@ -221,6 +221,8 @@ objects:
                   value: ${DEFAULT_FROM_EMAIL}
                 - name: EMAIL_URL
                   value: ${EMAIL_URL}
+                - name: ENABLE_OBSERVABILITY_API
+                  value: "True"
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: web
               ports:
