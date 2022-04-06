@@ -322,7 +322,7 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      name: superuser-job
+      name: super-job
     spec:
       parallelism: 1
       completions: 1
