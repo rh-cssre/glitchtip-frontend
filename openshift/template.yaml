@@ -340,6 +340,27 @@ objects:
               envFrom:
                 - secretRef:
                     name: superuser-secret
+              env:
+                - name: DATABASE_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.host
+                - name: DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.password
+                - name: DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.name
+                - name: DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${RDS_SECRET_NAME}
+                      key: db.user
 
           restartPolicy: Never
 
