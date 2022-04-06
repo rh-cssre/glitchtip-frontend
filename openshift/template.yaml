@@ -336,7 +336,7 @@ objects:
             - name: superuser-job
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
-                ["python", "/code/manage.py", "createsuperuser", "--noinput"]
+                ["python3", "./manage.py", "createsuperuser", "--noinput"]
               envFrom:
                 - secretRef:
                     name: superuser-secret
