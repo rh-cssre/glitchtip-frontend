@@ -341,7 +341,7 @@ objects:
                 - secretRef:
                     name: superuser-secret
 
-          restartPolicy: OnFailure
+          restartPolicy: Never
 
 parameters:
   - description: Image tag
