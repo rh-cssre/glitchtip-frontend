@@ -322,7 +322,7 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      name: glitchtip-job
+      name: superuser-job
     spec:
       parallelism: 1
       completions: 1
@@ -330,10 +330,10 @@ objects:
       backoffLimit: 3
       template:
         metadata:
-          name: glitchtip
+          name: superuser-job
         spec:
           containers:
-            - name: glitchtip
+            - name: superuser-job
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python", "/code/manage.py", "createsuperuser", "--noinput"]
