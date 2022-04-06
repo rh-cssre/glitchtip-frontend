@@ -322,7 +322,7 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      name: super-job
+      name: superb-job
     spec:
       parallelism: 1
       completions: 1
@@ -330,10 +330,10 @@ objects:
       backoffLimit: 3
       template:
         metadata:
-          name: superuser-job
+          name: superb-job
         spec:
           containers:
-            - name: superuser-job
+            - name: superb-job
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
