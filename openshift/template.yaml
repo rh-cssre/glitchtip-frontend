@@ -20,17 +20,6 @@ objects:
         app.kubernetes.io/name: glitchtip
       name: glitchtip-configmap
 
-  # ---------- GT SECRET -----------
-  # - apiVersion: v1
-  #   kind: Secret
-  #   data:
-  #     EMAIL_URL: ${EMAIL_URL}
-  #   metadata:
-  #     labels:
-  #       app.kubernetes.io/instance: glitchtip
-  #       app.kubernetes.io/name: glitchtip
-  #     name: glitchtip-secrets
-  #   type: Opaque
   # ---- BEAT DEPLOYMENT ------
   - apiVersion: apps/v1
     kind: Deployment
@@ -327,6 +316,32 @@ objects:
                   memory: ${{GT_WORKER_MEMORY_LIMITS}}
                   cpu: ${{GT_WORKER_CPU_LIMITS}}
           restartPolicy: Always
+
+  # ---- CREATE SUPERUSER JOB -------------
+
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: glitchtip-job
+    spec:
+      parallelism: 1
+      completions: 1
+      activeDeadlineSeconds: 1800
+      backoffLimit: 3
+      template:
+        metadata:
+          name: glitchtip
+        spec:
+          containers:
+            - name: glitchtip
+              image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
+              command:
+                ["python", "/code/manage.py", "createsuperuser", "--noinput"]
+              envFrom:
+                - secretRef:
+                    name: superuser-secret
+
+          restartPolicy: OnFailure
 
 parameters:
   - description: Image tag
