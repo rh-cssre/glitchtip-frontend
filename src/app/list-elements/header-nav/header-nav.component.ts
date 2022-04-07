@@ -13,7 +13,7 @@ import { OrganizationProject } from "../../api/organizations/organizations.inter
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
-import { normalizeProjectParams } from "../utils";
+import { normalizeProjectParams } from "../../issues/utils";
 
 @Component({
   selector: "gt-header-nav",

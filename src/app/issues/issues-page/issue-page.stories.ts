@@ -12,7 +12,7 @@ import { IssuesPageComponent } from "./issues-page.component";
 import { MaterialModule } from "../../shared/material.module";
 import { IssuesService } from "../issues.service";
 import { issueList } from "./issues-test-data";
-import { HeaderNavComponent } from "../header-nav/header-nav.component";
+import { HeaderNavComponent } from "../../list-elements/header-nav/header-nav.component";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
 import { DaysAgoPipe, DaysOldPipe } from "src/app/shared/days-ago.pipe";

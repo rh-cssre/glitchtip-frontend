@@ -18,7 +18,6 @@ import { IssuesPageComponent } from "./issues-page/issues-page.component";
 import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 import { EntryRequestComponent } from "./issue-detail/event-detail/entry-request/entry-request.component";
-import { HeaderNavComponent } from "./header-nav/header-nav.component";
 import { EntryCSPComponent } from "./issue-detail/event-detail/entry-csp/entry-csp.component";
 import { EntryMessageComponent } from "./issue-detail/event-detail/entry-message/entry-message.component";
 import { EntryExceptionComponent } from "./issue-detail/event-detail/entry-exception/entry-exception.component";
@@ -54,7 +53,6 @@ import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue
     EntryRequestComponent,
     EntryCSPComponent,
     EntryMessageComponent,
-    HeaderNavComponent,
     EntryExceptionComponent,
     IssueDetailTitleComponent,
     FrameTitleComponent,
