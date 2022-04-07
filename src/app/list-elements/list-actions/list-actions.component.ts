@@ -1,5 +1,5 @@
 import { formatDate } from "@angular/common";
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 
@@ -8,7 +8,7 @@ import { MatSelectChange } from "@angular/material/select";
   templateUrl: "./list-actions.component.html",
   styleUrls: ["./list-actions.component.scss"],
 })
-export class ListActionsComponent implements OnInit {
+export class ListActionsComponent {
   @Input() dateForm?: FormGroup;
   @Input() sortForm?: FormGroup;
   @Input() sorts?: object;
@@ -50,6 +50,4 @@ export class ListActionsComponent implements OnInit {
       end: endDate,
     });
   }
-
-  ngOnInit(): void {}
 }
