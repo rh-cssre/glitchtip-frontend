@@ -25,7 +25,6 @@ export class ListActionsComponent {
   constructor() {}
 
   convertToZTime(date: Date) {
-    console.log(date);
     return formatDate(date, "yyyy-MM-ddTHH:mm:ss.SSS", "en-US") + "Z";
   }
 
