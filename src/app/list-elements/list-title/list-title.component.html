@@ -1,6 +1,6 @@
-<header class="page-header" *ngIf="title">
+<ng-container *ngIf="title">
   <h1 class="mat-display-1">
     {{ title }}
     <ng-container *ngIf="searchHits"> ({{ searchHits }}) </ng-container>
   </h1>
-</header>
+</ng-container>

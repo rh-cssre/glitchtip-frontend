@@ -1,8 +1,13 @@
 <section
   class="l-body l-body--full-width mat-elevation-z0"
   *ngIf="paginator$ | async as paginator"
-> 
-  <gt-list-title title="Issues" [searchHits]="paginator.count"></gt-list-title>
+>
+  <header class="page-header">
+    <gt-list-title
+      title="Issues"
+      [searchHits]="paginator.count"
+    ></gt-list-title>
+  </header>
   <gt-project-filter-bar></gt-project-filter-bar>
 
   <div *ngIf="issues$ | async as issues" class="wrapper">
