@@ -40,15 +40,15 @@ describe("Screenshot Run", () => {
       seedBackend(true);
       requestLogin();
       cy.visit(`/${organization.slug}/issues`);
-      cy.get("gt-header-nav mat-expansion-panel-header").click();
-      cy.get("gt-header-nav").contains(project3.name).click();
+      cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
+      cy.get("gt-project-filter-bar").contains(project3.name).click();
       // Need the DSN to do this from the frontend
       cy.get("[data-test-dsn]")
         .invoke("val")
         .then((dsn) => seedJavaScriptIssues(dsn as string));
 
-      cy.get("gt-header-nav mat-expansion-panel-header").click();
-      cy.get("gt-header-nav").contains(project2.name).click();
+      cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
+      cy.get("gt-project-filter-bar").contains(project2.name).click();
       // Need the DSN to do this from the frontend
       cy.get("[data-test-dsn]")
         .invoke("val")

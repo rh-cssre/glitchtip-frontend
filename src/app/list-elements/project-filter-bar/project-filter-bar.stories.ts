@@ -5,12 +5,12 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
-import { HeaderNavComponent } from "./header-nav.component";
+import { ProjectFilterBarComponent } from "./project-filter-bar.component";
 import { OrganizationProject } from "../../api/organizations/organizations.interface";
 import { MaterialModule } from "../../shared/material.module";
 
 export default {
-  title: "Issues/Issue Header Nav",
+  title: "List elements/Project Filter Bar",
   decorators: [
     moduleMetadata({
       imports: [
@@ -76,14 +76,14 @@ const sampleProjects: OrganizationProject[] = [
   },
 ];
 
-export const headerNav = () => ({
-  component: HeaderNavComponent,
+export const projectFilterBar = () => ({
+  component: ProjectFilterBarComponent,
   props: {
     projects$: of(sampleProjects),
     appliedProjectIds: [1, 2, 5],
   },
 });
 
-headerNav.story = {
+projectFilterBar.story = {
   parameters: {},
 };
