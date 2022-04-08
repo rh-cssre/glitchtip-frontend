@@ -1,8 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatBadgeModule } from "@angular/material/badge";
@@ -38,8 +36,6 @@ import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue
     ReactiveFormsModule,
     IssuesRoutingModule,
     SharedModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatTableModule,
     MatTabsModule,
     MatBadgeModule,
