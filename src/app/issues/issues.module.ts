@@ -9,7 +9,7 @@ import { MatBadgeModule } from "@angular/material/badge";
 import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesRoutingModule } from "./issues-routing.module";
-import { ListElementsModule } from "../list-elements/list-elements.module";
+import { DataFilterBarModule } from "../list-elements/data-filter-bar/data-filter-bar.module";
 import { SharedModule } from "../shared/shared.module";
 import { LazyMarkdownModule } from "../lazy-markdown/lazy-markdown.module";
 
@@ -44,7 +44,7 @@ import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue
     MatBadgeModule,
     MarkdownModule,
     LazyMarkdownModule,
-    ListElementsModule,
+    DataFilterBarModule,
   ],
   declarations: [
     IssuesPageComponent,

@@ -32,7 +32,7 @@
               organizationEnvironments$ | async as organizationEnvironments
             "
           >
-            <gt-list-actions
+            <gt-data-filter-bar
               [dateForm]="dateForm"
               [environmentForm]="environmentForm"
               [searchForm]="form"
@@ -44,7 +44,7 @@
               (filterByEnvironment)="filterByEnvironment($event)"
               (searchSubmit)="searchSubmit()"
               (sortByChanged)="sortByChanged($event)"
-            ></gt-list-actions>
+            ></gt-data-filter-bar>
           </ng-container>
         </th>
       </ng-container>
