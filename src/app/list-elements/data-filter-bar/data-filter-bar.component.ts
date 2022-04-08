@@ -4,11 +4,11 @@ import { FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 
 @Component({
-  selector: "gt-list-actions",
-  templateUrl: "./list-actions.component.html",
-  styleUrls: ["./list-actions.component.scss"],
+  selector: "gt-data-filter-bar",
+  templateUrl: "./data-filter-bar.component.html",
+  styleUrls: ["./data-filter-bar.component.scss"],
 })
-export class ListActionsComponent {
+export class DataFilterBarComponent {
   @Input() dateForm?: FormGroup;
   @Input() sortForm?: FormGroup;
   @Input() sorts?: object;
