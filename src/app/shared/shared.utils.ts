@@ -139,3 +139,19 @@ export function checkForOverflow($event: Event) {
   }
   return true;
 }
+
+export function timedeltaToMS(value: string) {
+  let milliseconds = 0;
+  if (value.includes(" ")) {
+    milliseconds += parseInt(value.split(" ")[0], 10) * 86400000;
+    value = value.split(" ")[1];
+  }
+  const splitValue = value.split(":");
+  milliseconds += parseInt(splitValue[0], 10) * 3600000;
+  milliseconds += parseInt(splitValue[1], 10) * 60000;
+  milliseconds += parseFloat(splitValue[2]) * 1000;
+  if (isNaN(milliseconds)) {
+    throw Error("Provided string was not a valid timedelta");
+  }
+  return Math.round(milliseconds);
+}

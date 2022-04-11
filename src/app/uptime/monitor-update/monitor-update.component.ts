@@ -11,7 +11,7 @@ import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-erro
 import { urlRegex, numberValidator } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
-import { timedeltaToSeconds } from "../uptime.utils"
+import { timedeltaToMS } from "src/app/shared/shared.utils";
 
 const defaultUrlValidators = [
   Validators.pattern(urlRegex),
@@ -96,7 +96,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         })
       )
       .toPromise();
-    
+
     this.formInterval.valueChanges.subscribe((interval) => {
       this.intervalPerMonth = Math.floor(2592000 / interval);
     });
@@ -110,7 +110,9 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
           this.formMonitorType.patchValue(data!.monitorType);
           this.formUrl.patchValue(data!.url);
           this.formExpectedStatus.patchValue(data!.expectedStatus);
-          this.formInterval.patchValue(timedeltaToSeconds(data!.interval));
+          this.formInterval.patchValue(
+            Math.round(timedeltaToMS(data!.interval) / 1000)
+          );
           this.formProject.patchValue(data!.project);
 
           if (this.formMonitorType.value !== "Heartbeat") {

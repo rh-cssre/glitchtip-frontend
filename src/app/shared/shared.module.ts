@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "./material.module";
 import { DaysAgoPipe, DaysOldPipe, TimeForPipe } from "./days-ago.pipe";
-import { SecondsOrMSPipe } from "./seconds-or-ms.pipe";
+import { HumanizeDurationPipe } from "./seconds-or-ms.pipe";
 import { ProjectCardComponent } from "./project-card/project-card.component";
 import { EntryDataComponent } from "./entry-data/entry-data.component";
 import { EmptyProjectsComponent } from "./project-card/empty-projects/empty-projects.component";
@@ -29,7 +29,7 @@ import { EventInfoComponent } from "./event-info/event-info.component";
     TimeForPipe,
     DaysAgoPipe,
     DaysOldPipe,
-    SecondsOrMSPipe,
+    HumanizeDurationPipe,
     ProjectCardComponent,
     EntryDataComponent,
     EmptyProjectsComponent,
@@ -46,7 +46,7 @@ import { EventInfoComponent } from "./event-info/event-info.component";
     TimeForPipe,
     DaysAgoPipe,
     DaysOldPipe,
-    SecondsOrMSPipe,
+    HumanizeDurationPipe,
     ProjectCardComponent,
     EntryDataComponent,
     EmptyProjectsComponent,
