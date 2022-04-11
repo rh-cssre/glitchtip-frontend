@@ -4,6 +4,9 @@ $font-path: "../fonts";
 @import "./assets/styles/font-files";
 @import "./assets/styles/resets";
 
+// material-icons
+@import "~material-icons/iconfont/material-icons.css";
+
 // partials
 @import "./scss/auth-forms";
 
@@ -105,4 +108,9 @@ header.page-header {
 .tt-wrapping {
   overflow-wrap: break-word;
   height: auto;
+}
+
+
+.ngx-charts-tooltip-content.type-tooltip {
+  font-family: $font-sans-serif !important;
 }

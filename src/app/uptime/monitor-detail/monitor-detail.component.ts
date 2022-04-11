@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { map, withLatestFrom } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
-import { timedeltaToSeconds } from "../uptime.utils";
 
 @Component({
   selector: "gt-monitor-detail",
@@ -34,6 +33,32 @@ export class MonitorDetailComponent
     })
   );
 
+  activeMonitorRecentChecksSeries$ =
+    this.uptimeService.activeMonitorRecentChecksSeries$;
+  responseChartScale$ =
+    this.uptimeService.activeMonitorRecentChecksSeries$.pipe(
+      map((series) => {
+        let yScaleMax = 20;
+        let xScaleMin = new Date();
+        xScaleMin.setHours(xScaleMin.getHours() - 1);
+        series?.forEach((subseries) => {
+          subseries.series.forEach((dataItem) => {
+            if (dataItem.value > yScaleMax) {
+              yScaleMax = dataItem.value;
+            }
+            if (dataItem.name < xScaleMin) {
+              xScaleMin = dataItem.name;
+            }
+          });
+        });
+        return {
+          yScaleMax,
+          yScaleMin: 0 - yScaleMax / 6,
+          xScaleMin,
+        };
+      })
+    );
+
   alertCountPluralMapping: { [k: string]: string } = {
     "=1": "is 1 uptime alert",
     other: "are # uptime alerts",
@@ -57,8 +82,6 @@ export class MonitorDetailComponent
       }
     );
   }
-
-  convertTimeDelta = timedeltaToSeconds;
 
   ngOnDestroy() {
     this.uptimeService.clearState();

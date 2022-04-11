@@ -18,7 +18,7 @@
       </mat-card-title>
       <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
       <div class="mat-caption">
-        Uptime check interval: {{ convertTimeDelta(monitor.interval) | number }} seconds
+        Uptime check interval: {{ monitor.interval | humanizeDuration: true }}
       </div>
       <mat-card-content class="reduced-padding">
         <div>
@@ -37,6 +37,23 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+    <ng-container *ngIf="activeMonitorRecentChecksSeries$ | async as data">
+      <ng-container *ngIf="responseChartScale$ | async as scale">
+        <mat-card>
+          <mat-card-title>Response Time</mat-card-title>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div>
+              <gt-monitor-response-chart
+                [data]="data"
+                [scale]="scale"
+              ></gt-monitor-response-chart>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </ng-container>
 
     <mat-card>
       <mat-card-title>Alerts</mat-card-title>

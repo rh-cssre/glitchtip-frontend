@@ -108,51 +108,6 @@ export class IssuesPageComponent
   };
   sorts = sorts;
 
-  /**
-   * Two ways to trigger project detail. The first is if we switch orgs.
-   * Filtered out the cases where orgSlug from URL wasn't the same as
-   * active org, and then only move on if the slug actually changes.
-   */
-  projectDetailTriggerSwitchOrgs = combineLatest([
-    this.navigationEnd$,
-    this.activeOrganization$,
-  ]).pipe(
-    filter(([navEnd, activeOrg]) => {
-      return navEnd.orgSlug && activeOrg
-        ? navEnd.orgSlug === activeOrg.slug
-        : false;
-    }),
-    distinctUntilChanged(
-      ([_, previousActiveOrg], [__, currentActiveOrg]) =>
-        previousActiveOrg?.slug === currentActiveOrg?.slug
-    ),
-    map(([navEnd, activeOrg]) => ({
-      orgSlug: navEnd.orgSlug,
-      projectId: navEnd.project,
-      activeOrgProjects: activeOrg ? activeOrg.projects : [],
-    }))
-  );
-
-  /**
-   * Two ways to trigger project detail. The second is if project URL
-   * params change.
-   */
-  projectDetailTriggerProjectCount = combineLatest([
-    this.navigationEnd$,
-    this.activeOrganization$,
-  ]).pipe(
-    filter(([navEnd]) => (navEnd.project ? navEnd.project.length > 0 : false)),
-    distinctUntilChanged(
-      ([previousNavEnd], [currentNavEnd]) =>
-        previousNavEnd.project?.toString() === currentNavEnd.project?.toString()
-    ),
-    map(([navEnd, activeOrg]) => ({
-      orgSlug: navEnd.orgSlug,
-      projectId: navEnd.project,
-      activeOrgProjects: activeOrg ? activeOrg.projects : [],
-    }))
-  );
-
   projectsFromParams$ = this.route.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
   );

@@ -1,31 +1,25 @@
 import { Pipe, PipeTransform } from "@angular/core";
+import { timedeltaToMS } from "./shared.utils";
+import { captureMessage, Severity } from "@sentry/angular";
 
 @Pipe({
-  name: "secondsOrMS",
+  name: "humanizeDuration",
 })
-export class SecondsOrMSPipe implements PipeTransform {
-  transform(value: string): string {
-    let seconds = 0;
-    if (value) {
-      if (value.includes(" ")) {
-        seconds += parseInt(value.split(" ")[0], 10) * 86400;
-        value = value.split(" ")[1];
-      }
-      const splitValue = value.split(":");
-      seconds += parseInt(splitValue[0], 10) * 3600;
-      seconds += parseInt(splitValue[1], 10) * 60;
-
-      let secondsAndMS = parseFloat(splitValue[2]);
-      if (isNaN(seconds) || isNaN(secondsAndMS)) {
-        return "";
+export class HumanizeDurationPipe implements PipeTransform {
+  transform(value: string, roundSeconds: boolean = false): string {
+    try {
+      const milliseconds = timedeltaToMS(value);
+      if (milliseconds > 999) {
+        return `${
+          roundSeconds
+            ? Math.round(milliseconds / 1000)
+            : (milliseconds / 1000).toFixed(2)
+        } seconds`;
       } else {
-        if (secondsAndMS > 1) {
-          return `${(secondsAndMS + seconds).toFixed(2)} seconds`;
-        } else {
-          return `${Math.round(secondsAndMS * 1000)}ms`;
-        }
+        return `${milliseconds}ms`;
       }
-    } else {
+    } catch (err) {
+      captureMessage("Provided string was not a valid timedelta", {level: Severity.Warning});
       return "";
     }
   }
