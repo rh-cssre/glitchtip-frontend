@@ -13,15 +13,15 @@ import { OrganizationProject } from "../../api/organizations/organizations.inter
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
-import { normalizeProjectParams } from "../utils";
+import { normalizeProjectParams } from "../../issues/utils";
 
 @Component({
-  selector: "gt-header-nav",
-  templateUrl: "./header-nav.component.html",
-  styleUrls: ["./header-nav.component.scss"],
+  selector: "gt-project-filter-bar",
+  templateUrl: "./project-filter-bar.component.html",
+  styleUrls: ["./project-filter-bar.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderNavComponent implements OnInit {
+export class ProjectFilterBarComponent implements OnInit {
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
