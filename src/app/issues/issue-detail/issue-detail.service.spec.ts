@@ -5,6 +5,7 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { EMPTY } from "rxjs";
 import { take } from "rxjs/operators";
 import { IssueDetailService } from "./issue-detail.service";
@@ -29,7 +30,11 @@ describe("IssueDetailService", () => {
         MatSnackBarModule,
         RouterTestingModule,
       ],
-      providers: [{ provide: OrganizationsService, useValue: mockOrgService }],
+      providers: [
+        { provide: OrganizationsService, useValue: mockOrgService },
+        MicroSentryService,
+        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(IssueDetailService);
