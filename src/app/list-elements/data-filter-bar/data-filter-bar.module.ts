@@ -6,7 +6,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { SharedModule } from "src/app/shared/shared.module";
 import { DataFilterBarComponent } from "./data-filter-bar.component";
 
-
 @NgModule({
   imports: [
     CommonModule,

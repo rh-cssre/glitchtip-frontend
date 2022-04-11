@@ -5,19 +5,18 @@
   <gt-project-filter-bar></gt-project-filter-bar>
   <div>
     <table mat-table class="mat-elevation-z2">
-      
-        <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="actions">
         <th
           mat-header-cell
           *matHeaderCellDef
           class="resolved-row"
           class="table-header"
         >
-            <gt-data-filter-bar
-              [dateForm]="dateForm"
-              [sortForm]="sortForm"
-              [sorts]="sorts"
-            ></gt-data-filter-bar>
+          <gt-data-filter-bar
+            [dateForm]="dateForm"
+            [sortForm]="sortForm"
+            [sorts]="sorts"
+          ></gt-data-filter-bar>
         </th>
       </ng-container>
 

@@ -8,9 +8,9 @@ import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesRoutingModule } from "./issues-routing.module";
 import { DataFilterBarModule } from "../list-elements/data-filter-bar/data-filter-bar.module";
-import { ProjectFilterBarModule } from "../list-elements/project-filter-bar/project-filter-bar.module"
+import { ProjectFilterBarModule } from "../list-elements/project-filter-bar/project-filter-bar.module";
 import { LazyMarkdownModule } from "../lazy-markdown/lazy-markdown.module";
-import { ListTitleModule } from "../list-elements/list-title/list-title.module"
+import { ListTitleModule } from "../list-elements/list-title/list-title.module";
 import { SharedModule } from "../shared/shared.module";
 
 // Components

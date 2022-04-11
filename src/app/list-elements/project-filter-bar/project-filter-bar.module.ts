@@ -6,7 +6,6 @@ import { RouterModule } from "@angular/router";
 import { SharedModule } from "../../shared/shared.module";
 import { ProjectFilterBarComponent } from "./project-filter-bar.component";
 
-
 @NgModule({
   imports: [
     CommonModule,
