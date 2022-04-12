@@ -13,7 +13,7 @@ import { OrganizationProject } from "../../api/organizations/organizations.inter
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
-import { normalizeProjectParams } from "../../issues/utils";
+import { normalizeProjectParams } from "src/app/shared/shared.utils";
 
 @Component({
   selector: "gt-project-filter-bar",

@@ -17,7 +17,7 @@ import {
   mergeMap,
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
-import { normalizeProjectParams } from "../utils";
+import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";

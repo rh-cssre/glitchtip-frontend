@@ -12,18 +12,6 @@ export function paramsToObject(entries: URLSearchParams) {
   return result;
 }
 
-export function normalizeProjectParams(
-  projects: string | string[] | undefined
-) {
-  if (Array.isArray(projects)) {
-    return projects;
-  }
-  if (typeof projects === "string") {
-    return [projects];
-  }
-  return [];
-}
-
 export function isStacktrace(
   stacktrace?: {} | Stacktrace | null
 ): stacktrace is Stacktrace {
