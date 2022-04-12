@@ -23,6 +23,9 @@
             [dateForm]="dateForm"
             [sortForm]="sortForm"
             [sorts]="sorts"
+            (dateFormSubmission)="onDateFormSubmit($event)"
+            (dateFormReset)="dateFormReset()"
+            (sortByChanged)="sortByChanged($event)"
           ></gt-data-filter-bar>
         </th>
       </ng-container>
