@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # This Job Runs End to End Tests
+# Run the backend server.
+docker-compose up
 
-# TODO
-# 1. Run the backend server. From the backend repo run `docker-compose up`. Do not enable Stripe.
-# 2. Run the frontend development server `npm start`
-# 3. Run Cypress `npm run cy:open`
+# Run the frontend development server
+npm start
 
-echo "Skipped running Tests."
+# Run Cypress
+npm run cy:open
