@@ -14,12 +14,32 @@ export class TransactionGroupsService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug: string, cursor?: string) {
+  list(
+    organizationSlug: string,
+    cursor?: string,
+    project?: string[] | null,
+    start?: string,
+    end?: string,
+    sort?: string,
+  ) {
+    const url = this.listURL(organizationSlug)
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
     }
-    return this.http.get<TransactionGroup[]>(this.listURL(organizationSlug), {
+    if (project) {
+      project.forEach((id) => {
+        httpParams = httpParams.append("project", id);
+      });
+    }
+    if (start && end) {
+      httpParams = httpParams.set("start", start);
+      httpParams = httpParams.set("end", end);
+    }
+    if (sort) {
+      httpParams = httpParams.set("sort", sort);
+    }
+    return this.http.get<TransactionGroup[]>(url, {
       observe: "response",
       params: httpParams,
     });
