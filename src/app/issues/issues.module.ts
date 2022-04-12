@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatBadgeModule } from "@angular/material/badge";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesRoutingModule } from "./issues-routing.module";
@@ -40,6 +42,8 @@ import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue
     MatTableModule,
     MatTabsModule,
     MatBadgeModule,
+    MatChipsModule,
+    MatExpansionModule,
     MarkdownModule,
     LazyMarkdownModule,
     ListTitleModule,
