@@ -371,7 +371,7 @@ export class IssuesPageComponent
 
   sortByChanged(event: MatSelectChange) {
     this.router.navigate([], {
-      queryParams: { sort: event.value },
+      queryParams: { cursor: null, sort: event.value },
       queryParamsHandling: "merge",
     });
   }
