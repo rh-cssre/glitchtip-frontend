@@ -5,6 +5,7 @@ import { withLatestFrom, Subscription, lastValueFrom } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { PerformanceService, PerformanceState } from "../performance.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import { checkForOverflow, normalizeProjectParams } from "src/app/shared/shared.utils";
 
 @Component({
   selector: "gt-transaction-groups",
@@ -15,6 +16,7 @@ export class TransactionGroupsComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>
   implements OnInit
 {
+  displayedColumns = ["name-and-project", "avgDuration"]
   sortForm = new FormGroup({
     sort: new FormControl({
       value: "",
@@ -34,9 +36,14 @@ export class TransactionGroupsComponent
     "-transaction_count": "Most Frequent",
     transaction_count: "Least Frequent",
   };
+  tooltipDisabled = false
+  transactionCountPluralMapping: { [k: string]: string } = {
+    "=1": "1 Transaction",
+    other: "# Transactions",
+  };
 
   routerEventSubscription: Subscription;
-  transactionGroups$ = this.performanceService.transactionGroups$;
+  transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
@@ -52,6 +59,19 @@ export class TransactionGroupsComponent
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
       return { orgSlug, cursor, project, start, end, sort };
+    })
+  );
+
+  projectsFromParams$ = this.route.queryParams.pipe(
+    map((params) => normalizeProjectParams(params.project))
+  );
+
+  appliedProjectCount$ = this.projectsFromParams$.pipe(
+    map((projects) => {
+      if (Array.isArray(projects)) {
+        return projects.length;
+      }
+      return 0;
     })
   );
 
@@ -78,7 +98,11 @@ export class TransactionGroupsComponent
     );
   }
 
+  checkIfTooltipIsNecessary($event: Event) {
+    this.tooltipDisabled = checkForOverflow($event);
+  }
+
   ngOnInit() {
-    lastValueFrom(this.transactionGroups$.pipe(tap((groups) => console.log(groups))))
+    lastValueFrom(this.transactionGroupsDisplay$.pipe(tap((groups) => console.log(groups))))
   }
 }

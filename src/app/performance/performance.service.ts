@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { EMPTY, lastValueFrom } from "rxjs";
-import { catchError, map, tap } from "rxjs/operators";
+import { combineLatest, EMPTY, lastValueFrom } from "rxjs";
+import { catchError, filter, map, tap } from "rxjs/operators";
+import { OrganizationsService } from "../api/organizations/organizations.service";
 import { TransactionGroupsService } from "../api/transactions/transaction-groups.service";
 import {
   Transaction,
@@ -46,9 +47,28 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     )
   );
 
+  transactionGroupsDisplay$ = combineLatest([
+    this.organizationsService.activeOrganizationProjects$,
+    this.transactionGroups$,
+  ]).pipe(
+    filter(([projects, groups]) => !!projects && !! groups),
+    map(([projects, groups]) => {
+      return groups.map((group) => {
+        const projectSlug = projects?.find(
+          (project) => project.id === group.project
+        )?.name;
+        return {
+          ...group,
+          projectSlug,
+        };
+      });
+    })
+  );
+
   constructor(
     private transactionsService: TransactionsService,
-    private transactionGroupsService: TransactionGroupsService
+    private transactionGroupsService: TransactionGroupsService,
+    private organizationsService: OrganizationsService
   ) {
     super(initialState);
   }

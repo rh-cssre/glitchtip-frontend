@@ -1,3 +1,7 @@
+@import "variables";
+
+$iconWidth: 56px;
+
 table {
   width: 100%;
   margin-bottom: 40px;
@@ -9,4 +13,55 @@ table {
 
 .table-header {
   padding: 20px 0 8px;
+}
+
+.name-and-project {
+  width: 500px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  @media screen and (max-width: $large - 1) {
+    width: 300px;
+  }
+  @media screen and (max-width: $medium - 1) {
+    width: 200px;
+  }
+  @media screen and (max-width: $tablet - 1) {
+    width: 160px;
+  }
+
+  a {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    max-width: fit-content;
+  }
+
+  div {
+    width: inherit;
+
+    .mat-caption {
+      color: inherit;
+    }
+  }
+}
+
+.avg-duration-cell {
+  width: 120px;
+
+  // @media screen and (max-width: $tablet - 1) {
+  //   display: none;
+  // }
+}
+
+.footer {
+  text-align: right;
+
+  mat-icon {
+    font-size: 35px;
+    height: $iconWidth;
+    width: $iconWidth;
+    line-height: $iconWidth;
+  }
 }
