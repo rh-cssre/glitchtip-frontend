@@ -32,14 +32,14 @@ export class TransactionGroupsComponent
     endDate: new FormControl(""),
   });
 
-  sorts = {
-    "-avg_duration": "Slowest",
-    avg_duration: "Fastest",
-    "-created": "Newest Creation Date",
-    created: "Oldest Creation Date",
-    "-transaction_count": "Most Frequent",
-    transaction_count: "Least Frequent",
-  };
+  sorts = [
+    { param: "-avg_duration", display: "Slowest" },
+    { param: "avg_duration", display: "Fastest" },
+    { param: "-created", display: "Newest Creation Date" },
+    { param: "created", display: "Oldest Creation Date" },
+    { param: "-transaction_count", display: "Most Frequent" },
+    { param: "transaction_count", display: "Least Frequent" },
+  ];
   tooltipDisabled = false;
   transactionCountPluralMapping: { [k: string]: string } = {
     "=1": "1 Transaction",
@@ -148,7 +148,7 @@ export class TransactionGroupsComponent
 
   sortByChanged(event: MatSelectChange) {
     this.router.navigate([], {
-      queryParams: { sort: event.value },
+      queryParams: { cursor: null, sort: event.value },
       queryParamsHandling: "merge",
     });
   }

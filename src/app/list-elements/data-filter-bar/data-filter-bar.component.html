@@ -62,11 +62,8 @@
             (selectionChange)="sortByChanged.emit($event)"
             formControlName="sort"
           >
-            <mat-option
-              *ngFor="let sort of sorts | keyvalue"
-              [value]="sort.key"
-            >
-              {{ sort.value }}
+            <mat-option *ngFor="let sort of sorts" [value]="sort.param">
+              {{ sort.display }}
             </mat-option>
           </mat-select>
         </mat-form-field>
