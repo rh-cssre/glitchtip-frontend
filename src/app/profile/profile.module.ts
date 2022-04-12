@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
+import { MatChipsModule } from "@angular/material/chips";
 
 import { ProfileRoutingModule } from "./profile-routing.module";
 import { ProfileComponent } from "./profile.component";
@@ -41,6 +42,7 @@ import { WizardComponent } from "./wizard/wizard.component";
     ProfileRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    MatChipsModule,
   ],
 })
 export class ProfileModule {}

@@ -7,6 +7,7 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatRadioModule } from "@angular/material/radio";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 // Components
 import { ProjectsComponent } from "./projects/projects.component";
@@ -41,6 +42,7 @@ import { NewRecipientComponent } from "./projects/project-detail/project-alerts/
     MatDialogModule,
     MatTabsModule,
     MatRadioModule,
+    MatExpansionModule,
   ],
   declarations: [
     ProjectsComponent,
