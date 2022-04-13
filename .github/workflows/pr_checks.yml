@@ -1,0 +1,55 @@
+name: pr checks
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push on master or pull request events
+  push:
+    branches: [ master ]
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  unit-test-and-lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run test -- --progress false --watch=false --browsers=ChromiumHeadless
+      - run: npm run lint
+  
+  e2e-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: start glitchtip-backend server
+        run: |
+          # clone glitchtip-backend repo
+          git clone https://github.com/rh-cssre/glitchtip-backend.git
+          cd glitchtip-backend;
+          docker-compose run --rm web ./manage.py migrate
+          docker-compose up -d
+      # start glitchtip-frontend server
+      - run: sleep 150
+      - run: npm ci
+      - run: npm start & npx wait-on http://localhost:4200
+      - run: sleep 30
+      - run: npm run cy:run
