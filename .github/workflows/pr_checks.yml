@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  unit-test-and-lint:
+  unit-test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,7 +26,33 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run test -- --progress false --watch=false --browsers=ChromiumHeadless
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
       - run: npm run lint
+      # test openshift/template.yaml
+      - name: Install oc
+        uses: redhat-actions/oc-installer@v1
+        with:
+          version: '4.6'
+      - name: Run oc process
+        run: oc process --local -f openshift/template.yaml -o yaml > blueprint.yaml
+      - name: validate openshift yaml
+        uses: instrumenta/kubeval-action@master
+        with:
+            files: blueprint.yaml
   
   e2e-test:
     runs-on: ubuntu-latest
