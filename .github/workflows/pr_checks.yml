@@ -1,0 +1,82 @@
+name: pr checks
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push on master or pull request events
+  push:
+    branches: [ master ]
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run test -- --progress false --watch=false --browsers=ChromiumHeadless
+
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run lint
+      # test openshift/template.yaml
+      - name: Install oc
+        uses: redhat-actions/oc-installer@v1
+        with:
+          version: '4.6'
+      - name: Run oc process
+        run: oc process --local -f openshift/template.yaml -o yaml > blueprint.yaml
+      - name: validate openshift yaml
+        uses: instrumenta/kubeval-action@master
+        with:
+            files: blueprint.yaml
+  
+  e2e-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: start glitchtip-backend server
+        run: |
+          # clone glitchtip-backend repo
+          git clone https://github.com/rh-cssre/glitchtip-backend.git
+          cd glitchtip-backend;
+          docker-compose run --rm web ./manage.py migrate
+          docker-compose up -d
+      # check backend server is up
+      - run: sleep 60 & nc -vz 127.0.0.1 8000
+      # start glitchtip-frontend server
+      - run: npm ci
+      - run: npm start & npx wait-on http://localhost:4200
+      - run: sleep 30
+      - run: npm run cy:run
