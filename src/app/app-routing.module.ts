@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
+import { CustomPreloadingStrategy } from "./preloadingStrategy";
 
 export const routes: Routes = [
   {
@@ -138,8 +139,8 @@ export const routes: Routes = [
     RouterModule.forRoot(routes, {
       onSameUrlNavigation: "reload",
       scrollPositionRestoration: "enabled",
-      relativeLinkResolution: "corrected",
       paramsInheritanceStrategy: "always",
+      preloadingStrategy: CustomPreloadingStrategy,
     }),
   ],
   exports: [RouterModule],

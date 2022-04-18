@@ -1,4 +1,5 @@
 import { TestBed } from "@angular/core/testing";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 
 import { ProjectAlertsService } from "./project-alerts.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -14,6 +15,10 @@ describe("ProjectAlertsService", () => {
         HttpClientTestingModule,
         RouterTestingModule,
         MatSnackBarModule,
+      ],
+      providers: [
+        MicroSentryService,
+        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
       ],
     });
     service = TestBed.inject(ProjectAlertsService);

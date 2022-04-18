@@ -1,0 +1,12 @@
+table {
+  width: 100%;
+  margin-bottom: 40px;
+
+  &.fixedLayout {
+    table-layout: fixed;
+  }
+}
+
+.table-header {
+  padding: 20px 0 8px;
+}

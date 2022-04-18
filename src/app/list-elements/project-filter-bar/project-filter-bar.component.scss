@@ -1,0 +1,177 @@
+@import "variables";
+
+section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  z-index: 2;
+}
+
+.no-projects {
+  &__picker {
+    @media screen and (max-width: $small - 1) {
+      display: none;
+    }
+  }
+}
+
+#project-picker {
+  position: relative;
+  flex: 1;
+}
+
+.reset-button {
+  position: absolute;
+  right: 50px;
+  z-index: 2;
+  height: 48px;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 0;
+  width: 35px;
+  min-width: 35px;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.2s;
+}
+
+.mat-expanded + .reset-button {
+  transform: translateY(4px);
+}
+
+mat-accordion {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: 48px;
+  z-index: 2;
+}
+
+mat-expansion-panel.mat-expansion-panel {
+  flex: 1;
+  &:first-of-type,
+  &:last-of-type {
+    border-radius: 0;
+  }
+}
+
+mat-expansion-panel::ng-deep {
+  div.mat-expansion-panel-body {
+    padding-left: 0;
+    padding-right: 0;
+
+    .mat-list-base .mat-list-item .mat-list-item-content {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+
+  .mat-selection-list {
+    max-height: 275px;
+    overflow-y: auto;
+  }
+
+  .mat-form-field {
+    display: block;
+  }
+
+  .mat-form-field-wrapper {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+  .mat-expansion-panel-header[aria-disabled="true"] {
+    color: rgba(0, 0, 0, 0.87);
+
+    &.disabled-looking {
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .mat-expansion-panel-header-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+
+  .button-group {
+    text-align: right;
+    margin-top: 16px;
+    margin-right: 24px;
+  }
+
+  button {
+    margin-left: 5px;
+  }
+}
+
+.list-item {
+  button {
+    // borrowed from some "button unstyled" classes I've done elsewhere
+    display: inline-block;
+    border: none;
+    margin: 0 15px 0 0; // 0
+    padding: 12px 0; // 0
+    -webkit-text-fill-color: currentColor;
+    background: transparent;
+    -webkit-appearance: none;
+    cursor: pointer;
+    color: inherit;
+    font-weight: inherit;
+
+    width: 100%;
+    text-align: left;
+  }
+
+  .disabled {
+    cursor: default;
+    pointer-events: none;
+    color: #b0b0b0;
+  }
+
+  mat-checkbox ::ng-deep label {
+    position: relative;
+
+    &:after {
+      $hitbox: -15px;
+      content: "";
+      background: transparent;
+      position: absolute;
+      top: $hitbox;
+      right: $hitbox;
+      bottom: $hitbox;
+      left: $hitbox;
+    }
+  }
+}
+
+.nav-action-group {
+  margin-left: 10px;
+
+  @media screen and (max-width: $medium - 1) {
+    display: flex;
+    flex-direction: column;
+
+    .nav-action:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    margin-left: 0;
+  }
+}
+
+.nav-action {
+  margin: 0 0 0 10px;
+
+  @media screen and (max-width: $small - 1) {
+    display: none;
+
+    .no-projects & {
+      display: block;
+      margin-left: 0;
+    }
+  }
+}

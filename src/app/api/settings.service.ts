@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import * as Sentry from "@sentry/angular";
+import { MicroSentryService } from "@micro-sentry/angular";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import { SocialApp } from "./user/user.interfaces";
+
+export const DSN_REGEXP =
+  /^(?:(\w+):)\/\/(?:(\w+)(?::(\w+))?@)([\w.-]+)(?::(\d+))?\/(.+)/;
 
 interface SettingsState {
   socialApps: SocialApp[];
@@ -53,7 +56,10 @@ export class SettingsService {
   );
   private readonly url = "/api/settings/";
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private microSentry: MicroSentryService
+  ) {}
 
   /** Get and set conf settings from backend. Typically run on application start */
   getSettings() {
@@ -81,7 +87,8 @@ export class SettingsService {
       }),
       tap((settings) => {
         if (settings.sentryDSN) {
-          Sentry.init({
+          // Micro-sentry does not support dynamic configuration, force it to
+          const options = {
             dsn: settings.sentryDSN,
             environment: settings.environment
               ? settings.environment
@@ -89,11 +96,35 @@ export class SettingsService {
             release: settings.version
               ? "glitchtip@" + settings.version
               : undefined,
-            autoSessionTracking: false,
-            tracesSampleRate: settings.sentryTracesSampleRate
-              ? settings.sentryTracesSampleRate
-              : undefined,
-          });
+          };
+
+          // https://github.com/Tinkoff/micro-sentry/blob/main/libs/core/src/lib/service/micro-sentry-client.ts#L14
+          const searched = DSN_REGEXP.exec(options.dsn);
+          const dsn = searched ? searched.slice(1) : [];
+          const pathWithProjectId = dsn[5].split("/");
+          const path = pathWithProjectId.slice(0, -1).join("/");
+
+          (this.microSentry.apiUrl as string) =
+            dsn[0] +
+            "://" +
+            dsn[3] +
+            (dsn[4] ? ":" + dsn[4] : "") +
+            (path ? "/" + path : "") +
+            "/api/" +
+            pathWithProjectId.pop() +
+            "/store/";
+
+          (this.microSentry.authHeader as string) =
+            "Sentry sentry_version=7,sentry_key=" +
+            dsn[1] +
+            (dsn[2] ? ",sentry_secret=" + dsn[2] : "");
+
+          if (options.environment) {
+            (this.microSentry.environment as string) = options.environment;
+          }
+          if (options.release) {
+            (this.microSentry as any).release = options.release;
+          }
         }
       }),
       tap((settings) => {

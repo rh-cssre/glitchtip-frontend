@@ -1,5 +1,6 @@
 import { NgZone } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { Router, ActivatedRoute } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 import {
@@ -25,6 +26,10 @@ describe("OrganizationsService", () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes),
         MaterialModule,
+      ],
+      providers: [
+        MicroSentryService,
+        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -85,6 +90,8 @@ describe("OrganizationsService", () => {
             },
           },
         },
+        MicroSentryService,
+        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
