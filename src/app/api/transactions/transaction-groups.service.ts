@@ -21,6 +21,7 @@ export class TransactionGroupsService extends APIBaseService {
     start?: string,
     end?: string,
     sort?: string,
+    environment?: string,
   ) {
     const url = this.listURL(organizationSlug)
     let httpParams = new HttpParams();
@@ -38,6 +39,9 @@ export class TransactionGroupsService extends APIBaseService {
     }
     if (sort) {
       httpParams = httpParams.set("sort", sort);
+    }
+    if (environment) {
+        httpParams = httpParams.append("environment", environment);
     }
     return this.http.get<TransactionGroup[]>(url, {
       observe: "response",

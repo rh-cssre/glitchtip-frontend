@@ -22,10 +22,13 @@
           <gt-data-filter-bar
             [dateForm]="dateForm"
             [sortForm]="sortForm"
+            [environmentForm]="environmentForm"
             [sorts]="sorts"
+            [organizationEnvironments]="['production']"
             (dateFormSubmission)="onDateFormSubmit($event)"
             (dateFormReset)="dateFormReset()"
             (sortByChanged)="sortByChanged($event)"
+            (filterByEnvironment)="filterByEnvironment($event)"
           ></gt-data-filter-bar>
         </th>
       </ng-container>

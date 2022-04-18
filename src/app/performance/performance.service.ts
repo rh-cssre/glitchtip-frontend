@@ -90,10 +90,11 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     project: string[] | null,
     start: string | undefined,
     end: string | undefined,
-    sort: string | undefined
+    sort: string | undefined,
+    environment: string | undefined,
   ) {
     lastValueFrom(
-      this.retrieveTransactionGroups(orgSlug, cursor, project, start, end, sort)
+      this.retrieveTransactionGroups(orgSlug, cursor, project, start, end, sort, environment)
     );
   }
 
@@ -103,10 +104,11 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     project?: string[] | null,
     start?: string,
     end?: string,
-    sort?: string
+    sort?: string,
+    environment?: string
   ) {
     return this.transactionGroupsService
-      .list(orgSlug, cursor, project, start, end, sort)
+      .list(orgSlug, cursor, project, start, end, sort, environment)
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ transactionGroups: res.body! }, res);
