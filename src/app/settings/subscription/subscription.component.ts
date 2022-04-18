@@ -10,6 +10,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 interface Percentages {
   total: number;
   errorEvents: number;
+  transactionEvents: number;
   uptimeEvents: number;
 }
 
@@ -59,6 +60,8 @@ export class SubscriptionComponent implements OnDestroy {
       return <Percentages>{
         total: (events?.total! / eventsAllowed!) * 100,
         errorEvents: (events?.eventCount! / eventsAllowed!) * 100,
+        transactionEvents:
+          (events?.transactionEventCount! / eventsAllowed!) * 100,
         uptimeEvents: (events?.uptimeCheckEventCount! / eventsAllowed!) * 100,
       };
     })
