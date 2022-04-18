@@ -18,6 +18,7 @@ import {
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
+import { EnvironmentsService } from "src/app/api/environments/environments.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
@@ -147,8 +148,8 @@ export class IssuesPageComponent
 
   organizationEnvironments$ = combineLatest([
     this.appliedProjectCount$,
-    this.issuesService.organizationEnvironmentsProcessed$,
-    this.environmentsService.visibleEnvironments$,
+    this.environmentsService.organizationEnvironmentsProcessed$,
+    this.projectEnvironmentsService.visibleEnvironments$,
   ]).pipe(
     map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
       appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
@@ -160,7 +161,8 @@ export class IssuesPageComponent
     protected router: Router,
     protected route: ActivatedRoute,
     private organizationsService: OrganizationsService,
-    private environmentsService: ProjectEnvironmentsService
+    private environmentsService: EnvironmentsService,
+    private projectEnvironmentsService: ProjectEnvironmentsService
   ) {
     super(issuesService, router, route);
 
@@ -198,7 +200,7 @@ export class IssuesPageComponent
         distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
         mergeMap(({ orgSlug }) =>
           orgSlug
-            ? this.issuesService.getOrganizationEnvironments(orgSlug)
+            ? this.environmentsService.getOrganizationEnvironments(orgSlug)
             : EMPTY
         )
       )
@@ -221,7 +223,7 @@ export class IssuesPageComponent
             (project) => project.id === parseInt(urlData.project![0], 10)
           );
           if (urlData.orgSlug && matchedProject) {
-            this.environmentsService
+            this.projectEnvironmentsService
               .retrieveEnvironmentsWithProperties(
                 urlData.orgSlug,
                 matchedProject.slug
@@ -237,7 +239,7 @@ export class IssuesPageComponent
      * in the URL. If it doesn't match a project environment, reset the URL.
      */
     this.resetEnvironmentSubscription = combineLatest([
-      this.environmentsService.visibleEnvironmentsLoaded$,
+      this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
       this.route.queryParams,
     ])
       .pipe(
@@ -299,7 +301,7 @@ export class IssuesPageComponent
     this.resetEnvironmentSubscription.unsubscribe();
     this.searchDirectHitSubscription.unsubscribe();
     this.issuesService.clearState();
-    this.environmentsService.clearState();
+    this.projectEnvironmentsService.clearState();
   }
 
   onDateFormSubmit(queryParams: object) {
