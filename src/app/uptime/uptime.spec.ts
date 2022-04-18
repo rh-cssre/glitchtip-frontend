@@ -5,11 +5,12 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 
 import { UptimeService } from "./uptime.service";
 
 import { RouterTestingModule } from "@angular/router/testing";
-import { monitorDetail, convertedSeries } from './test-data'
+import { monitorDetail, convertedSeries } from "./test-data";
 
 describe("UptimeService", () => {
   let httpTestingController: HttpTestingController;
@@ -21,6 +22,10 @@ describe("UptimeService", () => {
         HttpClientTestingModule,
         MatSnackBarModule,
         RouterTestingModule,
+      ],
+      providers: [
+        MicroSentryService,
+        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -34,6 +39,8 @@ describe("UptimeService", () => {
       "/api/0/organizations/uptime-chart-testing/monitors/1/"
     );
     req.flush(testData, { headers: { Link: "link header info" } });
-    service.activeMonitorRecentChecksSeries$.subscribe((series) => expect(series).toEqual(convertedSeries));
+    service.activeMonitorRecentChecksSeries$.subscribe((series) =>
+      expect(series).toEqual(convertedSeries)
+    );
   });
 });

@@ -17,8 +17,8 @@ describe("Issues Page", () => {
     requestLogin();
     cy.visit(`/${organization.slug}/issues`);
     // Need the DSN to do this from the frontend
-    cy.get("gt-header-nav mat-expansion-panel-header").click();
-    cy.get("gt-header-nav").contains("PitchFlip").click();
+    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
+    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
     cy.get("[data-test-dsn]").invoke("val").as("dsn");
   });
 
@@ -129,8 +129,8 @@ describe("Issues Page", () => {
     );
 
     cy.get("#selectAll").click({ force: true });
-    cy.get("gt-header-nav mat-expansion-panel-header").click();
-    cy.get("gt-header-nav").contains("PitchFlip").click();
+    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
+    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
     cy.get("#selectAll").click({ force: true });
     cy.contains("Select all 55 issues that match this query");
     cy.get("#bulkUpdateProject").click();
@@ -144,8 +144,8 @@ describe("Issues Page", () => {
     cy.visit(
       "http://localhost:4200/business-company-inc/issues?&query=is:resolved"
     );
-    cy.get("gt-header-nav mat-expansion-panel-header").click();
-    cy.get("gt-header-nav").contains("PitchFlip").click();
+    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
+    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
     cy.log(
       "now we are testing that the issues we resolved for a specific project are indeed resolved"
     );

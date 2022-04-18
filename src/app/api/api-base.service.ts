@@ -9,6 +9,7 @@ export interface APIBaseService {
     slug2?: unknown
   ): Observable<unknown>;
   create(obj: unknown, slug1?: string, slug2?: string): Observable<unknown>;
+  destroy(id: string, slug1?: string, slug2?: string): Observable<unknown>;
 }
 
 /**
@@ -23,11 +24,6 @@ export abstract class APIBaseService {
 
   abstract list(slug1?: string, slug2?: string): Observable<unknown>;
   abstract retrieve(
-    id: string,
-    slug1?: string,
-    slug2?: string
-  ): Observable<unknown>;
-  abstract destroy(
     id: string,
     slug1?: string,
     slug2?: string

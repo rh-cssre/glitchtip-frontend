@@ -3,14 +3,12 @@
   *ngIf="paginator$ | async as paginator"
 >
   <header class="page-header">
-    <h1 class="mat-display-1">
-      Issues
-      <ng-container *ngIf="searchHits$ | async as searchHits">
-        ({{ searchHits }})
-      </ng-container>
-    </h1>
+    <gt-list-title
+      title="Issues"
+      [searchHits]="paginator.count"
+    ></gt-list-title>
   </header>
-  <gt-header-nav></gt-header-nav>
+  <gt-project-filter-bar></gt-project-filter-bar>
 
   <div *ngIf="issues$ | async as issues" class="wrapper">
     <table
@@ -27,116 +25,25 @@
           class="resolved-row"
           class="table-header"
         >
-          <div class="action-group">
-            <form
-              class="date-form"
-              [formGroup]="dateForm"
-              (ngSubmit)="onDateFormSubmit()"
-            >
-              <mat-form-field>
-                <mat-label>Start Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="startPicker"
-                  formControlName="startDate"
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="startPicker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #startPicker></mat-datepicker>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>End Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="endPicker"
-                  formControlName="endDate"
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="endPicker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #endPicker></mat-datepicker>
-              </mat-form-field>
-              <button
-                type="submit"
-                mat-flat-button
-                color="primary"
-                [disabled]="
-                  !dateForm.value.startDate ||
-                  !dateForm.value.endDate ||
-                  dateForm.pristine
-                "
-              >
-                Filter
-              </button>
-              <button
-                type="button"
-                (click)="dateFormReset()"
-                mat-stroked-button
-                color="primary"
-                [disabled]="
-                  !dateForm.value.startDate && !dateForm.value.endDate
-                "
-              >
-                Clear
-              </button>
-            </form>
-
-            <form [formGroup]="sortForm" class="sort-form">
-              <mat-form-field>
-                <mat-label>Sort by</mat-label>
-                <mat-select
-                  (selectionChange)="sortByChanged($event)"
-                  formControlName="sort"
-                >
-                  <mat-option
-                    *ngFor="let sort of sorts | keyvalue"
-                    [value]="sort.key"
-                  >
-                    {{ sort.value }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </form>
-
-            <form [formGroup]="environmentForm" class="environment-form">
-              <mat-form-field
-                *ngIf="organizationEnvironments$ | async as environments"
-              >
-                <mat-label>Environment</mat-label>
-                <mat-select
-                  (selectionChange)="filterByEnvironment($event)"
-                  formControlName="environment"
-                >
-                  <mat-option [value]="null">All Environments</mat-option>
-                  <mat-option
-                    *ngFor="let environment of environments"
-                    [value]="environment"
-                  >
-                    {{ environment }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </form>
-
-            <form
-              [formGroup]="form"
-              (ngSubmit)="onSubmit()"
-              class="search-form"
-            >
-              <mat-form-field>
-                <input
-                  matInput
-                  type="search"
-                  placeholder="Search"
-                  formControlName="query"
-                />
-              </mat-form-field>
-            </form>
-          </div>
+          <ng-container
+            *ngIf="
+              organizationEnvironments$ | async as organizationEnvironments
+            "
+          >
+            <gt-data-filter-bar
+              [dateForm]="dateForm"
+              [environmentForm]="environmentForm"
+              [searchForm]="form"
+              [sortForm]="sortForm"
+              [sorts]="sorts"
+              [organizationEnvironments]="organizationEnvironments"
+              (dateFormSubmission)="onDateFormSubmit($event)"
+              (dateFormReset)="dateFormReset()"
+              (filterByEnvironment)="filterByEnvironment($event)"
+              (searchSubmit)="searchSubmit()"
+              (sortByChanged)="sortByChanged($event)"
+            ></gt-data-filter-bar>
+          </ng-container>
         </th>
       </ng-container>
 

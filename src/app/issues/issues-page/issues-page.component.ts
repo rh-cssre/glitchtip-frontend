@@ -4,7 +4,6 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { formatDate } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -22,17 +21,6 @@ import { normalizeProjectParams } from "../utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
-
-export const sorts = {
-  "-last_seen": "Last Seen",
-  last_seen: "First Seen",
-  "-created": "Newest Creation Date",
-  created: "Oldest Creation Date",
-  "-count": "Most Frequent",
-  count: "Least Frequent",
-  "-priority": "Highest Priority",
-  priority: "Lowest Priority",
-};
 
 @Component({
   selector: "gt-issues-page",
@@ -106,7 +94,16 @@ export class IssuesPageComponent
     "=1": "1 event",
     other: "# events",
   };
-  sorts = sorts;
+  sorts = {
+    "-last_seen": "Last Seen",
+    last_seen: "First Seen",
+    "-created": "Newest Creation Date",
+    created: "Oldest Creation Date",
+    "-count": "Most Frequent",
+    count: "Least Frequent",
+    "-priority": "Highest Priority",
+    priority: "Lowest Priority",
+  };
 
   projectsFromParams$ = this.route.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
@@ -305,35 +302,9 @@ export class IssuesPageComponent
     this.environmentsService.clearState();
   }
 
-  onDateFormSubmit() {
-    /**
-     * The + "Z" feels ridiculous, but it works, and avoids problems I didn't
-     * have time to solve
-     */
-    const startDate = this.dateForm.value.startDate
-      ? formatDate(
-          this.dateForm.value.startDate,
-          "yyyy-MM-ddTHH:mm:ss.SSS",
-          "en-US"
-        ) + "Z"
-      : null;
-
-    /**
-     * End dates come in at midnight, so if you pick May 5, you don't get events
-     * from May 5. Bumping it to 23:59:59.999 fixes this
-     */
-    const modifiedEndDate = this.dateForm.value.endDate
-      ? this.dateForm.value.endDate.getTime() + 86399999
-      : null;
-    const endDate = modifiedEndDate
-      ? formatDate(modifiedEndDate, "yyyy-MM-ddTHH:mm:ss.SSS", "en-US") + "Z"
-      : null;
+  onDateFormSubmit(queryParams: object) {
     this.router.navigate([], {
-      queryParams: {
-        cursor: null,
-        start: startDate ? startDate : null,
-        end: endDate ? endDate : null,
-      },
+      queryParams,
       queryParamsHandling: "merge",
     });
   }
@@ -350,7 +321,7 @@ export class IssuesPageComponent
     this.dateForm.setValue({ startDate: null, endDate: null });
   }
 
-  onSubmit() {
+  searchSubmit() {
     this.router.navigate([], {
       queryParams: {
         query: this.form.value.query,
@@ -400,7 +371,7 @@ export class IssuesPageComponent
 
   sortByChanged(event: MatSelectChange) {
     this.router.navigate([], {
-      queryParams: { sort: event.value },
+      queryParams: { cursor: null, sort: event.value },
       queryParamsHandling: "merge",
     });
   }

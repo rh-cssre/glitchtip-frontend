@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { timedeltaToMS } from "./shared.utils";
-import { captureMessage, Severity } from "@sentry/angular";
 
 @Pipe({
   name: "humanizeDuration",
@@ -19,7 +18,7 @@ export class HumanizeDurationPipe implements PipeTransform {
         return `${milliseconds}ms`;
       }
     } catch (err) {
-      captureMessage("Provided string was not a valid timedelta", {level: Severity.Warning});
+      console.warn("Provided string was not a valid timedelta");
       return "";
     }
   }
