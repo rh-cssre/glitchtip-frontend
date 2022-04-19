@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import {
   Router,
   RoutesRecognized,
@@ -27,12 +27,10 @@ import {
   tap,
   first,
 } from "rxjs/operators";
-import { baseUrl } from "../../constants";
 import {
   Organization,
   OrganizationDetail,
   Member,
-  OrganizationMembersRequest,
   MemberRole,
   OrganizationErrors,
   OrganizationLoading,
@@ -41,6 +39,7 @@ import { SettingsService } from "../settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { TeamsService } from "../teams/teams.service";
 import { Team } from "../teams/teams.interfaces";
+import { MembersAPIService } from "./members-api.service"
 import { OrganizationAPIService } from "./organizations-api.service";
 import { TeamsAPIService } from "../teams/teams-api.service";
 
@@ -83,7 +82,6 @@ export class OrganizationsService {
     initialState
   );
   private readonly getState$ = this.organizationsState.asObservable();
-  private readonly url = baseUrl + "/organizations/";
   private routeParams?: { [key: string]: string };
   initialLoad$ = this.getState$.pipe(
     map((data) => data.initialLoad),
@@ -193,9 +191,9 @@ export class OrganizationsService {
   );
 
   constructor(
-    private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
+    private membersAPIService: MembersAPIService,
     private organizationAPIService: OrganizationAPIService,
     private snackBar: MatSnackBar,
     private settingsService: SettingsService,
@@ -377,7 +375,7 @@ export class OrganizationsService {
   }
 
   retrieveOrganizationMembers(orgSlug: string) {
-    return this.http.get<Member[]>(`${this.url}${orgSlug}/members/`).pipe(
+    return this.membersAPIService.list(orgSlug).pipe(
       tap((members) => {
         this.setActiveOrganizationMembers(members);
       })
@@ -390,7 +388,7 @@ export class OrganizationsService {
     teamsInput: string[],
     roleInput: MemberRole
   ) {
-    const data: OrganizationMembersRequest = {
+    const data = {
       email: emailInput,
       role: roleInput,
       teams: teamsInput,
@@ -399,8 +397,7 @@ export class OrganizationsService {
       .pipe(
         take(1),
         mergeMap((orgSlug) =>
-          this.http
-            .post<Member>(`${this.url}${orgSlug}/members/`, data)
+          this.membersAPIService.inviteUser(orgSlug!, data)
             .pipe(map((response) => ({ response, orgSlug })))
         ),
         tap(({ response, orgSlug }) => {
