@@ -7,7 +7,13 @@ import {
   NavigationStart,
 } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, combineLatest, Observable, EMPTY } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  lastValueFrom,
+  Observable,
+  EMPTY,
+} from "rxjs";
 import {
   map,
   withLatestFrom,
@@ -36,6 +42,7 @@ import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { TeamsService } from "../teams/teams.service";
 import { Team } from "../teams/teams.interfaces";
 import { OrganizationAPIService } from "./organizations-api.service";
+import { TeamsAPIService } from "../teams/teams-api.service";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -193,6 +200,7 @@ export class OrganizationsService {
     private snackBar: MatSnackBar,
     private settingsService: SettingsService,
     private subscriptionsService: SubscriptionsService,
+    private teamsAPIService: TeamsAPIService,
     private teamsService: TeamsService
   ) {
     this.routeParams$.subscribe((params) => (this.routeParams = params));
@@ -415,27 +423,22 @@ export class OrganizationsService {
   }
 
   retrieveOrganizationTeams(orgSlug: string) {
-    const url = `${this.url}${orgSlug}/teams/`;
-    return this.http
-      .get<Team[]>(url)
-      .pipe(
+    lastValueFrom(
+      this.teamsAPIService.list(orgSlug).pipe(
         tap((resp) => {
-          this.getOrganizationTeams(resp);
+          this.setOrganizationTeams(resp);
         })
       )
-      .toPromise();
+    );
   }
 
   createTeam(teamSlug: string, orgSlug: string) {
-    const data = {
-      slug: teamSlug,
-    };
-    return this.http.post<Team>(`${this.url}${orgSlug}/teams/`, data).pipe(
-      tap((team) => {
-        this.refreshOrganizationDetail().subscribe();
-        this.teamsService.addTeam(team);
-      })
-    );
+    return this.teamsAPIService.create(orgSlug, teamSlug).pipe(
+        tap((team) => {
+          this.refreshOrganizationDetail().subscribe();
+          this.teamsService.addTeam(team);
+        })
+      )
   }
 
   addTeamMember(
@@ -649,7 +652,7 @@ export class OrganizationsService {
     });
   }
 
-  private getOrganizationTeams(teams: Team[]) {
+  private setOrganizationTeams(teams: Team[]) {
     this.organizationsState.next({
       ...this.organizationsState.getValue(),
       organizationTeams: teams,
