@@ -38,7 +38,28 @@ export class TeamsAPIService extends APIBaseService {
   }
 
   retrieveTeamMembers(orgSlug: string, teamSlug: string) {
-      return this.http.get<Member[]>(this.membersListURL(orgSlug, teamSlug))
+    return this.http.get<Member[]>(this.teamMembersListURL(orgSlug, teamSlug));
+  }
+
+  addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
+    return this.http.post<Team>(
+      this.teamMemberURL(member.id, orgSlug, teamSlug),
+      member
+    );
+  }
+
+  removeTeamMember(memberId: number, orgSlug: string, teamSlug: string) {
+    return this.http.delete<Team>(
+      this.teamMemberURL(memberId, orgSlug, teamSlug)
+    );
+  }
+
+  joinTeam(orgSlug: string, teamSlug: string) {
+    return this.http.post<Team>(this.userTeamURL(orgSlug, teamSlug), null);
+  }
+
+  leaveTeam(orgSlug: string, teamSlug: string) {
+    return this.http.delete<Team>(this.userTeamURL(orgSlug, teamSlug));
   }
 
   protected listURL(orgSlug: string) {
@@ -49,7 +70,15 @@ export class TeamsAPIService extends APIBaseService {
     return `${baseUrl}${this.url}${orgSlug}/${teamSlug}/`;
   }
 
-  protected membersListURL(orgSlug: string, teamSlug: string) {
-      return `${baseUrl}${this.url}${orgSlug}/${teamSlug}/members/`
+  protected userTeamURL(orgSlug: string, teamSlug: string) {
+    return `${baseUrl}/organizations/${orgSlug}/members/me/teams/${teamSlug}/`;
+  }
+
+  protected teamMemberURL(memberId: number, orgSlug: string, teamSlug: string) {
+    return `${baseUrl}/organizations/${orgSlug}/members/${memberId}/teams/${teamSlug}/`;
+  }
+
+  protected teamMembersListURL(orgSlug: string, teamSlug: string) {
+    return `${baseUrl}${this.url}${orgSlug}/${teamSlug}/members/`;
   }
 }

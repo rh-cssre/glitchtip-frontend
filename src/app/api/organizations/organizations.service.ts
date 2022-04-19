@@ -434,68 +434,70 @@ export class OrganizationsService {
 
   createTeam(teamSlug: string, orgSlug: string) {
     return this.teamsAPIService.create(orgSlug, teamSlug).pipe(
-        tap((team) => {
-          this.refreshOrganizationDetail().subscribe();
-          this.teamsService.addTeam(team);
-        })
-      )
+      tap((team) => {
+        this.refreshOrganizationDetail().subscribe();
+        this.teamsService.addTeam(team);
+      })
+    );
   }
 
-  addTeamMember(
-    member: Member,
-    orgSlug: string | undefined,
-    teamSlug: string | undefined
-  ) {
-    const url = `${this.url}${orgSlug}/members/${member.id}/teams/${teamSlug}/`;
-    return this.http.post<Team>(url, member).pipe(
+  addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
+    return this.teamsAPIService.addTeamMember(member, orgSlug, teamSlug).pipe(
       tap((team: Team) => {
-        if (orgSlug) {
-          this.teamsService.retrieveTeamMembers(orgSlug, team.slug).toPromise();
-          this.retrieveOrganizationMembers(orgSlug).toPromise();
-        }
+        lastValueFrom(
+          this.teamsService.retrieveTeamMembers(orgSlug, team.slug)
+        );
+        lastValueFrom(this.retrieveOrganizationMembers(orgSlug));
       })
     );
   }
 
   removeTeamMember(memberId: number, teamSlug: string) {
     const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
-    const url = `${this.url}${orgSlug}/members/${memberId}/teams/${teamSlug}/`;
-    return this.http.delete<Team>(url).pipe(
-      tap(() => {
-        this.teamsService.removeMember(memberId);
-      })
+    if (orgSlug) {
+      return this.teamsAPIService
+        .removeTeamMember(memberId, orgSlug, teamSlug)
+        .pipe(
+          tap(() => {
+            this.teamsService.removeMember(memberId);
+          })
+        );
+    } else {
+      return EMPTY;
+    }
+  }
+
+  leaveTeam(teamSlug: string) {
+    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    this.setLeaveTeamLoading(teamSlug);
+    lastValueFrom(
+      this.teamsAPIService.leaveTeam(orgSlug!, teamSlug).pipe(
+        tap((resp) => {
+          this.snackBar.open(`You have left ${resp.slug}`);
+          this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.setLeaveTeamError(error);
+          return EMPTY;
+        })
+      )
     );
   }
 
-  leaveTeam(team: string) {
+  joinTeam(teamSlug: string) {
     const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
-    const url = `${this.url}${orgSlug}/members/me/teams/${team}/`;
-    this.setLeaveTeamLoading(team);
-    return this.http.delete<Team>(url).pipe(
-      tap((resp) => {
-        this.snackBar.open(`You have left ${resp.slug}`);
-        this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.setLeaveTeamError(error);
-        return EMPTY;
-      })
-    );
-  }
-
-  joinTeam(team: string) {
-    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
-    const url = `${this.url}${orgSlug}/members/me/teams/${team}/`;
-    this.setJoinTeamLoading(team);
-    return this.http.post<Team>(url, null).pipe(
-      tap((resp) => {
-        this.snackBar.open(`You joined ${resp.slug}`);
-        this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.setJoinTeamError(error);
-        return EMPTY;
-      })
+    this.setJoinTeamLoading(teamSlug);
+    lastValueFrom(
+      this.teamsAPIService.joinTeam(orgSlug!, teamSlug).pipe(
+        tap((resp) => {
+          this.snackBar.open(`You joined ${resp.slug}`);
+          this.setTeamsView(resp.slug, resp.isMember, resp.memberCount);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.setJoinTeamError(error);
+          return EMPTY;
+        })
+      )
     );
   }
 
