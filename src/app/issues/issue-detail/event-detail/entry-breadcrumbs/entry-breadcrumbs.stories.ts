@@ -1,28 +1,18 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
-import { SharedModule } from "src/app/shared/shared.module";
 import { EntryBreadcrumbsComponent } from "../entry-breadcrumbs/entry-breadcrumbs.component";
 
 import { databaseStackError } from "../test-data/database-stack-error";
 import { breadcrumbError } from "../test-data/breadcrumb-error";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Entry Breadcrumbs",
   component: EntryBreadcrumbsComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
+      imports: [GlitchtipTestingModule],
     }),
   ],
 };

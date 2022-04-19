@@ -1,11 +1,6 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata, Story } from "@storybook/angular";
 import { of } from "rxjs";
 
-import { SharedModule } from "src/app/shared/shared.module";
 import { EntryRequestComponent } from "./entry-request.component";
 
 import { databaseError } from "../test-data/database-error";
@@ -17,19 +12,14 @@ import { stringError } from "../test-data/string-error";
 import { cspError } from "../test-data/csp-error";
 import { pageNotFound } from "../test-data/page-not-found";
 import { socialApp } from "../test-data/social-app";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Entry Request",
   component: EntryRequestComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
+      imports: [GlitchtipTestingModule],
     }),
   ],
   argTypes: {
