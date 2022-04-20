@@ -1,0 +1,52 @@
+name: Scan Yaml Files with Kubelinter
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push on master or pull request events
+  push:
+    branches: [ master ]
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  kubelint-test-k8s-manifests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+  
+      - name: Scan k8s-manifests folder
+        id: kube-lint-scan
+        uses: stackrox/kube-linter-action@v1
+        with:
+          directory: k8s-manifests
+
+  kubelint-test-openshift:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+  
+      - name: Scan openshift folder
+        id: kube-lint-scan-openshift
+        uses: stackrox/kube-linter-action@v1
+        with:
+          directory: openshift
