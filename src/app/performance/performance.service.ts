@@ -51,7 +51,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     this.organizationsService.activeOrganizationProjects$,
     this.transactionGroups$,
   ]).pipe(
-    filter(([projects, groups]) => !!projects && !! groups),
+    filter(([projects, groups]) => !!projects && !!groups),
     map(([projects, groups]) => {
       return groups.map((group) => {
         const projectSlug = projects?.find(
@@ -92,9 +92,19 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     end: string | undefined,
     sort: string | undefined,
     environment: string | undefined,
+    query: string | undefined
   ) {
     lastValueFrom(
-      this.retrieveTransactionGroups(orgSlug, cursor, project, start, end, sort, environment)
+      this.retrieveTransactionGroups(
+        orgSlug,
+        cursor,
+        project,
+        start,
+        end,
+        sort,
+        environment,
+        query
+      )
     );
   }
 
@@ -105,10 +115,11 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     start?: string,
     end?: string,
     sort?: string,
-    environment?: string
+    environment?: string,
+    query?: string
   ) {
     return this.transactionGroupsService
-      .list(orgSlug, cursor, project, start, end, sort, environment)
+      .list(orgSlug, cursor, project, start, end, sort, environment, query)
       .pipe(
         tap((res) => {
           this.setStateAndPagination({ transactionGroups: res.body! }, res);

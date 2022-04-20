@@ -3,7 +3,10 @@
   *ngIf="paginator$ | async as paginator"
 >
   <header class="page-header">
-    <gt-list-title title="Transaction Groups" searchHits="60"></gt-list-title>
+    <gt-list-title
+      title="Transaction Groups"
+      [searchHits]="paginator.count"
+    ></gt-list-title>
   </header>
   <gt-project-filter-bar></gt-project-filter-bar>
   <div>
@@ -23,12 +26,14 @@
             [dateForm]="dateForm"
             [sortForm]="sortForm"
             [environmentForm]="environmentForm"
+            [searchForm]="searchForm"
             [sorts]="sorts"
             [organizationEnvironments]="['production']"
             (dateFormSubmission)="onDateFormSubmit($event)"
             (dateFormReset)="dateFormReset()"
             (sortByChanged)="sortByChanged($event)"
             (filterByEnvironment)="filterByEnvironment($event)"
+            (searchSubmit)="searchSubmit()"
           ></gt-data-filter-bar>
         </th>
       </ng-container>

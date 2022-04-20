@@ -34,6 +34,9 @@ export class TransactionGroupsComponent
   environmentForm = new FormGroup({
     environment: new FormControl({ value: "" }),
   });
+  searchForm = new FormGroup({
+    query: new FormControl(""),
+  });
 
   sorts = [
     { param: "-avg_duration", display: "Slowest" },
@@ -66,7 +69,8 @@ export class TransactionGroupsComponent
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
       const environment: string | undefined = queryParams.environment;
-      return { orgSlug, cursor, project, start, end, sort, environment };
+      const query: string | undefined = queryParams.query;
+      return { orgSlug, cursor, project, start, end, sort, environment, query };
     })
   );
 
@@ -91,7 +95,7 @@ export class TransactionGroupsComponent
     super(performanceService, router, route);
 
     this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, project, start, end, sort, environment }) => {
+      ({ orgSlug, cursor, project, start, end, sort, environment, query }) => {
         if (orgSlug) {
           this.performanceService.getTransactionGroups(
             orgSlug,
@@ -100,7 +104,8 @@ export class TransactionGroupsComponent
             start,
             end,
             sort,
-            environment
+            environment,
+            query
           );
         }
       }
@@ -161,6 +166,16 @@ export class TransactionGroupsComponent
   filterByEnvironment(event: MatSelectChange) {
     this.router.navigate([], {
       queryParams: { cursor: null, environment: event.value },
+      queryParamsHandling: "merge",
+    });
+  }
+
+  searchSubmit() {
+    this.router.navigate([], {
+      queryParams: {
+        query: this.searchForm.value.query,
+        cursor: null,
+      },
       queryParamsHandling: "merge",
     });
   }

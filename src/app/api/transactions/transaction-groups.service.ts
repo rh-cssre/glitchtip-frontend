@@ -22,8 +22,9 @@ export class TransactionGroupsService extends APIBaseService {
     end?: string,
     sort?: string,
     environment?: string,
+    query?: string
   ) {
-    const url = this.listURL(organizationSlug)
+    const url = this.listURL(organizationSlug);
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
@@ -41,7 +42,10 @@ export class TransactionGroupsService extends APIBaseService {
       httpParams = httpParams.set("sort", sort);
     }
     if (environment) {
-        httpParams = httpParams.append("environment", environment);
+      httpParams = httpParams.append("environment", environment);
+    }
+    if (query) {
+      httpParams = httpParams.append("query", query);
     }
     return this.http.get<TransactionGroup[]>(url, {
       observe: "response",
@@ -50,7 +54,9 @@ export class TransactionGroupsService extends APIBaseService {
   }
 
   retrieve(organizationSlug: string, id: string) {
-    return this.http.get<TransactionGroup>(this.detailURL(organizationSlug, id));
+    return this.http.get<TransactionGroup>(
+      this.detailURL(organizationSlug, id)
+    );
   }
 
   protected listURL(organizationSlug: string) {
