@@ -62,7 +62,7 @@ export class TeamsAPIService extends APIBaseService {
     return this.http.delete<Team>(this.userTeamURL(orgSlug, teamSlug));
   }
 
-  protected listURL(orgSlug: string) {
+  private listURL(orgSlug: string) {
     return `${baseUrl}/organizations/${orgSlug}${this.url}`;
   }
 
@@ -70,15 +70,15 @@ export class TeamsAPIService extends APIBaseService {
     return `${baseUrl}${this.url}${orgSlug}/${teamSlug}/`;
   }
 
-  protected userTeamURL(orgSlug: string, teamSlug: string) {
+  private userTeamURL(orgSlug: string, teamSlug: string) {
     return `${baseUrl}/organizations/${orgSlug}/members/me/teams/${teamSlug}/`;
   }
 
-  protected teamMemberURL(memberId: number, orgSlug: string, teamSlug: string) {
+  private teamMemberURL(memberId: number, orgSlug: string, teamSlug: string) {
     return `${baseUrl}/organizations/${orgSlug}/members/${memberId}/teams/${teamSlug}/`;
   }
 
-  protected teamMembersListURL(orgSlug: string, teamSlug: string) {
+  private teamMembersListURL(orgSlug: string, teamSlug: string) {
     return `${baseUrl}${this.url}${orgSlug}/${teamSlug}/members/`;
   }
 }
