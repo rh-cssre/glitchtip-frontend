@@ -7,7 +7,7 @@ import { APIBaseService } from "../api-base.service";
 @Injectable({
   providedIn: "root",
 })
-export class TransactionGroupsService extends APIBaseService {
+export class TransactionGroupsAPIService extends APIBaseService {
   readonly url = "/transaction-groups/";
 
   constructor(protected http: HttpClient) {

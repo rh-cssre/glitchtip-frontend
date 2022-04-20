@@ -3,12 +3,12 @@ import { Injectable } from "@angular/core";
 import { combineLatest, EMPTY, lastValueFrom } from "rxjs";
 import { catchError, filter, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "../api/organizations/organizations.service";
-import { TransactionGroupsService } from "../api/transactions/transaction-groups.service";
+import { TransactionGroupsAPIService } from "../api/transactions/transaction-groups-api.service";
 import {
   Transaction,
   TransactionGroup,
 } from "../api/transactions/transactions.interfaces";
-import { TransactionsService } from "../api/transactions/transactions.service";
+import { TransactionsAPIService } from "../api/transactions/transactions-api.service";
 import {
   initialPaginationState,
   PaginationStatefulService,
@@ -66,8 +66,8 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   );
 
   constructor(
-    private transactionsService: TransactionsService,
-    private transactionGroupsService: TransactionGroupsService,
+    private transactionsService: TransactionsAPIService,
+    private transactionGroupsService: TransactionGroupsAPIService,
     private organizationsService: OrganizationsService
   ) {
     super(initialState);

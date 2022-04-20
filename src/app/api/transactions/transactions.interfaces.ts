@@ -28,6 +28,7 @@ export interface TransactionDetail extends Transaction {
 }
 
 export interface TransactionGroup extends TransactionBase{
+  id: number;
   project: number;
   avgDuration: number;
   transactionCount: number;

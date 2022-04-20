@@ -47,7 +47,8 @@
                 [matTooltip]="group.transaction"
                 matTooltipPosition="above"
                 [matTooltipDisabled]="tooltipDisabled"
-                [routerLink]="[]"
+                [routerLink]="group.id"
+                queryParamsHandling="merge"
                 >{{ group.transaction }}</a
               >
             </div>
