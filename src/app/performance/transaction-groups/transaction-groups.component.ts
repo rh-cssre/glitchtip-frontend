@@ -41,8 +41,6 @@ export class TransactionGroupsComponent
   sorts = [
     { param: "-avg_duration", display: "Slowest" },
     { param: "avg_duration", display: "Fastest" },
-    { param: "-created", display: "Newest Creation Date" },
-    { param: "created", display: "Oldest Creation Date" },
     { param: "-transaction_count", display: "Most Frequent" },
     { param: "transaction_count", display: "Least Frequent" },
   ];
