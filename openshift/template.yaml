@@ -519,10 +519,6 @@ parameters:
     name: GT_WORKER_REPLICAS
     value: "1"
 
-  - description: Django Hash Salt
-    name: SECRET_KEY
-    value: glitchtip-elasticache
-
   - description: RDS secret name
     name: RDS_SECRET_NAME
     value: glitchtip-rds
