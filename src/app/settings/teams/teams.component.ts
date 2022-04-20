@@ -57,10 +57,10 @@ export class TeamsComponent implements OnInit {
   }
 
   leaveTeam(team: string) {
-    this.organizationsService.leaveTeam(team).subscribe();
+    this.organizationsService.leaveTeam(team);
   }
 
   joinTeam(team: string) {
-    this.organizationsService.joinTeam(team).subscribe();
+    this.organizationsService.joinTeam(team);
   }
 }
