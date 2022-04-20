@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
@@ -18,7 +18,7 @@ import {
 })
 export class TransactionGroupsComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>
-  implements OnInit
+  implements OnInit, OnDestroy
 {
   displayedColumns = ["name-and-project", "avgDuration"];
   sortForm = new FormGroup({
@@ -53,6 +53,7 @@ export class TransactionGroupsComponent
   };
 
   routerEventSubscription: Subscription;
+  transactionGroupsDisplaySubscription: Subscription;
   transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
@@ -111,11 +112,12 @@ export class TransactionGroupsComponent
       }
     );
 
-    this.transactionGroupsDisplay$.subscribe((groups) =>
-      groups.length === 0
-        ? this.sortForm.controls.sort.disable()
-        : this.sortForm.controls.sort.enable()
-    );
+    this.transactionGroupsDisplaySubscription =
+      this.transactionGroupsDisplay$.subscribe((groups) =>
+        groups.length === 0
+          ? this.sortForm.controls.sort.disable()
+          : this.sortForm.controls.sort.enable()
+      );
   }
 
   checkIfTooltipIsNecessary($event: Event) {
@@ -178,5 +180,10 @@ export class TransactionGroupsComponent
       },
       queryParamsHandling: "merge",
     });
+  }
+
+  ngOnDestroy() {
+    this.routerEventSubscription.unsubscribe();
+    this.transactionGroupsDisplaySubscription.unsubscribe();
   }
 }
