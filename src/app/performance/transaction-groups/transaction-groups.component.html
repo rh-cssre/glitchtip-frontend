@@ -9,7 +9,7 @@
     ></gt-list-title>
   </header>
   <gt-project-filter-bar></gt-project-filter-bar>
-  <div>
+  <div *ngIf="transactionGroupsDisplay$ | async as transactionGroups">
     <table
       mat-table
       class="mat-elevation-z2"
@@ -116,7 +116,7 @@
         mat-header-row
         class="overlay"
         *matHeaderRowDef="displayedColumns"
-        [class.u-hidden]="false"
+        [class.u-hidden]="transactionGroups.length === 0"
       ></tr>
       <tr
         mat-row
