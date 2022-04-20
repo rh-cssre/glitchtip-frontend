@@ -147,8 +147,8 @@ export class IssuesPageComponent
 
   organizationEnvironments$ = combineLatest([
     this.appliedProjectCount$,
-    this.issuesService.organizationEnvironmentsProcessed$,
-    this.environmentsService.visibleEnvironments$,
+    this.organizationsService.organizationEnvironmentsProcessed$,
+    this.projectEnvironmentsService.visibleEnvironments$,
   ]).pipe(
     map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
       appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
@@ -160,7 +160,7 @@ export class IssuesPageComponent
     protected router: Router,
     protected route: ActivatedRoute,
     private organizationsService: OrganizationsService,
-    private environmentsService: ProjectEnvironmentsService
+    private projectEnvironmentsService: ProjectEnvironmentsService
   ) {
     super(issuesService, router, route);
 
@@ -198,7 +198,7 @@ export class IssuesPageComponent
         distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
         mergeMap(({ orgSlug }) =>
           orgSlug
-            ? this.issuesService.getOrganizationEnvironments(orgSlug)
+            ? this.organizationsService.getOrganizationEnvironments(orgSlug)
             : EMPTY
         )
       )
@@ -221,7 +221,7 @@ export class IssuesPageComponent
             (project) => project.id === parseInt(urlData.project![0], 10)
           );
           if (urlData.orgSlug && matchedProject) {
-            this.environmentsService
+            this.projectEnvironmentsService
               .retrieveEnvironmentsWithProperties(
                 urlData.orgSlug,
                 matchedProject.slug
@@ -237,7 +237,7 @@ export class IssuesPageComponent
      * in the URL. If it doesn't match a project environment, reset the URL.
      */
     this.resetEnvironmentSubscription = combineLatest([
-      this.environmentsService.visibleEnvironmentsLoaded$,
+      this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
       this.route.queryParams,
     ])
       .pipe(
@@ -299,7 +299,7 @@ export class IssuesPageComponent
     this.resetEnvironmentSubscription.unsubscribe();
     this.searchDirectHitSubscription.unsubscribe();
     this.issuesService.clearState();
-    this.environmentsService.clearState();
+    this.projectEnvironmentsService.clearState();
   }
 
   onDateFormSubmit(queryParams: object) {
@@ -371,7 +371,7 @@ export class IssuesPageComponent
 
   sortByChanged(event: MatSelectChange) {
     this.router.navigate([], {
-      queryParams: { sort: event.value },
+      queryParams: { cursor: null, sort: event.value },
       queryParamsHandling: "merge",
     });
   }

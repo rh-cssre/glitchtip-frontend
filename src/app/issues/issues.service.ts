@@ -15,14 +15,11 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
-import { Environment } from "../api/organizations/organizations.interface";
-import { OrganizationAPIService } from "../api/organizations/organizations-api.service";
 
 export interface IssuesState extends PaginationStatefulServiceState {
   issues: Issue[];
   directHit?: IssueWithMatchingEvent;
   selectedIssues: number[];
-  organizationEnvironments: Environment[];
   selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
   areIssuesForProjectSelected: boolean;
   errors: string[];
@@ -32,7 +29,6 @@ const initialState: IssuesState = {
   issues: [],
   selectedIssues: [],
   pagination: initialPaginationState,
-  organizationEnvironments: [],
   selectedProjectInfo: {},
   areIssuesForProjectSelected: false,
   errors: [],
@@ -72,9 +68,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   readonly thereAreSelectedIssues$ = this.selectedIssues$.pipe(
     map((selectedIssues) => selectedIssues.length > 0)
   );
-  readonly organizationEnvironments$ = this.getState$.pipe(
-    map((data) => data.organizationEnvironments)
-  );
   readonly numberOfSelectedIssues$ = this.getState$.pipe(
     map((state) => state.selectedIssues.length)
   );
@@ -82,28 +75,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     map((state) => state.selectedProjectInfo)
   );
   readonly errors$ = this.getState$.pipe(map((state) => state.errors));
-  /**
-   * Uses reducer to remove duplicate environments, also converts objects to a
-   * list of names since that's all that the component requires
-   */
-  readonly organizationEnvironmentsProcessed$ = this.organizationEnvironments$.pipe(
-    map((environments) =>
-      environments.reduce(
-        (accumulator, environment) => [
-          ...accumulator,
-          ...(!accumulator.includes(environment.name)
-            ? [environment.name]
-            : []),
-        ],
-        [] as string[]
-      )
-    )
-  );
 
   constructor(
     private snackbar: MatSnackBar,
-    private issuesAPIService: IssuesAPIService,
-    private organizationsAPIService: OrganizationAPIService
+    private issuesAPIService: IssuesAPIService
   ) {
     super(initialState);
   }
@@ -129,10 +104,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       sort,
       environment
     ).toPromise();
-  }
-
-  getOrganizationEnvironments(orgSlug: string) {
-    return this.retrieveOrganizationEnvironments(orgSlug);
   }
 
   toggleSelected(issueId: number) {
@@ -235,10 +206,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
           ) {
             directHit = res.body![0] as IssueWithMatchingEvent;
           }
-          this.setStateAndPagination(
-            { issues: res.body!, directHit },
-            res
-          );
+          this.setStateAndPagination({ issues: res.body!, directHit }, res);
         }),
         catchError((err: HttpErrorResponse) => {
           this.setIssuesError(err);
@@ -322,19 +290,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         initialLoadComplete: true,
       },
     });
-  }
-
-  private retrieveOrganizationEnvironments(orgSlug: string) {
-    return this.organizationsAPIService
-      .retrieveOrganizationEnvironments(orgSlug)
-      .pipe(
-        tap((environments) => {
-          this.setState({
-            directHit: undefined,
-            organizationEnvironments: environments,
-          });
-        })
-      );
   }
 
   private updateErrorMessage(err: HttpErrorResponse): string[] {

@@ -55,12 +55,16 @@
                   </div>
                   <div class="display-bar">
                     <div
+                      class="error-event"
+                      style="width: {{ eventsPercent.errorEvents }}%"
+                    ></div>
+                    <div
                       class="uptime-event"
                       style="width: {{ eventsPercent.uptimeEvents }}%"
                     ></div>
                     <div
-                      class="error-event"
-                      style="width: {{ eventsPercent.errorEvents }}%"
+                      class="transaction-event"
+                      style="width: {{ eventsPercent.transactionEvents }}%"
                     ></div>
                   </div>
                   <ng-container *ngIf="eventsCountWithTotal$ | async as count">
@@ -77,12 +81,16 @@
                     <div>
                       <ul>
                         <li>
+                          <b class="error">Issue events:</b>
+                          {{ count.eventCount }}
+                        </li>
+                        <li>
                           <b class="uptime">Uptime events:</b>
                           {{ count.uptimeCheckEventCount }}
                         </li>
                         <li>
-                          <b class="error">Error events:</b>
-                          {{ count.eventCount }}
+                          <b class="performance">Performance events:</b>
+                          {{ count.transactionEventCount }}
                         </li>
                         <li>
                           Total events used in billing period: {{ count.total }}

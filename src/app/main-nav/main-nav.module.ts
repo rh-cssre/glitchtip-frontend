@@ -8,6 +8,6 @@ import { MaterialModule } from "../shared/material.module";
 @NgModule({
   declarations: [MainNavComponent],
   imports: [CommonModule, RouterModule, MaterialModule],
-  exports: [MainNavComponent]
+  exports: [MainNavComponent],
 })
 export class MainNavModule {}

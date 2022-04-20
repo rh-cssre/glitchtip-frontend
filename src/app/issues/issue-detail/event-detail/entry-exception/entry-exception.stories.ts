@@ -1,11 +1,7 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { moduleMetadata, Story } from "@storybook/angular";
 import { of } from "rxjs";
 
-import { SharedModule } from "src/app/shared/shared.module";
 import { EntryExceptionComponent } from "./entry-exception.component";
 import { FrameTitleComponent } from "../entry-exception/frame-title/frame-title.component";
 import { FrameExpandedComponent } from "../entry-exception/frame-expanded/frame-expanded.component";
@@ -20,19 +16,14 @@ import { stringError } from "../test-data/string-error";
 import { socialApp } from "../test-data/social-app";
 import { zeroDivisionDotnet } from "../test-data/zero-division-dotnet";
 import { stacktraceUndefined } from "../test-data/stacktrace-undefined";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Entry Exception",
   component: EntryExceptionComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
+      imports: [GlitchtipTestingModule, MatExpansionModule],
       declarations: [
         FrameTitleComponent,
         FrameExpandedComponent,
