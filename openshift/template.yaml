@@ -61,6 +61,11 @@ objects:
                     secretKeyRef:
                       name: redis-credentials
                       key: redis.url
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: glitchtip-secret
+                      key: PASSWORD_HASH_TOKEN
                 - name: REDIS_PORT
                   valueFrom:
                     secretKeyRef:
@@ -405,7 +410,7 @@ parameters:
     displayName: ENABLE_OPEN_USER_REGISTRATION
     required: true
     name: ENABLE_OPEN_USER_REGISTRATION
-    value: "True"
+    value: "true"
 
   - description: I_PAID_FOR_GLITCHTIP
     displayName: I_PAID_FOR_GLITCHTIP
@@ -513,10 +518,6 @@ parameters:
     required: true
     name: GT_WORKER_REPLICAS
     value: "1"
-
-  - description: Elastic cache secret name
-    name: EC_SECRET_NAME
-    value: glitchtip-elasticache
 
   - description: RDS secret name
     name: RDS_SECRET_NAME
