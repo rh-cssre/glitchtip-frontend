@@ -61,6 +61,11 @@ objects:
                     secretKeyRef:
                       name: redis-credentials
                       key: redis.url
+                - name: SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: glitchtip-secret
+                      key: PASSWORD_HASH_TOKEN
                 - name: REDIS_PORT
                   valueFrom:
                     secretKeyRef:
@@ -514,8 +519,8 @@ parameters:
     name: GT_WORKER_REPLICAS
     value: "1"
 
-  - description: Elastic cache secret name
-    name: EC_SECRET_NAME
+  - description: Django Hash Salt
+    name: SECRET_KEY
     value: glitchtip-elasticache
 
   - description: RDS secret name
