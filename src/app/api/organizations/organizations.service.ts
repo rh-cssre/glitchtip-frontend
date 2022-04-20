@@ -28,6 +28,7 @@ import {
   first,
 } from "rxjs/operators";
 import {
+  Environment,
   Organization,
   OrganizationDetail,
   Member,
@@ -39,7 +40,8 @@ import { SettingsService } from "../settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { TeamsService } from "../teams/teams.service";
 import { Team } from "../teams/teams.interfaces";
-import { MembersAPIService } from "./members-api.service"
+import { EnvironmentsAPIService } from "../environments/environments-api.service";
+import { MembersAPIService } from "./members-api.service";
 import { OrganizationAPIService } from "./organizations-api.service";
 import { TeamsAPIService } from "../teams/teams-api.service";
 
@@ -49,6 +51,7 @@ interface OrganizationsState {
   activeOrganization: OrganizationDetail | null;
   organizationMembers: Member[];
   organizationTeams: Team[];
+  organizationEnvironments: Environment[];
   errors: OrganizationErrors;
   loading: OrganizationLoading;
   /** Has organizations loaded the first time? */
@@ -61,6 +64,7 @@ const initialState: OrganizationsState = {
   activeOrganization: null,
   organizationMembers: [],
   organizationTeams: [],
+  organizationEnvironments: [],
   errors: {
     addTeamMember: "",
     removeTeamMember: "",
@@ -168,6 +172,25 @@ export class OrganizationsService {
     filter(([orgTeams, selectedOrgTeams]) => orgTeams === selectedOrgTeams)
   );
 
+  readonly organizationEnvironments$ = this.getState$.pipe(
+    map((data) => data.organizationEnvironments)
+  );
+
+  readonly organizationEnvironmentsProcessed$ =
+    this.organizationEnvironments$.pipe(
+      map((environments) =>
+        environments.reduce(
+          (accumulator, environment) => [
+            ...accumulator,
+            ...(!accumulator.includes(environment.name)
+              ? [environment.name]
+              : []),
+          ],
+          [] as string[]
+        )
+      )
+    );
+
   readonly errors$ = this.getState$.pipe(map((data) => data.errors));
   readonly loading$ = this.getState$.pipe(map((data) => data.loading));
   /**
@@ -193,6 +216,7 @@ export class OrganizationsService {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private environmentsAPIService: EnvironmentsAPIService,
     private membersAPIService: MembersAPIService,
     private organizationAPIService: OrganizationAPIService,
     private snackBar: MatSnackBar,
@@ -397,7 +421,8 @@ export class OrganizationsService {
       .pipe(
         take(1),
         mergeMap((orgSlug) =>
-          this.membersAPIService.inviteUser(orgSlug!, data)
+          this.membersAPIService
+            .inviteUser(orgSlug!, data)
             .pipe(map((response) => ({ response, orgSlug })))
         ),
         tap(({ response, orgSlug }) => {
@@ -504,6 +529,18 @@ export class OrganizationsService {
 
   updateTeam(id: number, newSlug: string) {
     this.updateTeamSlug(id, newSlug);
+  }
+
+  getOrganizationEnvironments(orgSlug: string) {
+    return this.retrieveOrganizationEnvironments(orgSlug);
+  }
+
+  private retrieveOrganizationEnvironments(orgSlug: string) {
+    return this.environmentsAPIService.list(orgSlug).pipe(
+      tap((environments) => {
+        this.setOrganizationEnvironments(environments);
+      })
+    );
   }
 
   clearErrorState() {
@@ -708,6 +745,13 @@ export class OrganizationsService {
         },
       });
     }
+  }
+
+  private setOrganizationEnvironments(environments: Environment[]) {
+    this.organizationsState.next({
+      ...this.organizationsState.getValue(),
+      organizationEnvironments: environments,
+    });
   }
 
   private getOrganizationDetail(slug: string) {

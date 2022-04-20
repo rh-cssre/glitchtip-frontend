@@ -18,7 +18,6 @@ import {
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "../utils";
-import { EnvironmentsService } from "src/app/api/environments/environments.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
@@ -148,7 +147,7 @@ export class IssuesPageComponent
 
   organizationEnvironments$ = combineLatest([
     this.appliedProjectCount$,
-    this.environmentsService.organizationEnvironmentsProcessed$,
+    this.organizationsService.organizationEnvironmentsProcessed$,
     this.projectEnvironmentsService.visibleEnvironments$,
   ]).pipe(
     map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
@@ -161,7 +160,6 @@ export class IssuesPageComponent
     protected router: Router,
     protected route: ActivatedRoute,
     private organizationsService: OrganizationsService,
-    private environmentsService: EnvironmentsService,
     private projectEnvironmentsService: ProjectEnvironmentsService
   ) {
     super(issuesService, router, route);
@@ -200,7 +198,7 @@ export class IssuesPageComponent
         distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
         mergeMap(({ orgSlug }) =>
           orgSlug
-            ? this.environmentsService.getOrganizationEnvironments(orgSlug)
+            ? this.organizationsService.getOrganizationEnvironments(orgSlug)
             : EMPTY
         )
       )
