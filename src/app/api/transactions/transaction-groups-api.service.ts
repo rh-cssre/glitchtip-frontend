@@ -53,9 +53,9 @@ export class TransactionGroupsAPIService extends APIBaseService {
     });
   }
 
-  retrieve(organizationSlug: string, id: string) {
+  retrieve(id: number, organizationSlug: string) {
     return this.http.get<TransactionGroup>(
-      this.detailURL(organizationSlug, id)
+      this.detailURL(id, organizationSlug)
     );
   }
 
@@ -63,7 +63,7 @@ export class TransactionGroupsAPIService extends APIBaseService {
     return `${baseUrl}/organizations/${organizationSlug}${this.url}`;
   }
 
-  protected detailURL(organizationSlug: string, id: string) {
+  protected detailURL(id: number, organizationSlug: string) {
     return `${this.listURL(organizationSlug)}${id}/`;
   }
 }

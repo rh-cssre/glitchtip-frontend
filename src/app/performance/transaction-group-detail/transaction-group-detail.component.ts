@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, EMPTY } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { exhaustMap, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { TransactionGroupDetailService } from "./transaction-group-detail.service";
 
@@ -12,6 +12,9 @@ import { TransactionGroupDetailService } from "./transaction-group-detail.servic
 })
 export class TransactionGroupDetailComponent implements OnInit {
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$
+  organization$ = this.organizationsService.activeOrganization$;
+  initialLoadComplete$ = this.transactionGroupDetailService.transactionGroupInitialLoadComplete$
+  transactionGroup$ = this.transactionGroupDetailService.transactionGroup$
   transactionGroupIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("transaction-group-id"))
   );
@@ -29,10 +32,10 @@ export class TransactionGroupDetailComponent implements OnInit {
     ])
       .pipe(
         tap(() => this.transactionGroupDetailService.clearState()),
-        map(([orgSlug, groupId]) => {
+        exhaustMap(([orgSlug, groupId]) => {
           if (orgSlug && groupId) {
-            return this.transactionGroupDetailService.getTransactionGroup(
-              orgSlug, groupId
+            return this.transactionGroupDetailService.retrieveTransactionGroup(
+              orgSlug, parseInt(groupId)
             );
           }
           return EMPTY;

@@ -1,1 +1,113 @@
-<p>transaction-group-detail works!</p>
+<section
+  class="l-body l-body--full-width"
+  *ngIf="(initialLoadComplete$ | async) && (transactionGroup$ | async) === null"
+>
+  <mat-card
+    class="auth-form transaction-group-404"
+    *ngIf="organization$ | async as organization"
+  >
+    <h1 class="mat-display-1">Transaction group not found</h1>
+    <p class="mat-body-1">
+      This may be because the URL is pointing to a transaction group that doesn't exist or
+      was deleted.
+    </p>
+    <p class="mat-body-1">
+      It's also possible that this transaction group was reported to a project that you are
+      not able to access.
+    </p>
+    <a
+      mat-flat-button
+      color="primary"
+      class="transaction-groups-link"
+      [routerLink]="['..']"
+    >
+      View all transaction groups in {{ organization.name }}
+    </a>
+  </mat-card>
+</section>
+<!-- <section class="l-body l-body--full-width" *ngIf="issue$ | async as issue">
+  <header>
+    <a
+      mat-stroked-button
+      class="project-issues-link"
+      [routerLink]="['..']"
+      [queryParams]="generateBackLink(issue.project.id)"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      View all issues for {{ issue.project.name }}
+    </a>
+    <div class="header-group">
+      <gt-issue-detail-title
+        [issueType]="issue?.type"
+        [culprit]="issue?.culprit"
+        [metadata]="issue?.metadata"
+      ></gt-issue-detail-title>
+      <div class="button-row">
+        <button
+          *ngIf="issue?.status === 'unresolved'"
+          mat-flat-button
+          color="primary"
+          (click)="markResolved()"
+        >
+          <mat-icon aria-hidden="true">done</mat-icon>
+          Resolve
+        </button>
+        <button
+          *ngIf="issue?.status === 'resolved'"
+          mat-flat-button
+          color="primary"
+          (click)="markUnresolved()"
+        >
+          <mat-icon aria-hidden="true">done</mat-icon>
+          Reopen
+        </button>
+        <button mat-stroked-button (click)="markIgnored()">Ignore</button>
+        <button mat-icon-button (click)="deleteIssue(issue?.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <p class="mat-body-1" *ngIf="issue.status === 'resolved'">
+      This issue has been marked as resolved.
+    </p>
+    <p class="mat-body-1" *ngIf="issue.status === 'ignored'">
+      This issue is being ignored. You will not be notified of any changes and
+      it will not show up by default in the issues page.
+    </p>
+  </header>
+
+  <div class="row">
+    <mat-card class="event-detail-card left">
+      
+    </mat-card>
+    <aside class="right">
+      <mat-card>
+        <dl>
+          <div>
+            <dt class="mat-caption">Issue #</dt>
+            <dd class="mat-body-1">{{ issue?.shortId }}</dd>
+          </div>
+          <div>
+            <dt class="mat-caption">Events</dt>
+            <dd class="mat-body-1">{{ issue?.count }}</dd>
+          </div>
+          <div>
+            <dt class="mat-caption">First Seen</dt>
+            <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
+            <dd class="mat-caption">
+              {{ issue?.firstSeen | date: "long" }}
+            </dd>
+          </div>
+          <div>
+            <dt class="mat-caption">Last Seen</dt>
+            <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
+            <dd class="mat-caption">
+              {{ issue?.lastSeen | date: "long" }}
+            </dd>
+          </div>
+        </dl>
+      </mat-card>
+      <gt-issue-detail-tags></gt-issue-detail-tags>
+    </aside>
+  </div>
+</section> -->
