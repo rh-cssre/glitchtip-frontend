@@ -410,7 +410,7 @@ parameters:
     displayName: ENABLE_OPEN_USER_REGISTRATION
     required: true
     name: ENABLE_OPEN_USER_REGISTRATION
-    value: "True"
+    value: "true"
 
   - description: I_PAID_FOR_GLITCHTIP
     displayName: I_PAID_FOR_GLITCHTIP
