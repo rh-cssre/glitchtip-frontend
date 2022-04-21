@@ -15,8 +15,7 @@ export class TransactionGroupDetailComponent implements OnInit {
   organization$ = this.organizationsService.activeOrganization$;
   initialLoadComplete$ =
     this.transactionGroupDetailService.transactionGroupInitialLoadComplete$;
-  transactionGroup$ =
-    this.transactionGroupDetailService.transactionGroup$;
+  transactionGroup$ = this.transactionGroupDetailService.transactionGroup$;
   transactionGroupIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("transaction-group-id"))
   );

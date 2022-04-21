@@ -40,7 +40,6 @@
   </header>
 
   <div class="row">
-    <mat-card class="detail-card left"> </mat-card>
     <aside class="right">
       <mat-card>
         <dl>
@@ -54,20 +53,14 @@
             <dt class="mat-caption">Transaction Count</dt>
             <dd class="mat-body-1">{{ group.transactionCount }}</dd>
           </div>
-          <!-- <div>
-            <dt class="mat-caption">First Seen</dt>
-            <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
-            <dd class="mat-caption">
-              {{ issue?.firstSeen | date: "long" }}
-            </dd>
+          <div>
+            <dt class="mat-caption">Operation</dt>
+            <dd class="mat-body-1">{{ group.op }}</dd>
           </div>
           <div>
-            <dt class="mat-caption">Last Seen</dt>
-            <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
-            <dd class="mat-caption">
-              {{ issue?.lastSeen | date: "long" }}
-            </dd> -->
-          <!-- </div> -->
+            <dt *ngIf="group.method" class="mat-caption">Method</dt>
+            <dd class="mat-body-1">{{ group.method }}</dd>
+          </div>
         </dl>
       </mat-card>
     </aside>

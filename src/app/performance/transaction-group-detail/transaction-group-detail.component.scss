@@ -23,14 +23,6 @@ header {
       flex-direction: column;
     }
   }
-
-  .button-row button {
-    margin-right: 8px;
-  }
-
-  gt-issue-detail-title {
-    margin-right: 20px;
-  }
 }
 
 .row {
@@ -58,6 +50,18 @@ header {
       width: 100%;
       margin-bottom: 30px;
     }
+  }
+}
+
+.detail-card {
+  margin-right: 16px;
+
+  @media screen and (max-width: $medium - 1) {
+    margin-right: 0;
+  }
+
+  > .tabbed-nav {
+    margin: -16px -16px 16px;
   }
 }
 
