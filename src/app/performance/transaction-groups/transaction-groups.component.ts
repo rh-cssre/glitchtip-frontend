@@ -53,9 +53,9 @@ export class TransactionGroupsComponent
   routerEventSubscription: Subscription;
   transactionGroupsDisplaySubscription: Subscription;
   transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
-  errors$ = this.performanceService.errors$
-  loading$ = this.performanceService.loading$
-  initialLoadComplete$ = this.performanceService.initialLoadComplete$
+  errors$ = this.performanceService.errors$;
+  loading$ = this.performanceService.loading$;
+  initialLoadComplete$ = this.performanceService.initialLoadComplete$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {

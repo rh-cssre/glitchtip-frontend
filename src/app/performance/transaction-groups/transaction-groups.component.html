@@ -132,7 +132,7 @@
                 (loading$ | async) === false
               "
             >
-              <ng-container *ngIf="(errors$ | async)?.length;">
+              <ng-container *ngIf="(errors$ | async)?.length; else noResults">
                 <ng-container
                   *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
                   ><h3 class="mat-display-1">
@@ -147,6 +147,9 @@
                   <li *ngFor="let error of errors$ | async">{{ error }}</li>
                 </ul>
               </ng-container>
+              <ng-template #noResults>
+                No transaction groups were found.
+              </ng-template>
             </ng-container>
           </div>
         </td>
