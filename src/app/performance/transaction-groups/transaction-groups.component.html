@@ -25,14 +25,11 @@
           <gt-data-filter-bar
             [dateForm]="dateForm"
             [sortForm]="sortForm"
-            [environmentForm]="environmentForm"
             [searchForm]="searchForm"
             [sorts]="sorts"
-            [organizationEnvironments]="['production']"
             (dateFormSubmission)="onDateFormSubmit($event)"
             (dateFormReset)="dateFormReset()"
             (sortByChanged)="sortByChanged($event)"
-            (filterByEnvironment)="filterByEnvironment($event)"
             (searchSubmit)="searchSubmit()"
           ></gt-data-filter-bar>
         </th>
