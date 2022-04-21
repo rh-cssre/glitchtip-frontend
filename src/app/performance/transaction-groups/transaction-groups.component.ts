@@ -130,12 +130,16 @@ export class TransactionGroupsComponent
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
       const sort: string | undefined = this.route.snapshot.queryParams.sort;
+      const query: string | undefined = this.route.snapshot.queryParams.query;
       this.sortForm.setValue({
         sort: sort !== undefined ? sort : "created",
       });
       this.dateForm.setValue({
         startDate: start ? start : null,
         endDate: end ? end : null,
+      });
+      this.searchForm.setValue({
+        query: query !== undefined ? query : "",
       });
     });
   }
