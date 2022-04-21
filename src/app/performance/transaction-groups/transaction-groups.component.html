@@ -25,14 +25,11 @@
           <gt-data-filter-bar
             [dateForm]="dateForm"
             [sortForm]="sortForm"
-            [environmentForm]="environmentForm"
             [searchForm]="searchForm"
             [sorts]="sorts"
-            [organizationEnvironments]="['production']"
             (dateFormSubmission)="onDateFormSubmit($event)"
             (dateFormReset)="dateFormReset()"
             (sortByChanged)="sortByChanged($event)"
-            (filterByEnvironment)="filterByEnvironment($event)"
             (searchSubmit)="searchSubmit()"
           ></gt-data-filter-bar>
         </th>
@@ -124,6 +121,37 @@
         *matRowDef="let row; columns: displayedColumns"
         class="monitor-row"
       ></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <div class="empty-states">
+            <ng-container
+              *ngIf="
+                (initialLoadComplete$ | async) === true &&
+                (loading$ | async) === false
+              "
+            >
+              <ng-container *ngIf="(errors$ | async)?.length; else noResults">
+                <ng-container
+                  *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
+                  ><h3 class="mat-display-1">
+                    There was an error processing your request
+                  </h3></ng-container
+                ><ng-template #multipleErrors
+                  ><h3 class="mat-display-1">
+                    There were errors while processing your request
+                  </h3></ng-template
+                >
+                <ul>
+                  <li *ngFor="let error of errors$ | async">{{ error }}</li>
+                </ul>
+              </ng-container>
+              <ng-template #noResults>
+                No transaction groups were found.
+              </ng-template>
+            </ng-container>
+          </div>
+        </td>
+      </tr>
       <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
     </table>
   </div>

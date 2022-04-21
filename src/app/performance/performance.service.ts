@@ -1,14 +1,12 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { combineLatest, EMPTY, lastValueFrom } from "rxjs";
+import { combineLatest, EMPTY } from "rxjs";
 import { catchError, filter, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { TransactionGroupsAPIService } from "../api/transactions/transaction-groups-api.service";
 import {
-  Transaction,
   TransactionGroup,
 } from "../api/transactions/transactions.interfaces";
-import { TransactionsAPIService } from "../api/transactions/transactions-api.service";
 import {
   initialPaginationState,
   PaginationStatefulService,
@@ -16,13 +14,11 @@ import {
 } from "../shared/stateful-service/pagination-stateful-service";
 
 export interface PerformanceState extends PaginationStatefulServiceState {
-  transactions: Transaction[];
   transactionGroups: TransactionGroup[];
   errors: string[];
 }
 
 const initialState: PerformanceState = {
-  transactions: [],
   transactionGroups: [],
   errors: [],
   pagination: initialPaginationState,
@@ -32,19 +28,8 @@ const initialState: PerformanceState = {
   providedIn: "root",
 })
 export class PerformanceService extends PaginationStatefulService<PerformanceState> {
-  transactions$ = this.getState$.pipe(map((state) => state.transactions));
   transactionGroups$ = this.getState$.pipe(
     map((state) => state.transactionGroups)
-  );
-  transactionsWithDelta$ = this.transactions$.pipe(
-    map((transactions) =>
-      transactions.map((transaction) => ({
-        ...transaction,
-        delta:
-          new Date(transaction.timestamp).getTime() -
-          new Date(transaction.startTimestamp).getTime(),
-      }))
-    )
   );
 
   transactionGroupsDisplay$ = combineLatest([
@@ -65,23 +50,13 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     })
   );
 
+  errors$ = this.getState$.pipe(map((state) => state.errors));
+
   constructor(
-    private transactionsService: TransactionsAPIService,
-    private transactionGroupsService: TransactionGroupsAPIService,
+    private transactionGroupsAPIService: TransactionGroupsAPIService,
     private organizationsService: OrganizationsService
   ) {
     super(initialState);
-  }
-
-  getTransactions(orgSlug: string, cursor?: string | undefined) {
-    this.transactionsService
-      .list(orgSlug, cursor)
-      .pipe(
-        tap((res) =>
-          this.setStateAndPagination({ transactions: res.body! }, res)
-        )
-      )
-      .toPromise();
   }
 
   getTransactionGroups(
@@ -94,18 +69,16 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     environment: string | undefined,
     query: string | undefined
   ) {
-    lastValueFrom(
-      this.retrieveTransactionGroups(
-        orgSlug,
-        cursor,
-        project,
-        start,
-        end,
-        sort,
-        environment,
-        query
-      )
-    );
+    this.retrieveTransactionGroups(
+      orgSlug,
+      cursor,
+      project,
+      start,
+      end,
+      sort,
+      environment,
+      query
+    ).subscribe();
   }
 
   private retrieveTransactionGroups(
@@ -118,7 +91,8 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     environment?: string,
     query?: string
   ) {
-    return this.transactionGroupsService
+    this.setLoadingStart();
+    return this.transactionGroupsAPIService
       .list(orgSlug, cursor, project, start, end, sort, environment, query)
       .pipe(
         tap((res) => {
@@ -150,5 +124,17 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     } else {
       return [err.message];
     }
+  }
+
+  private setLoadingStart() {
+    const state = this.state.getValue();
+    this.setState({
+      errors: [],
+      pagination: {
+        ...state.pagination,
+        loading: true,
+        initialLoadComplete: false,
+      },
+    });
   }
 }
