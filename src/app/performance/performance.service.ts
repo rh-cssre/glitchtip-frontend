@@ -4,9 +4,7 @@ import { combineLatest, EMPTY } from "rxjs";
 import { catchError, filter, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { TransactionGroupsAPIService } from "../api/transactions/transaction-groups-api.service";
-import {
-  TransactionGroup,
-} from "../api/transactions/transactions.interfaces";
+import { TransactionGroup } from "../api/transactions/transactions.interfaces";
 import {
   initialPaginationState,
   PaginationStatefulService,
@@ -53,7 +51,11 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   errors$ = this.getState$.pipe(map((state) => state.errors));
 
   constructor(
+<<<<<<< HEAD
     private transactionGroupsAPIService: TransactionGroupsAPIService,
+=======
+    private transactionGroupsService: TransactionGroupsService,
+>>>>>>> transaction-groups-continued
     private organizationsService: OrganizationsService
   ) {
     super(initialState);
@@ -92,7 +94,11 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     query?: string
   ) {
     this.setLoadingStart();
+<<<<<<< HEAD
     return this.transactionGroupsAPIService
+=======
+    return this.transactionGroupsService
+>>>>>>> transaction-groups-continued
       .list(orgSlug, cursor, project, start, end, sort, environment, query)
       .pipe(
         tap((res) => {
