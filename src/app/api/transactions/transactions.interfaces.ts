@@ -24,10 +24,10 @@ export interface Transaction extends TransactionBase {
 }
 
 export interface TransactionDetail extends Transaction {
-  spans: Span[]
+  spans: Span[];
 }
 
-export interface TransactionGroup extends TransactionBase{
+export interface TransactionGroup extends TransactionBase {
   project: number;
   avgDuration: string;
   transactionCount: number;

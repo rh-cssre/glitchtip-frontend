@@ -48,9 +48,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     })
   );
 
-  errors$ = this.getState$.pipe(
-    map((state) => state.errors)
-  );
+  errors$ = this.getState$.pipe(map((state) => state.errors));
 
   constructor(
     private transactionGroupsService: TransactionGroupsService,
@@ -69,16 +67,16 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     environment: string | undefined,
     query: string | undefined
   ) {
-      this.retrieveTransactionGroups(
-        orgSlug,
-        cursor,
-        project,
-        start,
-        end,
-        sort,
-        environment,
-        query
-      ).subscribe()
+    this.retrieveTransactionGroups(
+      orgSlug,
+      cursor,
+      project,
+      start,
+      end,
+      sort,
+      environment,
+      query
+    ).subscribe();
   }
 
   private retrieveTransactionGroups(
