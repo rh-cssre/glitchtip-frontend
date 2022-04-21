@@ -1,7 +1,80 @@
+@import "variables";
+
 .transaction-group-404 h1 {
   text-align: left;
 }
 
 .transaction-groups-link {
   margin: 0 0 20px;
+}
+
+header {
+  margin: -16px 0 5px;
+
+  @media screen and (max-width: $tablet - 1) {
+    margin-bottom: 20px;
+  }
+
+  .header-group {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: $tablet - 1) {
+      flex-direction: column;
+    }
+  }
+
+  .button-row button {
+    margin-right: 8px;
+  }
+
+  gt-issue-detail-title {
+    margin-right: 20px;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+
+  @media screen and (max-width: $medium - 1) {
+    flex-direction: column-reverse;
+  }
+
+  .left {
+    flex: 75%;
+    overflow: hidden;
+
+    @media screen and (max-width: $medium - 1) {
+      width: 100%;
+    }
+  }
+
+  .right {
+    flex: 25%;
+
+    @media screen and (max-width: $medium - 1) {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+  }
+}
+
+dl {
+  margin-top: 0;
+
+  > div {
+    margin-bottom: 15px;
+  }
+
+  dt {
+    font-weight: 500;
+    opacity: 0.54;
+    margin: 2px 0;
+  }
+
+  dd {
+    margin: 0;
+  }
 }

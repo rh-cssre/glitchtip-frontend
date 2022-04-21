@@ -11,10 +11,12 @@ import { TransactionGroupDetailService } from "./transaction-group-detail.servic
   styleUrls: ["./transaction-group-detail.component.scss"],
 })
 export class TransactionGroupDetailComponent implements OnInit {
-  activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$
+  activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
   organization$ = this.organizationsService.activeOrganization$;
-  initialLoadComplete$ = this.transactionGroupDetailService.transactionGroupInitialLoadComplete$
-  transactionGroup$ = this.transactionGroupDetailService.transactionGroup$
+  initialLoadComplete$ =
+    this.transactionGroupDetailService.transactionGroupInitialLoadComplete$;
+  transactionGroup$ =
+    this.transactionGroupDetailService.transactionGroup$;
   transactionGroupIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("transaction-group-id"))
   );
@@ -26,21 +28,26 @@ export class TransactionGroupDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    combineLatest([
-      this.activeOrganizationSlug$,
-      this.transactionGroupIdParam$
-    ])
+    combineLatest([this.activeOrganizationSlug$, this.transactionGroupIdParam$])
       .pipe(
         tap(() => this.transactionGroupDetailService.clearState()),
         exhaustMap(([orgSlug, groupId]) => {
           if (orgSlug && groupId) {
             return this.transactionGroupDetailService.retrieveTransactionGroup(
-              orgSlug, parseInt(groupId)
+              orgSlug,
+              parseInt(groupId)
             );
           }
           return EMPTY;
         })
       )
       .subscribe();
+  }
+
+  generateBackLink(projectId: string) {
+    return {
+      ...this.route.snapshot.queryParams,
+      project: projectId,
+    };
   }
 }

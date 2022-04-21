@@ -25,6 +25,22 @@ export class TransactionGroupDetailService extends StatefulService<TransactionGr
   readonly transactionGroup$ = this.getState$.pipe(
     map((state) => state.transactionGroup)
   );
+  // readonly transactionGroupDisplay$ = combineLatest([
+  //   this.organizationsService.activeOrganizationProjects$,
+  //   this.transactionGroup$,
+  // ]).pipe(
+  //   filter(([projects, group]) => !!projects && !!group),
+  //   map(([projects, group]) => {
+  //     const projectSlug = projects?.find(
+  //       (project) => project.id === group?.project
+  //     )?.slug;
+  //     return {
+  //       ...group,
+  //       projectSlug,
+  //     };
+  //   })
+  // );
+
   readonly transactionGroupLoading$ = this.getState$.pipe(
     map((state) => state.transactionGroupLoading)
   );
@@ -38,10 +54,7 @@ export class TransactionGroupDetailService extends StatefulService<TransactionGr
     super(initialState);
   }
 
-  retrieveTransactionGroup(
-    orgSlug: string,
-    transactionGroupId: number
-  ) {
+  retrieveTransactionGroup(orgSlug: string, transactionGroupId: number) {
     this.setState({ transactionGroupLoading: true });
     return this.transactionGroupsAPIService
       .retrieve(transactionGroupId, orgSlug)
