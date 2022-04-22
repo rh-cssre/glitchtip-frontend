@@ -12,6 +12,7 @@ interface Percentages {
   errorEvents: number;
   transactionEvents: number;
   uptimeEvents: number;
+  fileSize: number;
 }
 
 @Component({
@@ -63,6 +64,7 @@ export class SubscriptionComponent implements OnDestroy {
         transactionEvents:
           (events?.transactionEventCount! / eventsAllowed!) * 100,
         uptimeEvents: (events?.uptimeCheckEventCount! / eventsAllowed!) * 100,
+        fileSize: (events?.fileSizeMB! / eventsAllowed!) * 100,
       };
     })
   );
