@@ -1,7 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
 import { combineLatest, Subscription } from "rxjs";
 import { map, filter } from "rxjs/operators";
+import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
 import { StripeService } from "./stripe.service";
@@ -12,6 +14,7 @@ interface Percentages {
   errorEvents: number;
   transactionEvents: number;
   uptimeEvents: number;
+  fileSize: number;
 }
 
 @Component({
@@ -63,6 +66,7 @@ export class SubscriptionComponent implements OnDestroy {
         transactionEvents:
           (events?.transactionEventCount! / eventsAllowed!) * 100,
         uptimeEvents: (events?.uptimeCheckEventCount! / eventsAllowed!) * 100,
+        fileSize: (events?.fileSizeMB! / eventsAllowed!) * 100,
       };
     })
   );
@@ -70,6 +74,7 @@ export class SubscriptionComponent implements OnDestroy {
   constructor(
     private service: SubscriptionsService,
     private route: ActivatedRoute,
+    public dialog: MatDialog,
     private stripe: StripeService,
     private orgService: OrganizationsService
   ) {
@@ -82,6 +87,12 @@ export class SubscriptionComponent implements OnDestroy {
         this.service.retrieveSubscription(slug).toPromise();
         this.service.retrieveSubscriptionCount(slug).toPromise();
       });
+  }
+
+  openEventInfoDialog() {
+    this.dialog.open(EventInfoComponent, {
+      maxWidth: "300px",
+    });
   }
 
   manageSubscription() {

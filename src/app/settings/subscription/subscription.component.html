@@ -55,6 +55,10 @@
                   </div>
                   <div class="display-bar">
                     <div
+                      class="file-size-percent"
+                      style="width: {{ eventsPercent.fileSize }}%"
+                    ></div>
+                    <div
                       class="error-event"
                       style="width: {{ eventsPercent.errorEvents }}%"
                     ></div>
@@ -93,7 +97,15 @@
                           {{ count.transactionEventCount }}
                         </li>
                         <li>
-                          Total events used in billing period: {{ count.total }}
+                          <b class="file-size">File storage:</b>
+                          {{ count.fileSizeMB }} MB
+                        </li>
+                        <li>
+                          Total
+                          <a [routerLink]="[]" (click)="openEventInfoDialog()"
+                            >events</a
+                          >
+                          used in billing period: {{ count.total }}
                         </li>
                       </ul>
                     </div>
