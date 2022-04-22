@@ -24,12 +24,12 @@ export abstract class APIBaseService {
 
   abstract list(slug1?: string, slug2?: string): Observable<unknown>;
   abstract retrieve(
-    id: string,
+    id: string | number,
     slug1?: string,
     slug2?: string
   ): Observable<unknown>;
 
-  protected detailURL(id: string, slug1?: string, slug2?: string) {
+  protected detailURL(id: string | number, slug1?: string, slug2?: string) {
     return this.url + id + "/";
   }
 }

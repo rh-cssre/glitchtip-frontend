@@ -5,7 +5,7 @@ import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { normalizeProjectParams } from "../utils";
+import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";

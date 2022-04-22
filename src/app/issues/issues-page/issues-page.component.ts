@@ -17,7 +17,7 @@ import {
   mergeMap,
 } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
-import { normalizeProjectParams } from "../utils";
+import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
@@ -94,16 +94,16 @@ export class IssuesPageComponent
     "=1": "1 event",
     other: "# events",
   };
-  sorts = {
-    "-last_seen": "Last Seen",
-    last_seen: "First Seen",
-    "-created": "Newest Creation Date",
-    created: "Oldest Creation Date",
-    "-count": "Most Frequent",
-    count: "Least Frequent",
-    "-priority": "Highest Priority",
-    priority: "Lowest Priority",
-  };
+  sorts = [
+    { param: "-last_seen", display: "Last Seen" },
+    { param: "last_seen", display: "First Seen" },
+    { param: "-created", display: "Newest Creation Date" },
+    { param: "created", display: "Oldest Creation Date" },
+    { param: "-count", display: "Most Frequent" },
+    { param: "count", display: "Least Frequent" },
+    { param: "-priority", display: "Highest Priority" },
+    { param: "priority", display: "Lowest Priority" },
+  ];
 
   projectsFromParams$ = this.route.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
