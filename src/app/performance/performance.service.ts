@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { combineLatest, EMPTY } from "rxjs";
 import { catchError, filter, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "../api/organizations/organizations.service";
-import { TransactionGroupsService } from "../api/transactions/transaction-groups.service";
+import { TransactionGroupsAPIService } from "../api/transactions/transaction-groups-api.service";
 import { TransactionGroup } from "../api/transactions/transactions.interfaces";
 import {
   initialPaginationState,
@@ -51,7 +51,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   errors$ = this.getState$.pipe(map((state) => state.errors));
 
   constructor(
-    private transactionGroupsService: TransactionGroupsService,
+    private transactionGroupsAPIService: TransactionGroupsAPIService,
     private organizationsService: OrganizationsService
   ) {
     super(initialState);
@@ -90,7 +90,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     query?: string
   ) {
     this.setLoadingStart();
-    return this.transactionGroupsService
+    return this.transactionGroupsAPIService
       .list(orgSlug, cursor, project, start, end, sort, environment, query)
       .pipe(
         tap((res) => {

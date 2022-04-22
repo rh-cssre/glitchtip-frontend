@@ -4,15 +4,15 @@ import {
 } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { testTransaction } from "./transactions-test-data";
-import { TransactionsService } from "./transactions.service";
+import { TransactionsAPIService } from "./transactions-api.service";
 
 describe("TransactionsService", () => {
-  let service: TransactionsService;
+  let service: TransactionsAPIService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
-    service = TestBed.inject(TransactionsService);
+    service = TestBed.inject(TransactionsAPIService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
