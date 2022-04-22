@@ -101,7 +101,11 @@
                           {{ count.fileSizeMB }} MB
                         </li>
                         <li>
-                          Total events used in billing period: {{ count.total }}
+                          Total
+                          <a [routerLink]="[]" (click)="openEventInfoDialog()"
+                            >events</a
+                          >
+                          used in billing period: {{ count.total }}
                         </li>
                       </ul>
                     </div>
