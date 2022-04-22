@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, EMPTY } from "rxjs";
-import { exhaustMap, map, tap } from "rxjs/operators";
+import { combineLatest, EMPTY, Subscription } from "rxjs";
+import { exhaustMap, map, tap, take } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { TransactionGroupDetailService } from "./transaction-group-detail.service";
 
@@ -10,7 +10,7 @@ import { TransactionGroupDetailService } from "./transaction-group-detail.servic
   templateUrl: "./transaction-group-detail.component.html",
   styleUrls: ["./transaction-group-detail.component.scss"],
 })
-export class TransactionGroupDetailComponent implements OnInit {
+export class TransactionGroupDetailComponent implements OnInit, OnDestroy {
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
   organization$ = this.organizationsService.activeOrganization$;
   initialLoadComplete$ =
@@ -19,6 +19,7 @@ export class TransactionGroupDetailComponent implements OnInit {
   transactionGroupIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("transaction-group-id"))
   );
+  retrieveDetailsSubscription?: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,9 +28,13 @@ export class TransactionGroupDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    combineLatest([this.activeOrganizationSlug$, this.transactionGroupIdParam$])
+    this.retrieveDetailsSubscription = combineLatest([
+      this.activeOrganizationSlug$,
+      this.transactionGroupIdParam$,
+    ])
       .pipe(
         tap(() => this.transactionGroupDetailService.clearState()),
+        take(1),
         exhaustMap(([orgSlug, groupId]) => {
           if (orgSlug && groupId) {
             return this.transactionGroupDetailService.retrieveTransactionGroup(
@@ -48,5 +53,9 @@ export class TransactionGroupDetailComponent implements OnInit {
       ...this.route.snapshot.queryParams,
       project: projectId,
     };
+  }
+
+  ngOnDestroy() {
+    this.retrieveDetailsSubscription?.unsubscribe();
   }
 }
