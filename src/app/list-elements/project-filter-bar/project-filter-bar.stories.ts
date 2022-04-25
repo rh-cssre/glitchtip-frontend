@@ -1,25 +1,16 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { ProjectFilterBarComponent } from "./project-filter-bar.component";
 import { OrganizationProject } from "../../api/organizations/organizations.interface";
-import { MaterialModule } from "../../shared/material.module";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "List elements/Project Filter Bar",
   decorators: [
     moduleMetadata({
-      imports: [
-        MaterialModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-      ],
+      imports: [GlitchtipTestingModule, MatExpansionModule],
     }),
   ],
 };

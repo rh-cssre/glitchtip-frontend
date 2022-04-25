@@ -66,5 +66,6 @@ import { NewRecipientComponent } from "./projects/project-detail/project-alerts/
     AlertFormComponent,
     NewRecipientComponent,
   ],
+  exports: [PlatformPickerComponent],
 })
 export class SettingsModule {}

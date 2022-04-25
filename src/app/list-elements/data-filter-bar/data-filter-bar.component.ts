@@ -11,7 +11,7 @@ import { MatSelectChange } from "@angular/material/select";
 export class DataFilterBarComponent {
   @Input() dateForm?: FormGroup;
   @Input() sortForm?: FormGroup;
-  @Input() sorts?: object;
+  @Input() sorts?: { param: string; display: string }[];
   @Input() environmentForm?: FormGroup;
   @Input() searchForm?: FormGroup;
   @Input() organizationEnvironments: string[] = [];

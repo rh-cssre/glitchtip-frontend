@@ -1,24 +1,16 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { moduleMetadata } from "@storybook/angular";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { PlatformPickerComponent } from "./platform-picker.component";
-import { SettingsModule } from "../../settings.module";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
+import { MatTabsModule } from "@angular/material/tabs";
 
 export default {
   title: "Project Settings/Platform Picker",
   decorators: [
     moduleMetadata({
-      imports: [
-        HttpClientTestingModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        SettingsModule,
-      ],
-      declarations: [],
+      imports: [GlitchtipTestingModule, MatExpansionModule, MatTabsModule],
+      declarations: [PlatformPickerComponent],
     }),
   ],
 };

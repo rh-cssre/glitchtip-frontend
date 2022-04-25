@@ -23,12 +23,16 @@ mat-error {
   .uptime {
     color: #8a2387;
   }
+
+  .performance {
+    color: #f27121;
+  }
 }
 
 .display-bar {
   background-color: #f4c6cd;
   width: 100%;
-  height: 4px;
+  height: 8px;
   margin-top: 4px;
   margin-bottom: 4px;
   display: flex;
@@ -38,8 +42,16 @@ mat-error {
     background-color: $amaranth;
   }
 
+  .transaction-event {
+    background-color: #f27121;
+  }
+
   .uptime-event {
-    background-color:#8a2387;
+    background-color: #8a2387;
+  }
+
+  .file-size-percent {
+    background-color: black;
   }
 }
 

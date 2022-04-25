@@ -155,3 +155,15 @@ export function timedeltaToMS(value: string) {
   }
   return Math.round(milliseconds);
 }
+
+export function normalizeProjectParams(
+  projects: string | string[] | undefined
+) {
+  if (Array.isArray(projects)) {
+    return projects;
+  }
+  if (typeof projects === "string") {
+    return [projects];
+  }
+  return [];
+}

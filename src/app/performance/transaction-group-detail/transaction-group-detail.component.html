@@ -1,0 +1,68 @@
+<section
+  class="l-body l-body--full-width"
+  *ngIf="(initialLoadComplete$ | async) && (transactionGroup$ | async) === null"
+>
+  <mat-card
+    class="auth-form transaction-group-404"
+    *ngIf="organization$ | async as organization"
+  >
+    <h1 class="mat-display-1">Transaction group not found</h1>
+    <p class="mat-body-1">
+      This may be because the URL is pointing to a transaction group that
+      doesn't exist or was deleted.
+    </p>
+    <p class="mat-body-1">
+      It's also possible that this transaction group was reported to a project
+      that you are not able to access.
+    </p>
+    <a
+      mat-flat-button
+      color="primary"
+      class="transaction-groups-link"
+      [routerLink]="['..']"
+    >
+      View all transaction groups in {{ organization.name }}
+    </a>
+  </mat-card>
+</section>
+<section
+  class="l-body l-body--full-width"
+  *ngIf="transactionGroup$ | async as group"
+>
+  <header>
+    <a mat-stroked-button class="transaction-groups-link" [routerLink]="['..']">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+      View all transaction groups
+    </a>
+    <div class="header-group">
+      <span class="mat-h1">{{ group.transaction }}</span>
+    </div>
+  </header>
+
+  <div class="row">
+    <aside class="right">
+      <mat-card>
+        <dl>
+          <div>
+            <dt class="mat-caption">Average Duration</dt>
+            <dd class="mat-body-1">
+              {{ group.avgDuration | humanizeDuration }}
+            </dd>
+          </div>
+          <div>
+            <dt class="mat-caption">Transaction Count</dt>
+            <dd class="mat-body-1">{{ group.transactionCount }}</dd>
+          </div>
+          <div>
+            <dt class="mat-caption">Operation</dt>
+            <dd class="mat-body-1">{{ group.op }}</dd>
+          </div>
+          <div>
+            <dt *ngIf="group.method" class="mat-caption">Method</dt>
+            <dd class="mat-body-1">{{ group.method }}</dd>
+          </div>
+        </dl>
+      </mat-card>
+    </aside>
+  </div>
+</section>

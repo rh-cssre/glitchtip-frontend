@@ -47,4 +47,5 @@ export interface EventsCount {
   eventCount: number | null;
   transactionEventCount: number | null;
   uptimeCheckEventCount: number | null;
+  fileSizeMB: number | null;
 }

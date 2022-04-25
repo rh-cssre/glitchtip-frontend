@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { PerformanceComponent } from "./performance.component";
-import { TransactionDetailComponent } from "./transaction-detail/transaction-detail.component";
+import { TransactionGroupDetailComponent } from "./transaction-group-detail/transaction-group-detail.component";
 import { TransactionGroupsComponent } from "./transaction-groups/transaction-groups.component";
 
 const routes: Routes = [
@@ -10,12 +9,13 @@ const routes: Routes = [
     component: TransactionGroupsComponent,
   },
   {
-    path: "",
-    component: PerformanceComponent,
+    path: "transaction-groups/:transaction-group-id",
+    component: TransactionGroupDetailComponent,
   },
   {
-    path: ":event-id",
-    component: TransactionDetailComponent,
+    path: "",
+    redirectTo: "transaction-groups",
+    pathMatch: "full",
   },
 ];
 
