@@ -125,6 +125,10 @@ export const routes: Routes = [
           title: "Performance",
         },
       },
+      {
+        path: ':project-slug',
+        redirectTo: 'settings/projects/:project-slug'
+      }
     ],
   },
   {
