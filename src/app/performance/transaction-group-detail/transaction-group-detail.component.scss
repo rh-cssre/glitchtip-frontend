@@ -16,12 +16,8 @@ header {
   }
 
   .header-group {
-    display: flex;
     justify-content: space-between;
-
-    @media screen and (max-width: $tablet - 1) {
-      flex-direction: column;
-    }
+    word-break: break-all;
   }
 }
 

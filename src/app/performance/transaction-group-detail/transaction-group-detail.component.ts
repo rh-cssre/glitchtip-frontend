@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, EMPTY, Subscription } from "rxjs";
-import { exhaustMap, map, tap, take } from "rxjs/operators";
+import { exhaustMap, filter, map, tap, take } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { TransactionGroupDetailService } from "./transaction-group-detail.service";
 
@@ -34,6 +34,7 @@ export class TransactionGroupDetailComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         tap(() => this.transactionGroupDetailService.clearState()),
+        filter(([orgSlug, groupId]) => !!orgSlug && !!groupId),
         take(1),
         exhaustMap(([orgSlug, groupId]) => {
           if (orgSlug && groupId) {

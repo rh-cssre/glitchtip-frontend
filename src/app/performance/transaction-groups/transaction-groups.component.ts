@@ -190,5 +190,6 @@ export class TransactionGroupsComponent
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
     this.transactionGroupsDisplaySubscription.unsubscribe();
+    this.performanceService.clearState();
   }
 }
