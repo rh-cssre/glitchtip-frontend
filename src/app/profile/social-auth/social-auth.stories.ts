@@ -1,27 +1,17 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata, Story } from "@storybook/angular";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { GlitchTipOAuthService } from "../../api/oauth/oauth.service";
 import { UserService } from "../../api/user/user.service";
-import { SharedModule } from "../../shared/shared.module";
 import { SocialAuthComponent } from "./social-auth.component";
 import { of } from "rxjs";
 import { SettingsService } from "src/app/api/settings.service";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Profile/Social Auth",
   component: SocialAuthComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
+      imports: [GlitchtipTestingModule],
       providers: [GlitchTipOAuthService, UserService, SettingsService],
       declarations: [SocialAuthComponent],
     }),

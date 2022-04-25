@@ -14,7 +14,6 @@ import {
   MonitorInput,
   ResponseTimeSeries,
 } from "./uptime.interfaces";
-import { Environment } from "../api/organizations/organizations.interface";
 import { MonitorsAPIService } from "../api/monitors/monitors-api.service";
 import { MonitorChecksAPIService } from "../api/monitors/monitor-checks-API.service";
 import { OrganizationsService } from "../api/organizations/organizations.service";
@@ -27,7 +26,6 @@ import { timedeltaToMS } from "src/app/shared/shared.utils";
 export interface UptimeState extends PaginationStatefulServiceState {
   monitors: MonitorDetail[];
   monitorChecks: MonitorCheck[];
-  orgEnvironments: Environment[];
   monitorDetails: MonitorDetail | null;
   uptimeAlertCount: number | null;
   alertCountLoading: boolean;
@@ -41,7 +39,6 @@ const initialState: UptimeState = {
   monitors: [],
   monitorChecks: [],
   pagination: initialPaginationState,
-  orgEnvironments: [],
   monitorDetails: null,
   uptimeAlertCount: null,
   alertCountLoading: true,
@@ -61,7 +58,6 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   createLoading$ = this.getState$.pipe(map((state) => state.createLoading));
   deleteLoading$ = this.getState$.pipe(map((state) => state.deleteLoading));
   error$ = this.getState$.pipe(map((state) => state.error));
-  orgEnvironments$ = this.getState$.pipe(map((state) => state.orgEnvironments));
   uptimeAlertCount$ = this.getState$.pipe(
     map((state) => state.uptimeAlertCount)
   );
@@ -354,9 +350,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   formatData(check: MonitorCheck) {
     return {
       name: new Date(check.startCheck),
-      value: check.responseTime
-        ? timedeltaToMS(check.responseTime)
-        : 0,
+      value: check.responseTime ? timedeltaToMS(check.responseTime) : 0,
     };
   }
 

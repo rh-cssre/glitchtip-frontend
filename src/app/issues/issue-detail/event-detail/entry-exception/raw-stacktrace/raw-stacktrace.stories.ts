@@ -1,25 +1,15 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata, Story } from "@storybook/angular";
 import { of } from "rxjs";
 
-import { SharedModule } from "src/app/shared/shared.module";
 import { RawStacktraceComponent } from "./raw-stacktrace.component";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Raw Stacktrace Title",
   component: RawStacktraceComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
+      imports: [GlitchtipTestingModule],
     }),
   ],
   argTypes: {

@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, EMPTY, combineLatest, Observable } from "rxjs";
+import {
+  BehaviorSubject,
+  EMPTY,
+  lastValueFrom,
+  combineLatest,
+  Observable,
+} from "rxjs";
 import {
   mergeMap,
   map,
@@ -10,8 +16,8 @@ import {
   exhaustMap,
   take,
 } from "rxjs/operators";
+import { MembersAPIService } from "./members-api.service";
 import { OrganizationsService } from "./organizations.service";
-import { baseUrl } from "../../constants";
 import { Member, MemberSelector } from "./organizations.interface";
 import { UserService } from "../user/user.service";
 
@@ -27,7 +33,6 @@ const initialState: MembersState = {
 
 @Injectable({ providedIn: "root" })
 export class MembersService {
-  private readonly url = baseUrl + "/organizations/";
   private readonly state = new BehaviorSubject<MembersState>(initialState);
   private readonly getState$ = this.state.asObservable();
   readonly loadingResendInvite$ = this.getState$.pipe(
@@ -56,21 +61,20 @@ export class MembersService {
   );
 
   constructor(
+    private membersAPIService: MembersAPIService,
     private organizationsService: OrganizationsService,
     private userService: UserService,
-    private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
 
   /** Send another invite to already invited org member */
   resendInvite(memberId: number) {
-    const data = { reinvite: 1 };
     this.setLoadingResendInvite(memberId);
-    return this.organizationsService.activeOrganizationSlug$
-      .pipe(
+    lastValueFrom(
+      this.organizationsService.activeOrganizationSlug$.pipe(
         take(1),
         mergeMap((orgSlug) =>
-          this.http.put(`${this.url}${orgSlug}/members/${memberId}/`, data)
+          this.membersAPIService.resendInvite(orgSlug!, memberId)
         ),
         tap(() => this.setResendInviteSuccess(memberId)),
         catchError(() => {
@@ -78,45 +82,43 @@ export class MembersService {
           return EMPTY;
         })
       )
-      .toPromise();
+    );
   }
 
   /** Remove member for active organization. */
   removeMember(member: Member) {
-    return this.organizationsService.activeOrganizationSlug$
-      .pipe(
+    lastValueFrom(
+      this.organizationsService.activeOrganizationSlug$.pipe(
         take(1),
         exhaustMap((orgSlug) => {
-          return this.http
-            .delete(`${this.url}${orgSlug}/members/${member.id}/`)
-            .pipe(
-              exhaustMap(() => {
-                this.snackBar.open(
-                  `Successfully removed ${member.email} from organization`
+          return this.membersAPIService.destroy(orgSlug!, member.id).pipe(
+            exhaustMap(() => {
+              this.snackBar.open(
+                `Successfully removed ${member.email} from organization`
+              );
+              if (orgSlug) {
+                return this.organizationsService.retrieveOrganizationMembers(
+                  orgSlug
                 );
-                if (orgSlug) {
-                  return this.organizationsService.retrieveOrganizationMembers(
-                    orgSlug
-                  );
-                }
-                return EMPTY;
-              }),
-              catchError((err) => {
-                let message = `Error attempting to remove ${member.email} from organization`;
-                if (
-                  err instanceof HttpErrorResponse &&
-                  err.status === 403 &&
-                  err.error?.detail
-                ) {
-                  message += `. ${err.error.detail}"`;
-                }
-                this.snackBar.open(message);
-                return EMPTY;
-              })
-            );
+              }
+              return EMPTY;
+            }),
+            catchError((err) => {
+              let message = `Error attempting to remove ${member.email} from organization`;
+              if (
+                err instanceof HttpErrorResponse &&
+                err.status === 403 &&
+                err.error?.detail
+              ) {
+                message += `. ${err.error.detail}"`;
+              }
+              this.snackBar.open(message);
+              return EMPTY;
+            })
+          );
         })
       )
-      .toPromise();
+    );
   }
 
   private setLoadingResendInvite(memberId: number) {

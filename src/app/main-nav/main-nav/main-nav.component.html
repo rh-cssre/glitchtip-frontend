@@ -76,20 +76,20 @@
         Issues
       </a>
       <a
-      mat-list-item
-      [disabled]="!activeOrganizationLoaded"
-      [routerLink]="[activeOrganizationSlug, 'uptime-monitors']"
-      routerLinkActive="active-route"
-    >
-      Uptime Monitors
-    </a>
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="[activeOrganizationSlug, 'uptime-monitors']"
+        routerLinkActive="active-route"
+      >
+        Uptime Monitors
+      </a>
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'performance']"
+        [routerLink]="[activeOrganizationSlug, 'performance', 'transaction-groups']"
         routerLinkActive="active-route"
       >
-        Performance <span class="subdued">&nbsp;(Beta)</span>
+        Performance
       </a>
       <a
         data-test-settings

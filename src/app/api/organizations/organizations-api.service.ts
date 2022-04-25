@@ -6,16 +6,15 @@ import {
   OrganizationDetail,
   OrganizationNew,
   OrganizationProject,
-  Environment,
 } from "./organizations.interface";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
 
-interface APIOrganizationProject extends Omit<OrganizationProject, "id">{
+interface APIOrganizationProject extends Omit<OrganizationProject, "id"> {
   id: string;
 }
 
-interface APIOrganizationDetail extends Omit<OrganizationDetail, "projects">  {
+interface APIOrganizationDetail extends Omit<OrganizationDetail, "projects"> {
   projects: APIOrganizationProject[];
 }
 
@@ -57,10 +56,5 @@ export class OrganizationAPIService extends APIBaseService {
 
   destroy(id: string) {
     return this.http.delete(this.detailURL(id));
-  }
-
-  retrieveOrganizationEnvironments(orgSlug: string) {
-    const url = `${baseUrl}/organizations/${orgSlug}/environments/`;
-    return this.http.get<Environment[]>(url);
   }
 }

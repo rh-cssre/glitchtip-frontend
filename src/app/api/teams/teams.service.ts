@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Team, TeamErrors, TeamLoading } from "./teams.interfaces";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import { BehaviorSubject, combineLatest, lastValueFrom, EMPTY } from "rxjs";
 import { map, tap, catchError } from "rxjs/operators";
-import { baseUrl } from "src/app/constants";
 import { Member } from "../organizations/organizations.interface";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { TeamsAPIService } from "./teams-api.service";
 
 interface TeamsState {
   teams: Team[] | null;
@@ -31,7 +31,6 @@ const initialState: TeamsState = {
 export class TeamsService {
   private readonly state = new BehaviorSubject<TeamsState>(initialState);
   private readonly getState$ = this.state.asObservable();
-  private readonly url = baseUrl;
 
   readonly teams$ = this.getState$.pipe(map((state) => state.teams));
   readonly team$ = this.getState$.pipe(map((data) => data.team));
@@ -54,36 +53,35 @@ export class TeamsService {
   );
 
   constructor(
-    private http: HttpClient,
     private userService: UserService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private teamsAPIService: TeamsAPIService
   ) {}
 
   retrieveTeamsByOrg(orgSlug: string) {
-    return this.http
-      .get<Team[]>(`${this.url}/organizations/${orgSlug}/teams/`)
+    return this.teamsAPIService
+      .list(orgSlug)
       .pipe(tap((teams) => this.setTeams(teams)));
   }
 
   retrieveSingleTeam(orgSlug: string, teamSlug: string) {
-    return this.http
-      .get<Team>(`${this.url}/teams/${orgSlug}/${teamSlug}/`)
-      .pipe(tap((resp) => this.setSingleTeam(resp)))
-      .subscribe();
+    lastValueFrom(
+      this.teamsAPIService
+        .retrieve(orgSlug, teamSlug)
+        .pipe(tap((resp) => this.setSingleTeam(resp)))
+    );
   }
 
   retrieveTeamMembers(orgSlug: string, teamSlug: string) {
-    return this.http
-      .get<Member[]>(`${this.url}/teams/${orgSlug}/${teamSlug}/members/`)
+    return this.teamsAPIService
+      .retrieveTeamMembers(orgSlug, teamSlug)
       .pipe(tap((teamMembers) => this.setTeamMembers(teamMembers)));
   }
 
   updateTeamSlug(orgSlug: string, teamSlug: string, newTeamSlug: string) {
-    const url = `${this.url}/teams/${orgSlug}/${teamSlug}/`;
-    const data = { slug: newTeamSlug };
     this.setUpdateTeamSlugLoading(true);
-    return this.http.put<Team>(url, data).pipe(
+    return this.teamsAPIService.update(orgSlug, teamSlug, newTeamSlug).pipe(
       tap((resp) => {
         this.router.navigate([
           orgSlug,
@@ -104,9 +102,8 @@ export class TeamsService {
   }
 
   deleteTeam(orgSlug: string, teamSlug: string) {
-    const url = `${this.url}/teams/${orgSlug}/${teamSlug}/`;
     this.setDeleteTeamLoading(true);
-    return this.http.delete(url).pipe(
+    return this.teamsAPIService.destroy(orgSlug, teamSlug).pipe(
       tap(() => {
         this.setDeleteTeamLoading(false);
         this.snackBar.open(`You have successfully deleted #${teamSlug}`);

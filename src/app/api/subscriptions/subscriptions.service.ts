@@ -43,7 +43,8 @@ export class SubscriptionsService {
         total +=
           state.eventsCount.eventCount! +
           state.eventsCount.transactionEventCount! +
-          state.eventsCount.uptimeCheckEventCount!;
+          state.eventsCount.uptimeCheckEventCount! +
+          state.eventsCount.fileSizeMB!;
 
         return {
           ...state.eventsCount,

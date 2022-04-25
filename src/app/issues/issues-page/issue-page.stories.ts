@@ -1,23 +1,20 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatTableModule } from "@angular/material/table";
 import { moduleMetadata } from "@storybook/angular";
+import { MarkdownModule } from "ngx-markdown";
 import { of } from "rxjs";
 
 import { IssuesPageComponent } from "./issues-page.component";
-import { MaterialModule } from "../../shared/material.module";
 import { IssuesService } from "../issues.service";
 import { issueList } from "./issues-test-data";
 import { ProjectFilterBarComponent } from "src/app/list-elements/project-filter-bar/project-filter-bar.component";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
-import { DaysAgoPipe, DaysOldPipe } from "src/app/shared/days-ago.pipe";
-import { MarkdownModule } from "ngx-markdown";
 import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
+import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
+import { DataFilterBarComponent } from "src/app/list-elements/data-filter-bar/data-filter-bar.component";
+import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
 
 export default {
   title: "Issues/Issues Page",
@@ -25,11 +22,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
-        HttpClientTestingModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
+        GlitchtipTestingModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatTableModule,
@@ -38,10 +31,10 @@ export default {
       ],
       providers: [IssuesService, MatDatepickerModule, OrganizationsService],
       declarations: [
+        ListTitleComponent,
+        DataFilterBarComponent,
         ProjectFilterBarComponent,
         IssueZeroStatesComponent,
-        DaysOldPipe,
-        DaysAgoPipe,
       ],
     }),
   ],
