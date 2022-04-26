@@ -20,7 +20,7 @@ export function uniqueId(length = 32) {
     .join("");
 }
 
-export const getDSN = (dsn: string, target="store") => {
+export const getDSN = (dsn: string, target = "store") => {
   const key = dsn.split("@")[0].split("//")[1];
   const id = dsn.split("@")[1].split("/")[1];
   const url = `/api/${id}/${target}/?sentry_key=${key}&sentry_version=7`;

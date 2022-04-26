@@ -13,12 +13,11 @@ describe("Transaction Groups Page", () => {
     cy.get("[data-test-dsn]").invoke("val").as("dsn");
   });
 
-
   it("should make 55 transactions, and see five on the second page", function () {
     testTransactions.generateTransactions(getDSN(this.dsn, "envelope"), 55);
     cy.visit(`/${organization.slug}/performance/transaction-groups`);
 
     cy.get("[data-cy=keyboard-right]").click();
-    cy.get("a:contains(something/somewhere)").should("have.length", 5)
+    cy.get("a:contains(something/somewhere)").should("have.length", 5);
   });
 });
