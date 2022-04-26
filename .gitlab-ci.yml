@@ -93,6 +93,21 @@ build-docker:
     - docker push ${CONTAINER_IMAGE}
     - if [ $CI_COMMIT_REF_NAME = "master" ]; then docker push ${CI_REGISTRY_IMAGE}:latest; fi
 
+upload-sourcemaps:
+  stage: deploy
+  image: getsentry/sentry-cli
+  dependencies:
+    - build-assets
+  script:
+    - VERSION=${CI_COMMIT_REF_NAME#*v}
+    - sentry-cli releases files ${VERSION} upload-sourcemaps dist/
+  only:
+    refs:
+      - sourcemaps-cli
+      - tags
+    variables:
+      - $CI_COMMIT_REF_PROTECTED
+
 deploy-staging:
   stage: deploy
   image:
