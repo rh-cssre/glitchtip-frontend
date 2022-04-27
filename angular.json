@@ -94,6 +94,7 @@
                 }
               },
               "outputHashing": "all",
+              "sourceMap": true,
               "assets": [
                 "src/favicon.ico",
                 "src/assets",
