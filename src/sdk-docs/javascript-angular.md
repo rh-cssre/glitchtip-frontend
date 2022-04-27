@@ -1,3 +1,49 @@
+For most use cases, GlitchTip recommends using [@micro-sentry/angular](https://github.com/Tinkoff/micro-sentry). Users who need performance data need to use `@sentry/angular`.
+
+# @micro-sentry
+
+@micro-sentry features a very small bundle size and is easy to configure.
+
+Install `@micro-sentry/angular`:
+
+```bash
+$ npm install --save @micro-sentry/angular
+```
+
+In `app.module.ts` add MicroSentryModule with your GlitchTip DSN.
+
+```javascript
+import { MicroSentryModule } from '@micro-sentry/angular';
+
+@NgModule({
+  imports: [
+    MicroSentryModule.forRoot({
+      dsn: 'your GlitchTip DSN here',
+    }),
+  ],
+})
+```
+
+## Configuration
+
+- dsn - Where to send event data too, found in GlitchTip in project settings.
+- environment - Set the running environment name, such as "production". When running in Node, such as Angular Universal, this defaults to environment variable `SENTRY_ENVIRONMENT`. No default is used in browser.
+- release - Set release name such as "1.0". Required to make use of uploaded sourcemaps.
+- ignoreErrors
+- blacklistUrls
+
+```javascript
+    MicroSentryModule.forRoot({
+      dsn: 'your GlitchTip DSN here',
+      environment: "production",
+      release: "1.0.0"
+    }),
+```
+
+# @sentry/angular
+
+@sentry/angular has more features including performance tracking. The package adds [25 KB](https://bundlephobia.com/result?p=@sentry/angular) to your JS bundle size.
+
 Install `@sentry/angular`:
 
 ```bash
