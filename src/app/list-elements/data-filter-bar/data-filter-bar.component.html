@@ -38,8 +38,7 @@
           mat-flat-button
           color="primary"
           [disabled]="
-            !dateForm.value.startDate ||
-            !dateForm.value.endDate ||
+            !(dateForm.value.startDate || dateForm.value.endDate) ||
             dateForm.pristine
           "
         >
