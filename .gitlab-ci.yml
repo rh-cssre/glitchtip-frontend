@@ -103,7 +103,6 @@ upload-sourcemaps:
     - sentry-cli releases files ${VERSION} upload-sourcemaps dist/
   only:
     refs:
-      - sourcemaps-cli
       - tags
     variables:
       - $CI_COMMIT_REF_PROTECTED
