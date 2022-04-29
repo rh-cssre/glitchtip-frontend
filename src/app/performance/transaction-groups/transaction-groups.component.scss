@@ -54,14 +54,3 @@ table {
 .empty-states {
   padding: 1.5em 0 0.5em;
 }
-
-.footer {
-  text-align: right;
-
-  mat-icon {
-    font-size: 35px;
-    height: $iconWidth;
-    width: $iconWidth;
-    line-height: $iconWidth;
-  }
-}
