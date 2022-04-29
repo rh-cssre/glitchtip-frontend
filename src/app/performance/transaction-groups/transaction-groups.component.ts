@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { withLatestFrom, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
+import { combineLatest, withLatestFrom, Subscription } from "rxjs";
+import { distinctUntilChanged, map, filter } from "rxjs/operators";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PerformanceService, PerformanceState } from "../performance.service";
+import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import {
   checkForOverflow,
@@ -50,6 +52,7 @@ export class TransactionGroupsComponent
     other: "# Transactions",
   };
 
+  projectEnvironmentSubscription: Subscription;
   routerEventSubscription: Subscription;
   transactionGroupsDisplaySubscription: Subscription;
   transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
@@ -75,6 +78,8 @@ export class TransactionGroupsComponent
       return { orgSlug, cursor, project, start, end, sort, environment, query };
     })
   );
+  activeOrganizationProjects$ =
+    this.organizationsService.activeOrganizationProjects$;
 
   projectsFromParams$ = this.route.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
@@ -89,8 +94,20 @@ export class TransactionGroupsComponent
     })
   );
 
+  organizationEnvironments$ = combineLatest([
+    this.appliedProjectCount$,
+    this.organizationsService.organizationEnvironmentsProcessed$,
+    this.projectEnvironmentsService.visibleEnvironments$,
+  ]).pipe(
+    map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
+      appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
+    )
+  );
+
   constructor(
+    private organizationsService: OrganizationsService,
     private performanceService: PerformanceService,
+    private projectEnvironmentsService: ProjectEnvironmentsService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
@@ -119,6 +136,34 @@ export class TransactionGroupsComponent
           ? this.sortForm.controls.sort.disable()
           : this.sortForm.controls.sort.enable()
       );
+
+    this.projectEnvironmentSubscription = combineLatest([
+      this.navigationEnd$,
+      this.activeOrganizationProjects$,
+    ])
+      .pipe(
+        filter(
+          ([urlData, projects]) =>
+            urlData.orgSlug !== undefined &&
+            urlData.project?.length === 1 &&
+            projects !== null
+        ),
+        distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
+        map(([urlData, projects]) => {
+          const matchedProject = projects!.find(
+            (project) => project.id === parseInt(urlData.project![0], 10)
+          );
+          if (urlData.orgSlug && matchedProject) {
+            this.projectEnvironmentsService
+              .retrieveEnvironmentsWithProperties(
+                urlData.orgSlug,
+                matchedProject.slug
+              )
+              .subscribe();
+          }
+        })
+      )
+      .subscribe();
   }
 
   checkIfTooltipIsNecessary($event: Event) {
