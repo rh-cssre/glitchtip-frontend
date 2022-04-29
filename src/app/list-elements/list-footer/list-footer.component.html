@@ -1,5 +1,5 @@
 <div *ngIf="paginator" class="footer">
-  <div *ngIf="true" class="spinner-container">
+  <div *ngIf="paginator.loading" class="spinner-container">
     <mat-progress-spinner
       [diameter]="33"
       color="primary"
