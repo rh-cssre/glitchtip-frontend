@@ -55,10 +55,7 @@ export class IssuesPageComponent
     endDate: new FormControl(""),
   });
 
-  issues$ = combineLatest([
-    this.issuesService.issuesWithSelected$,
-    this.loading$,
-  ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
+  issues$ = this.issuesService.issuesWithSelected$
   areAllSelected$ = this.issuesService.areAllSelected$;
   thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
   selectedProjectInfo$ = this.issuesService.selectedProjectInfo$;
