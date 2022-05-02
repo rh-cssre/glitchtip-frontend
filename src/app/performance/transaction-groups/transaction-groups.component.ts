@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { withLatestFrom, Subscription } from "rxjs";
 import { map } from "rxjs/operators";
+import { TransactionGroup } from "src/app/api/transactions/transactions.interfaces";
 import { PerformanceService, PerformanceState } from "../performance.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import {
@@ -123,6 +124,14 @@ export class TransactionGroupsComponent
 
   checkIfTooltipIsNecessary($event: Event) {
     this.tooltipDisabled = checkForOverflow($event);
+  }
+
+  setTitleTooltip(group: TransactionGroup) {
+    if (group.method) {
+      return `${group.method} ${group.transaction}`
+    } else {
+      return `${group.transaction} ${group.op}`
+    }
   }
 
   ngOnInit() {

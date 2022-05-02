@@ -41,13 +41,20 @@
           <div class="name-and-project">
             <div (mouseover)="checkIfTooltipIsNecessary($event)">
               <a
-                [matTooltip]="group.transaction"
+                [matTooltip]="setTitleTooltip(group)"
                 matTooltipPosition="above"
                 [matTooltipDisabled]="tooltipDisabled"
                 [routerLink]="group.id"
                 queryParamsHandling="merge"
-                >{{ group.transaction }}</a
               >
+                <span *ngIf="group.method">
+                  {{ group.method }}
+                </span>
+                {{ group.transaction }}
+              </a>
+                <span *ngIf="group.method === null">
+                  {{ group.op }}
+                </span>
             </div>
             <div class="mat-caption">
               <span *ngIf="(appliedProjectCount$ | async) !== 1">
