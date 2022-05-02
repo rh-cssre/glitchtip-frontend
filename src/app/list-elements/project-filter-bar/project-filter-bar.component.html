@@ -78,12 +78,12 @@
       </button>
     </mat-accordion>
   </div>
-  <div class="nav-action-group">
+  <div class="nav-action-group" *ngIf="orgSlug$ | async as orgSlug">
     <a
       mat-stroked-button
       color="primary"
       class="nav-action"
-      [routerLink]="['..', 'settings', 'projects', 'new']"
+      [routerLink]="['/', orgSlug, 'settings', 'projects', 'new']"
     >
       <mat-icon>add</mat-icon>
       Add Project
@@ -95,8 +95,8 @@
       class="nav-action"
       [routerLink]="
         (singleProjectSlug$ | async)
-          ? ['..', 'settings', 'projects', singleProjectSlug$ | async]
-          : ['..', 'settings', 'projects']
+          ? ['/', orgSlug, 'settings', 'projects', singleProjectSlug$ | async]
+          : ['/', orgSlug, 'settings', 'projects']
       "
     >
       <mat-icon>settings</mat-icon>
