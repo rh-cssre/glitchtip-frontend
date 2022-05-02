@@ -50,13 +50,25 @@ export class GlitchTipOAuthService {
 
   // /** Redirect user to OAuth provider auth URL */
   initOAuthLogin(socialApp: SocialApp) {
-    const params = new URLSearchParams({
+    const params: Record<string, string> = {
       response_type: "token",
       client_id: socialApp.client_id,
       redirect_uri: window.location.origin + "/auth/" + socialApp.provider,
       scope: socialApp.scopes.join(" "),
-    });
-    const url = `${socialApp.authorize_url}?${params.toString()}`;
+    };
+
+    if (socialApp.provider === 'keycloak') {
+      const nonce = self.crypto.randomUUID();
+
+      const expire = new Date();
+      expire.setUTCMinutes( expire.getUTCMinutes() + 10);
+
+      document.cookie = `keycloak_nonce=${nonce}; expires=${expire}; path=/`;
+      params['nonce'] = nonce;
+    }
+
+    const urlParams = new URLSearchParams(params);
+    const url = `${socialApp.authorize_url}?${urlParams.toString()}`;
     window.location.href = url;
   }
 }

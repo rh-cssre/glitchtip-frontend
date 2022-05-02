@@ -22,6 +22,7 @@ import { normalizeProjectParams } from "src/app/shared/shared.utils";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFilterBarComponent implements OnInit {
+  orgSlug$ = this.organizationsService.activeOrganizationSlug$;
   /** All projects available */
   projects$ = this.organizationsService.activeOrganizationProjects$;
 

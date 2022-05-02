@@ -135,8 +135,8 @@ export class TransactionGroupsComponent
         sort: sort !== undefined ? sort : "created",
       });
       this.dateForm.setValue({
-        startDate: start ? start : null,
-        endDate: end ? end : null,
+        startDate: start ? new Date(start) : null,
+        endDate: end ? new Date(end) : null,
       });
       this.searchForm.setValue({
         query: query !== undefined ? query : "",
@@ -190,5 +190,6 @@ export class TransactionGroupsComponent
   ngOnDestroy() {
     this.routerEventSubscription.unsubscribe();
     this.transactionGroupsDisplaySubscription.unsubscribe();
+    this.performanceService.clearState();
   }
 }
