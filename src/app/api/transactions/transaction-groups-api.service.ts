@@ -34,8 +34,10 @@ export class TransactionGroupsAPIService extends APIBaseService {
         httpParams = httpParams.append("project", id);
       });
     }
-    if (start && end) {
+    if (start) {
       httpParams = httpParams.set("start", start);
+    }
+    if (end) {
       httpParams = httpParams.set("end", end);
     }
     if (sort) {
