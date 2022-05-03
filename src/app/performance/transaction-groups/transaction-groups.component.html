@@ -22,16 +22,25 @@
           [attr.colspan]="displayedColumns.length"
           class="table-header"
         >
-          <gt-data-filter-bar
-            [dateForm]="dateForm"
-            [sortForm]="sortForm"
-            [searchForm]="searchForm"
-            [sorts]="sorts"
-            (dateFormSubmission)="onDateFormSubmit($event)"
-            (dateFormReset)="dateFormReset()"
-            (sortByChanged)="sortByChanged($event)"
-            (searchSubmit)="searchSubmit()"
-          ></gt-data-filter-bar>
+          <ng-container
+            *ngIf="
+              organizationEnvironments$ | async as organizationEnvironments
+            "
+          >
+            <gt-data-filter-bar
+              [dateForm]="dateForm"
+              [environmentForm]="environmentForm"
+              [sortForm]="sortForm"
+              [searchForm]="searchForm"
+              [sorts]="sorts"
+              [organizationEnvironments]="organizationEnvironments"
+              (dateFormSubmission)="onDateFormSubmit($event)"
+              (dateFormReset)="dateFormReset()"
+              (filterByEnvironment)="filterByEnvironment($event)"
+              (sortByChanged)="sortByChanged($event)"
+              (searchSubmit)="searchSubmit()"
+            ></gt-data-filter-bar>
+          </ng-container>
         </th>
       </ng-container>
 

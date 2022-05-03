@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { withLatestFrom, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
+import { combineLatest, withLatestFrom, Subscription } from "rxjs";
+import { map, tap } from "rxjs/operators";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PerformanceService, PerformanceState } from "../performance.service";
+import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import {
   checkForOverflow,
@@ -50,6 +52,9 @@ export class TransactionGroupsComponent
     other: "# Transactions",
   };
 
+  orgEnvironmentSubscription: Subscription;
+  projectEnvironmentSubscription: Subscription;
+  resetEnvironmentSubscription: Subscription;
   routerEventSubscription: Subscription;
   transactionGroupsDisplaySubscription: Subscription;
   transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
@@ -75,6 +80,8 @@ export class TransactionGroupsComponent
       return { orgSlug, cursor, project, start, end, sort, environment, query };
     })
   );
+  activeOrganizationProjects$ =
+    this.organizationsService.activeOrganizationProjects$;
 
   projectsFromParams$ = this.route.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
@@ -89,8 +96,20 @@ export class TransactionGroupsComponent
     })
   );
 
+  organizationEnvironments$ = combineLatest([
+    this.appliedProjectCount$,
+    this.organizationsService.organizationEnvironmentsProcessed$,
+    this.projectEnvironmentsService.visibleEnvironments$,
+  ]).pipe(
+    map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
+      appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
+    )
+  );
+
   constructor(
+    private organizationsService: OrganizationsService,
     private performanceService: PerformanceService,
+    private projectEnvironmentsService: ProjectEnvironmentsService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
@@ -113,12 +132,47 @@ export class TransactionGroupsComponent
       }
     );
 
+    this.organizationEnvironments$.subscribe((environments) =>
+      environments.length === 0
+        ? this.environmentForm.controls.environment.disable()
+        : this.environmentForm.controls.environment.enable()
+    );
+
     this.transactionGroupsDisplaySubscription =
       this.transactionGroupsDisplay$.subscribe((groups) =>
         groups.length === 0
           ? this.sortForm.controls.sort.disable()
           : this.sortForm.controls.sort.enable()
       );
+
+    this.orgEnvironmentSubscription = this.organizationsService
+      .observeOrgEnvironments(this.navigationEnd$)
+      .subscribe();
+
+    this.projectEnvironmentSubscription = this.projectEnvironmentsService
+      .observeProjectEnvironments(this.navigationEnd$)
+      .subscribe();
+
+    this.resetEnvironmentSubscription = combineLatest([
+      this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
+      this.route.queryParams,
+    ])
+      .pipe(
+        tap(([projectEnvironments, queryParams]) => {
+          if (
+            queryParams.project &&
+            queryParams.environment &&
+            !projectEnvironments.includes(queryParams.environment)
+          ) {
+            this.environmentForm.setValue({ environment: null });
+            this.router.navigate([], {
+              queryParams: { environment: null },
+              queryParamsHandling: "merge",
+            });
+          }
+        })
+      )
+      .subscribe();
   }
 
   checkIfTooltipIsNecessary($event: Event) {
@@ -188,8 +242,12 @@ export class TransactionGroupsComponent
   }
 
   ngOnDestroy() {
+    this.orgEnvironmentSubscription.unsubscribe();
+    this.projectEnvironmentSubscription.unsubscribe();
+    this.resetEnvironmentSubscription.unsubscribe();
     this.routerEventSubscription.unsubscribe();
     this.transactionGroupsDisplaySubscription.unsubscribe();
     this.performanceService.clearState();
+    this.projectEnvironmentsService.clearState();
   }
 }
