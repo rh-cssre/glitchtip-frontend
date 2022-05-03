@@ -109,7 +109,7 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
     );
   }
 
-  projectEnvironmentSubscription(
+  observeProjectEnvironments(
     queryParamsObs: Observable<{
       orgSlug: string | undefined;
       project: string[] | null;
@@ -118,28 +118,26 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
     return combineLatest([
       queryParamsObs,
       this.organizationsService.activeOrganizationProjects$,
-    ])
-      .pipe(
-        filter(
-          ([urlData, projects]) =>
-            urlData.orgSlug !== undefined &&
-            urlData.project?.length === 1 &&
-            projects !== null
-        ),
-        distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
-        map(([urlData, projects]) => {
-          const matchedProject = projects!.find(
-            (project) => project.id === parseInt(urlData.project![0], 10)
-          );
-          if (urlData.orgSlug && matchedProject) {
-            this.retrieveEnvironmentsWithProperties(
-              urlData.orgSlug,
-              matchedProject.slug
-            ).subscribe();
-          }
-        })
-      )
-      .subscribe();
+    ]).pipe(
+      filter(
+        ([urlData, projects]) =>
+          urlData.orgSlug !== undefined &&
+          urlData.project?.length === 1 &&
+          projects !== null
+      ),
+      distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
+      map(([urlData, projects]) => {
+        const matchedProject = projects!.find(
+          (project) => project.id === parseInt(urlData.project![0], 10)
+        );
+        if (urlData.orgSlug && matchedProject) {
+          this.retrieveEnvironmentsWithProperties(
+            urlData.orgSlug,
+            matchedProject.slug
+          ).subscribe();
+        }
+      })
+    );
   }
 
   retrieveEnvironmentsWithProperties(orgSlug: string, projectSlug: string) {

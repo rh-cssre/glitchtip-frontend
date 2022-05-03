@@ -531,19 +531,17 @@ export class OrganizationsService {
     this.updateTeamSlug(id, newSlug);
   }
 
-  orgEnvironmentSubscription(
+  observeOrgEnvironments(
     queryParamsObs: Observable<{
       orgSlug: string | undefined;
     }>
   ) {
-    return queryParamsObs
-      .pipe(
-        distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
-        mergeMap(({ orgSlug }) =>
-          orgSlug ? this.getOrganizationEnvironments(orgSlug) : EMPTY
-        )
+    return queryParamsObs.pipe(
+      distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
+      mergeMap(({ orgSlug }) =>
+        orgSlug ? this.getOrganizationEnvironments(orgSlug) : EMPTY
       )
-      .subscribe();
+    );
   }
 
   getOrganizationEnvironments(orgSlug: string) {

@@ -186,13 +186,13 @@ export class IssuesPageComponent
       }
     );
 
-    this.orgEnvironmentSubscription =
-      this.organizationsService.orgEnvironmentSubscription(this.navigationEnd$);
+    this.orgEnvironmentSubscription = this.organizationsService
+      .observeOrgEnvironments(this.navigationEnd$)
+      .subscribe();
 
-    this.projectEnvironmentSubscription =
-      this.projectEnvironmentsService.projectEnvironmentSubscription(
-        this.navigationEnd$
-      );
+    this.projectEnvironmentSubscription = this.projectEnvironmentsService
+      .observeProjectEnvironments(this.navigationEnd$)
+      .subscribe();
 
     /**
      * When changing from one project to another, see if there is an environment

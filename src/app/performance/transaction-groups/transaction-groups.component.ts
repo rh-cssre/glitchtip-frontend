@@ -145,13 +145,13 @@ export class TransactionGroupsComponent
           : this.sortForm.controls.sort.enable()
       );
 
-    this.orgEnvironmentSubscription =
-      this.organizationsService.orgEnvironmentSubscription(this.navigationEnd$);
+    this.orgEnvironmentSubscription = this.organizationsService
+      .observeOrgEnvironments(this.navigationEnd$)
+      .subscribe();
 
-    this.projectEnvironmentSubscription =
-      this.projectEnvironmentsService.projectEnvironmentSubscription(
-        this.navigationEnd$
-      );
+    this.projectEnvironmentSubscription = this.projectEnvironmentsService
+      .observeProjectEnvironments(this.navigationEnd$)
+      .subscribe();
 
     this.resetEnvironmentSubscription = combineLatest([
       this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
@@ -243,9 +243,11 @@ export class TransactionGroupsComponent
 
   ngOnDestroy() {
     this.orgEnvironmentSubscription.unsubscribe();
+    this.projectEnvironmentSubscription.unsubscribe();
     this.resetEnvironmentSubscription.unsubscribe();
     this.routerEventSubscription.unsubscribe();
     this.transactionGroupsDisplaySubscription.unsubscribe();
     this.performanceService.clearState();
+    this.projectEnvironmentsService.clearState();
   }
 }
