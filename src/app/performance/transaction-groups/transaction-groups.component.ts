@@ -126,13 +126,13 @@ export class TransactionGroupsComponent
   }
 
   ngOnInit() {
-    this.route.params.subscribe((_) => {
+    this.route.queryParams.subscribe((_) => {
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
       const sort: string | undefined = this.route.snapshot.queryParams.sort;
       const query: string | undefined = this.route.snapshot.queryParams.query;
       this.sortForm.setValue({
-        sort: sort !== undefined ? sort : "created",
+        sort: sort !== undefined ? sort : "-avg_duration",
       });
       this.dateForm.setValue({
         startDate: start ? new Date(start) : null,

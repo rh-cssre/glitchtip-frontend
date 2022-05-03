@@ -266,7 +266,7 @@ export class IssuesPageComponent
   }
 
   ngOnInit() {
-    this.route.params.subscribe((_) => {
+    this.route.queryParams.subscribe((_) => {
       const query: string | undefined = this.route.snapshot.queryParams.query;
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
