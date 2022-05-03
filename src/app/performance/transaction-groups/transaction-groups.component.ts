@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { combineLatest, withLatestFrom, Subscription } from "rxjs";
-import { distinctUntilChanged, map, filter } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PerformanceService, PerformanceState } from "../performance.service";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
@@ -52,7 +52,9 @@ export class TransactionGroupsComponent
     other: "# Transactions",
   };
 
+  orgEnvironmentSubscription: Subscription;
   projectEnvironmentSubscription: Subscription;
+  resetEnvironmentSubscription: Subscription;
   routerEventSubscription: Subscription;
   transactionGroupsDisplaySubscription: Subscription;
   transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
@@ -130,6 +132,12 @@ export class TransactionGroupsComponent
       }
     );
 
+    this.organizationEnvironments$.subscribe((environments) =>
+      environments.length === 0
+        ? this.environmentForm.controls.environment.disable()
+        : this.environmentForm.controls.environment.enable()
+    );
+
     this.transactionGroupsDisplaySubscription =
       this.transactionGroupsDisplay$.subscribe((groups) =>
         groups.length === 0
@@ -137,29 +145,30 @@ export class TransactionGroupsComponent
           : this.sortForm.controls.sort.enable()
       );
 
-    this.projectEnvironmentSubscription = combineLatest([
-      this.navigationEnd$,
-      this.activeOrganizationProjects$,
+    this.orgEnvironmentSubscription =
+      this.organizationsService.orgEnvironmentSubscription(this.navigationEnd$);
+
+    this.projectEnvironmentSubscription =
+      this.projectEnvironmentsService.projectEnvironmentSubscription(
+        this.navigationEnd$
+      );
+
+    this.resetEnvironmentSubscription = combineLatest([
+      this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
+      this.route.queryParams,
     ])
       .pipe(
-        filter(
-          ([urlData, projects]) =>
-            urlData.orgSlug !== undefined &&
-            urlData.project?.length === 1 &&
-            projects !== null
-        ),
-        distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
-        map(([urlData, projects]) => {
-          const matchedProject = projects!.find(
-            (project) => project.id === parseInt(urlData.project![0], 10)
-          );
-          if (urlData.orgSlug && matchedProject) {
-            this.projectEnvironmentsService
-              .retrieveEnvironmentsWithProperties(
-                urlData.orgSlug,
-                matchedProject.slug
-              )
-              .subscribe();
+        tap(([projectEnvironments, queryParams]) => {
+          if (
+            queryParams.project &&
+            queryParams.environment &&
+            !projectEnvironments.includes(queryParams.environment)
+          ) {
+            this.environmentForm.setValue({ environment: null });
+            this.router.navigate([], {
+              queryParams: { environment: null },
+              queryParamsHandling: "merge",
+            });
           }
         })
       )
@@ -233,6 +242,8 @@ export class TransactionGroupsComponent
   }
 
   ngOnDestroy() {
+    this.orgEnvironmentSubscription.unsubscribe();
+    this.resetEnvironmentSubscription.unsubscribe();
     this.routerEventSubscription.unsubscribe();
     this.transactionGroupsDisplaySubscription.unsubscribe();
     this.performanceService.clearState();

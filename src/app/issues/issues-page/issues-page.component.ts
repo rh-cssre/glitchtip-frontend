@@ -7,15 +7,8 @@ import {
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Subscription, combineLatest, EMPTY } from "rxjs";
-import {
-  map,
-  filter,
-  withLatestFrom,
-  distinctUntilChanged,
-  tap,
-  mergeMap,
-} from "rxjs/operators";
+import { Subscription, combineLatest } from "rxjs";
+import { map, withLatestFrom, tap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -193,44 +186,13 @@ export class IssuesPageComponent
       }
     );
 
-    this.orgEnvironmentSubscription = this.navigationEnd$
-      .pipe(
-        distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
-        mergeMap(({ orgSlug }) =>
-          orgSlug
-            ? this.organizationsService.getOrganizationEnvironments(orgSlug)
-            : EMPTY
-        )
-      )
-      .subscribe();
+    this.orgEnvironmentSubscription =
+      this.organizationsService.orgEnvironmentSubscription(this.navigationEnd$);
 
-    this.projectEnvironmentSubscription = combineLatest([
-      this.navigationEnd$,
-      this.activeOrganizationProjects$,
-    ])
-      .pipe(
-        filter(
-          ([urlData, projects]) =>
-            urlData.orgSlug !== undefined &&
-            urlData.project?.length === 1 &&
-            projects !== null
-        ),
-        distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
-        map(([urlData, projects]) => {
-          const matchedProject = projects!.find(
-            (project) => project.id === parseInt(urlData.project![0], 10)
-          );
-          if (urlData.orgSlug && matchedProject) {
-            this.projectEnvironmentsService
-              .retrieveEnvironmentsWithProperties(
-                urlData.orgSlug,
-                matchedProject.slug
-              )
-              .subscribe();
-          }
-        })
-      )
-      .subscribe();
+    this.projectEnvironmentSubscription =
+      this.projectEnvironmentsService.projectEnvironmentSubscription(
+        this.navigationEnd$
+      );
 
     /**
      * When changing from one project to another, see if there is an environment
@@ -241,8 +203,12 @@ export class IssuesPageComponent
       this.route.queryParams,
     ])
       .pipe(
-        tap(([projectEnvironments, { environment }]) => {
-          if (environment && !projectEnvironments.includes(environment)) {
+        tap(([projectEnvironments, queryParams]) => {
+          if (
+            queryParams.project &&
+            queryParams.environment &&
+            !projectEnvironments.includes(queryParams.environment)
+          ) {
             this.environmentForm.setValue({ environment: null });
             this.router.navigate([], {
               queryParams: { environment: null },
