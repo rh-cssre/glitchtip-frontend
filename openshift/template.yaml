@@ -221,6 +221,20 @@ objects:
               name: web
               ports:
                 - containerPort: ${{GT_APP_PORT}}
+              readinessProbe:
+                exec:
+                  command:
+                    - cat
+                    - /tmp/healthy
+                initialDelaySeconds: 5
+                periodSeconds: 5
+              livenessProbe:
+                exec:
+                  command:
+                    - cat
+                    - /tmp/healthy
+                initialDelaySeconds: 5
+                periodSeconds: 5
               resources:
                 requests:
                   cpu: ${{GT_WEB_CPU_REQUESTS}}
