@@ -8,10 +8,8 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { PerformanceService, PerformanceState } from "../performance.service";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
-import {
-  checkForOverflow,
-  normalizeProjectParams,
-} from "src/app/shared/shared.utils";
+import { normalizeProjectParams } from "src/app/shared/shared.utils";
+import { TransactionGroup } from "src/app/api/transactions/transactions.interfaces";
 
 @Component({
   selector: "gt-transaction-groups",
@@ -175,8 +173,33 @@ export class TransactionGroupsComponent
       .subscribe();
   }
 
+  checkForOverflow($event: Event) {
+    const target = $event.target as HTMLElement;
+    if (target.parentElement) {
+      const maxWidth = target.closest("div")!.offsetWidth;
+      const spans = target.parentElement.children;
+      let totalWidth = 0;
+      for (let i = 0; i < spans.length; i++) {
+        if (spans[i] instanceof HTMLElement) {
+          const span1 = spans[i] as HTMLElement;
+          totalWidth += span1.offsetWidth;
+        }
+      }
+      return totalWidth > maxWidth ? false : true;
+    }
+    return true;
+  }
+
   checkIfTooltipIsNecessary($event: Event) {
-    this.tooltipDisabled = checkForOverflow($event);
+    this.tooltipDisabled = this.checkForOverflow($event);
+  }
+
+  setTitleTooltip(group: TransactionGroup) {
+    if (group.method) {
+      return `${group.method} ${group.transaction}`;
+    } else {
+      return `${group.transaction} ${group.op}`;
+    }
   }
 
   ngOnInit() {
