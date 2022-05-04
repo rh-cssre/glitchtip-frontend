@@ -74,17 +74,6 @@ table {
   padding-bottom: 10px;
 }
 
-.footer {
-  text-align: right;
-
-  mat-icon {
-    font-size: 35px;
-    height: $iconWidth;
-    width: $iconWidth;
-    line-height: $iconWidth;
-  }
-}
-
 .resolved {
   background: mat.get-color-from-palette(mat.$gray-palette, 100);
   > a {
@@ -99,12 +88,6 @@ table {
 .mute-icon {
   vertical-align: middle;
   margin-right: 5px;
-}
-
-.spinner-container {
-  mat-progress-spinner {
-    margin: 30px auto;
-  }
 }
 
 mat-card {

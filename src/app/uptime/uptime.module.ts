@@ -5,6 +5,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatTableModule } from "@angular/material/table";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 
+import { ListFooterModule } from "../list-elements/list-footer/list-footer.module";
 import { ListTitleModule } from "../list-elements/list-title/list-title.module";
 import { MonitorChartComponent } from "./monitor-chart/monitor-chart.component";
 import { MonitorChecksComponent } from "./monitor-checks/monitor-checks.component";
@@ -37,6 +38,7 @@ import { UptimeRoutingModule } from "./uptime-routing.module";
     ReactiveFormsModule,
     MatDialogModule,
     NgxChartsModule,
+    ListFooterModule,
     ListTitleModule,
   ],
 })

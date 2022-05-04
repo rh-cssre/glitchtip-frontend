@@ -55,10 +55,7 @@ export class IssuesPageComponent
     endDate: new FormControl(""),
   });
 
-  issues$ = combineLatest([
-    this.issuesService.issuesWithSelected$,
-    this.loading$,
-  ]).pipe(map(([issues, loading]) => (!loading ? issues : [])));
+  issues$ = this.issuesService.issuesWithSelected$
   areAllSelected$ = this.issuesService.areAllSelected$;
   thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
   selectedProjectInfo$ = this.issuesService.selectedProjectInfo$;
@@ -269,7 +266,7 @@ export class IssuesPageComponent
   }
 
   ngOnInit() {
-    this.route.params.subscribe((_) => {
+    this.route.queryParams.subscribe((_) => {
       const query: string | undefined = this.route.snapshot.queryParams.query;
       const start: string | undefined = this.route.snapshot.queryParams.start;
       const end: string | undefined = this.route.snapshot.queryParams.end;
