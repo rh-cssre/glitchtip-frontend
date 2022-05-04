@@ -212,8 +212,8 @@ export class TransactionGroupsComponent
         sort: sort !== undefined ? sort : "-avg_duration",
       });
       this.dateForm.setValue({
-        startDate: start ? new Date(start) : null,
-        endDate: end ? new Date(end) : null,
+        startDate: start ? new Date(start.replace("Z", "")) : null,
+        endDate: end ? new Date(end.replace("Z", "")) : null,
       });
       this.searchForm.setValue({
         query: query !== undefined ? query : "",
