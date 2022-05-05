@@ -360,6 +360,13 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
+              resources:
+                requests:
+                  cpu: 1m
+                  memory: 500M
+                limits:
+                  memory: 800M
+                  cpu: 2m
               envFrom:
                 - secretRef:
                     name: superuser-secret
