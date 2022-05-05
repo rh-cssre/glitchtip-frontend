@@ -512,7 +512,7 @@ parameters:
     displayName: BEAT_REPLICAS
     required: true
     name: BEAT_REPLICAS
-    value: "3"
+    value: "1"
 
   - description: GT_WEB_REPLICAS
     displayName: GT_WEB_REPLICAS
