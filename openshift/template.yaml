@@ -38,7 +38,6 @@ objects:
         app.kubernetes.io/name: glitchtip
       name: glitchtip-beat
     spec:
-      serviceAccountName: glitchtip-beat-sa
       progressDeadlineSeconds: 600
       replicas: ${{BEAT_REPLICAS}}
       revisionHistoryLimit: 10
@@ -59,6 +58,7 @@ objects:
             app.kubernetes.io/instance: glitchtip
             app.kubernetes.io/name: glitchtip
         spec:
+          serviceAccountName: glitchtip-beat-sa
           containers:
             - env:
                 - name: SERVER_ROLE
