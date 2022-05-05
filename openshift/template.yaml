@@ -221,6 +221,24 @@ objects:
               name: web
               ports:
                 - containerPort: ${{GT_APP_PORT}}
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
               resources:
                 requests:
                   cpu: ${{GT_WEB_CPU_REQUESTS}}
