@@ -21,6 +21,12 @@ objects:
       name: glitchtip-configmap
 
   # ---- BEAT DEPLOYMENT ------
+
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: glitchtip-beat-sa
+
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -32,6 +38,7 @@ objects:
         app.kubernetes.io/name: glitchtip
       name: glitchtip-beat
     spec:
+      serviceAccountName: glitchtip-beat-sa
       progressDeadlineSeconds: 600
       replicas: ${{BEAT_REPLICAS}}
       revisionHistoryLimit: 10
@@ -505,7 +512,7 @@ parameters:
     displayName: BEAT_REPLICAS
     required: true
     name: BEAT_REPLICAS
-    value: "1"
+    value: "3"
 
   - description: GT_WEB_REPLICAS
     displayName: GT_WEB_REPLICAS
