@@ -222,19 +222,23 @@ objects:
               ports:
                 - containerPort: ${{GT_APP_PORT}}
               readinessProbe:
-                exec:
-                  command:
-                    - cat
-                    - /tmp/healthy
-                initialDelaySeconds: 5
-                periodSeconds: 5
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
               livenessProbe:
-                exec:
-                  command:
-                    - cat
-                    - /tmp/healthy
-                initialDelaySeconds: 5
-                periodSeconds: 5
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
               resources:
                 requests:
                   cpu: ${{GT_WEB_CPU_REQUESTS}}
