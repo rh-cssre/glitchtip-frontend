@@ -21,6 +21,12 @@ objects:
       name: glitchtip-configmap
 
   # ---- BEAT DEPLOYMENT ------
+
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: glitchtip-beat-sa
+
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -52,6 +58,7 @@ objects:
             app.kubernetes.io/instance: glitchtip
             app.kubernetes.io/name: glitchtip
         spec:
+          serviceAccountName: glitchtip-beat-sa
           containers:
             - env:
                 - name: SERVER_ROLE
