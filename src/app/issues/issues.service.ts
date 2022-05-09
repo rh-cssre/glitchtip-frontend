@@ -183,7 +183,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     sort?: string,
     environment?: string
   ) {
-    this.setClearErrors();
+    this.setIssuesLoading();
     return this.issuesAPIService
       .list(
         organizationSlug,
@@ -258,12 +258,12 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
-  private setClearErrors() {
+  private setIssuesLoading() {
     const state = this.state.getValue();
     this.setState({
       directHit: undefined,
       errors: [],
-      pagination: { ...state.pagination, loading: false },
+      pagination: { ...state.pagination, loading: true },
     });
   }
 

@@ -76,33 +76,7 @@
             [attr.colspan]="displayedColumns.length"
             class="footer"
           >
-            <ng-container *ngIf="(loading$ | async) === false">
-              <button
-                [routerLink]="[]"
-                [queryParams]="paginator.previousPageParams || {}"
-                queryParamsHandling="merge"
-                mat-button
-                [disabled]="paginator.hasPreviousPage === false"
-              >
-                <mat-icon>keyboard_arrow_left</mat-icon>
-              </button>
-              <button
-                [routerLink]="[]"
-                [queryParams]="paginator.nextPageParams || {}"
-                queryParamsHandling="merge"
-                mat-button
-                [disabled]="paginator.hasNextPage === false"
-              >
-                <mat-icon>keyboard_arrow_right</mat-icon>
-              </button>
-            </ng-container>
-            <div *ngIf="loading$ | async" class="spinner-container">
-              <mat-progress-spinner
-                [diameter]="33"
-                color="primary"
-                mode="indeterminate"
-              ></mat-progress-spinner>
-            </div>
+            <gt-list-footer [paginator]="paginator"> </gt-list-footer>
           </td>
         </ng-container>
         <tr

@@ -22,16 +22,25 @@
           [attr.colspan]="displayedColumns.length"
           class="table-header"
         >
-          <gt-data-filter-bar
-            [dateForm]="dateForm"
-            [sortForm]="sortForm"
-            [searchForm]="searchForm"
-            [sorts]="sorts"
-            (dateFormSubmission)="onDateFormSubmit($event)"
-            (dateFormReset)="dateFormReset()"
-            (sortByChanged)="sortByChanged($event)"
-            (searchSubmit)="searchSubmit()"
-          ></gt-data-filter-bar>
+          <ng-container
+            *ngIf="
+              organizationEnvironments$ | async as organizationEnvironments
+            "
+          >
+            <gt-data-filter-bar
+              [dateForm]="dateForm"
+              [environmentForm]="environmentForm"
+              [sortForm]="sortForm"
+              [searchForm]="searchForm"
+              [sorts]="sorts"
+              [organizationEnvironments]="organizationEnvironments"
+              (dateFormSubmission)="onDateFormSubmit($event)"
+              (dateFormReset)="dateFormReset()"
+              (filterByEnvironment)="filterByEnvironment($event)"
+              (sortByChanged)="sortByChanged($event)"
+              (searchSubmit)="searchSubmit()"
+            ></gt-data-filter-bar>
+          </ng-container>
         </th>
       </ng-container>
 
@@ -39,15 +48,21 @@
         <th mat-header-cell *matHeaderCellDef>Title</th>
         <td mat-cell *matCellDef="let group">
           <div class="name-and-project">
-            <div (mouseover)="checkIfTooltipIsNecessary($event)">
-              <a
-                [matTooltip]="group.transaction"
+            <div
+              class="group-title"
+              (mouseover)="checkIfTooltipIsNecessary($event)"
+            >
+              <span
                 matTooltipPosition="above"
+                [matTooltip]="setTitleTooltip(group)"
                 [matTooltipDisabled]="tooltipDisabled"
-                [routerLink]="group.id"
-                queryParamsHandling="merge"
-                >{{ group.transaction }}</a
               >
+                <a [routerLink]="group.id" queryParamsHandling="merge">
+                  <span *ngIf="group.method">{{ group.method }}&nbsp;</span
+                  >{{ group.transaction }}<span *ngIf="!group.method">;</span>
+                </a>
+                <span *ngIf="!group.method">&nbsp;{{ group.op }}</span>
+              </span>
             </div>
             <div class="mat-caption">
               <span *ngIf="(appliedProjectCount$ | async) !== 1">
@@ -79,27 +94,9 @@
           [attr.colspan]="displayedColumns.length"
           class="footer"
         >
-          <button
-            [routerLink]="[]"
-            [queryParams]="paginator.previousPageParams || {}"
-            queryParamsHandling="merge"
-            mat-button
-            [disabled]="paginator.hasPreviousPage === false"
-          >
-            <mat-icon>keyboard_arrow_left</mat-icon>
-          </button>
-          <button
-            [routerLink]="[]"
-            [queryParams]="paginator.nextPageParams || {}"
-            queryParamsHandling="merge"
-            mat-button
-            [disabled]="paginator.hasNextPage === false"
-          >
-            <mat-icon data-cy="keyboard-right">keyboard_arrow_right</mat-icon>
-          </button>
+          <gt-list-footer [paginator]="paginator"> </gt-list-footer>
         </td>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="['actions']"></tr>
       <tr
         mat-header-row
