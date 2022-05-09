@@ -143,6 +143,16 @@ objects:
           labels:
             glitchtip: web
         spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: glithtip
+                    operator: In
+                    values:
+                    - web
+                topologyKey: "kubernetes.io/hostname"
           initContainers:
             - name: init-migration
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
