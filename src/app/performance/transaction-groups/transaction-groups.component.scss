@@ -30,11 +30,10 @@ table {
     width: 160px;
   }
 
-  a {
+  .group-title {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    display: block;
     max-width: fit-content;
   }
 
@@ -53,15 +52,4 @@ table {
 
 .empty-states {
   padding: 1.5em 0 0.5em;
-}
-
-.footer {
-  text-align: right;
-
-  mat-icon {
-    font-size: 35px;
-    height: $iconWidth;
-    width: $iconWidth;
-    line-height: $iconWidth;
-  }
 }
