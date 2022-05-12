@@ -54,6 +54,7 @@ import "zone.js"; // Included with Angular CLI.
 interface PlausibleOptions {
   callback?: (event?: unknown) => void;
   props?: { [key: string]: string };
+  u?: string
 }
 
 type Plausible = (event: string, params?: PlausibleOptions) => void;

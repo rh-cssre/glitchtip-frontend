@@ -88,7 +88,7 @@ export class SettingsService {
             `(?<=${window.location.host}\/).*?(?=\/issues|\/performance|\/uptime|\/settings|\/projects|\/uptime-monitors)`
           );
           var redactedUrl = url.replace(orgSlugRegex, "org_slug");
-          window.plausible("pageview", { props: { u: redactedUrl } });
+          window.plausible("pageview", { u: redactedUrl });
         }
       }),
       tap((settings) => {
