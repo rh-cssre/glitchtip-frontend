@@ -111,6 +111,24 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               imagePullPolicy: Always
               name: glitchtip
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
               resources:
                 limits:
                   cpu: ${{BEAT_CPU_LIMITS}}
@@ -146,13 +164,13 @@ objects:
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                  - key: glithtip
-                    operator: In
-                    values:
-                    - web
-                topologyKey: "kubernetes.io/hostname"
+                - labelSelector:
+                    matchExpressions:
+                      - key: glithtip
+                        operator: In
+                        values:
+                          - web
+                  topologyKey: "kubernetes.io/hostname"
           initContainers:
             - name: init-migration
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
@@ -348,6 +366,24 @@ objects:
                   value: ${GT_APP_PORT}
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
               resources:
                 requests:
                   cpu: ${{GT_WORKER_CPU_REQUESTS}}
