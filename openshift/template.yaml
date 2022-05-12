@@ -413,6 +413,24 @@ objects:
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
+                initialDelaySeconds: 3
+                periodSeconds: 3
               resources:
                 requests:
                   cpu: 1m
