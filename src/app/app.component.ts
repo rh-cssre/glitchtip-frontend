@@ -63,8 +63,7 @@ export class AppComponent implements OnInit {
       }
 
       if (event instanceof NavigationEnd) {
-        console.log("triggered")
-        this.settings.triggerPlausibleReport()
+        this.settings.triggerPlausibleReport();
       }
     });
 
