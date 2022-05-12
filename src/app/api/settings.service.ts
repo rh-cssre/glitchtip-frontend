@@ -83,6 +83,12 @@ export class SettingsService {
               ((window as any).plausible.q =
                 (window as any).plausible.q || []).push(arguments);
             };
+          var url = window.location.href;
+          const orgSlugRegex = new RegExp(
+            `(?<=${window.location.host}\/).*?(?=\/issues|\/performance|\/uptime|\/settings|\/projects|\/uptime-monitors)`
+          );
+          var redactedUrl = url.replace(orgSlugRegex, "org_slug");
+          window.plausible("pageview", { props: { u: redactedUrl } });
         }
       }),
       tap((settings) => {
