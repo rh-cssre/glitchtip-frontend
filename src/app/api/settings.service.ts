@@ -153,7 +153,7 @@ export class SettingsService {
       const orgSlugRegex = new RegExp(
         `(?<=${window.location.host}\/).*?(?=\/issues|\/performance|\/uptime|\/settings|\/projects|\/uptime-monitors)`
       );
-      var redactedUrl = url.replace(orgSlugRegex, "org_slug");
+      var redactedUrl = url.replace(orgSlugRegex, "<organization_slug>");
       window.plausible("pageview", { u: redactedUrl });
     }
   }
