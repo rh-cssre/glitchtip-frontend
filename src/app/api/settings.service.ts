@@ -147,6 +147,17 @@ export class SettingsService {
     );
   }
 
+  triggerPlausibleReport() {
+    if (window.plausible) {
+      var url = window.location.href;
+      const orgSlugRegex = new RegExp(
+        `(?<=${window.location.host}\/).*?(?=\/issues|\/performance|\/uptime|\/settings|\/projects|\/uptime-monitors)`
+      );
+      var redactedUrl = url.replace(orgSlugRegex, "<organization_slug>");
+      window.plausible("pageview", { u: redactedUrl });
+    }
+  }
+
   private retrieveSettings() {
     return this.http.get<SettingsState>(this.url);
   }
