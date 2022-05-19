@@ -366,6 +366,13 @@ objects:
                   value: ${GT_APP_PORT}
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
+              startupProbe:
+                exec:
+                  command:
+                    - touch
+                    - /tmp/healthy
+                initialDelaySeconds: 5
+                periodSeconds: 5
               readinessProbe:
                 exec:
                   command:
