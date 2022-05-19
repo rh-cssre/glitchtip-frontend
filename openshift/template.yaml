@@ -409,31 +409,34 @@ objects:
       backoffLimit: 3
       template:
         metadata:
-          name: superb-job
+          name: superuser-job-1
         spec:
           containers:
-            - name: superb-job
+            - name: superuser-job-co
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
+              startupProbe:
+                exec:
+                  command:
+                    - touch
+                    - /tmp/healthy
+                initialDelaySeconds: 5
+                periodSeconds: 5
               readinessProbe:
-                httpGet:
-                  path: /
-                  port: ${{GT_APP_PORT}}
-                  httpHeaders:
-                    - name: Test-Header
-                      value: Awesome
-                initialDelaySeconds: 3
-                periodSeconds: 3
+                exec:
+                  command:
+                    - cat
+                    - /tmp/healthy
+                initialDelaySeconds: 5
+                periodSeconds: 5
               livenessProbe:
-                httpGet:
-                  path: /
-                  port: ${{GT_APP_PORT}}
-                  httpHeaders:
-                    - name: Test-Header
-                      value: Awesome
-                initialDelaySeconds: 3
-                periodSeconds: 3
+                exec:
+                  command:
+                    - cat
+                    - /tmp/healthy
+                initialDelaySeconds: 5
+                periodSeconds: 5
               resources:
                 requests:
                   cpu: 1m
