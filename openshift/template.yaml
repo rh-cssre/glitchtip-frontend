@@ -311,9 +311,9 @@ objects:
       resources:
         requests:
           storage: 1Gi
-        selector:
-          matchLabels:
-            storage-tier: gold
+      selector:
+        matchLabels:
+          storage-tier: gold
 
   # --------- WORKER DEPLOYMENT --------------
 
