@@ -366,25 +366,14 @@ objects:
                   value: ${GT_APP_PORT}
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
-              startupProbe:
-                exec:
-                  command:
-                    - touch
-                    - /tmp/healthy
-                initialDelaySeconds: 5
-                periodSeconds: 5
               readinessProbe:
                 exec:
-                  command:
-                    - cat
-                    - /tmp/healthy
+                  command: ["celery", "-A", "glitchtip", "status"]
                 initialDelaySeconds: 5
                 periodSeconds: 5
               livenessProbe:
                 exec:
-                  command:
-                    - cat
-                    - /tmp/healthy
+                  command: ["celery", "-A", "glitchtip", "status"]
                 initialDelaySeconds: 5
                 periodSeconds: 5
               resources:
@@ -412,29 +401,22 @@ objects:
           name: superuser-job-1
         spec:
           containers:
-            - name: superuser-job-co
+            - name: superuser-job-1
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
-              startupProbe:
-                exec:
-                  command:
-                    - touch
-                    - /tmp/healthy
-                initialDelaySeconds: 5
-                periodSeconds: 5
               readinessProbe:
                 exec:
                   command:
-                    - cat
-                    - /tmp/healthy
+                    - ls
+                    - /tmp/
                 initialDelaySeconds: 5
                 periodSeconds: 5
               livenessProbe:
                 exec:
                   command:
-                    - cat
-                    - /tmp/healthy
+                    - ls
+                    - /tmp/
                 initialDelaySeconds: 5
                 periodSeconds: 5
               resources:
