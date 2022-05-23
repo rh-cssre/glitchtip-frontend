@@ -368,16 +368,12 @@ objects:
               name: worker
               readinessProbe:
                 exec:
-                  command:
-                    - cat
-                    - /tmp/healthy
+                  command: ["celery", "-A", "glitchtip", "status"]
                 initialDelaySeconds: 5
                 periodSeconds: 5
               livenessProbe:
                 exec:
-                  command:
-                    - cat
-                    - /tmp/healthy
+                  command: ["celery", "-A", "glitchtip", "status"]
                 initialDelaySeconds: 5
                 periodSeconds: 5
               resources:
@@ -394,7 +390,7 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      name: superuser-job
+      name: superuser-job-1
     spec:
       parallelism: 1
       completions: 1
@@ -402,31 +398,27 @@ objects:
       backoffLimit: 3
       template:
         metadata:
-          name: superb-job
+          name: superuser-job-1
         spec:
           containers:
-            - name: superb-job
+            - name: superuser-job-1
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
               readinessProbe:
-                httpGet:
-                  path: /
-                  port: ${{GT_APP_PORT}}
-                  httpHeaders:
-                    - name: Test-Header
-                      value: Awesome
-                initialDelaySeconds: 3
-                periodSeconds: 3
+                exec:
+                  command:
+                    - ls
+                    - /tmp/
+                initialDelaySeconds: 5
+                periodSeconds: 5
               livenessProbe:
-                httpGet:
-                  path: /
-                  port: ${{GT_APP_PORT}}
-                  httpHeaders:
-                    - name: Test-Header
-                      value: Awesome
-                initialDelaySeconds: 3
-                periodSeconds: 3
+                exec:
+                  command:
+                    - ls
+                    - /tmp/
+                initialDelaySeconds: 5
+                periodSeconds: 5
               resources:
                 requests:
                   cpu: 1m
