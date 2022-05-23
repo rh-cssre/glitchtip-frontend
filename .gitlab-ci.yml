@@ -99,7 +99,7 @@ upload-sourcemaps:
   dependencies:
     - build-assets
   script:
-    - VERSION=${CI_COMMIT_REF_NAME#*v}
+    - VERSION=glitchtip@${CI_COMMIT_REF_NAME#*v}
     - sentry-cli releases files ${VERSION} upload-sourcemaps dist/
   only:
     refs:

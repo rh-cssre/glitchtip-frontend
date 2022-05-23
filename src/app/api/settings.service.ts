@@ -147,14 +147,13 @@ export class SettingsService {
     );
   }
 
-  triggerPlausibleReport() {
+  triggerPlausibleReport(orgSlug: string | undefined) {
     if (window.plausible) {
       var url = window.location.href;
-      const orgSlugRegex = new RegExp(
-        `(?<=${window.location.host}\/).*?(?=\/issues|\/performance|\/uptime|\/settings|\/projects|\/uptime-monitors)`
-      );
-      var redactedUrl = url.replace(orgSlugRegex, "<organization_slug>");
-      window.plausible("pageview", { u: redactedUrl });
+
+      window.plausible("pageview", {
+        u: orgSlug ? url.replace(`/${orgSlug}/`, "/<organization_slug>/") : url,
+      });
     }
   }
 
