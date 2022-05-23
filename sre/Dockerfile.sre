@@ -12,9 +12,12 @@ FROM registry.gitlab.com/glitchtip/glitchtip-backend:master
 ARG GLITCHTIP_VERSION=local
 ENV GLITCHTIP_VERSION ${GLITCHTIP_VERSION}
 
-RUN chmod +x /home/celery/celerybeat-schedule
-RUN chmod +x /usr/local/lib/python3.10/site-packages/
-RUN chmod +x /usr/local/bin/
+USER app
+
+RUN chown app:app /home/celery/celerybeat-schedule
+RUN chmod 755 /home/celery/celerybeat-schedule
+RUN chmod 755 /usr/local/lib/python3.10/site-packages/
+RUN chmod 755 /usr/local/bin/
 
 COPY --from=build-frontend /opt/app-root/src/dist/glitchtip-frontend /code/dist
 
