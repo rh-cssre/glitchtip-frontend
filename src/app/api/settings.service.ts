@@ -150,6 +150,10 @@ export class SettingsService {
   triggerPlausibleReport(orgSlug: string | undefined) {
     if (window.plausible) {
       var url = window.location.href;
+      url = url.replace(/\/issues\/\d+(\/|\?|$)/g, "/issues/<issue_id>/")
+      url = url.replace(/\/uptime-monitors\/\d+(\/|$)/g, "/uptime-monitors/<monitor_id>/")
+      url = url.replace(/\/events\/\w+(\/|$)/g, "/events/<event_id>/")
+      url = url.replace(/\/transaction-groups\/\d+(\/|$)/g, "/transaction-groups/<transaction_group_id>/")
 
       window.plausible("pageview", {
         u: orgSlug ? url.replace(`/${orgSlug}/`, "/<organization_slug>/") : url,
