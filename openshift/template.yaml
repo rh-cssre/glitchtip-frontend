@@ -299,6 +299,22 @@ objects:
       selector:
         glitchtip: web
 
+  # ------ PVC for BEAT -------
+
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: beat-data-pvc
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 1Gi
+      selector:
+        matchLabels:
+          storage-tier: gold
+
   # --------- WORKER DEPLOYMENT --------------
 
   - apiVersion: apps/v1
@@ -317,6 +333,10 @@ objects:
           labels:
             glitchtip: worker
         spec:
+          volumes:
+            - name: beat-data
+              persistentVolumeClaim:
+                claimName: beat-data-pvc
           containers:
             - args:
                 - celery
@@ -326,6 +346,8 @@ objects:
                 - -B
                 - -l
                 - INFO
+                - -s
+                - /celery/celerybeat-schedule
               env:
                 - name: REDIS_URL
                   valueFrom:
@@ -366,6 +388,9 @@ objects:
                   value: ${GT_APP_PORT}
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
+              volumeMounts:
+                - mountPath: /celery
+                  name: beat-data
               readinessProbe:
                 exec:
                   command: ["celery", "-A", "glitchtip", "status"]
