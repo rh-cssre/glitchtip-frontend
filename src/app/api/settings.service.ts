@@ -150,6 +150,7 @@ export class SettingsService {
   triggerPlausibleReport(orgSlug: string | undefined) {
     if (window.plausible) {
       var url = window.location.href;
+      url = url.replace(/\/\d+(\/|$)/g, "/<id>/");
 
       window.plausible("pageview", {
         u: orgSlug ? url.replace(`/${orgSlug}/`, "/<organization_slug>/") : url,
