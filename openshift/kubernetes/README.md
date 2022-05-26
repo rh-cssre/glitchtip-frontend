@@ -10,7 +10,7 @@
 - Note the Credentials, and create the Corresponding Secrets
 - List the Installed Charts: `helm list`
 - Create/[Update](k8s.yaml) `glitchtip-rds` secret with credentials from `helm get notes postgres`
-- Create/[Update](k8s.yaml) `glitchtip-elasticache` secret with credentials from `helm get notes elasticache`
+- Create/[Update](k8s.yaml) `glitchtip-elasticache` secret with credentials from `helm get notes redis`
 - Similarly create/update Cron Job Secrets, A admin account with defined creds will be created. \
     Default creds: username: `admin`, pass: `admin-admin`, email: `admin@admin.com`
 
