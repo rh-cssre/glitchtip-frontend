@@ -7,12 +7,10 @@ RUN ["npm", "ci", "--no-audit", "--no-fund", "--loglevel=error"]
 RUN ["npm", "run", "build-prod", "--loglevel=error"]
 
 
-FROM quay.io/deepshar/glitchtip-backend:latest
+FROM registry.gitlab.com/glitchtip/glitchtip-backend:master
 
 ARG GLITCHTIP_VERSION=local
 ENV GLITCHTIP_VERSION ${GLITCHTIP_VERSION}
-
-RUN chown app:app "celerybeat-schedule"
 
 COPY --from=build-frontend /opt/app-root/src/dist/glitchtip-frontend /code/dist
 
