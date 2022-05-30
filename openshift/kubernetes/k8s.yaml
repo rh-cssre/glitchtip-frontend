@@ -1,0 +1,482 @@
+# -------- CONFIG MAP ----------
+---
+apiVersion: v1
+kind: ConfigMap
+data:
+  GLITCHTIP_DOMAIN: https://glitchtip.stage.devshift.net
+metadata:
+  annotations: {}
+  labels:
+    app.kubernetes.io/instance: glitchtip
+    app.kubernetes.io/name: glitchtip
+  name: glitchtip-configmap
+
+  # ---- BEAT DEPLOYMENT ------
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: glitchtip-beat-sa
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app.kubernetes.io/component: beat
+    app.kubernetes.io/instance: glitchtip
+    app.kubernetes.io/name: glitchtip
+  name: glitchtip-beat
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: beat
+      app.kubernetes.io/instance: glitchtip
+      app.kubernetes.io/name: glitchtip
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: beat
+        app.kubernetes.io/instance: glitchtip
+        app.kubernetes.io/name: glitchtip
+    spec:
+      serviceAccountName: glitchtip-beat-sa
+      containers:
+        - env:
+            - name: SERVER_ROLE
+              value: beat
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: redis.url
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-secret
+                  key: PASSWORD_HASH_TOKEN
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-elasticache
+                  key: db.port
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-elasticache
+                  key: db.auth_token
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.host
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.name
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.user
+            - name: PORT
+              value: "8000"
+          envFrom:
+            - configMapRef:
+                name: glitchtip-configmap
+          image: "quay.io/cs-sre/glitchtip"
+          imagePullPolicy: Always
+          name: glitchtip
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+              httpHeaders:
+                - name: Test-Header
+                  value: Awesome
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+              httpHeaders:
+                - name: Test-Header
+                  value: Awesome
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          resources:
+            limits:
+              cpu: 50m
+              memory: 96Mi
+            requests:
+              cpu: 1m
+              memory: 32Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+
+  # ------- WEB DEPLOYMENT JOB --------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    glitchtip: web
+  name: glitchtip-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      glitchtip: web
+  template:
+    metadata:
+      labels:
+        glitchtip: web
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: glithtip
+                    operator: In
+                    values:
+                      - web
+              topologyKey: "kubernetes.io/hostname"
+      initContainers:
+        - name: init-migration
+          image: "quay.io/cs-sre/glitchtip"
+          command: ["python3", "./manage.py", "migrate"]
+          env:
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.host
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.name
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.user
+      containers:
+        - env:
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: redis.url
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-elasticache
+                  key: db.port
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-elasticache
+                  key: db.auth_token
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.host
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.name
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.user
+            - name: PORT
+              value: "8000"
+            - name: I_PAID_FOR_GLITCHTIP
+              value: "True"
+            - name: ENABLE_OPEN_USER_REGISTRATION
+              value: "True"
+            - name: GLITCHTIP_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: glitchtip-configmap
+                  key: GLITCHTIP_DOMAIN
+            - name: DEFAULT_FROM_EMAIL
+              value: no-reply@devshift.net
+            - name: EMAIL_URL
+              value: smtp+tls://smtp-user:smtp-password@email-smtp.eu-west-1.amazonaws.com:587
+            - name: ENABLE_OBSERVABILITY_API
+              value: "True"
+          image: "quay.io/cs-sre/glitchtip"
+          name: web
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+              httpHeaders:
+                - name: Test-Header
+                  value: Awesome
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+              httpHeaders:
+                - name: Test-Header
+                  value: Awesome
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          resources:
+            requests:
+              cpu: "1"
+              memory: 800M
+            limits:
+              memory: 2G
+              cpu: "5"
+      restartPolicy: Always
+
+  # ---------- GT WEB SERVICE -----------
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    glitchtip: web
+  name: glitchtip-web
+spec:
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 8000
+  selector:
+    glitchtip: web
+
+  # ------ PVC for BEAT -------
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: beat-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+# ---- WORKER -----------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    glitchtip: worker
+  name: glitchtip-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      glitchtip: worker
+  template:
+    metadata:
+      labels:
+        glitchtip: worker
+    spec:
+      volumes:
+        - name: beat-data
+          persistentVolumeClaim:
+            claimName: beat-data-pvc
+      containers:
+        - args:
+            - celery
+            - -A
+            - glitchtip
+            - worker
+            - -B
+            - -l
+            - INFO
+            - -s
+            - /celery/celerybeat-schedule
+          env:
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-credentials
+                  key: redis.url
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-elasticache
+                  key: db.port
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-elasticache
+                  key: db.auth_token
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.host
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.name
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.user
+            - name: PORT
+              value: "8000"
+          image: "quay.io/cs-sre/glitchtip"
+          name: worker
+          volumeMounts:
+            - mountPath: /celery
+              name: beat-data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              memory: 200M
+              cpu: 100m
+      restartPolicy: Always
+
+  # ---- CREATE SUPERUSER JOB -------------
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: superuser-job-1
+spec:
+  parallelism: 1
+  completions: 1
+  activeDeadlineSeconds: 1800
+  backoffLimit: 3
+  template:
+    metadata:
+      name: superuser-job-1
+    spec:
+      containers:
+        - name: superuser-job-1
+          image: "quay.io/cs-sre/glitchtip"
+          command: ["python3", "./manage.py", "createsuperuser", "--noinput"]
+          resources:
+            requests:
+              cpu: 1m
+              memory: 500M
+            limits:
+              memory: 800M
+              cpu: 2m
+          envFrom:
+            - secretRef:
+                name: superuser-secret
+          env:
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.host
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.name
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: glitchtip-rds
+                  key: db.user
+
+      restartPolicy: Never
+
+---
+apiVersion: v1
+data:
+  db.host: cG9zdGdyZXMtcG9zdGdyZXNxbA==
+  db.name: cG9zdGdyZXM=
+  db.password: STdmQ3dqS1k1bg==
+  db.port: NTQzMg==
+  db.user: cG9zdGdyZXM=
+kind: Secret
+metadata:
+  name: glitchtip-rds
+
+---
+apiVersion: v1
+data:
+  db.host: bXktcmVsZWFzZS1yZWRpcy1tYXN0ZXI=
+  db.name: bXktcmVsZWFzZS1yZWRpcy1tYXN0ZXI=
+  db.auth_token: T0pCQllWM05DOA==
+  db.port: NjM3OQ==
+  db.user: cmVkaXM=
+kind: Secret
+metadata:
+  name: glitchtip-elasticache
+
+---
+apiVersion: v1
+data:
+  redis.url: bXktcmVsZWFzZS1yZWRpcy1tYXN0ZXI=
+kind: Secret
+metadata:
+  name: redis-credentials
+
+---
+apiVersion: v1
+data:
+  DJANGO_SUPERUSER_EMAIL: YWRtaW5AYWRtaW4uY29t
+  DJANGO_SUPERUSER_PASSWORD: YWRtaW4tYWRtaW4=
+  DJANGO_SUPERUSER_USERNAME: YWRtaW4=
+kind: Secret
+metadata:
+  name: superuser-secret
