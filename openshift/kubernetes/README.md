@@ -18,7 +18,7 @@
 - Create a Admin User Creds, A job will create a Admin account to enable signin in the application:
     > `kubectl create secret generic superuser-secret --from-literal=DJANGO_SUPERUSER_EMAIL=admin@admin.com --from-literal=DJANGO_SUPERUSER_PASSWORD={ANY-BASIC-PASSWORD-THAT-YOU-CAN-REMEMBER} --from-literal=DJANGO_SUPERUSER_USERNAME=admin`
 - Create a Generic Secret:
-    > `kubectl create secret generic glitchtip-secret --from-literal=PASSWORD_HASH_TOKEN=&9+w^zi1r(ii^4fgpw6t=9cdyy5flyv@y=j9vtr@0jj83o(8bd`
+    > `kubectl create secret generic glitchtip-secret --from-literal=PASSWORD_HASH_TOKEN="&9+w^zi1r(ii^4fgpw6t=9cdyy5flyv@y=j9vtr@0jj83o(8bd"`
 
 Finally Deploy rest of the artifacts with: `kubectl apply -f k8s.yaml`
 
