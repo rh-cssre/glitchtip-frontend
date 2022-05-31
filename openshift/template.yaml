@@ -402,6 +402,7 @@ objects:
         metadata:
           name: superuser-job-1
         spec:
+          ttlSecondsAfterFinished: 100
           containers:
             - name: superuser-job-1
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
