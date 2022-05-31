@@ -20,11 +20,11 @@ import {
   IssueTags,
   IssueTagsAdjusted,
 } from "../interfaces";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { generateIconPath } from "../../shared/shared.utils";
 import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
 import { IssuesService } from "../issues.service";
 import { Json } from "src/app/interface-primitives";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 
 interface IssueDetailState {
@@ -449,11 +449,16 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     return;
   }
 
-  checkContextName(contextsObject: { [key: string]: Json }, defaultUnknown: string) {
-    if  (contextsObject.name) {
-      return contextsObject.name === "Other" ? `Unknown ${defaultUnknown}` : contextsObject.name as string
+  checkContextName(
+    contextsObject: { [key: string]: Json },
+    defaultUnknown: string
+  ) {
+    if (contextsObject.name) {
+      return contextsObject.name === "Other"
+        ? `Unknown ${defaultUnknown}`
+        : (contextsObject.name as string);
     } else {
-      return `Unknown ${defaultUnknown}`
+      return `Unknown ${defaultUnknown}`;
     }
   }
 
