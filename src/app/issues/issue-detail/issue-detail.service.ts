@@ -554,9 +554,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
               ? generateIconPath(contextsObject.name as string)
               : null,
             matIcon: "memory",
-            title: contextsObject.name
-              ? (contextsObject.name as string)
-              : "Unknown GPU",
+            title: this.checkContextName(contextsObject, "GPU"),
             subtitle: contextsObject.vendor_name
               ? (contextsObject.vendor_name as string)
               : "Unknown",
