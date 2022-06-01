@@ -398,6 +398,7 @@ objects:
       completions: 1
       activeDeadlineSeconds: 1800
       backoffLimit: 3
+      ttlSecondsAfterFinished: 100
       template:
         metadata:
           name: superuser-job-1
