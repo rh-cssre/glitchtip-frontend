@@ -62,8 +62,8 @@ spec:
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: glitchtip-secret
-                  key: PASSWORD_HASH_TOKEN
+                  name: tokens
+                  key: PASSWORD_SALT_TOKEN
             - name: REDIS_PORT
               valueFrom:
                 secretKeyRef:
@@ -367,6 +367,7 @@ spec:
   completions: 1
   activeDeadlineSeconds: 1800
   backoffLimit: 3
+  ttlSecondsAfterFinished: 100
   template:
     metadata:
       name: superuser-job-1
