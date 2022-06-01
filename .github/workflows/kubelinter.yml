@@ -44,9 +44,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-  
-      - name: Scan openshift folder
-        id: kube-lint-scan-openshift
-        uses: stackrox/kube-linter-action@v1
+
+      - uses: actions/setup-go@v3
         with:
-          directory: openshift
+          go-version: '^1.13.1' # The Go version to download (if necessary) and use.
+      - run: go version
+
+      - name: download kube-linter
+        run: |
+          GO111MODULE=on go install golang.stackrox.io/kube-linter/cmd/kube-linter@latest
+
+      - name: scan yaml files in openshift folder
+        run: for filename in $(find . -type f -wholename './openshift/*.yaml' -not -path '*openshift/kubernetes*'); do $HOME/go/bin/kube-linter lint $filename ; done
