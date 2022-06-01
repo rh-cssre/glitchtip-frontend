@@ -103,23 +103,15 @@ spec:
           imagePullPolicy: Always
           name: glitchtip
           readinessProbe:
-            httpGet:
-              path: /
-              port: 8000
-              httpHeaders:
-                - name: Test-Header
-                  value: Awesome
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            exec:
+              command: ["ls", "/tmp"]
+            initialDelaySeconds: 30
+            periodSeconds: 50
           livenessProbe:
-            httpGet:
-              path: /
-              port: 8000
-              httpHeaders:
-                - name: Test-Header
-                  value: Awesome
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            exec:
+              command: ["ls", "/tmp"]
+            initialDelaySeconds: 30
+            periodSeconds: 50
           resources:
             limits:
               cpu: 50m
@@ -288,19 +280,6 @@ spec:
   selector:
     glitchtip: web
 
-  # ------ PVC for BEAT -------
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: beat-data-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-
 # ---- WORKER -----------
 ---
 apiVersion: apps/v1
@@ -319,10 +298,6 @@ spec:
       labels:
         glitchtip: worker
     spec:
-      volumes:
-        - name: beat-data
-          persistentVolumeClaim:
-            claimName: beat-data-pvc
       containers:
         - args:
             - celery
@@ -332,8 +307,6 @@ spec:
             - -B
             - -l
             - INFO
-            - -s
-            - /celery/celerybeat-schedule
           env:
             - name: REDIS_URL
               valueFrom:
@@ -374,9 +347,6 @@ spec:
               value: "8000"
           image: "quay.io/cs-sre/glitchtip"
           name: worker
-          volumeMounts:
-            - mountPath: /celery
-              name: beat-data
           resources:
             requests:
               cpu: 50m
@@ -438,45 +408,3 @@ spec:
                   key: db.user
 
       restartPolicy: Never
-
----
-apiVersion: v1
-data:
-  db.host: cG9zdGdyZXMtcG9zdGdyZXNxbA==
-  db.name: cG9zdGdyZXM=
-  db.password: STdmQ3dqS1k1bg==
-  db.port: NTQzMg==
-  db.user: cG9zdGdyZXM=
-kind: Secret
-metadata:
-  name: glitchtip-rds
-
----
-apiVersion: v1
-data:
-  db.host: bXktcmVsZWFzZS1yZWRpcy1tYXN0ZXI=
-  db.name: bXktcmVsZWFzZS1yZWRpcy1tYXN0ZXI=
-  db.auth_token: T0pCQllWM05DOA==
-  db.port: NjM3OQ==
-  db.user: cmVkaXM=
-kind: Secret
-metadata:
-  name: glitchtip-elasticache
-
----
-apiVersion: v1
-data:
-  redis.url: bXktcmVsZWFzZS1yZWRpcy1tYXN0ZXI=
-kind: Secret
-metadata:
-  name: redis-credentials
-
----
-apiVersion: v1
-data:
-  DJANGO_SUPERUSER_EMAIL: YWRtaW5AYWRtaW4uY29t
-  DJANGO_SUPERUSER_PASSWORD: YWRtaW4tYWRtaW4=
-  DJANGO_SUPERUSER_USERNAME: YWRtaW4=
-kind: Secret
-metadata:
-  name: superuser-secret
