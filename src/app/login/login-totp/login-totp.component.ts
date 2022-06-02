@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+} from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../login.service";
 
@@ -8,7 +15,8 @@ import { LoginService } from "../login.service";
   styleUrls: ["./login-totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginTotpComponent implements OnInit {
+export class LoginTotpComponent implements OnInit, AfterViewInit {
+  @ViewChild("input") input!: ElementRef;
   error$ = this.loginService.error$;
   hasFIDO2$ = this.loginService.hasFIDO2$;
   form = new FormGroup({
@@ -27,6 +35,10 @@ export class LoginTotpComponent implements OnInit {
         this.code?.setErrors({ serverError: error.code });
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.input.nativeElement.focus();
   }
 
   get code() {
