@@ -71,8 +71,8 @@ objects:
                 - name: SECRET_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: glitchtip-secret
-                      key: PASSWORD_HASH_TOKEN
+                      name: tokens
+                      key: PASSWORD_SALT_TOKEN
                 - name: REDIS_PORT
                   valueFrom:
                     secretKeyRef:
@@ -392,7 +392,7 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      name: superuser-job-1
+      name: superuser-job-2
     spec:
       parallelism: 1
       completions: 1
@@ -401,10 +401,10 @@ objects:
       ttlSecondsAfterFinished: 100
       template:
         metadata:
-          name: superuser-job-1
+          name: superuser-job-2
         spec:
           containers:
-            - name: superuser-job-1
+            - name: superuser-job-2
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               command:
                 ["python3", "./manage.py", "createsuperuser", "--noinput"]
