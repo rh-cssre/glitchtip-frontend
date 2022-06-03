@@ -33,7 +33,7 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
   });
 
   constructor(
-    private changedetector: ChangeDetectorRef,
+    private changeDetector: ChangeDetectorRef,
     private loginService: LoginService
   ) {}
 
@@ -47,7 +47,7 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.input.nativeElement.focus();
-    this.changedetector.detectChanges();
+    this.changeDetector.detectChanges();
   }
 
   get code() {
