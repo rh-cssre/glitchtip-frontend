@@ -12,7 +12,7 @@
       ></gt-form-error>
       <mat-form-field class="full-width">
         <mat-label>Verification Code</mat-label>
-        <input matInput formControlName="code" />
+        <input #input matInput formControlName="code" />
         <mat-error *ngIf="code?.invalid">
           <span *ngIf="code?.errors?.required">Required</span>
           <span *ngIf="code?.errors?.minlength || code?.errors?.maxlength">
@@ -26,6 +26,8 @@
       <button id="submit" mat-flat-button color="primary">Login</button>
     </form>
 
-    <a *ngIf="hasFIDO2$ | async" [routerLink]="[]" (click)="switchMethod()">Log in with security key instead</a>
+    <a *ngIf="hasFIDO2$ | async" [routerLink]="[]" (click)="switchMethod()"
+      >Log in with security key instead</a
+    >
   </mat-card-content>
 </div>
