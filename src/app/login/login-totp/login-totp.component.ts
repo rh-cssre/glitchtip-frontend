@@ -1,12 +1,17 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   OnInit,
   ElementRef,
   ViewChild,
   AfterViewInit,
 } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
 import { LoginService } from "../login.service";
 
 @Component({
@@ -27,7 +32,10 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
     ]),
   });
 
-  constructor(private loginService: LoginService) {}
+  constructor(
+    private changedetector: ChangeDetectorRef,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit() {
     this.error$.subscribe((error) => {
@@ -39,6 +47,7 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.input.nativeElement.focus();
+    this.changedetector.detectChanges();
   }
 
   get code() {
