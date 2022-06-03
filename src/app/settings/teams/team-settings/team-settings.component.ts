@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { FormControl, Validators, FormGroup } from "@angular/forms";
+import { UntypedFormControl, Validators, UntypedFormGroup } from "@angular/forms";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute } from "@angular/router";
 import { map, take } from "rxjs/operators";
@@ -15,8 +15,8 @@ export class TeamSettingsComponent implements OnInit {
   team$ = this.teamsService.team$;
   loading$ = this.teamsService.loading$;
   errors$ = this.teamsService.errors$;
-  form = new FormGroup({
-    slug: new FormControl("", [Validators.required]),
+  form = new UntypedFormGroup({
+    slug: new UntypedFormControl("", [Validators.required]),
   });
   routeSlugs$ = this.route.paramMap.pipe(
     map((params) => [params.get("org-slug"), params.get("team-slug")])

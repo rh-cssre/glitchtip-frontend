@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { tap, filter, first, take, map } from "rxjs/operators";
@@ -43,31 +43,31 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
-  monitorEditForm = new FormGroup({
-    monitorType: new FormControl("Ping", [Validators.required]),
-    name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
-    url: new FormControl(""),
-    expectedStatus: new FormControl(200, [
+  monitorEditForm = new UntypedFormGroup({
+    monitorType: new UntypedFormControl("Ping", [Validators.required]),
+    name: new UntypedFormControl("", [Validators.required, Validators.maxLength(200)]),
+    url: new UntypedFormControl(""),
+    expectedStatus: new UntypedFormControl(200, [
       Validators.required,
       Validators.min(100),
       numberValidator,
     ]),
-    interval: new FormControl(60, [
+    interval: new UntypedFormControl(60, [
       Validators.required,
       Validators.min(60),
       Validators.max(86399),
     ]),
-    project: new FormControl(null),
+    project: new UntypedFormControl(null),
   });
 
-  formName = this.monitorEditForm.get("name") as FormControl;
-  formMonitorType = this.monitorEditForm.get("monitorType") as FormControl;
-  formUrl = this.monitorEditForm.get("url") as FormControl;
+  formName = this.monitorEditForm.get("name") as UntypedFormControl;
+  formMonitorType = this.monitorEditForm.get("monitorType") as UntypedFormControl;
+  formUrl = this.monitorEditForm.get("url") as UntypedFormControl;
   formExpectedStatus = this.monitorEditForm.get(
     "expectedStatus"
-  ) as FormControl;
-  formInterval = this.monitorEditForm.get("interval") as FormControl;
-  formProject = this.monitorEditForm.get("project") as FormControl;
+  ) as UntypedFormControl;
+  formInterval = this.monitorEditForm.get("interval") as UntypedFormControl;
+  formProject = this.monitorEditForm.get("project") as UntypedFormControl;
 
   matcher = new LessAnnoyingErrorStateMatcher();
 

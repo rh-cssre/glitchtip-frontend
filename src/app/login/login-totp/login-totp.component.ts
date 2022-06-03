@@ -6,7 +6,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../login.service";
 
 @Component({
@@ -19,8 +19,8 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
   @ViewChild("input") input!: ElementRef;
   error$ = this.loginService.error$;
   hasFIDO2$ = this.loginService.hasFIDO2$;
-  form = new FormGroup({
-    code: new FormControl("", [
+  form = new UntypedFormGroup({
+    code: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(16),
