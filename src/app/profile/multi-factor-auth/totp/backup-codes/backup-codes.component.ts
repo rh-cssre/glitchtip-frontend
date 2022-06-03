@@ -2,7 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy
 } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
@@ -18,8 +18,8 @@ export class BackupCodesComponent {
   error$ = this.service.serverError$;
   copiedCodes$ = this.service.copiedCodes$;
   regenCodes$ = this.service.regenCodes$;
-  backupCodeForm = new FormGroup({
-    backupCode: new FormControl("", [
+  backupCodeForm = new UntypedFormGroup({
+    backupCode: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(16),
       Validators.maxLength(16),

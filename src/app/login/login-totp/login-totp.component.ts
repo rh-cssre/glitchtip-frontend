@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../login.service";
 
 @Component({
@@ -11,8 +11,8 @@ import { LoginService } from "../login.service";
 export class LoginTotpComponent implements OnInit {
   error$ = this.loginService.error$;
   hasFIDO2$ = this.loginService.hasFIDO2$;
-  form = new FormGroup({
-    code: new FormControl("", [
+  form = new UntypedFormGroup({
+    code: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(16),

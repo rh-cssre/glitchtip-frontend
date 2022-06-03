@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -20,10 +20,10 @@ export class NewProjectComponent implements OnInit {
   loading = false;
   error?: string;
   orgSlug?: string;
-  form = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    platform: new FormControl(""),
-    team: new FormControl("", [Validators.required]),
+  form = new UntypedFormGroup({
+    name: new UntypedFormControl("", [Validators.required]),
+    platform: new UntypedFormControl(""),
+    team: new UntypedFormControl("", [Validators.required]),
   });
 
   constructor(
