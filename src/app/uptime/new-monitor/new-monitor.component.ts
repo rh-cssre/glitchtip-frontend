@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { map } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -36,28 +36,28 @@ export class NewMonitorComponent implements OnInit {
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
-  newMonitorForm = new FormGroup({
-    monitorType: new FormControl("Ping", [Validators.required]),
-    name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
-    url: new FormControl("https://", defaultUrlValidators),
-    expectedStatus: new FormControl(200, [
+  newMonitorForm = new UntypedFormGroup({
+    monitorType: new UntypedFormControl("Ping", [Validators.required]),
+    name: new UntypedFormControl("", [Validators.required, Validators.maxLength(200)]),
+    url: new UntypedFormControl("https://", defaultUrlValidators),
+    expectedStatus: new UntypedFormControl(200, [
       Validators.required,
       Validators.min(100),
       numberValidator,
     ]),
-    interval: new FormControl("60", [
+    interval: new UntypedFormControl("60", [
       Validators.required,
       Validators.min(60),
       Validators.max(86399),
     ]),
-    project: new FormControl(null),
+    project: new UntypedFormControl(null),
   });
 
-  formName = this.newMonitorForm.get("name") as FormControl;
-  formMonitorType = this.newMonitorForm.get("monitorType") as FormControl;
-  formUrl = this.newMonitorForm.get("url") as FormControl;
-  formExpectedStatus = this.newMonitorForm.get("expectedStatus") as FormControl;
-  formInterval = this.newMonitorForm.get("interval") as FormControl;
+  formName = this.newMonitorForm.get("name") as UntypedFormControl;
+  formMonitorType = this.newMonitorForm.get("monitorType") as UntypedFormControl;
+  formUrl = this.newMonitorForm.get("url") as UntypedFormControl;
+  formExpectedStatus = this.newMonitorForm.get("expectedStatus") as UntypedFormControl;
+  formInterval = this.newMonitorForm.get("interval") as UntypedFormControl;
 
   intervalPerMonth = 2592000 / this.formInterval.value;
 

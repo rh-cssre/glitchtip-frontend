@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { OrganizationProject } from "../../api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -78,7 +78,7 @@ export class ProjectFilterBarComponent implements OnInit {
   );
 
   /** Used to filter project names */
-  filterProjectInput = new FormControl();
+  filterProjectInput = new UntypedFormControl();
 
   /** Projects that are filtered via the text field form control */
   filteredProjects$: Observable<OrganizationProject[] | null> = combineLatest([

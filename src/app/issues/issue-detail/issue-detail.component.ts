@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { map, exhaustMap, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
@@ -15,8 +15,8 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 export class IssueDetailComponent implements OnInit {
   issue$ = this.issueService.issue$;
   initialLoadComplete$ = this.issueService.issueInitialLoadComplete$;
-  form = new FormGroup({
-    assignee: new FormControl(""),
+  form = new UntypedFormGroup({
+    assignee: new UntypedFormControl(""),
   });
   issueIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("issue-id"))

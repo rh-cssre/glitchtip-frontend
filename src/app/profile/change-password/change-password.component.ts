@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
   FormGroupDirective,
 } from "@angular/forms";
@@ -25,13 +25,13 @@ export class ChangePasswordComponent implements OnInit {
 
   loading = false;
   error: string | null | undefined;
-  form = new FormGroup({
-    old_password: new FormControl("", [Validators.required]),
-    new_password1: new FormControl("", [
+  form = new UntypedFormGroup({
+    old_password: new UntypedFormControl("", [Validators.required]),
+    new_password1: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
-    new_password2: new FormControl("", [
+    new_password2: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { ResetPasswordService } from "../api/reset-password/reset-password.service";
 
 @Component({
@@ -12,8 +12,8 @@ export class ResetPasswordComponent {
   sendResetEmailError$ = this.resetService.sendResetEmailError$;
   sendResetEmailLoading$ = this.resetService.sendResetEmailLoading$;
   sendResetEmailSuccess$ = this.resetService.sendResetEmailSuccess$;
-  form = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.email]),
+  form = new UntypedFormGroup({
+    email: new UntypedFormControl("", [Validators.required, Validators.email]),
   });
 
   constructor(private resetService: ResetPasswordService) {}

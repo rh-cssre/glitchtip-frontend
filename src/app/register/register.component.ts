@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { RegisterService } from "./register.service";
@@ -19,13 +19,13 @@ export class RegisterComponent implements OnInit {
   loading = false;
   error = "";
   tags = "";
-  form = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.email]),
-    password1: new FormControl("", [
+  form = new UntypedFormGroup({
+    email: new UntypedFormControl("", [Validators.required, Validators.email]),
+    password1: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
-    password2: new FormControl("", [
+    password2: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
