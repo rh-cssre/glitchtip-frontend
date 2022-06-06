@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { TeamsService } from "src/app/api/teams/teams.service";
@@ -17,7 +17,7 @@ export class TeamProjectsComponent implements OnInit {
   projectsNotOnTeam$ = this.projectsService.projectsNotOnTeam$;
   loading$ = this.projectsService.addRemoveLoading$;
   errors$ = this.projectsService.errors$;
-  project = new FormControl();
+  project = new UntypedFormControl();
   teamSlug$ = this.route.paramMap.pipe(
     map((params) => params.get("team-slug"))
   );

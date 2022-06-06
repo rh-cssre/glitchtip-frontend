@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
   FormGroupDirective,
   NgForm,
@@ -15,7 +15,7 @@ import { numberValidator } from "src/app/shared/validators";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: FormControl | null,
+    control: UntypedFormControl | null,
     form: FormGroupDirective | NgForm | null
   ): boolean {
     return !!(control && control.invalid && form?.touched);
@@ -57,31 +57,31 @@ export class AlertFormComponent implements OnInit {
     Validators.required,
   ];
 
-  projectAlertForm = new FormGroup({
-    optionsGroup: new FormGroup(
+  projectAlertForm = new UntypedFormGroup({
+    optionsGroup: new UntypedFormGroup(
       {
-        uptime: new FormControl(""),
-        errorAlert: new FormControl(""),
+        uptime: new UntypedFormControl(""),
+        errorAlert: new UntypedFormControl(""),
       },
       selectionRequiredValidator
     ),
-    timespan_minutes: new FormControl(""),
-    quantity: new FormControl(""),
+    timespan_minutes: new UntypedFormControl(""),
+    quantity: new UntypedFormControl(""),
   });
 
   projectFormTimespan = this.projectAlertForm.get(
     "timespan_minutes"
-  ) as FormControl;
-  projectFormQuantity = this.projectAlertForm.get("quantity") as FormControl;
+  ) as UntypedFormControl;
+  projectFormQuantity = this.projectAlertForm.get("quantity") as UntypedFormControl;
   projectFormUptime = this.projectAlertForm.get(
     "optionsGroup.uptime"
-  ) as FormControl;
+  ) as UntypedFormControl;
   projectFormErrorAlert = this.projectAlertForm.get(
     "optionsGroup.errorAlert"
-  ) as FormControl;
+  ) as UntypedFormControl;
   projectFormOptionsGroup = this.projectAlertForm.get(
     "optionsGroup"
-  ) as FormGroup;
+  ) as UntypedFormGroup;
 
   matcher = new LessAnnoyingErrorStateMatcher();
   newFormMatcher = new NewAlertErrorStateMatcher();

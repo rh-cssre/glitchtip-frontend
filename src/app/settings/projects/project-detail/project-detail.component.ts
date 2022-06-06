@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
   FormGroupDirective,
 } from "@angular/forms";
@@ -34,12 +34,12 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   updatePlatformLoading = false;
   updatePlatformError = "";
 
-  nameForm = new FormGroup({
-    name: new FormControl("", [Validators.required]),
+  nameForm = new UntypedFormGroup({
+    name: new UntypedFormControl("", [Validators.required]),
   });
 
-  platformForm = new FormGroup({
-    platform: new FormControl(""),
+  platformForm = new UntypedFormGroup({
+    platform: new UntypedFormControl(""),
   });
 
   constructor(

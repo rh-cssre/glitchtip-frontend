@@ -1,9 +1,9 @@
 import { ErrorStateMatcher } from "@angular/material/core";
-import { FormControl, FormGroupDirective, NgForm } from "@angular/forms";
+import { UntypedFormControl, FormGroupDirective, NgForm } from "@angular/forms";
 
 export class LessAnnoyingErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: FormControl | null,
+    control: UntypedFormControl | null,
     form: FormGroupDirective | NgForm | null
   ): boolean {
     return !!(control && control.invalid && form?.submitted);

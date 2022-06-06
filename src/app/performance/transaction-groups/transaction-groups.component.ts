@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { combineLatest, withLatestFrom, Subscription } from "rxjs";
 import { map, tap } from "rxjs/operators";
@@ -21,21 +21,21 @@ export class TransactionGroupsComponent
   implements OnInit, OnDestroy
 {
   displayedColumns = ["name-and-project", "avgDuration"];
-  sortForm = new FormGroup({
-    sort: new FormControl({
+  sortForm = new UntypedFormGroup({
+    sort: new UntypedFormControl({
       value: "",
       disabled: true,
     }),
   });
-  dateForm = new FormGroup({
-    startDate: new FormControl(""),
-    endDate: new FormControl(""),
+  dateForm = new UntypedFormGroup({
+    startDate: new UntypedFormControl(""),
+    endDate: new UntypedFormControl(""),
   });
-  environmentForm = new FormGroup({
-    environment: new FormControl({ value: "" }),
+  environmentForm = new UntypedFormGroup({
+    environment: new UntypedFormControl({ value: "" }),
   });
-  searchForm = new FormGroup({
-    query: new FormControl(""),
+  searchForm = new UntypedFormGroup({
+    query: new UntypedFormControl(""),
   });
 
   sorts = [

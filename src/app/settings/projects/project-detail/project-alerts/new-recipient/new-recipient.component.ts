@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "../project-alerts.service";
 import { urlRegex } from "src/app/shared/validators";
@@ -21,13 +21,13 @@ export class NewRecipientComponent implements OnInit {
     { viewValue: "General Webhook", value: "webhook" },
   ];
 
-  recipientForm = new FormGroup({
-    recipientType: new FormControl("", [Validators.required]),
-    url: new FormControl(""),
+  recipientForm = new UntypedFormGroup({
+    recipientType: new UntypedFormControl("", [Validators.required]),
+    url: new UntypedFormControl(""),
   });
 
-  recipientType = this.recipientForm.get("recipientType") as FormControl;
-  url = this.recipientForm.get("url") as FormControl;
+  recipientType = this.recipientForm.get("recipientType") as UntypedFormControl;
+  url = this.recipientForm.get("url") as UntypedFormControl;
 
   constructor(
     public dialogRef: MatDialogRef<NewRecipientComponent>,

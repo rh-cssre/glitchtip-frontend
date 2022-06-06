@@ -6,7 +6,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { Member } from "src/app/api/organizations/organizations.interface";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from "src/app/api/user/user.service";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 
 @Component({
   selector: "gt-team-members",
@@ -18,7 +18,7 @@ export class TeamMembersComponent implements OnInit {
   filteredAddTeamMembers$ = this.organizationsService.filteredAddTeamMembers$;
   userTeamRole$ = this.teamsService.userTeamRole$;
 
-  member = new FormControl();
+  member = new UntypedFormControl();
   orgSlug = "";
   teamSlug = "";
   addMemberError = "";

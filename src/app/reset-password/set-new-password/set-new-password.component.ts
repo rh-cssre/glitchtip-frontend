@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { ResetPasswordService } from "src/app/api/reset-password/reset-password.service";
 
@@ -16,12 +16,12 @@ export class SetNewPasswordComponent {
   );
   setNewPasswordError$ = this.resetService.setNewPasswordError$;
   setnewPasswordLoading$ = this.resetService.setNewPasswordLoading$;
-  form = new FormGroup({
-    new_password1: new FormControl("", [
+  form = new UntypedFormGroup({
+    new_password1: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
-    new_password2: new FormControl("", [
+    new_password2: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),

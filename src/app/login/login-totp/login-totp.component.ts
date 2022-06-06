@@ -1,5 +1,17 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+} from "@angular/core";
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
 import { LoginService } from "../login.service";
 
 @Component({
@@ -8,18 +20,22 @@ import { LoginService } from "../login.service";
   styleUrls: ["./login-totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginTotpComponent implements OnInit {
+export class LoginTotpComponent implements OnInit, AfterViewInit {
+  @ViewChild("input") input!: ElementRef;
   error$ = this.loginService.error$;
   hasFIDO2$ = this.loginService.hasFIDO2$;
-  form = new FormGroup({
-    code: new FormControl("", [
+  form = new UntypedFormGroup({
+    code: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(16),
     ]),
   });
 
-  constructor(private loginService: LoginService) {}
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit() {
     this.error$.subscribe((error) => {
@@ -27,6 +43,11 @@ export class LoginTotpComponent implements OnInit {
         this.code?.setErrors({ serverError: error.code });
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.input.nativeElement.focus();
+    this.changeDetector.detectChanges();
   }
 
   get code() {

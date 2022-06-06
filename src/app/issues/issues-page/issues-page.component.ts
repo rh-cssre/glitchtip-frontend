@@ -4,7 +4,7 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Subscription, combineLatest } from "rxjs";
@@ -31,21 +31,21 @@ export class IssuesPageComponent
   );
   searchHits$ = this.issuesService.searchHits$;
   searchDirectHit$ = this.issuesService.searchDirectHit$;
-  form = new FormGroup({
-    query: new FormControl(""),
+  form = new UntypedFormGroup({
+    query: new UntypedFormControl(""),
   });
-  sortForm = new FormGroup({
-    sort: new FormControl({
+  sortForm = new UntypedFormGroup({
+    sort: new UntypedFormControl({
       value: "",
       disabled: true,
     }),
   });
-  environmentForm = new FormGroup({
-    environment: new FormControl({ value: "" }),
+  environmentForm = new UntypedFormGroup({
+    environment: new UntypedFormControl({ value: "" }),
   });
-  dateForm = new FormGroup({
-    startDate: new FormControl(""),
-    endDate: new FormControl(""),
+  dateForm = new UntypedFormGroup({
+    startDate: new UntypedFormControl(""),
+    endDate: new UntypedFormControl(""),
   });
 
   issues$ = this.issuesService.issuesWithSelected$

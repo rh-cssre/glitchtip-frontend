@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import {
-  FormGroup,
-  FormArray,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormArray,
+  UntypedFormControl,
   Validators,
-  FormBuilder,
+  UntypedFormBuilder,
 } from "@angular/forms";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { AuthTokensService } from "../auth-tokens.service";
@@ -22,7 +22,7 @@ export class NewTokenComponent implements OnInit, OnDestroy {
   createErrorLabel$ = this.authTokensService.createErrorLabel$;
   createErrorScopes$ = this.authTokensService.createErrorScopes$;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   scopeOptions: string[] = [
     "project:read",
     "project:write",
@@ -43,24 +43,24 @@ export class NewTokenComponent implements OnInit, OnDestroy {
   ];
 
   get scopes() {
-    return this.form.controls.scopes as FormArray;
+    return this.form.controls.scopes as UntypedFormArray;
   }
 
   get label() {
-    return this.form.controls.label as FormControl;
+    return this.form.controls.label as UntypedFormControl;
   }
 
   constructor(
     private authTokensService: AuthTokensService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     this.form = this.fb.group({
-      label: new FormControl("", [Validators.required]),
-      scopes: new FormArray([]),
+      label: new UntypedFormControl("", [Validators.required]),
+      scopes: new UntypedFormArray([]),
     });
 
     /* Set scopeOptions to scopes FormArray **/
-    this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
+    this.scopeOptions.forEach(() => this.scopes.push(new UntypedFormControl(false)));
   }
 
   ngOnInit(): void {
