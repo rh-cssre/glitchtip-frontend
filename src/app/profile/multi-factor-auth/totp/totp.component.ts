@@ -6,7 +6,7 @@ import {
   OnInit,
   OnDestroy,
 } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import * as QRCode from "qrcode";
 import { combineLatest } from "rxjs";
 import { delay, filter, tap } from "rxjs/operators";
@@ -25,8 +25,8 @@ export class TOTPComponent implements OnInit, OnDestroy {
   step$ = this.service.setupTOTPStage$;
   error$ = this.service.serverError$;
   copiedCodes$ = this.service.copiedCodes$;
-  codeForm = new FormGroup({
-    code: new FormControl("", [
+  codeForm = new UntypedFormGroup({
+    code: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(6),

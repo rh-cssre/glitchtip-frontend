@@ -178,9 +178,10 @@
       }
     }
   },
-  "defaultProject": "glitchtip-frontend",
   "cli": {
     "analytics": "86390919-7a40-4e23-8811-d61b83438874",
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

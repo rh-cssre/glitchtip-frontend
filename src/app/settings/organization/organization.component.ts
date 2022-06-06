@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { tap, take } from "rxjs/operators";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { OrganizationDetail } from "src/app/api/organizations/organizations.interface";
@@ -17,8 +17,8 @@ export class OrganizationComponent implements OnInit {
   updateLoading = false;
   deleteError = "";
   deleteLoading = false;
-  form = new FormGroup({
-    name: new FormControl(""),
+  form = new UntypedFormGroup({
+    name: new UntypedFormControl(""),
   });
 
   constructor(

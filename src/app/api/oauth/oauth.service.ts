@@ -51,7 +51,7 @@ export class GlitchTipOAuthService {
   // /** Redirect user to OAuth provider auth URL */
   initOAuthLogin(socialApp: SocialApp) {
     const params: Record<string, string> = {
-      response_type: "token",
+      response_type: "code",
       client_id: socialApp.client_id,
       redirect_uri: window.location.origin + "/auth/" + socialApp.provider,
       scope: socialApp.scopes.join(" "),
