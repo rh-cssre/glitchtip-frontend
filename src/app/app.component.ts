@@ -1,6 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Title } from "@angular/platform-browser";
-import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from "@angular/router";
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RoutesRecognized,
+} from "@angular/router";
 import { map, filter, take, exhaustMap, tap } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { AuthService } from "./api/auth/auth.service";
@@ -13,7 +17,6 @@ import { UserService } from "./api/user/user.service";
   templateUrl: "./app.component.html",
 })
 export class AppComponent implements OnInit {
-  title = "glitchtip-frontend";
   isLoggedIn$ = this.auth.isLoggedIn;
 
   /**
@@ -37,8 +40,7 @@ export class AppComponent implements OnInit {
     private organizationService: OrganizationsService,
     private settings: SettingsService,
     private route: ActivatedRoute,
-    private router: Router,
-    private titleService: Title
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -55,18 +57,10 @@ export class AppComponent implements OnInit {
         }
       }
 
-      if (event instanceof RoutesRecognized) {
-        let titleTag = "GlitchTip";
-        if (typeof event.state.root.firstChild!.data.title !== "undefined") {
-          titleTag = event.state.root.firstChild!.data.title + " | GlitchTip";
-        }
-        this.titleService.setTitle(titleTag);
-      }
-
       if (event instanceof NavigationEnd) {
-          const params = this.route.snapshot.firstChild?.params
-          const orgSlug = params ? params["org-slug"] : undefined;
-          this.settings.triggerPlausibleReport(orgSlug);
+        const params = this.route.snapshot.firstChild?.params;
+        const orgSlug = params ? params["org-slug"] : undefined;
+        this.settings.triggerPlausibleReport(orgSlug);
       }
     });
 
