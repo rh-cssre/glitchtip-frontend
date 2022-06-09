@@ -60,7 +60,7 @@ test-e2e:
 build-assets:
   stage: test
   script:
-    - npm ci
+    - npm ci --force
     - npm run build-prod
   artifacts:
     paths:
