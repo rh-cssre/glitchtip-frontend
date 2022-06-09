@@ -45,7 +45,7 @@ test-e2e:
     name: cypress/included:9.7.0
     entrypoint: [""]
   script:
-    - npm ci
+    - npm ci --force
     - cp src/proxy.conf.ci.json src/proxy.conf.json
     - npm run e2e
   except:
@@ -60,7 +60,7 @@ test-e2e:
 build-assets:
   stage: test
   script:
-    - npm ci
+    - npm ci --force
     - npm run build-prod
   artifacts:
     paths:
