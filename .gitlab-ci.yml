@@ -27,7 +27,7 @@ test:
   image: registry.gitlab.com/dasch8/angular-ci:latest
   script:
     - apk add --no-cache git
-    - npm ci
+    - npm ci --force
     - npm run lint
     - npm run test -- --progress false --watch=false --browsers=Chromium_CI
 
