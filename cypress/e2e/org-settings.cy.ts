@@ -1,4 +1,4 @@
-import { requestLogin, seedBackend } from "./utils";
+import { requestLogin, seedBackend } from "./utils.cy";
 import { organization } from "../fixtures/variables";
 
 describe("Organization Settings", () => {

@@ -1,4 +1,4 @@
-import { requestLogin, seedBackend } from "./utils";
+import { requestLogin, seedBackend } from "./utils.cy";
 import { project } from "../fixtures/variables";
 
 describe("Home page", () => {

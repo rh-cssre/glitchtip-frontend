@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin, getDSN } from "./utils";
+import { seedBackend, requestLogin, getDSN } from "./utils.cy";
 import * as testTransactions from "../fixtures/transactions";
 import { organization } from "../fixtures/variables";
 

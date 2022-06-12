@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin, getDSN } from "./utils";
+import { seedBackend, requestLogin, getDSN } from "./utils.cy";
 import * as jsErrors from "../fixtures/events";
 import * as djangoErrors from "../fixtures/django-events";
 import { organization, project2, project3 } from "../fixtures/variables";

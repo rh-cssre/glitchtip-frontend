@@ -1,4 +1,4 @@
-import { seedBackend } from "./utils";
+import { seedBackend } from "./utils.cy";
 import { user } from "../fixtures/users";
 
 describe("Login", () => {

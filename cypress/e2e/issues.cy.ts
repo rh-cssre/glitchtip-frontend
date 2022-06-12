@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin, getDSN } from "./utils";
+import { seedBackend, requestLogin, getDSN } from "./utils.cy";
 import * as jsErrors from "../fixtures/events";
 import { organization, environments } from "../fixtures/variables";
 

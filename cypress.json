@@ -1,9 +1,0 @@
-{
-  "baseUrl": "http://localhost:4200",
-  "backendBaseURL": "http://localhooost:8000",
-  "video": false,
-  "trashAssetsBeforeRuns": true,
-  "retries": {
-    "runMode": 1
-  }
-}
