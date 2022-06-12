@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   UntypedFormGroup,
   UntypedFormArray,
@@ -7,20 +7,24 @@ import {
   UntypedFormBuilder,
 } from "@angular/forms";
 import { MatCheckbox } from "@angular/material/checkbox";
-import { AuthTokensService } from "../auth-tokens.service";
+import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
+import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 
 @Component({
   selector: "gt-new-token",
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
 })
-export class NewTokenComponent implements OnInit, OnDestroy {
+export class NewTokenComponent
+  extends StatefulBaseComponent<AuthTokensState, AuthTokensService>
+  implements OnInit
+{
   @ViewChild("selectAllCheckbox") selectAllCheckbox?: MatCheckbox;
 
-  createLoading$ = this.authTokensService.createLoading$;
-  createError$ = this.authTokensService.createError$;
-  createErrorLabel$ = this.authTokensService.createErrorLabel$;
-  createErrorScopes$ = this.authTokensService.createErrorScopes$;
+  createLoading$ = this.service.createLoading$;
+  createError$ = this.service.createError$;
+  createErrorLabel$ = this.service.createErrorLabel$;
+  createErrorScopes$ = this.service.createErrorScopes$;
 
   form: UntypedFormGroup;
   scopeOptions: string[] = [
@@ -51,16 +55,19 @@ export class NewTokenComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private authTokensService: AuthTokensService,
+    protected service: AuthTokensService,
     private fb: UntypedFormBuilder
   ) {
+    super(service);
     this.form = this.fb.group({
       label: new UntypedFormControl("", [Validators.required]),
       scopes: new UntypedFormArray([]),
     });
 
     /* Set scopeOptions to scopes FormArray **/
-    this.scopeOptions.forEach(() => this.scopes.push(new UntypedFormControl(false)));
+    this.scopeOptions.forEach(() =>
+      this.scopes.push(new UntypedFormControl(false))
+    );
   }
 
   ngOnInit(): void {
@@ -82,10 +89,6 @@ export class NewTokenComponent implements OnInit, OnDestroy {
     } else {
       this.scopes.setValue(Array.from(this.scopeOptions, () => false));
     }
-  }
-
-  ngOnDestroy() {
-    this.authTokensService.clear();
   }
 
   getLabelFieldError() {
@@ -127,7 +130,7 @@ export class NewTokenComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.authTokensService.resetCreateErrors();
+    this.service.resetCreateErrors();
 
     this.validateForm();
 
@@ -138,7 +141,7 @@ export class NewTokenComponent implements OnInit, OnDestroy {
           checked ? this.scopeOptions[index] : null
         )
         .filter((selected: string) => selected !== null);
-      this.authTokensService.createAuthToken(label, selectedScopes);
+      this.service.createAuthToken(label, selectedScopes);
     }
   }
 }

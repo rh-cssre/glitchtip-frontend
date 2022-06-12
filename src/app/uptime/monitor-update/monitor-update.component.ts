@@ -1,17 +1,22 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
+import { Component, OnInit } from "@angular/core";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { tap, filter, first, take, map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
-import { UptimeService } from "../uptime.service";
+import { UptimeService, UptimeState } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { urlRegex, numberValidator } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
 import { timedeltaToMS } from "src/app/shared/shared.utils";
+import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 
 const defaultUrlValidators = [
   Validators.pattern(urlRegex),
@@ -24,12 +29,15 @@ const defaultUrlValidators = [
   templateUrl: "./monitor-update.component.html",
   styleUrls: ["./monitor-update.component.scss"],
 })
-export class MonitorUpdateComponent implements OnInit, OnDestroy {
-  monitor$ = this.uptimeService.activeMonitor$;
-  loading$ = this.uptimeService.editLoading$;
-  error$ = this.uptimeService.error$;
+export class MonitorUpdateComponent
+  extends StatefulBaseComponent<UptimeState, UptimeService>
+  implements OnInit
+{
+  monitor$ = this.service.activeMonitor$;
+  loading$ = this.service.editLoading$;
+  error$ = this.service.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
-  deleteLoading$ = this.uptimeService.deleteLoading$;
+  deleteLoading$ = this.service.deleteLoading$;
 
   totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
     map((subscription) =>
@@ -45,7 +53,10 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   monitorEditForm = new UntypedFormGroup({
     monitorType: new UntypedFormControl("Ping", [Validators.required]),
-    name: new UntypedFormControl("", [Validators.required, Validators.maxLength(200)]),
+    name: new UntypedFormControl("", [
+      Validators.required,
+      Validators.maxLength(200),
+    ]),
     url: new UntypedFormControl(""),
     expectedStatus: new UntypedFormControl(200, [
       Validators.required,
@@ -61,7 +72,9 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   });
 
   formName = this.monitorEditForm.get("name") as UntypedFormControl;
-  formMonitorType = this.monitorEditForm.get("monitorType") as UntypedFormControl;
+  formMonitorType = this.monitorEditForm.get(
+    "monitorType"
+  ) as UntypedFormControl;
   formUrl = this.monitorEditForm.get("url") as UntypedFormControl;
   formExpectedStatus = this.monitorEditForm.get(
     "expectedStatus"
@@ -72,12 +85,14 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
   matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
-    private uptimeService: UptimeService,
-    private route: ActivatedRoute,
+    protected service: UptimeService,
+    protected route: ActivatedRoute,
     private organizationsService: OrganizationsService,
     private subscriptionsService: SubscriptionsService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    super(service);
+  }
 
   ngOnInit() {
     combineLatest([
@@ -90,8 +105,8 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         tap(([orgSlug, params]) => {
           const monitorId = params["monitor-id"];
           if (orgSlug && monitorId) {
-            this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
-            this.uptimeService.callSubscriptionDetails();
+            this.service.retrieveMonitorDetails(orgSlug, monitorId);
+            this.service.callSubscriptionDetails();
           }
         })
       )
@@ -123,10 +138,6 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  ngOnDestroy() {
-    this.uptimeService.clearState();
-  }
-
   updateRequiredFields() {
     if (this.formMonitorType.value === "Heartbeat") {
       this.formUrl.clearValidators();
@@ -147,7 +158,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.monitorEditForm.valid) {
-      this.uptimeService.editMonitor(this.monitorEditForm.value);
+      this.service.editMonitor(this.monitorEditForm.value);
     }
   }
 
@@ -157,7 +168,7 @@ export class MonitorUpdateComponent implements OnInit, OnDestroy {
         `Are you sure you want to remove this monitor? You will lose all of its uptime check history.`
       )
     ) {
-      this.uptimeService.deleteMonitor();
+      this.service.deleteMonitor();
     }
   }
 }

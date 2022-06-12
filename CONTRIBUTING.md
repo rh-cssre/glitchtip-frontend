@@ -16,9 +16,23 @@ We use Angular CLI for rapid, performant development. Modules should be lazy loa
 
 - Always use component encapsulated CSS (limit use of global)
 - Use Storybook
-- Follow redux-like patterns using RXJS but do not actually use redux. Services should contain immutable state, pure functions, and rxjs pipelines to build selectors. Contributors should have a basic familiarity with state management systems like redux and with RXJS.
+- Follow redux-like patterns using RXJS but do not actually use redux. Services should contain immutable state, pure functions, and rxjs pipelines to build selectors. Contributors should have a basic familiarity with state management systems like redux and with RXJS. See "Managing State" for details.
   - Do not store state in components except in trivial or rapid prototyping use cases.
 - Use OnPush change detection. However very simple, isolated features maybe use Default.
 - We don't have full test coverage. Complex functions should have unit tests. Trivial ones are acceptable without them as TypeScript checks them sufficiently. Integration tests that prove correctness of a collection of smaller functions is encouraged.
 - We use Angular Material for rapid development. A component that works today is better than a nicer custom component that might work some day.
   - But don’t bend over backwards to use Material if it doesn’t fit the use case
+
+## Managing State
+
+GlitchTip uses rxjs's BehaviorSubject to provide state to components. Most components should extend the following base classes:
+
+**StatefulBaseComponent** and **StatefulService**
+
+StatefulBaseComponent provides a destroy$ observable on ngOnDestroy. Use it to unsubscribe with takeUntil(this.$destroy). It also calls service.clearState on destroy.
+
+StatefulService provides a react-like `setState` and `clearState` functions.
+
+**PaginatedBaseComponent** extends StatefulBaseComponent and **PaginationStatefulService** extends StatefulService
+
+These components/services provide helpers for managing a single paginated list in state.

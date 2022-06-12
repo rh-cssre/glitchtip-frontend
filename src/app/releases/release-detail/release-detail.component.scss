@@ -1,0 +1,44 @@
+@import "variables";
+
+$iconWidth: 56px;
+
+header {
+  display: flex;
+  flex-direction: column;
+  margin-top: -16px;
+  padding-bottom: 16px;
+
+  a {
+    width: min-content;
+  }
+
+  h1 {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    text-overflow: wrap;
+    overflow-wrap: break-word;
+  }
+}
+
+table {
+  width: 100%;
+  margin-bottom: 40px;
+  table-layout: fixed;
+}
+
+.table-header {
+  padding: 20px 0 8px;
+}
+
+.name {
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.empty-states {
+  padding: 1.5em 0 0.5em;
+}
