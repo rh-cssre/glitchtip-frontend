@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend, requestLogin } from "./utils.cy";
 import {
   organization,
   newTeam,
@@ -130,7 +130,9 @@ describe("Add and edit alerts", () => {
   it("should add an alert for uptime notifications, then update it to work for error notifications", () => {
     cy.get("#create-new-alert").click();
     cy.get("[data-cy=error-check]").click();
-    cy.contains("Please select events or uptime monitor triggers for your alert.");
+    cy.contains(
+      "Please select events or uptime monitor triggers for your alert."
+    );
     cy.get("[data-cy=uptime-check]").click();
     cy.get("button").contains("submit").click();
     cy.contains("Success! Your new alert has been added.");

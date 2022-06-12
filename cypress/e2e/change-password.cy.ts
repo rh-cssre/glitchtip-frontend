@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend, requestLogin } from "./utils.cy";
 import { changePassword, user } from "../fixtures/users";
 
 describe("Change Password", () => {

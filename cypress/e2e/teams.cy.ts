@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend, requestLogin } from "./utils.cy";
 import { organization, newTeam, team } from "../fixtures/variables";
 import { user } from "../fixtures/users";
 

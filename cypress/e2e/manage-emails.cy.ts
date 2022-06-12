@@ -1,4 +1,4 @@
-import { seedBackend, requestLogin } from "./utils";
+import { seedBackend, requestLogin } from "./utils.cy";
 
 describe("Change Password", () => {
   beforeEach(() => {
