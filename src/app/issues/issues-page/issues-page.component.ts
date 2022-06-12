@@ -7,7 +7,7 @@ import {
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Subscription, combineLatest } from "rxjs";
+import { combineLatest, takeUntil } from "rxjs";
 import { map, withLatestFrom, tap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
@@ -26,11 +26,11 @@ export class IssuesPageComponent
   implements OnInit, OnDestroy
 {
   displayedColumns: string[] = ["select", "title", "events"];
-  loading$ = this.issuesService.getState$.pipe(
+  loading$ = this.service.getState$.pipe(
     map((state) => state.pagination.loading)
   );
-  searchHits$ = this.issuesService.searchHits$;
-  searchDirectHit$ = this.issuesService.searchDirectHit$;
+  searchHits$ = this.service.searchHits$;
+  searchDirectHit$ = this.service.searchDirectHit$;
   form = new UntypedFormGroup({
     query: new UntypedFormControl(""),
   });
@@ -48,11 +48,11 @@ export class IssuesPageComponent
     endDate: new UntypedFormControl(""),
   });
 
-  issues$ = this.issuesService.issuesWithSelected$
-  areAllSelected$ = this.issuesService.areAllSelected$;
-  thereAreSelectedIssues$ = this.issuesService.thereAreSelectedIssues$;
-  selectedProjectInfo$ = this.issuesService.selectedProjectInfo$;
-  numberOfSelectedIssues$ = this.issuesService.numberOfSelectedIssues$;
+  issues$ = this.service.issuesWithSelected$;
+  areAllSelected$ = this.service.areAllSelected$;
+  thereAreSelectedIssues$ = this.service.thereAreSelectedIssues$;
+  selectedProjectInfo$ = this.service.selectedProjectInfo$;
+  numberOfSelectedIssues$ = this.service.numberOfSelectedIssues$;
   activeOrganizationProjects$ =
     this.organizationsService.activeOrganizationProjects$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
@@ -74,12 +74,7 @@ export class IssuesPageComponent
       return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
-  errors$ = this.issuesService.errors$;
-  routerEventSubscription: Subscription;
-  orgEnvironmentSubscription: Subscription;
-  projectEnvironmentSubscription: Subscription;
-  resetEnvironmentSubscription: Subscription;
-  searchDirectHitSubscription: Subscription;
+  errors$ = this.service.errors$;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
     other: "# events",
@@ -146,13 +141,13 @@ export class IssuesPageComponent
   );
 
   constructor(
-    private issuesService: IssuesService,
+    protected service: IssuesService,
     protected router: Router,
     protected route: ActivatedRoute,
     private organizationsService: OrganizationsService,
     private projectEnvironmentsService: ProjectEnvironmentsService
   ) {
-    super(issuesService, router, route);
+    super(service, router, route);
 
     this.issues$.subscribe((resp) =>
       resp.length === 0
@@ -166,40 +161,54 @@ export class IssuesPageComponent
         : this.environmentForm.controls.environment.enable()
     );
 
-    this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, query, project, start, end, sort, environment }) => {
-        if (orgSlug) {
-          this.issuesService.getIssues(
-            orgSlug,
-            cursor,
-            query,
-            project,
-            start,
-            end,
-            sort,
-            environment
-          );
+    this.navigationEnd$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        ({
+          orgSlug,
+          cursor,
+          query,
+          project,
+          start,
+          end,
+          sort,
+          environment,
+        }) => {
+          if (orgSlug) {
+            this.service.getIssues(
+              orgSlug,
+              cursor,
+              query,
+              project,
+              start,
+              end,
+              sort,
+              environment
+            );
+          }
         }
-      }
-    );
+      );
 
-    this.orgEnvironmentSubscription = this.organizationsService
+    this.organizationsService
       .observeOrgEnvironments(this.navigationEnd$)
+      .pipe(takeUntil(this.destroy$))
       .subscribe();
 
-    this.projectEnvironmentSubscription = this.projectEnvironmentsService
+    this.projectEnvironmentsService
       .observeProjectEnvironments(this.navigationEnd$)
+      .pipe(takeUntil(this.destroy$))
       .subscribe();
 
     /**
      * When changing from one project to another, see if there is an environment
      * in the URL. If it doesn't match a project environment, reset the URL.
      */
-    this.resetEnvironmentSubscription = combineLatest([
+    combineLatest([
       this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
       this.route.queryParams,
     ])
       .pipe(
+        takeUntil(this.destroy$),
         tap(([projectEnvironments, queryParams]) => {
           if (
             queryParams.project &&
@@ -216,8 +225,9 @@ export class IssuesPageComponent
       )
       .subscribe();
 
-    this.searchDirectHitSubscription = this.searchDirectHit$.subscribe(
-      (directHit) => {
+    this.searchDirectHit$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((directHit) => {
         this.router.navigate(
           [directHit.id, "events", directHit.matchingEventId],
           {
@@ -227,8 +237,7 @@ export class IssuesPageComponent
             replaceUrl: true, // so the browser back button works
           }
         );
-      }
-    );
+      });
   }
 
   ngOnInit() {
@@ -256,12 +265,7 @@ export class IssuesPageComponent
   }
 
   ngOnDestroy() {
-    this.routerEventSubscription.unsubscribe();
-    this.orgEnvironmentSubscription.unsubscribe();
-    this.projectEnvironmentSubscription.unsubscribe();
-    this.resetEnvironmentSubscription.unsubscribe();
-    this.searchDirectHitSubscription.unsubscribe();
-    this.issuesService.clearState();
+    super.ngOnDestroy();
     this.projectEnvironmentsService.clearState();
   }
 
@@ -295,30 +299,30 @@ export class IssuesPageComponent
   }
 
   bulkMarkResolved() {
-    this.issuesService.bulkSetStatus("resolved");
+    this.service.bulkSetStatus("resolved");
   }
 
   bulkMarkUnresolved() {
-    this.issuesService.bulkSetStatus("unresolved");
+    this.service.bulkSetStatus("unresolved");
   }
 
   bulkMarkIgnored() {
-    this.issuesService.bulkSetStatus("ignored");
+    this.service.bulkSetStatus("ignored");
   }
 
   toggleCheck(issueId: number) {
-    this.issuesService.toggleSelected(issueId);
+    this.service.toggleSelected(issueId);
   }
 
   toggleSelectAll() {
-    this.issuesService.toggleSelectAll();
+    this.service.toggleSelectAll();
   }
 
   bulkUpdateProject() {
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(
         map(([params, queryParams]) => {
-          this.issuesService.bulkUpdateIssuesForProject(
+          this.service.bulkUpdateIssuesForProject(
             params["org-slug"],
             queryParams.project,
             queryParams.query
@@ -329,7 +333,7 @@ export class IssuesPageComponent
   }
 
   clearBulkProjectUpdate() {
-    this.issuesService.clearProjectInfo();
+    this.service.clearProjectInfo();
   }
 
   sortByChanged(event: MatSelectChange) {

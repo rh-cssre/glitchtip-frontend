@@ -108,6 +108,14 @@ export const routes: Routes = [
         },
       },
       {
+        path: "releases",
+        loadChildren: () =>
+          import("./releases/releases.module").then((m) => m.ReleasesModule),
+        data: {
+          title: "Releases",
+        },
+      },
+      {
         path: "settings",
         loadChildren: () =>
           import("./settings/settings.module").then((m) => m.SettingsModule),
@@ -126,9 +134,9 @@ export const routes: Routes = [
         },
       },
       {
-        path: ':project-slug',
-        redirectTo: 'settings/projects/:project-slug'
-      }
+        path: ":project-slug",
+        redirectTo: "settings/projects/:project-slug",
+      },
     ],
   },
   {
