@@ -1,28 +1,34 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { AuthTokensService } from "./auth-tokens.service";
+import { Component, OnInit } from "@angular/core";
+import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
+import { AuthTokensService, AuthTokensState } from "./auth-tokens.service";
 
 @Component({
   selector: "gt-auth-tokens",
   templateUrl: "./auth-tokens.component.html",
   styleUrls: ["./auth-tokens.component.scss"],
 })
-export class AuthTokensComponent implements OnInit, OnDestroy {
-  authTokens$ = this.authTokensService.apiTokens$;
-  deleteLoading$ = this.authTokensService.deleteLoading$;
-  initialLoad$ = this.authTokensService.initialLoad$;
+export class AuthTokensComponent
+  extends StatefulBaseComponent<AuthTokensState, AuthTokensService>
+  implements OnInit
+{
+  authTokens$ = this.service.apiTokens$;
+  deleteLoading$ = this.service.deleteLoading$;
+  initialLoad$ = this.service.initialLoad$;
 
-  constructor(private authTokensService: AuthTokensService) {}
-
-  ngOnInit(): void {
-    this.authTokensService.loadAuthTokens();
+  constructor(protected service: AuthTokensService) {
+    super(service);
   }
 
-  ngOnDestroy(): void {
-    this.authTokensService.clear();
+  ngOnInit(): void {
+    this.service.loadAuthTokens();
   }
 
   deleteAuthToken(id: string) {
-    if (window.confirm("Are you sure you want to delete this authentication token?"))
-      this.authTokensService.deleteAuthToken(id);
+    if (
+      window.confirm(
+        "Are you sure you want to delete this authentication token?"
+      )
+    )
+      this.service.deleteAuthToken(id);
   }
 }

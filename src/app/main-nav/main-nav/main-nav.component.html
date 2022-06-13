@@ -62,14 +62,6 @@
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'projects']"
-        routerLinkActive="active-route"
-      >
-        Projects
-      </a>
-      <a
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
         [routerLink]="[activeOrganizationSlug, 'issues']"
         routerLinkActive="active-route"
       >
@@ -86,10 +78,31 @@
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'performance', 'transaction-groups']"
+        [routerLink]="[
+          activeOrganizationSlug,
+          'performance',
+          'transaction-groups'
+        ]"
         routerLinkActive="active-route"
       >
         Performance
+      </a>
+      <mat-divider class="org-details-divider"></mat-divider>
+      <a
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="[activeOrganizationSlug, 'projects']"
+        routerLinkActive="active-route"
+      >
+        Projects
+      </a>
+      <a
+        mat-list-item
+        [disabled]="!activeOrganizationLoaded"
+        [routerLink]="[activeOrganizationSlug, 'releases']"
+        routerLinkActive="active-route"
+      >
+        Releases
       </a>
       <a
         data-test-settings
