@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: npm ci --force
       - run: npm run test -- --progress false --watch=false --browsers=ChromiumHeadless
 
   lint:
@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: npm ci --force
       - run: npm run lint
       # test openshift/template.yaml
       - name: Install oc
@@ -76,7 +76,7 @@ jobs:
       # check backend server is up
       - run: sleep 60 & nc -vz 127.0.0.1 8000
       # start glitchtip-frontend server
-      - run: npm ci
+      - run: npm ci --force
       - run: npm start & npx wait-on http://localhost:4200
       - run: sleep 30
       - run: npm run cy:run
