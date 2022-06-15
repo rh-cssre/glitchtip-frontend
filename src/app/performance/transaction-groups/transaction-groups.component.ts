@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { combineLatest, withLatestFrom, Subscription } from "rxjs";
+import { combineLatest, withLatestFrom, takeUntil } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PerformanceService, PerformanceState } from "../performance.service";
@@ -50,15 +50,10 @@ export class TransactionGroupsComponent
     other: "# Transactions",
   };
 
-  orgEnvironmentSubscription: Subscription;
-  projectEnvironmentSubscription: Subscription;
-  resetEnvironmentSubscription: Subscription;
-  routerEventSubscription: Subscription;
-  transactionGroupsDisplaySubscription: Subscription;
-  transactionGroupsDisplay$ = this.performanceService.transactionGroupsDisplay$;
-  errors$ = this.performanceService.errors$;
-  loading$ = this.performanceService.loading$;
-  initialLoadComplete$ = this.performanceService.initialLoadComplete$;
+  transactionGroupsDisplay$ = this.service.transactionGroupsDisplay$;
+  errors$ = this.service.errors$;
+  loading$ = this.service.loading$;
+  initialLoadComplete$ = this.service.initialLoadComplete$;
   navigationEnd$ = this.cursorNavigationEnd$.pipe(
     withLatestFrom(this.route.params, this.route.queryParams),
     map(([_, params, queryParams]) => {
@@ -106,29 +101,40 @@ export class TransactionGroupsComponent
 
   constructor(
     private organizationsService: OrganizationsService,
-    private performanceService: PerformanceService,
+    protected service: PerformanceService,
     private projectEnvironmentsService: ProjectEnvironmentsService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    super(performanceService, router, route);
+    super(service, router, route);
 
-    this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, cursor, project, start, end, sort, environment, query }) => {
-        if (orgSlug) {
-          this.performanceService.getTransactionGroups(
-            orgSlug,
-            cursor,
-            project,
-            start,
-            end,
-            sort,
-            environment,
-            query
-          );
+    this.navigationEnd$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        ({
+          orgSlug,
+          cursor,
+          project,
+          start,
+          end,
+          sort,
+          environment,
+          query,
+        }) => {
+          if (orgSlug) {
+            this.service.getTransactionGroups(
+              orgSlug,
+              cursor,
+              project,
+              start,
+              end,
+              sort,
+              environment,
+              query
+            );
+          }
         }
-      }
-    );
+      );
 
     this.organizationEnvironments$.subscribe((environments) =>
       environments.length === 0
@@ -136,26 +142,30 @@ export class TransactionGroupsComponent
         : this.environmentForm.controls.environment.enable()
     );
 
-    this.transactionGroupsDisplaySubscription =
-      this.transactionGroupsDisplay$.subscribe((groups) =>
+    this.transactionGroupsDisplay$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((groups) =>
         groups.length === 0
           ? this.sortForm.controls.sort.disable()
           : this.sortForm.controls.sort.enable()
       );
 
-    this.orgEnvironmentSubscription = this.organizationsService
+    this.organizationsService
       .observeOrgEnvironments(this.navigationEnd$)
+      .pipe(takeUntil(this.destroy$))
       .subscribe();
 
-    this.projectEnvironmentSubscription = this.projectEnvironmentsService
+    this.projectEnvironmentsService
       .observeProjectEnvironments(this.navigationEnd$)
+      .pipe(takeUntil(this.destroy$))
       .subscribe();
 
-    this.resetEnvironmentSubscription = combineLatest([
+    combineLatest([
       this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
       this.route.queryParams,
     ])
       .pipe(
+        takeUntil(this.destroy$),
         tap(([projectEnvironments, queryParams]) => {
           if (
             queryParams.project &&
@@ -265,12 +275,7 @@ export class TransactionGroupsComponent
   }
 
   ngOnDestroy() {
-    this.orgEnvironmentSubscription.unsubscribe();
-    this.projectEnvironmentSubscription.unsubscribe();
-    this.resetEnvironmentSubscription.unsubscribe();
-    this.routerEventSubscription.unsubscribe();
-    this.transactionGroupsDisplaySubscription.unsubscribe();
-    this.performanceService.clearState();
+    super.ngOnDestroy();
     this.projectEnvironmentsService.clearState();
   }
 }

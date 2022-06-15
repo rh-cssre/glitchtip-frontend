@@ -24,10 +24,10 @@ stages:
 
 test:
   stage: test
-  image: registry.gitlab.com/dasch8/angular-ci:latest
+  image: node:16-alpine
   script:
-    - apk add --no-cache git
-    - npm ci
+    - apk add --update --no-cache chromium-chromedriver chromium git
+    - npm ci --force
     - npm run lint
     - npm run test -- --progress false --watch=false --browsers=Chromium_CI
 
@@ -42,10 +42,10 @@ test-e2e:
       alias: backend
       command: ["./bin/run-migrate-and-runserver.sh"]
   image:
-    name: cypress/included:9.7.0
+    name: cypress/included:10.1.0
     entrypoint: [""]
   script:
-    - npm ci
+    - npm ci --force
     - cp src/proxy.conf.ci.json src/proxy.conf.json
     - npm run e2e
   except:
@@ -60,7 +60,7 @@ test-e2e:
 build-assets:
   stage: test
   script:
-    - npm ci
+    - npm ci --force
     - npm run build-prod
   artifacts:
     paths:
@@ -100,7 +100,7 @@ upload-sourcemaps:
     - build-assets
   script:
     - VERSION=glitchtip@${CI_COMMIT_REF_NAME#*v}
-    - sentry-cli releases files ${VERSION} upload-sourcemaps dist/
+    - sentry-cli releases files ${VERSION} upload-sourcemaps dist/glitchtip-frontend
   only:
     refs:
       - tags

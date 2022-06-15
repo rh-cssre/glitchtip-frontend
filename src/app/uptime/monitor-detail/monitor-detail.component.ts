@@ -1,8 +1,7 @@
-import { Component, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { UptimeState, UptimeService } from "../uptime.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, withLatestFrom } from "rxjs/operators";
-import { Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 
 @Component({
@@ -11,80 +10,67 @@ import { PaginationBaseComponent } from "src/app/shared/stateful-service/paginat
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MonitorDetailComponent
-  extends PaginationBaseComponent<UptimeState, UptimeService>
-  implements OnDestroy
-{
-  monitor$ = this.uptimeService.activeMonitor$;
-  monitorChecks$ = this.uptimeService.monitorChecks$;
-  loading$ = this.uptimeService.getState$.pipe(
+export class MonitorDetailComponent extends PaginationBaseComponent<
+  UptimeState,
+  UptimeService
+> {
+  monitor$ = this.service.activeMonitor$;
+  monitorChecks$ = this.service.monitorChecks$;
+  loading$ = this.service.getState$.pipe(
     map((state) => state.pagination.loading)
   );
-  uptimeAlertCount$ = this.uptimeService.uptimeAlertCount$;
-  alertCountLoading$ = this.uptimeService.alertCountLoading$;
-  associatedProjectSlug$ = this.uptimeService.associatedProjectSlug$;
-  navigationEnd$ = this.cursorNavigationEnd$.pipe(
-    withLatestFrom(this.route.params, this.route.queryParams),
-    map(([_, params, queryParams]) => {
-      const orgSlug: string | undefined = params["org-slug"];
-      const monitorId: string | undefined = params["monitor-id"];
-      const cursor: string | undefined = queryParams.cursor;
-      return { orgSlug, monitorId, cursor };
-    })
-  );
+  uptimeAlertCount$ = this.service.uptimeAlertCount$;
+  alertCountLoading$ = this.service.alertCountLoading$;
+  associatedProjectSlug$ = this.service.associatedProjectSlug$;
 
   activeMonitorRecentChecksSeries$ =
-    this.uptimeService.activeMonitorRecentChecksSeries$;
-  responseChartScale$ =
-    this.uptimeService.activeMonitorRecentChecksSeries$.pipe(
-      map((series) => {
-        let yScaleMax = 20;
-        let xScaleMin = new Date();
-        xScaleMin.setHours(xScaleMin.getHours() - 1);
-        series?.forEach((subseries) => {
-          subseries.series.forEach((dataItem) => {
-            if (dataItem.value > yScaleMax) {
-              yScaleMax = dataItem.value;
-            }
-            if (dataItem.name < xScaleMin) {
-              xScaleMin = dataItem.name;
-            }
-          });
+    this.service.activeMonitorRecentChecksSeries$;
+  responseChartScale$ = this.service.activeMonitorRecentChecksSeries$.pipe(
+    map((series) => {
+      let yScaleMax = 20;
+      let xScaleMin = new Date();
+      xScaleMin.setHours(xScaleMin.getHours() - 1);
+      series?.forEach((subseries) => {
+        subseries.series.forEach((dataItem) => {
+          if (dataItem.value > yScaleMax) {
+            yScaleMax = dataItem.value;
+          }
+          if (dataItem.name < xScaleMin) {
+            xScaleMin = dataItem.name;
+          }
         });
-        return {
-          yScaleMax,
-          yScaleMin: 0 - yScaleMax / 6,
-          xScaleMin,
-        };
-      })
-    );
+      });
+      return {
+        yScaleMax,
+        yScaleMin: 0 - yScaleMax / 6,
+        xScaleMin,
+      };
+    })
+  );
 
   alertCountPluralMapping: { [k: string]: string } = {
     "=1": "is 1 uptime alert",
     other: "are # uptime alerts",
   };
 
-  routerEventSubscription: Subscription;
-
   constructor(
-    private uptimeService: UptimeService,
+    protected service: UptimeService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    super(uptimeService, router, route);
+    super(service, router, route);
 
-    this.routerEventSubscription = this.navigationEnd$.subscribe(
-      ({ orgSlug, monitorId, cursor }) => {
-        if (orgSlug && monitorId) {
-          this.uptimeService.retrieveMonitorDetails(orgSlug, monitorId);
-          this.uptimeService.retrieveMonitorChecks(orgSlug, monitorId, cursor);
-        }
+    this.activeCombinedParams$.subscribe(([params, queryParams]) => {
+      const orgSlug = params["org-slug"];
+      const monitorId = params["monitor-id"];
+      if (orgSlug && monitorId) {
+        this.service.retrieveMonitorDetails(orgSlug, monitorId);
+        this.service.retrieveMonitorChecks(
+          orgSlug,
+          monitorId,
+          queryParams.cursor
+        );
       }
-    );
-  }
-
-  ngOnDestroy() {
-    this.uptimeService.clearState();
-    this.routerEventSubscription.unsubscribe();
+    });
   }
 }

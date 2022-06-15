@@ -1,4 +1,4 @@
-import { uniqueId } from "../integration/utils";
+import { uniqueId } from "../e2e/utils.cy";
 
 export const generateTransactions = (url: string, count: number) => {
   for (let i = 0; i < count; i++) {
