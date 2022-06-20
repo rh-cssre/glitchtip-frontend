@@ -13,8 +13,8 @@ import { tap, filter, map } from "rxjs/operators";
 export class ProfileComponent {
   user$ = this.userService.userDetails$;
   isLoggedIn$ = this.auth.isLoggedIn;
-  activeOrganizationDetail$ = this.organizationService
-    .activeOrganizationDetail$;
+  activeOrganizationDetail$ =
+    this.organizationService.activeOrganizationDetail$;
 
   constructor(
     private userService: UserService,
