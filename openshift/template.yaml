@@ -105,6 +105,8 @@ objects:
                       key: db.user
                 - name: PORT
                   value: ${GT_APP_PORT}
+                - name: ENABLE_SOCIAL_AUTH
+                  value: ${{ENABLE_SOCIAL_AUTH}}
               envFrom:
                 - configMapRef:
                     name: glitchtip-configmap
@@ -421,6 +423,12 @@ parameters:
     required: true
     name: ENABLE_OPEN_USER_REGISTRATION
     value: "False"
+
+  - description: ENABLE_SOCIAL_AUTH
+    displayName: ENABLE_SOCIAL_AUTH
+    required: true
+    name: ENABLE_SOCIAL_AUTH
+    value: "True"
 
   - description: I_PAID_FOR_GLITCHTIP
     displayName: I_PAID_FOR_GLITCHTIP
