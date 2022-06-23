@@ -4,8 +4,8 @@
 
 <mat-card *ngIf="(reports$ | async)?.length === 0" class="mat-elevation-z0">
   <mat-card-content>
-    <p>No user reports have been submitted.</p>
-    <p>
+    <p i18n>No user reports have been submitted.</p>
+    <p i18n>
       To enable user reports, take a look at `showReportDialog` in the JS SDK.
     </p>
   </mat-card-content>
@@ -50,5 +50,4 @@
       mode="indeterminate"
     ></mat-progress-spinner>
   </div>
-
 </ng-container>
