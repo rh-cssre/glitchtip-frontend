@@ -6,7 +6,7 @@
     }}</mat-error>
     <div>
       <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
-        <mat-label>Add Project</mat-label>
+        <mat-label i18n>Add Project</mat-label>
         <mat-select (selectionChange)="addProject()" [formControl]="project">
           <ng-container
             *ngIf="(projectsNotOnTeam$ | async)?.length; else emptyState"

@@ -86,7 +86,7 @@
       [routerLink]="['/', orgSlug, 'settings', 'projects', 'new']"
     >
       <mat-icon>add</mat-icon>
-      Add Project
+      <ng-container i18n>Add Project</ng-container>
     </a>
     <a
       *ngIf="projects.length > 0"
