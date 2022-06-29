@@ -367,5 +367,95 @@
         <target> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </target>
       </segment>
     </unit>
+    <unit id="3301086086650990787">
+      <segment state="initial">
+        <source>Register</source>
+        <target>Register</target>
+      </segment>
+    </unit>
+    <unit id="5277739594710154939">
+      <segment state="initial">
+        <source>Already have an account?</source>
+        <target>Already have an account?</target>
+      </segment>
+    </unit>
+    <unit id="8520023152129279437">
+      <segment state="initial">
+        <source>Log In</source>
+        <target>Log In</target>
+      </segment>
+    </unit>
+    <unit id="5611592591303869712">
+      <segment state="initial">
+        <source>Status</source>
+        <target>Status</target>
+      </segment>
+    </unit>
+    <unit id="5573486145935722913">
+      <segment state="initial">
+        <source>Up</source>
+        <target>Up</target>
+      </segment>
+    </unit>
+    <unit id="375247309021166846">
+      <segment state="initial">
+        <source>Down</source>
+        <target>Down</target>
+      </segment>
+    </unit>
+    <unit id="4775550080689015987">
+      <segment state="initial">
+        <source>Reason</source>
+        <target>Reason</target>
+      </segment>
+    </unit>
+    <unit id="8998179362936748717">
+      <segment state="initial">
+        <source>OK</source>
+        <target>OK</target>
+      </segment>
+    </unit>
+    <unit id="4355002072406321718">
+      <segment state="initial">
+        <source>Request not received</source>
+        <target>Request not received</target>
+      </segment>
+    </unit>
+    <unit id="663614338028506842">
+      <segment state="initial">
+        <source>Response time</source>
+        <target>Response time</target>
+      </segment>
+    </unit>
+    <unit id="8470311110519302542">
+      <segment state="initial">
+        <source>No data</source>
+        <target>No data</target>
+      </segment>
+    </unit>
+    <unit id="125349681170616048">
+      <segment state="initial">
+        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
+        <target> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </target>
+      </segment>
+    </unit>
+    <unit id="1282599611814715251">
+      <segment state="initial">
+        <source> Settings </source>
+        <target> Settings </target>
+      </segment>
+    </unit>
+    <unit id="6998318993417414160">
+      <segment state="initial">
+        <source>Response Time</source>
+        <target>Response Time</target>
+      </segment>
+    </unit>
+    <unit id="8154453727027523235">
+      <segment state="initial">
+        <source>Alerts</source>
+        <target>Alerts</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

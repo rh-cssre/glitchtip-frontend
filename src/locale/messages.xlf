@@ -306,5 +306,80 @@
         <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
       </segment>
     </unit>
+    <unit id="3301086086650990787">
+      <segment>
+        <source>Register</source>
+      </segment>
+    </unit>
+    <unit id="5277739594710154939">
+      <segment>
+        <source>Already have an account?</source>
+      </segment>
+    </unit>
+    <unit id="8520023152129279437">
+      <segment>
+        <source>Log In</source>
+      </segment>
+    </unit>
+    <unit id="125349681170616048">
+      <segment>
+        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
+      </segment>
+    </unit>
+    <unit id="1282599611814715251">
+      <segment>
+        <source> Settings </source>
+      </segment>
+    </unit>
+    <unit id="375247309021166846">
+      <segment>
+        <source>Down</source>
+      </segment>
+    </unit>
+    <unit id="4355002072406321718">
+      <segment>
+        <source>Request not received</source>
+      </segment>
+    </unit>
+    <unit id="4775550080689015987">
+      <segment>
+        <source>Reason</source>
+      </segment>
+    </unit>
+    <unit id="5573486145935722913">
+      <segment>
+        <source>Up</source>
+      </segment>
+    </unit>
+    <unit id="5611592591303869712">
+      <segment>
+        <source>Status</source>
+      </segment>
+    </unit>
+    <unit id="663614338028506842">
+      <segment>
+        <source>Response time</source>
+      </segment>
+    </unit>
+    <unit id="6998318993417414160">
+      <segment>
+        <source>Response Time</source>
+      </segment>
+    </unit>
+    <unit id="8154453727027523235">
+      <segment>
+        <source>Alerts</source>
+      </segment>
+    </unit>
+    <unit id="8470311110519302542">
+      <segment>
+        <source>No data</source>
+      </segment>
+    </unit>
+    <unit id="8998179362936748717">
+      <segment>
+        <source>OK</source>
+      </segment>
+    </unit>
   </file>
 </xliff>

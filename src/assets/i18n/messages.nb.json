@@ -59,5 +59,20 @@
   "1399934467160441489": "Lag en ny organisasjon",
   "8405849621940251921": "Dette er første steg for å komme i gang med GlitchTip.",
   "5229548711048638988": "Lag organisasjon",
-  "6943733526667450823": " Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. "
+  "6943733526667450823": " Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. ",
+  "3301086086650990787": "Register",
+  "5277739594710154939": "Already have an account?",
+  "8520023152129279437": "Log In",
+  "5611592591303869712": "Status",
+  "5573486145935722913": "Up",
+  "375247309021166846": "Down",
+  "4775550080689015987": "Reason",
+  "8998179362936748717": "OK",
+  "4355002072406321718": "Request not received",
+  "663614338028506842": "Response time",
+  "8470311110519302542": "No data",
+  "125349681170616048": " Uptime check interval: {$INTERPOLATION}",
+  "1282599611814715251": " Settings ",
+  "6998318993417414160": "Response Time",
+  "8154453727027523235": "Alerts"
 }
