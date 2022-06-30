@@ -8,9 +8,9 @@
       </segment>
     </unit>
     <unit id="8464263618615235731">
-      <segment state="initial">
+      <segment state="translated">
         <source>Create New Organization</source>
-        <target>Lag ny organisasjon</target>
+        <target>Opprett ny organisasjon</target>
       </segment>
     </unit>
     <unit id="2804049603671779506">
@@ -328,7 +328,7 @@
     <unit id="1399934467160441489">
       <segment state="translated">
         <source>Create a New Organization</source>
-        <target>Lag en ny organisasjon</target>
+        <target>Opprett en ny organisasjon</target>
       </segment>
     </unit>
     <unit id="7079167664042577585">
@@ -344,21 +344,21 @@
       </segment>
     </unit>
     <unit id="6943733526667450823">
-      <segment state="initial">
+      <segment state="translated">
         <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
-        <target> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </target>
+        <target>Registrering er deaktivert. Kontakt en administrator for å bli invitert til en eksisterende organisasjon.</target>
       </segment>
     </unit>
     <unit id="3301086086650990787">
-      <segment state="initial">
+      <segment state="translated">
         <source>Register</source>
-        <target>Register</target>
+        <target>Opprett konto</target>
       </segment>
     </unit>
     <unit id="5277739594710154939">
-      <segment state="initial">
+      <segment state="translated">
         <source>Already have an account?</source>
-        <target>Already have an account?</target>
+        <target>Har du allerede en konto?</target>
       </segment>
     </unit>
     <unit id="8520023152129279437">
@@ -374,21 +374,21 @@
       </segment>
     </unit>
     <unit id="5573486145935722913">
-      <segment state="initial">
+      <segment state="translated">
         <source>Up</source>
-        <target>Up</target>
+        <target>Opp</target>
       </segment>
     </unit>
     <unit id="375247309021166846">
-      <segment state="initial">
+      <segment state="translated">
         <source>Down</source>
-        <target>Down</target>
+        <target>Ned</target>
       </segment>
     </unit>
     <unit id="4775550080689015987">
-      <segment state="initial">
+      <segment state="translated">
         <source>Reason</source>
-        <target>Reason</target>
+        <target>Begrunnelse</target>
       </segment>
     </unit>
     <unit id="8998179362936748717">
@@ -398,45 +398,45 @@
       </segment>
     </unit>
     <unit id="4355002072406321718">
-      <segment state="initial">
+      <segment state="translated">
         <source>Request not received</source>
-        <target>Request not received</target>
+        <target>Forespørsel ikke mottatt</target>
       </segment>
     </unit>
     <unit id="663614338028506842">
-      <segment state="initial">
+      <segment state="translated">
         <source>Response time</source>
-        <target>Response time</target>
+        <target>Responstid</target>
       </segment>
     </unit>
     <unit id="8470311110519302542">
-      <segment state="initial">
+      <segment state="translated">
         <source>No data</source>
-        <target>No data</target>
+        <target>Ingen data</target>
       </segment>
     </unit>
     <unit id="125349681170616048">
-      <segment state="initial">
+      <segment state="translated">
         <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
-        <target> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </target>
+        <target> Intervall for sjekk av oppetid: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </target>
       </segment>
     </unit>
     <unit id="1282599611814715251">
-      <segment state="initial">
+      <segment state="translated">
         <source> Settings </source>
-        <target> Settings </target>
+        <target> Innstillinger </target>
       </segment>
     </unit>
     <unit id="6998318993417414160">
-      <segment state="initial">
+      <segment state="translated">
         <source>Response Time</source>
-        <target>Response Time</target>
+        <target>Responstid</target>
       </segment>
     </unit>
     <unit id="8154453727027523235">
-      <segment state="initial">
+      <segment state="translated">
         <source>Alerts</source>
-        <target>Alerts</target>
+        <target>Varsler</target>
       </segment>
     </unit>
     <unit id="8953033926734869941">
@@ -459,8 +459,8 @@
     </unit>
     <unit id="7767441910831780637">
       <segment state="initial">
-        <source>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started.</source>
-        <target>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started.</target>
+        <source>This alert isn't being sent anywhere. Select "Add An Alert Recipient" below to get started.</source>
+        <target>This alert isn't being sent anywhere. Select "Add An Alert Recipient" below to get started.</target>
       </segment>
     </unit>
     <unit id="4292593925952604077">
@@ -489,8 +489,8 @@
     </unit>
     <unit id="4308586846395940263">
       <segment state="initial">
-        <source> You don&apos;t have any alerts set up. Click &quot;Create New Alert&quot; on the top right of this card to get started. </source>
-        <target> You don&apos;t have any alerts set up. Click &quot;Create New Alert&quot; on the top right of this card to get started. </target>
+        <source> You don't have any alerts set up. Click "Create New Alert" on the top right of this card to get started. </source>
+        <target> You don't have any alerts set up. Click "Create New Alert" on the top right of this card to get started. </target>
       </segment>
     </unit>
     <unit id="7091571651222742304">
@@ -657,8 +657,8 @@
     </unit>
     <unit id="8008089187175876959">
       <segment state="initial">
-        <source>The account you&apos;re logged into is already a part of this organization. You might want to</source>
-        <target>The account you&apos;re logged into is already a part of this organization. You might want to</target>
+        <source>The account you're logged into is already a part of this organization. You might want to</source>
+        <target>The account you're logged into is already a part of this organization. You might want to</target>
       </segment>
     </unit>
     <unit id="5113632876676621367">
