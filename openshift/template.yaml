@@ -139,6 +139,11 @@ objects:
 
   # ------- WEB DEPLOYMENT JOB --------------------
 
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: glitchtip-web-sa
+
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -155,16 +160,17 @@ objects:
           labels:
             glitchtip: web
         spec:
+          serviceAccountName: glitchtip-web-sa
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchExpressions:
-                      - key: glithtip
-                        operator: In
-                        values:
-                          - web
-                  topologyKey: "kubernetes.io/hostname"
+              - labelSelector:
+                  matchExpressions:
+                    - key: glithtip
+                      operator: In
+                      values:
+                        - web
+                topologyKey: "kubernetes.io/hostname"
           initContainers:
             - name: init-migration
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
