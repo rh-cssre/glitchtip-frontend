@@ -7,7 +7,7 @@
   [class.not-skinny]="isLoggedIn$ | async"
 >
   <mat-card-content *ngIf="acceptInfo$ | async as acceptInfo">
-    <mat-card-title>Organization Invite</mat-card-title>
+    <mat-card-title i18n>Organization Invite</mat-card-title>
     <p>
       You have been invited to join
       <strong>{{ acceptInfo.org_user.organization.name }}</strong> so you can
@@ -27,13 +27,14 @@
         mat-flat-button
         color="primary"
         (click)="onSubmit()"
+        i18n
       >
         Accept invitation
       </button>
     </ng-container>
 
     <ng-template #notLoggedIn>
-      <p>
+      <p i18n>
         To continue, you must either log in to your existing account, or create
         a new one.
       </p>
@@ -44,6 +45,7 @@
           color="primary"
           [routerLink]="['/register']"
           [queryParams]="{ next: nextUrl$ | async }"
+          i18n
         >
           Create new account
         </a>
@@ -52,6 +54,7 @@
           color="primary"
           [routerLink]="['/login']"
           [queryParams]="{ next: nextUrl$ | async }"
+          i18n
         >
           Log in with existing account
         </a>

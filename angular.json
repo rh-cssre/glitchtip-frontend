@@ -16,6 +16,14 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "gt",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "nb": {
+            "translation": "src/locale/messages.nb.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -49,13 +57,9 @@
                 "output": "./static/assets/images/os-logos"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "./src/assets/styles"
-              ]
+              "includePaths": ["./src/assets/styles"]
             },
             "scripts": []
           },
@@ -138,9 +142,12 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "browserTarget": "glitchtip-frontend:build"
+            "browserTarget": "glitchtip-frontend:build",
+            "format": "xlf2",
+            "outputPath": "src/locale",
+            "targetFiles": ["../locale/messages.nb.xlf"]
           }
         },
         "test": {
@@ -151,17 +158,10 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "./src/assets/styles"
-              ]
+              "includePaths": ["./src/assets/styles"]
             },
             "scripts": []
           }
@@ -169,10 +169,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -180,8 +177,6 @@
   },
   "cli": {
     "analytics": "86390919-7a40-4e23-8811-d61b83438874",
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ]
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

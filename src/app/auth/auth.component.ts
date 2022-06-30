@@ -52,7 +52,10 @@ export class AuthComponent implements OnInit {
     const code = query.get("code");
 
     // keycloak: verify nonce
-    if (provider === "keycloak" && !AuthComponent.verifyKeycloakNonce(accessToken)) {
+    if (
+      provider === "keycloak" &&
+      !AuthComponent.verifyKeycloakNonce(accessToken)
+    ) {
       this.router.navigate([]).then();
       this.snackbar.open("Invalid authentication response, please try again.");
       return;
@@ -74,28 +77,32 @@ export class AuthComponent implements OnInit {
     }
   }
 
-  private static verifyKeycloakNonce(accessToken: string | null):boolean {
+  private static verifyKeycloakNonce(accessToken: string | null): boolean {
     if (!accessToken) {
-      document.cookie = "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       return false;
     }
 
-    const [_, payload] = accessToken.split('.');
+    const [_, payload] = accessToken.split(".");
 
-    const {nonce} = JSON.parse(atob(payload));
+    const { nonce } = JSON.parse(atob(payload));
 
     // document.cookie = "cookie1=value; cookie2=value; cookie3=value;"
-    const cookieNonce = document.cookie.split(";")
-      .filter(cookie => cookie.indexOf('=') !== -1)
-      .map(cookie => cookie.trim().split("="))
-      .filter(([name]) => name === 'keycloak_nonce')?.[0][1];
+    const cookieNonce = document.cookie
+      .split(";")
+      .filter((cookie) => cookie.indexOf("=") !== -1)
+      .map((cookie) => cookie.trim().split("="))
+      .filter(([name]) => name === "keycloak_nonce")?.[0][1];
 
     if (nonce !== cookieNonce) {
-      document.cookie = "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       return false;
     }
 
-    document.cookie = "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     return true;
   }
 
@@ -108,7 +115,7 @@ export class AuthComponent implements OnInit {
     } else if (error.status === 500) {
       this.router.navigate([""]);
       this.snackbar.open(
-        "There was an error connecting to your social authentication provider."
+        $localize`There was an error connecting to your social authentication provider.`
       );
     }
   }

@@ -1,7 +1,7 @@
 <div class="margin-set">
-  <h1 class="header-left">Log in with authenticator app</h1>
+  <h1 class="header-left" i18n>Log in with authenticator app</h1>
   <mat-card-content class="contents-left">
-    <div class="instructions">
+    <div class="instructions" i18n>
       Enter the code from the authenticator app on your mobile device. If you’ve
       lost your device, you may enter one of your recovery codes.
     </div>
@@ -11,11 +11,11 @@
         [error]="error$ | async"
       ></gt-form-error>
       <mat-form-field class="full-width">
-        <mat-label>Verification Code</mat-label>
+        <mat-label i18n>Verification Code</mat-label>
         <input #input matInput formControlName="code" />
         <mat-error *ngIf="code?.invalid">
-          <span *ngIf="code?.errors?.required">Required</span>
-          <span *ngIf="code?.errors?.minlength || code?.errors?.maxlength">
+          <span *ngIf="code?.errors?.required" i18n>Required</span>
+          <span *ngIf="code?.errors?.minlength || code?.errors?.maxlength" i18n>
             Code must be of length 6 or 16
           </span>
           <span *ngFor="let serverError of code?.errors?.serverError">{{
@@ -23,10 +23,10 @@
           }}</span>
         </mat-error>
       </mat-form-field>
-      <button id="submit" mat-flat-button color="primary">Login</button>
+      <button id="submit" mat-flat-button color="primary" i18n>Login</button>
     </form>
 
-    <a *ngIf="hasFIDO2$ | async" [routerLink]="[]" (click)="switchMethod()"
+    <a *ngIf="hasFIDO2$ | async" [routerLink]="[]" (click)="switchMethod()" i18n
       >Log in with security key instead</a
     >
   </mat-card-content>
