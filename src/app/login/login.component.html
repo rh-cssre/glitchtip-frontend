@@ -60,9 +60,8 @@
             mat-flat-button
             color="primary"
             i18n
+            >Log in</button
           >
-            Log in
-          </button>
         </form>
         <ng-container *ngIf="socialApps$ | async as socialApps">
           <div *ngIf="socialApps.length" class="or">
@@ -78,6 +77,7 @@
               <gt-auth-svg
                 source="auth"
                 text="Log in with {{ socialApp.name }}"
+                i18n-text
                 [provider]="socialApp.provider"
               ></gt-auth-svg>
             </button>
