@@ -166,7 +166,7 @@ objects:
               requiredDuringSchedulingIgnoredDuringExecution:
               - labelSelector:
                   matchExpressions:
-                    - key: glithtip
+                    - key: glitchtip
                       operator: In
                       values:
                         - web
