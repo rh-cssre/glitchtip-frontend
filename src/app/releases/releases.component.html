@@ -4,6 +4,7 @@
 >
   <header class="page-header">
     <gt-list-title
+      i18n-title
       title="Releases"
       [searchHits]="paginator.count"
     ></gt-list-title>
@@ -71,7 +72,7 @@
                   <li *ngFor="let error of errors$ | async">{{ error }}</li>
                 </ul>
               </ng-container>
-              <ng-template #noResults
+              <ng-template #noResults i18n
                 >There are no releases for this organization.</ng-template
               >
             </ng-container>

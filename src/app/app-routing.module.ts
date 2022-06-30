@@ -10,6 +10,9 @@ export const routes: Routes = [
     loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
     pathMatch: "full",
     canActivate: [IsLoggedInGuard],
+    data: {
+      preload: true,
+    }
   },
   {
     path: "organizations/new",
@@ -33,6 +36,9 @@ export const routes: Routes = [
       import("./profile/profile.module").then((m) => m.ProfileModule),
     canActivate: [IsLoggedInGuard],
     title: "Profile",
+    data: {
+      preload: true,
+    }
   },
   {
     path: "register",
@@ -78,6 +84,9 @@ export const routes: Routes = [
         loadChildren: () =>
           import("./issues/issues.module").then((m) => m.IssuesModule),
         title: "Issues",
+        data: {
+          preload: true,
+        }
       },
       {
         path: "uptime-monitors",
@@ -104,6 +113,9 @@ export const routes: Routes = [
         loadChildren: () =>
           import("./settings/settings.module").then((m) => m.SettingsModule),
         title: "Settings",
+        data: {
+          preload: true,
+        }
       },
       {
         path: "performance",

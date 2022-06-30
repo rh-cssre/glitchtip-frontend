@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US">
+  <file id="ngi18n" original="ng.template">
+    <unit id="827275858583778252">
+      <segment>
+        <source>Organization Invite</source>
+      </segment>
+    </unit>
+    <unit id="7296214579004182808">
+      <segment>
+        <source> Create New Organization </source>
+      </segment>
+    </unit>
+    <unit id="2804049603671779506">
+      <segment>
+        <source>Delete User Account</source>
+      </segment>
+    </unit>
+    <unit id="7136629517888357997">
+      <segment>
+        <source> By deleting your user account, you will permanently lose all data, including access to organization projects and their associated events. </source>
+      </segment>
+    </unit>
+    <unit id="6995074968493842265">
+      <segment>
+        <source> Make sure to delete or transfer ownership of any organizations before deleting your account. Owners of paid organization subscriptions are not able to delete their account. </source>
+      </segment>
+    </unit>
+    <unit id="3078760420237279624">
+      <segment>
+        <source>Auth Tokens</source>
+      </segment>
+    </unit>
+    <unit id="1306736474856666525">
+      <segment>
+        <source> Create New Token </source>
+      </segment>
+    </unit>
+    <unit id="4659875269929910438">
+      <segment>
+        <source> Authentication tokens give you access to the GlitchTip API. You can create these tokens as authentication to gain specific access around the app. </source>
+      </segment>
+    </unit>
+    <unit id="7538977961049758582">
+      <segment>
+        <source>Your Tokens</source>
+      </segment>
+    </unit>
+    <unit id="254889665941268430">
+      <segment>
+        <source> Once you create a token, it will show up here. </source>
+      </segment>
+    </unit>
+    <unit id="4587452935087847438">
+      <segment>
+        <source>Releases</source>
+      </segment>
+    </unit>
+    <unit id="2251615247560743164">
+      <segment>
+        <source>There are no releases for this organization.</source>
+      </segment>
+    </unit>
+    <unit id="962909631654203858">
+      <segment>
+        <source> Accept invitation </source>
+      </segment>
+    </unit>
+    <unit id="4874624408275670197">
+      <segment>
+        <source> Log in with existing account </source>
+      </segment>
+    </unit>
+    <unit id="633567051649832152">
+      <segment>
+        <source> Create new account </source>
+      </segment>
+    </unit>
+    <unit id="8364538908162673554">
+      <segment>
+        <source> To continue, you must either log in to your existing account, or create a new one. </source>
+      </segment>
+    </unit>
+    <unit id="3961541970784414950">
+      <segment>
+        <source>There was an error connecting to your social authentication provider.</source>
+      </segment>
+    </unit>
+    <unit id="1095247315180807956">
+      <segment>
+        <source>New to GlitchTip?</source>
+      </segment>
+    </unit>
+    <unit id="1176990449799757498">
+      <segment>
+        <source>Issues</source>
+      </segment>
+    </unit>
+    <unit id="13416001704298648">
+      <segment>
+        <source> Members </source>
+      </segment>
+    </unit>
+    <unit id="1399934467160441489">
+      <segment>
+        <source>Create a New Organization</source>
+      </segment>
+    </unit>
+    <unit id="1403444527740042521">
+      <segment>
+        <source> Enter the code from the authenticator app on your mobile device. If you’ve lost your device, you may enter one of your recovery codes. </source>
+      </segment>
+    </unit>
+    <unit id="1466012768716286509">
+      <segment>
+        <source>Sign Up</source>
+      </segment>
+    </unit>
+    <unit id="1573340253867282263">
+      <segment>
+        <source> Projects </source>
+      </segment>
+    </unit>
+    <unit id="15806356562100686">
+      <segment>
+        <source> To enable user reports, take a look at `showReportDialog` in the JS SDK. </source>
+      </segment>
+    </unit>
+    <unit id="2096666835589407429">
+      <segment>
+        <source> Reopen </source>
+      </segment>
+    </unit>
+    <unit id="2454050363478003966">
+      <segment>
+        <source>Login</source>
+      </segment>
+    </unit>
+    <unit id="2481283412904907364">
+      <segment>
+        <source>Support GlitchTip</source>
+      </segment>
+    </unit>
+    <unit id="2907070106267329067">
+      <segment>
+        <source>Log in with authenticator app instead</source>
+      </segment>
+    </unit>
+    <unit id="3012996930901307374">
+      <segment>
+        <source> Settings </source>
+      </segment>
+    </unit>
+    <unit id="30262483107911885">
+      <segment>
+        <source> Profile </source>
+      </segment>
+    </unit>
+    <unit id="3056614778231322145">
+      <segment>
+        <source>No user reports have been submitted.</source>
+      </segment>
+    </unit>
+    <unit id="3328654199895417292">
+      <segment>
+        <source>Log in with authenticator app</source>
+      </segment>
+    </unit>
+    <unit id="3737185603553645778">
+      <segment>
+        <source>Your password is required to log in</source>
+      </segment>
+    </unit>
+    <unit id="3955295606692378575">
+      <segment>
+        <source> Mark as resolved </source>
+      </segment>
+    </unit>
+    <unit id="4053112335752964687">
+      <segment>
+        <source>Add Project</source>
+      </segment>
+    </unit>
+    <unit id="4053451334444184493">
+      <segment>
+        <source> Retry </source>
+      </segment>
+    </unit>
+    <unit id="4123493666855318656">
+      <segment>
+        <source> Notifications </source>
+      </segment>
+    </unit>
+    <unit id="4253861884986496315">
+      <segment>
+        <source>Your email is required to log in</source>
+      </segment>
+    </unit>
+    <unit id="4389772680661696634">
+      <segment>
+        <source> Releases </source>
+      </segment>
+    </unit>
+    <unit id="4517225298571061656">
+      <segment>
+        <source> Account </source>
+      </segment>
+    </unit>
+    <unit id="4690947398301082144">
+      <segment>
+        <source> Multi-factor Authentication </source>
+      </segment>
+    </unit>
+    <unit id="4736017430891007987">
+      <segment>
+        <source>Log in with security key</source>
+      </segment>
+    </unit>
+    <unit id="5113165610004622651">
+      <segment>
+        <source>Log Out</source>
+      </segment>
+    </unit>
+    <unit id="5229548711048638988">
+      <segment>
+        <source> Create Organization </source>
+      </segment>
+    </unit>
+    <unit id="5444344807485186137">
+      <segment>
+        <source> Auth Tokens </source>
+      </segment>
+    </unit>
+    <unit id="6270648407328773828">
+      <segment>
+        <source> Log in </source>
+      </segment>
+    </unit>
+    <unit id="6627551976444260400">
+      <segment>
+        <source>or</source>
+      </segment>
+    </unit>
+    <unit id="6680124653427513148">
+      <segment>
+        <source> Code must be of length 6 or 16 </source>
+      </segment>
+    </unit>
+    <unit id="6972105223770675605">
+      <segment>
+        <source>Reset Password</source>
+      </segment>
+    </unit>
+    <unit id="699875993990298792">
+      <segment>
+        <source> Ignore </source>
+      </segment>
+    </unit>
+    <unit id="7045123878111147511">
+      <segment>
+        <source>Required</source>
+      </segment>
+    </unit>
+    <unit id="7320655317974192454">
+      <segment>
+        <source> Plug in your security key and follow the prompt from your browser to finish logging in. </source>
+      </segment>
+    </unit>
+    <unit id="7451233168808859381">
+      <segment>
+        <source>Verification Code</source>
+      </segment>
+    </unit>
+    <unit id="7836693894255586526">
+      <segment>
+        <source> Teams </source>
+      </segment>
+    </unit>
+    <unit id="8405849621940251921">
+      <segment>
+        <source> This is the first step to get started with GlitchTip. </source>
+      </segment>
+    </unit>
+    <unit id="8730825622925436557">
+      <segment>
+        <source> Subscription </source>
+      </segment>
+    </unit>
+    <unit id="8938510541215036054">
+      <segment>
+        <source>Enter a valid email address</source>
+      </segment>
+    </unit>
+    <unit id="9040838861188606319">
+      <segment>
+        <source>Log in with security key instead</source>
+      </segment>
+    </unit>
+    <unit id="907767253133208536">
+      <segment>
+        <source>Your password should be at least 8 characters long</source>
+      </segment>
+    </unit>
+    <unit id="6943733526667450823">
+      <segment>
+        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+      </segment>
+    </unit>
+  </file>
+</xliff>

@@ -28,6 +28,7 @@
           id="create-new-link"
           routerLink="/organizations/new"
           class="no-org-create"
+          i18n
         >
           Create New Organization
         </a>
@@ -93,6 +94,7 @@
         [disabled]="!activeOrganizationLoaded"
         [routerLink]="[activeOrganizationSlug, 'projects']"
         routerLinkActive="active-route"
+        i18n
       >
         Projects
       </a>
@@ -101,6 +103,7 @@
         [disabled]="!activeOrganizationLoaded"
         [routerLink]="[activeOrganizationSlug, 'releases']"
         routerLinkActive="active-route"
+        i18n
       >
         Releases
       </a>
@@ -110,6 +113,7 @@
         [disabled]="!activeOrganizationLoaded"
         [routerLink]="[activeOrganizationSlug, 'settings']"
         routerLinkActive="active-route"
+        i18n
       >
         Settings
       </a>
@@ -119,6 +123,7 @@
         [disabled]="!activeOrganizationLoaded"
         [routerLink]="['/', activeOrganizationSlug, 'settings', 'projects']"
         routerLinkActive="active-route"
+        i18n
       >
         Projects
       </a>
@@ -128,6 +133,7 @@
         mat-list-item
         [routerLink]="['/', activeOrganizationSlug, 'settings', 'subscription']"
         routerLinkActive="active-route"
+        i18n
       >
         Subscription
       </a>
@@ -136,6 +142,7 @@
         [routerLink]="['/', activeOrganizationSlug, 'settings', 'teams']"
         routerLinkActive="active-route"
         class="sub-items"
+        i18n
       >
         Teams
       </a>
@@ -144,6 +151,7 @@
         [routerLink]="['/', activeOrganizationSlug, 'settings', 'members']"
         routerLinkActive="active-route"
         class="sub-items"
+        i18n
       >
         Members
       </a>
@@ -152,6 +160,7 @@
         mat-list-item
         [routerLink]="['/profile']"
         routerLinkActive="active-route"
+        i18n
       >
         Profile
       </a>
@@ -160,6 +169,7 @@
         [routerLink]="['/profile']"
         routerLinkActive="active-route"
         class="sub-items"
+        i18n
       >
         Account
       </a>
@@ -168,6 +178,7 @@
         [routerLink]="['/profile', 'multi-factor-auth']"
         routerLinkActive="active-route"
         class="sub-items"
+        i18n
       >
         Multi-factor Authentication
       </a>
@@ -176,6 +187,7 @@
         [routerLink]="['/profile', 'notifications']"
         routerLinkActive="active-route"
         class="sub-items"
+        i18n
       >
         Notifications
       </a>
@@ -184,15 +196,16 @@
         [routerLink]="['/profile', 'auth-tokens']"
         routerLinkActive="active-route"
         class="sub-items"
+        i18n
       >
         Auth Tokens
       </a>
-      <button mat-menu-item (click)="this.logout()">Log Out</button>
+      <button mat-menu-item (click)="this.logout()" i18n>Log Out</button>
     </mat-nav-list>
 
     <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
       <mat-card-title>
-        <h3 class="mat-display-1">Support GlitchTip</h3>
+        <h3 class="mat-display-1" i18n>Support GlitchTip</h3>
       </mat-card-title>
       <mat-card-content>
         <ul>

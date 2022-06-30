@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US" trgLang="nb">
+  <file id="ngi18n" original="ng.template">
+    <unit id="827275858583778252">
+      <segment state="translated">
+        <source>Organization Invite</source>
+        <target>Invitasjon til organisasjon</target>
+      </segment>
+    </unit>
+    <unit id="7296214579004182808">
+      <segment state="translated">
+        <source> Create New Organization </source>
+        <target>Lag ny organisasjon</target>
+      </segment>
+    </unit>
+    <unit id="2804049603671779506">
+      <segment state="translated">
+        <source>Delete User Account</source>
+        <target>Slett brukerkonto</target>
+      </segment>
+    </unit>
+    <unit id="7136629517888357997">
+      <segment state="translated">
+        <source> By deleting your user account, you will permanently lose all data, including access to organization projects and their associated events. </source>
+        <target>Ved å slette brukerkontoen din vil du permanent miste all data, inkludert tilgang til organisasjonsprosjekter og deres tilhørende hendelser.</target>
+      </segment>
+    </unit>
+    <unit id="6995074968493842265">
+      <segment state="translated">
+        <source> Make sure to delete or transfer ownership of any organizations before deleting your account. Owners of paid organization subscriptions are not able to delete their account. </source>
+        <target>Pass på å slette eller overføre eierskap for alle organisasjoner før du sletter kontoen din. Eiere av abonnementstjenester kan ikke slette kontoen sin.</target>
+      </segment>
+    </unit>
+    <unit id="3078760420237279624">
+      <segment state="translated">
+        <source>Auth Tokens</source>
+        <target>Auth tokens</target>
+      </segment>
+    </unit>
+    <unit id="1306736474856666525">
+      <segment state="translated">
+        <source> Create New Token </source>
+        <target>Lag nytt token</target>
+      </segment>
+    </unit>
+    <unit id="4659875269929910438">
+      <segment state="translated">
+        <source> Authentication tokens give you access to the GlitchTip API. You can create these tokens as authentication to gain specific access around the app. </source>
+        <target>Auth tokens gir deg tilgang til GlitchTip APIet. Du kan benytte disse til å gi forskjellige og tilpassede tilganger i applikasjonen.</target>
+      </segment>
+    </unit>
+    <unit id="7538977961049758582">
+      <segment state="translated">
+        <source>Your Tokens</source>
+        <target>Dine tokens</target>
+      </segment>
+    </unit>
+    <unit id="254889665941268430">
+      <segment state="translated">
+        <source> Once you create a token, it will show up here. </source>
+        <target>Når du har laget et token vil det vises her.</target>
+      </segment>
+    </unit>
+    <unit id="4587452935087847438">
+      <segment state="translated">
+        <source>Releases</source>
+        <target>Utgivelser</target>
+      </segment>
+    </unit>
+    <unit id="2251615247560743164">
+      <segment state="translated">
+        <source>There are no releases for this organization.</source>
+        <target>Det er ingen utgivelser for denne organisasjonen.</target>
+      </segment>
+    </unit>
+    <unit id="962909631654203858">
+      <segment state="translated">
+        <source> Accept invitation </source>
+        <target> Aksepter invitasjon</target>
+      </segment>
+    </unit>
+    <unit id="8364538908162673554">
+      <segment state="translated">
+        <source> To continue, you must either log in to your existing account, or create a new one. </source>
+        <target>For å fortsette må du enten logge inn med en eksisterende konto, eller lage en ny.</target>
+      </segment>
+    </unit>
+    <unit id="633567051649832152">
+      <segment state="translated">
+        <source> Create new account </source>
+        <target> Lag ny konto</target>
+      </segment>
+    </unit>
+    <unit id="4874624408275670197">
+      <segment state="translated">
+        <source> Log in with existing account </source>
+        <target> Logg inn med eksisterende konto</target>
+      </segment>
+    </unit>
+    <unit id="3961541970784414950">
+      <segment state="translated">
+        <source>There was an error connecting to your social authentication provider.</source>
+        <target>Det oppsto en feil ved tilkobling til ekstern autentiseringstilbyder.</target>
+      </segment>
+    </unit>
+    <unit id="1176990449799757498">
+      <segment state="translated">
+        <source>Issues</source>
+        <target>Problemer</target>
+      </segment>
+    </unit>
+    <unit id="3955295606692378575">
+      <segment state="translated">
+        <source> Mark as resolved </source>
+        <target>Merk som løst</target>
+      </segment>
+    </unit>
+    <unit id="2096666835589407429">
+      <segment state="translated">
+        <source> Reopen </source>
+        <target>Åpne igjen</target>
+      </segment>
+    </unit>
+    <unit id="699875993990298792">
+      <segment state="translated">
+        <source> Ignore </source>
+        <target> Ignorer</target>
+      </segment>
+    </unit>
+    <unit id="3056614778231322145">
+      <segment state="translated">
+        <source>No user reports have been submitted.</source>
+        <target>Ingen rapporter har blitt sendt inn av brukere.</target>
+      </segment>
+    </unit>
+    <unit id="15806356562100686">
+      <segment state="translated">
+        <source> To enable user reports, take a look at `showReportDialog` in the JS SDK. </source>
+        <target>For å benytte brukerrapporter, ta en titt på `showReportDialog` i JS SDK.</target>
+      </segment>
+    </unit>
+    <unit id="4053112335752964687">
+      <segment state="translated">
+        <source>Add Project</source>
+        <target>Legg til prosjekt</target>
+      </segment>
+    </unit>
+    <unit id="4736017430891007987">
+      <segment state="translated">
+        <source>Log in with security key</source>
+        <target>Logg inn med sikkerhetsnøkkel</target>
+      </segment>
+    </unit>
+    <unit id="7320655317974192454">
+      <segment state="translated">
+        <source> Plug in your security key and follow the prompt from your browser to finish logging in. </source>
+        <target>Koble til din sikkerhetsnøkkel og følg instruksjonene i nettleseren din for å fullføre innloggingen.</target>
+      </segment>
+    </unit>
+    <unit id="4053451334444184493">
+      <segment state="translated">
+        <source> Retry </source>
+        <target> Prøv igjen</target>
+      </segment>
+    </unit>
+    <unit id="2907070106267329067">
+      <segment state="translated">
+        <source>Log in with authenticator app instead</source>
+        <target>Logg inn med autentiserings-app i stedet</target>
+      </segment>
+    </unit>
+    <unit id="3328654199895417292">
+      <segment state="translated">
+        <source>Log in with authenticator app</source>
+        <target>Logg inn med autentiserings-app</target>
+      </segment>
+    </unit>
+    <unit id="1403444527740042521">
+      <segment state="translated">
+        <source> Enter the code from the authenticator app on your mobile device. If you’ve lost your device, you may enter one of your recovery codes. </source>
+        <target>Skriv inn koden fra autentiserings-appen på telefonen din. Hvis du har mistet telefonen, skriv inn en av gjenopprettingskodene.</target>
+      </segment>
+    </unit>
+    <unit id="7451233168808859381">
+      <segment state="translated">
+        <source>Verification Code</source>
+        <target>Verifikasjonskode</target>
+      </segment>
+    </unit>
+    <unit id="7045123878111147511">
+      <segment state="translated">
+        <source>Required</source>
+        <target>Påkrevd</target>
+      </segment>
+    </unit>
+    <unit id="6680124653427513148">
+      <segment state="translated">
+        <source> Code must be of length 6 or 16 </source>
+        <target>Koden må være 6 eller 16 tegn lang</target>
+      </segment>
+    </unit>
+    <unit id="2454050363478003966">
+      <segment state="translated">
+        <source>Login</source>
+        <target>Logg inn</target>
+      </segment>
+    </unit>
+    <unit id="9040838861188606319">
+      <segment state="translated">
+        <source>Log in with security key instead</source>
+        <target>Logg inn med sikkerhetsnøkkel i stedet</target>
+      </segment>
+    </unit>
+    <unit id="4253861884986496315">
+      <segment state="translated">
+        <source>Your email is required to log in</source>
+        <target>Epost er påkrevd for å logge inn</target>
+      </segment>
+    </unit>
+    <unit id="8938510541215036054">
+      <segment state="translated">
+        <source>Enter a valid email address</source>
+        <target>Skriv inn en gyldig epostadresse</target>
+      </segment>
+    </unit>
+    <unit id="907767253133208536">
+      <segment state="translated">
+        <source>Your password should be at least 8 characters long</source>
+        <target>Passordet bør være på minst åtte tegn</target>
+      </segment>
+    </unit>
+    <unit id="3737185603553645778">
+      <segment state="translated">
+        <source>Your password is required to log in</source>
+        <target>Passord er påkrevd for å logge inn</target>
+      </segment>
+    </unit>
+    <unit id="6270648407328773828">
+      <segment state="translated">
+        <source> Log in </source>
+        <target> Logg inn</target>
+      </segment>
+    </unit>
+    <unit id="6627551976444260400">
+      <segment state="translated">
+        <source>or</source>
+        <target>eller</target>
+      </segment>
+    </unit>
+    <unit id="1095247315180807956">
+      <segment state="translated">
+        <source>New to GlitchTip?</source>
+        <target>Ny GlitchTip-bruker?</target>
+      </segment>
+    </unit>
+    <unit id="1466012768716286509">
+      <segment state="translated">
+        <source>Sign Up</source>
+        <target>Registrer deg</target>
+      </segment>
+    </unit>
+    <unit id="6972105223770675605">
+      <segment state="translated">
+        <source>Reset Password</source>
+        <target>Nullstill passord</target>
+      </segment>
+    </unit>
+    <unit id="1573340253867282263">
+      <segment state="translated">
+        <source> Projects </source>
+        <target> Prosjekter</target>
+      </segment>
+    </unit>
+    <unit id="4389772680661696634">
+      <segment state="translated">
+        <source> Releases </source>
+        <target>Utgivelser</target>
+      </segment>
+    </unit>
+    <unit id="3012996930901307374">
+      <segment state="translated">
+        <source> Settings </source>
+        <target>Innstillinger</target>
+      </segment>
+    </unit>
+    <unit id="8730825622925436557">
+      <segment state="translated">
+        <source> Subscription </source>
+        <target>Abonnement</target>
+      </segment>
+    </unit>
+    <unit id="7836693894255586526">
+      <segment state="translated">
+        <source> Teams </source>
+        <target>Grupper</target>
+      </segment>
+    </unit>
+    <unit id="13416001704298648">
+      <segment state="translated">
+        <source> Members </source>
+        <target>Medlemmer</target>
+      </segment>
+    </unit>
+    <unit id="30262483107911885">
+      <segment state="translated">
+        <source> Profile </source>
+        <target>Profil</target>
+      </segment>
+    </unit>
+    <unit id="4517225298571061656">
+      <segment state="translated">
+        <source> Account </source>
+        <target>Konto</target>
+      </segment>
+    </unit>
+    <unit id="4690947398301082144">
+      <segment state="translated">
+        <source> Multi-factor Authentication </source>
+        <target>Flerfaktor-autentisering</target>
+      </segment>
+    </unit>
+    <unit id="4123493666855318656">
+      <segment state="translated">
+        <source> Notifications </source>
+        <target>Varsler</target>
+      </segment>
+    </unit>
+    <unit id="5444344807485186137">
+      <segment state="translated">
+        <source> Auth Tokens </source>
+        <target> Auth tokens </target>
+      </segment>
+    </unit>
+    <unit id="5113165610004622651">
+      <segment state="translated">
+        <source>Log Out</source>
+        <target>Logg ut</target>
+      </segment>
+    </unit>
+    <unit id="2481283412904907364">
+      <segment state="translated">
+        <source>Support GlitchTip</source>
+        <target>Støtt GlitchTip</target>
+      </segment>
+    </unit>
+    <unit id="1399934467160441489">
+      <segment state="translated">
+        <source>Create a New Organization</source>
+        <target>Lag en ny organisasjon</target>
+      </segment>
+    </unit>
+    <unit id="8405849621940251921">
+      <segment state="translated">
+        <source> This is the first step to get started with GlitchTip. </source>
+        <target>Dette er første steg for å komme i gang med GlitchTip.</target>
+      </segment>
+    </unit>
+    <unit id="5229548711048638988">
+      <segment state="translated">
+        <source> Create Organization </source>
+        <target>Lag organisasjon</target>
+      </segment>
+    </unit>
+    <unit id="6943733526667450823">
+      <segment state="initial">
+        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+        <target> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </target>
+      </segment>
+    </unit>
+  </file>
+</xliff>
