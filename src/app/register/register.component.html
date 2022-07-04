@@ -1,6 +1,6 @@
 <div class="auth-form-wrapper">
   <mat-card class="auth-form">
-    <h1>Register</h1>
+    <h1 i18n>Register</h1>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-error *ngIf="error">{{ error }}</mat-error>
@@ -89,7 +89,8 @@
       </ng-container>
     </mat-card-content>
     <p class="mat-body-1 sign-up">
-      Already have an account? <a routerLink="../login">Log In</a>
+      <ng-container i18n>Already have an account?</ng-container>
+      <a routerLink="../login" i18n>Log In</a>
     </p>
   </mat-card>
 </div>
