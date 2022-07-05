@@ -11,11 +11,17 @@ if (environment.production) {
 
 // First locale is default, add additional after it
 const availableLocales = ["en", "nb"];
+// Direct macrolanguages to specific ones. Example: Norwegian becomes Bokmål
+const localeMappings: { [key: string]: string } = { no: "nb" };
 
 let locale =
   availableLocales.find((l) => navigator.language.startsWith(l)) ??
   availableLocales[0];
 window.document.documentElement.lang = locale;
+
+if (locale in localeMappings) {
+  locale = localeMappings[locale];
+}
 
 if (locale === availableLocales[0]) {
   platformBrowserDynamic()

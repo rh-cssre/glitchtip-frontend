@@ -1,10 +1,10 @@
 <div class="margin-set">
   <h1 class="header-left" i18n>Log in with security key</h1>
   <mat-card-content class="contents-left">
-    <div class="instructions" i18n>
-      Plug in your security key and follow the prompt from your browser to
-      finish logging in.
-    </div>
+    <div class="instructions" i18n
+      >Plug in your security key and follow the prompt from your browser to
+      finish logging in.</div
+    >
     <ng-container *ngIf="authInProg$ | async; else failed">
       <div class="progress-bar">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -13,9 +13,9 @@
     <ng-template #failed>
       <gt-form-error [error]="error$ | async"></gt-form-error>
       <div class="auth-button">
-        <button mat-flat-button color="primary" (click)="retryAuth()" i18n>
-          Retry
-        </button>
+        <button mat-flat-button color="primary" (click)="retryAuth()" i18n
+          >Retry</button
+        >
       </div>
     </ng-template>
     <a [routerLink]="[]" (click)="switchMethod()" i18n
