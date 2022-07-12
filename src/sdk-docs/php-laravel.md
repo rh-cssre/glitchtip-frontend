@@ -4,32 +4,18 @@ Install the `sentry/sentry-laravel` package:
 $ composer require sentry/sentry-laravel
 ```
 
-If you're on Laravel 5.5 or later the package will be auto-discovered. Otherwise you will need to manually configure it in your `config/app.php`.
-
-Add GlitchTip reporting to `App/Exceptions/Handler.php`:
-
-```php
-public function report(Exception $exception)
-{
-    if (app()->bound('sentry') && $this->shouldReport($exception)){
-        app('sentry')->captureException($exception);
-    }
-
-    parent::report($exception);
-}
-```
-
 Create the SDK configuration file (`config/sentry.php`) with this command:
 
 ```sh
-$ php artisan vendor:publish --provider="Sentry\Laravel\ServiceProvider"
+$ php artisan sentry:publish --dsn=your DSN here
 ```
 
-Add your DSN to `.env`:
+This command adds to your .env file:
 
-```sh
-SENTRY_LARAVEL_DSN=___PUBLIC_DSN___
-```
+- `SENTRY_LARAVEL_DSN` - The DSN from your GlitchTip project.
+- `SENTRY_TRACES_SAMPLE_RATE` - Between 0.0 and 1.0. 1.0 will send 100% of transactions to GlitchTip. You may wish to set it to a lower number to keep event count and disk space usage lower. Such as 0.2 for a 20% sampling rate.
+
+Additional configuration settings are found in `config/sentry.php`.
 
 You can verify that GlitchTip is capturing errors in your Laravel application by creating a debug route that will throw an exception:
 
