@@ -1,6 +1,6 @@
 <section class="l-body">
   <header class="page-header">
-    <h2 class="mat-display-1">Subscription</h2>
+    <h2 class="mat-display-1" i18n>Subscription</h2>
   </header>
   <ng-container *ngIf="subscription$ | async as subscription">
     <mat-card>
@@ -21,6 +21,7 @@
                     subscription.plan.amount === '0.00';
                     else paidSubscription
                   "
+                  i18n
                   >You have selected the free plan. Please consider making a
                   monthly
                   <a
@@ -30,20 +31,26 @@
                   >
                   to help keep open source development sustainable. Thank you
                   for choosing GlitchTip!</ng-container
-                ><ng-template #paidSubscription
+                ><ng-template #paidSubscription i18n
                   >This organization has an active subscription to GlitchTip.
                   Thank you!</ng-template
                 >
               </p>
-              <p *ngIf="subscription.status === 'trialing'" class="mat-body-1">
-                This organization has a trial subscription to GlitchTip.
-              </p>
-              <p *ngIf="subscription.status === 'past_due'" class="mat-body-1">
-                This organization has a subscription to GlitchTip, but the
-                payment is past due.
-              </p>
+              <p
+                *ngIf="subscription.status === 'trialing'"
+                class="mat-body-1"
+                i18n
+                >This organization has a trial subscription to GlitchTip.</p
+              >
+              <p
+                *ngIf="subscription.status === 'past_due'"
+                class="mat-body-1"
+                i18n
+                >This organization has a subscription to GlitchTip, but the
+                payment is past due.</p
+              >
               <ng-container>
-                <mat-card-subtitle>Details</mat-card-subtitle>
+                <mat-card-subtitle i18n>Details</mat-card-subtitle>
                 <h3>{{ subscription.plan.product.name }}</h3>
                 {{ subscription.plan.product.description }}
                 <div
@@ -85,113 +92,113 @@
                     <div>
                       <ul>
                         <li>
-                          <b class="error">Issue events:</b>
+                          <b class="error" i18n>Issue events:</b>
                           {{ count.eventCount }}
                         </li>
                         <li>
-                          <b class="uptime">Uptime events:</b>
+                          <b class="uptime" i18n>Uptime events:</b>
                           {{ count.uptimeCheckEventCount }}
                         </li>
                         <li>
-                          <b class="performance">Performance events:</b>
+                          <b class="performance" i18n>Performance events:</b>
                           {{ count.transactionEventCount }}
                         </li>
                         <li>
-                          <b class="file-size">File storage:</b>
+                          <b class="file-size" i18n>File storage:</b>
                           {{ count.fileSizeMB }} MB
                         </li>
-                        <li>
-                          Total
+                        <li i18n
+                          >Total
                           <a [routerLink]="[]" (click)="openEventInfoDialog()"
                             >events</a
                           >
-                          used in billing period: {{ count.total }}
-                        </li>
+                          used in billing period: {{ count.total }}</li
+                        >
                       </ul>
                     </div>
                   </ng-container>
                 </div>
                 <ul>
+                  <li class="mat-body-1" i18n
+                    >Start date for this plan:
+                    {{ subscription.start_date | date }}</li
+                  >
+                  <li class="mat-body-1" i18n
+                    >Plan cost: {{ subscription.plan.amount | currency }}</li
+                  >
                   <li class="mat-body-1">
-                    Start date for this plan:
-                    {{ subscription.start_date | date }}
-                  </li>
-                  <li class="mat-body-1">
-                    Plan cost: {{ subscription.plan.amount | currency }}
-                  </li>
-                  <li class="mat-body-1">
-                    Billing:
+                    <ng-container i18n>Billing</ng-container>:
                     <ng-container
                       *ngIf="
                         subscription.collection_method ===
                         'charge_automatically'
                       "
+                      i18n
+                      >Automatic</ng-container
                     >
-                      Automatic
-                    </ng-container>
                     <ng-container
                       *ngIf="subscription.collection_method === 'send_invoice'"
+                      i18n
+                      >Send invoice</ng-container
                     >
-                      Send invoice
-                    </ng-container>
                   </li>
-                  <li class="mat-body-1">
-                    Billing period:
+                  <li class="mat-body-1" i18n
+                    >Billing period:
                     {{ subscription.current_period_start | date }} to
-                    {{ subscription.current_period_end | date }}
-                  </li>
+                    {{ subscription.current_period_end | date }}</li
+                  >
                 </ul>
               </ng-container>
             </ng-container>
-            <p class="mat-body-1">
-              If you have questions about your subscription, please contact us
-              at
-              <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-              >.
-            </p>
+            <p class="mat-body-1" i18n
+              >If you have questions about your subscription, please contact us
+              at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+              >.</p
+            >
             <mat-error>{{ error$ | async }}</mat-error>
             <button
               mat-flat-button
               color="primary"
               (click)="manageSubscription()"
+              i18n
+              >Manage Subscription</button
             >
-              Manage Subscription
-            </button>
           </ng-container>
           <ng-template #noSubscription>
-            <p class="mat-body-1">
-              This organization does not have an active subscription to
-              GlitchTip. Pick a plan to get started.
-            </p>
+            <p class="mat-body-1" i18n
+              >This organization does not have an active subscription to
+              GlitchTip. Pick a plan to get started.</p
+            >
           </ng-template>
         </div>
         <div *ngIf="(subscription$ | async) === null as subscription">
-          <p class="mat-body-1">
-            This organization does not have an active subscription to GlitchTip.
-          </p>
-          <a [routerLink]="['/payment']">Subscription Options</a>
-          <p class="mat-body-1">
-            If you would like to purchase a subscription, please contact us at
+          <p class="mat-body-1" i18n
+            >This organization does not have an active subscription to
+            GlitchTip.</p
+          >
+          <a [routerLink]="['/payment']" i18n>Subscription Options</a>
+          <p class="mat-body-1" i18n
+            >If you would like to purchase a subscription, please contact us at
             <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-            >.
-          </p>
+            >.</p
+          >
         </div>
       </mat-card-content>
     </mat-card>
     <mat-card *ngIf="promptForProject$ | async">
       <mat-card-content>
-        <p>
-          Now that you have an organization and a subscription, create a
-          project.
-        </p>
+        <p i18n
+          >Now that you have an organization and a subscription, create a
+          project.</p
+        >
         <a
           *ngIf="activeOrganizationSlug$ | async as slug"
           mat-flat-button
           [routerLink]="['/', slug, 'settings', 'projects', 'new']"
           color="primary"
+          i18n
+          >Create New Project</a
         >
-          Create New Project
-        </a>
       </mat-card-content>
     </mat-card>
     <gt-payment

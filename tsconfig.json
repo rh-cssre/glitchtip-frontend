@@ -24,6 +24,7 @@
     "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
     "fullTemplateTypeCheck": true,
     "strictTemplates": true,
     "strictInjectionParameters": true
