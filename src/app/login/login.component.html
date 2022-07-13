@@ -66,9 +66,10 @@
             >Log in</button
           >
         </form>
+	 <div class="or mat-body-strong" i18n>or</div>
       </div>
         <ng-container *ngIf="socialApps$ | async as socialApps">
-          <div *ngIf="socialApps.length >= 1" class="or">
+          <div *ngIf="socialApps.length > 1" class="or">
             <span class="mat-body-strong mat-body-2" i18n>or</span>
           </div>
           <div class="o-auth">
