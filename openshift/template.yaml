@@ -32,6 +32,7 @@ objects:
     metadata:
       annotations:
         deployment.kubernetes.io/revision: "1"
+        ignore-check.kube-linter.io/minimum-three-replicas: "Beat deployment should only have 1 replica"
       labels:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
@@ -164,13 +165,13 @@ objects:
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                    - key: glitchtip
-                      operator: In
-                      values:
-                        - web
-                topologyKey: "kubernetes.io/hostname"
+                - labelSelector:
+                    matchExpressions:
+                      - key: glitchtip
+                        operator: In
+                        values:
+                          - web
+                  topologyKey: "kubernetes.io/hostname"
           initContainers:
             - name: init-migration
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
@@ -301,9 +302,16 @@ objects:
 
   # --------- WORKER DEPLOYMENT --------------
 
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: glitchtip-worker-sa
+
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
+      annotations:
+        ignore-check.kube-linter.io/minimum-three-replicas: "Worker deployment should only have 1 replica"
       labels:
         glitchtip: worker
       name: glitchtip-worker
@@ -317,6 +325,7 @@ objects:
           labels:
             glitchtip: worker
         spec:
+          serviceAccountName: glitchtip-web-sa
           containers:
             - args:
                 - celery
