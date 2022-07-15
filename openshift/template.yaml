@@ -242,6 +242,8 @@ objects:
                   value: "${I_PAID_FOR_GLITCHTIP}"
                 - name: ENABLE_OPEN_USER_REGISTRATION
                   value: "${ENABLE_OPEN_USER_REGISTRATION}"
+                - name: ENABLE_LOGIN_FORM
+                  value: "${ENABLE_LOGIN_FORM}"
                 - name: GLITCHTIP_DOMAIN
                   valueFrom:
                     configMapKeyRef:
@@ -444,6 +446,11 @@ parameters:
     required: true
     name: ENABLE_SOCIAL_AUTH
     value: "True"
+
+  - description: ENABLE_LOGIN_FORM
+    displayName: ENABLE_LOGIN_FORM
+    name: ENABLE_LOGIN_FORM
+    value: "False"
 
   - description: I_PAID_FOR_GLITCHTIP
     displayName: I_PAID_FOR_GLITCHTIP

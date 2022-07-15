@@ -1,5 +1,7 @@
 import { seedBackend, requestLogin } from "./utils.cy";
+import { environment } from "../../src/environments/environment";
 
+if (environment.loginForm) {
 describe("Change Password", () => {
   beforeEach(() => {
     seedBackend();
@@ -50,3 +52,4 @@ describe("Change Password", () => {
     // TODO Verify? Might not be possible or even necessary
   });
 });
+}
