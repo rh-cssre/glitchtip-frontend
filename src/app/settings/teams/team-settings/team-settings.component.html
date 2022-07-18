@@ -1,5 +1,5 @@
 <mat-card *ngIf="team$ | async as team">
-  <mat-card-title>Settings</mat-card-title>
+  <mat-card-title i18n>Settings</mat-card-title>
 
   <mat-divider></mat-divider>
   <mat-card-content>
@@ -13,7 +13,7 @@
         <mat-label>Slug</mat-label>
         <input matInput formControlName="slug" [value]="team.slug" />
         <mat-error>
-          <span *ngIf="this.form.get('slug')?.errors?.required"
+          <span *ngIf="this.form.get('slug')?.errors?.required" i18n
             >Enter a team name</span
           ></mat-error
         >
@@ -29,14 +29,14 @@
   </mat-card-content>
 </mat-card>
 <mat-card>
-  <mat-card-title>Delete Team</mat-card-title>
+  <mat-card-title i18n>Delete Team</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content class="remove-content">
     <div>
-      <p>
-        By deleting your team, you will lose all associated data. This cannot be
-        undone.
-      </p>
+      <p i18n
+        >By deleting your team, you will lose all associated data. This cannot
+        be undone.</p
+      >
       <mat-error></mat-error>
     </div>
     <gt-loading-button

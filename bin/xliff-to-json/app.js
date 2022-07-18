@@ -32,9 +32,17 @@ function jsonAngularCompat(xliffContent) {
     } else {
       result[current] = xliffContent[current]
         .map((entry) => {
-          return typeof entry === "string"
-            ? entry
-            : `{$${entry.Standalone["equiv"]}}`;
+          if (typeof entry === "string") {
+            return entry;
+          } else {
+            if (entry.Standalone) {
+              return `{$${entry.Standalone["equiv"]}}`;
+            } else if (entry.Span) {
+              return `{$${entry.Span.equivStart}}${entry.Span["contents"]}{$${entry.Span.equivEnd}}`;
+            } else {
+              throw Error("Unhandled message content: ", entry)
+            }
+          }
         })
         .join("");
     }

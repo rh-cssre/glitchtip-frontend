@@ -113,10 +113,10 @@
             (newAlertOpen$ | async) === false;
           else showAlerts
         "
-        ><p class="no-alerts" i18n>
-          You don't have any alerts set up. Click "Create New Alert" on the top
-          right of this card to get started.
-        </p></ng-container
+        ><p class="no-alerts" i18n
+          >You don't have any alerts set up. Click "Create New Alert" on the top
+          right of this card to get started.</p
+        ></ng-container
       ><ng-template #showAlerts>
         <div
           *ngFor="let alert of projectAlerts$ | async; let i = index"

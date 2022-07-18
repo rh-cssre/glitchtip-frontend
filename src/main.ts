@@ -10,7 +10,7 @@ if (environment.production) {
 }
 
 // First locale is default, add additional after it
-const availableLocales = ["en", "nb"];
+const availableLocales = ["en", "fr", "nb"];
 // Direct macrolanguages to specific ones. Example: Norwegian becomes Bokmål
 const localeMappings: { [key: string]: string } = { no: "nb" };
 

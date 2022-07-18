@@ -8,13 +8,13 @@
     <!-- If there are errors, only show the error -->
     <ng-container *ngIf="(errors$ | async)?.length; else emptyState">
       <ng-container *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
-        ><h3 class="mat-display-1">
-          There was an error processing your request
-        </h3></ng-container
+        ><h3 class="mat-display-1" i18n
+          >There was an error processing your request</h3
+        ></ng-container
       ><ng-template #multipleErrors
-        ><h3 class="mat-display-1">
-          There were errors while processing your request
-        </h3></ng-template
+        ><h3 class="mat-display-1" i18n
+          >There were errors while processing your request</h3
+        ></ng-template
       >
       <ul>
         <li *ngFor="let error of errors$ | async">{{ error }}</li>
@@ -27,11 +27,11 @@
       <ng-container
         *ngIf="(orgHasAProject$ | async) === false; else hasProject"
       >
-        <h3 class="mat-display-1">This organization has no projects.</h3>
-        <p class="mat-body-1">
-          To add a project to this organization, press the
-          "Add&nbsp;Project"&nbsp;button.
-        </p>
+        <h3 class="mat-display-1" i18n>This organization has no projects.</h3>
+        <p class="mat-body-1" i18n
+          >To add a project to this organization, press the
+          "Add&nbsp;Project"&nbsp;button.</p
+        >
       </ng-container>
 
       <ng-template #hasProject>
@@ -43,14 +43,14 @@
             <p class="not-on-team">
               <ng-container
                 *ngIf="singleProjectApplied$ | async; else notOnTeamMultiple"
+                i18n
+                >You can't see issues for this project because you're not on the
+                team.</ng-container
               >
-                You can't see issues for this project because you're not on the
-                team.
-              </ng-container>
-              <ng-template #notOnTeamMultiple>
-                Out of the projects you have selected, you are not a part of
-                that project's team for at least one of them.
-              </ng-template>
+              <ng-template #notOnTeamMultiple i18n
+                >Out of the projects you have selected, you are not a part of
+                that project's team for at least one of them.</ng-template
+              >
             </p>
           </ng-container>
           <ng-container *ngIf="notOnTeam.length > 2"> </ng-container>
@@ -78,11 +78,11 @@
                     else otherTemplate
                   "
                 >
-                  <h2 class="mat-display-1">
-                    Connect your
+                  <h2 class="mat-display-1" i18n
+                    >Connect your
                     {{ activeProjectPlatformName$ | async }} project to
-                    GlitchTip
-                  </h2>
+                    GlitchTip</h2
+                  >
 
                   <gt-lazy-markdown
                     markdownSrc="/static/sdk-docs/{{
@@ -92,9 +92,9 @@
                 </ng-container>
 
                 <ng-template #otherTemplate>
-                  <h2 class="mat-display-1">
-                    Connect your project to GlitchTip
-                  </h2>
+                  <h2 class="mat-display-1" i18n
+                    >Connect your project to GlitchTip</h2
+                  >
 
                   <gt-lazy-markdown
                     markdownSrc="/static/sdk-docs/all-sdks.md"
@@ -108,16 +108,16 @@
 
               <ng-template #noPlatform>
                 <div class="install-instructions">
-                  <h2 class="mat-display-1">
-                    Connect your project to GlitchTip
-                  </h2>
+                  <h2 class="mat-display-1" i18n
+                    >Connect your project to GlitchTip</h2
+                  >
 
                   <gt-lazy-markdown
                     markdownSrc="/static/sdk-docs/all-sdks.md"
                   ></gt-lazy-markdown>
 
-                  <p class="mat-body-1">
-                    If you go to this project's
+                  <p class="mat-body-1" i18n
+                    >If you go to this project's
                     <a
                       [routerLink]="[
                         '/',
@@ -129,8 +129,8 @@
                     >
                       settings page</a
                     >, you can pick a platform. If you do, you'll get more
-                    specific instructions about how to get started.
-                  </p>
+                    specific instructions about how to get started.</p
+                  >
                 </div>
               </ng-template>
               <div
@@ -139,10 +139,10 @@
               >
                 <h2 class="mat-display-1">DSN</h2>
 
-                <p class="mat-body-1">
-                  Most instructions will have a spot that says "your DSN here".
-                  Copy the DSN and paste it into that spot.
-                </p>
+                <p class="mat-body-1" i18n
+                  >Most instructions will have a spot that says "your DSN here".
+                  Copy the DSN and paste it into that spot.</p
+                >
 
                 <div class="dsn-area">
                   <gt-copy-input
@@ -161,17 +161,17 @@
                   "
                 >
                   <ng-container *ngIf="activeProjectPlatform !== 'other'">
-                    <h2 class="mat-body-2">What's this all about?</h2>
+                    <h2 class="mat-body-2" i18n>What's this all about?</h2>
 
                     <gt-lazy-markdown
                       markdownSrc="/static/sdk-docs/all-sdks.md"
                     ></gt-lazy-markdown>
 
-                    <p class="mat-body-1">
-                      This page is showing instructions on how to connect
+                    <p class="mat-body-1" i18n
+                      >This page is showing instructions on how to connect
                       GlitchTip to your project based on the platform you
-                      specified.
-                    </p>
+                      specified.</p
+                    >
                   </ng-container>
                 </ng-container>
               </div>
@@ -180,19 +180,20 @@
 
           <ng-template #noIssueMessaging>
             <!-- No issues match the filters, in general -->
-            <h3 class="mat-display-1">No events match your filters.</h3>
-            <p class="mat-body-1">
-              Try changing your search parameters to get something to show here.
-            </p>
+            <h3 class="mat-display-1" i18n>No events match your filters.</h3>
+            <p class="mat-body-1" i18n
+              >Try changing your search parameters to get something to show
+              here.</p
+            >
           </ng-template>
         </ng-container>
 
         <ng-template #multipleProjects>
-          <h3>No events match your filters.</h3>
-          <p class="mat-body-1">
-            You have multiple projects selected. Select a single project to
-            learn more about why there's nothing here.
-          </p>
+          <h3 i18n>No events match your filters.</h3>
+          <p class="mat-body-1" i18n
+            >You have multiple projects selected. Select a single project to
+            learn more about why there's nothing here.</p
+          >
         </ng-template>
       </ng-template></ng-template
     >
