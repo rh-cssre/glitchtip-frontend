@@ -9,12 +9,14 @@ import { EMPTY } from "rxjs";
 import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
 import { MaterialModule } from "../shared/material.module";
+import { environment } from "../../environments/environment";
 
 @Component({ selector: "gt-form-error", template: "" })
 class FormErrorStubComponent {
   @Input() error: any;
 }
 
+if (environment.loginForm) {
 // Type is wrong abouit createSpyObject, third param is for properties
 const authServiceSpy = (jasmine as any).createSpyObj(
   "LoginService",
@@ -65,3 +67,4 @@ describe("LoginComponent", () => {
     expect(authServiceSpy.login).toHaveBeenCalled();
   });
 });
+}

@@ -1,3 +1,5 @@
+import { environment } from "../../src/environments/environment";
+if (environment.loginForm) {
 describe("Send reset email", () => {
   it("should show validation errors", () => {
     cy.visit("/reset-password");
@@ -16,3 +18,4 @@ describe("Send reset email", () => {
     cy.get("#reset").should("not.exist");
   });
 });
+}
