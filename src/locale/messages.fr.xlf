@@ -1,292 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US" trgLang="nb">
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US" trgLang="fr-FR">
   <file id="ngi18n" original="ng.template">
     <unit id="827275858583778252">
       <segment state="translated">
         <source>Organization Invite</source>
-        <target>Invitasjon til organisasjon</target>
+        <target>Invitation dans une organisation</target>
       </segment>
     </unit>
     <unit id="8464263618615235731">
       <segment state="translated">
         <source>Create New Organization</source>
-        <target>Opprett ny organisasjon</target>
+        <target>Créer une nouvelle organisation</target>
       </segment>
     </unit>
     <unit id="2804049603671779506">
       <segment state="translated">
         <source>Delete User Account</source>
-        <target>Slett brukerkonto</target>
+        <target>Supprimer le compte utilisateur</target>
       </segment>
     </unit>
     <unit id="1203636405699791528">
       <segment state="initial">
         <source>By deleting your user account, you will permanently lose all data, including access to organization projects and their associated events.</source>
-        <target>Ved å slette brukerkontoen din vil du permanent miste all data, inkludert tilgang til organisasjonsprosjekter og deres tilhørende hendelser.</target>
+        <target>En supprimant votre compte utilisateur, vous perdrez définitivement toutes les données, y compris l&apos;accès aux projets des organisations et leurs événements associés.</target>
       </segment>
     </unit>
     <unit id="8069478311783909563">
       <segment state="initial">
         <source>Make sure to delete or transfer ownership of any organizations before deleting your account. Owners of paid organization subscriptions are not able to delete their account.</source>
-        <target>Pass på å slette eller overføre eierskap for alle organisasjoner før du sletter kontoen din. Eiere av abonnementstjenester kan ikke slette kontoen sin.</target>
+        <target>Assurez-vous de supprimer ou de transférer la propriété de toutes les organisations avant de supprimer votre compte. Les propriétaires d&apos;abonnements d&apos;organisation payants ne peuvent pas supprimer leur compte.</target>
       </segment>
     </unit>
     <unit id="3078760420237279624">
       <segment state="translated">
         <source>Auth Tokens</source>
-        <target>Auth tokens</target>
+        <target>Jetons d&apos;authentification</target>
       </segment>
     </unit>
     <unit id="7345261406944700511">
       <segment state="translated">
         <source>Create New Token</source>
-        <target>Lag nytt token</target>
+        <target>Créer un nouveau jeton</target>
       </segment>
     </unit>
     <unit id="7890916963184797167">
       <segment state="initial">
         <source>Authentication tokens give you access to the GlitchTip API. You can create these tokens as authentication to gain specific access around the app.</source>
-        <target>Auth tokens gir deg tilgang til GlitchTip APIet. Du kan benytte disse til å gi forskjellige og tilpassede tilganger i applikasjonen.</target>
+        <target>Les jetons d&apos;authentification vous donnent accès à l&apos;API de GlitchTip. Vous pouvez créer ces jetons comme moyen d&apos;authentification pour accéder à l&apos;application.</target>
       </segment>
     </unit>
     <unit id="7538977961049758582">
       <segment state="translated">
         <source>Your Tokens</source>
-        <target>Dine tokens</target>
+        <target>Vos jetons</target>
       </segment>
     </unit>
     <unit id="5612078901304454283">
       <segment state="translated">
         <source>Once you create a token, it will show up here.</source>
-        <target>Når du har laget et token vil det vises her.</target>
+        <target>Une fois que vous avez créé un jeton, il apparaîtra ici.</target>
       </segment>
     </unit>
     <unit id="4587452935087847438">
       <segment state="translated">
         <source>Releases</source>
-        <target>Utgivelser</target>
+        <target>Versions</target>
       </segment>
     </unit>
     <unit id="2251615247560743164">
       <segment state="translated">
         <source>There are no releases for this organization.</source>
-        <target>Det er ingen utgivelser for denne organisasjonen.</target>
+        <target>Il n&apos;y a pas de version pour cette organisation.</target>
       </segment>
     </unit>
     <unit id="6326759550347037576">
       <segment state="translated">
         <source>Accept invitation</source>
-        <target>Aksepter invitasjon</target>
-      </segment>
-    </unit>
-    <unit id="4406952910598958793">
-      <segment state="initial">
-        <source>To continue, you must either log in to your existing account, or create a new one.</source>
-        <target>For å fortsette må du enten logge inn med en eksisterende konto, eller lage en ny.</target>
-      </segment>
-    </unit>
-    <unit id="4648253303476880511">
-      <segment state="translated">
-        <source>Create new account</source>
-        <target>Lag ny konto</target>
+        <target>Accepter l&apos;invitation</target>
       </segment>
     </unit>
     <unit id="7055509398589474309">
       <segment state="translated">
         <source>Log in with existing account</source>
-        <target>Logg inn med eksisterende konto</target>
+        <target>Se connecter avec un compte existant</target>
+      </segment>
+    </unit>
+    <unit id="4648253303476880511">
+      <segment state="translated">
+        <source>Create new account</source>
+        <target>Créer un nouveau compte</target>
+      </segment>
+    </unit>
+    <unit id="4406952910598958793">
+      <segment state="initial">
+        <source>To continue, you must either log in to your existing account, or create a new one.</source>
+        <target>Pour continuer, vous devez soit vous connecter avec votre compte existant, soit en créer un nouveau.</target>
       </segment>
     </unit>
     <unit id="3961541970784414950">
       <segment state="translated">
         <source>There was an error connecting to your social authentication provider.</source>
-        <target>Det oppsto en feil ved tilkobling til ekstern autentiseringstilbyder.</target>
-      </segment>
-    </unit>
-    <unit id="1176990449799757498">
-      <segment state="translated">
-        <source>Issues</source>
-        <target>Problemer</target>
-      </segment>
-    </unit>
-    <unit id="6312371663219634282">
-      <segment state="translated">
-        <source>Mark as resolved</source>
-        <target>Merk som løst</target>
-      </segment>
-    </unit>
-    <unit id="6722197117273372334">
-      <segment state="translated">
-        <source>Reopen</source>
-        <target>Åpne igjen</target>
-      </segment>
-    </unit>
-    <unit id="1240739868347418586">
-      <segment state="translated">
-        <source>Ignore</source>
-        <target>Ignorer</target>
-      </segment>
-    </unit>
-    <unit id="3056614778231322145">
-      <segment state="translated">
-        <source>No user reports have been submitted.</source>
-        <target>Ingen rapporter har blitt sendt inn av brukere.</target>
-      </segment>
-    </unit>
-    <unit id="6509290351210910224">
-      <segment state="initial">
-        <source>To enable user reports, take a look at `showReportDialog` in the JS SDK.</source>
-        <target>For å benytte brukerrapporter, ta en titt på `showReportDialog` i JS SDK.</target>
-      </segment>
-    </unit>
-    <unit id="4053112335752964687">
-      <segment state="translated">
-        <source>Add Project</source>
-        <target>Legg til prosjekt</target>
-      </segment>
-    </unit>
-    <unit id="4736017430891007987">
-      <segment state="translated">
-        <source>Log in with security key</source>
-        <target>Logg inn med sikkerhetsnøkkel</target>
-      </segment>
-    </unit>
-    <unit id="2305074984265047688">
-      <segment state="initial">
-        <source>Plug in your security key and follow the prompt from your browser to finish logging in.</source>
-        <target>Koble til din sikkerhetsnøkkel og følg instruksjonene i nettleseren din for å fullføre innloggingen.</target>
-      </segment>
-    </unit>
-    <unit id="7934833136974560675">
-      <segment state="translated">
-        <source>Retry</source>
-        <target>Prøv igjen</target>
-      </segment>
-    </unit>
-    <unit id="2907070106267329067">
-      <segment state="translated">
-        <source>Log in with authenticator app instead</source>
-        <target>Logg inn med autentiserings-app i stedet</target>
-      </segment>
-    </unit>
-    <unit id="3328654199895417292">
-      <segment state="translated">
-        <source>Log in with authenticator app</source>
-        <target>Logg inn med autentiserings-app</target>
-      </segment>
-    </unit>
-    <unit id="22386476955637539">
-      <segment state="initial">
-        <source>Enter the code from the authenticator app on your mobile device. If you’ve lost your device, you may enter one of your recovery codes.</source>
-        <target>Skriv inn koden fra autentiserings-appen på telefonen din. Hvis du har mistet telefonen, skriv inn en av gjenopprettingskodene.</target>
-      </segment>
-    </unit>
-    <unit id="7451233168808859381">
-      <segment state="translated">
-        <source>Verification Code</source>
-        <target>Verifikasjonskode</target>
-      </segment>
-    </unit>
-    <unit id="7045123878111147511">
-      <segment state="translated">
-        <source>Required</source>
-        <target>Påkrevd</target>
-      </segment>
-    </unit>
-    <unit id="315190807015121967">
-      <segment state="translated">
-        <source>Code must be of length 6 or 16</source>
-        <target>Koden må være 6 eller 16 tegn lang</target>
-      </segment>
-    </unit>
-    <unit id="2454050363478003966">
-      <segment state="translated">
-        <source>Login</source>
-        <target>Logg inn</target>
-      </segment>
-    </unit>
-    <unit id="9040838861188606319">
-      <segment state="translated">
-        <source>Log in with security key instead</source>
-        <target>Logg inn med sikkerhetsnøkkel i stedet</target>
-      </segment>
-    </unit>
-    <unit id="4253861884986496315">
-      <segment state="translated">
-        <source>Your email is required to log in</source>
-        <target>Epost er påkrevd for å logge inn</target>
-      </segment>
-    </unit>
-    <unit id="8938510541215036054">
-      <segment state="translated">
-        <source>Enter a valid email address</source>
-        <target>Skriv inn en gyldig epostadresse</target>
-      </segment>
-    </unit>
-    <unit id="907767253133208536">
-      <segment state="translated">
-        <source>Your password should be at least 8 characters long</source>
-        <target>Passordet bør være på minst åtte tegn</target>
-      </segment>
-    </unit>
-    <unit id="3737185603553645778">
-      <segment state="translated">
-        <source>Your password is required to log in</source>
-        <target>Passord er påkrevd for å logge inn</target>
-      </segment>
-    </unit>
-    <unit id="2336550011721758066">
-      <segment state="translated">
-        <source>Log in</source>
-        <target>Logg inn</target>
-      </segment>
-    </unit>
-    <unit id="6627551976444260400">
-      <segment state="translated">
-        <source>or</source>
-        <target>eller</target>
+        <target>Une erreur s&apos;est produite lors de la connexion à votre fournisseur d&apos;authentification sociale.</target>
       </segment>
     </unit>
     <unit id="1095247315180807956">
       <segment state="translated">
         <source>New to GlitchTip?</source>
-        <target>Ny GlitchTip-bruker?</target>
+        <target>Vous êtes nouveau sur GlitchTip ?</target>
       </segment>
     </unit>
-    <unit id="1466012768716286509">
+    <unit id="1176990449799757498">
       <segment state="translated">
-        <source>Sign Up</source>
-        <target>Registrer deg</target>
-      </segment>
-    </unit>
-    <unit id="6972105223770675605">
-      <segment state="translated">
-        <source>Reset Password</source>
-        <target>Nullstill passord</target>
-      </segment>
-    </unit>
-    <unit id="4930506384627295710">
-      <segment state="translated">
-        <source>Settings</source>
-        <target>Innstillinger</target>
-      </segment>
-    </unit>
-    <unit id="7830707034534607415">
-      <segment state="translated">
-        <source>Subscription</source>
-        <target>Abonnement</target>
-      </segment>
-    </unit>
-    <unit id="9008968878373693685">
-      <segment state="translated">
-        <source>Teams</source>
-        <target>Grupper</target>
+        <source>Issues</source>
+        <target>Problèmes</target>
       </segment>
     </unit>
     <unit id="4691887509600985309">
       <segment state="translated">
         <source>Members</source>
-        <target>Medlemmer</target>
+        <target>Membres</target>
+      </segment>
+    </unit>
+    <unit id="1399934467160441489">
+      <segment state="translated">
+        <source>Create a New Organization</source>
+        <target>Créer une nouvelle organisation</target>
+      </segment>
+    </unit>
+    <unit id="22386476955637539">
+      <segment state="initial">
+        <source>Enter the code from the authenticator app on your mobile device. If you’ve lost your device, you may enter one of your recovery codes.</source>
+        <target>Entrez le code de l&apos;application d&apos;authentification sur votre appareil mobile. Si vous avez perdu votre appareil, vous pouvez entrer un de vos codes de récupération.</target>
+      </segment>
+    </unit>
+    <unit id="1466012768716286509">
+      <segment state="translated">
+        <source>Sign Up</source>
+        <target>S&apos;inscrire</target>
+      </segment>
+    </unit>
+    <unit id="6509290351210910224">
+      <segment state="initial">
+        <source>To enable user reports, take a look at `showReportDialog` in the JS SDK.</source>
+        <target>Pour activer les rapports d&apos;utilisateurs, consultez `showReportDialog` dans le SDK JS.</target>
+      </segment>
+    </unit>
+    <unit id="6722197117273372334">
+      <segment state="translated">
+        <source>Reopen</source>
+        <target>Rouvrir</target>
+      </segment>
+    </unit>
+    <unit id="2454050363478003966">
+      <segment state="translated">
+        <source>Login</source>
+        <target>Connexion</target>
+      </segment>
+    </unit>
+    <unit id="2481283412904907364">
+      <segment state="translated">
+        <source>Support GlitchTip</source>
+        <target>Soutenir GlitchTip</target>
+      </segment>
+    </unit>
+    <unit id="2907070106267329067">
+      <segment state="translated">
+        <source>Log in with authenticator app instead</source>
+        <target>Connectez-vous avec l&apos;application d&apos;authentification à la place</target>
+      </segment>
+    </unit>
+    <unit id="4930506384627295710">
+      <segment state="translated">
+        <source>Settings</source>
+        <target>Paramètres</target>
       </segment>
     </unit>
     <unit id="4915431133669985304">
@@ -295,100 +181,256 @@
         <target>Profil</target>
       </segment>
     </unit>
-    <unit id="4086606389696938932">
+    <unit id="3056614778231322145">
       <segment state="translated">
-        <source>Account</source>
-        <target>Konto</target>
+        <source>No user reports have been submitted.</source>
+        <target>Aucun rapport d&apos;utilisateur n&apos;a été soumis.</target>
       </segment>
     </unit>
-    <unit id="4539315091720234670">
+    <unit id="3328654199895417292">
       <segment state="translated">
-        <source>Multi-factor Authentication</source>
-        <target>Flerfaktor-autentisering</target>
+        <source>Log in with authenticator app</source>
+        <target>Connectez-vous avec l&apos;application d&apos;authentification</target>
+      </segment>
+    </unit>
+    <unit id="3737185603553645778">
+      <segment state="translated">
+        <source>Your password is required to log in</source>
+        <target>Votre mot de passe est nécessaire pour vous connecter</target>
+      </segment>
+    </unit>
+    <unit id="6312371663219634282">
+      <segment state="translated">
+        <source>Mark as resolved</source>
+        <target>Marquer comme résolu</target>
+      </segment>
+    </unit>
+    <unit id="4053112335752964687">
+      <segment state="translated">
+        <source>Add Project</source>
+        <target>Ajouter un projet</target>
+      </segment>
+    </unit>
+    <unit id="7934833136974560675">
+      <segment state="translated">
+        <source>Retry</source>
+        <target>Réessayer</target>
       </segment>
     </unit>
     <unit id="5851560788527570644">
       <segment state="translated">
         <source>Notifications</source>
-        <target>Varsler</target>
+        <target>Notifications</target>
+      </segment>
+    </unit>
+    <unit id="4253861884986496315">
+      <segment state="translated">
+        <source>Your email is required to log in</source>
+        <target>Votre email est nécessaire pour vous connecter</target>
+      </segment>
+    </unit>
+    <unit id="4086606389696938932">
+      <segment state="translated">
+        <source>Account</source>
+        <target>Compte</target>
+      </segment>
+    </unit>
+    <unit id="4539315091720234670">
+      <segment state="translated">
+        <source>Multi-factor Authentication</source>
+        <target>Authentification multifacteur</target>
+      </segment>
+    </unit>
+    <unit id="4736017430891007987">
+      <segment state="translated">
+        <source>Log in with security key</source>
+        <target>Connectez-vous avec une clé de sécurité</target>
       </segment>
     </unit>
     <unit id="5113165610004622651">
       <segment state="translated">
         <source>Log Out</source>
-        <target>Logg ut</target>
-      </segment>
-    </unit>
-    <unit id="2481283412904907364">
-      <segment state="translated">
-        <source>Support GlitchTip</source>
-        <target>Støtt GlitchTip</target>
-      </segment>
-    </unit>
-    <unit id="1399934467160441489">
-      <segment state="translated">
-        <source>Create a New Organization</source>
-        <target>Opprett en ny organisasjon</target>
-      </segment>
-    </unit>
-    <unit id="7079167664042577585">
-      <segment state="translated">
-        <source>This is the first step to get started with GlitchTip.</source>
-        <target>Dette er første steg for å komme i gang med GlitchTip.</target>
+        <target>Se déconnecter</target>
       </segment>
     </unit>
     <unit id="4551866846795587701">
       <segment state="translated">
         <source>Create Organization</source>
-        <target>Lag organisasjon</target>
+        <target>Créer une organisation</target>
+      </segment>
+    </unit>
+    <unit id="2336550011721758066">
+      <segment state="translated">
+        <source>Log in</source>
+        <target>Se connecter</target>
+      </segment>
+    </unit>
+    <unit id="6627551976444260400">
+      <segment state="translated">
+        <source>or</source>
+        <target>ou</target>
+      </segment>
+    </unit>
+    <unit id="315190807015121967">
+      <segment state="translated">
+        <source>Code must be of length 6 or 16</source>
+        <target>Le code doit avoir une longueur de 6 ou 16</target>
+      </segment>
+    </unit>
+    <unit id="6972105223770675605">
+      <segment state="translated">
+        <source>Reset Password</source>
+        <target>Réinitialiser le mot de passe</target>
+      </segment>
+    </unit>
+    <unit id="1240739868347418586">
+      <segment state="translated">
+        <source>Ignore</source>
+        <target>Ignorer</target>
+      </segment>
+    </unit>
+    <unit id="7045123878111147511">
+      <segment state="translated">
+        <source>Required</source>
+        <target>Obligatoire</target>
+      </segment>
+    </unit>
+    <unit id="2305074984265047688">
+      <segment state="initial">
+        <source>Plug in your security key and follow the prompt from your browser to finish logging in.</source>
+        <target>Branchez votre clé de sécurité et suivez les instructions de votre navigateur pour terminer la connexion.</target>
+      </segment>
+    </unit>
+    <unit id="7451233168808859381">
+      <segment state="translated">
+        <source>Verification Code</source>
+        <target>Code de vérification</target>
+      </segment>
+    </unit>
+    <unit id="9008968878373693685">
+      <segment state="translated">
+        <source>Teams</source>
+        <target>Équipes</target>
+      </segment>
+    </unit>
+    <unit id="7079167664042577585">
+      <segment state="translated">
+        <source>This is the first step to get started with GlitchTip.</source>
+        <target>C&apos;est la première étape pour démarrer avec GlitchTip.</target>
+      </segment>
+    </unit>
+    <unit id="7830707034534607415">
+      <segment state="translated">
+        <source>Subscription</source>
+        <target>Abonnement</target>
+      </segment>
+    </unit>
+    <unit id="8938510541215036054">
+      <segment state="translated">
+        <source>Enter a valid email address</source>
+        <target>Entrez une adresse mail valide</target>
+      </segment>
+    </unit>
+    <unit id="9040838861188606319">
+      <segment state="translated">
+        <source>Log in with security key instead</source>
+        <target>Connectez-vous avec la clé de sécurité à la place</target>
+      </segment>
+    </unit>
+    <unit id="907767253133208536">
+      <segment state="translated">
+        <source>Your password should be at least 8 characters long</source>
+        <target>Votre mot de passe doit comporter au moins 8 caractères</target>
       </segment>
     </unit>
     <unit id="6745305564776759454">
       <segment state="initial">
         <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
-        <target> Registrering er deaktivert. Kontakt en administrator for å bli invitert til en eksisterende organisasjon. </target>
+        <target> L&apos;enregistrement a été désactivé sur cette instance de GlitchTip. Contactez un administrateur pour être invité dans une organisation existante. </target>
       </segment>
     </unit>
     <unit id="3301086086650990787">
       <segment state="translated">
         <source>Register</source>
-        <target>Opprett konto</target>
+        <target>S&apos;inscrire</target>
       </segment>
     </unit>
     <unit id="5277739594710154939">
       <segment state="translated">
         <source>Already have an account?</source>
-        <target>Har du allerede en konto?</target>
+        <target>Vous avez déjà un compte?</target>
       </segment>
     </unit>
     <unit id="8520023152129279437">
       <segment state="translated">
         <source>Log In</source>
-        <target>Logg inn</target>
+        <target>Connexion</target>
       </segment>
     </unit>
-    <unit id="5611592591303869712">
-      <segment state="translated">
-        <source>Status</source>
-        <target>Status</target>
+    <unit id="3517932573606350122">
+      <segment state="initial">
+        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
+        <target> Intervalle de test de disponibilité : </target>
       </segment>
     </unit>
-    <unit id="5573486145935722913">
-      <segment state="translated">
-        <source>Up</source>
-        <target>Opp</target>
+    <unit id="4426319772533875265">
+      <segment state="initial">
+        <source> Settings </source>
+        <target> Paramètres </target>
       </segment>
     </unit>
     <unit id="375247309021166846">
       <segment state="translated">
         <source>Down</source>
-        <target>Ned</target>
+        <target>Indisponible</target>
+      </segment>
+    </unit>
+    <unit id="4355002072406321718">
+      <segment state="translated">
+        <source>Request not received</source>
+        <target>Demande non reçue</target>
       </segment>
     </unit>
     <unit id="4775550080689015987">
       <segment state="translated">
         <source>Reason</source>
-        <target>Begrunnelse</target>
+        <target>Raison</target>
+      </segment>
+    </unit>
+    <unit id="5573486145935722913">
+      <segment state="translated">
+        <source>Up</source>
+        <target>Disponible</target>
+      </segment>
+    </unit>
+    <unit id="5611592591303869712">
+      <segment state="translated">
+        <source>Status</source>
+        <target>Statut</target>
+      </segment>
+    </unit>
+    <unit id="663614338028506842">
+      <segment state="translated">
+        <source>Response time</source>
+        <target>Temps de réponse</target>
+      </segment>
+    </unit>
+    <unit id="6998318993417414160">
+      <segment state="translated">
+        <source>Response Time</source>
+        <target>Temps de réponse</target>
+      </segment>
+    </unit>
+    <unit id="8154453727027523235">
+      <segment state="translated">
+        <source>Alerts</source>
+        <target>Alertes</target>
+      </segment>
+    </unit>
+    <unit id="8470311110519302542">
+      <segment state="translated">
+        <source>No data</source>
+        <target>Pas de données</target>
       </segment>
     </unit>
     <unit id="8998179362936748717">
@@ -397,262 +439,220 @@
         <target>OK</target>
       </segment>
     </unit>
-    <unit id="4355002072406321718">
+    <unit id="2159130950882492111">
       <segment state="translated">
-        <source>Request not received</source>
-        <target>Forespørsel ikke mottatt</target>
-      </segment>
-    </unit>
-    <unit id="663614338028506842">
-      <segment state="translated">
-        <source>Response time</source>
-        <target>Responstid</target>
-      </segment>
-    </unit>
-    <unit id="8470311110519302542">
-      <segment state="translated">
-        <source>No data</source>
-        <target>Ingen data</target>
-      </segment>
-    </unit>
-    <unit id="3517932573606350122">
-      <segment state="initial">
-        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
-        <target> Intervall for sjekk av oppetid: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </target>
-      </segment>
-    </unit>
-    <unit id="4426319772533875265">
-      <segment state="initial">
-        <source> Settings </source>
-        <target> Innstillinger </target>
-      </segment>
-    </unit>
-    <unit id="6998318993417414160">
-      <segment state="translated">
-        <source>Response Time</source>
-        <target>Responstid</target>
-      </segment>
-    </unit>
-    <unit id="8154453727027523235">
-      <segment state="translated">
-        <source>Alerts</source>
-        <target>Varsler</target>
-      </segment>
-    </unit>
-    <unit id="8953033926734869941">
-      <segment state="translated">
-        <source>Name</source>
-        <target>Navn</target>
-      </segment>
-    </unit>
-    <unit id="8525090520605150470">
-      <segment state="translated">
-        <source>Once you have the app running, proceed to the next step.</source>
-        <target>Når applikasjonen kjører, fortsett til neste trinn.</target>
-      </segment>
-    </unit>
-    <unit id="8597728355047941352">
-      <segment state="translated">
-        <source>New Alert</source>
-        <target>Nytt varsel</target>
-      </segment>
-    </unit>
-    <unit id="7903124738511795245">
-      <segment state="initial">
-        <source>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started.</source>
-        <target>Dette varselet sendes ingen steder. Velg &quot;Legg til en varselmottaker&quot; under for å komme i gang.</target>
-      </segment>
-    </unit>
-    <unit id="4292593925952604077">
-      <segment state="translated">
-        <source>Send an email to team members on this project.</source>
-        <target>Send en epost til gruppemedlemmer på dette prosjektet.</target>
+        <source>Cancel</source>
+        <target>Annuler</target>
       </segment>
     </unit>
     <unit id="4267924302851864012">
       <segment state="translated">
         <source>Add An Alert Recipient</source>
-        <target>Legg til en varselmottaker</target>
+        <target>Ajouter un destinataire d&apos;alerte</target>
       </segment>
     </unit>
-    <unit id="935187492052582731">
+    <unit id="4292593925952604077">
       <segment state="translated">
-        <source>Submit</source>
-        <target>Send inn</target>
-      </segment>
-    </unit>
-    <unit id="2159130950882492111">
-      <segment state="translated">
-        <source>Cancel</source>
-        <target>Avbryt</target>
+        <source>Send an email to team members on this project.</source>
+        <target>Envoyez un e-mail aux membres de l&apos;équipe de ce projet.</target>
       </segment>
     </unit>
     <unit id="1339421090554377874">
       <segment state="initial">
         <source>You don&apos;t have any alerts set up. Click &quot;Create New Alert&quot; on the top right of this card to get started.</source>
-        <target>Du har ikke konfigurert noen varsler. Klikk &quot;Opprett nytt varsel&quot; øverst til høyre for å komme i gang.</target>
-      </segment>
-    </unit>
-    <unit id="7091571651222742304">
-      <segment state="translated">
-        <source>Projects</source>
-        <target>Prosjekter</target>
+        <target> Vous n&apos;avez configuré aucune alerte. Cliquez sur &quot;Créer une nouvelle alerte&quot; en haut à droite de cette carte pour commencer. </target>
       </segment>
     </unit>
     <unit id="5534317372657539313">
       <segment state="translated">
         <source>Create New Alert</source>
-        <target>Opprett nytt varsel</target>
+        <target>Créer une nouvelle alerte</target>
       </segment>
     </unit>
     <unit id="5841403146698469514">
       <segment state="translated">
         <source>Create New Project</source>
-        <target>Opprett nytt prosjekt</target>
+        <target>Créer un nouveau projet</target>
       </segment>
     </unit>
-    <unit id="4630994130285969053">
+    <unit id="7091571651222742304">
       <segment state="translated">
-        <source>Uptime Monitors</source>
-        <target>Oppetidsmonitorer</target>
+        <source>Projects</source>
+        <target>Projets</target>
+      </segment>
+    </unit>
+    <unit id="7903124738511795245">
+      <segment state="initial">
+        <source>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started.</source>
+        <target>Cette alerte n&apos;est envoyée nulle part. Sélectionnez &quot;Ajouter un destinataire d&apos;alerte&quot; ci-dessous pour commencer.</target>
+      </segment>
+    </unit>
+    <unit id="8525090520605150470">
+      <segment state="translated">
+        <source>Once you have the app running, proceed to the next step.</source>
+        <target>Une fois l&apos;application en cours d&apos;exécution, passez à l&apos;étape suivante.</target>
+      </segment>
+    </unit>
+    <unit id="8597728355047941352">
+      <segment state="translated">
+        <source>New Alert</source>
+        <target>Nouvelle alerte</target>
+      </segment>
+    </unit>
+    <unit id="8953033926734869941">
+      <segment state="translated">
+        <source>Name</source>
+        <target>Nom</target>
+      </segment>
+    </unit>
+    <unit id="935187492052582731">
+      <segment state="translated">
+        <source>Submit</source>
+        <target>Valider</target>
       </segment>
     </unit>
     <unit id="1322586333669103999">
       <segment state="translated">
         <source>Performance</source>
-        <target>Ytelse</target>
+        <target>Performance</target>
       </segment>
     </unit>
-    <unit id="641978626769494466">
+    <unit id="4630994130285969053">
       <segment state="translated">
-        <source>TOTP authentication</source>
-        <target>TOTP-autentisering</target>
-      </segment>
-    </unit>
-    <unit id="7830120603266316643">
-      <segment state="translated">
-        <source>TOTP authentication is currently enabled on your account.</source>
-        <target>TOTP-autentisering er aktivert for din konto</target>
-      </segment>
-    </unit>
-    <unit id="7156742322731584028">
-      <segment state="translated">
-        <source>Disable TOTP</source>
-        <target>Deaktiver TOTP</target>
-      </segment>
-    </unit>
-    <unit id="7822329547663295003">
-      <segment state="initial">
-        <source>Make your account more secure by requiring a time-based one time password (TOTP) code after you log in.</source>
-        <target>Øk sikkerheten for din konto ved å benytte et tidsbegrenset engangspassord (TOTP) sammen med innlogging.</target>
-      </segment>
-    </unit>
-    <unit id="3654876689359735061">
-      <segment state="initial">
-        <source>If you ever lose access to your codes, you can recover your account with your</source>
-        <target>Hvis du mister tilgangen på kodene dine kan du gjenopprette kontoen din med</target>
-      </segment>
-    </unit>
-    <unit id="2587894849982120639">
-      <segment state="translated">
-        <source>backup codes</source>
-        <target>gjenopprettingskoder</target>
+        <source>Uptime Monitors</source>
+        <target>Moniteurs de disponibilité</target>
       </segment>
     </unit>
     <unit id="2045779543869682721">
       <segment state="translated">
         <source>Get Started</source>
-        <target>Kom igang</target>
+        <target>Commencer</target>
       </segment>
     </unit>
-    <unit id="3099741642167775297">
+    <unit id="2587894849982120639">
       <segment state="translated">
-        <source>Download</source>
-        <target>Last ned</target>
+        <source>backup codes</source>
+        <target>codes de sauvegarde</target>
       </segment>
     </unit>
     <unit id="2876784140114247021">
       <segment state="translated">
         <source>or your favorite TOTP app on your mobile device</source>
-        <target>eller din foretrukne TOTP-applikasjon på din telefon</target>
+        <target>ou votre application TOTP préférée sur votre appareil mobile</target>
+      </segment>
+    </unit>
+    <unit id="3099741642167775297">
+      <segment state="translated">
+        <source>Download</source>
+        <target>Télécharger</target>
+      </segment>
+    </unit>
+    <unit id="3654876689359735061">
+      <segment state="initial">
+        <source>If you ever lose access to your codes, you can recover your account with your</source>
+        <target>Si jamais vous perdez l&apos;accès à vos codes, vous pouvez récupérer votre compte avec votre</target>
+      </segment>
+    </unit>
+    <unit id="7822329547663295003">
+      <segment state="initial">
+        <source>Make your account more secure by requiring a time-based one time password (TOTP) code after you log in.</source>
+        <target>Sécurisez votre compte en exigeant un mot de passe à usage unique basé sur le temps (TOTP) après vous être connecté.</target>
       </segment>
     </unit>
     <unit id="3885497195825665706">
       <segment state="translated">
         <source>Next</source>
-        <target>Neste</target>
-      </segment>
-    </unit>
-    <unit id="2726971803372813135">
-      <segment state="initial">
-        <source>Scan the QR Code in your authenticator app or enter the code below:</source>
-        <target>Scan QR-koden i autentiserings-appen eller skriv inn koden under:</target>
-      </segment>
-    </unit>
-    <unit id="291649817233009176">
-      <segment state="initial">
-        <source>Enter a six-digit password generated by your authenticator app and submit this form to enable TOTP authentication:</source>
-        <target>Skriv inn det sekssifrede passordet generert av din autentiserings-app og send inn for å aktivere TOTP-autentisering:</target>
-      </segment>
-    </unit>
-    <unit id="4071496549933477149">
-      <segment state="translated">
-        <source>6-digit Code</source>
-        <target>Sekssifret kode</target>
-      </segment>
-    </unit>
-    <unit id="5995673810894749629">
-      <segment state="translated">
-        <source>Code must be 6 digits</source>
-        <target>Koden må være seks tall</target>
+        <target>Suivant</target>
       </segment>
     </unit>
     <unit id="3971398713275316255">
       <segment state="translated">
         <source>Enable TOTP</source>
-        <target>Aktiver TOTP</target>
+        <target>Activer TOTP</target>
       </segment>
     </unit>
-    <unit id="6058250631075928277">
+    <unit id="4071496549933477149">
       <segment state="translated">
-        <source>You have been invited to join</source>
-        <target>Du har blitt invitert til</target>
+        <source>6-digit Code</source>
+        <target>Code à 6 chiffres</target>
+      </segment>
+    </unit>
+    <unit id="2726971803372813135">
+      <segment state="initial">
+        <source>Scan the QR Code in your authenticator app or enter the code below:</source>
+        <target>Scannez le code QR dans votre application d&apos;authentification ou saisissez le code ci-dessous :</target>
+      </segment>
+    </unit>
+    <unit id="5995673810894749629">
+      <segment state="translated">
+        <source>Code must be 6 digits</source>
+        <target>Le code doit être composé de 6 chiffres</target>
+      </segment>
+    </unit>
+    <unit id="641978626769494466">
+      <segment state="translated">
+        <source>TOTP authentication</source>
+        <target>Authentification TOTP</target>
+      </segment>
+    </unit>
+    <unit id="7156742322731584028">
+      <segment state="translated">
+        <source>Disable TOTP</source>
+        <target>Désactiver TOTP</target>
+      </segment>
+    </unit>
+    <unit id="7830120603266316643">
+      <segment state="translated">
+        <source>TOTP authentication is currently enabled on your account.</source>
+        <target>L&apos;authentification TOTP est actuellement activée sur votre compte.</target>
+      </segment>
+    </unit>
+    <unit id="291649817233009176">
+      <segment state="initial">
+        <source>Enter a six-digit password generated by your authenticator app and submit this form to enable TOTP authentication:</source>
+        <target>Entrez un mot de passe à six chiffres généré par votre application d&apos;authentification et validez ce formulaire pour activer l&apos;authentification TOTP :</target>
       </segment>
     </unit>
     <unit id="1114702394872457328">
       <segment state="translated">
         <source>so you can keep track of errors</source>
-        <target>så du kan følge med på programvarefeil</target>
-      </segment>
-    </unit>
-    <unit id="6609789944031289762">
-      <segment state="initial">
-        <source>The account you&apos;re logged into is already a part of this organization. You might want to</source>
-        <target>Kontoen du er logget inn med er allerede med i en organisasjon.</target>
-      </segment>
-    </unit>
-    <unit id="5113632876676621367">
-      <segment state="translated">
-        <source>log out</source>
-        <target>Logg ut</target>
-      </segment>
-    </unit>
-    <unit id="2303592265389969112">
-      <segment state="initial">
-        <source>then create an account for or log into the account that this invite link was intended for</source>
-        <target>og opprett en konto, eller logg inn med kontoen denne linken var ment for</target>
+        <target>afin que vous puissiez garder une trace des erreurs</target>
       </segment>
     </unit>
     <unit id="520980174761118864">
       <segment state="initial">
         <source>Log in with <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></source>
-        <target>Logg inn med <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></target>
+        <target>Se connecter avec <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></target>
+      </segment>
+    </unit>
+    <unit id="2303592265389969112">
+      <segment state="initial">
+        <source>then create an account for or log into the account that this invite link was intended for</source>
+        <target>puis créez un compte ou connectez-vous au compte auquel ce lien d&apos;invitation était destiné</target>
+      </segment>
+    </unit>
+    <unit id="5113632876676621367">
+      <segment state="translated">
+        <source>log out</source>
+        <target>se déconnecter</target>
+      </segment>
+    </unit>
+    <unit id="6058250631075928277">
+      <segment state="translated">
+        <source>You have been invited to join</source>
+        <target>Vous avez été invité à rejoindre</target>
+      </segment>
+    </unit>
+    <unit id="6609789944031289762">
+      <segment state="initial">
+        <source>The account you&apos;re logged into is already a part of this organization. You might want to</source>
+        <target>Le compte auquel vous êtes connecté fait déjà partie de cette organisation. Vous pourriez vouloir</target>
       </segment>
     </unit>
     <unit id="5715233980836936433">
-      <segment state="translated">
+      <segment state="initial">
         <source>Donate <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://liberapay.com/GlitchTip/donate&quot; &gt;" dispEnd="&lt;/a&gt;"> via Liberapay </pc></source>
-        <target>Donate <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://liberapay.com/GlitchTip/donate&quot; &gt;" dispEnd="&lt;/a&gt;"> via that Liberapay </pc></target>
+        <target>Donate <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://liberapay.com/GlitchTip/donate&quot; &gt;" dispEnd="&lt;/a&gt;"> via Liberapay </pc></target>
       </segment>
     </unit>
     <unit id="5349000458605027240">

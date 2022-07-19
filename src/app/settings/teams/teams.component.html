@@ -1,25 +1,22 @@
 <section class="l-body">
   <header class="page-header">
-    <h1 class="mat-display-1">Teams</h1>
+    <h1 class="mat-display-1" i18n>Teams</h1>
     <button
       mat-flat-button
       color="primary"
       (click)="openCreateTeamDialog()"
       id="new-team"
+      i18n
+      >Create Team</button
     >
-      Create Team
-    </button>
   </header>
   <mat-card>
-    <mat-card-title>Your Teams</mat-card-title>
-    <p class="description">
-      Teams are for managing issue notifications and workflow. View permissions are handled through 
-      <a 
-        routerLink="../members"
-      >
-        organization membership.
-      </a>
-    </p>
+    <mat-card-title i18n>Your Teams</mat-card-title>
+    <p class="description" i18n
+      >Teams are for managing issue notifications and workflow. View permissions
+      are handled through
+      <a routerLink="../members"> organization membership.</a></p
+    >
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams">
@@ -43,26 +40,26 @@
         </mat-list-item>
       </mat-list>
       <ng-template #noTeams>
-        <p *ngIf="(otherTeams$ | async)?.length; else noTeamsInOrg">
-          You aren't part of any teams. Join a team below or press the "Create
-          Team" button in the upper right.
-        </p>
+        <p *ngIf="(otherTeams$ | async)?.length; else noTeamsInOrg" i18n
+          >You aren't part of any teams. Join a team below or press the "Create
+          Team" button in the upper right.</p
+        >
         <ng-template #noTeamsInOrg>
-          <p>
-            You don't have any teams set up. Teams determine which users have
-            access to projects in your organization.
-          </p>
-          <p>
-            To create a new team, press the "Create Team" button in the upper
-            right.
-          </p>
+          <p i18n
+            >You don't have any teams set up. Teams determine which users have
+            access to projects in your organization.</p
+          >
+          <p i18n
+            >To create a new team, press the "Create Team" button in the upper
+            right.</p
+          >
         </ng-template>
       </ng-template>
     </mat-card-content>
   </mat-card>
 
   <mat-card *ngIf="(otherTeams$ | async)?.length">
-    <mat-card-title>Other Teams</mat-card-title>
+    <mat-card-title i18n>Other Teams</mat-card-title>
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-list>

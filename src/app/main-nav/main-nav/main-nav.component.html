@@ -200,28 +200,27 @@
       </mat-card-title>
       <mat-card-content>
         <ul>
-          <li>
-            <ng-container i18n>Donate</ng-container>
+          <li i18n
+            >Donate
             <a
               target="_blank"
               rel="noopener noreferrer"
               href="https://liberapay.com/GlitchTip/donate"
-              i18n
-              >via Liberapay</a
             >
+              via Liberapay
+            </a>
           </li>
-          <li>
-            <ng-container i18n>Switch to</ng-container>
+          <li i18n>
+            Switch to
             <a
               target="_blank"
               rel="noopener"
               href="https://app.glitchtip.com/register?utm_medium=website&utm_source=glitchtip&utm_campaign=selfhost_nagware"
-              i18n
               >Hosted GlitchTip</a
             >
           </li>
-          <li>
-            <ng-container i18n>Purchase support</ng-container>:
+          <li i18n>
+            Purchase support:
             <a
               href="mailto:sales@glitchtip.com?subject=Purchase support inquiry"
               >sales@glitchtip.com</a
@@ -232,14 +231,14 @@
     </mat-card>
   </mat-sidenav>
 
-  <mat-sidenav-content
-    ><mat-toolbar
+  <mat-sidenav-content>
+    <mat-toolbar
       *ngIf="isLoggedIn$ | async"
       (click)="toggleSideNav()"
       color="primary"
     >
       <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon></button
+        <mat-icon>menu</mat-icon> </button
       ><span
         class="active-org"
         *ngIf="activeOrganizationDetail$ | async as orgDetails"
