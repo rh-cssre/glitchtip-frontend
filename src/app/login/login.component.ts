@@ -8,6 +8,7 @@ import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SocialApp } from "../api/user/user.interfaces";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "gt-login",
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
 
   socialApps$ = this.settings.socialApps$;
   enableUserRegistration$ = this.settings.enableUserRegistration$;
+  enableLoginForm$ = environment.loginForm;
   acceptInfo$ = this.acceptService.acceptInfo$;
 
   constructor(
@@ -78,9 +80,11 @@ export class LoginComponent implements OnInit {
       if (nextUrl) {
         this.authService.setRedirectUrl(nextUrl)
       }
-      this.loginService
-        .login(this.form.value.email, this.form.value.password)
-        .subscribe();
+      if (environment.loginForm) {
+        this.loginService
+            .login(this.form.value.email, this.form.value.password)
+            .subscribe();
+      }
     }
   }
 }
