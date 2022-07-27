@@ -128,7 +128,7 @@ data:
                 "type": "prometheus",
                 "uid": "aQ7y3WBnk"
               },
-              "expr": "(sum(rate(django_http_responses_total_by_status_total{job=\"glitchtip-web\", status!~\"5.+\"}[28d])) by (job) / sum(rate(django_http_requests_total_by_method_total{job=\"glitchtip-web\"}[28d])) by (job)) * 100",
+              "expr": "(sum(rate(haproxy_backend_http_responses_total{exported_namespace=\"glitchtip-stage\", code!=\"5xx\"}[1d])) by (exported_namespace) / sum(rate(haproxy_backend_connections_total{backend=~\".*https.*\", exported_namespace=\"glitchtip-stage\"}[1d])) by (exported_namespace)) * 100",
               "refId": "A"
             }
           ],
@@ -285,14 +285,14 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.2",
+          "pluginVersion": "9.0.3",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "aQ7y3WBnk"
               },
-              "expr": "(1 - ((sum(increase(django_http_responses_total_by_status_total{job=\"glitchtip-web\", status=~\"5.+\"}[28d])) OR on() vector(0)) / (0.05 * sum(increase(django_http_requests_total_by_method_total{job=\"glitchtip-web\"}[28d]))))) * 100",
+              "expr": "(1 - ((sum(increase(haproxy_backend_http_responses_total{exported_namespace=\"glitchtip-stage\", code=\"5xx\"}[28d]))) / (0.05 * sum(increase(haproxy_backend_connections_total{backend=~\".*https.*\", exported_namespace=\"glitchtip-stage\"}[28d]))))) * 100",
               "refId": "A"
             }
           ],
@@ -350,7 +350,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.2",
+          "pluginVersion": "9.0.3",
           "targets": [
             {
               "datasource": {
@@ -429,7 +429,7 @@ data:
             },
             "textMode": "auto"
           },
-          "pluginVersion": "8.5.2",
+          "pluginVersion": "9.0.3",
           "targets": [
             {
               "datasource": {
@@ -459,7 +459,7 @@ data:
       "timezone": "",
       "title": "Glitchtip SLO",
       "uid": "8hKIWxr7z",
-      "version": 13,
+      "version": 14,
       "weekStart": ""
     }
 kind: ConfigMap
