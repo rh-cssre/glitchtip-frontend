@@ -1,16 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, Input } from "@angular/core";
 import Prism from "prismjs";
-
-const SUPPORTED_GRAMMER = [
-  "javascript",
-  "csharp",
-  "python",
-  "java",
-  "ruby",
-  "php",
-  "go",
-  "rust",
-];
+import { PRISM_SUPPORTED_GRAMMER } from "./constants";
 
 const GRAMMER_MAPPINGS: { [key: string]: string } = { node: "javascript" };
 
@@ -29,10 +19,12 @@ export class PrismDirective implements AfterViewInit {
         language = GRAMMER_MAPPINGS[language] as string;
       }
       const code = this.code || this.el.nativeElement.innerText;
-      if (SUPPORTED_GRAMMER.includes(language)) {
+      if (PRISM_SUPPORTED_GRAMMER.includes(language)) {
         const grammar = Prism.languages[language];
         const html = Prism.highlight(code, grammar, language);
         this.el.nativeElement.innerHTML = html;
+
+        setTimeout(() => Prism.highlightAll())  // Necessary for prism plugins
       }
     }
   }

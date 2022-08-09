@@ -1,14 +1,20 @@
-<div *ngFor="let contextLine of context">
+<div *ngIf="getCodeBlock(); else simpleContext">
   <pre
-    gtPrism
-    [language]="eventPlatform"
-    [class.highlight]="
-      contextLine[0] === lineNo && context && context.length > 1
-    "
-    class="context padding"
-    >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
-  >
+    [attr.data-start]="firstLineNumber"
+    [attr.data-line]="lineNo"
+  ><code gtPrism [language]="eventPlatform" class="line-numbers language-{{eventPlatform}}">{{ getCodeBlock() }}</code></pre>
 </div>
+<ng-template #simpleContext>
+  <div *ngFor="let contextLine of context">
+    <pre
+      [class.highlight]="
+        contextLine[0] === lineNo && context && context.length > 1
+      "
+      class="context padding"
+      >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
+    >
+  </div>
+</ng-template>
 <div class="var-wrapper" *ngIf="vars">
   <ng-container *ngFor="let varList of vars | keyvalue">
     <mat-divider></mat-divider>
