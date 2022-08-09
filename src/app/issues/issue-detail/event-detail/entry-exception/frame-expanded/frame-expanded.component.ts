@@ -11,6 +11,7 @@ export class FrameExpandedComponent {
   @Input() lineNo?: string | number | null;
   @Input() context?: (string | number)[][];
   @Input() vars?: { [key: string]: Json } | null;
+  @Input() eventPlatform?: string;
 
   checkType(value: JsonArrayOrObject | Json): string {
     if (value === null) {
