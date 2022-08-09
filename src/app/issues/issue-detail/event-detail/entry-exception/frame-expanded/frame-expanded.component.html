@@ -1,5 +1,7 @@
 <div *ngFor="let contextLine of context">
   <pre
+    gtPrism
+    [language]="eventPlatform"
     [class.highlight]="
       contextLine[0] === lineNo && context && context.length > 1
     "
