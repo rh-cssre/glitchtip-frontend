@@ -94,9 +94,9 @@
       *ngIf="!newAlert"
       buttonText="Update"
       [disabled]="
-        projectFormTimespan?.value === timespan &&
-        projectFormQuantity?.value === quantity &&
-        projectFormUptime?.value === uptime
+        projectFormTimespan.value === timespan &&
+        projectFormQuantity.value === quantity &&
+        projectFormUptime.value === uptime
       "
       buttonStyle="stroked"
       [loading]="loading === true"
