@@ -1,31 +1,50 @@
-import { AfterViewInit, Directive, ElementRef, Input } from "@angular/core";
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnInit,
+} from "@angular/core";
 import Prism from "prismjs";
-import { PRISM_SUPPORTED_GRAMMER } from "./constants";
-
-const GRAMMER_MAPPINGS: { [key: string]: string } = { node: "javascript" };
+import { GRAMMER_MAPPINGS, PRISM_SUPPORTED_GRAMMER } from "./constants";
 
 @Directive({
   selector: "[gtPrism]",
 })
-export class PrismDirective implements AfterViewInit {
+export class PrismDirective implements AfterViewInit, OnInit {
   @Input() code?: string;
-  @Input() language? = "javascript";
+  @Input() language?: string;
+  @HostBinding("class") elementClass = "";
+
   constructor(private el: ElementRef) {}
 
-  ngAfterViewInit() {
-    let language = this.language;
+  ngOnInit() {
+    const language = this.getLanguage();
     if (language) {
-      if (language in GRAMMER_MAPPINGS) {
-        language = GRAMMER_MAPPINGS[language] as string;
-      }
+      this.elementClass = `language-${language}`;
+    }
+  }
+
+  ngAfterViewInit() {
+    const language = this.getLanguage();
+    if (language) {
       const code = this.code || this.el.nativeElement.innerText;
       if (PRISM_SUPPORTED_GRAMMER.includes(language)) {
         const grammar = Prism.languages[language];
         const html = Prism.highlight(code, grammar, language);
         this.el.nativeElement.innerHTML = html;
 
-        setTimeout(() => Prism.highlightAll())  // Necessary for prism plugins
+        Prism.highlightElement(this.el.nativeElement); // Necessary for prism plugins
       }
     }
+  }
+
+  getLanguage() {
+    let language = this.language;
+    if (language && language in GRAMMER_MAPPINGS) {
+      language = GRAMMER_MAPPINGS[language] as string;
+    }
+    return language;
   }
 }

@@ -1,8 +1,8 @@
-<div *ngIf="getCodeBlock(); else simpleContext">
+<div *ngIf="getCodeBlock() as codeBlock; else simpleContext">
   <pre
     [attr.data-start]="firstLineNumber"
     [attr.data-line]="lineNo"
-  ><code gtPrism [language]="eventPlatform" class="line-numbers language-{{eventPlatform}}">{{ getCodeBlock() }}</code></pre>
+  ><code gtPrism [language]="eventPlatform" class="line-numbers">{{ codeBlock }}</code></pre>
 </div>
 <ng-template #simpleContext>
   <div *ngFor="let contextLine of context">
