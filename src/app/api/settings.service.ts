@@ -18,7 +18,6 @@ interface SettingsState {
   chatwootWebsiteToken: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
-  sentryTracesSampleRate: number | null;
   environment: string | null;
   version: string | null;
 }
@@ -33,7 +32,6 @@ const initialState: SettingsState = {
   chatwootWebsiteToken: null,
   stripePublicKey: null,
   sentryDSN: null,
-  sentryTracesSampleRate: null,
   environment: null,
   version: null,
 };
