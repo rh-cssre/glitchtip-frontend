@@ -33,6 +33,7 @@ import { ContextsComponent } from "./issue-detail/event-detail/context/contexts.
 import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.component";
 import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-breadcrumbs/entry-breadcrumbs.component";
 import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue-detail-tags.component";
+import { PrismjsModule } from "../prismjs/prismjs.module";
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue
     ListTitleModule,
     DataFilterBarModule,
     ProjectFilterBarModule,
+    PrismjsModule
   ],
   declarations: [
     IssuesPageComponent,
