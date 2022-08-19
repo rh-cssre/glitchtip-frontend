@@ -76,9 +76,9 @@ export const iconDictionary: { [key: string]: string } = {
   nvidia: localPath("nvidia"),
   amd: localPath("amd"),
   arm: localPath("arm", "jpg"),
-  cpython: localPath("cpython"),
+  cpython: localPath("python", "svg"),
   ruby: localPath("ruby"),
-  python: localPath("python"),
+  python: localPath("python", "svg"),
   go: localPath("go"),
 };
 
