@@ -22,8 +22,12 @@ export class TokenInterceptor implements HttpInterceptor {
         ) {
           this.auth.expireAuth();
           return EMPTY;
+        } else if (error.status === 0) {
+          // Probably an aborted request
+          console.warn(error);
+          return EMPTY;
         }
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
