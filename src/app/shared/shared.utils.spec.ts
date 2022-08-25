@@ -8,7 +8,7 @@ describe("Icon Paths", () => {
 
   it("generates path to os library", () => {
     const redHat = generateIconPath("Red Hat");
-    expect(redHat).toBe("static/assets/images/os-logos/red-hat.png");
+    expect(redHat).toBe("static/assets/images/os-logos/RHT.png");
   });
 
   it("generates path to browser logo library", () => {
@@ -18,6 +18,6 @@ describe("Icon Paths", () => {
 
   it("generates path to local library", () => {
     const cPython = generateIconPath("C Python");
-    expect(cPython).toBe("static/assets/images/logos/48x48/cpython.png");
+    expect(cPython).toBe("static/assets/images/logos/48x48/python.svg");
   });
 });
