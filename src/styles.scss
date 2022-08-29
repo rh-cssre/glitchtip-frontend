@@ -1,6 +1,8 @@
 $font-path: "../fonts";
 @use '@angular/material' as mat;
 @import "prismjs/themes/prism.css";
+@import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+@import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 @import "./assets/styles/variables";
 @import "./assets/styles/font-files";
 @import "./assets/styles/resets";
