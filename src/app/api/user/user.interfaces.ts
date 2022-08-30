@@ -50,8 +50,8 @@ interface Email {
 }
 
 interface UserOptions {
-  timezone: string;
-  stacktraceOrder: number;
-  language: string;
-  clock24Hours: boolean;
+  timezone?: string;
+  stacktraceOrder?: number;
+  language?: string;
+  clock24Hours?: boolean;
 }

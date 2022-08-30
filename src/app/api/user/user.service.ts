@@ -57,6 +57,21 @@ export class UserService {
     return this.http.delete(this.url);
   }
 
+  updateUserOptions(name: string, options: { [key: string]: string }) {
+    return this.patchUser({ name, options })
+      .pipe(
+        tap(() => {
+          this.getUserDetails();
+          this.snackBar.open("Preferences have been updated")
+        })
+      )
+      .toPromise();
+  }
+
+  private patchUser(user: Partial<User>) {
+    return this.http.patch(this.url, user);
+  }
+
   disconnectSocialAccount(accountId: number) {
     this.setDisconnectLoading(accountId);
     this.http

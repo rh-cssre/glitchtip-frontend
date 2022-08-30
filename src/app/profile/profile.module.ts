@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 import { ProfileRoutingModule } from "./profile-routing.module";
 import { ProfileComponent } from "./profile.component";
@@ -19,6 +20,7 @@ import { TOTPComponent } from "./multi-factor-auth/totp/totp.component";
 import { Fido2Component } from "./multi-factor-auth/fido2/fido2.component";
 import { BackupCodesComponent } from "./multi-factor-auth/totp/backup-codes/backup-codes.component";
 import { WizardComponent } from "./wizard/wizard.component";
+import { PreferencesComponent } from "./preferences/preferences.component";
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { WizardComponent } from "./wizard/wizard.component";
     Fido2Component,
     BackupCodesComponent,
     WizardComponent,
+    PreferencesComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +46,7 @@ import { WizardComponent } from "./wizard/wizard.component";
     SharedModule,
     ReactiveFormsModule,
     MatChipsModule,
+    MatAutocompleteModule,
   ],
 })
 export class ProfileModule {}
