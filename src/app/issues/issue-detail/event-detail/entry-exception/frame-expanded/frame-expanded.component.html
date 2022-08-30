@@ -6,14 +6,16 @@
   ><code gtPrism [language]="eventPlatform" class="line-numbers">{{ codeBlock }}</code></pre>
 </div>
 <ng-template #simpleContext>
-  <div *ngFor="let contextLine of context">
-    <pre
-      [class.highlight]="
-        contextLine[0] === lineNo && context && context.length > 1
-      "
-      class="context padding"
-      >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
-    >
+  <div class="simple-code-container">
+    <div *ngFor="let contextLine of context">
+      <pre
+        [class.highlight]="
+          contextLine[0] === lineNo && context && context.length > 1
+        "
+        class="context padding"
+        >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
+      >
+    </div>
   </div>
 </ng-template>
 <div class="var-wrapper" *ngIf="vars">

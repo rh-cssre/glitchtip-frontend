@@ -4,8 +4,6 @@
 $left-column-width: 20%;
 
 pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -19,6 +17,10 @@ pre {
   padding-right: 8px;
 }
 
+.simple-code-container {
+  overflow-x: auto;
+}
+
 .context {
   padding-top: 1px;
   padding-bottom: 1px;
@@ -26,6 +28,7 @@ pre {
 
 .highlight {
   background: mat.get-color-from-palette($amaranth-palette, 100);
+  width: 100vw;
 }
 
 .var-wrapper {
