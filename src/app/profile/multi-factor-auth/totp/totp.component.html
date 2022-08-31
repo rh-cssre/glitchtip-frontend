@@ -17,12 +17,9 @@
         >Make your account more secure by requiring a time-based one time
         password (TOTP) code after you log in.</p
       >
-      <p class="mat-body-1">
-        <ng-container i18n
-          >If you ever lose access to your codes, you can recover your account
-          with your</ng-container
-        >
-        <strong i18n>backup codes</strong>.
+      <p class="mat-body-1" i18n>
+        If you ever lose access to your codes, you can recover your account with
+        your <strong>backup codes</strong>.
       </p>
 
       <div class="totp-process" *ngIf="step$ | async as step">

@@ -38,7 +38,7 @@ const initialState: MFAState = {
   enteredCode: false,
   regenCodes: false,
   credential: null,
-  setupFIDO2Stage: 0
+  setupFIDO2Stage: 0,
 };
 
 @Injectable({
@@ -63,17 +63,10 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   enteredCodeSuccess$ = this.getState$.pipe(
     map((state) => state.copiedCodes && state.enteredCode)
   );
-  regenCodes$ = this.getState$.pipe(
-    map((state) => state.regenCodes)
-  );
-  setupFIDO2Stage$ = this.getState$.pipe(
-    map((state) => state.setupFIDO2Stage)
-  );
+  regenCodes$ = this.getState$.pipe(map((state) => state.regenCodes));
+  setupFIDO2Stage$ = this.getState$.pipe(map((state) => state.setupFIDO2Stage));
 
-  constructor(
-    private api: UserKeysService,
-    private snackBar: MatSnackBar,
-  ) {
+  constructor(private api: UserKeysService, private snackBar: MatSnackBar) {
     super(initialState);
   }
 
@@ -85,17 +78,16 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
 
   // Will need to rework snackbar messaging when FIDO2 is added.
   deleteKey(keyId: number, keyType: string) {
-    return this.api
-      .destroy(keyId.toString())
-      .pipe(
-        exhaustMap(() => this.getUserKeys()),
-        tap(() => {
-          if (keyType === "TOTP") {
-            this.snackBar.open("TOTP authentication deactivated.");
-          } else {
-            this.snackBar.open("Security key removed.");
-        }})
-      );
+    return this.api.destroy(keyId.toString()).pipe(
+      exhaustMap(() => this.getUserKeys()),
+      tap(() => {
+        if (keyType === "TOTP") {
+          this.snackBar.open("TOTP authentication deactivated.");
+        } else {
+          this.snackBar.open("Security key removed.");
+        }
+      })
+    );
   }
 
   incrementTOTPStage() {
@@ -202,9 +194,10 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     this.setState({ serverError: {} });
     this.setState({ setupFIDO2Stage: 1 });
     return this.api.fido2().pipe(
-      exhaustMap(async options => {
+      exhaustMap(async (options) => {
         return await navigator.credentials.create(options);
-      }), map((credResult) => {
+      }),
+      map((credResult) => {
         if (credResult === null) {
           return throwError;
         } else {
@@ -212,8 +205,14 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
           this.setState({ setupFIDO2Stage: 2 });
           return EMPTY;
         }
-      }), catchError(err => {
-        this.setState({ serverError: { non_field_errors: ["Device activation was unsuccessful."] } });
+      }),
+      catchError((err) => {
+        console.warn(err);
+        this.setState({
+          serverError: {
+            non_field_errors: ["Device activation was unsuccessful."],
+          },
+        });
         this.setState({ setupFIDO2Stage: 0 });
         return EMPTY;
       })
@@ -223,16 +222,16 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   registerFido2(name: string) {
     const state = this.state.getValue();
     if (state.credential) {
-      const attestationResponse = state.credential.response as AuthenticatorAttestationResponse;
+      const attestationResponse = state.credential
+        .response as AuthenticatorAttestationResponse;
       return this.api.fido2Create(attestationResponse, name).pipe(
         tap(() => {
           this.clearState();
           this.snackBar.open("Your security key has been registered.");
           this.getUserKeys().subscribe();
-        }));
+        })
+      );
     }
     return EMPTY;
   }
 }
-
-

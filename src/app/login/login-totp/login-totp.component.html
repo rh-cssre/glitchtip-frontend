@@ -24,6 +24,9 @@
         </mat-error>
       </mat-form-field>
       <button id="submit" mat-flat-button color="primary" i18n>Login</button>
+      <mat-checkbox class="mat-caption" formControlName="remember"
+        >Don't prompt again on this device</mat-checkbox
+      >
     </form>
 
     <a *ngIf="hasFIDO2$ | async" [routerLink]="[]" (click)="switchMethod()" i18n
