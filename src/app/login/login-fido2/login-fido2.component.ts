@@ -12,7 +12,6 @@ export class LoginFido2Component implements OnInit {
   error$ = this.loginService.error$;
   authInProg$ = this.loginService.authInProg$;
 
-
   constructor(private loginService: LoginService) {}
 
   switchMethod() {
@@ -27,4 +26,7 @@ export class LoginFido2Component implements OnInit {
     this.loginService.authenticateFIDO2().subscribe();
   }
 
+  toggleRemember(event: boolean) {
+    this.loginService.toggleRemember(event);
+  }
 }
