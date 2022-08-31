@@ -73,6 +73,10 @@ export class PreferencesComponent implements OnInit {
     );
   }
 
+  clearTimeZone() {
+    this.formTimeZone.setValue("")
+  }
+
   onSubmit() {
     if (this.form.valid) {
       const name = this.form.value.name!;

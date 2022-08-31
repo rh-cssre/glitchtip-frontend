@@ -24,6 +24,16 @@
           [matAutocomplete]="auto"
           [errorStateMatcher]="matcher"
         />
+        <button
+          [class.invalid]="formTimeZone.invalid"
+          mat-button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="clearTimeZone()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
         <mat-autocomplete #auto="matAutocomplete">
           <mat-option
             *ngFor="let timeZone of filteredOptions | async"
