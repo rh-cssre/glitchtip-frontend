@@ -1,3 +1,5 @@
+@import "variables";
+
 .half-width {
   max-width: 390px;
 }
@@ -8,4 +10,8 @@
 
 .timezone {
   margin-bottom: 7px;
+}
+
+.invalid {
+  color: $amaranth;
 }
