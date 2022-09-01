@@ -3,15 +3,17 @@
 Start by adding the SDK and then linking it:
 
 ```bash
-$ npm install react-native-sentry --save
+$ npm install --save @sentry/react-native
 # or
-# yarn add react-native-sentry
+# yarn add @sentry/react-native
 # if you are using yarn
+# If you are running a project with react-native prior to 0.60, you still need to call react-native link, otherwise you can skip this step as react-native 
+# version 0.60 and above does this automatically.
 # this is for linking
-$ react-native link react-native-sentry
+$ react-native link @sentry/react-native
 ```
 
-The _link_ step will pull in the native dependency and patch your project accordingly. <!--If you are using expo you don’t have to (or can’t) run that link step. For more information about that see [_Using Sentry with Expo_]({%- link _documentation/clients/react-native/expo.md -%}). On linking the new [Sentry Wizard](https://github.com/getsentry/sentry-wizard) will help you to configure your project and change files accordingly. -->
+The _link_ step will pull in the native dependency and patch your project accordingly. <!--If you are using expo you don’t have to (or can’t) run that link step. For more information about that see [_Using Sentry with Expo_](https://github.com/expo/sentry-expo). On linking the new [Sentry Wizard](https://github.com/getsentry/sentry-wizard) will help you to configure your project and change files accordingly. -->
 
 Upon linking the following changes will be performed:
 
@@ -28,8 +30,10 @@ Upon linking the following changes will be performed:
 When you run `react-native link` we will automatically update your _index.ios.js_ / _index.android.js_ with the following changes:
 
 ```javascript
-import { Sentry } from "react-native-sentry";
-Sentry.config("your DSN here").install();
+import * as Sentry from "@sentry/react-native";
+Sentry.init({
+    dsn: "your DSN here"
+})
 ```
 
 You can pass additional configuration options to the `config()` method if you want to do so.
