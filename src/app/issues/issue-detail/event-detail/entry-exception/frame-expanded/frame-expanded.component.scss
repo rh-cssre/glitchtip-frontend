@@ -1,18 +1,22 @@
 @use '@angular/material' as mat;
 @import "variables";
 
-$left-column-width: 20%;
-
 pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.prism-code-container {
+  padding-right: 1em;
 }
 
 .padding {
   padding-left: 8px;
   padding-right: 8px;
+}
+
+.simple-code-container {
+  overflow-x: auto;
 }
 
 .context {
@@ -22,27 +26,50 @@ pre {
 
 .highlight {
   background: mat.get-color-from-palette($amaranth-palette, 100);
+  width: 100vw;
 }
 
 .var-wrapper {
   padding-top: 32px;
   padding-bottom: 16px;
 
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   .vars {
-    display: block;
+    display: flex;
+    justify-content: space-between;
     clear: both;
     padding-top: 8px;
     padding-bottom: 8px;
+    @media screen and (max-width: $small - 1) {
+      flex-direction: column;
+    }
 
     dt {
+      white-space: pre-wrap;
+      word-wrap: break-word;
       float: left;
-      width: $left-column-width;
-      padding-right: 16px;
+      width: 20%;
+
+      @media screen and (max-width: $large - 1) {
+        width: 25%;
+      }
+
+      @media screen and (max-width: $small - 1) {
+        width: 100%;
+      }
     }
 
     dd {
-      margin-left: $left-column-width;
-      width: 80%;
+      margin-left: 0px;
+      width: 70%;
+
+      @media screen and (max-width: $small - 1) {
+        width: 100%;
+      }
     }
   }
 }

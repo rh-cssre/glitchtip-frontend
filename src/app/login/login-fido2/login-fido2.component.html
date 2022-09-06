@@ -18,6 +18,9 @@
         >
       </div>
     </ng-template>
+    <mat-checkbox class="remember-me-checkbox mat-caption" (change) ="toggleRemember($event.checked)"
+      >Don't prompt again on this device</mat-checkbox
+    >
     <a [routerLink]="[]" (click)="switchMethod()" i18n
       >Log in with authenticator app instead</a
     >

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { EMPTY } from "rxjs";
-import { catchError, map, tap, exhaustMap } from "rxjs/operators";
+import { catchError, map, tap, exhaustMap, withLatestFrom } from "rxjs/operators";
 import { encode, decode } from "cborg";
 import { StatefulService } from "../shared/stateful-service/stateful-service";
 import { ServerError } from "../shared/django.interfaces";
@@ -16,6 +16,7 @@ interface LoginState {
   validAuth: ValidAuth[] | null;
   useTOTP: boolean;
   authInProg: boolean;
+  rememberRequest: boolean;
 }
 
 const initialState: LoginState = {
@@ -24,6 +25,7 @@ const initialState: LoginState = {
   validAuth: null,
   useTOTP: false,
   authInProg: false,
+  rememberRequest: false,
 };
 
 @Injectable({
@@ -40,6 +42,7 @@ export class LoginService extends StatefulService<LoginState> {
     map((state) => state.validAuth?.includes("TOTP"))
   );
   authInProg$ = this.getState$.pipe(map((state) => state.authInProg));
+  rememberRequest$ = this.getState$.pipe(map((state) => state.rememberRequest));
   useTOTP$ = this.getState$.pipe(map((state) => state.useTOTP));
   constructor(private http: HttpClient, private authService: AuthService) {
     super(initialState);
@@ -132,7 +135,11 @@ export class LoginService extends StatefulService<LoginState> {
             });
           }
         }),
-        tap(() => {
+        withLatestFrom(this.rememberRequest$),
+        tap(([_, rememberRequest]) => {
+          if (rememberRequest) {
+            this.rememberDevice().toPromise();
+          }
           this.clearState();
           this.authService.afterLogin();
         }),
@@ -155,7 +162,11 @@ export class LoginService extends StatefulService<LoginState> {
       );
   }
 
-  authenticateTOTP(code: string) {
+  toggleRemember(request = false) {
+    this.setState({ rememberRequest: request });
+  }
+
+  authenticateTOTP(code: string, remember = false) {
     const url = "/api/mfa/authenticate/totp/";
     const data = {
       otp: code,
@@ -164,6 +175,9 @@ export class LoginService extends StatefulService<LoginState> {
     return this.http.post(url, data).pipe(
       tap(() => {
         this.clearState();
+        if (remember) {
+          this.rememberDevice().toPromise();
+        }
         this.authService.afterLogin();
       }),
       catchError((err) => {
@@ -175,6 +189,19 @@ export class LoginService extends StatefulService<LoginState> {
         }
         this.setState({ loading: false, error });
         return EMPTY;
+      })
+    );
+  }
+
+  /** Create a new trusted device key, save as cookie */
+  rememberDevice() {
+    const url = "/api/mfa/user_keys/trusted_device/";
+    return this.http.get<{ key: string; user_agent: string }>(url).pipe(
+      exhaustMap((response) => {
+        const expire = new Date();
+        expire.setTime(expire.getTime() + 1000 * 86400 * 180); // 180 days
+        document.cookie = `remember_device_key=${response.key}; expires=${expire}; path=/`;
+        return this.http.post(url, response);
       })
     );
   }
