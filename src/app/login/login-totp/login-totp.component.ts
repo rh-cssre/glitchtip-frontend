@@ -7,11 +7,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from "@angular/core";
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../login.service";
 
 @Component({
@@ -24,12 +20,13 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
   @ViewChild("input") input!: ElementRef;
   error$ = this.loginService.error$;
   hasFIDO2$ = this.loginService.hasFIDO2$;
-  form = new UntypedFormGroup({
-    code: new UntypedFormControl("", [
+  form = new FormGroup({
+    code: new FormControl("", [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(16),
     ]),
+    remember: new FormControl(false),
   });
 
   constructor(
@@ -60,9 +57,11 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (this.form.valid && this.code) {
-      const code: string = this.code.value;
+      const code = this.code.value!;
       if (code.length === 6) {
-        this.loginService.authenticateTOTP(code).subscribe();
+        this.loginService
+          .authenticateTOTP(code, this.form.value.remember === true)
+          .subscribe();
       } else {
         this.loginService.authenticateBackupCode(code).subscribe();
       }

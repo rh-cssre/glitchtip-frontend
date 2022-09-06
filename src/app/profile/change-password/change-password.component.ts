@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  UntypedFormGroup,
-  UntypedFormControl,
   Validators,
   FormGroupDirective,
+  FormGroup,
+  FormControl,
 } from "@angular/forms";
 import { PasswordService } from "./password.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -25,13 +25,13 @@ export class ChangePasswordComponent implements OnInit {
 
   loading = false;
   error: string | null | undefined;
-  form = new UntypedFormGroup({
-    old_password: new UntypedFormControl("", [Validators.required]),
-    new_password1: new UntypedFormControl("", [
+  form = new FormGroup({
+    old_password: new FormControl("", [Validators.required]),
+    new_password1: new FormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
-    new_password2: new UntypedFormControl("", [
+    new_password2: new FormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
@@ -67,9 +67,9 @@ export class ChangePasswordComponent implements OnInit {
       this.loading = true;
       this.passwordService
         .changePassword(
-          this.form.value.old_password,
-          this.form.value.new_password1,
-          this.form.value.new_password2
+          this.form.value.old_password!,
+          this.form.value.new_password1!,
+          this.form.value.new_password2!
         )
         .subscribe(
           () => {
