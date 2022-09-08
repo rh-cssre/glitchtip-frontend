@@ -116,12 +116,26 @@ objects:
               name: glitchtip
               readinessProbe:
                 exec:
-                  command: ["ls", "/tmp"]
+                  command:
+                    - celery
+                    - '-A'
+                    - glitchtip
+                    - inspect
+                    - ping
+                    - t
+                    - '5'
                 initialDelaySeconds: 30
                 periodSeconds: 5
               livenessProbe:
                 exec:
-                  command: ["ls", "/tmp"]
+                  command:
+                    - celery
+                    - '-A'
+                    - glitchtip
+                    - inspect
+                    - ping
+                    - t
+                    - '5'
                 initialDelaySeconds: 30
                 periodSeconds: 5
               resources:
@@ -381,12 +395,26 @@ objects:
               name: worker
               readinessProbe:
                 exec:
-                  command: ["ls", "/tmp"]
+                  command:
+                    - celery
+                    - '-A'
+                    - glitchtip
+                    - inspect
+                    - ping
+                    - t
+                    - '5'
                 initialDelaySeconds: 30
                 periodSeconds: 5
               livenessProbe:
                 exec:
-                  command: ["ls", "/tmp"]
+                  command:
+                    - celery
+                    - '-A'
+                    - glitchtip
+                    - inspect
+                    - ping
+                    - t
+                    - '5'
                 initialDelaySeconds: 30
                 periodSeconds: 5
               resources:
