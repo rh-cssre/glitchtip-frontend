@@ -466,7 +466,8 @@ parameters:
     required: true
     name: ENABLE_SOCIAL_AUTH
     value: "True"
-
+  
+  # for enabling manual login [gt-frontend]
   - description: ENABLE_LOGIN_FORM
     displayName: ENABLE_LOGIN_FORM
     name: ENABLE_LOGIN_FORM
