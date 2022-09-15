@@ -389,7 +389,7 @@ objects:
                     - ping
                     - '-t'
                     - '5'
-                initialDelaySeconds: 30
+                initialDelaySeconds: 40
                 timeoutSeconds: 7
                 periodSeconds: 10
                 successThreshold: 1
@@ -404,7 +404,7 @@ objects:
                     - ping
                     - '-t'
                     - '5'
-                initialDelaySeconds: 30
+                initialDelaySeconds: 40
                 timeoutSeconds: 7
                 periodSeconds: 15
                 successThreshold: 1
