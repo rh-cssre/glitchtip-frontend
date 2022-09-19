@@ -48,13 +48,13 @@
             [disabled]="
               (!frame.context || !frame.context.length) && !frame.vars
             "
-            [expanded]="frame.context.length ? i === 0 : undefined"
+            [expanded]="frame.context?.length ? i === 0 : undefined"
             class="mat-elevation-z0"
           >
             <mat-expansion-panel-header
               collapsedHeight="auto"
               expandedHeight="auto"
-              [class.disabled-panel]="!frame.context.length && !frame.vars"
+              [class.disabled-panel]="!frame.context?.length && !frame.vars"
               [class.highlighted]="frame.inApp"
             >
               <gt-frame-title
@@ -63,6 +63,7 @@
               ></gt-frame-title>
             </mat-expansion-panel-header>
             <gt-frame-expanded
+              *ngIf="frame.context"
               [lineNo]="frame.lineNo"
               [context]="frame.context"
               [vars]="frame.vars"
