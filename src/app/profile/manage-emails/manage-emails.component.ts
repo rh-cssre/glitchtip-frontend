@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
   FormGroupDirective,
   AbstractControl,
@@ -48,8 +48,8 @@ export class ManageEmailsComponent implements OnInit {
     );
 
   // tslint:disable:member-ordering
-  form = new FormGroup({
-    email_address: new FormControl(
+  form = new UntypedFormGroup({
+    email_address: new UntypedFormControl(
       "",
       [Validators.email, Validators.required],
       this.matchesExistingValidator

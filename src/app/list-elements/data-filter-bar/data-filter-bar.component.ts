@@ -1,6 +1,6 @@
 import { formatDate } from "@angular/common";
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 
 @Component({
@@ -9,11 +9,11 @@ import { MatSelectChange } from "@angular/material/select";
   styleUrls: ["./data-filter-bar.component.scss"],
 })
 export class DataFilterBarComponent {
-  @Input() dateForm?: FormGroup;
-  @Input() sortForm?: FormGroup;
+  @Input() dateForm?: UntypedFormGroup;
+  @Input() sortForm?: UntypedFormGroup;
   @Input() sorts?: { param: string; display: string }[];
-  @Input() environmentForm?: FormGroup;
-  @Input() searchForm?: FormGroup;
+  @Input() environmentForm?: UntypedFormGroup;
+  @Input() searchForm?: UntypedFormGroup;
   @Input() organizationEnvironments: string[] = [];
 
   @Output() dateFormSubmission = new EventEmitter<object>();

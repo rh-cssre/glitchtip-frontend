@@ -38,7 +38,7 @@ export const contexts = () => {
       subtitle: "3.8.0",
       key: "Version",
       type: "runtime",
-      icon: "static/assets/images/logos/48x48/cpython.png",
+      icon: "static/assets/images/logos/48x48/python.svg",
       matIcon: null,
     },
     {
@@ -91,7 +91,7 @@ export const unknownContexts = () => {
     },
     {
       type: "runtime",
-      icon: "static/assets/images/logos/48x48/cpython.png",
+      icon: "static/assets/images/logos/48x48/python.svg",
       matIcon: "tab",
       title: "CPython",
       subtitle: "3.8.6",

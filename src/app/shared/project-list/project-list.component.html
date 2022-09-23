@@ -6,16 +6,16 @@
     "
   >
     <mat-card-content>
-      <p class="mat-body-1">
-        In order to use GlitchTip, you'll need to create an organization.
-      </p>
+      <p class="mat-body-1" i18n
+        >In order to use GlitchTip, you'll need to create an organization.</p
+      >
       <a
         mat-flat-button
         color="primary"
         [routerLink]="['/organizations', 'new']"
+        i18n
+        >Create New Organization</a
       >
-        Create New Organization
-      </a>
     </mat-card-content>
   </mat-card>
 
@@ -36,9 +36,9 @@
           mat-stroked-button
           color="primary"
           [routerLink]="['/', organization.slug, 'settings', 'projects', 'new']"
+          i18n
+          >Create New Project in {{ organization.name }}</a
         >
-          Create New Project in {{ organization.name }}
-        </a>
       </header>
       <gt-empty-projects
         *ngIf="organization.projects.length === 0"

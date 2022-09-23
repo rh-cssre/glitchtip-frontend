@@ -2,9 +2,9 @@
   <header class="page-header">
     <h1 class="mat-display-1">#{{ teamSlug$ | async }}</h1>
     <a mat-flat-button [routerLink]="['/settings', orgSlug$ | async, 'teams']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      Back to Teams
-    </a>
+      <mat-icon>keyboard_arrow_left</mat-icon
+      ><ng-container i18n>Back to Teams</ng-container></a
+    >
   </header>
 
   <nav mat-tab-nav-bar>

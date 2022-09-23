@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Validators, FormGroup, FormControl } from "@angular/forms";
 import { ResetPasswordService } from "../api/reset-password/reset-password.service";
+import { SettingsService } from "../api/settings.service";
 
 @Component({
   selector: "gt-reset-password",
@@ -15,15 +16,19 @@ export class ResetPasswordComponent {
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
   });
+  enableUserRegistration$ = this.settings.enableUserRegistration$;
 
-  constructor(private resetService: ResetPasswordService) {}
+  constructor(
+    private resetService: ResetPasswordService,
+    private settings: SettingsService
+  ) {}
 
   get email() {
     return this.form.get("email");
   }
 
   onSubmit() {
-    if (this.form.valid) {
+    if (this.form.valid && this.form.value.email) {
       this.resetService.sendResetEmail(this.form.value.email);
     }
   }

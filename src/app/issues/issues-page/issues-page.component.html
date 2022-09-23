@@ -4,6 +4,7 @@
 >
   <header class="page-header">
     <gt-list-title
+      i18n-title
       title="Issues"
       [searchHits]="paginator.count"
     ></gt-list-title>
@@ -90,23 +91,23 @@
               color="primary"
               (click)="bulkMarkResolved()"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
+              i18n
+              >Mark as resolved</button
             >
-              Mark as resolved
-            </button>
             <button
               mat-stroked-button
               (click)="bulkMarkUnresolved()"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
+              i18n
+              >Reopen</button
             >
-              Reopen
-            </button>
             <button
               mat-stroked-button
               (click)="bulkMarkIgnored()"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
+              i18n
+              >Ignore</button
             >
-              Ignore
-            </button>
           </div>
         </th>
         <td
@@ -239,7 +240,7 @@
           *matFooterCellDef
           [attr.colspan]="displayedColumns.length"
         >
-        <gt-list-footer [paginator]="paginator"> </gt-list-footer>
+          <gt-list-footer [paginator]="paginator"> </gt-list-footer>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="['actions']"></tr>

@@ -7,9 +7,9 @@
       color="primary"
       (click)="openNewAlert()"
       [disabled]="(newAlertOpen$ | async) === true"
+      i18n
+      >Create New Alert</button
     >
-      Create New Alert
-    </button>
   </mat-card-header>
   <mat-divider></mat-divider>
 
@@ -18,7 +18,7 @@
       <!-- New Alert -->
       <div *ngIf="(newAlertOpen$ | async) === true" class="new-alert">
         <div class="alert-header">
-          <h3>New Alert</h3>
+          <h3 i18n>New Alert</h3>
         </div>
         <p
           *ngIf="newAlertError$ | async as error"
@@ -35,10 +35,10 @@
         <p
           *ngIf="(newProjectAlertRecipients$ | async)?.length === 0"
           class="no-recipients no-recipients-new"
+          i18n
+          >This alert isn't being sent anywhere. Select "Add An Alert Recipient"
+          below to get started.</p
         >
-          This alert isn't being sent anywhere. Select "Add An Alert Recipient"
-          below to get started.
-        </p>
         <ul>
           <li
             *ngFor="
@@ -54,8 +54,9 @@
                     class="tooltip"
                     matTooltip="Send an email to team members on this project."
                     matTooltipClass="tt-wrapping"
-                    >Send an email to team members on this project.
-                  </span>
+                    i18n
+                    >Send an email to team members on this project.</span
+                  >
                 </div>
               </ng-container>
               <ng-container *ngIf="recipient.recipientType === 'webhook'">
@@ -91,16 +92,19 @@
           (click)="openCreateRecipientDialog()"
         >
           <mat-icon>add</mat-icon>
-          Add An Alert Recipient
+          <ng-container i18n>Add An Alert Recipient</ng-container>
         </button>
         <div class="new-alert-actions">
           <gt-loading-button
             buttonText="submit"
             [loading]="(newAlertLoading$ | async) === true"
             (click)="submitCreateAlert()"
+            i18n
             >Submit</gt-loading-button
           >
-          <button (click)="closeNewAlert()" mat-stroked-button>Cancel</button>
+          <button (click)="closeNewAlert()" mat-stroked-button i18n
+            >Cancel</button
+          >
         </div>
       </div>
       <ng-container
@@ -109,10 +113,10 @@
             (newAlertOpen$ | async) === false;
           else showAlerts
         "
-        ><p class="no-alerts">
-          You don't have any alerts set up. Click "Create New Alert" on the top
-          right of this card to get started.
-        </p></ng-container
+        ><p class="no-alerts" i18n
+          >You don't have any alerts set up. Click "Create New Alert" on the top
+          right of this card to get started.</p
+        ></ng-container
       ><ng-template #showAlerts>
         <div
           *ngFor="let alert of projectAlerts$ | async; let i = index"

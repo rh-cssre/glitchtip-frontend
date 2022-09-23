@@ -7,15 +7,15 @@
         <ul class="value-props">
           <li>
             <mat-icon color="primary">check_circle</mat-icon>
-            Error tracking
+            <ng-container i18n>Error tracking</ng-container>
           </li>
           <li>
             <mat-icon color="primary">check_circle</mat-icon>
-            Unlimited projects
+            <ng-container i18n>Unlimited projects</ng-container>
           </li>
           <li>
             <mat-icon color="primary">check_circle</mat-icon>
-            Unlimited team members
+            <ng-container i18n>Unlimited team members</ng-container>
           </li>
         </ul>
         <p>
@@ -34,18 +34,17 @@
   </div>
   <div class="event-info">
     <mat-card>
-      <mat-card-title>Events</mat-card-title>
+      <mat-card-title i18n>Events</mat-card-title>
       <mat-divider></mat-divider>
       <mat-card-content>
         <gt-event-info></gt-event-info>
       </mat-card-content>
     </mat-card>
   </div>
-  <p class="mat-body-1">
-    Questions about subscriptions? Need assistance, or a bigger plan? Contact us
-    at
-    <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-    >.
-  </p>
+  <p class="mat-body-1" i18n
+    >Questions about subscriptions? Need assistance, or a bigger plan? Contact
+    us at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+    >.</p
+  >
 </ng-container>
 <!-- TODO: add state for user who is not owner, since they cannot sign up for an org-->

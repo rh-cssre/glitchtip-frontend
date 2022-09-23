@@ -18,9 +18,9 @@ interface SettingsState {
   chatwootWebsiteToken: string | null;
   stripePublicKey: string | null;
   sentryDSN: string | null;
-  sentryTracesSampleRate: number | null;
   environment: string | null;
   version: string | null;
+  serverTimeZone: string | null;
 }
 
 const initialState: SettingsState = {
@@ -33,9 +33,9 @@ const initialState: SettingsState = {
   chatwootWebsiteToken: null,
   stripePublicKey: null,
   sentryDSN: null,
-  sentryTracesSampleRate: null,
   environment: null,
   version: null,
+  serverTimeZone: null,
 };
 
 @Injectable({
@@ -54,6 +54,7 @@ export class SettingsService {
   enableUserRegistration$ = this.state.pipe(
     map((settings) => settings.enableUserRegistration)
   );
+  serverTimeZone$ = this.state.pipe(map((settings) => settings.serverTimeZone));
   private readonly url = "/api/settings/";
 
   constructor(

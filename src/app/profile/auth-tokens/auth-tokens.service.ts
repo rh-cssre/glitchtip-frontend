@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, EMPTY } from "rxjs";
+import { EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import { APIToken } from "src/app/api/api-tokens/api-tokens.interfaces";
 import { APITokenService } from "src/app/api/api-tokens/api-tokens.service";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 
-interface AuthTokensState {
+export interface AuthTokensState {
   apiTokens: APIToken[];
   loading: {
     apiTokens: boolean;
@@ -32,9 +33,7 @@ const initialState: AuthTokensState = {
 @Injectable({
   providedIn: "root",
 })
-export class AuthTokensService {
-  private readonly state = new BehaviorSubject<AuthTokensState>(initialState);
-  private readonly getState$ = this.state.asObservable();
+export class AuthTokensService extends StatefulService<AuthTokensState> {
   readonly apiTokens$ = this.getState$.pipe(map((state) => state.apiTokens));
   readonly initialLoad$ = this.getState$.pipe(
     map((state) => state.loading.apiTokens)
@@ -58,7 +57,9 @@ export class AuthTokensService {
   constructor(
     private apiTokenService: APITokenService,
     private router: Router
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   loadAuthTokens() {
     this.apiTokenService
@@ -116,10 +117,6 @@ export class AuthTokensService {
         })
       )
       .toPromise();
-  }
-
-  clear() {
-    this.state.next(initialState);
   }
 
   resetCreateErrors() {

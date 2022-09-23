@@ -1,5 +1,5 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { Injectable, NgModule } from "@angular/core";
+import { Routes, RouterModule, TitleStrategy, RouterStateSnapshot } from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
 import { CustomPreloadingStrategy } from "./preloadingStrategy";
@@ -10,6 +10,9 @@ export const routes: Routes = [
     loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
     pathMatch: "full",
     canActivate: [IsLoggedInGuard],
+    data: {
+      preload: true,
+    }
   },
   {
     path: "organizations/new",
@@ -18,36 +21,31 @@ export const routes: Routes = [
         (m) => m.NewOrganizationModule
       ),
     canActivate: [IsLoggedInGuard],
-    data: {
-      title: "Create New Organization",
-    },
+    title: "Create New Organization",
   },
   {
     path: "login",
     loadChildren: () =>
       import("./login/login.module").then((m) => m.LoginModule),
     canActivate: [AlreadyLoggedInGuard],
-    data: {
-      title: "Log In",
-    },
+    title: "Log In",
   },
   {
     path: "profile",
     loadChildren: () =>
       import("./profile/profile.module").then((m) => m.ProfileModule),
     canActivate: [IsLoggedInGuard],
+    title: "Profile",
     data: {
-      title: "Profile",
-    },
+      preload: true,
+    }
   },
   {
     path: "register",
     loadChildren: () =>
       import("./register/register.module").then((m) => m.RegisterModule),
     canActivate: [AlreadyLoggedInGuard],
-    data: {
-      title: "Register",
-    },
+    title: "Register",
   },
   {
     path: "reset-password",
@@ -55,9 +53,7 @@ export const routes: Routes = [
       import("./reset-password/reset-password.module").then(
         (m) => m.ResetPasswordModule
       ),
-    data: {
-      title: "Reset Password",
-    },
+    title: "Reset Password",
   },
   {
     path: "auth",
@@ -87,33 +83,39 @@ export const routes: Routes = [
         path: "issues",
         loadChildren: () =>
           import("./issues/issues.module").then((m) => m.IssuesModule),
+        title: "Issues",
         data: {
-          title: "Issues",
-        },
+          preload: true,
+        }
       },
       {
         path: "uptime-monitors",
         loadChildren: () =>
           import("./uptime/uptime.module").then((m) => m.UptimeModule),
-        data: {
-          title: "Uptime Monitors",
-        },
+        title: "Uptime Monitors",
       },
       {
         path: "projects",
         loadChildren: () =>
           import("./projects/projects.module").then((m) => m.ProjectsModule),
+        title: "Projects",
+      },
+      {
+        path: "releases",
+        loadChildren: () =>
+          import("./releases/releases.module").then((m) => m.ReleasesModule),
         data: {
-          title: "Projects",
+          title: "Releases",
         },
       },
       {
         path: "settings",
         loadChildren: () =>
           import("./settings/settings.module").then((m) => m.SettingsModule),
+        title: "Settings",
         data: {
-          title: "Settings",
-        },
+          preload: true,
+        }
       },
       {
         path: "performance",
@@ -121,14 +123,12 @@ export const routes: Routes = [
           import("./performance/performance.module").then(
             (m) => m.PerformanceModule
           ),
-        data: {
-          title: "Performance",
-        },
+        title: "Performance",
       },
       {
-        path: ':project-slug',
-        redirectTo: 'settings/projects/:project-slug'
-      }
+        path: ":project-slug",
+        redirectTo: "settings/projects/:project-slug",
+      },
     ],
   },
   {
@@ -137,6 +137,19 @@ export const routes: Routes = [
     pathMatch: "full",
   },
 ];
+
+
+@Injectable()
+export class TemplatePageTitleStrategy extends TitleStrategy {
+  override updateTitle(routerState: RouterStateSnapshot) {
+    const title = this.buildTitle(routerState);
+    if (title !== undefined) {
+      document.title = title;
+    } else {
+      document.title = "GlitchTip";
+    }
+  };
+};
 
 @NgModule({
   imports: [
@@ -148,5 +161,6 @@ export const routes: Routes = [
     }),
   ],
   exports: [RouterModule],
+  providers: [{provide: TitleStrategy,  useClass: TemplatePageTitleStrategy}]
 })
 export class AppRoutingModule {}

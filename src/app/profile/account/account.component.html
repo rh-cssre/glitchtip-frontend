@@ -1,21 +1,23 @@
+<gt-preferences class="spacing"></gt-preferences>
 <gt-change-password class="spacing"></gt-change-password>
 <gt-social-auth class="spacing"></gt-social-auth>
 <gt-manage-emails class="spacing"></gt-manage-emails>
 
 <mat-card>
-  <mat-card-title>Delete User Account</mat-card-title>
+  <mat-card-title i18n>Delete User Account</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content class="remove-content">
     <div>
-      <p>
-        By deleting your user account, you will permanently lose all data,
-        including access to organization projects and their associated events.
-      </p>
-      <p>
-        Make sure to delete or transfer ownership of any organizations before
+      <p i18n
+        >By deleting your user account, you will permanently lose all data,
+        including access to organization projects and their associated
+        events.</p
+      >
+      <p i18n
+        >Make sure to delete or transfer ownership of any organizations before
         deleting your account. Owners of paid organization subscriptions are not
-        able to delete their account.
-      </p>
+        able to delete their account.</p
+      >
       <mat-error>{{ deleteError }}</mat-error>
     </div>
     <gt-loading-button

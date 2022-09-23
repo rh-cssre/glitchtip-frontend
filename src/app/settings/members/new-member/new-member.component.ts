@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
   AbstractControl,
   ValidationErrors,
@@ -42,10 +42,10 @@ export class NewMemberComponent implements OnInit, OnDestroy {
     .filteredOrganizationTeams$;
   errors$ = this.organizationsService.errors$;
   loading$ = this.organizationsService.loading$;
-  form = new FormGroup({
-    email: new FormControl("", [Validators.required, emailsValidator]),
-    role: new FormControl("", [Validators.required]),
-    teams: new FormControl([]),
+  form = new UntypedFormGroup({
+    email: new UntypedFormControl("", [Validators.required, emailsValidator]),
+    role: new UntypedFormControl("", [Validators.required]),
+    teams: new UntypedFormControl([]),
   });
 
   constructor(

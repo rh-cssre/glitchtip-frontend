@@ -12,7 +12,7 @@ import { flattenedPlatforms } from "./platforms-for-picker";
 import categoryList from "./platform-categories";
 import {
   ControlValueAccessor,
-  FormControl,
+  UntypedFormControl,
   NG_VALUE_ACCESSOR,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
@@ -50,7 +50,7 @@ export class PlatformPickerComponent implements ControlValueAccessor {
   categoryList = categoryList;
 
   /** Used to filter project names */
-  filterPlatformInput = new FormControl();
+  filterPlatformInput = new UntypedFormControl();
 
   /** Projects that are filtered via the text field form control */
   filteredPlatforms$ = this.filterPlatformInput.valueChanges.pipe(

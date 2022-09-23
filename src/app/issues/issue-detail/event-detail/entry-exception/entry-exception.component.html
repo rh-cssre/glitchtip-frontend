@@ -63,9 +63,11 @@
               ></gt-frame-title>
             </mat-expansion-panel-header>
             <gt-frame-expanded
+              *ngIf="frame.context"
               [lineNo]="frame.lineNo"
               [context]="frame.context"
               [vars]="frame.vars"
+              [eventPlatform]="eventPlatform"
             ></gt-frame-expanded>
           </mat-expansion-panel>
         </mat-accordion>

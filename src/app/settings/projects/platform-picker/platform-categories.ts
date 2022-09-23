@@ -7,7 +7,7 @@ const popular = [
   "ruby-rails",
   "node-express",
   "php-laravel",
-  "php-symfony2",
+  "php-symfony",
   "java",
   "csharp",
   "elixir",
@@ -16,16 +16,17 @@ const popular = [
   "node",
   "react-native",
   "javascript-angular",
+  "dart-flutter",
 ];
 const frontend = [
   "javascript",
   "javascript-react",
   "javascript-nextjs",
   "javascript-angular",
-  "javascript-angularjs",
   "javascript-backbone",
   "javascript-ember",
   "javascript-vue",
+  "dart-flutter",
 ];
 const mobile = [
   "cocoa-objc",
@@ -33,6 +34,7 @@ const mobile = [
   "java-android",
   "cordova",
   "react-native",
+  "dart-flutter",
 ];
 const backend = [
   "csharp",
@@ -53,7 +55,7 @@ const backend = [
   "php",
   "php-laravel",
   "php-monolog",
-  "php-symfony2",
+  "php-symfony",
   "python",
   "python-django",
   "python-flask",
@@ -70,7 +72,7 @@ const backend = [
   "ruby-rack",
   "rust",
 ];
-const desktop = ["cocoa", "csharp", "java", "electron", "minidump", "native"];
+const desktop = ["cocoa", "csharp", "java", "electron", "minidump", "native", "dart-flutter"];
 const categoryList = [
   { id: "popular", name: "Popular", platforms: popular },
   { id: "browser", name: "Browser", platforms: frontend },

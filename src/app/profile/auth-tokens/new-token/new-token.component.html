@@ -1,7 +1,7 @@
 <section class="l-body">
   <mat-card>
     <mat-card-header class="flex-space-between">
-      <mat-card-title> Create New Token </mat-card-title>
+      <mat-card-title i18n>Create New Token</mat-card-title>
       <a
         mat-flat-button
         [routerLink]="['/profile', 'auth-tokens']"
@@ -28,7 +28,7 @@
             ><span *ngIf="label?.errors?.required"
               >Create a label for your auth token</span
             ><span *ngIf="label?.errors?.serverErrorLabel">{{
-              label?.errors?.serverErrorLabel
+              label.errors?.serverErrorLabel
             }}</span></mat-error
           >
         </mat-form-field>
@@ -56,7 +56,7 @@
           ><span *ngIf="scopes?.errors?.selectOne"
             >Select at least one scope</span
           ><span *ngIf="scopes?.errors?.serverErrorScopes">{{
-            scopes?.errors?.serverErrorScopes
+            scopes.errors?.serverErrorScopes
           }}</span></mat-error
         >
         <gt-loading-button

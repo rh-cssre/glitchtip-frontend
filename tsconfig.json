@@ -19,11 +19,12 @@
     "importHelpers": true,
     "resolveJsonModule": true,
     "strictNullChecks": true,
-    "target": "es2015",
+    "target": "es2020",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
     "fullTemplateTypeCheck": true,
     "strictTemplates": true,
     "strictInjectionParameters": true

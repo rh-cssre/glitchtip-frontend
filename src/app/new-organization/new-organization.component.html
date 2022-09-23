@@ -8,10 +8,10 @@
             else elseBlock
           "
         >
-          <mat-card-title>Create a New Organization</mat-card-title>
-          <p *ngIf="(organizationCount$ | async) === 0">
-            This is the first step to get started with GlitchTip.
-          </p>
+          <mat-card-title i18n>Create a New Organization</mat-card-title>
+          <p *ngIf="(organizationCount$ | async) === 0" i18n
+            >This is the first step to get started with GlitchTip.</p
+          >
           <form
             [formGroup]="form"
             (ngSubmit)="onSubmit()"
@@ -19,14 +19,19 @@
           >
             <mat-error *ngIf="error">{{ error }}</mat-error>
             <mat-form-field>
-              <input matInput formControlName="name" placeholder="Name" />
+              <input
+                matInput
+                formControlName="name"
+                placeholder="Name"
+                i18n-placeholder
+              />
             </mat-form-field>
-            <button id="submit" mat-flat-button color="primary">
-              Create Organization
-            </button>
+            <button id="submit" mat-flat-button color="primary" i18n
+              >Create Organization</button
+            >
           </form>
         </ng-container>
-        <ng-template #elseBlock>
+        <ng-template #elseBlock i18n>
           Registration has been disabled on this instance of GlitchTip. Contact
           an administrator to be invited into an existing organization.
         </ng-template>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { LoginService } from "./login.service";
@@ -20,9 +20,9 @@ export class LoginComponent implements OnInit {
   requiresMFA$ = this.loginService.requiresMFA$;
   hasFido2$ = this.loginService.hasFIDO2$;
   useTOTP$ = this.loginService.useTOTP$;
-  form = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.email]),
-    password: new FormControl("", [
+  form = new UntypedFormGroup({
+    email: new UntypedFormControl("", [Validators.required, Validators.email]),
+    password: new UntypedFormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),

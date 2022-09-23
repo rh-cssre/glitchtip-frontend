@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { GlitchTipOAuthService } from "src/app/api/oauth/oauth.service";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
@@ -15,7 +15,7 @@ export class SocialAuthComponent implements OnInit {
   user$ = this.userService.userDetails$;
   disconnectLoading$ = this.userService.disconnectLoading$;
   socialApps$ = this.settingsService.socialApps$;
-  account = new FormControl();
+  account = new UntypedFormControl();
 
   constructor(
     private userService: UserService,

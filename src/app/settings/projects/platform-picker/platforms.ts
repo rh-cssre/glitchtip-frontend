@@ -20,15 +20,13 @@ export const platforms: Platform[] = [
         id: "csharp-aspnetcore",
         name: "ASP.NET Core",
         type: "framework",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=aspnetcore",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=aspnetcore",
       },
       {
         id: "csharp",
         name: "C#",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=csharp",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=csharp",
       },
     ],
   },
@@ -40,8 +38,7 @@ export const platforms: Platform[] = [
         id: "cordova",
         name: "Cordova",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=cordova",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=cordova",
       },
     ],
   },
@@ -53,8 +50,7 @@ export const platforms: Platform[] = [
         id: "electron",
         name: "Electron",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=electron",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=electron",
       },
     ],
   },
@@ -150,22 +146,19 @@ export const platforms: Platform[] = [
         id: "javascript-angularjs",
         name: "AngularJS",
         type: "framework",
-        link:
-          "https://docs.sentry.io/clients/javascript/integrations/angularjs/",
+        link: "https://docs.sentry.io/clients/javascript/integrations/angularjs/",
       },
       {
         id: "javascript-backbone",
         name: "Backbone",
         type: "framework",
-        link:
-          "https://docs.sentry.io/clients/javascript/integrations/#backbone",
+        link: "https://docs.sentry.io/clients/javascript/integrations/#backbone",
       },
       {
         id: "javascript-browser",
         name: "Browser JavaScript",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=browser",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=browser",
       },
       {
         id: "javascript-ember",
@@ -177,8 +170,7 @@ export const platforms: Platform[] = [
         id: "javascript",
         name: "JavaScript",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=browser",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=browser",
       },
       {
         id: "javascript-react",
@@ -190,8 +182,7 @@ export const platforms: Platform[] = [
         id: "javascript-nextjs",
         name: "Next.js",
         type: "framework",
-        link:
-          "https://github.com/getsentry/sentry-javascript/tree/master/packages/nextjs",
+        link: "https://github.com/getsentry/sentry-javascript/tree/master/packages/nextjs",
       },
       {
         id: "javascript-vue",
@@ -221,8 +212,7 @@ export const platforms: Platform[] = [
         id: "native",
         name: "Native (C/C++)",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=native",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=native",
       },
     ],
   },
@@ -252,8 +242,7 @@ export const platforms: Platform[] = [
         id: "node",
         name: "Node.js",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=node",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=node",
       },
     ],
   },
@@ -307,13 +296,7 @@ export const platforms: Platform[] = [
         id: "php-symfony",
         name: "Symfony",
         type: "framework",
-        link: "https://docs.sentry.io/platforms/php/symfony/",
-      },
-      {
-        id: "php-symfony2",
-        name: "Symfony2",
-        type: "framework",
-        link: "https://docs.sentry.io/clients/php/integrations/symfony2/",
+        link: "https://docs.sentry.io/platforms/php/guides/symfony/",
       },
     ],
   },
@@ -385,8 +368,7 @@ export const platforms: Platform[] = [
         id: "python",
         name: "Python",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=python",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=python",
       },
       {
         id: "python-rq",
@@ -433,6 +415,18 @@ export const platforms: Platform[] = [
     ],
   },
   {
+    id: "dart-flutter",
+    name: "Flutter",
+    integrations: [
+      {
+        id: "dart-flutter",
+        name: "Flutter",
+        type: "language",
+        link: "",
+      },
+    ],
+  },
+  {
     id: "ruby",
     name: "Ruby",
     integrations: [
@@ -464,8 +458,7 @@ export const platforms: Platform[] = [
         id: "rust",
         name: "Rust",
         type: "language",
-        link:
-          "https://docs.sentry.io/error-reporting/quickstart/?platform=rust",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=rust",
       },
     ],
   },

@@ -1,5 +1,5 @@
 import { environments } from "./variables";
-import { uniqueId } from "../integration/utils";
+import { uniqueId } from "../e2e/utils.cy";
 
 export const criticalMessage = {
   message: "Critical Error",

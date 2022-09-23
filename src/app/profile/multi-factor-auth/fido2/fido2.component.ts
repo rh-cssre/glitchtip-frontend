@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { EMPTY } from "rxjs";
 import { checkForOverflow } from "src/app/shared/shared.utils";
 
@@ -17,8 +17,8 @@ export class Fido2Component {
   FIDO2Keys$ = this.service.FIDO2Keys$;
   setupFIDO2Stage$ = this.service.setupFIDO2Stage$;
   error$ = this.service.serverError$;
-  fido2Form = new FormGroup({
-    fido2Code: new FormControl("", [
+  fido2Form = new UntypedFormGroup({
+    fido2Code: new UntypedFormControl("", [
       Validators.required,
     ]),
   });

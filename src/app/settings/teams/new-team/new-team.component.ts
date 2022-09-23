@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -12,8 +12,8 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 export class NewTeamComponent {
   loading = false;
   errors: string[] = [];
-  form = new FormGroup({
-    slug: new FormControl("", [Validators.required]),
+  form = new UntypedFormGroup({
+    slug: new UntypedFormControl("", [Validators.required]),
   });
   orgSlug?: string;
 

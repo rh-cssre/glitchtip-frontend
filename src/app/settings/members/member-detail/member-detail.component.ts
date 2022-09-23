@@ -5,7 +5,7 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -27,8 +27,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     map((params) => params.get("member-id"))
   );
   routeParams$ = combineLatest([this.orgSlug$, this.memberIdSlug$]);
-  form = new FormGroup({
-    role: new FormControl(""),
+  form = new UntypedFormGroup({
+    role: new UntypedFormControl(""),
   });
 
   constructor(

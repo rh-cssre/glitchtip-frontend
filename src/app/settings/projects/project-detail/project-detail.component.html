@@ -1,11 +1,11 @@
 <section class="l-body" *ngIf="activeProject$ | async as project">
   <header class="page-header">
-    <h1 class="mat-display-1">Settings for {{ project.name }}</h1>
+    <h1 class="mat-display-1" i18n>Settings for {{ project.name }}</h1>
   </header>
   <mat-card *ngIf="project.isMember === false"
     ><mat-card-content class="note-padding">
-      <p class="mat-body-strong">Note</p>
-      <p>
+      <p class="mat-body-strong" i18n>Note</p>
+      <p i18n>
         Because you are an admin for {{ project.organization.name }}, you have
         access to all of its projects. However, if you want to view issues for
         {{ project.name }}, you must be a member of one of its teams.
@@ -13,7 +13,7 @@
     ></mat-card
   >
   <mat-card>
-    <mat-card-title>Update Project</mat-card-title>
+    <mat-card-title i18n>Update Project</mat-card-title>
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-error class="server-error" *ngIf="updateNameError">{{
@@ -25,10 +25,10 @@
         class="project-form"
       >
         <mat-form-field>
-          <mat-label>Name</mat-label>
+          <mat-label i18n>Name</mat-label>
           <input matInput formControlName="name" [value]="project.name" />
           <mat-error>
-            <span *ngIf="name?.errors?.required"
+            <span *ngIf="name?.errors?.required" i18n
               >Enter a project name</span
             ></mat-error
           >
@@ -57,6 +57,7 @@
           href="https://glitchtip.com/sdkdocs/{{ platform.value }}"
           target="_blank"
           class="documentation-link"
+          i18n
         >
           Platform Documentation
         </a>
@@ -70,8 +71,8 @@
     </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title>Client Keys (DSN)</mat-card-title>
-    <p class="mat-caption">
+    <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
+    <p class="mat-caption" i18n>
       Data Source Name: The code that connects your project to GlitchTip.
       Install a library into your project, then configure it with the DSN so
       that it knows how to send errors to your GlitchTip account.
@@ -94,31 +95,36 @@
   <gt-project-alerts></gt-project-alerts>
 
   <mat-card>
-    <mat-card-title>Personal Project Notifications</mat-card-title>
+    <mat-card-title i18n>Personal Project Notifications</mat-card-title>
     <mat-divider></mat-divider>
     <mat-card-content class="remove-content">
       <div>
-        <p>
-          Edit whether or not you want to receive notifications for this project
-        </p>
+        <p i18n
+          >Edit whether or not you want to receive notifications for this
+          project</p
+        >
       </div>
       <div>
-        <a mat-flat-button color="primary" routerLink="/profile/notifications">
-          Edit Preferences
-        </a>
+        <a
+          mat-flat-button
+          color="primary"
+          routerLink="/profile/notifications"
+          i18n
+          >Edit Preferences</a
+        >
       </div>
     </mat-card-content>
   </mat-card>
 
   <mat-card>
-    <mat-card-title>Delete Project</mat-card-title>
+    <mat-card-title i18n>Delete Project</mat-card-title>
     <mat-divider></mat-divider>
     <mat-card-content class="remove-content">
       <div>
-        <p>
-          By deleting your project, you will lose all associated data. This
-          cannot be undone.
-        </p>
+        <p i18n
+          >By deleting your project, you will lose all associated data. This
+          cannot be undone.</p
+        >
         <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
       </div>
       <gt-loading-button

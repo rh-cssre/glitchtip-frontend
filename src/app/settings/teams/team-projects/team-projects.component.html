@@ -1,12 +1,12 @@
 <mat-card>
   <mat-card-header class="card-header">
-    <mat-card-title>Projects</mat-card-title>
+    <mat-card-title i18n>Projects</mat-card-title>
     <mat-error *ngIf="(errors$ | async)?.addProjectToTeam">{{
       (errors$ | async)?.addProjectToTeam
     }}</mat-error>
     <div>
       <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
-        <mat-label>Add Project</mat-label>
+        <mat-label i18n>Add Project</mat-label>
         <mat-select (selectionChange)="addProject()" [formControl]="project">
           <ng-container
             *ngIf="(projectsNotOnTeam$ | async)?.length; else emptyState"
@@ -18,7 +18,7 @@
               {{ project.name }}
             </mat-option></ng-container
           ><ng-template #emptyState>
-            <mat-option disabled>No projects</mat-option>
+            <mat-option disabled i18n>No projects</mat-option>
           </ng-template>
         </mat-select>
       </mat-form-field>
@@ -29,7 +29,7 @@
     <ng-container
       *ngIf="(projectsOnTeam$ | async)?.length === 0; else listMembers"
     >
-      <p class="center-text">This team doesn't have any projects</p>
+      <p class="center-text" i18n>This team doesn't have any projects</p>
     </ng-container>
     <ng-template #listMembers>
       <mat-list>

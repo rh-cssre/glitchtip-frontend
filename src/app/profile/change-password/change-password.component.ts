@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  FormGroup,
-  FormControl,
   Validators,
   FormGroupDirective,
+  FormGroup,
+  FormControl,
 } from "@angular/forms";
 import { PasswordService } from "./password.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -67,9 +67,9 @@ export class ChangePasswordComponent implements OnInit {
       this.loading = true;
       this.passwordService
         .changePassword(
-          this.form.value.old_password,
-          this.form.value.new_password1,
-          this.form.value.new_password2
+          this.form.value.old_password!,
+          this.form.value.new_password1!,
+          this.form.value.new_password2!
         )
         .subscribe(
           () => {
