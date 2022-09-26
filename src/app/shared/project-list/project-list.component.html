@@ -46,7 +46,7 @@
       ></gt-empty-projects>
 
       <div>
-        <div class="card-wrapper">
+        <div class="project-card-wrapper">
           <ng-container *ngFor="let project of organization.projects">
             <gt-project-card
               [cardLink]="['/', project.organization.slug, 'issues']"
