@@ -16,6 +16,11 @@
   }
   .text-wrapper {
     display: flex;
+    align-items: center;
+    
+    h3 {
+      margin-bottom: 0px;
+    }
   }
 
   .spacer {
