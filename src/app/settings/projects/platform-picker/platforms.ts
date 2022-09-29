@@ -415,6 +415,18 @@ export const platforms: Platform[] = [
     ],
   },
   {
+    id: "dart-flutter",
+    name: "Flutter",
+    integrations: [
+      {
+        id: "dart-flutter",
+        name: "Flutter",
+        type: "language",
+        link: "",
+      },
+    ],
+  },
+  {
     id: "ruby",
     name: "Ruby",
     integrations: [

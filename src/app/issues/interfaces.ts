@@ -304,7 +304,7 @@ export interface Frame {
   symbolAddr: string | null;
   trust: string | null;
   inApp: boolean;
-  context: (string | number)[][];
+  context: (string | number)[][] | null;
   vars: { [key: string]: Json } | null;
   errors?: string | null;
   lineNo: number | null;
