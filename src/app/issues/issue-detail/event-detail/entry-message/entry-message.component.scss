@@ -4,6 +4,9 @@ h3 {
   padding-top: 16px;
 }
 
-p {
+.formatted-message {
   font-family: $font-mono;
+  white-space: pre-wrap;
+  word-wrap: normal;
+  word-break: break-all;
 }

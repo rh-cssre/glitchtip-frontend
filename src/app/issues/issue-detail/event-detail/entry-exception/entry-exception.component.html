@@ -3,12 +3,12 @@
     <div class="header-wrapper">
       <div class="text-wrapper">
         <h3>Exception</h3>
-        <p *ngIf="group.value === 'full-data'" class="spacer">
+        <div *ngIf="group.value === 'full-data'" class="spacer">
           (<a mat-button (click)="getFlippedFrames()"
             >most recent call <span *ngIf="isReversed$ | async">first</span
             ><span *ngIf="(isReversed$ | async) === false">last</span></a
           >)
-        </p>
+            </div>
       </div>
       <mat-button-toggle-group #group="matButtonToggleGroup">
         <mat-button-toggle
