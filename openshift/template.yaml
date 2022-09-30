@@ -116,14 +116,28 @@ objects:
               name: glitchtip
               readinessProbe:
                 exec:
-                  command: ["ls", "/tmp"]
-                initialDelaySeconds: 30
-                periodSeconds: 5
+                  command: [
+                    "bash",
+                    "-c",
+                    "celery -A glitchtip inspect ping"
+                  ]
+                initialDelaySeconds: 40
+                timeoutSeconds: 180
+                periodSeconds: 30
+                successThreshold: 1
+                failureThreshold: 3
               livenessProbe:
                 exec:
-                  command: ["ls", "/tmp"]
-                initialDelaySeconds: 30
-                periodSeconds: 5
+                  command: [
+                    "bash",
+                    "-c",
+                    "celery -A glitchtip inspect ping"
+                  ]
+                initialDelaySeconds: 40
+                timeoutSeconds: 180
+                periodSeconds: 30
+                successThreshold: 1
+                failureThreshold: 3
               resources:
                 limits:
                   cpu: ${{BEAT_CPU_LIMITS}}
@@ -266,8 +280,8 @@ objects:
                   httpHeaders:
                     - name: Test-Header
                       value: Awesome
-                initialDelaySeconds: 3
-                periodSeconds: 3
+                initialDelaySeconds: 10
+                periodSeconds: 15
               livenessProbe:
                 httpGet:
                   path: /
@@ -275,8 +289,8 @@ objects:
                   httpHeaders:
                     - name: Test-Header
                       value: Awesome
-                initialDelaySeconds: 3
-                periodSeconds: 3
+                initialDelaySeconds: 10
+                periodSeconds: 15
               resources:
                 requests:
                   cpu: ${{GT_WEB_CPU_REQUESTS}}
