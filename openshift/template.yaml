@@ -338,7 +338,7 @@ objects:
                 - -l
                 - INFO
                 - -s
-                - /code/var/run/celerybeat-schedule
+                - /celery/celerybeat-schedule
               env:
                 - name: REDIS_URL
                   valueFrom:
