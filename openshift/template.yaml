@@ -116,11 +116,7 @@ objects:
               name: glitchtip
               readinessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -128,11 +124,7 @@ objects:
                 failureThreshold: 3
               livenessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -395,11 +387,7 @@ objects:
               name: worker
               readinessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -407,11 +395,7 @@ objects:
                 failureThreshold: 3
               livenessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -474,7 +458,7 @@ parameters:
     required: true
     name: ENABLE_SOCIAL_AUTH
     value: "True"
-  
+
   # for enabling manual login [gt-frontend]
   - description: ENABLE_LOGIN_FORM
     displayName: ENABLE_LOGIN_FORM
@@ -511,7 +495,7 @@ parameters:
     displayName: BEAT_MEMORY_LIMITS
     required: true
     name: BEAT_MEMORY_LIMITS
-    value: "96Mi"
+    value: "500Mi"
 
   - description: GT_WEB_MEMORY_LIMITS
     displayName: GT_WEB_MEMORY_LIMITS
