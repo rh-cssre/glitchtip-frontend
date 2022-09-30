@@ -384,7 +384,7 @@ objects:
                   command: [
                     "bash",
                     "-c",
-                    "celery inspect ping -A glitchtip -t 5"
+                    "celery -A glitchtip inspect ping"
                   ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 7
@@ -396,7 +396,7 @@ objects:
                   command: [
                     "bash",
                     "-c",
-                    "celery inspect ping -A glitchtip -t 5"
+                    "celery -A glitchtip inspect ping"
                   ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 7
