@@ -387,8 +387,8 @@ objects:
                     "celery -A glitchtip inspect ping"
                   ]
                 initialDelaySeconds: 40
-                timeoutSeconds: 7
-                periodSeconds: 10
+                timeoutSeconds: 180
+                periodSeconds: 30
                 successThreshold: 1
                 failureThreshold: 3
               livenessProbe:
@@ -399,8 +399,8 @@ objects:
                     "celery -A glitchtip inspect ping"
                   ]
                 initialDelaySeconds: 40
-                timeoutSeconds: 7
-                periodSeconds: 15
+                timeoutSeconds: 180
+                periodSeconds: 30
                 successThreshold: 1
                 failureThreshold: 3
               resources:
@@ -566,7 +566,7 @@ parameters:
     displayName: GT_WEB_REPLICAS
     required: true
     name: GT_WEB_REPLICAS
-    value: "3"
+    value: "2"
 
   - description: GT_WORKER_REPLICAS
     displayName: GT_WORKER_REPLICAS
