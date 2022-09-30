@@ -388,7 +388,7 @@ objects:
                   ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
-                periodSeconds: 10
+                periodSeconds: 30
                 successThreshold: 1
                 failureThreshold: 3
               livenessProbe:
@@ -400,7 +400,7 @@ objects:
                   ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
-                periodSeconds: 15
+                periodSeconds: 30
                 successThreshold: 1
                 failureThreshold: 3
               resources:
