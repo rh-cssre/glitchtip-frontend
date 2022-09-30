@@ -453,13 +453,13 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     contextsObject: { [key: string]: Json },
     defaultUnknown: string
   ) {
-    if (contextsObject.name) {
-      return contextsObject.name === "Other"
-        ? `Unknown ${defaultUnknown}`
-        : (contextsObject.name as string);
-    } else {
-      return `Unknown ${defaultUnknown}`;
+    if (
+      contextsObject.name !== "Other" &&
+      typeof contextsObject.name === "string"
+    ) {
+      return contextsObject.name;
     }
+    return `Unknown ${defaultUnknown}`;
   }
 
   /**
