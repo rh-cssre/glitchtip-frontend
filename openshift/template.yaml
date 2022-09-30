@@ -338,7 +338,7 @@ objects:
                 - -l
                 - INFO
                 - -s
-                - /code/var/run/celerybeat-schedule
+                - /celery/celerybeat-schedule
               env:
                 - name: REDIS_URL
                   valueFrom:
@@ -381,14 +381,11 @@ objects:
               name: worker
               readinessProbe:
                 exec:
-                  command:
-                    - celery
-                    - '-A'
-                    - glitchtip
-                    - inspect
-                    - ping
-                    - '-t'
-                    - '5'
+                  command: [
+                    "bash",
+                    "-c",
+                    "celery inspect ping -A glitchtip -t 5"
+                  ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 7
                 periodSeconds: 10
@@ -396,14 +393,11 @@ objects:
                 failureThreshold: 3
               livenessProbe:
                 exec:
-                  command:
-                    - celery
-                    - '-A'
-                    - glitchtip
-                    - inspect
-                    - ping
-                    - '-t'
-                    - '5'
+                  command: [
+                    "bash",
+                    "-c",
+                    "celery inspect ping -A glitchtip -t 5"
+                  ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 7
                 periodSeconds: 15
