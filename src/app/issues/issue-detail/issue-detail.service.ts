@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -19,12 +20,12 @@ import {
   IssueTags,
   IssueTagsAdjusted,
 } from "../interfaces";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { IssuesService } from "../issues.service";
 import { generateIconPath } from "../../shared/shared.utils";
 import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
+import { IssuesService } from "../issues.service";
+import { Json } from "src/app/interface-primitives";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
-import { HttpErrorResponse } from "@angular/common/http";
 
 interface IssueDetailState {
   issue: IssueDetail | null;
@@ -448,6 +449,19 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     return;
   }
 
+  checkContextName(
+    contextsObject: { [key: string]: Json },
+    defaultUnknown: string
+  ) {
+    if (
+      contextsObject.name !== "Other" &&
+      typeof contextsObject.name === "string"
+    ) {
+      return contextsObject.name;
+    }
+    return `Unknown ${defaultUnknown}`;
+  }
+
   /**
    * For the contexts bar in event detail, find specific contexts and
    * return array of matching objects to loop through in template.
@@ -470,10 +484,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
               ? generateIconPath(contextsObject.name as string)
               : null,
             matIcon: "tab",
-            title:
-              contextsObject.name !== "Other"
-                ? (contextsObject.name as string)
-                : "Unknown Browser",
+            title: this.checkContextName(contextsObject, "Browser"),
             subtitle: contextsObject.version
               ? (contextsObject.version as string)
               : "Unknown",
@@ -487,10 +498,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
               ? generateIconPath(contextsObject.name as string)
               : null,
             matIcon: "tab",
-            title:
-              contextsObject.name !== "Other"
-                ? (contextsObject.name as string)
-                : "Unknown Runtime",
+            title: this.checkContextName(contextsObject, "Runtime"),
             subtitle: contextsObject.version
               ? (contextsObject.version as string)
               : "Unknown",
@@ -504,10 +512,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
               ? generateIconPath(contextsObject.name as string)
               : null,
             matIcon: "computer",
-            title:
-              contextsObject.name !== "Other"
-                ? (contextsObject.name as string)
-                : "Unknown Operating System",
+            title: this.checkContextName(contextsObject, "Operating System"),
             subtitle: contextsObject.version
               ? (contextsObject.version as string)
               : contextsObject.kernel_version
@@ -549,9 +554,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
               ? generateIconPath(contextsObject.name as string)
               : null,
             matIcon: "memory",
-            title: contextsObject.name
-              ? (contextsObject.name as string)
-              : "Unknown GPU",
+            title: this.checkContextName(contextsObject, "GPU"),
             subtitle: contextsObject.vendor_name
               ? (contextsObject.vendor_name as string)
               : "Unknown",
