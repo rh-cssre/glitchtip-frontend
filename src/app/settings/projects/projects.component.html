@@ -12,7 +12,7 @@
     ></gt-empty-projects>
   </div>
 
-  <div class="card-wrapper">
+  <div class="project-card-wrapper">
     <gt-project-card
       *ngFor="let project of projectsForActiveOrg$ | async"
       [cardLink]="project.slug"

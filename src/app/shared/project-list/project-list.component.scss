@@ -17,3 +17,9 @@
     margin-bottom: 10px;
   }
 }
+
+.new-project-button {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

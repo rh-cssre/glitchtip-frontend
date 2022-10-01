@@ -36,8 +36,9 @@
           mat-stroked-button
           color="primary"
           [routerLink]="['/', organization.slug, 'settings', 'projects', 'new']"
+          class="new-project-button"
           i18n
-          >Create New Project in {{ organization.name }}</a
+          >Create new project in {{ organization.name }}</a
         >
       </header>
       <gt-empty-projects
@@ -46,7 +47,7 @@
       ></gt-empty-projects>
 
       <div>
-        <div class="card-wrapper">
+        <div class="project-card-wrapper">
           <ng-container *ngFor="let project of organization.projects">
             <gt-project-card
               [cardLink]="['/', project.organization.slug, 'issues']"
