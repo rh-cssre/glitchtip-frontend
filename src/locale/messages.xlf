@@ -441,11 +441,6 @@
         <source>Get Started</source>
       </segment>
     </unit>
-    <unit id="2587894849982120639">
-      <segment>
-        <source>backup codes</source>
-      </segment>
-    </unit>
     <unit id="2876784140114247021">
       <segment>
         <source>or your favorite TOTP app on your mobile device</source>
@@ -454,11 +449,6 @@
     <unit id="3099741642167775297">
       <segment>
         <source>Download</source>
-      </segment>
-    </unit>
-    <unit id="3654876689359735061">
-      <segment>
-        <source>If you ever lose access to your codes, you can recover your account with your</source>
       </segment>
     </unit>
     <unit id="7822329547663295003">
@@ -596,9 +586,9 @@
         <source>Edit Preferences</source>
       </segment>
     </unit>
-    <unit id="3053704647269423720">
+    <unit id="6960036943669975538">
       <segment>
-        <source>Create New Project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
+        <source>Create new project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
       </segment>
     </unit>
     <unit id="3647474424920112919">
@@ -969,6 +959,21 @@
     <unit id="8120474743695089696">
       <segment>
         <source>This organization has a subscription to GlitchTip, but the payment is past due.</source>
+      </segment>
+    </unit>
+    <unit id="2405706490874342359">
+      <segment>
+        <source> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </source>
+      </segment>
+    </unit>
+    <unit id="3893164255729997778">
+      <segment>
+        <source> Select a valid time zone </source>
+      </segment>
+    </unit>
+    <unit id="8951128623878467862">
+      <segment>
+        <source>Preferences</source>
       </segment>
     </unit>
   </file>
