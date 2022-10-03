@@ -476,7 +476,7 @@ parameters:
     displayName: BEAT_MEMORY_REQUESTS
     required: true
     name: BEAT_MEMORY_REQUESTS
-    value: "32Mi"
+    value: "800Mi"
 
   - description: GT_WEB_MEMORY_REQUESTS
     displayName: GT_WEB_MEMORY_REQUESTS
