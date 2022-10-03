@@ -116,7 +116,12 @@ objects:
               name: glitchtip
               readinessProbe:
                 exec:
-                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
+                  command:
+                    [
+                      "bash",
+                      "-c",
+                      "celery -A glitchtip inspect ping -d celery@$HOSTNAME",
+                    ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -124,7 +129,12 @@ objects:
                 failureThreshold: 3
               livenessProbe:
                 exec:
-                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
+                  command:
+                    [
+                      "bash",
+                      "-c",
+                      "celery -A glitchtip inspect ping -d celery@$HOSTNAME",
+                    ]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
