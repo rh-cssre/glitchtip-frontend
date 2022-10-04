@@ -31,8 +31,8 @@ objects:
     kind: Deployment
     metadata:
       annotations:
-        deployment.kubernetes.io/revision: "1"
-        ignore-check.kube-linter.io/minimum-three-replicas: "Beat deployment should only have 1 replica"
+      # deployment.kubernetes.io/revision: "1"
+      # ignore-check.kube-linter.io/minimum-three-replicas: "Beat deployment should only have 1 replica"
       labels:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
@@ -560,7 +560,7 @@ parameters:
     displayName: BEAT_REPLICAS
     required: true
     name: BEAT_REPLICAS
-    value: "1"
+    value: "2"
 
   - description: GT_WEB_REPLICAS
     displayName: GT_WEB_REPLICAS
