@@ -497,7 +497,7 @@ parameters:
     displayName: BEAT_MEMORY_LIMITS
     required: true
     name: BEAT_MEMORY_LIMITS
-    value: "500M"
+    value: "600M"
 
   - description: GT_WEB_MEMORY_LIMITS
     displayName: GT_WEB_MEMORY_LIMITS
@@ -516,7 +516,7 @@ parameters:
     displayName: BEAT_CPU_REQUESTS
     required: true
     name: BEAT_CPU_REQUESTS
-    value: "1m"
+    value: "100m"
 
   - description: GT_WEB_CPU_REQUESTS
     displayName: GT_WEB_CPU_REQUESTS
@@ -535,7 +535,7 @@ parameters:
     displayName: BEAT_CPU_LIMITS
     required: true
     name: BEAT_CPU_LIMITS
-    value: "500m"
+    value: "600m"
 
   - description: MIGRATION_JOB_CPU_LIMITS
     displayName: MIGRATION_JOB_CPU_LIMITS
@@ -560,7 +560,7 @@ parameters:
     displayName: BEAT_REPLICAS
     required: true
     name: BEAT_REPLICAS
-    value: "2"
+    value: "1"
 
   - description: GT_WEB_REPLICAS
     displayName: GT_WEB_REPLICAS
