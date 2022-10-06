@@ -30,6 +30,7 @@ objects:
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
+      name: glitchtip-beat
       annotations:
         deployment.kubernetes.io/revision: "1"
         ignore-check.kube-linter.io/minimum-three-replicas: "Beat deployment should only have 1 replica"
@@ -37,7 +38,6 @@ objects:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
         app.kubernetes.io/name: glitchtip
-      name: glitchtip-beat
     spec:
       progressDeadlineSeconds: 600
       replicas: ${{BEAT_REPLICAS}}
@@ -60,6 +60,10 @@ objects:
             app.kubernetes.io/name: glitchtip
         spec:
           serviceAccountName: glitchtip-beat-sa
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          terminationGracePeriodSeconds: 30
           containers:
             - env:
                 - name: SERVER_ROLE
@@ -113,14 +117,20 @@ objects:
                     name: glitchtip-configmap
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               imagePullPolicy: Always
-              name: glitchtip
+              name: beat
+              args:
+                - celery
+                - -A
+                - glitchtip
+                - beat
+                - -l
+                - INFO
+                - -s
+                - /celery/celerybeat-schedule
               readinessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command:
+                    ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -128,11 +138,8 @@ objects:
                 failureThreshold: 3
               livenessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command:
+                    ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -147,10 +154,7 @@ objects:
                   memory: ${{BEAT_MEMORY_REQUESTS}}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
-          dnsPolicy: ClusterFirst
-          restartPolicy: Always
-          schedulerName: default-scheduler
-          terminationGracePeriodSeconds: 30
+
 
   # ------- WEB DEPLOYMENT JOB --------------------
 
@@ -348,11 +352,8 @@ objects:
                 - -A
                 - glitchtip
                 - worker
-                - -B
                 - -l
                 - INFO
-                - -s
-                - /celery/celerybeat-schedule
               env:
                 - name: REDIS_URL
                   valueFrom:
@@ -395,11 +396,7 @@ objects:
               name: worker
               readinessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -407,11 +404,7 @@ objects:
                 failureThreshold: 3
               livenessProbe:
                 exec:
-                  command: [
-                    "bash",
-                    "-c",
-                    "celery -A glitchtip inspect ping"
-                  ]
+                  command: ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -474,7 +467,7 @@ parameters:
     required: true
     name: ENABLE_SOCIAL_AUTH
     value: "True"
-  
+
   # for enabling manual login [gt-frontend]
   - description: ENABLE_LOGIN_FORM
     displayName: ENABLE_LOGIN_FORM
@@ -492,7 +485,7 @@ parameters:
     displayName: BEAT_MEMORY_REQUESTS
     required: true
     name: BEAT_MEMORY_REQUESTS
-    value: "32Mi"
+    value: "500M"
 
   - description: GT_WEB_MEMORY_REQUESTS
     displayName: GT_WEB_MEMORY_REQUESTS
@@ -511,7 +504,7 @@ parameters:
     displayName: BEAT_MEMORY_LIMITS
     required: true
     name: BEAT_MEMORY_LIMITS
-    value: "96Mi"
+    value: "600M"
 
   - description: GT_WEB_MEMORY_LIMITS
     displayName: GT_WEB_MEMORY_LIMITS
@@ -530,7 +523,7 @@ parameters:
     displayName: BEAT_CPU_REQUESTS
     required: true
     name: BEAT_CPU_REQUESTS
-    value: "1m"
+    value: "100m"
 
   - description: GT_WEB_CPU_REQUESTS
     displayName: GT_WEB_CPU_REQUESTS
@@ -549,7 +542,7 @@ parameters:
     displayName: BEAT_CPU_LIMITS
     required: true
     name: BEAT_CPU_LIMITS
-    value: "50m"
+    value: "600m"
 
   - description: MIGRATION_JOB_CPU_LIMITS
     displayName: MIGRATION_JOB_CPU_LIMITS
