@@ -547,18 +547,6 @@
         <target>Øk sikkerheten for din konto ved å benytte et tidsbegrenset engangspassord (TOTP) sammen med innlogging.</target>
       </segment>
     </unit>
-    <unit id="3654876689359735061">
-      <segment state="initial">
-        <source>If you ever lose access to your codes, you can recover your account with your</source>
-        <target>Hvis du mister tilgangen på kodene dine kan du gjenopprette kontoen din med</target>
-      </segment>
-    </unit>
-    <unit id="2587894849982120639">
-      <segment state="translated">
-        <source>backup codes</source>
-        <target>gjenopprettingskoder</target>
-      </segment>
-    </unit>
     <unit id="2045779543869682721">
       <segment state="translated">
         <source>Get Started</source>
@@ -883,10 +871,10 @@
         <target>In order to use GlitchTip, you&apos;ll need to create an organization.</target>
       </segment>
     </unit>
-    <unit id="3053704647269423720">
+    <unit id="6960036943669975538">
       <segment state="initial">
-        <source>Create New Project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
-        <target>Create New Project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></target>
+        <source>Create new project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
+        <target>Create new project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></target>
       </segment>
     </unit>
     <unit id="1935221132513179654">
@@ -1163,6 +1151,24 @@
       <segment state="initial">
         <source>Other Teams</source>
         <target>Other Teams</target>
+      </segment>
+    </unit>
+    <unit id="2405706490874342359">
+      <segment state="initial">
+        <source> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </source>
+        <target> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </target>
+      </segment>
+    </unit>
+    <unit id="8951128623878467862">
+      <segment state="initial">
+        <source>Preferences</source>
+        <target>Preferences</target>
+      </segment>
+    </unit>
+    <unit id="3893164255729997778">
+      <segment state="initial">
+        <source> Select a valid time zone </source>
+        <target> Select a valid time zone </target>
       </segment>
     </unit>
   </file>

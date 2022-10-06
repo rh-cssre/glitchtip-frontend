@@ -49,6 +49,12 @@ mat-sidenav-content {
       transform: translateY(-1px);
     }
   }
+  
+  .active-org {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .overflow {
