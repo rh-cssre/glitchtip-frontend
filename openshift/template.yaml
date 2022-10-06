@@ -31,8 +31,8 @@ objects:
     kind: Deployment
     metadata:
       annotations:
-      # deployment.kubernetes.io/revision: "1"
-      # ignore-check.kube-linter.io/minimum-three-replicas: "Beat deployment should only have 1 replica"
+      deployment.kubernetes.io/revision: "1"
+      ignore-check.kube-linter.io/minimum-three-replicas: "Beat deployment should only have 1 replica"
       labels:
         app.kubernetes.io/component: beat
         app.kubernetes.io/instance: glitchtip
@@ -61,6 +61,15 @@ objects:
         spec:
           serviceAccountName: glitchtip-beat-sa
           containers:
+            - args:
+                - celery
+                - -A
+                - glitchtip
+                - beat
+                - -l
+                - INFO
+                - -s
+                - /celery/celerybeat-schedule
             - env:
                 - name: SERVER_ROLE
                   value: beat
@@ -117,7 +126,7 @@ objects:
               readinessProbe:
                 exec:
                   command:
-                    ["bash", "-c", "celery -A glitchtip inspect ping -t 10"]
+                    ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -126,7 +135,7 @@ objects:
               livenessProbe:
                 exec:
                   command:
-                    ["bash", "-c", "celery -A glitchtip inspect ping -t 10"]
+                    ["bash", "-c", "celery -A glitchtip inspect ping"]
                 initialDelaySeconds: 40
                 timeoutSeconds: 180
                 periodSeconds: 30
@@ -342,11 +351,8 @@ objects:
                 - -A
                 - glitchtip
                 - worker
-                - -B
                 - -l
                 - INFO
-                - -s
-                - /celery/celerybeat-schedule
               env:
                 - name: REDIS_URL
                   valueFrom:
