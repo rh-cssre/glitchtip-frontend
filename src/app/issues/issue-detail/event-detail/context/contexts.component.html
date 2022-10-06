@@ -1,4 +1,4 @@
-<section class="card-wrapper">
+<section class="grid-wrapper">
   <div *ngFor="let contexts of specialContexts$ | async" class="wrapper">
     <ng-container *ngIf="contexts.icon || contexts.matIcon; else unknownIcon">
       <ng-container *ngIf="contexts.icon; else useMatIcon">

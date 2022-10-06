@@ -45,9 +45,9 @@ ul {
   background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
-.card-wrapper {
+.project-card-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax((334px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax((290px), 1fr));
   grid-gap: 24px;
 }
 
