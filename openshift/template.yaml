@@ -278,21 +278,13 @@ objects:
               ports:
                 - containerPort: ${{GT_APP_PORT}}
               readinessProbe:
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: ${{GT_APP_PORT}}
-                  httpHeaders:
-                    - name: Test-Header
-                      value: Awesome
                 initialDelaySeconds: 10
                 periodSeconds: 15
               livenessProbe:
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: ${{GT_APP_PORT}}
-                  httpHeaders:
-                    - name: Test-Header
-                      value: Awesome
                 initialDelaySeconds: 15
                 periodSeconds: 15
               resources:
