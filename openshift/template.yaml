@@ -126,7 +126,7 @@ objects:
                 - -l
                 - INFO
                 - -s
-                - /celery/celerybeat-schedule
+                - /tmp/celerybeat-schedule
               readinessProbe:
                 exec:
                   command:
@@ -278,13 +278,21 @@ objects:
               ports:
                 - containerPort: ${{GT_APP_PORT}}
               readinessProbe:
-                tcpSocket:
+                httpGet:
+                  path: /
                   port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
                 initialDelaySeconds: 10
                 periodSeconds: 15
               livenessProbe:
-                tcpSocket:
+                httpGet:
+                  path: /
                   port: ${{GT_APP_PORT}}
+                  httpHeaders:
+                    - name: Test-Header
+                      value: Awesome
                 initialDelaySeconds: 15
                 periodSeconds: 15
               resources:

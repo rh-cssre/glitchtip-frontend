@@ -7,7 +7,7 @@ RUN ["npm", "ci", "--no-audit", "--no-fund", "--loglevel=error"]
 RUN ["npm", "run", "build-prod", "--loglevel=error"]
 
 
-FROM quay.io/cs-sre/glitchtip-backend:master
+FROM registry.gitlab.com/glitchtip/glitchtip-backend:master
 
 ARG GLITCHTIP_VERSION=local
 ENV GLITCHTIP_VERSION ${GLITCHTIP_VERSION}
