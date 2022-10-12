@@ -94,7 +94,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     sort: string | undefined,
     environment: string | undefined
   ) {
-    this.retrieveIssues(
+    return this.retrieveIssues(
       orgSlug,
       cursor,
       query,
@@ -103,7 +103,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       end,
       sort,
       environment
-    ).toPromise();
+    );
   }
 
   toggleSelected(issueId: number) {

@@ -298,6 +298,12 @@ export const platforms: Platform[] = [
         type: "framework",
         link: "https://docs.sentry.io/platforms/php/guides/symfony/",
       },
+      {
+        id: "php-drupal",
+        name: "Drupal",
+        type: "framework",
+        link: "https://drupal.org/project/raven",
+      },
     ],
   },
   {
