@@ -3,13 +3,12 @@
     <mat-divider></mat-divider>
     <h3>Message</h3>
     <pre class="formatted-message">{{ message?.formatted }}</pre>
-      <ng-container *ngIf="message?.params"></ng-container>
-      <dl>
-        <gt-entry-data
-          *ngFor="let param of message?.params | keyvalue"
-          [key]="param.key"
-          [value]="param.value"
-        >
+    <dl *ngIf="message?.params">
+      <gt-entry-data
+        *ngFor="let param of message?.params | keyvalue"
+        [key]="param.key"
+        [value]="param.value"
+      >
       </gt-entry-data>
     </dl>
   </div>
