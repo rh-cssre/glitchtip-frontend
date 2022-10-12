@@ -57,16 +57,6 @@ export class GlitchTipOAuthService {
       scope: socialApp.scopes.join(" "),
     };
 
-    if (socialApp.provider === 'keycloak') {
-      const nonce = self.crypto.randomUUID();
-
-      const expire = new Date();
-      expire.setUTCMinutes( expire.getUTCMinutes() + 10);
-
-      document.cookie = `keycloak_nonce=${nonce}; expires=${expire}; path=/`;
-      params['nonce'] = nonce;
-    }
-
     const urlParams = new URLSearchParams(params);
     const url = `${socialApp.authorize_url}?${urlParams.toString()}`;
     window.location.href = url;
