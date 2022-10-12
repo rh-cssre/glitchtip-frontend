@@ -56,6 +56,7 @@ const backend = [
   "php-laravel",
   "php-monolog",
   "php-symfony",
+  "php-drupal",
   "python",
   "python-django",
   "python-flask",

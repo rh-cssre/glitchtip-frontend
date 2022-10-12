@@ -7,8 +7,8 @@ import {
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute } from "@angular/router";
-import { combineLatest, takeUntil } from "rxjs";
-import { map, withLatestFrom, tap } from "rxjs/operators";
+import { combineLatest, Subject, takeUntil } from "rxjs";
+import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -74,6 +74,7 @@ export class IssuesPageComponent
       return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
+  issuesLookup$: Subject<void> = new Subject();
   errors$ = this.service.errors$;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
@@ -161,33 +162,30 @@ export class IssuesPageComponent
         : this.environmentForm.controls.environment.enable()
     );
 
-    this.navigationEnd$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        ({
-          orgSlug,
-          cursor,
-          query,
-          project,
-          start,
-          end,
-          sort,
-          environment,
-        }) => {
-          if (orgSlug) {
-            this.service.getIssues(
-              orgSlug,
-              cursor,
-              query,
-              project,
-              start,
-              end,
-              sort,
-              environment
-            );
-          }
-        }
-      );
+    this.issuesLookup$
+      .pipe(
+        withLatestFrom(this.navigationEnd$),
+        switchMap(([_, params]) =>
+          this.service.getIssues(
+            params.orgSlug!,
+            params.cursor,
+            params.query,
+            params.project,
+            params.start,
+            params.end,
+            params.sort,
+            params.environment
+          )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+
+    this.navigationEnd$.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params.orgSlug) {
+        this.issuesLookup$.next();
+      }
+    });
 
     this.organizationsService
       .observeOrgEnvironments(this.navigationEnd$)
