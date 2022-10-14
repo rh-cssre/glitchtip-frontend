@@ -6,9 +6,10 @@ import {
   AbstractControl,
   ValidationErrors,
 } from "@angular/forms";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
+import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { SettingsService } from "src/app/api/settings.service";
 
 /** Custom validator to vaildate emails separated by commas */
 function validateEmails(emails: string) {
@@ -37,9 +38,10 @@ function emailsValidator(control: AbstractControl): ValidationErrors | null {
   styleUrls: ["./new-member.component.scss"],
 })
 export class NewMemberComponent implements OnInit, OnDestroy {
+  enableUserRegistration$ = this.settingsService.enableUserRegistration$;
   organizationTeams$ = this.organizationsService.organizationTeams$;
-  filteredOrganizationTeams$ = this.organizationsService
-    .filteredOrganizationTeams$;
+  filteredOrganizationTeams$ =
+    this.organizationsService.filteredOrganizationTeams$;
   errors$ = this.organizationsService.errors$;
   loading$ = this.organizationsService.loading$;
   form = new UntypedFormGroup({
@@ -50,7 +52,8 @@ export class NewMemberComponent implements OnInit, OnDestroy {
 
   constructor(
     private organizationsService: OrganizationsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {

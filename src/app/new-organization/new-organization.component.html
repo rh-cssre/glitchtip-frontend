@@ -4,7 +4,7 @@
       <ng-container *ngIf="userDetails$ | async as user">
         <ng-container
           *ngIf="
-            (enableUserRegistration$ | async) || user.isSuperuser;
+            (enableOrganizationCreation$ | async) || user.isSuperuser;
             else elseBlock
           "
         >
@@ -32,7 +32,7 @@
           </form>
         </ng-container>
         <ng-template #elseBlock i18n>
-          Registration has been disabled on this instance of GlitchTip. Contact
+          Organization creation has been disabled on this instance of GlitchTip. Contact
           an administrator to be invited into an existing organization.
         </ng-template>
       </ng-container>

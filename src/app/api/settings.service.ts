@@ -13,6 +13,7 @@ interface SettingsState {
   billingEnabled: boolean;
   iPaidForGlitchTip: boolean | null;
   enableUserRegistration: boolean;
+  enableOrganizationCreation: boolean;
   plausibleURL: string | null;
   plausibleDomain: string | null;
   chatwootWebsiteToken: string | null;
@@ -28,6 +29,7 @@ const initialState: SettingsState = {
   billingEnabled: false,
   iPaidForGlitchTip: null,
   enableUserRegistration: false,
+  enableOrganizationCreation: false,
   plausibleURL: null,
   plausibleDomain: null,
   chatwootWebsiteToken: null,
@@ -53,6 +55,9 @@ export class SettingsService {
   );
   enableUserRegistration$ = this.state.pipe(
     map((settings) => settings.enableUserRegistration)
+  );
+  enableOrganizationCreation$ = this.state.pipe(
+    map((settings) => settings.enableOrganizationCreation)
   );
   serverTimeZone$ = this.state.pipe(map((settings) => settings.serverTimeZone));
   private readonly url = "/api/settings/";

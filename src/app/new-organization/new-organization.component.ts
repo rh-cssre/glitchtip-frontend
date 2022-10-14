@@ -13,7 +13,8 @@ import { UserService } from "../api/user/user.service";
 })
 export class NewOrganizationsComponent {
   organizationCount$ = this.organizationsService.organizationCount$;
-  enableUserRegistration$ = this.settingsService.enableUserRegistration$;
+  enableOrganizationCreation$ =
+    this.settingsService.enableOrganizationCreation$;
   userDetails$ = this.userService.userDetails$;
   loading = false;
   error: string | undefined;
