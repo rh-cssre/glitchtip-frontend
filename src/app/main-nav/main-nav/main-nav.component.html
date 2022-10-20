@@ -16,53 +16,65 @@
       />
     </mat-toolbar>
     <mat-nav-list>
-      <ng-container
-        *ngIf="
-          (organizationsInitialLoad$ | async) &&
-            (organizations$ | async)?.length === 0;
-          else showOrgMenu
-        "
-      >
-        <a
-          mat-menu-item
-          id="create-new-link"
-          routerLink="/organizations/new"
-          class="no-org-create"
-          i18n
-          >Create New Organization</a
+      <ng-container *ngIf="contextLoaded$ | async">
+        <ng-container
+          *ngIf="
+            (organizations$ | async)?.length === 0 && (canCreateOrg$ | async);
+            else showOrgMenu
+          "
         >
+          <a
+            mat-menu-item
+            id="create-new-link"
+            routerLink="/organizations/new"
+            class="no-org-create"
+            i18n
+            >Create New Organization</a
+          >
+        </ng-container>
+        <ng-template #showOrgMenu>
+          <mat-list-item
+            id="org-dropdown"
+            color="accent"
+            [matMenuTriggerFor]="menu"
+            class="org-dropdown-list-item"
+          >
+            <span class="overflow">
+              {{ (activeOrganizationDetail$ | async)?.name }}
+            </span>
+            <span class="down-caret">▼</span>
+          </mat-list-item>
+        </ng-template>
+        <mat-menu #menu="matMenu">
+          <button
+            *ngFor="let organization of organizations$ | async"
+            (click)="setOrganization(organization.id)"
+            mat-menu-item
+          >
+            {{ organization.name }}
+          </button>
+          <mat-divider></mat-divider>
+          <ng-container *ngIf="canCreateOrg$ | async; else creationDisabled">
+            <a
+              mat-menu-item
+              id="create-new-link"
+              routerLink="/organizations/new"
+              i18n
+              >Create New Organization</a
+            >
+          </ng-container>
+          <ng-template #creationDisabled>
+            <span
+              mat-menu-item
+              disabled
+              matTooltip="Organization creation is currently disabled"
+              matTooltipPosition="below"
+            >
+              Create New Organization
+            </span>
+          </ng-template>
+        </mat-menu>
       </ng-container>
-      <ng-template #showOrgMenu>
-        <mat-list-item
-          id="org-dropdown"
-          color="accent"
-          [disabled]="(organizationsInitialLoad$ | async) === false"
-          [matMenuTriggerFor]="menu"
-          class="org-dropdown-list-item"
-        >
-          <span class="overflow">
-            {{ (activeOrganizationDetail$ | async)?.name }}
-          </span>
-          <span class="down-caret">▼</span>
-        </mat-list-item>
-      </ng-template>
-      <mat-menu #menu="matMenu">
-        <button
-          *ngFor="let organization of organizations$ | async"
-          (click)="setOrganization(organization.id)"
-          mat-menu-item
-        >
-          {{ organization.name }}
-        </button>
-        <mat-divider></mat-divider>
-        <a
-          mat-menu-item
-          id="create-new-link"
-          routerLink="/organizations/new"
-          i18n
-          >Create New Organization</a
-        >
-      </mat-menu>
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
