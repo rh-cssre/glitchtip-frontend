@@ -39,7 +39,7 @@ export class NewOrganizationsComponent implements OnDestroy {
     this.userDetails$,
   ]).pipe(
     map(([settingsLoaded, orgsLoaded, user]) => {
-      return settingsLoaded && orgsLoaded && user;
+      return settingsLoaded && orgsLoaded && !!user;
     })
   );
 

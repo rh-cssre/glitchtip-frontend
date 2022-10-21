@@ -36,7 +36,7 @@ export class MainNavComponent {
     this.userService.userDetails$,
   ]).pipe(
     map(([settingsLoaded, orgsLoaded, user]) => {
-      return settingsLoaded && orgsLoaded && user;
+      return settingsLoaded && orgsLoaded && !!user;
     })
   );
 
