@@ -66,6 +66,7 @@ const initialState: OrganizationsState = {
   organizationTeams: [],
   organizationEnvironments: [],
   errors: {
+    createOrganization: "",
     addTeamMember: "",
     removeTeamMember: "",
     addOrganizationMember: "",
@@ -264,14 +265,22 @@ export class OrganizationsService {
       name,
     };
     return this.organizationAPIService.create(data).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.error?.detail) {
+          this.setCreateOrgError(error.error?.detail);
+        } else {
+          this.setCreateOrgError(`${error.statusText}: ${error.status}`);
+        }
+        return EMPTY;
+      }),
       tap((organization) => {
-        this.retrieveOrganizations()
-          .pipe(
+        lastValueFrom(
+          this.retrieveOrganizations().pipe(
             tap(() => {
               this.setActiveOrganizationId(organization.id);
             })
           )
-          .toPromise();
+        );
       })
     );
   }
@@ -597,6 +606,17 @@ export class OrganizationsService {
       loading: {
         ...state.loading,
         addOrganizationMember: loading,
+      },
+    });
+  }
+
+  private setCreateOrgError(error: string) {
+    const state = this.organizationsState.getValue();
+    this.organizationsState.next({
+      ...state,
+      errors: {
+        ...state.errors,
+        createOrganization: error,
       },
     });
   }
