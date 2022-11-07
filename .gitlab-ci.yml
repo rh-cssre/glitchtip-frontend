@@ -34,7 +34,7 @@ test:
 test-e2e:
   stage: test
   variables:
-    ENABLE_OPEN_USER_REGISTRATION: "true"
+    ENABLE_ORGANIZATION_CREATION: "true"
     CELERY_TASK_ALWAYS_EAGER: "true"
   services:
     - postgres
