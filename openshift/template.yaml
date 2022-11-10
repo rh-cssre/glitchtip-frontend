@@ -260,6 +260,10 @@ objects:
                   value: "${I_PAID_FOR_GLITCHTIP}"
                 - name: ENABLE_OPEN_USER_REGISTRATION
                   value: "${ENABLE_OPEN_USER_REGISTRATION}"
+                - name: SOCIALACCOUNT_PROVIDERS_keycloak_KEYCLOAK_URL
+                  value: "${KEYCLOAK_URL}"
+                - name: SOCIALACCOUNT_PROVIDERS_keycloak_KEYCLOAK_REALM
+                  value: "${KEYCLOAK_REALM}"
                 - name: ENABLE_LOGIN_FORM
                   value: "${ENABLE_LOGIN_FORM}"
                 - name: GLITCHTIP_DOMAIN
@@ -467,6 +471,12 @@ parameters:
     required: true
     name: ENABLE_SOCIAL_AUTH
     value: "True"
+
+  - description: Keycloak server url
+    name: KEYCLOAK_URL
+
+  - description: Keycloak realm
+    name: KEYCLOAK_REALM
 
   # for enabling manual login [gt-frontend]
   - description: ENABLE_LOGIN_FORM
