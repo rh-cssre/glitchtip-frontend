@@ -473,14 +473,10 @@ parameters:
     value: "True"
 
   - description: Keycloak server url
-    required: true
     name: KEYCLOAK_URL
-    value: ""
 
   - description: Keycloak realm
-    required: true
     name: KEYCLOAK_REALM
-    value: ""
 
   # for enabling manual login [gt-frontend]
   - description: ENABLE_LOGIN_FORM
