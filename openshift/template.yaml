@@ -273,8 +273,31 @@ objects:
                       key: GLITCHTIP_DOMAIN
                 - name: DEFAULT_FROM_EMAIL
                   value: ${DEFAULT_FROM_EMAIL}
-                - name: EMAIL_URL
-                  value: ${EMAIL_URL}
+                - name: EMAIL_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: server
+                - name: EMAIL_HOST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: password
+                - name: EMAIL_HOST_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: username
+                - name: EMAIL_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: port
+                - name: EMAIL_USE_TLS
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: require_tls
                 - name: ENABLE_OBSERVABILITY_API
                   value: "True"
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
@@ -396,6 +419,31 @@ objects:
                       key: db.user
                 - name: PORT
                   value: ${GT_APP_PORT}
+                - name: EMAIL_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: server
+                - name: EMAIL_HOST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: password
+                - name: EMAIL_HOST_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: username
+                - name: EMAIL_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: port
+                - name: EMAIL_USE_TLS
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${SMTP_SETTINGS_SECRET}
+                      key: require_tls
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
               readinessProbe:
@@ -454,11 +502,10 @@ parameters:
     name: DEFAULT_FROM_EMAIL
     value: "no-reply@devshift.net"
 
-  - description: EMAIL_URL
-    displayName: EMAIL_URL
+  - description: Secret with SMTP settings
+    name: SMTP_SETTINGS_SECRET
     required: true
-    name: EMAIL_URL
-    value: "smtp+tls://smtp-user:smtp-password@email-smtp.eu-west-1.amazonaws.com:587"
+    value: "smtp"
 
   - description: ENABLE_OPEN_USER_REGISTRATION
     displayName: ENABLE_OPEN_USER_REGISTRATION
