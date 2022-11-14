@@ -51,16 +51,6 @@ export class AuthComponent implements OnInit {
     const accessToken = new URLSearchParams(fragment).get("access_token");
     const code = query.get("code");
 
-    // keycloak: verify nonce
-    if (
-      provider === "keycloak" &&
-      !AuthComponent.verifyKeycloakNonce(accessToken)
-    ) {
-      this.router.navigate([]).then();
-      this.snackbar.open("Invalid authentication response, please try again.");
-      return;
-    }
-
     if (accessToken || code) {
       this.oauthService
         .completeOAuthLogin(provider, this.isLoggedIn, accessToken, code)
@@ -75,35 +65,6 @@ export class AuthComponent implements OnInit {
     } else {
       this.notEnoughQueryData();
     }
-  }
-
-  private static verifyKeycloakNonce(accessToken: string | null): boolean {
-    if (!accessToken) {
-      document.cookie =
-        "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      return false;
-    }
-
-    const [_, payload] = accessToken.split(".");
-
-    const { nonce } = JSON.parse(atob(payload));
-
-    // document.cookie = "cookie1=value; cookie2=value; cookie3=value;"
-    const cookieNonce = document.cookie
-      .split(";")
-      .filter((cookie) => cookie.indexOf("=") !== -1)
-      .map((cookie) => cookie.trim().split("="))
-      .filter(([name]) => name === "keycloak_nonce")?.[0][1];
-
-    if (nonce !== cookieNonce) {
-      document.cookie =
-        "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      return false;
-    }
-
-    document.cookie =
-      "keycloak_nonce=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    return true;
   }
 
   private processSocialAuthErrorResponse(error: HttpErrorResponse) {

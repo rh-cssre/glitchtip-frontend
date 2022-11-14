@@ -77,6 +77,7 @@ export interface OrganizationLoading {
 }
 
 export interface OrganizationErrors {
+  createOrganization: string;
   addTeamMember: string;
   removeTeamMember: string;
   addOrganizationMember: string;
