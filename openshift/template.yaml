@@ -444,6 +444,11 @@ objects:
                     secretKeyRef:
                       name: ${SMTP_SETTINGS_SECRET}
                       key: require_tls
+                - name: GLITCHTIP_DOMAIN
+                  valueFrom:
+                    configMapKeyRef:
+                      name: glitchtip-configmap
+                      key: GLITCHTIP_DOMAIN
               image: "${REGISTRY_IMAGE}:${IMAGE_TAG}"
               name: worker
               readinessProbe:
