@@ -18,8 +18,9 @@
     <mat-nav-list>
       <ng-container
         *ngIf="
-          (organizationsInitialLoad$ | async) &&
-            (organizations$ | async)?.length === 0;
+          (contextLoaded$ | async) &&
+            (organizations$ | async)?.length === 0 &&
+            (canCreateOrg$ | async);
           else showOrgMenu
         "
       >
@@ -35,8 +36,8 @@
       <ng-template #showOrgMenu>
         <mat-list-item
           id="org-dropdown"
+          [disabled]="(contextLoaded$ | async) === false"
           color="accent"
-          [disabled]="(organizationsInitialLoad$ | async) === false"
           [matMenuTriggerFor]="menu"
           class="org-dropdown-list-item"
         >
@@ -55,14 +56,27 @@
           {{ organization.name }}
         </button>
         <mat-divider></mat-divider>
-        <a
-          mat-menu-item
-          id="create-new-link"
-          routerLink="/organizations/new"
-          i18n
-          >Create New Organization</a
-        >
+        <ng-container *ngIf="canCreateOrg$ | async; else creationDisabled">
+          <a
+            mat-menu-item
+            id="create-new-link"
+            routerLink="/organizations/new"
+            i18n
+            >Create New Organization</a
+          >
+        </ng-container>
+        <ng-template #creationDisabled>
+          <span
+            mat-menu-item
+            disabled
+            matTooltip="Organization creation is currently disabled"
+            matTooltipPosition="below"
+          >
+            Create New Organization
+          </span>
+        </ng-template>
       </mat-menu>
+
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"

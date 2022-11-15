@@ -13,8 +13,9 @@
           <h2>Email(s)</h2>
           <p class="email-paragraph">
             Invite a member to join this organization via their email address.
-            If they do not already have an account, they will first be asked to
-            create one. Multiple emails delimited by commas.
+            <span *ngIf="enableUserRegistration$ | async;else restrictedRegistration">If they do not already have an account, they will first be asked to create one</span>
+            <ng-template #restrictedRegistration>Only existing GlitchTip users may be invited.</ng-template>
+            Multiple emails delimited by commas.
           </p>
           <mat-form-field>
             <input

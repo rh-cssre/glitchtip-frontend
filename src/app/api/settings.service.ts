@@ -13,6 +13,7 @@ interface SettingsState {
   billingEnabled: boolean;
   iPaidForGlitchTip: boolean | null;
   enableUserRegistration: boolean;
+  enableOrganizationCreation: boolean;
   plausibleURL: string | null;
   plausibleDomain: string | null;
   chatwootWebsiteToken: string | null;
@@ -21,6 +22,7 @@ interface SettingsState {
   environment: string | null;
   version: string | null;
   serverTimeZone: string | null;
+  initialLoad: boolean;
 }
 
 const initialState: SettingsState = {
@@ -28,6 +30,7 @@ const initialState: SettingsState = {
   billingEnabled: false,
   iPaidForGlitchTip: null,
   enableUserRegistration: false,
+  enableOrganizationCreation: false,
   plausibleURL: null,
   plausibleDomain: null,
   chatwootWebsiteToken: null,
@@ -36,6 +39,7 @@ const initialState: SettingsState = {
   environment: null,
   version: null,
   serverTimeZone: null,
+  initialLoad: false,
 };
 
 @Injectable({
@@ -54,7 +58,13 @@ export class SettingsService {
   enableUserRegistration$ = this.state.pipe(
     map((settings) => settings.enableUserRegistration)
   );
+  enableOrganizationCreation$ = this.state.pipe(
+    map((settings) => settings.enableOrganizationCreation)
+  );
   serverTimeZone$ = this.state.pipe(map((settings) => settings.serverTimeZone));
+  initialLoad$ = this.state.pipe(
+    map((settings) => settings.initialLoad)
+  );
   private readonly url = "/api/settings/";
 
   constructor(
@@ -65,7 +75,7 @@ export class SettingsService {
   /** Get and set conf settings from backend. Typically run on application start */
   getSettings() {
     return this.retrieveSettings().pipe(
-      tap((settings) => this.setSettings(settings)),
+      tap((settings) => this.setSettings({ ...settings, initialLoad: true })),
       tap((settings) => {
         // tslint:disable:only-arrow-functions
         // tslint:disable:space-before-function-paren
