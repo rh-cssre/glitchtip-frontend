@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { map, tap, catchError, filter, take } from "rxjs/operators";
 import { EMPTY, combineLatest, lastValueFrom } from "rxjs";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { Router } from "@angular/router";
 import {
   initialPaginationState,

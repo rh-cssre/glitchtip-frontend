@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { EMPTY } from "rxjs";
 import { tap, map, catchError, filter, first } from "rxjs/operators";
 import { OrganizationProject } from "../../api/organizations/organizations.interface";

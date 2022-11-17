@@ -6,7 +6,7 @@ import {
   FormControl,
 } from "@angular/forms";
 import { PasswordService } from "./password.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { UserService } from "src/app/api/user/user.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { map, take, mergeMap, tap } from "rxjs/operators";

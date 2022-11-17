@@ -4,9 +4,9 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { SettingsRoutingModule } from "./settings-routing.module";
 
 // Material
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatTabsModule } from "@angular/material/tabs";
-import { MatRadioModule } from "@angular/material/radio";
+import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
+import { MatLegacyTabsModule as MatTabsModule } from "@angular/material/legacy-tabs";
+import { MatLegacyRadioModule as MatRadioModule } from "@angular/material/legacy-radio";
 import { MatExpansionModule } from "@angular/material/expansion";
 
 // Components

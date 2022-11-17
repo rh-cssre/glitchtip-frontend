@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { take } from "rxjs/operators";
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
 
