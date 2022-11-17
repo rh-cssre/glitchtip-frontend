@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 
 import { ListFooterModule } from "../list-elements/list-footer/list-footer.module";

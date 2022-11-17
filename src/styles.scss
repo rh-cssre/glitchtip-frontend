@@ -16,18 +16,36 @@ $font-path: "../fonts";
 // Common styles for Angular Material. Included so that we only have to load a
 // single CSS file for Angular Material in our app.
 // Don't include this anywhere else!
-@include mat.core($custom-typography);
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy($custom-typography);`
+@include mat.all-legacy-component-typographies($custom-typography);
+@include mat.legacy-core();
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($candy-app-theme);
+@include mat.all-legacy-component-themes($candy-app-theme);
 
 // @include mat.typography-hierarchy($custom-typography);
 
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
-  @include mat.core($mobile-typography);
+  // TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy($mobile-typography);`
+@include mat.all-legacy-component-typographies($mobile-typography);
+@include mat.legacy-core();
 }
 
 a {

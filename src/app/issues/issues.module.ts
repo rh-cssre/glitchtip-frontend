@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatTableModule } from "@angular/material/table";
-import { MatTabsModule } from "@angular/material/tabs";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
+import { MatLegacyTabsModule as MatTabsModule } from "@angular/material/legacy-tabs";
 import { MatBadgeModule } from "@angular/material/badge";
-import { MatChipsModule } from "@angular/material/chips";
+import { MatLegacyChipsModule as MatChipsModule } from "@angular/material/legacy-chips";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MarkdownModule } from "ngx-markdown";
 
