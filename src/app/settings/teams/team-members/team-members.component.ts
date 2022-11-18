@@ -4,7 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Member } from "src/app/api/organizations/organizations.interface";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { UserService } from "src/app/api/user/user.service";
 import { UntypedFormControl } from "@angular/forms";
 

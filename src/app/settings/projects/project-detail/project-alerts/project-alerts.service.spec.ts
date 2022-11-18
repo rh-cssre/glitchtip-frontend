@@ -4,7 +4,7 @@ import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { ProjectAlertsService } from "./project-alerts.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
 
 describe("ProjectAlertsService", () => {
   let service: ProjectAlertsService;

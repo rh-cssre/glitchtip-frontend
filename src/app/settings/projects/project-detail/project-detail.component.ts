@@ -6,7 +6,7 @@ import {
   FormGroupDirective,
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { filter, first, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";

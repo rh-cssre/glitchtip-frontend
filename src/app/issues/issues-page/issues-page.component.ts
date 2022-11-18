@@ -5,7 +5,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { MatSelectChange } from "@angular/material/select";
+import { MatLegacySelectChange as MatSelectChange } from "@angular/material/legacy-select";
 import { Router, ActivatedRoute } from "@angular/router";
 import { combineLatest, Subject, takeUntil } from "rxjs";
 import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";

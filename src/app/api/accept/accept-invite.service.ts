@@ -5,7 +5,7 @@ import { EMPTY, BehaviorSubject, combineLatest } from "rxjs";
 import { baseUrl } from "../../constants";
 import { AcceptAPIResponse } from "./accept-invite.interfaces";
 import { Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { OrganizationsService } from "../organizations/organizations.service";
 
 interface AcceptState {
