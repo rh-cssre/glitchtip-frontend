@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { combineLatest, Subscription } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
