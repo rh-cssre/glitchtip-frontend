@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 
 import { DataFilterBarModule } from "../list-elements/data-filter-bar/data-filter-bar.module";
 import { ListTitleModule } from "../list-elements/list-title/list-title.module";
