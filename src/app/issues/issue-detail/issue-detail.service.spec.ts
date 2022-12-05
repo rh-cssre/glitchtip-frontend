@@ -4,7 +4,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
 import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { EMPTY } from "rxjs";
 import { take } from "rxjs/operators";

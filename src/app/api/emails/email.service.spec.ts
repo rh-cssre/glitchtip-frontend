@@ -7,7 +7,7 @@ import {
 
 import { EmailService } from "./email.service";
 import { sampleEmailAddressData } from "./sample-email-address-data";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
 
 describe("EmailService", () => {
   let service: EmailService;

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, ViewChild } from "@angular/core";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatLegacyMenuTrigger as MatMenuTrigger } from "@angular/material/legacy-menu";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
