@@ -6,7 +6,7 @@ import { map, tap, catchError } from "rxjs/operators";
 import { Member } from "../organizations/organizations.interface";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { TeamsAPIService } from "./teams-api.service";
 
 interface TeamsState {
