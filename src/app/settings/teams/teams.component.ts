@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute } from "@angular/router";
 import { map, filter, tap } from "rxjs/operators";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { NewTeamComponent } from "./new-team/new-team.component";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 

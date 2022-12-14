@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router, ParamMap } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
