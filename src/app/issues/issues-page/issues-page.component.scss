@@ -33,7 +33,7 @@ table {
 }
 
 .table-header {
-  padding: 20px 0 8px;
+  padding: 20px 24px 8px;
 }
 
 .bulk-project-select {
@@ -72,6 +72,14 @@ table {
   hyphens: auto;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.mat-column-select {
+  padding-left: 24px;
+}
+
+.mat-column-events {
+  padding-right: 24px;
 }
 
 .resolved {
