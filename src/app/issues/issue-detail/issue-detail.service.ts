@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { combineLatest, EMPTY } from "rxjs";
 import { tap, map, catchError, withLatestFrom } from "rxjs/operators";
 import {

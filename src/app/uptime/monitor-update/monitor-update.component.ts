@@ -5,7 +5,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { tap, filter, first, take, map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";

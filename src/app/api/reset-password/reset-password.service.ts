@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap, catchError, map } from "rxjs/operators";
 import { EMPTY, BehaviorSubject } from "rxjs";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 
 interface ResetPasswordState {

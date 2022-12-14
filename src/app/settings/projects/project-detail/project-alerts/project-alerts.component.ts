@@ -4,7 +4,7 @@ import {
   ProjectAlert,
 } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "./project-alerts.service";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
 import { distinctUntilChanged } from "rxjs";

@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { tap, catchError } from "rxjs/operators";
 import { EMPTY } from "rxjs";
 import { Router } from "@angular/router";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: "root",

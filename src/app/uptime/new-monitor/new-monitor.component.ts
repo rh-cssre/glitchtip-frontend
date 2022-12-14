@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { map } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";

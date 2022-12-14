@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject, Subject, EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import { EmailAddress } from "./email.interfaces";

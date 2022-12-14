@@ -10,7 +10,7 @@ import { MatLegacyCardModule as MatCardModule } from "@angular/material/legacy-c
 import { ErrorStateMatcher } from "@angular/material/core";
 import { MatLegacyCheckboxModule as MatCheckboxModule } from "@angular/material/legacy-checkbox";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatLegacyListModule as MatListModule } from "@angular/material/legacy-list";
 import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";

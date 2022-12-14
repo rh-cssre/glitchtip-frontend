@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
+import { MatDialogRef } from "@angular/material/dialog";
 import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "../project-alerts.service";
