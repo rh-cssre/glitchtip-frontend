@@ -42,3 +42,9 @@ table {
 .empty-states {
   padding: 1.5em 16px 0.5em;
 }
+
+.pagination-row {
+  td {
+    border-top: 1px solid #0000001f;
+  }
+}
