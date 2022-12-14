@@ -15,6 +15,14 @@ table {
   padding: 20px 0 8px;
 }
 
+.mat-column-name-and-project {
+  padding-left: 24px;
+}
+
+.mat-column-avgDuration {
+  padding-right: 24px;
+}
+
 .name-and-project {
   width: 500px;
   padding-top: 8px;
@@ -52,4 +60,10 @@ table {
 
 .empty-states {
   padding: 1.5em 0 0.5em;
+}
+
+.pagination-row {
+  td {
+    border-top: 1px solid #0000001f;
+  }
 }
