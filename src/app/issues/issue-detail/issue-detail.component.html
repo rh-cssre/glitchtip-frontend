@@ -78,7 +78,12 @@
 
   <div class="row">
     <mat-card class="event-detail-card left">
-      <nav mat-tab-nav-bar class="tabbed-nav">
+      <nav
+        mat-tab-nav-bar
+        class="tabbed-nav"
+        mat-stretch-tabs="false"
+        [tabPanel]="tabPanel"
+      >
         <a
           mat-tab-link
           [routerLink]="['./']"
@@ -113,8 +118,9 @@
           </ng-container>
         </a>
       </nav>
-
-      <router-outlet></router-outlet>
+      <mat-tab-nav-panel #tabPanel>
+        <router-outlet></router-outlet>
+      </mat-tab-nav-panel>
     </mat-card>
     <aside class="right">
       <mat-card>
