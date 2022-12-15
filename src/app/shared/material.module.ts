@@ -5,7 +5,7 @@
  */
 
 import { NgModule } from "@angular/core";
-import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatButtonModule } from "@angular/material/button";
 import { MatLegacyCardModule as MatCardModule } from "@angular/material/legacy-card";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { MatLegacyCheckboxModule as MatCheckboxModule } from "@angular/material/legacy-checkbox";
