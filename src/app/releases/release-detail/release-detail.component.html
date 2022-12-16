@@ -5,7 +5,7 @@
   <ng-container *ngIf="release$ | async as release">
     <ng-container *ngIf="releaseFiles$ | async as files">
       <header>
-        <a mat-stroked-button [routerLink]="['..']">
+        <a mat-stroked-button [routerLink]="['..']" class="releases-list-link">
           <mat-icon>keyboard_arrow_left</mat-icon>
           View all Releases
         </a>

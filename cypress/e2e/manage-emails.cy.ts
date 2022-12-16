@@ -42,7 +42,7 @@ describe("Change Password", () => {
     const emailToDelete = "cypress-email-to-delete@example.com";
     cy.get("input[formcontrolname=email_address]").clear().type(emailToDelete);
     cy.get("#add-email-form").submit();
-    cy.get("mat-list-item:nth-child(3) .delete-button").click({ force: true });
+    cy.get("mat-list-item:nth-child(3) [data-cy=delete-button]").click({ force: true });
     cy.get("gt-manage-emails").should("not.contain", emailToDelete);
 
     // TODO Make primary

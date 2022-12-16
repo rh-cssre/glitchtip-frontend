@@ -24,8 +24,14 @@
 }
 
 .email-actions {
+  display: flex;
+  align-items: center;
   margin-top: 4px;
   padding-bottom: 8px;
+
+  gt-loading-button {
+    margin-right: 5px;
+  }
 }
 
 mat-chip-set {

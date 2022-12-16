@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatTableModule } from "@angular/material/table";
-import { MatLegacyTabsModule as MatTabsModule } from "@angular/material/legacy-tabs";
+import { MatTabsModule } from "@angular/material/tabs";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatExpansionModule } from "@angular/material/expansion";

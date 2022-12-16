@@ -40,17 +40,17 @@ $font-path: "../fonts";
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
   // TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy($mobile-typography);`
-@include mat.core();
-@include mat.all-component-typographies($mobile-typography);
-@include mat.all-legacy-component-typographies($mobile-typography);
-@include mat.legacy-core();
+  //  The following line adds:
+  //    1. Default typography styles for all components
+  //    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+  //  If you specify typography styles for the components you use elsewhere, you should delete this line.
+  //  If you don't need the default component typographies but still want the hierarchy styles,
+  //  you can delete this line and instead use:
+  //    `@include mat.legacy-typography-hierarchy($mobile-typography);`
+  @include mat.core();
+  @include mat.all-component-typographies($mobile-typography);
+  @include mat.all-legacy-component-typographies($mobile-typography);
+  @include mat.legacy-core();
 }
 
 a {
@@ -152,5 +152,47 @@ header.page-header {
 .pagination-row {
   td {
     border-top: 1px solid #0000001f;
+  }
+}
+
+// Taken from https://stackoverflow.com/a/57759753
+.small-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"] {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.medium-icon-button {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0px !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"] {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 }
