@@ -6,17 +6,22 @@
       <mat-list-item *ngFor="let email of emailAddresses$ | async">
         <div class="email-info">
           <span>{{ email.email }}</span>
-          <mat-chip-list
+          <mat-chip-set
             *ngIf="email.isPrimary || !email.isVerified"
-            [selectable]="false"
+            role="list"
           >
-            <mat-chip color="primary" selected *ngIf="email.isPrimary">
+            <mat-chip
+              color="primary"
+              highlighted="true"
+              *ngIf="email.isPrimary"
+              role="listitem"
+            >
               Primary
             </mat-chip>
-            <mat-chip color="primary" *ngIf="!email.isVerified">
+            <mat-chip color="primary" *ngIf="!email.isVerified" role="listitem">
               Unverified
             </mat-chip>
-          </mat-chip-list>
+          </mat-chip-set>
         </div>
         <div class="email-actions">
           <gt-loading-button
@@ -46,7 +51,8 @@
             ></mat-progress-spinner>
           </div>
           <button
-            class="delete-button"
+            data-cy="delete-button"
+            class="medium-icon-button"
             *ngIf="
               !email.isPrimary &&
               (loadingStates$ | async)?.delete !== email.email

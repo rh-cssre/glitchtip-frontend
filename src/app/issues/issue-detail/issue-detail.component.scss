@@ -24,12 +24,17 @@ header {
     }
   }
 
-  .button-row button {
-    margin-right: 8px;
-  }
-
   gt-issue-detail-title {
     margin-right: 20px;
+  }
+}
+
+.button-row {
+  display: flex;
+  align-items: flex-start;
+
+  button {
+    margin-right: 8px;
   }
 }
 
