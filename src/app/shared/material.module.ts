@@ -21,7 +21,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatLegacyMenuModule as MatMenuModule } from "@angular/material/legacy-menu";
 import { MatLegacySelectModule as MatSelectModule } from "@angular/material/legacy-select";
 import { MatLegacyTooltipModule as MatTooltipModule } from "@angular/material/legacy-tooltip";
-import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from "@angular/material/legacy-progress-spinner";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { LessAnnoyingErrorStateMatcher } from "./less-annoying-error-state-matcher";
 
