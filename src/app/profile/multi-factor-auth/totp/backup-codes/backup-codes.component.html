@@ -14,12 +14,14 @@
     phone, each of these recovery codes can be used one time to regain
     access to your account. <strong>Print them out or save them someplace safe.</strong>
   </p>
-  <button mat-flat-button color="primary" (click)="downloadCodes()">
-    Download
-  </button>
-  <button mat-flat-button color="primary" (click)="copyCodes()">
-    Copy
-  </button>
+  <div class="button-group">
+    <button mat-flat-button color="primary" (click)="downloadCodes()">
+      Download
+    </button>
+    <button mat-flat-button color="primary" (click)="copyCodes()">
+      Copy
+    </button>
+  </div>
   <p class="mat-body-strong">
     Enter one of the backup codes to confirm that you have saved them:
   </p>

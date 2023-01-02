@@ -5,8 +5,8 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 
 // Material
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatTabsModule } from "@angular/material/tabs";
-import { MatRadioModule } from "@angular/material/radio";
+import { MatTabsModule } from "@angular/material/tabs"
+import { MatLegacyRadioModule as MatRadioModule } from "@angular/material/legacy-radio";
 import { MatExpansionModule } from "@angular/material/expansion";
 
 // Components

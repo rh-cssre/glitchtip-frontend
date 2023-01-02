@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import type { Frame } from "src/app/issues/interfaces";
 
 @Component({
@@ -49,12 +48,10 @@ export class FrameTitleComponent {
     }
   }
 
-  sanitizeUrl(str: string): string | null {
-    const url = sanitizeUrl(str);
+  sanitizeUrl(url: string): string | null {
     if (url === "about:blank") {
       return null;
-    } else {
-      return url;
     }
+    return url;
   }
 }
