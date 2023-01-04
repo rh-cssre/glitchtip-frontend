@@ -11,4 +11,22 @@ export class AuthSvgComponent {
   @Input() provider = "";
   @Input() source: "auth" | "dropdown" | "disconnect" | "" = "";
   @Input() loading = false;
+
+  checkProviderSvg(provider: string) {
+    if (
+      [
+        "digitalocean",
+        "gitea",
+        "github",
+        "gitlab",
+        "google",
+        "keycloak",
+        "microsoft",
+      ].includes(provider)
+    ) {
+      return `#${provider}`;
+    } else {
+      return "#openid"
+    }
+  }
 }
