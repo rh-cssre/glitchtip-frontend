@@ -4,7 +4,7 @@
   </ng-container>
   <ng-template #notLoading>
     <svg>
-      <use [attr.xlink:href]="checkProviderSvg(provider)"></use>
+      <use [attr.xlink:href]="getProviderSvgName(provider)"></use>
     </svg>
     <span class="text">{{ text }}</span>
   </ng-template>
