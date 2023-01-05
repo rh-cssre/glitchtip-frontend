@@ -6,7 +6,7 @@ import {
   Validators,
   UntypedFormBuilder,
 } from "@angular/forms";
-import { MatLegacyCheckbox as MatCheckbox } from "@angular/material/legacy-checkbox";
+import { MatCheckbox } from "@angular/material/checkbox";
 import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 
