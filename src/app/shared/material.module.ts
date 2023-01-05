@@ -18,7 +18,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatIconModule } from "@angular/material/icon";
-import { MatLegacyMenuModule as MatMenuModule } from "@angular/material/legacy-menu";
+import { MatMenuModule } from "@angular/material/menu";
 import { MatLegacySelectModule as MatSelectModule } from "@angular/material/legacy-select";
 import { MatLegacyTooltipModule as MatTooltipModule } from "@angular/material/legacy-tooltip";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
@@ -34,7 +34,7 @@ export const COMPONENTS = [
   MatGridListModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
+  MatListModule, 
   MatMenuModule,
   MatSelectModule,
   MatSidenavModule,
