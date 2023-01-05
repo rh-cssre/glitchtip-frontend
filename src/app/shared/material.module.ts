@@ -34,7 +34,7 @@ export const COMPONENTS = [
   MatGridListModule,
   MatIconModule,
   MatInputModule,
-  MatListModule, 
+  MatListModule,
   MatMenuModule,
   MatSelectModule,
   MatSidenavModule,
