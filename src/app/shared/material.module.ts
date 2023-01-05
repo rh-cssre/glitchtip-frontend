@@ -8,7 +8,7 @@ import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatLegacyCardModule as MatCardModule } from "@angular/material/legacy-card";
 import { ErrorStateMatcher } from "@angular/material/core";
-import { MatLegacyCheckboxModule as MatCheckboxModule } from "@angular/material/legacy-checkbox";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatSidenavModule } from "@angular/material/sidenav";
