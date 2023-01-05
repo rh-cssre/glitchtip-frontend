@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatLegacyInputModule as MatInputModule } from "@angular/material/legacy-input";
-import { MatLegacyProgressBarModule as MatProgressBarModule } from "@angular/material/legacy-progress-bar";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatPseudoCheckboxModule } from "@angular/material/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "./login.component";
