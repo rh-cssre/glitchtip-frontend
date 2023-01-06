@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MatLegacyProgressBarModule as MatProgressBarModule } from "@angular/material/legacy-progress-bar";
 
 import { SubscriptionRoutingModule } from "./subscription-routing.module";
 import { SharedModule } from "src/app/shared/shared.module";
@@ -13,7 +12,6 @@ import { PaymentComponent } from "./payment/payment.component";
     CommonModule,
     SubscriptionRoutingModule,
     SharedModule,
-    MatProgressBarModule,
   ],
 })
 export class SubscriptionModule {}
