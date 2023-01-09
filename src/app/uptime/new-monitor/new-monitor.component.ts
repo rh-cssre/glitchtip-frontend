@@ -109,7 +109,6 @@ export class NewMonitorComponent implements OnInit {
     if (this.newMonitorForm.valid) {
       this.uptimeService.createMonitor({
         ...this.newMonitorForm.value,
-
         expectedStatus: this.formExpectedStatus.enabled
           ? this.formExpectedStatus.value
           : null,
