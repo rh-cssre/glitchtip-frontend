@@ -5,7 +5,7 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 
 // Material
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatTabsModule } from "@angular/material/tabs";
+import { MatTabsModule } from "@angular/material/tabs"
 import { MatRadioModule } from "@angular/material/radio";
 import { MatExpansionModule } from "@angular/material/expansion";
 

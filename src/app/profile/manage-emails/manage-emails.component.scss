@@ -24,11 +24,17 @@
 }
 
 .email-actions {
+  display: flex;
+  align-items: center;
   margin-top: 4px;
   padding-bottom: 8px;
+
+  gt-loading-button {
+    margin-right: 5px;
+  }
 }
 
-mat-chip-list {
+mat-chip-set {
   display: inline-block;
   margin-right: 15px;
   pointer-events: none;
@@ -37,8 +43,9 @@ mat-chip-list {
 
 mat-chip {
   font-size: 0.8em;
-  padding: 0 10px;
-  min-height: 24px;
+  font-weight: 500;
+  padding: 0;
+  height: 24px;
 }
 
 .delete-spinner-container {
