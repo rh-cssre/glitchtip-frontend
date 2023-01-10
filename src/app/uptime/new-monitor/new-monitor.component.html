@@ -137,7 +137,13 @@
             </p>
           </div>
         </div>
-        <div class="short-field">
+        <div
+          class="short-field"
+          *ngIf="
+            formMonitorType?.value !== 'Heartbeat' &&
+            formMonitorType?.value !== 'Ping'
+          "
+        >
           <div class="form-field">
             <mat-form-field>
               <mat-label>Expected Status</mat-label>
