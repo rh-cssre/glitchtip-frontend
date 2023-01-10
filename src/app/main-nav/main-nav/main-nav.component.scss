@@ -49,7 +49,7 @@ mat-sidenav-content {
       transform: translateY(-1px);
     }
   }
-  
+
   .active-org {
     max-width: 100%;
     overflow: hidden;
@@ -71,17 +71,40 @@ mat-sidenav-content {
   margin-left: 8px;
 }
 
+.org-dropdown,
+.no-org-create {
+  width: 100%;
+  height: 48px;
+  border-radius: 0px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: left;
+}
+
+.org-dropdown {
+  ::ng-deep .mdc-button__label {
+    width: 100%;
+  }
+
+  .label-container {
+    display: inline-flex;
+    text-align: left;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.no-org-create {
+  font-weight: 500;
+}
+
 .org-details-divider {
   margin: 10px 0;
 }
 
-.org-dropdown-list-item ::ng-deep .mat-list-item-content {
-  justify-content: space-between;
-}
-
-.mat-nav-list > button.mat-menu-item,
-.no-org-create {
-  font-weight: 500;
+.nav-link-list {
+  padding-top: 0px;
 }
 
 .mat-list-item-disabled {
