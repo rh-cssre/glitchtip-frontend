@@ -59,16 +59,6 @@ mat-expansion-panel::ng-deep {
   div.mat-expansion-panel-body {
     padding-left: 0;
     padding-right: 0;
-
-    .mat-list-base .mat-list-item .mat-list-item-content {
-      padding-left: 24px;
-      padding-right: 24px;
-    }
-  }
-
-  .mat-selection-list {
-    max-height: 275px;
-    overflow-y: auto;
   }
 
   .mat-form-field {
@@ -107,9 +97,14 @@ mat-expansion-panel::ng-deep {
 }
 
 .list-item {
+
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+
   button {
-    // borrowed from some "button unstyled" classes I've done elsewhere
     display: inline-block;
+    flex-grow: 1;
     border: none;
     margin: 0 15px 0 0; // 0
     padding: 12px 0; // 0
@@ -120,7 +115,6 @@ mat-expansion-panel::ng-deep {
     color: inherit;
     font-weight: inherit;
 
-    width: 100%;
     text-align: left;
   }
 

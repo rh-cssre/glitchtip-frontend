@@ -28,8 +28,8 @@
           />
         </mat-form-field>
 
-        <mat-list>
-          <mat-list-item
+        <ul>
+          <li
             class="list-item"
             *ngFor="let project of filteredProjects$ | async"
           >
@@ -47,8 +47,8 @@
               [disabled]="!project.isMember"
             >
             </mat-checkbox>
-          </mat-list-item>
-        </mat-list>
+          </li>
+        </ul>
 
         <div class="button-group">
           <button
