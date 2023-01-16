@@ -170,7 +170,7 @@ mat-expansion-panel::ng-deep {
     display: none;
 
     .no-projects & {
-      display: block;
+      display: inline-flex;
       margin-left: 0;
     }
   }

@@ -259,13 +259,20 @@
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell zero-states-cell" [attr.colspan]="displayedColumns.length">
+        <td
+          class="mat-cell zero-states-cell"
+          [attr.colspan]="displayedColumns.length"
+        >
           <gt-issue-zero-states
             *ngIf="paginator.initialLoadComplete"
           ></gt-issue-zero-states>
         </td>
       </tr>
-      <tr mat-footer-row class="pagination-row" *matFooterRowDef="['pagination']"></tr>
+      <tr
+        mat-footer-row
+        class="pagination-row"
+        *matFooterRowDef="['pagination']"
+      ></tr>
     </table>
   </div>
 </section>
