@@ -36,6 +36,7 @@ describe("List, add, update and delete uptime Monitors", () => {
 
   it("Should not be able to add monitor with invalid values", () => {
     cy.visit(`/${organization.slug}/uptime-monitors/new`);
+    cy.get("#monitor-type").click().get("mat-option").contains("GET").click();
     cy.get("#monitor-url").type("invalid url");
     cy.get("#interval").clear().type("86400");
     cy.get("#monitor-submit").click();
