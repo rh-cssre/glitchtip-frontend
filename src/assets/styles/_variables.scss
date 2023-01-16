@@ -98,10 +98,11 @@ $legacy-mobile-typography: mat.define-legacy-typography-config(
 
 $mobile-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $headline-4: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $headline-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $headline-2: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $headline-1: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $headline-1: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-3: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-4: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
 );
 
 // Breakpoints
