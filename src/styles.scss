@@ -26,7 +26,8 @@ $font-path: "../fonts";
 //    `@include mat.legacy-typography-hierarchy($custom-typography);`
 @include mat.core();
 @include mat.all-component-typographies($custom-typography);
-@include mat.all-legacy-component-typographies($custom-typography);
+@include mat.list-typography($custom-nav-typography);
+@include mat.all-legacy-component-typographies($legacy-typography);
 @include mat.legacy-core();
 
 // Include theme styles for core and each component used in your app.
@@ -64,7 +65,14 @@ ul {
 }
 
 .active-route {
-  font-weight: 700;
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+
+  .mdc-list-item__primary-text {
+    color: mat.get-color-from-palette($amaranth-palette, 500)
+  }
+}
+
+.active-route:hover {
   background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 

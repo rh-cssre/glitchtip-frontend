@@ -107,11 +107,6 @@ mat-sidenav-content {
   padding-top: 0px;
 }
 
-.mat-list-item-disabled {
-  background-color: white;
-  color: mat.get-color-from-palette(mat.$gray-palette, 500) !important;
-}
-
 .subdued {
   color: mat.get-color-from-palette(mat.$gray-palette, 700);
   font-weight: 300;
