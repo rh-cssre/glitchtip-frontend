@@ -70,7 +70,7 @@ $custom-typography: mat.define-typography-config(
   $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
   $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
-  $body-2: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
+  $body-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
 );
 
