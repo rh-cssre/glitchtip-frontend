@@ -28,7 +28,7 @@
       <p class="center-text" i18n>This team doesn't have any members</p>
     </ng-container>
     <ng-template #listMembers>
-      <ul class="member-list">
+      <ul data-test-list class="member-list">
         <mat-error *ngIf="removeMemberError" class="center-text">{{
           removeMemberError
         }}</mat-error>
