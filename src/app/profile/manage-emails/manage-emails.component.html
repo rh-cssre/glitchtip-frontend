@@ -2,8 +2,8 @@
   <mat-card-title>Email Addresses</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let email of emailAddresses$ | async">
+    <ul>
+      <li *ngFor="let email of emailAddresses$ | async" class="email-list-item">
         <div class="email-info">
           <span>{{ email.email }}</span>
           <mat-chip-set
@@ -64,8 +64,8 @@
             <mat-icon>delete</mat-icon>
           </button>
         </div>
-      </mat-list-item>
-    </mat-list>
+      </li>
+    </ul>
     <form
       [formGroup]="form"
       (ngSubmit)="onSubmit()"

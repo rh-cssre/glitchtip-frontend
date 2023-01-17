@@ -61,7 +61,24 @@ $font-mono: "Plex Mono";
 // https://github.com/angular/components/blob/d9977bdb1101e107312580c124acf0a9f410452e/src/material/core/typography/_typography.scss
 // See for intended use cases
 // https://material.angular.io/guide/typography#what-is-typography-
-$custom-typography: mat.define-legacy-typography-config(
+$custom-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-1: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-3: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
+  $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $body-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
+);
+
+$custom-nav-typography: mat.define-typography-config(
+  $body-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
+);
+
+$legacy-typography: mat.define-legacy-typography-config(
   $font-family: $font-sans-serif,
   $display-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
   $display-3: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
@@ -71,12 +88,21 @@ $custom-typography: mat.define-legacy-typography-config(
   $body-1: mat.define-typography-level(16px, 24px, 400),
 );
 
-$mobile-typography: mat.define-legacy-typography-config(
+$legacy-mobile-typography: mat.define-legacy-typography-config(
   $font-family: $font-sans-serif,
   $display-4: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
   $display-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
   $display-2: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
   $display-1: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+);
+
+$mobile-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-1: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-3: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-4: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
 );
 
 // Breakpoints

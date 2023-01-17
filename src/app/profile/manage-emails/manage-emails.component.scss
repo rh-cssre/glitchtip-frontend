@@ -1,17 +1,14 @@
 @import "variables";
 
-.mat-list-base .mat-list-item {
+.email-list-item {
   height: auto;
-  padding-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 8px;
   padding-bottom: 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
-  ::ng-deep .mat-list-item-content {
-    padding-left: 0;
-    padding-right: 0;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
 }
 
 .email-info {

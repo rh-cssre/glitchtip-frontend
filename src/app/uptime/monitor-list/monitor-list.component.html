@@ -61,7 +61,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <td mat-cell *matCellDef="let monitor" class="status">
+          <td mat-cell *matCellDef="let monitor" class="status mat-body-1">
             <span *ngIf="monitor.isUp">Up</span>
             <span *ngIf="monitor.isUp === false">Down</span>
             <ng-container *ngIf="monitor.lastChange">
