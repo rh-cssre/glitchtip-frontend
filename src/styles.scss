@@ -50,7 +50,7 @@ $font-path: "../fonts";
   //    `@include mat.legacy-typography-hierarchy($mobile-typography);`
   @include mat.core();
   @include mat.all-component-typographies($mobile-typography);
-  @include mat.all-legacy-component-typographies($mobile-typography);
+  @include mat.all-legacy-component-typographies($legacy-mobile-typography);
   @include mat.legacy-core();
 }
 
