@@ -78,6 +78,11 @@ $custom-nav-typography: mat.define-typography-config(
   $body-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
 );
 
+$custom-card-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-6: mat.define-typography-level(24px, 30px, 500, $font-sans-serif),
+);
+
 $legacy-typography: mat.define-legacy-typography-config(
   $font-family: $font-sans-serif,
   $display-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),

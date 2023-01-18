@@ -8,6 +8,10 @@ mat-card {
   justify-content: space-between;
 }
 
+mat-card-header {
+  margin-bottom: 8px;
+}
+
 a {
   text-decoration: none;
   color: mat.get-color-from-palette(mat.$gray-palette, 900);
@@ -32,7 +36,7 @@ a {
   }
 }
 
-.mat-card-actions {
+mat-card-actions {
   display: flex;
   justify-content: space-between;
 
