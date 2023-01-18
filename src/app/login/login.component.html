@@ -18,8 +18,9 @@
         </ng-template>
       </ng-container>
       <ng-template #do_login>
-        <h1 i18n>Login</h1>
-
+        <mat-card-title>
+          <h3 i18n>Login</h3>
+        </mat-card-title>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <gt-form-error [error]="error$ | async"></gt-form-error>
           <mat-form-field class="full-width">
