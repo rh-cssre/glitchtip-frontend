@@ -212,11 +212,13 @@
     </mat-nav-list>
 
     <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
-      <mat-card-title>
-        <h3 class="mat-display-1" i18n>Support GlitchTip</h3>
-      </mat-card-title>
+      <mat-card-header>
+        <mat-card-title>
+          <h3 i18n>Support GlitchTip</h3>
+        </mat-card-title>
+      </mat-card-header>
       <mat-card-content>
-        <ul>
+        <ul class="mat-body-1">
           <li i18n
             >Donate
             <a
