@@ -59,6 +59,10 @@ mat-card-content {
   font-family: $font-sans-serif;
 }
 
+mat-card-title {
+  padding-bottom: 8px;
+}
+
 a {
   color: $amaranth;
   font-weight: 500;

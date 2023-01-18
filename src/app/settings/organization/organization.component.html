@@ -4,7 +4,9 @@
   </header>
   <ng-container *ngIf="activeOrganizationDetail$ | async as activeOrg">
     <mat-card>
-      <mat-card-title>General</mat-card-title>
+      <mat-card-header>
+        <mat-card-title>General</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="updateOrganization()">
@@ -25,7 +27,9 @@
       </mat-card-content>
     </mat-card>
     <mat-card>
-      <mat-card-title>Delete Organization</mat-card-title>
+      <mat-card-header>
+        <mat-card-title>Delete Organization</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content class="remove-content">
         <div>

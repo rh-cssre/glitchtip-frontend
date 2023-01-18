@@ -9,7 +9,10 @@
     </a>
   </header>
   <mat-card>
-    <mat-card-title>Basics</mat-card-title><mat-divider></mat-divider>
+    <mat-card-header>
+      <mat-card-title>Basics</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
     <mat-card-content class="basics-content">
       <div class="column">
         <div class="mat-body-strong">Email</div>
@@ -26,7 +29,9 @@
     </mat-card-content>
   </mat-card>
   <mat-card>
-    <mat-card-title>Role</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>Role</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -50,7 +55,9 @@
     </mat-card-content>
   </mat-card>
   <mat-card>
-    <mat-card-title>Team(s)</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>Team(s)</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <ng-container *ngIf="member.teams.length === 0; else listMembers">

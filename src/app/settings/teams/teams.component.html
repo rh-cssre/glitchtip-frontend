@@ -11,12 +11,14 @@
     >
   </header>
   <mat-card>
+    <mat-card-header>
     <mat-card-title i18n>Your Teams</mat-card-title>
-    <p class="description" i18n
+    <p class="description mat-body-1" i18n
       >Teams are for managing issue notifications and workflow. View permissions
       are handled through
       <a routerLink="../members"> organization membership.</a></p
     >
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <ul *ngIf="(yourTeams$ | async)?.length; else noTeams">
