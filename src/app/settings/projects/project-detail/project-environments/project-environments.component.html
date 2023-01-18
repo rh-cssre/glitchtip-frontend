@@ -1,8 +1,8 @@
 <section>
   <mat-card>
-    <h1>
+    <mat-card-header>
       <mat-card-title>Environments</mat-card-title>
-    </h1>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <ng-container *ngIf="(initialLoad$ | async) === false; else afterLoad">

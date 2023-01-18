@@ -63,6 +63,10 @@ mat-card-title {
   padding-bottom: 8px;
 }
 
+.vertical-card-header {
+  flex-direction: column;
+}
+
 a {
   color: $amaranth;
   font-weight: 500;
@@ -146,6 +150,7 @@ header.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .tt-wrapping {
