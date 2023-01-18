@@ -1,21 +1,25 @@
 <div class="auth-form-wrapper">
   <mat-card class="auth-form">
-    <div class="logo-container">
-      <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
-    </div>
-    <ng-container *ngIf="requiresMFA$ | async; else do_login">
-      <ng-container
-        *ngIf="(hasFido2$ | async) === false || (useTOTP$ | async); else fido2"
-      >
-        <gt-login-totp></gt-login-totp>
+    <mat-card-content>
+      <div class="logo-container">
+        <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
+      </div>
+      <ng-container *ngIf="requiresMFA$ | async; else do_login">
+        <ng-container
+          *ngIf="
+            (hasFido2$ | async) === false || (useTOTP$ | async);
+            else fido2
+          "
+        >
+          <gt-login-totp></gt-login-totp>
+        </ng-container>
+        <ng-template #fido2>
+          <gt-login-fido2></gt-login-fido2>
+        </ng-template>
       </ng-container>
-      <ng-template #fido2>
-        <gt-login-fido2></gt-login-fido2>
-      </ng-template>
-    </ng-container>
-    <ng-template #do_login>
-      <h1 i18n>Login</h1>
-      <mat-card-content>
+      <ng-template #do_login>
+        <h1 i18n>Login</h1>
+
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <gt-form-error [error]="error$ | async"></gt-form-error>
           <mat-form-field class="full-width">
@@ -92,8 +96,8 @@
             <a routerLink="/reset-password" i18n>Reset Password</a>
           </p>
         </div>
-      </mat-card-content>
-    </ng-template>
+      </ng-template>
+    </mat-card-content>
   </mat-card>
 </div>
 <div cdkFocusRegionEnd></div>
