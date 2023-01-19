@@ -33,6 +33,10 @@ section {
   overflow: hidden;
   transform: translateY(0);
   transition: transform 0.2s;
+
+  mat-icon {
+    margin-right: 0;
+  }
 }
 
 .mat-expanded + .reset-button {
@@ -61,11 +65,8 @@ mat-expansion-panel::ng-deep {
     padding-right: 0;
   }
 
-  .mat-form-field {
+  .mat-mdc-form-field {
     display: block;
-  }
-
-  .mat-form-field-wrapper {
     margin-left: 24px;
     margin-right: 24px;
   }
