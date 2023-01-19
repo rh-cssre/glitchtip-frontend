@@ -27,6 +27,7 @@ $font-path: "../fonts";
 @include mat.core();
 @include mat.all-component-typographies($custom-typography);
 @include mat.list-typography($custom-nav-typography);
+@include mat.card-typography($custom-card-typography);
 @include mat.all-legacy-component-typographies($legacy-typography);
 @include mat.legacy-core();
 
@@ -52,6 +53,18 @@ $font-path: "../fonts";
   @include mat.all-component-typographies($mobile-typography);
   @include mat.all-legacy-component-typographies($legacy-mobile-typography);
   @include mat.legacy-core();
+}
+
+mat-card-content {
+  font-family: $font-sans-serif;
+}
+
+mat-card-title {
+  padding-bottom: 8px;
+}
+
+.vertical-card-header {
+  flex-direction: column;
 }
 
 a {
@@ -137,6 +150,7 @@ header.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .tt-wrapping {

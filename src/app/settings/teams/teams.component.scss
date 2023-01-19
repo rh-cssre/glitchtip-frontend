@@ -2,6 +2,10 @@ mat-card {
   margin-top: 24px;
   margin-bottom: 24px;
 
+  mat-card-header {
+    flex-direction: column;
+  }
+
   mat-card-content {
     padding-top: 16px;
   }
@@ -9,6 +13,10 @@ mat-card {
 
 mat-error {
   display: block;
+}
+
+.description {
+  margin-top: 12px;;
 }
 
 .center-text {
