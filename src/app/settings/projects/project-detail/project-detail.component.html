@@ -1,6 +1,6 @@
 <section class="l-body" *ngIf="activeProject$ | async as project">
   <header class="page-header">
-    <h1 class="mat-display-1" i18n>Settings for {{ project.name }}</h1>
+    <h1 class="mat-headline-4" i18n>Settings for {{ project.name }}</h1>
   </header>
   <mat-card *ngIf="project.isMember === false"
     ><mat-card-content class="note-padding">

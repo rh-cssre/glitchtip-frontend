@@ -63,15 +63,16 @@ $font-mono: "Plex Mono";
 // https://material.angular.io/guide/typography#what-is-typography-
 $custom-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $headline-1: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $headline-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $headline-3: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $headline-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $headline-1: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $headline-2: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-4: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
   $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
   $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
   $body-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
+  $caption: mat.define-typography-level(12px, 13.5px, 400, $font-sans-serif),
 );
 
 $custom-nav-typography: mat.define-typography-config(
@@ -107,7 +108,12 @@ $mobile-typography: mat.define-typography-config(
   $headline-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
   $headline-3: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
   $headline-4: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
+  $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $body-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
+  $caption: mat.define-typography-level(12px, 13.5px, 400, $font-sans-serif),
 );
 
 // Breakpoints

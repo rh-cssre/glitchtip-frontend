@@ -28,14 +28,11 @@ $font-path: "../fonts";
 @include mat.all-component-typographies($custom-typography);
 @include mat.list-typography($custom-nav-typography);
 @include mat.card-typography($custom-card-typography);
-@include mat.all-legacy-component-typographies($legacy-typography);
-@include mat.legacy-core();
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($candy-app-theme);
-@include mat.all-legacy-component-themes($candy-app-theme);
 
 // @include mat.typography-hierarchy($custom-typography);
 
@@ -51,8 +48,7 @@ $font-path: "../fonts";
   //    `@include mat.legacy-typography-hierarchy($mobile-typography);`
   @include mat.core();
   @include mat.all-component-typographies($mobile-typography);
-  @include mat.all-legacy-component-typographies($legacy-mobile-typography);
-  @include mat.legacy-core();
+  @include mat.list-typography($custom-nav-typography);
 }
 
 mat-card-content {
@@ -133,8 +129,8 @@ header.page-header {
   display: none;
 }
 
-.mat-display-1,
-.mat-display-2 {
+.mat-headline-3,
+.mat-headline-4 {
   margin-bottom: 1.2em;
 }
 
