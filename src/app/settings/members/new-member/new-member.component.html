@@ -18,10 +18,10 @@
             Multiple emails delimited by commas.
           </p>
           <mat-form-field>
+            <mat-label>Email</mat-label>
             <input
               matInput
               type="email"
-              placeholder="Email"
               formControlName="email"
             />
             <mat-error *ngIf="form.get('email')?.errors">
