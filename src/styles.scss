@@ -28,6 +28,7 @@ $font-path: "../fonts";
 @include mat.all-component-typographies($custom-typography);
 @include mat.list-typography($custom-nav-typography);
 @include mat.card-typography($custom-card-typography);
+@include mat.table-typography($custom-table-typography);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -49,6 +50,8 @@ $font-path: "../fonts";
   @include mat.core();
   @include mat.all-component-typographies($mobile-typography);
   @include mat.list-typography($custom-nav-typography);
+  @include mat.card-typography($custom-card-typography);
+  @include mat.table-typography($custom-table-typography);
 }
 
 mat-card-content {

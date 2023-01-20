@@ -114,7 +114,6 @@ mat-expansion-panel::ng-deep {
     -webkit-appearance: none;
     cursor: pointer;
     color: inherit;
-    font-weight: inherit;
 
     text-align: left;
   }
@@ -169,4 +168,8 @@ mat-expansion-panel::ng-deep {
       margin-left: 0;
     }
   }
+}
+
+.mat-body-1 {
+  margin: 0;
 }

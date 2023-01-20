@@ -39,19 +39,26 @@ $amaranth-palette: (
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $candy-app-primary: mat.define-palette($amaranth-palette);
-$candy-app-accent: mat.define-palette(mat.$deep-orange-palette, A200, A100, A400);
+$candy-app-accent: mat.define-palette(
+  mat.$deep-orange-palette,
+  A200,
+  A100,
+  A400
+);
 
 // The warn palette is optional (defaults to red).
 $candy-app-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat.define-light-theme((
-  color: (
-    primary: $candy-app-primary,
-    accent: $candy-app-accent,
-    warn: $candy-app-warn,
+$candy-app-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $candy-app-primary,
+      accent: $candy-app-accent,
+      warn: $candy-app-warn,
+    ),
   )
-));
+);
 
 $font-sans-serif: "Plex Sans";
 $font-mono: "Plex Mono";
@@ -63,10 +70,14 @@ $font-mono: "Plex Mono";
 // https://material.angular.io/guide/typography#what-is-typography-
 $custom-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $headline-1: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
-  $headline-2: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $headline-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $headline-4: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-1:
+    mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $headline-2:
+    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-3:
+    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-4:
+    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
   $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
   $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
@@ -76,6 +87,7 @@ $custom-typography: mat.define-typography-config(
 );
 
 $custom-nav-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
   $body-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
 );
 
@@ -84,30 +96,47 @@ $custom-card-typography: mat.define-typography-config(
   $headline-6: mat.define-typography-level(24px, 30px, 500, $font-sans-serif),
 );
 
+$custom-table-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-2: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
+);
+
 $legacy-typography: mat.define-legacy-typography-config(
   $font-family: $font-sans-serif,
-  $display-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
-  $display-3: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-1: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $display-4:
+    mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $display-3:
+    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $display-2:
+    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $display-1:
+    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
   $body-2: mat.define-typography-level(16px, 28px, 500),
   $body-1: mat.define-typography-level(16px, 24px, 400),
 );
 
 $legacy-mobile-typography: mat.define-legacy-typography-config(
   $font-family: $font-sans-serif,
-  $display-4: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-2: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $display-1: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $display-4:
+    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $display-3:
+    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $display-2:
+    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $display-1:
+    mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
 );
 
 $mobile-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $headline-1: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $headline-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $headline-3: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $headline-4: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $headline-1:
+    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-2:
+    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-3:
+    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-4:
+    mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
   $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
   $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
   $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
