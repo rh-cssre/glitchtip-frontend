@@ -136,7 +136,13 @@
               </p>
             </div>
           </div>
-          <div class="short-field">
+          <div
+            class="short-field"
+            *ngIf="
+              formMonitorType?.value !== 'Heartbeat' &&
+              formMonitorType?.value !== 'Ping'
+            "
+          >
             <div class="form-field">
               <mat-form-field>
                 <mat-label>Expected Status</mat-label>
@@ -242,7 +248,9 @@
         </form> </mat-card-content
     ></mat-card>
     <mat-card class="delete">
-      <mat-card-title>Delete Monitor</mat-card-title>
+      <mat-card-header>
+        <mat-card-title>Delete Monitor</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content class="remove-content">
         <div>

@@ -29,11 +29,20 @@ table {
         margin-right: 5px;
       }
     }
+
+    @media screen and (max-width: $small - 1) {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    margin: -4px 0;
   }
 }
 
 .table-header {
-  padding: 20px 0 8px;
+  padding: 20px 24px 8px;
 }
 
 .bulk-project-select {
@@ -52,14 +61,14 @@ table {
     padding-bottom: 8px;
 
     button {
-      margin-left: 8px;
-      margin-right: 8px;
+      margin: 8px;
     }
   }
 
   &__text {
     margin-left: 8px;
     margin-right: 8px;
+    font-family: $font-sans-serif;
     font-size: 14px;
     font-weight: 500;
     color: mat.get-color-from-palette(mat.$gray-palette, 800);
@@ -72,6 +81,18 @@ table {
   hyphens: auto;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.mat-column-select {
+  padding-left: 24px;
+}
+
+.mat-column-events {
+  padding-right: 24px;
+}
+
+.zero-states-cell {
+  padding: 0 24px;
 }
 
 .resolved {
@@ -88,11 +109,6 @@ table {
 .mute-icon {
   vertical-align: middle;
   margin-right: 5px;
-}
-
-mat-card {
-  margin-top: 24px;
-  margin-bottom: 24px;
 }
 
 .checkbox-cell {

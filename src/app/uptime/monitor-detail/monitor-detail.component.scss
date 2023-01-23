@@ -1,13 +1,7 @@
 @import "variables";
 
 header {
-  display: flex;
-  flex-direction: column;
   margin-top: -16px;
-
-  a {
-    width: min-content;
-  }
 
   h1 {
     margin-top: 20px;
@@ -35,6 +29,10 @@ mat-card {
       }
     }
   }
+}
+
+.interval {
+  margin-bottom: 4px;
 }
 
 .reduced-padding {

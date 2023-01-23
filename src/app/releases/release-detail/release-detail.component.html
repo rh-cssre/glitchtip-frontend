@@ -5,7 +5,7 @@
   <ng-container *ngIf="release$ | async as release">
     <ng-container *ngIf="releaseFiles$ | async as files">
       <header>
-        <a mat-stroked-button [routerLink]="['..']">
+        <a mat-stroked-button [routerLink]="['..']" class="releases-list-link">
           <mat-icon>keyboard_arrow_left</mat-icon>
           View all Releases
         </a>
@@ -88,7 +88,7 @@
               </div>
             </td>
           </tr>
-          <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
+          <tr class="pagination-row" mat-footer-row *matFooterRowDef="['pagination']"></tr>
         </table>
       </div>
     </ng-container>

@@ -4,9 +4,11 @@
     <a mat-flat-button color="primary" [routerLink]="['new']">Invite Member</a>
   </header>
   <mat-card>
-    <mat-card-title>
-      {{ (activeOrganizationDetail$ | async)?.name }}
-    </mat-card-title>
+    <mat-card-header>
+      <mat-card-title>
+        {{ (activeOrganizationDetail$ | async)?.name }}
+      </mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div class="list">

@@ -1,7 +1,9 @@
 <mat-card class="half-width">
-  <mat-card-content>
+  <mat-card-header>
     <mat-card-title i18n>Preferences</mat-card-title>
-    <mat-divider></mat-divider>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
     <form
       *ngIf="userDetails$ | async"
       [formGroup]="form"
@@ -26,7 +28,7 @@
         />
         <button
           [class.invalid]="formTimeZone.invalid"
-          mat-button
+          class="small-icon-button"
           mat-icon-button
           matSuffix
           type="button"

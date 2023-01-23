@@ -1,5 +1,7 @@
 <mat-card>
-  <mat-card-title>Register Security Key</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Register Security Key</mat-card-title>
+  </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
     <p>Set up a hardware device as a second factor to sign in.</p>
@@ -50,43 +52,43 @@
         </button>
       </form>
     </ng-container>
-  </mat-card-content>
-  <ng-container *ngIf="(FIDO2Keys$ | async)!.length > 0">
-    <p class="mat-body-strong">Security keys</p>
-    <div class="negative-margin">
-      <div class="mat-body-strong">
-        <div class="key_headings">
-          <div>Name</div>
-          <div>Last used</div>
+    <ng-container *ngIf="(FIDO2Keys$ | async)!.length > 0">
+      <p class="mat-body-strong">Security keys</p>
+      <div class="negative-margin">
+        <div class="mat-body-strong">
+          <div class="key_headings">
+            <div>Name</div>
+            <div>Last used</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="key_row" *ngFor="let key of FIDO2Keys$ | async">
-      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
-        <span
-          [matTooltip]="key.name"
-          matTooltipPosition="above"
-          [matTooltipDisabled]="tooltipDisabled"
-          >{{ key.name }}</span
+      <div class="key_row" *ngFor="let key of FIDO2Keys$ | async">
+        <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+          <span
+            [matTooltip]="key.name"
+            matTooltipPosition="above"
+            [matTooltipDisabled]="tooltipDisabled"
+            >{{ key.name }}</span
+          >
+        </div>
+        <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+          <span
+            [matTooltip]="formatDate(key.last_used)"
+            matTooltipPosition="above"
+            [matTooltipDisabled]="tooltipDisabled"
+            >{{ formatDate(key.last_used) }}</span
+          >
+        </div>
+        <button
+          class="trash"
+          mat-icon-button
+          color="primary"
+          attr.aria-label="Delete {{ key.name }}"
+          (click)="deleteFido2Key(key.id)"
         >
+          <mat-icon>delete_outline</mat-icon>
+        </button>
       </div>
-      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
-        <span
-          [matTooltip]="formatDate(key.last_used)"
-          matTooltipPosition="above"
-          [matTooltipDisabled]="tooltipDisabled"
-          >{{ formatDate(key.last_used) }}</span
-        >
-      </div>
-      <button
-        class="trash"
-        mat-icon-button
-        color="primary"
-        attr.aria-label="Delete {{ key.name }}"
-        (click)="deleteFido2Key(key.id)"
-      >
-        <mat-icon>delete_outline</mat-icon>
-      </button>
-    </div>
-  </ng-container>
+    </ng-container>
+  </mat-card-content>
 </mat-card>

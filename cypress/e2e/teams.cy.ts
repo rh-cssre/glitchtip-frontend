@@ -41,7 +41,7 @@ describe("List Team Members", () => {
     cy.get("mat-option span")
       .contains(user.email)
       .then((option) => option[0].click());
-    cy.get("mat-list mat-list-item").first().contains(user.email);
+    cy.get("[data-test-list] li").first().contains(user.email);
   });
 
   it("should remove a team member", () => {
