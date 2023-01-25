@@ -12,6 +12,7 @@ $font-path: "../fonts";
 
 // partials
 @import "./scss/auth-forms";
+@import "./scss/data-filter-bar";
 
 // Common styles for Angular Material. Included so that we only have to load a
 // single CSS file for Angular Material in our app.
@@ -80,7 +81,7 @@ ul {
   background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 
   .mdc-list-item__primary-text {
-    color: mat.get-color-from-palette($amaranth-palette, 500)
+    color: mat.get-color-from-palette($amaranth-palette, 500);
   }
 }
 

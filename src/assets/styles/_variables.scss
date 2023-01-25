@@ -96,6 +96,11 @@ $custom-card-typography: mat.define-typography-config(
   $headline-6: mat.define-typography-level(24px, 30px, 500, $font-sans-serif),
 );
 
+$custom-input-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-1: mat.define-typography-level(13px, 15px, 400, $font-sans-serif),
+);
+
 $custom-table-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
   $body-2: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
