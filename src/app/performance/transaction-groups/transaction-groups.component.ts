@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { MatLegacySelectChange as MatSelectChange } from "@angular/material/legacy-select";
+import { MatSelectChange } from "@angular/material/select";
 import { combineLatest, withLatestFrom, takeUntil } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";

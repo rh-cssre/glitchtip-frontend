@@ -34,6 +34,10 @@
 
   mat-form-field {
     margin-bottom: 10px;
+
+    @media screen and (max-width: $small - 1) {
+      margin-bottom: 20px;
+    }
   }
 
   mat-error span {

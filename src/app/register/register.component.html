@@ -9,13 +9,8 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-error *ngIf="error">{{ error }}</mat-error>
         <mat-form-field class="full-width">
-          <input
-            matInput
-            autofocus
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-          />
+          <mat-label>Email</mat-label>
+          <input matInput autofocus type="email" formControlName="email" />
           <mat-error>
             <span *ngIf="email?.errors?.required"
               >Your email is required to sign up</span
@@ -29,14 +24,10 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input
-            matInput
-            type="password"
-            placeholder="Password"
-            formControlName="password1"
-          />
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password1" />
           <mat-error>
-            <span *ngIf="password1?.errors"
+            <span *ngIf="password1?.errors?.minlength"
               >Your password should be at least 8 characters long</span
             >
             <span *ngIf="password1?.errors?.required"
@@ -48,6 +39,7 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
+          <mat-label>Confirm password</mat-label>
           <input
             matInput
             type="password"

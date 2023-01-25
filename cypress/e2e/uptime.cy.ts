@@ -44,7 +44,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.contains("Enter a monitor name");
     cy.contains("Enter a valid URL");
     cy.contains("Enter a status code number");
-    cy.contains("The number needs to be less than 86400 (24 hours).");
+    cy.contains("Must be less than 86400 (24 hours).");
   });
 
   it("Should add a single monitor and see that monitor on list", () => {

@@ -24,11 +24,11 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <gt-form-error [error]="error$ | async"></gt-form-error>
           <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
             <input
               matInput
               autofocus
               type="email"
-              placeholder="Email"
               formControlName="email"
             />
             <mat-error *ngIf="email?.errors">
@@ -44,10 +44,10 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width">
+            <mat-label>Password</mat-label>
             <input
               matInput
               type="password"
-              placeholder="Password"
               formControlName="password"
             />
             <mat-error *ngIf="password?.errors">

@@ -1,7 +1,7 @@
 import { formatDate } from "@angular/common";
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { UntypedFormGroup } from "@angular/forms";
-import { MatLegacySelectChange as MatSelectChange } from "@angular/material/legacy-select";
+import { MatSelectChange } from "@angular/material/select";
 
 @Component({
   selector: "gt-data-filter-bar",
