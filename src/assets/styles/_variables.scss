@@ -86,9 +86,12 @@ $custom-typography: mat.define-typography-config(
   $caption: mat.define-typography-level(12px, 13.5px, 400, $font-sans-serif),
 );
 
-$custom-nav-typography: mat.define-typography-config(
+// Angular Material uses subtitle for buttons in a list,
+// so body-1 and subtitle-1 have to be the same
+$nav-list-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
   $body-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
+  $subtitle-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
 );
 
 $custom-card-typography: mat.define-typography-config(
@@ -104,32 +107,6 @@ $custom-input-typography: mat.define-typography-config(
 $custom-table-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
   $body-2: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
-);
-
-$legacy-typography: mat.define-legacy-typography-config(
-  $font-family: $font-sans-serif,
-  $display-4:
-    mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
-  $display-3:
-    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-2:
-    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-1:
-    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $body-2: mat.define-typography-level(16px, 28px, 500),
-  $body-1: mat.define-typography-level(16px, 24px, 400),
-);
-
-$legacy-mobile-typography: mat.define-legacy-typography-config(
-  $font-family: $font-sans-serif,
-  $display-4:
-    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-3:
-    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-2:
-    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $display-1:
-    mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
 );
 
 $mobile-typography: mat.define-typography-config(
