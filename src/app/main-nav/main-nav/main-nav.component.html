@@ -180,6 +180,7 @@
         mat-list-item
         [routerLink]="['/profile']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Account</a
@@ -188,6 +189,7 @@
         mat-list-item
         [routerLink]="['/profile', 'multi-factor-auth']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Multi-factor Authentication</a
@@ -196,6 +198,7 @@
         mat-list-item
         [routerLink]="['/profile', 'notifications']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Notifications</a
@@ -204,6 +207,7 @@
         mat-list-item
         [routerLink]="['/profile', 'auth-tokens']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Auth Tokens</a
@@ -251,20 +255,11 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar
+    <gt-mobile-nav-toolbar
       *ngIf="isLoggedIn$ | async"
-      (click)="toggleSideNav()"
-      color="primary"
-    >
-      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon> </button
-      ><span
-        class="active-org"
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        >{{ orgDetails?.name }}</span
-      >
-    </mat-toolbar>
-
+      [activeOrg]="activeOrganizationDetail$ | async"
+      (buttonClicked)="toggleSideNav()"
+    ></gt-mobile-nav-toolbar>
     <div class="wrapper">
       <ng-content></ng-content>
     </div>

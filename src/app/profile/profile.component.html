@@ -33,15 +33,11 @@
     </nav>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-toolbar color="primary" (click)="toggleSideNav()">
-      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon></button
-      ><span
-        class="active-org"
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        >{{ orgDetails?.name }}</span
-      >
-    </mat-toolbar>
+    <gt-mobile-nav-toolbar
+      *ngIf="isLoggedIn$ | async"
+      [activeOrg]="activeOrganizationDetail$ | async"
+      (buttonClicked)="toggleSideNav()"
+    ></gt-mobile-nav-toolbar>
     <section class="l-body">
       <header class="page-header">
         <h1 class="mat-headline-4">User Profile</h1>
