@@ -13,6 +13,7 @@ $font-path: "../fonts";
 // partials
 @import "./scss/auth-forms";
 @import "./scss/data-filter-bar";
+@import "./scss/nav-lists";
 
 // Common styles for Angular Material. Included so that we only have to load a
 // single CSS file for Angular Material in our app.
@@ -27,7 +28,6 @@ $font-path: "../fonts";
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($candy-app-theme);
-
 
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
@@ -44,11 +44,6 @@ mat-card-title {
   padding-bottom: 8px;
 }
 
-gt-main-nav,
-gt-profile {
-  @include mat.list-typography($nav-list-typography);
-}
-
 .vertical-card-header {
   flex-direction: column;
 }
@@ -61,18 +56,6 @@ a {
 ul {
   list-style: none;
   padding: unset;
-}
-
-.active-route {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
-
-  .mdc-list-item__primary-text {
-    color: mat.get-color-from-palette($amaranth-palette, 500);
-  }
-}
-
-.active-route:hover {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .project-card-wrapper {
