@@ -4,7 +4,6 @@ import type { Frame } from "src/app/issues/interfaces";
 @Component({
   selector: "gt-frame-title",
   templateUrl: "./frame-title.component.html",
-  styleUrls: ["./frame-title.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameTitleComponent {
