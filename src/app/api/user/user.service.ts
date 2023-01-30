@@ -138,7 +138,7 @@ export class UserService {
   private setInitialUserUIState() {
     const state = this.state.getValue();
     this.state.next({
-      user: state.user,
+      ...state,
       userDeleteError: initialState.userDeleteError,
       userDeleteLoading: initialState.userDeleteLoading,
       disconnectLoading: initialState.disconnectLoading,

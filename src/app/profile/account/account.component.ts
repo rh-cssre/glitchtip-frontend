@@ -32,6 +32,6 @@ export class AccountComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.userService.clearUserDeleteErrorState();
+    this.userService.clearUserUIState();
   }
 }
