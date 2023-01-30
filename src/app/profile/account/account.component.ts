@@ -26,7 +26,8 @@ export class AccountComponent implements OnDestroy {
       lastValueFrom(
         this.userService
           .deleteUser()
-          .pipe(tap(() => this.authService.removeAuth()))
+          .pipe(tap(() => this.authService.removeAuth())),
+        { defaultValue: null }
       );
     }
   }
