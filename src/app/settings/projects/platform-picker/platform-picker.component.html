@@ -7,10 +7,10 @@
       </p>
     </div>
     <mat-form-field>
+      <mat-label>Filter platforms</mat-label>
       <input
         #filterInput
         type="text"
-        placeholder="Filter platforms"
         aria-label="Filter platforms"
         [formControl]="filterPlatformInput"
         matInput
@@ -76,7 +76,7 @@
       (afterExpand)="focusPanel()"
     >
       <mat-expansion-panel-header data-test-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="expansion-panel-title">
           {{ getPlatformName(activePlatform) }}
         </mat-panel-title>
       </mat-expansion-panel-header>

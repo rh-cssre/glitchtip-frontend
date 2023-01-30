@@ -32,15 +32,14 @@
       <p class="center-text" i18n>This team doesn't have any projects</p>
     </ng-container>
     <ng-template #listMembers>
-      <mat-list>
+      <ul>
         <mat-error
           *ngIf="(errors$ | async)?.removeProjectFromTeam"
           class="center-text"
           >{{ (errors$ | async)?.removeProjectFromTeam }}</mat-error
         >
-        <mat-list-item *ngFor="let project of projectsOnTeam$ | async">
-          <a
-            mat-line
+        <li *ngFor="let project of projectsOnTeam$ | async" class="team-project-list-item">
+          <a class="team-name"
             [routerLink]="['/', project.organization.slug, 'issues']"
             [queryParams]="{ project: project.id }"
             >{{ project.name }}</a
@@ -54,7 +53,8 @@
             (click)="removeProject(project.slug)"
             id="remove-team-member"
           ></gt-loading-button>
-        </mat-list-item> </mat-list
-    ></ng-template>
+        </li>
+      </ul>
+    </ng-template>
   </mat-card-content>
 </mat-card>

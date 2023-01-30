@@ -32,34 +32,34 @@ export const typography = () => ({
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-      mat-display-4: Large, one-off header, usually at the top of the page (e.g.
+      mat-headline-1: Large, one-off header, usually at the top of the page (e.g.
       a hero header).
     </p>
-    <p class="mat-display-4">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-1">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-      mat-display-3: Large, one-off header, usually at the top of the page (e.g.
+      mat-headline-2: Large, one-off header, usually at the top of the page (e.g.
       a hero header).
     </p>
-    <p class="mat-display-3">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-2">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-display-2: Large, one-off header, usually at the top of the page (e.g.
+    mat-headline-3: Large, one-off header, usually at the top of the page (e.g.
     a hero header).
     </p>
-    <p class="mat-display-2">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-3">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-display-1: Large, one-off header, usually at the top of the page (e.g.
+    mat-headline-4: Large, one-off header, usually at the top of the page (e.g.
     a hero header).
     </p>
-    <p class="mat-display-1">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-4">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 

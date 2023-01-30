@@ -1,6 +1,6 @@
 <section class="l-body" *ngIf="activeProject$ | async as project">
   <header class="page-header">
-    <h1 class="mat-display-1" i18n>Settings for {{ project.name }}</h1>
+    <h1 class="mat-headline-4" i18n>Settings for {{ project.name }}</h1>
   </header>
   <mat-card *ngIf="project.isMember === false"
     ><mat-card-content class="note-padding">
@@ -13,7 +13,9 @@
     ></mat-card
   >
   <mat-card>
-    <mat-card-title i18n>Update Project</mat-card-title>
+    <mat-card-header>
+      <mat-card-title i18n>Update Project</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-error class="server-error" *ngIf="updateNameError">{{
@@ -71,12 +73,14 @@
     </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
-    <p class="mat-caption" i18n>
-      Data Source Name: The code that connects your project to GlitchTip.
-      Install a library into your project, then configure it with the DSN so
-      that it knows how to send errors to your GlitchTip account.
-    </p>
+    <mat-card-header class="vertical-card-header">
+      <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
+      <p class="mat-caption" i18n>
+        Data Source Name: The code that connects your project to GlitchTip.
+        Install a library into your project, then configure it with the DSN so
+        that it knows how to send errors to your GlitchTip account.
+      </p>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <gt-copy-input
@@ -95,7 +99,9 @@
   <gt-project-alerts></gt-project-alerts>
 
   <mat-card>
-    <mat-card-title i18n>Personal Project Notifications</mat-card-title>
+    <mat-card-header>
+      <mat-card-title i18n>Personal Project Notifications</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content class="remove-content">
       <div>
@@ -117,7 +123,9 @@
   </mat-card>
 
   <mat-card>
-    <mat-card-title i18n>Delete Project</mat-card-title>
+    <mat-card-header>
+      <mat-card-title i18n>Delete Project</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content class="remove-content">
       <div>

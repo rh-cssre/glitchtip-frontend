@@ -6,7 +6,7 @@ import {
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/legacy-snack-bar";
 import { MicroSentryModule } from "@micro-sentry/angular";
 
 import { AppComponent } from "./app.component";

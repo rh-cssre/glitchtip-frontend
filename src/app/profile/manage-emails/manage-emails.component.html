@@ -1,22 +1,29 @@
 <mat-card>
-  <mat-card-title>Email Addresses</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Email Addresses</mat-card-title>
+  </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let email of emailAddresses$ | async">
+    <ul>
+      <li *ngFor="let email of emailAddresses$ | async" class="email-list-item">
         <div class="email-info">
           <span>{{ email.email }}</span>
-          <mat-chip-list
+          <mat-chip-set
             *ngIf="email.isPrimary || !email.isVerified"
-            [selectable]="false"
+            role="list"
           >
-            <mat-chip color="primary" selected *ngIf="email.isPrimary">
+            <mat-chip
+              color="primary"
+              highlighted="true"
+              *ngIf="email.isPrimary"
+              role="listitem"
+            >
               Primary
             </mat-chip>
-            <mat-chip color="primary" *ngIf="!email.isVerified">
+            <mat-chip color="primary" *ngIf="!email.isVerified" role="listitem">
               Unverified
             </mat-chip>
-          </mat-chip-list>
+          </mat-chip-set>
         </div>
         <div class="email-actions">
           <gt-loading-button
@@ -46,7 +53,8 @@
             ></mat-progress-spinner>
           </div>
           <button
-            class="delete-button"
+            data-cy="delete-button"
+            class="medium-icon-button"
             *ngIf="
               !email.isPrimary &&
               (loadingStates$ | async)?.delete !== email.email
@@ -58,8 +66,8 @@
             <mat-icon>delete</mat-icon>
           </button>
         </div>
-      </mat-list-item>
-    </mat-list>
+      </li>
+    </ul>
     <form
       [formGroup]="form"
       (ngSubmit)="onSubmit()"
@@ -68,12 +76,8 @@
     >
       <div class="add-email-form-ui">
         <mat-form-field>
-          <input
-            matInput
-            type="email"
-            placeholder="Email Address"
-            formControlName="email_address"
-          />
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" formControlName="email_address" />
           <mat-error>
             <span
               *ngIf="
