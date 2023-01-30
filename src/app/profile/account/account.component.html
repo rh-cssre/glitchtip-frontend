@@ -20,12 +20,14 @@
         deleting your account. Owners of paid organization subscriptions are not
         able to delete their account.</p
       >
-      <mat-error>{{ deleteError }}</mat-error>
+      <mat-error *ngIf="userDeleteError$ | async as error">
+        {{ error }}
+      </mat-error>
     </div>
     <gt-loading-button
       data-test
       buttonText="Delete User Account"
-      [loading]="deleteLoading"
+      [loading]="(userDeleteLoading$ | async) === true"
       (click)="deleteUser()"
       id="delete-user"
     >
