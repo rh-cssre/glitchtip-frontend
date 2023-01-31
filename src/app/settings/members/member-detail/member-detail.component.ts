@@ -23,10 +23,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   updateMemberError$ = this.memberDetailService.updateMemberError$;
   updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
-  memberIdSlug$ = this.route.paramMap.pipe(
+  memberIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("member-id"))
   );
-  routeParams$ = combineLatest([this.orgSlug$, this.memberIdSlug$]);
+  routeParams$ = combineLatest([this.orgSlug$, this.memberIdParam$]);
   form = new UntypedFormGroup({
     role: new UntypedFormControl(""),
   });
@@ -40,11 +40,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeParams$
       .pipe(
-        map(([organizationSlug, memberIdSlug]) => {
-          if (organizationSlug && memberIdSlug) {
-            this.memberDetailService
-              .retrieveMemberDetail(organizationSlug, memberIdSlug)
-              .toPromise();
+        map(([organizationSlug, memberIdParam]) => {
+          if (organizationSlug && memberIdParam) {
+            this.memberDetailService.retrieveMemberDetail(
+              organizationSlug,
+              +memberIdParam
+            );
             this.organizationsService.retrieveOrganizationTeams(
               organizationSlug
             );

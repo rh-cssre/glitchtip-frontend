@@ -1,11 +1,17 @@
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse, HttpClient } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  EMPTY,
+  filter,
+  lastValueFrom,
+} from "rxjs";
 import { map, take, exhaustMap, tap, catchError } from "rxjs/operators";
 import { Member } from "./organizations.interface";
+import { MembersAPIService } from "./members-api.service";
 import { OrganizationsService } from "./organizations.service";
-import { baseUrl } from "src/app/constants";
 
 interface MemberDetailState {
   memberDetail: Member | null;
@@ -21,7 +27,6 @@ const initialState: MemberDetailState = {
 
 @Injectable({ providedIn: "root" })
 export class MemberDetailService {
-  private readonly url = baseUrl + "/organizations/";
   private readonly state = new BehaviorSubject<MemberDetailState>(initialState);
   private readonly getState$ = this.state.asObservable();
   readonly memberDetail$ = this.getState$.pipe(
@@ -35,27 +40,27 @@ export class MemberDetailService {
   );
 
   constructor(
+    private membersService: MembersAPIService,
     private organizationsService: OrganizationsService,
-    private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
 
   /** Update member teams and/or permissions */
   updateMember(updatedRole: string) {
     this.setUpdateMemberLoading(true);
-    return combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.memberDetail$,
-    ])
-      .pipe(
+    return lastValueFrom(
+      combineLatest([
+        this.organizationsService.activeOrganizationSlug$,
+        this.memberDetail$,
+      ]).pipe(
+        filter(([orgslug, memberDetail]) => !!orgslug && !!memberDetail),
         take(1),
         exhaustMap(([orgSlug, memberDetail]) => {
           const data = {
-            ...memberDetail,
+            ...memberDetail!,
             role: updatedRole,
           };
-          const url = `${this.url}${orgSlug}/members/${memberDetail?.id}/`;
-          return this.http.put<Member>(url, data).pipe(
+          return this.membersService.update(orgSlug!, data).pipe(
             tap((resp) => {
               this.setUpdateMemberLoading(false);
               this.snackBar.open(
@@ -73,19 +78,21 @@ export class MemberDetailService {
             })
           );
         })
-      )
-      .toPromise();
+      ),
+      { defaultValue: null }
+    );
   }
 
   clearState() {
     this.state.next(initialState);
   }
 
-  retrieveMemberDetail(orgSlug: string, memberId: string) {
-    const url = `${this.url}${orgSlug}/members/${memberId}/`;
-    return this.http
-      .get<Member>(url)
-      .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)));
+  retrieveMemberDetail(orgSlug: string, memberId: number) {
+    return lastValueFrom(
+      this.membersService
+        .retrieve(orgSlug, memberId)
+        .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)))
+    );
   }
 
   updateMemberDetail(member: Member) {
