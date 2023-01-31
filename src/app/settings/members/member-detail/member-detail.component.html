@@ -57,27 +57,35 @@
       </form>
     </mat-card-content>
   </mat-card>
-  <mat-card *ngIf="!member.isOwner">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>Organization Account Ownership</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <mat-error *ngIf="transferOrgOwnershipError$ | async as error">{{
-        error
-      }}</mat-error>
-      <p>
-        The account owner has access to the organization's GlitchTip
-        subscription settings. If you are the current account owner or have an
-        owner role, you may transfer ownership to this member.
-      </p>
-      <gt-loading-button
-        buttonText="Transfer Ownership"
-        [loading]="(transferOrgOwnershipLoading$ | async) === true"
-        (click)="transferOrgOwnership()"
-      >
-        Change Password
-      </gt-loading-button>
+      <ng-container *ngIf="!member.isOwner; else isOwner">
+        <mat-error *ngIf="transferOrgOwnershipError$ | async as error">{{
+          error
+        }}</mat-error>
+        <p>
+          The account owner has access to the organization's GlitchTip
+          subscription settings. If you are the current account owner or have an
+          owner role, you may transfer ownership to this member.
+        </p>
+        <gt-loading-button
+          buttonText="Transfer Ownership"
+          [loading]="(transferOrgOwnershipLoading$ | async) === true"
+          (click)="transferOrgOwnership()"
+        >
+          Change Password
+        </gt-loading-button>
+      </ng-container>
+      <ng-template #isOwner>
+        <p>
+          This member is the organization account owner and has access to the
+          organization's GlitchTip subscription settings.
+        </p>
+      </ng-template>
     </mat-card-content>
   </mat-card>
   <mat-card>
