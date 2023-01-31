@@ -22,6 +22,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   teams$ = this.organizationsService.organizationTeams$;
   updateMemberError$ = this.memberDetailService.updateMemberError$;
   updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
+  transferOrgOwnershipError$ =
+    this.memberDetailService.transferOrgOwnershipError$;
+  transferOrgOwnershipLoading$ =
+    this.memberDetailService.transferOrgOwnershipLoading$;
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
   memberIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("member-id"))
@@ -71,5 +75,9 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     const role = this.form.get("role")?.value;
     this.memberDetailService.updateMember(role);
     // entire member object needs to be put to orgs/org-slug/members/member-id
+  }
+
+  transferOrgOwnership() {
+    this.memberDetailService.transferOrgOwnership();
   }
 }

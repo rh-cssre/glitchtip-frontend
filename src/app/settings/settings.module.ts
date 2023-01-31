@@ -5,6 +5,7 @@ import { SettingsRoutingModule } from "./settings-routing.module";
 import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar.module";
 
 // Material
+import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs"
 import { MatRadioModule } from "@angular/material/radio";
@@ -41,6 +42,7 @@ import { NewRecipientComponent } from "./projects/project-detail/project-alerts/
     MobileNavToolbarModule,
     SettingsRoutingModule,
     SharedModule,
+    MatChipsModule,
     MatDialogModule,
     MatTabsModule,
     MatRadioModule,

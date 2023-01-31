@@ -17,12 +17,16 @@ interface MemberDetailState {
   memberDetail: Member | null;
   updateMemberError: string;
   updateMemberLoading: boolean;
+  transferOrgOwnershipError: string;
+  transferOrgOwnershipLoading: boolean;
 }
 
 const initialState: MemberDetailState = {
   memberDetail: null,
   updateMemberError: "",
   updateMemberLoading: false,
+  transferOrgOwnershipError: "",
+  transferOrgOwnershipLoading: false,
 };
 
 @Injectable({ providedIn: "root" })
@@ -37,6 +41,12 @@ export class MemberDetailService {
   );
   readonly updateMemberLoading$ = this.getState$.pipe(
     map((state) => state.updateMemberLoading)
+  );
+  readonly transferOrgOwnershipError$ = this.getState$.pipe(
+    map((state) => state.transferOrgOwnershipError)
+  );
+  readonly transferOrgOwnershipLoading$ = this.getState$.pipe(
+    map((state) => state.transferOrgOwnershipLoading)
   );
 
   constructor(
@@ -83,6 +93,52 @@ export class MemberDetailService {
     );
   }
 
+  transferOrgOwnership() {
+    this.setTransferOrgOwnershipLoading(true);
+    lastValueFrom(
+      combineLatest([
+        this.organizationsService.activeOrganizationSlug$,
+        this.memberDetail$,
+      ]).pipe(
+        filter(([orgSlug, memberDetail]) => !!orgSlug && !!memberDetail),
+        take(1),
+        exhaustMap(([orgSlug, memberDetail]) => {
+          return this.membersService
+            .setOrgOwner(orgSlug!, memberDetail!.id)
+            .pipe(
+              tap((resp) => {
+                this.setUpdateMemberLoading(false);
+                this.snackBar.open(
+                  `Successfully transferred organization account ownership to ${resp.email}.`
+                );
+                const newMemberDetail = {
+                  ...resp,
+                  teams: memberDetail!.teams,
+                };
+                this.updateMemberDetail(newMemberDetail);
+              }),
+              catchError((err: HttpErrorResponse) => {
+                this.setTransferOrgOwnershipLoading(false);
+                if (err instanceof HttpErrorResponse) {
+                  if (err.status === 403 && err.error?.detail) {
+                    this.setTransferOrgOwnershipError(err.error?.detail);
+                  } else if (err.status === 400 && err.error?.message) {
+                    this.setTransferOrgOwnershipError(err.error?.message);
+                  } else {
+                    this.setTransferOrgOwnershipError(
+                      "Unable to transfer account ownership."
+                    );
+                  }
+                }
+                return EMPTY;
+              })
+            );
+        })
+      ),
+      { defaultValue: null }
+    );
+  }
+
   clearState() {
     this.state.next(initialState);
   }
@@ -108,6 +164,20 @@ export class MemberDetailService {
 
   private setUpdateMemberLoading(loading: boolean) {
     this.state.next({ ...this.state.getValue(), updateMemberLoading: loading });
+  }
+
+  private setTransferOrgOwnershipError(errorMessage: string) {
+    this.state.next({
+      ...this.state.getValue(),
+      transferOrgOwnershipError: errorMessage,
+    });
+  }
+
+  private setTransferOrgOwnershipLoading(loading: boolean) {
+    this.state.next({
+      ...this.state.getValue(),
+      transferOrgOwnershipLoading: loading,
+    });
   }
 
   private setMemberDetail(member: Member) {
