@@ -31,7 +31,7 @@ export class MembersAPIService {
 
   setOrgOwner(orgSlug: string, memberId: number) {
     return this.http.post<Member>(
-      this.detailURL(orgSlug, memberId) + "/set_owner/",
+      this.detailURL(orgSlug, memberId) + "set_owner/",
       null
     );
   }
