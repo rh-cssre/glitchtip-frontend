@@ -36,7 +36,7 @@
     <ng-container *ngIf="(setupFIDO2Stage$ | async) === 2">
       <p>Provide a name for your device to complete registration.</p>
       <form [formGroup]="fido2Form">
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Device name</mat-label>
           <input matInput formControlName="fido2Code" />
           <mat-error *ngIf="fido2Code?.invalid">

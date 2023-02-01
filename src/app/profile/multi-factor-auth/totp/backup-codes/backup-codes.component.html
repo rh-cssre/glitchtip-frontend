@@ -33,7 +33,7 @@
   </p>
   <form [formGroup]="backupCodeForm">
     <gt-form-error [error]="error$ | async"></gt-form-error>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Backup code</mat-label>
       <input matInput formControlName="backupCode" />
       <mat-error *ngIf="backupCode?.invalid">

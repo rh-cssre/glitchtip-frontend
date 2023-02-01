@@ -5,7 +5,7 @@
     <mat-card-header>
       <mat-card-title>Social Auth Accounts</mat-card-title>
       <ng-container *ngIf="(socialApps$ | async)?.length">
-        <mat-form-field *ngIf="socialApps$ | async as socialApps">
+        <mat-form-field *ngIf="socialApps$ | async as socialApps" appearance="outline">
           <mat-label>Add Account</mat-label>
           <mat-select (selectionChange)="addAccount()" [formControl]="account">
             <mat-option
