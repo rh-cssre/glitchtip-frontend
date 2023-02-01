@@ -13,7 +13,7 @@
       </div>
       <form [formGroup]="newMonitorForm" (ngSubmit)="onSubmit()">
         <div>
-          <mat-form-field class="wide-field">
+          <mat-form-field class="wide-field" appearance="outline">
             <mat-label>Monitor Name</mat-label>
             <input
               id="monitor-name"
@@ -33,7 +33,7 @@
           </mat-form-field>
         </div>
         <div class="short-field-container">
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Monitor type</mat-label>
             <mat-select
               id="monitor-type"
@@ -74,7 +74,7 @@
         </div>
         <ng-container *ngIf="formMonitorType?.value !== 'Heartbeat'">
           <div class="url-spacing">
-            <mat-form-field class="wide-field">
+            <mat-form-field class="wide-field" appearance="outline">
               <mat-label>Site URL</mat-label>
               <input
                 id="monitor-url"
@@ -97,7 +97,7 @@
           </div>
         </ng-container>
         <div class="short-field-container">
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Associated Project</mat-label>
             <mat-select id="associated-project" formControlName="project">
               <ng-container *ngIf="orgProjects$ | async as orgProjects">
@@ -123,7 +123,7 @@
             formMonitorType?.value !== 'Ping'
           "
         >
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Expected Status</mat-label>
             <input
               id="expected-status"
@@ -151,7 +151,7 @@
           </mat-form-field>
         </div>
         <div class="short-field-container">
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Interval (seconds)</mat-label>
             <input
               id="interval"

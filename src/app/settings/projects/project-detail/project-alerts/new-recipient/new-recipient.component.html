@@ -6,7 +6,7 @@
     id="create-team-form"
   >
     <mat-dialog-content class="mat-typography">
-      <mat-form-field class="type">
+      <mat-form-field class="type" appearance="outline">
         <mat-label>Recipient Type</mat-label>
         <mat-select id="recipient-type" [formControl]="recipientType">
           <mat-option
@@ -23,7 +23,11 @@
         </mat-select>
       </mat-form-field>
       <div [ngSwitch]="recipientType.value" class="switch">
-        <mat-form-field class="webhook" *ngSwitchCase="'webhook'">
+        <mat-form-field
+          class="webhook"
+          *ngSwitchCase="'webhook'"
+          appearance="outline"
+        >
           <mat-label>Webhook URL</mat-label>
           <svg matPrefix class="slack">
             <use xlink:href="#webhook"></use>

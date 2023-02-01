@@ -5,7 +5,10 @@
       (errors$ | async)?.addProjectToTeam
     }}</mat-error>
     <div>
-      <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
+      <mat-form-field
+        *ngIf="(userTeamRole$ | async) !== 'member'"
+        appearance="outline"
+      >
         <mat-label i18n>Add Project</mat-label>
         <mat-select (selectionChange)="addProject()" [formControl]="project">
           <ng-container
@@ -38,8 +41,12 @@
           class="center-text"
           >{{ (errors$ | async)?.removeProjectFromTeam }}</mat-error
         >
-        <li *ngFor="let project of projectsOnTeam$ | async" class="team-project-list-item">
-          <a class="team-name"
+        <li
+          *ngFor="let project of projectsOnTeam$ | async"
+          class="team-project-list-item"
+        >
+          <a
+            class="team-name"
             [routerLink]="['/', project.organization.slug, 'issues']"
             [queryParams]="{ project: project.id }"
             >{{ project.name }}</a

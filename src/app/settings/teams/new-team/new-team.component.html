@@ -8,7 +8,7 @@
     <mat-error class="error mat-caption">
       <span *ngFor="let error of errors">{{ error }}</span>
     </mat-error>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Slug</mat-label>
       <input matInput gtSlugify formControlName="slug" />
       <mat-error *ngIf="slug?.errors?.required">
