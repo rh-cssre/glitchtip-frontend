@@ -23,7 +23,7 @@
         </mat-card-title>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <gt-form-error [error]="error$ | async"></gt-form-error>
-          <mat-form-field class="full-width">
+          <mat-form-field class="full-width" appearance="outline">
             <mat-label>Email</mat-label>
             <input
               matInput
@@ -43,7 +43,7 @@
               }}</span>
             </mat-error>
           </mat-form-field>
-          <mat-form-field class="full-width">
+          <mat-form-field class="full-width" appearance="outline">
             <mat-label>Password</mat-label>
             <input
               matInput

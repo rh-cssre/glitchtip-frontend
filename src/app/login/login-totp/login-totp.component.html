@@ -9,7 +9,7 @@
       class="error-center"
       [error]="error$ | async"
     ></gt-form-error>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" appearance="outline">
       <mat-label i18n>Verification Code</mat-label>
       <input #input matInput formControlName="code" />
       <mat-error *ngIf="code?.invalid">
