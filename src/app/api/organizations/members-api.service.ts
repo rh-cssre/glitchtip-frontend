@@ -29,6 +29,13 @@ export class MembersAPIService {
     return this.http.delete(this.detailURL(orgSlug, memberId));
   }
 
+  setOrgOwner(orgSlug: string, memberId: number) {
+    return this.http.post<Member>(
+      this.detailURL(orgSlug, memberId) + "set_owner/",
+      null
+    );
+  }
+
   inviteUser(orgSlug: string, data: OrganizationMembersRequest) {
     return this.http.post<Member>(this.listURL(orgSlug), data);
   }
