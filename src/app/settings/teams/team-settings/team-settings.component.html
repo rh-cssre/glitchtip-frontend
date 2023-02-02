@@ -10,7 +10,7 @@
       >{{ (errors$ | async)?.updateName }}</mat-error
     >
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Slug</mat-label>
         <input matInput formControlName="slug" [value]="team.slug" />
         <mat-error>

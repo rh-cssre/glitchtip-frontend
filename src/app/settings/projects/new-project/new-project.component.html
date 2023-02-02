@@ -11,7 +11,7 @@
             formControlName="platform"
             template="buttons"
           ></gt-platform-picker>
-          <mat-form-field class="project-name">
+          <mat-form-field class="project-name" appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name"/>
             <mat-error>
@@ -19,7 +19,7 @@
             </mat-error>
           </mat-form-field>
           <div class="teams">
-            <mat-form-field *ngIf="teams$ | async as teams">
+            <mat-form-field *ngIf="teams$ | async as teams" appearance="outline">
               <mat-select
                 (click)="teams.length ? undefined : openCreateTeamDialog()"
                 [placeholder]="teams.length ? 'Assign a team' : 'Create a team'"
@@ -41,6 +41,7 @@
 
             <button
               mat-icon-button
+              class="icon-button-shift"
               color="primary"
               aria-label="Add a team"
               (click)="openCreateTeamDialog()"

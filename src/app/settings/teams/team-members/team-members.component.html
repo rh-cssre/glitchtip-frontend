@@ -1,7 +1,11 @@
 <mat-card>
   <mat-card-header class="card-header">
     <mat-card-title i18n>Members</mat-card-title>
-    <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
+    <mat-form-field
+      *ngIf="(userTeamRole$ | async) !== 'member'"
+      appearance="outline"
+      data-cy=team-member-select
+    >
       <mat-label i18n>Add Member</mat-label>
       <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
         <ng-container
@@ -32,7 +36,10 @@
         <mat-error *ngIf="removeMemberError" class="center-text">{{
           removeMemberError
         }}</mat-error>
-        <li *ngFor="let teamMember of teamMembers$ | async" class="member-list-item">
+        <li
+          *ngFor="let teamMember of teamMembers$ | async"
+          class="member-list-item"
+        >
           <a
             mat-line
             [routerLink]="['../', 'members', teamMember.id]"
