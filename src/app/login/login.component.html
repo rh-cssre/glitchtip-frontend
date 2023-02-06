@@ -1,70 +1,104 @@
 <div class="auth-form-wrapper">
   <mat-card class="auth-form">
-    <div class="logo-container">
-      <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
-    </div>
-    <ng-container *ngIf="requiresMFA$ | async; else do_login">
-      <ng-container *ngIf="(hasFido2$ | async) === false || (useTOTP$ | async); else fido2">
-        <gt-login-totp></gt-login-totp>
-      </ng-container>
-      <ng-template #fido2>
-        <gt-login-fido2></gt-login-fido2>
-      </ng-template>
-    </ng-container>
-    <ng-template #do_login>
-      <div *ngIf="enableLoginForm$">
-        <h1 i18n>Login</h1>
+    <mat-card-content>
+      <div class="logo-container">
+        <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
       </div>
-      <mat-card-content>
-        <div *ngIf="enableLoginForm$">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <gt-form-error [error]="error$ | async"></gt-form-error>
-            <mat-form-field class="full-width">
-              <input matInput autofocus type="email" placeholder="Email" formControlName="email" />
-              <mat-error *ngIf="email?.errors">
-                <span *ngIf="email?.errors?.required" i18n>Your email is required to log in</span>
-                <span *ngIf="email?.errors?.email" i18n>Enter a valid email address</span>
-                <span *ngIf="email?.errors?.serverError">{{
-                  email?.errors?.serverError
-                  }}</span>
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field class="full-width">
-              <input matInput type="password" placeholder="Password" formControlName="password" />
-              <mat-error *ngIf="password?.errors">
-                <span *ngIf="password?.errors?.minlength" i18n>Your password should be at least 8 characters long</span>
-                <span *ngIf="password?.errors?.required" i18n>Your password is required to log in</span>
-              </mat-error>
-            </mat-form-field>
-            <button id="submit" class="full-width" mat-flat-button color="primary" i18n>Log in</button>
-          </form>
-          <div class="or mat-body-strong" i18n>or</div>
-        </div>
+      <ng-container *ngIf="requiresMFA$ | async; else do_login">
+        <ng-container
+          *ngIf="
+            (hasFido2$ | async) === false || (useTOTP$ | async);
+            else fido2
+          "
+        >
+          <gt-login-totp></gt-login-totp>
+        </ng-container>
+        <ng-template #fido2>
+          <gt-login-fido2></gt-login-fido2>
+        </ng-template>
+      </ng-container>
+      <ng-template #do_login>
+        <mat-card-title>
+          <h3 i18n>Login</h3>
+        </mat-card-title>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <gt-form-error [error]="error$ | async"></gt-form-error>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              autofocus
+              type="email"
+              formControlName="email"
+            />
+            <mat-error *ngIf="email?.errors">
+              <span *ngIf="email?.errors?.required" i18n
+                >Your email is required to log in</span
+              >
+              <span *ngIf="email?.errors?.email" i18n
+                >Enter a valid email address</span
+              >
+              <span *ngIf="email?.errors?.serverError">{{
+                email?.errors?.serverError
+              }}</span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="password"
+            />
+            <mat-error *ngIf="password?.errors">
+              <span *ngIf="password?.errors?.minlength" i18n
+                >Your password should be at least 8 characters long</span
+              >
+              <span *ngIf="password?.errors?.required" i18n
+                >Your password is required to log in</span
+              >
+            </mat-error>
+          </mat-form-field>
+          <button
+            id="submit"
+            class="full-width"
+            mat-flat-button
+            color="primary"
+            i18n
+            >Log in</button
+          >
+        </form>
         <ng-container *ngIf="socialApps$ | async as socialApps">
-          <div *ngIf="socialApps.length > 1" class="or">
+          <div *ngIf="socialApps.length" class="or">
             <span class="mat-body-strong mat-body-2" i18n>or</span>
           </div>
           <div class="o-auth">
-            <button *ngFor="let socialApp of socialApps" mat-stroked-button class="full-width margin"
-              (click)="onSocialApp(socialApp)">
-              <gt-auth-svg source="auth" text="Log in with {{ socialApp.name }}" i18n-text
-                [provider]="socialApp.provider"></gt-auth-svg>
+            <button
+              *ngFor="let socialApp of socialApps"
+              mat-stroked-button
+              class="full-width margin"
+              (click)="onSocialApp(socialApp)"
+            >
+              <gt-auth-svg
+                source="auth"
+                text="Log in with {{ socialApp.name }}"
+                i18n-text
+                [provider]="socialApp.provider"
+              ></gt-auth-svg>
             </button>
           </div>
         </ng-container>
-        <div *ngIf="enableLoginForm$">
-          <div class="sign-up">
-            <p *ngIf="enableUserRegistration$ | async" class="mat-body-1">
-              <ng-container i18n>New to GlitchTip?</ng-container>
-              <a routerLink="../register" i18n>Sign Up</a>
-            </p>
-            <p class="mat-body-1">
-              <a routerLink="/reset-password" i18n>Reset Password</a>
-            </p>
-          </div>
+        <div class="sign-up">
+          <p *ngIf="enableUserRegistration$ | async" class="mat-body-1">
+            <ng-container i18n>New to GlitchTip?</ng-container>
+            <a routerLink="../register" i18n>Sign Up</a>
+          </p>
+          <p class="mat-body-1">
+            <a routerLink="/reset-password" i18n>Reset Password</a>
+          </p>
         </div>
-      </mat-card-content>
-    </ng-template>
+      </ng-template>
+    </mat-card-content>
   </mat-card>
 </div>
 <div cdkFocusRegionEnd></div>

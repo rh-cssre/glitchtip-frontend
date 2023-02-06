@@ -1,6 +1,7 @@
 <mat-card *ngIf="team$ | async as team">
-  <mat-card-title i18n>Settings</mat-card-title>
-
+  <mat-card-header>
+    <mat-card-title i18n>Settings</mat-card-title>
+  </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
     <mat-error
@@ -9,7 +10,7 @@
       >{{ (errors$ | async)?.updateName }}</mat-error
     >
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Slug</mat-label>
         <input matInput formControlName="slug" [value]="team.slug" />
         <mat-error>
@@ -29,7 +30,9 @@
   </mat-card-content>
 </mat-card>
 <mat-card>
-  <mat-card-title i18n>Delete Team</mat-card-title>
+  <mat-card-header>
+    <mat-card-title i18n>Delete Team</mat-card-title>
+  </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="remove-content">
     <div>

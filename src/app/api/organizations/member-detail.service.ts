@@ -1,27 +1,36 @@
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse, HttpClient } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, combineLatest, EMPTY } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  EMPTY,
+  filter,
+  lastValueFrom,
+} from "rxjs";
 import { map, take, exhaustMap, tap, catchError } from "rxjs/operators";
 import { Member } from "./organizations.interface";
+import { MembersAPIService } from "./members-api.service";
 import { OrganizationsService } from "./organizations.service";
-import { baseUrl } from "src/app/constants";
 
 interface MemberDetailState {
   memberDetail: Member | null;
   updateMemberError: string;
   updateMemberLoading: boolean;
+  transferOrgOwnershipError: string;
+  transferOrgOwnershipLoading: boolean;
 }
 
 const initialState: MemberDetailState = {
   memberDetail: null,
   updateMemberError: "",
   updateMemberLoading: false,
+  transferOrgOwnershipError: "",
+  transferOrgOwnershipLoading: false,
 };
 
 @Injectable({ providedIn: "root" })
 export class MemberDetailService {
-  private readonly url = baseUrl + "/organizations/";
   private readonly state = new BehaviorSubject<MemberDetailState>(initialState);
   private readonly getState$ = this.state.asObservable();
   readonly memberDetail$ = this.getState$.pipe(
@@ -33,29 +42,35 @@ export class MemberDetailService {
   readonly updateMemberLoading$ = this.getState$.pipe(
     map((state) => state.updateMemberLoading)
   );
+  readonly transferOrgOwnershipError$ = this.getState$.pipe(
+    map((state) => state.transferOrgOwnershipError)
+  );
+  readonly transferOrgOwnershipLoading$ = this.getState$.pipe(
+    map((state) => state.transferOrgOwnershipLoading)
+  );
 
   constructor(
+    private membersService: MembersAPIService,
     private organizationsService: OrganizationsService,
-    private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
 
   /** Update member teams and/or permissions */
   updateMember(updatedRole: string) {
     this.setUpdateMemberLoading(true);
-    return combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.memberDetail$,
-    ])
-      .pipe(
+    return lastValueFrom(
+      combineLatest([
+        this.organizationsService.activeOrganizationSlug$,
+        this.memberDetail$,
+      ]).pipe(
+        filter(([orgslug, memberDetail]) => !!orgslug && !!memberDetail),
         take(1),
         exhaustMap(([orgSlug, memberDetail]) => {
           const data = {
-            ...memberDetail,
+            ...memberDetail!,
             role: updatedRole,
           };
-          const url = `${this.url}${orgSlug}/members/${memberDetail?.id}/`;
-          return this.http.put<Member>(url, data).pipe(
+          return this.membersService.update(orgSlug!, data).pipe(
             tap((resp) => {
               this.setUpdateMemberLoading(false);
               this.snackBar.open(
@@ -73,19 +88,67 @@ export class MemberDetailService {
             })
           );
         })
-      )
-      .toPromise();
+      ),
+      { defaultValue: null }
+    );
+  }
+
+  transferOrgOwnership() {
+    this.setTransferOrgOwnershipLoading(true);
+    lastValueFrom(
+      combineLatest([
+        this.organizationsService.activeOrganizationSlug$,
+        this.memberDetail$,
+      ]).pipe(
+        filter(([orgSlug, memberDetail]) => !!orgSlug && !!memberDetail),
+        take(1),
+        exhaustMap(([orgSlug, memberDetail]) => {
+          return this.membersService
+            .setOrgOwner(orgSlug!, memberDetail!.id)
+            .pipe(
+              tap((resp) => {
+                this.setUpdateMemberLoading(false);
+                this.snackBar.open(
+                  `Successfully transferred organization account ownership to ${resp.email}.`
+                );
+                const newMemberDetail = {
+                  ...resp,
+                  teams: memberDetail!.teams,
+                };
+                this.updateMemberDetail(newMemberDetail);
+              }),
+              catchError((err: HttpErrorResponse) => {
+                this.setTransferOrgOwnershipLoading(false);
+                if (err instanceof HttpErrorResponse) {
+                  if (err.status === 403 && err.error?.detail) {
+                    this.setTransferOrgOwnershipError(err.error?.detail);
+                  } else if (err.status === 400 && err.error?.message) {
+                    this.setTransferOrgOwnershipError(err.error?.message);
+                  } else {
+                    this.setTransferOrgOwnershipError(
+                      "Unable to transfer account ownership."
+                    );
+                  }
+                }
+                return EMPTY;
+              })
+            );
+        })
+      ),
+      { defaultValue: null }
+    );
   }
 
   clearState() {
     this.state.next(initialState);
   }
 
-  retrieveMemberDetail(orgSlug: string, memberId: string) {
-    const url = `${this.url}${orgSlug}/members/${memberId}/`;
-    return this.http
-      .get<Member>(url)
-      .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)));
+  retrieveMemberDetail(orgSlug: string, memberId: number) {
+    return lastValueFrom(
+      this.membersService
+        .retrieve(orgSlug, memberId)
+        .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)))
+    );
   }
 
   updateMemberDetail(member: Member) {
@@ -101,6 +164,20 @@ export class MemberDetailService {
 
   private setUpdateMemberLoading(loading: boolean) {
     this.state.next({ ...this.state.getValue(), updateMemberLoading: loading });
+  }
+
+  private setTransferOrgOwnershipError(errorMessage: string) {
+    this.state.next({
+      ...this.state.getValue(),
+      transferOrgOwnershipError: errorMessage,
+    });
+  }
+
+  private setTransferOrgOwnershipLoading(loading: boolean) {
+    this.state.next({
+      ...this.state.getValue(),
+      transferOrgOwnershipLoading: loading,
+    });
   }
 
   private setMemberDetail(member: Member) {
