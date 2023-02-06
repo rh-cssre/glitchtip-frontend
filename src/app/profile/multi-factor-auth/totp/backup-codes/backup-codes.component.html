@@ -1,36 +1,45 @@
-<div *ngIf="TOTPKey$ | async;">
-  <p class="mat-h3 mat-subheading-3"><strong>Regenerate backup codes</strong></p>
+<div *ngIf="TOTPKey$ | async">
+  <p class="mat-h2"><strong>Regenerate backup codes</strong></p>
   <p class="mat-h4">
-    If you have lost your backup codes you can generate new ones, invalidating all
-    previous codes. <strong>Print out these new codes or save them someplace safe.</strong>
+    If you have lost your backup codes you can generate new ones, invalidating
+    all previous codes.
+    <strong>Print out these new codes or save them someplace safe.</strong>
   </p>
-  <button *ngIf="(regenCodes$ | async) === false" mat-stroked-button color="primary" (click)="startRegenCodes()">
+  <button
+    *ngIf="(regenCodes$ | async) === false"
+    mat-stroked-button
+    color="primary"
+    (click)="startRegenCodes()"
+  >
     Regenerate codes
   </button>
 </div>
 <div *ngIf="(regenCodes$ | async) || (TOTPKey$ | async) === undefined">
   <p *ngIf="(TOTPKey$ | async) === undefined" class="mat-h4">
-    Download or copy a list of backup codes. If you ever lose your
-    phone, each of these recovery codes can be used one time to regain
-    access to your account. <strong>Print them out or save them someplace safe.</strong>
+    Download or copy a list of backup codes. If you ever lose your phone, each
+    of these recovery codes can be used one time to regain access to your
+    account. <strong>Print them out or save them someplace safe.</strong>
   </p>
-  <button mat-flat-button color="primary" (click)="downloadCodes()">
-    Download
-  </button>
-  <button mat-flat-button color="primary" (click)="copyCodes()">
-    Copy
-  </button>
+  <div class="button-group">
+    <button mat-flat-button color="primary" (click)="downloadCodes()">
+      Download
+    </button>
+    <button mat-flat-button color="primary" (click)="copyCodes()">
+      Copy
+    </button>
+  </div>
   <p class="mat-body-strong">
     Enter one of the backup codes to confirm that you have saved them:
   </p>
   <form [formGroup]="backupCodeForm">
     <gt-form-error [error]="error$ | async"></gt-form-error>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Backup code</mat-label>
       <input matInput formControlName="backupCode" />
       <mat-error *ngIf="backupCode?.invalid">
         <span *ngIf="backupCode?.errors?.required">Required</span>
-        <span *ngIf="backupCode?.errors?.minlength || backupCode?.errors?.maxlength"
+        <span
+          *ngIf="backupCode?.errors?.minlength || backupCode?.errors?.maxlength"
           >Code must be 16 digits</span
         >
       </mat-error>
@@ -38,10 +47,10 @@
     <button
       mat-flat-button
       color="primary"
-      [disabled]="(copiedCodes$ | async) !== (true)"
+      [disabled]="(copiedCodes$ | async) !== true"
       (click)="verifyBackupCode()"
     >
-      {{(regenCodes$ | async) ? 'Confirm' : 'Next'}}
+      {{ (regenCodes$ | async) ? "Confirm" : "Next" }}
     </button>
   </form>
 </div>

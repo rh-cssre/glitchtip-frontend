@@ -2,10 +2,12 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { SettingsRoutingModule } from "./settings-routing.module";
+import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar.module";
 
 // Material
+import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatTabsModule } from "@angular/material/tabs";
+import { MatTabsModule } from "@angular/material/tabs"
 import { MatRadioModule } from "@angular/material/radio";
 import { MatExpansionModule } from "@angular/material/expansion";
 
@@ -37,8 +39,10 @@ import { NewRecipientComponent } from "./projects/project-detail/project-alerts/
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    MobileNavToolbarModule,
     SettingsRoutingModule,
     SharedModule,
+    MatChipsModule,
     MatDialogModule,
     MatTabsModule,
     MatRadioModule,

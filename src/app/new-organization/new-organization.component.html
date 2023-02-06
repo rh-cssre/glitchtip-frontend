@@ -13,11 +13,11 @@
             id="create-organization-form"
           >
             <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
-            <mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
               <input
                 matInput
                 formControlName="name"
-                placeholder="Name"
                 i18n-placeholder
               />
             </mat-form-field>
