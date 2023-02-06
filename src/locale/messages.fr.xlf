@@ -343,9 +343,9 @@
         <target>Votre mot de passe doit comporter au moins 8 caractères</target>
       </segment>
     </unit>
-    <unit id="6745305564776759454">
+    <unit id="2935794773842380882">
       <segment state="initial">
-        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization.</source>
         <target> L&apos;enregistrement a été désactivé sur cette instance de GlitchTip. Contactez un administrateur pour être invité dans une organisation existante. </target>
       </segment>
     </unit>
@@ -535,9 +535,9 @@
         <target>ou votre application TOTP préférée sur votre appareil mobile</target>
       </segment>
     </unit>
-    <unit id="3099741642167775297">
-      <segment state="translated">
-        <source>Download</source>
+    <unit id="1738896816778317550">
+      <segment state="initial">
+        <source>Download </source>
         <target>Télécharger</target>
       </segment>
     </unit>

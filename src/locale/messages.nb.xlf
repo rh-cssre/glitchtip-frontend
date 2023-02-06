@@ -343,9 +343,9 @@
         <target>Lag organisasjon</target>
       </segment>
     </unit>
-    <unit id="6745305564776759454">
+    <unit id="2935794773842380882">
       <segment state="initial">
-        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization.</source>
         <target> Registrering er deaktivert. Kontakt en administrator for å bli invitert til en eksisterende organisasjon. </target>
       </segment>
     </unit>
@@ -553,9 +553,9 @@
         <target>Kom igang</target>
       </segment>
     </unit>
-    <unit id="3099741642167775297">
-      <segment state="translated">
-        <source>Download</source>
+    <unit id="1738896816778317550">
+      <segment state="initial">
+        <source>Download </source>
         <target>Last ned</target>
       </segment>
     </unit>

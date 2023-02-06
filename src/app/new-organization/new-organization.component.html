@@ -15,21 +15,18 @@
             <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
-              <input
-                matInput
-                formControlName="name"
-                i18n-placeholder
-              />
+              <input matInput formControlName="name" i18n-placeholder />
             </mat-form-field>
             <button id="submit" mat-flat-button color="primary" i18n
               >Create Organization</button
             >
           </form>
         </ng-container>
-        <ng-template #elseBlock i18n>
-          Organization creation has been disabled on this instance of GlitchTip.
-          Contact an administrator to be invited into an existing organization.
-        </ng-template>
+        <ng-template #elseBlock i18n
+          >Organization creation has been disabled on this instance of
+          GlitchTip. Contact an administrator to be invited into an existing
+          organization.</ng-template
+        >
       </ng-container>
     </mat-card-content>
   </mat-card>

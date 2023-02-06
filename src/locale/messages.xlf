@@ -286,9 +286,9 @@
         <source>Your password should be at least 8 characters long</source>
       </segment>
     </unit>
-    <unit id="6745305564776759454">
+    <unit id="2935794773842380882">
       <segment>
-        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization.</source>
       </segment>
     </unit>
     <unit id="3301086086650990787">
@@ -446,9 +446,9 @@
         <source>or your favorite TOTP app on your mobile device</source>
       </segment>
     </unit>
-    <unit id="3099741642167775297">
+    <unit id="1738896816778317550">
       <segment>
-        <source>Download</source>
+        <source>Download </source>
       </segment>
     </unit>
     <unit id="7822329547663295003">
