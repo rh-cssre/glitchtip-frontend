@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { BehaviorSubject, EMPTY } from "rxjs";
+import { BehaviorSubject, EMPTY, lastValueFrom } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
 import {
   Subscription,
@@ -136,15 +136,27 @@ export class SubscriptionsService {
    * Retrieve Subscription and navigate to subscription page if no subscription exists
    */
   checkIfUserHasSubscription(orgSlug: string) {
-    this.retrieveSubscription(orgSlug)
-      .pipe(
+    lastValueFrom(
+      this.retrieveSubscription(orgSlug).pipe(
         tap((subscription) => {
-          if (subscription.status === null) {
-            this.router.navigate([orgSlug, "settings", "subscription"]);
+          const subscriptionRoute = [orgSlug, "settings", "subscription"];
+          if (
+            subscription.status === null &&
+            !this.router.isActive(
+              this.router.createUrlTree(subscriptionRoute),
+              {
+                paths: "exact",
+                queryParams: "subset",
+                fragment: "ignored",
+                matrixParams: "ignored",
+              }
+            )
+          ) {
+            this.router.navigate(subscriptionRoute);
           }
         })
       )
-      .toPromise();
+    );
   }
 
   clearState() {
