@@ -11,11 +11,7 @@
     >
       <mat-form-field class="full-width first-field" appearance="outline">
         <mat-label>Name</mat-label>
-        <input
-          matInput
-          formControlName="name"
-          maxlength="255"
-        />
+        <input matInput formControlName="name" maxlength="255" />
       </mat-form-field>
       <mat-form-field class="timezone full-width" appearance="outline">
         <mat-label>Time Zone</mat-label>
@@ -45,9 +41,9 @@
           </mat-option>
         </mat-autocomplete>
         <mat-error>
-          <span *ngIf="formTimeZone?.errors?.invalidAutocompleteString" i18n>
-            Select a valid time zone
-          </span>
+          <span *ngIf="formTimeZone?.errors?.invalidAutocompleteString" i18n
+            >Select a valid time zone</span
+          >
         </mat-error>
         <mat-hint>Your system time zone is {{ currentTimeZone }}</mat-hint>
       </mat-form-field>
