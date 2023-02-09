@@ -1,26 +1,29 @@
 <div class="mat-typography" [class.dialog-content]="dialog">
   <h2 *ngIf="dialog" i18n>Events</h2>
-  <p i18n
-    >Events are the unit of measure for tracking GlitchTip usage. An
-    organization's maximum number of events per month is determined by its
-    subscription type. Events are used to measure four GlitchTip features:</p
-  >
-  <ul>
-    <li i18n
-      ><b>Issues:</b> Each occurrence of an event reported to GlitchTip</li
+  <div class="mat-body-1">
+    <p i18n
+      >Events are the unit of measure for tracking GlitchTip usage. An
+      organization's maximum number of events per month is determined by its
+      subscription type. Events are used to measure four GlitchTip features:</p
     >
-    <li i18nb
-      ><b>Uptime:</b> Whenever GlitchTip checks the status of your app or your
-      app sends a request to GlitchTip to report its own status</li
-    >
-    <li i18n
-      ><b>Performance:</b> Each time your app sends GlitchTip a transaction
-      report for a tracked activity on your app</li
-    >
-    <li i18n
-      ><b>Releases:</b> Each megabyte of file storage is counted as an event</li
-    >
-  </ul>
+    <ul>
+      <li i18n
+        ><b>Issues:</b> Each occurrence of an event reported to GlitchTip</li
+      >
+      <li i18nb
+        ><b>Uptime:</b> Whenever GlitchTip checks the status of your app or your
+        app sends a request to GlitchTip to report its own status</li
+      >
+      <li i18n
+        ><b>Performance:</b> Each time your app sends GlitchTip a transaction
+        report for a tracked activity on your app</li
+      >
+      <li i18n
+        ><b>Releases:</b> Each megabyte of file storage is counted as an
+        event</li
+      >
+    </ul>
+  </div>
   <button
     *ngIf="dialog"
     mat-flat-button
