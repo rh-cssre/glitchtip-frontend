@@ -87,7 +87,6 @@ export class SubscriptionsService {
    * Retrieve subscription for this organization
    * @param slug Organization Slug for requested subscription
    */
-
   retrieveSubscription(slug: string) {
     this.setSubscriptionLoading(true);
     lastValueFrom(
@@ -96,11 +95,15 @@ export class SubscriptionsService {
           this.setSubscriptionLoading(false);
           this.setSubscription(subscription);
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
-  // Keep trying to get subscription, for users redirected from Stripe
+  /**
+   * Keep trying to get subscription, for users redirected from Stripe
+   * @param slug Organization Slug for requested subscription
+   */
   retrieveUntilSubscriptionOrTimeout(slug: string) {
     this.setFromStripe(true);
     this.setSubscriptionLoading(true);
@@ -116,7 +119,8 @@ export class SubscriptionsService {
           }
         }),
         takeUntil(this.subscriptionRetryTimer())
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
