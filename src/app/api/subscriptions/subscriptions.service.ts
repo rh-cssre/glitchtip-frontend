@@ -219,7 +219,7 @@ export class SubscriptionsService {
   }
 
   private subscriptionRetryTimer() {
-    return timer(10000).pipe(
+    return timer(60000).pipe(
       tap(() => {
         this.setSubscriptionLoading(false);
         this.setSubscriptionLoadingTimeout(true);
