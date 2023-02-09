@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { BehaviorSubject, EMPTY, lastValueFrom, timer } from "rxjs";
-import { delay, tap, map, catchError, expand, takeUntil } from "rxjs/operators";
+import { catchError, delay, expand, map, tap, takeUntil } from "rxjs/operators";
 import {
   Subscription,
   Product,
@@ -100,6 +100,7 @@ export class SubscriptionsService {
     );
   }
 
+  // Keep trying to get subscription, for users redirected from Stripe
   retrieveUntilSubscriptionOrTimeout(slug: string) {
     this.setFromStripe(true);
     this.setSubscriptionLoading(true);
@@ -203,7 +204,7 @@ export class SubscriptionsService {
   private getSubscription(slug: string) {
     return this.http.get<Subscription>(`${this.url}${slug}/`).pipe(
       catchError((error) => {
-        this.clearState();
+        this.setSubscriptionLoading(false);
         return EMPTY;
       })
     );

@@ -23,7 +23,7 @@ interface Percentages {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubscriptionComponent implements OnDestroy {
-  fromStripe$ = this.service.fromStripe$
+  fromStripe$ = this.service.fromStripe$;
   subscription$ = this.service.subscription$;
   subscriptionLoading$ = this.service.subscriptionLoading$;
   subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;

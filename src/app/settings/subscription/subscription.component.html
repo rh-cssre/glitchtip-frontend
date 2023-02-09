@@ -1,7 +1,9 @@
 <section class="l-body">
   <header class="page-header">
     <h2 class="mat-headline-4" i18n>Subscription</h2>
-    <span *ngIf="fromStripe$ | async" class="mat-subtitle-1">Redirected from Stripe</span>
+    <span *ngIf="fromStripe$ | async" class="mat-subtitle-1"
+      >Redirected from Stripe</span
+    >
   </header>
   <ng-container *ngIf="subscription$ | async as subscription; else loading">
     <mat-card>
@@ -195,7 +197,11 @@
     ></gt-payment>
   </ng-container>
   <ng-template #loading>
-    <mat-card>
+    <mat-card
+      *ngIf="
+        (subscriptionLoading$ | async) || (subscriptionLoadingTimeout$ | async)
+      "
+    >
       <mat-card-header></mat-card-header>
       <mat-card-content>
         <div *ngIf="subscriptionLoading$ | async" class="spinner-container">
@@ -203,8 +209,10 @@
         </div>
         <div *ngIf="subscriptionLoadingTimeout$ | async">
           GlitchTip was unable to find a subscription for your account. If you
-          just signed up for a subscription on our payment platform, it may take
-          a few moments to update in our records.
+          just signed up for a subscription on our payment platform, please
+          contact us at
+          <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+          >.
         </div>
       </mat-card-content>
     </mat-card>
