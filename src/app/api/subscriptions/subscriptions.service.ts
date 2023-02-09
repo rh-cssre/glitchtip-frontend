@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { BehaviorSubject, EMPTY, lastValueFrom } from "rxjs";
-import { tap, map, catchError } from "rxjs/operators";
+import { BehaviorSubject, EMPTY, lastValueFrom, timer } from "rxjs";
+import { delay, tap, map, catchError, expand, takeUntil } from "rxjs/operators";
 import {
   Subscription,
   Product,
@@ -13,12 +13,18 @@ import { baseUrl } from "src/app/constants";
 
 interface SubscriptionsState {
   subscription: Subscription | null;
+  subscriptionLoading: boolean;
+  subscriptionLoadingTimeout: boolean;
+  fromStripe: boolean;
   eventsCount: EventsCount | null;
   products: Product[] | null;
 }
 
 const initialState: SubscriptionsState = {
   subscription: null,
+  subscriptionLoading: false,
+  subscriptionLoadingTimeout: false,
+  fromStripe: false,
   eventsCount: null,
   products: null,
 };
@@ -36,6 +42,13 @@ export class SubscriptionsService {
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
   );
+  readonly subscriptionLoading$ = this.getState$.pipe(
+    map((state) => state.subscriptionLoading)
+  );
+  readonly subscriptionLoadingTimeout$ = this.getState$.pipe(
+    map((state) => state.subscriptionLoadingTimeout)
+  );
+  readonly fromStripe$ = this.getState$.pipe(map((state) => state.fromStripe));
   readonly eventsCountWithTotal$ = this.getState$.pipe(
     map((state) => {
       let total = 0;
@@ -74,13 +87,35 @@ export class SubscriptionsService {
    * Retrieve subscription for this organization
    * @param slug Organization Slug for requested subscription
    */
+
   retrieveSubscription(slug: string) {
-    return this.http.get<Subscription>(`${this.url}${slug}/`).pipe(
-      tap((subscription) => this.setSubscription(subscription)),
-      catchError((error) => {
-        this.clearState();
-        return EMPTY;
-      })
+    this.setSubscriptionLoading(true);
+    lastValueFrom(
+      this.getSubscription(slug).pipe(
+        tap((subscription) => {
+          this.setSubscriptionLoading(false);
+          this.setSubscription(subscription);
+        })
+      )
+    );
+  }
+
+  retrieveUntilSubscriptionOrTimeout(slug: string) {
+    this.setFromStripe(true);
+    this.setSubscriptionLoading(true);
+    lastValueFrom(
+      this.getSubscription(slug).pipe(
+        expand((subscription) => {
+          if (!subscription.created) {
+            return this.getSubscription(slug).pipe(delay(2000));
+          } else {
+            this.setSubscriptionLoading(false);
+            this.setSubscription(subscription);
+            return EMPTY;
+          }
+        }),
+        takeUntil(this.subscriptionRetryTimer())
+      )
     );
   }
 
@@ -136,27 +171,25 @@ export class SubscriptionsService {
    * Retrieve Subscription and navigate to subscription page if no subscription exists
    */
   checkIfUserHasSubscription(orgSlug: string) {
-    lastValueFrom(
-      this.retrieveSubscription(orgSlug).pipe(
-        tap((subscription) => {
-          const subscriptionRoute = [orgSlug, "settings", "subscription"];
-          if (
-            subscription.status === null &&
-            !this.router.isActive(
-              this.router.createUrlTree(subscriptionRoute),
-              {
-                paths: "exact",
-                queryParams: "subset",
-                fragment: "ignored",
-                matrixParams: "ignored",
-              }
-            )
-          ) {
-            this.router.navigate(subscriptionRoute);
-          }
-        })
-      )
-    );
+    const subscriptionRoute = [orgSlug, "settings", "subscription"];
+    if (
+      !this.router.isActive(this.router.createUrlTree(subscriptionRoute), {
+        paths: "exact",
+        queryParams: "subset",
+        fragment: "ignored",
+        matrixParams: "ignored",
+      })
+    ) {
+      lastValueFrom(
+        this.getSubscription(orgSlug).pipe(
+          tap((subscription) => {
+            if (subscription.status === null) {
+              this.router.navigate(subscriptionRoute);
+            }
+          })
+        )
+      );
+    }
   }
 
   clearState() {
@@ -167,8 +200,38 @@ export class SubscriptionsService {
     this.state.next({ ...this.state.getValue(), products });
   }
 
+  private getSubscription(slug: string) {
+    return this.http.get<Subscription>(`${this.url}${slug}/`).pipe(
+      catchError((error) => {
+        this.clearState();
+        return EMPTY;
+      })
+    );
+  }
+
+  private setFromStripe(fromStripe: boolean) {
+    this.state.next({ ...this.state.getValue(), fromStripe });
+  }
+
   private setSubscription(subscription: Subscription) {
     this.state.next({ ...this.state.getValue(), subscription });
+  }
+
+  private subscriptionRetryTimer() {
+    return timer(10000).pipe(
+      tap(() => {
+        this.setSubscriptionLoading(false);
+        this.setSubscriptionLoadingTimeout(true);
+      })
+    );
+  }
+
+  private setSubscriptionLoading(subscriptionLoading: boolean) {
+    this.state.next({ ...this.state.getValue(), subscriptionLoading });
+  }
+
+  private setSubscriptionLoadingTimeout(subscriptionLoadingTimeout: boolean) {
+    this.state.next({ ...this.state.getValue(), subscriptionLoadingTimeout });
   }
 
   private setSubscriptionCount(eventsCount: EventsCount) {

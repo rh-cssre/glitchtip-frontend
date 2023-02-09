@@ -10,6 +10,16 @@ mat-error {
   display: block;
 }
 
+.page-header {
+  flex-wrap: wrap;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .visualization {
   position: relative;
   margin: -10px 0 20px;

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { combineLatest, Subscription } from "rxjs";
-import { map, filter } from "rxjs/operators";
+import { map, filter, take } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
@@ -23,7 +23,10 @@ interface Percentages {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubscriptionComponent implements OnDestroy {
+  fromStripe$ = this.service.fromStripe$
   subscription$ = this.service.subscription$;
+  subscriptionLoading$ = this.service.subscriptionLoading$;
+  subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   promptForProject$ = combineLatest([
@@ -78,14 +81,26 @@ export class SubscriptionComponent implements OnDestroy {
     private stripe: StripeService,
     private orgService: OrganizationsService
   ) {
-    this.routerSubscription = this.route.params
+    this.routerSubscription = combineLatest([
+      this.route.params,
+      this.route.queryParams,
+    ])
       .pipe(
-        map((params) => params["org-slug"] as string),
-        filter((slug) => !!slug)
+        map(([params, queryParams]) => {
+          const slug = params["org-slug"] as string;
+          const sessionId = queryParams["session_id"];
+          return { slug, sessionId };
+        }),
+        filter((routerData) => !!routerData.slug),
+        take(1)
       )
-      .subscribe((slug) => {
-        this.service.retrieveSubscription(slug).toPromise();
-        this.service.retrieveSubscriptionCount(slug).toPromise();
+      .subscribe((routerData) => {
+        if (routerData.sessionId) {
+          this.service.retrieveUntilSubscriptionOrTimeout(routerData.slug);
+        } else {
+          this.service.retrieveSubscription(routerData.slug);
+          this.service.retrieveSubscriptionCount(routerData.slug).toPromise();
+        }
       });
   }
 
