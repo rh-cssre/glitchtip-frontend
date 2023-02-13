@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, ChangeDetectionStrategy, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
   selector: "gt-loading-button",
@@ -14,4 +14,5 @@ export class LoadingButtonComponent {
   /** For fullWidth to work, you may need to set width: 100% to app-loading-button */
   @Input() fullWidth = false;
   @Input() buttonStyle: "flat" | "stroked" | "basic" = "flat";
+  @Output() buttonClick = new EventEmitter();
 }

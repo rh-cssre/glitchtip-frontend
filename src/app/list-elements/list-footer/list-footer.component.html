@@ -17,6 +17,7 @@
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
   <button
+    data-cy="keyboard-right"
     class="button-right"
     [routerLink]="[]"
     [queryParams]="paginator.nextPageParams || {}"
@@ -24,6 +25,6 @@
     mat-button
     [disabled]="paginator.hasNextPage === false"
   >
-    <mat-icon data-cy="keyboard-right">keyboard_arrow_right</mat-icon>
+    <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
 </div>

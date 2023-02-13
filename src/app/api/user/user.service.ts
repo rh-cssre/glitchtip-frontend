@@ -7,11 +7,15 @@ import { User } from "./user.interfaces";
 
 interface UserState {
   user: User | null;
+  userDeleteError: string | null;
+  userDeleteLoading: boolean;
   disconnectLoading: number | null;
 }
 
 const initialState: UserState = {
   user: null,
+  userDeleteError: null,
+  userDeleteLoading: false,
   disconnectLoading: null,
 };
 
@@ -21,6 +25,12 @@ const initialState: UserState = {
 export class UserService {
   private readonly state = new BehaviorSubject<UserState>(initialState);
   readonly userDetails$ = this.state.pipe(map((state) => state.user));
+  readonly userDeleteError$ = this.state.pipe(
+    map((state) => state.userDeleteError)
+  );
+  readonly userDeleteLoading$ = this.state.pipe(
+    map((state) => state.userDeleteLoading)
+  );
   readonly disconnectLoading$ = this.state.pipe(
     map((state) => state.disconnectLoading)
   );
@@ -54,7 +64,17 @@ export class UserService {
   }
 
   deleteUser() {
-    return this.http.delete(this.url);
+    this.setUserDeleteLoading(true);
+    return this.http.delete(this.url).pipe(
+      catchError((err) => {
+        if (err instanceof HttpErrorResponse) {
+          this.setUserDeleteError(
+            err.error?.message ? err.error?.message : "Unable to delete user"
+          );
+        }
+        return EMPTY;
+      })
+    );
   }
 
   updateUserOptions(name: string, options: { [key: string]: string }) {
@@ -62,7 +82,7 @@ export class UserService {
       .pipe(
         tap(() => {
           this.getUserDetails();
-          this.snackBar.open("Preferences have been updated")
+          this.snackBar.open("Preferences have been updated");
         })
       )
       .toPromise();
@@ -95,11 +115,42 @@ export class UserService {
       .toPromise();
   }
 
+  clearUserUIState() {
+    this.setInitialUserUIState();
+  }
+
+  private setUserDeleteLoading(loading: boolean) {
+    const state = this.state.getValue();
+    this.state.next({
+      ...state,
+      userDeleteLoading: loading,
+    });
+  }
+
   private setDisconnectLoading(loading: number | null) {
     this.state.next({ ...this.state.getValue(), disconnectLoading: loading });
   }
 
   private setUserDetails(userDetails: User) {
     this.state.next({ ...this.state.getValue(), user: userDetails });
+  }
+
+  private setInitialUserUIState() {
+    const state = this.state.getValue();
+    this.state.next({
+      ...state,
+      userDeleteError: initialState.userDeleteError,
+      userDeleteLoading: initialState.userDeleteLoading,
+      disconnectLoading: initialState.disconnectLoading,
+    });
+  }
+
+  private setUserDeleteError(error: string) {
+    this.setUserDeleteLoading(false);
+    const state = this.state.getValue();
+    this.state.next({
+      ...state,
+      userDeleteError: error,
+    });
   }
 }

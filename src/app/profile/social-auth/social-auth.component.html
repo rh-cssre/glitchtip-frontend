@@ -5,7 +5,7 @@
     <mat-card-header>
       <mat-card-title>Social Auth Accounts</mat-card-title>
       <ng-container *ngIf="(socialApps$ | async)?.length">
-        <mat-form-field *ngIf="socialApps$ | async as socialApps">
+        <mat-form-field *ngIf="socialApps$ | async as socialApps" appearance="outline">
           <mat-label>Add Account</mat-label>
           <mat-select (selectionChange)="addAccount()" [formControl]="account">
             <mat-option
@@ -31,32 +31,34 @@
         </p>
       </ng-container>
       <ng-template #authAccountsList>
-        <div class="button-wrapper">
+        <div class="socialaccount-list-wrapper">
           <ng-container
             *ngFor="
               let socialAccount of (user$ | async)?.identities;
-              let i = index
+              let lastItem = last
             "
           >
-            <button
-              mat-stroked-button
-              class="full-width margin"
-              (click)="disconnect(socialAccount.id)"
-              [disabled]="(disconnectLoading$ | async) === socialAccount.id"
-            >
-              <gt-auth-svg
-                [loading]="(disconnectLoading$ | async) === socialAccount.id"
-                source="disconnect"
-                text="Disconnect
-            {{
-                  socialAccount.username
-                    ? socialAccount.username
-                    : socialAccount.email
-                }}"
-                [provider]="socialAccount.provider"
-              ></gt-auth-svg></button
-          ></ng-container></div
-      ></ng-template>
+            <div class="socialaccount-wrapper">
+              <button
+                mat-stroked-button
+                (click)="disconnect(socialAccount.id)"
+                [disabled]="(disconnectLoading$ | async) === socialAccount.id"
+              >
+                <gt-auth-svg
+                  [loading]="(disconnectLoading$ | async) === socialAccount.id"
+                  source="disconnect"
+                  text="Disconnect {{ socialAccount.name }}"
+                  [provider]="socialAccount.provider"
+                ></gt-auth-svg>
+              </button>
+              <div class="email">
+                {{ socialAccount.email }}
+              </div>
+            </div>
+            <mat-divider *ngIf="!lastItem"></mat-divider>
+          </ng-container>
+        </div>
+      </ng-template>
     </mat-card-content>
   </mat-card>
 </ng-container>

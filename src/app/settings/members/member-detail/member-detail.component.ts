@@ -22,11 +22,15 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   teams$ = this.organizationsService.organizationTeams$;
   updateMemberError$ = this.memberDetailService.updateMemberError$;
   updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
+  transferOrgOwnershipError$ =
+    this.memberDetailService.transferOrgOwnershipError$;
+  transferOrgOwnershipLoading$ =
+    this.memberDetailService.transferOrgOwnershipLoading$;
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
-  memberIdSlug$ = this.route.paramMap.pipe(
+  memberIdParam$ = this.route.paramMap.pipe(
     map((params) => params.get("member-id"))
   );
-  routeParams$ = combineLatest([this.orgSlug$, this.memberIdSlug$]);
+  routeParams$ = combineLatest([this.orgSlug$, this.memberIdParam$]);
   form = new UntypedFormGroup({
     role: new UntypedFormControl(""),
   });
@@ -40,11 +44,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeParams$
       .pipe(
-        map(([organizationSlug, memberIdSlug]) => {
-          if (organizationSlug && memberIdSlug) {
-            this.memberDetailService
-              .retrieveMemberDetail(organizationSlug, memberIdSlug)
-              .toPromise();
+        map(([organizationSlug, memberIdParam]) => {
+          if (organizationSlug && memberIdParam) {
+            this.memberDetailService.retrieveMemberDetail(
+              organizationSlug,
+              +memberIdParam
+            );
             this.organizationsService.retrieveOrganizationTeams(
               organizationSlug
             );
@@ -70,5 +75,9 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     const role = this.form.get("role")?.value;
     this.memberDetailService.updateMember(role);
     // entire member object needs to be put to orgs/org-slug/members/member-id
+  }
+
+  transferOrgOwnership() {
+    this.memberDetailService.transferOrgOwnership();
   }
 }
