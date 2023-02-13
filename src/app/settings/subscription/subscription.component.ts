@@ -4,10 +4,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { combineLatest, lastValueFrom, Subscription } from "rxjs";
 import { map, filter, take, tap } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
-import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
-import { StripeService } from "./stripe.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { StripeService } from "./stripe.service";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 
 interface Percentages {
   total: number;

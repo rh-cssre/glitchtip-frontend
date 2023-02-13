@@ -8,9 +8,9 @@ import {
   StripeBillingPortalSession,
 } from "./stripe.interfaces";
 import { loadStripe } from "@stripe/stripe-js";
-import { SettingsService } from "src/app/api/settings.service";
 import { EMPTY, catchError } from "rxjs";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { SettingsService } from "src/app/api/settings.service";
 
 export interface StripeState {
   error: string | null;
