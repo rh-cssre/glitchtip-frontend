@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { combineLatest, Subscription } from "rxjs";
-import { map, filter, take } from "rxjs/operators";
+import { combineLatest, lastValueFrom, Subscription } from "rxjs";
+import { map, filter, take, tap } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
@@ -28,6 +28,7 @@ export class SubscriptionComponent implements OnDestroy {
   subscriptionLoading$ = this.service.subscriptionLoading$;
   subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
+  activeOrganization$ = this.orgService.activeOrganization$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   promptForProject$ = combineLatest([
     this.orgService.activeOrganizationLoaded$,
@@ -99,8 +100,8 @@ export class SubscriptionComponent implements OnDestroy {
           this.service.retrieveUntilSubscriptionOrTimeout(routerData.slug);
         } else {
           this.service.retrieveSubscription(routerData.slug);
-          this.service.retrieveSubscriptionCount(routerData.slug).toPromise();
         }
+        this.service.retrieveSubscriptionEventCount(routerData.slug);
       });
   }
 
@@ -111,7 +112,12 @@ export class SubscriptionComponent implements OnDestroy {
   }
 
   manageSubscription() {
-    this.stripe.redirectToBillingPortal();
+    lastValueFrom(
+      this.activeOrganization$.pipe(
+        filter((org) => !!org),
+        tap((org) => this.stripe.redirectToBillingPortal(org!.id))
+      )
+    );
   }
 
   ngOnDestroy() {
