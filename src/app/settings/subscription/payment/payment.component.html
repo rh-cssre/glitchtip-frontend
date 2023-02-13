@@ -19,7 +19,7 @@
           </li>
         </ul>
         <p>
-          <span class="mat-display-1">
+          <span class="mat-headline-4">
             ${{ product.plans[0].amount | number }}
           </span>
           / month
@@ -34,7 +34,9 @@
   </div>
   <div class="event-info">
     <mat-card>
-      <mat-card-title i18n>Events</mat-card-title>
+      <mat-card-header>
+        <mat-card-title i18n>Events</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         <gt-event-info></gt-event-info>

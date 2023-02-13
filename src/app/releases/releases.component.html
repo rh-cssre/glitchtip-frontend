@@ -60,11 +60,11 @@
               <ng-container *ngIf="(errors$ | async)?.length; else noResults">
                 <ng-container
                   *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
-                  ><h3 class="mat-display-1">
+                  ><h3 class="mat-headline-4">
                     There was an error processing your request
                   </h3></ng-container
                 ><ng-template #multipleErrors
-                  ><h3 class="mat-display-1">
+                  ><h3 class="mat-headline-4">
                     There were errors while processing your request
                   </h3></ng-template
                 >
@@ -79,7 +79,7 @@
           </div>
         </td>
       </tr>
-      <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
+      <tr class="pagination-row" mat-footer-row *matFooterRowDef="['pagination']"></tr>
     </table>
   </div>
 </section>

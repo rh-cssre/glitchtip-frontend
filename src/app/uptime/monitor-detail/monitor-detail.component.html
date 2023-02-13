@@ -5,24 +5,26 @@
         <mat-icon>keyboard_arrow_left</mat-icon>
         View all uptime monitors
       </a>
-      <h1 class="mat-display-1">Uptime details for {{ monitor.name }}</h1>
+      <h1 class="mat-headline-4">Uptime details for {{ monitor.name }}</h1>
     </header>
     <mat-card>
-      <mat-card-title>
-        <span *ngIf="monitor.isUp" i18n="Uptime check reports up">Up</span>
-        <span *ngIf="monitor.isUp === false" i18n="Uptime check reports down"
-          >Down</span
-        >
-        <span *ngIf="monitor.isUp === null" i18n>No data</span>
-        <ng-container *ngIf="monitor.lastChange">
-          {{ monitor.lastChange | timeFor }}
-        </ng-container>
-      </mat-card-title>
-      <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
-      <div class="mat-caption" i18n>
-        Uptime check interval: {{ monitor.interval | humanizeDuration: true }}
-      </div>
+      <mat-card-header>
+        <mat-card-title>
+          <span *ngIf="monitor.isUp" i18n="Uptime check reports up">Up</span>
+          <span *ngIf="monitor.isUp === false" i18n="Uptime check reports down"
+            >Down</span
+          >
+          <span *ngIf="monitor.isUp === null" i18n>No data</span>
+          <ng-container *ngIf="monitor.lastChange">
+            {{ monitor.lastChange | timeFor }}
+          </ng-container>
+        </mat-card-title>
+      </mat-card-header>
       <mat-card-content class="reduced-padding">
+        <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
+        <div class="mat-caption interval" i18n>
+          Uptime check interval: {{ monitor.interval | humanizeDuration: true }}
+        </div>
         <div>
           <div class="url-display">
             <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
@@ -44,7 +46,9 @@
     <ng-container *ngIf="activeMonitorRecentChecksSeries$ | async as data">
       <ng-container *ngIf="responseChartScale$ | async as scale">
         <mat-card>
-          <mat-card-title i18n>Response Time</mat-card-title>
+          <mat-card-header>
+            <mat-card-title i18n>Response Time</mat-card-title>
+          </mat-card-header>
           <mat-divider></mat-divider>
           <mat-card-content>
             <div>
@@ -59,7 +63,9 @@
     </ng-container>
 
     <mat-card>
-      <mat-card-title i18n>Alerts</mat-card-title>
+      <mat-card-header>
+        <mat-card-title i18n>Alerts</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         <ng-container *ngIf="monitor.projectName; else noProject">
