@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  Input,
   OnInit,
 } from "@angular/core";
 import { lastValueFrom } from "rxjs";
@@ -18,7 +17,6 @@ import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.se
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentComponent implements OnInit {
-  @Input() activeOrganization: boolean = true;
   planOptions$ = this.subscriptionService.planOptionsWithShortNames$;
   subscriptionCreationLoadingId$ =
     this.subscriptionService.subscriptionCreationLoadingId$;

@@ -47,7 +47,8 @@ export class StripeService extends StatefulService<StripeState> {
             return EMPTY;
           }
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
@@ -74,7 +75,8 @@ export class StripeService extends StatefulService<StripeState> {
           }
           return EMPTY;
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
