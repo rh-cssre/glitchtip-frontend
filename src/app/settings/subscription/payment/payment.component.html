@@ -26,8 +26,8 @@
         </p>
         <gt-loading-button
           buttonText="Select"
-          [loading]="selectedSubscription === i"
-          (click)="onSubmit(product.plans[0], i)"
+          [loading]="(subscriptionCreationLoadingId$ | async) === product.plans[0].id"
+          (click)="onSubmit(product.plans[0])"
         ></gt-loading-button>
       </mat-card-content>
     </mat-card>
