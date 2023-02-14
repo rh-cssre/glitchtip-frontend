@@ -106,7 +106,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
           this.setSubscription(subscription);
         }),
         catchError(() => {
-          this.setSubscriptionLoadingEnd();
+          this.setSubscriptionLoadingError();
           return EMPTY;
         })
       ),
@@ -131,7 +131,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
           }
         }),
         catchError(() => {
-          this.setSubscriptionLoadingEnd();
+          this.setSubscriptionLoadingError();
           return EMPTY;
         }),
         takeUntil(this.subscriptionRetryTimer())
@@ -267,7 +267,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
     this.setState({ subscriptionLoading: true, fromStripe });
   }
 
-  private setSubscriptionLoadingEnd() {
+  private setSubscriptionLoadingError() {
     this.setState({ subscriptionLoading: false });
   }
 
