@@ -84,7 +84,8 @@ table {
 }
 
 .mat-column-select {
-  padding-left: 24px;
+  padding-left: 14px;
+  padding-right: 0;
 }
 
 .mat-column-events {
@@ -112,11 +113,7 @@ table {
 }
 
 .checkbox-cell {
-  width: 70px;
-
-  @media screen and (max-width: $tablet - 1) {
-    width: 55px;
-  }
+  width: 50px;
 }
 
 @media screen and (max-width: $tablet - 1) {
