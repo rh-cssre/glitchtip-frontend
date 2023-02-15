@@ -33,7 +33,7 @@ $font-path: "../fonts";
 @media screen and (max-width: 767px) {
   @include mat.all-component-typographies($mobile-typography);
   @include mat.card-typography($custom-card-typography);
-  @include mat.table-typography($custom-table-typography);
+  @include mat.table-typography($custom-mobile-table-typography);
 }
 
 mat-card-content {
