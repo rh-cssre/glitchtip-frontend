@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { EMPTY, lastValueFrom, timer } from "rxjs";
 import { catchError, delay, expand, map, tap, takeUntil } from "rxjs/operators";
@@ -7,13 +6,13 @@ import {
   Subscription,
   Plan,
   Product,
-  CreateSubscriptionResp,
   EventsCount,
 } from "./subscriptions.interfaces";
-import { baseUrl } from "src/app/constants";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 import { Organization } from "../organizations/organizations.interface";
+import { ProductsAPIService } from "./products-api.service";
 import { StripeService } from "src/app/settings/subscription/stripe.service";
+import { SubscriptionsAPIService } from "./subscriptions-api.service";
 
 interface SubscriptionsState {
   subscriptionCreationLoadingId: string | null;
@@ -39,8 +38,6 @@ const initialState: SubscriptionsState = {
   providedIn: "root",
 })
 export class SubscriptionsService extends StatefulService<SubscriptionsState> {
-  private readonly url = baseUrl + "/subscriptions/";
-
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
   );
@@ -87,7 +84,8 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
   );
 
   constructor(
-    private http: HttpClient,
+    private productsAPIService: ProductsAPIService,
+    private subscriptionsAPIService: SubscriptionsAPIService,
     private stripe: StripeService,
     private router: Router
   ) {
@@ -101,7 +99,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
   retrieveSubscription(slug: string) {
     this.setSubscriptionLoadingStart();
     lastValueFrom(
-      this.getSubscription(slug).pipe(
+      this.subscriptionsAPIService.retrieve(slug).pipe(
         tap((subscription) => {
           this.setSubscription(subscription);
         }),
@@ -121,10 +119,12 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
   retrieveUntilSubscriptionOrTimeout(slug: string) {
     this.setSubscriptionLoadingStart(true);
     lastValueFrom(
-      this.getSubscription(slug).pipe(
+      this.subscriptionsAPIService.retrieve(slug).pipe(
         expand((subscription) => {
           if (!subscription.created) {
-            return this.getSubscription(slug).pipe(delay(2000));
+            return this.subscriptionsAPIService
+              .retrieve(slug)
+              .pipe(delay(2000));
           } else {
             this.setSubscription(subscription);
             return EMPTY;
@@ -146,7 +146,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
    */
   retrieveSubscriptionEventCount(slug: string) {
     lastValueFrom(
-      this.getSubscriptionEventCount(slug).pipe(
+      this.subscriptionsAPIService.retrieveEventsCount(slug).pipe(
         tap((count) => this.setSubscriptionCount(count)),
         catchError((error) => {
           return EMPTY;
@@ -162,7 +162,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
    */
   retrieveSubscriptionPlans() {
     lastValueFrom(
-      this.getSubscriptionPlans().pipe(
+      this.productsAPIService.list().pipe(
         tap((products) => {
           const productAmountSorted = products
             .map((product) => ({
@@ -183,7 +183,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
     this.setSubscriptionCreationStart(plan.id);
     if (plan.amount === 0) {
       lastValueFrom(
-        this.createSubscription(organization, plan.id).pipe(
+        this.subscriptionsAPIService.create(organization.id, plan.id).pipe(
           tap((resp) => {
             this.setSubscription(resp.subscription);
             this.router.navigate([organization.slug, "issues"]);
@@ -209,7 +209,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
       })
     ) {
       lastValueFrom(
-        this.getSubscription(orgSlug).pipe(
+        this.subscriptionsAPIService.retrieve(orgSlug).pipe(
           tap((subscription) => {
             if (subscription.status === null) {
               this.router.navigate(subscriptionRoute);
@@ -218,29 +218,6 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
         )
       );
     }
-  }
-
-  private createSubscription(organization: Organization, planId: string) {
-    const data = {
-      organization: organization.id,
-      plan: planId,
-    };
-    return this.http.post<CreateSubscriptionResp>(
-      "/api/0/subscriptions/",
-      data
-    );
-  }
-
-  private getSubscription(slug: string) {
-    return this.http.get<Subscription>(`${this.url}${slug}/`);
-  }
-
-  private getSubscriptionEventCount(slug: string) {
-    return this.http.get<EventsCount>(`${this.url}${slug}/events_count/`);
-  }
-
-  private getSubscriptionPlans() {
-    return this.http.get<Product[]>("/api/0/products/");
   }
 
   private subscriptionRetryTimer() {
