@@ -115,7 +115,8 @@ export class SubscriptionComponent implements OnDestroy {
     lastValueFrom(
       this.activeOrganization$.pipe(
         filter((org) => !!org),
-        tap((org) => this.stripe.redirectToBillingPortal(org!.id))
+        tap((org) => this.stripe.redirectToBillingPortal(org!.id)),
+        take(1)
       )
     );
   }
