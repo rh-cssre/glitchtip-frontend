@@ -14,8 +14,26 @@ export class MembersAPIService {
     return this.http.get<Member[]>(this.listURL(orgSlug));
   }
 
+  retrieve(orgSlug: string, memberId: number) {
+    return this.http.get<Member>(this.detailURL(orgSlug, memberId));
+  }
+
+  update(orgSlug: string, memberData: Member) {
+    return this.http.put<Member>(
+      this.detailURL(orgSlug, memberData.id),
+      memberData
+    );
+  }
+
   destroy(orgSlug: string, memberId: number) {
     return this.http.delete(this.detailURL(orgSlug, memberId));
+  }
+
+  setOrgOwner(orgSlug: string, memberId: number) {
+    return this.http.post<Member>(
+      this.detailURL(orgSlug, memberId) + "set_owner/",
+      null
+    );
   }
 
   inviteUser(orgSlug: string, data: OrganizationMembersRequest) {

@@ -50,6 +50,7 @@ export interface Member {
   email: string;
   pending: boolean;
   teams: string[];
+  isOwner: boolean;
 }
 
 export interface MemberSelector extends Member {

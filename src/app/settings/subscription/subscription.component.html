@@ -1,8 +1,11 @@
 <section class="l-body">
   <header class="page-header">
-    <h2 class="mat-display-1" i18n>Subscription</h2>
+    <h2 class="mat-headline-4" i18n>Subscription</h2>
+    <span *ngIf="fromStripe$ | async" class="mat-subtitle-1"
+      >Redirected from Stripe</span
+    >
   </header>
-  <ng-container *ngIf="subscription$ | async as subscription">
+  <ng-container *ngIf="subscription$ | async as subscription; else loading">
     <mat-card>
       <mat-card-content>
         <div>
@@ -38,7 +41,7 @@
               </p>
               <p
                 *ngIf="subscription.status === 'trialing'"
-                class="mat-body-1"
+                class="mat-body-1 no-bottom-margin"
                 i18n
                 >This organization has a trial subscription to GlitchTip.</p
               >
@@ -171,18 +174,6 @@
             >
           </ng-template>
         </div>
-        <div *ngIf="(subscription$ | async) === null as subscription">
-          <p class="mat-body-1" i18n
-            >This organization does not have an active subscription to
-            GlitchTip.</p
-          >
-          <a [routerLink]="['/payment']" i18n>Subscription Options</a>
-          <p class="mat-body-1" i18n
-            >If you would like to purchase a subscription, please contact us at
-            <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-            >.</p
-          >
-        </div>
       </mat-card-content>
     </mat-card>
     <mat-card *ngIf="promptForProject$ | async">
@@ -205,4 +196,25 @@
       *ngIf="subscription.status === null || subscription.status === 'canceled'"
     ></gt-payment>
   </ng-container>
+  <ng-template #loading>
+    <mat-card
+      *ngIf="
+        (subscriptionLoading$ | async) || (subscriptionLoadingTimeout$ | async)
+      "
+    >
+      <mat-card-header></mat-card-header>
+      <mat-card-content>
+        <div *ngIf="subscriptionLoading$ | async" class="spinner-container">
+          <mat-spinner diameter="36"></mat-spinner>
+        </div>
+        <div *ngIf="subscriptionLoadingTimeout$ | async">
+          GlitchTip was unable to find a subscription for your account. If you
+          just signed up for a subscription on our payment platform, please
+          contact us at
+          <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+          >.
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
 </section>
