@@ -111,7 +111,7 @@ $custom-table-typography: mat.define-typography-config(
 
 $custom-mobile-table-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $body-2: mat.define-typography-level(14px, 14px, 400, $font-sans-serif),
+  $body-2: mat.define-typography-level(14px, 22px, 400, $font-sans-serif),
 );
 
 $mobile-typography: mat.define-typography-config(
