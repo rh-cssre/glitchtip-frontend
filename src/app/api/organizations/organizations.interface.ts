@@ -49,8 +49,12 @@ export interface Member {
   dateCreated: string;
   email: string;
   pending: boolean;
-  teams: string[];
   isOwner: boolean;
+}
+
+export interface MemberDetail extends Member {
+    teams: string[];
+    roles: MemberRoleDetail[];
 }
 
 export interface MemberSelector extends Member {
@@ -65,10 +69,21 @@ export interface OrganizationUser extends Member {
 
 export type MemberRole = "member" | "admin" | "manager" | "owner";
 
+export interface MemberRoleDetail {
+  id: MemberRole;
+  name: string;
+  desc: string;
+}
+
 export interface OrganizationMembersRequest {
   email: string;
   role: MemberRole;
   teams: string[];
+}
+
+export interface MemberUpdateData {
+  role?: MemberRole;
+  teams?: string[];
 }
 
 export interface OrganizationLoading {

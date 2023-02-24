@@ -1,4 +1,4 @@
-<section class="l-body" *ngIf="memberDetail$ | async as member">
+<section class="l-body" *ngIf="member$ | async as member">
   <header class="page-header">
     <h1 class="mat-headline-4">
       {{ member.email }}
@@ -88,18 +88,18 @@
       </ng-template>
     </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card *ngIf="memberTeams$ | async as memberTeams">
     <mat-card-header>
       <mat-card-title>Team(s)</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <ng-container *ngIf="member.teams.length === 0; else listMembers">
+      <ng-container *ngIf="memberTeams.length === 0; else listMembers">
         <p class="center-text">This user isn't on any teams.</p>
       </ng-container>
       <ng-template #listMembers>
         <mat-list>
-          <mat-list-item *ngFor="let team of member?.teams">
+          <mat-list-item *ngFor="let team of memberTeams">
             <a
               mat-line
               [routerLink]="['teams', team, 'members']"

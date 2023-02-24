@@ -1,46 +1,47 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import {
-  BehaviorSubject,
-  combineLatest,
-  EMPTY,
-  filter,
-  lastValueFrom,
-} from "rxjs";
+import { combineLatest, EMPTY, filter, lastValueFrom } from "rxjs";
 import { map, take, exhaustMap, tap, catchError } from "rxjs/operators";
-import { Member } from "./organizations.interface";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import {
+  Member,
+  MemberDetail,
+  MemberRole,
+  MemberRoleDetail,
+} from "./organizations.interface";
 import { MembersAPIService } from "./members-api.service";
 import { OrganizationsService } from "./organizations.service";
 
 interface MemberDetailState {
-  memberDetail: Member | null;
-  updateMemberError: string;
-  updateMemberLoading: boolean;
+  member: Member | null;
+  memberTeams: string[] | null;
+  availableRoles: MemberRoleDetail[] | null;
+  updateMemberRoleError: string;
+  updateMemberRoleLoading: boolean;
   transferOrgOwnershipError: string;
   transferOrgOwnershipLoading: boolean;
 }
 
 const initialState: MemberDetailState = {
-  memberDetail: null,
-  updateMemberError: "",
-  updateMemberLoading: false,
+  member: null,
+  memberTeams: null,
+  availableRoles: null,
+  updateMemberRoleError: "",
+  updateMemberRoleLoading: false,
   transferOrgOwnershipError: "",
   transferOrgOwnershipLoading: false,
 };
 
 @Injectable({ providedIn: "root" })
-export class MemberDetailService {
-  private readonly state = new BehaviorSubject<MemberDetailState>(initialState);
-  private readonly getState$ = this.state.asObservable();
-  readonly memberDetail$ = this.getState$.pipe(
-    map((data) => data.memberDetail)
+export class MemberDetailService extends StatefulService<MemberDetailState> {
+  readonly member$ = this.getState$.pipe(map((data) => data.member));
+  readonly memberTeams$ = this.getState$.pipe(map((data) => data.memberTeams));
+  readonly updateMemberRoleError$ = this.getState$.pipe(
+    map((state) => state.updateMemberRoleError)
   );
-  readonly updateMemberError$ = this.getState$.pipe(
-    map((state) => state.updateMemberError)
-  );
-  readonly updateMemberLoading$ = this.getState$.pipe(
-    map((state) => state.updateMemberLoading)
+  readonly updateMemberRoleLoading$ = this.getState$.pipe(
+    map((state) => state.updateMemberRoleLoading)
   );
   readonly transferOrgOwnershipError$ = this.getState$.pipe(
     map((state) => state.transferOrgOwnershipError)
@@ -50,43 +51,43 @@ export class MemberDetailService {
   );
 
   constructor(
-    private membersService: MembersAPIService,
+    private membersAPIService: MembersAPIService,
     private organizationsService: OrganizationsService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    super(initialState);
+  }
 
   /** Update member teams and/or permissions */
-  updateMember(updatedRole: string) {
-    this.setUpdateMemberLoading(true);
+  updateMemberRole(updatedRole: MemberRole) {
+    this.setUpdateMemberRoleLoadingStart();
     return lastValueFrom(
       combineLatest([
         this.organizationsService.activeOrganizationSlug$,
-        this.memberDetail$,
+        this.member$,
       ]).pipe(
         filter(([orgslug, memberDetail]) => !!orgslug && !!memberDetail),
         take(1),
         exhaustMap(([orgSlug, memberDetail]) => {
           const data = {
-            ...memberDetail!,
             role: updatedRole,
           };
-          return this.membersService.update(orgSlug!, data).pipe(
-            tap((resp) => {
-              this.setUpdateMemberLoading(false);
-              this.snackBar.open(
-                `Successfully updated ${resp.email}'s role to ${resp.roleName}`
-              );
-              if (memberDetail) {
-                const newMemberDetail = { ...resp, teams: memberDetail.teams };
-                this.updateMemberDetail(newMemberDetail);
-              }
-            }),
-            catchError((error: HttpErrorResponse) => {
-              this.setUpdateMemberLoading(false);
-              this.setUpdateMemberError(`${error.statusText}: ${error.status}`);
-              return EMPTY;
-            })
-          );
+          return this.membersAPIService
+            .update(orgSlug!, memberDetail!.id, data)
+            .pipe(
+              tap((resp) => {
+                this.setUpdateMemberRole(resp);
+                this.snackBar.open(
+                  `Successfully updated ${resp.email}'s role to ${resp.roleName}`
+                );
+              }),
+              catchError((error: HttpErrorResponse) => {
+                this.setUpdateMemberRoleError(
+                  `${error.statusText}: ${error.status}`
+                );
+                return EMPTY;
+              })
+            );
         })
       ),
       { defaultValue: null }
@@ -94,45 +95,37 @@ export class MemberDetailService {
   }
 
   transferOrgOwnership() {
-    this.setTransferOrgOwnershipLoading(true);
+    this.setTransferOrgOwnershipLoadingStart();
     lastValueFrom(
       combineLatest([
         this.organizationsService.activeOrganizationSlug$,
-        this.memberDetail$,
+        this.member$,
       ]).pipe(
-        filter(([orgSlug, memberDetail]) => !!orgSlug && !!memberDetail),
+        filter(([orgSlug, member]) => !!orgSlug && !!member),
         take(1),
-        exhaustMap(([orgSlug, memberDetail]) => {
-          return this.membersService
-            .setOrgOwner(orgSlug!, memberDetail!.id)
-            .pipe(
-              tap((resp) => {
-                this.setUpdateMemberLoading(false);
-                this.snackBar.open(
-                  `Successfully transferred organization account ownership to ${resp.email}.`
-                );
-                const newMemberDetail = {
-                  ...resp,
-                  teams: memberDetail!.teams,
-                };
-                this.updateMemberDetail(newMemberDetail);
-              }),
-              catchError((err: HttpErrorResponse) => {
-                this.setTransferOrgOwnershipLoading(false);
-                if (err instanceof HttpErrorResponse) {
-                  if (err.status === 403 && err.error?.detail) {
-                    this.setTransferOrgOwnershipError(err.error?.detail);
-                  } else if (err.status === 400 && err.error?.message) {
-                    this.setTransferOrgOwnershipError(err.error?.message);
-                  } else {
-                    this.setTransferOrgOwnershipError(
-                      "Unable to transfer account ownership."
-                    );
-                  }
+        exhaustMap(([orgSlug, member]) => {
+          return this.membersAPIService.makeOrgOwner(orgSlug!, member!.id).pipe(
+            tap((resp) => {
+              this.snackBar.open(
+                `Successfully transferred organization account ownership to ${resp.email}.`
+              );
+              this.setTransferOrgOwnership(resp);
+            }),
+            catchError((err: HttpErrorResponse) => {
+              if (err instanceof HttpErrorResponse) {
+                if (err.status === 403 && err.error?.detail) {
+                  this.setTransferOrgOwnershipError(err.error?.detail);
+                } else if (err.status === 400 && err.error?.message) {
+                  this.setTransferOrgOwnershipError(err.error?.message);
+                } else {
+                  this.setTransferOrgOwnershipError(
+                    "Unable to transfer account ownership."
+                  );
                 }
-                return EMPTY;
-              })
-            );
+              }
+              return EMPTY;
+            })
+          );
         })
       ),
       { defaultValue: null }
@@ -145,45 +138,47 @@ export class MemberDetailService {
 
   retrieveMemberDetail(orgSlug: string, memberId: number) {
     return lastValueFrom(
-      this.membersService
+      this.membersAPIService
         .retrieve(orgSlug, memberId)
-        .pipe(tap((memberDetail) => this.setMemberDetail(memberDetail)))
+        .pipe(tap((memberDetail) => this.setMemberDetails(memberDetail)))
     );
   }
 
-  updateMemberDetail(member: Member) {
-    this.setMemberDetail(member);
+  private setUpdateMemberRoleError(updateMemberRoleError: string) {
+    this.setState({ updateMemberRoleLoading: false, updateMemberRoleError });
   }
 
-  private setUpdateMemberError(errorMessage: string) {
-    this.state.next({
-      ...this.state.getValue(),
-      updateMemberError: errorMessage,
+  private setUpdateMemberRoleLoadingStart() {
+    this.setState({ updateMemberRoleLoading: true });
+  }
+
+  private setUpdateMemberRole(member: Member) {
+    this.setState({ updateMemberRoleLoading: false, member });
+  }
+
+  private setTransferOrgOwnershipLoadingStart() {
+    this.setState({ transferOrgOwnershipLoading: true });
+  }
+
+  private setTransferOrgOwnership(member: Member) {
+    this.setState({
+      transferOrgOwnershipLoading: false,
+      member,
     });
   }
 
-  private setUpdateMemberLoading(loading: boolean) {
-    this.state.next({ ...this.state.getValue(), updateMemberLoading: loading });
-  }
-
   private setTransferOrgOwnershipError(errorMessage: string) {
-    this.state.next({
-      ...this.state.getValue(),
+    this.setState({
+      transferOrgOwnershipLoading: false,
       transferOrgOwnershipError: errorMessage,
     });
   }
 
-  private setTransferOrgOwnershipLoading(loading: boolean) {
-    this.state.next({
-      ...this.state.getValue(),
-      transferOrgOwnershipLoading: loading,
-    });
-  }
-
-  private setMemberDetail(member: Member) {
-    this.state.next({
-      ...this.state.getValue(),
-      memberDetail: member,
+  private setMemberDetails(member: MemberDetail) {
+    this.setState({
+      member,
+      memberTeams: member.teams,
+      availableRoles: member.roles,
     });
   }
 }

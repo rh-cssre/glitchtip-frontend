@@ -8,7 +8,6 @@ import { ActivatedRoute } from "@angular/router";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
 
 @Component({
@@ -18,10 +17,10 @@ import { MemberDetailService } from "src/app/api/organizations/member-detail.ser
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
-  memberDetail$ = this.memberDetailService.memberDetail$;
-  teams$ = this.organizationsService.organizationTeams$;
-  updateMemberError$ = this.memberDetailService.updateMemberError$;
-  updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
+  member$ = this.memberDetailService.member$;
+  memberTeams$ = this.memberDetailService.memberTeams$;
+  updateMemberError$ = this.memberDetailService.updateMemberRoleError$;
+  updateMemberLoading$ = this.memberDetailService.updateMemberRoleLoading$;
   transferOrgOwnershipError$ =
     this.memberDetailService.transferOrgOwnershipError$;
   transferOrgOwnershipLoading$ =
@@ -37,7 +36,6 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     public route: ActivatedRoute,
-    private organizationsService: OrganizationsService,
     private memberDetailService: MemberDetailService
   ) {}
 
@@ -50,15 +48,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
               organizationSlug,
               +memberIdParam
             );
-            this.organizationsService.retrieveOrganizationTeams(
-              organizationSlug
-            );
           }
         })
       )
       .subscribe();
 
-    this.memberDetail$.subscribe((data) => {
+    this.member$.subscribe((data) => {
       if (data) {
         this.form.patchValue({
           role: data.role,
@@ -73,8 +68,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const role = this.form.get("role")?.value;
-    this.memberDetailService.updateMember(role);
-    // entire member object needs to be put to orgs/org-slug/members/member-id
+    this.memberDetailService.updateMemberRole(role);
   }
 
   transferOrgOwnership() {
