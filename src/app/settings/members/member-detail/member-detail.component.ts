@@ -54,10 +54,11 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.member$.subscribe((data) => {
-      if (data) {
+      if (data && this.form.pristine) {
         this.form.patchValue({
           role: data.role,
         });
+        this.form.markAsPristine();
       }
     });
   }
