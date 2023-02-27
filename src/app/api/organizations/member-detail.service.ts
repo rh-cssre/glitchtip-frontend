@@ -131,10 +131,6 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
     );
   }
 
-  clearState() {
-    this.state.next(initialState);
-  }
-
   retrieveMemberDetail(orgSlug: string, memberId: number) {
     return lastValueFrom(
       this.membersAPIService
