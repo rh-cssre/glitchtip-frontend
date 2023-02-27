@@ -23,8 +23,15 @@ export class MembersAPIService {
     return this.http.get<MemberDetail>(this.detailURL(orgSlug, memberId));
   }
 
-  update(orgSlug: string, memberId: number, memberData: MemberUpdateData) {
-    return this.http.put<Member>(this.detailURL(orgSlug, memberId), memberData);
+  update(
+    orgSlug: string,
+    memberId: number,
+    memberUpdateData: MemberUpdateData
+  ) {
+    return this.http.put<Member>(
+      this.detailURL(orgSlug, memberId),
+      memberUpdateData
+    );
   }
 
   destroy(orgSlug: string, memberId: number) {

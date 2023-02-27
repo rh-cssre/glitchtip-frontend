@@ -53,8 +53,8 @@ export interface Member {
 }
 
 export interface MemberDetail extends Member {
-    teams: string[];
-    roles: MemberRoleDetail[];
+  teams: string[];
+  roles: MemberRoleDetail[];
 }
 
 export interface MemberSelector extends Member {
