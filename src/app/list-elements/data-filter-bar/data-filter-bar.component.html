@@ -6,7 +6,7 @@
         [formGroup]="dateForm"
         (ngSubmit)="onDateFormSubmit()"
       >
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Start Date</mat-label>
           <input
             matInput
@@ -20,7 +20,7 @@
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>End Date</mat-label>
           <input
             matInput
@@ -55,7 +55,7 @@
         </button>
       </form>
       <form [formGroup]="sortForm" class="sort-form">
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Sort by</mat-label>
           <mat-select
             (selectionChange)="sortByChanged.emit($event)"
@@ -69,7 +69,7 @@
       </form>
       <ng-container *ngIf="environmentForm">
         <form [formGroup]="environmentForm" class="environment-form">
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Environment</mat-label>
             <mat-select
               (selectionChange)="filterByEnvironment.emit($event)"
@@ -92,13 +92,9 @@
           (ngSubmit)="searchSubmit.emit()"
           class="search-form"
         >
-          <mat-form-field>
-            <input
-              matInput
-              type="search"
-              placeholder="Search"
-              formControlName="query"
-            />
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput type="search" formControlName="query"/>
           </mat-form-field>
         </form>
       </ng-container>
