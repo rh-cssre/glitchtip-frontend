@@ -58,7 +58,6 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
     super(initialState);
   }
 
-  /** Update member teams and/or permissions */
   updateMemberRole(updatedRole: MemberRole) {
     this.setUpdateMemberRoleLoadingStart();
     return lastValueFrom(
