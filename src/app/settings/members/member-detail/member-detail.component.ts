@@ -37,7 +37,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   });
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
 
-  displayScopes$ = this.formRole.valueChanges.pipe(
+  selectedRoleScopes$ = this.formRole.valueChanges.pipe(
     startWith(null),
     withLatestFrom(this.availableRoles$),
     filter(([_, availableRoles]) => !!availableRoles),
@@ -82,7 +82,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const role = this.form.get("role")?.value;
+    const role = this.formRole.value;
     if (role) {
       this.memberDetailService.updateMemberRole(role);
     }

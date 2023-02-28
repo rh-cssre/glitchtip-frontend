@@ -80,7 +80,7 @@
         >
       </div>
       <div class="role-scopes">
-        <ng-container *ngIf="displayScopes$ | async as scopes">
+        <ng-container *ngIf="selectedRoleScopes$ | async as scopes">
           <div class="mat-body-strong" i18n>Scopes:</div>
           <div>{{ scopes }}</div>
         </ng-container>
