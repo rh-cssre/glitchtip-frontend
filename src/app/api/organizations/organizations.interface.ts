@@ -42,7 +42,7 @@ export interface OrganizationProject {
 }
 
 export interface Member {
-  role: string;
+  role: MemberRole;
   id: number;
   user: User | null;
   roleName: string;
