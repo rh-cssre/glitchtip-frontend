@@ -73,6 +73,7 @@ export interface MemberRoleDetail {
   id: MemberRole;
   name: string;
   desc: string;
+  scopes: string[];
 }
 
 export interface OrganizationMembersRequest {

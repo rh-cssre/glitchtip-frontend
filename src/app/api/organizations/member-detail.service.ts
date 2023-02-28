@@ -37,6 +37,9 @@ const initialState: MemberDetailState = {
 export class MemberDetailService extends StatefulService<MemberDetailState> {
   readonly member$ = this.getState$.pipe(map((data) => data.member));
   readonly memberTeams$ = this.getState$.pipe(map((data) => data.memberTeams));
+  readonly availableRoles$ = this.getState$.pipe(
+    map((data) => data.availableRoles)
+  );
   readonly updateMemberRoleError$ = this.getState$.pipe(
     map((state) => state.updateMemberRoleError)
   );
