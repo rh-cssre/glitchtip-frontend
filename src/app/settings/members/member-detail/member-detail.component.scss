@@ -34,19 +34,43 @@ mat-card {
 form {
   text-align: center;
 
-  div {
+  .role-form-elements {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media (max-width: $large - 1) {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
   }
 }
 
+.role-button-container {
+  min-width: 140px;
+}
+
+.role-description {
+  margin-bottom: 15px;
+}
+
 mat-radio-group {
+  display: flex;
   margin-top: 24px;
   margin-bottom: 24px;
 
   mat-radio-button {
     margin-right: 32px;
+  }
+
+  @media (max-width: $large - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    mat-radio-button {
+      margin-right: 10px;
+    }
   }
 }
 
