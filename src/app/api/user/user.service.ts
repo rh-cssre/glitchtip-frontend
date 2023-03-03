@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { EMPTY, Subject } from "rxjs";
+import { EMPTY, lastValueFrom, Subject } from "rxjs";
 import { tap, map, catchError, exhaustMap } from "rxjs/operators";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 import { User, UserOptions } from "./user.interfaces";
@@ -66,7 +66,7 @@ export class UserService extends StatefulService<UserState> {
   }
 
   deleteUser() {
-    this.setUserDeleteLoading(true);
+    this.setUserDeleteLoadingStart();
     return this.userAPIService.destroy().pipe(
       catchError((err) => {
         if (err instanceof HttpErrorResponse) {
@@ -80,75 +80,68 @@ export class UserService extends StatefulService<UserState> {
   }
 
   updateUser(name: string, options: UserOptions) {
-    return this.userAPIService
-      .update({ name, options })
-      .pipe(
-        tap(() => {
-          this.getUserDetails();
+    lastValueFrom(
+      this.userAPIService.update({ name, options }).pipe(
+        tap((resp) => {
+          this.setUserDetails(resp)
           this.snackBar.open("Preferences have been updated");
         })
       )
-      .toPromise();
+    );
   }
 
   disconnectSocialAccount(accountId: number) {
-    this.setDisconnectLoading(accountId);
-    this.socialAuthAPIService
-      .disconnect(accountId)
-      .pipe(
+    this.setDisconnectLoadingStart(accountId);
+    lastValueFrom(
+      this.socialAuthAPIService.disconnect(accountId).pipe(
         tap(() => {
-          this.setDisconnectLoading(null);
+          this.setDisconnectLoadingEnd();
           this.getUserDetails();
           this.snackBar.open(
             "You have successfully disconnected your social auth account"
           );
         }),
         catchError((err: HttpErrorResponse) => {
-          this.setDisconnectLoading(null);
+          this.setDisconnectLoadingEnd();
           if (Array.isArray(err.error) && err.error.length) {
             this.snackBar.open(err.error[0]);
           }
           return EMPTY;
         })
-      )
-      .toPromise();
+      ),
+      { defaultValue: null }
+    );
   }
 
   clearUserUIState() {
-    this.setInitialUserUIState();
-  }
-
-  private setUserDeleteLoading(loading: boolean) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      userDeleteLoading: loading,
-    });
-  }
-
-  private setDisconnectLoading(loading: number | null) {
-    this.state.next({ ...this.state.getValue(), disconnectLoading: loading });
-  }
-
-  private setUserDetails(userDetails: User) {
-    this.state.next({ ...this.state.getValue(), user: userDetails });
-  }
-
-  private setInitialUserUIState() {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
+    this.setState({
       userDeleteError: initialState.userDeleteError,
       userDeleteLoading: initialState.userDeleteLoading,
       disconnectLoading: initialState.disconnectLoading,
     });
   }
 
+  private setUserDeleteLoadingStart() {
+    this.setState({
+      userDeleteLoading: true,
+    });
+  }
+
+  private setDisconnectLoadingStart(loading: number) {
+    this.setState({ disconnectLoading: loading });
+  }
+
+  private setDisconnectLoadingEnd() {
+    this.setState({ disconnectLoading: null });
+  }
+
+  private setUserDetails(user: User) {
+    this.setState({ user });
+  }
+
   private setUserDeleteError(error: string) {
-    this.setUserDeleteLoading(false);
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
+    this.setState({
+      userDeleteLoading: false,
       userDeleteError: error,
     });
   }
