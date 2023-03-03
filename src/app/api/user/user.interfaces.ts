@@ -48,7 +48,7 @@ interface Email {
   email: string;
 }
 
-interface UserOptions {
+export interface UserOptions {
   timezone?: string;
   stacktraceOrder?: number;
   language?: string;

@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, EMPTY, Subject } from "rxjs";
+import { EMPTY, Subject } from "rxjs";
 import { tap, map, catchError, exhaustMap } from "rxjs/operators";
-import { User } from "./user.interfaces";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { User, UserOptions } from "./user.interfaces";
+import { UserAPIService } from "./user-api.service";
+import { SocialAuthAPIService } from "../social-auth/social-auth-api.service";
 
 interface UserState {
   user: User | null;
@@ -22,8 +25,7 @@ const initialState: UserState = {
 @Injectable({
   providedIn: "root",
 })
-export class UserService {
-  private readonly state = new BehaviorSubject<UserState>(initialState);
+export class UserService extends StatefulService<UserState> {
   readonly userDetails$ = this.state.pipe(map((state) => state.user));
   readonly userDeleteError$ = this.state.pipe(
     map((state) => state.userDeleteError)
@@ -39,13 +41,17 @@ export class UserService {
   readonly activeUserEmail$ = this.userDetails$.pipe(
     map((userDetails) => userDetails?.email)
   );
-  private readonly url = "/api/0/users/me/";
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
+  constructor(
+    private snackBar: MatSnackBar,
+    private userAPIService: UserAPIService,
+    private socialAuthAPIService: SocialAuthAPIService
+  ) {
+    super(initialState);
     this.getUserDetailsAction
       .pipe(
         exhaustMap(() =>
-          this.retrieveUserDetails().pipe(
+          this.userAPIService.retrieve().pipe(
             tap((resp: User) => this.setUserDetails(resp)),
             catchError(() => EMPTY)
           )
@@ -59,13 +65,9 @@ export class UserService {
     this.getUserDetailsAction.next(undefined);
   }
 
-  private retrieveUserDetails() {
-    return this.http.get<User>(this.url);
-  }
-
   deleteUser() {
     this.setUserDeleteLoading(true);
-    return this.http.delete(this.url).pipe(
+    return this.userAPIService.destroy().pipe(
       catchError((err) => {
         if (err instanceof HttpErrorResponse) {
           this.setUserDeleteError(
@@ -77,8 +79,9 @@ export class UserService {
     );
   }
 
-  updateUserOptions(name: string, options: { [key: string]: string }) {
-    return this.patchUser({ name, options })
+  updateUser(name: string, options: UserOptions) {
+    return this.userAPIService
+      .update({ name, options })
       .pipe(
         tap(() => {
           this.getUserDetails();
@@ -88,14 +91,10 @@ export class UserService {
       .toPromise();
   }
 
-  private patchUser(user: Partial<User>) {
-    return this.http.patch(this.url, user);
-  }
-
   disconnectSocialAccount(accountId: number) {
     this.setDisconnectLoading(accountId);
-    this.http
-      .post("/api/socialaccounts/" + accountId + "/disconnect/", {})
+    this.socialAuthAPIService
+      .disconnect(accountId)
       .pipe(
         tap(() => {
           this.setDisconnectLoading(null);
