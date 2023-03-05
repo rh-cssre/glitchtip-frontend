@@ -52,7 +52,23 @@ export class UserService extends StatefulService<UserState> {
       .pipe(
         exhaustMap(() =>
           this.userAPIService.retrieve().pipe(
-            tap((resp: User) => this.setUserDetails(resp)),
+            tap((resp: User) => {
+              this.setUserDetails(resp);
+              if (resp.chatwootIdentifierHash) {
+                let chatwootUser = {
+                  email: resp.email,
+                  identifier_hash: resp.chatwootIdentifierHash,
+                };
+                // Chatwoot may not always be ready at this point
+                if ((window as any).$chatwoot) {
+                  (window as any).$chatwoot.setUser(resp.id, chatwootUser);
+                } else {
+                  window.addEventListener("chatwoot:ready", function () {
+                    (window as any).$chatwoot.setUser(resp.id, chatwootUser);
+                  });
+                }
+              }
+            }),
             catchError(() => EMPTY)
           )
         )
@@ -83,7 +99,7 @@ export class UserService extends StatefulService<UserState> {
     lastValueFrom(
       this.userAPIService.update({ name, options }).pipe(
         tap((resp) => {
-          this.setUserDetails(resp)
+          this.setUserDetails(resp);
           this.snackBar.open("Preferences have been updated");
         })
       )
