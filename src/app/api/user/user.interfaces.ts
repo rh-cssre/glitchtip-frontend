@@ -27,6 +27,7 @@ export interface User {
   lastActive: string;
   identities: SocialAccount[];
   id: string;
+  chatwootIdentifierHash: string | null;
   isActive: boolean;
   has2fa: boolean;
   canReset2fa: boolean;
@@ -48,7 +49,7 @@ interface Email {
   email: string;
 }
 
-interface UserOptions {
+export interface UserOptions {
   timezone?: string;
   stacktraceOrder?: number;
   language?: string;
