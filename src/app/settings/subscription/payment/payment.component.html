@@ -19,22 +19,24 @@
           </li>
         </ul>
         <p>
-          <span class="mat-display-1">
+          <span class="mat-headline-4">
             ${{ product.plans[0].amount | number }}
           </span>
           / month
         </p>
         <gt-loading-button
           buttonText="Select"
-          [loading]="selectedSubscription === i"
-          (click)="onSubmit(product.plans[0], i)"
+          [loading]="(subscriptionCreationLoadingId$ | async) === product.plans[0].id"
+          (click)="onSubmit(product.plans[0])"
         ></gt-loading-button>
       </mat-card-content>
     </mat-card>
   </div>
   <div class="event-info">
     <mat-card>
-      <mat-card-title i18n>Events</mat-card-title>
+      <mat-card-header>
+        <mat-card-title i18n>Events</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         <gt-event-info></gt-event-info>

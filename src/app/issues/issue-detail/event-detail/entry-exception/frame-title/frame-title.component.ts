@@ -1,11 +1,9 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import type { Frame } from "src/app/issues/interfaces";
 
 @Component({
   selector: "gt-frame-title",
   templateUrl: "./frame-title.component.html",
-  styleUrls: ["./frame-title.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameTitleComponent {
@@ -49,12 +47,10 @@ export class FrameTitleComponent {
     }
   }
 
-  sanitizeUrl(str: string): string | null {
-    const url = sanitizeUrl(str);
+  sanitizeUrl(url: string): string | null {
     if (url === "about:blank") {
       return null;
-    } else {
-      return url;
     }
+    return url;
   }
 }
