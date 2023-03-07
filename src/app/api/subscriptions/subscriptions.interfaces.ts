@@ -30,7 +30,7 @@ interface SubscriptionItem {
 }
 
 export interface Subscription {
-  id: string | null;
+  id: string;
   created: string | null;
   collection_method: string | null;
   billing_cycle_anchor: string | null;
