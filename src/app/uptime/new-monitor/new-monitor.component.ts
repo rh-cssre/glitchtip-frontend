@@ -5,7 +5,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { map } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
@@ -24,13 +23,7 @@ export class NewMonitorComponent implements OnInit {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   loading$ = this.uptimeService.createLoading$;
-  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
-    map((subscription) =>
-      subscription && subscription.plan?.product.metadata
-        ? parseInt(subscription.plan?.product.metadata.events, 10)
-        : null
-    )
-  );
+  totalEventsAllowed$ = this.subscriptionsService.totalEventsAllowed$;
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 

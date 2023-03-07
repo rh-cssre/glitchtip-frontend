@@ -34,9 +34,9 @@ export class StripeService extends StatefulService<StripeState> {
     super(initialState);
   }
 
-  redirectToSubscriptionCheckout(organizationId: number, plan: string) {
+  redirectToSubscriptionCheckout(organizationId: number, price: string) {
     lastValueFrom(
-      this.createSubscriptionCheckout(organizationId, plan).pipe(
+      this.createSubscriptionCheckout(organizationId, price).pipe(
         withLatestFrom(this.settingsService.stripePublicKey$),
         exhaustMap(([resp, stripePublicKey]) => {
           if (stripePublicKey) {
@@ -84,11 +84,11 @@ export class StripeService extends StatefulService<StripeState> {
     this.state.next(initialState);
   }
 
-  private createSubscriptionCheckout(organization: number, plan: string) {
+  private createSubscriptionCheckout(organization: number, price: string) {
     const url = baseUrl + "/create-stripe-subscription-checkout/";
     const data = {
       organization,
-      plan,
+      price,
     };
     return this.http.post<StripeCheckoutSession>(url, data);
   }

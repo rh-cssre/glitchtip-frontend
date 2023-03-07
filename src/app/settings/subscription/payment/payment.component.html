@@ -1,6 +1,6 @@
-<ng-container *ngIf="planOptions$ | async as planOptions">
+<ng-container *ngIf="productOptions$ | async as productOptions">
   <div class="plans mat-elevation-z1">
-    <mat-card *ngFor="let product of planOptions; let i = index">
+    <mat-card *ngFor="let product of productOptions; let i = index">
       <mat-card-content>
         <mat-card-title>{{ product.name }}</mat-card-title>
         <p>{{ product.description }}</p>
@@ -20,14 +20,14 @@
         </ul>
         <p>
           <span class="mat-headline-4">
-            ${{ product.plans[0].amount | number }}
+            ${{ product.mainUnitPrice | number }}
           </span>
           / month
         </p>
         <gt-loading-button
           buttonText="Select"
-          [loading]="(subscriptionCreationLoadingId$ | async) === product.plans[0].id"
-          (click)="onSubmit(product.plans[0])"
+          [loading]="(subscriptionCreationLoadingId$ | async) === product.prices[0].id"
+          (click)="onSubmit(product.prices[0])"
         ></gt-loading-button>
       </mat-card-content>
     </mat-card>

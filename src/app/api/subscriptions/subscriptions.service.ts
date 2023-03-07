@@ -4,7 +4,7 @@ import { EMPTY, lastValueFrom, timer } from "rxjs";
 import { catchError, delay, expand, map, tap, takeUntil } from "rxjs/operators";
 import {
   Subscription,
-  Plan,
+  BasePrice,
   Product,
   EventsCount,
 } from "./subscriptions.interfaces";
@@ -41,6 +41,25 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
   readonly subscription$ = this.getState$.pipe(
     map((state) => state.subscription)
   );
+  readonly formattedSubscription$ = this.subscription$.pipe(
+    map((subscription) => {
+      let price = subscription?.items[0]?.price
+        ? subscription.items[0].price
+        : null;
+      if (subscription) {
+        return {
+          ...subscription,
+          mainUnitPrice: price ? price.unit_amount / 100 : null,
+          productName: price ? subscription.items[0].price.product.name : null,
+          productDescription: price
+            ? subscription.items[0].price.product.description
+            : null,
+        };
+      } else {
+        return null;
+      }
+    })
+  );
   readonly subscriptionLoading$ = this.getState$.pipe(
     map((state) => state.subscriptionLoading)
   );
@@ -51,6 +70,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
     map((state) => state.subscriptionCreationLoadingId)
   );
   readonly fromStripe$ = this.getState$.pipe(map((state) => state.fromStripe));
+
   readonly eventsCountWithTotal$ = this.getState$.pipe(
     map((state) => {
       let total = 0;
@@ -70,15 +90,26 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
       }
     })
   );
+  
+  readonly totalEventsAllowed$ = this.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.items[0]
+        ? parseInt(subscription.items[0].price.product.metadata.events, 10)
+        : null
+    )
+  );
 
-  readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
-  readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
-    map((plans) => {
-      return plans?.map((plan) => ({
-        ...plan,
-        name: plan.name.startsWith("GlitchTip ")
-          ? plan.name.substring(10)
-          : plan.name,
+  readonly productOptions$ = this.getState$.pipe(
+    map((state) => state.products)
+  );
+  readonly formattedProductOptions = this.productOptions$.pipe(
+    map((products) => {
+      return products?.map((product) => ({
+        ...product,
+        name: product.name.startsWith("GlitchTip ")
+          ? product.name.substring(10)
+          : product.name,
+        mainUnitPrice: product.prices[0].unit_amount / 100,
       }));
     })
   );
@@ -160,30 +191,24 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
    * Retrieve subscription plans
    * productAmountSorted converts product prices to ints and sorts from low to high
    */
-  retrieveSubscriptionPlans() {
+  retrieveProducts() {
     lastValueFrom(
       this.productsAPIService.list().pipe(
         tap((products) => {
-          const productAmountSorted = products
-            .map((product) => ({
-              ...product,
-              plans: product.plans.map((plans) => ({
-                ...plans,
-                amount: +plans.amount,
-              })),
-            }))
-            .sort((a, b) => a.plans[0].amount - b.plans[0].amount);
+          const productAmountSorted = products.sort(
+            (a, b) => a.prices[0].unit_amount - b.prices[0].unit_amount
+          );
           this.setProducts(productAmountSorted);
         })
       )
     );
   }
 
-  dispatchSubscriptionCreation(organization: Organization, plan: Plan) {
-    this.setSubscriptionCreationStart(plan.id);
-    if (plan.amount === 0) {
+  dispatchSubscriptionCreation(organization: Organization, price: BasePrice) {
+    this.setSubscriptionCreationStart(price.id);
+    if (price.unit_amount === 0) {
       lastValueFrom(
-        this.subscriptionsAPIService.create(organization.id, plan.id).pipe(
+        this.subscriptionsAPIService.create(organization.id, price.id).pipe(
           tap((resp) => {
             this.setSubscription(resp.subscription);
             this.router.navigate([organization.slug, "issues"]);
@@ -191,7 +216,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
         )
       );
     } else {
-      this.stripe.redirectToSubscriptionCheckout(organization.id, plan.id);
+      this.stripe.redirectToSubscriptionCheckout(organization.id, price.id);
     }
   }
 
