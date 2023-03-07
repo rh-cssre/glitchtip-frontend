@@ -14,10 +14,10 @@ export class SubscriptionsAPIService {
   readonly url = `${baseUrl}/subscriptions/`;
   constructor(protected http: HttpClient) {}
 
-  create(organizationId: number, price: string) {
+  create(organizationId: number, priceId: string) {
     const data = {
       organization: organizationId,
-      price: price,
+      price: priceId,
     };
     return this.http.post<CreateSubscriptionResp>(this.url, data);
   }

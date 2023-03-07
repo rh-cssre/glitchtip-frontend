@@ -43,10 +43,10 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
   );
   readonly formattedSubscription$ = this.subscription$.pipe(
     map((subscription) => {
-      let price = subscription?.items[0]?.price
-        ? subscription.items[0].price
-        : null;
       if (subscription) {
+        let price = subscription.items[0]?.price
+          ? subscription.items[0].price
+          : null;
         return {
           ...subscription,
           mainUnitPrice: price ? price.unit_amount / 100 : null,
@@ -90,7 +90,7 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
       }
     })
   );
-  
+
   readonly totalEventsAllowed$ = this.subscription$.pipe(
     map((subscription) =>
       subscription && subscription.items[0]
