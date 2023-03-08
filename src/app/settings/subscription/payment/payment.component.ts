@@ -1,12 +1,8 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-} from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 import { filter, first, tap } from "rxjs/operators";
 import { environment } from "../../../../environments/environment";
-import { Plan } from "src/app/api/subscriptions/subscriptions.interfaces";
+import { BasePrice } from "src/app/api/subscriptions/subscriptions.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 
@@ -17,7 +13,7 @@ import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.se
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentComponent implements OnInit {
-  planOptions$ = this.subscriptionService.planOptionsWithShortNames$;
+  productOptions$ = this.subscriptionService.formattedProductOptions;
   subscriptionCreationLoadingId$ =
     this.subscriptionService.subscriptionCreationLoadingId$;
   billingEmail = environment.billingEmail;
@@ -28,11 +24,11 @@ export class PaymentComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.subscriptionService.retrieveSubscriptionPlans()
+    this.subscriptionService.retrieveProducts();
     this.organizationService.retrieveOrganizations().subscribe();
   }
 
-  onSubmit(plan: Plan) {
+  onSubmit(price: BasePrice) {
     lastValueFrom(
       this.organizationService.activeOrganization$.pipe(
         first(),
@@ -40,7 +36,7 @@ export class PaymentComponent implements OnInit {
         tap((activeOrganization) =>
           this.subscriptionService.dispatchSubscriptionCreation(
             activeOrganization!,
-            plan
+            price
           )
         )
       )

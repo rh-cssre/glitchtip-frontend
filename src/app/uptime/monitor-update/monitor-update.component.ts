@@ -6,7 +6,7 @@ import {
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { tap, filter, first, take, map } from "rxjs/operators";
+import { tap, filter, first, take } from "rxjs/operators";
 import { combineLatest, lastValueFrom } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
@@ -35,15 +35,7 @@ export class MonitorUpdateComponent
   error$ = this.service.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   deleteLoading$ = this.service.deleteLoading$;
-
-  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
-    map((subscription) =>
-      subscription && subscription.plan?.product.metadata
-        ? parseInt(subscription.plan.product.metadata.events, 10)
-        : null
-    )
-  );
-
+  totalEventsAllowed$ = this.subscriptionsService.totalEventsAllowed$;
   intervalPerMonth: number | null = null;
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];

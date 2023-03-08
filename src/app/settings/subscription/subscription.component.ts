@@ -24,10 +24,11 @@ interface Percentages {
 })
 export class SubscriptionComponent implements OnDestroy {
   fromStripe$ = this.service.fromStripe$;
-  subscription$ = this.service.subscription$;
+  subscription$ = this.service.formattedSubscription$;
   subscriptionLoading$ = this.service.subscriptionLoading$;
   subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
+  totalEventsAllowed$ = this.service.totalEventsAllowed$
   activeOrganization$ = this.orgService.activeOrganization$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   promptForProject$ = combineLatest([
@@ -51,13 +52,6 @@ export class SubscriptionComponent implements OnDestroy {
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
   error$ = this.stripe.error$;
-  totalEventsAllowed$ = this.subscription$.pipe(
-    map((subscription) =>
-      subscription && subscription.plan?.product.metadata
-        ? parseInt(subscription.plan.product.metadata.events, 10)
-        : null
-    )
-  );
   eventsPercent$ = combineLatest([
     this.totalEventsAllowed$,
     this.eventsCountWithTotal$,
