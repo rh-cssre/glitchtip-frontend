@@ -15,6 +15,7 @@
     <table
       mat-table
       [dataSource]="issues$"
+      [trackBy]="trackIssues"
       class="mat-elevation-z2"
       [class.fixedLayout]="issues.length === 0"
     >
