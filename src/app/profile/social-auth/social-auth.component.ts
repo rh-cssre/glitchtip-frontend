@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
+import { combineLatest, map } from "rxjs";
 import { GlitchTipOAuthService } from "src/app/api/oauth/oauth.service";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
@@ -12,9 +13,26 @@ import { SocialApp } from "../../api/user/user.interfaces";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialAuthComponent implements OnInit {
-  user$ = this.userService.userDetails$;
   disconnectLoading$ = this.userService.disconnectLoading$;
   socialApps$ = this.settingsService.socialApps$;
+  user$ = combineLatest([this.socialApps$, this.userService.userDetails$]).pipe(
+    map(([socialApps, userDetails]) => {
+      let socialAccountsWithNames = userDetails?.identities.map(
+        (socialAccount) => {
+          return {
+            ...socialAccount,
+            name: socialApps.find(
+              (socialApp) => socialApp.provider === socialAccount.provider
+            )?.name,
+          };
+        }
+      );
+      return {
+        ...userDetails,
+        identities: socialAccountsWithNames,
+      };
+    })
+  );
   account = new UntypedFormControl();
 
   constructor(

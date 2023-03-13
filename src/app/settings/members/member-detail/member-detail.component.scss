@@ -13,13 +13,18 @@ mat-card {
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: $tablet - 1) {
+  .column {
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: 0;
-    padding-right: 0;
+  }
+
+  @media (max-width: $large - 1) {
+    flex-direction: column;
+    justify-content: center;
 
     .column {
+      display: block;
       margin-top: 8px;
       margin-bottom: 8px;
     }

@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { combineLatest, Subject, takeUntil } from "rxjs";
 import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
+import { Issue } from "../interfaces";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
@@ -265,6 +266,10 @@ export class IssuesPageComponent
   ngOnDestroy() {
     super.ngOnDestroy();
     this.projectEnvironmentsService.clearState();
+  }
+
+  trackIssues(index: number, issue: Issue): number {
+    return issue.id;
   }
 
   onDateFormSubmit(queryParams: object) {

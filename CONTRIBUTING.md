@@ -31,7 +31,9 @@ GlitchTip uses rxjs's BehaviorSubject to provide state to components. Most compo
 
 StatefulBaseComponent provides a destroy$ observable on ngOnDestroy. Use it to unsubscribe with takeUntil(this.$destroy). It also calls service.clearState on destroy.
 
-StatefulService provides a react-like `setState` and `clearState` functions.
+StatefulService provides react-like `setState` and `clearState` functions. `setState` should be used in private, reducer-style functions. Each such function should be responsible for setting all of the state in a service relevant to a given synchronous event. Dispatching events and calling the necessary functions for setting state should be handled by public, action-style functions.
+
+Httpclient API calls should be placed in a separate API service and imported into a StatefulService instance. Generally the `APIBaseService` should be used for this.
 
 **PaginatedBaseComponent** extends StatefulBaseComponent and **PaginationStatefulService** extends StatefulService
 
