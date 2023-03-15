@@ -46,7 +46,7 @@
       ></gt-issue-detail-title>
       <div class="button-row">
         <button
-          *ngIf="issue?.status === 'unresolved'"
+          *ngIf="issue?.status !== 'resolved'"
           mat-flat-button
           color="primary"
           (click)="markResolved()"
@@ -55,7 +55,7 @@
           Resolve
         </button>
         <button
-          *ngIf="issue?.status === 'resolved'"
+          *ngIf="issue?.status !== 'unresolved'"
           mat-flat-button
           color="primary"
           (click)="markUnresolved()"
@@ -63,7 +63,13 @@
           <mat-icon aria-hidden="true">done</mat-icon>
           Reopen
         </button>
-        <button mat-stroked-button (click)="markIgnored()">Ignore</button>
+        <button
+          *ngIf="issue?.status !== 'ignored'"
+          mat-stroked-button
+          (click)="markIgnored()"
+        >
+          Ignore
+        </button>
         <button
           mat-icon-button
           class="medium-icon-button"
