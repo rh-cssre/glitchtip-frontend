@@ -5,11 +5,11 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { map } from "rxjs/operators";
+import { FormControl, FormGroup } from "@angular/forms";
+import { filter, map, withLatestFrom, startWith } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
+import { MemberRole } from "src/app/api/organizations/organizations.interface";
 
 @Component({
   selector: "gt-member-detail",
@@ -18,10 +18,11 @@ import { MemberDetailService } from "src/app/api/organizations/member-detail.ser
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
-  memberDetail$ = this.memberDetailService.memberDetail$;
-  teams$ = this.organizationsService.organizationTeams$;
-  updateMemberError$ = this.memberDetailService.updateMemberError$;
-  updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
+  member$ = this.memberDetailService.member$;
+  memberTeams$ = this.memberDetailService.memberTeams$;
+  availableRoles$ = this.memberDetailService.availableRoles$;
+  updateMemberError$ = this.memberDetailService.updateMemberRoleError$;
+  updateMemberLoading$ = this.memberDetailService.updateMemberRoleLoading$;
   transferOrgOwnershipError$ =
     this.memberDetailService.transferOrgOwnershipError$;
   transferOrgOwnershipLoading$ =
@@ -31,13 +32,24 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     map((params) => params.get("member-id"))
   );
   routeParams$ = combineLatest([this.orgSlug$, this.memberIdParam$]);
-  form = new UntypedFormGroup({
-    role: new UntypedFormControl(""),
+  form = new FormGroup({
+    role: new FormControl<MemberRole | null>(null),
   });
+  formRole = this.form.get("role") as FormControl<MemberRole | null>;
+
+  selectedRoleScopes$ = this.formRole.valueChanges.pipe(
+    startWith(null),
+    withLatestFrom(this.availableRoles$),
+    filter(([_, availableRoles]) => !!availableRoles),
+    map(([_, availableRoles]) => {
+      return availableRoles!
+        .find((roleDetails) => roleDetails.id === this.formRole.value)
+        ?.scopes.join(", ");
+    })
+  );
 
   constructor(
     public route: ActivatedRoute,
-    private organizationsService: OrganizationsService,
     private memberDetailService: MemberDetailService
   ) {}
 
@@ -50,19 +62,17 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
               organizationSlug,
               +memberIdParam
             );
-            this.organizationsService.retrieveOrganizationTeams(
-              organizationSlug
-            );
           }
         })
       )
       .subscribe();
 
-    this.memberDetail$.subscribe((data) => {
-      if (data) {
+    this.member$.subscribe((data) => {
+      if (data && this.form.pristine) {
         this.form.patchValue({
           role: data.role,
         });
+        this.form.markAsPristine();
       }
     });
   }
@@ -72,9 +82,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const role = this.form.get("role")?.value;
-    this.memberDetailService.updateMember(role);
-    // entire member object needs to be put to orgs/org-slug/members/member-id
+    const role = this.formRole.value;
+    if (role) {
+      this.memberDetailService.updateMemberRole(role);
+    }
   }
 
   transferOrgOwnership() {
