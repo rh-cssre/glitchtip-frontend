@@ -25,6 +25,8 @@ if (window.Cypress) {
   snackBarDuration = 100;
 }
 
+const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
+
 @NgModule({
   declarations: [AppComponent, RateLimitBannerComponent],
   imports: [
@@ -38,7 +40,7 @@ if (window.Cypress) {
       headerName: "X-CSRFTOKEN",
     }),
     MainNavModule,
-    MicroSentryModule.forRoot({}),
+    MicroSentryModule.forRoot({ ignoreErrors: [serverErrorsRegex] }),
     SharedModule,
   ],
   providers: [
