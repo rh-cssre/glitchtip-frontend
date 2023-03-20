@@ -7,6 +7,7 @@ import { MainNavService } from "../main-nav/main-nav.service";
 import { tap, filter, map } from "rxjs/operators";
 
 @Component({
+  selector: "gt-profile",
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.scss"],
 })

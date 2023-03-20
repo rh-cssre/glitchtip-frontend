@@ -17,11 +17,11 @@
             <ng-template #restrictedRegistration>Only existing GlitchTip users may be invited.</ng-template>
             Multiple emails delimited by commas.
           </p>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
             <input
               matInput
               type="email"
-              placeholder="Email"
               formControlName="email"
             />
             <mat-error *ngIf="form.get('email')?.errors">
@@ -46,7 +46,7 @@
         <p>Organization member status grants view access to all of an organization’s issues handled by GlitchTip.</p>
         <div>
           <h2>Team</h2>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Add Team</mat-label>
             <mat-select multiple formControlName="teams" disableOptionCentering>
               <ng-container
