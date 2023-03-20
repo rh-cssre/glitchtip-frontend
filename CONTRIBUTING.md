@@ -6,6 +6,10 @@ A good issue includes reproducible steps for bugs. Clear use cases for feature r
 
 A good merge request includes a unit test demonstrating how a bug exists and is fixed with your change. Out of caution, contributors must not view or be familiar with proprietary Sentry code. Our codebase borrows code and ideas from Sentry when it was open source. We provide a fork of the last open source version of sentry [here](https://gitlab.com/glitchtip/sentry-open-source). You may and should read, understand, and copy open source Sentry code. While Sentry's current code is on Github, it would violate their proprietary license to use it.
 
+## Adding larger features and npm dependencies
+
+Please open an issue to discuss any larger feature or new npm dependency before starting work. We aim to be very dependency-light so as to keep the project maintainable with very little time. Larger feature development is encouraged, provided you are willing to assist with general project maintainance. Consider asking what maintaince task you can help with. 
+
 # Frontend Architecture Overview
 
 GlitchTip features an isolated backend API and this Angular single page application frontend. This project aims to produce a static bundle that can be included in a full GlitchTip docker image that is ultimately served by Django (or maybe ultimately by a CDN). In theory, you could build your own frontend if you wanted to.
