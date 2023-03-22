@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: ":monitor-id/update",
     component: MonitorUpdateComponent,
-  },
+  }, 
 ];
 
 @NgModule({

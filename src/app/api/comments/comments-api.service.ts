@@ -1,8 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
 import { Comment } from "./comments.interfaces";
-import { Environment } from "../organizations/organizations.interface";
 
 @Injectable({
   providedIn: "root",
@@ -12,12 +11,21 @@ export class CommentsAPIService {
 
   constructor(protected http: HttpClient) {}
 
-  list(issueId: number) {
-    return this.http.get<Environment[]>(this.listURL(issueId));
+  list(issueId: number, cursor?: string) {
+    let httpParams = new HttpParams();
+    if (cursor) {
+      httpParams = httpParams.set("cursor", cursor);
+    }
+    return this.http.get<Comment[]>(this.listURL(issueId), {
+      params: httpParams,
+    });
   }
 
   update(issueId: number, commentId: number, comment: Comment) {
-    return this.http.patch(this.detailURL(issueId, commentId), comment);
+    return this.http.patch<Comment>(
+      this.detailURL(issueId, commentId),
+      comment
+    );
   }
 
   destroy(issueId: number, commentId: number) {
