@@ -26,6 +26,7 @@ export class CommentsAPIService {
       httpParams = httpParams.set("cursor", cursor);
     }
     return this.http.get<Comment[]>(this.listURL(issueId), {
+      observe: "response",
       params: httpParams,
     });
   }

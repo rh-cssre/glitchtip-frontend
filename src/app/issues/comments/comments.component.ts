@@ -33,6 +33,7 @@ export class CommentsComponent
     super(commentsService, router, route);
     this.activeCombinedParams$.subscribe(
       ([params, queryParams]) => {
+        console.log(queryParams)
         if (params["issue-id"]) {
           this.commentsService.getComments(
             params["issue-id"],
@@ -57,6 +58,4 @@ export class CommentsComponent
       );
     }
   }
-
-  ngOnDestroy() {}
 }

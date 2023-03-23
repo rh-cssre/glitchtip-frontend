@@ -8,6 +8,7 @@ import {
 } from "src/app/shared/stateful-service/pagination-stateful-service";
 import { CommentsAPIService } from "src/app/api/comments/comments-api.service";
 import { Comment } from "src/app/api/comments/comments.interfaces";
+import { HttpResponse } from "@angular/common/http";
 
 export interface CommentsState extends PaginationStatefulServiceState {
   comments: Comment[];
@@ -42,8 +43,8 @@ export class CommentsService extends PaginationStatefulService<CommentsState> {
     this.setCommentsLoadingStart();
     lastValueFrom(
       this.commentsAPIService.list(issueId, cursor).pipe(
-        tap((response) => {
-          this.setCommentsLoadingComplete(response);
+        tap((res) => {
+          this.setCommentsLoadingComplete(res);
         }),
         catchError((error) => {
           this.setCommentsLoadingError(
@@ -74,11 +75,11 @@ export class CommentsService extends PaginationStatefulService<CommentsState> {
     this.setState({ commentsListLoading: true });
   }
 
-  private setCommentsLoadingComplete(comments: Comment[]) {
-    this.setState({
+  private setCommentsLoadingComplete(res: HttpResponse<Comment[]>) {
+    this.setStateAndPagination({
       commentsListLoading: false,
-      comments,
-    });
+      comments: res.body!
+    }, res);
   }
 
   private setCommentsLoadingError(error: string) {

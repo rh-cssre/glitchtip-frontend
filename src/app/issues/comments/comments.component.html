@@ -13,8 +13,44 @@
   >
   </gt-loading-button>
 </form>
-<ng-container *ngIf="comments$ | async as comments">
-  <div *ngFor="let comment of comments">
-    {{ comment.data.text }}
+
+<div class="comment-list">
+  <ng-container *ngFor="let comment of comments$ | async">
+    <div class="comment">
+      <p class="name">{{ comment.user?.email }} </p>
+      <p class="date">{{ comment.dateCreated | date: "medium" }}</p>
+      <p>{{ comment.data.text }}</p>
+    </div>
+    <mat-divider></mat-divider>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="paginator$ | async as paginator">
+  <div class="nav-arrows" *ngIf="paginator.loading === false">
+    <a
+      [routerLink]="[]"
+      [queryParams]="paginator.previousPageParams || {}"
+      queryParamsHandling="merge"
+      mat-button
+      [disabled]="paginator.hasPreviousPage === false"
+    >
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </a>
+    <a
+      [routerLink]="[]"
+      [queryParams]="paginator.nextPageParams || {}"
+      queryParamsHandling="merge"
+      mat-button
+      [disabled]="paginator.hasNextPage === false"
+    >
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </a>
+  </div>
+  <div *ngIf="paginator.loading" class="spinner-container">
+    <mat-progress-spinner
+      [diameter]="33"
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
   </div>
 </ng-container>
