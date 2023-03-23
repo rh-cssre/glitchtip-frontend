@@ -11,6 +11,15 @@ export class CommentsAPIService {
 
   constructor(protected http: HttpClient) {}
 
+  create(issueId: number, text: string) {
+    let data = {
+      data: {
+        text,
+      },
+    };
+    return this.http.post<Comment>(this.listURL(issueId), data);
+  }
+
   list(issueId: number, cursor?: string) {
     let httpParams = new HttpParams();
     if (cursor) {

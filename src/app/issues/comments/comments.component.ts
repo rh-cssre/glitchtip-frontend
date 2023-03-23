@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription, withLatestFrom } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { lastValueFrom } from "rxjs";
+import { tap } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { CommentsState, CommentsService } from "./comments.service";
 
@@ -15,38 +16,47 @@ export class CommentsComponent
   implements OnDestroy
 {
   comments$ = this.commentsService.comments$;
-  loading$ = this.commentsService.loading$;
+  loading$ = this.commentsService.commentsListLoading$;
   errorReports$ = this.commentsService.error$;
 
-  navigationEnd$ = this.cursorNavigationEnd$.pipe(
-    withLatestFrom(this.route.params, this.route.queryParams),
-    map(([_, params, queryParams]) => {
-      const issueId: number | undefined = params["issue-id"];
-      const cursor: string | undefined = queryParams.cursor;
-      return { issueId, cursor };
-    })
-  );
+  newCommentForm = new FormGroup({
+    text: new FormControl("", [Validators.required]),
+  });
 
-  routerEventSubscription: Subscription;
+  newCommentFormText = this.newCommentForm.get("text") as FormControl;
 
   constructor(
     private commentsService: CommentsService,
-    protected route: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
     super(commentsService, router, route);
-    this.routerEventSubscription = this.navigationEnd$
-      .pipe(
-        tap(({ issueId, cursor }) => {
-          if (issueId) {
-            this.commentsService.getComments(issueId, cursor);
-          }
-        })
-      )
-      .subscribe();
+    this.activeCombinedParams$.subscribe(
+      ([params, queryParams]) => {
+        if (params["issue-id"]) {
+          this.commentsService.getComments(
+            params["issue-id"],
+            queryParams.cursor
+          );
+        }
+      }
+    );
   }
 
-  ngOnDestroy() {
-    this.routerEventSubscription.unsubscribe();
+  submitNewComment() {
+    if (this.newCommentForm.valid) {
+      lastValueFrom(
+        this.route.params.pipe(
+          tap((params) => {
+            this.commentsService.createComment(
+              +params["issue-id"],
+              this.newCommentFormText.value
+            );
+          })
+        )
+      );
+    }
   }
+
+  ngOnDestroy() {}
 }

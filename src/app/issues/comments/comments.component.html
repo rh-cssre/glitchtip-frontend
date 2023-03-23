@@ -1,1 +1,20 @@
-<p>comments works!</p>
+<form [formGroup]="newCommentForm" (ngSubmit)="submitNewComment()">
+  <mat-form-field appearance="outline">
+    <mat-label>Comment</mat-label>
+    <input matInput formControlName="text" required />
+    <mat-error *ngIf="newCommentFormText?.errors?.required">
+      Enter a monitor name
+    </mat-error>
+  </mat-form-field>
+  <gt-loading-button
+    class="submit"
+    [loading]="false"
+    buttonText="Submit Comment"
+  >
+  </gt-loading-button>
+</form>
+<ng-container *ngIf="comments$ | async as comments">
+  <div *ngFor="let comment of comments">
+    {{ comment.data.text }}
+  </div>
+</ng-container>

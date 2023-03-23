@@ -130,6 +130,15 @@
               User Reports
             </ng-container>
           </a>
+          <a
+            mat-tab-link
+            [routerLink]="['comments']"
+            routerLinkActive
+            [active]="comments.isActive"
+            #comments="routerLinkActive"
+          >
+            <span>Comments</span>
+          </a>
         </nav>
       </div>
       <mat-card-content>
