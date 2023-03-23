@@ -1,23 +1,11 @@
-<form [formGroup]="newCommentForm" (ngSubmit)="submitNewComment()">
-  <mat-form-field appearance="outline">
-    <mat-label>Comment</mat-label>
-    <input matInput formControlName="text" required />
-    <mat-error *ngIf="newCommentFormText?.errors?.required">
-      Enter a monitor name
-    </mat-error>
-  </mat-form-field>
-  <gt-loading-button
-    class="submit"
-    [loading]="false"
-    buttonText="Submit Comment"
-  >
-  </gt-loading-button>
-</form>
+<gt-comment-form
+  (commentSubmitted)="createOrUpdateComment($event)"
+></gt-comment-form>
 
 <div class="comment-list">
   <ng-container *ngFor="let comment of comments$ | async">
     <div class="comment">
-      <p class="name">{{ comment.user?.email }} </p>
+      <p class="name">{{ comment.user?.email }}</p>
       <p class="date">{{ comment.dateCreated | date: "medium" }}</p>
       <p>{{ comment.data.text }}</p>
     </div>

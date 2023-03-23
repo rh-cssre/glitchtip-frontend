@@ -31,31 +31,27 @@ export class CommentsComponent
     protected route: ActivatedRoute
   ) {
     super(commentsService, router, route);
-    this.activeCombinedParams$.subscribe(
-      ([params, queryParams]) => {
-        console.log(queryParams)
-        if (params["issue-id"]) {
-          this.commentsService.getComments(
-            params["issue-id"],
-            queryParams.cursor
-          );
-        }
+    this.activeCombinedParams$.subscribe(([params, queryParams]) => {
+      if (params["issue-id"]) {
+        this.commentsService.getComments(
+          params["issue-id"],
+          queryParams.cursor
+        );
       }
-    );
+    });
   }
 
-  submitNewComment() {
-    if (this.newCommentForm.valid) {
-      lastValueFrom(
-        this.route.params.pipe(
-          tap((params) => {
-            this.commentsService.createComment(
-              +params["issue-id"],
-              this.newCommentFormText.value
-            );
-          })
-        )
-      );
-    }
+  createOrUpdateComment(data: {text: string, commentId?: number}) {
+    lastValueFrom(
+      this.route.params.pipe(
+        tap((params) => {
+          this.commentsService.createOrUpdateComment(
+            +params["issue-id"],
+            data.text,
+            data.commentId
+          );
+        })
+      )
+    );
   }
 }

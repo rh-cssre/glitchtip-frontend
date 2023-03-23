@@ -56,6 +56,14 @@ export class CommentsService extends PaginationStatefulService<CommentsState> {
     );
   }
 
+  createOrUpdateComment(issueId: number, text: string, commentId?: number) {
+    if (commentId) {
+      console.log("Comment updated")
+    } else {
+      this.createComment(issueId, text)
+    }
+  }
+
   createComment(issueId: number, text: string) {
     this.setCreateCommentLoadingStart();
     lastValueFrom(

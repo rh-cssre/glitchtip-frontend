@@ -35,6 +35,7 @@ import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-bre
 import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue-detail-tags.component";
 import { PrismjsModule } from "../prismjs/prismjs.module";
 import { CommentsComponent } from './comments/comments.component';
+import { CommentFormComponent } from "./comments/comment-form/comment-form.component";
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { CommentsComponent } from './comments/comments.component';
     EntryBreadcrumbsComponent,
     IssueDetailTagsComponent,
     CommentsComponent,
+    CommentFormComponent,
   ],
 })
 export class IssuesModule {}
