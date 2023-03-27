@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
+import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar.module";
 import { ProfileRoutingModule } from "./profile-routing.module";
 import { ProfileComponent } from "./profile.component";
 import { SharedModule } from "../shared/shared.module";
@@ -42,6 +43,7 @@ import { PreferencesComponent } from "./preferences/preferences.component";
   ],
   imports: [
     CommonModule,
+    MobileNavToolbarModule,
     ProfileRoutingModule,
     SharedModule,
     ReactiveFormsModule,

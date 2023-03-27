@@ -8,11 +8,11 @@
     <!-- If there are errors, only show the error -->
     <ng-container *ngIf="(errors$ | async)?.length; else emptyState">
       <ng-container *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
-        ><h3 class="mat-display-1" i18n
+        ><h3 class="mat-headline-4" i18n
           >There was an error processing your request</h3
         ></ng-container
       ><ng-template #multipleErrors
-        ><h3 class="mat-display-1" i18n
+        ><h3 class="mat-headline-4" i18n
           >There were errors while processing your request</h3
         ></ng-template
       >
@@ -27,7 +27,7 @@
       <ng-container
         *ngIf="(orgHasAProject$ | async) === false; else hasProject"
       >
-        <h3 class="mat-display-1" i18n>This organization has no projects.</h3>
+        <h3 class="mat-headline-4" i18n>This organization has no projects.</h3>
         <p class="mat-body-1" i18n
           >To add a project to this organization, press the
           "Add&nbsp;Project"&nbsp;button.</p
@@ -64,7 +64,7 @@
           <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
             <div class="install-wrapper">
               <div
-                class="install-instructions"
+                class="install-instructions mat-body-1"
                 *ngIf="
                   activeProjectPlatform$ | async as activeProjectPlatform;
                   else noPlatform
@@ -78,7 +78,7 @@
                     else otherTemplate
                   "
                 >
-                  <h2 class="mat-display-1" i18n
+                  <h2 class="mat-headline-4" i18n
                     >Connect your
                     {{ activeProjectPlatformName$ | async }} project to
                     GlitchTip</h2
@@ -92,7 +92,7 @@
                 </ng-container>
 
                 <ng-template #otherTemplate>
-                  <h2 class="mat-display-1" i18n
+                  <h2 class="mat-headline-4" i18n
                     >Connect your project to GlitchTip</h2
                   >
 
@@ -107,8 +107,8 @@
               </div>
 
               <ng-template #noPlatform>
-                <div class="install-instructions">
-                  <h2 class="mat-display-1" i18n
+                <div class="install-instructions mat-body-1">
+                  <h2 class="mat-headline-4" i18n
                     >Connect your project to GlitchTip</h2
                   >
 
@@ -137,7 +137,7 @@
                 class="dsn"
                 *ngIf="firstProjectKey$ | async as firstProjectKey"
               >
-                <h2 class="mat-display-1">DSN</h2>
+                <h2 class="mat-headline-4">DSN</h2>
 
                 <p class="mat-body-1" i18n
                   >Most instructions will have a spot that says "your DSN here".
@@ -162,10 +162,11 @@
                 >
                   <ng-container *ngIf="activeProjectPlatform !== 'other'">
                     <h2 class="mat-body-2" i18n>What's this all about?</h2>
-
-                    <gt-lazy-markdown
-                      markdownSrc="/static/sdk-docs/all-sdks.md"
-                    ></gt-lazy-markdown>
+                    <div class="mat-body-1">
+                      <gt-lazy-markdown
+                        markdownSrc="/static/sdk-docs/all-sdks.md"
+                      ></gt-lazy-markdown>
+                    </div>
 
                     <p class="mat-body-1" i18n
                       >This page is showing instructions on how to connect
@@ -180,7 +181,7 @@
 
           <ng-template #noIssueMessaging>
             <!-- No issues match the filters, in general -->
-            <h3 class="mat-display-1" i18n>No events match your filters.</h3>
+            <h3 class="mat-headline-4" i18n>No events match your filters.</h3>
             <p class="mat-body-1" i18n
               >Try changing your search parameters to get something to show
               here.</p

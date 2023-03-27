@@ -101,7 +101,7 @@ export class PreferencesComponent implements OnInit {
       const options = {
         ...(timeZone !== null && { timezone: timeZone }),
       };
-      this.service.updateUserOptions(name, options);
+      this.service.updateUser(name, options);
     }
   }
 }
