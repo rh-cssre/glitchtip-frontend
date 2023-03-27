@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { map, tap, catchError } from "rxjs/operators";
 import { EMPTY, lastValueFrom } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 import { CommentsAPIService } from "src/app/api/comments/comments-api.service";
 import { Comment } from "src/app/api/comments/comments.interfaces";
@@ -29,7 +30,10 @@ export class CommentsService extends StatefulService<CommentsState> {
     map((state) => state.commentsListLoading)
   );
 
-  constructor(private commentsAPIService: CommentsAPIService) {
+  constructor(
+    private commentsAPIService: CommentsAPIService,
+    private snackbar: MatSnackBar
+  ) {
     super(initialState);
   }
 
@@ -52,9 +56,9 @@ export class CommentsService extends StatefulService<CommentsState> {
 
   createOrUpdateComment(issueId: number, text: string, commentId?: number) {
     if (commentId) {
-      console.log("Comment updated")
+      console.log("Comment updated");
     } else {
-      this.createComment(issueId, text)
+      this.createComment(issueId, text);
     }
   }
 
@@ -73,6 +77,20 @@ export class CommentsService extends StatefulService<CommentsState> {
     );
   }
 
+  deleteComment(issueId: number, commentId: number) {
+    lastValueFrom(
+      this.commentsAPIService.destroy(issueId, commentId).pipe(
+        tap(() => {
+          this.setCommentDeleteComplete(commentId);
+          this.snackbar.open("Comment deleted.");
+        }),
+        catchError(
+          () => "There was an error deleting this comment. Please try again."
+        )
+      )
+    );
+  }
+
   private setCommentsLoadingStart() {
     this.setState({ commentsListLoading: true });
   }
@@ -80,7 +98,7 @@ export class CommentsService extends StatefulService<CommentsState> {
   private setCommentsLoadingComplete(comments: Comment[]) {
     this.setState({
       commentsListLoading: false,
-      comments
+      comments,
     });
   }
 
@@ -101,13 +119,20 @@ export class CommentsService extends StatefulService<CommentsState> {
     const state = this.state.getValue();
     this.setState({
       createCommentLoading: false,
-      comments: state.comments?.concat([comment]),
+      comments: [comment].concat(state.comments),
     });
   }
 
   private setCreateCommentLoadingError() {
     this.setState({
       createCommentLoading: false,
+    });
+  }
+
+  private setCommentDeleteComplete(commentId: number) {
+    const state = this.state.getValue();
+    this.setState({
+      comments: state.comments.filter((comment) => comment.id !== commentId),
     });
   }
 }

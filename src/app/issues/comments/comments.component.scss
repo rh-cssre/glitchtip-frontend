@@ -1,0 +1,13 @@
+
+.comment {
+  padding: 15px 0;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .name {
+    margin-right: 10px;
+  }
+}

@@ -5,8 +5,28 @@
 <div class="comment-list">
   <ng-container *ngFor="let comment of comments$ | async">
     <div class="comment">
-      <p class="name">{{ comment.user?.email }}</p>
-      <p class="date">{{ comment.dateCreated | date: "medium" }}</p>
+      <div class="comment-header">
+        <div>
+          <span class="name mat-subtitle-1">{{ comment.user?.email }}</span>
+          <span class="date mat-caption">{{
+            comment.dateCreated | date: "medium"
+          }}</span>
+        </div>
+        <ng-container *ngIf="user$ | async as user">
+          <div
+            *ngIf="user.id === comment.user?.id"
+            class="comment-edit-options"
+          >
+            <button
+              mat-icon-button
+              class="medium-icon-button"
+              (click)="deleteComment(comment.id)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
       <p>{{ comment.data.text }}</p>
     </div>
     <mat-divider></mat-divider>
