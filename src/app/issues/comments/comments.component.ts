@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { lastValueFrom } from "rxjs";
 import { tap } from "rxjs/operators";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 import { CommentsState, CommentsService } from "./comments.service";
 
 @Component({
@@ -12,8 +12,8 @@ import { CommentsState, CommentsService } from "./comments.service";
   styleUrls: ["./comments.component.scss"],
 })
 export class CommentsComponent
-  extends PaginationBaseComponent<CommentsState, CommentsService>
-  implements OnDestroy
+  extends StatefulBaseComponent<CommentsState, CommentsService>
+  implements OnDestroy, OnInit
 {
   comments$ = this.commentsService.comments$;
   loading$ = this.commentsService.commentsListLoading$;
@@ -27,21 +27,20 @@ export class CommentsComponent
 
   constructor(
     private commentsService: CommentsService,
-    protected router: Router,
     protected route: ActivatedRoute
   ) {
-    super(commentsService, router, route);
-    this.activeCombinedParams$.subscribe(([params, queryParams]) => {
+    super(commentsService);
+  }
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
       if (params["issue-id"]) {
-        this.commentsService.getComments(
-          params["issue-id"],
-          queryParams.cursor
-        );
+        this.commentsService.getComments(params["issue-id"]);
       }
     });
   }
 
-  createOrUpdateComment(data: {text: string, commentId?: number}) {
+  createOrUpdateComment(data: { text: string; commentId?: number }) {
     lastValueFrom(
       this.route.params.pipe(
         tap((params) => {

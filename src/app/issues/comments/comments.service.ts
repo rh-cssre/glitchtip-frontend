@@ -1,16 +1,11 @@
 import { Injectable } from "@angular/core";
 import { map, tap, catchError } from "rxjs/operators";
 import { EMPTY, lastValueFrom } from "rxjs";
-import {
-  initialPaginationState,
-  PaginationStatefulService,
-  PaginationStatefulServiceState,
-} from "src/app/shared/stateful-service/pagination-stateful-service";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 import { CommentsAPIService } from "src/app/api/comments/comments-api.service";
 import { Comment } from "src/app/api/comments/comments.interfaces";
-import { HttpResponse } from "@angular/common/http";
 
-export interface CommentsState extends PaginationStatefulServiceState {
+export interface CommentsState {
   comments: Comment[];
   commentsListLoading: boolean;
   createCommentLoading: boolean;
@@ -22,13 +17,12 @@ const initialState: CommentsState = {
   commentsListLoading: false,
   createCommentLoading: false,
   error: null,
-  pagination: initialPaginationState,
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class CommentsService extends PaginationStatefulService<CommentsState> {
+export class CommentsService extends StatefulService<CommentsState> {
   comments$ = this.getState$.pipe(map((state) => state.comments));
   error$ = this.getState$.pipe(map((state) => state.error));
   commentsListLoading$ = this.getState$.pipe(
@@ -39,10 +33,10 @@ export class CommentsService extends PaginationStatefulService<CommentsState> {
     super(initialState);
   }
 
-  getComments(issueId: number, cursor: string | undefined) {
+  getComments(issueId: number) {
     this.setCommentsLoadingStart();
     lastValueFrom(
-      this.commentsAPIService.list(issueId, cursor).pipe(
+      this.commentsAPIService.list(issueId).pipe(
         tap((res) => {
           this.setCommentsLoadingComplete(res);
         }),
@@ -83,11 +77,11 @@ export class CommentsService extends PaginationStatefulService<CommentsState> {
     this.setState({ commentsListLoading: true });
   }
 
-  private setCommentsLoadingComplete(res: HttpResponse<Comment[]>) {
-    this.setStateAndPagination({
+  private setCommentsLoadingComplete(comments: Comment[]) {
+    this.setState({
       commentsListLoading: false,
-      comments: res.body!
-    }, res);
+      comments
+    });
   }
 
   private setCommentsLoadingError(error: string) {

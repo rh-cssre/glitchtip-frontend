@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
 import { Comment } from "./comments.interfaces";
@@ -20,15 +20,8 @@ export class CommentsAPIService {
     return this.http.post<Comment>(this.listURL(issueId), data);
   }
 
-  list(issueId: number, cursor?: string) {
-    let httpParams = new HttpParams();
-    if (cursor) {
-      httpParams = httpParams.set("cursor", cursor);
-    }
-    return this.http.get<Comment[]>(this.listURL(issueId), {
-      observe: "response",
-      params: httpParams,
-    });
+  list(issueId: number) {
+    return this.http.get<Comment[]>(this.listURL(issueId));
   }
 
   update(issueId: number, commentId: number, comment: Comment) {
