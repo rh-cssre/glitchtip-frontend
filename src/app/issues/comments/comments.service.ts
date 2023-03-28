@@ -61,14 +61,14 @@ export class CommentsService extends StatefulService<CommentsState> {
   }
 
   getComments(issueId: number) {
-    this.setCommentsLoadingStart();
+    this.setCommentsListLoadingStart();
     lastValueFrom(
       this.commentsAPIService.list(issueId).pipe(
         tap((res) => {
-          this.setCommentsLoadingComplete(res);
+          this.setCommentsListLoadingComplete(res);
         }),
         catchError((error) => {
-          this.setCommentsLoadingError(
+          this.setCommentsListLoadingError(
             "Something went wrong. Try reloading the page."
           );
           return EMPTY;
@@ -150,18 +150,18 @@ export class CommentsService extends StatefulService<CommentsState> {
     return updatedComments;
   }
 
-  private setCommentsLoadingStart() {
+  private setCommentsListLoadingStart() {
     this.setState({ commentsListLoading: true });
   }
 
-  private setCommentsLoadingComplete(comments: Comment[]) {
+  private setCommentsListLoadingComplete(comments: Comment[]) {
     this.setState({
       commentsListLoading: false,
       comments,
     });
   }
 
-  private setCommentsLoadingError(error: string) {
+  private setCommentsListLoadingError(error: string) {
     this.setState({
       commentsListLoading: false,
       error,
@@ -171,6 +171,20 @@ export class CommentsService extends StatefulService<CommentsState> {
   private setCreateCommentLoadingStart() {
     this.setState({
       createCommentLoading: true,
+    });
+  }
+
+  private setCreateCommentLoadingComplete(comment: Comment) {
+    const state = this.state.getValue();
+    this.setState({
+      createCommentLoading: false,
+      comments: [comment].concat(state.comments),
+    });
+  }
+
+  private setCreateCommentLoadingError() {
+    this.setState({
+      createCommentLoading: false,
     });
   }
 
@@ -226,33 +240,19 @@ export class CommentsService extends StatefulService<CommentsState> {
     });
   }
 
-  private setCreateCommentLoadingComplete(comment: Comment) {
+  private setCommentDeleteComplete(commentId: number) {
     const state = this.state.getValue();
     this.setState({
-      createCommentLoading: false,
-      comments: [comment].concat(state.comments),
-    });
-  }
-
-  private setCommentDeleteError(commentId: number) {
-    const state = this.state.getValue();
-    this.setState({
+      comments: state.comments.filter((comment) => comment.id !== commentId),
       commentDeleteLoading: state.commentDeleteLoading.filter(
         (id) => id !== commentId
       ),
     });
   }
 
-  private setCreateCommentLoadingError() {
-    this.setState({
-      createCommentLoading: false,
-    });
-  }
-
-  private setCommentDeleteComplete(commentId: number) {
+  private setCommentDeleteError(commentId: number) {
     const state = this.state.getValue();
     this.setState({
-      comments: state.comments.filter((comment) => comment.id !== commentId),
       commentDeleteLoading: state.commentDeleteLoading.filter(
         (id) => id !== commentId
       ),
