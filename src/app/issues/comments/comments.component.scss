@@ -16,9 +16,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  
+  .comment-user-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-right: 10px;
+  }
   .name {
     margin-right: 10px;
   }
+}
+
+.comment-edit-options {
+  min-width: 64px;
 }
 
 .delete-loading-wrapper {
