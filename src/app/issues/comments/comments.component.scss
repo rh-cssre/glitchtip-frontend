@@ -1,6 +1,9 @@
-
 .comment {
   padding: 15px 0;
+
+  &:last-of-type ~ mat-divider {
+    display: none;
+  }
 }
 
 .comment-header {

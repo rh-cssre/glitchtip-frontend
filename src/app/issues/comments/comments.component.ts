@@ -2,10 +2,9 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { lastValueFrom } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 import { CommentsState, CommentsService } from "./comments.service";
-import { Comment } from "src/app/api/comments/comments.interfaces";
 import { UserService } from "src/app/api/user/user.service";
 
 @Component({
@@ -17,8 +16,10 @@ export class CommentsComponent
   extends StatefulBaseComponent<CommentsState, CommentsService>
   implements OnDestroy, OnInit
 {
-  comments$ = this.commentsService.comments$;
-  loading$ = this.commentsService.commentsListLoading$;
+  comments$ = this.commentsService.commentsWithUIState$;
+  createCommentLoading$ = this.commentsService.createCommentLoading$;
+  commentsListLoading$ = this.commentsService.commentsListLoading$;
+  commentUpdateLoading$ = this.commentsService.commentUpdateLoading$;
   errorReports$ = this.commentsService.error$;
   user$ = this.userService.userDetails$;
 
@@ -44,24 +45,26 @@ export class CommentsComponent
     });
   }
 
-  checkCommentUser(comment: Comment) {
-    lastValueFrom(
-      this.user$.pipe(map((user) => user?.id === comment.user?.id))
-    );
-  }
-
-  createOrUpdateComment(data: { text: string; commentId?: number }) {
+  createOrUpdateComment(data: { text: string; id?: number }) {
     lastValueFrom(
       this.route.params.pipe(
         tap((params) => {
           this.commentsService.createOrUpdateComment(
             +params["issue-id"],
             data.text,
-            data.commentId
+            data.id
           );
         })
       )
     );
+  }
+
+  triggerCommentUpdateMode(commentId: number) {
+    this.commentsService.triggerCommentUpdateMode(commentId);
+  }
+
+  cancelCommentUpdateMode(commentId: number) {
+    this.commentsService.cancelCommentUpdateMode(commentId);
   }
 
   deleteComment(commentId: number) {

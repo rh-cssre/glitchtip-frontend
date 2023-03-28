@@ -24,11 +24,13 @@ export class CommentsAPIService {
     return this.http.get<Comment[]>(this.listURL(issueId));
   }
 
-  update(issueId: number, commentId: number, comment: Comment) {
-    return this.http.patch<Comment>(
-      this.detailURL(issueId, commentId),
-      comment
-    );
+  update(issueId: number, commentId: number, text: string) {
+    let data = {
+      data: {
+        text,
+      },
+    };
+    return this.http.put<Comment>(this.detailURL(issueId, commentId), data);
   }
 
   destroy(issueId: number, commentId: number) {

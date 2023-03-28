@@ -1,33 +1,51 @@
 <gt-comment-form
+  [loading]="(createCommentLoading$ | async)!"
   (commentSubmitted)="createOrUpdateComment($event)"
 ></gt-comment-form>
 
 <div class="comment-list">
   <ng-container *ngFor="let comment of comments$ | async">
     <div class="comment">
-      <div class="comment-header">
-        <div>
-          <span class="name mat-subtitle-1">{{ comment.user?.email }}</span>
-          <span class="date mat-caption">{{
-            comment.dateCreated | date: "medium"
-          }}</span>
-        </div>
-        <ng-container *ngIf="user$ | async as user">
-          <div
-            *ngIf="user.id === comment.user?.id"
-            class="comment-edit-options"
-          >
-            <button
-              mat-icon-button
-              class="medium-icon-button"
-              (click)="deleteComment(comment.id)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
+      <ng-container *ngIf="comment.updateMode; else displayComment">
+        <gt-comment-form
+          [comment]="comment"
+          [loading]="comment.updateLoading"
+          (cancelUpdate)="cancelCommentUpdateMode($event)"
+          (commentSubmitted)="createOrUpdateComment($event)"
+        ></gt-comment-form>
+      </ng-container>
+      <ng-template #displayComment>
+        <div class="comment-header">
+          <div>
+            <span class="name mat-subtitle-1">{{ comment.user?.email }}</span>
+            <span class="date mat-caption">{{
+              comment.dateCreated | date: "medium"
+            }}</span>
           </div>
-        </ng-container>
-      </div>
-      <p>{{ comment.data.text }}</p>
+          <ng-container *ngIf="user$ | async as user">
+            <div
+              *ngIf="user.id === comment.user?.id"
+              class="comment-edit-options"
+            >
+              <button
+                mat-icon-button
+                class="small-icon-button"
+                (click)="triggerCommentUpdateMode(comment.id)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                class="small-icon-button"
+                (click)="deleteComment(comment.id)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+        <p>{{ comment.data.text }}</p>
+      </ng-template>
     </div>
     <mat-divider></mat-divider>
   </ng-container>
