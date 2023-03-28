@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { lastValueFrom } from "rxjs";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 import { CommentsState, CommentsService } from "./comments.service";
 import { UserService } from "src/app/api/user/user.service";
@@ -20,8 +20,10 @@ export class CommentsComponent
   createCommentLoading$ = this.commentsService.createCommentLoading$;
   commentsListLoading$ = this.commentsService.commentsListLoading$;
   commentUpdateLoading$ = this.commentsService.commentUpdateLoading$;
-  errorReports$ = this.commentsService.error$;
   user$ = this.userService.userDetails$;
+  displayCommentCreation$ = this.comments$.pipe(
+    map((comments) => comments.length < 50)
+  );
 
   newCommentForm = new FormGroup({
     text: new FormControl("", [Validators.required]),

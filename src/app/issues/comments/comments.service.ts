@@ -13,7 +13,6 @@ export interface CommentsState {
   createCommentLoading: boolean;
   commentUpdateLoading: number[];
   commentDeleteLoading: number[];
-  error: string | null;
 }
 
 const initialState: CommentsState = {
@@ -23,7 +22,6 @@ const initialState: CommentsState = {
   createCommentLoading: false,
   commentUpdateLoading: [],
   commentDeleteLoading: [],
-  error: null,
 };
 
 @Injectable({
@@ -42,7 +40,6 @@ export class CommentsService extends StatefulService<CommentsState> {
       })
     )
   );
-  error$ = this.getState$.pipe(map((state) => state.error));
   commentsListLoading$ = this.getState$.pipe(
     map((state) => state.commentsListLoading)
   );
@@ -67,7 +64,7 @@ export class CommentsService extends StatefulService<CommentsState> {
         tap((res) => {
           this.setCommentsListLoadingComplete(res);
         }),
-        catchError((error) => {
+        catchError(() => {
           this.setCommentsListLoadingError(
             "Something went wrong. Try reloading the page."
           );
@@ -84,8 +81,11 @@ export class CommentsService extends StatefulService<CommentsState> {
         tap((resp) => {
           this.setCreateCommentLoadingComplete(resp);
         }),
-        catchError((err) => {
+        catchError(() => {
           this.setCreateCommentLoadingError();
+          this.snackbar.open(
+            "There was a problem posting this comment, please try again"
+          );
           return EMPTY;
         })
       )
@@ -164,7 +164,6 @@ export class CommentsService extends StatefulService<CommentsState> {
   private setCommentsListLoadingError(error: string) {
     this.setState({
       commentsListLoading: false,
-      error,
     });
   }
 
