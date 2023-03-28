@@ -1,4 +1,8 @@
-<form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+<form
+  [formGroup]="commentForm"
+  #formDirective="ngForm"
+  (ngSubmit)="submitComment(formDirective)"
+>
   <mat-form-field appearance="outline">
     <mat-label>{{ comment ? "Update Comment" : "Comment" }}</mat-label>
     <textarea

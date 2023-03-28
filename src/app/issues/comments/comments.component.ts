@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { lastValueFrom } from "rxjs";
 import { map, tap } from "rxjs/operators";
@@ -24,12 +23,6 @@ export class CommentsComponent
   displayCommentCreation$ = this.comments$.pipe(
     map((comments) => comments.length < 50)
   );
-
-  newCommentForm = new FormGroup({
-    text: new FormControl("", [Validators.required]),
-  });
-
-  newCommentFormText = this.newCommentForm.get("text") as FormControl;
 
   constructor(
     private commentsService: CommentsService,

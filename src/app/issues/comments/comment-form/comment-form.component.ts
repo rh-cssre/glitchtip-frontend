@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  Validators,
+} from "@angular/forms";
 import { Comment } from "src/app/api/comments/comments.interfaces";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
@@ -37,16 +42,18 @@ export class CommentFormComponent implements OnInit {
   }
 
   emitCancelUpdate() {
-    this.cancelUpdate.emit(+this.comment!.id);
+    this.cancelUpdate.emit(this.comment!.id);
   }
 
-  submitComment() {
+  //Reset must be called on FormGroupDirective
+  //to avoid displaying validation error after submission
+  submitComment(formDirective: FormGroupDirective) {
     if (this.commentForm.valid) {
       this.commentSubmitted.emit({
         text: this.commentFormText.value,
-        id: this.comment ? +this.comment.id : undefined,
+        id: this.comment ? this.comment.id : undefined,
       });
-      this.commentForm.reset();
+      formDirective.resetForm();
     }
   }
 }
