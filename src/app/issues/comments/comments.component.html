@@ -1,7 +1,10 @@
-<gt-comment-form
-  [loading]="(createCommentLoading$ | async)!"
-  (commentSubmitted)="createOrUpdateComment($event)"
-></gt-comment-form>
+<div class="comment-create-wrapper">
+  <gt-comment-form
+    [loading]="(createCommentLoading$ | async)!"
+    (commentSubmitted)="createOrUpdateComment($event)"
+  ></gt-comment-form>
+  <mat-divider></mat-divider>
+</div>
 
 <div class="comment-list">
   <ng-container *ngFor="let comment of comments$ | async">
