@@ -12,6 +12,7 @@ export interface CommentsState {
   commentsListLoading: boolean;
   createCommentLoading: boolean;
   commentUpdateLoading: number[];
+  commentDeleteLoading: number[];
   error: string | null;
 }
 
@@ -21,6 +22,7 @@ const initialState: CommentsState = {
   commentsListLoading: false,
   createCommentLoading: false,
   commentUpdateLoading: [],
+  commentDeleteLoading: [],
   error: null,
 };
 
@@ -35,6 +37,7 @@ export class CommentsService extends StatefulService<CommentsState> {
           ...comment,
           updateMode: state.updateModeComments.includes(comment.id),
           updateLoading: state.commentUpdateLoading.includes(comment.id),
+          deleteLoading: state.commentDeleteLoading.includes(comment.id),
         };
       })
     )
@@ -72,14 +75,6 @@ export class CommentsService extends StatefulService<CommentsState> {
         })
       )
     );
-  }
-
-  createOrUpdateComment(issueId: number, text: string, commentId?: number) {
-    if (commentId) {
-      this.updateComment(issueId, commentId, text);
-    } else {
-      this.createComment(issueId, text);
-    }
   }
 
   createComment(issueId: number, text: string) {
@@ -125,15 +120,20 @@ export class CommentsService extends StatefulService<CommentsState> {
   }
 
   deleteComment(issueId: number, commentId: number) {
+    this.setCommentDeleteLoadingStart(commentId);
     lastValueFrom(
       this.commentsAPIService.destroy(issueId, commentId).pipe(
         tap(() => {
           this.setCommentDeleteComplete(commentId);
           this.snackbar.open("Comment deleted.");
         }),
-        catchError(
-          () => "There was an error deleting this comment. Please try again."
-        )
+        catchError(() => {
+          this.setCommentDeleteError(commentId);
+          this.snackbar.open(
+            "There was an error deleting this comment. Please try again."
+          );
+          return EMPTY;
+        })
       )
     );
   }
@@ -219,11 +219,27 @@ export class CommentsService extends StatefulService<CommentsState> {
     });
   }
 
+  private setCommentDeleteLoadingStart(commentId: number) {
+    const state = this.state.getValue();
+    this.setState({
+      commentDeleteLoading: state.commentDeleteLoading.concat(commentId),
+    });
+  }
+
   private setCreateCommentLoadingComplete(comment: Comment) {
     const state = this.state.getValue();
     this.setState({
       createCommentLoading: false,
       comments: [comment].concat(state.comments),
+    });
+  }
+
+  private setCommentDeleteError(commentId: number) {
+    const state = this.state.getValue();
+    this.setState({
+      commentDeleteLoading: state.commentDeleteLoading.filter(
+        (id) => id !== commentId
+      ),
     });
   }
 
@@ -237,6 +253,9 @@ export class CommentsService extends StatefulService<CommentsState> {
     const state = this.state.getValue();
     this.setState({
       comments: state.comments.filter((comment) => comment.id !== commentId),
+      commentDeleteLoading: state.commentDeleteLoading.filter(
+        (id) => id !== commentId
+      ),
     });
   }
 }

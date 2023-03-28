@@ -49,11 +49,15 @@ export class CommentsComponent
     lastValueFrom(
       this.route.params.pipe(
         tap((params) => {
-          this.commentsService.createOrUpdateComment(
-            +params["issue-id"],
-            data.text,
-            data.id
-          );
+          if (data.id) {
+            this.commentsService.updateComment(
+              +params["issue-id"],
+              data.id,
+              data.text
+            );
+          } else {
+            this.commentsService.createComment(+params["issue-id"], data.text);
+          }
         })
       )
     );
