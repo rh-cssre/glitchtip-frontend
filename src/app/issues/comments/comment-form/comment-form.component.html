@@ -1,7 +1,12 @@
 <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
   <mat-form-field appearance="outline">
     <mat-label>{{ comment ? "Update Comment" : "Comment" }}</mat-label>
-    <textarea matInput formControlName="text" required></textarea>
+    <textarea
+      matInput
+      formControlName="text"
+      [errorStateMatcher]="matcher"
+      required
+    ></textarea>
     <mat-error *ngIf="commentFormText?.errors?.required">
       Enter comment text.
     </mat-error>
@@ -9,6 +14,7 @@
   <div class="buttons">
     <gt-loading-button
       class="submit-button"
+      [disabled]="disableSubmissions()"
       [loading]="loading"
       [buttonText]="comment ? 'Update Comment' : 'Submit Comment'"
     >

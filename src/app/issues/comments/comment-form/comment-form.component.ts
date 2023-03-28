@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Comment } from "src/app/api/comments/comments.interfaces";
+import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
 @Component({
   selector: "gt-comment-form",
@@ -14,7 +15,8 @@ export class CommentFormComponent implements OnInit {
     text: string;
     id?: number;
   }>();
-  @Output() cancelUpdate = new EventEmitter<number>
+  @Output() cancelUpdate = new EventEmitter<number>();
+  matcher = new LessAnnoyingErrorStateMatcher();
 
   commentForm = new FormGroup({
     text: new FormControl("", [Validators.required]),
@@ -24,21 +26,27 @@ export class CommentFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.comment) {
-      this.commentFormText.setValue(this.comment.data.text)
+      this.commentFormText.setValue(this.comment.data.text);
     }
   }
 
+  disableSubmissions() {
+    return this.comment && this.commentFormText.value === this.comment.data.text
+      ? true
+      : false;
+  }
+
   emitCancelUpdate() {
-    this.cancelUpdate.emit(+this.comment!.id)
+    this.cancelUpdate.emit(+this.comment!.id);
   }
 
   submitComment() {
     if (this.commentForm.valid) {
       this.commentSubmitted.emit({
         text: this.commentFormText.value,
-        id: this.comment ? +this.comment.id : undefined
+        id: this.comment ? +this.comment.id : undefined,
       });
-      this.commentForm.reset()
+      this.commentForm.reset();
     }
   }
 }

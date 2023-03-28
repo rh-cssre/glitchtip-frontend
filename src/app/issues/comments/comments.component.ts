@@ -72,12 +72,13 @@ export class CommentsComponent
   }
 
   deleteComment(commentId: number) {
-    lastValueFrom(
-      this.route.params.pipe(
-        tap((params) => {
-          this.commentsService.deleteComment(+params["issue-id"], commentId);
-        })
-      )
-    );
+    if (window.confirm("Are you sure you want to delete this comment?"))
+      lastValueFrom(
+        this.route.params.pipe(
+          tap((params) => {
+            this.commentsService.deleteComment(+params["issue-id"], commentId);
+          })
+        )
+      );
   }
 }
