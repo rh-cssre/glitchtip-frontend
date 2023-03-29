@@ -148,18 +148,22 @@
       class="heartbeat-card"
       *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint"
     >
-      <mat-card-title>Heartbeat URL endpoint</mat-card-title>
+      <mat-card-header>
+        <mat-card-title>Heartbeat URL endpoint</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
-      <p>
-        Configure your project to send a POST request with no content to the
-        following URL at your specified interval. If GlitchTip does not receive
-        this request within the interval, your site status will be marked as
-        down.
-      </p>
-      <gt-copy-input
-        [value]="monitor.heartbeatEndpoint"
-        placeholder="Endpoint URL"
-      ></gt-copy-input>
+      <mat-card-content>
+        <p>
+          Configure your project to send a POST request with no content to the
+          following URL at your specified interval. If GlitchTip does not
+          receive this request within the interval, your site status will be
+          marked as down.
+        </p>
+        <gt-copy-input
+          [value]="monitor.heartbeatEndpoint"
+          placeholder="Endpoint URL"
+        ></gt-copy-input>
+      </mat-card-content>
     </mat-card>
   </ng-container>
 </section>
