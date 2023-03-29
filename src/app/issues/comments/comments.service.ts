@@ -3,8 +3,9 @@ import { map, tap, catchError } from "rxjs/operators";
 import { EMPTY, lastValueFrom } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
-import { CommentsAPIService } from "src/app/api/comments/comments-api.service";
 import { Comment } from "src/app/api/comments/comments.interfaces";
+import { CommentsAPIService } from "src/app/api/comments/comments-api.service";
+import { IssueDetailService } from "../issue-detail/issue-detail.service";
 
 export interface CommentsState {
   comments: Comment[];
@@ -52,6 +53,7 @@ export class CommentsService extends StatefulService<CommentsState> {
 
   constructor(
     private commentsAPIService: CommentsAPIService,
+    private issueDetailService: IssueDetailService,
     private snackbar: MatSnackBar
   ) {
     super(initialState);
@@ -80,6 +82,7 @@ export class CommentsService extends StatefulService<CommentsState> {
       this.commentsAPIService.create(issueId, text).pipe(
         tap((resp) => {
           this.setCreateCommentLoadingComplete(resp);
+          this.issueDetailService.updateCommentCount(1);
         }),
         catchError(() => {
           this.setCreateCommentLoadingError();
@@ -125,6 +128,7 @@ export class CommentsService extends StatefulService<CommentsState> {
       this.commentsAPIService.destroy(issueId, commentId).pipe(
         tap(() => {
           this.setCommentDeleteComplete(commentId);
+          this.issueDetailService.updateCommentCount(-1);
           this.snackbar.open("Comment deleted.");
         }),
         catchError(() => {

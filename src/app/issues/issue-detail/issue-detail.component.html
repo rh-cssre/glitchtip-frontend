@@ -137,7 +137,18 @@
             [active]="comments.isActive"
             #comments="routerLinkActive"
           >
-            <span>Comments</span>
+            <ng-container *ngIf="issue.numComments > 0; else noComments">
+              <span
+                [matBadge]="issue.numComments"
+                matBadgeOverlap="false"
+                class="report-badge"
+              >
+                Comments
+              </span>
+            </ng-container>
+            <ng-template #noComments>
+              <span>Comments</span>
+            </ng-template>
           </a>
         </nav>
       </div>
