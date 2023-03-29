@@ -9,15 +9,12 @@
 </ng-container>
 <ng-template #showComments>
   <div class="comment-create-wrapper">
-    <ng-container *ngIf="displayCommentCreation$ | async; else maxComments">
+    <ng-container *ngIf="displayCommentCreation$ | async">
       <gt-comment-form
         [loading]="(createCommentLoading$ | async)!"
         (commentSubmitted)="createOrUpdateComment($event)"
       ></gt-comment-form>
     </ng-container>
-    <ng-template #maxComments>
-      <b>This issue has reached its maximum comment limit (50).</b>
-    </ng-template>
   </div>
 
   <div class="comment-list">

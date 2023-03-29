@@ -85,15 +85,11 @@ export class CommentsService extends StatefulService<CommentsState> {
           this.setCreateCommentLoadingComplete(resp);
           this.issueDetailService.updateCommentCount(1);
         }),
-        catchError((err) => {
+        catchError(() => {
           this.setCreateCommentLoadingError();
-          if (err.status === 400) {
-            this.snackbar.open("Maximum number of comments reached.");
-          } else {
-            this.snackbar.open(
-              "There was a problem posting this comment, please try again"
-            );
-          }
+          this.snackbar.open(
+            "There was a problem posting this comment, please try again"
+          );
           return EMPTY;
         })
       ),

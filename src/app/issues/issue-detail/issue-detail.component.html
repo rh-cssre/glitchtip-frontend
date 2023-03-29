@@ -139,7 +139,7 @@
           >
             <ng-container *ngIf="issue.numComments > 0; else noComments">
               <span
-                [matBadge]="issue.numComments"
+                [matBadge]="issue.numComments < 100 ? issue.numComments : '99+'"
                 matBadgeOverlap="false"
                 class="report-badge"
               >
