@@ -72,7 +72,8 @@ export class CommentsService extends StatefulService<CommentsState> {
           );
           return EMPTY;
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
@@ -91,7 +92,8 @@ export class CommentsService extends StatefulService<CommentsState> {
           );
           return EMPTY;
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
@@ -118,7 +120,8 @@ export class CommentsService extends StatefulService<CommentsState> {
           );
           return EMPTY;
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
@@ -138,7 +141,8 @@ export class CommentsService extends StatefulService<CommentsState> {
           );
           return EMPTY;
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
