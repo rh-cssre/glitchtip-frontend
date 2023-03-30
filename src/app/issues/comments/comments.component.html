@@ -75,7 +75,11 @@
                 </div>
               </ng-container>
             </div>
-            <p>{{ comment.data.text }}</p>
+            <div
+              markdown
+              [data]="comment.data.text"
+              class="comment-markdown"
+            ></div>
           </div>
         </ng-template>
       </div>
