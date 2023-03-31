@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { ErrorHandler, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
@@ -18,6 +18,7 @@ import { AuthModule } from "./api/auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
+import { GlobalErrorHandler } from "./global-error-handler";
 
 let snackBarDuration = 4000;
 if (window.Cypress) {
@@ -53,6 +54,7 @@ const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: snackBarDuration },
     },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
   bootstrap: [AppComponent],
 })
