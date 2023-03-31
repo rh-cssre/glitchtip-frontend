@@ -130,6 +130,26 @@
               User Reports
             </ng-container>
           </a>
+          <a
+            mat-tab-link
+            [routerLink]="['comments']"
+            routerLinkActive
+            [active]="comments.isActive"
+            #comments="routerLinkActive"
+          >
+            <ng-container *ngIf="issue.numComments > 0; else noComments">
+              <span
+                [matBadge]="issue.numComments < 100 ? issue.numComments : '99+'"
+                matBadgeOverlap="false"
+                class="report-badge"
+              >
+                Comments
+              </span>
+            </ng-container>
+            <ng-template #noComments>
+              <span>Comments</span>
+            </ng-template>
+          </a>
         </nav>
       </div>
       <mat-card-content>

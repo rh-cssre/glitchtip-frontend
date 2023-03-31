@@ -34,6 +34,8 @@ import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.
 import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-breadcrumbs/entry-breadcrumbs.component";
 import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue-detail-tags.component";
 import { PrismjsModule } from "../prismjs/prismjs.module";
+import { CommentsComponent } from './comments/comments.component';
+import { CommentFormComponent } from "./comments/comment-form/comment-form.component";
 
 @NgModule({
   imports: [
@@ -71,6 +73,8 @@ import { PrismjsModule } from "../prismjs/prismjs.module";
     IssueZeroStatesComponent,
     EntryBreadcrumbsComponent,
     IssueDetailTagsComponent,
+    CommentsComponent,
+    CommentFormComponent,
   ],
 })
 export class IssuesModule {}
