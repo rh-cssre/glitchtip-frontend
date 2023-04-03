@@ -105,19 +105,20 @@ export class MembersService {
             }),
             catchError((err) => {
               let message = `Error attempting to remove ${member.email} from organization`;
-              if (
-                err instanceof HttpErrorResponse &&
-                err.status === 403 &&
-                err.error?.detail
-              ) {
-                message += `. ${err.error.detail}"`;
+              if (err instanceof HttpErrorResponse) {
+                if (err.status === 403 && err.error?.detail) {
+                  message += `. ${err.error.detail}`;
+                } else if (err.status === 400 && err.error?.message) {
+                  message += `. ${err.error.message}`;
+                }
               }
               this.snackBar.open(message);
               return EMPTY;
             })
           );
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
