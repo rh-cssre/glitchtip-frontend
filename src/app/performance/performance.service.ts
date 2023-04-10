@@ -10,6 +10,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
 
 export interface PerformanceState extends PaginationStatefulServiceState {
   transactionGroups: TransactionGroup[];
@@ -106,22 +107,13 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   private setTransactionGroupsError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      errors: this.updateErrorMessage(errors),
+      errors: parseErrorMessage(errors),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 
   private setLoadingStart() {
