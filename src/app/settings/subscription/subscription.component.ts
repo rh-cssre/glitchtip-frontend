@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
-import { combineLatest, Subscription } from "rxjs";
-import { map, filter } from "rxjs/operators";
+import { combineLatest, lastValueFrom, Subscription } from "rxjs";
+import { map, filter, take, tap } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
-import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { environment } from "../../../environments/environment";
-import { StripeService } from "./stripe.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { StripeService } from "./stripe.service";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 
 interface Percentages {
   total: number;
@@ -23,8 +23,13 @@ interface Percentages {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubscriptionComponent implements OnDestroy {
-  subscription$ = this.service.subscription$;
+  fromStripe$ = this.service.fromStripe$;
+  subscription$ = this.service.formattedSubscription$;
+  subscriptionLoading$ = this.service.subscriptionLoading$;
+  subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
+  totalEventsAllowed$ = this.service.totalEventsAllowed$
+  activeOrganization$ = this.orgService.activeOrganization$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   promptForProject$ = combineLatest([
     this.orgService.activeOrganizationLoaded$,
@@ -47,13 +52,6 @@ export class SubscriptionComponent implements OnDestroy {
   routerSubscription: Subscription;
   billingEmail = environment.billingEmail;
   error$ = this.stripe.error$;
-  totalEventsAllowed$ = this.subscription$.pipe(
-    map((subscription) =>
-      subscription && subscription.plan?.product.metadata
-        ? parseInt(subscription.plan.product.metadata.events, 10)
-        : null
-    )
-  );
   eventsPercent$ = combineLatest([
     this.totalEventsAllowed$,
     this.eventsCountWithTotal$,
@@ -78,14 +76,26 @@ export class SubscriptionComponent implements OnDestroy {
     private stripe: StripeService,
     private orgService: OrganizationsService
   ) {
-    this.routerSubscription = this.route.params
+    this.routerSubscription = combineLatest([
+      this.route.params,
+      this.route.queryParams,
+    ])
       .pipe(
-        map((params) => params["org-slug"] as string),
-        filter((slug) => !!slug)
+        map(([params, queryParams]) => {
+          const slug = params["org-slug"] as string;
+          const sessionId = queryParams["session_id"];
+          return { slug, sessionId };
+        }),
+        filter((routerData) => !!routerData.slug),
+        take(1)
       )
-      .subscribe((slug) => {
-        this.service.retrieveSubscription(slug).toPromise();
-        this.service.retrieveSubscriptionCount(slug).toPromise();
+      .subscribe((routerData) => {
+        if (routerData.sessionId) {
+          this.service.retrieveUntilSubscriptionOrTimeout(routerData.slug);
+        } else {
+          this.service.retrieveSubscription(routerData.slug);
+        }
+        this.service.retrieveSubscriptionEventCount(routerData.slug);
       });
   }
 
@@ -96,7 +106,13 @@ export class SubscriptionComponent implements OnDestroy {
   }
 
   manageSubscription() {
-    this.stripe.redirectToBillingPortal();
+    lastValueFrom(
+      this.activeOrganization$.pipe(
+        filter((org) => !!org),
+        tap((org) => this.stripe.redirectToBillingPortal(org!.id)),
+        take(1)
+      )
+    );
   }
 
   ngOnDestroy() {
