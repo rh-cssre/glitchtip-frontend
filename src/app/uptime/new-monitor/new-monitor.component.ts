@@ -45,7 +45,7 @@ export class NewMonitorComponent implements OnInit {
     ]),
     interval: new UntypedFormControl("60", [
       Validators.required,
-      Validators.min(60),
+      Validators.min(1),
       Validators.max(86399),
     ]),
     timeout: new UntypedFormControl(null, [
