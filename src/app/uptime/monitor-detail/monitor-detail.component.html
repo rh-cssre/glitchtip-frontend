@@ -42,23 +42,24 @@
         </div>
       </mat-card-content>
     </mat-card>
-
-    <ng-container *ngIf="activeMonitorRecentChecksSeries$ | async as data">
-      <ng-container *ngIf="responseChartScale$ | async as scale">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title i18n>Response Time</mat-card-title>
-          </mat-card-header>
-          <mat-divider></mat-divider>
-          <mat-card-content>
-            <div>
-              <gt-monitor-response-chart
-                [data]="data"
-                [scale]="scale"
-              ></gt-monitor-response-chart>
-            </div>
-          </mat-card-content>
-        </mat-card>
+    <ng-container *ngIf="monitor.monitorType !== 'Heartbeat'">
+      <ng-container *ngIf="activeMonitorRecentChecksSeries$ | async as data">
+        <ng-container *ngIf="responseChartScale$ | async as scale">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title i18n>Response Time</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+              <div>
+                <gt-monitor-response-chart
+                  [data]="data"
+                  [scale]="scale"
+                ></gt-monitor-response-chart>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
       </ng-container>
     </ng-container>
 
