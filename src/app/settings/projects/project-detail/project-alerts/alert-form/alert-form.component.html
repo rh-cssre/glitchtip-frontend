@@ -39,7 +39,15 @@
         [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
       />
       <mat-error *ngIf="projectFormQuantity?.errors">
-        <span>Enter an integer greater than 0.</span>
+        <span *ngIf="projectFormQuantity?.errors?.min"
+          >The quantity needs to be greater than or equal to 0.</span
+        >
+        <span *ngIf="projectFormQuantity?.errors?.invalidNumber"
+          >Enter a number.
+        </span>
+        <span *ngIf="projectFormQuantity?.errors?.required"
+          >This field is required.</span
+        >
       </mat-error>
     </mat-form-field>
     <span
@@ -59,7 +67,15 @@
         [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
       />
       <mat-error *ngIf="projectFormTimespan?.errors">
-        <span>Enter an integer greater than 0.</span>
+        <span *ngIf="projectFormTimespan?.errors?.min"
+          >The timespan needs to be greater than or equal to 0.</span
+        >
+        <span *ngIf="projectFormTimespan?.errors?.invalidNumber"
+          >Enter a number.
+        </span>
+        <span *ngIf="projectFormTimespan?.errors?.required"
+          >This field is required.</span
+        >
       </mat-error>
     </mat-form-field>
     <span

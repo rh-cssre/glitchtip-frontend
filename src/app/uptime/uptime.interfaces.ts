@@ -17,7 +17,6 @@ export interface MonitorInput {
   expectedStatus: number;
   interval: string;
   project: number | null;
-  timeout: number | null;
 }
 
 export interface MonitorDetail extends MonitorInput {

@@ -142,7 +142,7 @@
             </mat-error>
             <mat-error
               *ngIf="
-                formExpectedStatus?.errors?.pattern ||
+                formExpectedStatus?.errors?.invalidNumber ||
                 formExpectedStatus?.errors?.required
               "
               >Enter a status code number
@@ -172,9 +172,10 @@
             </mat-error>
             <mat-error
               *ngIf="
-                formInterval?.errors?.pattern || formInterval?.errors?.required
+                formInterval?.errors?.invalidNumber ||
+                formInterval?.errors?.required
               "
-              >Enter an integer.
+              >Enter a number.
             </mat-error>
           </mat-form-field>
           <ng-container
@@ -204,27 +205,6 @@
               </ng-template>
             </div>
           </ng-container>
-        </div>
-        <div
-          class="short-field-container"
-          *ngIf="formMonitorType?.value !== 'Heartbeat'"
-        >
-          <mat-form-field appearance="outline">
-            <mat-label>Timeout</mat-label>
-            <input
-              id="timeout"
-              matInput
-              type="number"
-              autocomplete="off"
-              formControlName="timeout"
-            />
-            <mat-error *ngIf="formTimeout?.errors">
-              <span>Enter an integer between 1 and 60.</span>
-            </mat-error>
-          </mat-form-field>
-          <div class="help-text mat-caption">
-            <span>Time in seconds GlitchTip will wait for a response from your app.</span>
-          </div>
         </div>
         <gt-loading-button
           class="submit"
