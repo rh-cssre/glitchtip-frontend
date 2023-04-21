@@ -12,7 +12,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { UptimeService, UptimeState } from "../uptime.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { urlRegex, numberValidator } from "src/app/shared/validators";
+import { intRegex, urlRegex } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
 import { timedeltaToMS } from "src/app/shared/shared.utils";
@@ -54,12 +54,17 @@ export class MonitorUpdateComponent
     expectedStatus: new UntypedFormControl(defaultExpectedStatus, [
       Validators.required,
       Validators.min(100),
-      numberValidator,
+      Validators.pattern(intRegex),
     ]),
     interval: new UntypedFormControl(60, [
       Validators.required,
-      Validators.min(60),
+      Validators.min(1),
       Validators.max(86399),
+    ]),
+    timeout: new UntypedFormControl(null, [
+      Validators.min(1),
+      Validators.max(60),
+      Validators.pattern(intRegex),
     ]),
     project: new UntypedFormControl(null),
   });
@@ -74,6 +79,7 @@ export class MonitorUpdateComponent
   ) as UntypedFormControl;
   formInterval = this.monitorEditForm.get("interval") as UntypedFormControl;
   formProject = this.monitorEditForm.get("project") as UntypedFormControl;
+  formTimeout = this.monitorEditForm.get("timeout") as UntypedFormControl;
 
   matcher = new LessAnnoyingErrorStateMatcher();
 
@@ -123,11 +129,13 @@ export class MonitorUpdateComponent
           this.formInterval.patchValue(
             Math.round(timedeltaToMS(data!.interval) / 1000)
           );
+          this.formTimeout.patchValue(data!.timeout);
           this.formProject.patchValue(data!.project);
 
           if (data!.monitorType === "Heartbeat") {
             this.formUrl.disable();
             this.formExpectedStatus.disable();
+            this.formTimeout.disable();
           } else if (data!.monitorType === "Ping") {
             this.formExpectedStatus.disable();
           }
@@ -140,12 +148,15 @@ export class MonitorUpdateComponent
     if (this.formMonitorType.value === "Heartbeat") {
       this.formUrl.disable();
       this.formExpectedStatus.disable();
+      this.formTimeout.disable();
     } else if (this.formMonitorType.value === "Ping") {
       this.formUrl.enable();
       this.formExpectedStatus.disable();
+      this.formTimeout.enable();
     } else {
       this.formUrl.enable();
       this.formExpectedStatus.enable();
+      this.formTimeout.enable();
     }
   }
 

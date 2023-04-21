@@ -9,7 +9,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { UptimeService } from "../uptime.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator, urlRegex } from "src/app/shared/validators";
+import { intRegex, urlRegex } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
 
@@ -41,12 +41,17 @@ export class NewMonitorComponent implements OnInit {
     expectedStatus: new UntypedFormControl({ value: 200, disabled: true }, [
       Validators.required,
       Validators.min(100),
-      numberValidator,
+      Validators.pattern(intRegex),
     ]),
     interval: new UntypedFormControl("60", [
       Validators.required,
-      Validators.min(60),
+      Validators.min(1),
       Validators.max(86399),
+    ]),
+    timeout: new UntypedFormControl(null, [
+      Validators.min(1),
+      Validators.max(60),
+      Validators.pattern(intRegex),
     ]),
     project: new UntypedFormControl(null),
   });
@@ -60,6 +65,7 @@ export class NewMonitorComponent implements OnInit {
     "expectedStatus"
   ) as UntypedFormControl;
   formInterval = this.newMonitorForm.get("interval") as UntypedFormControl;
+  formTimeout = this.newMonitorForm.get("timeout") as UntypedFormControl;
 
   intervalPerMonth = 2592000 / this.formInterval.value;
 
@@ -83,12 +89,15 @@ export class NewMonitorComponent implements OnInit {
     if (this.formMonitorType.value === "Heartbeat") {
       this.formUrl.disable();
       this.formExpectedStatus.disable();
+      this.formTimeout.disable();
     } else if (this.formMonitorType.value === "Ping") {
       this.formUrl.enable();
       this.formExpectedStatus.disable();
+      this.formTimeout.enable();
     } else {
       this.formUrl.enable();
       this.formExpectedStatus.enable();
+      this.formTimeout.enable();
     }
   }
 
