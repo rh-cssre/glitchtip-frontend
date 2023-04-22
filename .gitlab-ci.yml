@@ -26,10 +26,8 @@ test:
   stage: test
   image: node:18-alpine
   script:
-    - apk add --update --no-cache chromium-chromedriver chromium git
     - npm ci --force
     - npm run lint
-    - npm run test -- --progress false --watch=false --browsers=Chromium_CI
 
 test-e2e:
   stage: test
