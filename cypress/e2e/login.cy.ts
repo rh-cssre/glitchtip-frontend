@@ -1,8 +1,6 @@
 import { seedBackend } from "./utils.cy";
 import { user } from "../fixtures/users";
-import { environment } from "../../src/environments/environment";
 
-if (environment.loginForm) {
 describe("Login", () => {
   it("should show validation errors", () => {
     cy.visit("/login");
@@ -21,4 +19,3 @@ describe("Login", () => {
     cy.url().should("eq", "http://localhost:4200/");
   });
 });
-}
