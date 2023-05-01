@@ -1,4 +1,5 @@
 // tslint:disable:max-line-length
+import { HttpErrorResponse } from "@angular/common/http";
 
 /**
  * generateClassName comes from
@@ -166,4 +167,13 @@ export function normalizeProjectParams(
     return [projects];
   }
   return [];
+}
+
+export function parseErrorMessage(err: HttpErrorResponse): string[] {
+  if (err.error && typeof err.error === "object") {
+    const errorValues: string[][] = Object.values<string[]>(err.error);
+    return errorValues.reduce((a, v) => a.concat(v), []);
+  } else {
+    return [err.message];
+  }
 }
