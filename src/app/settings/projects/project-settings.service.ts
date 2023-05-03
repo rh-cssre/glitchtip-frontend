@@ -17,6 +17,7 @@ import {
 import { ProjectsAPIService } from "../../api/projects/projects-api.service";
 import { ProjectKeysAPIService } from "../../api/projects/project-keys-api.service";
 import { OrganizationProjectsAPIService } from "../../api/projects/organization-projects-api.service";
+import { ProjectTeamsAPIService } from "src/app/api/projects/project-teams-api.service";
 
 interface ProjectLoading {
   addProjectToTeam: boolean;
@@ -75,6 +76,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
   constructor(
     private snackBar: MatSnackBar,
     private projectsAPIService: ProjectsAPIService,
+    private projectTeamsAPIService: ProjectTeamsAPIService,
     private orgProjectsAPIService: OrganizationProjectsAPIService,
     private projectKeysAPIService: ProjectKeysAPIService
   ) {
@@ -126,7 +128,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
 
   addProjectToTeam(orgSlug: string, teamSlug: string, projectSlug: string) {
     this.setAddProjectToTeamLoading(true);
-    this.projectsAPIService
+    this.projectTeamsAPIService
       .addProjectToTeam(orgSlug, teamSlug, projectSlug)
       .pipe(
         tap((resp) => {
@@ -147,7 +149,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
     projectSlug: string
   ) {
     this.setRemoveProjectFromTeamLoading(projectSlug);
-    return this.projectsAPIService
+    return this.projectTeamsAPIService
       .removeProjectFromTeam(orgSlug, teamSlug, projectSlug)
       .pipe(
         tap((resp) => {

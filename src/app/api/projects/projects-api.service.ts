@@ -46,27 +46,6 @@ export class ProjectsAPIService extends APIBaseService {
     return this.http.delete(this.detailURL(organizationSlug, projectSlug));
   }
 
-  addProjectToTeam(
-    organizationSlug: string,
-    teamSlug: string,
-    projectSlug: string
-  ) {
-    return this.http.post<ProjectDetail>(
-      this.projectTeamsURL(organizationSlug, teamSlug, projectSlug),
-      null
-    );
-  }
-
-  removeProjectFromTeam(
-    organizationSlug: string,
-    teamSlug: string,
-    projectSlug: string
-  ) {
-    return this.http.delete<ProjectDetail>(
-      this.projectTeamsURL(organizationSlug, teamSlug, projectSlug)
-    );
-  }
-
   listEnvironments(organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectEnvironment[]>(
       this.projectEnvironmentsURL(organizationSlug, projectSlug)
@@ -86,14 +65,6 @@ export class ProjectsAPIService extends APIBaseService {
       ),
       environment
     );
-  }
-
-  private projectTeamsURL(
-    organizationSlug: string,
-    teamSlug: string,
-    projectSlug: string
-  ) {
-    return `${baseUrl}${this.url}${organizationSlug}/${projectSlug}/teams/${teamSlug}/`;
   }
 
   private projectEnvironmentsURL(
