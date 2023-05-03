@@ -1,5 +1,9 @@
 import { User } from "../user/user.interfaces";
-import { Team } from "../teams/teams.interfaces";
+import { Team, RelatedTeam } from "../teams/teams.interfaces";
+import {
+  BaseProject,
+  ProjectReferenceWithMember,
+} from "../projects/projects-api.interfaces";
 
 export interface OrganizationNew {
   name: string;
@@ -19,7 +23,7 @@ export interface Organization extends OrganizationNew {
 
 // tslint:disable-next-line:no-empty-interface
 export interface OrganizationDetail extends Organization {
-  projects: OrganizationProject[];
+  projects: ProjectReferenceWithMember[];
   teams: Team[];
 }
 
@@ -33,12 +37,8 @@ export interface Avatar {
   avatarUuid: string | null;
 }
 
-export interface OrganizationProject {
-  name: string;
-  slug: string;
-  platform: string | null;
-  id: number;
-  isMember: boolean;
+export interface OrganizationProject extends BaseProject {
+  teams: RelatedTeam[];
 }
 
 export interface Member {

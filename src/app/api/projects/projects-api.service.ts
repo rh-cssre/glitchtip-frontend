@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
@@ -9,23 +9,15 @@ import { ProjectEnvironment } from "../organizations/organizations.interface";
   providedIn: "root",
 })
 export class ProjectsAPIService extends APIBaseService {
-  readonly url = baseUrl + "/projects/";
+  readonly url = "/projects/";
+  readonly listUrl = `${baseUrl}${this.url}`;
 
   constructor(protected http: HttpClient) {
     super(http);
   }
 
-  /**
-   * @param organizationSlug Optional filter by organization slug
-   * @param query Optional query filter
-   */
-  list(organizationSlug?: string, query?: string) {
-    let params = new HttpParams();
-    if (query) {
-      params = params.append("query", query);
-    }
-    const url = this.listURL(organizationSlug);
-    return this.http.get<Project[]>(url, { params });
+  list() {
+    return this.http.get<Project[]>(this.listURL());
   }
 
   retrieve(organizationSlug: string, projectSlug: string) {
@@ -47,7 +39,7 @@ export class ProjectsAPIService extends APIBaseService {
 
   create(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
-    return this.http.post<Project>(url, project);
+    return this.http.post<ProjectDetail>(url, project);
   }
 
   destroy(organizationSlug: string, projectSlug: string) {
@@ -59,7 +51,7 @@ export class ProjectsAPIService extends APIBaseService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return this.http.post<Project>(
+    return this.http.post<ProjectDetail>(
       this.projectTeamsURL(organizationSlug, teamSlug, projectSlug),
       null
     );
@@ -70,7 +62,7 @@ export class ProjectsAPIService extends APIBaseService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return this.http.delete<Project>(
+    return this.http.delete<ProjectDetail>(
       this.projectTeamsURL(organizationSlug, teamSlug, projectSlug)
     );
   }
@@ -101,7 +93,7 @@ export class ProjectsAPIService extends APIBaseService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return `${this.url}${organizationSlug}/${projectSlug}/teams/${teamSlug}/`;
+    return `${baseUrl}${this.url}${organizationSlug}/${projectSlug}/teams/${teamSlug}/`;
   }
 
   private projectEnvironmentsURL(
@@ -109,19 +101,18 @@ export class ProjectsAPIService extends APIBaseService {
     projectSlug: string,
     name?: string
   ) {
-    return `${this.url}${organizationSlug}/${projectSlug}/environments/${
+    return `${baseUrl}${
+      this.url
+    }${organizationSlug}/${projectSlug}/environments/${
       name ? encodeURIComponent(name) + "/" : ""
     }`;
   }
 
-  private listURL(organizationSlug?: string) {
-    if (organizationSlug) {
-      return `${baseUrl}/organizations/${organizationSlug}/projects/`;
-    }
-    return this.url;
+  private listURL() {
+    return `${baseUrl}${this.url}`;
   }
 
   protected detailURL(organizationSlug: string, projectSlug: string) {
-    return `${this.listURL(organizationSlug)}${projectSlug}/`;
+    return `${this.listURL()}${organizationSlug}/${projectSlug}/`;
   }
 }

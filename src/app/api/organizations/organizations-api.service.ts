@@ -1,22 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { map } from "rxjs";
 import {
   Organization,
   OrganizationDetail,
   OrganizationNew,
-  OrganizationProject,
 } from "./organizations.interface";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
-
-interface APIOrganizationProject extends Omit<OrganizationProject, "id"> {
-  id: string;
-}
-
-interface APIOrganizationDetail extends Omit<OrganizationDetail, "projects"> {
-  projects: APIOrganizationProject[];
-}
 
 @Injectable({
   providedIn: "root",
@@ -32,18 +22,7 @@ export class OrganizationAPIService extends APIBaseService {
   }
 
   retrieve(id: string) {
-    return this.http.get<APIOrganizationDetail>(this.detailURL(id)).pipe(
-      map((apiOrgDetail) => {
-        const projects = apiOrgDetail.projects.map((project) => ({
-          ...project,
-          id: parseInt(project.id, 10),
-        }));
-        return {
-          ...apiOrgDetail,
-          projects,
-        } as OrganizationDetail;
-      })
-    );
+    return this.http.get<OrganizationDetail>(this.detailURL(id));
   }
 
   create(obj: OrganizationNew) {

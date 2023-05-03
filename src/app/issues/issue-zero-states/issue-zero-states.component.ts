@@ -6,7 +6,7 @@ import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
-import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
+import { ProjectReferenceWithMember } from "src/app/api/projects/projects-api.interfaces";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
@@ -30,8 +30,8 @@ export class IssueZeroStatesComponent implements OnInit {
   projectsFromParams$ = this.activatedRoute.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
   );
-  activeOrganizationProjects$ = this.organizationsService
-    .activeOrganizationProjects$;
+  activeOrganizationProjects$ =
+    this.organizationsService.activeOrganizationProjects$;
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
   activeProjectID$ = combineLatest([
     this.projectsFromParams$,
@@ -42,7 +42,7 @@ export class IssueZeroStatesComponent implements OnInit {
         return projectIDs[0];
       }
       if (activeOrgProjects?.length === 1) {
-        return activeOrgProjects[0].id.toString();
+        return activeOrgProjects[0].id;
       }
       return null;
     }),
@@ -128,10 +128,10 @@ export class IssueZeroStatesComponent implements OnInit {
       if (!Array.isArray(projectsFromParams)) {
         return [];
       }
-      const projectsMatchedFromParams: OrganizationProject[] = [];
+      const projectsMatchedFromParams: ProjectReferenceWithMember[] = [];
       projectsFromParams.forEach((projectId) => {
         const matchedProject = activeOrgProjects?.find(
-          (project) => project.id === parseInt(projectId, 10)
+          (project) => project.id === projectId
         );
         if (matchedProject) {
           projectsMatchedFromParams.push(matchedProject);

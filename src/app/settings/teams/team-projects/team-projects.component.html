@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="orgSlug$ | async as orgSlug">
   <mat-card-header class="card-header">
     <mat-card-title i18n>Projects</mat-card-title>
     <mat-error *ngIf="(errors$ | async)?.addProjectToTeam">{{
@@ -47,7 +47,7 @@
         >
           <a
             class="team-name"
-            [routerLink]="['/', project.organization.slug, 'issues']"
+            [routerLink]="['/', orgSlug, 'issues']"
             [queryParams]="{ project: project.id }"
             >{{ project.name }}</a
           >

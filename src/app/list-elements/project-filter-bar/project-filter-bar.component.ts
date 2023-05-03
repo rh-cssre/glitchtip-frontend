@@ -9,7 +9,7 @@ import {
 import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { UntypedFormControl } from "@angular/forms";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
+import { ProjectReferenceWithMember } from "src/app/api/projects/projects-api.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
@@ -27,7 +27,7 @@ export class ProjectFilterBarComponent implements OnInit {
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
   /** Projects that are selected in this component but not yet applied */
-  selectedProjectIds = new BehaviorSubject<number[]>([]);
+  selectedProjectIds = new BehaviorSubject<string[]>([]);
 
   /** Observable of selectedProjectIds, intended to separate concerns */
   selectedProjectIds$ = this.selectedProjectIds.asObservable();
@@ -36,9 +36,7 @@ export class ProjectFilterBarComponent implements OnInit {
   appliedProjectIds$ = this.route.queryParams.pipe(
     map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
-      this.selectedProjectIds.next(
-        normalizedParams.map((id: string) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.next(normalizedParams);
       return normalizedParams;
     })
   );
@@ -81,18 +79,19 @@ export class ProjectFilterBarComponent implements OnInit {
   filterProjectInput = new UntypedFormControl();
 
   /** Projects that are filtered via the text field form control */
-  filteredProjects$: Observable<OrganizationProject[] | null> = combineLatest([
-    this.projects$.pipe(startWith([] as OrganizationProject[])),
-    this.filterProjectInput.valueChanges.pipe(startWith("")),
-  ]).pipe(
-    map(([projects, value]) =>
-      projects
-        ? projects.filter((project) =>
-            project.name.toLowerCase().includes(value.toLowerCase())
-          )
-        : null
-    )
-  );
+  filteredProjects$: Observable<ProjectReferenceWithMember[] | null> =
+    combineLatest([
+      this.projects$.pipe(startWith([] as ProjectReferenceWithMember[])),
+      this.filterProjectInput.valueChanges.pipe(startWith("")),
+    ]).pipe(
+      map(([projects, value]) =>
+        projects
+          ? projects.filter((project) =>
+              project.name.toLowerCase().includes(value.toLowerCase())
+            )
+          : null
+      )
+    );
 
   someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
     map((ids) => ids.length !== 0)
@@ -182,14 +181,14 @@ export class ProjectFilterBarComponent implements OnInit {
     }
   }
 
-  navigate(project: number[] | null) {
+  navigate(project: string[] | null) {
     this.router.navigate([], {
       queryParams: { project: project ? project : null },
       queryParamsHandling: "merge",
     });
   }
 
-  isSelected(projectId: number) {
+  isSelected(projectId: string) {
     return !!this.selectedProjectIds.getValue().find((id) => id === projectId);
   }
 
@@ -197,13 +196,13 @@ export class ProjectFilterBarComponent implements OnInit {
     this.filterInput?.nativeElement.focus();
   }
 
-  selectProjectAndClose(projectId: number) {
+  selectProjectAndClose(projectId: string) {
     this.navigate([projectId]);
     this.selectedProjectIds.next([projectId]);
     this.expansionPanel?.close();
   }
 
-  toggleProject(projectId: number) {
+  toggleProject(projectId: string) {
     const selectedIds = [...this.selectedProjectIds.getValue()];
     const idMatchIndex = selectedIds.indexOf(projectId);
     if (idMatchIndex > -1) {
@@ -216,9 +215,7 @@ export class ProjectFilterBarComponent implements OnInit {
 
   resetPanel() {
     if (this.appliedProjectIds !== undefined) {
-      this.selectedProjectIds.next(
-        this.appliedProjectIds.map((id) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.next(this.appliedProjectIds);
       this.expansionPanel?.close();
     }
   }

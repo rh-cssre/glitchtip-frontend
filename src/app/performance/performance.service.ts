@@ -39,7 +39,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     map(([projects, groups]) => {
       return groups.map((group) => {
         const projectSlug = projects?.find(
-          (project) => project.id === group.project
+          (project) => +project.id === group.project
         )?.name;
         return {
           ...group,

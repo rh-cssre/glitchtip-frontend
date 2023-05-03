@@ -128,7 +128,7 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
       distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
       map(([urlData, projects]) => {
         const matchedProject = projects!.find(
-          (project) => project.id === parseInt(urlData.project![0], 10)
+          (project) => project.id === urlData.project![0]
         );
         if (urlData.orgSlug && matchedProject) {
           this.retrieveEnvironmentsWithProperties(
