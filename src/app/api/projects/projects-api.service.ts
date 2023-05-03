@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
 import { Project, ProjectDetail, ProjectNew } from "./projects-api.interfaces";
-import { ProjectEnvironment } from "../organizations/organizations.interface";
 
 @Injectable({
   providedIn: "root",
@@ -44,39 +43,6 @@ export class ProjectsAPIService extends APIBaseService {
 
   destroy(organizationSlug: string, projectSlug: string) {
     return this.http.delete(this.detailURL(organizationSlug, projectSlug));
-  }
-
-  listEnvironments(organizationSlug: string, projectSlug: string) {
-    return this.http.get<ProjectEnvironment[]>(
-      this.projectEnvironmentsURL(organizationSlug, projectSlug)
-    );
-  }
-
-  updateEnvironment(
-    organizationSlug: string,
-    projectSlug: string,
-    environment: ProjectEnvironment
-  ) {
-    return this.http.put<ProjectEnvironment>(
-      this.projectEnvironmentsURL(
-        organizationSlug,
-        projectSlug,
-        environment.name
-      ),
-      environment
-    );
-  }
-
-  private projectEnvironmentsURL(
-    organizationSlug: string,
-    projectSlug: string,
-    name?: string
-  ) {
-    return `${baseUrl}${
-      this.url
-    }${organizationSlug}/${projectSlug}/environments/${
-      name ? encodeURIComponent(name) + "/" : ""
-    }`;
   }
 
   private listURL() {
