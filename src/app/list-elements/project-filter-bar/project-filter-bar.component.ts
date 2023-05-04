@@ -9,7 +9,7 @@ import {
 import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { UntypedFormControl } from "@angular/forms";
-import { ProjectReferenceWithMember } from "src/app/api/projects/projects-api.interfaces";
+import { OrganizationProject } from "src/app/api/projects/projects-api.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
@@ -79,9 +79,9 @@ export class ProjectFilterBarComponent implements OnInit {
   filterProjectInput = new UntypedFormControl();
 
   /** Projects that are filtered via the text field form control */
-  filteredProjects$: Observable<ProjectReferenceWithMember[] | null> =
+  filteredProjects$: Observable<OrganizationProject[] | null> =
     combineLatest([
-      this.projects$.pipe(startWith([] as ProjectReferenceWithMember[])),
+      this.projects$.pipe(startWith([] as OrganizationProject[])),
       this.filterProjectInput.valueChanges.pipe(startWith("")),
     ]).pipe(
       map(([projects, value]) =>

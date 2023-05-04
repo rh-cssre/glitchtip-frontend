@@ -11,11 +11,7 @@ export interface ProjectReference extends ProjectNew {
   slug: string;
 }
 
-export interface ProjectReferenceWithMember extends ProjectReference {
-  isMember: boolean;
-}
-
-export interface BaseProject extends ProjectReferenceWithMember {
+export interface BaseProject extends ProjectReference {
   avatar: Avatar;
   color: string;
   features: [];

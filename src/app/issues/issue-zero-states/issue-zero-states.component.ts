@@ -6,7 +6,7 @@ import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
-import { ProjectReferenceWithMember } from "src/app/api/projects/projects-api.interfaces";
+import { OrganizationProject } from "src/app/api/projects/projects-api.interfaces";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
@@ -128,7 +128,7 @@ export class IssueZeroStatesComponent implements OnInit {
       if (!Array.isArray(projectsFromParams)) {
         return [];
       }
-      const projectsMatchedFromParams: ProjectReferenceWithMember[] = [];
+      const projectsMatchedFromParams: OrganizationProject[] = [];
       projectsFromParams.forEach((projectId) => {
         const matchedProject = activeOrgProjects?.find(
           (project) => project.id === projectId

@@ -3,13 +3,13 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { tap, map, catchError, filter, first } from "rxjs/operators";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
 import {
   initialPaginationState,
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
 import {
+  OrganizationProject,
   ProjectDetail,
   ProjectKey,
   ProjectNew,
