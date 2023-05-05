@@ -1,4 +1,13 @@
 import { Organization, OrganizationDetail } from "./organizations.interface";
+import { OrganizationProject } from "../projects/projects-api.interfaces";
+
+interface APIOrganizationProject extends Omit<OrganizationProject, "id"> {
+  id: string;
+}
+
+interface APIOrganizationDetail extends Omit<OrganizationDetail, "projects"> {
+  projects: APIOrganizationProject[];
+}
 
 export const organizationList: Organization[] = [
   {
@@ -37,7 +46,7 @@ export const organizationList: Organization[] = [
   },
 ];
 
-export const testOrgDetail: OrganizationDetail = {
+export const testOrgDetail: APIOrganizationDetail = {
   id: 1,
   name: "prince ali",
   slug: "prince-ali",

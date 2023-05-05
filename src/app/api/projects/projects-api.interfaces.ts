@@ -7,8 +7,12 @@ export interface ProjectNew {
 }
 
 export interface ProjectReference extends ProjectNew {
-  id: string;
+  id: number;
   slug: string;
+}
+
+export interface APIProjectReference extends Omit<ProjectReference, "id"> {
+  id: string;
 }
 
 export interface BaseProject extends ProjectReference {
@@ -29,12 +33,24 @@ export interface Project extends BaseProject {
   organization: Organization;
 }
 
+export interface APIProject extends Omit<Project, "id"> {
+  id: string;
+}
+
 export interface ProjectDetail extends Project {
   teams: RelatedTeam[];
 }
 
+export interface APIProjectDetail extends Omit<ProjectDetail, "id"> {
+  id: string;
+}
+
 export interface OrganizationProject extends BaseProject {
   teams: RelatedTeam[];
+}
+
+export interface APIOrganizationProject extends Omit<OrganizationProject, "id"> {
+  id: string;
 }
 
 export interface DSN {

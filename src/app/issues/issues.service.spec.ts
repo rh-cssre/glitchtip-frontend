@@ -7,8 +7,8 @@ import {
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { IssuesService } from "./issues.service";
-import { Issue } from "./interfaces";
-import { issueList } from "./issues-page/issues-test-data";
+import { APIIssue } from "./interfaces";
+import { apiIssueList, issueList } from "./issues-page/issues-test-data";
 import { RouterTestingModule } from "@angular/router/testing";
 
 describe("IssuesService", () => {
@@ -32,13 +32,13 @@ describe("IssuesService", () => {
   });
 
   it("should retrieve a list of issues", () => {
-    const testData: Issue[] = issueList;
+    const testData: APIIssue[] = apiIssueList;
     const url = "burke-software-consulting";
     (service as any).retrieveIssues(url).toPromise();
     const req = httpTestingController.expectOne(
       "/api/0/organizations/burke-software-consulting/issues/"
     );
     req.flush(testData, { headers: { Link: "link header info" } });
-    service.issues$.subscribe((issues) => expect(issues).toEqual(testData));
+    service.issues$.subscribe((issues) => expect(issues).toEqual(issueList));
   });
 });

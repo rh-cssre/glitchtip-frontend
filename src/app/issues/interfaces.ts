@@ -1,4 +1,4 @@
-import { ProjectReference } from "../api/projects/projects-api.interfaces";
+import { ProjectReference, APIProjectReference } from "../api/projects/projects-api.interfaces";
 import { Json } from "../interface-primitives";
 
 interface Tag {
@@ -191,6 +191,10 @@ export interface Issue {
   platform?: string;
 }
 
+export interface APIIssue extends Omit<Issue, "project"> {
+  project: APIProjectReference;
+}
+
 export interface IssueDetail extends Issue {
   seenBy: Json[];
   pluginIssues: string[];
@@ -206,6 +210,10 @@ export interface IssueDetail extends Issue {
   pluginContexts: string[];
   lastRelease: string | null;
   activity: Activity[];
+}
+
+export interface APIIssueDetail extends Omit<IssueDetail, "project"> {
+  project: APIProjectReference;
 }
 
 export interface UpdateStatusResponse {

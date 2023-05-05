@@ -71,7 +71,7 @@ export class IssueDetailComponent implements OnInit {
     }
   }
 
-  generateBackLink(projectId: string) {
+  generateBackLink(projectId: number) {
     return {
       ...this.route.snapshot.queryParams,
       project: projectId,

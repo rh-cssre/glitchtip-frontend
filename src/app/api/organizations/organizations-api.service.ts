@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs";
 import {
+  APIOrganizationDetail,
   Organization,
   OrganizationDetail,
   OrganizationNew,
@@ -22,15 +24,26 @@ export class OrganizationAPIService extends APIBaseService {
   }
 
   retrieve(id: string) {
-    return this.http.get<OrganizationDetail>(this.detailURL(id));
+    return this.http.get<APIOrganizationDetail>(this.detailURL(id)).pipe(
+      map((apiOrgDetail) => {
+        const projects = apiOrgDetail.projects.map((project) => ({
+          ...project,
+          id: parseInt(project.id, 10),
+        }));
+        return {
+          ...apiOrgDetail,
+          projects,
+        } as OrganizationDetail;
+      })
+    );
   }
 
   create(obj: OrganizationNew) {
-    return this.http.post<OrganizationDetail>(this.url, obj);
+    return this.http.post<Organization>(this.url, obj);
   }
 
   update(id: string, obj: OrganizationNew) {
-    return this.http.put<OrganizationDetail>(this.detailURL(id), obj);
+    return this.http.put<Organization>(this.detailURL(id), obj);
   }
 
   destroy(id: string) {

@@ -1,6 +1,6 @@
-import { Issue } from "../interfaces";
+import { APIIssue, Issue } from "../interfaces";
 
-export const issueList: Issue[] = [
+export const apiIssueList: APIIssue[] = [
   {
     lastSeen: "2021-02-19T18:56:01.952Z",
     numComments: 0,
@@ -250,3 +250,13 @@ export const issueList: Issue[] = [
     statusDetails: {},
   },
 ];
+
+export const issueList: Issue[] = apiIssueList.map((apiIssue) => {
+  return {
+    ...apiIssue,
+    project: {
+      ...apiIssue.project,
+      id: parseInt(apiIssue.project.id, 10),
+    },
+  };
+});

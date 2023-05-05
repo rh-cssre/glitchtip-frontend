@@ -27,7 +27,7 @@ export class ProjectFilterBarComponent implements OnInit {
   projects$ = this.organizationsService.activeOrganizationProjects$;
 
   /** Projects that are selected in this component but not yet applied */
-  selectedProjectIds = new BehaviorSubject<string[]>([]);
+  selectedProjectIds = new BehaviorSubject<number[]>([]);
 
   /** Observable of selectedProjectIds, intended to separate concerns */
   selectedProjectIds$ = this.selectedProjectIds.asObservable();
@@ -41,7 +41,7 @@ export class ProjectFilterBarComponent implements OnInit {
     })
   );
 
-  appliedProjectIds?: string[];
+  appliedProjectIds?: number[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
   selectedProjectsString$ = combineLatest([
@@ -79,19 +79,18 @@ export class ProjectFilterBarComponent implements OnInit {
   filterProjectInput = new UntypedFormControl();
 
   /** Projects that are filtered via the text field form control */
-  filteredProjects$: Observable<OrganizationProject[] | null> =
-    combineLatest([
-      this.projects$.pipe(startWith([] as OrganizationProject[])),
-      this.filterProjectInput.valueChanges.pipe(startWith("")),
-    ]).pipe(
-      map(([projects, value]) =>
-        projects
-          ? projects.filter((project) =>
-              project.name.toLowerCase().includes(value.toLowerCase())
-            )
-          : null
-      )
-    );
+  filteredProjects$: Observable<OrganizationProject[] | null> = combineLatest([
+    this.projects$.pipe(startWith([] as OrganizationProject[])),
+    this.filterProjectInput.valueChanges.pipe(startWith("")),
+  ]).pipe(
+    map(([projects, value]) =>
+      projects
+        ? projects.filter((project) =>
+            project.name.toLowerCase().includes(value.toLowerCase())
+          )
+        : null
+    )
+  );
 
   someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
     map((ids) => ids.length !== 0)
@@ -188,7 +187,7 @@ export class ProjectFilterBarComponent implements OnInit {
     });
   }
 
-  isSelected(projectId: string) {
+  isSelected(projectId: number) {
     return !!this.selectedProjectIds.getValue().find((id) => id === projectId);
   }
 
@@ -196,13 +195,13 @@ export class ProjectFilterBarComponent implements OnInit {
     this.filterInput?.nativeElement.focus();
   }
 
-  selectProjectAndClose(projectId: string) {
-    this.navigate([projectId]);
+  selectProjectAndClose(projectId: number) {
+    this.navigate([projectId.toString()]);
     this.selectedProjectIds.next([projectId]);
     this.expansionPanel?.close();
   }
 
-  toggleProject(projectId: string) {
+  toggleProject(projectId: number) {
     const selectedIds = [...this.selectedProjectIds.getValue()];
     const idMatchIndex = selectedIds.indexOf(projectId);
     if (idMatchIndex > -1) {
@@ -221,7 +220,9 @@ export class ProjectFilterBarComponent implements OnInit {
   }
 
   closePanel() {
-    this.navigate(this.selectedProjectIds.getValue());
+    this.navigate(
+      this.selectedProjectIds.getValue().map((id) => id.toString())
+    );
     this.expansionPanel?.close();
   }
 

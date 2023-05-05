@@ -1,8 +1,11 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { map } from "rxjs";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
 import {
+  APIIssue,
+  APIIssueDetail,
   EventDetail,
   Issue,
   IssueDetail,
@@ -25,7 +28,7 @@ export class IssuesAPIService extends APIBaseService {
     organizationSlug?: string,
     cursor?: string,
     query?: string,
-    project?: string[] | null,
+    project?: number[] | null,
     start?: string,
     end?: string,
     sort?: string,
@@ -58,14 +61,41 @@ export class IssuesAPIService extends APIBaseService {
     if (environment) {
       httpParams = httpParams.set("environment", environment);
     }
-    return this.http.get<Issue[]>(url, {
-      observe: "response",
-      params: httpParams,
-    });
+    return this.http
+      .get<APIIssue[]>(url, {
+        observe: "response",
+        params: httpParams,
+      })
+      .pipe(
+        map((response) => {
+          const issues = response.body!.map((apiIssue) => {
+            return {
+              ...apiIssue,
+              project: {
+                ...apiIssue.project,
+                id: parseInt(apiIssue.project.id, 10),
+              },
+            } as Issue;
+          });
+          return response.clone({
+            body: issues
+          });
+        })
+      );
   }
 
   retrieve(id: string) {
-    return this.http.get<IssueDetail>(this.detailURL(id));
+    return this.http.get<APIIssueDetail>(this.detailURL(id)).pipe(
+      map((apiIssueDetail) => {
+        return {
+          ...apiIssueDetail,
+          project: {
+            ...apiIssueDetail.project,
+            id: parseInt(apiIssueDetail.project.id, 10),
+          },
+        } as IssueDetail;
+      })
+    );
   }
 
   update(

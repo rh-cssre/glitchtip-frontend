@@ -1,7 +1,11 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { map } from "rxjs";
 import { baseUrl } from "../../constants";
-import { OrganizationProject } from "./projects-api.interfaces";
+import {
+  APIOrganizationProject,
+  OrganizationProject,
+} from "./projects-api.interfaces";
 
 @Injectable({
   providedIn: "root",
@@ -17,7 +21,16 @@ export class OrganizationProjectsAPIService {
       params = params.append("query", query);
     }
     const url = this.listURL(organizationSlug);
-    return this.http.get<OrganizationProject[]>(url, { params });
+    return this.http.get<APIOrganizationProject[]>(url, { params }).pipe(
+      map((apiOrgProjects) => {
+        return apiOrgProjects.map((project) => {
+          return {
+            ...project,
+            id: parseInt(project.id, 10),
+          } as OrganizationProject;
+        });
+      })
+    );
   }
 
   private listURL(organizationSlug?: string) {

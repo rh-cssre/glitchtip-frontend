@@ -105,7 +105,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
    * @param orgSlug Active organization slug
    */
   getProjectDetails(
-    project: string[] | null,
+    project: number[] | null,
     activeOrgProjects: OrganizationProject[] | null,
     orgSlug: string
   ) {

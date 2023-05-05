@@ -61,7 +61,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   getTransactionGroups(
     orgSlug: string,
     cursor: string | undefined,
-    project: string[] | null,
+    project: number[] | null,
     start: string | undefined,
     end: string | undefined,
     sort: string | undefined,
@@ -83,7 +83,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   private retrieveTransactionGroups(
     orgSlug: string,
     cursor?: string,
-    project?: string[] | null,
+    project?: number[] | null,
     start?: string,
     end?: string,
     sort?: string,

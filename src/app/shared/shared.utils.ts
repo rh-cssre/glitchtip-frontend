@@ -161,10 +161,10 @@ export function normalizeProjectParams(
   projects: string | string[] | undefined
 ) {
   if (Array.isArray(projects)) {
-    return projects;
+    return projects.map((id) => parseInt(id, 10));
   }
   if (typeof projects === "string") {
-    return [projects];
+    return [parseInt(projects, 10)];
   }
   return [];
 }

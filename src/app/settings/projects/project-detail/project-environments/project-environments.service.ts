@@ -112,7 +112,7 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
   observeProjectEnvironments(
     queryParamsObs: Observable<{
       orgSlug: string | undefined;
-      project: string[] | null;
+      project: number[] | null;
     }>
   ) {
     return combineLatest([

@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
-import { ProjectDetail } from "./projects-api.interfaces";
+import { APIProjectDetail } from "./projects-api.interfaces";
+import { detailIdsToIntPipe } from "./projects-api.utils";
 
 @Injectable({
   providedIn: "root",
@@ -14,9 +15,11 @@ export class ProjectTeamsAPIService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return this.http.post<ProjectDetail>(
-      this.projectTeamsURL(organizationSlug, teamSlug, projectSlug),
-      null
+    return detailIdsToIntPipe(
+      this.http.post<APIProjectDetail>(
+        this.projectTeamsURL(organizationSlug, teamSlug, projectSlug),
+        null
+      )
     );
   }
 
@@ -25,8 +28,10 @@ export class ProjectTeamsAPIService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return this.http.delete<ProjectDetail>(
-      this.projectTeamsURL(organizationSlug, teamSlug, projectSlug)
+    return detailIdsToIntPipe(
+      this.http.delete<APIProjectDetail>(
+        this.projectTeamsURL(organizationSlug, teamSlug, projectSlug)
+      )
     );
   }
 

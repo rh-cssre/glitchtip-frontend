@@ -1,7 +1,7 @@
-import { IssueDetail } from "../interfaces";
+import { APIIssueDetail, IssueDetail } from "../interfaces";
 
 // data from api/0/issues/{{ issue number }}
-export const sampleIssueDetail: IssueDetail = {
+export const sampleApiIssueDetail: APIIssueDetail = {
   seenBy: [
     {
       username: "a@aa.aa",
@@ -248,4 +248,12 @@ export const sampleIssueDetail: IssueDetail = {
     },
   ],
   statusDetails: {},
+};
+
+export const sampleIssueDetail: IssueDetail = {
+  ...sampleApiIssueDetail,
+  project: {
+    ...sampleApiIssueDetail.project,
+    id: parseInt(sampleApiIssueDetail.project.id, 10),
+  },
 };

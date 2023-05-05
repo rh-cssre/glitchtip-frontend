@@ -73,7 +73,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
   ]).pipe(
     map(
       ([projects, monitor]) =>
-        projects?.find((project) => +project.id === monitor?.project)?.slug
+        projects?.find((project) => project.id === monitor?.project)?.slug
     )
   );
   activeMonitorRecentChecksSeries$ = this.activeMonitor$.pipe(
