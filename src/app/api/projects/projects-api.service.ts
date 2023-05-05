@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map } from "rxjs";
 import { APIBaseService } from "../api-base.service";
@@ -23,17 +23,21 @@ export class ProjectsAPIService extends APIBaseService {
   }
 
   list() {
-    return this.http.get<APIProject[]>(this.listURL()).pipe(
-      map((apiProjects) => {
-        const projects = apiProjects.map((project) => {
-          return {
-            ...project,
-            id: parseInt(project.id, 10),
-          };
-        });
-        return projects as Project[];
-      })
-    );
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set("limit", 200);
+    return this.http
+      .get<APIProject[]>(this.listURL(), { params: httpParams })
+      .pipe(
+        map((apiProjects) => {
+          const projects = apiProjects.map((project) => {
+            return {
+              ...project,
+              id: parseInt(project.id, 10),
+            };
+          });
+          return projects as Project[];
+        })
+      );
   }
 
   retrieve(organizationSlug: string, projectSlug: string) {
