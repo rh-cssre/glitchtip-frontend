@@ -4,8 +4,14 @@
   padding-right: 20px;
 }
 
-.issue-404 h1 {
-  text-align: left;
+.issue-404 {
+  h1 {
+    text-align: left;
+  }
+
+  p {
+    margin: 16px 0;
+  }
 }
 
 header {
@@ -24,12 +30,17 @@ header {
     }
   }
 
-  .button-row button {
-    margin-right: 8px;
-  }
-
   gt-issue-detail-title {
     margin-right: 20px;
+  }
+}
+
+.button-row {
+  display: flex;
+  align-items: flex-start;
+
+  button {
+    margin-right: 8px;
   }
 }
 
@@ -55,6 +66,11 @@ dl {
 
 .event-detail-card {
   margin-right: 16px;
+
+  .tab-nav-container {
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
 
   @media screen and (max-width: $medium - 1) {
     margin-right: 0;

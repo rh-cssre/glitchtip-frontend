@@ -36,6 +36,11 @@ describe("List, add, update and delete uptime Monitors", () => {
 
   it("Should not be able to add monitor with invalid values", () => {
     cy.visit(`/${organization.slug}/uptime-monitors/new`);
+    cy.get("[data-cy=monitor-type]")
+      .click()
+      .get("mat-option")
+      .contains("GET")
+      .click();
     cy.get("#monitor-url").type("invalid url");
     cy.get("#interval").clear().type("86400");
     cy.get("#monitor-submit").click();
@@ -43,7 +48,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.contains("Enter a monitor name");
     cy.contains("Enter a valid URL");
     cy.contains("Enter a status code number");
-    cy.contains("The number needs to be less than 86400 (24 hours).");
+    cy.contains("Must be less than 86400 (24 hours).");
   });
 
   it("Should add a single monitor and see that monitor on list", () => {
@@ -51,12 +56,13 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.get("#add-monitor").click();
     cy.get("#monitor-name").type("secondmonitor");
     cy.get("#monitor-url").type("www.twitter.com");
-    cy.get("#associated-project")
+    cy.get("[data-cy=associated-project]")
       .click()
+      .get("mat-select")
       .get("mat-option")
       .contains("NicheScrip")
       .click();
-    cy.get("#monitor-type")
+    cy.get("[data-cy=monitor-type]")
       .click()
       .get("mat-option")
       .contains("Heartbeat")

@@ -42,14 +42,19 @@ export interface OrganizationProject {
 }
 
 export interface Member {
-  role: string;
+  role: MemberRole;
   id: number;
   user: User | null;
   roleName: string;
   dateCreated: string;
   email: string;
   pending: boolean;
+  isOwner: boolean;
+}
+
+export interface MemberDetail extends Member {
   teams: string[];
+  roles: MemberRoleDetail[];
 }
 
 export interface MemberSelector extends Member {
@@ -64,10 +69,22 @@ export interface OrganizationUser extends Member {
 
 export type MemberRole = "member" | "admin" | "manager" | "owner";
 
+export interface MemberRoleDetail {
+  id: MemberRole;
+  name: string;
+  desc: string;
+  scopes: string[];
+}
+
 export interface OrganizationMembersRequest {
   email: string;
   role: MemberRole;
   teams: string[];
+}
+
+export interface MemberUpdateData {
+  role?: MemberRole;
+  teams?: string[];
 }
 
 export interface OrganizationLoading {

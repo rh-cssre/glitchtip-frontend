@@ -148,9 +148,7 @@ export class UptimeService extends PaginationStatefulService<UptimeState> {
                 take(1),
                 tap((slug) => {
                   if (slug) {
-                    lastValueFrom(
-                      this.subscriptionsService.retrieveSubscription(slug)
-                    );
+                    this.subscriptionsService.retrieveSubscription(slug);
                   }
                 })
               )
