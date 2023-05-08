@@ -1,8 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { map } from "rxjs";
 import { baseUrl } from "../../constants";
-import { APIProjectDetail } from "./projects-api.interfaces";
-import { detailIdsToIntPipe } from "./projects-api.utils";
+import { ProjectDetail } from "./projects-api.interfaces";
+import { normalizeID } from "../shared-api.utils";
 
 @Injectable({
   providedIn: "root",
@@ -15,12 +16,17 @@ export class ProjectTeamsAPIService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return detailIdsToIntPipe(
-      this.http.post<APIProjectDetail>(
+    return this.http
+      .post<ProjectDetail>(
         this.projectTeamsURL(organizationSlug, teamSlug, projectSlug),
         null
       )
-    );
+      .pipe(
+        map((projectDetail) => {
+          projectDetail.id = normalizeID(projectDetail.id);
+          return projectDetail;
+        })
+      );
   }
 
   removeProjectFromTeam(
@@ -28,11 +34,16 @@ export class ProjectTeamsAPIService {
     teamSlug: string,
     projectSlug: string
   ) {
-    return detailIdsToIntPipe(
-      this.http.delete<APIProjectDetail>(
+    return this.http
+      .delete<ProjectDetail>(
         this.projectTeamsURL(organizationSlug, teamSlug, projectSlug)
       )
-    );
+      .pipe(
+        map((projectDetail) => {
+          projectDetail.id = normalizeID(projectDetail.id);
+          return projectDetail;
+        })
+      );
   }
 
   private projectTeamsURL(

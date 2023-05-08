@@ -1,9 +1,6 @@
 import { User } from "../user/user.interfaces";
 import { Team } from "../teams/teams.interfaces";
-import {
-  APIOrganizationProject,
-  OrganizationProject
-} from "../projects/projects-api.interfaces";
+import { OrganizationProject } from "../projects/projects-api.interfaces";
 
 export interface OrganizationNew {
   name: string;
@@ -25,10 +22,6 @@ export interface Organization extends OrganizationNew {
 export interface OrganizationDetail extends Organization {
   projects: OrganizationProject[];
   teams: Team[];
-}
-
-export interface APIOrganizationDetail extends Omit<OrganizationDetail, "projects"> {
-  projects: APIOrganizationProject[];
 }
 
 interface OrgStatus {

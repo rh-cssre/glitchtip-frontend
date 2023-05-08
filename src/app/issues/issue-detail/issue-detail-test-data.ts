@@ -1,4 +1,14 @@
-import { APIIssueDetail, IssueDetail } from "../interfaces";
+import { IssueDetail } from "../interfaces";
+import { ProjectReference } from "src/app/api/projects/projects-api.interfaces";
+
+
+interface APIProjectReference extends Omit<ProjectReference, "id"> {
+  id: string;
+}
+
+interface APIIssueDetail extends Omit<IssueDetail, "project"> {
+  project: APIProjectReference;
+}
 
 // data from api/0/issues/{{ issue number }}
 export const sampleApiIssueDetail: APIIssueDetail = {

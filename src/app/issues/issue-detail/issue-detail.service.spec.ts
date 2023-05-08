@@ -9,7 +9,7 @@ import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { EMPTY } from "rxjs";
 import { take } from "rxjs/operators";
 import { IssueDetailService } from "./issue-detail.service";
-import { APIIssueDetail, IssueDetail, EventDetail, AnnotatedContexts } from "../interfaces";
+import { IssueDetail, EventDetail, AnnotatedContexts } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { sampleApiIssueDetail, sampleIssueDetail } from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
@@ -45,7 +45,7 @@ describe("IssueDetailService", () => {
   });
 
   it("should retieve issue detail", () => {
-    const testApiData: APIIssueDetail = sampleApiIssueDetail;
+    const testApiData = sampleApiIssueDetail;
     service.retrieveIssue(testApiData.id).toPromise();
     const req = httpTestingController.expectOne(
       `/api/0/issues/${testApiData.id}/`

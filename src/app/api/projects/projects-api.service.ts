@@ -3,13 +3,8 @@ import { Injectable } from "@angular/core";
 import { map } from "rxjs";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
-import {
-  APIProject,
-  APIProjectDetail,
-  Project,
-  ProjectNew,
-} from "./projects-api.interfaces";
-import { detailIdsToIntPipe } from "./projects-api.utils";
+import { Project, ProjectDetail, ProjectNew } from "./projects-api.interfaces";
+import { normalizeID } from "../shared-api.utils";
 
 @Injectable({
   providedIn: "root",
@@ -26,26 +21,24 @@ export class ProjectsAPIService extends APIBaseService {
     let httpParams = new HttpParams();
     httpParams = httpParams.set("limit", 200);
     return this.http
-      .get<APIProject[]>(this.listURL(), { params: httpParams })
+      .get<Project[]>(this.listURL(), { params: httpParams })
       .pipe(
-        map((apiProjects) => {
-          const projects = apiProjects.map((project) => {
-            return {
-              ...project,
-              id: parseInt(project.id, 10),
-            };
-          });
-          return projects as Project[];
+        map((projects) => {
+          projects.map((project) => (project.id = normalizeID(project.id)));
+          return projects;
         })
       );
   }
 
   retrieve(organizationSlug: string, projectSlug: string) {
-    return detailIdsToIntPipe(
-      this.http.get<APIProjectDetail>(
-        this.detailURL(organizationSlug, projectSlug)
-      )
-    );
+    return this.http
+      .get<ProjectDetail>(this.detailURL(organizationSlug, projectSlug))
+      .pipe(
+        map((projectDetail) => {
+          projectDetail.id = normalizeID(projectDetail.id);
+          return projectDetail;
+        })
+      );
   }
 
   update(
@@ -53,17 +46,24 @@ export class ProjectsAPIService extends APIBaseService {
     projectSlug: string,
     data: Partial<Project>
   ) {
-    return detailIdsToIntPipe(
-      this.http.put<APIProjectDetail>(
-        this.detailURL(organizationSlug, projectSlug),
-        data
-      )
-    );
+    return this.http
+      .put<ProjectDetail>(this.detailURL(organizationSlug, projectSlug), data)
+      .pipe(
+        map((projectDetail) => {
+          projectDetail.id = normalizeID(projectDetail.id);
+          return projectDetail;
+        })
+      );
   }
 
   create(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const url = `${baseUrl}/teams/${orgSlug}/${teamSlug}/projects/`;
-    return detailIdsToIntPipe(this.http.post<APIProjectDetail>(url, project));
+    return this.http.post<ProjectDetail>(url, project).pipe(
+      map((projectDetail) => {
+        projectDetail.id = normalizeID(projectDetail.id);
+        return projectDetail;
+      })
+    );
   }
 
   destroy(organizationSlug: string, projectSlug: string) {

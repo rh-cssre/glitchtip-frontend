@@ -7,7 +7,6 @@ import {
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { IssuesService } from "./issues.service";
-import { APIIssue } from "./interfaces";
 import { apiIssueList, issueList } from "./issues-page/issues-test-data";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -32,7 +31,7 @@ describe("IssuesService", () => {
   });
 
   it("should retrieve a list of issues", () => {
-    const testData: APIIssue[] = apiIssueList;
+    const testData = apiIssueList;
     const url = "burke-software-consulting";
     (service as any).retrieveIssues(url).toPromise();
     const req = httpTestingController.expectOne(
