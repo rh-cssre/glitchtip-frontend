@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { Params } from "@angular/router";
+import { map } from "rxjs";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
 import {
@@ -10,7 +12,7 @@ import {
   IssueTags,
   UpdateStatusResponse,
 } from "src/app/issues/interfaces";
-import { Params } from "@angular/router";
+import { normalizeID } from "../shared-api.utils";
 
 @Injectable({
   providedIn: "root",
@@ -25,7 +27,7 @@ export class IssuesAPIService extends APIBaseService {
     organizationSlug?: string,
     cursor?: string,
     query?: string,
-    project?: string[] | null,
+    project?: number[] | null,
     start?: string,
     end?: string,
     sort?: string,
@@ -58,14 +60,28 @@ export class IssuesAPIService extends APIBaseService {
     if (environment) {
       httpParams = httpParams.set("environment", environment);
     }
-    return this.http.get<Issue[]>(url, {
-      observe: "response",
-      params: httpParams,
-    });
+    return this.http
+      .get<Issue[]>(url, {
+        observe: "response",
+        params: httpParams,
+      })
+      .pipe(
+        map((response) => {
+          response.body!.map(
+            (issue) => (issue.project.id = normalizeID(issue.project.id))
+          );
+          return response;
+        })
+      );
   }
 
   retrieve(id: string) {
-    return this.http.get<IssueDetail>(this.detailURL(id));
+    return this.http.get<IssueDetail>(this.detailURL(id)).pipe(
+      map((issueDetail) => {
+        issueDetail.project.id = normalizeID(issueDetail.project.id);
+        return issueDetail;
+      })
+    );
   }
 
   update(

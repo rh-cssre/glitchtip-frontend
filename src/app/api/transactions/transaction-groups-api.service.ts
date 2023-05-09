@@ -17,7 +17,7 @@ export class TransactionGroupsAPIService extends APIBaseService {
   list(
     organizationSlug: string,
     cursor?: string,
-    project?: string[] | null,
+    project?: number[] | null,
     start?: string,
     end?: string,
     sort?: string,

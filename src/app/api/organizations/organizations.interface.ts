@@ -1,5 +1,6 @@
 import { User } from "../user/user.interfaces";
 import { Team } from "../teams/teams.interfaces";
+import { OrganizationProject } from "../projects/projects-api.interfaces";
 
 export interface OrganizationNew {
   name: string;
@@ -31,14 +32,6 @@ interface OrgStatus {
 export interface Avatar {
   avatarType: string;
   avatarUuid: string | null;
-}
-
-export interface OrganizationProject {
-  name: string;
-  slug: string;
-  platform: string | null;
-  id: number;
-  isMember: boolean;
 }
 
 export interface Member {

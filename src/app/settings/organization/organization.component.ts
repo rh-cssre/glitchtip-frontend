@@ -3,7 +3,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { tap, take } from "rxjs/operators";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { OrganizationDetail } from "src/app/api/organizations/organizations.interface";
+import { Organization } from "src/app/api/organizations/organizations.interface";
 
 @Component({
   selector: "gt-organization",
@@ -53,7 +53,7 @@ export class OrganizationComponent implements OnInit {
     this.organizationsService
       .updateOrganization(this.form.value.name)
       .subscribe(
-        (org: OrganizationDetail) => {
+        (org: Organization) => {
           this.updateLoading = false;
           this.snackBar.open(
             `The name of your organization has been updated to ${org.name}`
