@@ -34,8 +34,9 @@ import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.
 import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-breadcrumbs/entry-breadcrumbs.component";
 import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue-detail-tags.component";
 import { PrismjsModule } from "../prismjs/prismjs.module";
-import { CommentsComponent } from './comments/comments.component';
+import { CommentsComponent } from "./comments/comments.component";
 import { CommentFormComponent } from "./comments/comment-form/comment-form.component";
+import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { CommentFormComponent } from "./comments/comment-form/comment-form.compo
     ListTitleModule,
     DataFilterBarModule,
     ProjectFilterBarModule,
-    PrismjsModule
+    PrismjsModule,
+    CopyInputComponent,
   ],
   declarations: [
     IssuesPageComponent,

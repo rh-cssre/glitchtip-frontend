@@ -7,7 +7,7 @@ import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar
 // Material
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatTabsModule } from "@angular/material/tabs"
+import { MatTabsModule } from "@angular/material/tabs";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatExpansionModule } from "@angular/material/expansion";
 
@@ -33,6 +33,7 @@ import { PlatformPickerComponent } from "./projects/platform-picker/platform-pic
 import { SlugifyDirective } from "./teams/new-team/slugify.directive";
 import { AlertFormComponent } from "./projects/project-detail/project-alerts/alert-form/alert-form.component";
 import { NewRecipientComponent } from "./projects/project-detail/project-alerts/new-recipient/new-recipient.component";
+import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { NewRecipientComponent } from "./projects/project-detail/project-alerts/
     MatTabsModule,
     MatRadioModule,
     MatExpansionModule,
+    CopyInputComponent,
   ],
   declarations: [
     ProjectsComponent,

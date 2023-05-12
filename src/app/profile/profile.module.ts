@@ -22,6 +22,7 @@ import { Fido2Component } from "./multi-factor-auth/fido2/fido2.component";
 import { BackupCodesComponent } from "./multi-factor-auth/totp/backup-codes/backup-codes.component";
 import { WizardComponent } from "./wizard/wizard.component";
 import { PreferencesComponent } from "./preferences/preferences.component";
+import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PreferencesComponent } from "./preferences/preferences.component";
     ReactiveFormsModule,
     MatChipsModule,
     MatAutocompleteModule,
+    CopyInputComponent,
   ],
 })
 export class ProfileModule {}

@@ -18,7 +18,6 @@ import { InputMatcherDirective } from "./input-matcher.directive";
 import { LoadingButtonComponent } from "./loading-button/loading-button.component";
 import { AuthSvgComponent } from "./auth-svg/auth-svg.component";
 import { ProjectListComponent } from "./project-list/project-list.component";
-import { CopyInputComponent } from "./copy-input/copy-input.component";
 import { ToDoItemComponent } from "./to-do-item/to-do-item.component";
 import { FormErrorComponent } from "./forms/form-error/form-error.component";
 import { EventInfoComponent } from "./event-info/event-info.component";
@@ -37,7 +36,6 @@ import { EventInfoComponent } from "./event-info/event-info.component";
     LoadingButtonComponent,
     AuthSvgComponent,
     ProjectListComponent,
-    CopyInputComponent,
     ToDoItemComponent,
     FormErrorComponent,
     EventInfoComponent,
@@ -55,7 +53,6 @@ import { EventInfoComponent } from "./event-info/event-info.component";
     LoadingButtonComponent,
     AuthSvgComponent,
     ProjectListComponent,
-    CopyInputComponent,
     ToDoItemComponent,
     FormErrorComponent,
     EventInfoComponent,

@@ -17,6 +17,7 @@ import { NewMonitorComponent } from "./new-monitor/new-monitor.component";
 import { MaterialModule } from "../shared/material.module";
 import { SharedModule } from "../shared/shared.module";
 import { UptimeRoutingModule } from "./uptime-routing.module";
+import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { UptimeRoutingModule } from "./uptime-routing.module";
     NgxChartsModule,
     ListFooterModule,
     ListTitleModule,
+    CopyInputComponent,
   ],
 })
 export class UptimeModule {}
