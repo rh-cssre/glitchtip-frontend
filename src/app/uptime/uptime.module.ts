@@ -15,9 +15,11 @@ import { MonitorResponseChartComponent } from "./monitor-response-chart/monitor-
 import { MonitorUpdateComponent } from "./monitor-update/monitor-update.component";
 import { NewMonitorComponent } from "./new-monitor/new-monitor.component";
 import { MaterialModule } from "../shared/material.module";
-import { SharedModule } from "../shared/shared.module";
 import { UptimeRoutingModule } from "./uptime-routing.module";
 import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
+import { TimeForPipe } from "../shared/days-ago.pipe";
+import { HumanizeDurationPipe } from "../shared/seconds-or-ms.pipe";
+import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
 
 @NgModule({
   declarations: [
@@ -34,7 +36,6 @@ import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
     UptimeRoutingModule,
     MatTableModule,
     MaterialModule,
-    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
@@ -42,6 +43,9 @@ import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
     ListFooterModule,
     ListTitleModule,
     CopyInputComponent,
+    TimeForPipe,
+    HumanizeDurationPipe,
+    LoadingButtonComponent,
   ],
 })
 export class UptimeModule {}

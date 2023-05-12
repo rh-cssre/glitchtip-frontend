@@ -3,6 +3,7 @@ import { timedeltaToMS } from "./shared.utils";
 
 @Pipe({
   name: "humanizeDuration",
+  standalone: true,
 })
 export class HumanizeDurationPipe implements PipeTransform {
   transform(value: string, roundSeconds: boolean = false): string {

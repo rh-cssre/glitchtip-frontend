@@ -7,7 +7,6 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar.module";
 import { ProfileRoutingModule } from "./profile-routing.module";
 import { ProfileComponent } from "./profile.component";
-import { SharedModule } from "../shared/shared.module";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { ManageEmailsComponent } from "./manage-emails/manage-emails.component";
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
@@ -23,6 +22,12 @@ import { BackupCodesComponent } from "./multi-factor-auth/totp/backup-codes/back
 import { WizardComponent } from "./wizard/wizard.component";
 import { PreferencesComponent } from "./preferences/preferences.component";
 import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
+import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
+import { InputMatcherDirective } from "../shared/input-matcher.directive";
+import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
+import { ToDoItemComponent } from "../shared/to-do-item/to-do-item.component";
+import { FormErrorComponent } from "../shared/forms/form-error/form-error.component";
+import { MaterialModule } from "../shared/material.module";
 
 @NgModule({
   declarations: [
@@ -46,11 +51,16 @@ import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
     CommonModule,
     MobileNavToolbarModule,
     ProfileRoutingModule,
-    SharedModule,
     ReactiveFormsModule,
     MatChipsModule,
     MatAutocompleteModule,
     CopyInputComponent,
+    AuthSvgComponent,
+    InputMatcherDirective,
+    LoadingButtonComponent,
+    ToDoItemComponent,
+    FormErrorComponent,
+    MaterialModule,
   ],
 })
 export class ProfileModule {}

@@ -3,8 +3,8 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { SharedModule } from "src/app/shared/shared.module";
 import { DataFilterBarComponent } from "./data-filter-bar.component";
+import { MaterialModule } from "src/app/shared/material.module";
 
 @NgModule({
   imports: [
@@ -12,7 +12,7 @@ import { DataFilterBarComponent } from "./data-filter-bar.component";
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    SharedModule,
+    MaterialModule,
   ],
   declarations: [DataFilterBarComponent],
   exports: [DataFilterBarComponent],

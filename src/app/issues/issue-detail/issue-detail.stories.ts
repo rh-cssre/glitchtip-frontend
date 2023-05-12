@@ -3,7 +3,6 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata, Story } from "@storybook/angular";
-import { SharedModule } from "../../shared/shared.module";
 import { IssueDetailTitleComponent } from "./issue-detail-title/issue-detail-title.component";
 
 export default {
@@ -16,7 +15,6 @@ export default {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        SharedModule,
       ],
       declarations: [IssueDetailTitleComponent],
     }),

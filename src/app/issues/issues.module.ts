@@ -14,7 +14,6 @@ import { ProjectFilterBarModule } from "../list-elements/project-filter-bar/proj
 import { LazyMarkdownModule } from "../lazy-markdown/lazy-markdown.module";
 import { ListFooterModule } from "../list-elements/list-footer/list-footer.module";
 import { ListTitleModule } from "../list-elements/list-title/list-title.module";
-import { SharedModule } from "../shared/shared.module";
 
 // Components
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
@@ -37,13 +36,16 @@ import { PrismjsModule } from "../prismjs/prismjs.module";
 import { CommentsComponent } from "./comments/comments.component";
 import { CommentFormComponent } from "./comments/comment-form/comment-form.component";
 import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
+import { DaysAgoPipe, DaysOldPipe } from "../shared/days-ago.pipe";
+import { EntryDataComponent } from "../shared/entry-data/entry-data.component";
+import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
+import { MaterialModule } from "../shared/material.module";
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     IssuesRoutingModule,
-    SharedModule,
     MatTableModule,
     MatTabsModule,
     MatBadgeModule,
@@ -57,6 +59,11 @@ import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
     ProjectFilterBarModule,
     PrismjsModule,
     CopyInputComponent,
+    DaysAgoPipe,
+    DaysOldPipe,
+    EntryDataComponent,
+    LoadingButtonComponent,
+    MaterialModule,
   ],
   declarations: [
     IssuesPageComponent,
