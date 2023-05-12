@@ -5,7 +5,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RegisterRoutingModule } from "./register-routing.module";
 import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
 import { InputMatcherDirective } from "../shared/input-matcher.directive";
-import { MaterialModule } from "../shared/material.module";
+import { MatInputModule } from "@angular/material/input";
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [RegisterComponent],
@@ -15,7 +16,8 @@ import { MaterialModule } from "../shared/material.module";
     ReactiveFormsModule,
     RegisterRoutingModule,
     InputMatcherDirective,
-    MaterialModule,
+    MatInputModule,
+    MatCardModule,
   ],
 })
 export class RegisterModule {}

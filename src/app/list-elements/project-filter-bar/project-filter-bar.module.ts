@@ -5,7 +5,9 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { ProjectFilterBarComponent } from "./project-filter-bar.component";
-import { MaterialModule } from "src/app/shared/material.module";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { MaterialModule } from "src/app/shared/material.module";
     MatExpansionModule,
     ReactiveFormsModule,
     RouterModule,
-    MaterialModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
   ],
   declarations: [ProjectFilterBarComponent],
   exports: [ProjectFilterBarComponent],

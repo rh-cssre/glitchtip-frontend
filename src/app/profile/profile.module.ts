@@ -27,7 +27,16 @@ import { InputMatcherDirective } from "../shared/input-matcher.directive";
 import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
 import { ToDoItemComponent } from "../shared/to-do-item/to-do-item.component";
 import { FormErrorComponent } from "../shared/forms/form-error/form-error.component";
-import { MaterialModule } from "../shared/material.module";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { MatInputModule } from "@angular/material/input";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -60,7 +69,16 @@ import { MaterialModule } from "../shared/material.module";
     LoadingButtonComponent,
     ToDoItemComponent,
     FormErrorComponent,
-    MaterialModule,
+    MatDividerModule,
+    MatCardModule,
+    MatInputModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatCheckboxModule,
   ],
 })
 export class ProfileModule {}

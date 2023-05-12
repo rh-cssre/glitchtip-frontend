@@ -1,10 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatNativeDateModule } from "@angular/material/core";
+import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { DataFilterBarComponent } from "./data-filter-bar.component";
-import { MaterialModule } from "src/app/shared/material.module";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   imports: [
@@ -12,7 +12,8 @@ import { MaterialModule } from "src/app/shared/material.module";
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    MaterialModule,
+    MatOptionModule,
+    MatSelectModule,
   ],
   declarations: [DataFilterBarComponent],
   exports: [DataFilterBarComponent],

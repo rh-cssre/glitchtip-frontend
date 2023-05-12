@@ -3,6 +3,8 @@ import { CommonModule } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatPseudoCheckboxModule } from "@angular/material/core";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "./login.component";
 import { LoginRoutingModule } from "./login-routing.module";
@@ -11,7 +13,7 @@ import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
 import { LoginTotpComponent } from "./login-totp/login-totp.component";
 import { LoginFido2Component } from "./login-fido2/login-fido2.component";
 import { FormErrorComponent } from "../shared/forms/form-error/form-error.component";
-import { MaterialModule } from "../shared/material.module";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
   declarations: [LoginComponent, LoginTotpComponent, LoginFido2Component],
@@ -25,7 +27,9 @@ import { MaterialModule } from "../shared/material.module";
     MatPseudoCheckboxModule,
     AuthSvgComponent,
     FormErrorComponent,
-    MaterialModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatButtonModule,
   ],
 })
 export class LoginModule {}

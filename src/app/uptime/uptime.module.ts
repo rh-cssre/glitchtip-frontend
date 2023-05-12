@@ -14,12 +14,19 @@ import { MonitorListComponent } from "./monitor-list/monitor-list.component";
 import { MonitorResponseChartComponent } from "./monitor-response-chart/monitor-response-chart.component";
 import { MonitorUpdateComponent } from "./monitor-update/monitor-update.component";
 import { NewMonitorComponent } from "./new-monitor/new-monitor.component";
-import { MaterialModule } from "../shared/material.module";
 import { UptimeRoutingModule } from "./uptime-routing.module";
 import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
 import { TimeForPipe } from "../shared/days-ago.pipe";
 import { HumanizeDurationPipe } from "../shared/seconds-or-ms.pipe";
 import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -35,10 +42,17 @@ import { LoadingButtonComponent } from "../shared/loading-button/loading-button.
     CommonModule,
     UptimeRoutingModule,
     MatTableModule,
-    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatCardModule,
+    MatIconModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
     NgxChartsModule,
     ListFooterModule,
     ListTitleModule,

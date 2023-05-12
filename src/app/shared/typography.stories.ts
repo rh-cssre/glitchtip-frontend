@@ -3,14 +3,11 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { moduleMetadata } from "@storybook/angular";
 
-import { MaterialModule } from "./material.module";
-
 export default {
   title: "Styles/General Styling",
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,

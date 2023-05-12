@@ -10,7 +10,9 @@ import { ProjectFilterBarModule } from "../list-elements/project-filter-bar/proj
 import { TransactionGroupsComponent } from "./transaction-groups/transaction-groups.component";
 import { TransactionGroupDetailComponent } from "./transaction-group-detail/transaction-group-detail.component";
 import { HumanizeDurationPipe } from "../shared/seconds-or-ms.pipe";
-import { MaterialModule } from "../shared/material.module";
+import { MatCardModule } from "@angular/material/card";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
 
 @NgModule({
   declarations: [TransactionGroupsComponent, TransactionGroupDetailComponent],
@@ -23,7 +25,9 @@ import { MaterialModule } from "../shared/material.module";
     DataFilterBarModule,
     ListFooterModule,
     HumanizeDurationPipe,
-    MaterialModule,
+    MatCardModule,
+    MatTooltipModule,
+    MatIconModule,
   ],
 })
 export class PerformanceModule {}
