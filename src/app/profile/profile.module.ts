@@ -39,6 +39,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-err
     MatDividerModule,
     MatCardModule,
     MatInputModule,
+    MatSelectModule,
     MatSidenavModule,
     MatListModule,
     MatIconModule,
