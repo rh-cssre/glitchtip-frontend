@@ -3,7 +3,6 @@ import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { ProjectFilterBarComponent } from "./project-filter-bar.component";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
 import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
@@ -15,7 +14,7 @@ export default {
   ],
 };
 
-const sampleProjects: OrganizationProject[] = [
+const sampleProjects: any = [
   {
     name: "GlitchTip",
     slug: "glitchtip",

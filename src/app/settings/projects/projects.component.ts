@@ -15,6 +15,7 @@ import { ProjectSettingsService } from "./project-settings.service";
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   subscription?: Subscription;
+  activeOrg$ = this.organizationsService.activeOrganization$;
   projects$ = this.organizationsService.activeOrganizationProjects$;
   projectsForActiveOrg$ = this.projectSettingsService.projects$;
 

@@ -32,7 +32,7 @@ export class NotificationsComponent implements OnInit {
     this.notificationsService.toggleProjectView();
   }
 
-  updateUserAlertSettings(projectId: string, status: NotificationStatus) {
+  updateUserAlertSettings(projectId: number, status: NotificationStatus) {
     this.notificationsService.alertsUpdate(projectId, status);
   }
 }

@@ -142,7 +142,7 @@ describe("Issues Page", () => {
     cy.reload();
     cy.contains("No events match your filters");
     cy.visit(
-      "http://localhost:4200/business-company-inc/issues?&query=is:resolved"
+      `http://localhost:4200/${organization.slug}/issues?&query=is:resolved`
     );
     cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
     cy.get("gt-project-filter-bar").contains("PitchFlip").click();

@@ -1,5 +1,5 @@
 import { componentWrapperDecorator, moduleMetadata } from "@storybook/angular";
-import { Meta } from "@storybook/angular/types-6-0";
+import { Meta } from "@storybook/angular";
 import { SharedModule } from "src/app/shared/shared.module";
 import { FormErrorComponent } from "./form-error.component";
 

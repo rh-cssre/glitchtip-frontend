@@ -7,7 +7,7 @@ header {
   margin-top: -16px;
 
   a {
-    width: min-content;
+    width: fit-content;
   }
 
   h1 {
@@ -18,12 +18,20 @@ header {
   margin-bottom: 20px;
 }
 
+mat-form-field {
+  margin-bottom: 4px;
+  @media screen and (max-width: $medium - 1) {
+    margin-bottom: 12px;
+  }
+}
+
 form {
   padding-bottom: 8px;
   padding-right: 8px;
   .mat-form-field {
     display: block;
   }
+
   gt-loading-button {
     margin-bottom: 8px;
   }
@@ -35,11 +43,15 @@ form {
   margin-right: auto;
 }
 
+.wide-field {
+  width: 100%;
+}
+
 .url-spacing {
   margin-top: 10px;
 }
 
-.short-field {
+.short-field-container {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
@@ -50,23 +62,20 @@ form {
     width: auto;
   }
 
-  .form-field {
-    width: 170px;
+  mat-form-field {
     margin-right: 16px;
   }
 }
 
 .help-text {
-  display: flex;
-  justify-content: flex-start;
   width: 370px;
-  position: relative;
-  bottom: 0;
-  left: 0;
+  padding: 0 16px;
   margin-bottom: 0;
+  height: fit-content;
 
   @media screen and (max-width: $tablet - 1) {
-    width: 170px;
+    width: 200px;
+    margin-bottom: 5px;
 
     p {
       margin-top: 0;

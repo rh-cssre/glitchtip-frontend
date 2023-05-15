@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { combineLatest, Subject, takeUntil } from "rxjs";
 import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
+import { Issue } from "../interfaces";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
@@ -61,12 +62,8 @@ export class IssuesPageComponent
     map(([cursor, params, queryParams]) => {
       const orgSlug: string | undefined = params["org-slug"];
       const query: string | undefined = queryParams.query;
-      let project: string[] | null = null;
-      if (typeof queryParams.project === "string") {
-        project = [queryParams.project];
-      } else if (typeof queryParams.project === "object") {
-        project = queryParams.project;
-      }
+      let project: number[] | null = null;
+      project = normalizeProjectParams(queryParams.project)
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
@@ -265,6 +262,10 @@ export class IssuesPageComponent
   ngOnDestroy() {
     super.ngOnDestroy();
     this.projectEnvironmentsService.clearState();
+  }
+
+  trackIssues(index: number, issue: Issue): number {
+    return issue.id;
   }
 
   onDateFormSubmit(queryParams: object) {

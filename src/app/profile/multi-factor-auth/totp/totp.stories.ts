@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { moduleMetadata } from "@storybook/angular";
-import { Meta } from "@storybook/angular/types-6-0";
+import { Meta } from "@storybook/angular";
 import { of } from "rxjs";
 import { SharedModule } from "src/app/shared/shared.module";
 import { totpUserKey } from "./test-data";
