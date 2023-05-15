@@ -1,7 +1,19 @@
-import { Component, ChangeDetectionStrategy, EventEmitter, Input, Output } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  EventEmitter,
+  Input,
+  Output,
+} from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
+  standalone: true,
   selector: "gt-loading-button",
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: "./loading-button.component.html",
   styleUrls: ["./loading-button.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

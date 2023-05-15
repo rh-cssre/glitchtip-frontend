@@ -66,7 +66,7 @@ const sampleProjects: any = [
   },
 ];
 
-export const projectFilterBar = () => ({
+export const ProjectFilterBar = () => ({
   component: ProjectFilterBarComponent,
   props: {
     projects$: of(sampleProjects),
@@ -74,6 +74,6 @@ export const projectFilterBar = () => ({
   },
 });
 
-projectFilterBar.story = {
+ProjectFilterBar.story = {
   parameters: {},
 };

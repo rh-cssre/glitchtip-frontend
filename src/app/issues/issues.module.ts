@@ -9,14 +9,15 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesRoutingModule } from "./issues-routing.module";
-import { DataFilterBarModule } from "../list-elements/data-filter-bar/data-filter-bar.module";
-import { ProjectFilterBarModule } from "../list-elements/project-filter-bar/project-filter-bar.module";
 import { LazyMarkdownModule } from "../lazy-markdown/lazy-markdown.module";
-import { ListFooterModule } from "../list-elements/list-footer/list-footer.module";
-import { ListTitleModule } from "../list-elements/list-title/list-title.module";
-import { SharedModule } from "../shared/shared.module";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
-// Components
+import { DataFilterBarComponent } from "../list-elements/data-filter-bar/data-filter-bar.component";
+import { ProjectFilterBarComponent } from "../list-elements/project-filter-bar/project-filter-bar.component";
+import { ListFooterComponent } from "../list-elements/list-footer/list-footer.component";
+import { ListTitleComponent } from "../list-elements/list-title/list-title.component";
+
+// Declared Components
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
 import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
@@ -34,27 +35,54 @@ import { IssueZeroStatesComponent } from "./issue-zero-states/issue-zero-states.
 import { EntryBreadcrumbsComponent } from "./issue-detail/event-detail/entry-breadcrumbs/entry-breadcrumbs.component";
 import { IssueDetailTagsComponent } from "./issue-detail/issue-detail-tags/issue-detail-tags.component";
 import { PrismjsModule } from "../prismjs/prismjs.module";
-import { CommentsComponent } from './comments/comments.component';
+import { CommentsComponent } from "./comments/comments.component";
 import { CommentFormComponent } from "./comments/comment-form/comment-form.component";
+import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
+import { DaysAgoPipe, DaysOldPipe } from "../shared/days-ago.pipe";
+import { EntryDataComponent } from "../shared/entry-data/entry-data.component";
+import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     IssuesRoutingModule,
-    SharedModule,
     MatTableModule,
     MatTabsModule,
     MatBadgeModule,
     MatChipsModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatDividerModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatButtonToggleModule,
+    MatInputModule,
+    MatButtonModule,
     MarkdownModule,
     LazyMarkdownModule,
-    ListFooterModule,
-    ListTitleModule,
-    DataFilterBarModule,
-    ProjectFilterBarModule,
-    PrismjsModule
+    LessAnnoyingErrorStateMatcherModule,
+    ListFooterComponent,
+    ListTitleComponent,
+    DataFilterBarComponent,
+    ProjectFilterBarComponent,
+    PrismjsModule,
+    CopyInputComponent,
+    DaysAgoPipe,
+    DaysOldPipe,
+    EntryDataComponent,
+    LoadingButtonComponent,
   ],
   declarations: [
     IssuesPageComponent,

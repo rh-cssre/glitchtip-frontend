@@ -3,15 +3,25 @@ import { CommonModule } from "@angular/common";
 import { RegisterComponent } from "./register.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RegisterRoutingModule } from "./register-routing.module";
-import { SharedModule } from "../shared/shared.module";
+import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
+import { InputMatcherDirective } from "../shared/input-matcher.directive";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [RegisterComponent],
   imports: [
     CommonModule,
+    AuthSvgComponent,
     ReactiveFormsModule,
     RegisterRoutingModule,
-    SharedModule,
+    InputMatcherDirective,
+    LessAnnoyingErrorStateMatcherModule,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
   ],
 })
 export class RegisterModule {}

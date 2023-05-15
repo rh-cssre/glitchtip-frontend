@@ -3,14 +3,11 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { moduleMetadata } from "@storybook/angular";
 
-import { MaterialModule } from "./material.module";
-
 export default {
   title: "Styles/General Styling",
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
@@ -19,7 +16,7 @@ export default {
   ],
 };
 
-export const typography = () => ({
+export const Typography = () => ({
   template: `
   <section>
     <article class="mat-typography">
@@ -115,7 +112,7 @@ export const typography = () => ({
   `,
 });
 
-export const icons = () => ({
+export const Icons = () => ({
   template: `
   <section class="mat-typography">
     <h1>Icons</h1>
@@ -150,7 +147,7 @@ export const icons = () => ({
   `,
 });
 
-export const colors = () => ({
+export const Colors = () => ({
   template: `
   <section class="mat-typography">
     <p class="mat-h1">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>

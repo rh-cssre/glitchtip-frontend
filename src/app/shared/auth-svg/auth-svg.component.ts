@@ -1,17 +1,21 @@
+import { CommonModule } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 const knownSocialProviders = [
-        "digitalocean",
-        "gitea",
-        "github",
-        "gitlab",
-        "google",
-        "keycloak",
-        "microsoft",
-      ]
+  "digitalocean",
+  "gitea",
+  "github",
+  "gitlab",
+  "google",
+  "keycloak",
+  "microsoft",
+];
 
 @Component({
+  standalone: true,
   selector: "gt-auth-svg",
+  imports: [CommonModule, MatProgressSpinnerModule],
   templateUrl: "./auth-svg.component.html",
   styleUrls: ["./auth-svg.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,12 +27,10 @@ export class AuthSvgComponent {
   @Input() loading = false;
 
   getProviderSvgName(provider: string) {
-    if (
-      knownSocialProviders.includes(provider)
-    ) {
+    if (knownSocialProviders.includes(provider)) {
       return `#${provider}`;
     } else {
-      return "#openid"
+      return "#openid";
     }
   }
 }
