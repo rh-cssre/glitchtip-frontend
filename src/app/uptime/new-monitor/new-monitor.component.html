@@ -21,7 +21,6 @@
               formControlName="name"
               maxlength="200"
               required
-              [errorStateMatcher]="matcher"
             />
             <mat-error *ngIf="formName?.errors?.required">
               Enter a monitor name
@@ -38,7 +37,6 @@
             <mat-select
               formControlName="monitorType"
               required
-              [errorStateMatcher]="matcher"
               (selectionChange)="updateRequiredFields()"
             >
               <mat-option *ngFor="let type of typeChoices" [value]="type">
@@ -80,7 +78,6 @@
                 matInput
                 formControlName="url"
                 required
-                [errorStateMatcher]="matcher"
               />
               <mat-error *ngIf="formUrl?.errors?.required">
                 Enter a url
@@ -135,7 +132,6 @@
               formControlName="expectedStatus"
               placeholder="Status code"
               required
-              [errorStateMatcher]="matcher"
             />
             <mat-error *ngIf="formExpectedStatus?.errors?.min">
               The quantity needs to be greater than or equal to 100.
@@ -162,7 +158,6 @@
               formControlName="interval"
               placeholder="60"
               required
-              [errorStateMatcher]="matcher"
             />
             <mat-error *ngIf="formInterval?.errors?.min">
               Must be 60 or higher.

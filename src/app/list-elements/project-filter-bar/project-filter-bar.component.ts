@@ -6,6 +6,16 @@ import {
   HostListener,
   ElementRef,
 } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { UntypedFormControl } from "@angular/forms";
@@ -16,7 +26,20 @@ import { MatExpansionPanel } from "@angular/material/expansion";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 
 @Component({
+  standalone: true,
   selector: "gt-project-filter-bar",
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatIconModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+  ],
   templateUrl: "./project-filter-bar.component.html",
   styleUrls: ["./project-filter-bar.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

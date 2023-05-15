@@ -48,6 +48,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule } from "@angular/material/select";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @NgModule({
   imports: [
@@ -77,6 +78,7 @@ import { MatSelectModule } from "@angular/material/select";
     ProjectCardComponent,
     EmptyProjectsComponent,
     LoadingButtonComponent,
+    LessAnnoyingErrorStateMatcherModule,
   ],
   declarations: [
     ProjectsComponent,

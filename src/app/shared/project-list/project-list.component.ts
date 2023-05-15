@@ -6,6 +6,7 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
@@ -20,6 +21,7 @@ import { EmptyProjectsComponent } from "../project-card/empty-projects/empty-pro
   imports: [
     CommonModule,
     RouterModule,
+    MatButtonModule,
     MatCardModule,
     ProjectCardComponent,
     EmptyProjectsComponent,

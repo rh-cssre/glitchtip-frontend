@@ -5,8 +5,8 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatTableModule } from "@angular/material/table";
 import { NgxChartsModule } from "@swimlane/ngx-charts";
 
-import { ListFooterModule } from "../list-elements/list-footer/list-footer.module";
-import { ListTitleModule } from "../list-elements/list-title/list-title.module";
+import { ListFooterComponent } from "../list-elements/list-footer/list-footer.component";
+import { ListTitleComponent } from "../list-elements/list-title/list-title.component";
 import { MonitorChartComponent } from "./monitor-chart/monitor-chart.component";
 import { MonitorChecksComponent } from "./monitor-checks/monitor-checks.component";
 import { MonitorDetailComponent } from "./monitor-detail/monitor-detail.component";
@@ -18,7 +18,9 @@ import { UptimeRoutingModule } from "./uptime-routing.module";
 import { CopyInputComponent } from "../shared/copy-input/copy-input.component";
 import { TimeForPipe } from "../shared/days-ago.pipe";
 import { HumanizeDurationPipe } from "../shared/seconds-or-ms.pipe";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
+import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
@@ -44,6 +46,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatTableModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
     MatDialogModule,
     MatInputModule,
     MatOptionModule,
@@ -54,8 +57,9 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatTooltipModule,
     MatProgressSpinnerModule,
     NgxChartsModule,
-    ListFooterModule,
-    ListTitleModule,
+    LessAnnoyingErrorStateMatcherModule,
+    ListFooterComponent,
+    ListTitleComponent,
     CopyInputComponent,
     TimeForPipe,
     HumanizeDurationPipe,

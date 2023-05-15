@@ -33,10 +33,12 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @NgModule({
   declarations: [
@@ -69,12 +71,14 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     LoadingButtonComponent,
     ToDoItemComponent,
     FormErrorComponent,
+    LessAnnoyingErrorStateMatcherModule,
     MatDividerModule,
     MatCardModule,
     MatInputModule,
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    MatButtonModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,
     MatTooltipModule,

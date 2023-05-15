@@ -6,7 +6,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { Comment } from "src/app/api/comments/comments.interfaces";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
 @Component({
   selector: "gt-comment-form",
@@ -21,7 +20,6 @@ export class CommentFormComponent implements OnInit {
     id?: number;
   }>();
   @Output() cancelUpdate = new EventEmitter<number>();
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   commentForm = new FormGroup({
     text: new FormControl("", [Validators.required]),

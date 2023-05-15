@@ -14,6 +14,7 @@ import { LoginTotpComponent } from "./login-totp/login-totp.component";
 import { LoginFido2Component } from "./login-fido2/login-fido2.component";
 import { FormErrorComponent } from "../shared/forms/form-error/form-error.component";
 import { MatButtonModule } from "@angular/material/button";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @NgModule({
   declarations: [LoginComponent, LoginTotpComponent, LoginFido2Component],
@@ -30,6 +31,7 @@ import { MatButtonModule } from "@angular/material/button";
     MatCardModule,
     MatCheckboxModule,
     MatButtonModule,
+    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class LoginModule {}

@@ -11,7 +11,6 @@ import { combineLatest, lastValueFrom } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { UptimeService, UptimeState } from "../uptime.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { intRegex, urlRegex } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
@@ -81,7 +80,6 @@ export class MonitorUpdateComponent
   formProject = this.monitorEditForm.get("project") as UntypedFormControl;
   formTimeout = this.monitorEditForm.get("timeout") as UntypedFormControl;
 
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     protected service: UptimeService,
