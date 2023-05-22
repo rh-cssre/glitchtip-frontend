@@ -9,7 +9,6 @@ import {
 import { filter, map, Observable, startWith, take } from "rxjs";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -41,8 +40,6 @@ export class PreferencesComponent implements OnInit {
 
   formName = this.form.get("name") as FormControl;
   formTimeZone = this.form.get("timeZone") as FormControl;
-
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private service: UserService,
@@ -101,7 +98,7 @@ export class PreferencesComponent implements OnInit {
       const options = {
         ...(timeZone !== null && { timezone: timeZone }),
       };
-      this.service.updateUserOptions(name, options);
+      this.service.updateUser(name, options);
     }
   }
 }

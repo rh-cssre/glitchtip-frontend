@@ -11,7 +11,7 @@ import {
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator } from "src/app/shared/validators";
+import { intRegex } from "src/app/shared/validators";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -53,7 +53,7 @@ export class AlertFormComponent implements OnInit {
 
   intervalValidators = [
     Validators.min(0),
-    numberValidator,
+    Validators.pattern(intRegex),
     Validators.required,
   ];
 

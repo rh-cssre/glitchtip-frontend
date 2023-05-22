@@ -10,8 +10,6 @@ import { By } from "@angular/platform-browser";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
-import { MaterialModule } from "src/app/shared/material.module";
-import { SharedModule } from "src/app/shared/shared.module";
 
 import { NewRecipientComponent } from "./new-recipient.component";
 
@@ -30,10 +28,8 @@ describe("NewRecipientComponent", () => {
         MatDialogModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        SharedModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        MaterialModule,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },

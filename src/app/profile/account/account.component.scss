@@ -11,7 +11,7 @@
   justify-content: space-between;
   align-items: center;
 
-  @media (max-width: $large - 1) {
+  @media (max-width: ($large - 1)) {
     flex-wrap: wrap;
     align-items: flex-start;
   }
@@ -22,5 +22,5 @@
 }
 
 gt-loading-button ::ng-deep button {
-  width: 160px;
+  width: 180px;
 }

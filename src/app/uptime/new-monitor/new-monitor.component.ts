@@ -1,20 +1,16 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+} from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { map } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator, urlRegex } from "src/app/shared/validators";
+import { intRegex, urlRegex } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
-
-const defaultUrlValidators = [
-  Validators.pattern(urlRegex),
-  Validators.required,
-  Validators.maxLength(2000),
-];
 
 @Component({
   selector: "gt-new-monitor",
@@ -26,42 +22,52 @@ export class NewMonitorComponent implements OnInit {
   error$ = this.uptimeService.error$;
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   loading$ = this.uptimeService.createLoading$;
-  totalEventsAllowed$ = this.subscriptionsService.subscription$.pipe(
-    map((subscription) =>
-      subscription && subscription.plan?.product.metadata
-        ? parseInt(subscription.plan?.product.metadata.events, 10)
-        : null
-    )
-  );
+  totalEventsAllowed$ = this.subscriptionsService.totalEventsAllowed$;
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
   newMonitorForm = new UntypedFormGroup({
     monitorType: new UntypedFormControl("Ping", [Validators.required]),
-    name: new UntypedFormControl("", [Validators.required, Validators.maxLength(200)]),
-    url: new UntypedFormControl("https://", defaultUrlValidators),
-    expectedStatus: new UntypedFormControl(200, [
+    name: new UntypedFormControl("", [
+      Validators.required,
+      Validators.maxLength(200),
+    ]),
+    url: new UntypedFormControl("https://", [
+      Validators.pattern(urlRegex),
+      Validators.required,
+      Validators.maxLength(2000),
+    ]),
+    expectedStatus: new UntypedFormControl({ value: 200, disabled: true }, [
       Validators.required,
       Validators.min(100),
-      numberValidator,
+      Validators.pattern(intRegex),
     ]),
     interval: new UntypedFormControl("60", [
       Validators.required,
-      Validators.min(60),
+      Validators.min(1),
       Validators.max(86399),
+    ]),
+    timeout: new UntypedFormControl(null, [
+      Validators.min(1),
+      Validators.max(60),
+      Validators.pattern(intRegex),
     ]),
     project: new UntypedFormControl(null),
   });
 
   formName = this.newMonitorForm.get("name") as UntypedFormControl;
-  formMonitorType = this.newMonitorForm.get("monitorType") as UntypedFormControl;
+  formMonitorType = this.newMonitorForm.get(
+    "monitorType"
+  ) as UntypedFormControl;
   formUrl = this.newMonitorForm.get("url") as UntypedFormControl;
-  formExpectedStatus = this.newMonitorForm.get("expectedStatus") as UntypedFormControl;
+  formExpectedStatus = this.newMonitorForm.get(
+    "expectedStatus"
+  ) as UntypedFormControl;
   formInterval = this.newMonitorForm.get("interval") as UntypedFormControl;
+  formTimeout = this.newMonitorForm.get("timeout") as UntypedFormControl;
 
   intervalPerMonth = 2592000 / this.formInterval.value;
 
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private organizationsService: OrganizationsService,
@@ -79,13 +85,17 @@ export class NewMonitorComponent implements OnInit {
 
   updateRequiredFields() {
     if (this.formMonitorType.value === "Heartbeat") {
-      this.formUrl.clearValidators();
-      this.formUrl.setValue("");
+      this.formUrl.disable();
+      this.formExpectedStatus.disable();
+      this.formTimeout.disable();
+    } else if (this.formMonitorType.value === "Ping") {
+      this.formUrl.enable();
+      this.formExpectedStatus.disable();
+      this.formTimeout.enable();
     } else {
-      this.formUrl.setValidators(defaultUrlValidators);
-      if (this.formUrl.value === "") {
-        this.formUrl.setValue("https://");
-      }
+      this.formUrl.enable();
+      this.formExpectedStatus.enable();
+      this.formTimeout.enable();
     }
   }
 
@@ -97,7 +107,13 @@ export class NewMonitorComponent implements OnInit {
 
   onSubmit() {
     if (this.newMonitorForm.valid) {
-      this.uptimeService.createMonitor(this.newMonitorForm.value);
+      this.uptimeService.createMonitor({
+        ...this.newMonitorForm.value,
+        expectedStatus: this.formExpectedStatus.enabled
+          ? this.formExpectedStatus.value
+          : null,
+        url: this.formUrl.enabled ? this.formUrl.value : "",
+      });
     }
   }
 }

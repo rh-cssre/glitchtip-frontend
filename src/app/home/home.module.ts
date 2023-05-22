@@ -3,10 +3,10 @@ import { CommonModule } from "@angular/common";
 
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
-import { SharedModule } from "../shared/shared.module";
+import { ProjectListComponent } from "../shared/project-list/project-list.component";
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, HomeRoutingModule, SharedModule],
+  imports: [CommonModule, HomeRoutingModule, ProjectListComponent],
 })
 export class HomeModule {}

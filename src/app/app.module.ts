@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { ErrorHandler, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
@@ -6,7 +6,7 @@ import {
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/legacy-snack-bar";
 import { MicroSentryModule } from "@micro-sentry/angular";
 
 import { AppComponent } from "./app.component";
@@ -15,9 +15,9 @@ import { TokenInterceptor } from "./api/auth/token.interceptor";
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
 import { AuthModule } from "./api/auth/auth.module";
-import { SharedModule } from "./shared/shared.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
+import { GlobalErrorHandler } from "./global-error-handler";
 
 let snackBarDuration = 4000;
 if (window.Cypress) {
@@ -25,21 +25,23 @@ if (window.Cypress) {
   snackBarDuration = 100;
 }
 
+const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
+
 @NgModule({
-  declarations: [AppComponent, RateLimitBannerComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule,
+    RateLimitBannerComponent,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN",
     }),
     MainNavModule,
-    MicroSentryModule.forRoot({}),
-    SharedModule,
+    MicroSentryModule.forRoot({ ignoreErrors: [serverErrorsRegex] }),
   ],
   providers: [
     {
@@ -51,6 +53,7 @@ if (window.Cypress) {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: snackBarDuration },
     },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
   bootstrap: [AppComponent],
 })

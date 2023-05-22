@@ -24,7 +24,7 @@ export default {
   },
 };
 
-export const socialAuth: Story = (args) => {
+export const SocialAuth: Story = (args) => {
   const { loading } = args;
   const loadingOptions: { [index: string]: any } = {
     First: 3,
@@ -77,6 +77,6 @@ export const socialAuth: Story = (args) => {
   };
 };
 
-socialAuth.story = {
+SocialAuth.story = {
   name: "Social Auth",
 };
