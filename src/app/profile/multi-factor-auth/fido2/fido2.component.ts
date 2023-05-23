@@ -1,14 +1,40 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { EMPTY } from "rxjs";
 import { checkForOverflow } from "src/app/shared/shared.utils";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
-  selector: "gt-fido2",
-  templateUrl: "./fido2.component.html",
-  styleUrls: ["./fido2.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-fido2",
+    templateUrl: "./fido2.component.html",
+    styleUrls: ["./fido2.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatDividerModule,
+        NgIf,
+        FormErrorComponent,
+        LoadingButtonComponent,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        NgFor,
+        MatTooltipModule,
+        MatIconModule,
+        AsyncPipe,
+    ],
 })
 export class Fido2Component {
   tooltipDisabled = false;

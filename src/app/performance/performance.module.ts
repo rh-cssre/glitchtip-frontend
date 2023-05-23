@@ -17,21 +17,21 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 
 @NgModule({
-  declarations: [TransactionGroupsComponent, TransactionGroupDetailComponent],
-  imports: [
-    CommonModule,
-    PerformanceRoutingModule,
-    MatTableModule,
-    ListTitleComponent,
-    ProjectFilterBarComponent,
-    DataFilterBarComponent,
-    ListFooterComponent,
-    LessAnnoyingErrorStateMatcherModule,
-    HumanizeDurationPipe,
-    MatButtonModule,
-    MatCardModule,
-    MatTooltipModule,
-    MatIconModule,
-  ],
+    imports: [
+        CommonModule,
+        PerformanceRoutingModule,
+        MatTableModule,
+        ListTitleComponent,
+        ProjectFilterBarComponent,
+        DataFilterBarComponent,
+        ListFooterComponent,
+        LessAnnoyingErrorStateMatcherModule,
+        HumanizeDurationPipe,
+        MatButtonModule,
+        MatCardModule,
+        MatTooltipModule,
+        MatIconModule,
+        TransactionGroupsComponent, TransactionGroupDetailComponent,
+    ],
 })
 export class PerformanceModule {}

@@ -6,7 +6,6 @@ import { AcceptInviteComponent } from "./accept-invite/accept-invite.component";
 import { AcceptRoutingModule } from "./accept-routing.module";
 
 @NgModule({
-  declarations: [AcceptInviteComponent],
-  imports: [CommonModule, AcceptRoutingModule, MatButtonModule, MatCardModule],
+    imports: [CommonModule, AcceptRoutingModule, MatButtonModule, MatCardModule, AcceptInviteComponent],
 })
 export class AcceptModule {}

@@ -10,7 +10,8 @@ import Prism from "prismjs";
 import { GRAMMER_MAPPINGS, PRISM_SUPPORTED_GRAMMER } from "./constants";
 
 @Directive({
-  selector: "[gtPrism]",
+    selector: "[gtPrism]",
+    standalone: true,
 })
 export class PrismDirective implements AfterViewInit, OnInit {
   @Input() code?: string;

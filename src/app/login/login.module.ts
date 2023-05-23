@@ -17,21 +17,21 @@ import { MatButtonModule } from "@angular/material/button";
 import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @NgModule({
-  declarations: [LoginComponent, LoginTotpComponent, LoginFido2Component],
-  imports: [
-    CommonModule,
-    LoginRoutingModule,
-    ReactiveFormsModule,
-    AuthModule,
-    MatInputModule,
-    MatProgressBarModule,
-    MatPseudoCheckboxModule,
-    AuthSvgComponent,
-    FormErrorComponent,
-    MatCardModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    LessAnnoyingErrorStateMatcherModule,
-  ],
+    imports: [
+        CommonModule,
+        LoginRoutingModule,
+        ReactiveFormsModule,
+        AuthModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatPseudoCheckboxModule,
+        AuthSvgComponent,
+        FormErrorComponent,
+        MatCardModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        LessAnnoyingErrorStateMatcherModule,
+        LoginComponent, LoginTotpComponent, LoginFido2Component,
+    ],
 })
 export class LoginModule {}

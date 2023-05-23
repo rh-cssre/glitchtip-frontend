@@ -7,28 +7,43 @@ import {
   ElementRef,
   HostListener,
 } from "@angular/core";
-import { MatExpansionPanel } from "@angular/material/expansion";
+import { MatExpansionPanel, MatExpansionModule } from "@angular/material/expansion";
 import { flattenedPlatforms } from "./platforms-for-picker";
 import categoryList from "./platform-categories";
-import {
-  ControlValueAccessor,
-  UntypedFormControl,
-  NG_VALUE_ACCESSOR,
-} from "@angular/forms";
+import { ControlValueAccessor, UntypedFormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
+import { MatListModule } from "@angular/material/list";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-platform-picker",
-  templateUrl: "./platform-picker.component.html",
-  styleUrls: ["./platform-picker.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PlatformPickerComponent),
-      multi: true,
-    },
-  ],
+    selector: "gt-platform-picker",
+    templateUrl: "./platform-picker.component.html",
+    styleUrls: ["./platform-picker.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => PlatformPickerComponent),
+            multi: true,
+        },
+    ],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatTabsModule,
+        NgFor,
+        MatButtonModule,
+        MatExpansionModule,
+        MatListModule,
+        AsyncPipe,
+    ],
 })
 export class PlatformPickerComponent implements ControlValueAccessor {
   @Input() template: "buttons" | "dropdown" = "buttons";

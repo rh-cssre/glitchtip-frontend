@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule } from "@angular/forms";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { LoginService } from "./login.service";
 import { AuthService } from "../api/auth/auth.service";
@@ -8,11 +8,36 @@ import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { SettingsService } from "../api/settings.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
 import { SocialApp } from "../api/user/user.interfaces";
+import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { FormErrorComponent } from "../shared/forms/form-error/form-error.component";
+import { LoginFido2Component } from "./login-fido2/login-fido2.component";
+import { LoginTotpComponent } from "./login-totp/login-totp.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
-  selector: "gt-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+    selector: "gt-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
+    standalone: true,
+    imports: [
+        MatCardModule,
+        NgIf,
+        LoginTotpComponent,
+        LoginFido2Component,
+        ReactiveFormsModule,
+        FormErrorComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        NgFor,
+        AuthSvgComponent,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class LoginComponent implements OnInit {
   loading$ = this.loginService.loading$;

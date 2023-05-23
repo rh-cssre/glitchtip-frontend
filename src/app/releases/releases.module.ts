@@ -13,16 +13,16 @@ import { ReleaseDetailComponent } from "./release-detail/release-detail.componen
 
 
 @NgModule({
-  declarations: [ReleasesComponent, ReleaseDetailComponent],
-  imports: [
-    CommonModule,
-    ReleasesRoutingModule,
-    ListFooterComponent,
-    ListTitleComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    MatTooltipModule,
-  ],
+    imports: [
+        CommonModule,
+        ReleasesRoutingModule,
+        ListFooterComponent,
+        ListTitleComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatTableModule,
+        MatTooltipModule,
+        ReleasesComponent, ReleaseDetailComponent,
+    ],
 })
 export class ReleasesModule {}

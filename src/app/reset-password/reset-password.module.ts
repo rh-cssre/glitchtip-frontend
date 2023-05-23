@@ -12,17 +12,17 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
-  declarations: [ResetPasswordComponent, SetNewPasswordComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ResetPasswordRoutingModule,
-    InputMatcherDirective,
-    LoadingButtonComponent,
-    LessAnnoyingErrorStateMatcherModule,
-    MatButtonModule,
-    MatInputModule,
-    MatCardModule,
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        ResetPasswordRoutingModule,
+        InputMatcherDirective,
+        LoadingButtonComponent,
+        LessAnnoyingErrorStateMatcherModule,
+        MatButtonModule,
+        MatInputModule,
+        MatCardModule,
+        ResetPasswordComponent, SetNewPasswordComponent,
+    ],
 })
 export class ResetPasswordModule {}

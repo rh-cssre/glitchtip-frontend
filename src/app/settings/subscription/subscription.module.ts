@@ -14,18 +14,18 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
-  declarations: [SubscriptionComponent, PaymentComponent],
-  imports: [
-    CommonModule,
-    SubscriptionRoutingModule,
-    LoadingButtonComponent,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    MatCardModule,
-    MatInputModule,
-    MatDividerModule,
-    MatIconModule,
-    EventInfoComponent,
-  ],
+    imports: [
+        CommonModule,
+        SubscriptionRoutingModule,
+        LoadingButtonComponent,
+        MatProgressSpinnerModule,
+        MatButtonModule,
+        MatCardModule,
+        MatInputModule,
+        MatDividerModule,
+        MatIconModule,
+        EventInfoComponent,
+        SubscriptionComponent, PaymentComponent,
+    ],
 })
 export class SubscriptionModule {}

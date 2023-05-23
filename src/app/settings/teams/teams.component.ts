@@ -1,15 +1,34 @@
 import { Component, OnInit } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, filter, tap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { NewTeamComponent } from "./new-team/new-team.component";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, NgFor, AsyncPipe, I18nPluralPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-  selector: "gt-teams",
-  templateUrl: "./teams.component.html",
-  styleUrls: ["./teams.component.scss"],
+    selector: "gt-teams",
+    templateUrl: "./teams.component.html",
+    styleUrls: ["./teams.component.scss"],
+    standalone: true,
+    imports: [
+        MatButtonModule,
+        MatCardModule,
+        RouterLink,
+        MatDividerModule,
+        NgIf,
+        MatFormFieldModule,
+        NgFor,
+        LoadingButtonComponent,
+        AsyncPipe,
+        I18nPluralPipe,
+    ],
 })
 export class TeamsComponent implements OnInit {
   activeOrganization$ = this.organizationsService.activeOrganization$;

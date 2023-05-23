@@ -14,14 +14,12 @@ import "prismjs/components/prism-go";
 import "prismjs/components/prism-rust";
 
 @NgModule({
-  declarations: [
-    PrismDirective,
-  ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    PrismDirective
-  ]
+    imports: [
+        CommonModule,
+        PrismDirective
+    ],
+    exports: [
+        PrismDirective
+    ]
 })
 export class PrismjsModule { }

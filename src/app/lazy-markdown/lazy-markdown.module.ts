@@ -5,8 +5,7 @@ import { LazyMarkdownComponent } from "./lazy-markdown.component";
 import { PrismjsModule } from "../prismjs/prismjs.module";
 
 @NgModule({
-  declarations: [LazyMarkdownComponent],
-  imports: [CommonModule, MarkdownModule.forRoot({}), PrismjsModule],
-  exports: [LazyMarkdownComponent],
+    imports: [CommonModule, MarkdownModule.forRoot({}), PrismjsModule, LazyMarkdownComponent],
+    exports: [LazyMarkdownComponent],
 })
 export class LazyMarkdownModule {}

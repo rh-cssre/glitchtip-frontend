@@ -6,8 +6,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MobileNavToolbarComponent } from "./mobile-nav-toolbar.component";
 
 @NgModule({
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatToolbarModule],
-  declarations: [MobileNavToolbarComponent],
-  exports: [MobileNavToolbarComponent],
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatToolbarModule, MobileNavToolbarComponent],
+    exports: [MobileNavToolbarComponent],
 })
 export class MobileNavToolbarModule {}

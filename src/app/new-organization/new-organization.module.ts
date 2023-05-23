@@ -10,15 +10,15 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
-  declarations: [NewOrganizationsComponent],
-  imports: [
-    CommonModule,
-    NewOrganizationRoutingModule,
-    LessAnnoyingErrorStateMatcherModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-  ],
+    imports: [
+        CommonModule,
+        NewOrganizationRoutingModule,
+        LessAnnoyingErrorStateMatcherModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCardModule,
+        NewOrganizationsComponent,
+    ],
 })
 export class NewOrganizationModule {}

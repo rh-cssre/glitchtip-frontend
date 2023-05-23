@@ -13,9 +13,8 @@ describe("FrameExpandedComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [FrameExpandedComponent],
-        imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule],
-      }).compileComponents();
+    imports: [RouterTestingModule, HttpClientTestingModule, MaterialModule, FrameExpandedComponent],
+}).compileComponents();
     })
   );
 

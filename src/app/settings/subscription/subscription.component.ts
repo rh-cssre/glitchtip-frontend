@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { combineLatest, lastValueFrom, Subscription } from "rxjs";
 import { map, filter, take, tap } from "rxjs/operators";
@@ -8,6 +8,12 @@ import { environment } from "../../../environments/environment";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { StripeService } from "./stripe.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { PaymentComponent } from "./payment/payment.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe, CurrencyPipe, DatePipe } from "@angular/common";
 
 interface Percentages {
   total: number;
@@ -18,9 +24,22 @@ interface Percentages {
 }
 
 @Component({
-  templateUrl: "./subscription.component.html",
-  styleUrls: ["./subscription.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: "./subscription.component.html",
+    styleUrls: ["./subscription.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        RouterLink,
+        MatFormFieldModule,
+        MatButtonModule,
+        PaymentComponent,
+        MatProgressSpinnerModule,
+        AsyncPipe,
+        CurrencyPipe,
+        DatePipe,
+    ],
 })
 export class SubscriptionComponent implements OnDestroy {
   fromStripe$ = this.service.fromStripe$;

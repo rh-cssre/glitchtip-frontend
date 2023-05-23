@@ -1,22 +1,46 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import {
-  UntypedFormGroup,
-  UntypedFormControl,
-  Validators,
-  FormGroupDirective,
-} from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
+import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, ReactiveFormsModule } from "@angular/forms";
+import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { filter, first, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import { ProjectDetail } from "src/app/api/projects/projects-api.interfaces";
 import { ProjectSettingsService } from "../project-settings.service";
+import { MatButtonModule } from "@angular/material/button";
+import { ProjectAlertsComponent } from "./project-alerts/project-alerts.component";
+import { ProjectEnvironmentsComponent } from "./project-environments/project-environments.component";
+import { CopyInputComponent } from "../../../shared/copy-input/copy-input.component";
+import { PlatformPickerComponent } from "../platform-picker/platform-picker.component";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-project-detail",
-  templateUrl: "./project-detail.component.html",
-  styleUrls: ["./project-detail.component.scss"],
+    selector: "gt-project-detail",
+    templateUrl: "./project-detail.component.html",
+    styleUrls: ["./project-detail.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        LoadingButtonComponent,
+        PlatformPickerComponent,
+        NgFor,
+        CopyInputComponent,
+        ProjectEnvironmentsComponent,
+        ProjectAlertsComponent,
+        MatButtonModule,
+        RouterLink,
+        AsyncPipe,
+    ],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;

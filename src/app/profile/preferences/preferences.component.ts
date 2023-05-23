@@ -1,14 +1,18 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-  Validators,
-} from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators, ReactiveFormsModule } from "@angular/forms";
 import { filter, map, Observable, startWith, take } from "rxjs";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatOptionModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -20,9 +24,25 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
 }
 
 @Component({
-  selector: "gt-preferences",
-  templateUrl: "./preferences.component.html",
-  styleUrls: ["./preferences.component.scss"],
+    selector: "gt-preferences",
+    templateUrl: "./preferences.component.html",
+    styleUrls: ["./preferences.component.scss"],
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatDividerModule,
+        NgIf,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        MatIconModule,
+        NgFor,
+        MatOptionModule,
+        LoadingButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class PreferencesComponent implements OnInit {
   defaultTimeZone: string = "Default";

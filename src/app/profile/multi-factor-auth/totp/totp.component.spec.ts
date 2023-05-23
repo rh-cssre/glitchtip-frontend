@@ -6,7 +6,11 @@ import { of } from "rxjs";
 import { totpUserKey } from "./test-data";
 import { TOTPComponent } from "./totp.component";
 
-@Component({ selector: "gt-backup-codes", template: "" })
+@Component({
+    selector: "gt-backup-codes", template: "",
+    standalone: true,
+    imports: [HttpClientTestingModule, MatSnackBarModule]
+})
 class BackupCodesStubComponent {
   @Input() error: any;
 }
@@ -17,9 +21,8 @@ describe("TotpComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TOTPComponent, BackupCodesStubComponent],
-      imports: [HttpClientTestingModule, MatSnackBarModule],
-    }).compileComponents();
+    imports: [HttpClientTestingModule, MatSnackBarModule, TOTPComponent, BackupCodesStubComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

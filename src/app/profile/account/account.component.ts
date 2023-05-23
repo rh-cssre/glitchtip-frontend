@@ -2,11 +2,33 @@ import { Component, OnDestroy } from "@angular/core";
 import { lastValueFrom, tap } from "rxjs";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { UserService } from "src/app/api/user/user.service";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { ManageEmailsComponent } from "../manage-emails/manage-emails.component";
+import { SocialAuthComponent } from "../social-auth/social-auth.component";
+import { ChangePasswordComponent } from "../change-password/change-password.component";
+import { PreferencesComponent } from "../preferences/preferences.component";
 
 @Component({
-  selector: "gt-account",
-  templateUrl: "./account.component.html",
-  styleUrls: ["./account.component.scss"],
+    selector: "gt-account",
+    templateUrl: "./account.component.html",
+    styleUrls: ["./account.component.scss"],
+    standalone: true,
+    imports: [
+        PreferencesComponent,
+        ChangePasswordComponent,
+        SocialAuthComponent,
+        ManageEmailsComponent,
+        MatCardModule,
+        MatDividerModule,
+        NgIf,
+        MatFormFieldModule,
+        LoadingButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class AccountComponent implements OnDestroy {
   userDeleteLoading$ = this.userService.userDeleteLoading$;
