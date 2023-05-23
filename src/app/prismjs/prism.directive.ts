@@ -9,9 +9,20 @@ import {
 import Prism from "prismjs";
 import { GRAMMER_MAPPINGS, PRISM_SUPPORTED_GRAMMER } from "./constants";
 
+import "prismjs/plugins/line-numbers/prism-line-numbers";
+import "prismjs/plugins/line-highlight/prism-line-highlight";
+import "prismjs/components/prism-csharp";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-ruby";
+import "prismjs/components/prism-markup-templating";
+import "prismjs/components/prism-php";
+import "prismjs/components/prism-go";
+import "prismjs/components/prism-rust";
+
 @Directive({
-    selector: "[gtPrism]",
-    standalone: true,
+  selector: "[gtPrism]",
+  standalone: true,
 })
 export class PrismDirective implements AfterViewInit, OnInit {
   @Input() code?: string;
