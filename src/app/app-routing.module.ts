@@ -95,8 +95,7 @@ export const routes: Routes = [
       },
       {
         path: "uptime-monitors",
-        loadChildren: () =>
-          import("./uptime/uptime-routing.module").then((m) => m.UPTIME_ROUTES),
+        loadChildren: () => import("./uptime/routes"),
         title: "Uptime Monitors",
       },
       {
