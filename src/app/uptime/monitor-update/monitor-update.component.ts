@@ -3,8 +3,9 @@ import {
   UntypedFormGroup,
   UntypedFormControl,
   Validators,
+  ReactiveFormsModule,
 } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterModule } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { tap, filter, first, take } from "rxjs/operators";
 import { combineLatest, lastValueFrom } from "rxjs";
@@ -16,14 +17,35 @@ import { EventInfoComponent } from "src/app/shared/event-info/event-info.compone
 import { MonitorType } from "../uptime.interfaces";
 import { timedeltaToMS } from "src/app/shared/shared.utils";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
+import { CommonModule } from "@angular/common";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatInputModule } from "@angular/material/input";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatIconModule } from "@angular/material/icon";
 
 const defaultExpectedStatus = 200;
 const defaultUrl = "https://";
 
 @Component({
+  standalone: true,
   selector: "gt-monitor-update",
   templateUrl: "./monitor-update.component.html",
   styleUrls: ["./monitor-update.component.scss"],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    LoadingButtonComponent,
+    MatCardModule,
+    MatOptionModule,
+    MatIconModule,
+    MatSelectModule,
+    MatDividerModule,
+    MatInputModule,
+  ],
 })
 export class MonitorUpdateComponent
   extends StatefulBaseComponent<UptimeState, UptimeService>
@@ -79,7 +101,6 @@ export class MonitorUpdateComponent
   formInterval = this.monitorEditForm.get("interval") as UntypedFormControl;
   formProject = this.monitorEditForm.get("project") as UntypedFormControl;
   formTimeout = this.monitorEditForm.get("timeout") as UntypedFormControl;
-
 
   constructor(
     protected service: UptimeService,

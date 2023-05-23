@@ -1,5 +1,10 @@
 import { Injectable, NgModule } from "@angular/core";
-import { Routes, RouterModule, TitleStrategy, RouterStateSnapshot } from "@angular/router";
+import {
+  Routes,
+  RouterModule,
+  TitleStrategy,
+  RouterStateSnapshot,
+} from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
 import { CustomPreloadingStrategy } from "./preloadingStrategy";
@@ -12,7 +17,7 @@ export const routes: Routes = [
     canActivate: [IsLoggedInGuard],
     data: {
       preload: true,
-    }
+    },
   },
   {
     path: "organizations/new",
@@ -38,7 +43,7 @@ export const routes: Routes = [
     title: "Profile",
     data: {
       preload: true,
-    }
+    },
   },
   {
     path: "register",
@@ -86,12 +91,12 @@ export const routes: Routes = [
         title: "Issues",
         data: {
           preload: true,
-        }
+        },
       },
       {
         path: "uptime-monitors",
         loadChildren: () =>
-          import("./uptime/uptime.module").then((m) => m.UptimeModule),
+          import("./uptime/uptime-routing.module").then((m) => m.UPTIME_ROUTES),
         title: "Uptime Monitors",
       },
       {
@@ -115,7 +120,7 @@ export const routes: Routes = [
         title: "Settings",
         data: {
           preload: true,
-        }
+        },
       },
       {
         path: "performance",
@@ -138,7 +143,6 @@ export const routes: Routes = [
   },
 ];
 
-
 @Injectable()
 export class TemplatePageTitleStrategy extends TitleStrategy {
   override updateTitle(routerState: RouterStateSnapshot) {
@@ -148,8 +152,8 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
     } else {
       document.title = "GlitchTip";
     }
-  };
-};
+  }
+}
 
 @NgModule({
   imports: [
@@ -161,6 +165,6 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
     }),
   ],
   exports: [RouterModule],
-  providers: [{provide: TitleStrategy,  useClass: TemplatePageTitleStrategy}]
+  providers: [{ provide: TitleStrategy, useClass: TemplatePageTitleStrategy }],
 })
 export class AppRoutingModule {}

@@ -3,6 +3,7 @@ import {
   UntypedFormGroup,
   UntypedFormControl,
   Validators,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -11,12 +12,32 @@ import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.se
 import { intRegex, urlRegex } from "src/app/shared/validators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorType } from "../uptime.interfaces";
+import { CommonModule } from "@angular/common";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { RouterModule } from "@angular/router";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
+  standalone: true,
   selector: "gt-new-monitor",
   templateUrl: "./new-monitor.component.html",
   styleUrls: ["./new-monitor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    LoadingButtonComponent,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatCardModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
 })
 export class NewMonitorComponent implements OnInit {
   error$ = this.uptimeService.error$;
@@ -67,7 +88,6 @@ export class NewMonitorComponent implements OnInit {
   formTimeout = this.newMonitorForm.get("timeout") as UntypedFormControl;
 
   intervalPerMonth = 2592000 / this.formInterval.value;
-
 
   constructor(
     private organizationsService: OrganizationsService,
