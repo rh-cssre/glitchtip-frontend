@@ -5,7 +5,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { UptimeService } from "../uptime.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
@@ -16,6 +16,7 @@ import { CommonModule } from "@angular/common";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { RouterModule } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatCardModule } from "@angular/material/card";
@@ -30,6 +31,8 @@ import { MatIconModule } from "@angular/material/icon";
   imports: [
     CommonModule,
     LoadingButtonComponent,
+    MatButtonModule,
+    MatDialogModule,
     MatInputModule,
     MatOptionModule,
     MatSelectModule,

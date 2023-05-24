@@ -13,7 +13,9 @@ import { MonitorResponseChartComponent } from "../monitor-response-chart/monitor
 import { HumanizeDurationPipe } from "src/app/shared/seconds-or-ms.pipe";
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { MatDialogModule } from "@angular/material/dialog";
 
 @Component({
   standalone: true,
@@ -29,6 +31,8 @@ import { MatIconModule } from "@angular/material/icon";
     MonitorResponseChartComponent,
     HumanizeDurationPipe,
     TimeForPipe,
+    MatButtonModule,
+    MatDialogModule,
     MonitorChartComponent,
     MatCardModule,
     MatDividerModule,

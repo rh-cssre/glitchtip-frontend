@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTableModule } from "@angular/material/table";
 import { MatIconModule } from "@angular/material/icon";
@@ -25,6 +26,7 @@ import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component"
     ListFooterComponent,
     TimeForPipe,
     MonitorChartComponent,
+    MatButtonModule,
     MatTooltipModule,
     MatTableModule,
     MatIconModule,
