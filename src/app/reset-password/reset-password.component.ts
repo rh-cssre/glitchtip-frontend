@@ -9,6 +9,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { NgIf, AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @Component({
     selector: "gt-reset-password",
@@ -26,6 +27,7 @@ import { MatCardModule } from "@angular/material/card";
         MatButtonModule,
         RouterLink,
         AsyncPipe,
+        LessAnnoyingErrorStateMatcherModule,
     ],
 })
 export class ResetPasswordComponent {

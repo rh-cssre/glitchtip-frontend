@@ -15,6 +15,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @Component({
     selector: "gt-register",
@@ -33,6 +34,7 @@ import { MatCardModule } from "@angular/material/card";
         AuthSvgComponent,
         RouterLink,
         AsyncPipe,
+        LessAnnoyingErrorStateMatcherModule
     ],
 })
 export class RegisterComponent implements OnInit {

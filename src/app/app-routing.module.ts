@@ -42,17 +42,13 @@ export const routes: Routes = [
   },
   {
     path: "register",
-    loadChildren: () =>
-      import("./register/register.module").then((m) => m.RegisterModule),
+    loadChildren: () => import("./register/routes"),
     canActivate: [AlreadyLoggedInGuard],
     title: "Register",
   },
   {
     path: "reset-password",
-    loadChildren: () =>
-      import("./reset-password/reset-password.module").then(
-        (m) => m.ResetPasswordModule
-      ),
+    loadChildren: () => import("./reset-password/routes"),
     title: "Reset Password",
   },
   {
