@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { tap, filter, first, take } from "rxjs/operators";
 import { combineLatest, lastValueFrom } from "rxjs";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -40,6 +40,7 @@ const defaultUrl = "https://";
     ReactiveFormsModule,
     LoadingButtonComponent,
     MatCardModule,
+    MatDialogModule,
     MatOptionModule,
     MatIconModule,
     MatSelectModule,
