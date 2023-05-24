@@ -53,12 +53,12 @@ export const routes: Routes = [
   },
   {
     path: "auth",
-    loadChildren: () => import("./auth/auth.module").then((m) => m.AuthModule),
+    loadChildren: () => import("./auth/routes"),
   },
   {
     path: "accept/:memberId/:token",
     loadChildren: () =>
-      import("./accept/accept.module").then((m) => m.AcceptModule),
+      import("./accept/routes"),
   },
   // Sentry OSS compat redirect
   {
