@@ -12,7 +12,7 @@ import { CustomPreloadingStrategy } from "./preloadingStrategy";
 export const routes: Routes = [
   {
     path: "",
-    loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
+    loadChildren: () => import("./home/routes"),
     pathMatch: "full",
     canActivate: [IsLoggedInGuard],
     data: {
@@ -21,24 +21,19 @@ export const routes: Routes = [
   },
   {
     path: "organizations/new",
-    loadChildren: () =>
-      import("./new-organization/new-organization.module").then(
-        (m) => m.NewOrganizationModule
-      ),
+    loadChildren: () => import("./new-organization/routes"),
     canActivate: [IsLoggedInGuard],
     title: "Create New Organization",
   },
   {
     path: "login",
-    loadChildren: () =>
-      import("./login/login.module").then((m) => m.LoginModule),
+    loadChildren: () => import("./login/routes"),
     canActivate: [AlreadyLoggedInGuard],
     title: "Log In",
   },
   {
     path: "profile",
-    loadChildren: () =>
-      import("./profile/profile.module").then((m) => m.ProfileModule),
+    loadChildren: () => import("./profile/routes"),
     canActivate: [IsLoggedInGuard],
     title: "Profile",
     data: {

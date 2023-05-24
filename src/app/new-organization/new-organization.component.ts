@@ -1,8 +1,14 @@
 import { Component, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { combineLatest } from "rxjs";
 import { map, tap, withLatestFrom } from "rxjs/operators";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "../api/settings.service";
 import { UserService } from "../api/user/user.service";
@@ -13,19 +19,20 @@ import { MatCardModule } from "@angular/material/card";
 import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-new-organizations",
-    templateUrl: "./new-organization.component.html",
-    styleUrls: ["./new-organization.component.scss"],
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCardModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        AsyncPipe,
-    ],
+  selector: "gt-new-organizations",
+  templateUrl: "./new-organization.component.html",
+  styleUrls: ["./new-organization.component.scss"],
+  standalone: true,
+  imports: [
+    LessAnnoyingErrorStateMatcherModule,
+    NgIf,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    AsyncPipe,
+  ],
 })
 export class NewOrganizationsComponent implements OnDestroy {
   organizationCount$ = this.organizationsService.organizationCount$;

@@ -1,5 +1,12 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, AbstractControl, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  FormGroupDirective,
+  AbstractControl,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { EmailService } from "../../api/emails/email.service";
 import { map, first } from "rxjs/operators";
 import { MatInputModule } from "@angular/material/input";
@@ -12,27 +19,29 @@ import { MatChipsModule } from "@angular/material/chips";
 import { NgFor, NgIf, AsyncPipe } from "@angular/common";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
+import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
-    selector: "gt-manage-emails",
-    templateUrl: "./manage-emails.component.html",
-    styleUrls: ["./manage-emails.component.scss"],
-    standalone: true,
-    imports: [
-        MatCardModule,
-        MatDividerModule,
-        NgFor,
-        NgIf,
-        MatChipsModule,
-        LoadingButtonComponent,
-        MatProgressSpinnerModule,
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        AsyncPipe,
-    ],
+  selector: "gt-manage-emails",
+  templateUrl: "./manage-emails.component.html",
+  styleUrls: ["./manage-emails.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    NgFor,
+    NgIf,
+    MatChipsModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    AsyncPipe,
+    LessAnnoyingErrorStateMatcherModule,
+  ],
 })
 export class ManageEmailsComponent implements OnInit {
   emailAddresses$ = this.emailService.emailAddressesSorted$;

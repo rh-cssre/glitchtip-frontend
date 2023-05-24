@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Validators, FormGroupDirective, FormGroup, FormControl, ReactiveFormsModule } from "@angular/forms";
+import {
+  Validators,
+  FormGroupDirective,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { PasswordService } from "./password.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from "src/app/api/user/user.service";
@@ -14,24 +20,26 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { NgIf, AsyncPipe } from "@angular/common";
+import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
-    selector: "gt-change-password",
-    templateUrl: "./change-password.component.html",
-    styleUrls: ["./change-password.component.scss"],
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCardModule,
-        MatDividerModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        InputMatcherDirective,
-        LoadingButtonComponent,
-        MatIconModule,
-        AsyncPipe,
-    ],
+  selector: "gt-change-password",
+  templateUrl: "./change-password.component.html",
+  styleUrls: ["./change-password.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    MatDividerModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    InputMatcherDirective,
+    LoadingButtonComponent,
+    MatIconModule,
+    AsyncPipe,
+    LessAnnoyingErrorStateMatcherModule,
+  ],
 })
 export class ChangePasswordComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective;
