@@ -4,16 +4,12 @@ import {
   Input,
   ViewEncapsulation,
 } from "@angular/core";
-import { MarkdownModule } from "ngx-markdown";
-import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "gt-lazy-markdown",
-    templateUrl: "./lazy-markdown.component.html",
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [NgIf, MarkdownModule],
+  selector: "gt-lazy-markdown",
+  templateUrl: "./lazy-markdown.component.html",
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LazyMarkdownComponent {
   @Input() markdownSrc: string | null = null;

@@ -11,7 +11,7 @@ import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import { CopyInputComponent } from "../../shared/copy-input/copy-input.component";
-import { LazyMarkdownComponent } from "../../lazy-markdown/lazy-markdown.component";
+import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
@@ -23,7 +23,7 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
     imports: [
         NgIf,
         NgFor,
-        LazyMarkdownComponent,
+        LazyMarkdownModule,
         RouterLink,
         CopyInputComponent,
         AsyncPipe,

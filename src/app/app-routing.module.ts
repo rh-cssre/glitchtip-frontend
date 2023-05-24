@@ -57,8 +57,7 @@ export const routes: Routes = [
   },
   {
     path: "accept/:memberId/:token",
-    loadChildren: () =>
-      import("./accept/routes"),
+    loadChildren: () => import("./accept/routes"),
   },
   // Sentry OSS compat redirect
   {
@@ -77,8 +76,7 @@ export const routes: Routes = [
     children: [
       {
         path: "issues",
-        loadChildren: () =>
-          import("./issues/issues.module").then((m) => m.IssuesModule),
+        loadChildren: () => import("./issues/routes"),
         title: "Issues",
         data: {
           preload: true,

@@ -6,6 +6,7 @@ import { LoadingButtonComponent } from "../../../shared/loading-button/loading-b
 import { NgIf } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
     selector: "gt-comment-form",
@@ -19,6 +20,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
         NgIf,
         LoadingButtonComponent,
         MatButtonModule,
+        LessAnnoyingErrorStateMatcherModule
     ],
 })
 export class CommentFormComponent implements OnInit {
