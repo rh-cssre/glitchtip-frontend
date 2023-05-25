@@ -109,10 +109,7 @@ export const routes: Routes = [
       },
       {
         path: "performance",
-        loadChildren: () =>
-          import("./performance/performance.module").then(
-            (m) => m.PerformanceModule
-          ),
+        loadChildren: () => import("./performance/routes"),
         title: "Performance",
       },
       {
