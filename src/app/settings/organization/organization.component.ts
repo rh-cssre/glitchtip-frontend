@@ -1,14 +1,31 @@
 import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, ReactiveFormsModule } from "@angular/forms";
 import { tap, take } from "rxjs/operators";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { Organization } from "src/app/api/organizations/organizations.interface";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-organization",
-  templateUrl: "./organization.component.html",
-  styleUrls: ["./organization.component.scss"],
+    selector: "gt-organization",
+    templateUrl: "./organization.component.html",
+    styleUrls: ["./organization.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        MatDividerModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        LoadingButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class OrganizationComponent implements OnInit {
   activeOrganizationDetail$ = this.organizationsService

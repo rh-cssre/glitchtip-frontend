@@ -1,11 +1,23 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { IssueDetailService } from "../../issue-detail.service";
+import { EntryDataComponent } from "../../../../shared/entry-data/entry-data.component";
+import { MatDividerModule } from "@angular/material/divider";
+import { NgIf, NgFor, AsyncPipe, KeyValuePipe } from "@angular/common";
 
 @Component({
-  selector: "gt-entry-message",
-  templateUrl: "./entry-message.component.html",
-  styleUrls: ["./entry-message.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-entry-message",
+    templateUrl: "./entry-message.component.html",
+    styleUrls: ["./entry-message.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatDividerModule,
+        NgFor,
+        EntryDataComponent,
+        AsyncPipe,
+        KeyValuePipe,
+    ],
 })
 export class EntryMessageComponent {
   eventEntryMessage$ = this.issueService.eventEntryMessage$;

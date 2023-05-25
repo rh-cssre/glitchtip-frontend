@@ -1,12 +1,11 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { Route } from "@angular/router";
 import { IssuesPageComponent } from "./issues-page/issues-page.component";
 import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
 
-const routes: Routes = [
+export default [
   { path: "", component: IssuesPageComponent },
   {
     path: ":issue-id",
@@ -18,10 +17,4 @@ const routes: Routes = [
       { path: "events/:event-id", component: EventDetailComponent },
     ],
   },
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class IssuesRoutingModule {}
+] as Route[];

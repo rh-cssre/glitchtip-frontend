@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { combineLatest, withLatestFrom, takeUntil } from "rxjs";
@@ -10,11 +10,34 @@ import { ProjectEnvironmentsService } from "src/app/settings/projects/project-de
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { TransactionGroup } from "src/app/api/transactions/transactions.interfaces";
+import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
+import { ListFooterComponent } from "../../list-elements/list-footer/list-footer.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { DataFilterBarComponent } from "../../list-elements/data-filter-bar/data-filter-bar.component";
+import { MatTableModule } from "@angular/material/table";
+import { ProjectFilterBarComponent } from "../../list-elements/project-filter-bar/project-filter-bar.component";
+import { ListTitleComponent } from "../../list-elements/list-title/list-title.component";
+import { NgIf, NgFor, AsyncPipe, I18nPluralPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-transaction-groups",
-  templateUrl: "./transaction-groups.component.html",
-  styleUrls: ["./transaction-groups.component.scss"],
+    selector: "gt-transaction-groups",
+    templateUrl: "./transaction-groups.component.html",
+    styleUrls: ["./transaction-groups.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        ListTitleComponent,
+        ProjectFilterBarComponent,
+        MatTableModule,
+        DataFilterBarComponent,
+        MatTooltipModule,
+        RouterLink,
+        ListFooterComponent,
+        NgFor,
+        AsyncPipe,
+        I18nPluralPipe,
+        HumanizeDurationPipe,
+    ],
 })
 export class TransactionGroupsComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>

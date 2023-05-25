@@ -1,5 +1,4 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { Route } from "@angular/router";
 import { ProfileComponent } from "./profile.component";
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 import { AuthTokensComponent } from "./auth-tokens/auth-tokens.component";
@@ -9,7 +8,7 @@ import { AccountComponent } from "./account/account.component";
 import { MultiFactorAuthComponent } from "./multi-factor-auth/multi-factor-auth.component";
 import { WizardComponent } from "./wizard/wizard.component";
 
-const routes: Routes = [
+export default [
   {
     path: "",
     component: ProfileComponent,
@@ -27,10 +26,4 @@ const routes: Routes = [
     path: "confirm-email/:key",
     component: ConfirmEmailComponent,
   },
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProfileRoutingModule {}
+] as Route[];

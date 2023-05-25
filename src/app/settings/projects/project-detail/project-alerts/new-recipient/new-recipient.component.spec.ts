@@ -23,21 +23,21 @@ describe("NewRecipientComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NewRecipientComponent],
-      imports: [
+    imports: [
         MatDialogModule,
         HttpClientTestingModule,
         RouterTestingModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-      ],
-      providers: [
+        NewRecipientComponent,
+    ],
+    providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: dialogMock },
         MicroSentryService,
         { provide: MICRO_SENTRY_CONFIG, useValue: {} },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
   });
 
   beforeEach(() => {

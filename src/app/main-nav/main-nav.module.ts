@@ -13,19 +13,19 @@ import { MainNavComponent } from "./main-nav/main-nav.component";
 import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar.module";
 
 @NgModule({
-  declarations: [MainNavComponent],
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatSidenavModule,
-    MatCardModule,
-    MatDividerModule,
-    MatButtonModule,
-    MatListModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MobileNavToolbarModule,
-  ],
-  exports: [MainNavComponent],
+    imports: [
+        CommonModule,
+        RouterModule,
+        MatSidenavModule,
+        MatCardModule,
+        MatDividerModule,
+        MatButtonModule,
+        MatListModule,
+        MatMenuModule,
+        MatToolbarModule,
+        MobileNavToolbarModule,
+        MainNavComponent,
+    ],
+    exports: [MainNavComponent],
 })
 export class MainNavModule {}

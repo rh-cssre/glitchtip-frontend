@@ -1,14 +1,42 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { UptimeState, UptimeService } from "../uptime.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { map } from "rxjs/operators";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
+import { CommonModule } from "@angular/common";
+import { MonitorChecksComponent } from "../monitor-checks/monitor-checks.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MonitorResponseChartComponent } from "../monitor-response-chart/monitor-response-chart.component";
+import { HumanizeDurationPipe } from "src/app/shared/seconds-or-ms.pipe";
+import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
+import { TimeForPipe } from "src/app/shared/days-ago.pipe";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
+  standalone: true,
   selector: "gt-monitor-detail",
   templateUrl: "./monitor-detail.component.html",
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MonitorChecksComponent,
+    CopyInputComponent,
+    MonitorResponseChartComponent,
+    HumanizeDurationPipe,
+    TimeForPipe,
+    MatButtonModule,
+    MonitorChartComponent,
+    MatCardModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+  ],
 })
 export class MonitorDetailComponent extends PaginationBaseComponent<
   UptimeState,

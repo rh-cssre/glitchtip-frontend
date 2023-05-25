@@ -1,12 +1,23 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 import { JsonArrayOrObject, Json } from "src/app/interface-primitives";
 import { PRISM_ALL_SUPPORTED_GRAMMER } from "src/app/prismjs/constants";
+import { MatDividerModule } from "@angular/material/divider";
+import { PrismDirective } from "../../../../../prismjs/prism.directive";
+import { NgIf, NgFor, KeyValuePipe } from "@angular/common";
 
 @Component({
-  selector: "gt-frame-expanded",
-  templateUrl: "./frame-expanded.component.html",
-  styleUrls: ["./frame-expanded.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-frame-expanded",
+    templateUrl: "./frame-expanded.component.html",
+    styleUrls: ["./frame-expanded.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        PrismDirective,
+        NgFor,
+        MatDividerModule,
+        KeyValuePipe,
+    ],
 })
 export class FrameExpandedComponent {
   @Input() lineNo?: string | number | null;

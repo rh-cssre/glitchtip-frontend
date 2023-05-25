@@ -1,16 +1,38 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { UntypedFormControl } from "@angular/forms";
+import { UntypedFormControl, ReactiveFormsModule } from "@angular/forms";
 import { combineLatest, map } from "rxjs";
 import { GlitchTipOAuthService } from "src/app/api/oauth/oauth.service";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
 import { SocialApp } from "../../api/user/user.interfaces";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDividerModule } from "@angular/material/divider";
+import { AuthSvgComponent } from "../../shared/auth-svg/auth-svg.component";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-social-auth",
-  templateUrl: "./social-auth.component.html",
-  styleUrls: ["./social-auth.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-social-auth",
+    templateUrl: "./social-auth.component.html",
+    styleUrls: ["./social-auth.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        NgFor,
+        MatOptionModule,
+        AuthSvgComponent,
+        MatDividerModule,
+        MatButtonModule,
+        AsyncPipe,
+    ],
 })
 export class SocialAuthComponent implements OnInit {
   disconnectLoading$ = this.userService.disconnectLoading$;

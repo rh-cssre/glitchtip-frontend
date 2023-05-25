@@ -6,7 +6,7 @@ import {
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { combineLatest, Subject, takeUntil } from "rxjs";
 import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
@@ -15,12 +15,43 @@ import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
+import { DaysAgoPipe, DaysOldPipe } from "../../shared/days-ago.pipe";
+import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
+import { ListFooterComponent } from "../../list-elements/list-footer/list-footer.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { DataFilterBarComponent } from "../../list-elements/data-filter-bar/data-filter-bar.component";
+import { MatTableModule } from "@angular/material/table";
+import { ProjectFilterBarComponent } from "../../list-elements/project-filter-bar/project-filter-bar.component";
+import { ListTitleComponent } from "../../list-elements/list-title/list-title.component";
+import { NgIf, AsyncPipe, JsonPipe, DatePipe, I18nPluralPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-issues-page",
-  templateUrl: "./issues-page.component.html",
-  styleUrls: ["./issues-page.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-issues-page",
+    templateUrl: "./issues-page.component.html",
+    styleUrls: ["./issues-page.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        ListTitleComponent,
+        ProjectFilterBarComponent,
+        MatTableModule,
+        DataFilterBarComponent,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatIconModule,
+        RouterLink,
+        ListFooterComponent,
+        IssueZeroStatesComponent,
+        AsyncPipe,
+        JsonPipe,
+        DatePipe,
+        I18nPluralPipe,
+        DaysAgoPipe,
+        DaysOldPipe,
+    ],
 })
 export class IssuesPageComponent
   extends PaginationBaseComponent<IssuesState, IssuesService>

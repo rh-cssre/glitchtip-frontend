@@ -1,13 +1,34 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { Validators, FormGroup, FormControl } from "@angular/forms";
+import { Validators, FormGroup, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ResetPasswordService } from "../api/reset-password/reset-password.service";
 import { SettingsService } from "../api/settings.service";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { LoadingButtonComponent } from "../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, AsyncPipe } from "@angular/common";
+import { MatCardModule } from "@angular/material/card";
+import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @Component({
-  selector: "gt-reset-password",
-  templateUrl: "./reset-password.component.html",
-  styleUrls: ["./reset-password.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-reset-password",
+    templateUrl: "./reset-password.component.html",
+    styleUrls: ["./reset-password.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatCardModule,
+        ReactiveFormsModule,
+        NgIf,
+        MatFormFieldModule,
+        MatInputModule,
+        LoadingButtonComponent,
+        MatButtonModule,
+        RouterLink,
+        AsyncPipe,
+        LessAnnoyingErrorStateMatcherModule,
+    ],
 })
 export class ResetPasswordComponent {
   sendResetEmailError$ = this.resetService.sendResetEmailError$;

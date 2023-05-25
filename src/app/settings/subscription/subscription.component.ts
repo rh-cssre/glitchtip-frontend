@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { combineLatest, lastValueFrom, Subscription } from "rxjs";
 import { map, filter, take, tap } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
@@ -8,6 +8,12 @@ import { environment } from "../../../environments/environment";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { StripeService } from "./stripe.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { PaymentComponent } from "./payment/payment.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe, CurrencyPipe, DatePipe } from "@angular/common";
 
 interface Percentages {
   total: number;
@@ -21,6 +27,20 @@ interface Percentages {
   templateUrl: "./subscription.component.html",
   styleUrls: ["./subscription.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    MatDialogModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatButtonModule,
+    PaymentComponent,
+    MatProgressSpinnerModule,
+    AsyncPipe,
+    CurrencyPipe,
+    DatePipe,
+  ],
 })
 export class SubscriptionComponent implements OnDestroy {
   fromStripe$ = this.service.fromStripe$;
@@ -28,7 +48,7 @@ export class SubscriptionComponent implements OnDestroy {
   subscriptionLoading$ = this.service.subscriptionLoading$;
   subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
-  totalEventsAllowed$ = this.service.totalEventsAllowed$
+  totalEventsAllowed$ = this.service.totalEventsAllowed$;
   activeOrganization$ = this.orgService.activeOrganization$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   promptForProject$ = combineLatest([

@@ -4,18 +4,46 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { FormControl, FormGroup } from "@angular/forms";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { filter, map, withLatestFrom, startWith } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
 import { MemberRole } from "src/app/api/organizations/organizations.interface";
+import { MatListModule } from "@angular/material/list";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { NgIf, NgFor, AsyncPipe, DatePipe } from "@angular/common";
 
 @Component({
-  selector: "gt-member-detail",
-  templateUrl: "./member-detail.component.html",
-  styleUrls: ["./member-detail.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-member-detail",
+    templateUrl: "./member-detail.component.html",
+    styleUrls: ["./member-detail.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatButtonModule,
+        RouterLink,
+        MatIconModule,
+        MatCardModule,
+        MatDividerModule,
+        MatChipsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatRadioModule,
+        LoadingButtonComponent,
+        MatListModule,
+        NgFor,
+        AsyncPipe,
+        DatePipe,
+    ],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
   member$ = this.memberDetailService.member$;
