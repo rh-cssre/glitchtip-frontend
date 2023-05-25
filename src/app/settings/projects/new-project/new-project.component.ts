@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
 import { EMPTY } from "rxjs";
@@ -28,6 +28,7 @@ import { MatCardModule } from "@angular/material/card";
     standalone: true,
     imports: [
         MatCardModule,
+        MatDialogModule,
         ReactiveFormsModule,
         NgIf,
         MatFormFieldModule,
