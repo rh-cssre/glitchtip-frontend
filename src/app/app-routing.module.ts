@@ -89,22 +89,19 @@ export const routes: Routes = [
       },
       {
         path: "projects",
-        loadChildren: () =>
-          import("./projects/projects.module").then((m) => m.ProjectsModule),
+        loadChildren: () => import("./projects/routes"),
         title: "Projects",
       },
       {
         path: "releases",
-        loadChildren: () =>
-          import("./releases/releases.module").then((m) => m.ReleasesModule),
+        loadChildren: () => import("./releases/routes"),
         data: {
           title: "Releases",
         },
       },
       {
         path: "settings",
-        loadChildren: () =>
-          import("./settings/settings.module").then((m) => m.SettingsModule),
+        loadChildren: () => import("./settings/routes"),
         title: "Settings",
         data: {
           preload: true,

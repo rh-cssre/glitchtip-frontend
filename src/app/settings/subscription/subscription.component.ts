@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { combineLatest, lastValueFrom, Subscription } from "rxjs";
 import { map, filter, take, tap } from "rxjs/operators";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
@@ -24,22 +24,23 @@ interface Percentages {
 }
 
 @Component({
-    templateUrl: "./subscription.component.html",
-    styleUrls: ["./subscription.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCardModule,
-        RouterLink,
-        MatFormFieldModule,
-        MatButtonModule,
-        PaymentComponent,
-        MatProgressSpinnerModule,
-        AsyncPipe,
-        CurrencyPipe,
-        DatePipe,
-    ],
+  templateUrl: "./subscription.component.html",
+  styleUrls: ["./subscription.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    MatDialogModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatButtonModule,
+    PaymentComponent,
+    MatProgressSpinnerModule,
+    AsyncPipe,
+    CurrencyPipe,
+    DatePipe,
+  ],
 })
 export class SubscriptionComponent implements OnDestroy {
   fromStripe$ = this.service.fromStripe$;
@@ -47,7 +48,7 @@ export class SubscriptionComponent implements OnDestroy {
   subscriptionLoading$ = this.service.subscriptionLoading$;
   subscriptionLoadingTimeout$ = this.service.subscriptionLoadingTimeout$;
   eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
-  totalEventsAllowed$ = this.service.totalEventsAllowed$
+  totalEventsAllowed$ = this.service.totalEventsAllowed$;
   activeOrganization$ = this.orgService.activeOrganization$;
   activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
   promptForProject$ = combineLatest([

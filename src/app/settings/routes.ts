@@ -1,5 +1,4 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { Route } from "@angular/router";
 import { ProjectsComponent } from "./projects/projects.component";
 import { NewProjectComponent } from "./projects/new-project/new-project.component";
 import { ProjectDetailComponent } from "./projects/project-detail/project-detail.component";
@@ -14,7 +13,7 @@ import { TeamProjectsComponent } from "./teams/team-projects/team-projects.compo
 import { TeamDetailsComponent } from "./teams/team-details/team-details.component";
 import { TeamSettingsComponent } from "./teams/team-settings/team-settings.component";
 
-const routes: Routes = [
+export default [
   {
     path: "",
     component: SettingsComponent,
@@ -25,10 +24,7 @@ const routes: Routes = [
       { path: "projects/:project-slug", component: ProjectDetailComponent },
       {
         path: "subscription",
-        loadChildren: () =>
-          import("./subscription/subscription.module").then(
-            (m) => m.SubscriptionModule
-          ),
+        loadChildren: () => import("./subscription/routes"),
       },
       {
         path: "teams",
@@ -55,10 +51,4 @@ const routes: Routes = [
       },
     ],
   },
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class SettingsRoutingModule {}
+] as Route[];
