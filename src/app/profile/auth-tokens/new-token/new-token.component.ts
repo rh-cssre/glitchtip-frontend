@@ -5,15 +5,43 @@ import {
   UntypedFormControl,
   Validators,
   UntypedFormBuilder,
+  ReactiveFormsModule,
 } from "@angular/forms";
-import { MatCheckbox } from "@angular/material/checkbox";
+import { MatCheckbox, MatCheckboxModule } from "@angular/material/checkbox";
 import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatIconModule } from "@angular/material/icon";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
   selector: "gt-new-token",
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    RouterLink,
+    MatIconModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    NgIf,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatCheckboxModule,
+    NgFor,
+    LoadingButtonComponent,
+    AsyncPipe,
+    LessAnnoyingErrorStateMatcherModule,
+  ],
 })
 export class NewTokenComponent
   extends StatefulBaseComponent<AuthTokensState, AuthTokensService>

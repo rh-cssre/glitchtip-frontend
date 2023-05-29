@@ -1,5 +1,10 @@
 import { Injectable, NgModule } from "@angular/core";
-import { Routes, RouterModule, TitleStrategy, RouterStateSnapshot } from "@angular/router";
+import {
+  Routes,
+  RouterModule,
+  TitleStrategy,
+  RouterStateSnapshot,
+} from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
 import { CustomPreloadingStrategy } from "./preloadingStrategy";
@@ -7,62 +12,52 @@ import { CustomPreloadingStrategy } from "./preloadingStrategy";
 export const routes: Routes = [
   {
     path: "",
-    loadChildren: () => import("./home/home.module").then((m) => m.HomeModule),
+    loadChildren: () => import("./home/routes"),
     pathMatch: "full",
     canActivate: [IsLoggedInGuard],
     data: {
       preload: true,
-    }
+    },
   },
   {
     path: "organizations/new",
-    loadChildren: () =>
-      import("./new-organization/new-organization.module").then(
-        (m) => m.NewOrganizationModule
-      ),
+    loadChildren: () => import("./new-organization/routes"),
     canActivate: [IsLoggedInGuard],
     title: "Create New Organization",
   },
   {
     path: "login",
-    loadChildren: () =>
-      import("./login/login.module").then((m) => m.LoginModule),
+    loadChildren: () => import("./login/routes"),
     canActivate: [AlreadyLoggedInGuard],
     title: "Log In",
   },
   {
     path: "profile",
-    loadChildren: () =>
-      import("./profile/profile.module").then((m) => m.ProfileModule),
+    loadChildren: () => import("./profile/routes"),
     canActivate: [IsLoggedInGuard],
     title: "Profile",
     data: {
       preload: true,
-    }
+    },
   },
   {
     path: "register",
-    loadChildren: () =>
-      import("./register/register.module").then((m) => m.RegisterModule),
+    loadChildren: () => import("./register/routes"),
     canActivate: [AlreadyLoggedInGuard],
     title: "Register",
   },
   {
     path: "reset-password",
-    loadChildren: () =>
-      import("./reset-password/reset-password.module").then(
-        (m) => m.ResetPasswordModule
-      ),
+    loadChildren: () => import("./reset-password/routes"),
     title: "Reset Password",
   },
   {
     path: "auth",
-    loadChildren: () => import("./auth/auth.module").then((m) => m.AuthModule),
+    loadChildren: () => import("./auth/routes"),
   },
   {
     path: "accept/:memberId/:token",
-    loadChildren: () =>
-      import("./accept/accept.module").then((m) => m.AcceptModule),
+    loadChildren: () => import("./accept/routes"),
   },
   // Sentry OSS compat redirect
   {
@@ -81,48 +76,40 @@ export const routes: Routes = [
     children: [
       {
         path: "issues",
-        loadChildren: () =>
-          import("./issues/issues.module").then((m) => m.IssuesModule),
+        loadChildren: () => import("./issues/routes"),
         title: "Issues",
         data: {
           preload: true,
-        }
+        },
       },
       {
         path: "uptime-monitors",
-        loadChildren: () =>
-          import("./uptime/uptime.module").then((m) => m.UptimeModule),
+        loadChildren: () => import("./uptime/routes"),
         title: "Uptime Monitors",
       },
       {
         path: "projects",
-        loadChildren: () =>
-          import("./projects/projects.module").then((m) => m.ProjectsModule),
+        loadChildren: () => import("./projects/routes"),
         title: "Projects",
       },
       {
         path: "releases",
-        loadChildren: () =>
-          import("./releases/releases.module").then((m) => m.ReleasesModule),
+        loadChildren: () => import("./releases/routes"),
         data: {
           title: "Releases",
         },
       },
       {
         path: "settings",
-        loadChildren: () =>
-          import("./settings/settings.module").then((m) => m.SettingsModule),
+        loadChildren: () => import("./settings/routes"),
         title: "Settings",
         data: {
           preload: true,
-        }
+        },
       },
       {
         path: "performance",
-        loadChildren: () =>
-          import("./performance/performance.module").then(
-            (m) => m.PerformanceModule
-          ),
+        loadChildren: () => import("./performance/routes"),
         title: "Performance",
       },
       {
@@ -138,7 +125,6 @@ export const routes: Routes = [
   },
 ];
 
-
 @Injectable()
 export class TemplatePageTitleStrategy extends TitleStrategy {
   override updateTitle(routerState: RouterStateSnapshot) {
@@ -148,8 +134,8 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
     } else {
       document.title = "GlitchTip";
     }
-  };
-};
+  }
+}
 
 @NgModule({
   imports: [
@@ -161,6 +147,6 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
     }),
   ],
   exports: [RouterModule],
-  providers: [{provide: TitleStrategy,  useClass: TemplatePageTitleStrategy}]
+  providers: [{ provide: TitleStrategy, useClass: TemplatePageTitleStrategy }],
 })
 export class AppRoutingModule {}

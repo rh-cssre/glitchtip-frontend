@@ -5,11 +5,22 @@ import {
   FormGroup,
   ValidatorFn,
   Validators,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { filter, map, Observable, startWith, take } from "rxjs";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatOptionModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -24,6 +35,23 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   selector: "gt-preferences",
   templateUrl: "./preferences.component.html",
   styleUrls: ["./preferences.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    NgIf,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatIconModule,
+    NgFor,
+    MatOptionModule,
+    LoadingButtonComponent,
+    AsyncPipe,
+    LessAnnoyingErrorStateMatcherModule,
+  ],
 })
 export class PreferencesComponent implements OnInit {
   defaultTimeZone: string = "Default";
@@ -41,8 +69,6 @@ export class PreferencesComponent implements OnInit {
 
   formName = this.form.get("name") as FormControl;
   formTimeZone = this.form.get("timeZone") as FormControl;
-
-  matcher = new LessAnnoyingErrorStateMatcher();
 
   constructor(
     private service: UserService,
@@ -101,7 +127,7 @@ export class PreferencesComponent implements OnInit {
       const options = {
         ...(timeZone !== null && { timezone: timeZone }),
       };
-      this.service.updateUserOptions(name, options);
+      this.service.updateUser(name, options);
     }
   }
 }

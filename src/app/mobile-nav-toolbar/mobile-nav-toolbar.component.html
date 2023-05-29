@@ -1,0 +1,6 @@
+<mat-toolbar (click)="buttonClicked.emit()" color="primary">
+  <button mat-button class="sidenav-toggle">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="active-org" *ngIf="activeOrg">{{ activeOrg.name }}</span>
+</mat-toolbar>

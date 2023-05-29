@@ -217,7 +217,7 @@ export const NormalIssuesSelected = () => {
   return selectProps("normalIssuesSelected");
 };
 
-export const normalIssuesAllSelected = () => {
+export const NormalIssuesAllSelected = () => {
   return selectProps("normalIssuesAllSelected");
 };
 

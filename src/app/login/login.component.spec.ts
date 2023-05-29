@@ -9,14 +9,19 @@ import { EMPTY } from "rxjs";
 import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
 import { MaterialModule } from "../shared/material.module";
-import { environment } from "../../environments/environment";
 
-@Component({ selector: "gt-form-error", template: "" })
+@Component({
+    selector: "gt-form-error", template: "",
+    standalone: true,
+    imports: [ReactiveFormsModule,
+        MaterialModule,
+        RouterTestingModule,
+        HttpClientTestingModule]
+})
 class FormErrorStubComponent {
   @Input() error: any;
 }
 
-if (environment.loginForm) {
 // Type is wrong abouit createSpyObject, third param is for properties
 const authServiceSpy = (jasmine as any).createSpyObj(
   "LoginService",
@@ -31,20 +36,20 @@ describe("LoginComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [LoginComponent, FormErrorStubComponent],
-        imports: [
-          NoopAnimationsModule,
-          ReactiveFormsModule,
-          MaterialModule,
-          RouterTestingModule,
-          HttpClientTestingModule,
-        ],
-        providers: [
-          { provide: LoginService, useValue: authServiceSpy },
-          MicroSentryService,
-          { provide: MICRO_SENTRY_CONFIG, useValue: {} },
-        ],
-      }).compileComponents();
+    imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        RouterTestingModule,
+        HttpClientTestingModule,
+        LoginComponent, FormErrorStubComponent,
+    ],
+    providers: [
+        { provide: LoginService, useValue: authServiceSpy },
+        MicroSentryService,
+        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
+    ],
+}).compileComponents();
     })
   );
 
@@ -67,4 +72,3 @@ describe("LoginComponent", () => {
     expect(authServiceSpy.login).toHaveBeenCalled();
   });
 });
-}
