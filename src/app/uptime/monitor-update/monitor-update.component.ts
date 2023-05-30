@@ -25,6 +25,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 const defaultExpectedStatus = 200;
 const defaultUrl = "https://";
@@ -39,6 +40,7 @@ const defaultUrl = "https://";
     RouterModule,
     ReactiveFormsModule,
     LoadingButtonComponent,
+    MatButtonModule,
     MatCardModule,
     MatDialogModule,
     MatOptionModule,
