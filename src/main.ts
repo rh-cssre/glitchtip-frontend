@@ -8,14 +8,16 @@ import { loadTranslations } from "@angular/localize";
 import { environment } from "./environments/environment";
 import { AppComponent } from "./app/app.component";
 import { MicroSentryModule } from "@micro-sentry/angular";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarModule,
+} from "@angular/material/snack-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { routes } from "./app/app.routes";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { LessAnnoyingErrorStateMatcher } from "./app/shared/less-annoying-error-state-matcher";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { GlobalErrorHandler } from "./app/global-error-handler";
-import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/legacy-snack-bar";
 import { tokenInterceptor } from "./app/api/auth/token.interceptor";
 import {
   provideHttpClient,
