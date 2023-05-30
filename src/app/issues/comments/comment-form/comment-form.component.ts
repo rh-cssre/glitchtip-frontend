@@ -1,27 +1,31 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormControl, FormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { Comment } from "src/app/api/comments/comments.interfaces";
 import { MatButtonModule } from "@angular/material/button";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { NgIf } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
-    selector: "gt-comment-form",
-    templateUrl: "./comment-form.component.html",
-    styleUrls: ["./comment-form.component.scss"],
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        NgIf,
-        LoadingButtonComponent,
-        MatButtonModule,
-        LessAnnoyingErrorStateMatcherModule
-    ],
+  selector: "gt-comment-form",
+  templateUrl: "./comment-form.component.html",
+  styleUrls: ["./comment-form.component.scss"],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgIf,
+    LoadingButtonComponent,
+    MatButtonModule,
+  ],
 })
 export class CommentFormComponent implements OnInit {
   @Input() comment?: Comment;

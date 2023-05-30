@@ -18,6 +18,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
 import { GlobalErrorHandler } from "./global-error-handler";
 import { MainNavComponent } from "./main-nav/main-nav/main-nav.component";
+import { ErrorStateMatcher } from "@angular/material/core";
+import { LessAnnoyingErrorStateMatcher } from "./shared/less-annoying-error-state-matcher";
 
 let snackBarDuration = 4000;
 if (window.Cypress) {
@@ -54,6 +56,10 @@ const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
       useValue: { duration: snackBarDuration },
     },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    {
+      provide: ErrorStateMatcher,
+      useClass: LessAnnoyingErrorStateMatcher,
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { RegisterService } from "./register.service";
@@ -15,27 +20,25 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
-import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @Component({
-    selector: "gt-register",
-    templateUrl: "./register.component.html",
-    styleUrls: ["./register.component.scss"],
-    standalone: true,
-    imports: [
-        MatCardModule,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormFieldModule,
-        MatInputModule,
-        InputMatcherDirective,
-        MatButtonModule,
-        NgFor,
-        AuthSvgComponent,
-        RouterLink,
-        AsyncPipe,
-        LessAnnoyingErrorStateMatcherModule
-    ],
+  selector: "gt-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    InputMatcherDirective,
+    MatButtonModule,
+    NgFor,
+    AuthSvgComponent,
+    RouterLink,
+    AsyncPipe,
+  ],
 })
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
@@ -135,6 +138,6 @@ export class RegisterComponent implements OnInit {
       setStorageWithExpiry("register", utm, 5 * 60 * 1000);
     }
 
-    this.oauthService.initOAuthLogin(socialApp)
+    this.oauthService.initOAuthLogin(socialApp);
   }
 }

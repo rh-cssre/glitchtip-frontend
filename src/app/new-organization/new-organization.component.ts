@@ -8,7 +8,6 @@ import {
 } from "@angular/forms";
 import { combineLatest } from "rxjs";
 import { map, tap, withLatestFrom } from "rxjs/operators";
-import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "../api/settings.service";
 import { UserService } from "../api/user/user.service";
@@ -24,7 +23,6 @@ import { NgIf, AsyncPipe } from "@angular/common";
   styleUrls: ["./new-organization.component.scss"],
   standalone: true,
   imports: [
-    LessAnnoyingErrorStateMatcherModule,
     NgIf,
     MatCardModule,
     ReactiveFormsModule,

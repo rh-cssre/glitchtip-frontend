@@ -19,7 +19,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
-import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
   selector: "gt-new-token",
@@ -40,7 +39,6 @@ import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoyin
     NgFor,
     LoadingButtonComponent,
     AsyncPipe,
-    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class NewTokenComponent

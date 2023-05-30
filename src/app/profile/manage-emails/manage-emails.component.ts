@@ -19,7 +19,6 @@ import { MatChipsModule } from "@angular/material/chips";
 import { NgFor, NgIf, AsyncPipe } from "@angular/common";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
-import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
   selector: "gt-manage-emails",
@@ -40,7 +39,6 @@ import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoyin
     MatFormFieldModule,
     MatInputModule,
     AsyncPipe,
-    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class ManageEmailsComponent implements OnInit {
