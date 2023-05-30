@@ -10,7 +10,7 @@ import { AppComponent } from "./app/app.component";
 import { MicroSentryModule } from "@micro-sentry/angular";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
-import { AppRoutingModule } from "./app/app-routing.module";
+import { routes } from "./app/app.routes";
 import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
 import { LessAnnoyingErrorStateMatcher } from "./app/shared/less-annoying-error-state-matcher";
 import { ErrorStateMatcher } from "@angular/material/core";
@@ -23,6 +23,13 @@ import {
   provideHttpClient,
   HttpClientXsrfModule,
 } from "@angular/common/http";
+import {
+  provideRouter,
+  withInMemoryScrolling,
+  withPreloading,
+  withRouterConfig,
+} from "@angular/router";
+import { CustomPreloadingStrategy } from "./app/preloadingStrategy";
 
 let snackBarDuration = 4000;
 if (window.Cypress) {
@@ -49,12 +56,22 @@ if (locale in localeMappings) {
   locale = localeMappings[locale];
 }
 
-if (locale === availableLocales[0]) {
+const bootstrap = () =>
   bootstrapApplication(AppComponent, {
     providers: [
+      provideRouter(
+        routes,
+        withPreloading(CustomPreloadingStrategy),
+        withInMemoryScrolling({
+          scrollPositionRestoration: "enabled",
+        }),
+        withRouterConfig({
+          onSameUrlNavigation: "reload",
+          paramsInheritanceStrategy: "always",
+        })
+      ),
       importProvidersFrom(
         BrowserModule,
-        AppRoutingModule,
         MatSnackBarModule,
         HttpClientXsrfModule.withOptions({
           cookieName: "csrftoken",
@@ -80,6 +97,9 @@ if (locale === availableLocales[0]) {
       provideHttpClient(withInterceptorsFromDi()),
     ],
   }).catch((err) => console.error(err));
+
+if (locale === availableLocales[0]) {
+  bootstrap();
 } else {
   // fetch resources for runtime translations. this could also point to an API endpoint
   fetch(`static/assets/i18n/messages.${locale}.json`)
@@ -93,35 +113,6 @@ if (locale === availableLocales[0]) {
     .then((result) => {
       loadTranslations(result);
 
-      bootstrapApplication(AppComponent, {
-        providers: [
-          importProvidersFrom(
-            BrowserModule,
-            AppRoutingModule,
-            MatSnackBarModule,
-            HttpClientXsrfModule.withOptions({
-              cookieName: "csrftoken",
-              headerName: "X-CSRFTOKEN",
-            }),
-            MicroSentryModule.forRoot({ ignoreErrors: [serverErrorsRegex] })
-          ),
-          {
-            provide: HTTP_INTERCEPTORS,
-            useClass: TokenInterceptor,
-            multi: true,
-          },
-          {
-            provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-            useValue: { duration: snackBarDuration },
-          },
-          { provide: ErrorHandler, useClass: GlobalErrorHandler },
-          {
-            provide: ErrorStateMatcher,
-            useClass: LessAnnoyingErrorStateMatcher,
-          },
-          provideAnimations(),
-          provideHttpClient(withInterceptorsFromDi()),
-        ],
-      }).catch((err) => console.error(err));
+      bootstrap();
     });
 }

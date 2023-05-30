@@ -1,13 +1,7 @@
-import { Injectable, NgModule } from "@angular/core";
-import {
-  Routes,
-  RouterModule,
-  TitleStrategy,
-  RouterStateSnapshot,
-} from "@angular/router";
 import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
 import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
-import { CustomPreloadingStrategy } from "./preloadingStrategy";
+import { RouterStateSnapshot, Routes, TitleStrategy } from "@angular/router";
+import { Injectable } from "@angular/core";
 
 export const routes: Routes = [
   {
@@ -137,16 +131,16 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
   }
 }
 
-@NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      onSameUrlNavigation: "reload",
-      scrollPositionRestoration: "enabled",
-      paramsInheritanceStrategy: "always",
-      preloadingStrategy: CustomPreloadingStrategy,
-    }),
-  ],
-  exports: [RouterModule],
-  providers: [{ provide: TitleStrategy, useClass: TemplatePageTitleStrategy }],
-})
-export class AppRoutingModule {}
+// @NgModule({
+//   imports: [
+//     RouterModule.forRoot(routes, {
+//       onSameUrlNavigation: "reload",
+//       scrollPositionRestoration: "enabled",
+//       paramsInheritanceStrategy: "always",
+//       preloadingStrategy: CustomPreloadingStrategy,
+//     }),
+//   ],
+//   exports: [RouterModule],
+//   providers: [{ provide: TitleStrategy, useClass: TemplatePageTitleStrategy }],
+// })
+// export class AppRoutingModule {}
