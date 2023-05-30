@@ -4,9 +4,16 @@ import { IssueDetailComponent } from "./issue-detail/issue-detail.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { EventDetailComponent } from "./issue-detail/event-detail/event-detail.component";
 import { UserReportsIssueComponent } from "./user-reports-issue/user-reports-issue.component";
+import { importProvidersFrom } from "@angular/core";
+import { MarkdownModule } from "ngx-markdown";
 
 export default [
-  { path: "", component: IssuesPageComponent },
+  {
+    path: "",
+    component: IssuesPageComponent,
+
+    providers: [importProvidersFrom(MarkdownModule.forRoot({}))],
+  },
   {
     path: ":issue-id",
     component: IssueDetailComponent,

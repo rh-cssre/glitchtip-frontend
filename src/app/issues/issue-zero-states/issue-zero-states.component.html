@@ -84,11 +84,9 @@
                     GlitchTip</h2
                   >
 
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/{{
-                      activeProjectPlatform
-                    }}.md"
-                  ></gt-lazy-markdown>
+                  <markdown
+                    src="/static/sdk-docs/{{ activeProjectPlatform }}.md"
+                  ></markdown>
                 </ng-container>
 
                 <ng-template #otherTemplate>
@@ -96,13 +94,9 @@
                     >Connect your project to GlitchTip</h2
                   >
 
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/all-sdks.md"
-                  ></gt-lazy-markdown>
+                  <markdown src="/static/sdk-docs/all-sdks.md"></markdown>
 
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/other.md"
-                  ></gt-lazy-markdown>
+                  <markdown src="/static/sdk-docs/other.md"></markdown>
                 </ng-template>
               </div>
 
@@ -112,9 +106,7 @@
                     >Connect your project to GlitchTip</h2
                   >
 
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/all-sdks.md"
-                  ></gt-lazy-markdown>
+                  <markdown src="/static/sdk-docs/all-sdks.md"></markdown>
 
                   <p class="mat-body-1" i18n
                     >If you go to this project's
@@ -163,9 +155,7 @@
                   <ng-container *ngIf="activeProjectPlatform !== 'other'">
                     <h2 class="mat-body-2" i18n>What's this all about?</h2>
                     <div class="mat-body-1">
-                      <gt-lazy-markdown
-                        markdownSrc="/static/sdk-docs/all-sdks.md"
-                      ></gt-lazy-markdown>
+                      <markdown src="/static/sdk-docs/all-sdks.md"></markdown>
                     </div>
 
                     <p class="mat-body-1" i18n
