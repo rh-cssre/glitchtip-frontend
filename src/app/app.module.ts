@@ -14,10 +14,10 @@ import { TokenInterceptor } from "./api/auth/token.interceptor";
 
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
-import { AuthModule } from "./api/auth/auth.module";
 import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
 import { GlobalErrorHandler } from "./global-error-handler";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 let snackBarDuration = 4000;
 if (window.Cypress) {
@@ -32,9 +32,9 @@ const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AuthModule,
     BrowserAnimationsModule,
     RateLimitBannerComponent,
+    MatSnackBarModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
