@@ -23,5 +23,6 @@ export default [
       { path: "user-reports", component: UserReportsIssueComponent },
       { path: "events/:event-id", component: EventDetailComponent },
     ],
+    providers: [importProvidersFrom(MarkdownModule.forRoot({}))],
   },
 ] as Route[];
