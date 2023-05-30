@@ -6,6 +6,7 @@ import {
   HttpClientXsrfModule,
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/legacy-snack-bar";
 import { MicroSentryModule } from "@micro-sentry/angular";
 
@@ -14,10 +15,9 @@ import { TokenInterceptor } from "./api/auth/token.interceptor";
 
 // Modules
 import { AppRoutingModule } from "./app-routing.module";
-import { MainNavModule } from "./main-nav/main-nav.module";
 import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
 import { GlobalErrorHandler } from "./global-error-handler";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MainNavComponent } from "./main-nav/main-nav/main-nav.component";
 
 let snackBarDuration = 4000;
 if (window.Cypress) {
@@ -34,13 +34,13 @@ const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
     AppRoutingModule,
     BrowserAnimationsModule,
     RateLimitBannerComponent,
+    MainNavComponent,
     MatSnackBarModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({
       cookieName: "csrftoken",
       headerName: "X-CSRFTOKEN",
     }),
-    MainNavModule,
     MicroSentryModule.forRoot({ ignoreErrors: [serverErrorsRegex] }),
   ],
   providers: [
