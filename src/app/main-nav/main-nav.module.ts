@@ -10,22 +10,20 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
 
 import { MainNavComponent } from "./main-nav/main-nav.component";
-import { MobileNavToolbarModule } from "../mobile-nav-toolbar/mobile-nav-toolbar.module";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        RouterModule,
-        MatSidenavModule,
-        MatCardModule,
-        MatDividerModule,
-        MatButtonModule,
-        MatListModule,
-        MatMenuModule,
-        MatToolbarModule,
-        MobileNavToolbarModule,
-        MainNavComponent,
-    ],
-    exports: [MainNavComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatListModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MainNavComponent,
+  ],
+  exports: [MainNavComponent],
 })
 export class MainNavModule {}
