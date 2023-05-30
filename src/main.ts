@@ -11,17 +11,16 @@ import { MicroSentryModule } from "@micro-sentry/angular";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { routes } from "./app/app.routes";
-import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
+import { bootstrapApplication } from "@angular/platform-browser";
 import { LessAnnoyingErrorStateMatcher } from "./app/shared/less-annoying-error-state-matcher";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { GlobalErrorHandler } from "./app/global-error-handler";
 import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS as MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/legacy-snack-bar";
-import { TokenInterceptor } from "./app/api/auth/token.interceptor";
+import { tokenInterceptor } from "./app/api/auth/token.interceptor";
 import {
-  HTTP_INTERCEPTORS,
-  withInterceptorsFromDi,
   provideHttpClient,
-  HttpClientXsrfModule,
+  withInterceptors,
+  withXsrfConfiguration,
 } from "@angular/common/http";
 import {
   provideRouter,
@@ -71,19 +70,9 @@ const bootstrap = () =>
         })
       ),
       importProvidersFrom(
-        BrowserModule,
         MatSnackBarModule,
-        HttpClientXsrfModule.withOptions({
-          cookieName: "csrftoken",
-          headerName: "X-CSRFTOKEN",
-        }),
         MicroSentryModule.forRoot({ ignoreErrors: [serverErrorsRegex] })
       ),
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: TokenInterceptor,
-        multi: true,
-      },
       {
         provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
         useValue: { duration: snackBarDuration },
@@ -94,7 +83,13 @@ const bootstrap = () =>
         useClass: LessAnnoyingErrorStateMatcher,
       },
       provideAnimations(),
-      provideHttpClient(withInterceptorsFromDi()),
+      provideHttpClient(
+        withXsrfConfiguration({
+          cookieName: "csrftoken",
+          headerName: "X-CSRFTOKEN",
+        }),
+        withInterceptors([tokenInterceptor])
+      ),
     ],
   }).catch((err) => console.error(err));
 
