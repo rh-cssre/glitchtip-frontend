@@ -1,20 +1,23 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RoutesRecognized,
-} from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized, RouterOutlet } from "@angular/router";
 import { map, filter, take, exhaustMap, tap } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { AuthService } from "./api/auth/auth.service";
 import { OrganizationsService } from "./api/organizations/organizations.service";
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
+import { RateLimitBannerComponent } from "./rate-limit-banner/rate-limit-banner.component";
+import { MainNavComponent } from "./main-nav/main-nav/main-nav.component";
 
 @Component({
-  selector: "gt-root",
-  templateUrl: "./app.component.html",
+    selector: "gt-root",
+    templateUrl: "./app.component.html",
+    standalone: true,
+    imports: [
+        MainNavComponent,
+        RateLimitBannerComponent,
+        RouterOutlet,
+    ],
 })
 export class AppComponent implements OnInit {
   isLoggedIn$ = this.auth.isLoggedIn;
