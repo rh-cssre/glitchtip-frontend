@@ -533,7 +533,7 @@
     </unit>
     <unit id="1120098013104989112">
       <segment>
-        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, &apos;settings&apos;, activeOrganizationSlug$ | async, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
+        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
       </segment>
     </unit>
     <unit id="1223506099460240555">
@@ -723,17 +723,7 @@
     </unit>
     <unit id="1219619838898772490">
       <segment>
-        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.plan.amount | currency }}"/></source>
-      </segment>
-    </unit>
-    <unit id="1432670211434533721">
-      <segment>
-        <source>Subscription Options</source>
-      </segment>
-    </unit>
-    <unit id="1676493260360867666">
-      <segment>
-        <source>If you would like to purchase a subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="."><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
+        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.mainUnitPrice | currency }}"/></source>
       </segment>
     </unit>
     <unit id="1678548018195726594">
@@ -764,11 +754,6 @@
     <unit id="2167503793894173335">
       <segment>
         <source>Create a New Team</source>
-      </segment>
-    </unit>
-    <unit id="2174410207450829295">
-      <segment>
-        <source>This organization does not have an active subscription to GlitchTip.</source>
       </segment>
     </unit>
     <unit id="2314099574053878289">
@@ -959,6 +944,86 @@
     <unit id="8433883189750412090">
       <segment>
         <source>You have been invited to join<pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ acceptInfo.org_user.organization.name }}"/></pc> so you can keep track of errors.</source>
+      </segment>
+    </unit>
+    <unit id="1581886603273423006">
+      <segment>
+        <source>Account Owner</source>
+      </segment>
+    </unit>
+    <unit id="1740276691614535252">
+      <segment>
+        <source>Gains admin access on all teams as well as the ability to add and remove members.</source>
+      </segment>
+    </unit>
+    <unit id="1922838090212936091">
+      <segment>
+        <source>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</source>
+      </segment>
+    </unit>
+    <unit id="2267387778265004491">
+      <segment>
+        <source>Organization Account Ownership</source>
+      </segment>
+    </unit>
+    <unit id="231679111972850796">
+      <segment>
+        <source>Added</source>
+      </segment>
+    </unit>
+    <unit id="3444805486131364421">
+      <segment>
+        <source>Scopes:</source>
+      </segment>
+    </unit>
+    <unit id="3916787140877704867">
+      <segment>
+        <source>Team(s)</source>
+      </segment>
+    </unit>
+    <unit id="4145496584631696119">
+      <segment>
+        <source>Role</source>
+      </segment>
+    </unit>
+    <unit id="4729000058409517470">
+      <segment>
+        <source>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</source>
+      </segment>
+    </unit>
+    <unit id="4768749765465246664">
+      <segment>
+        <source>Email</source>
+      </segment>
+    </unit>
+    <unit id="5909691734964157223">
+      <segment>
+        <source> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </source>
+      </segment>
+    </unit>
+    <unit id="6146979090477797496">
+      <segment>
+        <source> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </source>
+      </segment>
+    </unit>
+    <unit id="6813159840018659686">
+      <segment>
+        <source>Back to Members</source>
+      </segment>
+    </unit>
+    <unit id="6895800612787584413">
+      <segment>
+        <source>Members can view and act on events, as well as view most other data within the organization.</source>
+      </segment>
+    </unit>
+    <unit id="6921336596257236722">
+      <segment>
+        <source>New version available. Load New Version?</source>
+      </segment>
+    </unit>
+    <unit id="9208909205064884220">
+      <segment>
+        <source>This user isn&apos;t on any teams.</source>
       </segment>
     </unit>
   </file>

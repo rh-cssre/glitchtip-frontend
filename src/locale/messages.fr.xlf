@@ -675,8 +675,8 @@
     </unit>
     <unit id="1120098013104989112">
       <segment state="initial">
-        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, &apos;settings&apos;, activeOrganizationSlug$ | async, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
-        <target>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, &apos;settings&apos;, activeOrganizationSlug$ | async, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</target>
+        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
+        <target>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</target>
       </segment>
     </unit>
     <unit id="6401078118236139749">
@@ -939,8 +939,8 @@
     </unit>
     <unit id="1219619838898772490">
       <segment state="initial">
-        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.plan.amount | currency }}"/></source>
-        <target>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.plan.amount | currency }}"/></target>
+        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.mainUnitPrice | currency }}"/></source>
+        <target>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.mainUnitPrice | currency }}"/></target>
       </segment>
     </unit>
     <unit id="5875130684997376720">
@@ -983,24 +983,6 @@
       <segment state="initial">
         <source>This organization does not have an active subscription to GlitchTip. Pick a plan to get started.</source>
         <target>This organization does not have an active subscription to GlitchTip. Pick a plan to get started.</target>
-      </segment>
-    </unit>
-    <unit id="2174410207450829295">
-      <segment state="initial">
-        <source>This organization does not have an active subscription to GlitchTip.</source>
-        <target>This organization does not have an active subscription to GlitchTip.</target>
-      </segment>
-    </unit>
-    <unit id="1432670211434533721">
-      <segment state="initial">
-        <source>Subscription Options</source>
-        <target>Subscription Options</target>
-      </segment>
-    </unit>
-    <unit id="1676493260360867666">
-      <segment state="initial">
-        <source>If you would like to purchase a subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="."><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
-        <target>If you would like to purchase a subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="."><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</target>
       </segment>
     </unit>
     <unit id="2115863840021276098">
@@ -1151,6 +1133,102 @@
       <segment state="initial">
         <source>The account you&apos;re logged into is already a part of this organization. You might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;" dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account that this invite link was intended for.</source>
         <target>The account you&apos;re logged into is already a part of this organization. You might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;" dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account that this invite link was intended for.</target>
+      </segment>
+    </unit>
+    <unit id="6921336596257236722">
+      <segment state="initial">
+        <source>New version available. Load New Version?</source>
+        <target>New version available. Load New Version?</target>
+      </segment>
+    </unit>
+    <unit id="6813159840018659686">
+      <segment state="initial">
+        <source>Back to Members</source>
+        <target>Back to Members</target>
+      </segment>
+    </unit>
+    <unit id="4768749765465246664">
+      <segment state="initial">
+        <source>Email</source>
+        <target>Email</target>
+      </segment>
+    </unit>
+    <unit id="4145496584631696119">
+      <segment state="initial">
+        <source>Role</source>
+        <target>Role</target>
+      </segment>
+    </unit>
+    <unit id="231679111972850796">
+      <segment state="initial">
+        <source>Added</source>
+        <target>Added</target>
+      </segment>
+    </unit>
+    <unit id="1581886603273423006">
+      <segment state="initial">
+        <source>Account Owner</source>
+        <target>Account Owner</target>
+      </segment>
+    </unit>
+    <unit id="6895800612787584413">
+      <segment state="initial">
+        <source>Members can view and act on events, as well as view most other data within the organization.</source>
+        <target>Members can view and act on events, as well as view most other data within the organization.</target>
+      </segment>
+    </unit>
+    <unit id="1922838090212936091">
+      <segment state="initial">
+        <source>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</source>
+        <target>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</target>
+      </segment>
+    </unit>
+    <unit id="1740276691614535252">
+      <segment state="initial">
+        <source>Gains admin access on all teams as well as the ability to add and remove members.</source>
+        <target>Gains admin access on all teams as well as the ability to add and remove members.</target>
+      </segment>
+    </unit>
+    <unit id="4729000058409517470">
+      <segment state="initial">
+        <source>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</source>
+        <target>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</target>
+      </segment>
+    </unit>
+    <unit id="3444805486131364421">
+      <segment state="initial">
+        <source>Scopes:</source>
+        <target>Scopes:</target>
+      </segment>
+    </unit>
+    <unit id="2267387778265004491">
+      <segment state="initial">
+        <source>Organization Account Ownership</source>
+        <target>Organization Account Ownership</target>
+      </segment>
+    </unit>
+    <unit id="6146979090477797496">
+      <segment state="initial">
+        <source> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </source>
+        <target> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </target>
+      </segment>
+    </unit>
+    <unit id="5909691734964157223">
+      <segment state="initial">
+        <source> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </source>
+        <target> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </target>
+      </segment>
+    </unit>
+    <unit id="3916787140877704867">
+      <segment state="initial">
+        <source>Team(s)</source>
+        <target>Team(s)</target>
+      </segment>
+    </unit>
+    <unit id="9208909205064884220">
+      <segment state="initial">
+        <source>This user isn&apos;t on any teams.</source>
+        <target>This user isn&apos;t on any teams.</target>
       </segment>
     </unit>
   </file>
