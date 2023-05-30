@@ -1,7 +1,10 @@
 <section class="l-body">
   <header class="page-header">
     <h1 class="mat-headline-4">#{{ teamSlug$ | async }}</h1>
-    <a mat-flat-button [routerLink]="['/settings', orgSlug$ | async, 'teams']">
+    <a
+      mat-flat-button
+      [routerLink]="['/', orgSlug$ | async, 'settings', 'teams']"
+    >
       <mat-icon>keyboard_arrow_left</mat-icon
       ><ng-container i18n>Back to Teams</ng-container></a
     >
@@ -18,7 +21,7 @@
       >{{ link.label }}
     </a>
   </nav>
- <mat-tab-nav-panel #tabPanel>
+  <mat-tab-nav-panel #tabPanel>
     <router-outlet></router-outlet>
   </mat-tab-nav-panel>
 </section>
