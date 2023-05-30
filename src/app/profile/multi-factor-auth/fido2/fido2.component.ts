@@ -18,7 +18,6 @@ import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
-import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
   selector: "gt-fido2",
@@ -40,7 +39,6 @@ import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoyin
     MatTooltipModule,
     MatIconModule,
     AsyncPipe,
-    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class Fido2Component {

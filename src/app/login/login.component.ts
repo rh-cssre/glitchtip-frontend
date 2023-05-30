@@ -22,7 +22,6 @@ import { LoginFido2Component } from "./login-fido2/login-fido2.component";
 import { LoginTotpComponent } from "./login-totp/login-totp.component";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
-import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-error-state-matcher.module";
 
 @Component({
   selector: "gt-login",
@@ -43,7 +42,6 @@ import { LessAnnoyingErrorStateMatcherModule } from "../shared/less-annoying-err
     AuthSvgComponent,
     RouterLink,
     AsyncPipe,
-    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class LoginComponent implements OnInit {

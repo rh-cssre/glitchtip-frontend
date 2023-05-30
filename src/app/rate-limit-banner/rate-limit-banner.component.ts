@@ -4,18 +4,19 @@ import { map } from "rxjs/operators";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
-import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
+import { AsyncPipe, NgIf } from "@angular/common";
+import { RouterLink } from "@angular/router";
 
 @Component({
   standalone: true,
   selector: "gt-rate-limit-banner",
   imports: [
-    CommonModule,
+    AsyncPipe,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    RouterModule,
+    RouterLink,
+    NgIf,
   ],
   templateUrl: "./rate-limit-banner.component.html",
   styleUrls: ["./rate-limit-banner.component.scss"],

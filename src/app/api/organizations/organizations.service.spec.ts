@@ -12,7 +12,7 @@ import { OrganizationsService } from "./organizations.service";
 import { Organization } from "./organizations.interface";
 import { organizationList, testOrgDetail } from "./organization-test-data";
 import { MaterialModule } from "src/app/shared/material.module";
-import { routes } from "src/app/app-routing.module";
+import { routes } from "src/app/routes";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;

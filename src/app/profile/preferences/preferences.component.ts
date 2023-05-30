@@ -20,7 +20,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
-import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -50,7 +49,6 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
     MatOptionModule,
     LoadingButtonComponent,
     AsyncPipe,
-    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class PreferencesComponent implements OnInit {

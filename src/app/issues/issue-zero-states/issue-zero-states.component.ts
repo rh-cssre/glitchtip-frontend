@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesService } from "../issues.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -11,23 +13,21 @@ import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import { CopyInputComponent } from "../../shared/copy-input/copy-input.component";
-import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-issue-zero-states",
-    templateUrl: "./issue-zero-states.component.html",
-    styleUrls: ["./issue-zero-states.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        LazyMarkdownModule,
-        RouterLink,
-        CopyInputComponent,
-        AsyncPipe,
-    ],
+  selector: "gt-issue-zero-states",
+  templateUrl: "./issue-zero-states.component.html",
+  styleUrls: ["./issue-zero-states.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    RouterLink,
+    CopyInputComponent,
+    AsyncPipe,
+    MarkdownModule,
+  ],
 })
 export class IssueZeroStatesComponent implements OnInit {
   loading$ = combineLatest([

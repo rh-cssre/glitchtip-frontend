@@ -20,7 +20,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { NgIf, AsyncPipe } from "@angular/common";
-import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoying-error-state-matcher.module";
 
 @Component({
   selector: "gt-change-password",
@@ -38,7 +37,6 @@ import { LessAnnoyingErrorStateMatcherModule } from "src/app/shared/less-annoyin
     LoadingButtonComponent,
     MatIconModule,
     AsyncPipe,
-    LessAnnoyingErrorStateMatcherModule,
   ],
 })
 export class ChangePasswordComponent implements OnInit {

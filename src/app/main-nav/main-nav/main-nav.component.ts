@@ -18,26 +18,26 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
-    selector: "gt-main-nav",
-    templateUrl: "./main-nav.component.html",
-    styleUrls: ["./main-nav.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        MatSidenavModule,
-        NgIf,
-        MatToolbarModule,
-        RouterLink,
-        MatButtonModule,
-        MatMenuModule,
-        NgFor,
-        MatDividerModule,
-        MatListModule,
-        RouterLinkActive,
-        MatCardModule,
-        MobileNavToolbarComponent,
-        AsyncPipe,
-    ],
+  selector: "gt-main-nav",
+  templateUrl: "./main-nav.component.html",
+  styleUrls: ["./main-nav.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatSidenavModule,
+    NgIf,
+    MatToolbarModule,
+    RouterLink,
+    MatButtonModule,
+    MatMenuModule,
+    NgFor,
+    MatDividerModule,
+    MatListModule,
+    RouterLinkActive,
+    MatCardModule,
+    MobileNavToolbarComponent,
+    AsyncPipe,
+  ],
 })
 export class MainNavComponent {
   activeOrganizationLoaded = false;
