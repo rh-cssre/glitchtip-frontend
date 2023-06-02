@@ -10,18 +10,25 @@ export enum DownReason {
   NETWORK = 5
 }
 
-export interface MonitorInput {
+interface MonitorBase {
   monitorType: MonitorType;
   name: string;
-  url: string;
-  expectedStatus: number;
   interval: string;
-  project: number | null;
-  timeout: number | null;
+  expectedStatus: number | null;
+  url: string;
 }
 
-export interface MonitorDetail extends MonitorInput {
+export interface MonitorInput extends MonitorBase {
+  project?: number | null;
+  timeout?: number | null;
+}
+
+export interface MonitorDetail extends MonitorBase {
   id: string;
+  url: string;
+  expectedStatus: number | null;
+  project: number | null;
+  timeout: number | null;
   projectName: string | null;
   checks: MonitorCheck[];
   isUp: boolean | null;
