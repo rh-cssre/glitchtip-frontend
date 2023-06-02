@@ -1,11 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { NgIf, AsyncPipe } from "@angular/common";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { tap, filter, take } from "rxjs/operators";
 import { lastValueFrom } from "rxjs";
-import { UptimeService, UptimeState } from "../uptime.service";
-import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
-import { CommonModule } from "@angular/common";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatDividerModule } from "@angular/material/divider";
@@ -13,6 +10,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
+import { UptimeService, UptimeState } from "../uptime.service";
+import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 
 @Component({
   standalone: true,
@@ -20,9 +19,9 @@ import { MonitorInput } from "../uptime.interfaces";
   templateUrl: "./monitor-update.component.html",
   styleUrls: ["./monitor-update.component.scss"],
   imports: [
-    CommonModule,
+    AsyncPipe,
+    NgIf,
     RouterModule,
-    ReactiveFormsModule,
     LoadingButtonComponent,
     MatButtonModule,
     MatCardModule,

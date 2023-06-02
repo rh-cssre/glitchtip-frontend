@@ -41,10 +41,10 @@ describe("List, add, update and delete uptime Monitors", () => {
       .get("mat-option")
       .contains("GET")
       .click();
-    cy.get("#monitor-url").type("invalid url");
-    cy.get("#interval").clear().type("86400");
-    cy.get("#monitor-submit").click();
-    cy.get("#expected-status").clear();
+    cy.get("[data-cy=site-url]").type("invalid url");
+    cy.get("[data-cy=interval]").clear().type("86400");
+    cy.get("[data-cy=monitor-submit]").click();
+    cy.get("[data-cy=expected-status]").clear();
     cy.contains("Enter a monitor name");
     cy.contains("Enter a valid URL");
     cy.contains("Enter a status code number");
@@ -55,7 +55,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.visit(`/${organization.slug}/uptime-monitors/`);
     cy.get("#add-monitor").click();
     cy.get("#monitor-name").type("secondmonitor");
-    cy.get("#monitor-url").type("www.twitter.com");
+    cy.get("[data-cy=site-url]").type("www.twitter.com");
     cy.get("[data-cy=associated-project]")
       .click()
       .get("mat-select")
@@ -67,8 +67,8 @@ describe("List, add, update and delete uptime Monitors", () => {
       .get("mat-option")
       .contains("Heartbeat")
       .click();
-    cy.get("#interval").clear().type("605");
-    cy.get("#monitor-submit").click();
+    cy.get("[data-cy=interval]").clear().type("605");
+    cy.get("[data-cy=monitor-submit]").click();
     cy.contains("Uptime details for secondmonitor");
     cy.visit(`/${organization.slug}/uptime-monitors/`);
     cy.contains("secondmonitor");

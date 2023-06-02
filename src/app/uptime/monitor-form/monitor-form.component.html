@@ -24,7 +24,7 @@
         </mat-form-field>
       </div>
       <div class="short-field-container">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" data-cy="monitor-type">
           <mat-label>Monitor type</mat-label>
           <mat-select
             formControlName="monitorType"
@@ -63,7 +63,11 @@
       </div>
       <ng-container *ngIf="formMonitorType?.value !== 'Heartbeat'">
         <div class="url-spacing">
-          <mat-form-field class="wide-field" appearance="outline">
+          <mat-form-field
+            class="wide-field"
+            appearance="outline"
+            data-cy="site-url"
+          >
             <mat-label>Site URL</mat-label>
             <input matInput formControlName="url" required />
             <mat-error *ngIf="formUrl?.errors?.required">
@@ -80,7 +84,7 @@
         </div>
       </ng-container>
       <div class="short-field-container">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" data-cy="associated-project">
           <mat-label>Associated Project</mat-label>
           <mat-select formControlName="project">
             <ng-container *ngIf="orgProjects$ | async as orgProjects">
@@ -117,6 +121,7 @@
             autocomplete="off"
             formControlName="expectedStatus"
             placeholder="Status code"
+            data-cy="expected-status"
             required
           />
           <mat-error *ngIf="formExpectedStatus?.errors?.min">
@@ -132,7 +137,7 @@
         </mat-form-field>
       </div>
       <div class="short-field-container">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" data-cy="interval">
           <mat-label>Interval (seconds)</mat-label>
           <input
             matInput
@@ -213,6 +218,7 @@
         class="submit"
         [loading]="loading === true"
         buttonText="Update Monitor"
+        data-cy="monitor-submit"
       >
       </gt-loading-button>
     </form> </mat-card-content

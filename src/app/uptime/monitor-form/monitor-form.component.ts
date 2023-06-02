@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { AsyncPipe, DecimalPipe, NgIf, NgFor } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import {
@@ -32,7 +32,10 @@ const defaultUrl = "https://";
   templateUrl: "./monitor-form.component.html",
   styleUrls: ["./monitor-form.component.scss"],
   imports: [
-    CommonModule,
+    AsyncPipe,
+    DecimalPipe,
+    NgIf,
+    NgFor,
     ReactiveFormsModule,
     RouterModule,
     EventInfoComponent,
