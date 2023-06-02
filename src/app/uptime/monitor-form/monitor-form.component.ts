@@ -16,14 +16,17 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { map, Observable, of, startWith } from "rxjs";
 import { MonitorDetail, MonitorInput, MonitorType } from "../uptime.interfaces";
 import { intRegex, urlRegex } from "src/app/shared/validators";
 import { timedeltaToMS } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
+import { UptimeService } from "../uptime.service";
 
 const defaultExpectedStatus = 200;
+const defaultInterval = 60;
 const defaultUrl = "https://";
 
 @Component({
@@ -60,7 +63,7 @@ export class MonitorFormComponent implements OnInit {
   orgProjects$ = this.organizationsService.activeOrganizationProjects$;
   totalEventsAllowed$ = this.subscriptionsService.totalEventsAllowed$;
 
-  intervalPerMonth: number | null = null;
+  intervalPerMonth$: Observable<number | null> = of(null);
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
@@ -86,7 +89,7 @@ export class MonitorFormComponent implements OnInit {
       Validators.min(100),
       Validators.pattern(intRegex),
     ]),
-    interval: new FormControl<number>(60, {
+    interval: new FormControl<number>(defaultInterval, {
       nonNullable: true,
       validators: [
         Validators.required,
@@ -113,10 +116,22 @@ export class MonitorFormComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private subscriptionsService: SubscriptionsService,
+    private uptimeService: UptimeService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.uptimeService.callSubscriptionDetails();
+    this.intervalPerMonth$ =
+      this.monitorForm.controls.interval.valueChanges.pipe(
+        startWith(
+          this.monitor
+            ? Math.round(timedeltaToMS(this.monitor.interval) / 1000)
+            : defaultInterval
+        ),
+        map((interval) => Math.floor(2592000 / interval))
+      );
+
     if (this.monitor) {
       this.formName.patchValue(this.monitor.name);
       this.formMonitorType.patchValue(this.monitor.monitorType);
@@ -140,10 +155,6 @@ export class MonitorFormComponent implements OnInit {
         this.formExpectedStatus.disable();
       }
     }
-
-    this.formInterval.valueChanges.subscribe((interval) => {
-      this.intervalPerMonth = Math.floor(2592000 / interval);
-    });
   }
 
   updateRequiredFields() {

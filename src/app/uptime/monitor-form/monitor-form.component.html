@@ -162,29 +162,31 @@
           </mat-error>
         </mat-form-field>
         <ng-container *ngIf="totalEventsAllowed$ | async as totalEventsAllowed">
-          <div class="help-text mat-caption">
-            <ng-container
-              *ngIf="
-                intervalPerMonth && intervalPerMonth <= totalEventsAllowed;
-                else limitExceeded
-              "
-            >
-              This will use approximately
-              {{ intervalPerMonth | number : "1.0-0" }}
-              <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
-              per month out of the
-              {{ totalEventsAllowed | number : "1.0-0" }} events your
-              organization's subscription allows for.
-            </ng-container>
-            <ng-template #limitExceeded>
-              This will use approximately
-              {{ intervalPerMonth | number : "1.0-0" }}
-              <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
-              per month, exceeding the
-              {{ totalEventsAllowed | number : "1.0-0" }} events your
-              organization's subscription allows for.
-            </ng-template>
-          </div>
+          <ng-container *ngIf="intervalPerMonth$ | async as intervalPerMonth">
+            <div class="help-text mat-caption">
+              <ng-container
+                *ngIf="
+                  intervalPerMonth <= totalEventsAllowed;
+                  else limitExceeded
+                "
+              >
+                This will use approximately
+                {{ intervalPerMonth | number : "1.0-0" }}
+                <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+                per month out of the
+                {{ totalEventsAllowed | number : "1.0-0" }} events your
+                organization's subscription allows for.
+              </ng-container>
+              <ng-template #limitExceeded>
+                This will use approximately
+                {{ intervalPerMonth | number : "1.0-0" }}
+                <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+                per month, exceeding the
+                {{ totalEventsAllowed | number : "1.0-0" }} events your
+                organization's subscription allows for.
+              </ng-template>
+            </div>
+          </ng-container>
         </ng-container>
       </div>
       <div
