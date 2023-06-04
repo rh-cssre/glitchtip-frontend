@@ -6,9 +6,10 @@ import { timedeltaToMS } from "./shared.utils";
   standalone: true,
 })
 export class HumanizeDurationPipe implements PipeTransform {
-  transform(value: string, roundSeconds: boolean = false): string {
+  transform(value: string | number, roundSeconds: boolean = false): string {
     try {
-      const milliseconds = timedeltaToMS(value);
+      const milliseconds =
+        typeof value === "string" ? timedeltaToMS(value) : value;
       if (milliseconds > 999) {
         return `${
           roundSeconds
