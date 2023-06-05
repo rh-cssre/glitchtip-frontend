@@ -1026,5 +1026,110 @@
         <source>This user isn&apos;t on any teams.</source>
       </segment>
     </unit>
+    <unit id="1312433286376470649">
+      <segment>
+        <source>Site URL</source>
+      </segment>
+    </unit>
+    <unit id="1398754421418372278">
+      <segment>
+        <source>Monitor Name</source>
+      </segment>
+    </unit>
+    <unit id="1418979860895365047">
+      <segment>
+        <source> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </source>
+      </segment>
+    </unit>
+    <unit id="2697177993211679999">
+      <segment>
+        <source> Uptime email notifications are sent to the team assigned to the associated project. </source>
+      </segment>
+    </unit>
+    <unit id="3255939212816298806">
+      <segment>
+        <source>Enter a status code number </source>
+      </segment>
+    </unit>
+    <unit id="3335933778689867657">
+      <segment>
+        <source>Expected Status</source>
+      </segment>
+    </unit>
+    <unit id="3698833851158228660">
+      <segment>
+        <source> Must be less than 86400 (24 hours). </source>
+      </segment>
+    </unit>
+    <unit id="3724940541438351467">
+      <segment>
+        <source>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</source>
+      </segment>
+    </unit>
+    <unit id="3802089991568977129">
+      <segment>
+        <source>Interval (seconds)</source>
+      </segment>
+    </unit>
+    <unit id="3939246603683357406">
+      <segment>
+        <source>Enter an integer. </source>
+      </segment>
+    </unit>
+    <unit id="4140044682969484412">
+      <segment>
+        <source> Must be 60 or higher. </source>
+      </segment>
+    </unit>
+    <unit id="4970236371480835408">
+      <segment>
+        <source> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+      </segment>
+    </unit>
+    <unit id="5049957255900483968">
+      <segment>
+        <source>Enter an integer between 1 and 60.</source>
+      </segment>
+    </unit>
+    <unit id="5956316725115867558">
+      <segment>
+        <source>Timeout</source>
+      </segment>
+    </unit>
+    <unit id="7307117116794596244">
+      <segment>
+        <source>Monitor type</source>
+      </segment>
+    </unit>
+    <unit id="7679156164610222177">
+      <segment>
+        <source> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+      </segment>
+    </unit>
+    <unit id="8098214202153793679">
+      <segment>
+        <source> The quantity needs to be greater than or equal to 100. </source>
+      </segment>
+    </unit>
+    <unit id="8190727095346221313">
+      <segment>
+        <source>Associated Project</source>
+      </segment>
+    </unit>
+    <unit id="8225067028207906234">
+      <segment>
+        <source> Enter a url </source>
+      </segment>
+    </unit>
+    <unit id="8410329189497378892">
+      <segment>
+        <source> GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down. </source>
+      </segment>
+    </unit>
+    <unit id="9084937670771016701">
+      <segment>
+        <source> Enter a valid URL with protocol (ex. https://example.com) </source>
+      </segment>
+    </unit>
   </file>
 </xliff>
