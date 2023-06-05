@@ -1231,5 +1231,131 @@
         <target>This user isn&apos;t on any teams.</target>
       </segment>
     </unit>
+    <unit id="1398754421418372278">
+      <segment state="initial">
+        <source>Monitor Name</source>
+        <target>Monitor Name</target>
+      </segment>
+    </unit>
+    <unit id="7307117116794596244">
+      <segment state="initial">
+        <source>Monitor type</source>
+        <target>Monitor type</target>
+      </segment>
+    </unit>
+    <unit id="1418979860895365047">
+      <segment state="initial">
+        <source> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </source>
+        <target> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </target>
+      </segment>
+    </unit>
+    <unit id="4970236371480835408">
+      <segment state="initial">
+        <source> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+        <target> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </target>
+      </segment>
+    </unit>
+    <unit id="7679156164610222177">
+      <segment state="initial">
+        <source> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+        <target> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </target>
+      </segment>
+    </unit>
+    <unit id="8410329189497378892">
+      <segment state="initial">
+        <source> GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down. </source>
+        <target> GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down. </target>
+      </segment>
+    </unit>
+    <unit id="1312433286376470649">
+      <segment state="initial">
+        <source>Site URL</source>
+        <target>Site URL</target>
+      </segment>
+    </unit>
+    <unit id="8225067028207906234">
+      <segment state="initial">
+        <source> Enter a url </source>
+        <target> Enter a url </target>
+      </segment>
+    </unit>
+    <unit id="9084937670771016701">
+      <segment state="initial">
+        <source> Enter a valid URL with protocol (ex. https://example.com) </source>
+        <target> Enter a valid URL with protocol (ex. https://example.com) </target>
+      </segment>
+    </unit>
+    <unit id="8190727095346221313">
+      <segment state="initial">
+        <source>Associated Project</source>
+        <target>Associated Project</target>
+      </segment>
+    </unit>
+    <unit id="2697177993211679999">
+      <segment state="initial">
+        <source> Uptime email notifications are sent to the team assigned to the associated project. </source>
+        <target> Uptime email notifications are sent to the team assigned to the associated project. </target>
+      </segment>
+    </unit>
+    <unit id="3335933778689867657">
+      <segment state="initial">
+        <source>Expected Status</source>
+        <target>Expected Status</target>
+      </segment>
+    </unit>
+    <unit id="8098214202153793679">
+      <segment state="initial">
+        <source> The quantity needs to be greater than or equal to 100. </source>
+        <target> The quantity needs to be greater than or equal to 100. </target>
+      </segment>
+    </unit>
+    <unit id="3255939212816298806">
+      <segment state="initial">
+        <source>Enter a status code number </source>
+        <target>Enter a status code number </target>
+      </segment>
+    </unit>
+    <unit id="3802089991568977129">
+      <segment state="initial">
+        <source>Interval (seconds)</source>
+        <target>Interval (seconds)</target>
+      </segment>
+    </unit>
+    <unit id="4140044682969484412">
+      <segment state="initial">
+        <source> Must be 60 or higher. </source>
+        <target> Must be 60 or higher. </target>
+      </segment>
+    </unit>
+    <unit id="3698833851158228660">
+      <segment state="initial">
+        <source> Must be less than 86400 (24 hours). </source>
+        <target> Must be less than 86400 (24 hours). </target>
+      </segment>
+    </unit>
+    <unit id="3939246603683357406">
+      <segment state="initial">
+        <source>Enter an integer. </source>
+        <target>Enter an integer. </target>
+      </segment>
+    </unit>
+    <unit id="5956316725115867558">
+      <segment state="initial">
+        <source>Timeout</source>
+        <target>Timeout</target>
+      </segment>
+    </unit>
+    <unit id="5049957255900483968">
+      <segment state="initial">
+        <source>Enter an integer between 1 and 60.</source>
+        <target>Enter an integer between 1 and 60.</target>
+      </segment>
+    </unit>
+    <unit id="3724940541438351467">
+      <segment state="initial">
+        <source>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</source>
+        <target>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -189,11 +189,11 @@ export class MonitorFormComponent implements OnInit {
         ...this.monitorForm.value,
         name: this.formName.value!,
         interval: this.formInterval.value!.toString(),
+        monitorType: this.formMonitorType.value!,
         expectedStatus: this.formExpectedStatus.enabled
           ? this.formExpectedStatus.value
           : null,
-        monitorType: this.formMonitorType.value!,
-        url: this.formUrl.value ? this.formUrl.value : "",
+        url: this.formUrl.enabled ? this.formUrl.value : "",
       });
     }
   }

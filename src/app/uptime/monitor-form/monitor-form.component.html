@@ -6,7 +6,7 @@
     <form [formGroup]="monitorForm" (ngSubmit)="submit()">
       <div>
         <mat-form-field class="wide-field" appearance="outline">
-          <mat-label>Monitor Name</mat-label>
+          <mat-label i18n>Monitor Name</mat-label>
           <input
             id="monitor-name"
             matInput
@@ -25,7 +25,7 @@
       </div>
       <div class="short-field-container">
         <mat-form-field appearance="outline" data-cy="monitor-type">
-          <mat-label>Monitor type</mat-label>
+          <mat-label i18n>Monitor type</mat-label>
           <mat-select
             formControlName="monitorType"
             required
@@ -41,23 +41,31 @@
         </mat-form-field>
         <div class="help-text mat-caption">
           <ng-container *ngIf="formMonitorType?.value === 'Ping'">
-            GlitchTip will "ping" the specified URL using an HTTP HEAD request
-            with no payload.
+            <span i18n>
+              GlitchTip will "ping" the specified URL using an HTTP HEAD request
+              with no payload.
+            </span>
           </ng-container>
           <ng-container *ngIf="formMonitorType?.value === 'POST'">
-            <p class="mat-caption">
+            <span i18n>
               GlitchTip will send an HTTP POST request to the specified URL. If
               the expected response is not received, the site will be marked as
               Down.
-            </p>
+            </span>
           </ng-container>
           <ng-container *ngIf="formMonitorType?.value === 'GET'">
-            GlitchTip will send an HTTP GET request to the specified URL. If the
-            expected response is not received, the site will be marked as Down.
+            <span i18n>
+              GlitchTip will send an HTTP GET request to the specified URL. If
+              the expected response is not received, the site will be marked as
+              Down.
+            </span>
           </ng-container>
           <ng-container *ngIf="formMonitorType?.value === 'Heartbeat'">
-            GlitchTip will await requests from your site to ensure it is active.
-            If it doesn't receive the request, the site will be marked as Down.
+            <p class="mat-caption" i18n>
+              GlitchTip will await requests from your site to ensure it is
+              active. If it doesn't receive the request, the site will be marked
+              as Down.
+            </p>
           </ng-container>
         </div>
       </div>
@@ -68,12 +76,12 @@
             appearance="outline"
             data-cy="site-url"
           >
-            <mat-label>Site URL</mat-label>
+            <mat-label i18n>Site URL</mat-label>
             <input matInput formControlName="url" required />
-            <mat-error *ngIf="formUrl?.errors?.required">
+            <mat-error *ngIf="formUrl?.errors?.required" i18n>
               Enter a url
             </mat-error>
-            <mat-error *ngIf="formUrl?.errors?.pattern">
+            <mat-error *ngIf="formUrl?.errors?.pattern" i18n>
               Enter a valid URL with protocol (ex. https://example.com)
             </mat-error>
             <mat-error *ngIf="formUrl?.errors?.maxlength">
@@ -85,7 +93,7 @@
       </ng-container>
       <div class="short-field-container">
         <mat-form-field appearance="outline" data-cy="associated-project">
-          <mat-label>Associated Project</mat-label>
+          <mat-label i18n>Associated Project</mat-label>
           <mat-select formControlName="project">
             <ng-container *ngIf="orgProjects$ | async as orgProjects">
               <mat-option value="">None</mat-option>
@@ -99,7 +107,7 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="help-text mat-caption">
+        <div class="help-text mat-caption" i18n>
           Uptime email notifications are sent to the team assigned to the
           associated project.
         </div>
@@ -112,7 +120,7 @@
         "
       >
         <mat-form-field appearance="outline">
-          <mat-label>Expected Status</mat-label>
+          <mat-label i18n>Expected Status</mat-label>
           <input
             matInput
             min="0"
@@ -124,7 +132,7 @@
             data-cy="expected-status"
             required
           />
-          <mat-error *ngIf="formExpectedStatus?.errors?.min">
+          <mat-error *ngIf="formExpectedStatus?.errors?.min" i18n>
             The quantity needs to be greater than or equal to 100.
           </mat-error>
           <mat-error
@@ -132,13 +140,14 @@
               formExpectedStatus?.errors?.pattern ||
               formExpectedStatus?.errors?.required
             "
+            i18n
             >Enter a status code number
           </mat-error>
         </mat-form-field>
       </div>
       <div class="short-field-container">
         <mat-form-field appearance="outline" data-cy="interval">
-          <mat-label>Interval (seconds)</mat-label>
+          <mat-label i18n>Interval (seconds)</mat-label>
           <input
             matInput
             min="0"
@@ -148,16 +157,17 @@
             placeholder="60"
             required
           />
-          <mat-error *ngIf="formInterval?.errors?.min">
+          <mat-error *ngIf="formInterval?.errors?.min" i18n>
             Must be 60 or higher.
           </mat-error>
-          <mat-error *ngIf="formInterval?.errors?.max">
+          <mat-error *ngIf="formInterval?.errors?.max" i18n>
             Must be less than 86400 (24 hours).
           </mat-error>
           <mat-error
             *ngIf="
               formInterval?.errors?.pattern || formInterval?.errors?.required
             "
+            i18n
             >Enter an integer.
           </mat-error>
         </mat-form-field>
@@ -194,7 +204,7 @@
         *ngIf="formMonitorType?.value !== 'Heartbeat'"
       >
         <mat-form-field appearance="outline">
-          <mat-label>Timeout</mat-label>
+          <mat-label i18n>Timeout</mat-label>
           <input
             id="timeout"
             matInput
@@ -206,11 +216,11 @@
             formControlName="timeout"
           />
           <mat-error *ngIf="formTimeout?.errors">
-            <span>Enter an integer between 1 and 60.</span>
+            <span i18n>Enter an integer between 1 and 60.</span>
           </mat-error>
         </mat-form-field>
         <div class="help-text mat-caption">
-          <span
+          <span i18n
             >Time in seconds GlitchTip will wait for a response from your app.
             Defaults to 20 seconds.</span
           >
