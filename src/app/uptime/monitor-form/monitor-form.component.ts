@@ -54,7 +54,7 @@ const defaultUrl = "https://";
   ],
 })
 export class MonitorFormComponent implements OnInit {
-  @Input() monitor?: MonitorDetail;
+  @Input() monitorSettings?: MonitorDetail;
   @Input({ required: true }) formError!: string | null;
   @Input({ required: true }) loading!: boolean | null;
 
@@ -67,51 +67,53 @@ export class MonitorFormComponent implements OnInit {
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
 
-  monitorForm = new FormGroup({
-    monitorType: new FormControl<MonitorType>("Ping", {
-      nonNullable: true,
-      validators: [Validators.required],
-    }),
-    name: new FormControl<string>("", {
-      nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(200)],
-    }),
-    url: new FormControl<string>(defaultUrl, {
-      nonNullable: true,
-      validators: [
-        Validators.pattern(urlRegex),
-        Validators.required,
-        Validators.maxLength(2000),
-      ],
-    }),
-    expectedStatus: new FormControl<number>(defaultExpectedStatus, [
-      Validators.required,
-      Validators.min(100),
-      Validators.pattern(intRegex),
-    ]),
-    interval: new FormControl<number>(defaultInterval, {
-      nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(86399),
-      ],
-    }),
-    timeout: new FormControl<number | null>(null, [
-      Validators.min(1),
-      Validators.max(60),
-      Validators.pattern(intRegex),
-    ]),
-    project: new FormControl<number | null>(null),
+  formMonitorType = new FormControl<MonitorType>("Ping", {
+    nonNullable: true,
+    validators: [Validators.required],
   });
 
-  formName = this.monitorForm.get("name") as FormControl;
-  formMonitorType = this.monitorForm.get("monitorType") as FormControl;
-  formUrl = this.monitorForm.get("url") as FormControl;
-  formExpectedStatus = this.monitorForm.get("expectedStatus") as FormControl;
-  formInterval = this.monitorForm.get("interval") as FormControl;
-  formProject = this.monitorForm.get("project") as FormControl;
-  formTimeout = this.monitorForm.get("timeout") as FormControl;
+  formName = new FormControl<string>("", {
+    nonNullable: true,
+    validators: [Validators.required, Validators.maxLength(200)],
+  });
+
+  formUrl = new FormControl<string>(defaultUrl, {
+    nonNullable: true,
+    validators: [
+      Validators.pattern(urlRegex),
+      Validators.required,
+      Validators.maxLength(2000),
+    ],
+  });
+
+  formExpectedStatus = new FormControl<number>(defaultExpectedStatus, [
+    Validators.required,
+    Validators.min(100),
+    Validators.pattern(intRegex),
+  ]);
+
+  formInterval = new FormControl<number>(defaultInterval, {
+    nonNullable: true,
+    validators: [Validators.required, Validators.min(1), Validators.max(86399)],
+  });
+
+  formTimeout = new FormControl<number | null>(null, [
+    Validators.min(1),
+    Validators.max(60),
+    Validators.pattern(intRegex),
+  ]);
+
+  formProject = new FormControl<number | null>(null);
+
+  monitorForm = new FormGroup({
+    monitorType: this.formMonitorType,
+    name: this.formName,
+    url: this.formUrl,
+    expectedStatus: this.formExpectedStatus,
+    interval: this.formInterval,
+    timeout: this.formTimeout,
+    project: this.formProject,
+  });
 
   constructor(
     private organizationsService: OrganizationsService,
@@ -125,33 +127,35 @@ export class MonitorFormComponent implements OnInit {
     this.intervalPerMonth$ =
       this.monitorForm.controls.interval.valueChanges.pipe(
         startWith(
-          this.monitor
-            ? Math.round(timedeltaToMS(this.monitor.interval) / 1000)
+          this.monitorSettings
+            ? Math.round(timedeltaToMS(this.monitorSettings.interval) / 1000)
             : defaultInterval
         ),
         map((interval) => Math.floor(2592000 / interval))
       );
 
-    if (this.monitor) {
-      this.formName.patchValue(this.monitor.name);
-      this.formMonitorType.patchValue(this.monitor.monitorType);
-      this.formUrl.patchValue(this.monitor.url ? this.monitor.url : defaultUrl);
+    if (this.monitorSettings) {
+      this.formName.patchValue(this.monitorSettings.name);
+      this.formMonitorType.patchValue(this.monitorSettings.monitorType);
+      this.formUrl.patchValue(
+        this.monitorSettings.url ? this.monitorSettings.url : defaultUrl
+      );
       this.formExpectedStatus.patchValue(
-        this.monitor.expectedStatus
-          ? this.monitor.expectedStatus
+        this.monitorSettings.expectedStatus
+          ? this.monitorSettings.expectedStatus
           : defaultExpectedStatus
       );
       this.formInterval.patchValue(
-        Math.round(timedeltaToMS(this.monitor.interval) / 1000)
+        Math.round(timedeltaToMS(this.monitorSettings.interval) / 1000)
       );
-      this.formTimeout.patchValue(this.monitor.timeout);
-      this.formProject.patchValue(this.monitor.project);
+      this.formTimeout.patchValue(this.monitorSettings.timeout);
+      this.formProject.patchValue(this.monitorSettings.project);
 
-      if (this.monitor.monitorType === "Heartbeat") {
+      if (this.monitorSettings.monitorType === "Heartbeat") {
         this.formUrl.disable();
         this.formExpectedStatus.disable();
         this.formTimeout.disable();
-      } else if (this.monitor.monitorType === "Ping") {
+      } else if (this.monitorSettings.monitorType === "Ping") {
         this.formExpectedStatus.disable();
       }
     }
@@ -183,13 +187,13 @@ export class MonitorFormComponent implements OnInit {
     if (this.monitorForm.valid) {
       this.formSubmitted.emit({
         ...this.monitorForm.value,
-        name: this.monitorForm.controls.name.value!,
-        interval: this.monitorForm.controls.interval.value!.toString(),
-        expectedStatus: this.monitorForm.controls.expectedStatus.enabled
-          ? this.monitorForm.controls.expectedStatus.value
+        name: this.formName.value!,
+        interval: this.formInterval.value!.toString(),
+        expectedStatus: this.formExpectedStatus.enabled
+          ? this.formExpectedStatus.value
           : null,
-        monitorType: this.monitorForm.controls.monitorType.value!,
-        url: this.monitorForm.value.url ? this.monitorForm.value.url : "",
+        monitorType: this.formMonitorType.value!,
+        url: this.formUrl.value ? this.formUrl.value : "",
       });
     }
   }

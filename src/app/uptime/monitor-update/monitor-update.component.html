@@ -8,7 +8,7 @@
   </header>
   <ng-container *ngIf="monitor$ | async as monitor">
     <gt-monitor-form
-      [monitor]="monitor"
+      [monitorSettings]="monitor"
       [loading]="(loading$ | async) === true"
       [formError]="error$ | async"
       (formSubmitted)="submit($event)"
