@@ -1,15 +1,30 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { tap, filter, map } from "rxjs/operators";
 import { SettingsService } from "src/app/api/settings.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "src/app/main-nav/main-nav.service";
+import { MobileNavToolbarComponent } from "../../mobile-nav-toolbar/mobile-nav-toolbar.component";
+import { NgIf, AsyncPipe } from "@angular/common";
+import { MatListModule } from "@angular/material/list";
+import { MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
-  selector: "gt-settings",
-  templateUrl: "./settings.component.html",
-  styleUrls: ["./settings.component.scss"],
+    selector: "gt-settings",
+    templateUrl: "./settings.component.html",
+    styleUrls: ["./settings.component.scss"],
+    standalone: true,
+    imports: [
+        MatSidenavModule,
+        MatListModule,
+        RouterLink,
+        RouterLinkActive,
+        NgIf,
+        MobileNavToolbarComponent,
+        RouterOutlet,
+        AsyncPipe,
+    ],
 })
 export class SettingsComponent {
   billingEnabled$ = this.service.billingEnabled$;

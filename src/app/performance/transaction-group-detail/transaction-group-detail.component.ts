@@ -1,14 +1,29 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { combineLatest, EMPTY, Subscription } from "rxjs";
 import { exhaustMap, filter, map, tap, take } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { TransactionGroupDetailService } from "./transaction-group-detail.service";
+import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-transaction-group-detail",
-  templateUrl: "./transaction-group-detail.component.html",
-  styleUrls: ["./transaction-group-detail.component.scss"],
+    selector: "gt-transaction-group-detail",
+    templateUrl: "./transaction-group-detail.component.html",
+    styleUrls: ["./transaction-group-detail.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        MatButtonModule,
+        RouterLink,
+        MatIconModule,
+        AsyncPipe,
+        HumanizeDurationPipe,
+    ],
 })
 export class TransactionGroupDetailComponent implements OnInit, OnDestroy {
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;

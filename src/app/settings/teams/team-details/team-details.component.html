@@ -1,13 +1,16 @@
 <section class="l-body">
   <header class="page-header">
-    <h1 class="mat-display-1">#{{ teamSlug$ | async }}</h1>
-    <a mat-flat-button [routerLink]="['/settings', orgSlug$ | async, 'teams']">
+    <h1 class="mat-headline-4">#{{ teamSlug$ | async }}</h1>
+    <a
+      mat-flat-button
+      [routerLink]="['/', orgSlug$ | async, 'settings', 'teams']"
+    >
       <mat-icon>keyboard_arrow_left</mat-icon
       ><ng-container i18n>Back to Teams</ng-container></a
     >
   </header>
 
-  <nav mat-tab-nav-bar>
+  <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
     <a
       *ngFor="let link of navLinks"
       mat-tab-link
@@ -18,6 +21,7 @@
       >{{ link.label }}
     </a>
   </nav>
-
-  <router-outlet></router-outlet>
+  <mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
 </section>

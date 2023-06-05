@@ -1,17 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import {
-  UntypedFormGroup,
-  UntypedFormControl,
-  Validators,
-  FormGroupDirective,
-  NgForm,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
-} from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, NgForm, ValidatorFn, AbstractControl, ValidationErrors, ReactiveFormsModule } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator } from "src/app/shared/validators";
+import { intRegex } from "src/app/shared/validators";
+import { LoadingButtonComponent } from "../../../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { NgIf } from "@angular/common";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -34,9 +31,19 @@ export const selectionRequiredValidator: ValidatorFn = (
 };
 
 @Component({
-  selector: "gt-alert-form",
-  templateUrl: "./alert-form.component.html",
-  styleUrls: ["./alert-form.component.scss"],
+    selector: "gt-alert-form",
+    templateUrl: "./alert-form.component.html",
+    styleUrls: ["./alert-form.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        ReactiveFormsModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
+        LoadingButtonComponent,
+    ],
 })
 export class AlertFormComponent implements OnInit {
   @Input() loading: boolean | null = false;
@@ -53,7 +60,7 @@ export class AlertFormComponent implements OnInit {
 
   intervalValidators = [
     Validators.min(0),
-    numberValidator,
+    Validators.pattern(intRegex),
     Validators.required,
   ];
 
