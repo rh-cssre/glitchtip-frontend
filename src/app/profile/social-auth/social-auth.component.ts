@@ -15,24 +15,24 @@ import { MatCardModule } from "@angular/material/card";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-social-auth",
-    templateUrl: "./social-auth.component.html",
-    styleUrls: ["./social-auth.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCardModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        NgFor,
-        MatOptionModule,
-        AuthSvgComponent,
-        MatDividerModule,
-        MatButtonModule,
-        AsyncPipe,
-    ],
+  selector: "gt-social-auth",
+  templateUrl: "./social-auth.component.html",
+  styleUrls: ["./social-auth.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    NgFor,
+    MatOptionModule,
+    AuthSvgComponent,
+    MatDividerModule,
+    MatButtonModule,
+    AsyncPipe,
+  ],
 })
 export class SocialAuthComponent implements OnInit {
   disconnectLoading$ = this.userService.disconnectLoading$;
