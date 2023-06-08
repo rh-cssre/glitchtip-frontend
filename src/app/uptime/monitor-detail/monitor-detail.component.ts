@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { UptimeState, UptimeService } from "../uptime.service";
+import { MonitorState, MonitorService } from "../monitor.service";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
@@ -40,7 +40,7 @@ import { lastValueFrom } from "rxjs";
   ],
 })
 export class MonitorDetailComponent
-  extends StatefulBaseComponent<UptimeState, UptimeService>
+  extends StatefulBaseComponent<MonitorState, MonitorService>
   implements OnInit
 {
   monitor$ = this.service.activeMonitor$;
@@ -83,7 +83,7 @@ export class MonitorDetailComponent
   };
 
   constructor(
-    protected service: UptimeService,
+    protected service: MonitorService,
     protected route: ActivatedRoute
   ) {
     super(service);

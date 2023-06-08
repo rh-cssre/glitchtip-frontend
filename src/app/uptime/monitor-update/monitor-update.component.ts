@@ -10,7 +10,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
-import { UptimeService, UptimeState } from "../uptime.service";
+import { MonitorService, MonitorState } from "../monitor.service";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
 
 @Component({
@@ -31,7 +31,7 @@ import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-
   ],
 })
 export class MonitorUpdateComponent
-  extends StatefulBaseComponent<UptimeState, UptimeService>
+  extends StatefulBaseComponent<MonitorState, MonitorService>
   implements OnInit
 {
   monitor$ = this.service.activeMonitor$;
@@ -40,7 +40,7 @@ export class MonitorUpdateComponent
   deleteLoading$ = this.service.deleteLoading$;
 
   constructor(
-    protected service: UptimeService,
+    protected service: MonitorService,
     protected route: ActivatedRoute
   ) {
     super(service);
@@ -56,7 +56,6 @@ export class MonitorUpdateComponent
           const monitorId = params["monitor-id"];
           if (orgSlug && monitorId) {
             this.service.retrieveMonitorDetails(orgSlug, monitorId);
-            this.service.callSubscriptionDetails();
           }
         })
       )

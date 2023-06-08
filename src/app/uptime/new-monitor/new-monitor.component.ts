@@ -5,7 +5,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
-import { UptimeService } from "../uptime.service";
+import { MonitorService } from "../monitor.service";
 
 @Component({
   standalone: true,
@@ -22,12 +22,12 @@ import { UptimeService } from "../uptime.service";
   ],
 })
 export class NewMonitorComponent {
-  error$ = this.uptimeService.error$;
-  loading$ = this.uptimeService.createLoading$;
+  error$ = this.monitorService.error$;
+  loading$ = this.monitorService.createLoading$;
 
-  constructor(private uptimeService: UptimeService) {}
+  constructor(private monitorService: MonitorService) {}
 
   submit(formValues: MonitorInput) {
-    this.uptimeService.createMonitor(formValues);
+    this.monitorService.createMonitor(formValues);
   }
 }

@@ -23,7 +23,7 @@ import { timedeltaToMS } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
-import { UptimeService } from "../uptime.service";
+import { MonitorService } from "../monitor.service";
 
 const defaultExpectedStatus = 200;
 const defaultInterval = 60;
@@ -118,12 +118,12 @@ export class MonitorFormComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private subscriptionsService: SubscriptionsService,
-    private uptimeService: UptimeService,
+    private monitorService: MonitorService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.uptimeService.callSubscriptionDetails();
+    this.monitorService.callSubscriptionDetails();
     this.intervalPerMonth$ =
       this.monitorForm.controls.interval.valueChanges.pipe(
         startWith(

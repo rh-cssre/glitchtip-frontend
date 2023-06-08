@@ -7,14 +7,14 @@ import {
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 
-import { UptimeService } from "./uptime.service";
+import { MonitorService } from "./monitor.service";
 
 import { RouterTestingModule } from "@angular/router/testing";
 import { monitorDetail, convertedSeries } from "./test-data";
 
-describe("UptimeService", () => {
+describe("MonitorService", () => {
   let httpTestingController: HttpTestingController;
-  let service: UptimeService;
+  let service: MonitorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,7 +29,7 @@ describe("UptimeService", () => {
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(UptimeService);
+    service = TestBed.inject(MonitorService);
   });
 
   it("should convert monitor checks to a formatted data series", () => {
