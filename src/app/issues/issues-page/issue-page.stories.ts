@@ -11,7 +11,6 @@ import { issueList } from "./issues-test-data";
 import { ProjectFilterBarComponent } from "src/app/list-elements/project-filter-bar/project-filter-bar.component";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
-import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
 import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 import { DataFilterBarComponent } from "src/app/list-elements/data-filter-bar/data-filter-bar.component";
 import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
@@ -27,7 +26,6 @@ export default {
         MatNativeDateModule,
         MatTableModule,
         MarkdownModule,
-        LazyMarkdownModule,
       ],
       providers: [IssuesService, MatDatepickerModule, OrganizationsService],
       declarations: [

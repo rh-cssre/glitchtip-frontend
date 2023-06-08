@@ -1,18 +1,17 @@
-import { NgZone } from "@angular/core";
-import { TestBed } from "@angular/core/testing";
-import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
-import { Router, ActivatedRoute } from "@angular/router";
-import { RouterTestingModule } from "@angular/router/testing";
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
-
 import { OrganizationsService } from "./organizations.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgZone } from "@angular/core";
+import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { Organization } from "./organizations.interface";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { organizationList, testOrgDetail } from "./organization-test-data";
-import { MaterialModule } from "src/app/shared/material.module";
-import { routes } from "src/app/routes";
+import { routes } from "src/app/app.routes";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;
@@ -24,8 +23,8 @@ describe("OrganizationsService", () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes(routes),
-        MaterialModule,
+        MatSnackBarModule,
+        RouterTestingModule,
       ],
       providers: [
         MicroSentryService,
@@ -76,8 +75,8 @@ describe("OrganizationsService", () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        MatSnackBarModule,
         RouterTestingModule.withRoutes(routes),
-        MaterialModule,
       ],
       providers: [
         {
