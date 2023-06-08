@@ -8,15 +8,13 @@ import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { EMPTY } from "rxjs";
 import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
-import { MaterialModule } from "../shared/material.module";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @Component({
-    selector: "gt-form-error", template: "",
-    standalone: true,
-    imports: [ReactiveFormsModule,
-        MaterialModule,
-        RouterTestingModule,
-        HttpClientTestingModule]
+  selector: "gt-form-error",
+  template: "",
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
 })
 class FormErrorStubComponent {
   @Input() error: any;
@@ -33,25 +31,24 @@ describe("LoginComponent", () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-    imports: [
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
-        MaterialModule,
         RouterTestingModule,
+        MatSnackBarModule,
         HttpClientTestingModule,
-        LoginComponent, FormErrorStubComponent,
-    ],
-    providers: [
+        LoginComponent,
+        FormErrorStubComponent,
+      ],
+      providers: [
         { provide: LoginService, useValue: authServiceSpy },
         MicroSentryService,
         { provide: MICRO_SENTRY_CONFIG, useValue: {} },
-    ],
-}).compileComponents();
-    })
-  );
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);

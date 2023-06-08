@@ -1,15 +1,17 @@
 import { Component, Input } from "@angular/core";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { of } from "rxjs";
 import { totpUserKey } from "./test-data";
 import { TOTPComponent } from "./totp.component";
 
 @Component({
-    selector: "gt-backup-codes", template: "",
-    standalone: true,
-    imports: [HttpClientTestingModule, MatSnackBarModule]
+  selector: "gt-backup-codes",
+  template: "",
+  standalone: true,
+  imports: [HttpClientTestingModule, MatSnackBarModule, NoopAnimationsModule],
 })
 class BackupCodesStubComponent {
   @Input() error: any;
@@ -21,8 +23,13 @@ describe("TotpComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule, MatSnackBarModule, TOTPComponent, BackupCodesStubComponent],
-}).compileComponents();
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule,
+        TOTPComponent,
+        BackupCodesStubComponent,
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

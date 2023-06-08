@@ -12,6 +12,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 
 import { NewRecipientComponent } from "./new-recipient.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("NewRecipientComponent", () => {
   let component: NewRecipientComponent;
@@ -23,21 +24,22 @@ describe("NewRecipientComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [
+      imports: [
         MatDialogModule,
         HttpClientTestingModule,
         RouterTestingModule,
         NoopAnimationsModule,
+        MatSnackBarModule,
         ReactiveFormsModule,
         NewRecipientComponent,
-    ],
-    providers: [
+      ],
+      providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: dialogMock },
         MicroSentryService,
         { provide: MICRO_SENTRY_CONFIG, useValue: {} },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
