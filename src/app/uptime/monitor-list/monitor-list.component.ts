@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -20,6 +20,7 @@ import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component"
   selector: "gt-monitor-list",
   templateUrl: "./monitor-list.component.html",
   styleUrls: ["./monitor-list.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterModule,
