@@ -11,7 +11,6 @@ export default [
   {
     path: "",
     component: IssuesPageComponent,
-
     providers: [importProvidersFrom(MarkdownModule.forRoot({}))],
   },
   {
