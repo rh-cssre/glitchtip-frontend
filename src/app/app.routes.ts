@@ -10,6 +10,7 @@ import { map } from "rxjs";
 import { LoggedInComponent } from "./logged-in.component";
 import { alreadyLoggedInGuard } from "./guards/already-logged-in.guard";
 import { AuthService } from "./api/auth/auth.service";
+import { OrganizationsService } from "./api/organizations/organizations.service";
 
 export const routes: Routes = [
   {
@@ -87,6 +88,10 @@ export const routes: Routes = [
       },
       {
         path: ":org-slug",
+        canActivate: [
+          (next: ActivatedRouteSnapshot) =>
+            inject(OrganizationsService).watchRoute(next),
+        ],
         children: [
           {
             path: "issues",
