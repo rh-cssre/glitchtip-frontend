@@ -13,7 +13,7 @@ import {
   MatSnackBarModule,
 } from "@angular/material/snack-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
-import { routes } from "./app/app.routes";
+import { routes, TemplatePageTitleStrategy } from "./app/app.routes";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { LessAnnoyingErrorStateMatcher } from "./app/shared/less-annoying-error-state-matcher";
 import { ErrorStateMatcher } from "@angular/material/core";
@@ -26,6 +26,7 @@ import {
 } from "@angular/common/http";
 import {
   provideRouter,
+  TitleStrategy,
   withInMemoryScrolling,
   withPreloading,
   withRouterConfig,
@@ -80,6 +81,7 @@ const bootstrap = () =>
         useValue: { duration: snackBarDuration },
       },
       { provide: ErrorHandler, useClass: GlobalErrorHandler },
+      { provide: TitleStrategy, useClass: TemplatePageTitleStrategy },
       {
         provide: ErrorStateMatcher,
         useClass: LessAnnoyingErrorStateMatcher,

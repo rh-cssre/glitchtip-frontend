@@ -17,6 +17,7 @@ export default [
   {
     path: ":issue-id",
     component: IssueDetailComponent,
+    resolve: [],
     children: [
       { path: "", component: EventDetailComponent },
       { path: "comments", component: CommentsComponent },

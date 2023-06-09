@@ -1,43 +1,27 @@
-import { IsLoggedInGuard } from "./guards/is-logged-in.guard";
-import { AlreadyLoggedInGuard } from "./guards/already-logged-in.guard";
-import { RouterStateSnapshot, Routes, TitleStrategy } from "@angular/router";
-import { Injectable } from "@angular/core";
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Routes,
+  TitleStrategy,
+  createUrlTreeFromSnapshot,
+} from "@angular/router";
+import { Injectable, inject } from "@angular/core";
+import { map } from "rxjs";
+import { LoggedInComponent } from "./logged-in.component";
+import { alreadyLoggedInGuard } from "./guards/already-logged-in.guard";
+import { AuthService } from "./api/auth/auth.service";
 
 export const routes: Routes = [
   {
-    path: "",
-    loadChildren: () => import("./home/routes"),
-    pathMatch: "full",
-    canActivate: [IsLoggedInGuard],
-    data: {
-      preload: true,
-    },
-  },
-  {
-    path: "organizations/new",
-    loadChildren: () => import("./new-organization/routes"),
-    canActivate: [IsLoggedInGuard],
-    title: "Create New Organization",
-  },
-  {
     path: "login",
     loadChildren: () => import("./login/routes"),
-    canActivate: [AlreadyLoggedInGuard],
+    canActivate: [alreadyLoggedInGuard],
     title: "Log In",
-  },
-  {
-    path: "profile",
-    loadChildren: () => import("./profile/routes"),
-    canActivate: [IsLoggedInGuard],
-    title: "Profile",
-    data: {
-      preload: true,
-    },
   },
   {
     path: "register",
     loadChildren: () => import("./register/routes"),
-    canActivate: [AlreadyLoggedInGuard],
+    canActivate: [alreadyLoggedInGuard],
     title: "Register",
   },
   {
@@ -65,50 +49,89 @@ export const routes: Routes = [
     pathMatch: "full",
   },
   {
-    path: ":org-slug",
-    canActivate: [IsLoggedInGuard],
+    path: "",
+    component: LoggedInComponent,
+    canActivate: [
+      (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
+        inject(AuthService)
+          .loginCheck(state)
+          .pipe(
+            map((isLoggedIn) =>
+              isLoggedIn
+                ? true
+                : createUrlTreeFromSnapshot(next, ["/", "login"])
+            )
+          ),
+    ],
     children: [
       {
-        path: "issues",
-        loadChildren: () => import("./issues/routes"),
-        title: "Issues",
+        path: "",
+        loadChildren: () => import("./home/routes"),
+        pathMatch: "full",
         data: {
           preload: true,
         },
       },
       {
-        path: "uptime-monitors",
-        loadChildren: () => import("./uptime/routes"),
-        title: "Uptime Monitors",
+        path: "organizations/new",
+        loadChildren: () => import("./new-organization/routes"),
+        title: "Create New Organization",
       },
       {
-        path: "projects",
-        loadChildren: () => import("./projects/routes"),
-        title: "Projects",
-      },
-      {
-        path: "releases",
-        loadChildren: () => import("./releases/routes"),
-        data: {
-          title: "Releases",
-        },
-      },
-      {
-        path: "settings",
-        loadChildren: () => import("./settings/routes"),
-        title: "Settings",
+        path: "profile",
+        loadChildren: () => import("./profile/routes"),
+        title: "Profile",
         data: {
           preload: true,
         },
       },
       {
-        path: "performance",
-        loadChildren: () => import("./performance/routes"),
-        title: "Performance",
-      },
-      {
-        path: ":project-slug",
-        redirectTo: "settings/projects/:project-slug",
+        path: ":org-slug",
+        data: { A: "fucking-org-slug-here" },
+        children: [
+          {
+            path: "issues",
+            loadChildren: () => import("./issues/routes"),
+            title: "Issues",
+            data: {
+              preload: true,
+            },
+          },
+          {
+            path: "uptime-monitors",
+            loadChildren: () => import("./uptime/routes"),
+            title: "Uptime Monitors",
+          },
+          {
+            path: "projects",
+            loadChildren: () => import("./projects/routes"),
+            title: "Projects",
+          },
+          {
+            path: "releases",
+            loadChildren: () => import("./releases/routes"),
+            data: {
+              title: "Releases",
+            },
+          },
+          {
+            path: "settings",
+            loadChildren: () => import("./settings/routes"),
+            title: "Settings",
+            data: {
+              preload: true,
+            },
+          },
+          {
+            path: "performance",
+            loadChildren: () => import("./performance/routes"),
+            title: "Performance",
+          },
+          {
+            path: ":project-slug",
+            redirectTo: "settings/projects/:project-slug",
+          },
+        ],
       },
     ],
   },
@@ -130,17 +153,3 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
     }
   }
 }
-
-// @NgModule({
-//   imports: [
-//     RouterModule.forRoot(routes, {
-//       onSameUrlNavigation: "reload",
-//       scrollPositionRestoration: "enabled",
-//       paramsInheritanceStrategy: "always",
-//       preloadingStrategy: CustomPreloadingStrategy,
-//     }),
-//   ],
-//   exports: [RouterModule],
-//   providers: [{ provide: TitleStrategy, useClass: TemplatePageTitleStrategy }],
-// })
-// export class AppRoutingModule {}

@@ -321,13 +321,12 @@ export class OrganizationsService {
         take(1),
         filter((slug) => slug !== null),
         tap((slug) => {
-          const firstChild = this.route.snapshot.firstChild;
-          if (
-            this.routeParams &&
-            this.routeParams["org-slug"] &&
-            slug !== this.routeParams["org-slug"] &&
-            firstChild
-          ) {
+          const oldSlug =
+            this.route.snapshot.firstChild?.firstChild?.paramMap.get(
+              "org-slug"
+            );
+          const firstChild = this.route.snapshot.firstChild?.firstChild;
+          if (oldSlug && slug !== oldSlug && firstChild) {
             if (
               firstChild.firstChild?.url &&
               firstChild.firstChild.url.length >= 1
