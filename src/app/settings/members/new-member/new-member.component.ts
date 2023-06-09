@@ -1,5 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -36,24 +43,24 @@ function emailsValidator(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-    selector: "gt-new-member",
-    templateUrl: "./new-member.component.html",
-    styleUrls: ["./new-member.component.scss"],
-    standalone: true,
-    imports: [
-        MatCardModule,
-        MatDividerModule,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormFieldModule,
-        MatInputModule,
-        MatRadioModule,
-        MatSelectModule,
-        NgFor,
-        MatOptionModule,
-        LoadingButtonComponent,
-        AsyncPipe,
-    ],
+  selector: "gt-new-member",
+  templateUrl: "./new-member.component.html",
+  styleUrls: ["./new-member.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    NgFor,
+    MatOptionModule,
+    LoadingButtonComponent,
+    AsyncPipe,
+  ],
 })
 export class NewMemberComponent implements OnInit, OnDestroy {
   enableUserRegistration$ = this.settingsService.enableUserRegistration$;
@@ -67,6 +74,7 @@ export class NewMemberComponent implements OnInit, OnDestroy {
     role: new UntypedFormControl("", [Validators.required]),
     teams: new UntypedFormControl([]),
   });
+  formRole = this.form.get("role") as UntypedFormControl;
 
   constructor(
     private organizationsService: OrganizationsService,
