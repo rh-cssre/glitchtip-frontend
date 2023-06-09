@@ -32,7 +32,7 @@ export class MonitorListService extends PaginationStatefulService<MonitorListSta
     super(initialState);
   }
 
-  getMonitors(organizationSlug: string, cursor?: string | undefined) {
+  getMonitors(organizationSlug: string, cursor: string | null) {
     this.setGetMonitorsStart();
     lastValueFrom(
       this.monitorsAPIService.list(organizationSlug, cursor).pipe(

@@ -79,7 +79,7 @@ const initialState: OrganizationsState = {
   providedIn: "root",
 })
 export class OrganizationsService extends StatefulService<OrganizationsState> {
-  private routeParams?: { [key: string]: string };
+  orgSlug: string | null = null;
   initialLoad$ = this.getState$.pipe(
     map((data) => data.initialLoad),
     distinct()
@@ -202,10 +202,6 @@ export class OrganizationsService extends StatefulService<OrganizationsState> {
     filter((event) => event instanceof RoutesRecognized)
   ) as Observable<RoutesRecognized>;
 
-  readonly routeParams$ = this.routesRecognized$.pipe(
-    map((event) => event.state.root.firstChild?.params)
-  );
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -219,7 +215,6 @@ export class OrganizationsService extends StatefulService<OrganizationsState> {
     private teamsService: TeamsService
   ) {
     super(initialState);
-    this.routeParams$.subscribe((params) => (this.routeParams = params));
 
     // When billing is enabled, check if active org has subscription
     combineLatest([
@@ -285,12 +280,8 @@ export class OrganizationsService extends StatefulService<OrganizationsState> {
       tap(([organizations, activeOrgId]) => {
         if (activeOrgId === null && organizations.length) {
           let activeOrg: Organization | undefined;
-          if (this.routeParams) {
-            activeOrg = organizations.find(
-              (org) =>
-                org.slug ===
-                (this.routeParams ? this.routeParams["org-slug"] : null)
-            );
+          if (this.orgSlug) {
+            activeOrg = organizations.find((org) => org.slug === this.orgSlug);
           }
           if (activeOrg) {
             this.changeActiveOrganization(activeOrg.id);
@@ -304,9 +295,9 @@ export class OrganizationsService extends StatefulService<OrganizationsState> {
   }
 
   watchRoute(state: ActivatedRouteSnapshot) {
-    const orgSlug = state.paramMap.get("org-slug");
-    if (orgSlug) {
-      this.setActiveOrganizationFromRouteChange(orgSlug);
+    this.orgSlug = state.paramMap.get("org-slug");
+    if (this.orgSlug) {
+      this.setActiveOrganizationFromRouteChange(this.orgSlug);
     }
     return true; // We use canActivate as a way to follow this param
   }

@@ -1,11 +1,12 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTableModule } from "@angular/material/table";
 import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
-import { map, withLatestFrom } from "rxjs/operators";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
 import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { MonitorListService, MonitorListState } from "./monitor-list.service";
@@ -19,7 +20,6 @@ import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component"
   selector: "gt-monitor-list",
   templateUrl: "./monitor-list.component.html",
   styleUrls: ["./monitor-list.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterModule,
@@ -46,14 +46,6 @@ export class MonitorListComponent extends PaginationBaseComponent<
     "check-chart",
     "status",
   ];
-  navigationEnd$ = this.cursorNavigationEnd$.pipe(
-    withLatestFrom(this.route.params, this.route.queryParams),
-    map(([_, params, queryParams]) => {
-      const orgSlug: string | undefined = params["org-slug"];
-      const cursor: string | undefined = queryParams.cursor;
-      return { orgSlug, cursor };
-    })
-  );
 
   constructor(
     protected service: MonitorListService,
@@ -61,10 +53,12 @@ export class MonitorListComponent extends PaginationBaseComponent<
     protected route: ActivatedRoute
   ) {
     super(service, router, route);
-
-    this.activeCombinedParams$.subscribe(([params, queryParams]) => {
-      if (params["org-slug"]) {
-        this.service.getMonitors(params["org-slug"], queryParams.cursor);
+    combineLatest([
+      this.route.parent!.paramMap.pipe(map((params) => params.get("org-slug"))),
+      this.route.queryParamMap.pipe(map((params) => params.get("cursor"))),
+    ]).subscribe(([orgSlug, cursor]) => {
+      if (orgSlug) {
+        this.service.getMonitors(orgSlug, cursor);
       }
     });
   }
