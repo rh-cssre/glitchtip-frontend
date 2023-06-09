@@ -87,7 +87,6 @@ export const routes: Routes = [
       },
       {
         path: ":org-slug",
-        data: { A: "fucking-org-slug-here" },
         children: [
           {
             path: "issues",
