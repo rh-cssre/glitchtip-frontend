@@ -7,8 +7,15 @@ import {
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
-import { combineLatest, EMPTY, takeUntil } from "rxjs";
-import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { combineLatest, EMPTY } from "rxjs";
+import {
+  map,
+  filter,
+  tap,
+  switchMap,
+  distinctUntilChanged,
+} from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { Issue } from "../interfaces";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
@@ -94,19 +101,8 @@ export class IssuesPageComponent
   activeOrganizationProjects$ =
     this.organizationsService.activeOrganizationProjects$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
-  navigationEnd$ = this.cursorNavigationEnd$.pipe(
-    withLatestFrom(this.route.params, this.route.queryParams),
-    map(([cursor, params, queryParams]) => {
-      const orgSlug: string | undefined = params["org-slug"];
-      const query: string | undefined = queryParams.query;
-      let project: number[] | null = null;
-      project = normalizeProjectParams(queryParams.project);
-      const start: string | undefined = queryParams.start;
-      const end: string | undefined = queryParams.end;
-      const sort: string | undefined = queryParams.sort;
-      const environment: string | undefined = queryParams.environment;
-      return { orgSlug, cursor, query, project, start, end, sort, environment };
-    })
+  orgSlug$ = this.route.parent!.paramMap.pipe(
+    map((params) => params.get("org-slug"))
   );
   errors$ = this.service.errors$;
   eventCountPluralMapping: { [k: string]: string } = {
@@ -195,15 +191,11 @@ export class IssuesPageComponent
         : this.environmentForm.controls.environment.enable()
     );
 
-    combineLatest([
-      this.route.parent!.paramMap.pipe(map((params) => params.get("org-slug"))),
-      this.route.queryParamMap,
-    ])
+    combineLatest([this.orgSlug$, this.route.queryParamMap])
       .pipe(
         switchMap(([orgSlug, params]) => {
           let project: number[] | null = null;
           project = normalizeProjectParams(params.get("project"));
-          console.log("do it", orgSlug);
           if (orgSlug) {
             return this.service.getIssues(
               orgSlug,
@@ -218,19 +210,47 @@ export class IssuesPageComponent
           }
           return EMPTY;
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed()
       )
       .subscribe();
 
-    this.organizationsService
-      .observeOrgEnvironments(this.navigationEnd$)
-      .pipe(takeUntil(this.destroy$))
+    this.orgSlug$
+      .pipe(
+        switchMap((orgSlug) => {
+          if (orgSlug) {
+            return this.organizationsService.getOrganizationEnvironments(
+              orgSlug
+            );
+          }
+          return EMPTY;
+        }),
+        takeUntilDestroyed()
+      )
       .subscribe();
 
-    this.projectEnvironmentsService
-      .observeProjectEnvironments(this.navigationEnd$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+    combineLatest([
+      this.orgSlug$,
+      this.route.queryParamMap.pipe(
+        map((params) => params.getAll("project")[0]),
+        filter((project) => !!project),
+        distinctUntilChanged()
+      ),
+      this.organizationsService.activeOrganizationProjects$,
+    ]).pipe(
+      switchMap(([orgSlug, projectId, orgProjects]) => {
+        const projectSlug = orgProjects?.find(
+          (orgProject) => orgProject.id.toString() === projectId
+        )?.slug;
+        if (orgSlug && projectSlug) {
+          return this.projectEnvironmentsService.retrieveEnvironmentsWithProperties(
+            orgSlug,
+            projectSlug
+          );
+        }
+        return EMPTY;
+      }),
+      takeUntilDestroyed()
+    );
 
     /**
      * When changing from one project to another, see if there is an environment
@@ -241,7 +261,7 @@ export class IssuesPageComponent
       this.route.queryParams,
     ])
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
         tap(([projectEnvironments, queryParams]) => {
           if (
             queryParams.project &&
@@ -258,19 +278,17 @@ export class IssuesPageComponent
       )
       .subscribe();
 
-    this.searchDirectHit$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((directHit) => {
-        this.router.navigate(
-          [directHit.id, "events", directHit.matchingEventId],
-          {
-            relativeTo: this.route,
-            queryParams: { query: null },
-            queryParamsHandling: "merge",
-            replaceUrl: true, // so the browser back button works
-          }
-        );
-      });
+    this.searchDirectHit$.pipe(takeUntilDestroyed()).subscribe((directHit) => {
+      this.router.navigate(
+        [directHit.id, "events", directHit.matchingEventId],
+        {
+          relativeTo: this.route,
+          queryParams: { query: null },
+          queryParamsHandling: "merge",
+          replaceUrl: true, // so the browser back button works
+        }
+      );
+    });
   }
 
   ngOnInit() {
