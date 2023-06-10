@@ -7,7 +7,7 @@ import {
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
-import { combineLatest, Subject, takeUntil } from "rxjs";
+import { combineLatest, EMPTY, takeUntil } from "rxjs";
 import { map, withLatestFrom, tap, switchMap } from "rxjs/operators";
 import { IssuesService, IssuesState } from "../issues.service";
 import { Issue } from "../interfaces";
@@ -25,33 +25,39 @@ import { DataFilterBarComponent } from "../../list-elements/data-filter-bar/data
 import { MatTableModule } from "@angular/material/table";
 import { ProjectFilterBarComponent } from "../../list-elements/project-filter-bar/project-filter-bar.component";
 import { ListTitleComponent } from "../../list-elements/list-title/list-title.component";
-import { NgIf, AsyncPipe, JsonPipe, DatePipe, I18nPluralPipe } from "@angular/common";
+import {
+  NgIf,
+  AsyncPipe,
+  JsonPipe,
+  DatePipe,
+  I18nPluralPipe,
+} from "@angular/common";
 
 @Component({
-    selector: "gt-issues-page",
-    templateUrl: "./issues-page.component.html",
-    styleUrls: ["./issues-page.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        ListTitleComponent,
-        ProjectFilterBarComponent,
-        MatTableModule,
-        DataFilterBarComponent,
-        MatCheckboxModule,
-        MatButtonModule,
-        MatIconModule,
-        RouterLink,
-        ListFooterComponent,
-        IssueZeroStatesComponent,
-        AsyncPipe,
-        JsonPipe,
-        DatePipe,
-        I18nPluralPipe,
-        DaysAgoPipe,
-        DaysOldPipe,
-    ],
+  selector: "gt-issues-page",
+  templateUrl: "./issues-page.component.html",
+  styleUrls: ["./issues-page.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    ListTitleComponent,
+    ProjectFilterBarComponent,
+    MatTableModule,
+    DataFilterBarComponent,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    ListFooterComponent,
+    IssueZeroStatesComponent,
+    AsyncPipe,
+    JsonPipe,
+    DatePipe,
+    I18nPluralPipe,
+    DaysAgoPipe,
+    DaysOldPipe,
+  ],
 })
 export class IssuesPageComponent
   extends PaginationBaseComponent<IssuesState, IssuesService>
@@ -94,7 +100,7 @@ export class IssuesPageComponent
       const orgSlug: string | undefined = params["org-slug"];
       const query: string | undefined = queryParams.query;
       let project: number[] | null = null;
-      project = normalizeProjectParams(queryParams.project)
+      project = normalizeProjectParams(queryParams.project);
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
@@ -102,7 +108,6 @@ export class IssuesPageComponent
       return { orgSlug, cursor, query, project, start, end, sort, environment };
     })
   );
-  issuesLookup$: Subject<void> = new Subject();
   errors$ = this.service.errors$;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
@@ -190,30 +195,32 @@ export class IssuesPageComponent
         : this.environmentForm.controls.environment.enable()
     );
 
-    this.issuesLookup$
+    combineLatest([
+      this.route.parent!.paramMap.pipe(map((params) => params.get("org-slug"))),
+      this.route.queryParamMap,
+    ])
       .pipe(
-        withLatestFrom(this.navigationEnd$),
-        switchMap(([_, params]) =>
-          this.service.getIssues(
-            params.orgSlug!,
-            params.cursor,
-            params.query,
-            params.project,
-            params.start,
-            params.end,
-            params.sort,
-            params.environment
-          )
-        ),
+        switchMap(([orgSlug, params]) => {
+          let project: number[] | null = null;
+          project = normalizeProjectParams(params.get("project"));
+          console.log("do it", orgSlug);
+          if (orgSlug) {
+            return this.service.getIssues(
+              orgSlug,
+              params.get("cursor"),
+              params.get("query"),
+              project,
+              params.get("start"),
+              params.get("end"),
+              params.get("sort"),
+              params.get("environment")
+            );
+          }
+          return EMPTY;
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe();
-
-    this.navigationEnd$.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      if (params.orgSlug) {
-        this.issuesLookup$.next();
-      }
-    });
 
     this.organizationsService
       .observeOrgEnvironments(this.navigationEnd$)

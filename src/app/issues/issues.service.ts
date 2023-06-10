@@ -87,13 +87,13 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   /** Refresh issues data. orgSlug is required. */
   getIssues(
     orgSlug: string,
-    cursor: string | undefined,
-    query: string = "is:unresolved",
+    cursor: string | undefined | null,
+    query: string | null = "is:unresolved",
     project: number[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined
+    start: string | undefined | null,
+    end: string | undefined | null,
+    sort: string | undefined | null,
+    environment: string | undefined | null
   ) {
     return this.retrieveIssues(
       orgSlug,
@@ -176,13 +176,13 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   /** Get issues from backend using appropriate endpoint based on organization */
   private retrieveIssues(
     organizationSlug?: string,
-    cursor?: string,
-    query?: string,
+    cursor?: string | null,
+    query?: string | null,
     project?: number[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null
   ) {
     this.setIssuesLoading();
     return this.issuesAPIService

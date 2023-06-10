@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { combineLatest, withLatestFrom, takeUntil } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { combineLatest, withLatestFrom, takeUntil, EMPTY } from "rxjs";
+import { map, switchMap, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { PerformanceService, PerformanceState } from "../performance.service";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
@@ -20,24 +20,24 @@ import { ListTitleComponent } from "../../list-elements/list-title/list-title.co
 import { NgIf, NgFor, AsyncPipe, I18nPluralPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-transaction-groups",
-    templateUrl: "./transaction-groups.component.html",
-    styleUrls: ["./transaction-groups.component.scss"],
-    standalone: true,
-    imports: [
-        NgIf,
-        ListTitleComponent,
-        ProjectFilterBarComponent,
-        MatTableModule,
-        DataFilterBarComponent,
-        MatTooltipModule,
-        RouterLink,
-        ListFooterComponent,
-        NgFor,
-        AsyncPipe,
-        I18nPluralPipe,
-        HumanizeDurationPipe,
-    ],
+  selector: "gt-transaction-groups",
+  templateUrl: "./transaction-groups.component.html",
+  styleUrls: ["./transaction-groups.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    ListTitleComponent,
+    ProjectFilterBarComponent,
+    MatTableModule,
+    DataFilterBarComponent,
+    MatTooltipModule,
+    RouterLink,
+    ListFooterComponent,
+    NgFor,
+    AsyncPipe,
+    I18nPluralPipe,
+    HumanizeDurationPipe,
+  ],
 })
 export class TransactionGroupsComponent
   extends PaginationBaseComponent<PerformanceState, PerformanceService>
@@ -83,7 +83,7 @@ export class TransactionGroupsComponent
       const orgSlug: string | undefined = params["org-slug"];
       const cursor: string | undefined = queryParams.cursor;
       let project: number[] | null = null;
-      project = normalizeProjectParams(queryParams.project)
+      project = normalizeProjectParams(queryParams.project);
       const start: string | undefined = queryParams.start;
       const end: string | undefined = queryParams.end;
       const sort: string | undefined = queryParams.sort;
@@ -127,33 +127,30 @@ export class TransactionGroupsComponent
   ) {
     super(service, router, route);
 
-    this.navigationEnd$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        ({
-          orgSlug,
-          cursor,
-          project,
-          start,
-          end,
-          sort,
-          environment,
-          query,
-        }) => {
+    combineLatest([
+      this.route.parent!.paramMap.pipe(map((params) => params.get("org-slug"))),
+      this.route.queryParamMap,
+    ])
+      .pipe(
+        switchMap(([orgSlug, params]) => {
           if (orgSlug) {
-            this.service.getTransactionGroups(
+            const project = normalizeProjectParams(params.get("project"));
+            return this.service.getTransactionGroups(
               orgSlug,
-              cursor,
+              params.get("cursor"),
               project,
-              start,
-              end,
-              sort,
-              environment,
-              query
+              params.get("start"),
+              params.get("end"),
+              params.get("sort"),
+              params.get("environment"),
+              params.get("query")
             );
           }
-        }
-      );
+          return EMPTY;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
 
     this.organizationEnvironments$.subscribe((environments) =>
       environments.length === 0
