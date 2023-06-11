@@ -27,6 +27,7 @@ import {
 import {
   provideRouter,
   TitleStrategy,
+  withComponentInputBinding,
   withInMemoryScrolling,
   withPreloading,
   withRouterConfig,
@@ -70,7 +71,8 @@ const bootstrap = () =>
         withRouterConfig({
           onSameUrlNavigation: "reload",
           paramsInheritanceStrategy: "always",
-        })
+        }),
+        withComponentInputBinding()
       ),
       importProvidersFrom(
         MatSnackBarModule,

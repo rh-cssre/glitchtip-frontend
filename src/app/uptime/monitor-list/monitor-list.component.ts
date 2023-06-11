@@ -1,5 +1,15 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+<<<<<<< Updated upstream
+import { Component, ChangeDetectionStrategy, OnChanges, Input } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+=======
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  OnChanges,
+} from "@angular/core";
+import { ActivatedRoute, RouterModule } from "@angular/router";
+>>>>>>> Stashed changes
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTableModule } from "@angular/material/table";
@@ -34,10 +44,9 @@ import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component"
     ListTitleComponent,
   ],
 })
-export class MonitorListComponent extends PaginationBaseComponent<
-  MonitorListState,
-  MonitorListService
-> {
+export class MonitorListComponent implements OnChanges {
+  @Input("org-slug") orgSlug?: string;
+  @Input() cursor?: string;
   tooltipDisabled = false;
 
   monitors$ = this.service.monitors$;
@@ -53,7 +62,6 @@ export class MonitorListComponent extends PaginationBaseComponent<
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    super(service, router, route);
     combineLatest([
       this.route.parent!.paramMap.pipe(map((params) => params.get("org-slug"))),
       this.route.queryParamMap.pipe(map((params) => params.get("cursor"))),
@@ -62,6 +70,10 @@ export class MonitorListComponent extends PaginationBaseComponent<
         this.service.getMonitors(orgSlug, cursor);
       }
     });
+  }
+
+  ngOnChanges() {
+    this.service.getMonitors(this.orgSlug!, this.cursor!);
   }
 
   checkIfTooltipIsNecessary($event: Event) {
