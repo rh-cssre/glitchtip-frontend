@@ -1,6 +1,7 @@
 import { HttpResponse } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { StatefulService } from "./stateful-service";
+import { urlParamsToObject } from "src/app/issues/utils";
 
 /**
  * Pagination info exists in a header, this parses it out for storing.
@@ -54,6 +55,19 @@ export abstract class PaginationStatefulService<
   TState extends PaginationStatefulServiceState
 > extends StatefulService<TState> {
   pagination$ = this.getState$.pipe(map((state) => state.pagination));
+  paginator$ = this.pagination$.pipe(
+    map((pagination) => ({
+      ...pagination,
+      hasNextPage: !!pagination.nextPageURL,
+      hasPreviousPage: !!pagination.previousPageURL,
+      nextPageParams: urlParamsToObject(pagination.nextPageURL),
+      previousPageParams: urlParamsToObject(pagination.previousPageURL),
+      count:
+        pagination.hits && pagination.hits === pagination.maxHits
+          ? pagination.hits.toString() + "+"
+          : pagination.hits?.toString(),
+    }))
+  );
   initialLoadComplete$ = this.pagination$.pipe(
     map((pagination) => pagination.initialLoadComplete)
   );
