@@ -1,6 +1,5 @@
 import { Router, NavigationEnd, ActivatedRoute, Params } from "@angular/router";
 import { filter, map, Observable, takeUntil, withLatestFrom } from "rxjs";
-import { urlParamsToObject } from "src/app/issues/utils";
 import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
@@ -37,18 +36,6 @@ export abstract class PaginationBaseComponent<
     protected route: ActivatedRoute
   ) {
     super(service);
-    this.paginator$ = service.pagination$.pipe(
-      map((pagination) => ({
-        ...pagination,
-        hasNextPage: !!pagination.nextPageURL,
-        hasPreviousPage: !!pagination.previousPageURL,
-        nextPageParams: urlParamsToObject(pagination.nextPageURL),
-        previousPageParams: urlParamsToObject(pagination.previousPageURL),
-        count:
-          pagination.hits && pagination.hits === pagination.maxHits
-            ? pagination.hits.toString() + "+"
-            : pagination.hits?.toString(),
-      }))
-    );
+    this.paginator$ = service.paginator$;
   }
 }
