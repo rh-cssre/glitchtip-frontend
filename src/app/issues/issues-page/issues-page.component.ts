@@ -177,9 +177,8 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     combineLatest([this.orgSlug$, this.route.queryParamMap])
       .pipe(
         switchMap(([orgSlug, params]) => {
-          let project: number[] | null = null;
           let query = params.get("query");
-          project = normalizeProjectParams(params.get("project"));
+          let project = normalizeProjectParams(params.getAll("project"));
           if (orgSlug) {
             return this.service.getIssues(
               orgSlug,

@@ -116,7 +116,7 @@ export class TransactionGroupsComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(([orgSlug, params]) => {
           if (orgSlug) {
-            const project = normalizeProjectParams(params.get("project"));
+            const project = normalizeProjectParams(params.getAll("project"));
             return this.service.getTransactionGroups(
               orgSlug,
               params.get("cursor"),
