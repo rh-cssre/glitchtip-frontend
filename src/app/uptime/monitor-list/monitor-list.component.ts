@@ -1,9 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnChanges,
-  Input,
-} from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -16,6 +11,7 @@ import { ListFooterComponent } from "src/app/list-elements/list-footer/list-foot
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import { MonitorListService } from "./monitor-list.service";
+import { combineLatest } from "rxjs";
 
 @Component({
   standalone: true,
@@ -36,9 +32,7 @@ import { MonitorListService } from "./monitor-list.service";
     ListTitleComponent,
   ],
 })
-export class MonitorListComponent implements OnChanges {
-  @Input("org-slug") orgSlug?: string;
-  @Input() cursor?: string;
+export class MonitorListComponent {
   tooltipDisabled = false;
   monitors$ = this.service.monitors$;
   paginator$ = this.service.paginator$;
@@ -52,10 +46,15 @@ export class MonitorListComponent implements OnChanges {
   constructor(
     protected route: ActivatedRoute,
     public service: MonitorListService
-  ) {}
-
-  ngOnChanges() {
-    this.service.getMonitors(this.orgSlug!, this.cursor!);
+  ) {
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(
+      ([params, queryParams]) => {
+        const orgSlug = params.get("org-slug");
+        if (orgSlug) {
+          this.service.getMonitors(orgSlug, queryParams.get("cursor"));
+        }
+      }
+    );
   }
 
   checkIfTooltipIsNecessary($event: Event) {
