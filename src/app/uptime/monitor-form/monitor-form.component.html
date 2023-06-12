@@ -67,6 +67,12 @@
               as Down.
             </p>
           </ng-container>
+          <ng-container *ngIf="formMonitorType?.value === 'TCP Port'">
+            <span i18n>
+              GlitchTip will check to make sure the port at the specified URL is
+              accessible.
+            </span>
+          </ng-container>
         </div>
       </div>
       <ng-container *ngIf="formMonitorType?.value !== 'Heartbeat'">
@@ -78,16 +84,33 @@
           >
             <mat-label i18n>Site URL</mat-label>
             <input matInput formControlName="url" required />
-            <mat-error *ngIf="formUrl?.errors?.required" i18n>
-              Enter a url
+            <mat-hint>
+              <ng-container *ngTemplateOutlet="urlHint"></ng-container>
+            </mat-hint>
+            <mat-error *ngIf="formUrl?.errors">
+              <ng-container *ngIf="formUrl?.errors?.maxlength; else urlHint">
+                <span i18n>
+                  URL may not be more than
+                  {{ formUrl.errors?.maxlength.requiredLength }} characters
+                </span>
+              </ng-container>
             </mat-error>
-            <mat-error *ngIf="formUrl?.errors?.pattern" i18n>
-              Enter a valid URL with protocol (ex. https://example.com)
-            </mat-error>
-            <mat-error *ngIf="formUrl?.errors?.maxlength">
-              URL may not be more than
-              {{ formUrl.errors?.maxlength.requiredLength }} characters
-            </mat-error>
+            <ng-template #urlHint>
+              <ng-container
+                *ngTemplateOutlet="
+                  formMonitorType?.value === 'TCP Port' ? portUrl : standardUrl
+                "
+              >
+              </ng-container>
+            </ng-template>
+            <ng-template #standardUrl>
+              <span i18n
+                >Enter a valid URL with protocol (ex. https://example.com)</span
+              >
+            </ng-template>
+            <ng-template #portUrl>
+              <span i18n>Enter a host name and port (ex. example.com:80)</span>
+            </ng-template>
           </mat-form-field>
         </div>
       </ng-container>
@@ -115,8 +138,7 @@
       <div
         class="short-field-container"
         *ngIf="
-          formMonitorType?.value !== 'Heartbeat' &&
-          formMonitorType?.value !== 'Ping'
+          formMonitorType?.value === 'GET' || formMonitorType?.value === 'POST'
         "
       >
         <mat-form-field appearance="outline">

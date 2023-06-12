@@ -1,4 +1,10 @@
-import { AsyncPipe, DecimalPipe, NgIf, NgFor } from "@angular/common";
+import {
+  AsyncPipe,
+  DecimalPipe,
+  NgIf,
+  NgFor,
+  NgTemplateOutlet,
+} from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import {
@@ -6,6 +12,8 @@ import {
   FormControl,
   Validators,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MatCardModule } from "@angular/material/card";
@@ -27,7 +35,29 @@ import { MonitorService } from "../monitor.service";
 
 const defaultExpectedStatus = 200;
 const defaultInterval = 60;
-const defaultUrl = "https://";
+
+// returns a pattern error to simplify error checking in template
+export function portUrlValidator(
+  control: AbstractControl<string>
+): ValidationErrors | null {
+  if (control.value.startsWith("https:")) {
+    return { pattern: true };
+  }
+  return null;
+}
+
+const standardUrlValidators = [
+  Validators.pattern(urlRegex),
+  Validators.required,
+  Validators.maxLength(2000),
+];
+
+const portUrlValidators = [
+  Validators.pattern(urlRegex),
+  Validators.required,
+  Validators.maxLength(2000),
+  portUrlValidator,
+];
 
 @Component({
   standalone: true,
@@ -39,6 +69,7 @@ const defaultUrl = "https://";
     DecimalPipe,
     NgIf,
     NgFor,
+    NgTemplateOutlet,
     ReactiveFormsModule,
     RouterModule,
     EventInfoComponent,
@@ -65,7 +96,7 @@ export class MonitorFormComponent implements OnInit {
 
   intervalPerMonth$: Observable<number | null> = of(null);
 
-  typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
+  typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat", "TCP Port"];
 
   formMonitorType = new FormControl<MonitorType>("Ping", {
     nonNullable: true,
@@ -77,13 +108,9 @@ export class MonitorFormComponent implements OnInit {
     validators: [Validators.required, Validators.maxLength(200)],
   });
 
-  formUrl = new FormControl<string>(defaultUrl, {
+  formUrl = new FormControl<string>("", {
     nonNullable: true,
-    validators: [
-      Validators.pattern(urlRegex),
-      Validators.required,
-      Validators.maxLength(2000),
-    ],
+    validators: standardUrlValidators,
   });
 
   formExpectedStatus = new FormControl<number>(defaultExpectedStatus, [
@@ -138,7 +165,7 @@ export class MonitorFormComponent implements OnInit {
       this.formName.patchValue(this.monitorSettings.name);
       this.formMonitorType.patchValue(this.monitorSettings.monitorType);
       this.formUrl.patchValue(
-        this.monitorSettings.url ? this.monitorSettings.url : defaultUrl
+        this.monitorSettings.url ? this.monitorSettings.url : ""
       );
       this.formExpectedStatus.patchValue(
         this.monitorSettings.expectedStatus
@@ -157,6 +184,9 @@ export class MonitorFormComponent implements OnInit {
         this.formTimeout.disable();
       } else if (this.monitorSettings.monitorType === "Ping") {
         this.formExpectedStatus.disable();
+      } else if (this.monitorSettings.monitorType === "TCP Port") {
+        this.formUrl.setValidators(portUrlValidators);
+        this.formExpectedStatus.disable();
       }
     }
   }
@@ -168,10 +198,17 @@ export class MonitorFormComponent implements OnInit {
       this.formTimeout.disable();
     } else if (this.formMonitorType.value === "Ping") {
       this.formUrl.enable();
+      this.formUrl.setValidators(standardUrlValidators);
+      this.formExpectedStatus.disable();
+      this.formTimeout.enable();
+    } else if (this.formMonitorType.value === "TCP Port") {
+      this.formUrl.enable();
+      this.formUrl.setValidators(portUrlValidators);
       this.formExpectedStatus.disable();
       this.formTimeout.enable();
     } else {
       this.formUrl.enable();
+      this.formUrl.setValidators(standardUrlValidators);
       this.formExpectedStatus.enable();
       this.formTimeout.enable();
     }
