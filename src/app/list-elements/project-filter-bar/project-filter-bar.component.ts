@@ -205,7 +205,7 @@ export class ProjectFilterBarComponent implements OnInit {
 
   navigate(project: string[] | null) {
     this.router.navigate([], {
-      queryParams: { project: project ? project : null },
+      queryParams: { project: project ? project : null, cursor: null },
       queryParamsHandling: "merge",
     });
   }
