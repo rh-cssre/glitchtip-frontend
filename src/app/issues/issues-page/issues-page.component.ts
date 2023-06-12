@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
@@ -16,11 +17,10 @@ import {
   switchMap,
   distinctUntilChanged,
 } from "rxjs/operators";
-import { IssuesService, IssuesState } from "../issues.service";
+import { IssuesService } from "../issues.service";
 import { Issue } from "../interfaces";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
 import { DaysAgoPipe, DaysOldPipe } from "../../shared/days-ago.pipe";
 import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
@@ -32,13 +32,6 @@ import { DataFilterBarComponent } from "../../list-elements/data-filter-bar/data
 import { MatTableModule } from "@angular/material/table";
 import { ProjectFilterBarComponent } from "../../list-elements/project-filter-bar/project-filter-bar.component";
 import { ListTitleComponent } from "../../list-elements/list-title/list-title.component";
-import {
-  NgIf,
-  AsyncPipe,
-  JsonPipe,
-  DatePipe,
-  I18nPluralPipe,
-} from "@angular/common";
 
 @Component({
   selector: "gt-issues-page",
@@ -47,7 +40,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
+    CommonModule,
     ListTitleComponent,
     ProjectFilterBarComponent,
     MatTableModule,
@@ -58,19 +51,13 @@ import {
     RouterLink,
     ListFooterComponent,
     IssueZeroStatesComponent,
-    AsyncPipe,
-    JsonPipe,
-    DatePipe,
-    I18nPluralPipe,
     DaysAgoPipe,
     DaysOldPipe,
   ],
 })
-export class IssuesPageComponent
-  extends PaginationBaseComponent<IssuesState, IssuesService>
-  implements OnInit, OnDestroy
-{
+export class IssuesPageComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ["select", "title", "events"];
+  paginator$ = this.service.paginator$;
   loading$ = this.service.getState$.pipe(
     map((state) => state.pagination.loading)
   );
@@ -101,9 +88,7 @@ export class IssuesPageComponent
   activeOrganizationProjects$ =
     this.organizationsService.activeOrganizationProjects$;
   activeOrganization$ = this.organizationsService.activeOrganization$;
-  orgSlug$ = this.route.parent!.paramMap.pipe(
-    map((params) => params.get("org-slug"))
-  );
+  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
   errors$ = this.service.errors$;
   eventCountPluralMapping: { [k: string]: string } = {
     "=1": "1 event",
@@ -177,8 +162,6 @@ export class IssuesPageComponent
     private organizationsService: OrganizationsService,
     private projectEnvironmentsService: ProjectEnvironmentsService
   ) {
-    super(service, router, route);
-
     this.issues$.subscribe((resp) =>
       resp.length === 0
         ? this.sortForm.controls.sort.disable()
@@ -316,7 +299,6 @@ export class IssuesPageComponent
   }
 
   ngOnDestroy() {
-    super.ngOnDestroy();
     this.projectEnvironmentsService.clearState();
   }
 

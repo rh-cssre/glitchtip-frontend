@@ -531,19 +531,6 @@ export class OrganizationsService extends StatefulService<OrganizationsState> {
     this.updateTeamSlug(id, newSlug);
   }
 
-  observeOrgEnvironments(
-    queryParamsObs: Observable<{
-      orgSlug: string | undefined;
-    }>
-  ) {
-    return queryParamsObs.pipe(
-      distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
-      mergeMap(({ orgSlug }) =>
-        orgSlug ? this.getOrganizationEnvironments(orgSlug) : EMPTY
-      )
-    );
-  }
-
   getOrganizationEnvironments(orgSlug: string) {
     return this.retrieveOrganizationEnvironments(orgSlug);
   }
