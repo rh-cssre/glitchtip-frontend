@@ -8,11 +8,14 @@ import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { AuthService } from "../api/auth/auth.service";
 import { LoginResponse } from "../api/auth/auth.interfaces";
 import { LoginService } from "../login/login.service";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-auth",
-  templateUrl: "./auth.component.html",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-auth",
+    templateUrl: "./auth.component.html",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [AsyncPipe],
 })
 export class AuthComponent implements OnInit {
   provider$ = this.route.params.pipe(map((params) => params.provider));

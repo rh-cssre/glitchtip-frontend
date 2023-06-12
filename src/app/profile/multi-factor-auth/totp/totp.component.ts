@@ -6,17 +6,40 @@ import {
   OnInit,
   OnDestroy,
 } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import * as QRCode from "qrcode";
 import { combineLatest } from "rxjs";
 import { delay, filter, tap } from "rxjs/operators";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.component";
+import { ToDoItemComponent } from "../../../shared/to-do-item/to-do-item.component";
+import { BackupCodesComponent } from "./backup-codes/backup-codes.component";
+import { MatButtonModule } from "@angular/material/button";
+import { NgIf, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
-  selector: "gt-totp",
-  templateUrl: "./totp.component.html",
-  styleUrls: ["./totp.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-totp",
+    templateUrl: "./totp.component.html",
+    styleUrls: ["./totp.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatDividerModule,
+        NgIf,
+        MatButtonModule,
+        BackupCodesComponent,
+        ToDoItemComponent,
+        ReactiveFormsModule,
+        FormErrorComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        AsyncPipe,
+    ],
 })
 export class TOTPComponent implements OnInit, OnDestroy {
   @ViewChild("canvas", { static: false }) canvas: ElementRef | undefined;

@@ -4,6 +4,12 @@ mat-form-field {
     margin-right: 10px;
 }
 
+.button-group {
+    button:first-child {
+        margin-right: 10px;
+    }
+}
+
 :host ::ng-deep .mat-body-strong {
     margin-bottom: 0px;
 }
@@ -12,9 +18,4 @@ mat-form-field {
     margin-top: 5px;
     margin-bottom: 10px;
     margin-right: 15px;
-}
-
-:host ::ng-deep .mat-subheading-3 {
-    margin-top: 5px;
-    margin-bottom: 10px;
 }

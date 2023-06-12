@@ -1,0 +1,237 @@
+<mat-card>
+  <mat-card-content>
+    <div class="form-center">
+      <mat-error *ngIf="formError">{{ formError }}</mat-error>
+    </div>
+    <form [formGroup]="monitorForm" (ngSubmit)="submit()">
+      <div>
+        <mat-form-field class="wide-field" appearance="outline">
+          <mat-label i18n>Monitor Name</mat-label>
+          <input
+            id="monitor-name"
+            matInput
+            formControlName="name"
+            maxlength="200"
+            required
+          />
+          <mat-error *ngIf="formName?.errors?.required">
+            Enter a monitor name
+          </mat-error>
+          <mat-error *ngIf="formName?.errors?.maxlength">
+            Name may not be more than
+            {{ formName.errors?.maxlength.requiredLength }} characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="monitor-type">
+          <mat-label i18n>Monitor type</mat-label>
+          <mat-select
+            formControlName="monitorType"
+            required
+            (selectionChange)="updateRequiredFields()"
+          >
+            <mat-option *ngFor="let type of typeChoices" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formMonitorType?.errors?.required">
+            Choose a monitor type
+          </mat-error>
+        </mat-form-field>
+        <div class="help-text mat-caption">
+          <ng-container *ngIf="formMonitorType?.value === 'Ping'">
+            <span i18n>
+              GlitchTip will "ping" the specified URL using an HTTP HEAD request
+              with no payload.
+            </span>
+          </ng-container>
+          <ng-container *ngIf="formMonitorType?.value === 'POST'">
+            <span i18n>
+              GlitchTip will send an HTTP POST request to the specified URL. If
+              the expected response is not received, the site will be marked as
+              Down.
+            </span>
+          </ng-container>
+          <ng-container *ngIf="formMonitorType?.value === 'GET'">
+            <span i18n>
+              GlitchTip will send an HTTP GET request to the specified URL. If
+              the expected response is not received, the site will be marked as
+              Down.
+            </span>
+          </ng-container>
+          <ng-container *ngIf="formMonitorType?.value === 'Heartbeat'">
+            <p class="mat-caption" i18n>
+              GlitchTip will await requests from your site to ensure it is
+              active. If it doesn't receive the request, the site will be marked
+              as Down.
+            </p>
+          </ng-container>
+        </div>
+      </div>
+      <ng-container *ngIf="formMonitorType?.value !== 'Heartbeat'">
+        <div class="url-spacing">
+          <mat-form-field
+            class="wide-field"
+            appearance="outline"
+            data-cy="site-url"
+          >
+            <mat-label i18n>Site URL</mat-label>
+            <input matInput formControlName="url" required />
+            <mat-error *ngIf="formUrl?.errors?.required" i18n>
+              Enter a url
+            </mat-error>
+            <mat-error *ngIf="formUrl?.errors?.pattern" i18n>
+              Enter a valid URL with protocol (ex. https://example.com)
+            </mat-error>
+            <mat-error *ngIf="formUrl?.errors?.maxlength">
+              URL may not be more than
+              {{ formUrl.errors?.maxlength.requiredLength }} characters
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="associated-project">
+          <mat-label i18n>Associated Project</mat-label>
+          <mat-select formControlName="project">
+            <ng-container *ngIf="orgProjects$ | async as orgProjects">
+              <mat-option value="">None</mat-option>
+              <mat-option
+                *ngFor="let orgProject of orgProjects"
+                [value]="orgProject.id"
+              >
+                {{ orgProject.name }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="help-text mat-caption" i18n>
+          Uptime email notifications are sent to the team assigned to the
+          associated project.
+        </div>
+      </div>
+      <div
+        class="short-field-container"
+        *ngIf="
+          formMonitorType?.value !== 'Heartbeat' &&
+          formMonitorType?.value !== 'Ping'
+        "
+      >
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Expected Status</mat-label>
+          <input
+            matInput
+            min="0"
+            max="1000"
+            type="number"
+            autocomplete="off"
+            formControlName="expectedStatus"
+            placeholder="Status code"
+            data-cy="expected-status"
+            required
+          />
+          <mat-error *ngIf="formExpectedStatus?.errors?.min" i18n>
+            The quantity needs to be greater than or equal to 100.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              formExpectedStatus?.errors?.pattern ||
+              formExpectedStatus?.errors?.required
+            "
+            i18n
+            >Enter a status code number
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="interval">
+          <mat-label i18n>Interval (seconds)</mat-label>
+          <input
+            matInput
+            min="0"
+            type="number"
+            autocomplete="off"
+            formControlName="interval"
+            placeholder="60"
+            required
+          />
+          <mat-error *ngIf="formInterval?.errors?.min" i18n>
+            Must be 60 or higher.
+          </mat-error>
+          <mat-error *ngIf="formInterval?.errors?.max" i18n>
+            Must be less than 86400 (24 hours).
+          </mat-error>
+          <mat-error
+            *ngIf="
+              formInterval?.errors?.pattern || formInterval?.errors?.required
+            "
+            i18n
+            >Enter an integer.
+          </mat-error>
+        </mat-form-field>
+        <ng-container *ngIf="totalEventsAllowed$ | async as totalEventsAllowed">
+          <ng-container *ngIf="intervalPerMonth$ | async as intervalPerMonth">
+            <div class="help-text mat-caption">
+              <ng-container
+                *ngIf="
+                  intervalPerMonth <= totalEventsAllowed;
+                  else limitExceeded
+                "
+              >
+                This will use approximately
+                {{ intervalPerMonth | number : "1.0-0" }}
+                <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+                per month out of the
+                {{ totalEventsAllowed | number : "1.0-0" }} events your
+                organization's subscription allows for.
+              </ng-container>
+              <ng-template #limitExceeded>
+                This will use approximately
+                {{ intervalPerMonth | number : "1.0-0" }}
+                <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+                per month, exceeding the
+                {{ totalEventsAllowed | number : "1.0-0" }} events your
+                organization's subscription allows for.
+              </ng-template>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div
+        class="short-field-container"
+        *ngIf="formMonitorType?.value !== 'Heartbeat'"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Timeout</mat-label>
+          <input
+            id="timeout"
+            matInput
+            min="0"
+            max="60"
+            type="number"
+            default="20"
+            autocomplete="off"
+            formControlName="timeout"
+          />
+          <mat-error *ngIf="formTimeout?.errors">
+            <span i18n>Enter an integer between 1 and 60.</span>
+          </mat-error>
+        </mat-form-field>
+        <div class="help-text mat-caption">
+          <span i18n
+            >Time in seconds GlitchTip will wait for a response from your app.
+            Defaults to 20 seconds.</span
+          >
+        </div>
+      </div>
+      <gt-loading-button
+        class="submit"
+        [loading]="loading === true"
+        buttonText="Update Monitor"
+        data-cy="monitor-submit"
+      >
+      </gt-loading-button>
+    </form> </mat-card-content
+></mat-card>
