@@ -25,13 +25,13 @@ export class IssuesAPIService extends APIBaseService {
 
   list(
     organizationSlug?: string,
-    cursor?: string,
-    query?: string,
+    cursor?: string | null,
+    query?: string | null,
     project?: number[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null
   ) {
     const url = organizationSlug
       ? `${baseUrl}/organizations/${organizationSlug}/issues/`

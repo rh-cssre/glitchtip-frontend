@@ -158,7 +158,7 @@ export function timedeltaToMS(value: string) {
 }
 
 export function normalizeProjectParams(
-  projects: string | string[] | undefined
+  projects: string | string[] | undefined | null
 ) {
   if (Array.isArray(projects)) {
     return projects.map((id) => parseInt(id, 10));

@@ -31,7 +31,7 @@ export class MonitorChecksService extends PaginationStatefulService<MonitorCheck
   retrieveMonitorChecks(
     orgSlug: string,
     monitorId: string,
-    cursor?: string | undefined
+    cursor?: string | null
   ) {
     this.setRetrieveMonitorChecksStart();
     lastValueFrom(

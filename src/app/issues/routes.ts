@@ -11,12 +11,12 @@ export default [
   {
     path: "",
     component: IssuesPageComponent,
-
     providers: [importProvidersFrom(MarkdownModule.forRoot({}))],
   },
   {
     path: ":issue-id",
     component: IssueDetailComponent,
+    resolve: [],
     children: [
       { path: "", component: EventDetailComponent },
       { path: "comments", component: CommentsComponent },

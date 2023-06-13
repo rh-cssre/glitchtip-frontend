@@ -60,15 +60,15 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
 
   getTransactionGroups(
     orgSlug: string,
-    cursor: string | undefined,
+    cursor: string | undefined | null,
     project: number[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined,
-    query: string | undefined
+    start: string | undefined | null,
+    end: string | undefined | null,
+    sort: string | undefined | null,
+    environment: string | undefined | null,
+    query: string | undefined | null
   ) {
-    this.retrieveTransactionGroups(
+    return this.retrieveTransactionGroups(
       orgSlug,
       cursor,
       project,
@@ -77,18 +77,18 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
       sort,
       environment,
       query
-    ).subscribe();
+    );
   }
 
   private retrieveTransactionGroups(
     orgSlug: string,
-    cursor?: string,
+    cursor?: string | null,
     project?: number[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null
   ) {
     this.setLoadingStart();
     return this.transactionGroupsAPIService

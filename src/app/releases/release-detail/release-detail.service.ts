@@ -37,7 +37,7 @@ export class ReleaseDetailService extends PaginationStatefulService<ReleaseDetai
   }
 
   /** Get release detail and associated files */
-  getRelease(orgSlug: string, version: string, cursor: string | undefined) {
+  getRelease(orgSlug: string, version: string, cursor?: string | null) {
     this.retrieveRelease(orgSlug, version).subscribe();
     this.retrieveReleaseFiles(orgSlug, version, cursor).subscribe();
   }
@@ -59,7 +59,7 @@ export class ReleaseDetailService extends PaginationStatefulService<ReleaseDetai
   private retrieveReleaseFiles(
     orgSlug: string,
     version: string,
-    cursor: string | undefined
+    cursor?: string | null
   ) {
     this.startPaginatedLoading();
     return this.releasesAPIService

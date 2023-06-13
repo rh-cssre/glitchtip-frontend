@@ -1,13 +1,6 @@
 import { Injectable } from "@angular/core";
-import { combineLatest, EMPTY, Observable } from "rxjs";
-import {
-  filter,
-  distinctUntilChanged,
-  map,
-  mergeMap,
-  takeWhile,
-  tap,
-} from "rxjs/operators";
+import { combineLatest, EMPTY } from "rxjs";
+import { filter, map, mergeMap, takeWhile, tap } from "rxjs/operators";
 import { ProjectEnvironment } from "src/app/api/organizations/organizations.interface";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
@@ -105,37 +98,6 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
             );
         }
         return EMPTY;
-      })
-    );
-  }
-
-  observeProjectEnvironments(
-    queryParamsObs: Observable<{
-      orgSlug: string | undefined;
-      project: number[] | null;
-    }>
-  ) {
-    return combineLatest([
-      queryParamsObs,
-      this.organizationsService.activeOrganizationProjects$,
-    ]).pipe(
-      filter(
-        ([urlData, projects]) =>
-          urlData.orgSlug !== undefined &&
-          urlData.project?.length === 1 &&
-          projects !== null
-      ),
-      distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
-      map(([urlData, projects]) => {
-        const matchedProject = projects!.find(
-          (project) => project.id === urlData.project![0]
-        );
-        if (urlData.orgSlug && matchedProject) {
-          this.retrieveEnvironmentsWithProperties(
-            urlData.orgSlug,
-            matchedProject.slug
-          ).subscribe();
-        }
       })
     );
   }

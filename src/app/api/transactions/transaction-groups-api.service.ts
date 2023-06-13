@@ -16,13 +16,13 @@ export class TransactionGroupsAPIService extends APIBaseService {
 
   list(
     organizationSlug: string,
-    cursor?: string,
+    cursor?: string | null,
     project?: number[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null
   ) {
     const url = this.listURL(organizationSlug);
     let httpParams = new HttpParams();

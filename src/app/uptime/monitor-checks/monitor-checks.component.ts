@@ -1,17 +1,13 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { combineLatest, merge, take } from "rxjs";
+import { combineLatest } from "rxjs";
 import { MonitorDetail, DownReason } from "../uptime.interfaces";
 import { reasonTextConversions } from "../uptime.utils";
 import { ListFooterComponent } from "src/app/list-elements/list-footer/list-footer.component";
 import { CommonModule } from "@angular/common";
 import { HumanizeDurationPipe } from "src/app/shared/seconds-or-ms.pipe";
 import { MatTableModule } from "@angular/material/table";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
-import {
-  MonitorChecksService,
-  MonitorChecksState,
-} from "./monitor-checks.service";
+import { MonitorChecksService } from "./monitor-checks.service";
 
 @Component({
   standalone: true,
@@ -26,38 +22,31 @@ import {
     RouterModule,
   ],
 })
-export class MonitorChecksComponent extends PaginationBaseComponent<
-  MonitorChecksState,
-  MonitorChecksService
-> {
+export class MonitorChecksComponent {
+  @Input({ required: true }) monitor!: MonitorDetail;
+  monitorChecks$ = this.service.monitorChecks$;
+  paginator$ = this.service.paginator$;
   displayedColumns: string[] = [
     "status",
     "reason",
     "responseTime",
     "startCheck",
   ];
-  @Input({ required: true }) monitor!: MonitorDetail;
-
-  monitorChecks$ = this.service.monitorChecks$;
-  initialParams$ = combineLatest([
-    this.route.params,
-    this.route.queryParams,
-  ]).pipe(take(1));
 
   constructor(
     protected service: MonitorChecksService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    super(service, router, route);
-
-    merge(this.initialParams$, this.activeCombinedParams$).subscribe(
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(
       ([params, queryParams]) => {
-        if (params["org-slug"] && params["monitor-id"]) {
+        const orgSlug = params.get("org-slug");
+        const monitorId = params.get("monitor-id");
+        if (orgSlug && monitorId) {
           this.service.retrieveMonitorChecks(
-            params["org-slug"],
-            params["monitor-id"],
-            queryParams.cursor
+            orgSlug,
+            monitorId,
+            queryParams.get("cursor")
           );
         }
       }

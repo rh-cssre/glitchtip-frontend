@@ -32,11 +32,11 @@ export class ReleasesService extends PaginationStatefulService<ReleasesState> {
     super(initialState);
   }
 
-  getReleases(orgSlug: string, cursor: string | undefined) {
+  getReleases(orgSlug: string, cursor: string | undefined | null) {
     this.retrieveReleases(orgSlug, cursor).subscribe();
   }
 
-  private retrieveReleases(orgSlug: string, cursor: string | undefined) {
+  private retrieveReleases(orgSlug: string, cursor: string | undefined | null) {
     this.startPaginatedLoading();
     return this.releasesAPIService.list(orgSlug, cursor).pipe(
       tap((res) => this.setStateAndPagination({ releases: res.body! }, res)),
