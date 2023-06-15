@@ -123,6 +123,7 @@ export interface Breadcrumb {
 
 export interface Message {
   formatted: string;
+  message: string;
   params?: string[] | { [key: string]: string };
 }
 
