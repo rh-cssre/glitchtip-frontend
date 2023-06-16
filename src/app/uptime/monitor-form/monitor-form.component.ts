@@ -53,7 +53,6 @@ const standardUrlValidators = [
 ];
 
 const portUrlValidators = [
-  Validators.pattern(urlRegex),
   Validators.required,
   Validators.maxLength(2000),
   portUrlValidator,
