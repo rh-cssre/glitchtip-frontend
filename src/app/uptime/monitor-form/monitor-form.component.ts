@@ -1,11 +1,5 @@
-import {
-  AsyncPipe,
-  DecimalPipe,
-  NgIf,
-  NgFor,
-  NgTemplateOutlet,
-} from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import {
   FormGroup,
@@ -64,11 +58,7 @@ const portUrlValidators = [
   templateUrl: "./monitor-form.component.html",
   styleUrls: ["./monitor-form.component.scss"],
   imports: [
-    AsyncPipe,
-    DecimalPipe,
-    NgIf,
-    NgFor,
-    NgTemplateOutlet,
+    CommonModule,
     ReactiveFormsModule,
     RouterModule,
     EventInfoComponent,
@@ -176,40 +166,25 @@ export class MonitorFormComponent implements OnInit {
       );
       this.formTimeout.patchValue(this.monitorSettings.timeout);
       this.formProject.patchValue(this.monitorSettings.project);
-
-      if (this.monitorSettings.monitorType === "Heartbeat") {
-        this.formUrl.disable();
-        this.formExpectedStatus.disable();
-        this.formTimeout.disable();
-      } else if (this.monitorSettings.monitorType === "Ping") {
-        this.formExpectedStatus.disable();
-      } else if (this.monitorSettings.monitorType === "TCP Port") {
-        this.formUrl.setValidators(portUrlValidators);
-        this.formExpectedStatus.disable();
-      }
     }
+
+    this.updateRequiredFields();
   }
 
   updateRequiredFields() {
+    this.formUrl.enable();
+    this.formUrl.setValidators(standardUrlValidators);
+    this.formExpectedStatus.enable();
+    this.formTimeout.enable();
     if (this.formMonitorType.value === "Heartbeat") {
       this.formUrl.disable();
       this.formExpectedStatus.disable();
       this.formTimeout.disable();
     } else if (this.formMonitorType.value === "Ping") {
-      this.formUrl.enable();
-      this.formUrl.setValidators(standardUrlValidators);
       this.formExpectedStatus.disable();
-      this.formTimeout.enable();
     } else if (this.formMonitorType.value === "TCP Port") {
-      this.formUrl.enable();
       this.formUrl.setValidators(portUrlValidators);
       this.formExpectedStatus.disable();
-      this.formTimeout.enable();
-    } else {
-      this.formUrl.enable();
-      this.formUrl.setValidators(standardUrlValidators);
-      this.formExpectedStatus.enable();
-      this.formTimeout.enable();
     }
   }
 
