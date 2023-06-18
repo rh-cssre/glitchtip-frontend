@@ -1,11 +1,13 @@
-import { AsyncPipe, DecimalPipe, NgIf, NgFor } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import {
   FormGroup,
   FormControl,
   Validators,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MatCardModule } from "@angular/material/card";
@@ -24,10 +26,32 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorService } from "../monitor.service";
+import { ServerError } from "src/app/shared/django.interfaces";
 
 const defaultExpectedStatus = 200;
 const defaultInterval = 60;
-const defaultUrl = "https://";
+
+// returns a pattern error to simplify error checking in template
+export function portUrlValidator(
+  control: AbstractControl<string>
+): ValidationErrors | null {
+  if (control.value.startsWith("https:")) {
+    return { pattern: true };
+  }
+  return null;
+}
+
+const standardUrlValidators = [
+  Validators.pattern(urlRegex),
+  Validators.required,
+  Validators.maxLength(2000),
+];
+
+const portUrlValidators = [
+  Validators.required,
+  Validators.maxLength(2000),
+  portUrlValidator,
+];
 
 @Component({
   standalone: true,
@@ -35,10 +59,7 @@ const defaultUrl = "https://";
   templateUrl: "./monitor-form.component.html",
   styleUrls: ["./monitor-form.component.scss"],
   imports: [
-    AsyncPipe,
-    DecimalPipe,
-    NgIf,
-    NgFor,
+    CommonModule,
     ReactiveFormsModule,
     RouterModule,
     EventInfoComponent,
@@ -55,7 +76,7 @@ const defaultUrl = "https://";
 })
 export class MonitorFormComponent implements OnInit {
   @Input() monitorSettings?: MonitorDetail;
-  @Input({ required: true }) formError!: string | null;
+  @Input({ required: true }) formError!: ServerError | null;
   @Input({ required: true }) loading!: boolean | null;
 
   @Output() formSubmitted = new EventEmitter<MonitorInput>();
@@ -65,7 +86,7 @@ export class MonitorFormComponent implements OnInit {
 
   intervalPerMonth$: Observable<number | null> = of(null);
 
-  typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat"];
+  typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat", "TCP Port"];
 
   formMonitorType = new FormControl<MonitorType>("Ping", {
     nonNullable: true,
@@ -77,13 +98,9 @@ export class MonitorFormComponent implements OnInit {
     validators: [Validators.required, Validators.maxLength(200)],
   });
 
-  formUrl = new FormControl<string>(defaultUrl, {
+  formUrl = new FormControl<string>("", {
     nonNullable: true,
-    validators: [
-      Validators.pattern(urlRegex),
-      Validators.required,
-      Validators.maxLength(2000),
-    ],
+    validators: standardUrlValidators,
   });
 
   formExpectedStatus = new FormControl<number>(defaultExpectedStatus, [
@@ -138,7 +155,7 @@ export class MonitorFormComponent implements OnInit {
       this.formName.patchValue(this.monitorSettings.name);
       this.formMonitorType.patchValue(this.monitorSettings.monitorType);
       this.formUrl.patchValue(
-        this.monitorSettings.url ? this.monitorSettings.url : defaultUrl
+        this.monitorSettings.url ? this.monitorSettings.url : ""
       );
       this.formExpectedStatus.patchValue(
         this.monitorSettings.expectedStatus
@@ -150,30 +167,25 @@ export class MonitorFormComponent implements OnInit {
       );
       this.formTimeout.patchValue(this.monitorSettings.timeout);
       this.formProject.patchValue(this.monitorSettings.project);
-
-      if (this.monitorSettings.monitorType === "Heartbeat") {
-        this.formUrl.disable();
-        this.formExpectedStatus.disable();
-        this.formTimeout.disable();
-      } else if (this.monitorSettings.monitorType === "Ping") {
-        this.formExpectedStatus.disable();
-      }
     }
+
+    this.updateRequiredFields();
   }
 
   updateRequiredFields() {
+    this.formUrl.enable();
+    this.formUrl.setValidators(standardUrlValidators);
+    this.formExpectedStatus.enable();
+    this.formTimeout.enable();
     if (this.formMonitorType.value === "Heartbeat") {
       this.formUrl.disable();
       this.formExpectedStatus.disable();
       this.formTimeout.disable();
     } else if (this.formMonitorType.value === "Ping") {
-      this.formUrl.enable();
       this.formExpectedStatus.disable();
-      this.formTimeout.enable();
-    } else {
-      this.formUrl.enable();
-      this.formExpectedStatus.enable();
-      this.formTimeout.enable();
+    } else if (this.formMonitorType.value === "TCP Port") {
+      this.formUrl.setValidators(portUrlValidators);
+      this.formExpectedStatus.disable();
     }
   }
 
