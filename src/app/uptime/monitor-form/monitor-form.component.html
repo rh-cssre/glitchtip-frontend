@@ -1,7 +1,9 @@
 <mat-card>
   <mat-card-content>
     <div class="form-center">
-      <mat-error *ngIf="formError">{{ formError }}</mat-error>
+      <mat-error *ngFor="let error of formError?.non_field_errors">{{
+        error
+      }}</mat-error>
     </div>
     <form [formGroup]="monitorForm" (ngSubmit)="submit()">
       <div>

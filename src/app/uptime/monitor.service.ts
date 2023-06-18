@@ -17,6 +17,7 @@ import { ProjectAlertsAPIService } from "../api/projects/project-alerts/project-
 import { SettingsService } from "../api/settings.service";
 import { SubscriptionsService } from "../api/subscriptions/subscriptions.service";
 import { timedeltaToMS } from "src/app/shared/shared.utils";
+import { ServerError } from "../shared/django.interfaces";
 
 export interface MonitorState {
   monitorDetails: MonitorDetail | null;
@@ -25,7 +26,7 @@ export interface MonitorState {
   editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
-  error: string;
+  error: ServerError | null;
 }
 
 const initialState: MonitorState = {
@@ -35,7 +36,7 @@ const initialState: MonitorState = {
   editLoading: false,
   createLoading: false,
   deleteLoading: false,
-  error: "",
+  error: null,
 };
 
 @Injectable({
@@ -100,14 +101,7 @@ export class MonitorService extends StatefulService<MonitorState> {
                     newMonitor.id,
                   ]);
                 }),
-                catchError((err) => {
-                  let message = "There was an error creating this monitor.";
-                  if (err instanceof HttpErrorResponse) {
-                    message = `${err.statusText}: ${err.status}`;
-                  }
-                  this.setCreateMonitorError(message);
-                  return EMPTY;
-                })
+                catchError((err) => this.processError(err))
               )
             );
           }
@@ -138,6 +132,21 @@ export class MonitorService extends StatefulService<MonitorState> {
     );
   }
 
+  private processError(err: any) {
+    if (err.status === 400) {
+      this.setMonitorError(err.error);
+    } else if (err instanceof HttpErrorResponse) {
+      this.setMonitorError({
+        non_field_errors: [`${err.statusText}: ${err.status}`],
+      });
+    } else {
+      this.setMonitorError({
+        non_field_errors: [`There was an error updating this monitor.`],
+      });
+    }
+    return EMPTY;
+  }
+
   editMonitor(data: MonitorInput) {
     lastValueFrom(
       combineLatest([
@@ -159,14 +168,7 @@ export class MonitorService extends StatefulService<MonitorState> {
                   updatedMonitor.id,
                 ]);
               }),
-              catchError((err) => {
-                let errorMessage = "There was an error updating this monitor.";
-                if (err instanceof HttpErrorResponse) {
-                  errorMessage = `${err.statusText}: ${err.status}`;
-                }
-                this.setEditMonitorError(errorMessage);
-                return EMPTY;
-              })
+              catchError((err) => this.processError(err))
             )
           );
         })
@@ -299,9 +301,10 @@ export class MonitorService extends StatefulService<MonitorState> {
     });
   }
 
-  private setCreateMonitorError(error: string) {
+  private setMonitorError(error: ServerError) {
     this.setState({
       createLoading: false,
+      editLoading: false,
       error,
     });
   }
@@ -315,13 +318,6 @@ export class MonitorService extends StatefulService<MonitorState> {
   private setEditMonitorEnd() {
     this.setState({
       editLoading: false,
-    });
-  }
-
-  private setEditMonitorError(error: string) {
-    this.setState({
-      editLoading: false,
-      error,
     });
   }
 

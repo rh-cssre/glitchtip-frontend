@@ -26,6 +26,7 @@ import { OrganizationsService } from "src/app/api/organizations/organizations.se
 import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { MonitorService } from "../monitor.service";
+import { ServerError } from "src/app/shared/django.interfaces";
 
 const defaultExpectedStatus = 200;
 const defaultInterval = 60;
@@ -75,7 +76,7 @@ const portUrlValidators = [
 })
 export class MonitorFormComponent implements OnInit {
   @Input() monitorSettings?: MonitorDetail;
-  @Input({ required: true }) formError!: string | null;
+  @Input({ required: true }) formError!: ServerError | null;
   @Input({ required: true }) loading!: boolean | null;
 
   @Output() formSubmitted = new EventEmitter<MonitorInput>();
