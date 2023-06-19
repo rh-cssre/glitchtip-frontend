@@ -98,7 +98,7 @@ export class MonitorFormComponent implements OnInit {
     validators: [Validators.required, Validators.maxLength(200)],
   });
 
-  formUrl = new FormControl<string>("", {
+  formUrl = new FormControl<string>("https://", {
     nonNullable: true,
     validators: standardUrlValidators,
   });
@@ -186,6 +186,9 @@ export class MonitorFormComponent implements OnInit {
     } else if (this.formMonitorType.value === "TCP Port") {
       this.formUrl.setValidators(portUrlValidators);
       this.formExpectedStatus.disable();
+      if (this.formUrl.value === "https://") {
+        this.formUrl.setValue("");
+      }
     }
   }
 

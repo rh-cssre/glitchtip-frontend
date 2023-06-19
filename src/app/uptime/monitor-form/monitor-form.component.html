@@ -253,7 +253,7 @@
       <gt-loading-button
         class="submit"
         [loading]="loading === true"
-        buttonText="Update Monitor"
+        [buttonText]="monitorSettings ? 'Update Monitor' : 'Create Monitor'"
         data-cy="monitor-submit"
       >
       </gt-loading-button>
