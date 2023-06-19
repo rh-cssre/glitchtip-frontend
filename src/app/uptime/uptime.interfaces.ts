@@ -1,26 +1,34 @@
 import { Series, DataItem } from "@swimlane/ngx-charts";
 
-export type MonitorType = "Ping" | "GET" | "POST" | "Heartbeat";
+export type MonitorType = "Ping" | "GET" | "POST" | "Heartbeat" | "TCP Port";
 export enum DownReason {
   UNKNOWN = 0,
   TIMEOUT = 1,
   STATUS = 2,
   BODY = 3,
   SSL = 4,
-  NETWORK = 5
+  NETWORK = 5,
 }
 
-export interface MonitorInput {
+interface MonitorBase {
   monitorType: MonitorType;
   name: string;
-  url: string;
-  expectedStatus: number;
   interval: string;
-  project: number | null;
+  expectedStatus: number | null;
+  url: string;
 }
 
-export interface MonitorDetail extends MonitorInput {
+export interface MonitorInput extends MonitorBase {
+  project?: number | null;
+  timeout?: number | null;
+}
+
+export interface MonitorDetail extends MonitorBase {
   id: string;
+  url: string;
+  expectedStatus: number | null;
+  project: number | null;
+  timeout: number | null;
   projectName: string | null;
   checks: MonitorCheck[];
   isUp: boolean | null;
@@ -35,10 +43,10 @@ export interface MonitorCheck {
   responseTime: string | null;
 }
 
-export interface ResponseTimeDataItem extends Omit<DataItem, 'name'> {
-  name: Date
+export interface ResponseTimeDataItem extends Omit<DataItem, "name"> {
+  name: Date;
 }
 
-export interface ResponseTimeSeries extends Omit<Series, 'series'> {
-  series: ResponseTimeDataItem[]
+export interface ResponseTimeSeries extends Omit<Series, "series"> {
+  series: ResponseTimeDataItem[];
 }

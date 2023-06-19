@@ -6,7 +6,11 @@ module.exports = {
     "@storybook/addon-actions",
     "@storybook/addon-a11y",
   ],
-  core: {
-    builder: "webpack5",
+  framework: {
+    name: "@storybook/angular",
+    options: {},
+  },
+  docs: {
+    autodocs: true,
   },
 };

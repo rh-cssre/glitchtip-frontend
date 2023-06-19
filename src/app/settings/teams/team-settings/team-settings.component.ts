@@ -1,15 +1,32 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { UntypedFormControl, Validators, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormControl, Validators, UntypedFormGroup, ReactiveFormsModule } from "@angular/forms";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute } from "@angular/router";
 import { map, take } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-team-settings",
-  templateUrl: "./team-settings.component.html",
-  styleUrls: ["./team-settings.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-team-settings",
+    templateUrl: "./team-settings.component.html",
+    styleUrls: ["./team-settings.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        LoadingButtonComponent,
+        AsyncPipe,
+    ],
 })
 export class TeamSettingsComponent implements OnInit {
   team$ = this.teamsService.team$;

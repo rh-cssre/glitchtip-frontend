@@ -1,10 +1,29 @@
-import { formatDate } from "@angular/common";
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule, formatDate } from "@angular/common";
+
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+
 import { UntypedFormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 
 @Component({
+  standalone: true,
   selector: "gt-data-filter-bar",
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    MatSelectModule,
+  ],
   templateUrl: "./data-filter-bar.component.html",
   styleUrls: ["./data-filter-bar.component.scss"],
 })
