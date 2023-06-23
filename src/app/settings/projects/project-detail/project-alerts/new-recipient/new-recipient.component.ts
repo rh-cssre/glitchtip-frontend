@@ -1,6 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { MatDialogRef, MatDialogModule } from "@angular/material/dialog";
-import { UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "../project-alerts.service";
 import { urlRegex } from "src/app/shared/validators";
@@ -8,32 +13,27 @@ import { MatButtonModule } from "@angular/material/button";
 import { LoadingButtonComponent } from "../../../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatOptionModule } from "@angular/material/core";
-import { NgFor, NgSwitch, NgSwitchCase, NgIf, NgSwitchDefault, AsyncPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 
 @Component({
-    selector: "gt-new-recipient",
-    templateUrl: "./new-recipient.component.html",
-    styleUrls: ["./new-recipient.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        MatDialogModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        NgFor,
-        MatOptionModule,
-        NgSwitch,
-        NgSwitchCase,
-        MatInputModule,
-        NgIf,
-        NgSwitchDefault,
-        LoadingButtonComponent,
-        MatButtonModule,
-        AsyncPipe,
-    ],
+  selector: "gt-new-recipient",
+  templateUrl: "./new-recipient.component.html",
+  styleUrls: ["./new-recipient.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatInputModule,
+    LoadingButtonComponent,
+    MatButtonModule,
+  ],
 })
 export class NewRecipientComponent implements OnInit {
   recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
@@ -42,7 +42,8 @@ export class NewRecipientComponent implements OnInit {
 
   recipientOptions = [
     { viewValue: "Email", value: "email" },
-    { viewValue: "General Webhook", value: "webhook" },
+    { viewValue: "General (slack-compatible) Webhook", value: "webhook" },
+    { viewValue: "Discord", value: "discord" },
   ];
 
   recipientForm = new UntypedFormGroup({
@@ -67,13 +68,13 @@ export class NewRecipientComponent implements OnInit {
     this.recipientType.valueChanges.subscribe((type: RecipientType) => {
       this.url.clearValidators();
       if (type === "webhook") {
-        this.url.setValue("https://")
+        this.url.setValue("https://");
         this.url.setValidators([
           Validators.required,
           Validators.pattern(urlRegex),
         ]);
       } else if (type === "email") {
-        this.url.setValue("")
+        this.url.setValue("");
       }
       this.url.updateValueAndValidity();
     });
