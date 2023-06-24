@@ -19,4 +19,4 @@ export interface AlertRecipient extends NewAlertRecipient {
   pk: number;
 }
 
-export type RecipientType = "email" | "webhook";
+export type RecipientType = "email" | "webhook" | "discord";
