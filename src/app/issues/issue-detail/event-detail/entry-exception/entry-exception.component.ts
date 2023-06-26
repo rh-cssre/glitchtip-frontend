@@ -1,12 +1,33 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
 import { IssueDetailService } from "../../issue-detail.service";
 import { isStacktrace } from "src/app/issues/utils";
+import { RawStacktraceComponent } from "./raw-stacktrace/raw-stacktrace.component";
+import { FrameExpandedComponent } from "./frame-expanded/frame-expanded.component";
+import { FrameTitleComponent } from "./frame-title/frame-title.component";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatButtonModule } from "@angular/material/button";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "gt-entry-exception",
-  templateUrl: "./entry-exception.component.html",
-  styleUrls: ["./entry-exception.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "gt-entry-exception",
+    templateUrl: "./entry-exception.component.html",
+    styleUrls: ["./entry-exception.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatButtonModule,
+        MatButtonToggleModule,
+        NgFor,
+        MatChipsModule,
+        MatExpansionModule,
+        FrameTitleComponent,
+        FrameExpandedComponent,
+        RawStacktraceComponent,
+        AsyncPipe,
+    ],
 })
 export class EntryExceptionComponent {
   @Input() eventTitle: string | undefined;
