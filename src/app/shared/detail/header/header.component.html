@@ -1,0 +1,47 @@
+<header>
+  <a
+    mat-stroked-button
+    class="project-issues-link"
+    [routerLink]="['..']"
+    [queryParams]="backLinkParams"
+  >
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    {{ backLinkText }}
+  </a>
+  <div class="header-group">
+    <h1>
+      <span class="mat-h1">{{ title[0] }}</span>
+      <span *ngIf="title[1]" class="mat-h3">{{ title[1] }}</span>
+      <p class="mat-h2">{{ subtitle }}</p>
+    </h1>
+    <div class="button-row">
+      <ng-container
+        *ngFor="let button of actionButtons"
+        [ngSwitch]="button.type"
+      >
+        <button
+          *ngSwitchCase="'primary'"
+          mat-flat-button
+          color="primary"
+          (click)="button.click()"
+        >
+          <mat-icon *ngIf="button.icon">{{ button.icon }}</mat-icon>
+          {{ button.name }}
+        </button>
+        <button
+          *ngSwitchCase="'delete'"
+          mat-icon-button
+          class="medium-icon-button"
+          (click)="button.click()"
+        >
+          <mat-icon *ngIf="button.icon">{{ button.icon }}</mat-icon>
+          {{ button.name }}
+        </button>
+        <button *ngSwitchDefault mat-stroked-button>
+          <mat-icon *ngIf="button.icon">{{ button.icon }}</mat-icon>
+          {{ button.name }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</header>

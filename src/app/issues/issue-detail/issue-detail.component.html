@@ -28,65 +28,12 @@
   </mat-card>
 </section>
 <section class="l-body l-body--full-width" *ngIf="issue$ | async as issue">
-  <header>
-    <a
-      mat-stroked-button
-      class="project-issues-link"
-      [routerLink]="['..']"
-      [queryParams]="generateBackLink(issue.project.id)"
-    >
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      View all issues for {{ issue.project.name }}
-    </a>
-    <div class="header-group">
-      <gt-issue-detail-title
-        [issueType]="issue?.type"
-        [culprit]="issue?.culprit"
-        [metadata]="issue?.metadata"
-      ></gt-issue-detail-title>
-      <div class="button-row">
-        <button
-          *ngIf="issue?.status !== 'resolved'"
-          mat-flat-button
-          color="primary"
-          (click)="markResolved()"
-        >
-          <mat-icon aria-hidden="true">done</mat-icon>
-          Resolve
-        </button>
-        <button
-          *ngIf="issue?.status !== 'unresolved'"
-          mat-flat-button
-          color="primary"
-          (click)="markUnresolved()"
-        >
-          <mat-icon aria-hidden="true">done</mat-icon>
-          Reopen
-        </button>
-        <button
-          *ngIf="issue?.status !== 'ignored'"
-          mat-stroked-button
-          (click)="markIgnored()"
-        >
-          Ignore
-        </button>
-        <button
-          mat-icon-button
-          class="medium-icon-button"
-          (click)="deleteIssue(issue?.id)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-    <p class="mat-body-1" *ngIf="issue.status === 'resolved'">
-      This issue has been marked as resolved.
-    </p>
-    <p class="mat-body-1" *ngIf="issue.status === 'ignored'">
-      This issue is being ignored. You will not be notified of any changes and
-      it will not show up by default in the issues page.
-    </p>
-  </header>
+  <gt-detail-header
+    [backLinkText]="'View all issues for ' + issue.project.name"
+    [title]="(issueTitle$ | async)!"
+    [subtitle]="issueSubtitle$ | async"
+    [actionButtons]="(actionButtons$ | async)!"
+  ></gt-detail-header>
 
   <div class="row">
     <mat-card class="event-detail-card left">
@@ -174,14 +121,14 @@
               <dt class="mat-caption">First Seen</dt>
               <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
               <dd class="mat-caption">
-                {{ issue?.firstSeen | date: "long" }}
+                {{ issue?.firstSeen | date : "long" }}
               </dd>
             </div>
             <div>
               <dt class="mat-caption">Last Seen</dt>
               <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
               <dd class="mat-caption">
-                {{ issue?.lastSeen | date: "long" }}
+                {{ issue?.lastSeen | date : "long" }}
               </dd>
             </div>
           </dl>

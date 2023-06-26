@@ -1,0 +1,42 @@
+@import "variables";
+
+.mat-h1 {
+  padding-right: 20px;
+}
+
+header {
+  @media screen and (max-width: ($tablet - 1)) {
+    margin-bottom: 20px;
+  }
+
+  .header-group {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: ($tablet - 1)) {
+      flex-direction: column;
+    }
+  }
+
+  gt-issue-detail-title {
+    margin-right: 20px;
+  }
+}
+
+.project-issues-link {
+  margin: 0 0 20px;
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.button-row {
+  display: flex;
+  align-items: flex-start;
+
+  button {
+    margin-right: 8px;
+  }
+}

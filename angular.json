@@ -11,6 +11,15 @@
         },
         "@schematics/angular:application": {
           "strict": true
+        },
+        "@schematics/angular:component": {
+          "standalone": true
+        },
+        "@schematics/angular:directive": {
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
         }
       },
       "root": "",
