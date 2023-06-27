@@ -1,0 +1,21 @@
+<header>
+  <a
+    mat-stroked-button
+    class="project-issues-link"
+    [routerLink]="['..']"
+    [queryParams]="backLinkParams"
+  >
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    {{ backLinkText }}
+  </a>
+  <div class="header-group">
+    <h1>
+      <span class="mat-h1">{{ title[0] }}</span>
+      <span *ngIf="title[1]" class="mat-h3">{{ title[1] }}</span>
+      <p class="mat-subtitle-2">{{ subtitle }}</p>
+    </h1>
+    <div class="button-row">
+      <ng-content />
+    </div>
+  </div>
+</header>

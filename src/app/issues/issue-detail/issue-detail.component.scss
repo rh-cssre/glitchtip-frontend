@@ -1,9 +1,5 @@
 @import "variables";
 
-.mat-h1 {
-  padding-right: 20px;
-}
-
 .issue-404 {
   h1 {
     text-align: left;
@@ -11,36 +7,6 @@
 
   p {
     margin: 16px 0;
-  }
-}
-
-header {
-  margin: -16px 0 5px;
-
-  @media screen and (max-width: $tablet - 1) {
-    margin-bottom: 20px;
-  }
-
-  .header-group {
-    display: flex;
-    justify-content: space-between;
-
-    @media screen and (max-width: $tablet - 1) {
-      flex-direction: column;
-    }
-  }
-
-  gt-issue-detail-title {
-    margin-right: 20px;
-  }
-}
-
-.button-row {
-  display: flex;
-  align-items: flex-start;
-
-  button {
-    margin-right: 8px;
   }
 }
 
@@ -120,10 +86,6 @@ mat-grid-list {
 
 table.mat-table {
   background: none;
-}
-
-.project-issues-link {
-  margin: 0 0 20px;
 }
 
 .report-badge > span {

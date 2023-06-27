@@ -1,12 +1,23 @@
 <section class="l-body">
   <ng-container *ngIf="monitor$ | async as monitor">
-    <header>
-      <a mat-stroked-button [routerLink]="['..']">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-        View all uptime monitors
-      </a>
-      <h1 class="mat-headline-4">Uptime details for {{ monitor.name }}</h1>
-    </header>
+    <gt-detail-header
+      [title]="['Uptime details for ' + monitor.name, null]"
+      backLinkText="View all uptime monitors"
+    >
+      <button
+        id="monitor-settings"
+        mat-flat-button
+        color="primary"
+        [disabled]="false"
+        [routerLink]="['./update']"
+        i18n
+      >
+        Settings
+      </button>
+      <button mat-icon-button class="medium-icon-button" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </gt-detail-header>
     <mat-card>
       <mat-card-header>
         <mat-card-title>
@@ -23,22 +34,13 @@
       <mat-card-content class="reduced-padding">
         <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
         <div class="mat-caption interval" i18n>
-          Uptime check interval: {{ monitor.interval | humanizeDuration: true }}
+          Uptime check interval:
+          {{ monitor.interval | humanizeDuration : true }}
         </div>
         <div>
           <div class="url-display">
             <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
           </div>
-          <button
-            id="monitor-settings"
-            mat-flat-button
-            color="primary"
-            [disabled]="false"
-            [routerLink]="['./update']"
-            i18n
-          >
-            Settings
-          </button>
         </div>
       </mat-card-content>
     </mat-card>
@@ -113,7 +115,7 @@
                 {{
                   uptimeAlertCount$
                     | async
-                    | i18nPlural: alertCountPluralMapping
+                    | i18nPlural : alertCountPluralMapping
                 }}
                 set up for this project. Visit the
                 <a
@@ -138,9 +140,7 @@
         </ng-template>
       </mat-card-content>
     </mat-card>
-    <gt-monitor-checks
-      [monitor]="monitor"
-    ></gt-monitor-checks>
+    <gt-monitor-checks [monitor]="monitor"></gt-monitor-checks>
     <mat-card
       id="heartbeat-endpoint"
       class="heartbeat-card"

@@ -31,15 +31,10 @@
   class="l-body l-body--full-width"
   *ngIf="transactionGroup$ | async as group"
 >
-  <header>
-    <a mat-stroked-button class="transaction-groups-link" [routerLink]="['..']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      View all transaction groups
-    </a>
-    <div class="header-group">
-      <span class="mat-h1">{{ group.transaction }}</span>
-    </div>
-  </header>
+  <gt-detail-header
+    [title]="[group.transaction, null]"
+    backLinkText="View all transaction groups"
+  />
 
   <div class="row">
     <aside class="right">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { tap, filter, take } from "rxjs/operators";
 import { lastValueFrom } from "rxjs";
@@ -12,6 +12,7 @@ import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
 import { MonitorService, MonitorState } from "../monitor.service";
 import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   standalone: true,
@@ -19,8 +20,7 @@ import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-
   templateUrl: "./monitor-update.component.html",
   styleUrls: ["./monitor-update.component.scss"],
   imports: [
-    AsyncPipe,
-    NgIf,
+    CommonModule,
     RouterModule,
     LoadingButtonComponent,
     MatButtonModule,
@@ -28,6 +28,7 @@ import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-
     MatDividerModule,
     MatIconModule,
     MonitorFormComponent,
+    DetailHeaderComponent,
   ],
 })
 export class MonitorUpdateComponent
@@ -66,10 +67,10 @@ export class MonitorUpdateComponent
     this.service.editMonitor(formValues);
   }
 
-  deleteMonitor() {
+  delete() {
     if (
       window.confirm(
-        `Are you sure you want to remove this monitor? You will lose all of its uptime check history.`
+        `Are you sure you want delete this monitor? You will permanently lose all associated uptime data.`
       )
     ) {
       this.service.deleteMonitor();

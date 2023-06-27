@@ -16,6 +16,7 @@ import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { lastValueFrom } from "rxjs";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   standalone: true,
@@ -37,6 +38,7 @@ import { lastValueFrom } from "rxjs";
     MatDividerModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    DetailHeaderComponent,
   ],
 })
 export class MonitorDetailComponent
@@ -98,5 +100,15 @@ export class MonitorDetailComponent
         })
       )
     );
+  }
+
+  delete() {
+    if (
+      window.confirm(
+        `Are you sure you want delete this monitor? You will permanently lose all associated uptime data.`
+      )
+    ) {
+      this.service.deleteMonitor();
+    }
   }
 }

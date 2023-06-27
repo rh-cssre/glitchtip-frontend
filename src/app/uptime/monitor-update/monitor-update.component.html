@@ -1,11 +1,17 @@
 <section class="l-body">
-  <header>
-    <a mat-stroked-button [routerLink]="['..']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      View monitor details
-    </a>
-    <h1 class="mat-headline-4">Update Monitor</h1>
-  </header>
+  <gt-detail-header
+    backLinkText="View monitor details"
+    [title]="['Update Monitor', null]"
+  >
+    <button
+      mat-icon-button
+      class="medium-icon-button"
+      id="delete-monitor"
+      (click)="delete()"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </gt-detail-header>
   <ng-container *ngIf="monitor$ | async as monitor">
     <gt-monitor-form
       [monitorSettings]="monitor"
@@ -13,26 +19,5 @@
       [formError]="error$ | async"
       (formSubmitted)="submit($event)"
     ></gt-monitor-form>
-    <mat-card class="delete">
-      <mat-card-header>
-        <mat-card-title>Delete Monitor</mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content class="remove-content">
-        <div>
-          <p>
-            By deleting this monitor, you will remove all of its uptime check
-            history.
-          </p>
-        </div>
-        <gt-loading-button
-          (click)="deleteMonitor()"
-          buttonText="Delete Monitor"
-          [loading]="(deleteLoading$ | async)!"
-          id="delete-monitor"
-        >
-        </gt-loading-button>
-      </mat-card-content>
-    </mat-card>
   </ng-container>
 </section>
