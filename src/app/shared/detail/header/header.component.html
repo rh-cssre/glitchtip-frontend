@@ -15,33 +15,7 @@
       <p class="mat-subtitle-2">{{ subtitle }}</p>
     </h1>
     <div class="button-row">
-      <ng-container
-        *ngFor="let button of actionButtons"
-        [ngSwitch]="button.type"
-      >
-        <button
-          *ngSwitchCase="'primary'"
-          mat-flat-button
-          color="primary"
-          (click)="button.click()"
-        >
-          <mat-icon *ngIf="button.icon">{{ button.icon }}</mat-icon>
-          {{ button.name }}
-        </button>
-        <button
-          *ngSwitchCase="'delete'"
-          mat-icon-button
-          class="medium-icon-button"
-          (click)="button.click()"
-        >
-          <mat-icon *ngIf="button.icon">{{ button.icon }}</mat-icon>
-          {{ button.name }}
-        </button>
-        <button *ngSwitchDefault mat-stroked-button>
-          <mat-icon *ngIf="button.icon">{{ button.icon }}</mat-icon>
-          {{ button.name }}
-        </button>
-      </ng-container>
+      <ng-content />
     </div>
   </div>
 </header>

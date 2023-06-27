@@ -4,14 +4,10 @@ import { RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
-export interface ActionButton {
-  name?: string;
-  type?: "primary" | "delete";
-  icon?: "delete" | "done";
-  click: () => void;
-}
-
-/** Header with title, back button, and action buttons for a object detail page */
+/**
+ * Header with title, back button, and action buttons for a object detail page
+ * Action buttons may be added as child elements
+ */
 @Component({
   selector: "gt-detail-header",
   standalone: true,
@@ -25,5 +21,4 @@ export class DetailHeaderComponent {
   @Input() backLinkText = "";
   @Input() title: [string, string | null] = ["", null];
   @Input() subtitle?: string | null;
-  @Input() actionButtons: ActionButton[] = [];
 }

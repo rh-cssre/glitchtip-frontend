@@ -40,7 +40,7 @@ h1 {
   display: flex;
   align-items: flex-start;
 
-  button {
+  ::ng-deep button {
     margin-right: 8px;
   }
 }

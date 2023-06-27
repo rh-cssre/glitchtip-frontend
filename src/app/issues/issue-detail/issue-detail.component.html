@@ -32,8 +32,36 @@
     [backLinkText]="'View all issues for ' + issue.project.name"
     [title]="(issueTitle$ | async)!"
     [subtitle]="issueSubtitle$ | async"
-    [actionButtons]="(actionButtons$ | async)!"
-  ></gt-detail-header>
+  >
+    <button
+      *ngIf="issue?.status !== 'resolved'"
+      mat-flat-button
+      color="primary"
+      (click)="markResolved()"
+    >
+      <mat-icon aria-hidden="true">done</mat-icon>
+      Resolve
+    </button>
+    <button
+      *ngIf="issue?.status !== 'unresolved'"
+      mat-flat-button
+      color="primary"
+      (click)="markUnresolved()"
+    >
+      <mat-icon aria-hidden="true">done</mat-icon>
+      Reopen
+    </button>
+    <button
+      *ngIf="issue?.status !== 'ignored'"
+      mat-stroked-button
+      (click)="markIgnored()"
+    >
+      Ignore
+    </button>
+    <button mat-icon-button class="medium-icon-button" (click)="deleteIssue()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </gt-detail-header>
 
   <div class="row">
     <mat-card class="event-detail-card left">

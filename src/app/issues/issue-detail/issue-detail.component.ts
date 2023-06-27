@@ -7,14 +7,13 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatCardModule } from "@angular/material/card";
 import { map, exhaustMap, tap } from "rxjs/operators";
 import { EMPTY, Observable } from "rxjs";
-import {
-  ActionButton,
-  DetailHeaderComponent,
-} from "src/app/shared/detail/header/header.component";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 import { IssueDetailService } from "./issue-detail.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { DaysAgoPipe } from "../../shared/days-ago.pipe";
 import { IssueDetailTagsComponent } from "./issue-detail-tags/issue-detail-tags.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "gt-issue-detail",
@@ -28,6 +27,8 @@ import { IssueDetailTagsComponent } from "./issue-detail-tags/issue-detail-tags.
     RouterModule,
     MatTabsModule,
     MatBadgeModule,
+    MatIconModule,
+    MatButtonModule,
     IssueDetailTagsComponent,
     DaysAgoPipe,
     DetailHeaderComponent,
@@ -76,39 +77,6 @@ export class IssueDetailComponent implements OnInit {
       }
     })
   );
-  actionButtons$ = this.issue$.pipe(
-    map((issue) => {
-      const buttons: ActionButton[] = [];
-      if (issue?.status !== "resolved") {
-        buttons.push({
-          name: "Resolve",
-          type: "primary",
-          icon: "done",
-          click: () => this.issueService.setStatus("resolved"),
-        });
-      }
-      if (issue?.status !== "unresolved") {
-        buttons.push({
-          name: "Reopen",
-          type: "primary",
-          icon: "done",
-          click: () => this.issueService.setStatus("unresolved"),
-        });
-      }
-      if (issue?.status !== "ignored") {
-        buttons.push({
-          name: "Ignore",
-          click: () => this.issueService.setStatus("ignored"),
-        });
-      }
-      buttons.push({
-        icon: "delete",
-        type: "delete",
-        click: () => this.deleteIssue(),
-      });
-      return buttons;
-    })
-  );
   initialLoadComplete$ = this.issueService.issueInitialLoadComplete$;
   form = new FormGroup({
     assignee: new FormControl(""),
@@ -141,6 +109,18 @@ export class IssueDetailComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  markResolved() {
+    this.issueService.setStatus("resolved");
+  }
+
+  markUnresolved() {
+    this.issueService.setStatus("unresolved");
+  }
+
+  markIgnored() {
+    this.issueService.setStatus("ignored");
   }
 
   deleteIssue() {
