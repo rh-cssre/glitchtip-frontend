@@ -101,4 +101,14 @@ export class MonitorDetailComponent
       )
     );
   }
+
+  delete() {
+    if (
+      window.confirm(
+        `Are you sure you want delete this monitor? You will permanently lose this issue and all associated uptime data.`
+      )
+    ) {
+      this.service.deleteMonitor();
+    }
+  }
 }

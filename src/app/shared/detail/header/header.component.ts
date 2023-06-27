@@ -19,6 +19,6 @@ import { MatButtonModule } from "@angular/material/button";
 export class DetailHeaderComponent {
   @Input() backLinkParams: { [key: string]: string } = {};
   @Input() backLinkText = "";
-  @Input() title: [string, string | null] = ["", null];
+  @Input() title: string | [string, string | null] = "";
   @Input() subtitle?: string | null;
 }

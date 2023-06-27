@@ -6,6 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
 import { MonitorService } from "../monitor.service";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   standalone: true,
@@ -19,6 +20,7 @@ import { MonitorService } from "../monitor.service";
     MonitorFormComponent,
     MatButtonModule,
     MatIconModule,
+    DetailHeaderComponent,
   ],
 })
 export class NewMonitorComponent {

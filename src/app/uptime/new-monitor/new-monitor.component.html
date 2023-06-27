@@ -1,11 +1,8 @@
 <section class="l-body">
-  <header>
-    <a mat-stroked-button [routerLink]="['..']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      View all uptime monitors
-    </a>
-    <h1 class="mat-headline-4">Create a New Uptime Monitor</h1>
-  </header>
+  <gt-detail-header
+    [title]="['Create a New Uptime Monitor', null]"
+    backLinkText="View all uptime monitors"
+  />
   <gt-monitor-form
     [loading]="(loading$ | async) === true"
     [formError]="error$ | async"

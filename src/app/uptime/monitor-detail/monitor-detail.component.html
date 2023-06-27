@@ -3,7 +3,21 @@
     <gt-detail-header
       [title]="['Uptime details for ' + monitor.name, null]"
       backLinkText="View all uptime monitors"
-    />
+    >
+      <button
+        id="monitor-settings"
+        mat-flat-button
+        color="primary"
+        [disabled]="false"
+        [routerLink]="['./update']"
+        i18n
+      >
+        Settings
+      </button>
+      <button mat-icon-button class="medium-icon-button" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </gt-detail-header>
     <mat-card>
       <mat-card-header>
         <mat-card-title>
@@ -27,16 +41,6 @@
           <div class="url-display">
             <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
           </div>
-          <button
-            id="monitor-settings"
-            mat-flat-button
-            color="primary"
-            [disabled]="false"
-            [routerLink]="['./update']"
-            i18n
-          >
-            Settings
-          </button>
         </div>
       </mat-card-content>
     </mat-card>
