@@ -16,6 +16,7 @@ import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { lastValueFrom } from "rxjs";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   standalone: true,
@@ -37,6 +38,7 @@ import { lastValueFrom } from "rxjs";
     MatDividerModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    DetailHeaderComponent,
   ],
 })
 export class MonitorDetailComponent
