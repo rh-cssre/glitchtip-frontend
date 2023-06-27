@@ -66,4 +66,14 @@ export class MonitorUpdateComponent
   submit(formValues: MonitorInput) {
     this.service.editMonitor(formValues);
   }
+
+  delete() {
+    if (
+      window.confirm(
+        `Are you sure you want delete this monitor? You will permanently lose all associated uptime data.`
+      )
+    ) {
+      this.service.deleteMonitor();
+    }
+  }
 }
