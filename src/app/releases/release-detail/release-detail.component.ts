@@ -1,29 +1,24 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { ReleaseDetailService } from "./release-detail.service";
 import { checkForOverflow } from "src/app/shared/shared.utils";
 import { ListFooterComponent } from "../../list-elements/list-footer/list-footer.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTableModule } from "@angular/material/table";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   templateUrl: "./release-detail.component.html",
   styleUrls: ["./release-detail.component.scss"],
   standalone: true,
   imports: [
-    NgIf,
-    MatButtonModule,
-    RouterLink,
-    MatIconModule,
+    CommonModule,
     MatTableModule,
     MatTooltipModule,
     ListFooterComponent,
-    NgFor,
-    AsyncPipe,
+    DetailHeaderComponent,
   ],
 })
 export class ReleaseDetailComponent {

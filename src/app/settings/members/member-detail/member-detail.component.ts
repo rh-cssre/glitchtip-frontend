@@ -8,10 +8,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { filter, map, withLatestFrom, startWith } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
-import { MemberRole } from "src/app/api/organizations/organizations.interface";
 import { MatListModule } from "@angular/material/list";
-import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";
@@ -19,7 +16,11 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { NgIf, NgFor, AsyncPipe, DatePipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
+import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
+import { MemberRole } from "src/app/api/organizations/organizations.interface";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   selector: "gt-member-detail",
@@ -28,7 +29,7 @@ import { NgIf, NgFor, AsyncPipe, DatePipe } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
+    CommonModule,
     MatButtonModule,
     RouterLink,
     MatIconModule,
@@ -40,9 +41,7 @@ import { NgIf, NgFor, AsyncPipe, DatePipe } from "@angular/common";
     MatRadioModule,
     LoadingButtonComponent,
     MatListModule,
-    NgFor,
-    AsyncPipe,
-    DatePipe,
+    DetailHeaderComponent,
   ],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
