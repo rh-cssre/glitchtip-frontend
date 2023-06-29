@@ -6,14 +6,13 @@
     "glitchtip-frontend": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
         "@schematics/angular:application": {
           "strict": true
         },
         "@schematics/angular:component": {
-          "standalone": true
+          "standalone": true,
+          "style": "scss",
+          "changeDetection": "OnPush"
         },
         "@schematics/angular:directive": {
           "standalone": true
@@ -69,13 +68,9 @@
                 "output": "./static/assets/images/os-logos"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "./src/assets/styles"
-              ]
+              "includePaths": ["./src/assets/styles"]
             },
             "scripts": []
           },
@@ -177,17 +172,10 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "./src/assets/styles"
-              ]
+              "includePaths": ["./src/assets/styles"]
             },
             "scripts": []
           }
@@ -195,10 +183,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
         "storybook": {
@@ -224,8 +209,6 @@
   },
   "cli": {
     "analytics": "86390919-7a40-4e23-8811-d61b83438874",
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ]
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

@@ -5,7 +5,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -63,21 +63,21 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   );
   searchHits$ = this.service.searchHits$;
   searchDirectHit$ = this.service.searchDirectHit$;
-  form = new UntypedFormGroup({
-    query: new UntypedFormControl(""),
+  form = new FormGroup({
+    query: new FormControl(""),
   });
-  sortForm = new UntypedFormGroup({
-    sort: new UntypedFormControl({
+  sortForm = new FormGroup({
+    sort: new FormControl({
       value: "",
       disabled: true,
     }),
   });
-  environmentForm = new UntypedFormGroup({
-    environment: new UntypedFormControl({ value: "" }),
+  environmentForm = new FormGroup({
+    environment: new FormControl(""),
   });
-  dateForm = new UntypedFormGroup({
-    startDate: new UntypedFormControl(""),
-    endDate: new UntypedFormControl(""),
+  dateForm = new FormGroup({
+    startDate: new FormControl<Date | string>(""),
+    endDate: new FormControl<Date | string>(""),
   });
 
   issues$ = this.service.issuesWithSelected$;
