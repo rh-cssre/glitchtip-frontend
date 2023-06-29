@@ -13,27 +13,27 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-    selector: "gt-members",
-    templateUrl: "./members.component.html",
-    styleUrls: ["./members.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        MatButtonModule,
-        RouterLink,
-        MatCardModule,
-        MatDividerModule,
-        NgFor,
-        NgIf,
-        MatChipsModule,
-        LoadingButtonComponent,
-        MatTooltipModule,
-        AsyncPipe,
-    ],
+  selector: "gt-members",
+  templateUrl: "./members.component.html",
+  styleUrls: ["./members.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    RouterLink,
+    MatCardModule,
+    MatDividerModule,
+    NgFor,
+    NgIf,
+    MatChipsModule,
+    LoadingButtonComponent,
+    MatTooltipModule,
+    AsyncPipe,
+  ],
 })
 export class MembersComponent implements OnInit {
-  activeOrganizationDetail$ = this.organizationsService
-    .activeOrganizationDetail$;
+  activeOrganizationDetail$ =
+    this.organizationsService.activeOrganizationDetail$;
   members$ = this.membersService.members$;
 
   constructor(

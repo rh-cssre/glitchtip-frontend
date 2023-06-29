@@ -13,23 +13,23 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-    selector: "gt-teams",
-    templateUrl: "./teams.component.html",
-    styleUrls: ["./teams.component.scss"],
-    standalone: true,
-    imports: [
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        RouterLink,
-        MatDividerModule,
-        NgIf,
-        MatFormFieldModule,
-        NgFor,
-        LoadingButtonComponent,
-        AsyncPipe,
-        I18nPluralPipe,
-    ],
+  selector: "gt-teams",
+  templateUrl: "./teams.component.html",
+  styleUrls: ["./teams.component.scss"],
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
+    RouterLink,
+    MatDividerModule,
+    NgIf,
+    MatFormFieldModule,
+    NgFor,
+    LoadingButtonComponent,
+    AsyncPipe,
+    I18nPluralPipe,
+  ],
 })
 export class TeamsComponent implements OnInit {
   activeOrganization$ = this.organizationsService.activeOrganization$;

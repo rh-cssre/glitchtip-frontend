@@ -13,33 +13,40 @@ import { ContextsComponent } from "./context/contexts.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { NgIf, NgFor, AsyncPipe, JsonPipe, DatePipe, KeyValuePipe } from "@angular/common";
+import {
+  NgIf,
+  NgFor,
+  AsyncPipe,
+  JsonPipe,
+  DatePipe,
+  KeyValuePipe,
+} from "@angular/common";
 
 @Component({
-    selector: "gt-event-detail",
-    templateUrl: "./event-detail.component.html",
-    styleUrls: ["./event-detail.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatButtonModule,
-        RouterLink,
-        MatIconModule,
-        MatDividerModule,
-        ContextsComponent,
-        NgFor,
-        EntryMessageComponent,
-        EntryExceptionComponent,
-        EntryCSPComponent,
-        EntryBreadcrumbsComponent,
-        EntryRequestComponent,
-        EntryDataComponent,
-        AsyncPipe,
-        JsonPipe,
-        DatePipe,
-        KeyValuePipe,
-    ],
+  selector: "gt-event-detail",
+  templateUrl: "./event-detail.component.html",
+  styleUrls: ["./event-detail.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButtonModule,
+    RouterLink,
+    MatIconModule,
+    MatDividerModule,
+    ContextsComponent,
+    NgFor,
+    EntryMessageComponent,
+    EntryExceptionComponent,
+    EntryCSPComponent,
+    EntryBreadcrumbsComponent,
+    EntryRequestComponent,
+    EntryDataComponent,
+    AsyncPipe,
+    JsonPipe,
+    DatePipe,
+    KeyValuePipe,
+  ],
 })
 export class EventDetailComponent implements OnInit {
   event$ = this.issueService.event$;

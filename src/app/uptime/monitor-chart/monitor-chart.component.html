@@ -4,7 +4,7 @@
       <div
         class="up-check"
         *ngIf="datapoint.isUp"
-        matTooltip="Up at {{ datapoint.startCheck | date: 'short' }}"
+        matTooltip="Up at {{ datapoint.startCheck | date : 'short' }}"
         matTooltipPosition="above"
       ></div>
       <div
@@ -12,7 +12,7 @@
         *ngIf="datapoint.isUp === false"
         matTooltip="{{
           datapoint.reason ? convertReasonText(datapoint.reason) : 'Down'
-        }} at {{ datapoint.startCheck | date: 'short' }}"
+        }} at {{ datapoint.startCheck | date : 'short' }}"
         matTooltipPosition="above"
       ></div>
     </ng-container>

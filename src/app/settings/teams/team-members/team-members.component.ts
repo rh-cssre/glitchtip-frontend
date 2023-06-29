@@ -16,23 +16,23 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
 
 @Component({
-    selector: "gt-team-members",
-    templateUrl: "./team-members.component.html",
-    styleUrls: ["./team-members.component.scss"],
-    standalone: true,
-    imports: [
-        MatCardModule,
-        NgIf,
-        MatFormFieldModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        NgFor,
-        MatOptionModule,
-        MatDividerModule,
-        RouterLink,
-        LoadingButtonComponent,
-        AsyncPipe,
-    ],
+  selector: "gt-team-members",
+  templateUrl: "./team-members.component.html",
+  styleUrls: ["./team-members.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    NgIf,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    NgFor,
+    MatOptionModule,
+    MatDividerModule,
+    RouterLink,
+    LoadingButtonComponent,
+    AsyncPipe,
+  ],
 })
 export class TeamMembersComponent implements OnInit {
   teamMembers$ = this.teamsService.teamMembers$;

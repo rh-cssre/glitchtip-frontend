@@ -4,10 +4,10 @@ import { map } from "rxjs/operators";
 import { ConfirmEmailService } from "../../api/confirm-email/confirm-email.service";
 
 @Component({
-    selector: "gt-confirm-email",
-    template: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
+  selector: "gt-confirm-email",
+  template: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ConfirmEmailComponent implements OnInit {
   constructor(

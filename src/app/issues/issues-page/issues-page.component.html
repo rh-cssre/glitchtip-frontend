@@ -129,7 +129,7 @@
             element.title
           }}</a>
           <div class="other-cell-info mat-caption">
-            {{ element.count | i18nPlural: eventCountPluralMapping }}
+            {{ element.count | i18nPlural : eventCountPluralMapping }}
           </div>
           <div>
             <span
@@ -144,7 +144,7 @@
               </ng-container>
               <time
                 [dateTime]="element.firstSeen"
-                [title]="element.firstSeen | date: 'medium'"
+                [title]="element.firstSeen | date : 'medium'"
               >
                 {{ element.firstSeen | daysOld }},
               </time>
@@ -152,7 +152,7 @@
               <time
                 *ngIf="element.firstSeen !== element.lastSeen"
                 [dateTime]="element.lastSeen"
-                [title]="element.lastSeen | date: 'medium'"
+                [title]="element.lastSeen | date : 'medium'"
               >
                 {{ element.lastSeen | daysAgo }}
               </time>

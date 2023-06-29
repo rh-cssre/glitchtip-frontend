@@ -7,7 +7,12 @@ import {
   ViewChild,
   AfterViewInit,
 } from "@angular/core";
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { LoginService } from "../login.service";
 import { RouterLink } from "@angular/router";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -18,23 +23,23 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { FormErrorComponent } from "../../shared/forms/form-error/form-error.component";
 
 @Component({
-    selector: "gt-login-totp",
-    templateUrl: "./login-totp.component.html",
-    styleUrls: ["./login-totp.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        FormErrorComponent,
-        MatFormFieldModule,
-        MatInputModule,
-        NgIf,
-        NgFor,
-        MatButtonModule,
-        MatCheckboxModule,
-        RouterLink,
-        AsyncPipe,
-    ],
+  selector: "gt-login-totp",
+  templateUrl: "./login-totp.component.html",
+  styleUrls: ["./login-totp.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    FormErrorComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    NgIf,
+    NgFor,
+    MatButtonModule,
+    MatCheckboxModule,
+    RouterLink,
+    AsyncPipe,
+  ],
 })
 export class LoginTotpComponent implements OnInit, AfterViewInit {
   @ViewChild("input") input!: ElementRef;

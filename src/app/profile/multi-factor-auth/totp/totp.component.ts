@@ -6,7 +6,12 @@ import {
   OnInit,
   OnDestroy,
 } from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import * as QRCode from "qrcode";
 import { combineLatest } from "rxjs";
 import { delay, filter, tap } from "rxjs/operators";
@@ -22,24 +27,24 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 
 @Component({
-    selector: "gt-totp",
-    templateUrl: "./totp.component.html",
-    styleUrls: ["./totp.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        MatCardModule,
-        MatDividerModule,
-        NgIf,
-        MatButtonModule,
-        BackupCodesComponent,
-        ToDoItemComponent,
-        ReactiveFormsModule,
-        FormErrorComponent,
-        MatFormFieldModule,
-        MatInputModule,
-        AsyncPipe,
-    ],
+  selector: "gt-totp",
+  templateUrl: "./totp.component.html",
+  styleUrls: ["./totp.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    NgIf,
+    MatButtonModule,
+    BackupCodesComponent,
+    ToDoItemComponent,
+    ReactiveFormsModule,
+    FormErrorComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    AsyncPipe,
+  ],
 })
 export class TOTPComponent implements OnInit, OnDestroy {
   @ViewChild("canvas", { static: false }) canvas: ElementRef | undefined;

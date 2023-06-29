@@ -19,10 +19,7 @@
           >
             <p *ngIf="subscription.status === 'active'" class="mat-body-1">
               <ng-container
-                *ngIf="
-                  subscription.mainUnitPrice === 0;
-                  else paidSubscription
-                "
+                *ngIf="subscription.mainUnitPrice === 0; else paidSubscription"
                 i18n
                 >You have selected the free plan. Please consider making a
                 monthly
@@ -124,8 +121,7 @@
                   {{ subscription.start_date | date }}</li
                 >
                 <li class="mat-body-1" i18n
-                  >Plan cost:
-                  {{ subscription.mainUnitPrice | currency }}</li
+                  >Plan cost: {{ subscription.mainUnitPrice | currency }}</li
                 >
                 <li class="mat-body-1">
                   <ng-container i18n>Billing</ng-container>:

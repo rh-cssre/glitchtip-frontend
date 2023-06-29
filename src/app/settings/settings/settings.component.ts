@@ -1,5 +1,10 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import {
+  ActivatedRoute,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from "@angular/router";
 import { tap, filter, map } from "rxjs/operators";
 import { SettingsService } from "src/app/api/settings.service";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
@@ -11,27 +16,27 @@ import { MatListModule } from "@angular/material/list";
 import { MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
-    selector: "gt-settings",
-    templateUrl: "./settings.component.html",
-    styleUrls: ["./settings.component.scss"],
-    standalone: true,
-    imports: [
-        MatSidenavModule,
-        MatListModule,
-        RouterLink,
-        RouterLinkActive,
-        NgIf,
-        MobileNavToolbarComponent,
-        RouterOutlet,
-        AsyncPipe,
-    ],
+  selector: "gt-settings",
+  templateUrl: "./settings.component.html",
+  styleUrls: ["./settings.component.scss"],
+  standalone: true,
+  imports: [
+    MatSidenavModule,
+    MatListModule,
+    RouterLink,
+    RouterLinkActive,
+    NgIf,
+    MobileNavToolbarComponent,
+    RouterOutlet,
+    AsyncPipe,
+  ],
 })
 export class SettingsComponent {
   billingEnabled$ = this.service.billingEnabled$;
   organizationSlug$ = this.organizationService.activeOrganizationSlug$;
   isLoggedIn$ = this.auth.isLoggedIn;
-  activeOrganizationDetail$ = this.organizationService
-    .activeOrganizationDetail$;
+  activeOrganizationDetail$ =
+    this.organizationService.activeOrganizationDetail$;
 
   constructor(
     private service: SettingsService,

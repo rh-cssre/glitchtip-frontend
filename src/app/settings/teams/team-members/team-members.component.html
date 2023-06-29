@@ -4,7 +4,7 @@
     <mat-form-field
       *ngIf="(userTeamRole$ | async) !== 'member'"
       appearance="outline"
-      data-cy=team-member-select
+      data-cy="team-member-select"
     >
       <mat-label i18n>Add Member</mat-label>
       <mat-select (selectionChange)="addTeamMember()" [formControl]="member">

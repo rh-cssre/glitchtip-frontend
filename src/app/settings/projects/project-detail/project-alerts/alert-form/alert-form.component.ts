@@ -1,5 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, NgForm, ValidatorFn, AbstractControl, ValidationErrors, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  FormGroupDirective,
+  NgForm,
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { intRegex } from "src/app/shared/validators";
@@ -31,19 +41,19 @@ export const selectionRequiredValidator: ValidatorFn = (
 };
 
 @Component({
-    selector: "gt-alert-form",
-    templateUrl: "./alert-form.component.html",
-    styleUrls: ["./alert-form.component.scss"],
-    standalone: true,
-    imports: [
-        NgIf,
-        ReactiveFormsModule,
-        MatCheckboxModule,
-        MatTooltipModule,
-        MatFormFieldModule,
-        MatInputModule,
-        LoadingButtonComponent,
-    ],
+  selector: "gt-alert-form",
+  templateUrl: "./alert-form.component.html",
+  styleUrls: ["./alert-form.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LoadingButtonComponent,
+  ],
 })
 export class AlertFormComponent implements OnInit {
   @Input() loading: boolean | null = false;
@@ -79,7 +89,9 @@ export class AlertFormComponent implements OnInit {
   projectFormTimespan = this.projectAlertForm.get(
     "timespan_minutes"
   ) as UntypedFormControl;
-  projectFormQuantity = this.projectAlertForm.get("quantity") as UntypedFormControl;
+  projectFormQuantity = this.projectAlertForm.get(
+    "quantity"
+  ) as UntypedFormControl;
   projectFormUptime = this.projectAlertForm.get(
     "optionsGroup.uptime"
   ) as UntypedFormControl;

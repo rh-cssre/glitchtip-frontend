@@ -59,11 +59,22 @@
                   >
                 </div>
               </ng-container>
-              <ng-container *ngIf="recipient.recipientType === 'webhook' || recipient.recipientType === 'discord'">
+              <ng-container
+                *ngIf="
+                  recipient.recipientType === 'webhook' ||
+                  recipient.recipientType === 'discord'
+                "
+              >
                 <div class="svg-box">
                   <svg class="svg">
-                    <use xlink:href="#discord" *ngIf="recipient.recipientType === 'discord'" ></use>
-                    <use xlink:href="#webhook" *ngIf="recipient.recipientType === 'webhook'" ></use>
+                    <use
+                      xlink:href="#discord"
+                      *ngIf="recipient.recipientType === 'discord'"
+                    ></use>
+                    <use
+                      xlink:href="#webhook"
+                      *ngIf="recipient.recipientType === 'webhook'"
+                    ></use>
                   </svg>
                 </div>
                 <div class="recipient-info">
@@ -186,11 +197,22 @@
                     </span>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="recipient.recipientType === 'webhook' || recipient.recipientType === 'discord'">
+                <ng-container
+                  *ngIf="
+                    recipient.recipientType === 'webhook' ||
+                    recipient.recipientType === 'discord'
+                  "
+                >
                   <div class="svg-box">
                     <svg class="svg">
-                      <use xlink:href="#discord" *ngIf="recipient.recipientType === 'discord'" ></use>
-                      <use xlink:href="#webhook" *ngIf="recipient.recipientType === 'webhook'" ></use>
+                      <use
+                        xlink:href="#discord"
+                        *ngIf="recipient.recipientType === 'discord'"
+                      ></use>
+                      <use
+                        xlink:href="#webhook"
+                        *ngIf="recipient.recipientType === 'webhook'"
+                      ></use>
                     </svg>
                   </div>
                   <div class="recipient-info">

@@ -14,22 +14,22 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { NgIf, NgFor, AsyncPipe, DatePipe } from "@angular/common";
 
 @Component({
-    selector: "gt-comments",
-    templateUrl: "./comments.component.html",
-    styleUrls: ["./comments.component.scss"],
-    standalone: true,
-    imports: [
-        NgIf,
-        MatProgressSpinnerModule,
-        CommentFormComponent,
-        NgFor,
-        MatDividerModule,
-        MatButtonModule,
-        MatIconModule,
-        MarkdownModule,
-        AsyncPipe,
-        DatePipe,
-    ],
+  selector: "gt-comments",
+  templateUrl: "./comments.component.html",
+  styleUrls: ["./comments.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatProgressSpinnerModule,
+    CommentFormComponent,
+    NgFor,
+    MatDividerModule,
+    MatButtonModule,
+    MatIconModule,
+    MarkdownModule,
+    AsyncPipe,
+    DatePipe,
+  ],
 })
 export class CommentsComponent
   extends StatefulBaseComponent<CommentsState, CommentsService>

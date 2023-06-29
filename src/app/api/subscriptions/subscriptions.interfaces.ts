@@ -20,7 +20,7 @@ export interface BasePrice {
   metadata: { [key: string]: string };
 }
 
-export interface Price extends BasePrice{
+export interface Price extends BasePrice {
   product: BaseProduct;
 }
 

@@ -8,18 +8,12 @@ import { MatCardModule } from "@angular/material/card";
 import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-accept-invite",
-    templateUrl: "./accept-invite.component.html",
-    styleUrls: ["./accept-invite.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCardModule,
-        MatButtonModule,
-        RouterLink,
-        AsyncPipe,
-    ],
+  selector: "gt-accept-invite",
+  templateUrl: "./accept-invite.component.html",
+  styleUrls: ["./accept-invite.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, MatCardModule, MatButtonModule, RouterLink, AsyncPipe],
 })
 export class AcceptInviteComponent implements OnInit {
   isLoggedIn$ = this.authService.isLoggedIn;

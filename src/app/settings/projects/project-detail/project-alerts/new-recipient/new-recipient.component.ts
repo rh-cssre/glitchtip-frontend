@@ -75,7 +75,7 @@ export class NewRecipientComponent implements OnInit {
         ]);
       } else if (type === "email") {
         this.url.setValue("");
-      } else if(type == 'discord') {
+      } else if (type == "discord") {
         this.url.setValue("");
       }
       this.url.updateValueAndValidity();

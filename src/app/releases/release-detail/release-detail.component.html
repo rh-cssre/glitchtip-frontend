@@ -45,10 +45,7 @@
             *matHeaderRowDef="displayedColumns"
             [class.u-hidden]="files.length === 0"
           ></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" [attr.colspan]="displayedColumns.length">
               <div class="empty-states">
@@ -88,7 +85,11 @@
               </div>
             </td>
           </tr>
-          <tr class="pagination-row" mat-footer-row *matFooterRowDef="['pagination']"></tr>
+          <tr
+            class="pagination-row"
+            mat-footer-row
+            *matFooterRowDef="['pagination']"
+          ></tr>
         </table>
       </div>
     </ng-container>

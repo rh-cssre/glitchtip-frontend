@@ -1,4 +1,16 @@
-import { KeyValue, NgIf, NgClass, NgFor, NgSwitch, NgSwitchCase, NgSwitchDefault, AsyncPipe, JsonPipe, DatePipe, KeyValuePipe } from "@angular/common";
+import {
+  KeyValue,
+  NgIf,
+  NgClass,
+  NgFor,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+  AsyncPipe,
+  JsonPipe,
+  DatePipe,
+  KeyValuePipe,
+} from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -13,26 +25,26 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDividerModule } from "@angular/material/divider";
 
 @Component({
-    selector: "gt-entry-breadcrumbs",
-    templateUrl: "./entry-breadcrumbs.component.html",
-    styleUrls: ["./entry-breadcrumbs.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatDividerModule,
-        NgClass,
-        MatButtonModule,
-        MatIconModule,
-        NgFor,
-        NgSwitch,
-        NgSwitchCase,
-        NgSwitchDefault,
-        AsyncPipe,
-        JsonPipe,
-        DatePipe,
-        KeyValuePipe,
-    ],
+  selector: "gt-entry-breadcrumbs",
+  templateUrl: "./entry-breadcrumbs.component.html",
+  styleUrls: ["./entry-breadcrumbs.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatDividerModule,
+    NgClass,
+    MatButtonModule,
+    MatIconModule,
+    NgFor,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    AsyncPipe,
+    JsonPipe,
+    DatePipe,
+    KeyValuePipe,
+  ],
 })
 export class EntryBreadcrumbsComponent implements AfterViewInit {
   @ViewChild("breadBox") breadBox?: ElementRef;

@@ -1,8 +1,10 @@
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import {
-  Component,
-  ChangeDetectionStrategy
-} from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
@@ -13,12 +15,20 @@ import { MatButtonModule } from "@angular/material/button";
 import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-backup-codes",
-    templateUrl: "./backup-codes.component.html",
-    styleUrls: ["./backup-codes.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [NgIf, MatButtonModule, ReactiveFormsModule, FormErrorComponent, MatFormFieldModule, MatInputModule, AsyncPipe]
+  selector: "gt-backup-codes",
+  templateUrl: "./backup-codes.component.html",
+  styleUrls: ["./backup-codes.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButtonModule,
+    ReactiveFormsModule,
+    FormErrorComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    AsyncPipe,
+  ],
 })
 export class BackupCodesComponent {
   TOTPKey$ = this.service.TOTPKey$;
@@ -36,7 +46,7 @@ export class BackupCodesComponent {
   constructor(
     private service: MultiFactorAuthService,
     private snackBar: MatSnackBar
-    ) {}
+  ) {}
 
   get backupCode() {
     return this.backupCodeForm.get("backupCode");
@@ -87,5 +97,4 @@ export class BackupCodesComponent {
 
     document.body.removeChild(element);
   }
-
 }

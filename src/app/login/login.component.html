@@ -25,12 +25,7 @@
           <gt-form-error [error]="error$ | async"></gt-form-error>
           <mat-form-field class="full-width" appearance="outline">
             <mat-label>Email</mat-label>
-            <input
-              matInput
-              autofocus
-              type="email"
-              formControlName="email"
-            />
+            <input matInput autofocus type="email" formControlName="email" />
             <mat-error *ngIf="email?.errors">
               <span *ngIf="email?.errors?.required" i18n
                 >Your email is required to log in</span
@@ -45,11 +40,7 @@
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
             <mat-label>Password</mat-label>
-            <input
-              matInput
-              type="password"
-              formControlName="password"
-            />
+            <input matInput type="password" formControlName="password" />
             <mat-error *ngIf="password?.errors">
               <span *ngIf="password?.errors?.minlength" i18n
                 >Your password should be at least 8 characters long</span

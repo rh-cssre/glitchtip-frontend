@@ -13,22 +13,22 @@ import { MatCardModule } from "@angular/material/card";
 import { NgIf, NgFor, AsyncPipe, DecimalPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-payment",
-    templateUrl: "./payment.component.html",
-    styleUrls: ["./payment.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        MatCardModule,
-        MatIconModule,
-        LoadingButtonComponent,
-        MatDividerModule,
-        EventInfoComponent,
-        AsyncPipe,
-        DecimalPipe,
-    ],
+  selector: "gt-payment",
+  templateUrl: "./payment.component.html",
+  styleUrls: ["./payment.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    MatCardModule,
+    MatIconModule,
+    LoadingButtonComponent,
+    MatDividerModule,
+    EventInfoComponent,
+    AsyncPipe,
+    DecimalPipe,
+  ],
 })
 export class PaymentComponent implements OnInit {
   productOptions$ = this.subscriptionService.formattedProductOptions;

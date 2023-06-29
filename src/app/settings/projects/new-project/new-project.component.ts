@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -22,27 +27,27 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
 
 @Component({
-    selector: "gt-new-project",
-    templateUrl: "./new-project.component.html",
-    styleUrls: ["./new-project.component.scss"],
-    standalone: true,
-    imports: [
-        MatCardModule,
-        MatDialogModule,
-        ReactiveFormsModule,
-        NgIf,
-        MatFormFieldModule,
-        PlatformPickerComponent,
-        MatInputModule,
-        MatSelectModule,
-        NgFor,
-        MatOptionModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatIconModule,
-        LoadingButtonComponent,
-        AsyncPipe,
-    ],
+  selector: "gt-new-project",
+  templateUrl: "./new-project.component.html",
+  styleUrls: ["./new-project.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormFieldModule,
+    PlatformPickerComponent,
+    MatInputModule,
+    MatSelectModule,
+    NgFor,
+    MatOptionModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    LoadingButtonComponent,
+    AsyncPipe,
+  ],
 })
 export class NewProjectComponent implements OnInit {
   teams$ = this.teamsService.teams$;

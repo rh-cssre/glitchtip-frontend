@@ -11,23 +11,23 @@ import { MatButtonModule } from "@angular/material/button";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-entry-exception",
-    templateUrl: "./entry-exception.component.html",
-    styleUrls: ["./entry-exception.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatButtonModule,
-        MatButtonToggleModule,
-        NgFor,
-        MatChipsModule,
-        MatExpansionModule,
-        FrameTitleComponent,
-        FrameExpandedComponent,
-        RawStacktraceComponent,
-        AsyncPipe,
-    ],
+  selector: "gt-entry-exception",
+  templateUrl: "./entry-exception.component.html",
+  styleUrls: ["./entry-exception.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButtonModule,
+    MatButtonToggleModule,
+    NgFor,
+    MatChipsModule,
+    MatExpansionModule,
+    FrameTitleComponent,
+    FrameExpandedComponent,
+    RawStacktraceComponent,
+    AsyncPipe,
+  ],
 })
 export class EntryExceptionComponent {
   @Input() eventTitle: string | undefined;

@@ -179,8 +179,8 @@ export class NotificationsService {
   }
 
   private setToggleProjectView() {
-    const projectViewExpanded = this.notificationsState.getValue()
-      .projectViewExpanded;
+    const projectViewExpanded =
+      this.notificationsState.getValue().projectViewExpanded;
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectViewExpanded: !projectViewExpanded,

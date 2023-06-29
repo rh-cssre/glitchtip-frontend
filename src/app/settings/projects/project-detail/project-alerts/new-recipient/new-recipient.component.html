@@ -38,8 +38,14 @@
         >
           <mat-label>Webhook URL</mat-label>
           <svg matPrefix class="slack">
-            <use xlink:href="#discord" *ngIf="recipientType.value === 'discord'" ></use>
-            <use xlink:href="#webhook" *ngIf="recipientType.value === 'webhook'" ></use>
+            <use
+              xlink:href="#discord"
+              *ngIf="recipientType.value === 'discord'"
+            ></use>
+            <use
+              xlink:href="#webhook"
+              *ngIf="recipientType.value === 'webhook'"
+            ></use>
           </svg>
           <input matInput type="url" formControlName="url" placeholder="URL" />
           <mat-hint *ngSwitchCase="'webhook'" i18n

@@ -1,5 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, ReactiveFormsModule } from "@angular/forms";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  FormGroupDirective,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { filter, first, map, tap } from "rxjs/operators";
@@ -20,27 +26,27 @@ import { MatCardModule } from "@angular/material/card";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-project-detail",
-    templateUrl: "./project-detail.component.html",
-    styleUrls: ["./project-detail.component.scss"],
-    standalone: true,
-    imports: [
-        NgIf,
-        MatCardModule,
-        MatDividerModule,
-        MatFormFieldModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        LoadingButtonComponent,
-        PlatformPickerComponent,
-        NgFor,
-        CopyInputComponent,
-        ProjectEnvironmentsComponent,
-        ProjectAlertsComponent,
-        MatButtonModule,
-        RouterLink,
-        AsyncPipe,
-    ],
+  selector: "gt-project-detail",
+  templateUrl: "./project-detail.component.html",
+  styleUrls: ["./project-detail.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    LoadingButtonComponent,
+    PlatformPickerComponent,
+    NgFor,
+    CopyInputComponent,
+    ProjectEnvironmentsComponent,
+    ProjectAlertsComponent,
+    MatButtonModule,
+    RouterLink,
+    AsyncPipe,
+  ],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;

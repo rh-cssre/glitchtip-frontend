@@ -13,13 +13,16 @@
           ></gt-platform-picker>
           <mat-form-field class="project-name" appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput formControlName="name"/>
+            <input matInput formControlName="name" />
             <mat-error>
               <span *ngIf="name?.errors?.required">Enter a project name</span>
             </mat-error>
           </mat-form-field>
           <div class="teams">
-            <mat-form-field *ngIf="teams$ | async as teams" appearance="outline">
+            <mat-form-field
+              *ngIf="teams$ | async as teams"
+              appearance="outline"
+            >
               <mat-select
                 (click)="teams.length ? undefined : openCreateTeamDialog()"
                 [placeholder]="teams.length ? 'Assign a team' : 'Create a team'"

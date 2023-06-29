@@ -12,12 +12,12 @@
   </header>
   <mat-card>
     <mat-card-header>
-    <mat-card-title i18n>Your Teams</mat-card-title>
-    <p class="description mat-body-1" i18n
-      >Teams are for managing issue notifications and workflow. View permissions
-      are handled through
-      <a routerLink="../members"> organization membership.</a></p
-    >
+      <mat-card-title i18n>Your Teams</mat-card-title>
+      <p class="description mat-body-1" i18n
+        >Teams are for managing issue notifications and workflow. View
+        permissions are handled through
+        <a routerLink="../members"> organization membership.</a></p
+      >
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
@@ -31,7 +31,7 @@
               #{{ yourTeam.slug }}
             </a>
             <div>
-              {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
+              {{ yourTeam.memberCount | i18nPlural : memberCountPluralMapping }}
             </div>
           </div>
           <gt-loading-button
@@ -79,7 +79,9 @@
               #{{ otherTeam.slug }}
             </a>
             <div>
-              {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
+              {{
+                otherTeam.memberCount | i18nPlural : memberCountPluralMapping
+              }}
             </div>
           </div>
           <gt-loading-button

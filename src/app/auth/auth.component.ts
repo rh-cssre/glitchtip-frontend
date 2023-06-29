@@ -11,11 +11,11 @@ import { LoginService } from "../login/login.service";
 import { AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "gt-auth",
-    templateUrl: "./auth.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [AsyncPipe],
+  selector: "gt-auth",
+  templateUrl: "./auth.component.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [AsyncPipe],
 })
 export class AuthComponent implements OnInit {
   provider$ = this.route.params.pipe(map((params) => params.provider));

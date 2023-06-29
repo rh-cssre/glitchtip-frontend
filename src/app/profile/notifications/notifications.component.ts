@@ -12,31 +12,31 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 
 @Component({
-    selector: "gt-notifications",
-    templateUrl: "./notifications.component.html",
-    styleUrls: ["./notifications.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        MatCardModule,
-        MatDividerModule,
-        NgIf,
-        MatProgressSpinnerModule,
-        MatButtonToggleModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatIconModule,
-        NgFor,
-        RouterLink,
-        AsyncPipe,
-        KeyValuePipe,
-    ],
+  selector: "gt-notifications",
+  templateUrl: "./notifications.component.html",
+  styleUrls: ["./notifications.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    NgIf,
+    MatProgressSpinnerModule,
+    MatButtonToggleModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule,
+    NgFor,
+    RouterLink,
+    AsyncPipe,
+    KeyValuePipe,
+  ],
 })
 export class NotificationsComponent implements OnInit {
   subscribeByDefault$ = this.notificationsService.subscribeByDefault$;
   projectViewExpanded$ = this.notificationsService.projectViewExpanded$;
-  subscribeByDefaultLoading$ = this.notificationsService
-    .subscribeByDefaultLoading$;
+  subscribeByDefaultLoading$ =
+    this.notificationsService.subscribeByDefaultLoading$;
   subscribeByDefaultError$ = this.notificationsService.subscribeByDefaultError$;
   projectAlertLoading$ = this.notificationsService.projectAlertLoading$;
   groupedProjects$ = this.notificationsService.groupedProjects$;

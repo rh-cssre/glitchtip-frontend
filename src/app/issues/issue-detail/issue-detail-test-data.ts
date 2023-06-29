@@ -1,7 +1,6 @@
 import { IssueDetail } from "../interfaces";
 import { ProjectReference } from "src/app/api/projects/projects-api.interfaces";
 
-
 interface APIProjectReference extends Omit<ProjectReference, "id"> {
   id: string;
 }

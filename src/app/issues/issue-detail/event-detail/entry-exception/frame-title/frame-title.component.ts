@@ -6,16 +6,11 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "gt-frame-title",
-    templateUrl: "./frame-title.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgIf,
-        MatTooltipModule,
-        MatButtonModule,
-        MatIconModule,
-    ],
+  selector: "gt-frame-title",
+  templateUrl: "./frame-title.component.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, MatTooltipModule, MatButtonModule, MatIconModule],
 })
 export class FrameTitleComponent {
   @Input() frame: Frame | undefined;

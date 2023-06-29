@@ -1,10 +1,7 @@
 The simplest way to send an event to GlitchTip is to paste this into your HTML file somewhere:
 
 ```html
-<script
-  src="https://unpkg.com/@sentry/browser@latest/build/bundle.min.js"
-  crossorigin="anonymous"
-></script>
+<script src="https://unpkg.com/@sentry/browser@latest/build/bundle.min.js" crossorigin="anonymous"></script>
 
 <script>
   Sentry.init({ dsn: "your DSN here" });

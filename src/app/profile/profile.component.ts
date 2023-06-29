@@ -1,5 +1,10 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import {
+  ActivatedRoute,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from "@angular/router";
 import { AuthService } from "../api/auth/auth.service";
 import { OrganizationsService } from "../api/organizations/organizations.service";
 import { UserService } from "../api/user/user.service";
@@ -11,20 +16,20 @@ import { MatListModule } from "@angular/material/list";
 import { MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
-    selector: "gt-profile",
-    templateUrl: "./profile.component.html",
-    styleUrls: ["./profile.component.scss"],
-    standalone: true,
-    imports: [
-        MatSidenavModule,
-        MatListModule,
-        RouterLink,
-        RouterLinkActive,
-        NgIf,
-        MobileNavToolbarComponent,
-        RouterOutlet,
-        AsyncPipe,
-    ],
+  selector: "gt-profile",
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.scss"],
+  standalone: true,
+  imports: [
+    MatSidenavModule,
+    MatListModule,
+    RouterLink,
+    RouterLinkActive,
+    NgIf,
+    MobileNavToolbarComponent,
+    RouterOutlet,
+    AsyncPipe,
+  ],
 })
 export class ProfileComponent {
   user$ = this.userService.userDetails$;

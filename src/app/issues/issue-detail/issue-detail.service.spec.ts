@@ -11,7 +11,10 @@ import { take } from "rxjs/operators";
 import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail, EventDetail, AnnotatedContexts } from "../interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { sampleApiIssueDetail, sampleIssueDetail } from "./issue-detail-test-data";
+import {
+  sampleApiIssueDetail,
+  sampleIssueDetail,
+} from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
 import { zeroDivisionDotnet } from "./event-detail/test-data/zero-division-dotnet";
@@ -51,7 +54,9 @@ describe("IssueDetailService", () => {
       `/api/0/issues/${testApiData.id}/`
     );
     req.flush(testApiData);
-    service.issue$.subscribe((issue) => expect(issue).toEqual(sampleIssueDetail));
+    service.issue$.subscribe((issue) =>
+      expect(issue).toEqual(sampleIssueDetail)
+    );
   });
 
   it("should clear the issue state", () => {
