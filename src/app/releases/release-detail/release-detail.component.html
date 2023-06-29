@@ -4,15 +4,12 @@
 >
   <ng-container *ngIf="release$ | async as release">
     <ng-container *ngIf="releaseFiles$ | async as files">
-      <header>
-        <a mat-stroked-button [routerLink]="['..']" class="releases-list-link">
-          <mat-icon>keyboard_arrow_left</mat-icon>
-          View all Releases
-        </a>
-        <h1 class="mat-headline-4">
-          Release files for {{ release.version }} ({{ paginator.count }})
-        </h1>
-      </header>
+      <gt-detail-header
+        [title]="
+          'Release files for ' + release.version + ' (' + paginator.count + ')'
+        "
+        backLinkText="View all Releases"
+      />
       <div>
         <table mat-table class="mat-elevation-z2" [dataSource]="releaseFiles$">
           <ng-container matColumnDef="name">

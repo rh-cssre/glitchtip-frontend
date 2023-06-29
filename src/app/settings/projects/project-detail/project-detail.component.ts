@@ -23,7 +23,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   selector: "gt-project-detail",
@@ -31,7 +32,7 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
   styleUrls: ["./project-detail.component.scss"],
   standalone: true,
   imports: [
-    NgIf,
+    CommonModule,
     MatCardModule,
     MatDividerModule,
     MatFormFieldModule,
@@ -39,13 +40,12 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
     MatInputModule,
     LoadingButtonComponent,
     PlatformPickerComponent,
-    NgFor,
     CopyInputComponent,
     ProjectEnvironmentsComponent,
     ProjectAlertsComponent,
     MatButtonModule,
     RouterLink,
-    AsyncPipe,
+    DetailHeaderComponent,
   ],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {

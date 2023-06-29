@@ -7,10 +7,10 @@ import { NewTeamComponent } from "./new-team/new-team.component";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { NgIf, NgFor, AsyncPipe, I18nPluralPipe } from "@angular/common";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "gt-teams",
@@ -18,17 +18,14 @@ import { MatButtonModule } from "@angular/material/button";
   styleUrls: ["./teams.component.scss"],
   standalone: true,
   imports: [
+    CommonModule,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
     RouterLink,
     MatDividerModule,
-    NgIf,
     MatFormFieldModule,
-    NgFor,
     LoadingButtonComponent,
-    AsyncPipe,
-    I18nPluralPipe,
   ],
 })
 export class TeamsComponent implements OnInit {

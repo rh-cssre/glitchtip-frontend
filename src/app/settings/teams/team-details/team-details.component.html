@@ -1,14 +1,8 @@
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-headline-4">#{{ teamSlug$ | async }}</h1>
-    <a
-      mat-flat-button
-      [routerLink]="['/', orgSlug$ | async, 'settings', 'teams']"
-    >
-      <mat-icon>keyboard_arrow_left</mat-icon
-      ><ng-container i18n>Back to Teams</ng-container></a
-    >
-  </header>
+  <gt-detail-header
+    backLinkText="Back to Teams"
+    [title]="'#' + (teamSlug$ | async)!"
+  />
 
   <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
     <a

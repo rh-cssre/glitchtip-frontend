@@ -21,4 +21,18 @@ export class DetailHeaderComponent {
   @Input() backLinkText = "";
   @Input() title: string | [string, string | null] = "";
   @Input() subtitle?: string | null;
+
+  getTitle() {
+    if (Array.isArray(this.title)) {
+      return this.title[0];
+    }
+    return this.title;
+  }
+
+  getTitleSuffix() {
+    if (Array.isArray(this.title)) {
+      return this.title[1];
+    }
+    return null;
+  }
 }

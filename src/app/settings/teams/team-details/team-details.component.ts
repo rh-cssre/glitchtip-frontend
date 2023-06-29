@@ -6,10 +6,11 @@ import {
   RouterOutlet,
 } from "@angular/router";
 import { map } from "rxjs/operators";
-import { NgFor, AsyncPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   selector: "gt-team-details",
@@ -17,14 +18,14 @@ import { MatButtonModule } from "@angular/material/button";
   styleUrls: ["./team-details.component.scss"],
   standalone: true,
   imports: [
+    CommonModule,
     MatButtonModule,
     RouterLink,
     MatIconModule,
     MatTabsModule,
-    NgFor,
     RouterLinkActive,
     RouterOutlet,
-    AsyncPipe,
+    DetailHeaderComponent,
   ],
 })
 export class TeamDetailsComponent {

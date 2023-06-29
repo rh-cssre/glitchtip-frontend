@@ -12,7 +12,6 @@ import { DetailHeaderComponent } from "src/app/shared/detail/header/header.compo
   standalone: true,
   selector: "gt-new-monitor",
   templateUrl: "./new-monitor.component.html",
-  styleUrls: ["./new-monitor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,

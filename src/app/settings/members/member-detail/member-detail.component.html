@@ -1,13 +1,5 @@
 <section class="l-body" *ngIf="member$ | async as member">
-  <header class="page-header">
-    <h1 class="mat-headline-4">
-      {{ member.email }}
-    </h1>
-    <a mat-flat-button [routerLink]="['..']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      <span i18n>Back to Members</span>
-    </a>
-  </header>
+  <gt-detail-header [title]="member.email" backLinkText="Back to Members" />
   <mat-card>
     <mat-card-header>
       <mat-card-title il8n>Basics</mat-card-title>
