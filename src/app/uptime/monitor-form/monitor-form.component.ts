@@ -109,6 +109,8 @@ export class MonitorFormComponent implements OnInit {
     Validators.pattern(intRegex),
   ]);
 
+  formExpectedBody = new FormControl("");
+
   formInterval = new FormControl<number>(defaultInterval, {
     nonNullable: true,
     validators: [Validators.required, Validators.min(1), Validators.max(86399)],
@@ -127,6 +129,7 @@ export class MonitorFormComponent implements OnInit {
     name: this.formName,
     url: this.formUrl,
     expectedStatus: this.formExpectedStatus,
+    expectedBody: this.formExpectedBody,
     interval: this.formInterval,
     timeout: this.formTimeout,
     project: this.formProject,
@@ -162,6 +165,7 @@ export class MonitorFormComponent implements OnInit {
           ? this.monitorSettings.expectedStatus
           : defaultExpectedStatus
       );
+      this.formExpectedBody.patchValue(this.monitorSettings.expectedBody);
       this.formInterval.patchValue(
         Math.round(timedeltaToMS(this.monitorSettings.interval) / 1000)
       );
@@ -176,16 +180,20 @@ export class MonitorFormComponent implements OnInit {
     this.formUrl.enable();
     this.formUrl.setValidators(standardUrlValidators);
     this.formExpectedStatus.enable();
+    this.formExpectedBody.enable();
     this.formTimeout.enable();
     if (this.formMonitorType.value === "Heartbeat") {
       this.formUrl.disable();
       this.formExpectedStatus.disable();
+      this.formExpectedBody.disable();
       this.formTimeout.disable();
     } else if (this.formMonitorType.value === "Ping") {
       this.formExpectedStatus.disable();
+      this.formExpectedBody.disable();
     } else if (this.formMonitorType.value === "TCP Port") {
       this.formUrl.setValidators(portUrlValidators);
       this.formExpectedStatus.disable();
+      this.formExpectedBody.disable();
       if (this.formUrl.value === "https://") {
         this.formUrl.setValue("");
       }
@@ -208,6 +216,7 @@ export class MonitorFormComponent implements OnInit {
         expectedStatus: this.formExpectedStatus.enabled
           ? this.formExpectedStatus.value
           : null,
+        expectedBody: this.formExpectedBody.value!,
         url: this.formUrl.enabled ? this.formUrl.value : "",
       });
     }

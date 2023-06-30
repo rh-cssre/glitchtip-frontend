@@ -15,6 +15,7 @@ interface MonitorBase {
   name: string;
   interval: string;
   expectedStatus: number | null;
+  expectedBody: string;
   url: string;
 }
 
@@ -27,6 +28,7 @@ export interface MonitorDetail extends MonitorBase {
   id: string;
   url: string;
   expectedStatus: number | null;
+  expectedBody: string;
   project: number | null;
   timeout: number | null;
   projectName: string | null;

@@ -169,6 +169,29 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <div
+        class="short-field-container"
+        *ngIf="
+          formMonitorType?.value === 'GET' || formMonitorType?.value === 'POST'
+        "
+      >
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Expected Response Body</mat-label>
+          <input
+            matInput
+            autocomplete="off"
+            formControlName="expectedBody"
+            placeholder="Status code"
+            data-cy="expected-body"
+          />
+        </mat-form-field>
+        <div class="help-text mat-caption">
+          <span i18n
+            >If string isn't found in response body, the monitor will report as
+            down</span
+          >
+        </div>
+      </div>
       <div class="short-field-container">
         <mat-form-field appearance="outline" data-cy="interval">
           <mat-label i18n>Interval (seconds)</mat-label>
