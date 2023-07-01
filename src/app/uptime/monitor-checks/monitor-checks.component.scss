@@ -16,7 +16,7 @@ table {
 
 .mat-column-responseTime {
   padding-right: 75px;
-  @media screen and (max-width: $small - 1) {
+  @media screen and (max-width: ($small - 1)) {
     display: none;
   }
 }
@@ -43,4 +43,8 @@ table {
   &--false:after {
     background-color: $amaranth;
   }
+}
+
+button {
+  margin-bottom: 8px;
 }

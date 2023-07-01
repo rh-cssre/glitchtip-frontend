@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { map, tap } from "rxjs/operators";
-import { lastValueFrom } from "rxjs";
 import {
   initialPaginationState,
   PaginationStatefulService,
@@ -11,10 +10,12 @@ import { MonitorChecksAPIService } from "src/app/api/monitors/monitor-checks-API
 
 export interface MonitorChecksState extends PaginationStatefulServiceState {
   monitorChecks: MonitorCheck[];
+  isChange: boolean;
 }
 
 const initialState: MonitorChecksState = {
   monitorChecks: [],
+  isChange: true,
   pagination: initialPaginationState,
 };
 
@@ -23,6 +24,7 @@ const initialState: MonitorChecksState = {
 })
 export class MonitorChecksService extends PaginationStatefulService<MonitorChecksState> {
   monitorChecks$ = this.getState$.pipe(map((state) => state.monitorChecks));
+  isChange$ = this.getState$.pipe(map((state) => state.isChange));
 
   constructor(private monitorChecksAPIService: MonitorChecksAPIService) {
     super(initialState);
@@ -31,11 +33,13 @@ export class MonitorChecksService extends PaginationStatefulService<MonitorCheck
   retrieveMonitorChecks(
     orgSlug: string,
     monitorId: string,
+    isChange: boolean,
     cursor?: string | null
   ) {
     this.setRetrieveMonitorChecksStart();
-    lastValueFrom(
-      this.monitorChecksAPIService.list(orgSlug, monitorId, cursor).pipe(
+    return this.monitorChecksAPIService
+      .list(orgSlug, monitorId, cursor, isChange)
+      .pipe(
         tap((res) => {
           this.setStateAndPagination(
             {
@@ -44,12 +48,16 @@ export class MonitorChecksService extends PaginationStatefulService<MonitorCheck
             res
           );
         })
-      )
-    );
+      );
   }
 
   setRetrieveMonitorChecksStart() {
     const state = this.state.getValue();
     this.setState({ pagination: { ...state.pagination, loading: true } });
+  }
+
+  toggleIsChange() {
+    const state = this.state.getValue();
+    this.setState({ ...initialState, isChange: !state.isChange });
   }
 }
