@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { map, tap } from "rxjs/operators";
-import { lastValueFrom } from "rxjs";
 import {
   initialPaginationState,
   PaginationStatefulService,
@@ -38,20 +37,18 @@ export class MonitorChecksService extends PaginationStatefulService<MonitorCheck
     cursor?: string | null
   ) {
     this.setRetrieveMonitorChecksStart();
-    lastValueFrom(
-      this.monitorChecksAPIService
-        .list(orgSlug, monitorId, cursor, isChange)
-        .pipe(
-          tap((res) => {
-            this.setStateAndPagination(
-              {
-                monitorChecks: res.body!,
-              },
-              res
-            );
-          })
-        )
-    );
+    return this.monitorChecksAPIService
+      .list(orgSlug, monitorId, cursor, isChange)
+      .pipe(
+        tap((res) => {
+          this.setStateAndPagination(
+            {
+              monitorChecks: res.body!,
+            },
+            res
+          );
+        })
+      );
   }
 
   setRetrieveMonitorChecksStart() {

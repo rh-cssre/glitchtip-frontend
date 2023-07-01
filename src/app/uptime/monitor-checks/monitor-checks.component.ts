@@ -1,6 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { combineLatest, distinctUntilChanged, map } from "rxjs";
+import {
+  EMPTY,
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  switchMap,
+} from "rxjs";
 import { MonitorDetail, DownReason } from "../uptime.interfaces";
 import { reasonTextConversions } from "../uptime.utils";
 import { ListFooterComponent } from "src/app/list-elements/list-footer/list-footer.component";
@@ -52,19 +58,24 @@ export class MonitorChecksComponent {
       this.route.queryParamMap,
       this.isChange$.pipe(distinctUntilChanged()),
     ])
-      .pipe(takeUntilDestroyed())
-      .subscribe(([params, queryParams, isChange]) => {
-        const orgSlug = params.get("org-slug");
-        const monitorId = params.get("monitor-id");
-        if (orgSlug && monitorId) {
-          this.service.retrieveMonitorChecks(
-            orgSlug,
-            monitorId,
-            isChange,
-            queryParams.get("cursor")
-          );
-        }
-      });
+      .pipe(
+        switchMap(([params, queryParams, isChange]) => {
+          console.log("get it", queryParams);
+          const orgSlug = params.get("org-slug");
+          const monitorId = params.get("monitor-id");
+          if (orgSlug && monitorId) {
+            return this.service.retrieveMonitorChecks(
+              orgSlug,
+              monitorId,
+              isChange,
+              queryParams.get("cursor")
+            );
+          }
+          return EMPTY;
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
   }
 
   convertReasonText(reason: DownReason) {
@@ -81,12 +92,12 @@ export class MonitorChecksComponent {
   }
 
   toggleIsChange() {
-    this.service.toggleIsChange();
     this.router.navigate([], {
       queryParams: {
         cursor: null,
       },
       queryParamsHandling: "merge",
     });
+    this.service.toggleIsChange();
   }
 }
