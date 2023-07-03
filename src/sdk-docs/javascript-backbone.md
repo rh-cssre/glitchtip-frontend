@@ -3,10 +3,7 @@
 Start by adding the `raven.js` script tag to your page. It should be loaded as early as possible.
 
 ```html
-<script
-  src="https://cdn.ravenjs.com/3.26.4/raven.min.js"
-  crossorigin="anonymous"
-></script>
+<script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
 ```
 
 ### Configuring the Client
