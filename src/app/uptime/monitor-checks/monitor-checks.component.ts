@@ -4,7 +4,14 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTableModule } from "@angular/material/table";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { EMPTY, combineLatest, map, switchMap, take } from "rxjs";
+import {
+  EMPTY,
+  combineLatest,
+  map,
+  switchMap,
+  take,
+  withLatestFrom,
+} from "rxjs";
 import { ListFooterComponent } from "src/app/list-elements/list-footer/list-footer.component";
 import { HumanizeDurationPipe } from "src/app/shared/seconds-or-ms.pipe";
 import { DownReason, MonitorDetail } from "../uptime.interfaces";
@@ -51,11 +58,10 @@ export class MonitorChecksComponent {
   ) {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
-        switchMap(([params, queryParams]) => {
+        withLatestFrom(this.isChange$),
+        switchMap(([[params, queryParams], isChange]) => {
           const orgSlug = params.get("org-slug");
           const monitorId = params.get("monitor-id");
-          const isChange =
-            queryParams.get("isChange") === "false" ? false : true;
           if (orgSlug && monitorId) {
             return this.service.retrieveMonitorChecks(
               orgSlug,
