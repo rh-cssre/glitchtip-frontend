@@ -1,21 +1,15 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import {
-  EMPTY,
-  combineLatest,
-  distinctUntilChanged,
-  map,
-  switchMap,
-} from "rxjs";
-import { MonitorDetail, DownReason } from "../uptime.interfaces";
-import { reasonTextConversions } from "../uptime.utils";
-import { ListFooterComponent } from "src/app/list-elements/list-footer/list-footer.component";
 import { CommonModule } from "@angular/common";
-import { HumanizeDurationPipe } from "src/app/shared/seconds-or-ms.pipe";
-import { MatTableModule } from "@angular/material/table";
-import { MonitorChecksService } from "./monitor-checks.service";
-import { MatButtonModule } from "@angular/material/button";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTableModule } from "@angular/material/table";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { EMPTY, combineLatest, map, switchMap, take } from "rxjs";
+import { ListFooterComponent } from "src/app/list-elements/list-footer/list-footer.component";
+import { HumanizeDurationPipe } from "src/app/shared/seconds-or-ms.pipe";
+import { DownReason, MonitorDetail } from "../uptime.interfaces";
+import { reasonTextConversions } from "../uptime.utils";
+import { MonitorChecksService } from "./monitor-checks.service";
 
 @Component({
   standalone: true,
@@ -35,7 +29,9 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 export class MonitorChecksComponent {
   @Input({ required: true }) monitor!: MonitorDetail;
   monitorChecks$ = this.service.monitorChecks$;
-  isChange$ = this.service.isChange$;
+  isChange$ = this.route.queryParamMap.pipe(
+    map((params) => (params.get("isChange") === "false" ? false : true))
+  );
   paginator$ = this.service.paginator$;
   displayedColumns$ = this.isChange$.pipe(
     map((isChanged) =>
@@ -53,16 +49,13 @@ export class MonitorChecksComponent {
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    combineLatest([
-      this.route.paramMap,
-      this.route.queryParamMap,
-      this.isChange$.pipe(distinctUntilChanged()),
-    ])
+    combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
-        switchMap(([params, queryParams, isChange]) => {
-          console.log("get it", queryParams);
+        switchMap(([params, queryParams]) => {
           const orgSlug = params.get("org-slug");
           const monitorId = params.get("monitor-id");
+          const isChange =
+            queryParams.get("isChange") === "false" ? false : true;
           if (orgSlug && monitorId) {
             return this.service.retrieveMonitorChecks(
               orgSlug,
@@ -92,12 +85,15 @@ export class MonitorChecksComponent {
   }
 
   toggleIsChange() {
-    this.router.navigate([], {
-      queryParams: {
-        cursor: null,
-      },
-      queryParamsHandling: "merge",
+    this.isChange$.pipe(take(1)).subscribe((isChange) => {
+      isChange = !isChange;
+      this.router.navigate([], {
+        queryParams: {
+          cursor: null,
+          isChange,
+        },
+        queryParamsHandling: "merge",
+      });
     });
-    this.service.toggleIsChange();
   }
 }
