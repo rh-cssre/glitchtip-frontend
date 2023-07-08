@@ -219,21 +219,23 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
         distinctUntilChanged()
       ),
       this.organizationsService.activeOrganizationProjects$,
-    ]).pipe(
-      switchMap(([orgSlug, projectId, orgProjects]) => {
-        const projectSlug = orgProjects?.find(
-          (orgProject) => orgProject.id.toString() === projectId
-        )?.slug;
-        if (orgSlug && projectSlug) {
-          return this.projectEnvironmentsService.retrieveEnvironmentsWithProperties(
-            orgSlug,
-            projectSlug
-          );
-        }
-        return EMPTY;
-      }),
-      takeUntilDestroyed()
-    );
+    ])
+      .pipe(
+        switchMap(([orgSlug, projectId, orgProjects]) => {
+          const projectSlug = orgProjects?.find(
+            (orgProject) => orgProject.id.toString() === projectId
+          )?.slug;
+          if (orgSlug && projectSlug) {
+            return this.projectEnvironmentsService.retrieveEnvironmentsWithProperties(
+              orgSlug,
+              projectSlug
+            );
+          }
+          return EMPTY;
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
 
     /**
      * When changing from one project to another, see if there is an environment

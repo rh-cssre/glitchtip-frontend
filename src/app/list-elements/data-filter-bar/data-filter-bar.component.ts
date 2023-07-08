@@ -1,15 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { CommonModule, formatDate } from "@angular/common";
-
-import { ReactiveFormsModule } from "@angular/forms";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatInputModule } from "@angular/material/input";
-import { MatSelectModule } from "@angular/material/select";
-
-import { UntypedFormGroup } from "@angular/forms";
-import { MatSelectChange } from "@angular/material/select";
+import { MatSelectChange, MatSelectModule } from "@angular/material/select";
 
 @Component({
   standalone: true,
@@ -28,11 +24,11 @@ import { MatSelectChange } from "@angular/material/select";
   styleUrls: ["./data-filter-bar.component.scss"],
 })
 export class DataFilterBarComponent {
-  @Input() dateForm?: UntypedFormGroup;
-  @Input() sortForm?: UntypedFormGroup;
+  @Input() dateForm?: FormGroup;
+  @Input() sortForm?: FormGroup;
   @Input() sorts?: { param: string; display: string }[];
-  @Input() environmentForm?: UntypedFormGroup;
-  @Input() searchForm?: UntypedFormGroup;
+  @Input() environmentForm?: FormGroup;
+  @Input() searchForm?: FormGroup;
   @Input() organizationEnvironments: string[] = [];
 
   @Output() dateFormSubmission = new EventEmitter<object>();
