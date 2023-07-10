@@ -4,7 +4,6 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata, Story } from "@storybook/angular";
 
-import { SharedModule } from "src/app/shared/shared.module";
 import { FrameTitleComponent } from "./frame-title.component";
 
 export default {
@@ -17,7 +16,6 @@ export default {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        SharedModule,
       ],
     }),
   ],

@@ -6,142 +6,161 @@
     class="auth-form issue-404"
     *ngIf="organization$ | async as organization"
   >
-    <h1 class="mat-display-1">Issue not found</h1>
-    <p class="mat-body-1">
-      This may be because the URL is pointing to an issue that doesn't exist or
-      was deleted.
-    </p>
-    <p class="mat-body-1">
-      It's also possible that this issue was reported to a project that you are
-      not able to access.
-    </p>
-    <a
-      mat-flat-button
-      color="primary"
-      class="project-issues-link"
-      [routerLink]="['..']"
-    >
-      View all issues in {{ organization.name }}
-    </a>
+    <mat-card-content>
+      <h1 class="mat-headline-4">Issue not found</h1>
+      <p class="mat-body-1">
+        This may be because the URL is pointing to an issue that doesn't exist
+        or was deleted.
+      </p>
+      <p class="mat-body-1">
+        It's also possible that this issue was reported to a project that you
+        are not able to access.
+      </p>
+      <a
+        mat-flat-button
+        color="primary"
+        class="project-issues-link"
+        [routerLink]="['..']"
+      >
+        View all issues in {{ organization.name }}
+      </a>
+    </mat-card-content>
   </mat-card>
 </section>
 <section class="l-body l-body--full-width" *ngIf="issue$ | async as issue">
-  <header>
-    <a
-      mat-stroked-button
-      class="project-issues-link"
-      [routerLink]="['..']"
-      [queryParams]="generateBackLink(issue.project.id)"
+  <gt-detail-header
+    [backLinkText]="'View all issues for ' + issue.project.name"
+    [title]="(issueTitle$ | async)!"
+    [subtitle]="issueSubtitle$ | async"
+  >
+    <button
+      *ngIf="issue?.status !== 'resolved'"
+      mat-flat-button
+      color="primary"
+      (click)="markResolved()"
     >
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      View all issues for {{ issue.project.name }}
-    </a>
-    <div class="header-group">
-      <gt-issue-detail-title
-        [issueType]="issue?.type"
-        [culprit]="issue?.culprit"
-        [metadata]="issue?.metadata"
-      ></gt-issue-detail-title>
-      <div class="button-row">
-        <button
-          *ngIf="issue?.status === 'unresolved'"
-          mat-flat-button
-          color="primary"
-          (click)="markResolved()"
-        >
-          <mat-icon aria-hidden="true">done</mat-icon>
-          Resolve
-        </button>
-        <button
-          *ngIf="issue?.status === 'resolved'"
-          mat-flat-button
-          color="primary"
-          (click)="markUnresolved()"
-        >
-          <mat-icon aria-hidden="true">done</mat-icon>
-          Reopen
-        </button>
-        <button mat-stroked-button (click)="markIgnored()">Ignore</button>
-        <button mat-icon-button (click)="deleteIssue(issue?.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-    <p class="mat-body-1" *ngIf="issue.status === 'resolved'">
-      This issue has been marked as resolved.
-    </p>
-    <p class="mat-body-1" *ngIf="issue.status === 'ignored'">
-      This issue is being ignored. You will not be notified of any changes and
-      it will not show up by default in the issues page.
-    </p>
-  </header>
+      <mat-icon aria-hidden="true">done</mat-icon>
+      Resolve
+    </button>
+    <button
+      *ngIf="issue?.status !== 'unresolved'"
+      mat-flat-button
+      color="primary"
+      (click)="markUnresolved()"
+    >
+      <mat-icon aria-hidden="true">done</mat-icon>
+      Reopen
+    </button>
+    <button
+      *ngIf="issue?.status !== 'ignored'"
+      mat-stroked-button
+      (click)="markIgnored()"
+    >
+      Ignore
+    </button>
+    <button mat-icon-button class="medium-icon-button" (click)="deleteIssue()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </gt-detail-header>
 
   <div class="row">
     <mat-card class="event-detail-card left">
-      <nav mat-tab-nav-bar class="tabbed-nav">
-        <a
-          mat-tab-link
-          [routerLink]="['./']"
-          routerLinkActive
-          [active]="details.isActive"
-          [routerLinkActiveOptions]="{ exact: true }"
-          #details="routerLinkActive"
+      <div class="tab-nav-container">
+        <nav
+          mat-tab-nav-bar
+          class="tabbed-nav"
+          mat-stretch-tabs="false"
+          [tabPanel]="tabPanel"
         >
-          Event Details
-        </a>
-        <a
-          mat-tab-link
-          [routerLink]="['user-reports']"
-          routerLinkActive
-          [active]="reports.isActive"
-          #reports="routerLinkActive"
-        >
-          <span
-            *ngIf="issue.userReportCount > 0"
-            [matBadge]="
-              issue.userReportCount < 100
-                ? issue.userReportCount.toString()
-                : '99+'
-            "
-            matBadgeOverlap="false"
-            class="report-badge"
+          <a
+            mat-tab-link
+            [routerLink]="['./']"
+            routerLinkActive
+            [active]="details.isActive"
+            [routerLinkActiveOptions]="{ exact: true }"
+            #details="routerLinkActive"
           >
-            User Reports
-          </span>
-          <ng-container *ngIf="issue.userReportCount === 0">
-            User Reports
-          </ng-container>
-        </a>
-      </nav>
-
-      <router-outlet></router-outlet>
+            Event Details
+          </a>
+          <a
+            mat-tab-link
+            [routerLink]="['user-reports']"
+            routerLinkActive
+            [active]="reports.isActive"
+            #reports="routerLinkActive"
+          >
+            <span
+              *ngIf="issue.userReportCount > 0"
+              [matBadge]="
+                issue.userReportCount < 100
+                  ? issue.userReportCount.toString()
+                  : '99+'
+              "
+              matBadgeOverlap="false"
+              class="report-badge"
+            >
+              User Reports
+            </span>
+            <ng-container *ngIf="issue.userReportCount === 0">
+              User Reports
+            </ng-container>
+          </a>
+          <a
+            mat-tab-link
+            [routerLink]="['comments']"
+            routerLinkActive
+            [active]="comments.isActive"
+            #comments="routerLinkActive"
+          >
+            <ng-container *ngIf="issue.numComments > 0; else noComments">
+              <span
+                [matBadge]="issue.numComments < 100 ? issue.numComments : '99+'"
+                matBadgeOverlap="false"
+                class="report-badge"
+              >
+                Comments
+              </span>
+            </ng-container>
+            <ng-template #noComments>
+              <span>Comments</span>
+            </ng-template>
+          </a>
+        </nav>
+      </div>
+      <mat-card-content>
+        <mat-tab-nav-panel #tabPanel>
+          <router-outlet></router-outlet>
+        </mat-tab-nav-panel>
+      </mat-card-content>
     </mat-card>
     <aside class="right">
       <mat-card>
-        <dl>
-          <div>
-            <dt class="mat-caption">Issue #</dt>
-            <dd class="mat-body-1">{{ issue?.shortId }}</dd>
-          </div>
-          <div>
-            <dt class="mat-caption">Events</dt>
-            <dd class="mat-body-1">{{ issue?.count }}</dd>
-          </div>
-          <div>
-            <dt class="mat-caption">First Seen</dt>
-            <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
-            <dd class="mat-caption">
-              {{ issue?.firstSeen | date: "long" }}
-            </dd>
-          </div>
-          <div>
-            <dt class="mat-caption">Last Seen</dt>
-            <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
-            <dd class="mat-caption">
-              {{ issue?.lastSeen | date: "long" }}
-            </dd>
-          </div>
-        </dl>
+        <mat-card-content>
+          <dl>
+            <div>
+              <dt class="mat-caption">Issue #</dt>
+              <dd class="mat-body-1">{{ issue?.shortId }}</dd>
+            </div>
+            <div>
+              <dt class="mat-caption">Events</dt>
+              <dd class="mat-body-1">{{ issue?.count }}</dd>
+            </div>
+            <div>
+              <dt class="mat-caption">First Seen</dt>
+              <dd class="mat-body-1">{{ issue.firstSeen | daysAgo }}</dd>
+              <dd class="mat-caption">
+                {{ issue?.firstSeen | date : "long" }}
+              </dd>
+            </div>
+            <div>
+              <dt class="mat-caption">Last Seen</dt>
+              <dd class="mat-body-1">{{ issue.lastSeen | daysAgo }}</dd>
+              <dd class="mat-caption">
+                {{ issue?.lastSeen | date : "long" }}
+              </dd>
+            </div>
+          </dl>
+        </mat-card-content>
       </mat-card>
       <gt-issue-detail-tags></gt-issue-detail-tags>
     </aside>

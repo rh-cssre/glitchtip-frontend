@@ -26,8 +26,9 @@ mat-list {
   margin-right: -15px;
 }
 
-mat-list-item ::ng-deep .mat-list-item-content {
+.environment-list-item {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
