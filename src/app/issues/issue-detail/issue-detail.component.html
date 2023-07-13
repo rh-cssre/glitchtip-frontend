@@ -30,6 +30,7 @@
 <section class="l-body l-body--full-width" *ngIf="issue$ | async as issue">
   <gt-detail-header
     [backLinkText]="'View all issues for ' + issue.project.name"
+    [backLinkParams]="generateBackLink(issue.project.id)"
     [title]="(issueTitle$ | async)!"
     [subtitle]="issueSubtitle$ | async"
   >

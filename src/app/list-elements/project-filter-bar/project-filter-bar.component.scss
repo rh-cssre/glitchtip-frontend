@@ -19,6 +19,9 @@ section {
 #project-picker {
   position: relative;
   flex: 1;
+  @media screen and (min-width: ($small - 1)) {
+    max-width: calc(100% - $side-nav-width);
+  }
 }
 
 .reset-button {

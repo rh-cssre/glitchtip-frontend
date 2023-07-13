@@ -17,7 +17,7 @@ import { MatButtonModule } from "@angular/material/button";
   styleUrls: ["./header.component.scss"],
 })
 export class DetailHeaderComponent {
-  @Input() backLinkParams: { [key: string]: string } = {};
+  @Input() backLinkParams: { [key: string]: string | number } = {};
   @Input() backLinkText = "";
   @Input() title: string | [string, string | null] = "";
   @Input() subtitle?: string | null;

@@ -132,6 +132,8 @@ $mobile-typography: mat.define-typography-config(
   $caption: mat.define-typography-level(12px, 13.5px, 400, $font-sans-serif),
 );
 
+$side-nav-width: 240px;
+
 // Breakpoints
 
 // These are the material breakpoints. Unless you find a way to customize them,
