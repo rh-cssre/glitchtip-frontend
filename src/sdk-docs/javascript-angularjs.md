@@ -33,10 +33,7 @@ like this:
 <script src="https://browser.sentry-cdn.com/5.27.6/bundle.min.js"></script>
 
 <!-- If you include the integration it will be available under Sentry.Integrations.Angular -->
-<script
-  src="https://browser.sentry-cdn.com/5.27.6/angular.min.js"
-  crossorigin="anonymous"
-></script>
+<script src="https://browser.sentry-cdn.com/5.27.6/angular.min.js" crossorigin="anonymous"></script>
 
 <script>
   Sentry.init({

@@ -4,7 +4,6 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { moduleMetadata, Story } from "@storybook/angular";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs";
-import { SharedModule } from "src/app/shared/shared.module";
 import { ProfileComponent } from "../profile.component";
 import { AuthTokensComponent } from "./auth-tokens.component";
 
@@ -18,7 +17,6 @@ export default {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        SharedModule,
       ],
       declarations: [ProfileComponent],
     }),
