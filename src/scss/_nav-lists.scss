@@ -22,7 +22,3 @@ gt-settings {
     color: mat.get-color-from-palette($amaranth-palette, 500);
   }
 }
-
-.active-route:hover {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
-}

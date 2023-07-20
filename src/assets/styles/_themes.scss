@@ -22,9 +22,12 @@ $candy-app-theme-dark: mat.define-dark-theme(
 
 @mixin theme-extension($theme) {
   $_background: map-get($theme, background);
-  $app-background-color: mat-color($_background, background);
+  $app-bg-color: mat-color($_background, background);
+  $_foreground: map-get($theme, foreground);
+  $app-fg-color: mat-color($_foreground, text);
 
   body {
-    background-color: $app-background-color;
+    background-color: $app-bg-color;
+    color: $app-fg-color;
   }
 }
