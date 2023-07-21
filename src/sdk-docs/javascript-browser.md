@@ -40,9 +40,5 @@ Sentry.init({
 To ensure that error reporting works correctly, you can create a simple test by calling an undefined function:
 
 ```javascript
-try {
-  myUndefinedFunction();
-} catch (error) {
-  Sentry.captureException(error);
-}
+myUndefinedFunction();
 ```
