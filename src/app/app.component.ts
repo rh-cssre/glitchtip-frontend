@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
       }
     }
     this.userService.userDetails$.subscribe((user) => {
-      setTheme(user?.options.preferred_theme)
+      setTheme(user?.options.preferredTheme)
     })
     systemTheme.addEventListener('change', ({ matches }) => {
       setTheme('system')

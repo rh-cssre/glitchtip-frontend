@@ -99,8 +99,8 @@ export class PreferencesComponent implements OnInit {
         }
         this.form.controls.timeZone.setValue(user.options.timezone);
       }
-      if (user?.options.preferred_theme) {
-        this.form.controls.theme.setValue(user.options.preferred_theme)
+      if (user?.options.preferredTheme) {
+        this.form.controls.theme.setValue(user.options.preferredTheme)
       } else {
         this.form.controls.theme.setValue("system")
       }
@@ -134,7 +134,7 @@ export class PreferencesComponent implements OnInit {
       }
       const options = {
         ...(timeZone !== null && { timezone: timeZone }),
-        ...(preferredTheme !== null && { preferred_theme: preferredTheme })
+        ...(preferredTheme !== null && { preferredTheme })
       };
       this.service.updateUser(name, options);
     }
