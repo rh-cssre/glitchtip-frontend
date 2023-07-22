@@ -11,7 +11,7 @@ Start by adding the `raven.js` script tag to your page. It should be loaded as e
 Next configure Raven.js to use your GlitchTip DSN:
 
 ```javascript
-Raven.config("your DSN here").install();
+Raven.config("YOUR-GLITCHTIP-DSN-HERE").install();
 ```
 
 At this point, Raven is ready to capture any uncaught exception.

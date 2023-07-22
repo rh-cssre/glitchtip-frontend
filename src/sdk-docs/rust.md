@@ -8,7 +8,7 @@ sentry = 'current version number'
 `sentry.init()` will return you a guard that when freed, will prevent process exit until all events have been sent (within a timeout):
 
 ```rust
-let _guard = sentry::init("your DSN here");
+let _guard = sentry::init("YOUR-GLITCHTIP-DSN-HERE");
 ```
 
 The quickest way to verify Sentry in your Rust application is to cause a panic:

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en-US">
   <file id="ngi18n" original="ng.template">
     <unit id="827275858583778252">
@@ -18,12 +18,14 @@
     </unit>
     <unit id="1203636405699791528">
       <segment>
-        <source>By deleting your user account, you will permanently lose all data, including access to organization projects and their associated events.</source>
+        <source>By deleting your user account, you will permanently lose all data, including access
+          to organization projects and their associated events.</source>
       </segment>
     </unit>
     <unit id="8069478311783909563">
       <segment>
-        <source>Make sure to delete or transfer ownership of any organizations before deleting your account. Owners of paid organization subscriptions are not able to delete their account.</source>
+        <source>Make sure to delete or transfer ownership of any organizations before deleting your
+          account. Owners of paid organization subscriptions are not able to delete their account.</source>
       </segment>
     </unit>
     <unit id="3078760420237279624">
@@ -38,7 +40,8 @@
     </unit>
     <unit id="7890916963184797167">
       <segment>
-        <source>Authentication tokens give you access to the GlitchTip API. You can create these tokens as authentication to gain specific access around the app.</source>
+        <source>Authentication tokens give you access to the GlitchTip API. You can create these
+          tokens as authentication to gain specific access around the app.</source>
       </segment>
     </unit>
     <unit id="7538977961049758582">
@@ -108,7 +111,8 @@
     </unit>
     <unit id="22386476955637539">
       <segment>
-        <source>Enter the code from the authenticator app on your mobile device. If you’ve lost your device, you may enter one of your recovery codes.</source>
+        <source>Enter the code from the authenticator app on your mobile device. If you’ve lost your
+          device, you may enter one of your recovery codes.</source>
       </segment>
     </unit>
     <unit id="1466012768716286509">
@@ -248,7 +252,8 @@
     </unit>
     <unit id="2305074984265047688">
       <segment>
-        <source>Plug in your security key and follow the prompt from your browser to finish logging in.</source>
+        <source>Plug in your security key and follow the prompt from your browser to finish logging
+          in.</source>
       </segment>
     </unit>
     <unit id="7451233168808859381">
@@ -288,7 +293,8 @@
     </unit>
     <unit id="2935794773842380882">
       <segment>
-        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization.</source>
+        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an
+          administrator to be invited into an existing organization.</source>
       </segment>
     </unit>
     <unit id="3301086086650990787">
@@ -308,7 +314,9 @@
     </unit>
     <unit id="3517932573606350122">
       <segment>
-        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
+        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION"
+            disp="{{ monitor.interval | humanizeDuration: true }}" />
+        </source>
       </segment>
     </unit>
     <unit id="4426319772533875265">
@@ -383,7 +391,8 @@
     </unit>
     <unit id="1339421090554377874">
       <segment>
-        <source>You don&apos;t have any alerts set up. Click &quot;Create New Alert&quot; on the top right of this card to get started.</source>
+        <source>You don&apos;t have any alerts set up. Click &quot;Create New Alert&quot; on the top
+          right of this card to get started.</source>
       </segment>
     </unit>
     <unit id="5534317372657539313">
@@ -403,7 +412,8 @@
     </unit>
     <unit id="7903124738511795245">
       <segment>
-        <source>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started.</source>
+        <source>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot;
+          below to get started.</source>
       </segment>
     </unit>
     <unit id="8525090520605150470">
@@ -453,7 +463,8 @@
     </unit>
     <unit id="7822329547663295003">
       <segment>
-        <source>Make your account more secure by requiring a time-based one time password (TOTP) code after you log in.</source>
+        <source>Make your account more secure by requiring a time-based one time password (TOTP)
+          code after you log in.</source>
       </segment>
     </unit>
     <unit id="3885497195825665706">
@@ -498,42 +509,56 @@
     </unit>
     <unit id="291649817233009176">
       <segment>
-        <source>Enter a six-digit password generated by your authenticator app and submit this form to enable TOTP authentication:</source>
+        <source>Enter a six-digit password generated by your authenticator app and submit this form
+          to enable TOTP authentication:</source>
       </segment>
     </unit>
     <unit id="520980174761118864">
       <segment>
-        <source>Log in with <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></source>
+        <source>Log in with <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}" /></source>
       </segment>
     </unit>
     <unit id="5715233980836936433">
       <segment>
-        <source>Donate <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://liberapay.com/GlitchTip/donate&quot; &gt;" dispEnd="&lt;/a&gt;"> via Liberapay </pc></source>
+        <source>Donate <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://liberapay.com/GlitchTip/donate&quot; &gt;"
+            dispEnd="&lt;/a&gt;"> via Liberapay </pc></source>
       </segment>
     </unit>
     <unit id="3509639242131814864">
       <segment>
-        <source> Purchase support: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:sales@glitchtip.com?subject=Purchase support inquiry&quot; &gt;" dispEnd="&lt;/a &gt;">sales@glitchtip.com</pc></source>
+        <source> Purchase support: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK"
+            type="link"
+            dispStart="&lt;a href=&quot;mailto:sales@glitchtip.com?subject=Purchase support inquiry&quot; &gt;"
+            dispEnd="&lt;/a &gt;">sales@glitchtip.com</pc></source>
       </segment>
     </unit>
     <unit id="5349000458605027240">
       <segment>
-        <source> Switch to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener&quot; href=&quot;https://app.glitchtip.com/register?utm_medium=website&amp;utm_source=glitchtip&amp;utm_campaign=selfhost_nagware&quot; &gt;" dispEnd="&lt;/a &gt;">Hosted GlitchTip</pc></source>
+        <source> Switch to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener&quot; href=&quot;https://app.glitchtip.com/register?utm_medium=website&amp;utm_source=glitchtip&amp;utm_campaign=selfhost_nagware&quot; &gt;"
+            dispEnd="&lt;/a &gt;">Hosted GlitchTip</pc></source>
       </segment>
     </unit>
     <unit id="1002135012519641907">
       <segment>
-        <source>You have multiple projects selected. Select a single project to learn more about why there&apos;s nothing here.</source>
+        <source>You have multiple projects selected. Select a single project to learn more about why
+          there&apos;s nothing here.</source>
       </segment>
     </unit>
     <unit id="100331146953492785">
       <segment>
-        <source>Connect your <ph id="0" equiv="INTERPOLATION" disp="{{ activeProjectPlatformName$ | async }}"/> project to GlitchTip</source>
+        <source>Connect your <ph id="0" equiv="INTERPOLATION"
+            disp="{{ activeProjectPlatformName$ | async }}" /> project to GlitchTip</source>
       </segment>
     </unit>
     <unit id="1120098013104989112">
       <segment>
-        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
+        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK"
+            equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;"
+            dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do,
+          you&apos;ll get more specific instructions about how to get started.</source>
       </segment>
     </unit>
     <unit id="1223506099460240555">
@@ -548,7 +573,9 @@
     </unit>
     <unit id="1744184913467319832">
       <segment>
-        <source> Data Source Name: The code that connects your project to GlitchTip. Install a library into your project, then configure it with the DSN so that it knows how to send errors to your GlitchTip account. </source>
+        <source> Data Source Name: The code that connects your project to GlitchTip. Install a
+          library into your project, then configure it with the DSN so that it knows how to send
+          errors to your GlitchTip account. </source>
       </segment>
     </unit>
     <unit id="1830742686550996935">
@@ -563,7 +590,8 @@
     </unit>
     <unit id="6960036943669975538">
       <segment>
-        <source>Create new project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
+        <source>Create new project in <ph id="0" equiv="INTERPOLATION"
+            disp="{{ organization.name }}" /></source>
       </segment>
     </unit>
     <unit id="3647474424920112919">
@@ -578,7 +606,10 @@
     </unit>
     <unit id="3821671973040323145">
       <segment>
-        <source> Because you are an admin for <ph id="0" equiv="INTERPOLATION" disp="{{ project.organization.name }}"/>, you have access to all of its projects. However, if you want to view issues for <ph id="1" equiv="INTERPOLATION_1" disp="{{ project.name }}"/>, you must be a member of one of its teams. </source>
+        <source> Because you are an admin for <ph id="0" equiv="INTERPOLATION"
+            disp="{{ project.organization.name }}" />, you have access to all of its projects.
+          However, if you want to view issues for <ph id="1" equiv="INTERPOLATION_1"
+            disp="{{ project.name }}" />, you must be a member of one of its teams. </source>
       </segment>
     </unit>
     <unit id="3834295552674710150">
@@ -593,22 +624,27 @@
     </unit>
     <unit id="44869671307620538">
       <segment>
-        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Releases:</pc> Each megabyte of file storage is counted as an event</source>
+        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt"
+            dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Releases:</pc> Each megabyte of file storage
+          is counted as an event</source>
       </segment>
     </unit>
     <unit id="4605329245463156030">
       <segment>
-        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Performance:</pc> Each time your app sends GlitchTip a transaction report for a tracked activity on your app</source>
+        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt"
+            dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Performance:</pc> Each time your app sends
+          GlitchTip a transaction report for a tracked activity on your app</source>
       </segment>
     </unit>
     <unit id="5010578757780115993">
       <segment>
-        <source>Settings for <ph id="0" equiv="INTERPOLATION" disp="{{ project.name }}"/></source>
+        <source>Settings for <ph id="0" equiv="INTERPOLATION" disp="{{ project.name }}" /></source>
       </segment>
     </unit>
     <unit id="5183247000083361116">
       <segment>
-        <source>Out of the projects you have selected, you are not a part of that project&apos;s team for at least one of them.</source>
+        <source>Out of the projects you have selected, you are not a part of that project&apos;s
+          team for at least one of them.</source>
       </segment>
     </unit>
     <unit id="5448343062628656309">
@@ -643,7 +679,8 @@
     </unit>
     <unit id="6401078118236139749">
       <segment>
-        <source>Most instructions will have a spot that says &quot;your DSN here&quot;. Copy the DSN and paste it into that spot.</source>
+        <source>Most instructions will have a spot that says &quot;YOUR-GLITCHTIP-DSN-HERE&quot;.
+          Copy the DSN and paste it into that spot.</source>
       </segment>
     </unit>
     <unit id="6410378746872498039">
@@ -653,7 +690,8 @@
     </unit>
     <unit id="6481795403650848876">
       <segment>
-        <source>This page is showing instructions on how to connect GlitchTip to your project based on the platform you specified.</source>
+        <source>This page is showing instructions on how to connect GlitchTip to your project based
+          on the platform you specified.</source>
       </segment>
     </unit>
     <unit id="6699311255070036397">
@@ -663,7 +701,8 @@
     </unit>
     <unit id="6940348790913679018">
       <segment>
-        <source>To add a project to this organization, press the &quot;Create New Project&quot; button.</source>
+        <source>To add a project to this organization, press the &quot;Create New Project&quot;
+          button.</source>
       </segment>
     </unit>
     <unit id="7033296732013526864">
@@ -678,7 +717,9 @@
     </unit>
     <unit id="7350070325817798539">
       <segment>
-        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Issues:</pc> Each occurrence of an event reported to GlitchTip</source>
+        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt"
+            dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Issues:</pc> Each occurrence of an event
+          reported to GlitchTip</source>
       </segment>
     </unit>
     <unit id="7819314041543176992">
@@ -703,7 +744,9 @@
     </unit>
     <unit id="848861324662209850">
       <segment>
-        <source>Events are the unit of measure for tracking GlitchTip usage. An organization&apos;s maximum number of events per month is determined by its subscription type. Events are used to measure four GlitchTip features:</source>
+        <source>Events are the unit of measure for tracking GlitchTip usage. An organization&apos;s
+          maximum number of events per month is determined by its subscription type. Events are used
+          to measure four GlitchTip features:</source>
       </segment>
     </unit>
     <unit id="105639553198587677">
@@ -713,7 +756,8 @@
     </unit>
     <unit id="1098433909560821849">
       <segment>
-        <source>Start date for this plan: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.start_date | date }}"/></source>
+        <source>Start date for this plan: <ph id="0" equiv="INTERPOLATION"
+            disp="{{ subscription.start_date | date }}" /></source>
       </segment>
     </unit>
     <unit id="1109945939275542736">
@@ -723,7 +767,8 @@
     </unit>
     <unit id="1219619838898772490">
       <segment>
-        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.mainUnitPrice | currency }}"/></source>
+        <source>Plan cost: <ph id="0" equiv="INTERPOLATION"
+            disp="{{ subscription.mainUnitPrice | currency }}" /></source>
       </segment>
     </unit>
     <unit id="1678548018195726594">
@@ -783,7 +828,11 @@
     </unit>
     <unit id="2506462652585445837">
       <segment>
-        <source>You have selected the free plan. Please consider making a monthly <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://liberapay.com/GlitchTip/donate&quot; target=&quot;_blank&quot; &gt;" dispEnd="&lt;/a &gt;">donation</pc> to help keep open source development sustainable. Thank you for choosing GlitchTip!</source>
+        <source>You have selected the free plan. Please consider making a monthly <pc id="0"
+            equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a href=&quot;https://liberapay.com/GlitchTip/donate&quot; target=&quot;_blank&quot; &gt;"
+            dispEnd="&lt;/a &gt;">donation</pc> to help keep open source development sustainable.
+          Thank you for choosing GlitchTip!</source>
       </segment>
     </unit>
     <unit id="2832668001279440249">
@@ -813,17 +862,23 @@
     </unit>
     <unit id="4479333657075318113">
       <segment>
-        <source>You aren&apos;t part of any teams. Join a team below or press the &quot;Create Team&quot; button in the upper right.</source>
+        <source>You aren&apos;t part of any teams. Join a team below or press the &quot;Create
+          Team&quot; button in the upper right.</source>
       </segment>
     </unit>
     <unit id="4687980611669913181">
       <segment>
-        <source>You don&apos;t have any teams set up. Teams determine which users have access to projects in your organization.</source>
+        <source>You don&apos;t have any teams set up. Teams determine which users have access to
+          projects in your organization.</source>
       </segment>
     </unit>
     <unit id="4894116049835995028">
       <segment>
-        <source>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd=".&lt;/p &gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
+        <source>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc
+            id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd=".&lt;/p &gt;">
+            <ph id="1" equiv="INTERPOLATION" disp="}}" />
+          </pc>.</source>
       </segment>
     </unit>
     <unit id="4996538950129944353">
@@ -853,12 +908,15 @@
     </unit>
     <unit id="5618100320383468888">
       <segment>
-        <source>Billing period: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.current_period_start | date }}"/> to <ph id="1" equiv="INTERPOLATION_1" disp="{{ subscription.current_period_end | date }}"/></source>
+        <source>Billing period: <ph id="0" equiv="INTERPOLATION"
+            disp="{{ subscription.current_period_start | date }}" /> to <ph id="1"
+            equiv="INTERPOLATION_1" disp="{{ subscription.current_period_end | date }}" /></source>
       </segment>
     </unit>
     <unit id="5799782740550832490">
       <segment>
-        <source>This organization does not have an active subscription to GlitchTip. Pick a plan to get started.</source>
+        <source>This organization does not have an active subscription to GlitchTip. Pick a plan to
+          get started.</source>
       </segment>
     </unit>
     <unit id="5875130684997376720">
@@ -873,7 +931,11 @@
     </unit>
     <unit id="6147245107718647120">
       <segment>
-        <source>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
+        <source>If you have questions about your subscription, please contact us at <pc id="0"
+            equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&gt;">
+            <ph id="1" equiv="INTERPOLATION" disp="}}" />
+          </pc>.</source>
       </segment>
     </unit>
     <unit id="6168919365016053724">
@@ -903,12 +965,18 @@
     </unit>
     <unit id="7229999489442894650">
       <segment>
-        <source>Total <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[]&quot; (click)=&quot;openEventInfoDialog()&quot; &gt;" dispEnd="&lt;/a &gt;">events</pc> used in billing period: <ph id="1" equiv="INTERPOLATION" disp="{{ count.total }}"/></source>
+        <source>Total <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a [routerLink]=&quot;[]&quot; (click)=&quot;openEventInfoDialog()&quot; &gt;"
+            dispEnd="&lt;/a &gt;">events</pc> used in billing period: <ph id="1"
+            equiv="INTERPOLATION" disp="{{ count.total }}" /></source>
       </segment>
     </unit>
     <unit id="7478140689790892603">
       <segment>
-        <source>Teams are for managing issue notifications and workflow. View permissions are handled through <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a routerLink=&quot;../members&quot;&gt;" dispEnd="&lt;/a&gt;"> organization membership.</pc></source>
+        <source>Teams are for managing issue notifications and workflow. View permissions are
+          handled through <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a routerLink=&quot;../members&quot;&gt;" dispEnd="&lt;/a&gt;">
+          organization membership.</pc></source>
       </segment>
     </unit>
     <unit id="810888510148304696">
@@ -923,7 +991,9 @@
     </unit>
     <unit id="2405706490874342359">
       <segment>
-        <source> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </source>
+        <source> If you ever lose access to your codes, you can recover your account with your <pc
+            id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other"
+            dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </source>
       </segment>
     </unit>
     <unit id="5279770905523465379">
@@ -938,12 +1008,21 @@
     </unit>
     <unit id="4185629687342786413">
       <segment>
-        <source>The account you&apos;re logged into is already a part of this organization. You might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;" dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account that this invite link was intended for.</source>
+        <source>The account you&apos;re logged into is already a part of this organization. You
+          might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link"
+            dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;"
+            dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account
+          that this invite link was intended for.</source>
       </segment>
     </unit>
     <unit id="8433883189750412090">
       <segment>
-        <source>You have been invited to join<pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ acceptInfo.org_user.organization.name }}"/></pc> so you can keep track of errors.</source>
+        <source>You have been invited to join<pc id="0" equivStart="START_TAG_STRONG"
+            equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;"
+            dispEnd="&lt;/strong&gt;">
+            <ph id="1" equiv="INTERPOLATION" disp="{{ acceptInfo.org_user.organization.name }}" />
+          </pc>
+          so you can keep track of errors.</source>
       </segment>
     </unit>
     <unit id="1581886603273423006">
@@ -958,7 +1037,9 @@
     </unit>
     <unit id="1922838090212936091">
       <segment>
-        <source>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</source>
+        <source>Admin privileges on any teams of which user is a member. They can create new teams
+          and projects, as well as delete teams and projects they are already members of.
+          Additionally, they can manage memberships of teams that they are members of.</source>
       </segment>
     </unit>
     <unit id="2267387778265004491">
@@ -988,7 +1069,8 @@
     </unit>
     <unit id="4729000058409517470">
       <segment>
-        <source>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</source>
+        <source>Unrestricted access to the organization, its data, and its settings. Can add,
+          modify, and delete projects and members.</source>
       </segment>
     </unit>
     <unit id="4768749765465246664">
@@ -998,12 +1080,15 @@
     </unit>
     <unit id="5909691734964157223">
       <segment>
-        <source> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </source>
+        <source> This member is the organization account owner and has access to the
+          organization&apos;s GlitchTip subscription settings. </source>
       </segment>
     </unit>
     <unit id="6146979090477797496">
       <segment>
-        <source> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </source>
+        <source> The account owner has access to the organization&apos;s GlitchTip subscription
+          settings. If you are the current account owner or have an owner role, you may transfer
+          ownership to this member. </source>
       </segment>
     </unit>
     <unit id="6813159840018659686">
@@ -1013,7 +1098,8 @@
     </unit>
     <unit id="6895800612787584413">
       <segment>
-        <source>Members can view and act on events, as well as view most other data within the organization.</source>
+        <source>Members can view and act on events, as well as view most other data within the
+          organization.</source>
       </segment>
     </unit>
     <unit id="6921336596257236722">
@@ -1038,7 +1124,8 @@
     </unit>
     <unit id="1418979860895365047">
       <segment>
-        <source> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </source>
+        <source> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with
+          no payload. </source>
       </segment>
     </unit>
     <unit id="2697177993211679999">
@@ -1063,7 +1150,8 @@
     </unit>
     <unit id="3724940541438351467">
       <segment>
-        <source>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</source>
+        <source>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20
+          seconds.</source>
       </segment>
     </unit>
     <unit id="3802089991568977129">
@@ -1083,7 +1171,8 @@
     </unit>
     <unit id="4970236371480835408">
       <segment>
-        <source> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+        <source> GlitchTip will send an HTTP POST request to the specified URL. If the expected
+          response is not received, the site will be marked as Down. </source>
       </segment>
     </unit>
     <unit id="5049957255900483968">
@@ -1103,7 +1192,8 @@
     </unit>
     <unit id="7679156164610222177">
       <segment>
-        <source> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+        <source> GlitchTip will send an HTTP GET request to the specified URL. If the expected
+          response is not received, the site will be marked as Down. </source>
       </segment>
     </unit>
     <unit id="8098214202153793679">
@@ -1123,7 +1213,8 @@
     </unit>
     <unit id="8410329189497378892">
       <segment>
-        <source> GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down. </source>
+        <source> GlitchTip will await requests from your site to ensure it is active. If it
+          doesn&apos;t receive the request, the site will be marked as Down. </source>
       </segment>
     </unit>
     <unit id="9084937670771016701">

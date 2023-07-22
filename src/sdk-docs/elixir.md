@@ -31,7 +31,7 @@ Setup the application production environment in your `config/config.exs`
 
 ```elixir
 config :sentry,
-  dsn: "your DSN here",
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   environment_name: Mix.env(),
   included_environments: [:prod],
   enable_source_code_context: true,
@@ -48,7 +48,7 @@ This will set the environment name to whatever the current Mix environment atom 
 You can even rely on more custom determinations of the environment name. It’s not uncommon for most applications to have a “staging” environment. In order to handle this without adding an additional Mix environment, you can set an environment variable that determines the release level.
 
 ```elixir
-config :sentry, dsn: "your DSN here",
+config :sentry, dsn: "YOUR-GLITCHTIP-DSN-HERE",
   included_environments: ~w(production staging),
   environment_name: System.get_env("RELEASE_LEVEL") || "development"
 ```

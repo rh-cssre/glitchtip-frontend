@@ -32,7 +32,7 @@ When you run `react-native link` we will automatically update your _index.ios.js
 ```javascript
 import * as Sentry from "@sentry/react-native";
 Sentry.init({
-  dsn: "your DSN here",
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
 });
 ```
 

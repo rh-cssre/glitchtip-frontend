@@ -22,7 +22,7 @@ import * as Sentry from "@sentry/browser";
 import * as Integrations from "@sentry/integrations";
 
 Sentry.init({
-  dsn: "your DSN here",
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   integrations: [new Integrations.Ember()],
 });
 ```
@@ -40,7 +40,7 @@ like this:
 
 <script>
   Sentry.init({
-    dsn: "your DSN here",
+    dsn: "YOUR-GLITCHTIP-DSN-HERE",
     integrations: [new Sentry.Integrations.Ember()],
   });
 </script>
