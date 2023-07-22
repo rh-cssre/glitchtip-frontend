@@ -1,4 +1,3 @@
-@import '@angular/material/theming';
 
 $candy-app-theme: mat.define-light-theme((color: (primary: $candy-app-primary,
         accent: $candy-app-accent,
@@ -14,9 +13,9 @@ $candy-app-theme-dark: mat.define-dark-theme((color: (primary: $candy-app-primar
 
 @mixin theme-extension($theme) {
   $_background: map-get($theme, background);
-  $app-bg-color: mat-color($_background, background);
+  $app-bg-color: map-get($_background, background);
   $_foreground: map-get($theme, foreground);
-  $app-fg-color: mat-color($_foreground, text);
+  $app-fg-color: map-get($_foreground, text);
 
   body {
     background-color: $app-bg-color;

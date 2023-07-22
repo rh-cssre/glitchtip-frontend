@@ -177,3 +177,30 @@ export function parseErrorMessage(err: HttpErrorResponse): string[] {
     return [err.message];
   }
 }
+
+export function setTheme(preferredTheme?: string | null) {
+  function setDark() {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }
+
+  function setLight() {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+
+  const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+  const isSystemOrUndefined = !preferredTheme || preferredTheme === "system";
+
+  if (isSystemOrUndefined) {
+    if (systemTheme.matches) {
+      setDark();
+    } else {
+      setLight();
+    }
+  } else if (preferredTheme === "dark") {
+    setDark();
+  } else {
+    setLight();
+  }
+}

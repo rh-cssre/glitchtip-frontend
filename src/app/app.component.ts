@@ -7,6 +7,7 @@ import {
 } from "@angular/router";
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
+import { setTheme } from "./shared/shared.utils";
 
 @Component({
   selector: "gt-root",
@@ -33,24 +34,14 @@ export class AppComponent implements OnInit {
     });
 
     const systemTheme = matchMedia("(prefers-color-scheme: dark)");
-    function setTheme(preferredTheme?: string) {
-      if (!preferredTheme || preferredTheme === 'system') {
-        if (systemTheme.matches) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      } else if (preferredTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    }
     this.userService.userDetails$.subscribe((user) => {
-      setTheme(user?.options.preferredTheme)
+      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"))
     })
-    systemTheme.addEventListener('change', ({ matches }) => {
-      setTheme('system')
+    systemTheme.addEventListener("change", () => {
+      const s = this.userService.userDetails$.subscribe((user) => {
+        setTheme(user?.options.preferredTheme)
+      })
+      s.unsubscribe()
     })
   }
 }
