@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesService } from "../issues.service";
@@ -20,14 +20,7 @@ import { CopyInputComponent } from "../../shared/copy-input/copy-input.component
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    NgIf,
-    NgFor,
-    RouterLink,
-    CopyInputComponent,
-    AsyncPipe,
-    MarkdownModule,
-  ],
+  imports: [CommonModule, RouterLink, CopyInputComponent, MarkdownModule],
 })
 export class IssueZeroStatesComponent implements OnInit {
   loading$ = combineLatest([
@@ -175,5 +168,15 @@ export class IssueZeroStatesComponent implements OnInit {
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
+    // Attempt to replace YOUR-GLITCHTIP-DSN-HERE with actual project DSN
+    this.firstProjectKey$.subscribe((project) => {
+      const dsn = project.dsn.public;
+      const elements = document.querySelectorAll("span.token.string");
+      for (const element of Array.from(elements)) {
+        if (element.textContent === '"YOUR-GLITCHTIP-DSN-HERE"') {
+          element.innerHTML = '"' + dsn + '"';
+        }
+      }
+    });
   }
 }

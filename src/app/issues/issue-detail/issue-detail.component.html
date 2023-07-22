@@ -7,23 +7,23 @@
     *ngIf="organization$ | async as organization"
   >
     <mat-card-content>
-      <h1 class="mat-headline-4">Issue not found</h1>
-      <p class="mat-body-1">
-        This may be because the URL is pointing to an issue that doesn't exist
-        or was deleted.
-      </p>
-      <p class="mat-body-1">
-        It's also possible that this issue was reported to a project that you
-        are not able to access.
-      </p>
+      <h1 class="mat-headline-4" i18n>Issue not found</h1>
+      <p class="mat-body-1" i18n
+        >This may be because the URL is pointing to an issue that doesn't exist
+        or was deleted.</p
+      >
+      <p class="mat-body-1" i18n
+        >It's also possible that this issue was reported to a project that you
+        are not able to access.</p
+      >
       <a
         mat-flat-button
         color="primary"
         class="project-issues-link"
+        i18n
         [routerLink]="['..']"
+        >View all issues in {{ organization.name }}</a
       >
-        View all issues in {{ organization.name }}
-      </a>
     </mat-card-content>
   </mat-card>
 </section>
