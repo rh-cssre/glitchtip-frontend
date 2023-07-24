@@ -7,7 +7,7 @@ $ composer require sentry/sentry-laravel
 Create the SDK configuration file (`config/sentry.php`) with this command:
 
 ```sh
-$ php artisan sentry:publish --dsn=your DSN here
+$ php artisan sentry:publish --dsn=YOUR-GLITCHTIP-DSN-HERE
 ```
 
 This command adds to your .env file:
@@ -17,10 +17,25 @@ This command adds to your .env file:
 
 Additional configuration settings are found in `config/sentry.php`.
 
+Finally modify the register method of Handler in `app/Exceptions/Handler.php` to:
+
+```php
+use Sentry\Laravel\Integration;
+
+    public function register(): void
+    {
+        $this->reportable(function (Throwable $e) {
+            Integration::captureUnhandledException($e);
+        });
+    }
+```
+
+## Testing
+
 You can verify that GlitchTip is capturing errors in your Laravel application by creating a debug route that will throw an exception:
 
 ```php
-Route::get('/debug-sentry', function () {
+Route::get('/', function () {
     throw new Exception('My first GlitchTip error!');
 });
 ```

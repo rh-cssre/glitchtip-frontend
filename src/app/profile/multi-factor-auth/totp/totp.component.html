@@ -1,5 +1,8 @@
 <mat-card>
-  <mat-card-title i18n>TOTP authentication</mat-card-title>
+  <mat-card-header>
+    <mat-card-title i18n>TOTP authentication</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
   <mat-card-content>
     <ng-container *ngIf="TOTPKey$ | async as TOTPKey; else TOTPDisabled">
       <p i18n>TOTP authentication is currently enabled on your account.</p>
@@ -35,7 +38,7 @@
         <div>
           <div *ngIf="step === 2">
             <div class="mat-h3">
-              <ng-container i18n>Download</ng-container>
+              <ng-container i18n>Download&nbsp;</ng-container>
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -102,7 +105,7 @@
               >
             </div>
             <gt-form-error [error]="error$ | async"></gt-form-error>
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label i18n>6-digit Code</mat-label>
               <input
                 matInput

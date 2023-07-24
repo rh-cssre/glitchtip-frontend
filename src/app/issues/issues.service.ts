@@ -15,6 +15,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
 
 export interface IssuesState extends PaginationStatefulServiceState {
   issues: Issue[];
@@ -86,13 +87,13 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   /** Refresh issues data. orgSlug is required. */
   getIssues(
     orgSlug: string,
-    cursor: string | undefined,
-    query: string = "is:unresolved",
-    project: string[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined
+    cursor: string | undefined | null,
+    query: string | null = "is:unresolved",
+    project: number[] | null,
+    start: string | undefined | null,
+    end: string | undefined | null,
+    sort: string | undefined | null,
+    environment: string | undefined | null
   ) {
     return this.retrieveIssues(
       orgSlug,
@@ -175,13 +176,13 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   /** Get issues from backend using appropriate endpoint based on organization */
   private retrieveIssues(
     organizationSlug?: string,
-    cursor?: string,
-    query?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string
+    cursor?: string | null,
+    query?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null
   ) {
     this.setIssuesLoading();
     return this.issuesAPIService
@@ -283,21 +284,12 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     const state = this.state.getValue();
     this.setState({
       directHit: undefined,
-      errors: this.updateErrorMessage(errors),
+      errors: parseErrorMessage(errors),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 }
