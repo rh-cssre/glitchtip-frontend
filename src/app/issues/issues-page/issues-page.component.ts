@@ -183,7 +183,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
             return this.service.getIssues(
               orgSlug,
               params.get("cursor"),
-              query ? query : undefined,
+              typeof query === "string" ? query : undefined,
               project,
               params.get("start"),
               params.get("end"),
