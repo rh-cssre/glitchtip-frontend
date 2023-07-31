@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 mat-card {
@@ -32,7 +32,7 @@ a {
   }
 }
 
-.mat-card-actions {
+mat-card-actions {
   display: flex;
   justify-content: space-between;
 

@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 .exception {
@@ -17,7 +17,7 @@
   .text-wrapper {
     display: flex;
     align-items: center;
-    
+
     h3 {
       margin-bottom: 0px;
     }
@@ -51,7 +51,7 @@
     }
   }
 
-  mat-chip-list {
+  mat-chip-set {
     display: block;
     margin-bottom: 24px;
   }

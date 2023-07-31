@@ -59,10 +59,22 @@
                   >
                 </div>
               </ng-container>
-              <ng-container *ngIf="recipient.recipientType === 'webhook'">
+              <ng-container
+                *ngIf="
+                  recipient.recipientType === 'webhook' ||
+                  recipient.recipientType === 'discord'
+                "
+              >
                 <div class="svg-box">
                   <svg class="svg">
-                    <use xlink:href="#webhook"></use>
+                    <use
+                      xlink:href="#discord"
+                      *ngIf="recipient.recipientType === 'discord'"
+                    ></use>
+                    <use
+                      xlink:href="#webhook"
+                      *ngIf="recipient.recipientType === 'webhook'"
+                    ></use>
                   </svg>
                 </div>
                 <div class="recipient-info">
@@ -75,7 +87,7 @@
                 </div>
               </ng-container>
               <button
-                class="trash"
+                class="trash medium-icon-button"
                 mat-icon-button
                 color="primary"
                 attr.aria-label="Delete Alert For {{ recipient.url }}"
@@ -185,10 +197,22 @@
                     </span>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="recipient.recipientType === 'webhook'">
+                <ng-container
+                  *ngIf="
+                    recipient.recipientType === 'webhook' ||
+                    recipient.recipientType === 'discord'
+                  "
+                >
                   <div class="svg-box">
                     <svg class="svg">
-                      <use xlink:href="#webhook"></use>
+                      <use
+                        xlink:href="#discord"
+                        *ngIf="recipient.recipientType === 'discord'"
+                      ></use>
+                      <use
+                        xlink:href="#webhook"
+                        *ngIf="recipient.recipientType === 'webhook'"
+                      ></use>
                     </svg>
                   </div>
                   <div class="recipient-info">
@@ -214,7 +238,7 @@
                 </ng-container>
                 <ng-template #notLoading>
                   <button
-                    class="trash"
+                    class="trash medium-icon-button"
                     id="delete-recipient"
                     mat-icon-button
                     color="primary"
