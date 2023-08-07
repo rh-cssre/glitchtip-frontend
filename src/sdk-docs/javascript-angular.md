@@ -18,7 +18,7 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 @NgModule({
   imports: [
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR-GLITCHTIP-DSN-HERE",
     }),
   ],
 })
@@ -34,7 +34,7 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 
 ```javascript
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR-GLITCHTIP-DSN-HERE",
       environment: "production",
       release: "1.0.0"
     }),
@@ -56,7 +56,7 @@ For best results, add this snippet to your main.ts. If you need to set the DSN d
 import * as Sentry from "@sentry/browser";
 
 Sentry.init({
-  dsn: "your GlitchTip DSN here",
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   autoSessionTracking: false,
 });
 ```
@@ -69,7 +69,7 @@ A more robust configuration example:
 import * as Sentry from "@sentry/browser";
 
 Sentry.init({
-  dsn: "your GlitchTip DSN here",
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   environment: "production",
   release: "1.0.0",
   autoSessionTracking: false,

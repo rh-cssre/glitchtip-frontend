@@ -5,14 +5,41 @@ import {
   Validators,
   FormGroupDirective,
   AbstractControl,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { EmailService } from "../../api/emails/email.service";
 import { map, first } from "rxjs/operators";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatChipsModule } from "@angular/material/chips";
+import { NgFor, NgIf, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-manage-emails",
   templateUrl: "./manage-emails.component.html",
   styleUrls: ["./manage-emails.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    NgFor,
+    NgIf,
+    MatChipsModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    AsyncPipe,
+  ],
 })
 export class ManageEmailsComponent implements OnInit {
   emailAddresses$ = this.emailService.emailAddressesSorted$;

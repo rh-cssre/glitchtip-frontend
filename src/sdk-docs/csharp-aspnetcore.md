@@ -20,7 +20,7 @@ ASP.NET Core 2.x:
 public static IWebHost BuildWebHost(string[] args) =>
     WebHost.CreateDefaultBuilder(args)
         // Add the following line:
-        .UseSentry("your DSN here")
+        .UseSentry("YOUR-GLITCHTIP-DSN-HERE")
 ```
 
 ASP.NET Core 3.0:
@@ -31,7 +31,7 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureWebHostDefaults(webBuilder =>
         {
             // Add the following line:
-            webBuilder.UseSentry("your DSN here")
+            webBuilder.UseSentry("YOUR-GLITCHTIP-DSN-HERE")
         });
 ```
 
