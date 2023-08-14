@@ -1,5 +1,5 @@
 $font-path: "../fonts";
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "prismjs/themes/prism.css";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 @import "prismjs/plugins/line-highlight/prism-line-highlight.css";
@@ -12,22 +12,40 @@ $font-path: "../fonts";
 
 // partials
 @import "./scss/auth-forms";
+@import "./scss/data-filter-bar";
+@import "./scss/nav-lists";
 
 // Common styles for Angular Material. Included so that we only have to load a
 // single CSS file for Angular Material in our app.
 // Don't include this anywhere else!
-@include mat.core($custom-typography);
+
+@include mat.core();
+@include mat.all-component-typographies($custom-typography);
+@include mat.card-typography($custom-card-typography);
+@include mat.table-typography($custom-table-typography);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($candy-app-theme);
 
-// @include mat.typography-hierarchy($custom-typography);
-
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
-  @include mat.core($mobile-typography);
+  @include mat.all-component-typographies($mobile-typography);
+  @include mat.card-typography($custom-card-typography);
+  @include mat.table-typography($custom-mobile-table-typography);
+}
+
+mat-card-content {
+  font-family: $font-sans-serif;
+}
+
+mat-card-title {
+  padding-bottom: 8px;
+}
+
+.vertical-card-header {
+  flex-direction: column;
 }
 
 a {
@@ -38,11 +56,6 @@ a {
 ul {
   list-style: none;
   padding: unset;
-}
-
-.active-route {
-  font-weight: 700;
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .project-card-wrapper {
@@ -59,7 +72,6 @@ header.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: -16px;
   margin-bottom: 20px;
 
   > * {
@@ -71,7 +83,7 @@ header.page-header {
   max-width: 1100px;
   padding-left: 24px;
   padding-right: 24px;
-  margin-top: 32px;
+  margin-top: 16px;
   margin-left: auto;
   margin-right: auto;
 
@@ -89,8 +101,8 @@ header.page-header {
   display: none;
 }
 
-.mat-display-1,
-.mat-display-2 {
+.mat-headline-3,
+.mat-headline-4 {
   margin-bottom: 1.2em;
 }
 
@@ -106,6 +118,7 @@ header.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .tt-wrapping {
@@ -119,4 +132,88 @@ header.page-header {
 
 .line-highlight {
   max-width: 100%;
+}
+
+.mat-mdc-header-cell {
+  font-size: 12px;
+  color: #0000008a;
+}
+
+.pagination-row {
+  td {
+    border-top: 1px solid #0000001f;
+  }
+}
+
+// Taken from https://stackoverflow.com/a/57759753
+.small-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0px !important;
+  display: inline-flex !important;
+  margin-right: 8px;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"] {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.medium-icon-button {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0px !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"] {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.comment-markdown {
+  ul {
+    list-style: disc outside;
+    padding-left: 20px;
+  }
+
+  pre {
+    margin-bottom: 20px;
+  }
+
+  blockquote {
+    margin: 0 0 20px 0;
+    padding: 20px 20px 20px 20px;
+    border-left: 5px solid mat.get-color-from-palette($amaranth-palette, 200);
+    background-color: #f5f2f0;
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    blockquote:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

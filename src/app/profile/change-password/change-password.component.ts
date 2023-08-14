@@ -4,6 +4,7 @@ import {
   FormGroupDirective,
   FormGroup,
   FormControl,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { PasswordService } from "./password.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -11,11 +12,32 @@ import { UserService } from "src/app/api/user/user.service";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { map, take, mergeMap, tap } from "rxjs/operators";
 import { EMPTY } from "rxjs";
+import { MatIconModule } from "@angular/material/icon";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { InputMatcherDirective } from "../../shared/input-matcher.directive";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "gt-change-password",
   templateUrl: "./change-password.component.html",
   styleUrls: ["./change-password.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    MatDividerModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    InputMatcherDirective,
+    LoadingButtonComponent,
+    MatIconModule,
+    AsyncPipe,
+  ],
 })
 export class ChangePasswordComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective;

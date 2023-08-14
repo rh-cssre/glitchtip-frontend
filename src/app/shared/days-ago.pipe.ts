@@ -3,6 +3,7 @@ import { formatDistanceStrict } from "date-fns";
 
 @Pipe({
   name: "daysAgo",
+  standalone: true,
 })
 export class DaysAgoPipe implements PipeTransform {
   transform(value: string): string {
@@ -12,6 +13,7 @@ export class DaysAgoPipe implements PipeTransform {
 
 @Pipe({
   name: "daysOld",
+  standalone: true,
 })
 export class DaysOldPipe implements PipeTransform {
   transform(value: string): string {
@@ -21,12 +23,13 @@ export class DaysOldPipe implements PipeTransform {
 
 @Pipe({
   name: "timeFor",
+  standalone: true,
 })
 export class TimeForPipe implements PipeTransform {
   transform(value: string): string {
     const formattedString = formatDateString(value, false, false);
     if (formattedString !== "") {
-    return "for " + formattedString;
+      return "for " + formattedString;
     } else {
       return formattedString;
     }
@@ -40,10 +43,10 @@ function formatDateString(value: string, replaceAgo: boolean, suffix: boolean) {
     date = formatDistanceStrict(inputDate, new Date(), {
       addSuffix: suffix,
     });
-    } catch (err) {
-      console.warn("Unable to process date", value);
-      return "";
-    }
+  } catch (err) {
+    console.warn("Unable to process date", value);
+    return "";
+  }
   if (replaceAgo) {
     return date.replace("ago", "old");
   } else {
