@@ -118,8 +118,9 @@ describe("Add and edit alerts", () => {
     cy.contains("This alert isn't being sent anywhere.");
 
     cy.get("button").contains("Add An Alert Recipient").click();
-    cy.get("#recipient-type")
+    cy.get("[data-cy=recipient-type]")
       .click()
+      .get("mat-select")
       .get("mat-option")
       .contains("Email")
       .click();
