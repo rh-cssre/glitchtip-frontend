@@ -39,6 +39,7 @@ $amaranth-palette: (
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $candy-app-primary: mat.define-palette($amaranth-palette);
+$candy-app-contrast: mat.define-palette($amaranth-palette, 300, 100, 500, 300);
 $candy-app-accent: mat.define-palette(
   mat.$deep-orange-palette,
   A200,
