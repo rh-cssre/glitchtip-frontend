@@ -6,6 +6,8 @@ import {
   RouterOutlet,
 } from "@angular/router";
 import { SettingsService } from "./api/settings.service";
+import { UserService } from "./api/user/user.service";
+import { setTheme } from "./shared/shared.utils";
 
 @Component({
   selector: "gt-root",
@@ -17,7 +19,8 @@ export class AppComponent implements OnInit {
   constructor(
     private settings: SettingsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -29,5 +32,16 @@ export class AppComponent implements OnInit {
         this.settings.triggerPlausibleReport(orgSlug);
       }
     });
+
+    const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+    this.userService.userDetails$.subscribe((user) => {
+      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"))
+    })
+    systemTheme.addEventListener("change", () => {
+      const s = this.userService.userDetails$.subscribe((user) => {
+        setTheme(user?.options.preferredTheme)
+      })
+      s.unsubscribe()
+    })
   }
 }

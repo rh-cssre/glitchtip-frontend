@@ -29,7 +29,7 @@ section {
   right: 50px;
   z-index: 2;
   height: 48px;
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--mat-expansion-header-indicator-color);
   padding: 0;
   width: 35px;
   min-width: 35px;
@@ -75,7 +75,7 @@ mat-expansion-panel::ng-deep {
   }
 
   .mat-expansion-panel-header[aria-disabled="true"] {
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--mat-expansion-header-text-color);
 
     &.disabled-looking {
       color: rgba(0, 0, 0, 0.4);

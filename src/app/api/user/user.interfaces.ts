@@ -54,4 +54,5 @@ export interface UserOptions {
   stacktraceOrder?: number;
   language?: string;
   clock24Hours?: boolean;
+  preferredTheme?: string;
 }

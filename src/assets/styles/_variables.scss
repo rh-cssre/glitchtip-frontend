@@ -50,15 +50,7 @@ $candy-app-accent: mat.define-palette(
 $candy-app-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $candy-app-primary,
-      accent: $candy-app-accent,
-      warn: $candy-app-warn,
-    ),
-  )
-);
+@import './themes';
 
 $font-sans-serif: "Plex Sans";
 $font-mono: "Plex Mono";

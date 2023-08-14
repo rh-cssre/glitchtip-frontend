@@ -28,6 +28,12 @@ $font-path: "../fonts";
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($candy-app-theme);
+@include theme-extension($candy-app-theme);
+
+.dark {
+  @include mat.all-component-colors($candy-app-theme-dark);
+  @include theme-extension($candy-app-theme-dark);
+}
 
 // Responsive type maybe?
 @media screen and (max-width: 767px) {
@@ -56,6 +62,10 @@ a {
 ul {
   list-style: none;
   padding: unset;
+}
+
+svg {
+  fill: currentColor;
 }
 
 .project-card-wrapper {

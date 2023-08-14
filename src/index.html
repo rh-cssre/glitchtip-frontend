@@ -382,5 +382,12 @@
     </svg>
     <gt-root></gt-root>
     <noscript>GlitchTip requires JavaScript</noscript>
+    <script>
+      const theme = localStorage.getItem("theme");
+      const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+      if (theme === 'dark' || (theme === null && systemTheme.matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </body>
 </html>
