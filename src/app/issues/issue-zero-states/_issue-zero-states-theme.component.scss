@@ -1,0 +1,11 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+
+  .not-on-team {
+    border: 2px solid mat.get-color-from-palette($primary);
+    color: mat.get-color-from-palette($primary);
+  }
+}

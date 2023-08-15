@@ -61,10 +61,6 @@ li {
     width: 100%;
     padding-left: 0;
     padding-right: 0;
-
-    &.active {
-      border: 1px solid $amaranth;
-    }
   }
 }
 
@@ -126,9 +122,5 @@ mat-list {
 
     width: 100%;
     text-align: left;
-
-    &:focus {
-      border: 1px solid $amaranth;
-    }
   }
 }

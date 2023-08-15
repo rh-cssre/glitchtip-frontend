@@ -16,21 +16,6 @@ mat-card {
   justify-content: flex-start;
 }
 
-.bar {
-  background: mat.get-color-from-palette(mat.$gray-palette, 400);
-  box-shadow: none;
-  transition: all 0.5s;
-
-  &:not(:last-child) {
-    border-right: 1px solid white;
-  }
-
-  &:hover {
-    background: $amaranth;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
-}
-
 .top-value {
   display: flex;
   justify-content: space-between;

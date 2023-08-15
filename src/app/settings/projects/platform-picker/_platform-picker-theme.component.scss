@@ -1,0 +1,18 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+
+  li {
+    button.active {
+      border: 1px solid mat.get-color-from-palette($primary, "default");
+    }
+  }
+
+  .list-item {
+    button:focus {
+      border: 1px solid mat.get-color-from-palette($primary, "default");;
+    }
+  }
+}

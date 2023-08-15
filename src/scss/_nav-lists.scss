@@ -13,15 +13,3 @@ gt-settings {
     white-space: normal;
   }
 }
-
-.active-route {
-  background-color: pink;
-
-  .mdc-list-item {
-    
-  }
-
-  .mdc-list-item__primary-text {
-    color: mat.get-color-from-palette($amaranth-palette, 500);
-  }
-}

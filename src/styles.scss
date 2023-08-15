@@ -2,6 +2,12 @@ $font-path: "../fonts";
 @use "sass:meta";
 @use "@angular/material" as mat;
 @use "./scss/nav-lists-theme";
+@use "src/app/profile/preferences/preferences-theme.component";
+@use "src/app/issues/issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded-theme.component";
+@use "src/app/issues/issue-detail/issue-detail-tags/issue-detail-tags.componenent";
+@use "src/app/issues/issues-page/_issues-page-theme.component";
+@use "src/app/issues/issue-zero-states/issue-zero-states-theme.component";
+@use "src/app/settings/projects/platform-picker/_platform-picker-theme.component";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 @import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 @import "./assets/styles/variables";
@@ -35,6 +41,14 @@ $font-path: "../fonts";
 // Light theme loaded by default, but all custom styling must be explicitly set
 .light {
   @include meta.load-css("prismjs/themes/prism.css");
+
+  @include nav-lists-theme.theme($candy-app-theme);
+  @include preferences-theme.theme($candy-app-theme);
+  @include frame-expanded-theme.theme($candy-app-theme);
+  @include issue-detail-tags.theme($candy-app-theme);
+  @include issues-page-theme.theme($candy-app-theme);
+  @include issue-zero-states-theme.theme($candy-app-theme);
+  @include platform-picker-theme.theme($candy-app-theme);
   
   a {
     color: mat.get-color-from-palette($candy-app-primary, "default");
@@ -45,10 +59,17 @@ $font-path: "../fonts";
   @include mat.all-component-colors($candy-app-theme-dark);
   @include theme-extension($candy-app-theme-dark);
   @include meta.load-css("prismjs/themes/prism-twilight.css");
+
   @include nav-lists-theme.theme($candy-app-theme-dark);
+  @include preferences-theme.theme($candy-app-theme-dark);
+  @include frame-expanded-theme.theme($candy-app-theme-dark);
+  @include issue-detail-tags.theme($candy-app-theme-dark);
+  @include issues-page-theme.theme($candy-app-theme-dark);
+  @include issue-zero-states-theme.theme($candy-app-theme-dark);
+  @include platform-picker-theme.theme($candy-app-theme-dark);
 
   a {
-    color: mat.get-color-from-palette($candy-app-contrast, "default");
+    color: mat.get-color-from-palette($candy-app-primary-contrast, "default");
   }
 }
 

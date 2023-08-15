@@ -177,34 +177,4 @@ table {
     bottom: 0;
     width: 3px;
   }
-
-  &--sample:after {
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
-  }
-
-  &--debug:after {
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
-  }
-
-  &--info:after {
-    background-color: #4b60b4;
-  }
-
-  &--warning:after {
-    background-color: #e9b949;
-  }
-
-  &--error:after {
-    background-color: $amaranth; //mat.get-color-from-palette($amaranth-palette, 200);
-  }
-
-  &--fatal:after {
-    background-image: repeating-linear-gradient(
-      -60deg,
-      $amaranth,
-      $amaranth 5px,
-      white 5px,
-      white 10px
-    );
-  }
 }
