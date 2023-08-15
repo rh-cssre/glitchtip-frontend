@@ -26,10 +26,6 @@ mat-tab-group {
   ::ng-deep .mat-mdc-tab {
     min-width: 50px;
   }
-
-  ::ng-deep mat-tab-header {
-    border-bottom: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
-  }
 }
 
 ul {

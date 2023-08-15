@@ -3,16 +3,30 @@
 
 @mixin theme($theme) {
   $primary: map.get($theme, primary);
+  $is-dark-theme: map.get($theme, is-dark);
 
-  li {
-    button.active {
-      border: 1px solid mat.get-color-from-palette($primary, "default");
+  gt-platform-picker {
+    li {
+      button.active {
+        border: 1px solid mat.get-color-from-palette($primary, "default");
+      }
     }
-  }
 
-  .list-item {
-    button:focus {
-      border: 1px solid mat.get-color-from-palette($primary, "default");;
+    .list-item {
+      button:focus {
+        border: 1px solid mat.get-color-from-palette($primary, "default");
+      }
+    }
+
+    mat-tab-group {
+      .mat-mdc-tab-header {
+        border-bottom: 1px solid
+          if(
+            $is-dark-theme,
+            mat.get-color-from-palette(mat.$gray-palette, 600),
+            mat.get-color-from-palette(mat.$gray-palette, 300)
+          );
+      }
     }
   }
 }
