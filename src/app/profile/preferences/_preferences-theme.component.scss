@@ -4,7 +4,9 @@
 @mixin theme($theme) {
   $primary: map.get($theme, primary);
 
-  .invalid {
-    color: mat.get-color-from-palette($primary, "default");
+  gt-preferences {
+    .invalid {
+      color: mat.get-color-from-palette($primary, "default");
+    }
   }
 }

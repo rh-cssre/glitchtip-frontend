@@ -4,19 +4,20 @@
 @mixin theme($theme) {
   $primary: map.get($theme, primary);
 
-  // TODO: Adjust non-theme colors
-  .bar {
-    background: mat.get-color-from-palette(mat.$gray-palette, 400);
-    box-shadow: none;
-    transition: all 0.5s;
+  gt-issue-detail-tags {
+    .bar {
+      background: mat.get-color-from-palette(mat.$gray-palette, 400);
+      box-shadow: none;
+      transition: all 0.5s;
 
-    &:not(:last-child) {
-      border-right: 1px solid white;
-    }
+      &:not(:last-child) {
+        border-right: 1px solid white;
+      }
 
-    &:hover {
-      background: mat.get-color-from-palette($primary, "default");
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      &:hover {
+        background: mat.get-color-from-palette($primary, "default");
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      }
     }
   }
 }

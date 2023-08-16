@@ -4,7 +4,9 @@
 @mixin theme($theme) {
   $primary: map.get($theme, primary);
 
-  .invalid {
-    color: mat.get-color-from-palette($primary, 100);
+  gt-frame-expanded {
+    .invalid {
+      color: mat.get-color-from-palette($primary, 100);
+    }
   }
 }
