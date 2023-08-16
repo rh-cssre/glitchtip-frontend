@@ -11,6 +11,8 @@
 @use "src/app/uptime/monitor-chart/monitor-chart-theme.component";
 @use "src/app/uptime/monitor-list/monitor-list-theme.component";
 @use "src/app/uptime/monitor-checks/monitor-checks-theme.component";
+@use "src/app/issues/issue-detail/event-detail/_event-detail-theme.component";
+@use "src/app/issues/comments/comments-theme.component";
 
 @mixin generate-rules($theme) {
   @include global-theme.theme($theme);
@@ -26,6 +28,9 @@
   @include monitor-chart-theme.theme($theme);
   @include monitor-list-theme.theme($theme);
   @include monitor-checks-theme.theme($theme);
+  @include event-detail-theme.theme($theme);
+  @include comments-theme.theme($theme);
+
 }
 
 @mixin generate-light-rules($light-theme) {
