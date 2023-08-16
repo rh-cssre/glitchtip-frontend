@@ -8,13 +8,13 @@
   gt-platform-picker {
     li {
       button.active {
-        border: 1px solid mat.get-color-from-palette($primary, "default");
+        border: 1px solid mat.get-color-from-palette($primary);
       }
     }
 
     .list-item {
       button:focus {
-        border: 1px solid mat.get-color-from-palette($primary, "default");
+        border: 1px solid mat.get-color-from-palette($primary);
       }
     }
 
