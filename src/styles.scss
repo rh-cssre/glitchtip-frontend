@@ -8,6 +8,11 @@ $font-path: "../fonts";
 @use "src/app/issues/issues-page/_issues-page-theme.component";
 @use "src/app/issues/issue-zero-states/issue-zero-states-theme.component";
 @use "src/app/settings/projects/platform-picker/_platform-picker-theme.component";
+@use "src/app/settings/subscription/subscription-theme.component";
+@use "src/app/shared/copy-input/copy-input-theme.component";
+@use "src/app/uptime/monitor-chart/monitor-chart-theme.component";
+@use "src/app/uptime/monitor-list/monitor-list-theme.component";
+@use "src/app/uptime/monitor-checks/monitor-checks-theme.component";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 @import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 @import "./assets/styles/variables";
@@ -49,6 +54,11 @@ $font-path: "../fonts";
   @include issues-page-theme.theme($candy-app-theme);
   @include issue-zero-states-theme.theme($candy-app-theme);
   @include platform-picker-theme.theme($candy-app-theme);
+  @include subscription-theme.theme($candy-app-theme);
+  @include copy-input-theme.theme($candy-app-theme);
+  @include monitor-chart-theme.theme($candy-app-theme);
+  @include monitor-list-theme.theme($candy-app-theme);
+  @include monitor-checks-theme.theme($candy-app-theme);
   
   a {
     color: mat.get-color-from-palette($candy-app-primary, "default");
@@ -67,6 +77,11 @@ $font-path: "../fonts";
   @include issues-page-theme.theme($candy-app-theme-dark);
   @include issue-zero-states-theme.theme($candy-app-theme-dark);
   @include platform-picker-theme.theme($candy-app-theme-dark);
+  @include subscription-theme.theme($candy-app-theme-dark);
+  @include copy-input-theme.theme($candy-app-theme-dark);
+  @include monitor-chart-theme.theme($candy-app-theme-dark);
+  @include monitor-list-theme.theme($candy-app-theme-dark);
+  @include monitor-checks-theme.theme($candy-app-theme-dark);
 
   a {
     color: mat.get-color-from-palette($candy-app-primary-contrast, "default");
