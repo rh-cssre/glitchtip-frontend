@@ -1,0 +1,23 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+gt-main-nav,
+gt-profile,
+gt-settings {
+  @include mat.list-typography($nav-list-typography);
+}
+
+.sub-items {
+  .mdc-list-item__primary-text {
+    word-wrap: normal;
+    white-space: normal;
+  }
+}
+
+.active-route {
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+
+  .mdc-list-item__primary-text {
+    color: mat.get-color-from-palette($amaranth-palette, 500);
+  }
+}
