@@ -1,19 +1,34 @@
-import { formatDate } from "@angular/common";
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { UntypedFormGroup } from "@angular/forms";
-import { MatSelectChange } from "@angular/material/select";
+import { CommonModule, formatDate } from "@angular/common";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectChange, MatSelectModule } from "@angular/material/select";
 
 @Component({
+  standalone: true,
   selector: "gt-data-filter-bar",
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    MatSelectModule,
+  ],
   templateUrl: "./data-filter-bar.component.html",
   styleUrls: ["./data-filter-bar.component.scss"],
 })
 export class DataFilterBarComponent {
-  @Input() dateForm?: UntypedFormGroup;
-  @Input() sortForm?: UntypedFormGroup;
+  @Input() dateForm?: FormGroup;
+  @Input() sortForm?: FormGroup;
   @Input() sorts?: { param: string; display: string }[];
-  @Input() environmentForm?: UntypedFormGroup;
-  @Input() searchForm?: UntypedFormGroup;
+  @Input() environmentForm?: FormGroup;
+  @Input() searchForm?: FormGroup;
   @Input() organizationEnvironments: string[] = [];
 
   @Output() dateFormSubmission = new EventEmitter<object>();

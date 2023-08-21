@@ -1,7 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { baseUrl } from "../../constants";
-import { Member, OrganizationMembersRequest } from "./organizations.interface";
+import {
+  Member,
+  MemberDetail,
+  MemberUpdateData,
+  OrganizationMembersRequest,
+} from "./organizations.interface";
 
 @Injectable({
   providedIn: "root",
@@ -14,8 +19,30 @@ export class MembersAPIService {
     return this.http.get<Member[]>(this.listURL(orgSlug));
   }
 
+  retrieve(orgSlug: string, memberId: number) {
+    return this.http.get<MemberDetail>(this.detailURL(orgSlug, memberId));
+  }
+
+  update(
+    orgSlug: string,
+    memberId: number,
+    memberUpdateData: MemberUpdateData
+  ) {
+    return this.http.put<Member>(
+      this.detailURL(orgSlug, memberId),
+      memberUpdateData
+    );
+  }
+
   destroy(orgSlug: string, memberId: number) {
     return this.http.delete(this.detailURL(orgSlug, memberId));
+  }
+
+  makeOrgOwner(orgSlug: string, memberId: number) {
+    return this.http.post<Member>(
+      this.detailURL(orgSlug, memberId) + "set_owner/",
+      null
+    );
   }
 
   inviteUser(orgSlug: string, data: OrganizationMembersRequest) {

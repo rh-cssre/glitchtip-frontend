@@ -1,0 +1,23 @@
+@use "@angular/material" as mat;
+@import "variables";
+
+mat-toolbar {
+  display: none;
+  cursor: pointer; // The whole toolbar is clickable
+
+  @media (max-width: $tablet - 1) {
+    display: flex;
+    padding-left: 0;
+  }
+
+  .sidenav-toggle {
+    height: 100%;
+    transform: translateY(-1px);
+  }
+}
+
+.active-org {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

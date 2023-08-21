@@ -15,68 +15,71 @@
         alt="GlitchTip"
       />
     </mat-toolbar>
-    <mat-nav-list>
-      <ng-container
-        *ngIf="
-          (contextLoaded$ | async) &&
-            (organizations$ | async)?.length === 0 &&
-            (canCreateOrg$ | async);
-          else showOrgMenu
-        "
+
+    <ng-container
+      *ngIf="
+        (contextLoaded$ | async) &&
+          (organizations$ | async)?.length === 0 &&
+          (canCreateOrg$ | async);
+        else showOrgMenu
+      "
+    >
+      <a
+        mat-button
+        id="create-new-link"
+        routerLink="/organizations/new"
+        class="org-create no-org-create"
+        i18n
+        >Create New Organization</a
       >
-        <a
-          mat-menu-item
-          id="create-new-link"
-          routerLink="/organizations/new"
-          class="no-org-create"
-          i18n
-          >Create New Organization</a
-        >
-      </ng-container>
-      <ng-template #showOrgMenu>
-        <mat-list-item
-          id="org-dropdown"
-          [disabled]="(contextLoaded$ | async) === false"
-          color="accent"
-          [matMenuTriggerFor]="menu"
-          class="org-dropdown-list-item"
-        >
+    </ng-container>
+    <ng-template #showOrgMenu>
+      <button
+        mat-button
+        id="org-dropdown"
+        [disabled]="(contextLoaded$ | async) === false"
+        [matMenuTriggerFor]="menu"
+        class="org-dropdown"
+      >
+        <div class="label-container">
           <span class="overflow">
             {{ (activeOrganizationDetail$ | async)?.name }}
           </span>
           <span class="down-caret">▼</span>
-        </mat-list-item>
-      </ng-template>
-      <mat-menu #menu="matMenu">
-        <button
-          *ngFor="let organization of organizations$ | async"
-          (click)="setOrganization(organization.id)"
+        </div>
+      </button>
+    </ng-template>
+    <mat-menu #menu="matMenu">
+      <button
+        *ngFor="let organization of organizations$ | async"
+        (click)="setOrganization(organization.id)"
+        mat-menu-item
+      >
+        {{ organization.name }}
+      </button>
+      <mat-divider></mat-divider>
+      <ng-container *ngIf="canCreateOrg$ | async; else creationDisabled">
+        <a
           mat-menu-item
+          id="create-new-link"
+          routerLink="/organizations/new"
+          i18n
+          >Create New Organization</a
         >
-          {{ organization.name }}
-        </button>
-        <mat-divider></mat-divider>
-        <ng-container *ngIf="canCreateOrg$ | async; else creationDisabled">
-          <a
-            mat-menu-item
-            id="create-new-link"
-            routerLink="/organizations/new"
-            i18n
-            >Create New Organization</a
-          >
-        </ng-container>
-        <ng-template #creationDisabled>
-          <span
-            mat-menu-item
-            disabled
-            matTooltip="Organization creation is currently disabled"
-            matTooltipPosition="below"
-          >
-            Create New Organization
-          </span>
-        </ng-template>
-      </mat-menu>
+      </ng-container>
+      <ng-template #creationDisabled>
+        <span
+          mat-menu-item
+          disabled
+          matTooltip="Organization creation is currently disabled"
+          matTooltipPosition="below"
+        >
+          Create New Organization
+        </span>
+      </ng-template>
+    </mat-menu>
 
+    <mat-nav-list class="nav-link-list">
       <a
         mat-list-item
         [disabled]="!activeOrganizationLoaded"
@@ -177,6 +180,7 @@
         mat-list-item
         [routerLink]="['/profile']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Account</a
@@ -185,6 +189,7 @@
         mat-list-item
         [routerLink]="['/profile', 'multi-factor-auth']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Multi-factor Authentication</a
@@ -193,6 +198,7 @@
         mat-list-item
         [routerLink]="['/profile', 'notifications']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Notifications</a
@@ -201,6 +207,7 @@
         mat-list-item
         [routerLink]="['/profile', 'auth-tokens']"
         routerLinkActive="active-route"
+        [routerLinkActiveOptions]="{ exact: true }"
         class="sub-items"
         i18n
         >Auth Tokens</a
@@ -209,11 +216,13 @@
     </mat-nav-list>
 
     <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
-      <mat-card-title>
-        <h3 class="mat-display-1" i18n>Support GlitchTip</h3>
-      </mat-card-title>
+      <mat-card-header>
+        <mat-card-title>
+          <h3 i18n>Support GlitchTip</h3>
+        </mat-card-title>
+      </mat-card-header>
       <mat-card-content>
-        <ul>
+        <ul class="mat-body-1">
           <li i18n
             >Donate
             <a
@@ -246,20 +255,11 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar
+    <gt-mobile-nav-toolbar
       *ngIf="isLoggedIn$ | async"
-      (click)="toggleSideNav()"
-      color="primary"
-    >
-      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon> </button
-      ><span
-        class="active-org"
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        >{{ orgDetails?.name }}</span
-      >
-    </mat-toolbar>
-
+      [activeOrg]="activeOrganizationDetail$ | async"
+      (buttonClicked)="toggleSideNav()"
+    ></gt-mobile-nav-toolbar>
     <div class="wrapper">
       <ng-content></ng-content>
     </div>
