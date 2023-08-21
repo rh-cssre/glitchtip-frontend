@@ -13,11 +13,3 @@ gt-settings {
     white-space: normal;
   }
 }
-
-.active-route {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
-
-  .mdc-list-item__primary-text {
-    color: mat.get-color-from-palette($amaranth-palette, 500);
-  }
-}

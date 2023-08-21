@@ -14,7 +14,6 @@ import { take } from "rxjs/operators";
   standalone: true,
   selector: "gt-copy-input",
   templateUrl: "./copy-input.component.html",
-  styleUrls: ["./copy-input.component.scss"],
   imports: [
     CommonModule,
     ClipboardModule,

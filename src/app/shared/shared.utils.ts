@@ -180,12 +180,14 @@ export function parseErrorMessage(err: HttpErrorResponse): string[] {
 
 export function setTheme(preferredTheme?: string | null) {
   function setDark() {
+    document.documentElement.classList.remove("light");
     document.documentElement.classList.add("dark");
     localStorage.setItem("theme", "dark");
   }
 
   function setLight() {
     document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
     localStorage.setItem("theme", "light");
   }
 

@@ -86,17 +86,4 @@ table {
     bottom: 0;
     width: 3px;
   }
-
-  &--true:after {
-    background-color: #54a65a;
-  }
-
-  &--false:after {
-    background-color: $amaranth;
-  }
-
-  // For monitors that do not yet have a check
-  &--:after {
-    background-color: gray;
-  }
 }

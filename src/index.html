@@ -386,7 +386,11 @@
       const theme = localStorage.getItem("theme");
       const systemTheme = matchMedia("(prefers-color-scheme: dark)");
       if (theme === 'dark' || (theme === null && systemTheme.matches)) {
+        document.documentElement.classList.remove('light');
         document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
       }
     </script>
   </body>

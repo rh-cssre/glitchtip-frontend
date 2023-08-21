@@ -35,14 +35,6 @@ table {
     bottom: 0;
     width: 3px;
   }
-
-  &--true:after {
-    background-color: #54a65a;
-  }
-
-  &--false:after {
-    background-color: $amaranth;
-  }
 }
 
 button {

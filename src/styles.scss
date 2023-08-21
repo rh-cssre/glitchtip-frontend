@@ -1,6 +1,7 @@
 $font-path: "../fonts";
+@use "sass:meta";
 @use "@angular/material" as mat;
-@import "prismjs/themes/prism.css";
+@use "src/assets/styles/collect-themes";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 @import "prismjs/plugins/line-highlight/prism-line-highlight.css";
 @import "./assets/styles/variables";
@@ -30,13 +31,16 @@ $font-path: "../fonts";
 @include mat.all-component-themes($candy-app-theme);
 @include theme-extension($candy-app-theme);
 
+.light {
+  @include meta.load-css("prismjs/themes/prism.css");
+  @include collect-themes.generate-light-rules($candy-app-theme);
+}
+
 .dark {
   @include mat.all-component-colors($candy-app-theme-dark);
   @include theme-extension($candy-app-theme-dark);
-
-  a {
-    color: mat.get-color-from-palette($candy-app-contrast, "default");
-  }
+  @include meta.load-css("prismjs/themes/prism-twilight.css");
+  @include collect-themes.generate-dark-rules($candy-app-theme-dark);
 }
 
 // Responsive type maybe?
@@ -59,7 +63,6 @@ mat-card-title {
 }
 
 a {
-  color: mat.get-color-from-palette($candy-app-primary, "default");
   font-weight: 500;
 }
 
@@ -76,10 +79,6 @@ svg {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax((290px), 1fr));
   grid-gap: 24px;
-}
-
-.mat-stroked-button {
-  background-color: #fefefe;
 }
 
 header.page-header {
@@ -150,13 +149,6 @@ header.page-header {
 
 .mat-mdc-header-cell {
   font-size: 12px;
-  color: #0000008a;
-}
-
-.pagination-row {
-  td {
-    border-top: 1px solid #0000001f;
-  }
 }
 
 // Taken from https://stackoverflow.com/a/57759753
@@ -215,8 +207,6 @@ header.page-header {
   blockquote {
     margin: 0 0 20px 0;
     padding: 20px 20px 20px 20px;
-    border-left: 5px solid mat.get-color-from-palette($amaranth-palette, 200);
-    background-color: #f5f2f0;
 
     p:first-child {
       margin-top: 0;
