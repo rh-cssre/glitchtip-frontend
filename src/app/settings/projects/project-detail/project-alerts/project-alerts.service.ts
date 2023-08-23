@@ -311,6 +311,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       quantity: newQuantity,
       uptime,
       alertRecipients: recipients,
+      name: "",
     };
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,

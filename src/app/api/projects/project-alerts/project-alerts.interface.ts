@@ -7,6 +7,7 @@ export interface NewProjectAlert {
 
 export interface ProjectAlert extends NewProjectAlert {
   pk: number;
+  name: string;
   alertRecipients: AlertRecipient[];
 }
 
