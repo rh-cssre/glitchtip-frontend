@@ -17,6 +17,7 @@ import {
   AlertRecipient,
   NewAlertRecipient,
   NewProjectAlert,
+  ParticalProjectAlert,
   ProjectAlert,
 } from "../../../../api/projects/project-alerts/project-alerts.interface";
 import { ProjectSettingsService } from "../../project-settings.service";
@@ -305,13 +306,12 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     recipients: AlertRecipient[]
   ) {
     this.setUpdatePropertiesLoading(id);
-    const data: ProjectAlert = {
+    const data: ParticalProjectAlert = {
       pk: id,
       timespan_minutes: newTimespan,
       quantity: newQuantity,
       uptime,
-      alertRecipients: recipients,
-      name: "",
+      alertRecipients: recipients
     };
     combineLatest([
       this.organizationsService.activeOrganizationSlug$,
