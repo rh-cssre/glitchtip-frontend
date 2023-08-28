@@ -210,6 +210,10 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     return;
   }
 
+  updateCommentCount(num: number) {
+    this.setUpdatedCommentCount(num);
+  }
+
   deleteIssue(id: string) {
     this.issuesAPIService
       .destroy(id)
@@ -317,6 +321,18 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
       issueInitialLoadComplete: true,
       event: null,
     });
+  }
+
+  private setUpdatedCommentCount(num: number) {
+    const state = this.state.getValue();
+    if (state.issue) {
+      this.setState({
+        issue: {
+          ...state.issue,
+          numComments: state.issue.numComments + num,
+        },
+      });
+    }
   }
 
   // private removed for testing
