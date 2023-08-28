@@ -4,9 +4,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata, Story } from "@storybook/angular";
 
-import { MaterialModule } from "../material.module";
 import { ProjectCardComponent } from "../project-card/project-card.component";
-
 
 export default {
   title: "Shared/Project card",
@@ -14,7 +12,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
@@ -23,17 +20,17 @@ export default {
     }),
   ],
   argTypes: {
-    sampleCard:{
-      options: [true, false]
+    sampleCard: {
+      options: [true, false],
     },
-    isMember:{
-      options: [true, false]
-    }
-  }
+    isMember: {
+      options: [true, false],
+    },
+  },
 };
 
 export const ProjectCard: Story = (args) => {
-const { sampleCard, isMember } = args
+  const { sampleCard, isMember } = args;
 
   return {
     props: {
@@ -61,5 +58,3 @@ const { sampleCard, isMember } = args
 ProjectCard.story = {
   parameters: {},
 };
-
-
