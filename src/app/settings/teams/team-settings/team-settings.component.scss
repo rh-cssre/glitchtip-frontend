@@ -1,17 +1,11 @@
 @import "variables";
 
-.mat-card {
+mat-card {
   margin: 24px 8px 8px 8px;
+}
 
-  mat-card-header {
-    &::ng-deep .mat-card-header-text {
-      margin-left: 0;
-    }
-  }
-
-  mat-card-content {
-    padding-top: 16px;
-  }
+mat-card-content {
+  padding-top: 16px;
 }
 
 form {
