@@ -192,9 +192,9 @@ export function setTheme(preferredTheme?: string | null) {
   }
 
   const systemTheme = matchMedia("(prefers-color-scheme: dark)");
-  const isSystemOrUndefined = !preferredTheme || preferredTheme === "system";
+  const isSystem = preferredTheme === "system";
 
-  if (isSystemOrUndefined) {
+  if (isSystem) {
     if (systemTheme.matches) {
       setDark();
     } else {

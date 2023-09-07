@@ -102,7 +102,7 @@ export class PreferencesComponent implements OnInit {
       if (user?.options.preferredTheme) {
         this.form.controls.theme.setValue(user.options.preferredTheme)
       } else {
-        this.form.controls.theme.setValue("system")
+        this.form.controls.theme.setValue("light")
       }
     });
     this.filteredOptions = this.form.controls["timeZone"].valueChanges.pipe(
