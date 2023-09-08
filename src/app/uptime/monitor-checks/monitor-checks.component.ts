@@ -1,5 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+} from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTableModule } from "@angular/material/table";
@@ -33,7 +38,7 @@ import { MonitorChecksService } from "./monitor-checks.service";
     RouterModule,
   ],
 })
-export class MonitorChecksComponent {
+export class MonitorChecksComponent implements OnDestroy {
   @Input({ required: true }) monitor!: MonitorDetail;
   monitorChecks$ = this.service.monitorChecks$;
   isChange$ = this.route.queryParamMap.pipe(
@@ -101,5 +106,9 @@ export class MonitorChecksComponent {
         queryParamsHandling: "merge",
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.service.clearState();
   }
 }
