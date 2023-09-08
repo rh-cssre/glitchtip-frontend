@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
@@ -27,7 +27,7 @@ import { UserReportsService } from "src/app/api/user-reports/user-reports.servic
     MatProgressSpinnerModule,
   ],
 })
-export class UserReportsIssueComponent {
+export class UserReportsIssueComponent implements OnDestroy {
   paginator$ = this.userReportService.paginator$;
   issueId$ = this.issueService.issue$.pipe(map((issue) => issue?.id));
   reports$ = this.userReportService.reports$;
@@ -48,5 +48,9 @@ export class UserReportsIssueComponent {
         }
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.userReportService.clearState();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { ReleaseDetailService } from "./release-detail.service";
@@ -21,7 +21,7 @@ import { DetailHeaderComponent } from "src/app/shared/detail/header/header.compo
     DetailHeaderComponent,
   ],
 })
-export class ReleaseDetailComponent {
+export class ReleaseDetailComponent implements OnDestroy {
   tooltipDisabled = false;
   displayedColumns = ["name"];
 
@@ -49,5 +49,9 @@ export class ReleaseDetailComponent {
 
   checkIfTooltipIsNecessary($event: Event) {
     this.tooltipDisabled = checkForOverflow($event);
+  }
+
+  ngOnDestroy(): void {
+    this.service.clearState();
   }
 }

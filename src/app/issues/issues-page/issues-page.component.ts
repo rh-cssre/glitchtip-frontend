@@ -302,6 +302,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.projectEnvironmentsService.clearState();
+    this.service.clearState();
   }
 
   trackIssues(index: number, issue: Issue): number {

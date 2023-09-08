@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -32,7 +32,7 @@ import { combineLatest } from "rxjs";
     ListTitleComponent,
   ],
 })
-export class MonitorListComponent {
+export class MonitorListComponent implements OnDestroy {
   tooltipDisabled = false;
   monitors$ = this.service.monitors$;
   paginator$ = this.service.paginator$;
@@ -59,5 +59,9 @@ export class MonitorListComponent {
 
   checkIfTooltipIsNecessary($event: Event) {
     this.tooltipDisabled = checkForOverflow($event);
+  }
+
+  ngOnDestroy(): void {
+    this.service.clearState();
   }
 }

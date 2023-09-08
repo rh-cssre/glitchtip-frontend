@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -22,7 +22,7 @@ import { combineLatest, map } from "rxjs";
     ListFooterComponent,
   ],
 })
-export class ReleasesComponent {
+export class ReleasesComponent implements OnDestroy {
   paginator$ = this.service.paginator$;
   tooltipDisabled = false;
   displayedColumns = ["version", "created"];
@@ -47,5 +47,9 @@ export class ReleasesComponent {
 
   checkIfTooltipIsNecessary($event: Event) {
     this.tooltipDisabled = checkForOverflow($event);
+  }
+
+  ngOnDestroy(): void {
+    this.service.clearState();
   }
 }

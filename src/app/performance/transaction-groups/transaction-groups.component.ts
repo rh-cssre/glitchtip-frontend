@@ -302,5 +302,6 @@ export class TransactionGroupsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.projectEnvironmentsService.clearState();
+    this.service.clearState();
   }
 }
