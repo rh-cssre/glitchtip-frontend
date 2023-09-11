@@ -4,7 +4,6 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata, Story } from "@storybook/angular";
 
-import { MaterialModule } from "../material.module";
 import { LoadingButtonComponent } from "../loading-button/loading-button.component";
 
 export default {
@@ -13,7 +12,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
