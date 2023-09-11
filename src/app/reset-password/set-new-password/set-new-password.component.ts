@@ -1,14 +1,37 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { map } from "rxjs/operators";
 import { ResetPasswordService } from "src/app/api/reset-password/reset-password.service";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { InputMatcherDirective } from "../../shared/input-matcher.directive";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, AsyncPipe } from "@angular/common";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-set-new-password",
   templateUrl: "./set-new-password.component.html",
   styleUrls: ["./set-new-password.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatCardModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    InputMatcherDirective,
+    LoadingButtonComponent,
+    RouterLink,
+    AsyncPipe,
+  ],
 })
 export class SetNewPasswordComponent {
   params$ = this.activatedRoute.params.pipe(

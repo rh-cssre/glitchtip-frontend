@@ -8,7 +8,7 @@ from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
 from myapp import wsgi_app
 
-sentry_sdk.init(dsn="your DSN here")
+sentry_sdk.init(dsn="YOUR-GLITCHTIP-DSN-HERE")
 
 wsgi_app = SentryWsgiMiddleware(wsgi_app)
 ```
