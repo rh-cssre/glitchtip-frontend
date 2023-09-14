@@ -59,7 +59,7 @@ build-assets:
   stage: test
   script:
     - npm version
-    - npm i
+    - npm i --force
     - npm ci --force
     - npm run build-prod
   artifacts:
