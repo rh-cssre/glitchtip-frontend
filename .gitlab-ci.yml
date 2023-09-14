@@ -58,6 +58,8 @@ test-e2e:
 build-assets:
   stage: test
   script:
+    - npm version
+    - npm i
     - npm ci --force
     - npm run build-prod
   artifacts:
