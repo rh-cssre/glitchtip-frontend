@@ -1,41 +1,12 @@
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
-import { MatTableModule } from "@angular/material/table";
-import { moduleMetadata } from "@storybook/angular";
-import { MarkdownModule } from "ngx-markdown";
 import { of } from "rxjs";
-
 import { IssuesPageComponent } from "./issues-page.component";
-import { IssuesService } from "../issues.service";
 import { issueList } from "./issues-test-data";
-import { ProjectFilterBarComponent } from "src/app/list-elements/project-filter-bar/project-filter-bar.component";
-import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
-import { DataFilterBarComponent } from "src/app/list-elements/data-filter-bar/data-filter-bar.component";
-import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
+import { basePage } from "src/app/storybook-constants";
 
 export default {
+  ...basePage,
   title: "Issues/Issues Page",
   component: IssuesPageComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [
-        GlitchtipTestingModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatTableModule,
-        MarkdownModule,
-      ],
-      providers: [IssuesService, MatDatepickerModule, OrganizationsService],
-      declarations: [
-        ListTitleComponent,
-        DataFilterBarComponent,
-        ProjectFilterBarComponent,
-        IssueZeroStatesComponent,
-      ],
-    }),
-  ],
 };
 
 const sampleProjects = [
