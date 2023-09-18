@@ -1,0 +1,46 @@
+@import "variables";
+
+.mat-h1 {
+  padding-right: 20px;
+}
+
+header {
+  @media screen and (max-width: ($tablet - 1)) {
+    margin-bottom: 20px;
+  }
+
+  .header-group {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: ($tablet - 1)) {
+      flex-direction: column;
+    }
+  }
+
+  gt-issue-detail-title {
+    margin-right: 20px;
+  }
+}
+
+.back-link {
+  margin: 0 0 16px;
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.mat-subtitle-2 {
+  margin: 0;
+}
+
+.button-row {
+  display: flex;
+  align-items: flex-start;
+
+  ::ng-deep button {
+    margin-right: 8px;
+  }
+}

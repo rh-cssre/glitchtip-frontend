@@ -1,5 +1,13 @@
 @import "variables";
 
+mat-form-field {
+  margin-bottom: 10px;
+
+  @media screen and (max-width: $small - 1) {
+    margin-bottom: 20px;
+  }
+}
+
 .half-width {
   max-width: 390px;
 }
@@ -8,10 +16,10 @@
   margin-top: 24px;
 }
 
-.timezone {
-  margin-bottom: 7px;
+.mt-1 {
+  margin-top: 0.25rem;
 }
 
-.invalid {
-  color: $amaranth;
+.mt-2 {
+  margin-top: 0.5rem;
 }
