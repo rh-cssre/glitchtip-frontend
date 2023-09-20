@@ -8,6 +8,7 @@ import {
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
 import { setTheme } from "./shared/shared.utils";
+import { MicroSentryErrorBusService } from "@micro-sentry/angular";
 
 @Component({
   selector: "gt-root",
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit {
     private settings: SettingsService,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private microSentryErrorBusService: MicroSentryErrorBusService
   ) {}
 
   ngOnInit() {
@@ -33,15 +35,25 @@ export class AppComponent implements OnInit {
       }
     });
 
+    this.microSentryErrorBusService.errors$.subscribe((error) => {
+      const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+
+      if (chunkFailedMessage.test(error.message)) {
+        if (confirm($localize`New version available. Load New Version?`)) {
+          window.location.reload();
+        }
+      }
+    });
+
     const systemTheme = matchMedia("(prefers-color-scheme: dark)");
     this.userService.userDetails$.subscribe((user) => {
-      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"))
-    })
+      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"));
+    });
     systemTheme.addEventListener("change", () => {
       const s = this.userService.userDetails$.subscribe((user) => {
-        setTheme(user?.options.preferredTheme)
-      })
-      s.unsubscribe()
-    })
+        setTheme(user?.options.preferredTheme);
+      });
+      s.unsubscribe();
+    });
   }
 }
