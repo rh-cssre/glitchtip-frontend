@@ -14,7 +14,7 @@ export class CustomMicroSentryErrorHandler implements ErrorHandler {
     });
   }
 
-  handleError(error: any): void {
+  handleError(error: Error): void {
     const chunkFailedMessage = /Loading chunk [\d]+ failed/;
 
     if (chunkFailedMessage.test(error.message)) {
