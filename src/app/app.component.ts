@@ -8,7 +8,6 @@ import {
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
 import { setTheme } from "./shared/shared.utils";
-import { MicroSentryErrorBusService } from "@micro-sentry/angular";
 
 @Component({
   selector: "gt-root",
@@ -22,7 +21,6 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private microSentryErrorBusService: MicroSentryErrorBusService
   ) {}
 
   ngOnInit() {
@@ -32,16 +30,6 @@ export class AppComponent implements OnInit {
         const params = this.route.snapshot.firstChild?.params;
         const orgSlug = params ? params["org-slug"] : undefined;
         this.settings.triggerPlausibleReport(orgSlug);
-      }
-    });
-
-    this.microSentryErrorBusService.errors$.subscribe((error) => {
-      const chunkFailedMessage = /Loading chunk [\d]+ failed/;
-
-      if (chunkFailedMessage.test(error.message)) {
-        if (confirm($localize`New version available. Load New Version?`)) {
-          window.location.reload();
-        }
       }
     });
 
