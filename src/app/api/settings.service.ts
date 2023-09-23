@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { MicroSentryService } from "@micro-sentry/angular";
+import { MicroSentryService } from "@glitchtip/micro-sentry-angular";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import { SocialApp } from "./user/user.interfaces";

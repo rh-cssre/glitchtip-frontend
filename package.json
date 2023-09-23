@@ -44,7 +44,7 @@
     "@browser-logos/safari": "^2.1.0",
     "@browser-logos/safari-ios": "^1.0.15",
     "@egoistdeveloper/operating-system-logos": "~1.2.3",
-    "@micro-sentry/angular": "^6.1.5",
+    "@glitchtip/micro-sentry-angular": "^0.0.1",
     "@stripe/stripe-js": "^1.54.1",
     "@swimlane/ngx-charts": "^20.4.1",
     "cborg": "^4.0.1",
