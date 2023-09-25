@@ -15,7 +15,7 @@ export default {
   ],
 };
 
-export const contexts = () => {
+export const Contexts = () => {
   const fullContext = [
     {
       title: "em@jay.com",
@@ -75,11 +75,11 @@ export const contexts = () => {
   };
 };
 
-contexts.story = {
+Contexts.story = {
   name: "Event Detail Full Context",
 };
 
-export const unknownContexts = () => {
+export const UnknownContexts = () => {
   const transformedContexts: any = [
     {
       type: "user",
@@ -130,7 +130,7 @@ export const unknownContexts = () => {
   };
 };
 
-unknownContexts.story = {
+UnknownContexts.story = {
   name: "Event Detail Contexts - Unknown Scenario",
 };
 
