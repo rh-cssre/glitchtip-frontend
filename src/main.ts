@@ -7,7 +7,7 @@ import { loadTranslations } from "@angular/localize";
 
 import { environment } from "./environments/environment";
 import { AppComponent } from "./app/app.component";
-import { MicroSentryModule } from "@micro-sentry/angular";
+import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
 import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,

@@ -4,7 +4,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
+import {
+  MICRO_SENTRY_CONFIG,
+  MicroSentryService,
+} from "@glitchtip/micro-sentry-angular";
 import { EMPTY } from "rxjs";
 import { LoginService } from "./login.service";
 import { LoginComponent } from "./login.component";
