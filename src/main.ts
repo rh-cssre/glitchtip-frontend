@@ -17,7 +17,7 @@ import { routes, TemplatePageTitleStrategy } from "./app/app.routes";
 import { bootstrapApplication } from "@angular/platform-browser";
 import { LessAnnoyingErrorStateMatcher } from "./app/shared/less-annoying-error-state-matcher";
 import { ErrorStateMatcher } from "@angular/material/core";
-import { GlobalErrorHandler } from "./app/global-error-handler";
+import { CustomMicroSentryErrorHandler } from "./app/custom-microsentry-error-handler";
 import { tokenInterceptor } from "./app/api/auth/token.interceptor";
 import {
   provideHttpClient,
@@ -80,7 +80,7 @@ const bootstrap = () =>
         provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
         useValue: { duration: snackBarDuration },
       },
-      { provide: ErrorHandler, useClass: GlobalErrorHandler },
+      { provide: ErrorHandler, useClass: CustomMicroSentryErrorHandler },
       { provide: TitleStrategy, useClass: TemplatePageTitleStrategy },
       {
         provide: ErrorStateMatcher,
