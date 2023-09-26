@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     private settings: SettingsService,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   ngOnInit() {
@@ -35,13 +35,13 @@ export class AppComponent implements OnInit {
 
     const systemTheme = matchMedia("(prefers-color-scheme: dark)");
     this.userService.userDetails$.subscribe((user) => {
-      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"))
-    })
+      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"));
+    });
     systemTheme.addEventListener("change", () => {
       const s = this.userService.userDetails$.subscribe((user) => {
-        setTheme(user?.options.preferredTheme)
-      })
-      s.unsubscribe()
-    })
+        setTheme(user?.options.preferredTheme);
+      });
+      s.unsubscribe();
+    });
   }
 }
