@@ -1,0 +1,98 @@
+$candy-app-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $candy-app-primary,
+      accent: $candy-app-accent,
+      warn: $candy-app-warn,
+    ),
+  )
+);
+
+$candy-app-theme-dark: mat.define-dark-theme(
+  (
+    color: (
+      primary: $candy-app-primary-contrast,
+      accent: $candy-app-accent,
+      warn: $candy-app-warn-contrast,
+    ),
+  )
+);
+
+@mixin theme-extension($theme) {
+  $_background: map-get($theme, background);
+  $app-bg-color: map-get($_background, background);
+  $_foreground: map-get($theme, foreground);
+  $app-fg-color: map-get($_foreground, text);
+
+  body {
+    background-color: $app-bg-color;
+    color: $app-fg-color;
+  }
+}
+
+@function modify-background($theme, $background-color) {
+  $bg2: mix($background-color, white, 95%);
+
+  // Replace the background in the color object's background palette.
+  $theme-color: map-get($theme, color);
+  $color-background-palette: map-get($theme-color, background);
+  $color-background-palette: map-merge(
+    $color-background-palette,
+    (
+      background: $background-color,
+    )
+  );
+  $color-background-palette: map-merge(
+    $color-background-palette,
+    (
+      raised-button: $background-color,
+    )
+  );
+  $color-background-palette: map-merge(
+    $color-background-palette,
+    (
+      dialog: $bg2,
+      card: $bg2,
+      selected-button: $background-color,
+    )
+  );
+
+  // Replace the background in the background palette (for legacy reasons)
+  $background-palette: map-get($theme, background);
+  $background-palette: map-merge(
+    $background-palette,
+    (
+      background: $background-color,
+    )
+  );
+  $background-palette: map-merge(
+    $background-palette,
+    (
+      raised-button: $background-color,
+    )
+  );
+
+  // Merge the changes into a new theme.
+  $modified-theme-color: map-merge(
+    $theme-color,
+    (
+      background: $color-background-palette,
+    )
+  );
+  $modified-theme: map-merge(
+    $theme,
+    (
+      color: $modified-theme-color,
+    )
+  );
+  $modified-theme: map-merge(
+    $modified-theme,
+    (
+      background: $background-palette,
+    )
+  );
+
+  @return $modified-theme;
+}
+
+$candy-app-theme-dark: modify-background($candy-app-theme-dark, #181818);

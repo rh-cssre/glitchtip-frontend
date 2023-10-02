@@ -4,7 +4,6 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { moduleMetadata } from "@storybook/angular";
 
-import { MaterialModule } from "../material.module";
 import { CopyInputComponent } from "../copy-input/copy-input.component";
 
 export default {
@@ -13,7 +12,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        MaterialModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
@@ -25,7 +23,6 @@ export default {
 
 export const CopyInput = () => {
   return {
-
     props: {
       value: "Some copying value",
       placeholder: "placeholder",

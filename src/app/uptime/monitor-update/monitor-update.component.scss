@@ -1,82 +1,5 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
-
-header {
-  display: flex;
-  flex-direction: column;
-  margin-top: -16px;
-
-  a {
-    width: min-content;
-  }
-
-  h1 {
-    margin-top: 20px;
-    margin-bottom: 0px;
-  }
-
-  margin-bottom: 20px;
-}
-
-form {
-  padding-bottom: 8px;
-  padding-right: 8px;
-  .mat-form-field {
-    display: block;
-  }
-  gt-loading-button {
-    margin-bottom: 8px;
-  }
-}
-
-.form-center {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.url-spacing {
-  margin-top: 10px;
-}
-
-.short-field {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  width: 700px;
-  margin-top: 10px;
-
-  @media screen and (max-width: $medium - 1) {
-    width: auto;
-  }
-
-  .form-field {
-    width: 170px;
-    margin-right: 16px;
-  }
-}
-
-.help-text {
-  display: flex;
-  justify-content: flex-start;
-  width: 370px;
-  position: relative;
-  bottom: 0;
-  left: 0;
-  margin-bottom: 0;
-
-  @media screen and (max-width: $tablet - 1) {
-    width: 170px;
-
-    p {
-      margin-top: 0;
-    }
-  }
-}
-
-.submit {
-  margin-top: 20px;
-}
 
 .delete {
   margin-top: 20px;
@@ -85,15 +8,14 @@ form {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
+
     @media (max-width: $tablet - 1) {
       flex-direction: column;
       align-items: flex-start;
     }
-  
+
     p {
       padding-right: 16px;
     }
   }
 }
-
