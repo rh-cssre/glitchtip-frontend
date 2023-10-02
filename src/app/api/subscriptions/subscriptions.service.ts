@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY, lastValueFrom, timer } from "rxjs";
 import { catchError, delay, expand, map, tap, takeUntil } from "rxjs/operators";
 import {
@@ -118,7 +119,8 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
     private productsAPIService: ProductsAPIService,
     private subscriptionsAPIService: SubscriptionsAPIService,
     private stripe: StripeService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     super(initialState);
   }
@@ -212,8 +214,18 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
           tap((resp) => {
             this.setSubscription(resp.subscription);
             this.router.navigate([organization.slug, "issues"]);
+          }),
+          catchError((err) => {
+            if (err.status === 409) {
+              this.setSubscriptionCreationError();
+              this.snackBar.open(
+                "This organization already has a subscription. Please reload page for latest details."
+              );
+            }
+            return EMPTY;
           })
-        )
+        ),
+        { defaultValue: null }
       );
     } else {
       this.stripe.redirectToSubscriptionCheckout(organization.id, price.id);
@@ -282,6 +294,10 @@ export class SubscriptionsService extends StatefulService<SubscriptionsState> {
 
   private setSubscriptionCreationStart(subscriptionCreationLoadingId: string) {
     this.setState({ subscriptionCreationLoadingId });
+  }
+
+  private setSubscriptionCreationError() {
+    this.setState({ subscriptionCreationLoadingId: null });
   }
 
   private setSubscriptionCount(eventsCount: EventsCount) {
