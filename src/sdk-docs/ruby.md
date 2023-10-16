@@ -16,7 +16,7 @@ To use Raven Ruby all you need is your DSN. Like most Sentry-compatible librarie
 
 ```ruby
 Raven.configure do |config|
-  config.dsn = 'your DSN here'
+  config.dsn = 'YOUR-GLITCHTIP-DSN-HERE'
 end
 ```
 
