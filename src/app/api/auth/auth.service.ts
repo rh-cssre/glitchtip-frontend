@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { Router, RouterStateSnapshot } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { lastValueFrom } from "rxjs";
 
 export interface AuthState {
   isLoggedIn: boolean;
@@ -31,6 +32,19 @@ export class AuthService extends StatefulService<AuthState> {
         redirectUrl: auth.redirectUrl,
       });
     }
+  }
+
+  loginCheck(state: RouterStateSnapshot) {
+    lastValueFrom(
+      this.isLoggedIn.pipe(
+        tap((loggedIn) => {
+          if (loggedIn === false) {
+            this.setRedirectUrl(state.url);
+          }
+        })
+      )
+    );
+    return this.isLoggedIn;
   }
 
   setAuth(data: AuthState) {

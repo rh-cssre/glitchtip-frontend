@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 $amaranth: #e22a46;
 
@@ -38,18 +38,21 @@ $amaranth-palette: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$candy-app-primary: mat.define-palette($amaranth-palette);
-$candy-app-accent: mat.define-palette(mat.$deep-orange-palette, A200, A100, A400);
+$candy-app-primary: mat.define-palette($amaranth-palette, 500);
+$candy-app-primary-contrast: mat.define-palette($amaranth-palette, 300, 100, 500, 300);
+$candy-app-accent: mat.define-palette(
+  mat.$deep-orange-palette,
+  A200,
+  A100,
+  A400
+);
 
 // The warn palette is optional (defaults to red).
 $candy-app-warn: mat.define-palette(mat.$red-palette);
+$candy-app-warn-contrast: mat.define-palette(mat.$red-palette, 300, 100, 500, 300);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat.define-light-theme(
-  $candy-app-primary,
-  $candy-app-accent,
-  $candy-app-warn
-);
+@import './themes';
 
 $font-sans-serif: "Plex Sans";
 $font-mono: "Plex Mono";
@@ -61,21 +64,69 @@ $font-mono: "Plex Mono";
 // https://material.angular.io/guide/typography#what-is-typography-
 $custom-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $display-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
-  $display-3: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-1: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $body-2: mat.define-typography-level(16px, 28px, 500),
-  $body-1: mat.define-typography-level(16px, 24px, 400),
+  $headline-1:
+    mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $headline-2:
+    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-3:
+    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-4:
+    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
+  $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $body-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
+  $caption: mat.define-typography-level(12px, 13.5px, 400, $font-sans-serif),
+);
+
+// Angular Material uses subtitle for buttons in a list,
+// so body-1 and subtitle-1 have to be the same
+$nav-list-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
+  $subtitle-1: mat.define-typography-level(16px, 24px, 500, $font-sans-serif),
+);
+
+$custom-card-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-6: mat.define-typography-level(24px, 30px, 500, $font-sans-serif),
+);
+
+$custom-input-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-1: mat.define-typography-level(13px, 15px, 400, $font-sans-serif),
+);
+
+$custom-table-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-2: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
+);
+
+$custom-mobile-table-typography: mat.define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-2: mat.define-typography-level(14px, 22px, 400, $font-sans-serif),
 );
 
 $mobile-typography: mat.define-typography-config(
   $font-family: $font-sans-serif,
-  $display-4: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-2: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $display-1: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $headline-1:
+    mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-2:
+    mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-3:
+    mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-4:
+    mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $subtitle-1: mat.define-typography-level(15px, 24px, 500, $font-sans-serif),
+  $subtitle-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $body-1: mat.define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $body-2: mat.define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $button: mat.define-typography-level(14px, 14px, 500, $font-sans-serif),
+  $caption: mat.define-typography-level(12px, 13.5px, 400, $font-sans-serif),
 );
+
+$side-nav-width: 240px;
 
 // Breakpoints
 
