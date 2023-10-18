@@ -5,11 +5,11 @@ export interface NewProjectAlert {
   alertRecipients: NewAlertRecipient[];
 }
 
-export interface ParticalProjectAlert extends NewProjectAlert {
+export interface PartialProjectAlert extends NewProjectAlert {
   pk: number;
   alertRecipients: AlertRecipient[];
 }
-export interface ProjectAlert extends ParticalProjectAlert {
+export interface ProjectAlert extends PartialProjectAlert {
   name: string;
 }
 

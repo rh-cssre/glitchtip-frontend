@@ -17,7 +17,7 @@ import {
   AlertRecipient,
   NewAlertRecipient,
   NewProjectAlert,
-  ParticalProjectAlert,
+  PartialProjectAlert,
   ProjectAlert,
 } from "../../../../api/projects/project-alerts/project-alerts.interface";
 import { ProjectSettingsService } from "../../project-settings.service";
@@ -306,7 +306,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     recipients: AlertRecipient[]
   ) {
     this.setUpdatePropertiesLoading(id);
-    const data: ParticalProjectAlert = {
+    const data: PartialProjectAlert = {
       pk: id,
       timespan_minutes: newTimespan,
       quantity: newQuantity,
