@@ -2,6 +2,7 @@
 @use "src/scss/nav-lists-theme";
 @use "src/app/profile/preferences/preferences-theme.component";
 @use "src/app/issues/issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded-theme.component";
+@use "src/app/issues/issue-detail/event-detail/entry-exception/entry-exception-theme.component";
 @use "src/app/issues/issue-detail/issue-detail-tags/issue-detail-tags.componenent";
 @use "src/app/issues/issues-page/_issues-page-theme.component";
 @use "src/app/issues/issue-zero-states/issue-zero-states-theme.component";
@@ -19,6 +20,7 @@
   @include global-theme.theme($theme);
   @include nav-lists-theme.theme($theme);
   @include preferences-theme.theme($theme);
+  @include entry-exception-theme.theme($theme);
   @include frame-expanded-theme.theme($theme);
   @include issue-detail-tags.theme($theme);
   @include issues-page-theme.theme($theme);
