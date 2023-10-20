@@ -15,7 +15,6 @@
   @media (min-width: $large) {
     display: flex;
     border-radius: 4px;
-    background: white;
   }
 
   mat-card {
@@ -23,8 +22,6 @@
 
     @media (min-width: $large) {
       flex: 1;
-      background: transparent;
-      border-right: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
       border-radius: 0;
       box-shadow: none !important;
 
