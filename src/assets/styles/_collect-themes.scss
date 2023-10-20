@@ -6,6 +6,7 @@
 @use "src/app/issues/issues-page/_issues-page-theme.component";
 @use "src/app/issues/issue-zero-states/issue-zero-states-theme.component";
 @use "src/app/settings/projects/platform-picker/_platform-picker-theme.component";
+@use "src/app/settings/subscription/payment/payment-theme.component";
 @use "src/app/settings/subscription/subscription-theme.component";
 @use "src/app/shared/copy-input/copy-input-theme.component";
 @use "src/app/uptime/monitor-chart/monitor-chart-theme.component";
@@ -23,6 +24,7 @@
   @include issues-page-theme.theme($theme);
   @include issue-zero-states-theme.theme($theme);
   @include platform-picker-theme.theme($theme);
+  @include payment-theme.theme($theme);
   @include subscription-theme.theme($theme);
   @include copy-input-theme.theme($theme);
   @include monitor-chart-theme.theme($theme);
