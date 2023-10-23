@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { MicroSentryService } from "@micro-sentry/angular";
+import { MicroSentryService } from "@glitchtip/micro-sentry-angular";
 import { BehaviorSubject } from "rxjs";
 import { tap, map } from "rxjs/operators";
 import { SocialApp } from "./user/user.interfaces";
@@ -62,9 +62,7 @@ export class SettingsService {
     map((settings) => settings.enableOrganizationCreation)
   );
   serverTimeZone$ = this.state.pipe(map((settings) => settings.serverTimeZone));
-  initialLoad$ = this.state.pipe(
-    map((settings) => settings.initialLoad)
-  );
+  initialLoad$ = this.state.pipe(map((settings) => settings.initialLoad));
   private readonly url = "/api/settings/";
 
   constructor(
