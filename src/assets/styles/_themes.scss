@@ -30,10 +30,10 @@ $candy-app-theme-dark: mat.define-dark-theme(
   }
 }
 
-@function modify-background($theme, $background-color) {
+@function modify-background($theme, $background-color, $foreground-color) {
   $bg2: mix($background-color, white, 95%);
 
-  // Replace the background in the color object's background palette.
+  // Replace the background and foreground in the color object's palette.
   $theme-color: map-get($theme, color);
   $color-background-palette: map-get($theme-color, background);
   $color-background-palette: map-merge(
@@ -56,6 +56,23 @@ $candy-app-theme-dark: mat.define-dark-theme(
       selected-button: $background-color,
     )
   );
+  $color-foreground-palette: map-get($theme-color, foreground);
+  $color-foreground-palette: map-merge(
+    $color-foreground-palette,
+    (
+      foreground: $foreground-color,
+    )
+  );
+  $color-foreground-palette: map-merge(
+    $color-foreground-palette,
+    (
+      base: $foreground-color,
+      icon: $foreground-color,
+      icons: $foreground-color,
+      text: $foreground-color,
+      slider-min: $foreground-color,
+    )
+  );
 
   // Replace the background in the background palette (for legacy reasons)
   $background-palette: map-get($theme, background);
@@ -71,12 +88,21 @@ $candy-app-theme-dark: mat.define-dark-theme(
       raised-button: $background-color,
     )
   );
+  // Replace the foreground in the foreground palette
+  $foreground-palette: map-get($theme, foreground);
+  $foreground-palette: map-merge(
+    $foreground-palette,
+    (
+      foreground: $foreground-color,
+    )
+  );
 
   // Merge the changes into a new theme.
   $modified-theme-color: map-merge(
     $theme-color,
     (
       background: $color-background-palette,
+      foreground: $color-foreground-palette,
     )
   );
   $modified-theme: map-merge(
@@ -89,10 +115,11 @@ $candy-app-theme-dark: mat.define-dark-theme(
     $modified-theme,
     (
       background: $background-palette,
+      foreground: $foreground-palette,
     )
   );
 
   @return $modified-theme;
 }
 
-$candy-app-theme-dark: modify-background($candy-app-theme-dark, #181818);
+$candy-app-theme-dark: modify-background($candy-app-theme-dark, #181818, #FAFAFA);
