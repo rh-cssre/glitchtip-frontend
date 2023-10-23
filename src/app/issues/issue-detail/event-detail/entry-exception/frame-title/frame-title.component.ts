@@ -1,12 +1,16 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import type { Frame } from "src/app/issues/interfaces";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { NgIf } from "@angular/common";
 
 @Component({
   selector: "gt-frame-title",
   templateUrl: "./frame-title.component.html",
-  styleUrls: ["./frame-title.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, MatTooltipModule, MatButtonModule, MatIconModule],
 })
 export class FrameTitleComponent {
   @Input() frame: Frame | undefined;
@@ -49,12 +53,10 @@ export class FrameTitleComponent {
     }
   }
 
-  sanitizeUrl(str: string): string | null {
-    const url = sanitizeUrl(str);
+  sanitizeUrl(url: string): string | null {
     if (url === "about:blank") {
       return null;
-    } else {
-      return url;
     }
+    return url;
   }
 }
