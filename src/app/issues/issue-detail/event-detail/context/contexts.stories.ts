@@ -5,6 +5,7 @@ import { generateIconPath, iconDictionary } from "src/app/shared/shared.utils";
 
 export default {
   title: "Events/Contexts",
+  component: ContextsComponent,
 };
 
 export const Contexts = () => {
@@ -60,7 +61,6 @@ export const Contexts = () => {
   ];
 
   return {
-    component: ContextsComponent,
     props: {
       specialContexts$: of(fullContext),
     },
@@ -115,7 +115,6 @@ export const UnknownContexts = () => {
     },
   ];
   return {
-    component: ContextsComponent,
     props: {
       specialContexts$: of(transformedContexts),
     },

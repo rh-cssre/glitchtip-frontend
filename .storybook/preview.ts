@@ -7,7 +7,8 @@ setCompodocJson(docJson);
 
 import { HttpClientModule } from "@angular/common/http";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+// import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { provideAnimations } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
 
@@ -24,7 +25,7 @@ export const decorators = [
       importProvidersFrom(MatSnackBarModule),
       importProvidersFrom(HttpClientModule),
       importProvidersFrom(RouterTestingModule),
-      importProvidersFrom(NoopAnimationsModule),
+      provideAnimations(),
       importProvidersFrom(MicroSentryModule.forRoot({})),
     ],
   }),

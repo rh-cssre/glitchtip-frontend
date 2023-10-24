@@ -1,8 +1,5 @@
-import { importProvidersFrom } from "@angular/core";
 import { provideHttpClient } from "@angular/common/http";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { applicationConfig, Meta, StoryObj } from "@storybook/angular";
-import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
 import { of } from "rxjs";
 import { SocialAuthComponent } from "./social-auth.component";
 
@@ -12,7 +9,6 @@ const meta: Meta<SocialAuthComponent> = {
   decorators: [
     applicationConfig({
       providers: [
-        importProvidersFrom(MatSnackBarModule, MicroSentryModule.forRoot({})),
         provideHttpClient(),
       ],
     }),

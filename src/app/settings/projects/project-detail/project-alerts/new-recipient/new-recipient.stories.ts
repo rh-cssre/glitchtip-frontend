@@ -6,13 +6,11 @@ import {
 import { MatDialogRef } from "@angular/material/dialog";
 import { provideRouter } from "@angular/router";
 import { provideHttpClient } from "@angular/common/http";
-import { importProvidersFrom } from "@angular/core";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
 
 import { NewRecipientComponent } from "./new-recipient.component";
 
 const meta: Meta<NewRecipientComponent> = {
+  title: "Project settings/Project alerts/New recipient",
   component: NewRecipientComponent,
   decorators: [
     applicationConfig({
@@ -20,7 +18,6 @@ const meta: Meta<NewRecipientComponent> = {
         { provide: MatDialogRef, useValue: {} },
         provideRouter([]),
         provideHttpClient(),
-        importProvidersFrom(MatSnackBarModule, MicroSentryModule.forRoot({})),
       ],
     }),
   ],

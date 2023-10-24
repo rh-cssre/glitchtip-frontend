@@ -2,10 +2,8 @@ import {
   Meta,
   StoryObj,
   applicationConfig,
-  moduleMetadata,
 } from "@storybook/angular";
 import { provideRouter } from "@angular/router";
-import { MatButtonModule } from "@angular/material/button";
 import { DetailHeaderComponent } from "./header.component";
 
 const meta: Meta<DetailHeaderComponent> = {
@@ -14,9 +12,6 @@ const meta: Meta<DetailHeaderComponent> = {
   decorators: [
     applicationConfig({
       providers: [provideRouter([])],
-    }),
-    moduleMetadata({
-      imports: [MatButtonModule],
     }),
   ],
   render: (args: DetailHeaderComponent) => ({

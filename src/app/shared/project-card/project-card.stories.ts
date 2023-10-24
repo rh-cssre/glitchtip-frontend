@@ -1,24 +1,10 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { moduleMetadata, Story } from "@storybook/angular";
+import { Story } from "@storybook/angular";
 
 import { ProjectCardComponent } from "../project-card/project-card.component";
 
 export default {
   title: "Shared/Project card",
   component: ProjectCardComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [
-        HttpClientTestingModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-      ],
-    }),
-  ],
   argTypes: {
     sampleCard: {
       options: [true, false],
