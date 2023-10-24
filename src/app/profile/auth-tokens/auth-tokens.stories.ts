@@ -1,26 +1,11 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata, Story } from "@storybook/angular";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { Story } from "@storybook/angular";
+
 import { of } from "rxjs";
-import { ProfileComponent } from "../profile.component";
 import { AuthTokensComponent } from "./auth-tokens.component";
 
 export default {
   title: "Profile/Auth Tokens",
   component: AuthTokensComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-      ],
-      declarations: [ProfileComponent],
-    }),
-  ],
   argTypes: {
     authTokens: {
       options: [true, false],

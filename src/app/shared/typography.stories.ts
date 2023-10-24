@@ -1,19 +1,5 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { moduleMetadata } from "@storybook/angular";
-
 export default {
   title: "Styles/General Styling",
-  decorators: [
-    moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-      ],
-    }),
-  ],
 };
 
 export const Typography = () => ({

@@ -16,6 +16,7 @@
     "../projects/**/*"
   ],
   "files": [
+    "./preview.ts",
     "./typings.d.ts"
   ]
 }

@@ -5,6 +5,7 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-actions",
     "@storybook/addon-a11y",
+    "@storybook/addon-themes",
   ],
   framework: {
     name: "@storybook/angular",
