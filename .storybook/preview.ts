@@ -9,7 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MicroSentryModule } from "@micro-sentry/angular";
+import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
 
 export const decorators = [
   withThemeByClassName({
@@ -29,3 +29,13 @@ export const decorators = [
     ],
   }),
 ];
+
+export const parameters = {
+  actions: { argTypesRegex: "^on[A-Z].*" },
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/,
+    },
+  },
+};

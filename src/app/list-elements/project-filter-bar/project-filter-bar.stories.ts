@@ -1,19 +1,11 @@
-// import { MatExpansionModule } from "@angular/material/expansion";
-import { applicationConfig } from "@storybook/angular";
 import { of } from "rxjs";
 
-import { standardProviders } from "src/app/storybook-constants";
 import { ProjectFilterBarComponent } from "./project-filter-bar.component";
 
 
 export default {
   title: "List elements/Project Filter Bar",
   component: ProjectFilterBarComponent,
-  decorators: [
-    applicationConfig({
-      providers: standardProviders,
-    })
-  ],
 };
 
 const sampleProjects: any = [
