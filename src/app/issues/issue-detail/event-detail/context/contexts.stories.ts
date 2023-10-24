@@ -1,18 +1,10 @@
-import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { ContextsComponent } from "./contexts.component";
 import { generateIconPath, iconDictionary } from "src/app/shared/shared.utils";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Contexts",
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule],
-      declarations: [],
-    }),
-  ],
 };
 
 export const Contexts = () => {

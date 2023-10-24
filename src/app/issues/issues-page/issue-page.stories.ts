@@ -1,10 +1,8 @@
 import { of } from "rxjs";
 import { IssuesPageComponent } from "./issues-page.component";
 import { issueList } from "./issues-test-data";
-import { basePage } from "src/app/storybook-constants";
 
 export default {
-  ...basePage,
   title: "Issues/Issues Page",
   component: IssuesPageComponent,
 };
