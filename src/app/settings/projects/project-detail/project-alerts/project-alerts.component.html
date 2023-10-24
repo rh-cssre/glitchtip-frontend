@@ -143,7 +143,12 @@
             {{ (removeAlertError$ | async)?.error }}
           </p>
           <div class="flex-common alert-header">
-            <h3>Alert {{ i + 1 }}</h3>
+            <ng-container *ngIf="alert.name else noAlertName">
+                <h3>{{ alert.name }}</h3>
+            </ng-container>
+            <ng-template #noAlertName>
+                <h3>Alert {{ i + 1 }}</h3>
+            </ng-template>
             <gt-loading-button
               [buttonText]="'Remove Alert ' + (i + 1)"
               buttonStyle="stroked"

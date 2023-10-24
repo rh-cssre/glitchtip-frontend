@@ -8,7 +8,7 @@ import { provideRouter } from "@angular/router";
 import { provideHttpClient } from "@angular/common/http";
 import { importProvidersFrom } from "@angular/core";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { MicroSentryModule } from "@micro-sentry/angular";
+import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
 
 import { NewRecipientComponent } from "./new-recipient.component";
 

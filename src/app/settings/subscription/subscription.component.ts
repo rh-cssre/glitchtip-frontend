@@ -24,6 +24,7 @@ interface Percentages {
 }
 
 @Component({
+  selector: "gt-subscription",
   templateUrl: "./subscription.component.html",
   styleUrls: ["./subscription.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,

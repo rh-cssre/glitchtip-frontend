@@ -96,9 +96,9 @@ export const Typography = () => ({
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-body-strong OR mat-body-2: Bolder body text.
+    mat-body-strong: Bolder body text.
     </p>
-    <p class="mat-body-strong mat-body-2">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-body-strong">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
