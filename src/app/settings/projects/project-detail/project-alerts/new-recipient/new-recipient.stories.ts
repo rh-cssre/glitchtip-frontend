@@ -5,7 +5,6 @@ import {
 } from "@storybook/angular";
 import { MatDialogRef } from "@angular/material/dialog";
 import { provideRouter } from "@angular/router";
-import { provideHttpClient } from "@angular/common/http";
 
 import { NewRecipientComponent } from "./new-recipient.component";
 
@@ -17,7 +16,6 @@ const meta: Meta<NewRecipientComponent> = {
       providers: [
         { provide: MatDialogRef, useValue: {} },
         provideRouter([]),
-        provideHttpClient(),
       ],
     }),
   ],
