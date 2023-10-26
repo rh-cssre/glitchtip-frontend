@@ -354,15 +354,15 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     this.service.toggleSelected(issueId);
   }
 
-  toggleSelectAll() {
-    this.service.toggleSelectAll();
+  toggleSelectAllOnPage() {
+    this.service.toggleSelectAllOnPage();
   }
 
-  bulkUpdateProject() {
+  selectAllResults() {
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(
         map(([params, queryParams]) => {
-          this.service.bulkUpdateIssuesForProject(
+          this.service.selectAllResults(
             params["org-slug"],
             queryParams.project,
             queryParams.query
@@ -372,8 +372,8 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  clearBulkProjectUpdate() {
-    this.service.clearProjectInfo();
+  clearSelectAllResults() {
+    this.service.cancelAllResultsSelection();
   }
 
   sortByChanged(event: MatSelectChange) {

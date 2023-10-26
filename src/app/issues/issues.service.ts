@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { combineLatest, Observable, EMPTY } from "rxjs";
+import { combineLatest, Observable, EMPTY, lastValueFrom } from "rxjs";
 import { tap, catchError, map, take, filter } from "rxjs/operators";
 import {
   Issue,
@@ -22,7 +22,6 @@ export interface IssuesState extends PaginationStatefulServiceState {
   directHit?: IssueWithMatchingEvent;
   selectedIssues: number[];
   selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
-  areIssuesForProjectSelected: boolean;
   errors: string[];
 }
 
@@ -31,7 +30,6 @@ const initialState: IssuesState = {
   selectedIssues: [],
   pagination: initialPaginationState,
   selectedProjectInfo: {},
-  areIssuesForProjectSelected: false,
   errors: [],
 };
 
@@ -84,100 +82,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     super(initialState);
   }
 
-  /** Refresh issues data. orgSlug is required. */
   getIssues(
-    orgSlug: string,
-    cursor: string | undefined | null,
-    query: string | null = "is:unresolved",
-    project: number[] | null,
-    start: string | undefined | null,
-    end: string | undefined | null,
-    sort: string | undefined | null,
-    environment: string | undefined | null
-  ) {
-    return this.retrieveIssues(
-      orgSlug,
-      cursor,
-      query,
-      project,
-      start,
-      end,
-      sort,
-      environment
-    );
-  }
-
-  toggleSelected(issueId: number) {
-    const state = this.state.getValue();
-    let selectedIssues: number[];
-    if (state.selectedIssues.includes(issueId)) {
-      selectedIssues = state.selectedIssues.filter(
-        (issue) => issue !== issueId
-      );
-    } else {
-      selectedIssues = state.selectedIssues.concat([issueId]);
-    }
-    this.state.next({ ...state, selectedIssues, directHit: undefined });
-  }
-
-  toggleSelectAll() {
-    const state = this.state.getValue();
-    if (state.issues.length === state.selectedIssues.length) {
-      this.state.next({
-        ...state,
-        directHit: undefined,
-        selectedIssues: [],
-      });
-      this.clearBulkProjectUpdate();
-    } else {
-      this.state.next({
-        ...state,
-        directHit: undefined,
-        selectedIssues: state.issues.map((issue) => issue.id),
-      });
-    }
-  }
-
-  /** Set one specified issue ID as status */
-  setStatus(id: number, status: IssueStatus) {
-    return this.updateStatus(status, [id]);
-  }
-
-  /** Set all selected issues to this status */
-  bulkSetStatus(status: IssueStatus) {
-    combineLatest([this.selectedIssues$, this.selectedProjectInfo$])
-      .pipe(
-        take(1),
-        map(([selectedIssues, selectedProjectInfo]) => {
-          return this.updateStatus(
-            status,
-            selectedIssues,
-            selectedProjectInfo.orgSlug,
-            selectedProjectInfo.projectId,
-            selectedProjectInfo.query
-          ).toPromise();
-        })
-      )
-      .subscribe();
-  }
-
-  bulkUpdateIssuesForProject(
-    orgSlug: string,
-    projectId: string,
-    query: string
-  ) {
-    this.setBulkUpdateIssuesForProject(orgSlug, projectId, query);
-  }
-
-  clearProjectInfo() {
-    this.clearBulkProjectUpdate();
-  }
-
-  /** Get issues from backend using appropriate endpoint based on organization */
-  private retrieveIssues(
     organizationSlug?: string,
     cursor?: string | null,
-    query?: string | null,
+    query: string | null = "is:unresolved",
     project?: number[] | null,
     start?: string | null,
     end?: string | null,
@@ -216,6 +124,66 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       );
   }
 
+  toggleSelected(issueId: number) {
+    lastValueFrom(
+      this.selectedIssues$.pipe(
+        take(1),
+        tap((selectedIssues) => {
+          let updatedSelection = [];
+          if (selectedIssues.includes(issueId)) {
+            updatedSelection = selectedIssues.filter(
+              (issue) => issue !== issueId
+            );
+          } else {
+            updatedSelection = selectedIssues.concat([issueId]);
+          }
+          this.setUpdateSelectedIssues(updatedSelection);
+        })
+      )
+    );
+  }
+
+  toggleSelectAllOnPage() {
+    lastValueFrom(
+      combineLatest([this.issues$, this.selectedIssues$]).pipe(
+        take(1),
+        tap(([issues, selectedIssues]) => {
+          if (issues.length === selectedIssues.length) {
+            this.setCancelAllOnPageSelection();
+          } else {
+            this.setSelectAllOnPage();
+          }
+        })
+      )
+    );
+  }
+
+  /** Set all selected issues to this status */
+  bulkSetStatus(status: IssueStatus) {
+    combineLatest([this.selectedIssues$, this.selectedProjectInfo$])
+      .pipe(
+        take(1),
+        map(([selectedIssues, selectedProjectInfo]) => {
+          return this.updateStatus(
+            status,
+            selectedIssues,
+            selectedProjectInfo.orgSlug,
+            selectedProjectInfo.projectId,
+            selectedProjectInfo.query
+          ).toPromise();
+        })
+      )
+      .subscribe();
+  }
+
+  selectAllResults(orgSlug: string, projectId: string, query: string) {
+    this.setAllResultsSelection(orgSlug, projectId, query);
+  }
+
+  cancelAllResultsSelection() {
+    this.setCancelAllResultsSelection();
+  }
+
   private updateStatus(
     status: IssueStatus,
     ids: number[],
@@ -227,8 +195,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       .update(status, ids, orgSlug, projectId, query)
       .pipe(
         tap((resp) => {
-          this.setIssueStatuses(ids, resp.status);
-          this.clearBulkProjectUpdate();
+          this.setUpdateStatusComplete(ids, resp.status);
         }),
         catchError((err: HttpErrorResponse) => {
           this.snackbar.open("Error, unable to update issue");
@@ -237,25 +204,43 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       );
   }
 
-  private clearBulkProjectUpdate() {
+  private setUpdateSelectedIssues(selectedIssues: number[]) {
+    this.setState({
+      selectedIssues,
+    });
+  }
+
+  private setSelectAllOnPage() {
     const state = this.state.getValue();
-    this.state.next({
-      ...state,
+    this.setState({
       directHit: undefined,
+      selectedIssues: state.issues.map((issue) => issue.id),
+    });
+  }
+
+  private setCancelAllOnPageSelection() {
+    this.setState({
+      directHit: undefined,
+      selectedIssues: [],
       selectedProjectInfo: {},
     });
   }
 
-  private setBulkUpdateIssuesForProject(
+  private setAllResultsSelection(
     orgSlug?: string,
     projectId?: string,
     query?: string
   ) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
+    this.setState({
       directHit: undefined,
       selectedProjectInfo: { orgSlug, projectId, query },
+    });
+  }
+
+  private setCancelAllResultsSelection() {
+    this.setState({
+      directHit: undefined,
+      selectedProjectInfo: {},
     });
   }
 
@@ -268,15 +253,15 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
-  private setIssueStatuses(issueIds: number[], status: IssueStatus) {
+  private setUpdateStatusComplete(issueIds: number[], status: IssueStatus) {
     const state = this.state.getValue();
-    this.state.next({
-      ...state,
+    this.setState({
       directHit: undefined,
       issues: state.issues.map((issue) =>
         issueIds.includes(issue.id) ? { ...issue, status } : issue
       ),
       selectedIssues: [],
+      selectedProjectInfo: {},
     });
   }
 

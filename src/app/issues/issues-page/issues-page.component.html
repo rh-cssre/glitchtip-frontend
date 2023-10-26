@@ -56,7 +56,7 @@
           [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
         >
           <mat-checkbox
-            (change)="toggleSelectAll()"
+            (change)="toggleSelectAllOnPage()"
             [checked]="(areAllSelected$ | async)!"
             [disabled]="issues.length === 0"
             id="selectAll"
@@ -191,7 +191,7 @@
                 id="bulkUpdateProject"
                 mat-stroked-button
                 color="primary"
-                (click)="bulkUpdateProject()"
+                (click)="selectAllResults()"
               >
                 <ng-container *ngIf="searchHits$ | async as searchHits"
                   >Select all {{ searchHits }} issues that match this
@@ -206,7 +206,7 @@
               <button
                 mat-stroked-button
                 color="primary"
-                (click)="clearBulkProjectUpdate()"
+                (click)="clearSelectAllResults()"
               >
                 Undo
               </button></ng-template
