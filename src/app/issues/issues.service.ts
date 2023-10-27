@@ -21,7 +21,7 @@ export interface IssuesState extends PaginationStatefulServiceState {
   issues: Issue[];
   directHit?: IssueWithMatchingEvent;
   selectedIssues: number[];
-  selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
+  allResultsSelected: boolean;
   errors: string[];
 }
 
@@ -29,7 +29,7 @@ const initialState: IssuesState = {
   issues: [],
   selectedIssues: [],
   pagination: initialPaginationState,
-  selectedProjectInfo: {},
+  allResultsSelected: false,
   errors: [],
 };
 
@@ -70,8 +70,8 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   readonly numberOfSelectedIssues$ = this.getState$.pipe(
     map((state) => state.selectedIssues.length)
   );
-  readonly selectedProjectInfo$ = this.getState$.pipe(
-    map((state) => state.selectedProjectInfo)
+  readonly allResultsSelected$ = this.getState$.pipe(
+    map((state) => state.allResultsSelected)
   );
   readonly errors$ = this.getState$.pipe(map((state) => state.errors));
 
@@ -124,7 +124,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
       );
   }
 
-  toggleSelected(issueId: number) {
+  toggleSelectOne(issueId: number) {
     lastValueFrom(
       this.selectedIssues$.pipe(
         take(1),
@@ -158,55 +158,63 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     );
   }
 
-  /** Set all selected issues to this status */
-  bulkSetStatus(status: IssueStatus) {
-    combineLatest([this.selectedIssues$, this.selectedProjectInfo$])
-      .pipe(
-        take(1),
-        map(([selectedIssues, selectedProjectInfo]) => {
-          return this.updateStatus(
-            status,
-            selectedIssues,
-            selectedProjectInfo.orgSlug,
-            selectedProjectInfo.projectId,
-            selectedProjectInfo.query
-          ).toPromise();
-        })
-      )
-      .subscribe();
-  }
-
-  selectAllResults(orgSlug: string, projectId: string, query: string) {
-    this.setAllResultsSelection(orgSlug, projectId, query);
+  selectAllResults() {
+    this.setAllResultsSelected();
   }
 
   cancelAllResultsSelection() {
     this.setCancelAllResultsSelection();
   }
 
-  private updateStatus(
-    status: IssueStatus,
-    ids: number[],
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
-  ) {
-    return this.issuesAPIService
-      .update(status, ids, orgSlug, projectId, query)
-      .pipe(
-        tap((resp) => {
-          this.setUpdateStatusComplete(ids, resp.status);
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.snackbar.open("Error, unable to update issue");
-          return EMPTY;
+  updateStatusByIssueId(status: IssueStatus) {
+    lastValueFrom(
+      this.selectedIssues$.pipe(
+        take(1),
+        tap((issues) => {
+          lastValueFrom(
+            this.issuesAPIService.update(status, issues).pipe(
+              tap((resp) => {
+                this.setUpdateStatusByIssueIdComplete(issues, resp.status);
+              }),
+              catchError((err: HttpErrorResponse) => {
+                this.snackbar.open("Error, unable to update issue");
+                return EMPTY;
+              })
+            )
+          );
         })
-      );
+      )
+    );
+  }
+
+  bulkUpdateStatus(
+    status: IssueStatus,
+    orgSlug: string,
+    projectIds: number[],
+    query?: string | null,
+    start?: string | null,
+    end?: string | null,
+    environment?: string | null
+  ) {
+    lastValueFrom(
+      this.issuesAPIService
+        .bulkUpdate(status, orgSlug, projectIds, query, start, end, environment)
+        .pipe(
+          tap((resp) => {
+            this.setBulkUpdateComplete(resp.status)
+          }),
+          catchError((err: HttpErrorResponse) => {
+            this.snackbar.open("Error, unable to update issue");
+            return EMPTY;
+          })
+        )
+    );
   }
 
   private setUpdateSelectedIssues(selectedIssues: number[]) {
     this.setState({
       selectedIssues,
+      allResultsSelected: false,
     });
   }
 
@@ -222,25 +230,21 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     this.setState({
       directHit: undefined,
       selectedIssues: [],
-      selectedProjectInfo: {},
+      allResultsSelected: false,
     });
   }
 
-  private setAllResultsSelection(
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
-  ) {
+  private setAllResultsSelected() {
     this.setState({
       directHit: undefined,
-      selectedProjectInfo: { orgSlug, projectId, query },
+      allResultsSelected: true,
     });
   }
 
   private setCancelAllResultsSelection() {
     this.setState({
       directHit: undefined,
-      selectedProjectInfo: {},
+      allResultsSelected: false,
     });
   }
 
@@ -253,7 +257,10 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     });
   }
 
-  private setUpdateStatusComplete(issueIds: number[], status: IssueStatus) {
+  private setUpdateStatusByIssueIdComplete(
+    issueIds: number[],
+    status: IssueStatus
+  ) {
     const state = this.state.getValue();
     this.setState({
       directHit: undefined,
@@ -261,7 +268,18 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         issueIds.includes(issue.id) ? { ...issue, status } : issue
       ),
       selectedIssues: [],
-      selectedProjectInfo: {},
+    });
+  }
+
+  private setBulkUpdateComplete(status: IssueStatus) {
+    const state = this.state.getValue();
+    this.setState({
+      directHit: undefined,
+      issues: state.issues.map((issue) => {
+        return { ...issue, status };
+      }),
+      selectedIssues: [],
+      allResultsSelected: false,
     });
   }
 
