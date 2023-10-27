@@ -201,7 +201,7 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
         .bulkUpdate(status, orgSlug, projectIds, query, start, end, environment)
         .pipe(
           tap((resp) => {
-            this.setBulkUpdateComplete(resp.status)
+            this.setBulkUpdateComplete(resp.status);
           }),
           catchError((err: HttpErrorResponse) => {
             this.snackbar.open("Error, unable to update issue");
@@ -221,14 +221,12 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   private setSelectAllOnPage() {
     const state = this.state.getValue();
     this.setState({
-      directHit: undefined,
       selectedIssues: state.issues.map((issue) => issue.id),
     });
   }
 
   private setCancelAllOnPageSelection() {
     this.setState({
-      directHit: undefined,
       selectedIssues: [],
       allResultsSelected: false,
     });
@@ -236,14 +234,12 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
 
   private setAllResultsSelected() {
     this.setState({
-      directHit: undefined,
       allResultsSelected: true,
     });
   }
 
   private setCancelAllResultsSelection() {
     this.setState({
-      directHit: undefined,
       allResultsSelected: false,
     });
   }
@@ -252,6 +248,8 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
     const state = this.state.getValue();
     this.setState({
       directHit: undefined,
+      selectedIssues: [],
+      allResultsSelected: false,
       errors: [],
       pagination: { ...state.pagination, loading: true },
     });
@@ -263,7 +261,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   ) {
     const state = this.state.getValue();
     this.setState({
-      directHit: undefined,
       issues: state.issues.map((issue) =>
         issueIds.includes(issue.id) ? { ...issue, status } : issue
       ),
@@ -274,7 +271,6 @@ export class IssuesService extends PaginationStatefulService<IssuesState> {
   private setBulkUpdateComplete(status: IssueStatus) {
     const state = this.state.getValue();
     this.setState({
-      directHit: undefined,
       issues: state.issues.map((issue) => {
         return { ...issue, status };
       }),
