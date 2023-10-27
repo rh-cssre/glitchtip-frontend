@@ -116,10 +116,10 @@ export interface Paginator extends PaginationState {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   nextPageParams: {
-    [key: string]: string;
+    [key: string]: string[];
   } | null;
   previousPageParams: {
-    [key: string]: string;
+    [key: string]: string[];
   } | null;
   /** Human readable object count string that appends "+" to indicate max hits */
   count: string | undefined;
