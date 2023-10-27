@@ -3,9 +3,9 @@ import { map } from "rxjs/operators";
 import { StatefulService } from "./stateful-service";
 
 export function paramsToObject(entries: URLSearchParams) {
-  const result: { [key: string]: string } = {};
+  const result: { [key: string]: string[] } = {};
   entries.forEach((value, key) => {
-    result[key] = value;
+    result[key] ? result[key].push(value) : (result[key] = [value]);
   });
   return result;
 }
