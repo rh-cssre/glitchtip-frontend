@@ -180,7 +180,7 @@
           <ng-container *ngIf="(showBulkSelectProject$ | async) === true">
             <ng-container
               *ngIf="
-                !(allResultsSelected$ | async);
+                (allResultsSelected$ | async) === false;
                 else deselect
               "
               ><span class="bulk-project-select__text"

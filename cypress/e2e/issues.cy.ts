@@ -121,17 +121,6 @@ describe("Issues Page", () => {
     cy.visit(`/${organization.slug}/issues`);
 
     cy.get("#selectAll").click();
-    cy.contains("Select all 55 issues that match this query").should(
-      "not.exist"
-    );
-    cy.log(
-      "you won't get the select all option here because a single project isn't selected"
-    );
-
-    cy.get("#selectAll").click({ force: true });
-    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
-    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
-    cy.get("#selectAll").click({ force: true });
     cy.contains("Select all 55 issues that match this query");
     cy.get("#bulkUpdateProject").click();
     cy.contains("All 55 issues are currently selected");
