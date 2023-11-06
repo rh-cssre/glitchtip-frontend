@@ -5,18 +5,10 @@ import {
   Organization,
   OrganizationDetail,
   OrganizationNew,
-  OrganizationProject,
 } from "./organizations.interface";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
-
-interface APIOrganizationProject extends Omit<OrganizationProject, "id"> {
-  id: string;
-}
-
-interface APIOrganizationDetail extends Omit<OrganizationDetail, "projects"> {
-  projects: APIOrganizationProject[];
-}
+import { normalizeID } from "../shared-api.utils";
 
 @Injectable({
   providedIn: "root",
@@ -32,26 +24,22 @@ export class OrganizationAPIService extends APIBaseService {
   }
 
   retrieve(id: string) {
-    return this.http.get<APIOrganizationDetail>(this.detailURL(id)).pipe(
-      map((apiOrgDetail) => {
-        const projects = apiOrgDetail.projects.map((project) => ({
-          ...project,
-          id: parseInt(project.id, 10),
-        }));
-        return {
-          ...apiOrgDetail,
-          projects,
-        } as OrganizationDetail;
+    return this.http.get<OrganizationDetail>(this.detailURL(id)).pipe(
+      map((orgDetail) => {
+        orgDetail.projects.map((project) => {
+          project.id = normalizeID(project.id);
+        });
+        return orgDetail;
       })
     );
   }
 
   create(obj: OrganizationNew) {
-    return this.http.post<OrganizationDetail>(this.url, obj);
+    return this.http.post<Organization>(this.url, obj);
   }
 
   update(id: string, obj: OrganizationNew) {
-    return this.http.put<OrganizationDetail>(this.detailURL(id), obj);
+    return this.http.put<Organization>(this.detailURL(id), obj);
   }
 
   destroy(id: string) {
