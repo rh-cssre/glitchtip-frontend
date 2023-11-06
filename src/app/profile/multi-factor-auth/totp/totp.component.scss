@@ -1,31 +1,35 @@
 mat-card {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
-    mat-card-content {
-        padding-top: 16px;
-    }
+  mat-card-content {
+    padding-top: 16px;
+  }
+}
+
+mat-card-title {
+  margin-bottom: 8px;
 }
 
 mat-form-field {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 :host ::ng-deep .mat-body-strong {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
-:host ::ng-deep .mat-flat-button {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    margin-right: 10px;
+button {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 #canvas {
-    margin-left: -13px;
-    margin-top: -13px;
+  margin-left: -13px;
+  margin-top: -13px;
 }
 
 .totp-string {
-    word-break: break-word;
+  word-break: break-word;
 }

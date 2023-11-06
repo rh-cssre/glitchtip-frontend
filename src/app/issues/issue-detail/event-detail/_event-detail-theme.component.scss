@@ -1,0 +1,22 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $foreground: map.get($theme, foreground);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-event-detail {
+    .pseudo-chip {
+      border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 500);
+      background-color: mat.get-color-from-palette($foreground);
+
+      &:hover {
+        background: if(
+          $is-dark-theme,
+          mat.get-color-from-palette(mat.$gray-palette, 800),
+          mat.get-color-from-palette(mat.$gray-palette, 100)
+        );
+      }
+    }
+  }
+}
