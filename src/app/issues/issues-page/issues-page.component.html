@@ -56,7 +56,7 @@
           [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
         >
           <mat-checkbox
-            (change)="toggleSelectAll()"
+            (change)="toggleSelectAllOnPage()"
             [checked]="(areAllSelected$ | async)!"
             [disabled]="issues.length === 0"
             id="selectAll"
@@ -90,21 +90,21 @@
               id="bulkMarkResolved"
               mat-flat-button
               color="primary"
-              (click)="bulkMarkResolved()"
+              (click)="updateStatus('resolved')"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
               i18n
               >Mark as resolved</button
             >
             <button
               mat-stroked-button
-              (click)="bulkMarkUnresolved()"
+              (click)="updateStatus('unresolved')"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
               i18n
               >Reopen</button
             >
             <button
               mat-stroked-button
-              (click)="bulkMarkIgnored()"
+              (click)="updateStatus('ignored')"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
               i18n
               >Ignore</button
@@ -180,7 +180,7 @@
           <ng-container *ngIf="(showBulkSelectProject$ | async) === true">
             <ng-container
               *ngIf="
-                (selectedProjectInfo$ | async | json) === '{}';
+                (allResultsSelected$ | async) === false;
                 else deselect
               "
               ><span class="bulk-project-select__text"
@@ -191,7 +191,7 @@
                 id="bulkUpdateProject"
                 mat-stroked-button
                 color="primary"
-                (click)="bulkUpdateProject()"
+                (click)="selectAllResults()"
               >
                 <ng-container *ngIf="searchHits$ | async as searchHits"
                   >Select all {{ searchHits }} issues that match this
@@ -206,7 +206,7 @@
               <button
                 mat-stroked-button
                 color="primary"
-                (click)="clearBulkProjectUpdate()"
+                (click)="clearSelectAllResults()"
               >
                 Undo
               </button></ng-template

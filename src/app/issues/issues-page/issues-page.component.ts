@@ -9,16 +9,17 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { combineLatest, EMPTY } from "rxjs";
+import { combineLatest, EMPTY, lastValueFrom } from "rxjs";
 import {
   map,
   filter,
+  take,
   tap,
   switchMap,
   distinctUntilChanged,
 } from "rxjs/operators";
 import { IssuesService } from "../issues.service";
-import { Issue } from "../interfaces";
+import { Issue, IssueStatus } from "../interfaces";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
@@ -83,7 +84,7 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   issues$ = this.service.issuesWithSelected$;
   areAllSelected$ = this.service.areAllSelected$;
   thereAreSelectedIssues$ = this.service.thereAreSelectedIssues$;
-  selectedProjectInfo$ = this.service.selectedProjectInfo$;
+  allResultsSelected$ = this.service.allResultsSelected$;
   numberOfSelectedIssues$ = this.service.numberOfSelectedIssues$;
   activeOrganizationProjects$ =
     this.organizationsService.activeOrganizationProjects$;
@@ -105,6 +106,26 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     { param: "priority", display: "Lowest Priority" },
   ];
 
+  currentQueryParams$ = combineLatest([
+    this.orgSlug$,
+    this.route.queryParamMap,
+  ]).pipe(
+    map(([orgSlug, params]) => {
+      let query = params.get("query");
+      let project = normalizeProjectParams(params.getAll("project"));
+      return {
+        orgSlug,
+        cursor: params.get("cursor"),
+        query: typeof query === "string" ? query : undefined,
+        project,
+        start: params.get("start"),
+        end: params.get("end"),
+        sort: params.get("sort"),
+        environment: params.get("environment"),
+      };
+    })
+  );
+
   projectsFromParams$ = this.route.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
   );
@@ -123,26 +144,18 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
   );
 
   showBulkSelectProject$ = combineLatest([
-    this.appliedProjectCount$,
     this.areAllSelected$,
     this.numberOfSelectedIssues$,
     this.searchHits$,
   ]).pipe(
-    map(
-      ([
-        appliedProjectCount,
-        areAllSelected,
-        numberOfSelectIssues,
-        searchHits,
-      ]) => {
-        const hits = searchHits && numberOfSelectIssues < searchHits;
-        if (appliedProjectCount === 1 && areAllSelected && hits) {
-          return true;
-        } else {
-          return false;
-        }
+    map(([areAllSelected, numberOfSelectIssues, searchHits]) => {
+      const hits = searchHits && numberOfSelectIssues < searchHits;
+      if (areAllSelected && hits) {
+        return true;
+      } else {
+        return false;
       }
-    )
+    })
   );
 
   organizationEnvironments$ = combineLatest([
@@ -174,21 +187,19 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
         : this.environmentForm.controls.environment.enable()
     );
 
-    combineLatest([this.orgSlug$, this.route.queryParamMap])
+    this.currentQueryParams$
       .pipe(
-        switchMap(([orgSlug, params]) => {
-          let query = params.get("query");
-          let project = normalizeProjectParams(params.getAll("project"));
-          if (orgSlug) {
+        switchMap((params) => {
+          if (params.orgSlug) {
             return this.service.getIssues(
-              orgSlug,
-              params.get("cursor"),
-              typeof query === "string" ? query : undefined,
-              project,
-              params.get("start"),
-              params.get("end"),
-              params.get("sort"),
-              params.get("environment")
+              params.orgSlug,
+              params.cursor,
+              params.query,
+              params.project,
+              params.start,
+              params.end,
+              params.sort,
+              params.environment
             );
           }
           return EMPTY;
@@ -338,42 +349,45 @@ export class IssuesPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  bulkMarkResolved() {
-    this.service.bulkSetStatus("resolved");
-  }
-
-  bulkMarkUnresolved() {
-    this.service.bulkSetStatus("unresolved");
-  }
-
-  bulkMarkIgnored() {
-    this.service.bulkSetStatus("ignored");
+  updateStatus(status: IssueStatus) {
+    lastValueFrom(
+      combineLatest([this.allResultsSelected$, this.currentQueryParams$]).pipe(
+        take(1),
+        tap(([allResultsSelected, params]) => {
+          if (allResultsSelected) {
+            if (params.orgSlug) {
+              this.service.bulkUpdateStatus(
+                status,
+                params.orgSlug,
+                params.project,
+                params.query,
+                params.start,
+                params.end,
+                params.environment
+              );
+            }
+          } else {
+            this.service.updateStatusByIssueId(status);
+          }
+        })
+      )
+    );
   }
 
   toggleCheck(issueId: number) {
-    this.service.toggleSelected(issueId);
+    this.service.toggleSelectOne(issueId);
   }
 
-  toggleSelectAll() {
-    this.service.toggleSelectAll();
+  toggleSelectAllOnPage() {
+    this.service.toggleSelectAllOnPage();
   }
 
-  bulkUpdateProject() {
-    combineLatest([this.route.params, this.route.queryParams])
-      .pipe(
-        map(([params, queryParams]) => {
-          this.service.bulkUpdateIssuesForProject(
-            params["org-slug"],
-            queryParams.project,
-            queryParams.query
-          );
-        })
-      )
-      .subscribe();
+  selectAllResults() {
+    this.service.selectAllResults();
   }
 
-  clearBulkProjectUpdate() {
-    this.service.clearProjectInfo();
+  clearSelectAllResults() {
+    this.service.cancelAllResultsSelection();
   }
 
   sortByChanged(event: MatSelectChange) {

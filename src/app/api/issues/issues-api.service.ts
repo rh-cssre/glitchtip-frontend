@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Params } from "@angular/router";
 import { map } from "rxjs";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
@@ -84,36 +83,46 @@ export class IssuesAPIService extends APIBaseService {
     );
   }
 
-  update(
-    status: IssueStatus,
-    ids: number[],
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
-  ) {
-    let params: Params;
-    let updateUrl = `${baseUrl}/organizations/${orgSlug}/issues/`;
-
-    if (orgSlug && projectId && query) {
-      params = {
-        project: projectId,
-        query,
-      };
-    } else if (orgSlug && projectId) {
-      params = {
-        project: projectId,
-      };
-    } else {
-      updateUrl = this.url;
-      params = {
-        id: ids.map((id) => id.toString()),
-      };
-    }
+  update(status: IssueStatus, ids: number[]) {
+    let params = new HttpParams();
+    ids.forEach((id) => {
+      params = params.append("id", id);
+    });
     return this.http.put<UpdateStatusResponse>(
-      updateUrl,
+      this.url,
       { status },
       { params }
     );
+  }
+
+  bulkUpdate(
+    status: IssueStatus,
+    orgSlug: string,
+    projectIds: number[],
+    query?: string | null,
+    start?: string | null,
+    end?: string | null,
+    environment?: string | null
+  ) {
+    let url = `${baseUrl}/organizations/${orgSlug}/issues/`;
+    let params = new HttpParams();
+
+    projectIds.forEach((id) => {
+      params = params.append("project", id);
+    });
+    if (query) {
+      params = params.append("query", query);
+    }
+    if (start) {
+      params = params.set("start", start);
+    }
+    if (end) {
+      params = params.set("end", end);
+    }
+    if (environment) {
+      params = params.set("environment", environment);
+    }
+    return this.http.put<UpdateStatusResponse>(url, { status }, { params });
   }
 
   destroy(id: string) {
