@@ -144,10 +144,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "glitchtip-frontend:build:production"
+              "buildTarget": "glitchtip-frontend:build:production"
             },
             "development": {
-              "browserTarget": "glitchtip-frontend:build:development"
+              "buildTarget": "glitchtip-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
