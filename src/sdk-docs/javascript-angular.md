@@ -1,24 +1,24 @@
-For most use cases, GlitchTip recommends using [@micro-sentry/angular](https://github.com/Tinkoff/micro-sentry). Users who need performance data need to use `@sentry/angular`.
+GlitchTip recommends using [@glitchtip/micro-sentry-angular](https://gitlab.com/glitchtip/micro-sentry). Alternatively, users who need performance data need to use `@sentry/angular-ivy`.
 
 # @micro-sentry
 
 @micro-sentry features a very small bundle size and is easy to configure.
 
-Install `@micro-sentry/angular`:
+Install `@glitchtip/micro-sentry-angular`:
 
 ```bash
-$ npm install --save @micro-sentry/angular
+$ npm install --save @glitchtip/micro-sentry-angular
 ```
 
 In `app.module.ts` add MicroSentryModule with your GlitchTip DSN.
 
 ```javascript
-import { MicroSentryModule } from '@micro-sentry/angular';
+import { MicroSentryModule } from '@glitchtip/micro-sentry-angular';
 
 @NgModule({
   imports: [
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR-GLITCHTIP-DSN-HERE",
     }),
   ],
 })
@@ -34,29 +34,29 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 
 ```javascript
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR-GLITCHTIP-DSN-HERE",
       environment: "production",
       release: "1.0.0"
     }),
 ```
 
-# @sentry/angular
+# @sentry/angular-ivy
 
-@sentry/angular has more features including performance tracking. The package adds [25 KB](https://bundlephobia.com/result?p=@sentry/angular) to your JS bundle size.
+@sentry/angular-ivy has more features including performance tracking. The package adds up to [277 KB](https://bundlephobia.com/result?p=@sentry/angular-ivy) to your JS bundle size.
 
-Install `@sentry/angular`:
+Install `@sentry/angular-ivy`:
 
 ```bash
-$ npm install --save @sentry/angular
+$ npm install --save @sentry/angular-ivy
 ```
 
 For best results, add this snippet to your main.ts. If you need to set the DSN dynamically, you may set this elsewhere as well.
 
 ```javascript
-import * as Sentry from "@sentry/browser";
+import { init } from "@sentry/angular-ivy";
 
-Sentry.init({
-  dsn: "your GlitchTip DSN here",
+init({
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   autoSessionTracking: false,
 });
 ```
@@ -66,10 +66,10 @@ Sentry.init({
 A more robust configuration example:
 
 ```javascript
-import * as Sentry from "@sentry/browser";
+import { init } from '@sentry/angular-ivy';
 
-Sentry.init({
-  dsn: "your GlitchTip DSN here",
+.init({
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   environment: "production",
   release: "1.0.0",
   autoSessionTracking: false,

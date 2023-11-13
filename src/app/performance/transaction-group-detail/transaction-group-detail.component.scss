@@ -4,23 +4,6 @@
   text-align: left;
 }
 
-.transaction-groups-link {
-  margin: 0 0 20px;
-}
-
-header {
-  margin: -16px 0 5px;
-
-  @media screen and (max-width: $tablet - 1) {
-    margin-bottom: 20px;
-  }
-
-  .header-group {
-    justify-content: space-between;
-    word-break: break-all;
-  }
-}
-
 .row {
   display: flex;
   align-items: flex-start;

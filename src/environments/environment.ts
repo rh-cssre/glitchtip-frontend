@@ -5,7 +5,6 @@
 export const environment = {
   production: false,
   billingEmail: "sales@glitchtip.com",
-  loginForm: false,
 };
 
 /*
