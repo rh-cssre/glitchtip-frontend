@@ -1,31 +1,10 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata, Story } from "@storybook/angular";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ProfileComponent } from "./profile.component";
-import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
-import { UserService } from "../api/user/user.service";
-import { SharedModule } from "../shared/shared.module";
+import { Story } from "@storybook/angular";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { of } from "rxjs";
 
 export default {
   title: "Profile/Profile",
   component: ChangePasswordComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
-      providers: [GlitchTipOAuthService, UserService],
-      declarations: [ProfileComponent, ChangePasswordComponent],
-    }),
-  ],
   argTypes: {
     loading: {
       options: [true, false],
