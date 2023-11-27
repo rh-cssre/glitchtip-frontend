@@ -9,7 +9,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MicroSentryModule } from "@glitchtip/micro-sentry-angular";
+import { MicroSentryModule } from "@micro-sentry/angular";
 
 export const decorators = [
   withThemeByClassName({

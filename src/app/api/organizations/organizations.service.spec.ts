@@ -5,10 +5,7 @@ import {
 import { OrganizationsService } from "./organizations.service";
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import {
-  MICRO_SENTRY_CONFIG,
-  MicroSentryService,
-} from "@glitchtip/micro-sentry-angular";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { Organization } from "./organizations.interface";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { organizationList } from "./organization-test-data";

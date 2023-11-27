@@ -1,8 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import {
-  MICRO_SENTRY_CONFIG,
-  MicroSentryService,
-} from "@glitchtip/micro-sentry-angular";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 
 import { ProjectAlertsService } from "./project-alerts.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";

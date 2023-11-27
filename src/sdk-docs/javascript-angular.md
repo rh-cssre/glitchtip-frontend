@@ -1,19 +1,19 @@
-GlitchTip recommends using [@glitchtip/micro-sentry-angular](https://gitlab.com/glitchtip/micro-sentry). Alternatively, users who need performance data need to use `@sentry/angular-ivy`.
+GlitchTip recommends using [@micro-sentry/angular](https://gitlab.com/glitchtip/micro-sentry). Alternatively, users who need performance data need to use `@sentry/angular-ivy`.
 
 # @micro-sentry
 
 @micro-sentry features a very small bundle size and is easy to configure.
 
-Install `@glitchtip/micro-sentry-angular`:
+Install `@micro-sentry/angular`:
 
 ```bash
-$ npm install --save @glitchtip/micro-sentry-angular
+$ npm install --save @micro-sentry/angular
 ```
 
 In `app.module.ts` add MicroSentryModule with your GlitchTip DSN.
 
 ```javascript
-import { MicroSentryModule } from '@glitchtip/micro-sentry-angular';
+import { MicroSentryModule } from '@micro-sentry/angular';
 
 @NgModule({
   imports: [

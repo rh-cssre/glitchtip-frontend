@@ -5,10 +5,7 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import {
-  MICRO_SENTRY_CONFIG,
-  MicroSentryService,
-} from "@glitchtip/micro-sentry-angular";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 
 import { MonitorService } from "./monitor.service";
 
