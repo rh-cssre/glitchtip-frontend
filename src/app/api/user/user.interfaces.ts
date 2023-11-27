@@ -1,9 +1,8 @@
-import { OAuthProvider } from "../oauth/oauth.interfaces";
 import { Avatar } from "../organizations/organizations.interface";
 
 export interface SocialAccount {
   id: number;
-  provider: OAuthProvider;
+  provider: string;
   uid: string;
   last_login: string;
   date_joined: string;
@@ -12,7 +11,7 @@ export interface SocialAccount {
 }
 
 export interface SocialApp {
-  provider: OAuthProvider;
+  provider: string;
   name: string;
   client_id: string;
   authorize_url: string;
@@ -28,6 +27,7 @@ export interface User {
   lastActive: string;
   identities: SocialAccount[];
   id: string;
+  chatwootIdentifierHash: string | null;
   isActive: boolean;
   has2fa: boolean;
   canReset2fa: boolean;
@@ -49,9 +49,10 @@ interface Email {
   email: string;
 }
 
-interface UserOptions {
+export interface UserOptions {
   timezone?: string;
   stacktraceOrder?: number;
   language?: string;
   clock24Hours?: boolean;
+  preferredTheme?: string;
 }
