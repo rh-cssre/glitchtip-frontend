@@ -14,7 +14,7 @@ Add `use Raven::Rack` to your `config.ru` or other rackup file (this is automati
 require 'raven'
 
 Raven.configure do |config|
-  config.dsn = 'your DSN here'
+  config.dsn = 'YOUR-GLITCHTIP-DSN-HERE'
 end
 
 use Raven::Rack
