@@ -44,6 +44,7 @@ export class NewRecipientComponent implements OnInit {
     { viewValue: "Email", value: "email" },
     { viewValue: "General (slack-compatible) Webhook", value: "webhook" },
     { viewValue: "Discord", value: "discord" },
+    { viewValue: "Google Chat", value: "googlechat" },
   ];
 
   recipientForm = new UntypedFormGroup({
@@ -77,6 +78,11 @@ export class NewRecipientComponent implements OnInit {
         this.url.setValue("");
       } else if (type == "discord") {
         this.url.setValue("");
+      } else if (type == "googlechat") {
+        this.url.setValue("https://chat.googleapis.com/v1/spaces/");
+        this.url.setValidators([
+          Validators.required,
+        ]);
       }
       this.url.updateValueAndValidity();
     });

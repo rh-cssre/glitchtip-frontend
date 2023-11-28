@@ -62,7 +62,8 @@
               <ng-container
                 *ngIf="
                   recipient.recipientType === 'webhook' ||
-                  recipient.recipientType === 'discord'
+                  recipient.recipientType === 'discord' ||
+                  recipient.recipientType === 'googlechat'
                 "
               >
                 <div class="svg-box">
@@ -70,6 +71,10 @@
                     <use
                       xlink:href="#discord"
                       *ngIf="recipient.recipientType === 'discord'"
+                    ></use>
+                    <use
+                      xlink:href="#googlechat"
+                      *ngIf="recipient.recipientType === 'googlechat'"
                     ></use>
                     <use
                       xlink:href="#webhook"
@@ -205,7 +210,8 @@
                 <ng-container
                   *ngIf="
                     recipient.recipientType === 'webhook' ||
-                    recipient.recipientType === 'discord'
+                    recipient.recipientType === 'discord' ||
+                    recipient.recipientType === 'googlechat'
                   "
                 >
                   <div class="svg-box">
@@ -213,6 +219,10 @@
                       <use
                         xlink:href="#discord"
                         *ngIf="recipient.recipientType === 'discord'"
+                      ></use>
+                      <use
+                        xlink:href="#googlechat"
+                        *ngIf="recipient.recipientType === 'googlechat'"
                       ></use>
                       <use
                         xlink:href="#webhook"

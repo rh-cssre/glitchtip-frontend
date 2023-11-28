@@ -30,7 +30,7 @@
         <mat-form-field
           class="webhook"
           *ngSwitchCase="
-            ['discord', 'webhook'].includes(recipientType.value)
+            ['discord', 'googlechat', 'webhook'].includes(recipientType.value)
               ? recipientType.value
               : null
           "
@@ -41,6 +41,10 @@
             <use
               xlink:href="#discord"
               *ngIf="recipientType.value === 'discord'"
+            ></use>
+            <use
+              xlink:href="#googlechat"
+              *ngIf="recipientType.value === 'googlechat'"
             ></use>
             <use
               xlink:href="#webhook"
