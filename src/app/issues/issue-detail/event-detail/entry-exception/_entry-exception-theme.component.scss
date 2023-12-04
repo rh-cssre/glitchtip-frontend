@@ -1,0 +1,17 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-entry-exception {
+    .highlighted {
+      background: if(
+        $is-dark-theme,
+        mat.get-color-from-palette(mat.$gray-palette, 800),
+        mat.get-color-from-palette(mat.$gray-palette, 100)
+      );
+    }
+  }
+}

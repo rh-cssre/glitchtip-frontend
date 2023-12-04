@@ -1,4 +1,4 @@
-import { moduleMetadata, Story } from "@storybook/angular";
+import { Story } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { EntryRequestComponent } from "./entry-request.component";
@@ -12,16 +12,10 @@ import { stringError } from "../test-data/string-error";
 import { cspError } from "../test-data/csp-error";
 import { pageNotFound } from "../test-data/page-not-found";
 import { socialApp } from "../test-data/social-app";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Entry Request",
   component: EntryRequestComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule],
-    }),
-  ],
   argTypes: {
     errorOptions: {
       options: [
