@@ -1,4 +1,4 @@
-GlitchTip recommends using [@micro-sentry/angular](https://gitlab.com/glitchtip/micro-sentry). Alternatively, users who need performance data need to use `@sentry/angular-ivy`.
+GlitchTip recommends using [@micro-sentry/angular](https://github.com/taiga-family/micro-sentry). Alternatively, users who need performance data need to use `@sentry/angular-ivy`.
 
 # @micro-sentry
 
