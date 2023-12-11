@@ -13,7 +13,7 @@ export class MonitorsAPIService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug: string, cursor?: string) {
+  list(organizationSlug: string, cursor?: string | null) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);

@@ -1,4 +1,3 @@
-@use '@angular/material' as mat;
 @import "variables";
 
 $iconWidth: 56px;
@@ -29,11 +28,20 @@ table {
         margin-right: 5px;
       }
     }
+
+    @media screen and (max-width: $small - 1) {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    margin: -4px 0;
   }
 }
 
 .table-header {
-  padding: 20px 0 8px;
+  padding: 20px 24px 8px;
 }
 
 .bulk-project-select {
@@ -46,23 +54,20 @@ table {
 
   &__inner {
     text-align: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 50);
     padding-top: 8px;
     padding-bottom: 8px;
 
     button {
-      margin-left: 8px;
-      margin-right: 8px;
+      margin: 8px;
     }
   }
 
   &__text {
     margin-left: 8px;
     margin-right: 8px;
+    font-family: $font-sans-serif;
     font-size: 14px;
     font-weight: 500;
-    color: mat.get-color-from-palette(mat.$gray-palette, 800);
   }
 }
 
@@ -74,15 +79,23 @@ table {
   padding-bottom: 10px;
 }
 
+.mat-column-select {
+  padding-left: 14px;
+  padding-right: 0;
+}
+
+.mat-column-events {
+  padding-right: 24px;
+}
+
+.zero-states-cell {
+  padding: 0 24px;
+}
+
 .resolved {
-  background: mat.get-color-from-palette(mat.$gray-palette, 100);
   > a {
     text-decoration: line-through;
   }
-}
-
-.ignored {
-  background: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .mute-icon {
@@ -90,17 +103,8 @@ table {
   margin-right: 5px;
 }
 
-mat-card {
-  margin-top: 24px;
-  margin-bottom: 24px;
-}
-
 .checkbox-cell {
-  width: 70px;
-
-  @media screen and (max-width: $tablet - 1) {
-    width: 55px;
-  }
+  width: 50px;
 }
 
 @media screen and (max-width: $tablet - 1) {
@@ -112,7 +116,6 @@ mat-card {
 }
 
 .sticky-header {
-  background-color: white;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -163,35 +166,5 @@ mat-card {
     top: 0;
     bottom: 0;
     width: 3px;
-  }
-
-  &--sample:after {
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
-  }
-
-  &--debug:after {
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
-  }
-
-  &--info:after {
-    background-color: #4b60b4;
-  }
-
-  &--warning:after {
-    background-color: #e9b949;
-  }
-
-  &--error:after {
-    background-color: $amaranth; //mat.get-color-from-palette($amaranth-palette, 200);
-  }
-
-  &--fatal:after {
-    background-image: repeating-linear-gradient(
-      -60deg,
-      $amaranth,
-      $amaranth 5px,
-      white 5px,
-      white 10px
-    );
   }
 }
