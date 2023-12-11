@@ -47,12 +47,12 @@ public class MyClass {
 
          For example, using an environment variable
 
-         export SENTRY_DSN="your DSN here"
+         export SENTRY_DSN="YOUR-GLITCHTIP-DSN-HERE"
          */
         Sentry.init();
 
         // You can also manually provide the DSN to the ``init`` method.
-        Sentry.init("your DSN here");
+        Sentry.init("YOUR-GLITCHTIP-DSN-HERE");
 
         /*
          It is possible to go around the static ``Sentry`` API, which means
