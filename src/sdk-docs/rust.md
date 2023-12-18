@@ -1,24 +1,40 @@
-To add GlitchTip to your Rust project you need to add a new dependency to your `Cargo.toml`:
+GlitchTip is an open-source alternative to Sentry that works seamlessly with the Sentry Rust SDK.
 
-```toml
-[dependencies]
-sentry = 'current version number'
-```
+# Step 1: Include the SDK via Cargo
 
-`sentry.init()` will return you a guard that when freed, will prevent process exit until all events have been sent (within a timeout):
+`cargo add sentry`
+
+# Step 2: Initialize the SDK
+
+Add the following code to your main.rs (or where relevant to run as soon as possible)
 
 ```rust
-let _guard = sentry::init("your DSN here");
+let _guard = sentry::init("YOUR-GLITCHTIP-DSN-HERE");
 ```
+
+# Step 3: Verify Error Reporting
 
 The quickest way to verify Sentry in your Rust application is to cause a panic:
 
 ```rust
 fn main() {
-    // Initialize sentry here
-    sentry::integrations::panic::register_panic_handler();
+    let _guard = sentry::init("YOUR-GLITCHTIP-DSN-HERE");
 
     // GlitchTip will capture this
-    panic!("Everything is on fire!");
+    panic!("Oh no, an error!");
 }
+```
+
+# Additional settings
+
+The Rust SDK accepts various configuration options. Here's an example that sets the release name.
+
+```rust
+let _guard = sentry::init((
+    "YOUR-GLITCHTIP-DSN-HERE",
+    sentry::ClientOptions {
+        release: sentry::release_name!(),
+        ..Default::default()
+    },
+));
 ```
