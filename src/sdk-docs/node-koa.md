@@ -5,7 +5,7 @@ const Koa = require("koa");
 const app = new Koa();
 const Sentry = require("@sentry/node");
 
-Sentry.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "YOUR-GLITCHTIP-DSN-HERE" });
 
 app.on("error", (err, ctx) => {
   Sentry.withScope(function (scope) {

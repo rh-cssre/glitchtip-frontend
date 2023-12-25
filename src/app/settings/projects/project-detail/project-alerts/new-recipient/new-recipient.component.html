@@ -6,7 +6,11 @@
     id="create-team-form"
   >
     <mat-dialog-content class="mat-typography">
-      <mat-form-field class="type">
+      <mat-form-field
+        class="type"
+        appearance="outline"
+        data-cy="recipient-type"
+      >
         <mat-label>Recipient Type</mat-label>
         <mat-select id="recipient-type" [formControl]="recipientType">
           <mat-option
@@ -23,12 +27,34 @@
         </mat-select>
       </mat-form-field>
       <div [ngSwitch]="recipientType.value" class="switch">
-        <mat-form-field class="webhook" *ngSwitchCase="'webhook'">
+        <mat-form-field
+          class="webhook"
+          *ngSwitchCase="
+            ['discord', 'googlechat', 'webhook'].includes(recipientType.value)
+              ? recipientType.value
+              : null
+          "
+          appearance="outline"
+        >
           <mat-label>Webhook URL</mat-label>
           <svg matPrefix class="slack">
-            <use xlink:href="#webhook"></use>
+            <use
+              xlink:href="#discord"
+              *ngIf="recipientType.value === 'discord'"
+            ></use>
+            <use
+              xlink:href="#googlechat"
+              *ngIf="recipientType.value === 'googlechat'"
+            ></use>
+            <use
+              xlink:href="#webhook"
+              *ngIf="recipientType.value === 'webhook'"
+            ></use>
           </svg>
           <input matInput type="url" formControlName="url" placeholder="URL" />
+          <mat-hint *ngSwitchCase="'webhook'" i18n
+            >Supports Slack, Microsoft Teams, Rocket.Chat, and more</mat-hint
+          >
           <mat-error *ngIf="url?.errors">
             <span *ngIf="url?.errors?.required || url?.errors?.pattern"
               >Enter a valid URL with protocol (ex. https://example.com)</span
