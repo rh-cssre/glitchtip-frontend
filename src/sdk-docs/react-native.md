@@ -7,7 +7,7 @@ $ npm install --save @sentry/react-native
 # or
 # yarn add @sentry/react-native
 # if you are using yarn
-# If you are running a project with react-native prior to 0.60, you still need to call react-native link, otherwise you can skip this step as react-native 
+# If you are running a project with react-native prior to 0.60, you still need to call react-native link, otherwise you can skip this step as react-native
 # version 0.60 and above does this automatically.
 # this is for linking
 $ react-native link @sentry/react-native
@@ -32,8 +32,8 @@ When you run `react-native link` we will automatically update your _index.ios.js
 ```javascript
 import * as Sentry from "@sentry/react-native";
 Sentry.init({
-    dsn: "your DSN here"
-})
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
+});
 ```
 
 You can pass additional configuration options to the `config()` method if you want to do so.

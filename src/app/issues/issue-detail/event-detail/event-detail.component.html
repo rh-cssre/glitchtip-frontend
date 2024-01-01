@@ -18,7 +18,7 @@
       </p>
       <p>
         <span *ngIf="event?.dateCreated" class="space">{{
-          event?.dateCreated | date: "long"
+          event?.dateCreated | date : "long"
         }}</span>
         <a
           target="_blank"
@@ -48,7 +48,7 @@
         [routerLink]="(nextEventUrl$ | async) || ''"
         [disabled]="(nextEvent$ | async) === false"
       >
-        Newer <mat-icon>keyboard_arrow_right</mat-icon>
+        Newer <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
       </button>
     </nav>
   </section>
