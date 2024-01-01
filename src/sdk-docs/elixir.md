@@ -1,26 +1,14 @@
-## Installation 8.x (Elixir >= 1.10)
+## Installation sentry-elixir sdk 9+
 
 ```elixir
 defp deps do
   [
     # ...
-    {:sentry, "~> 8.0"},
+    {:sentry, "~> 10.0"},
     {:jason, "~> 1.1"},
     {:hackney, "~> 1.8"},
     # if you are using plug_cowboy
     {:plug_cowboy, "~> 2.3"},
-  ]
-end
-```
-
-## Installation 7.x (Elixir < 1.10)
-
-```elixir
-defp deps do
-  [
-    # ...
-    {:sentry, "~> 7.2"},
-    {:jason, "~> 1.1"},
   ]
 end
 ```
@@ -35,10 +23,7 @@ config :sentry,
   environment_name: Mix.env(),
   included_environments: [:prod],
   enable_source_code_context: true,
-  # 8.x
   root_source_code_paths: [File.cwd!()]
-  # 7.x
-  root_source_code_path: File.cwd!()
 ```
 
 The `environment_name` and `included_environments` work together to determine if and when GlitchTip should record exceptions. The `environment_name` is the name of the current environment.
@@ -84,27 +69,6 @@ If using an environment without Phoenix, add the following at the top of your Pl
      parsers: [:urlencoded, :multipart]
 
 +  plug Sentry.PlugContext
-```
-
-## Setup with Plug or Phoenix (7.x)
-
-In your Plug.Router or Phoenix.Router, add the following lines:
-
-```elixir
- # lib/my_app_web/router.ex
- defmodule MyAppWeb.Router do
-   use MyAppWeb, :router
-+  use Plug.ErrorHandler
-+  use Sentry.Plug
-```
-
-If using Phoenix, you can include `Sentry.Phoenix.Endpoint`. This module captures errors in the Phoenix pipeline:
-
-```elixir
- # lib/my_app_web/endpoint.ex
-defmodule MyAppWeb.Endpoint
-   use Phoenix.Endpoint, otp_app: :my_app
-+  use Sentry.Phoenix.Endpoint
 ```
 
 ## Capture Crashed Process Exceptions

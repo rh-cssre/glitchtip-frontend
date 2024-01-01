@@ -45,6 +45,11 @@ export const routes: Routes = [
     pathMatch: "full",
   },
   {
+    path: "orgredirect/organizations/:orgslug/settings/auth-tokens",
+    redirectTo: "/profile/auth-tokens",
+    pathMatch: "full"
+  },
+  {
     path: "account/settings/wizard/:hash",
     redirectTo: "profile/wizard/:hash",
     pathMatch: "full",
