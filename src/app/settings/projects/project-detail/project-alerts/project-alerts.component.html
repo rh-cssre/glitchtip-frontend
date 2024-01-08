@@ -59,10 +59,27 @@
                   >
                 </div>
               </ng-container>
-              <ng-container *ngIf="recipient.recipientType === 'webhook'">
+              <ng-container
+                *ngIf="
+                  recipient.recipientType === 'webhook' ||
+                  recipient.recipientType === 'discord' ||
+                  recipient.recipientType === 'googlechat'
+                "
+              >
                 <div class="svg-box">
                   <svg class="svg">
-                    <use xlink:href="#webhook"></use>
+                    <use
+                      xlink:href="#discord"
+                      *ngIf="recipient.recipientType === 'discord'"
+                    ></use>
+                    <use
+                      xlink:href="#googlechat"
+                      *ngIf="recipient.recipientType === 'googlechat'"
+                    ></use>
+                    <use
+                      xlink:href="#webhook"
+                      *ngIf="recipient.recipientType === 'webhook'"
+                    ></use>
                   </svg>
                 </div>
                 <div class="recipient-info">
@@ -75,7 +92,7 @@
                 </div>
               </ng-container>
               <button
-                class="trash"
+                class="trash medium-icon-button"
                 mat-icon-button
                 color="primary"
                 attr.aria-label="Delete Alert For {{ recipient.url }}"
@@ -131,7 +148,12 @@
             {{ (removeAlertError$ | async)?.error }}
           </p>
           <div class="flex-common alert-header">
-            <h3>Alert {{ i + 1 }}</h3>
+            <ng-container *ngIf="alert.name else noAlertName">
+                <h3>{{ alert.name }}</h3>
+            </ng-container>
+            <ng-template #noAlertName>
+                <h3>Alert {{ i + 1 }}</h3>
+            </ng-template>
             <gt-loading-button
               [buttonText]="'Remove Alert ' + (i + 1)"
               buttonStyle="stroked"
@@ -185,10 +207,27 @@
                     </span>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="recipient.recipientType === 'webhook'">
+                <ng-container
+                  *ngIf="
+                    recipient.recipientType === 'webhook' ||
+                    recipient.recipientType === 'discord' ||
+                    recipient.recipientType === 'googlechat'
+                  "
+                >
                   <div class="svg-box">
                     <svg class="svg">
-                      <use xlink:href="#webhook"></use>
+                      <use
+                        xlink:href="#discord"
+                        *ngIf="recipient.recipientType === 'discord'"
+                      ></use>
+                      <use
+                        xlink:href="#googlechat"
+                        *ngIf="recipient.recipientType === 'googlechat'"
+                      ></use>
+                      <use
+                        xlink:href="#webhook"
+                        *ngIf="recipient.recipientType === 'webhook'"
+                      ></use>
                     </svg>
                   </div>
                   <div class="recipient-info">
@@ -214,7 +253,7 @@
                 </ng-container>
                 <ng-template #notLoading>
                   <button
-                    class="trash"
+                    class="trash medium-icon-button"
                     id="delete-recipient"
                     mat-icon-button
                     color="primary"
