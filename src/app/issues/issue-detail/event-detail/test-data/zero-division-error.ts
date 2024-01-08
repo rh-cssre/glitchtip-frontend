@@ -101,8 +101,7 @@ export const zeroDivisionError: EventDetail = {
                     callback_args: [],
                     middleware_method:
                       "<function CsrfViewMiddleware.process_view at 0x7f9c5023b8b0>",
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
                     request: "<WSGIRequest: GET '/divide-zero/'>",
                     callback: "<function DivideZeroView at 0x7f9c50bc1af0>",
                     wrapped_callback:
@@ -163,8 +162,7 @@ export const zeroDivisionError: EventDetail = {
                     callback_args: [],
                     middleware_method:
                       "<function CsrfViewMiddleware.process_view at 0x7f9c5023b8b0>",
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
                     request: "<WSGIRequest: GET '/divide-zero/'>",
                     callback: "<function DivideZeroView at 0x7f9c50bc1af0>",
                     wrapped_callback:
@@ -218,8 +216,7 @@ export const zeroDivisionError: EventDetail = {
                   colNo: null,
                   vars: {
                     initkwargs: {},
-                    self:
-                      "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
+                    self: "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
                     args: [],
                     request: "<WSGIRequest: GET '/divide-zero/'>",
                     kwargs: {},
@@ -265,8 +262,7 @@ export const zeroDivisionError: EventDetail = {
                   function: "dispatch",
                   colNo: null,
                   vars: {
-                    self:
-                      "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
+                    self: "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
                     handler:
                       "<bound method DivideZeroView.get of <errors.views.DivideZeroView object at 0x7f9c4ade79a0>>",
                     request: "<WSGIRequest: GET '/divide-zero/'>",
@@ -322,8 +318,7 @@ export const zeroDivisionError: EventDetail = {
                   function: "get",
                   colNo: null,
                   vars: {
-                    self:
-                      "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
+                    self: "<errors.views.DivideZeroView object at 0x7f9c4ade79a0>",
                     args: [],
                     request: "<WSGIRequest: GET '/divide-zero/'>",
                     kwargs: {},
