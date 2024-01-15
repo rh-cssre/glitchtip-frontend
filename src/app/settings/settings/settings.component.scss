@@ -1,7 +1,5 @@
 @import "variables";
 
-$iconWidth: 56px;
-
 button {
   display: block;
   margin: 20px;
@@ -20,43 +18,5 @@ mat-drawer {
 
   @media (max-width: $tablet - 1) {
     display: none;
-  }
-}
-
-mat-drawer-content {
-  mat-toolbar {
-    display: none;
-    padding-left: $iconWidth;
-    cursor: pointer;
-
-    @media (max-width: $tablet - 1) {
-      display: flex;
-    }
-
-    .sidenav-toggle {
-      padding: 0;
-      position: absolute;
-      left: 0;
-      top: 0;
-      margin: 0;
-      min-width: $iconWidth;
-    }
-
-    mat-icon {
-      font-size: 25px;
-      height: $iconWidth;
-      width: $iconWidth;
-      line-height: $iconWidth;
-      color: white;
-
-      @media (min-width: $small) {
-        height: 64px;
-        line-height: 64px;
-      }
-    }
-
-    .active-org {
-      margin-left: 8px;
-    }
   }
 }
