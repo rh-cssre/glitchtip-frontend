@@ -1,17 +1,11 @@
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { moduleMetadata } from "@storybook/angular";
-import { Meta } from "@storybook/angular/types-6-0";
+import { Meta } from "@storybook/angular";
 import { of } from "rxjs";
-import { SharedModule } from "src/app/shared/shared.module";
 import { totpUserKey } from "./test-data";
 import { TOTPComponent } from "./totp.component";
 
 export default {
   title: "profile/TOTP",
   component: TOTPComponent,
-  decorators: [
-    moduleMetadata({ imports: [HttpClientTestingModule, SharedModule] }),
-  ],
 } as Meta;
 
 export const Disabled = () => ({
