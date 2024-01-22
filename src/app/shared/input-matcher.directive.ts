@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 
 @Directive({
+  standalone: true,
   selector: "[gtInputMatcher]",
   providers: [
     {

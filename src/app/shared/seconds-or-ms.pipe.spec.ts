@@ -12,7 +12,9 @@ describe("SecondsOrMSPipe", () => {
     const secondsDuration = "0:00:01.063595";
 
     expect(humanizeDurationPipe.transform(msDuration)).toBe("64ms");
-    expect(humanizeDurationPipe.transform(secondsDuration)).toBe("1.06 seconds");
+    expect(humanizeDurationPipe.transform(secondsDuration)).toBe(
+      "1.06 seconds"
+    );
   });
 
   it("an invalid duration does not transform the value", () => {
