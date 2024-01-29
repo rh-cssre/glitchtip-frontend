@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "src/assets/styles/variables";
+@use "@angular/material" as mat;
+@import "variables";
 
 mat-card-content {
   padding-top: 32px;
@@ -62,7 +62,7 @@ mat-error {
   border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.mat-list-item {
+.project-list-item {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
