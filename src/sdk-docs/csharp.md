@@ -21,17 +21,14 @@ dotnet add package Sentry
 You should initialize the SDK as early as possible, like in the `Main` method in `Program.cs`:
 
 ```csharp
-using (SentrySdk.Init("your DSN here"))
+SentrySdk.Init(options =>
 {
-    // App code
-}
+    options.Dsn = "YOUR-GLITCHTIP-DSN-HERE";
+});
 ```
 
-You can verify GlitchTip is capturing unhandled exceptions by raising an exception. For example, you can use the following snippet to raise a `DivideByZeroException`:
+You can verify GlitchTip is capturing unhandled exceptions by raising an exception:
 
 ```csharp
-using (SentrySdk.Init("your DSN here"))
-{
-    Console.WriteLine(1 / 0);
-}
+throw new Exception("Hello world!");
 ```

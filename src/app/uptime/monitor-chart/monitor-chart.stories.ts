@@ -1,6 +1,4 @@
-import { moduleMetadata, Meta, Story } from "@storybook/angular";
-
-import { CommonModule } from "@angular/common";
+import { Meta, Story } from "@storybook/angular";
 
 import { MonitorChartComponent } from "./monitor-chart.component";
 
@@ -8,12 +6,6 @@ import { mixedChecks, fewChecks } from "./mock-chart-data";
 
 export default {
   component: MonitorChartComponent,
-  decorators: [
-    moduleMetadata({
-      declarations: [MonitorChartComponent],
-      imports: [CommonModule],
-    }),
-  ],
   title: "Uptime/MonitorChart",
   excludeStories: /.*Data$/,
 } as Meta;
