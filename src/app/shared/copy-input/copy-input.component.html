@@ -1,14 +1,9 @@
-<mat-form-field class="full-width">
-  <input
-    class="background"
-    readonly
-    matInput
-    [placeholder]="placeholder"
-    [value]="value"
-    data-test-dsn
-  />
+<mat-form-field class="full-width" appearance="outline">
+  <mat-label>{{ placeholder }}</mat-label>
+  <input class="background" readonly matInput [value]="value" data-test-dsn />
   <button
     mat-icon-button
+    class="small-icon-button"
     [cdkCopyToClipboard]="value"
     (cdkCopyToClipboardCopied)="copied()"
     matTooltip="Copy key to clipboard"
