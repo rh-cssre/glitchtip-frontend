@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { map } from "rxjs";
 import { baseUrl } from "../../constants";
 import { APIBaseService } from "../api-base.service";
 import {
@@ -10,7 +11,7 @@ import {
   IssueTags,
   UpdateStatusResponse,
 } from "src/app/issues/interfaces";
-import { Params } from "@angular/router";
+import { normalizeID } from "../shared-api.utils";
 
 @Injectable({
   providedIn: "root",
@@ -23,13 +24,13 @@ export class IssuesAPIService extends APIBaseService {
 
   list(
     organizationSlug?: string,
-    cursor?: string,
-    query?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string
+    cursor?: string | null,
+    query?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null
   ) {
     const url = organizationSlug
       ? `${baseUrl}/organizations/${organizationSlug}/issues/`
@@ -58,46 +59,70 @@ export class IssuesAPIService extends APIBaseService {
     if (environment) {
       httpParams = httpParams.set("environment", environment);
     }
-    return this.http.get<Issue[]>(url, {
-      observe: "response",
-      params: httpParams,
-    });
+    return this.http
+      .get<Issue[]>(url, {
+        observe: "response",
+        params: httpParams,
+      })
+      .pipe(
+        map((response) => {
+          response.body!.map(
+            (issue) => (issue.project.id = normalizeID(issue.project.id))
+          );
+          return response;
+        })
+      );
   }
 
   retrieve(id: string) {
-    return this.http.get<IssueDetail>(this.detailURL(id));
+    return this.http.get<IssueDetail>(this.detailURL(id)).pipe(
+      map((issueDetail) => {
+        issueDetail.project.id = normalizeID(issueDetail.project.id);
+        return issueDetail;
+      })
+    );
   }
 
-  update(
-    status: IssueStatus,
-    ids: number[],
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
-  ) {
-    let params: Params;
-    let updateUrl = `${baseUrl}/organizations/${orgSlug}/issues/`;
-
-    if (orgSlug && projectId && query) {
-      params = {
-        project: projectId,
-        query,
-      };
-    } else if (orgSlug && projectId) {
-      params = {
-        project: projectId,
-      };
-    } else {
-      updateUrl = this.url;
-      params = {
-        id: ids.map((id) => id.toString()),
-      };
-    }
+  update(status: IssueStatus, ids: number[]) {
+    let params = new HttpParams();
+    ids.forEach((id) => {
+      params = params.append("id", id);
+    });
     return this.http.put<UpdateStatusResponse>(
-      updateUrl,
+      this.url,
       { status },
       { params }
     );
+  }
+
+  bulkUpdate(
+    status: IssueStatus,
+    orgSlug: string,
+    projectIds: number[],
+    query?: string | null,
+    start?: string | null,
+    end?: string | null,
+    environment?: string | null
+  ) {
+    let url = `${baseUrl}/organizations/${orgSlug}/issues/`;
+    let params = new HttpParams();
+
+    projectIds.forEach((id) => {
+      params = params.append("project", id);
+    });
+    if (query) {
+      params = params.append("query", query);
+    }
+    if (start) {
+      params = params.set("start", start);
+    }
+    if (end) {
+      params = params.set("end", end);
+    }
+    if (environment) {
+      params = params.set("environment", environment);
+    }
+    return this.http.put<UpdateStatusResponse>(url, { status }, { params });
   }
 
   destroy(id: string) {
