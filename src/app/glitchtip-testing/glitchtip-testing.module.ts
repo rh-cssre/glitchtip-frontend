@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MicroSentryModule } from "@micro-sentry/angular";
-import { SharedModule } from "../shared/shared.module";
 
 /** Convenience module for storybook and testing only */
 @NgModule({
@@ -15,9 +14,7 @@ import { SharedModule } from "../shared/shared.module";
     ReactiveFormsModule,
     RouterTestingModule,
     NoopAnimationsModule,
-    SharedModule,
     MicroSentryModule.forRoot({}),
   ],
-  exports: [SharedModule],
 })
 export class GlitchtipTestingModule {}

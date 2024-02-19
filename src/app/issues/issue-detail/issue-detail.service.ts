@@ -2,7 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { combineLatest, EMPTY } from "rxjs";
+import { combineLatest, EMPTY, lastValueFrom } from "rxjs";
 import { tap, map, catchError, withLatestFrom } from "rxjs/operators";
 import {
   IssueDetail,
@@ -22,7 +22,6 @@ import {
 } from "../interfaces";
 import { generateIconPath } from "../../shared/shared.utils";
 import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
-import { IssuesService } from "../issues.service";
 import { Json } from "src/app/interface-primitives";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
@@ -129,7 +128,6 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
 
   constructor(
     private organization: OrganizationsService,
-    private issueService: IssuesService,
     private issuesAPIService: IssuesAPIService,
     private snackBar: MatSnackBar,
     private router: Router
@@ -202,12 +200,16 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   setStatus(status: IssueStatus) {
     const issue = this.state.getValue().issue;
     if (issue) {
-      return this.issueService
-        .setStatus(issue.id, status)
-        .pipe(tap((resp) => this.setIssueStatus(resp.status)))
-        .toPromise();
+      lastValueFrom(
+        this.issuesAPIService
+          .update(status, [issue.id])
+          .pipe(tap((resp) => this.setIssueStatus(resp.status)))
+      );
     }
-    return;
+  }
+
+  updateCommentCount(num: number) {
+    this.setUpdatedCommentCount(num);
   }
 
   deleteIssue(id: string) {
@@ -317,6 +319,18 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
       issueInitialLoadComplete: true,
       event: null,
     });
+  }
+
+  private setUpdatedCommentCount(num: number) {
+    const state = this.state.getValue();
+    if (state.issue) {
+      this.setState({
+        issue: {
+          ...state.issue,
+          numComments: state.issue.numComments + num,
+        },
+      });
+    }
   }
 
   // private removed for testing
