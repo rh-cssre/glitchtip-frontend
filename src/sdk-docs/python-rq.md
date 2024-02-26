@@ -6,7 +6,7 @@ Create a file called `mysettings.py` with the following content:
 import sentry_sdk
 from sentry_sdk.integrations.rq import RqIntegration
 
-sentry_sdk.init("your DSN here", integrations=[RqIntegration()])
+sentry_sdk.init("YOUR-GLITCHTIP-DSN-HERE", integrations=[RqIntegration()])
 ```
 
 Start your worker with:

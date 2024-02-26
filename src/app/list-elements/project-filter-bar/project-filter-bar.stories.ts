@@ -1,21 +1,14 @@
-import { MatExpansionModule } from "@angular/material/expansion";
-import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { ProjectFilterBarComponent } from "./project-filter-bar.component";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
+
 
 export default {
   title: "List elements/Project Filter Bar",
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule, MatExpansionModule],
-    }),
-  ],
+  component: ProjectFilterBarComponent,
 };
 
-const sampleProjects: OrganizationProject[] = [
+const sampleProjects: any = [
   {
     name: "GlitchTip",
     slug: "glitchtip",
@@ -67,14 +60,13 @@ const sampleProjects: OrganizationProject[] = [
   },
 ];
 
-export const projectFilterBar = () => ({
-  component: ProjectFilterBarComponent,
+export const ProjectFilterBar = () => ({
   props: {
     projects$: of(sampleProjects),
     appliedProjectIds: [1, 2, 5],
   },
 });
 
-projectFilterBar.story = {
+ProjectFilterBar.story = {
   parameters: {},
 };

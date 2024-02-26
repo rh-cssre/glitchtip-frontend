@@ -5,8 +5,13 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-actions",
     "@storybook/addon-a11y",
+    "@storybook/addon-themes",
   ],
-  core: {
-    builder: "webpack5",
+  framework: {
+    name: "@storybook/angular",
+    options: {},
+  },
+  docs: {
+    autodocs: true,
   },
 };
