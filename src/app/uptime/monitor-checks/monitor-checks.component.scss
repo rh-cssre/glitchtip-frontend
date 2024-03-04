@@ -7,7 +7,7 @@ table {
 }
 
 .mat-column-status {
-  padding-right: 10px;
+  padding: 0 10px 0 24px;
 }
 
 .mat-column-reason {
@@ -16,9 +16,13 @@ table {
 
 .mat-column-responseTime {
   padding-right: 75px;
-  @media screen and (max-width: $small - 1) {
+  @media screen and (max-width: ($small - 1)) {
     display: none;
   }
+}
+
+.mat-column-startCheck {
+  padding-right: 24px;
 }
 
 .status-color {
@@ -31,13 +35,8 @@ table {
     bottom: 0;
     width: 3px;
   }
-
-  &--true:after {
-    background-color: #54a65a;
-  }
-
-  &--false:after {
-    background-color: $amaranth;
-  }
 }
 
+button {
+  margin-bottom: 8px;
+}
