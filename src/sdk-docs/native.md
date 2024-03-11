@@ -45,7 +45,7 @@ Import and initialize the SDK early in your application setup:
 
 int main(void) {
   sentry_options_t *options = sentry_options_new();
-  sentry_options_set_dsn(options, "your DSN here");
+  sentry_options_set_dsn(options, "YOUR-GLITCHTIP-DSN-HERE");
   sentry_init(options);
 
   /* ... */

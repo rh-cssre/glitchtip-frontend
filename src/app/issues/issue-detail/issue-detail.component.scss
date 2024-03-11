@@ -1,35 +1,12 @@
 @import "variables";
 
-.mat-h1 {
-  padding-right: 20px;
-}
-
-.issue-404 h1 {
-  text-align: left;
-}
-
-header {
-  margin: -16px 0 5px;
-
-  @media screen and (max-width: $tablet - 1) {
-    margin-bottom: 20px;
+.issue-404 {
+  h1 {
+    text-align: left;
   }
 
-  .header-group {
-    display: flex;
-    justify-content: space-between;
-
-    @media screen and (max-width: $tablet - 1) {
-      flex-direction: column;
-    }
-  }
-
-  .button-row button {
-    margin-right: 8px;
-  }
-
-  gt-issue-detail-title {
-    margin-right: 20px;
+  p {
+    margin: 16px 0;
   }
 }
 
@@ -55,6 +32,11 @@ dl {
 
 .event-detail-card {
   margin-right: 16px;
+
+  .tab-nav-container {
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
 
   @media screen and (max-width: $medium - 1) {
     margin-right: 0;
@@ -104,10 +86,6 @@ mat-grid-list {
 
 table.mat-table {
   background: none;
-}
-
-.project-issues-link {
-  margin: 0 0 20px;
 }
 
 .report-badge > span {
