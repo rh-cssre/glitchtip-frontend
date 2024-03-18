@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, ViewChild } from "@angular/core";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatMenuTrigger, MatMenuModule } from "@angular/material/menu";
 import { combineLatest } from "rxjs";
 import { map } from "rxjs/operators";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
@@ -7,12 +7,37 @@ import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "../main-nav.service";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
+import { MobileNavToolbarComponent } from "../../mobile-nav-toolbar/mobile-nav-toolbar.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatButtonModule } from "@angular/material/button";
+import { RouterLink, RouterLinkActive } from "@angular/router";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
   selector: "gt-main-nav",
   templateUrl: "./main-nav.component.html",
   styleUrls: ["./main-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatSidenavModule,
+    NgIf,
+    MatToolbarModule,
+    RouterLink,
+    MatButtonModule,
+    MatMenuModule,
+    NgFor,
+    MatDividerModule,
+    MatListModule,
+    RouterLinkActive,
+    MatCardModule,
+    MobileNavToolbarComponent,
+    AsyncPipe,
+  ],
 })
 export class MainNavComponent {
   activeOrganizationLoaded = false;
