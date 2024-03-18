@@ -1,4 +1,9 @@
+import { ClipboardModule } from "@angular/cdk/clipboard";
+import { CommonModule } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { BehaviorSubject, timer } from "rxjs";
 import { take } from "rxjs/operators";
 
@@ -6,9 +11,16 @@ import { take } from "rxjs/operators";
  * A read-only input that allows the user to copy it's value
  */
 @Component({
+  standalone: true,
   selector: "gt-copy-input",
   templateUrl: "./copy-input.component.html",
-  styleUrls: ["./copy-input.component.scss"],
+  imports: [
+    CommonModule,
+    ClipboardModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyInputComponent {

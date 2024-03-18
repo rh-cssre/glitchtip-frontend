@@ -73,7 +73,15 @@ const backend = [
   "ruby-rack",
   "rust",
 ];
-const desktop = ["cocoa", "csharp", "java", "electron", "minidump", "native", "dart-flutter"];
+const desktop = [
+  "cocoa",
+  "csharp",
+  "java",
+  "electron",
+  "minidump",
+  "native",
+  "dart-flutter",
+];
 const categoryList = [
   { id: "popular", name: "Popular", platforms: popular },
   { id: "browser", name: "Browser", platforms: frontend },
