@@ -1,3 +1,27 @@
+@import "variables";
+
+.page-header {
+  flex-wrap: wrap;
+
+  @media screen and (max-width: $small - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.mat-headline-4 {
+  margin: 0;
+}
+
+.mat-caption {
+  font-weight: 500;
+}
+
+mat-chip {
+  height: 24px;
+  font-weight: 500;
+}
+
 .list {
   width: 100%;
 
@@ -9,23 +33,52 @@
     justify-content: space-between;
     flex-wrap: wrap;
 
+    @media (max-width: $large - 1) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
     &:nth-last-child(n + 2) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     }
   }
 
-  .email {
-    flex: 1 1 0%;
+  .email-and-badge,
+  .reinvite-and-role {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
-  .invite-status {
-    width: 180px;
-    padding-left: 16px;
-    padding-right: 16px;
+  .email-and-badge {
+    * {
+      margin: 0 16px 0 0;
+    }
 
-    .pending {
-      margin-top: 0;
-      margin-bottom: 0;
+    align-items: center;
+    flex: 1 1 0%;
+    flex-wrap: wrap;
+
+    a {
+      margin-right: 16px;
+    }
+  }
+
+  .reinvite-and-role {
+    mat-chip {
+      margin: 0 0 0 16px;
+    }
+
+    @media (max-width: $large - 1) {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+
+      mat-chip {
+        margin: 0;
+      }
+
+      .reinvite {
+        margin-bottom: 10px;
+      }
     }
   }
 
@@ -33,16 +86,10 @@
     width: 140px;
     padding-left: 16px;
     padding-right: 16px;
-  }
-}
 
-.resend-invite {
-  height: auto;
-
-  &::ng-deep .mat-flat-button {
-    line-height: unset;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    @media (max-width: $large - 1) {
+      padding: 0;
+    }
   }
 }
 

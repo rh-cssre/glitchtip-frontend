@@ -1,6 +1,6 @@
 <section class="l-body">
   <header class="page-header">
-    <h1 class="mat-display-1">Create a New Project</h1>
+    <h1 class="mat-headline-4">Create a New Project</h1>
   </header>
   <mat-card>
     <mat-card-content>
@@ -11,14 +11,18 @@
             formControlName="platform"
             template="buttons"
           ></gt-platform-picker>
-          <mat-form-field class="project-name">
-            <input matInput formControlName="name" placeholder="Project Name" />
+          <mat-form-field class="project-name" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
             <mat-error>
               <span *ngIf="name?.errors?.required">Enter a project name</span>
             </mat-error>
           </mat-form-field>
           <div class="teams">
-            <mat-form-field *ngIf="teams$ | async as teams">
+            <mat-form-field
+              *ngIf="teams$ | async as teams"
+              appearance="outline"
+            >
               <mat-select
                 (click)="teams.length ? undefined : openCreateTeamDialog()"
                 [placeholder]="teams.length ? 'Assign a team' : 'Create a team'"
@@ -40,6 +44,7 @@
 
             <button
               mat-icon-button
+              class="icon-button-shift"
               color="primary"
               aria-label="Add a team"
               (click)="openCreateTeamDialog()"

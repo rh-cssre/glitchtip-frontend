@@ -9,6 +9,7 @@ import { baseUrl } from "src/app/constants";
   selector: "gt-wizard",
   templateUrl: "./wizard.component.html",
   styleUrls: ["./wizard.component.scss"],
+  standalone: true,
 })
 export class WizardComponent implements OnInit {
   message = "Connecting to @sentry/wizard...";

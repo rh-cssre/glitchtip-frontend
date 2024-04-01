@@ -4,17 +4,33 @@ import {
   UntypedFormGroup,
   UntypedFormControl,
   Validators,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { combineLatest } from "rxjs";
 import { map, tap, withLatestFrom } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "../api/settings.service";
 import { UserService } from "../api/user/user.service";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "gt-new-organizations",
   templateUrl: "./new-organization.component.html",
   styleUrls: ["./new-organization.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    AsyncPipe,
+  ],
 })
 export class NewOrganizationsComponent implements OnDestroy {
   organizationCount$ = this.organizationsService.organizationCount$;

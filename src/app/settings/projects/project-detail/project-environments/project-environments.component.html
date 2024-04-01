@@ -1,8 +1,8 @@
 <section>
   <mat-card>
-    <h1>
+    <mat-card-header>
       <mat-card-title>Environments</mat-card-title>
-    </h1>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <ng-container *ngIf="(initialLoad$ | async) === false; else afterLoad">
@@ -22,17 +22,19 @@
                 *ngFor="let environment of sortedEnvironment.environments"
               >
                 <mat-list-item>
-                  <span>
-                    {{ environment.name }}
-                  </span>
-                  <gt-loading-button
-                    (click)="toggleHidden(environment)"
-                    [loading]="
-                      environment.id === (toggleHiddenloading$ | async)
-                    "
-                    [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
-                    buttonStyle="stroked"
-                  ></gt-loading-button>
+                  <div class="environment-list-item">
+                    <span class="mat-body-1">
+                      {{ environment.name }}
+                    </span>
+                    <gt-loading-button
+                      (click)="toggleHidden(environment)"
+                      [loading]="
+                        environment.id === (toggleHiddenloading$ | async)
+                      "
+                      [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
+                      buttonStyle="stroked"
+                    ></gt-loading-button>
+                  </div>
                 </mat-list-item>
               </ng-container>
             </mat-list>
