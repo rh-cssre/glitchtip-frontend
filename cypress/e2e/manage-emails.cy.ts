@@ -1,7 +1,5 @@
 import { seedBackend, requestLogin } from "./utils.cy";
-import { environment } from "../../src/environments/environment";
 
-if (environment.loginForm) {
 describe("Change Password", () => {
   beforeEach(() => {
     seedBackend();
@@ -19,7 +17,7 @@ describe("Change Password", () => {
     // Add email
     cy.get("input[formcontrolname=email_address]").type(secondEmail);
     cy.get("#add-email-form").submit();
-    cy.get("gt-manage-emails mat-list").contains(secondEmail);
+    cy.get("gt-manage-emails ul").contains(secondEmail);
 
     // Duplicate email
     cy.get("input[formcontrolname=email_address]").type(secondEmail);
@@ -44,7 +42,7 @@ describe("Change Password", () => {
     const emailToDelete = "cypress-email-to-delete@example.com";
     cy.get("input[formcontrolname=email_address]").clear().type(emailToDelete);
     cy.get("#add-email-form").submit();
-    cy.get("mat-list-item:nth-child(3) .delete-button").click({ force: true });
+    cy.get("li:nth-child(3) [data-cy=delete-button]").click({ force: true });
     cy.get("gt-manage-emails").should("not.contain", emailToDelete);
 
     // TODO Make primary
@@ -52,4 +50,3 @@ describe("Change Password", () => {
     // TODO Verify? Might not be possible or even necessary
   });
 });
-}
