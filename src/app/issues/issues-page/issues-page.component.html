@@ -15,6 +15,7 @@
     <table
       mat-table
       [dataSource]="issues$"
+      [trackBy]="trackIssues"
       class="mat-elevation-z2"
       [class.fixedLayout]="issues.length === 0"
     >
@@ -55,7 +56,7 @@
           [class.sticky-header]="(thereAreSelectedIssues$ | async) === true"
         >
           <mat-checkbox
-            (change)="toggleSelectAll()"
+            (change)="toggleSelectAllOnPage()"
             [checked]="(areAllSelected$ | async)!"
             [disabled]="issues.length === 0"
             id="selectAll"
@@ -89,21 +90,21 @@
               id="bulkMarkResolved"
               mat-flat-button
               color="primary"
-              (click)="bulkMarkResolved()"
+              (click)="updateStatus('resolved')"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
               i18n
               >Mark as resolved</button
             >
             <button
               mat-stroked-button
-              (click)="bulkMarkUnresolved()"
+              (click)="updateStatus('unresolved')"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
               i18n
               >Reopen</button
             >
             <button
               mat-stroked-button
-              (click)="bulkMarkIgnored()"
+              (click)="updateStatus('ignored')"
               [disabled]="(thereAreSelectedIssues$ | async) === false"
               i18n
               >Ignore</button
@@ -128,7 +129,7 @@
             element.title
           }}</a>
           <div class="other-cell-info mat-caption">
-            {{ element.count | i18nPlural: eventCountPluralMapping }}
+            {{ element.count | i18nPlural : eventCountPluralMapping }}
           </div>
           <div>
             <span
@@ -143,7 +144,7 @@
               </ng-container>
               <time
                 [dateTime]="element.firstSeen"
-                [title]="element.firstSeen | date: 'medium'"
+                [title]="element.firstSeen | date : 'medium'"
               >
                 {{ element.firstSeen | daysOld }},
               </time>
@@ -151,7 +152,7 @@
               <time
                 *ngIf="element.firstSeen !== element.lastSeen"
                 [dateTime]="element.lastSeen"
-                [title]="element.lastSeen | date: 'medium'"
+                [title]="element.lastSeen | date : 'medium'"
               >
                 {{ element.lastSeen | daysAgo }}
               </time>
@@ -179,7 +180,7 @@
           <ng-container *ngIf="(showBulkSelectProject$ | async) === true">
             <ng-container
               *ngIf="
-                (selectedProjectInfo$ | async | json) === '{}';
+                (allResultsSelected$ | async) === false;
                 else deselect
               "
               ><span class="bulk-project-select__text"
@@ -190,7 +191,7 @@
                 id="bulkUpdateProject"
                 mat-stroked-button
                 color="primary"
-                (click)="bulkUpdateProject()"
+                (click)="selectAllResults()"
               >
                 <ng-container *ngIf="searchHits$ | async as searchHits"
                   >Select all {{ searchHits }} issues that match this
@@ -205,7 +206,7 @@
               <button
                 mat-stroked-button
                 color="primary"
-                (click)="clearBulkProjectUpdate()"
+                (click)="clearSelectAllResults()"
               >
                 Undo
               </button></ng-template
@@ -229,7 +230,7 @@
           *matCellDef="let element"
           [class.resolved]="element.status === 'resolved'"
           [class.ignored]="element.status === 'ignored'"
-          class="event-cell"
+          class="event-cell mat-body-1"
         >
           <p>{{ element.count }}</p>
         </td>
@@ -259,13 +260,20 @@
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+        <td
+          class="mat-cell zero-states-cell"
+          [attr.colspan]="displayedColumns.length"
+        >
           <gt-issue-zero-states
             *ngIf="paginator.initialLoadComplete"
           ></gt-issue-zero-states>
         </td>
       </tr>
-      <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
+      <tr
+        mat-footer-row
+        class="pagination-row"
+        *matFooterRowDef="['pagination']"
+      ></tr>
     </table>
   </div>
 </section>

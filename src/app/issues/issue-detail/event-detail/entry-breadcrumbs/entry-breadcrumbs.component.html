@@ -1,11 +1,11 @@
-<section *ngIf="breadcrumbs$ | async as breadcrumbs">
+<section *ngIf="breadcrumbs$ | async as breadcrumbs" class="mat-typography">
   <mat-divider></mat-divider>
   <h3>Breadcrumbs</h3>
   <div
     #breadBox
     class="wrapper"
     [ngClass]="(showShowMore$ | async) ? 'bread-box' : 'bread-box--expanded'"
-    [class.bread-box--expanded]="(showShowMore$| async) === false"
+    [class.bread-box--expanded]="(showShowMore$ | async) === false"
   >
     <button
       *ngIf="showShowMore$ | async"
@@ -51,11 +51,11 @@
                   </td>
                   <td class="column-three">{{ value.message }}</td>
                   <td class="column-four">
-                    {{ value.timestamp | date: "HH:mm:ss.SSS" }}
+                    {{ value.timestamp | date : "HH:mm:ss.SSS" }}
                   </td>
                 </tr>
                 <ng-container>
-                  <tr *ngFor="let data of value.data | keyvalue: keepOrder">
+                  <tr *ngFor="let data of value.data | keyvalue : keepOrder">
                     <td class="column-one"></td>
                     <td class="column-two">{{ data.key }}</td>
                     <td class="column-three">
