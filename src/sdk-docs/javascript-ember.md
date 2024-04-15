@@ -22,7 +22,7 @@ import * as Sentry from "@sentry/browser";
 import * as Integrations from "@sentry/integrations";
 
 Sentry.init({
-  dsn: "your DSN here",
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   integrations: [new Integrations.Ember()],
 });
 ```
@@ -36,14 +36,11 @@ like this:
 <script src="https://browser.sentry-cdn.com/5.27.6/bundle.min.js"></script>
 
 <!-- If you include the integration it will be available under Sentry.Integrations.Ember -->
-<script
-  src="https://browser.sentry-cdn.com/5.27.6/ember.min.js"
-  crossorigin="anonymous"
-></script>
+<script src="https://browser.sentry-cdn.com/5.27.6/ember.min.js" crossorigin="anonymous"></script>
 
 <script>
   Sentry.init({
-    dsn: "your DSN here",
+    dsn: "YOUR-GLITCHTIP-DSN-HERE",
     integrations: [new Sentry.Integrations.Ember()],
   });
 </script>

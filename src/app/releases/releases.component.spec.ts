@@ -9,8 +9,7 @@ describe("ReleasesComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GlitchtipTestingModule],
-      declarations: [ReleasesComponent],
+      imports: [GlitchtipTestingModule, ReleasesComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReleasesComponent);
