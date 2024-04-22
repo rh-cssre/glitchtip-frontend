@@ -16,15 +16,15 @@
       [checked]="projectFormErrorAlert.value"
       (change)="toggleErrorAlerts()"
     >
-      <span>
+      <span class="mat-body-1">
         If&nbsp;an&nbsp;<span
           class="tooltip"
           matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
           >event</span
-        >&nbsp;happens</span
+        >&nbsp;happens&nbsp;</span
       >
     </mat-checkbox>
-    <mat-form-field floatLabel="always">
+    <mat-form-field floatLabel="always" appearance="outline">
       <mat-label>Quantity</mat-label>
       <input
         matInput
@@ -39,21 +39,13 @@
         [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
       />
       <mat-error *ngIf="projectFormQuantity?.errors">
-        <span *ngIf="projectFormQuantity?.errors?.min"
-          >The quantity needs to be greater than or equal to 0.</span
-        >
-        <span *ngIf="projectFormQuantity?.errors?.invalidNumber"
-          >Enter a number.
-        </span>
-        <span *ngIf="projectFormQuantity?.errors?.required"
-          >This field is required.</span
-        >
+        <span>Enter an integer greater than 0.</span>
       </mat-error>
     </mat-form-field>
     <span
       >time<span *ngIf="projectFormQuantity?.value !== 1">s</span>&nbsp;in</span
     >
-    <mat-form-field floatLabel="always">
+    <mat-form-field floatLabel="always" appearance="outline">
       <mat-label>Timespan</mat-label>
       <input
         matInput
@@ -67,15 +59,7 @@
         [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
       />
       <mat-error *ngIf="projectFormTimespan?.errors">
-        <span *ngIf="projectFormTimespan?.errors?.min"
-          >The timespan needs to be greater than or equal to 0.</span
-        >
-        <span *ngIf="projectFormTimespan?.errors?.invalidNumber"
-          >Enter a number.
-        </span>
-        <span *ngIf="projectFormTimespan?.errors?.required"
-          >This field is required.</span
-        >
+        <span>Enter an integer greater than 0.</span>
       </mat-error>
     </mat-form-field>
     <span
@@ -85,7 +69,9 @@
 
     <div class="uptime-option" formGroupName="optionsGroup">
       <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-        >If an uptime monitor is triggered.</mat-checkbox
+        ><span class="mat-body-1"
+          >If an uptime monitor is triggered.</span
+        ></mat-checkbox
       >
     </div>
   </div>
