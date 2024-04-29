@@ -1,0 +1,21 @@
+@use "@angular/material" as mat;
+@import "variables";
+
+gt-data-filter-bar {
+  @include mat.form-field-typography($custom-input-typography);
+  @include mat.datepicker-typography($custom-input-typography);
+  @include mat.select-typography($custom-input-typography);
+  @include mat.select-density(-2);
+  @include mat.datepicker-density(-2);
+  @include mat.form-field-density(-2);
+  @include mat.input-density(-2);
+
+  .mat-mdc-select-trigger {
+    align-items: center;
+  }
+
+  .mat-mdc-form-field-infix {
+    display: flex;
+    align-items: center;
+  }
+}
