@@ -23,6 +23,7 @@
 </button>
 <button
   *ngIf="buttonStyle === 'stroked'"
+  (click)="buttonClick.emit()"
   mat-stroked-button
   color="primary"
   [disabled]="loading || disabled"
