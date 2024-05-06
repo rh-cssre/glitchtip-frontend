@@ -5,9 +5,12 @@ export interface NewProjectAlert {
   alertRecipients: NewAlertRecipient[];
 }
 
-export interface ProjectAlert extends NewProjectAlert {
+export interface PartialProjectAlert extends NewProjectAlert {
   pk: number;
   alertRecipients: AlertRecipient[];
+}
+export interface ProjectAlert extends PartialProjectAlert {
+  name: string;
 }
 
 export interface NewAlertRecipient {
@@ -19,4 +22,4 @@ export interface AlertRecipient extends NewAlertRecipient {
   pk: number;
 }
 
-export type RecipientType = "email" | "webhook";
+export type RecipientType = "email" | "webhook" | "discord" | "googlechat";

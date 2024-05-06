@@ -17,7 +17,7 @@ export class RegisterService {
       email,
       password1,
       password2,
-      tags
+      tags,
     };
     return this.http.post<AuthState>(url, data).pipe(tap(() => this.setAuth()));
   }

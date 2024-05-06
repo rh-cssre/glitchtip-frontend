@@ -20,8 +20,8 @@ interface NotificationsState {
   subscribeByDefaultLoading: boolean;
   subscribeByDefaultError: string;
   groupedProjects: GroupedProjects;
-  projectAlertLoading: string;
-  projectAlertError: ProjectError;
+  projectAlertLoading: number | null;
+  projectAlertError: ProjectError | null;
 }
 
 const initialState: NotificationsState = {
@@ -30,8 +30,8 @@ const initialState: NotificationsState = {
   subscribeByDefaultLoading: false,
   subscribeByDefaultError: "",
   groupedProjects: [],
-  projectAlertLoading: "",
-  projectAlertError: { error: "", id: "" },
+  projectAlertLoading: null,
+  projectAlertError: null,
 };
 
 @Injectable({
@@ -94,7 +94,7 @@ export class NotificationsService {
           if (projects) {
             const projectsWithAlerts = projects.map((project) => {
               const matchingId = Object.keys(projectAlerts).find(
-                (element) => element === project.id
+                (element) => parseInt(element, 10) === project.id
               );
               return {
                 ...project,
@@ -119,7 +119,7 @@ export class NotificationsService {
     this.setGroupedProjects(groupedProjects);
   }
 
-  alertsUpdate(projectId: string, status: NotificationStatus) {
+  alertsUpdate(projectId: number, status: NotificationStatus) {
     const data: ProjectAlerts = {
       [projectId]: status,
     };
@@ -129,11 +129,11 @@ export class NotificationsService {
       .pipe(
         tap((_) => {
           this.retrieveUserAlertSettings();
-          this.setProjectAlertLoading("");
+          this.setProjectAlertLoading(null);
         }),
         catchError((error) => {
           if (error) {
-            this.setProjectAlertLoading("");
+            this.setProjectAlertLoading(null);
             this.setProjectAlertError(this.error(error), projectId);
           }
           return EMPTY;
@@ -179,8 +179,8 @@ export class NotificationsService {
   }
 
   private setToggleProjectView() {
-    const projectViewExpanded = this.notificationsState.getValue()
-      .projectViewExpanded;
+    const projectViewExpanded =
+      this.notificationsState.getValue().projectViewExpanded;
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectViewExpanded: !projectViewExpanded,
@@ -201,14 +201,14 @@ export class NotificationsService {
     });
   }
 
-  private setProjectAlertLoading(projectId: string) {
+  private setProjectAlertLoading(projectId: number | null) {
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectAlertLoading: projectId,
     });
   }
 
-  private setProjectAlertError(error: string, id: string) {
+  private setProjectAlertError(error: string, id: number) {
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectAlertError: { error, id },

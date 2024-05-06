@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 mat-card {
@@ -10,7 +10,7 @@ mat-card {
 
 a {
   text-decoration: none;
-  color: mat.get-color-from-palette(mat.$gray-palette, 900);
+  color: var(--mat-expansion-container-text-color);
   font-weight: 400;
 }
 
@@ -32,7 +32,7 @@ a {
   }
 }
 
-.mat-card-actions {
+mat-card-actions {
   display: flex;
   justify-content: space-between;
 
