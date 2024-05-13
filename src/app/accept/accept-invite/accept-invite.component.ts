@@ -1,14 +1,19 @@
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { AuthService } from "src/app/api/auth/auth.service";
 import { AcceptInviteService } from "src/app/api/accept/accept-invite.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, tap } from "rxjs/operators";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "gt-accept-invite",
   templateUrl: "./accept-invite.component.html",
   styleUrls: ["./accept-invite.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, MatCardModule, MatButtonModule, RouterLink, AsyncPipe],
 })
 export class AcceptInviteComponent implements OnInit {
   isLoggedIn$ = this.authService.isLoggedIn;

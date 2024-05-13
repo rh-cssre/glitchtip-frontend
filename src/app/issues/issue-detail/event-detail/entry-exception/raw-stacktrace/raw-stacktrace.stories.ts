@@ -1,17 +1,11 @@
-import { moduleMetadata, Story } from "@storybook/angular";
+import { Story } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { RawStacktraceComponent } from "./raw-stacktrace.component";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Raw Stacktrace Title",
   component: RawStacktraceComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule],
-    }),
-  ],
   argTypes: {
     hasFunction: {
       options: [true, false],
