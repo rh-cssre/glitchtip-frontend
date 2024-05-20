@@ -1,12 +1,7 @@
-import { MatExpansionModule } from "@angular/material/expansion";
-import { moduleMetadata, Story } from "@storybook/angular";
+import { Story } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { EntryExceptionComponent } from "./entry-exception.component";
-import { FrameTitleComponent } from "../entry-exception/frame-title/frame-title.component";
-import { FrameExpandedComponent } from "../entry-exception/frame-expanded/frame-expanded.component";
-import { RawStacktraceComponent } from "../entry-exception/raw-stacktrace/raw-stacktrace.component";
-
 import { databaseError } from "../test-data/database-error";
 import { databaseStackError } from "../test-data/database-stack-error";
 import { postError } from "../test-data/post-error";
@@ -16,21 +11,10 @@ import { stringError } from "../test-data/string-error";
 import { socialApp } from "../test-data/social-app";
 import { zeroDivisionDotnet } from "../test-data/zero-division-dotnet";
 import { stacktraceUndefined } from "../test-data/stacktrace-undefined";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Event Detail/Entry Exception",
   component: EntryExceptionComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule, MatExpansionModule],
-      declarations: [
-        FrameTitleComponent,
-        FrameExpandedComponent,
-        RawStacktraceComponent,
-      ],
-    }),
-  ],
   argTypes: {
     errorType: {
       options: [

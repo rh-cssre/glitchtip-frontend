@@ -6,6 +6,10 @@ A good issue includes reproducible steps for bugs. Clear use cases for feature r
 
 A good merge request includes a unit test demonstrating how a bug exists and is fixed with your change. Out of caution, contributors must not view or be familiar with proprietary Sentry code. Our codebase borrows code and ideas from Sentry when it was open source. We provide a fork of the last open source version of sentry [here](https://gitlab.com/glitchtip/sentry-open-source). You may and should read, understand, and copy open source Sentry code. While Sentry's current code is on Github, it would violate their proprietary license to use it.
 
+## Adding larger features and npm dependencies
+
+Please open an issue to discuss any larger feature or new npm dependency before starting work. We aim to be very dependency-light so as to keep the project maintainable with very little time. Larger feature development is encouraged, provided you are willing to assist with general project maintainance. Consider asking what maintaince task you can help with. 
+
 # Frontend Architecture Overview
 
 GlitchTip features an isolated backend API and this Angular single page application frontend. This project aims to produce a static bundle that can be included in a full GlitchTip docker image that is ultimately served by Django (or maybe ultimately by a CDN). In theory, you could build your own frontend if you wanted to.
@@ -31,7 +35,9 @@ GlitchTip uses rxjs's BehaviorSubject to provide state to components. Most compo
 
 StatefulBaseComponent provides a destroy$ observable on ngOnDestroy. Use it to unsubscribe with takeUntil(this.$destroy). It also calls service.clearState on destroy.
 
-StatefulService provides a react-like `setState` and `clearState` functions.
+StatefulService provides react-like `setState` and `clearState` functions. `setState` should be used in private, reducer-style functions. Each such function should be responsible for setting all of the state in a service relevant to a given synchronous event. Dispatching events and calling the necessary functions for setting state should be handled by public, action-style functions.
+
+Httpclient API calls should be placed in a separate API service and imported into a StatefulService instance. Generally the `APIBaseService` should be used for this.
 
 **PaginatedBaseComponent** extends StatefulBaseComponent and **PaginationStatefulService** extends StatefulService
 

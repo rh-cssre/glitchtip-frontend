@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 // THIS IS BEING SHARED WITH A MARKETING COMPONENT
@@ -15,7 +15,6 @@
   @media (min-width: $large) {
     display: flex;
     border-radius: 4px;
-    background: white;
   }
 
   mat-card {
@@ -23,8 +22,6 @@
 
     @media (min-width: $large) {
       flex: 1;
-      background: transparent;
-      border-right: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
       border-radius: 0;
       box-shadow: none !important;
 
@@ -55,6 +52,6 @@
 }
 
 .event-info {
-    margin-top: 24px;
-    margin-bottom: 24px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }

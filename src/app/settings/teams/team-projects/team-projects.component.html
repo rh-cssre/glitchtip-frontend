@@ -1,11 +1,14 @@
-<mat-card>
+<mat-card *ngIf="orgSlug$ | async as orgSlug">
   <mat-card-header class="card-header">
     <mat-card-title i18n>Projects</mat-card-title>
     <mat-error *ngIf="(errors$ | async)?.addProjectToTeam">{{
       (errors$ | async)?.addProjectToTeam
     }}</mat-error>
     <div>
-      <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
+      <mat-form-field
+        *ngIf="(userTeamRole$ | async) !== 'member'"
+        appearance="outline"
+      >
         <mat-label i18n>Add Project</mat-label>
         <mat-select (selectionChange)="addProject()" [formControl]="project">
           <ng-container
@@ -32,16 +35,19 @@
       <p class="center-text" i18n>This team doesn't have any projects</p>
     </ng-container>
     <ng-template #listMembers>
-      <mat-list>
+      <ul>
         <mat-error
           *ngIf="(errors$ | async)?.removeProjectFromTeam"
           class="center-text"
           >{{ (errors$ | async)?.removeProjectFromTeam }}</mat-error
         >
-        <mat-list-item *ngFor="let project of projectsOnTeam$ | async">
+        <li
+          *ngFor="let project of projectsOnTeam$ | async"
+          class="team-project-list-item"
+        >
           <a
-            mat-line
-            [routerLink]="['/', project.organization.slug, 'issues']"
+            class="team-name"
+            [routerLink]="['/', orgSlug, 'issues']"
             [queryParams]="{ project: project.id }"
             >{{ project.name }}</a
           >
@@ -54,7 +60,8 @@
             (click)="removeProject(project.slug)"
             id="remove-team-member"
           ></gt-loading-button>
-        </mat-list-item> </mat-list
-    ></ng-template>
+        </li>
+      </ul>
+    </ng-template>
   </mat-card-content>
 </mat-card>

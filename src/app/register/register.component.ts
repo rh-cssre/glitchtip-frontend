@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
+import {
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
+import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { tap } from "rxjs/operators";
 import { RegisterService } from "./register.service";
 import { AcceptInviteService } from "../api/accept/accept-invite.service";
@@ -8,11 +13,32 @@ import { SettingsService } from "../api/settings.service";
 import { SocialApp } from "../api/user/user.interfaces";
 import { GlitchTipOAuthService } from "../api/oauth/oauth.service";
 import { getUTM, setStorageWithExpiry } from "../shared/shared.utils";
+import { AuthSvgComponent } from "../shared/auth-svg/auth-svg.component";
+import { MatButtonModule } from "@angular/material/button";
+import { InputMatcherDirective } from "../shared/input-matcher.directive";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-register",
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    InputMatcherDirective,
+    MatButtonModule,
+    NgFor,
+    AuthSvgComponent,
+    RouterLink,
+    AsyncPipe,
+  ],
 })
 export class RegisterComponent implements OnInit {
   socialApps$ = this.settings.socialApps$;
@@ -112,6 +138,6 @@ export class RegisterComponent implements OnInit {
       setStorageWithExpiry("register", utm, 5 * 60 * 1000);
     }
 
-    this.oauthService.initOAuthLogin(socialApp)
+    this.oauthService.initOAuthLogin(socialApp);
   }
 }
