@@ -1,7 +1,16 @@
 import { IssueDetail } from "../interfaces";
+import { ProjectReference } from "src/app/api/projects/projects-api.interfaces";
+
+interface APIProjectReference extends Omit<ProjectReference, "id"> {
+  id: string;
+}
+
+interface APIIssueDetail extends Omit<IssueDetail, "project"> {
+  project: APIProjectReference;
+}
 
 // data from api/0/issues/{{ issue number }}
-export const sampleIssueDetail: IssueDetail = {
+export const sampleApiIssueDetail: APIIssueDetail = {
   seenBy: [
     {
       username: "a@aa.aa",
@@ -248,4 +257,12 @@ export const sampleIssueDetail: IssueDetail = {
     },
   ],
   statusDetails: {},
+};
+
+export const sampleIssueDetail: IssueDetail = {
+  ...sampleApiIssueDetail,
+  project: {
+    ...sampleApiIssueDetail.project,
+    id: parseInt(sampleApiIssueDetail.project.id, 10),
+  },
 };

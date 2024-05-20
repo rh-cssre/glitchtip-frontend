@@ -143,22 +143,10 @@ export const platforms: Platform[] = [
         link: "https://docs.sentry.io/platforms/javascript/angular/",
       },
       {
-        id: "javascript-angularjs",
-        name: "AngularJS",
-        type: "framework",
-        link: "https://docs.sentry.io/clients/javascript/integrations/angularjs/",
-      },
-      {
         id: "javascript-backbone",
         name: "Backbone",
         type: "framework",
         link: "https://docs.sentry.io/clients/javascript/integrations/#backbone",
-      },
-      {
-        id: "javascript-browser",
-        name: "Browser JavaScript",
-        type: "language",
-        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=browser",
       },
       {
         id: "javascript-ember",
@@ -170,7 +158,7 @@ export const platforms: Platform[] = [
         id: "javascript",
         name: "JavaScript",
         type: "language",
-        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=browser",
+        link: "https://docs.sentry.io/error-reporting/quickstart/?platform=javascript",
       },
       {
         id: "javascript-react",

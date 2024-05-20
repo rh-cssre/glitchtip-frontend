@@ -19,6 +19,9 @@ section {
 #project-picker {
   position: relative;
   flex: 1;
+  @media screen and (min-width: ($small - 1)) {
+    max-width: calc(100% - $side-nav-width);
+  }
 }
 
 .reset-button {
@@ -26,13 +29,17 @@ section {
   right: 50px;
   z-index: 2;
   height: 48px;
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--mat-expansion-header-indicator-color);
   padding: 0;
   width: 35px;
   min-width: 35px;
   overflow: hidden;
   transform: translateY(0);
   transition: transform 0.2s;
+
+  mat-icon {
+    margin-right: 0;
+  }
 }
 
 .mat-expanded + .reset-button {
@@ -59,33 +66,16 @@ mat-expansion-panel::ng-deep {
   div.mat-expansion-panel-body {
     padding-left: 0;
     padding-right: 0;
-
-    .mat-list-base .mat-list-item .mat-list-item-content {
-      padding-left: 24px;
-      padding-right: 24px;
-    }
   }
 
-  .mat-selection-list {
-    max-height: 275px;
-    overflow-y: auto;
-  }
-
-  .mat-form-field {
+  .mat-mdc-form-field {
     display: block;
-  }
-
-  .mat-form-field-wrapper {
     margin-left: 24px;
     margin-right: 24px;
   }
 
   .mat-expansion-panel-header[aria-disabled="true"] {
-    color: rgba(0, 0, 0, 0.87);
-
-    &.disabled-looking {
-      color: rgba(0, 0, 0, 0.4);
-    }
+    color: var(--mat-expansion-header-text-color);
   }
 
   .mat-expansion-panel-header-title {
@@ -107,9 +97,13 @@ mat-expansion-panel::ng-deep {
 }
 
 .list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+
   button {
-    // borrowed from some "button unstyled" classes I've done elsewhere
     display: inline-block;
+    flex-grow: 1;
     border: none;
     margin: 0 15px 0 0; // 0
     padding: 12px 0; // 0
@@ -118,9 +112,7 @@ mat-expansion-panel::ng-deep {
     -webkit-appearance: none;
     cursor: pointer;
     color: inherit;
-    font-weight: inherit;
 
-    width: 100%;
     text-align: left;
   }
 
@@ -170,8 +162,12 @@ mat-expansion-panel::ng-deep {
     display: none;
 
     .no-projects & {
-      display: block;
+      display: inline-flex;
       margin-left: 0;
     }
   }
+}
+
+.mat-body-1 {
+  margin: 0;
 }
