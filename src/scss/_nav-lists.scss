@@ -1,0 +1,15 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+gt-main-nav,
+gt-profile,
+gt-settings {
+  @include mat.list-typography($nav-list-typography);
+}
+
+.sub-items {
+  .mdc-list-item__primary-text {
+    word-wrap: normal;
+    white-space: normal;
+  }
+}

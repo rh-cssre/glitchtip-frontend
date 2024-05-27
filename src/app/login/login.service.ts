@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { EMPTY } from "rxjs";
-import { catchError, map, tap, exhaustMap, withLatestFrom } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  tap,
+  exhaustMap,
+  withLatestFrom,
+} from "rxjs/operators";
 import { encode, decode } from "cborg";
 import { StatefulService } from "../shared/stateful-service/stateful-service";
 import { ServerError } from "../shared/django.interfaces";

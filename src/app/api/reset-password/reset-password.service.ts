@@ -58,7 +58,6 @@ export class ResetPasswordService {
     this.postEmailToReset(email)
       .pipe(
         tap((_) => {
-          console.log(_);
           this.setSendResetEmailLoading(false),
             this.setSendResetEmailSuccess(
               `If you have an account with GlitchTip, an email has been sent to ${email}`

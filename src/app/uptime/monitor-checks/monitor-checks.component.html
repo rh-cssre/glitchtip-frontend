@@ -1,88 +1,100 @@
-<ng-container *ngIf="paginator">
-  <ng-container *ngIf="monitorChecks">
-    <ng-container *ngIf="monitorChecks.length > 0">
-      <table mat-table [dataSource]="monitorChecks" class="mat-elevation-z2">
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef i18n>Status</th>
-          <td
-            mat-cell
-            *matCellDef="let monitorCheck"
-            class="status-color status-color--{{ monitorCheck.isUp }}"
+<ng-container *ngIf="monitorChecks$ | async as monitorChecks">
+  <ng-container *ngIf="monitorChecks.length">
+    <button mat-raised-button (click)="toggleIsChange()">
+      <ng-container *ngIf="isChange$ | async; else isNotChange" i18n
+        >Show all checks</ng-container
+      >
+      <ng-template #isNotChange i18n>Show incidents</ng-template>
+    </button>
+    <table
+      *ngIf="displayedColumns$ | async as displayedColumns"
+      mat-table
+      [dataSource]="monitorChecks"
+      class="mat-elevation-z2"
+    >
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef i18n>Status</th>
+        <td
+          mat-cell
+          *matCellDef="let monitorCheck"
+          class="status-color status-color--{{ monitorCheck.isUp }} mat-body-1"
+        >
+          <span *ngIf="monitorCheck.isUp" i18n="Uptime check reports up"
+            >Up</span
           >
-            <span *ngIf="monitorCheck.isUp" i18n="Uptime check reports up"
-              >Up</span
-            >
-            <span
-              *ngIf="monitorCheck.isUp === false"
-              i18n="Uptime check reports down"
-              >Down</span
-            >
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="reason">
-          <th mat-header-cell *matHeaderCellDef i18n>Reason</th>
-          <td mat-cell *matCellDef="let monitorCheck">
-            <ng-container *ngIf="monitorCheck.isUp; else down">
-              <span i18n>OK</span>
-            </ng-container>
-            <ng-template #down>
-              <ng-container
-                *ngIf="
-                  monitorCheck.reason === null &&
-                    monitor?.monitorType === 'Heartbeat';
-                  else reason
-                "
-              >
-                <span i18n>Request not received</span>
-              </ng-container>
-              <ng-template #reason>
-                <span>
-                  {{ convertReasonText(monitorCheck.reason) }}
-                </span>
-              </ng-template>
-            </ng-template>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="responseTime">
-          <th mat-header-cell *matHeaderCellDef i18n>Response time</th>
-          <td mat-cell *matCellDef="let monitorCheck">
+          <span
+            *ngIf="monitorCheck.isUp === false"
+            i18n="Uptime check reports down"
+            >Down</span
+          >
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="reason">
+        <th mat-header-cell *matHeaderCellDef i18n>Reason</th>
+        <td mat-cell *matCellDef="let monitorCheck" class="mat-body-1">
+          <ng-container *ngIf="monitorCheck.isUp; else down">
+            <span i18n>OK</span>
+          </ng-container>
+          <ng-template #down>
             <ng-container
               *ngIf="
-                monitor?.monitorType === 'Heartbeat' ||
-                  !monitorCheck.responseTime;
-                else time
+                monitorCheck.reason === null &&
+                  monitor?.monitorType === 'Heartbeat';
+                else reason
               "
             >
-              <span>-</span>
+              <span i18n>Request not received</span>
             </ng-container>
-            <ng-template #time>
-              <span>{{ monitorCheck.responseTime | humanizeDuration }}</span>
+            <ng-template #reason>
+              <span>
+                {{ convertReasonText(monitorCheck.reason) }}
+              </span>
             </ng-template>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="startCheck">
-          <th mat-header-cell *matHeaderCellDef>Time</th>
-          <td mat-cell *matCellDef="let monitorCheck">
-            <span>{{ monitorCheck.startCheck | date: "short" }}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="pagination">
-          <td
-            mat-footer-cell
-            *matFooterCellDef
-            [attr.colspan]="displayedColumns.length"
+          </ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="responseTime">
+        <th mat-header-cell *matHeaderCellDef i18n>Response time</th>
+        <td mat-cell *matCellDef="let monitorCheck" class="mat-body-1">
+          <ng-container
+            *ngIf="
+              monitor.monitorType === 'Heartbeat' || !monitorCheck.responseTime;
+              else time
+            "
           >
-            <gt-list-footer [paginator]="paginator"> </gt-list-footer>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="monitor-row"
-        ></tr>
-        <tr mat-footer-row *matFooterRowDef="['pagination']"></tr>
-      </table>
-    </ng-container>
+            <span>-</span>
+          </ng-container>
+          <ng-template #time>
+            <span>{{ monitorCheck.responseTime | humanizeDuration }}</span>
+          </ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="startCheck">
+        <th mat-header-cell *matHeaderCellDef>Time</th>
+        <td mat-cell *matCellDef="let monitorCheck" class="mat-body-1">
+          <span>{{ monitorCheck.startCheck | date : "short" }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="pagination">
+        <td
+          mat-footer-cell
+          *matFooterCellDef
+          [attr.colspan]="displayedColumns.length"
+        >
+          <gt-list-footer [paginator]="(paginator$ | async)!"> </gt-list-footer>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="monitor-row"
+      ></tr>
+      <tr
+        class="pagination-row"
+        mat-footer-row
+        *matFooterRowDef="['pagination']"
+      ></tr>
+    </table>
   </ng-container>
 </ng-container>
