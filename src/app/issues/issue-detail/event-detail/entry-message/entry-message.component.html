@@ -2,7 +2,9 @@
   <div>
     <mat-divider></mat-divider>
     <h3>Message</h3>
-    <pre class="formatted-message">{{ message?.formatted }}</pre>
+    <pre class="formatted-message">{{
+      message?.formatted ?? message?.message
+    }}</pre>
     <dl *ngIf="message?.params">
       <gt-entry-data
         *ngFor="let param of message?.params | keyvalue"

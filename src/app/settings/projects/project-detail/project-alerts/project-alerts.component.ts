@@ -4,15 +4,38 @@ import {
   ProjectAlert,
 } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "./project-alerts.service";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
 import { distinctUntilChanged } from "rxjs";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { LoadingButtonComponent } from "../../../../shared/loading-button/loading-button.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-project-alerts",
   templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatDividerModule,
+    NgIf,
+    AlertFormComponent,
+    NgFor,
+    MatIconModule,
+    MatTooltipModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    AsyncPipe,
+  ],
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
   @ViewChild("newAlert") newAlertRef?: AlertFormComponent;

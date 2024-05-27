@@ -6,26 +6,37 @@ interface BaseProduct {
   metadata: { [key: string]: string };
 }
 
-export interface Plan {
+export interface Product extends BaseProduct {
+  prices: BasePrice[];
+}
+
+export interface BasePrice {
   id: string;
   nickname: string;
-  amount: number | string;
+  currency: string;
+  type: string;
+  unit_amount: number;
+  human_readable_price: string;
   metadata: { [key: string]: string };
+}
+
+export interface Price extends BasePrice {
   product: BaseProduct;
 }
 
-export interface Product extends BaseProduct {
-  plans: Plan[];
+interface SubscriptionItem {
+  id: number;
+  price: Price;
 }
 
 export interface Subscription {
   id: string;
-  created: string;
-  collection_method: string;
-  billing_cycle_anchor: string;
-  current_period_end: string;
-  current_period_start: string;
-  start_date: string;
+  created: string | null;
+  collection_method: string | null;
+  billing_cycle_anchor: string | null;
+  current_period_end: string | null;
+  current_period_start: string | null;
+  start_date: string | null;
   status:
     | "active"
     | "canceled"
@@ -34,12 +45,12 @@ export interface Subscription {
     | "past_due"
     | "trialing"
     | "unpaid";
-  plan: Plan | null;
+  items: SubscriptionItem[];
 }
 
 export interface CreateSubscriptionResp {
   organization: number;
-  plan: string;
+  price: string;
   subscription: Subscription;
 }
 
