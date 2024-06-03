@@ -1,0 +1,23 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+
+  gt-issue-detail-tags {
+    .bar {
+      background: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 400);
+      box-shadow: none;
+      transition: all 0.5s;
+
+      &:not(:last-child) {
+        border-right: 1px solid white;
+      }
+
+      &:hover {
+        background: mat.m2-get-color-from-palette($primary, "default");
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      }
+    }
+  }
+}

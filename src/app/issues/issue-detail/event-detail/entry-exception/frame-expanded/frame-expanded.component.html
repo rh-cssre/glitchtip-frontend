@@ -1,9 +1,9 @@
-<div *ngIf="getCodeBlock() as codeBlock; else simpleContext">
+<div *ngIf="shouldDisplayPrismCode; else simpleContext">
   <pre
     class="prism-code-container"
     [attr.data-start]="firstLineNumber"
     [attr.data-line-offset]="firstLineNumber"
-    [attr.data-line]="lineNo"
+    [attr.data-line]="highlightLine"
   ><code gtPrism [language]="eventPlatform" class="line-numbers">{{ codeBlock }}</code></pre>
 </div>
 <ng-template #simpleContext>
