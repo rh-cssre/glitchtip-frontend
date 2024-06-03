@@ -1,0 +1,89 @@
+<ng-container *ngIf="commentsListLoading$ | async; else showComments">
+  <div class="comments-loading-wrapper">
+    <mat-progress-spinner
+      [diameter]="33"
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+</ng-container>
+<ng-template #showComments>
+  <div class="comment-create-wrapper">
+    <ng-container *ngIf="displayCommentCreation$ | async">
+      <gt-comment-form
+        [loading]="(createCommentLoading$ | async)!"
+        (commentSubmitted)="createOrUpdateComment($event)"
+      ></gt-comment-form>
+    </ng-container>
+  </div>
+
+  <div class="comment-list">
+    <ng-container *ngFor="let comment of comments$ | async; let i = index">
+      <mat-divider class="list-head-divider" *ngIf="i === 0"></mat-divider>
+      <div class="comment">
+        <ng-container *ngIf="comment.updateMode; else displayComment">
+          <gt-comment-form
+            [comment]="comment"
+            [loading]="comment.updateLoading"
+            (cancelUpdate)="cancelCommentUpdateMode($event)"
+            (commentSubmitted)="createOrUpdateComment($event)"
+          ></gt-comment-form>
+        </ng-container>
+        <ng-template #displayComment>
+          <div class="delete-loading-wrapper">
+            <div class="delete-loading-overlay" *ngIf="comment.deleteLoading">
+              <div class="delete-spinner-wrapper">
+                <mat-progress-spinner
+                  [diameter]="33"
+                  color="primary"
+                  mode="indeterminate"
+                ></mat-progress-spinner>
+              </div>
+            </div>
+            <div class="comment-header">
+              <div class="comment-user-details">
+                <div>
+                  <span class="name mat-subtitle-1">{{
+                    comment.user?.email
+                  }}</span>
+                </div>
+                <div>
+                  <span class="date mat-caption">{{
+                    comment.dateCreated | date : "	LLL d, Y hh:mm a"
+                  }}</span>
+                </div>
+              </div>
+              <ng-container *ngIf="user$ | async as user">
+                <div
+                  *ngIf="user.id === comment.user?.id"
+                  class="comment-edit-options"
+                >
+                  <button
+                    mat-icon-button
+                    class="small-icon-button"
+                    (click)="triggerCommentUpdateMode(comment.id)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    class="small-icon-button"
+                    (click)="deleteComment(comment.id)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+            <div
+              markdown
+              [data]="comment.data.text"
+              class="comment-markdown"
+            ></div>
+          </div>
+        </ng-template>
+      </div>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </div>
+</ng-template>
