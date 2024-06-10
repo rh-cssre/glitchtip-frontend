@@ -13,7 +13,7 @@ export class ReleasesAPIService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug: string, cursor?: string) {
+  list(organizationSlug: string, cursor?: string | null) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
@@ -28,7 +28,11 @@ export class ReleasesAPIService extends APIBaseService {
     return this.http.get<Release>(this.detailURL(organizationSlug, version));
   }
 
-  listReleaseFiles(organizationSlug: string, version: string, cursor?: string) {
+  listReleaseFiles(
+    organizationSlug: string,
+    version: string,
+    cursor?: string | null
+  ) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);

@@ -54,6 +54,7 @@ export const zeroDivisionDotnet: EventDetail = {
     {
       type: "message",
       data: {
+        message: "",
         formatted:
           "An unhandled exception has occurred while executing the request.",
       },
