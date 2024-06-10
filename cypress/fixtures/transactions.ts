@@ -2,7 +2,12 @@ import { uniqueId } from "../e2e/utils.cy";
 
 export const generateTransactions = (url: string, count: number) => {
   for (let i = 0; i < count; i++) {
-    cy.request("POST", url, uniqueTransaction());
+    cy.request({
+      method: "POST",
+      url,
+      headers: { "Content-Type": "application/x-sentry-envelope" },
+      body: uniqueTransaction(),
+    });
   }
 };
 

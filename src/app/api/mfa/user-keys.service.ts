@@ -67,28 +67,31 @@ export class UserKeysService extends APIBaseService {
 
   fido2() {
     // Should use cbor
-    return this.http.get(this.fido2Url, {
-      headers: {
-        Accept: "application/octet-stream"
-      },
-      responseType: "arraybuffer"
-    })
-    .pipe(map(response => {
-      const converted = new Uint8Array(response);
-      return decode(converted);
-    }));
+    return this.http
+      .get(this.fido2Url, {
+        headers: {
+          Accept: "application/octet-stream",
+        },
+        responseType: "arraybuffer",
+      })
+      .pipe(
+        map((response) => {
+          const converted = new Uint8Array(response);
+          return decode(converted);
+        })
+      );
   }
 
   fido2Create(attResponse: AuthenticatorAttestationResponse, name: string) {
     const request = encode({
       attestationObject: new Uint8Array(attResponse.attestationObject),
       clientDataJSON: new Uint8Array(attResponse.clientDataJSON),
-      name
+      name,
     });
     return this.http.post<UserKey>(this.fido2Url, request.buffer, {
       headers: {
         "Content-Type": "application/cbor",
-      }
+      },
     });
   }
 
