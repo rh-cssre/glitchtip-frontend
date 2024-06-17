@@ -1,4 +1,4 @@
-<ng-container *ngIf="frame !== undefined">
+<section *ngIf="frame !== undefined" class="mat-typography">
   <ng-container *ngIf="frame.filename || frame.module">
     <span
       [matTooltip]="
@@ -21,7 +21,7 @@
       "
     >
       <a
-        class="help-button"
+        class="help-button small-icon-button"
         mat-icon-button
         matTooltipPosition="above"
         [matTooltip]="frame.filename"
@@ -50,4 +50,4 @@
 code: https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L245
 docs: https://gitlab.com/glitchtip/sentry-open-source/sentry-docs/-/blob/master/src/collections/_documentation/development/sdk-dev/event-payloads/stacktrace.md
 -->
-</ng-container>
+</section>

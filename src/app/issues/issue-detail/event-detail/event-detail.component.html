@@ -18,7 +18,7 @@
       </p>
       <p>
         <span *ngIf="event?.dateCreated" class="space">{{
-          event?.dateCreated | date: "long"
+          event?.dateCreated | date : "long"
         }}</span>
         <a
           target="_blank"
@@ -26,7 +26,7 @@
             '/organizations/' +
             (orgSlug$ | async) +
             '/issues/' +
-            event.issue +
+            event.groupID +
             '/events/' +
             event?.eventID +
             '/json/'
@@ -48,7 +48,7 @@
         [routerLink]="(nextEventUrl$ | async) || ''"
         [disabled]="(nextEvent$ | async) === false"
       >
-        Newer <mat-icon>keyboard_arrow_right</mat-icon>
+        Newer <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
       </button>
     </nav>
   </section>
@@ -109,7 +109,7 @@
       <gt-entry-data
         *ngFor="let context of event.context | keyvalue"
         [key]="context.key"
-        [value]="context.value | json"
+        [value]="context.value"
       >
       </gt-entry-data>
     </dl>
