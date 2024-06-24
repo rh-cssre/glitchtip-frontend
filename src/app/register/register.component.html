@@ -1,17 +1,16 @@
 <div class="auth-form-wrapper">
   <mat-card class="auth-form">
-    <h1 i18n>Register</h1>
+    <mat-card-header>
+      <mat-card-title>
+        <h3 i18n>Register</h3>
+      </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-error *ngIf="error">{{ error }}</mat-error>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            autofocus
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-          />
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput autofocus type="email" formControlName="email" />
           <mat-error>
             <span *ngIf="email?.errors?.required"
               >Your email is required to sign up</span
@@ -24,15 +23,11 @@
             }}</span>
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            type="password"
-            placeholder="Password"
-            formControlName="password1"
-          />
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password1" />
           <mat-error>
-            <span *ngIf="password1?.errors"
+            <span *ngIf="password1?.errors?.minlength"
               >Your password should be at least 8 characters long</span
             >
             <span *ngIf="password1?.errors?.required"
@@ -43,7 +38,8 @@
             }}</span>
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Confirm password</mat-label>
           <input
             matInput
             type="password"
@@ -70,7 +66,7 @@
       </form>
       <ng-container *ngIf="socialApps$ | async as socialApps">
         <div *ngIf="socialApps.length" class="or">
-          <span class="mat-body-strong mat-body-2">or</span>
+          <span class="mat-body-strong">or</span>
         </div>
         <div class="o-auth">
           <button
@@ -90,7 +86,7 @@
     </mat-card-content>
     <p class="mat-body-1 sign-up">
       <ng-container i18n>Already have an account?</ng-container>
-      <br><a routerLink="../login" i18n>Log In</a>
+      <br /><a routerLink="../login" i18n>Log In</a>
     </p>
   </mat-card>
 </div>
