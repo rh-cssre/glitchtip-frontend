@@ -1,0 +1,22 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+@use "variables";
+
+$nav-list-typography: mat.m2-define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-1: mat.m2-define-typography-level(16px, 24px, 500, $font-sans-serif),
+  $subtitle-1: mat.m2-define-typography-level(16px, 24px, 500, $font-sans-serif),
+);
+
+gt-main-nav,
+gt-profile,
+gt-settings {
+  @include mat.list-typography($nav-list-typography);
+}
+
+.sub-items {
+  .mdc-list-item__primary-text {
+    word-wrap: normal;
+    white-space: normal;
+  }
+}
