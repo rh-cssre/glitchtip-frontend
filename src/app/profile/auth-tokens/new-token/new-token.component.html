@@ -21,7 +21,7 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <h2>Label</h2>
         <p>Give your token a name, so you can easily identify it.</p>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Label</mat-label>
           <input matInput type="text" formControlName="label" />
           <mat-error

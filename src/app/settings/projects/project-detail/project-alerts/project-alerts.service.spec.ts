@@ -31,52 +31,52 @@ describe("ProjectAlertsService", () => {
   it("find and replace should return array of project alerts with new time and quantity", () => {
     const currentAlerts = [
       {
-        pk: 79,
-        timespan_minutes: 4,
+        id: 79,
+        timespanMinutes: 4,
         quantity: 111,
         uptime: true,
         alertRecipients: [],
       },
       {
-        pk: 78,
-        timespan_minutes: 5,
+        id: 78,
+        timespanMinutes: 5,
         quantity: 3,
         uptime: false,
         alertRecipients: [],
       },
       {
-        pk: 77,
-        timespan_minutes: 5,
+        id: 77,
+        timespanMinutes: 5,
         quantity: 4,
         uptime: true,
         alertRecipients: [],
       },
     ];
     const updatedAlertResp = {
-      pk: 78,
-      timespan_minutes: 3,
+      id: 78,
+      timespanMinutes: 3,
       quantity: 11,
       uptime: true,
       alertRecipients: [],
     };
     const newAlerts = [
       {
-        pk: 79,
-        timespan_minutes: 4,
+        id: 79,
+        timespanMinutes: 4,
         quantity: 111,
         uptime: true,
         alertRecipients: [],
       },
       {
-        pk: 78,
-        timespan_minutes: 3,
+        id: 78,
+        timespanMinutes: 3,
         quantity: 11,
         uptime: true,
         alertRecipients: [],
       },
       {
-        pk: 77,
-        timespan_minutes: 5,
+        id: 77,
+        timespanMinutes: 5,
         quantity: 4,
         uptime: true,
         alertRecipients: [],

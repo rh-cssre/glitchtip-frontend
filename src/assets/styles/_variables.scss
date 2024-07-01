@@ -1,81 +1,8 @@
-@use '@angular/material' as mat;
-
-$amaranth: #e22a46;
-
-$amaranth-palette: (
-  50: #fce5e9,
-  100: #f6bfc8,
-  200: #f195a3,
-  300: #eb6a7e,
-  400: #e64a62,
-  500: #e22a46,
-  600: #df253f,
-  700: #da1f37,
-  800: #d6192f,
-  900: #cf0f20,
-  A100: #fffcfc,
-  A200: #ffc9cc,
-  A400: #ff969d,
-  A700: #ff7c85,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #ffffff,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$candy-app-primary: mat.define-palette($amaranth-palette);
-$candy-app-accent: mat.define-palette(mat.$deep-orange-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$candy-app-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat.define-light-theme(
-  $candy-app-primary,
-  $candy-app-accent,
-  $candy-app-warn
-);
-
+$font-path: "../fonts";
 $font-sans-serif: "Plex Sans";
 $font-mono: "Plex Mono";
 
-// Define a custom typography config that overrides the font-family as well as specific levels
-// See for defaults:
-// https://github.com/angular/components/blob/d9977bdb1101e107312580c124acf0a9f410452e/src/material/core/typography/_typography.scss
-// See for intended use cases
-// https://material.angular.io/guide/typography#what-is-typography-
-$custom-typography: mat.define-typography-config(
-  $font-family: $font-sans-serif,
-  $display-4: mat.define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
-  $display-3: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-2: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-1: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $body-2: mat.define-typography-level(16px, 28px, 500),
-  $body-1: mat.define-typography-level(16px, 24px, 400),
-);
-
-$mobile-typography: mat.define-typography-config(
-  $font-family: $font-sans-serif,
-  $display-4: mat.define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
-  $display-3: mat.define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
-  $display-2: mat.define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
-  $display-1: mat.define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
-);
+$side-nav-width: 240px;
 
 // Breakpoints
 
