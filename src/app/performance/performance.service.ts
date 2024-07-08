@@ -10,6 +10,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
 
 export interface PerformanceState extends PaginationStatefulServiceState {
   transactionGroups: TransactionGroup[];
@@ -38,7 +39,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     map(([projects, groups]) => {
       return groups.map((group) => {
         const projectSlug = projects?.find(
-          (project) => project.id === group.project
+          (project) => +project.id === group.project
         )?.name;
         return {
           ...group,
@@ -59,15 +60,15 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
 
   getTransactionGroups(
     orgSlug: string,
-    cursor: string | undefined,
-    project: string[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined,
-    query: string | undefined
+    cursor: string | undefined | null,
+    project: number[] | null,
+    start: string | undefined | null,
+    end: string | undefined | null,
+    sort: string | undefined | null,
+    environment: string | undefined | null,
+    query: string | undefined | null
   ) {
-    this.retrieveTransactionGroups(
+    return this.retrieveTransactionGroups(
       orgSlug,
       cursor,
       project,
@@ -76,18 +77,18 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
       sort,
       environment,
       query
-    ).subscribe();
+    );
   }
 
   private retrieveTransactionGroups(
     orgSlug: string,
-    cursor?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    cursor?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null
   ) {
     this.setLoadingStart();
     return this.transactionGroupsAPIService
@@ -106,22 +107,13 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   private setTransactionGroupsError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      errors: this.updateErrorMessage(errors),
+      errors: parseErrorMessage(errors),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 
   private setLoadingStart() {

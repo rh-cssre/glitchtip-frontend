@@ -34,7 +34,7 @@ export class UserReportsService extends PaginationStatefulService<UserReportsSta
     super(initialState);
   }
 
-  getReportsForIssue(issue: number, cursor: string | undefined) {
+  getReportsForIssue(issue: number, cursor?: string | null) {
     this.setLoadingReports(true);
     this.resetUserReports();
     this.getIssueReports(issue, cursor)
@@ -57,7 +57,7 @@ export class UserReportsService extends PaginationStatefulService<UserReportsSta
       .subscribe();
   }
 
-  private getIssueReports(issueId: number, cursor: string | undefined) {
+  private getIssueReports(issueId: number, cursor?: string | null) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
