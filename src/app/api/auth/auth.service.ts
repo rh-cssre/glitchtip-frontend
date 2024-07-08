@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { Router, RouterStateSnapshot } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { lastValueFrom } from "rxjs";
 
 export interface AuthState {
   isLoggedIn: boolean;
@@ -19,9 +20,11 @@ const initialState: AuthState = {
 })
 export class AuthService extends StatefulService<AuthState> {
   isLoggedIn = this.getState$.pipe(map((data) => data.isLoggedIn));
-  private readonly url = "/rest-auth/logout/";
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     super(initialState);
     const authData = localStorage.getItem("auth");
     if (authData) {
@@ -31,6 +34,19 @@ export class AuthService extends StatefulService<AuthState> {
         redirectUrl: auth.redirectUrl,
       });
     }
+  }
+
+  loginCheck(state: RouterStateSnapshot) {
+    lastValueFrom(
+      this.isLoggedIn.pipe(
+        tap((loggedIn) => {
+          if (loggedIn === false) {
+            this.setRedirectUrl(state.url);
+          }
+        }),
+      ),
+    );
+    return this.isLoggedIn;
   }
 
   setAuth(data: AuthState) {
@@ -56,7 +72,8 @@ export class AuthService extends StatefulService<AuthState> {
   /** Log out user from the backend  */
   logout() {
     this.http
-      .post(this.url, null)
+      .post("/rest-auth/logout/", null)
+      // .delete("/_allauth/browser/v1/auth/session")
       .pipe(tap(() => this.removeAuth()))
       .toPromise();
   }

@@ -29,7 +29,7 @@ export interface TransactionDetail extends Transaction {
 
 export interface TransactionGroup extends TransactionBase {
   project: number;
-  avgDuration: string;
+  avgDuration: number;
   transactionCount: number;
 }
 

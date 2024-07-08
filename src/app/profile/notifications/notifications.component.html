@@ -1,6 +1,8 @@
 <section class="l-body">
   <mat-card>
-    <mat-card-title>Notifications</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>Notifications</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div class="default-settings">
@@ -61,7 +63,7 @@
           </div>
           <div class="border">
             <div
-              class="mat-list-item"
+              class="project-list-item"
               *ngFor="let project of projects.value; let i = index"
             >
               <div class="project">
