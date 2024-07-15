@@ -68,15 +68,21 @@ export class MembersService {
   ) {}
 
   /** Send another invite to already invited org member */
-  resendInvite(memberId: number) {
-    this.setLoadingResendInvite(memberId);
+  resendInvite(member: Member) {
+    this.setLoadingResendInvite(member.id);
+    const data = {
+      email: member.email,
+      orgRole: member.role,
+      teamRoles: [],
+      reinvite: true,
+    }
     lastValueFrom(
       this.organizationsService.activeOrganizationSlug$.pipe(
         take(1),
         mergeMap((orgSlug) =>
-          this.membersAPIService.resendInvite(orgSlug!, memberId)
+          this.membersAPIService.inviteUser(orgSlug!, data)
         ),
-        tap(() => this.setResendInviteSuccess(memberId)),
+        tap(() => this.setResendInviteSuccess(member.id)),
         catchError(() => {
           this.clearLoadingResendInvite();
           return EMPTY;
@@ -105,19 +111,20 @@ export class MembersService {
             }),
             catchError((err) => {
               let message = `Error attempting to remove ${member.email} from organization`;
-              if (
-                err instanceof HttpErrorResponse &&
-                err.status === 403 &&
-                err.error?.detail
-              ) {
-                message += `. ${err.error.detail}"`;
+              if (err instanceof HttpErrorResponse) {
+                if (err.status === 403 && err.error?.detail) {
+                  message += `. ${err.error.detail}`;
+                } else if (err.status === 400 && err.error?.message) {
+                  message += `. ${err.error.message}`;
+                }
               }
               this.snackBar.open(message);
               return EMPTY;
             })
           );
         })
-      )
+      ),
+      { defaultValue: null }
     );
   }
 
