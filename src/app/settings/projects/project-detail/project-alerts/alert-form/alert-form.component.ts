@@ -8,10 +8,17 @@ import {
   ValidatorFn,
   AbstractControl,
   ValidationErrors,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator } from "src/app/shared/validators";
+import { intRegex } from "src/app/shared/validators";
+import { LoadingButtonComponent } from "../../../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { NgIf } from "@angular/common";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -37,6 +44,16 @@ export const selectionRequiredValidator: ValidatorFn = (
   selector: "gt-alert-form",
   templateUrl: "./alert-form.component.html",
   styleUrls: ["./alert-form.component.scss"],
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LoadingButtonComponent,
+  ],
 })
 export class AlertFormComponent implements OnInit {
   @Input() loading: boolean | null = false;
@@ -45,7 +62,7 @@ export class AlertFormComponent implements OnInit {
   @Input() uptime: boolean | null = false;
   @Input() errorAlert: boolean = true;
   @Output() alertSubmit = new EventEmitter<{
-    timespan_minutes: number;
+    timespanMinutes: number;
     quantity: number;
     uptime: boolean;
   }>();
@@ -53,7 +70,7 @@ export class AlertFormComponent implements OnInit {
 
   intervalValidators = [
     Validators.min(0),
-    numberValidator,
+    Validators.pattern(intRegex),
     Validators.required,
   ];
 
@@ -65,14 +82,16 @@ export class AlertFormComponent implements OnInit {
       },
       selectionRequiredValidator
     ),
-    timespan_minutes: new UntypedFormControl(""),
+    timespanMinutes: new UntypedFormControl(""),
     quantity: new UntypedFormControl(""),
   });
 
   projectFormTimespan = this.projectAlertForm.get(
-    "timespan_minutes"
+    "timespanMinutes"
   ) as UntypedFormControl;
-  projectFormQuantity = this.projectAlertForm.get("quantity") as UntypedFormControl;
+  projectFormQuantity = this.projectAlertForm.get(
+    "quantity"
+  ) as UntypedFormControl;
   projectFormUptime = this.projectAlertForm.get(
     "optionsGroup.uptime"
   ) as UntypedFormControl;
@@ -90,7 +109,7 @@ export class AlertFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectAlertForm.setValue({
-      timespan_minutes: this.timespan,
+      timespanMinutes: this.timespan,
       quantity: this.quantity,
       optionsGroup: {
         uptime: this.uptime,
@@ -142,7 +161,7 @@ export class AlertFormComponent implements OnInit {
   onSubmit(): void {
     if (this.projectAlertForm.valid) {
       this.alertSubmit.emit({
-        timespan_minutes: this.projectFormErrorAlert.value
+        timespanMinutes: this.projectFormErrorAlert.value
           ? this.projectFormTimespan.value
           : null,
         quantity: this.projectFormErrorAlert.value
