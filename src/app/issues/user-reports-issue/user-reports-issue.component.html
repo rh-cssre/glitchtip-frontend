@@ -16,7 +16,7 @@
   <ng-container *ngFor="let report of reports$ | async">
     <div class="report">
       <p class="name">{{ report.name }} ({{ report.email }})</p>
-      <p class="date">{{ report.dateCreated | date: "medium" }}</p>
+      <p class="date">{{ report.dateCreated | date : "medium" }}</p>
       <p>{{ report.comments }}</p>
     </div>
     <mat-divider></mat-divider>

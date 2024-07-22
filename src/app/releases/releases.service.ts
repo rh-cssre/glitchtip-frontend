@@ -8,6 +8,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
 
 export interface ReleasesState extends PaginationStatefulServiceState {
   releases: Release[];
@@ -31,11 +32,11 @@ export class ReleasesService extends PaginationStatefulService<ReleasesState> {
     super(initialState);
   }
 
-  getReleases(orgSlug: string, cursor: string | undefined) {
+  getReleases(orgSlug: string, cursor: string | undefined | null) {
     this.retrieveReleases(orgSlug, cursor).subscribe();
   }
 
-  private retrieveReleases(orgSlug: string, cursor: string | undefined) {
+  private retrieveReleases(orgSlug: string, cursor: string | undefined | null) {
     this.startPaginatedLoading();
     return this.releasesAPIService.list(orgSlug, cursor).pipe(
       tap((res) => this.setStateAndPagination({ releases: res.body! }, res)),
@@ -49,22 +50,13 @@ export class ReleasesService extends PaginationStatefulService<ReleasesState> {
   private setReleasesError(err: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      errors: this.updateErrorMessage(err),
+      errors: parseErrorMessage(err),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 
   startPaginatedLoading() {
