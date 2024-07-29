@@ -8,7 +8,7 @@ Import and initialize the SDK early in your application's setup:
 
 ```python
 import sentry_sdk
-sentry_sdk.init("your DSN here")
+sentry_sdk.init("YOUR-GLITCHTIP-DSN-HERE")
 ```
 
 You can cause a Python error by inserting a divide by zero expression

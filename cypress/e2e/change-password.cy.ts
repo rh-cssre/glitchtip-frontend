@@ -15,9 +15,10 @@ describe("Change Password", () => {
     cy.get("input[formcontrolname=new_password1]").type(
       changePassword.new_password1
     );
-    cy.get("input[formcontrolname=new_password2]").type(
-      changePassword.new_password2
-    );
+    cy.get("[data-cy='confirm-password']")
+      .click()
+      .get("input[formcontrolname=new_password2]")
+      .type(changePassword.new_password2);
     cy.get("#change-password-form").submit();
     cy.contains("Your current password is incorrect.");
   });
@@ -27,9 +28,10 @@ describe("Change Password", () => {
     cy.get("input[formcontrolname=new_password1]").type(
       changePassword.new_password1
     );
-    cy.get("input[formcontrolname=new_password2]").type(
-      changePassword.new_password2
-    );
+    cy.get("[data-cy='confirm-password']")
+      .click()
+      .get("input[formcontrolname=new_password2]")
+      .type(changePassword.new_password2);
     cy.get("#change-password-form").submit();
     cy.contains("Your new password has been saved");
   });
