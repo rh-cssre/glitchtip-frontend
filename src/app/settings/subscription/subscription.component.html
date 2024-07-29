@@ -1,24 +1,27 @@
 <section class="l-body">
   <header class="page-header">
-    <h2 class="mat-display-1" i18n>Subscription</h2>
+    <h2 class="mat-headline-4" i18n>Subscription</h2>
+    <span *ngIf="fromStripe$ | async" class="mat-subtitle-1"
+      >Redirected from Stripe</span
+    >
   </header>
-  <ng-container *ngIf="subscription$ | async as subscription">
-    <mat-card>
-      <mat-card-content>
-        <div>
-          <ng-container
-            *ngIf="
-              subscription.status === 'active' ||
-                subscription.status === 'trialing' ||
-                subscription.status === 'past_due';
-              else noSubscription
-            "
-          >
-            <ng-container *ngIf="subscription.plan">
+  <ng-container *ngIf="!(subscriptionLoading$ | async); else loading">
+    <ng-container *ngIf="subscription$ | async as subscription">
+      <mat-card>
+        <mat-card-content>
+          <div>
+            <ng-container
+              *ngIf="
+                subscription.status === 'active' ||
+                  subscription.status === 'trialing' ||
+                  subscription.status === 'past_due';
+                else noSubscription
+              "
+            >
               <p *ngIf="subscription.status === 'active'" class="mat-body-1">
                 <ng-container
                   *ngIf="
-                    subscription.plan.amount === '0.00';
+                    subscription.mainUnitPrice === 0;
                     else paidSubscription
                   "
                   i18n
@@ -38,7 +41,7 @@
               </p>
               <p
                 *ngIf="subscription.status === 'trialing'"
-                class="mat-body-1"
+                class="mat-body-1 no-bottom-margin"
                 i18n
                 >This organization has a trial subscription to GlitchTip.</p
               >
@@ -51,8 +54,8 @@
               >
               <ng-container>
                 <mat-card-subtitle i18n>Details</mat-card-subtitle>
-                <h3>{{ subscription.plan.product.name }}</h3>
-                {{ subscription.plan.product.description }}
+                <h3>{{ subscription.productName }}</h3>
+                {{ subscription.productDescription }}
                 <div
                   class="visualization"
                   *ngIf="eventsPercent$ | async as eventsPercent"
@@ -124,7 +127,7 @@
                     {{ subscription.start_date | date }}</li
                   >
                   <li class="mat-body-1" i18n
-                    >Plan cost: {{ subscription.plan.amount | currency }}</li
+                    >Plan cost: {{ subscription.mainUnitPrice | currency }}</li
                   >
                   <li class="mat-body-1">
                     <ng-container i18n>Billing</ng-container>:
@@ -149,60 +152,74 @@
                   >
                 </ul>
               </ng-container>
+
+              <p class="mat-body-1" i18n
+                >If you have questions about your subscription, please contact
+                us at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+                >.</p
+              >
+              <mat-error>{{ error$ | async }}</mat-error>
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="manageSubscription()"
+                i18n
+                >Manage Subscription</button
+              >
             </ng-container>
-            <p class="mat-body-1" i18n
-              >If you have questions about your subscription, please contact us
-              at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-              >.</p
-            >
-            <mat-error>{{ error$ | async }}</mat-error>
-            <button
-              mat-flat-button
-              color="primary"
-              (click)="manageSubscription()"
-              i18n
-              >Manage Subscription</button
-            >
-          </ng-container>
-          <ng-template #noSubscription>
-            <p class="mat-body-1" i18n
-              >This organization does not have an active subscription to
-              GlitchTip. Pick a plan to get started.</p
-            >
-          </ng-template>
-        </div>
-        <div *ngIf="(subscription$ | async) === null as subscription">
-          <p class="mat-body-1" i18n
-            >This organization does not have an active subscription to
-            GlitchTip.</p
+            <ng-template #noSubscription>
+              <p class="mat-body-1" i18n
+                >This organization does not have an active subscription to
+                GlitchTip. Pick a plan to get started.</p
+              >
+            </ng-template>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="promptForProject$ | async">
+        <mat-card-content>
+          <p i18n
+            >Now that you have an organization and a subscription, create a
+            project.</p
           >
-          <a [routerLink]="['/payment']" i18n>Subscription Options</a>
-          <p class="mat-body-1" i18n
-            >If you would like to purchase a subscription, please contact us at
-            <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-            >.</p
+          <a
+            *ngIf="activeOrganizationSlug$ | async as slug"
+            mat-flat-button
+            [routerLink]="['/', slug, 'settings', 'projects', 'new']"
+            color="primary"
+            i18n
+            >Create New Project</a
           >
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card *ngIf="promptForProject$ | async">
-      <mat-card-content>
-        <p i18n
-          >Now that you have an organization and a subscription, create a
-          project.</p
-        >
-        <a
-          *ngIf="activeOrganizationSlug$ | async as slug"
-          mat-flat-button
-          [routerLink]="['/', slug, 'settings', 'projects', 'new']"
-          color="primary"
-          i18n
-          >Create New Project</a
-        >
-      </mat-card-content>
-    </mat-card>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
     <gt-payment
-      *ngIf="subscription.status === null || subscription.status === 'canceled'"
+      *ngIf="
+        ((subscriptionLoading$ | async) == false &&
+          (subscription$ | async) === null) ||
+        (subscription$ | async)!.status === 'canceled'
+      "
     ></gt-payment>
   </ng-container>
+  <ng-template #loading>
+    <mat-card
+      *ngIf="
+        (subscriptionLoading$ | async) || (subscriptionLoadingTimeout$ | async)
+      "
+    >
+      <mat-card-header></mat-card-header>
+      <mat-card-content>
+        <div *ngIf="subscriptionLoading$ | async" class="spinner-container">
+          <mat-spinner diameter="36"></mat-spinner>
+        </div>
+        <div *ngIf="subscriptionLoadingTimeout$ | async">
+          GlitchTip was unable to find a subscription for your account. If you
+          just signed up for a subscription on our payment platform, please
+          contact us at
+          <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+          >.
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
 </section>
