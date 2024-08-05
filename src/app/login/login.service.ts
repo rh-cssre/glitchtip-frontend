@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { EMPTY } from "rxjs";
-import { catchError, map, tap, exhaustMap, withLatestFrom } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  tap,
+  exhaustMap,
+  withLatestFrom,
+} from "rxjs/operators";
 import { encode, decode } from "cborg";
 import { StatefulService } from "../shared/stateful-service/stateful-service";
 import { ServerError } from "../shared/django.interfaces";
@@ -36,15 +42,18 @@ export class LoginService extends StatefulService<LoginState> {
   error$ = this.getState$.pipe(map((state) => state.error));
   requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));
   hasFIDO2$ = this.getState$.pipe(
-    map((state) => state.validAuth?.includes("FIDO2"))
+    map((state) => state.validAuth?.includes("FIDO2")),
   );
   hasTOTP$ = this.getState$.pipe(
-    map((state) => state.validAuth?.includes("TOTP"))
+    map((state) => state.validAuth?.includes("TOTP")),
   );
   authInProg$ = this.getState$.pipe(map((state) => state.authInProg));
   rememberRequest$ = this.getState$.pipe(map((state) => state.rememberRequest));
   useTOTP$ = this.getState$.pipe(map((state) => state.useTOTP));
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {
     super(initialState);
   }
 
@@ -72,7 +81,7 @@ export class LoginService extends StatefulService<LoginState> {
         }
         this.setState({ loading: false, error });
         return EMPTY;
-      })
+      }),
     );
   }
 
@@ -117,7 +126,7 @@ export class LoginService extends StatefulService<LoginState> {
             return encode({
               credentialId: new Uint8Array(resp.rawId),
               authenticatorData: new Uint8Array(
-                assertionResponse.authenticatorData
+                assertionResponse.authenticatorData,
               ),
               clientDataJSON: new Uint8Array(assertionResponse.clientDataJSON),
               signature: new Uint8Array(assertionResponse.signature),
@@ -158,7 +167,7 @@ export class LoginService extends StatefulService<LoginState> {
             this.setState({ loading: false, error, authInProg: false });
           }
           return EMPTY;
-        })
+        }),
       );
   }
 
@@ -189,7 +198,7 @@ export class LoginService extends StatefulService<LoginState> {
         }
         this.setState({ loading: false, error });
         return EMPTY;
-      })
+      }),
     );
   }
 
@@ -202,7 +211,7 @@ export class LoginService extends StatefulService<LoginState> {
         expire.setTime(expire.getTime() + 1000 * 86400 * 180); // 180 days
         document.cookie = `remember_device_key=${response.key}; expires=${expire}; path=/`;
         return this.http.post(url, response);
-      })
+      }),
     );
   }
 
@@ -230,7 +239,7 @@ export class LoginService extends StatefulService<LoginState> {
         }
         this.setState({ loading: false, error });
         return EMPTY;
-      })
+      }),
     );
   }
 }

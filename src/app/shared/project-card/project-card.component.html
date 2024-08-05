@@ -4,9 +4,11 @@
     [queryParams]="isMember ? cardLinkQueryParams || {} : {}"
     [tabIndex]="sampleCard && -1"
   >
-    <mat-card-title>
-      <span>{{ title }}</span>
-    </mat-card-title>
+    <mat-card-header>
+      <mat-card-title>
+        <span>{{ title }}</span>
+      </mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <ng-container *ngFor="let description of descriptionList">
