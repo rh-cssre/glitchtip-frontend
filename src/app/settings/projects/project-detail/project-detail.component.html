@@ -1,7 +1,8 @@
 <section class="l-body" *ngIf="activeProject$ | async as project">
-  <header class="page-header">
-    <h1 class="mat-display-1" i18n>Settings for {{ project.name }}</h1>
-  </header>
+  <gt-detail-header
+    [title]="'Settings for ' + project.name"
+    backLinkText="Back to Projects"
+  />
   <mat-card *ngIf="project.isMember === false"
     ><mat-card-content class="note-padding">
       <p class="mat-body-strong" i18n>Note</p>
@@ -13,7 +14,9 @@
     ></mat-card
   >
   <mat-card>
-    <mat-card-title i18n>Update Project</mat-card-title>
+    <mat-card-header>
+      <mat-card-title i18n>Update Project</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <mat-error class="server-error" *ngIf="updateNameError">{{
@@ -24,14 +27,21 @@
         (ngSubmit)="updateName()"
         class="project-form"
       >
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label i18n>Name</mat-label>
           <input matInput formControlName="name" [value]="project.name" />
           <mat-error>
-            <span *ngIf="name?.errors?.required" i18n
+            <span
+              data-cy="project-name-error-required"
+              *ngIf="name?.errors?.required"
               >Enter a project name</span
-            ></mat-error
-          >
+            >
+            <span
+              data-cy="project-name-error-length"
+              *ngIf="name?.errors?.maxlength"
+              >Name must be 64 characters or less</span
+            >
+          </mat-error>
         </mat-form-field>
         <gt-loading-button
           [disabled]="name?.value === project.name"
@@ -71,12 +81,14 @@
     </mat-card-content>
   </mat-card>
   <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
-    <p class="mat-caption" i18n>
-      Data Source Name: The code that connects your project to GlitchTip.
-      Install a library into your project, then configure it with the DSN so
-      that it knows how to send errors to your GlitchTip account.
-    </p>
+    <mat-card-header class="vertical-card-header">
+      <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
+      <p class="mat-caption" i18n>
+        Data Source Name: The code that connects your project to GlitchTip.
+        Install a library into your project, then configure it with the DSN so
+        that it knows how to send errors to your GlitchTip account.
+      </p>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <gt-copy-input
@@ -95,7 +107,9 @@
   <gt-project-alerts></gt-project-alerts>
 
   <mat-card>
-    <mat-card-title i18n>Personal Project Notifications</mat-card-title>
+    <mat-card-header>
+      <mat-card-title i18n>Personal Project Notifications</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content class="remove-content">
       <div>
@@ -117,7 +131,9 @@
   </mat-card>
 
   <mat-card>
-    <mat-card-title i18n>Delete Project</mat-card-title>
+    <mat-card-header>
+      <mat-card-title i18n>Delete Project</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content class="remove-content">
       <div>

@@ -6,17 +6,40 @@ import {
   HostListener,
   ElementRef,
 } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
 import { UntypedFormControl } from "@angular/forms";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
+import { OrganizationProject } from "src/app/api/projects/projects-api.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 
 @Component({
+  standalone: true,
   selector: "gt-project-filter-bar",
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatIconModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+  ],
   templateUrl: "./project-filter-bar.component.html",
   styleUrls: ["./project-filter-bar.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,14 +59,12 @@ export class ProjectFilterBarComponent implements OnInit {
   appliedProjectIds$ = this.route.queryParams.pipe(
     map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
-      this.selectedProjectIds.next(
-        normalizedParams.map((id: string) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.next(normalizedParams);
       return normalizedParams;
     })
   );
 
-  appliedProjectIds?: string[];
+  appliedProjectIds?: number[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
   selectedProjectsString$ = combineLatest([
@@ -182,9 +203,9 @@ export class ProjectFilterBarComponent implements OnInit {
     }
   }
 
-  navigate(project: number[] | null) {
+  navigate(project: string[] | null) {
     this.router.navigate([], {
-      queryParams: { project: project ? project : null },
+      queryParams: { project: project ? project : null, cursor: null },
       queryParamsHandling: "merge",
     });
   }
@@ -198,7 +219,7 @@ export class ProjectFilterBarComponent implements OnInit {
   }
 
   selectProjectAndClose(projectId: number) {
-    this.navigate([projectId]);
+    this.navigate([projectId.toString()]);
     this.selectedProjectIds.next([projectId]);
     this.expansionPanel?.close();
   }
@@ -216,15 +237,15 @@ export class ProjectFilterBarComponent implements OnInit {
 
   resetPanel() {
     if (this.appliedProjectIds !== undefined) {
-      this.selectedProjectIds.next(
-        this.appliedProjectIds.map((id) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.next(this.appliedProjectIds);
       this.expansionPanel?.close();
     }
   }
 
   closePanel() {
-    this.navigate(this.selectedProjectIds.getValue());
+    this.navigate(
+      this.selectedProjectIds.getValue().map((id) => id.toString())
+    );
     this.expansionPanel?.close();
   }
 

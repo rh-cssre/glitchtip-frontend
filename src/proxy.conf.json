@@ -6,5 +6,9 @@
   "/rest-auth": {
     "target": "http://localhost:8000",
     "secure": false
+  },
+  "/_allauth": {
+    "target": "http://localhost:8000",
+    "secure": false
   }
 }
