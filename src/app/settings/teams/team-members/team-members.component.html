@@ -1,7 +1,11 @@
 <mat-card>
   <mat-card-header class="card-header">
     <mat-card-title i18n>Members</mat-card-title>
-    <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
+    <mat-form-field
+      *ngIf="(userTeamRole$ | async) !== 'member'"
+      appearance="outline"
+      data-cy="team-member-select"
+    >
       <mat-label i18n>Add Member</mat-label>
       <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
         <ng-container
@@ -28,11 +32,14 @@
       <p class="center-text" i18n>This team doesn't have any members</p>
     </ng-container>
     <ng-template #listMembers>
-      <mat-list>
+      <ul data-test-list class="member-list">
         <mat-error *ngIf="removeMemberError" class="center-text">{{
           removeMemberError
         }}</mat-error>
-        <mat-list-item *ngFor="let teamMember of teamMembers$ | async">
+        <li
+          *ngFor="let teamMember of teamMembers$ | async"
+          class="member-list-item"
+        >
           <a
             mat-line
             [routerLink]="['../', 'members', teamMember.id]"
@@ -46,7 +53,7 @@
             (click)="removeTeamMember(teamMember.id, teamMember.email)"
             id="remove-team-member"
           ></gt-loading-button>
-        </mat-list-item> </mat-list
+        </li> </ul
     ></ng-template>
   </mat-card-content>
 </mat-card>

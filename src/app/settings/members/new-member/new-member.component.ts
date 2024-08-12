@@ -5,11 +5,21 @@ import {
   Validators,
   AbstractControl,
   ValidationErrors,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "src/app/api/settings.service";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 /** Custom validator to vaildate emails separated by commas */
 function validateEmails(emails: string) {
@@ -36,6 +46,21 @@ function emailsValidator(control: AbstractControl): ValidationErrors | null {
   selector: "gt-new-member",
   templateUrl: "./new-member.component.html",
   styleUrls: ["./new-member.component.scss"],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    ReactiveFormsModule,
+    NgIf,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    NgFor,
+    MatOptionModule,
+    LoadingButtonComponent,
+    AsyncPipe,
+  ],
 })
 export class NewMemberComponent implements OnInit, OnDestroy {
   enableUserRegistration$ = this.settingsService.enableUserRegistration$;
@@ -49,6 +74,7 @@ export class NewMemberComponent implements OnInit, OnDestroy {
     role: new UntypedFormControl("", [Validators.required]),
     teams: new UntypedFormControl([]),
   });
+  formRole = this.form.get("role") as UntypedFormControl;
 
   constructor(
     private organizationsService: OrganizationsService,
