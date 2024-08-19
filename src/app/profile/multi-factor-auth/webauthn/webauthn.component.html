@@ -1,0 +1,77 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Register Security Key</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <p>Set up a hardware device as a second factor to sign in.</p>
+    @if (stage() === 1) {
+    @if (hasTOTP()) {
+    <p>
+      To add a security key to your account, plug it in, click the button
+      below and follow the prompt from your browser.
+    </p>
+    } @else {
+    <p>
+      Not all browsers support security keys. Therefore, we require that you
+      set up a TOTP authenticator app first. That way you'll always be able
+      to sign in - even when you're using an unsupported browser.
+    </p>
+    }
+    @if (error) {
+    <div class="activation-error">
+      <gt-form-error [error]="error"></gt-form-error>
+    </div>
+    }
+    <gt-loading-button buttonText="Set up new device" [loading]="false" (click)="activateWebAuthn()"
+      [disabled]="hasTOTP() === undefined" buttonStyle="flat"></gt-loading-button>
+    }
+    @if (stage() === 2) {
+    <p i18n>Provide a name for your device to complete registration.</p>
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline">
+        <mat-label i18an>Device name</mat-label>
+        <input matInput formControlName="name" />
+        @if (name?.invalid) {
+        <mat-error>
+          @if (name?.errors?.required) {
+          <span i18n>Required</span>
+          }
+        </mat-error>
+
+        }
+      </mat-form-field>
+      <button class="register-button" mat-flat-button color="primary" (click)="registerWebAuthn()">
+        Register
+      </button>
+    </form>
+    }
+    @if (authenticators().length > 0) {
+    <p class="mat-body-strong">Security keys</p>
+    <div class="negative-margin">
+      <div class="mat-body-strong">
+        <div class="key_headings">
+          <div>Name</div>
+          <div>Last used</div>
+        </div>
+      </div>
+    </div>
+    @for (key of authenticators(); track key) {
+    <div class="key_row">
+      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+        <span [matTooltip]="key.name" matTooltipPosition="above" [matTooltipDisabled]="tooltipDisabled">{{ key.name
+          }}</span>
+      </div>
+      <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
+        <span [matTooltip]="formatDate(key.last_used_at)" matTooltipPosition="above"
+          [matTooltipDisabled]="tooltipDisabled">{{ formatDate(key.last_used_at) }}</span>
+      </div>
+      <button class="trash" mat-icon-button color="primary" attr.aria-label="Delete {{ key.name }}"
+        (click)="deleteWebAuthn(key.id)">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+    }
+    }
+  </mat-card-content>
+</mat-card>

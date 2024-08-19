@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "src/assets/styles/variables";
+@use "@angular/material" as mat;
+@import "variables";
 
 h3 {
   padding-top: 32px;
@@ -52,10 +52,6 @@ ul {
 .table-wrapper {
   padding-left: 8px;
   padding-right: 8px;
-}
-
-.error {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
 }
 
 .category {
