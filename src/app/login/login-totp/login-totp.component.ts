@@ -7,19 +7,40 @@ import {
   ViewChild,
   AfterViewInit,
 } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { LoginService } from "../login.service";
+import { FormErrorComponent } from "../../shared/forms/form-error/form-error.component";
+import { lastValueFrom, tap } from "rxjs";
 
 @Component({
   selector: "gt-login-totp",
   templateUrl: "./login-totp.component.html",
   styleUrls: ["./login-totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    FormErrorComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    RouterLink,
+  ],
 })
 export class LoginTotpComponent implements OnInit, AfterViewInit {
+  hasWebAuthn = this.loginService.hasWebAuthn;
   @ViewChild("input") input!: ElementRef;
-  error$ = this.loginService.error$;
-  hasFIDO2$ = this.loginService.hasFIDO2$;
   form = new FormGroup({
     code: new FormControl("", [
       Validators.required,
@@ -31,15 +52,16 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
-    this.error$.subscribe((error) => {
-      if (error?.code) {
-        this.code?.setErrors({ serverError: error.code });
-      }
-    });
+    // this.error$.subscribe((error) => {
+    //   if (error?.code) {
+    //     this.code?.setErrors({ serverError: error.code });
+    //   }
+    // });
   }
 
   ngAfterViewInit() {
@@ -55,15 +77,19 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
     this.loginService.switchMethod();
   }
 
+  restartLogin() {
+    this.loginService.restartLogin();
+  }
+
   onSubmit() {
     if (this.form.valid && this.code) {
       const code = this.code.value!;
       if (code.length === 6) {
-        this.loginService
-          .authenticateTOTP(code, this.form.value.remember === true)
-          .subscribe();
-      } else {
-        this.loginService.authenticateBackupCode(code).subscribe();
+        lastValueFrom(
+          this.loginService
+            .totpAuthenticate(code)
+            .pipe(tap(() => this.router.navigate(["/"]))),
+        );
       }
     }
   }

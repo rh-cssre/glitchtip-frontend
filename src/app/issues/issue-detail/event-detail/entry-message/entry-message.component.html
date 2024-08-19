@@ -1,15 +1,22 @@
-<section *ngIf="eventEntryMessage$ | async as message" class="mat-typography">
-  <div>
-    <mat-divider></mat-divider>
-    <h3>Message</h3>
-    <pre class="formatted-message">{{ message?.formatted }}</pre>
-    <dl *ngIf="message?.params">
-      <gt-entry-data
-        *ngFor="let param of message?.params | keyvalue"
-        [key]="param.key"
-        [value]="param.value"
-      >
-      </gt-entry-data>
-    </dl>
-  </div>
-</section>
+@if (eventEntryMessage$ | async; as message) {
+  <section class="mat-typography">
+    <div>
+      <mat-divider></mat-divider>
+      <h3>Message</h3>
+      <pre class="formatted-message">{{
+        message?.formatted ?? message?.message
+      }}</pre>
+      @if (message?.params) {
+        <dl>
+          @for (param of message?.params | keyvalue; track param) {
+            <gt-entry-data
+              [key]="param.key"
+              [value]="param.value"
+              >
+            </gt-entry-data>
+          }
+        </dl>
+      }
+    </div>
+  </section>
+}

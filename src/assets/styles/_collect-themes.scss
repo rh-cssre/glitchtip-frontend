@@ -1,0 +1,52 @@
+@use "src/scss/global-theme";
+@use "src/scss/nav-lists-theme";
+@use "src/app/profile/preferences/preferences-theme.component";
+@use "src/app/issues/issue-detail/event-detail/entry-breadcrumbs/_entry-breadcrumbs-theme.component.scss";
+@use "src/app/issues/issue-detail/event-detail/entry-exception/frame-expanded/frame-expanded-theme.component";
+@use "src/app/issues/issue-detail/event-detail/entry-exception/entry-exception-theme.component";
+@use "src/app/issues/issue-detail/issue-detail-tags/issue-detail-tags.componenent";
+@use "src/app/issues/issues-page/_issues-page-theme.component";
+@use "src/app/issues/issue-zero-states/issue-zero-states-theme.component";
+@use "src/app/settings/projects/platform-picker/_platform-picker-theme.component";
+@use "src/app/settings/subscription/payment/payment-theme.component";
+@use "src/app/settings/subscription/subscription-theme.component";
+@use "src/app/shared/copy-input/copy-input-theme.component";
+@use "src/app/uptime/monitor-chart/monitor-chart-theme.component";
+@use "src/app/uptime/monitor-list/monitor-list-theme.component";
+@use "src/app/uptime/monitor-checks/monitor-checks-theme.component";
+@use "src/app/issues/issue-detail/event-detail/_event-detail-theme.component";
+@use "src/app/issues/comments/comments-theme.component";
+@use "src/app/list-elements/project-filter-bar/project-filter-bar-theme.component";
+@use "src/app/profile/notifications/_notifications-theme.component.scss";
+
+
+@mixin generate-rules($theme) {
+  @include global-theme.theme($theme);
+  @include nav-lists-theme.theme($theme);
+  @include preferences-theme.theme($theme);
+  @include entry-breadcrumbs-theme.theme($theme);
+  @include entry-exception-theme.theme($theme);
+  @include frame-expanded-theme.theme($theme);
+  @include issue-detail-tags.theme($theme);
+  @include issues-page-theme.theme($theme);
+  @include issue-zero-states-theme.theme($theme);
+  @include platform-picker-theme.theme($theme);
+  @include payment-theme.theme($theme);
+  @include subscription-theme.theme($theme);
+  @include copy-input-theme.theme($theme);
+  @include monitor-chart-theme.theme($theme);
+  @include monitor-list-theme.theme($theme);
+  @include monitor-checks-theme.theme($theme);
+  @include event-detail-theme.theme($theme);
+  @include comments-theme.theme($theme);
+  @include project-filter-bar-theme.theme($theme);
+  @include notifications-theme.theme($theme);
+}
+
+@mixin generate-light-rules($light-theme) {
+  @include generate-rules($light-theme) 
+}
+
+@mixin generate-dark-rules($dark-theme) {
+ @include generate-rules($dark-theme) 
+}

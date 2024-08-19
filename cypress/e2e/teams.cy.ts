@@ -23,7 +23,7 @@ describe("Create New Team", () => {
       newTeam.slug + " invalid ch@r@cter$"
     );
     cy.get("#create-team-submit").click();
-    cy.contains("consisting of letters, numbers, underscores or hyphens.");
+    cy.contains("Use only letters, numbers, underscores");
   });
 });
 
@@ -36,20 +36,23 @@ describe("List Team Members", () => {
   it("should add and list team member", () => {
     cy.visit(`/${organization.slug}/settings/teams/${team.name}/members/`);
     cy.contains(`#${team.name}`);
-    cy.get("mat-label").contains("Add Member");
-    cy.get("mat-select").first().click();
-    cy.get("mat-option span")
+    cy.get("[data-cy=team-member-select]")
+      .click()
+      .get("mat-select")
+      .get("mat-option")
       .contains(user.email)
-      .then((option) => option[0].click());
-    cy.get("mat-list mat-list-item").first().contains(user.email);
+      .click();
+    cy.get("[data-test-list] li").first().contains(user.email);
   });
 
   it("should remove a team member", () => {
     cy.visit(`/${organization.slug}/settings/teams/${team.name}/members/`);
-    cy.get("mat-select").first().click();
-    cy.get("mat-option span")
+    cy.get("[data-cy=team-member-select]")
+      .click()
+      .get("mat-select")
+      .get("mat-option")
       .contains(user.email)
-      .then((option) => option[0].click());
+      .click();
     cy.get("#remove-team-member").click();
     cy.contains("This team doesn't have any members");
   });
