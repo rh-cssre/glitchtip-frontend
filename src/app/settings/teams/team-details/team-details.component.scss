@@ -1,0 +1,6 @@
+@use "@angular/material" as mat;
+@import "variables";
+
+nav {
+  border-bottom: 1px solid mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300);
+}

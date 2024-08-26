@@ -1,5 +1,3 @@
-import { environment } from "../../src/environments/environment";
-if (environment.loginForm) {
 describe("Send reset email", () => {
   it("should show validation errors", () => {
     cy.visit("/reset-password");
@@ -12,10 +10,9 @@ describe("Send reset email", () => {
     cy.get("input[formcontrolname=email]").type("aa@aa.com");
     cy.get("#submit").click();
     cy.contains(
-      "If you have an account with GlitchTip, an email has been sent to aa@aa.com"
+      "If you have an account with GlitchTip, an email has been sent",
     );
     cy.get("#reset").click();
     cy.get("#reset").should("not.exist");
   });
 });
-}

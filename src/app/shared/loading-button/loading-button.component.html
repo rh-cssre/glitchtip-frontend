@@ -1,32 +1,46 @@
-<div class="spinner-container" *ngIf="loading">
-  <mat-spinner diameter="24"></mat-spinner>
-</div>
-<button
-  *ngIf="buttonStyle === 'flat'"
-  [class.full-width]="fullWidth"
-  mat-flat-button
-  color="primary"
-  [disabled]="loading || disabled"
->
-  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-  <span [class.loading]="loading">{{ buttonText }}</span>
-</button>
-<button
-  *ngIf="buttonStyle === 'basic'"
-  [class.full-width]="fullWidth"
-  mat-button
-  color="primary"
-  [disabled]="loading || disabled"
->
-  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-  <span [class.loading]="loading">{{ buttonText }}</span>
-</button>
-<button
-  *ngIf="buttonStyle === 'stroked'"
-  mat-stroked-button
-  color="primary"
-  [disabled]="loading || disabled"
->
-  <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-  <span [class.loading]="loading">{{ buttonText }}</span>
-</button>
+@if (loading) {
+  <div class="spinner-container">
+    <mat-spinner diameter="24"></mat-spinner>
+  </div>
+}
+@if (buttonStyle === 'flat') {
+  <button
+    [class.full-width]="fullWidth"
+    (click)="buttonClick.emit()"
+    mat-flat-button
+    color="primary"
+    [disabled]="loading || disabled"
+    >
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    <span [class.loading]="loading">{{ buttonText }}</span>
+  </button>
+}
+@if (buttonStyle === 'basic') {
+  <button
+    [class.full-width]="fullWidth"
+    (click)="buttonClick.emit()"
+    mat-button
+    color="primary"
+    [disabled]="loading || disabled"
+    >
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    <span [class.loading]="loading">{{ buttonText }}</span>
+  </button>
+}
+@if (buttonStyle === 'stroked') {
+  <button
+    (click)="buttonClick.emit()"
+    mat-stroked-button
+    color="primary"
+    [disabled]="loading || disabled"
+    >
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    <span [class.loading]="loading">{{ buttonText }}</span>
+  </button>
+}

@@ -1,93 +1,112 @@
 <mat-card>
-  <mat-card-title>Email Addresses</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Email Addresses</mat-card-title>
+  </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <mat-list>
-      <mat-list-item *ngFor="let email of emailAddresses$ | async">
-        <div class="email-info">
-          <span>{{ email.email }}</span>
-          <mat-chip-list
-            *ngIf="email.isPrimary || !email.isVerified"
-            [selectable]="false"
-          >
-            <mat-chip color="primary" selected *ngIf="email.isPrimary">
-              Primary
-            </mat-chip>
-            <mat-chip color="primary" *ngIf="!email.isVerified">
-              Unverified
-            </mat-chip>
-          </mat-chip-list>
-        </div>
-        <div class="email-actions">
-          <gt-loading-button
-            *ngIf="!email.isVerified"
-            buttonText="Resend confirmation"
-            [loading]="
-              (loadingStates$ | async)?.resendConfirmation === email.email
-            "
-            (click)="resendConfirmation(email.email)"
-            buttonStyle="stroked"
-          ></gt-loading-button>
-          <gt-loading-button
-            *ngIf="!email.isPrimary && email.isVerified"
-            buttonText="Make primary"
-            [loading]="(loadingStates$ | async)?.makePrimary === email.email"
-            (click)="makePrimary(email.email)"
-            buttonStyle="stroked"
-          ></gt-loading-button>
-          <div
-            *ngIf="(loadingStates$ | async)?.delete === email.email"
-            class="delete-spinner-container"
-          >
-            <mat-progress-spinner
-              [diameter]="24"
-              color="primary"
-              mode="indeterminate"
-            ></mat-progress-spinner>
+    <ul>
+      @for (email of emailAddresses$ | async; track email) {
+        <li class="email-list-item">
+          <div class="email-info">
+            <span>{{ email.email }}</span>
+            @if (email.isPrimary || !email.isVerified) {
+              <mat-chip-set
+                role="list"
+                >
+                @if (email.isPrimary) {
+                  <mat-chip
+                    color="primary"
+                    highlighted="true"
+                    role="listitem"
+                    >
+                    Primary
+                  </mat-chip>
+                }
+                @if (!email.isVerified) {
+                  <mat-chip color="primary" role="listitem">
+                    Unverified
+                  </mat-chip>
+                }
+              </mat-chip-set>
+            }
           </div>
-          <button
-            class="delete-button"
-            *ngIf="
+          <div class="email-actions">
+            @if (!email.isVerified) {
+              <gt-loading-button
+                buttonText="Resend confirmation"
+                [loading]="
+                  (loadingStates$ | async)?.resendConfirmation === email.email
+                "
+                (buttonClick)="resendConfirmation(email.email)"
+                buttonStyle="stroked"
+              ></gt-loading-button>
+            }
+            @if (!email.isPrimary && email.isVerified) {
+              <gt-loading-button
+                buttonText="Make primary"
+                [loading]="(loadingStates$ | async)?.makePrimary === email.email"
+                (buttonClick)="makePrimary(email.email)"
+                buttonStyle="stroked"
+              ></gt-loading-button>
+            }
+            @if ((loadingStates$ | async)?.delete === email.email) {
+              <div
+                class="delete-spinner-container"
+                >
+                <mat-progress-spinner
+                  [diameter]="24"
+                  color="primary"
+                  mode="indeterminate"
+                ></mat-progress-spinner>
+              </div>
+            }
+            @if (
               !email.isPrimary &&
               (loadingStates$ | async)?.delete !== email.email
-            "
-            mat-icon-button
-            aria-label="Remove email address"
-            (click)="deleteEmail(email.email)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </mat-list-item>
-    </mat-list>
+              ) {
+              <button
+                data-cy="delete-button"
+                class="medium-icon-button"
+                mat-icon-button
+                aria-label="Remove email address"
+                (click)="deleteEmail(email.email)"
+                >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
+        </li>
+      }
+    </ul>
     <form
       [formGroup]="form"
       (ngSubmit)="onSubmit()"
       id="add-email-form"
       class="add-email-form"
-    >
+      >
       <div class="add-email-form-ui">
-        <mat-form-field>
-          <input
-            matInput
-            type="email"
-            placeholder="Email Address"
-            formControlName="email_address"
-          />
+        <mat-form-field appearance="outline">
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" formControlName="email_address" />
           <mat-error>
-            <span
-              *ngIf="
-                email_address?.errors?.required || email_address?.errors?.email
-              "
-            >
-              Please enter a valid email address.
-            </span>
-            <span *ngIf="email_address?.errors?.matchesExistingValidator">
-              This email address is already on the list.
-            </span>
-            <span *ngIf="email_address?.errors?.serverError">
-              {{ email_address?.errors?.serverError }}
-            </span>
+            @if (
+              email_address?.errors?.required || email_address?.errors?.email
+              ) {
+              <span
+                >
+                Please enter a valid email address.
+              </span>
+            }
+            @if (email_address?.errors?.matchesExistingValidator) {
+              <span>
+                This email address is already on the list.
+              </span>
+            }
+            @if (email_address?.errors?.serverError) {
+              <span>
+                {{ email_address?.errors?.serverError }}
+              </span>
+            }
           </mat-error>
         </mat-form-field>
         <gt-loading-button
@@ -95,9 +114,11 @@
           [loading]="(loadingStates$ | async)?.add"
         ></gt-loading-button>
       </div>
-      <mat-error class="server-error" *ngIf="(addEmailError$ | async) !== ''">
-        {{ addEmailError$ | async }}
-      </mat-error>
+      @if ((addEmailError$ | async) !== '') {
+        <mat-error class="server-error">
+          {{ addEmailError$ | async }}
+        </mat-error>
+      }
     </form>
   </mat-card-content>
 </mat-card>

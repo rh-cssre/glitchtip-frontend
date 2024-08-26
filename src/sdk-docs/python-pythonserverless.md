@@ -8,7 +8,7 @@ Apply the `serverless_function` decorator to each function that might throw erro
 import sentry_sdk
 from sentry_sdk.integrations.serverless import serverless_function
 
-sentry_sdk.init(dsn="your DSN here")
+sentry_sdk.init(dsn="YOUR-GLITCHTIP-DSN-HERE")
 
 @serverless_function
 def my_function(...):
