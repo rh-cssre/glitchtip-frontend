@@ -1,61 +1,75 @@
-<section *ngIf="eventEntryRequest$ | async as request" class="mat-typography">
-  <mat-divider></mat-divider>
-  <section class="location">
-    <span class="method mat-body-strong">{{
-      request?.method ? request?.method : "GET"
-    }}</span>
-    <a
-      [matTooltip]="request.url"
-      matTooltipPosition="above"
-      color="primary"
-      target="_blank"
-      [href]="request?.url"
-      >{{ request?.path }}</a
-    >
-    <span class="domain">{{ request?.domainName }}</span>
-  </section>
-  <section>
-    <div *ngIf="request.data">
-      <mat-divider></mat-divider>
-      <h3>Body</h3>
-      <dl>
-        <gt-entry-data
-          *ngFor="let requestData of request.data | keyvalue"
-          [key]="requestData.key"
-          [value]="requestData.value"
-        ></gt-entry-data>
-      </dl>
-    </div>
-    <section *ngIf="request?.query_string">
-      <h3>Query String</h3>
-      <dl>
-        <gt-entry-data
-          *ngFor="let query of request?.query_string"
-          [key]="query[0]"
-          [value]="query[1]"
-        ></gt-entry-data>
-      </dl>
+@if (eventEntryRequest$ | async; as request) {
+  <section class="mat-typography">
+    <mat-divider></mat-divider>
+    <section class="location">
+      <span class="method mat-body-strong">{{
+        request?.method ? request?.method : "GET"
+      }}</span>
+      <a
+        [matTooltip]="request.url"
+        matTooltipPosition="above"
+        color="primary"
+        target="_blank"
+        [href]="request?.url"
+        >{{ request?.path }}</a
+        >
+        <span class="domain">{{ request?.domainName }}</span>
+      </section>
+      <section>
+        @if (request.data) {
+          <div>
+            <mat-divider></mat-divider>
+            <h3>Body</h3>
+            <dl>
+              @for (requestData of request.data | keyvalue; track requestData) {
+                <gt-entry-data
+                  [key]="requestData.key"
+                  [value]="requestData.value"
+                ></gt-entry-data>
+              }
+            </dl>
+          </div>
+        }
+        @if (request?.query_string) {
+          <section>
+            <h3>Query String</h3>
+            <dl>
+              @for (query of request?.query_string; track query) {
+                <gt-entry-data
+                  [key]="query[0]"
+                  [value]="query[1]"
+                ></gt-entry-data>
+              }
+            </dl>
+          </section>
+        }
+        @if (request?.headers) {
+          <section>
+            <h3>Headers</h3>
+            <dl>
+              @for (header of request?.headers; track header) {
+                <gt-entry-data
+                  [key]="header[0]"
+                  [value]="header[1]"
+                ></gt-entry-data>
+              }
+            </dl>
+          </section>
+        }
+        @if (request?.env) {
+          <section>
+            <mat-divider></mat-divider>
+            <h3>Environment</h3>
+            <dl>
+              @for (env of request.env | keyvalue; track env) {
+                <gt-entry-data
+                  [key]="env.key"
+                  [value]="env.value"
+                ></gt-entry-data>
+              }
+            </dl>
+          </section>
+        }
+      </section>
     </section>
-    <section *ngIf="request?.headers">
-      <h3>Headers</h3>
-      <dl>
-        <gt-entry-data
-          *ngFor="let header of request?.headers"
-          [key]="header[0]"
-          [value]="header[1]"
-        ></gt-entry-data>
-      </dl>
-    </section>
-    <section *ngIf="request?.env">
-      <mat-divider></mat-divider>
-      <h3>Environment</h3>
-      <dl>
-        <gt-entry-data
-          *ngFor="let env of request.env | keyvalue"
-          [key]="env.key"
-          [value]="env.value"
-        ></gt-entry-data>
-      </dl>
-    </section>
-  </section>
-</section>
+  }
