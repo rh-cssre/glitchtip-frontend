@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 // This make the app cover the whole screen at all times
@@ -11,7 +11,7 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
-  width: 240px;
+  width: $side-nav-width;
 }
 
 .logo-toolbar {
@@ -24,36 +24,12 @@ mat-sidenav {
 }
 
 .sub-items {
-  display: none !important;
+  display: none;
 
   @media (max-width: $tablet - 1) {
-    display: block !important;
+    display: flex;
     margin-left: 24px;
     max-width: calc(100% - 24px);
-    color: mat.get-color-from-palette(mat.$gray-palette, 600);
-  }
-}
-
-mat-sidenav-content {
-  mat-toolbar {
-    display: none;
-    cursor: pointer; // The whole toolbar is clickable
-
-    @media (max-width: $tablet - 1) {
-      display: flex;
-      padding-left: 0;
-    }
-
-    .sidenav-toggle {
-      height: 100%;
-      transform: translateY(-1px);
-    }
-  }
-  
-  .active-org {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 }
 
@@ -71,26 +47,44 @@ mat-sidenav-content {
   margin-left: 8px;
 }
 
-.org-details-divider {
-  margin: 10px 0;
+.org-dropdown,
+.no-org-create {
+  width: 100%;
+  height: 48px;
+  border-radius: 0px;
+  padding: 0 16px;
+  display: flex;
+  justify-content: left;
 }
 
-.org-dropdown-list-item ::ng-deep .mat-list-item-content {
-  justify-content: space-between;
+.org-dropdown {
+  ::ng-deep .mdc-button__label {
+    width: 100%;
+  }
+
+  .label-container {
+    display: inline-flex;
+    text-align: left;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
-.mat-nav-list > button.mat-menu-item,
 .no-org-create {
   font-weight: 500;
 }
 
-.mat-list-item-disabled {
-  background-color: white;
-  color: mat.get-color-from-palette(mat.$gray-palette, 500) !important;
+.org-details-divider {
+  margin: 10px 0;
+}
+
+.nav-link-list {
+  padding-top: 0px;
 }
 
 .subdued {
-  color: mat.get-color-from-palette(mat.$gray-palette, 700);
+  color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 700);
   font-weight: 300;
 }
 
@@ -100,7 +94,7 @@ mat-sidenav-content {
 
   h3 {
     font-size: 0.8em;
-    margin-bottom: 0.5em;
+    margin: 0 0 0.5em 0;
   }
 
   button {
@@ -127,3 +121,15 @@ mat-sidenav-content {
     font-size: 20px;
   }
 }
+
+.version {
+  text-align: center;
+
+  a {
+    color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 700);
+    font-weight: 300;
+    font-size: small;
+    text-decoration: none;
+  }
+}
+

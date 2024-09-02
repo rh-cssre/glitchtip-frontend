@@ -1,4 +1,4 @@
-<ng-container *ngIf="template === 'buttons'">
+@if (template === 'buttons') {
   <div class="heading">
     <div class="text-info">
       <label for="project-picker" class="mat-body-1">Platform</label>
@@ -6,81 +6,89 @@
         The primary platform for this project. Used for documentation.
       </p>
     </div>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Filter platforms</mat-label>
       <input
         #filterInput
         type="text"
-        placeholder="Filter platforms"
         aria-label="Filter platforms"
         [formControl]="filterPlatformInput"
         matInput
-      />
+        />
     </mat-form-field>
   </div>
   <mat-tab-group
     id="project-picker"
     [selectedIndex]="selected"
     (selectedIndexChange)="setSelected($event)"
-  >
-    <mat-tab label="{{ category.name }}" *ngFor="let category of categoryList">
-      <ul>
-        <li *ngFor="let platform of category.platforms">
-          <button
-            data-test
-            mat-stroked-button
-            type="button"
-            (click)="writeValue(getPlatformId(platform), true)"
-            [class.active]="activePlatform === getPlatformId(platform)"
+    >
+    @for (category of categoryList; track category) {
+      <mat-tab label="{{ category.name }}">
+        <ul>
+          @for (platform of category.platforms; track platform) {
+            <li>
+              <button
+                data-test
+                mat-stroked-button
+                type="button"
+                (click)="writeValue(getPlatformId(platform), true)"
+                [class.active]="activePlatform === getPlatformId(platform)"
             [color]="
               activePlatform === getPlatformId(platform) ? 'primary' : ''
             "
-          >
-            {{ getPlatformName(platform) }}
-          </button>
-        </li>
-      </ul>
-    </mat-tab>
+                >
+                {{ getPlatformName(platform) }}
+              </button>
+            </li>
+          }
+        </ul>
+      </mat-tab>
+    }
     <mat-tab label="All">
       <ul>
-        <li *ngIf="(filteredPlatforms$ | async)?.length === 0">
-          <button
-            mat-stroked-button
-            type="button"
-            (click)="writeValue('other', true)"
-            [class.active]="activePlatform === getPlatformId('other')"
-          >
-            Other
-          </button>
-        </li>
-        <li *ngFor="let platform of filteredPlatforms$ | async">
-          <button
-            mat-stroked-button
-            type="button"
-            (click)="writeValue(platform.id, true)"
-            [class.active]="activePlatform === getPlatformId(platform.id)"
-          >
-            {{ platform.name }}
-          </button>
-        </li>
+        @if ((filteredPlatforms$ | async)?.length === 0) {
+          <li>
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="writeValue('other', true)"
+              [class.active]="activePlatform === getPlatformId('other')"
+              >
+              Other
+            </button>
+          </li>
+        }
+        @for (platform of filteredPlatforms$ | async; track platform) {
+          <li>
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="writeValue(platform.id, true)"
+              [class.active]="activePlatform === getPlatformId(platform.id)"
+              >
+              {{ platform.name }}
+            </button>
+          </li>
+        }
       </ul>
     </mat-tab>
   </mat-tab-group>
-</ng-container>
+}
 
-<ng-container *ngIf="template === 'dropdown'">
+@if (template === 'dropdown') {
   <label class="mat-caption">Platform</label>
   <mat-accordion displayMode="flat">
     <mat-expansion-panel
       #expansionPanel
       class="mat-elevation-z1"
       (afterExpand)="focusPanel()"
-    >
+      >
       <mat-expansion-panel-header data-test-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="expansion-panel-title">
           {{ getPlatformName(activePlatform) }}
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <input
           #filterInput
           type="text"
@@ -88,40 +96,41 @@
           aria-label="Filter platforms"
           [formControl]="filterPlatformInput"
           matInput
-        />
+          />
       </mat-form-field>
-
       <mat-list>
-        <mat-list-item
-          class="list-item"
-          *ngIf="(filteredPlatforms$ | async)?.length === 0"
-        >
-          <button
-            id="picker-button-other"
-            type="button"
-            (click)="writeValue('other')"
-            class="mat-body-1 picker-button"
-            [class.active]="activePlatform === getPlatformId('other')"
-          >
-            Other
-          </button>
-        </mat-list-item>
-        <mat-list-item
-          class="list-item"
-          *ngFor="let platform of filteredPlatforms$ | async"
-        >
-          <button
-            data-test
-            id="picker-button-{{ platform.id }}"
-            type="button"
-            (click)="writeValue(platform.id)"
-            class="mat-body-1 picker-button"
-            [class.active]="activePlatform === getPlatformId(platform.id)"
-          >
-            {{ platform.name }}
-          </button>
-        </mat-list-item>
+        @if ((filteredPlatforms$ | async)?.length === 0) {
+          <mat-list-item
+            class="list-item"
+            >
+            <button
+              id="picker-button-other"
+              type="button"
+              (click)="writeValue('other')"
+              class="mat-body-1 picker-button"
+              [class.active]="activePlatform === getPlatformId('other')"
+              >
+              Other
+            </button>
+          </mat-list-item>
+        }
+        @for (platform of filteredPlatforms$ | async; track platform) {
+          <mat-list-item
+            class="list-item"
+            >
+            <button
+              data-test
+              id="picker-button-{{ platform.id }}"
+              type="button"
+              (click)="writeValue(platform.id)"
+              class="mat-body-1 picker-button"
+              [class.active]="activePlatform === getPlatformId(platform.id)"
+              >
+              {{ platform.name }}
+            </button>
+          </mat-list-item>
+        }
       </mat-list>
     </mat-expansion-panel>
   </mat-accordion>
-</ng-container>
+}

@@ -1,0 +1,91 @@
+@if (commentsListLoading$ | async) {
+  <div class="comments-loading-wrapper">
+    <mat-progress-spinner
+      [diameter]="33"
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+} @else {
+  <div class="comment-create-wrapper">
+    @if (displayCommentCreation$ | async) {
+      <gt-comment-form
+        [loading]="(createCommentLoading$ | async)!"
+        (commentSubmitted)="createOrUpdateComment($event)"
+      ></gt-comment-form>
+    }
+  </div>
+  <div class="comment-list">
+    @for (comment of comments$ | async; track comment; let i = $index) {
+      @if (i === 0) {
+        <mat-divider class="list-head-divider"></mat-divider>
+      }
+      <div class="comment">
+        @if (comment.updateMode) {
+          <gt-comment-form
+            [comment]="comment"
+            [loading]="comment.updateLoading"
+            (cancelUpdate)="cancelCommentUpdateMode($event)"
+            (commentSubmitted)="createOrUpdateComment($event)"
+          ></gt-comment-form>
+        } @else {
+          <div class="delete-loading-wrapper">
+            @if (comment.deleteLoading) {
+              <div class="delete-loading-overlay">
+                <div class="delete-spinner-wrapper">
+                  <mat-progress-spinner
+                    [diameter]="33"
+                    color="primary"
+                    mode="indeterminate"
+                  ></mat-progress-spinner>
+                </div>
+              </div>
+            }
+            <div class="comment-header">
+              <div class="comment-user-details">
+                <div>
+                  <span class="name mat-subtitle-1">{{
+                    comment.user.email
+                  }}</span>
+                </div>
+                <div>
+                  <span class="date mat-caption">{{
+                    comment.dateCreated | date : "	LLL d, Y hh:mm a"
+                  }}</span>
+                </div>
+              </div>
+              @if (user$ | async; as user) {
+                @if (user.id === comment.user.id) {
+                  <div
+                    class="comment-edit-options"
+                    >
+                    <button
+                      mat-icon-button
+                      class="small-icon-button"
+                      (click)="triggerCommentUpdateMode(comment.id)"
+                      >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      class="small-icon-button"
+                      (click)="deleteComment(comment.id)"
+                      >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                }
+              }
+            </div>
+            <div
+              markdown
+              [data]="comment.data.text"
+              class="comment-markdown"
+            ></div>
+          </div>
+        }
+      </div>
+      <mat-divider></mat-divider>
+    }
+  </div>
+}

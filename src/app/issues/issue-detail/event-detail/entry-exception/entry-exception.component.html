@@ -1,80 +1,105 @@
-<section *ngIf="eventEntryException$ | async as exception">
-  <section class="exception">
-    <div class="header-wrapper">
-      <div class="text-wrapper">
-        <h3>Exception</h3>
-        <div *ngIf="group.value === 'full-data'" class="spacer">
-          (<a mat-button (click)="getFlippedFrames()"
-            >most recent call <span *ngIf="isReversed$ | async">first</span
-            ><span *ngIf="(isReversed$ | async) === false">last</span></a
-          >)
-            </div>
-      </div>
-      <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle
-          [checked]="true"
-          value="full-data"
-          aria-label="full data"
-        >
-          Full
-        </mat-button-toggle>
-        <mat-button-toggle value="raw" aria-label="raw data">
-          Raw
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    <div class="full" *ngIf="group.value === 'full-data' && exception.values">
-      <div *ngFor="let value of exception.values">
-        <h2>{{ value.type }}</h2>
-        <p class="subtitle">{{ value.value }}</p>
-        <mat-chip-list *ngIf="value.mechanism">
-          <mat-chip disabled>mechanism: {{ value.mechanism.type }}</mat-chip>
-          <mat-chip color="accent" selected disabled
-            >handled: {{ value.mechanism.handled ? "yes" : "no" }}</mat-chip
-          >
-          <mat-chip *ngIf="value.mechanism.data" disabled
-            >function: {{ value.mechanism.data.function }}</mat-chip
-          >
-        </mat-chip-list>
-        <mat-accordion
-          *ngIf="checkStacktraceInterface(value.stacktrace)"
-          [multi]="true"
-          displayMode="flat"
-        >
-          <!-- TODO:  Add additional conditions for non expandable frames
-          https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L107-->
-          <mat-expansion-panel
-            *ngFor="let frame of value.stacktrace.frames; let i = index"
+@if (eventEntryException$ | async; as exception) {
+  <section
+    class="mat-typography"
+    >
+    <section class="exception">
+      <div class="header-wrapper">
+        <div class="text-wrapper">
+          <h3>Exception</h3>
+          @if (group.value === 'full-data') {
+            <div class="spacer">
+              (<a mat-button (click)="getFlippedFrames()"
+              >most recent call @if (isReversed$ | async) {
+              <span>first</span
+                >
+                }@if ((isReversed$ | async) === false) {
+                <span>last</span>
+                }</a
+                >)
+              </div>
+            }
+          </div>
+          <mat-button-toggle-group #group="matButtonToggleGroup">
+            <mat-button-toggle
+              [checked]="true"
+              value="full-data"
+              aria-label="full data"
+              >
+              Full
+            </mat-button-toggle>
+            <mat-button-toggle value="raw" aria-label="raw data">
+              Raw
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        @if (group.value === 'full-data' && exception.values) {
+          <div class="full">
+            @for (value of exception.values; track value) {
+              <div>
+                <h2>{{ value.type }}</h2>
+                <p class="subtitle">{{ value.value }}</p>
+                @if (value.mechanism) {
+                  <mat-chip-set role="list">
+                    <mat-chip disabled role="listitem"
+                      >mechanism: {{ value.mechanism.type }}</mat-chip
+                      >
+                      <mat-chip color="accent" highlighted disabled role="listitem"
+                        >handled: {{ value.mechanism.handled ? "yes" : "no" }}</mat-chip
+                        >
+                        @if (value.mechanism.data) {
+                          <mat-chip disabled role="listitem"
+                            >function: {{ value.mechanism.data.function }}</mat-chip
+                            >
+                          }
+                        </mat-chip-set>
+                      }
+                      @if (checkStacktraceInterface(value.stacktrace)) {
+                        <mat-accordion
+                          [multi]="true"
+                          displayMode="flat"
+                          >
+                          <!-- TODO:  Add additional conditions for non expandable frames
+                          https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L107-->
+                          @for (frame of value.stacktrace.frames; track frame; let i = $index) {
+                            <mat-expansion-panel
             [disabled]="
               (!frame.context || !frame.context.length) && !frame.vars
             "
-            [expanded]="frame.context?.length ? i === 0 : undefined"
-            class="mat-elevation-z0"
-          >
-            <mat-expansion-panel-header
-              collapsedHeight="auto"
-              expandedHeight="auto"
-              [class.disabled-panel]="!frame.context?.length && !frame.vars"
-              [class.highlighted]="frame.inApp"
-            >
-              <gt-frame-title
-                [frame]="frame"
-                [eventPlatform]="eventPlatform"
-              ></gt-frame-title>
-            </mat-expansion-panel-header>
-            <gt-frame-expanded
-              *ngIf="frame.context"
-              [lineNo]="frame.lineNo"
-              [context]="frame.context"
-              [vars]="frame.vars"
-              [eventPlatform]="eventPlatform"
-            ></gt-frame-expanded>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
-    </div>
-    <div *ngIf="group.value === 'raw' && exception.values">
-      <gt-raw-stacktrace [eventPlatform]="eventPlatform"></gt-raw-stacktrace>
-    </div>
-  </section>
-</section>
+                              [expanded]="frame.context?.length ? i === 0 : undefined"
+                              class="mat-elevation-z0"
+                              >
+                              <mat-expansion-panel-header
+                                collapsedHeight="auto"
+                                expandedHeight="auto"
+                                [class.disabled-panel]="!frame.context?.length && !frame.vars"
+                                [class.highlighted]="frame.inApp"
+                                >
+                                <gt-frame-title
+                                  [frame]="frame"
+                                  [eventPlatform]="eventPlatform"
+                                ></gt-frame-title>
+                              </mat-expansion-panel-header>
+                              @if (frame.context) {
+                                <gt-frame-expanded
+                                  [lineNo]="frame.lineNo"
+                                  [context]="frame.context"
+                                  [vars]="frame.vars"
+                                  [eventPlatform]="eventPlatform"
+                                ></gt-frame-expanded>
+                              }
+                            </mat-expansion-panel>
+                          }
+                        </mat-accordion>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+              @if (group.value === 'raw' && exception.values) {
+                <div>
+                  <gt-raw-stacktrace [eventPlatform]="eventPlatform"></gt-raw-stacktrace>
+                </div>
+              }
+            </section>
+          </section>
+        }
