@@ -9,13 +9,13 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   providedIn: "root",
 })
 export class ConfirmEmailService {
-  private readonly url = "/rest-auth/registration/verify-email/";
+  private readonly url = "/_allauth/browser/v1/auth/email/verify";
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   confirmEmail(key: string) {
     this.postConfirmEmailKey(key)

@@ -1,29 +1,31 @@
 <section class="grid-wrapper">
-  <div *ngFor="let contexts of specialContexts$ | async" class="wrapper">
-    <ng-container *ngIf="contexts.icon || contexts.matIcon; else unknownIcon">
-      <ng-container *ngIf="contexts.icon; else useMatIcon">
-        <img class="image" [src]="contexts.icon" [alt]="contexts.icon"
-      /></ng-container>
-      <ng-template #useMatIcon>
-        <mat-icon class="image">{{ contexts.matIcon }}</mat-icon></ng-template
-      >
-    </ng-container>
-    <ng-template #unknownIcon>
-      <mat-icon class="image">help_outline</mat-icon>
-    </ng-template>
-    <div class="spacer">
-      <p class="mat-body-strong">{{ contexts.title }}</p>
-      <p
-        *ngIf="
+  @for (contexts of specialContexts$ | async; track contexts) {
+    <div class="wrapper">
+      @if (contexts.icon || contexts.matIcon) {
+        @if (contexts.icon) {
+          <img class="image" [src]="contexts.icon" [alt]="contexts.icon"
+            />
+        } @else {
+          <mat-icon class="image">{{ contexts.matIcon }}</mat-icon>
+        }
+      } @else {
+        <mat-icon class="image">help_outline</mat-icon>
+      }
+      <div class="spacer">
+        <p class="mat-body-strong">{{ contexts.title }}</p>
+        @if (
           !contexts.title.includes('Unknown') &&
           contexts.key &&
           contexts.subtitle
-        "
-        class="mat-small mat-caption"
-      >
-        <span class="bold">{{ contexts.key }}:&nbsp;</span
-        ><span class="spacer-small">{{ contexts.subtitle }}</span>
-      </p>
-    </div>
-  </div>
-</section>
+          ) {
+          <p
+            class="mat-small mat-caption"
+            >
+            <span class="bold">{{ contexts.key }}:&nbsp;</span
+              ><span class="spacer-small">{{ contexts.subtitle }}</span>
+            </p>
+          }
+        </div>
+      </div>
+    }
+  </section>

@@ -1,32 +1,38 @@
-<div class="mat-typography">
-  <h2 *ngIf="dialog" i18n>Events</h2>
-  <p i18n
-    >Events are the unit of measure for tracking GlitchTip usage. An
-    organization's maximum number of events per month is determined by its
-    subscription type. Events are used to measure four GlitchTip features:</p
-  >
-  <ul>
-    <li i18n
-      ><b>Issues:</b> Each occurrence of an event reported to GlitchTip</li
-    >
-    <li i18nb
-      ><b>Uptime:</b> Whenever GlitchTip checks the status of your app or your
-      app sends a request to GlitchTip to report its own status</li
-    >
-    <li i18n
-      ><b>Performance:</b> Each time your app sends GlitchTip a transaction
-      report for a tracked activity on your app</li
-    >
-    <li i18n
-      ><b>Releases:</b> Each megabyte of file storage is counted as an event</li
-    >
-  </ul>
-  <button
-    *ngIf="dialog"
-    mat-flat-button
-    color="primary"
-    (click)="closeDialog()"
-    i18n
-    >Close</button
-  >
-</div>
+<div class="mat-typography" [class.dialog-content]="dialog">
+  @if (dialog) {
+    <h2 i18n>Events</h2>
+  }
+  <div class="mat-body-1">
+    <p i18n
+      >Events are the unit of measure for tracking GlitchTip usage. An
+      organization's maximum number of events per month is determined by its
+      subscription type. Events are used to measure four GlitchTip features:</p
+      >
+      <ul>
+        <li i18n
+          ><b>Issues:</b> Each occurrence of an event reported to GlitchTip</li
+          >
+          <li i18nb
+            ><b>Uptime:</b> Whenever GlitchTip checks the status of your app or your
+            app sends a request to GlitchTip to report its own status</li
+            >
+            <li i18n
+              ><b>Performance:</b> Each time your app sends GlitchTip a transaction
+        report for a tracked activity on your app</li
+              >
+              <li i18n
+                ><b>Releases:</b> Each megabyte of file storage is counted as an
+        event</li
+                >
+              </ul>
+            </div>
+            @if (dialog) {
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="closeDialog()"
+                i18n
+                >Close</button
+                >
+              }
+            </div>

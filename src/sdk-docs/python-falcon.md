@@ -15,7 +15,7 @@ The integration has been confirmed to work with Falcon 1.4 and 2.0.
    from sentry_sdk.integrations.falcon import FalconIntegration
 
    sentry_sdk.init(
-       dsn="your DSN here",
+       dsn="YOUR-GLITCHTIP-DSN-HERE",
        integrations=[FalconIntegration()]
    )
 

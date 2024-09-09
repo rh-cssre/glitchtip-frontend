@@ -1,25 +1,22 @@
-import { moduleMetadata } from "@storybook/angular";
+import type { Meta, StoryObj } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { EntryCSPComponent } from "./entry-csp.component";
-
 import { cspError } from "../test-data/csp-error";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
-export default {
+const meta: Meta<EntryCSPComponent> = {
   title: "Events/Event Detail/Entry CSP",
   component: EntryCSPComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule],
-    }),
-  ],
 };
 
-export const EntryCSP = () => {
-  return {
+export default meta;
+type Story = StoryObj<EntryCSPComponent>;
+
+export const Primary: Story = {
+  name: "Entry CSP",
+  render: () => ({
     props: {
       eventEntryCSP$: of(cspError.entries[1].data),
     },
-  };
+  }),
 };

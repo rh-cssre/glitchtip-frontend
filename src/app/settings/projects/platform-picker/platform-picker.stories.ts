@@ -1,18 +1,10 @@
-import { MatExpansionModule } from "@angular/material/expansion";
-import { moduleMetadata } from "@storybook/angular";
-
 import { PlatformPickerComponent } from "./platform-picker.component";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
-import { MatTabsModule } from "@angular/material/tabs";
+
+
 
 export default {
   title: "Project Settings/Platform Picker",
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule, MatExpansionModule, MatTabsModule],
-      declarations: [PlatformPickerComponent],
-    }),
-  ],
+  component: PlatformPickerComponent,
 };
 
 export const PlatformPickerButtons = () => {
