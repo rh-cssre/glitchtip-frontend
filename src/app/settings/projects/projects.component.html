@@ -1,32 +1,37 @@
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1" i18n>Projects</h1>
-    <a mat-flat-button [routerLink]="['new']" color="primary" i18n
-      >Create New Project</a
-    >
-  </header>
-  <div *ngIf="projectsForActiveOrg$ | async as projects">
-    <gt-empty-projects
-      *ngIf="projects.length === 0"
-      [activeOrgOnly]="true"
-    ></gt-empty-projects>
-  </div>
-
-  <div class="project-card-wrapper">
-    <gt-project-card
-      *ngFor="let project of projectsForActiveOrg$ | async"
-      [cardLink]="project.slug"
-      [title]="project.name"
-      [descriptionList]="[
-        { key: 'organization', value: project.organization.name },
-        { key: 'date created', value: (project.dateCreated | date)! }
-      ]"
-      [isMember]="project.isMember"
-      [secondaryButton]="{
-        link: project.slug,
-        icon: 'settings',
-        text: 'Settings'
-      }"
-    ></gt-project-card>
-  </div>
-</section>
+  @if (activeOrg$ | async; as activeOrg) {
+    <header class="page-header">
+      <h1 class="mat-headline-4" i18n>Projects</h1>
+      <a mat-flat-button [routerLink]="['new']" color="primary" i18n
+        >Create New Project</a
+        >
+      </header>
+      @if (projectsForActiveOrg$ | async; as projects) {
+        <div>
+          @if (projects.length === 0) {
+            <gt-empty-projects
+              [activeOrgOnly]="true"
+            ></gt-empty-projects>
+          }
+        </div>
+      }
+      <div class="project-card-wrapper">
+        @for (project of projectsForActiveOrg$ | async; track project) {
+          <gt-project-card
+            [cardLink]="project.slug"
+            [title]="project.name"
+        [descriptionList]="[
+          { key: 'organization', value: activeOrg.name },
+          { key: 'date created', value: (project.dateCreated | date)! }
+        ]"
+            [isMember]="project.isMember"
+        [secondaryButton]="{
+          link: project.slug,
+          icon: 'settings',
+          text: 'Settings'
+        }"
+          ></gt-project-card>
+        }
+      </div>
+    }
+  </section>

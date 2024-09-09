@@ -11,11 +11,15 @@ import {
 } from "@angular/core";
 import { debounceTime, fromEvent, Subscription } from "rxjs";
 import { ResponseTimeSeries } from "../uptime.interfaces";
+import { CommonModule } from "@angular/common";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 
 @Component({
+  standalone: true,
   selector: "gt-monitor-response-chart",
   templateUrl: "./monitor-response-chart.component.html",
   styleUrls: ["./monitor-response-chart.component.scss"],
+  imports: [CommonModule, NgxChartsModule],
 })
 export class MonitorResponseChartComponent
   implements AfterViewInit, OnInit, OnDestroy
@@ -28,7 +32,7 @@ export class MonitorResponseChartComponent
   };
 
   @ViewChild("containerRef") containerRef?: ElementRef;
-  //Ngx-charts does not do continuous resizing, but only adjusts after window resizing completes. 
+  //Ngx-charts does not do continuous resizing, but only adjusts after window resizing completes.
   //This is a workaround to force continous resizing
   @HostListener("window:resize")
   windowResize() {

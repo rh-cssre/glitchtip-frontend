@@ -1,82 +1,65 @@
-import { moduleMetadata, Story } from "@storybook/angular";
-import { GlitchTipOAuthService } from "../../api/oauth/oauth.service";
-import { UserService } from "../../api/user/user.service";
-import { SocialAuthComponent } from "./social-auth.component";
-import { of } from "rxjs";
-import { SettingsService } from "src/app/api/settings.service";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
+// import { Meta, StoryObj } from "@storybook/angular";
+// import { of } from "rxjs";
+// import { SocialAuthComponent } from "./social-auth.component";
 
-export default {
-  title: "Profile/Social Auth",
-  component: SocialAuthComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule],
-      providers: [GlitchTipOAuthService, UserService, SettingsService],
-      declarations: [SocialAuthComponent],
-    }),
-  ],
-  argTypes: {
-    loading: {
-      options: ["First", "Second", "None"],
-      control: { type: "select" },
-    },
-  },
-};
+// const meta: Meta<SocialAuthComponent> = {
+//   title: "Profile/Social Auth",
+//   component: SocialAuthComponent,
+// };
+// const loadingOptions: { [index: string]: any } = {
+//   First: 3,
+//   Second: 4,
+//   None: null,
+// };
 
-export const socialAuth: Story = (args) => {
-  const { loading } = args;
-  const loadingOptions: { [index: string]: any } = {
-    First: 3,
-    Second: 4,
-    None: null,
-  };
-  return {
-    props: {
-      disconnectLoading$: of(loadingOptions[loading]),
-      user$: of({
-        username: "rain@bow.com",
-        lastLogin: "2020-10-29T15:51:52.193929Z",
-        isSuperuser: true,
-        emails: [],
-        identities: [
-          {
-            id: 3,
-            provider: "google",
-            uid: "secret",
-            last_login: "2020-10-29T15:51:52.182486Z",
-            date_joined: "2020-10-29T15:51:52.182546Z",
-            email: "a@a.aa",
-            username: null,
-          },
-          {
-            id: 4,
-            provider: "google",
-            uid: "secret",
-            last_login: "2020-10-29T15:51:52.182486Z",
-            date_joined: "2020-10-29T15:51:52.182546Z",
-            email: "b@b.bb",
-            username: null,
-          },
-        ],
-        id: "1",
-        isActive: true,
-        name: "",
-        dateJoined: "2020-08-18T13:18:51.432490Z",
-        hasPasswordAuth: true,
-        email: "rain@bow.com",
-      }),
-      socialApps$: of([
-        {
-          provider: "google",
-          name: "Google",
-          client_id: "secrets secrets are no fun",
-        },
-      ]),
-    },
-  };
-};
+// export default meta;
+// type Story = StoryObj<SocialAuthComponent>;
 
-socialAuth.story = {
-  name: "Social Auth",
-};
+// export const Default: Story = {
+//   args: {
+//     disconnectLoading$: of(loadingOptions["First"]),
+//     user$: of({
+//       username: "rain@bow.com",
+//       lastLogin: "2020-10-29T15:51:52.193929Z",
+//       isSuperuser: true,
+//       emails: [],
+//       identities: [
+//         {
+//           id: 3,
+//           name: "",
+//           provider: "google",
+//           uid: "secret",
+//           last_login: "2020-10-29T15:51:52.182486Z",
+//           date_joined: "2020-10-29T15:51:52.182546Z",
+//           email: "a@a.aa",
+//           username: null,
+//         },
+//         {
+//           id: 4,
+//           name: "",
+//           provider: "google",
+//           uid: "secret",
+//           last_login: "2020-10-29T15:51:52.182486Z",
+//           date_joined: "2020-10-29T15:51:52.182546Z",
+//           email: "b@b.bb",
+//           username: null,
+//         },
+//       ],
+//       id: "1",
+//       isActive: true,
+//       name: "",
+//       dateJoined: "2020-08-18T13:18:51.432490Z",
+//       hasPasswordAuth: true,
+//       email: "rain@bow.com",
+//     }),
+//     socialApps$: of([
+//       {
+//         provider: "google",
+//         name: "Google",
+//         client_id: "secrets secrets are no fun",
+//         authorize_url: "",
+//         scopes: [],
+//       },
+//     ]),
+//   },
+// };

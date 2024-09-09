@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 form {
@@ -19,17 +19,18 @@ form {
 .tooltip {
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
+  text-decoration-color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 500);
   cursor: help;
 }
 
-.mat-form-field {
+mat-form-field {
+  width: 120px;
   margin-left: 12px;
   margin-right: 12px;
-}
 
-.mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {
-  width: 150px;
+  &::ng-deep .mat-mdc-form-field-error-wrapper {
+    padding: 0;
+  }
 }
 
 .underline {

@@ -1,42 +1,71 @@
-<section class="l-body">
+<section class="l-body mat-typography">
   <header class="page-header">
-    <h1 class="mat-display-1">Organization Members</h1>
+    <h1 class="mat-headline-4">Organization Members</h1>
     <a mat-flat-button color="primary" [routerLink]="['new']">Invite Member</a>
   </header>
   <mat-card>
-    <mat-card-title>
-      {{ (activeOrganizationDetail$ | async)?.name }}
-    </mat-card-title>
+    <mat-card-header>
+      <mat-card-title>
+        {{ (activeOrganizationDetail$ | async)?.name }}
+      </mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div class="list">
-        <div class="list--item" *ngFor="let member of members$ | async">
-          <a class="email" mat-line [routerLink]="[member.id]">{{
-            member.email
-          }}</a>
-
-          <div *ngIf="member.pending" class="invite-status">
-            <p class="pending">Pending</p>
+        @for (member of members$ | async; track member) {
+          <div class="list--item">
+            <div class="email-and-badge">
+              <a class="email" mat-line [routerLink]="[member.id]"
+                >{{ member.email }}
+              </a>
+              @if (member.isOwner) {
+                <mat-chip
+                  class="mat-caption"
+                  color="primary"
+                  highlighted="true"
+                  >
+                  Account Owner
+                </mat-chip>
+              }
+              @if (member.pending) {
+                <mat-chip
+                  class="mat-caption"
+                  color="primary"
+                  >
+                  Invite Pending
+                </mat-chip>
+              }
+            </div>
+            <div class="reinvite-and-role">
+              @if (member.pending) {
+                <div class="reinvite">
+                  @if (!member.loadingResendInvite) {
+                    <gt-loading-button
+                      class="resend-invite"
+                      [loading]="member.loadingResendInvite"
+                      [buttonText]="
+                        member.sentResendInvite ? 'Invite Resent' : 'Resend Invite'
+                      "
+                      [disabled]="member.sentResendInvite"
+                      (buttonClick)="resendInvite(member)"
+                      >
+                    </gt-loading-button>
+                  }
+                </div>
+              }
+              <div class="role">{{ member.roleName }}</div>
+            </div>
             <gt-loading-button
-              *ngIf="!member.loadingResendInvite && !member.sentResendInvite"
-              class="resend-invite"
-              [loading]="member.loadingResendInvite"
-              buttonText="Resend Invite"
-              (click)="resendInvite(member.id)"
-            >
-            </gt-loading-button>
-            <span *ngIf="member.sentResendInvite">Invite Sent</span>
+              class="remove-button"
+              matTooltip="Account ownership must be transferred."
+              [matTooltipDisabled]="!member.isOwner"
+              [disabled]="member.isOwner"
+              (buttonClick)="removeMember(member)"
+              [buttonText]="member.isMe ? 'Leave' : 'Remove'"
+              buttonStyle="stroked"
+            ></gt-loading-button>
           </div>
-
-          <div class="role">{{ member.roleName }}</div>
-
-          <gt-loading-button
-            class="remove-button"
-            (click)="removeMember(member)"
-            [buttonText]="member.isMe ? 'Leave' : 'Remove'"
-            buttonStyle="stroked"
-          ></gt-loading-button>
-        </div>
+        }
       </div>
     </mat-card-content>
   </mat-card>
