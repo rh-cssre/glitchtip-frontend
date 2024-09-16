@@ -1,4 +1,4 @@
-import { KeyValue } from "@angular/common";
+import { KeyValue, NgClass, AsyncPipe, JsonPipe, DatePipe, KeyValuePipe } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -8,12 +8,26 @@ import {
 } from "@angular/core";
 import { Json } from "src/app/interface-primitives";
 import { IssueDetailService } from "../../issue-detail.service";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDividerModule } from "@angular/material/divider";
 
 @Component({
   selector: "gt-entry-breadcrumbs",
   templateUrl: "./entry-breadcrumbs.component.html",
   styleUrls: ["./entry-breadcrumbs.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatDividerModule,
+    NgClass,
+    MatButtonModule,
+    MatIconModule,
+    AsyncPipe,
+    JsonPipe,
+    DatePipe,
+    KeyValuePipe
+],
 })
 export class EntryBreadcrumbsComponent implements AfterViewInit {
   @ViewChild("breadBox") breadBox?: ElementRef;

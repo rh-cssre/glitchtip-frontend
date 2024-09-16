@@ -1,6 +1,6 @@
 <section class="l-body">
   <header class="page-header">
-    <h1 class="mat-display-1" i18n>Teams</h1>
+    <h1 class="mat-headline-4" i18n>Teams</h1>
     <button
       mat-flat-button
       color="primary"
@@ -8,80 +8,102 @@
       id="new-team"
       i18n
       >Create Team</button
-    >
-  </header>
-  <mat-card>
-    <mat-card-title i18n>Your Teams</mat-card-title>
-    <p class="description" i18n
-      >Teams are for managing issue notifications and workflow. View permissions
-      are handled through
-      <a routerLink="../members"> organization membership.</a></p
-    >
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams">
-        <mat-error class="center-text" *ngIf="errors$ | async as error">{{
-          error.removeTeamMember
-        }}</mat-error>
-        <mat-list-item *ngFor="let yourTeam of yourTeams$ | async">
-          <a mat-line [routerLink]="[yourTeam.slug, 'members']">
-            #{{ yourTeam.slug }}
-          </a>
-          <p mat-line>
-            {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
-          </p>
-          <gt-loading-button
-            buttonText="Leave Team"
-            buttonStyle="stroked"
-            [loading]="(loading$ | async)?.removeTeamMember === yourTeam.slug"
-            (click)="leaveTeam(yourTeam.slug)"
-            id="leave-team"
-          ></gt-loading-button>
-        </mat-list-item>
-      </mat-list>
-      <ng-template #noTeams>
-        <p *ngIf="(otherTeams$ | async)?.length; else noTeamsInOrg" i18n
-          >You aren't part of any teams. Join a team below or press the "Create
+      >
+    </header>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title i18n>Your Teams</mat-card-title>
+        <p class="description mat-body-1" i18n
+          >Teams are for managing issue notifications and workflow. View
+        permissions are handled through
+        <a routerLink="../members"> organization membership.</a></p
+          >
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          @if ((yourTeams$ | async)?.length) {
+            <ul>
+              @if (errors$ | async; as error) {
+                <mat-error class="center-text">{{
+                  error.removeTeamMember
+                }}</mat-error>
+              }
+              @for (yourTeam of yourTeams$ | async; track yourTeam) {
+                <li class="team-list-item">
+                  <div class="team-list-item-text">
+                    <a [routerLink]="[yourTeam.slug, 'members']">
+                      #{{ yourTeam.slug }}
+                    </a>
+                    <div>
+                      {{ yourTeam.memberCount | i18nPlural : memberCountPluralMapping }}
+                    </div>
+                  </div>
+                  <gt-loading-button
+                    buttonText="Leave Team"
+                    buttonStyle="stroked"
+                    [loading]="(loading$ | async)?.removeTeamMember === yourTeam.slug"
+                    (buttonClick)="leaveTeam(yourTeam.slug)"
+                    id="leave-team"
+                  ></gt-loading-button>
+                </li>
+              }
+            </ul>
+          } @else {
+            @if ((otherTeams$ | async)?.length) {
+              <p i18n
+                >You aren't part of any teams. Join a team below or press the "Create
           Team" button in the upper right.</p
-        >
-        <ng-template #noTeamsInOrg>
-          <p i18n
-            >You don't have any teams set up. Teams determine which users have
+                >
+              } @else {
+                <p i18n
+                  >You don't have any teams set up. Teams determine which users have
             access to projects in your organization.</p
-          >
-          <p i18n
-            >To create a new team, press the "Create Team" button in the upper
+                  >
+                  <p i18n
+                    >To create a new team, press the "Create Team" button in the upper
             right.</p
-          >
-        </ng-template>
-      </ng-template>
-    </mat-card-content>
-  </mat-card>
+                    >
+                  }
+                }
+              </mat-card-content>
+            </mat-card>
 
-  <mat-card *ngIf="(otherTeams$ | async)?.length">
-    <mat-card-title i18n>Other Teams</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <mat-list>
-        <mat-error class="center-text" *ngIf="errors$ | async as error">{{
-          error.addTeamMember
-        }}</mat-error>
-        <mat-list-item *ngFor="let otherTeam of otherTeams$ | async">
-          <a mat-line [routerLink]="[otherTeam.slug, 'members']">
-            #{{ otherTeam.slug }}
-          </a>
-          <p mat-line>
-            {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
-          </p>
-          <gt-loading-button
-            buttonText="Join Team"
-            buttonStyle="stroked"
-            [loading]="(loading$ | async)?.addTeamMember === otherTeam.slug"
-            (click)="joinTeam(otherTeam.slug)"
-            id="leave-team"
-          ></gt-loading-button>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-</section>
+            @if ((otherTeams$ | async)?.length) {
+              <mat-card>
+                <mat-card-title i18n>Other Teams</mat-card-title>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                  <ul>
+                    @if (errors$ | async; as error) {
+                      <mat-error class="center-text">{{
+                        error.addTeamMember
+                      }}</mat-error>
+                    }
+                    @for (otherTeam of otherTeams$ | async; track otherTeam) {
+                      <li
+                        class="team-list-item"
+                        >
+                        <div class="team-list-item-text">
+                          <a [routerLink]="[otherTeam.slug, 'members']">
+                            #{{ otherTeam.slug }}
+                          </a>
+                          <div>
+                            {{
+                            otherTeam.memberCount | i18nPlural : memberCountPluralMapping
+                            }}
+                          </div>
+                        </div>
+                        <gt-loading-button
+                          buttonText="Join Team"
+                          buttonStyle="stroked"
+                          [loading]="(loading$ | async)?.addTeamMember === otherTeam.slug"
+                          (buttonClick)="joinTeam(otherTeam.slug)"
+                          id="leave-team"
+                        ></gt-loading-button>
+                      </li>
+                    }
+                  </ul>
+                </mat-card-content>
+              </mat-card>
+            }
+          </section>

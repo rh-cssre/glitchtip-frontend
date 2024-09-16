@@ -1,66 +1,65 @@
-<div *ngIf="(isLoggedIn$ | async) === false" class="logo-container">
-  <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
-</div>
+@if ((isLoggedIn$ | async) === false) {
+  <div class="logo-container">
+    <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
+  </div>
+}
 
 <mat-card
   [class.skinnier]="(isLoggedIn$ | async) === false"
   [class.not-skinny]="isLoggedIn$ | async"
->
-  <mat-card-content *ngIf="acceptInfo$ | async as acceptInfo">
-    <mat-card-title i18n>Organization Invite</mat-card-title>
-    <p>
-      <ng-container i18n>You have been invited to join</ng-container>
-      <strong>{{ acceptInfo.org_user.organization.name }}</strong>
-      <ng-container i18n>so you can keep track of errors</ng-container>.
-    </p>
-
-    <p *ngIf="alreadyInOrg$ | async">
-      <ng-container i18n
-        >The account you're logged into is already a part of this organization.
-        You might want to</ng-container
-      >
-      <a (click)="logout()" href="javascript:void(0)" i18n>log out</a>,
-      <ng-container i18n
-        >then create an account for or log into the account that this invite
-        link was intended for</ng-container
-      >.
-    </p>
-
-    <ng-container *ngIf="isLoggedIn$ | async; else notLoggedIn">
-      <button
-        *ngIf="(alreadyInOrg$ | async) === false"
-        mat-flat-button
-        color="primary"
-        (click)="onSubmit()"
-        i18n
-        >Accept invitation</button
-      >
-    </ng-container>
-
-    <ng-template #notLoggedIn>
+  >
+  @if (acceptInfo$ | async; as acceptInfo) {
+    <mat-card-content>
+      <mat-card-title i18n>Organization Invite</mat-card-title>
       <p i18n
-        >To continue, you must either log in to your existing account, or create
-        a new one.</p
+        >You have been invited to join<strong>
+        {{ acceptInfo.orgUser.organization.name }}
+      </strong>
+      so you can keep track of errors.</p
       >
-
-      <div class="button-container">
-        <a
-          mat-flat-button
-          color="primary"
-          [routerLink]="['/register']"
-          [queryParams]="{ next: nextUrl$ | async }"
-          i18n
-          >Create new account</a
-        >
-        <a
-          mat-stroked-button
-          color="primary"
-          [routerLink]="['/login']"
-          [queryParams]="{ next: nextUrl$ | async }"
-          i18n
-          >Log in with existing account</a
-        >
-      </div>
-    </ng-template>
-  </mat-card-content>
-</mat-card>
+      @if (alreadyInOrg$ | async) {
+        <p i18n
+          >The account you're logged into is already a part of this organization.
+      You might want to
+      <a (click)="logout()" href="javascript:void(0)">log out</a>, then create
+      an account for or log into the account that this invite link was intended
+      for.</p
+          >
+        }
+        @if (isLoggedIn$ | async) {
+          @if ((alreadyInOrg$ | async) === false) {
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="onSubmit()"
+              i18n
+              >Accept invitation</button
+              >
+            }
+          } @else {
+            <p i18n
+              >To continue, you must either log in to your existing account, or create
+        a new one.</p
+              >
+              <div class="button-container">
+                <a
+                  mat-flat-button
+                  color="primary"
+                  [routerLink]="['/register']"
+                  [queryParams]="{ next: nextUrl$ | async }"
+                  i18n
+                  >Create new account</a
+                  >
+                  <a
+                    mat-stroked-button
+                    color="primary"
+                    [routerLink]="['/login']"
+                    [queryParams]="{ next: nextUrl$ | async }"
+                    i18n
+                    >Log in with existing account</a
+                    >
+                  </div>
+                }
+              </mat-card-content>
+            }
+          </mat-card>
