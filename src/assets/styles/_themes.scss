@@ -1,0 +1,236 @@
+@use "@angular/material" as mat;
+@import "variables";
+
+$amaranth: #e22a46;
+
+$amaranth-palette: (
+  50: #fce5e9,
+  100: #f6bfc8,
+  200: #f195a3,
+  300: #eb6a7e,
+  400: #e64a62,
+  500: #e22a46,
+  600: #df253f,
+  700: #da1f37,
+  800: #d6192f,
+  900: #cf0f20,
+  A100: #fffcfc,
+  A200: #ffc9cc,
+  A400: #ff969d,
+  A700: #ff7c85,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$candy-app-primary: mat.m2-define-palette($amaranth-palette, 500);
+$candy-app-primary-contrast: mat.m2-define-palette($amaranth-palette, 300, 100, 500, 300);
+$candy-app-accent: mat.m2-define-palette(
+  mat.$m2-deep-orange-palette,
+  A200,
+  A100,
+  A400
+);
+
+// The warn palette is optional (defaults to red).
+$candy-app-warn: mat.m2-define-palette(mat.$m2-red-palette);
+$candy-app-warn-contrast: mat.m2-define-palette(mat.$m2-red-palette, 300, 100, 500, 300);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$candy-app-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $candy-app-primary,
+      accent: $candy-app-accent,
+      warn: $candy-app-warn,
+    ),
+  )
+);
+
+$candy-app-theme-dark: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: $candy-app-primary-contrast,
+      accent: $candy-app-accent,
+      warn: $candy-app-warn-contrast,
+    ),
+  )
+);
+
+@mixin theme-extension($theme) {
+  $_background: map-get($theme, background);
+  $app-bg-color: map-get($_background, background);
+  $_foreground: map-get($theme, foreground);
+  $app-fg-color: map-get($_foreground, text);
+
+  body {
+    background-color: $app-bg-color;
+    color: $app-fg-color;
+  }
+}
+
+@function modify-background($theme, $background-color, $foreground-color) {
+  $bg2: mix($background-color, white, 95%);
+
+  // Replace the background and foreground in the color object's palette.
+  $theme-color: map-get($theme, color);
+  $color-background-palette: map-get($theme-color, background);
+  $color-background-palette: map-merge(
+    $color-background-palette,
+    (
+      background: $background-color,
+    )
+  );
+  $color-background-palette: map-merge(
+    $color-background-palette,
+    (
+      raised-button: $background-color,
+    )
+  );
+  $color-background-palette: map-merge(
+    $color-background-palette,
+    (
+      dialog: $bg2,
+      card: $bg2,
+      selected-button: $background-color,
+    )
+  );
+  $color-foreground-palette: map-get($theme-color, foreground);
+  $color-foreground-palette: map-merge(
+    $color-foreground-palette,
+    (
+      foreground: $foreground-color,
+    )
+  );
+  $color-foreground-palette: map-merge(
+    $color-foreground-palette,
+    (
+      base: $foreground-color,
+      icon: $foreground-color,
+      icons: $foreground-color,
+      text: $foreground-color,
+      slider-min: $foreground-color,
+    )
+  );
+
+  // Replace the background in the background palette (for legacy reasons)
+  $background-palette: map-get($theme, background);
+  $background-palette: map-merge(
+    $background-palette,
+    (
+      background: $background-color,
+    )
+  );
+  $background-palette: map-merge(
+    $background-palette,
+    (
+      raised-button: $background-color,
+    )
+  );
+  // Replace the foreground in the foreground palette
+  $foreground-palette: map-get($theme, foreground);
+  $foreground-palette: map-merge(
+    $foreground-palette,
+    (
+      foreground: $foreground-color,
+    )
+  );
+
+  // Merge the changes into a new theme.
+  $modified-theme-color: map-merge(
+    $theme-color,
+    (
+      background: $color-background-palette,
+      foreground: $color-foreground-palette,
+    )
+  );
+  $modified-theme: map-merge(
+    $theme,
+    (
+      color: $modified-theme-color,
+    )
+  );
+  $modified-theme: map-merge(
+    $modified-theme,
+    (
+      background: $background-palette,
+      foreground: $foreground-palette,
+    )
+  );
+
+  @return $modified-theme;
+}
+
+$candy-app-theme-dark: modify-background($candy-app-theme-dark, #181818, #FAFAFA);
+
+// Define a custom typography config that overrides the font-family as well as specific levels
+// See for defaults:
+// https://github.com/angular/components/blob/d9977bdb1101e107312580c124acf0a9f410452e/src/material/core/typography/_typography.scss
+// See for intended use cases
+// https://material.angular.io/guide/typography#what-is-typography-
+$custom-typography: mat.m2-define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-1:
+    mat.m2-define-typography-level(56px, 65px, 700, $font-sans-serif, -0.05em),
+  $headline-2:
+    mat.m2-define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-3:
+    mat.m2-define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-4:
+    mat.m2-define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $subtitle-1: mat.m2-define-typography-level(15px, 24px, 500, $font-sans-serif),
+  $subtitle-2: mat.m2-define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $body-1: mat.m2-define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $body-2: mat.m2-define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $button: mat.m2-define-typography-level(14px, 14px, 500, $font-sans-serif),
+  $caption: mat.m2-define-typography-level(12px, 13.5px, 400, $font-sans-serif),
+);
+
+$custom-card-typography: mat.m2-define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-6: mat.m2-define-typography-level(24px, 30px, 500, $font-sans-serif),
+);
+
+$custom-table-typography: mat.m2-define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-2: mat.m2-define-typography-level(16px, 24px, 400, $font-sans-serif),
+);
+
+$custom-mobile-table-typography: mat.m2-define-typography-config(
+  $font-family: $font-sans-serif,
+  $body-2: mat.m2-define-typography-level(14px, 22px, 400, $font-sans-serif),
+);
+
+$mobile-typography: mat.m2-define-typography-config(
+  $font-family: $font-sans-serif,
+  $headline-1:
+    mat.m2-define-typography-level(45px, 55px, 700, $font-sans-serif, -0.035em),
+  $headline-2:
+    mat.m2-define-typography-level(34px, 40px, 700, $font-sans-serif, -0.02em),
+  $headline-3:
+    mat.m2-define-typography-level(24px, 30px, 700, $font-sans-serif, -0.02em),
+  $headline-4:
+    mat.m2-define-typography-level(20px, 26px, 700, $font-sans-serif, -0.02em),
+  $subtitle-1: mat.m2-define-typography-level(15px, 24px, 500, $font-sans-serif),
+  $subtitle-2: mat.m2-define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $body-1: mat.m2-define-typography-level(16px, 24px, 400, $font-sans-serif),
+  $body-2: mat.m2-define-typography-level(16px, 28px, 500, $font-sans-serif),
+  $button: mat.m2-define-typography-level(14px, 14px, 500, $font-sans-serif),
+  $caption: mat.m2-define-typography-level(12px, 13.5px, 400, $font-sans-serif),
+);
