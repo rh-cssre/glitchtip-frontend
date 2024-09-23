@@ -1,32 +1,37 @@
-<div *ngIf="getCodeBlock() as codeBlock; else simpleContext">
-  <pre
-    class="prism-code-container"
-    [attr.data-start]="firstLineNumber"
-    [attr.data-line-offset]="firstLineNumber"
-    [attr.data-line]="lineNo"
-  ><code gtPrism [language]="eventPlatform" class="line-numbers">{{ codeBlock }}</code></pre>
-</div>
-<ng-template #simpleContext>
-  <div class="simple-code-container">
-    <div *ngFor="let contextLine of context">
-      <pre
+@if (shouldDisplayPrismCode) {
+  <div>
+    <pre
+      class="prism-code-container"
+      [attr.data-start]="firstLineNumber"
+      [attr.data-line-offset]="firstLineNumber"
+      [attr.data-line]="highlightLine"
+      ><code gtPrism [language]="eventPlatform" class="line-numbers">{{ codeBlock }}</code></pre>
+    </div>
+  } @else {
+    <div class="simple-code-container">
+      @for (contextLine of context; track contextLine) {
+        <div>
+          <pre
         [class.highlight]="
           contextLine[0] === lineNo && context && context.length > 1
         "
-        class="context padding"
-        >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
-      >
-    </div>
-  </div>
-</ng-template>
-<div class="var-wrapper" *ngIf="vars">
-  <ng-container *ngFor="let varList of vars | keyvalue">
-    <mat-divider></mat-divider>
-    <div class="vars padding">
-      <dt class="mat-body-strong">{{ varList.key }}:</dt>
-      <dd>
-        <pre>{{ checkType(varList.value) }}</pre>
-      </dd>
-    </div>
-  </ng-container>
-</div>
+            class="context padding"
+            >{{ contextLine[0] }}. {{ contextLine[1] }}</pre
+            >
+          </div>
+        }
+      </div>
+    }
+    @if (vars) {
+      <div class="var-wrapper">
+        @for (varList of vars | keyvalue; track varList) {
+          <mat-divider></mat-divider>
+          <div class="vars padding">
+            <dt class="mat-body-strong">{{ varList.key }}:</dt>
+            <dd>
+              <pre>{{ checkType(varList.value) }}</pre>
+            </dd>
+          </div>
+        }
+      </div>
+    }

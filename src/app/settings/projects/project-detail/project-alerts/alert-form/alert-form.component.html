@@ -1,9 +1,8 @@
-<p
-  *ngIf="projectFormOptionsGroup?.errors?.selectionRequired"
-  class="error alert-form-error"
->
-  Please select events or uptime monitor triggers for your alert.
-</p>
+@if (projectFormOptionsGroup.errors?.selectionRequired) {
+  <p class="error alert-form-error">
+    Please select events or uptime monitor triggers for your alert.
+  </p>
+}
 
 <form
   class="flex-common"
@@ -16,15 +15,17 @@
       [checked]="projectFormErrorAlert.value"
       (change)="toggleErrorAlerts()"
     >
-      <span>
-        If&nbsp;an&nbsp;<span
+      <span class="mat-body-1" i18n>
+        If an
+        <span
           class="tooltip"
           matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
           >event</span
-        >&nbsp;happens</span
+        >
+        happens</span
       >
     </mat-checkbox>
-    <mat-form-field floatLabel="always">
+    <mat-form-field floatLabel="always" appearance="outline">
       <mat-label>Quantity</mat-label>
       <input
         matInput
@@ -38,23 +39,17 @@
         placeholder="#"
         [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
       />
-      <mat-error *ngIf="projectFormQuantity?.errors">
-        <span *ngIf="projectFormQuantity?.errors?.min"
-          >The quantity needs to be greater than or equal to 0.</span
-        >
-        <span *ngIf="projectFormQuantity?.errors?.invalidNumber"
-          >Enter a number.
-        </span>
-        <span *ngIf="projectFormQuantity?.errors?.required"
-          >This field is required.</span
-        >
-      </mat-error>
+      @if (projectFormQuantity.errors) {
+        <mat-error>
+          <span>Enter an integer greater than 0.</span>
+        </mat-error>
+      }
     </mat-form-field>
-    <span
-      >time<span *ngIf="projectFormQuantity?.value !== 1">s</span>&nbsp;in</span
+    <span i18n
+      >{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }} in</span
     >
-    <mat-form-field floatLabel="always">
-      <mat-label>Timespan</mat-label>
+    <mat-form-field floatLabel="always" appearance="outline">
+      <mat-label i18n>Timespan</mat-label>
       <input
         matInput
         min="0"
@@ -62,44 +57,40 @@
         type="number"
         autocomplete="off"
         (click)="toggleFromInput()"
-        formControlName="timespan_minutes"
+        formControlName="timespanMinutes"
         placeholder="#"
         [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
       />
-      <mat-error *ngIf="projectFormTimespan?.errors">
-        <span *ngIf="projectFormTimespan?.errors?.min"
-          >The timespan needs to be greater than or equal to 0.</span
-        >
-        <span *ngIf="projectFormTimespan?.errors?.invalidNumber"
-          >Enter a number.
-        </span>
-        <span *ngIf="projectFormTimespan?.errors?.required"
-          >This field is required.</span
-        >
-      </mat-error>
+      @if (projectFormTimespan.errors) {
+        <mat-error>
+          <span i18n>Enter an integer greater than 0.</span>
+        </mat-error>
+      }
     </mat-form-field>
-    <span
-      >minute<span *ngIf="projectFormTimespan?.value !== 1">s</span
-      >,&nbsp;send&nbsp;an&nbsp;email.</span
+    <span i18n
+      >in {{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send
+      an alert.</span
     >
-
     <div class="uptime-option" formGroupName="optionsGroup">
       <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-        >If an uptime monitor is triggered.</mat-checkbox
+        ><span class="mat-body-1" i18n
+          >If an uptime monitor is triggered.</span
+        ></mat-checkbox
       >
     </div>
   </div>
   <div class="update" data-cy="update-container">
-    <gt-loading-button
-      *ngIf="!newAlert"
-      buttonText="Update"
-      [disabled]="
-        projectFormTimespan.value === timespan &&
-        projectFormQuantity.value === quantity &&
-        projectFormUptime.value === uptime
-      "
-      buttonStyle="stroked"
-      [loading]="loading === true"
-    ></gt-loading-button>
+    @if (!newAlert) {
+      <gt-loading-button
+        buttonText="Update"
+        [disabled]="
+          projectFormTimespan.value === timespan &&
+          projectFormQuantity.value === quantity &&
+          projectFormUptime.value === uptime
+        "
+        buttonStyle="stroked"
+        [loading]="loading === true"
+      ></gt-loading-button>
+    }
   </div>
 </form>

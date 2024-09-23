@@ -6,11 +6,19 @@
     "glitchtip-frontend": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
         "@schematics/angular:application": {
           "strict": true
+        },
+        "@schematics/angular:component": {
+          "standalone": true,
+          "style": "scss",
+          "changeDetection": "OnPush"
+        },
+        "@schematics/angular:directive": {
+          "standalone": true
+        },
+        "@schematics/angular:pipe": {
+          "standalone": true
         }
       },
       "root": "",
@@ -29,12 +37,12 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/glitchtip-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["src/polyfills.ts", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -62,7 +70,7 @@
             ],
             "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src/assets/styles"]
+              "includePaths": ["./src/assets/styles", ""]
             },
             "scripts": []
           },
@@ -121,7 +129,6 @@
             "development": {
               "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -136,10 +143,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "glitchtip-frontend:build:production"
+              "buildTarget": "glitchtip-frontend:build:production"
             },
             "development": {
-              "browserTarget": "glitchtip-frontend:build:development"
+              "buildTarget": "glitchtip-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -176,6 +183,24 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "glitchtip-frontend:build",
+            "compodoc": false,
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "glitchtip-frontend:build",
+            "compodoc": false,
+            "outputDir": "storybook-static"
           }
         }
       }
