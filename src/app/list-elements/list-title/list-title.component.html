@@ -1,6 +1,8 @@
-<ng-container *ngIf="title">
-  <h1 class="mat-display-1">
+@if (title) {
+  <h1 class="mat-headline-4">
     {{ title }}
-    <ng-container *ngIf="searchHits"> ({{ searchHits }}) </ng-container>
+    @if (searchHits) {
+      ({{ searchHits }})
+    }
   </h1>
-</ng-container>
+}

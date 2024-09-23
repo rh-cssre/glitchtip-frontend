@@ -1,60 +1,70 @@
-<mat-card>
-  <mat-card-header class="card-header">
-    <mat-card-title i18n>Projects</mat-card-title>
-    <mat-error *ngIf="(errors$ | async)?.addProjectToTeam">{{
-      (errors$ | async)?.addProjectToTeam
-    }}</mat-error>
-    <div>
-      <mat-form-field *ngIf="(userTeamRole$ | async) !== 'member'">
-        <mat-label i18n>Add Project</mat-label>
-        <mat-select (selectionChange)="addProject()" [formControl]="project">
-          <ng-container
-            *ngIf="(projectsNotOnTeam$ | async)?.length; else emptyState"
-          >
-            <mat-option
-              *ngFor="let project of projectsNotOnTeam$ | async"
-              [value]="project.slug"
+@if (orgSlug$ | async; as orgSlug) {
+  <mat-card>
+    <mat-card-header class="card-header">
+      <mat-card-title i18n>Projects</mat-card-title>
+      @if ((errors$ | async)?.addProjectToTeam) {
+        <mat-error>{{
+          (errors$ | async)?.addProjectToTeam
+        }}</mat-error>
+      }
+      <div>
+        @if ((userTeamRole$ | async) !== 'member') {
+          <mat-form-field
+            appearance="outline"
             >
-              {{ project.name }}
-            </mat-option></ng-container
-          ><ng-template #emptyState>
-            <mat-option disabled i18n>No projects</mat-option>
-          </ng-template>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    <ng-container
-      *ngIf="(projectsOnTeam$ | async)?.length === 0; else listMembers"
-    >
-      <p class="center-text" i18n>This team doesn't have any projects</p>
-    </ng-container>
-    <ng-template #listMembers>
-      <mat-list>
-        <mat-error
-          *ngIf="(errors$ | async)?.removeProjectFromTeam"
-          class="center-text"
-          >{{ (errors$ | async)?.removeProjectFromTeam }}</mat-error
-        >
-        <mat-list-item *ngFor="let project of projectsOnTeam$ | async">
-          <a
-            mat-line
-            [routerLink]="['/', project.organization.slug, 'issues']"
-            [queryParams]="{ project: project.id }"
-            >{{ project.name }}</a
-          >
-          <gt-loading-button
-            buttonText="Remove"
-            buttonStyle="stroked"
-            [loading]="
-              project.slug === (loading$ | async)?.removeProjectFromTeam
-            "
-            (click)="removeProject(project.slug)"
-            id="remove-team-member"
-          ></gt-loading-button>
-        </mat-list-item> </mat-list
-    ></ng-template>
-  </mat-card-content>
-</mat-card>
+            <mat-label i18n>Add Project</mat-label>
+            <mat-select (selectionChange)="addProject()" [formControl]="project">
+              @if ((projectsNotOnTeam$ | async)?.length) {
+                @for (project of projectsNotOnTeam$ | async; track project) {
+                  <mat-option
+                    [value]="project.slug"
+                    >
+                    {{ project.name }}
+                  </mat-option>
+                }
+              } @else {
+                <mat-option disabled i18n>No projects</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      @if ((projectsOnTeam$ | async)?.length === 0) {
+        <p class="center-text" i18n>This team doesn't have any projects</p>
+      } @else {
+        <ul>
+          @if ((errors$ | async)?.removeProjectFromTeam) {
+            <mat-error
+              class="center-text"
+              >{{ (errors$ | async)?.removeProjectFromTeam }}</mat-error
+              >
+            }
+            @for (project of projectsOnTeam$ | async; track project) {
+              <li
+                class="team-project-list-item"
+                >
+                <a
+                  class="team-name"
+                  [routerLink]="['/', orgSlug, 'issues']"
+                  [queryParams]="{ project: project.id }"
+                  >{{ project.name }}</a
+                  >
+                  <gt-loading-button
+                    buttonText="Remove"
+                    buttonStyle="stroked"
+                    [loading]="
+                      project.slug === (loading$ | async)?.removeProjectFromTeam
+                    "
+                    (buttonClick)="removeProject(project.slug)"
+                    id="remove-team-member"
+                  ></gt-loading-button>
+                </li>
+              }
+            </ul>
+          }
+        </mat-card-content>
+      </mat-card>
+    }

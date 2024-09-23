@@ -1,63 +1,64 @@
 <section class="l-body">
-  <mat-card
-    *ngIf="
-      (projects$ | async)?.length === 0 &&
-      (activeOrganizationDetail$ | async) === undefined
-    "
-  >
-    <mat-card-content>
-      <p class="mat-body-1" i18n
-        >In order to use GlitchTip, you'll need to create an organization.</p
+  @if (
+    (projects$ | async)?.length === 0 &&
+    (activeOrganizationDetail$ | async) === undefined
+    ) {
+    <mat-card
       >
-      <a
-        mat-flat-button
-        color="primary"
-        [routerLink]="['/organizations', 'new']"
-        i18n
-        >Create New Organization</a
-      >
-    </mat-card-content>
-  </mat-card>
+      <mat-card-content>
+        <p class="mat-body-1" i18n
+          >In order to use GlitchTip, you'll need to create an organization.</p
+          >
+          <a
+            mat-flat-button
+            color="primary"
+            [routerLink]="['/organizations', 'new']"
+            i18n
+            >Create New Organization</a
+            >
+          </mat-card-content>
+        </mat-card>
+      }
 
-  <ng-container *ngFor="let organization of orgsAndProjects$ | async">
-    <section
-      class="org-projects-section"
-      *ngIf="
-        !activeOrgOnly ||
-        (activeOrgOnly &&
+      @for (organization of orgsAndProjects$ | async; track organization) {
+        @if (
+          !activeOrgOnly ||
+          (activeOrgOnly &&
           organization.id === (activeOrganizationDetail$ | async)?.id)
-      "
-    >
-      <header class="page-header">
-        <h2 class="mat-display-1">
-          {{ activeOrgOnly ? "Projects" : organization.name }}
-        </h2>
-        <a
-          mat-stroked-button
-          color="primary"
-          [routerLink]="['/', organization.slug, 'settings', 'projects', 'new']"
-          class="new-project-button"
-          i18n
-          >Create new project in {{ organization.name }}</a
-        >
-      </header>
-      <gt-empty-projects
-        *ngIf="organization.projects.length === 0"
-        [activeOrgOnly]="activeOrgOnly"
-      ></gt-empty-projects>
-
-      <div>
-        <div class="project-card-wrapper">
-          <ng-container *ngFor="let project of organization.projects">
-            <gt-project-card
-              [cardLink]="['/', project.organization.slug, 'issues']"
-              [cardLinkQueryParams]="{ project: project.id }"
-              [title]="project.name"
+          ) {
+          <section
+            class="org-projects-section"
+            >
+            <header class="page-header">
+              <h2 class="mat-headline-4">
+                {{ activeOrgOnly ? "Projects" : organization.name }}
+              </h2>
+              <a
+                mat-stroked-button
+                color="primary"
+                [routerLink]="['/', organization.slug, 'settings', 'projects', 'new']"
+                class="new-project-button"
+                i18n
+                >Create new project in {{ organization.name }}</a
+                >
+              </header>
+              @if (organization.projects.length === 0) {
+                <gt-empty-projects
+                  [activeOrgOnly]="activeOrgOnly"
+                ></gt-empty-projects>
+              }
+              <div>
+                <div class="project-card-wrapper">
+                  @for (project of organization.projects; track project) {
+                    <gt-project-card
+                      [cardLink]="['/', project.organization.slug, 'issues']"
+                      [cardLinkQueryParams]="{ project: project.id }"
+                      [title]="project.name"
               [descriptionList]="[
                 { key: 'organization', value: project.organization.name },
                 { key: 'date created', value: (project.dateCreated | date)! }
               ]"
-              [isMember]="project.isMember"
+                      [isMember]="project.isMember"
               [primaryButton]="{
                 text: 'Issues',
                 icon: 'warning',
@@ -75,10 +76,11 @@
                   project.slug
                 ]
               }"
-            ></gt-project-card>
-          </ng-container>
-        </div>
-      </div>
-    </section>
-  </ng-container>
-</section>
+                    ></gt-project-card>
+                  }
+                </div>
+              </div>
+            </section>
+          }
+        }
+      </section>

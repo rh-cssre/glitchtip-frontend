@@ -1,29 +1,37 @@
-<section *ngIf="eventEntryCSP$ | async as csp" class="mat-typography">
-  <mat-divider></mat-divider>
-  <div class="csp__header">
-    <h3>CSP Report</h3>
-    <mat-button-toggle-group #group="matButtonToggleGroup">
-      <mat-button-toggle
-        [checked]="true"
-        value="report-csp"
-        aria-label="full csp report data"
-      >
-        Report
-      </mat-button-toggle>
-      <mat-button-toggle value="raw-csp" aria-label="raw csp report data">
-        Raw
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  <div *ngIf="group.value === 'report-csp'">
-    <h4>{{ csp?.effective_directive }}</h4>
-    <dl *ngFor="let data of csp | keyvalue">
-      <gt-entry-data [key]="data.key" [value]="data.value"></gt-entry-data>
-    </dl>
-  </div>
-  <div *ngIf="group.value === 'raw-csp'">
-    <pre>
-&#123;<span class="csp__code">"csp-report": {{ csp | json }}</span>&#125;
-  </pre>
-  </div>
-</section>
+@if (eventEntryCSP$ | async; as csp) {
+  <section class="mat-typography">
+    <mat-divider></mat-divider>
+    <div class="csp__header">
+      <h3>CSP Report</h3>
+      <mat-button-toggle-group #group="matButtonToggleGroup">
+        <mat-button-toggle
+          [checked]="true"
+          value="report-csp"
+          aria-label="full csp report data"
+          >
+          Report
+        </mat-button-toggle>
+        <mat-button-toggle value="raw-csp" aria-label="raw csp report data">
+          Raw
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    @if (group.value === 'report-csp') {
+      <div>
+        <h4>{{ csp?.effective_directive }}</h4>
+        @for (data of csp | keyvalue; track data) {
+          <dl>
+            <gt-entry-data [key]="data.key" [value]="data.value"></gt-entry-data>
+          </dl>
+        }
+      </div>
+    }
+    @if (group.value === 'raw-csp') {
+      <div>
+        <pre>
+          &#123;<span class="csp__code">"csp-report": {{ csp | json }}</span>&#125;
+        </pre>
+      </div>
+    }
+  </section>
+}
