@@ -1,128 +1,93 @@
 <div class="empty-states">
   <!-- Don't show any of this until loading state is resolved -->
-  <ng-container
-    *ngIf="
-      (initialLoadComplete$ | async) === true && (loading$ | async) === false
-    "
-  >
+  @if (displayZeroStates$ | async) {
     <!-- If there are errors, only show the error -->
-    <ng-container *ngIf="(errors$ | async)?.length; else emptyState">
-      <ng-container *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
-        ><h3 class="mat-display-1" i18n
+    @if ((errors$ | async)?.length) {
+      @if ((errors$ | async)?.length === 1) {
+        <h3 class="mat-headline-4" i18n
           >There was an error processing your request</h3
-        ></ng-container
-      ><ng-template #multipleErrors
-        ><h3 class="mat-display-1" i18n
-          >There were errors while processing your request</h3
-        ></ng-template
-      >
-      <ul>
-        <li *ngFor="let error of errors$ | async">{{ error }}</li>
-      </ul>
-    </ng-container>
-
-    <!-- If there are no errors, show an empty state option -->
-    <ng-template #emptyState>
-      <!-- If there are zero projects -->
-      <ng-container
-        *ngIf="(orgHasAProject$ | async) === false; else hasProject"
-      >
-        <h3 class="mat-display-1" i18n>This organization has no projects.</h3>
-        <p class="mat-body-1" i18n
-          >To add a project to this organization, press the
+          >
+        } @else {
+          <h3 class="mat-headline-4" i18n
+            >There were errors while processing your request</h3
+            >
+          }
+          <ul>
+            @for (error of errors$ | async; track error) {
+              <li>{{ error }}</li>
+            }
+          </ul>
+        } @else {
+          <!-- If there are zero projects -->
+          @if ((orgHasAProject$ | async) === false) {
+            <h3 class="mat-headline-4" i18n>This organization has no projects.</h3>
+            <p class="mat-body-1" i18n
+              >To add a project to this organization, press the
           "Add&nbsp;Project"&nbsp;button.</p
-        >
-      </ng-container>
-
-      <ng-template #hasProject>
-        <!-- You're an admin, but you're not on the team -->
-        <ng-container
-          *ngIf="projectsWhereAdminIsNotOnTheTeam$ | async as notOnTeam"
-        >
-          <ng-container *ngIf="notOnTeam.length > 0 && notOnTeam.length < 2">
-            <p class="not-on-team">
-              <ng-container
-                *ngIf="singleProjectApplied$ | async; else notOnTeamMultiple"
-                i18n
-                >You can't see issues for this project because you're not on the
+              >
+            } @else {
+              <!-- You're an admin, but you're not on the team -->
+              @if (projectsWhereAdminIsNotOnTheTeam$ | async; as notOnTeam) {
+                @if (notOnTeam.length > 0 && notOnTeam.length < 2) {
+                  <p class="not-on-team">
+                    @if (singleProjectApplied$ | async) {
+                      <ng-container
+                        i18n
+                        >You can't see issues for this project because you're not on the
                 team.</ng-container
-              >
-              <ng-template #notOnTeamMultiple i18n
-                >Out of the projects you have selected, you are not a part of
-                that project's team for at least one of them.</ng-template
-              >
-            </p>
-          </ng-container>
-          <ng-container *ngIf="notOnTeam.length > 2"> </ng-container>
-        </ng-container>
-
-        <!-- If there is one project applied -->
-        <ng-container
-          *ngIf="singleProjectApplied$ | async; else multipleProjects"
-        >
-          <!-- If no event has been sent -->
-          <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
-            <div class="install-wrapper">
-              <div
-                class="install-instructions"
-                *ngIf="
-                  activeProjectPlatform$ | async as activeProjectPlatform;
-                  else noPlatform
-                "
-              >
-                <ng-container
-                  *ngIf="
-                    activeProjectPlatform !== 'other' &&
-                      activeProjectPlatform !== '' &&
-                      (activeProjectPlatformName$ | async);
-                    else otherTemplate
-                  "
-                >
-                  <h2 class="mat-display-1" i18n
-                    >Connect your
+                        >
+                      } @else {
+                        <ng-container i18n>Out of the projects you have selected, you are not a part of
+                that project's team for at least one of them.</ng-container>
+                      }
+                    </p>
+                  }
+                  @if (notOnTeam.length > 2) {
+                  }
+                }
+                <!-- If there is one project applied -->
+                @if (singleProjectApplied$ | async) {
+                  <!-- If no event has been sent -->
+                  @if (showOnboarding$ | async) {
+                    <div class="install-wrapper">
+                      @if (
+                        activeProjectPlatform$ | async; as activeProjectPlatform) {
+                        <div
+                          class="install-instructions mat-body-1"
+                          >
+                          @if (
+                            activeProjectPlatform !== 'other' &&
+                            activeProjectPlatform !== '' &&
+                            (activeProjectPlatformName$ | async)) {
+                            <h2 class="mat-headline-4" i18n
+                              >Connect your
                     {{ activeProjectPlatformName$ | async }} project to
                     GlitchTip</h2
-                  >
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/{{
-                      activeProjectPlatform
-                    }}.md"
-                  ></gt-lazy-markdown>
-                </ng-container>
-
-                <ng-template #otherTemplate>
-                  <h2 class="mat-display-1" i18n
-                    >Connect your project to GlitchTip</h2
-                  >
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/all-sdks.md"
-                  ></gt-lazy-markdown>
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/other.md"
-                  ></gt-lazy-markdown>
-                </ng-template>
-              </div>
-
-              <ng-template #noPlatform>
-                <div class="install-instructions">
-                  <h2 class="mat-display-1" i18n
-                    >Connect your project to GlitchTip</h2
-                  >
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/all-sdks.md"
-                  ></gt-lazy-markdown>
-
-                  <p class="mat-body-1" i18n
-                    >If you go to this project's
+                              >
+                              <markdown
+                                src="/static/sdk-docs/{{ activeProjectPlatform }}.md"
+                              ></markdown>
+                            } @else {
+                              <h2 class="mat-headline-4" i18n
+                                >Connect your project to GlitchTip</h2
+                                >
+                                <markdown src="/static/sdk-docs/all-sdks.md"></markdown>
+                                <markdown src="/static/sdk-docs/other.md"></markdown>
+                              }
+                            </div>
+                          } @else {
+                            <div class="install-instructions mat-body-1">
+                              <h2 class="mat-headline-4" i18n
+                                >Connect your project to GlitchTip</h2
+                                >
+                                <markdown src="/static/sdk-docs/all-sdks.md"></markdown>
+                                <p class="mat-body-1" i18n
+                                  >If you go to this project's
                     <a
                       [routerLink]="[
                         '/',
-                        'settings',
                         activeOrganizationSlug$ | async,
+                        'settings',
                         'projects',
                         activeProjectSlug$ | async
                       ]"
@@ -130,72 +95,64 @@
                       settings page</a
                     >, you can pick a platform. If you do, you'll get more
                     specific instructions about how to get started.</p
-                  >
-                </div>
-              </ng-template>
-              <div
-                class="dsn"
-                *ngIf="firstProjectKey$ | async as firstProjectKey"
-              >
-                <h2 class="mat-display-1">DSN</h2>
-
-                <p class="mat-body-1" i18n
-                  >Most instructions will have a spot that says "your DSN here".
-                  Copy the DSN and paste it into that spot.</p
-                >
-
-                <div class="dsn-area">
-                  <gt-copy-input
-                    [value]="firstProjectKey.dsn.public"
-                    placeholder="DSN"
-                  ></gt-copy-input>
-                  <gt-copy-input
-                    [value]="firstProjectKey.dsn.security"
-                    placeholder="Security Endpoint"
-                  ></gt-copy-input>
-                </div>
-
-                <ng-container
-                  *ngIf="
-                    activeProjectPlatform$ | async as activeProjectPlatform
-                  "
-                >
-                  <ng-container *ngIf="activeProjectPlatform !== 'other'">
-                    <h2 class="mat-body-2" i18n>What's this all about?</h2>
-
-                    <gt-lazy-markdown
-                      markdownSrc="/static/sdk-docs/all-sdks.md"
-                    ></gt-lazy-markdown>
-
-                    <p class="mat-body-1" i18n
-                      >This page is showing instructions on how to connect
+                                    >
+                                  </div>
+                                }
+                                @if (firstProjectKey$ | async; as firstProjectKey) {
+                                  <div
+                                    class="dsn"
+                                    >
+                                    <h2 class="mat-headline-4">DSN</h2>
+                                    <p class="mat-body-1" i18n
+                                      >Most instructions will have a spot that says
+                  "YOUR-GLITCHTIP-DSN-HERE". Copy the DSN and paste it into that
+                  spot.</p
+                                      >
+                                      <div class="dsn-area">
+                                        <gt-copy-input
+                                          [value]="firstProjectKey.dsn.public"
+                                          placeholder="DSN"
+                                        ></gt-copy-input>
+                                        <gt-copy-input
+                                          [value]="firstProjectKey.dsn.security"
+                                          placeholder="Security Endpoint"
+                                        ></gt-copy-input>
+                                      </div>
+                                      @if (
+                                        activeProjectPlatform$ | async; as activeProjectPlatform
+                                        ) {
+                                        @if (activeProjectPlatform !== 'other') {
+                                          <h2 class="mat-body-strong" i18n>What's this all about?</h2>
+                                          <div class="mat-body-1">
+                                            <markdown src="/static/sdk-docs/all-sdks.md"></markdown>
+                                          </div>
+                                          <p class="mat-body-1" i18n
+                                            >This page is showing instructions on how to connect
                       GlitchTip to your project based on the platform you
                       specified.</p
-                    >
-                  </ng-container>
-                </ng-container>
-              </div>
-            </div>
-          </ng-container>
-
-          <ng-template #noIssueMessaging>
-            <!-- No issues match the filters, in general -->
-            <h3 class="mat-display-1" i18n>No events match your filters.</h3>
-            <p class="mat-body-1" i18n
-              >Try changing your search parameters to get something to show
+                                            >
+                                          }
+                                        }
+                                      </div>
+                                    }
+                                  </div>
+                                } @else {
+                                  <!-- No issues match the filters, in general -->
+                                  <h3 class="mat-headline-4" i18n>No events match your filters.</h3>
+                                  <p class="mat-body-1" i18n
+                                    >Try changing your search parameters to get something to show
               here.</p
-            >
-          </ng-template>
-        </ng-container>
-
-        <ng-template #multipleProjects>
-          <h3 i18n>No events match your filters.</h3>
-          <p class="mat-body-1" i18n
-            >You have multiple projects selected. Select a single project to
+                                    >
+                                  }
+                                } @else {
+                                  <h3 i18n>No events match your filters.</h3>
+                                  <p class="mat-body-1" i18n
+                                    >You have multiple projects selected. Select a single project to
             learn more about why there's nothing here.</p
-          >
-        </ng-template>
-      </ng-template></ng-template
-    >
-  </ng-container>
-</div>
+                                    >
+                                  }
+                                }
+                              }
+                              <!-- If there are no errors, show an empty state option -->
+                            }
+                          </div>

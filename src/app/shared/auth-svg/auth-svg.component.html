@@ -1,17 +1,10 @@
 <div class="wrapper {{ source }}">
-  <ng-container *ngIf="loading; else notLoading">
+  @if (loading) {
     <mat-spinner diameter="24"></mat-spinner>
-  </ng-container>
-  <ng-template #notLoading>
+  } @else {
     <svg>
-      <use *ngIf="provider === 'gitlab'" xlink:href="#gitlab"></use>
-      <use *ngIf="provider === 'microsoft'" xlink:href="#microsoft"></use>
-      <use *ngIf="provider === 'github'" xlink:href="#github"></use>
-      <use *ngIf="provider === 'google'" xlink:href="#google"></use>
-      <use *ngIf="provider === 'digitalocean'" xlink:href="#digitalocean"></use>
-      <use *ngIf="provider === 'gitea'" xlink:href="#gitea"></use>
-      <use *ngIf="provider === 'keycloak'" xlink:href="#keycloak"></use>
+      <use [attr.xlink:href]="getProviderSvgName(provider)"></use>
     </svg>
-    <span class="text">{{ text }}</span></ng-template
-  >
+    <span class="text">{{ text }}</span>
+  }
 </div>

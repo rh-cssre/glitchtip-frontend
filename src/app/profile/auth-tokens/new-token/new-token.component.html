@@ -13,24 +13,25 @@
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <mat-error class="server-error"
-        ><span *ngIf="createError$ | async">{{
-          createError$ | async
-        }}</span></mat-error
-      >
+      <mat-error class="server-error">
+        @if (createError$ | async) {
+          <span>{{ createError$ | async }}</span>
+        }
+      </mat-error>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <h2>Label</h2>
         <p>Give your token a name, so you can easily identify it.</p>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Label</mat-label>
           <input matInput type="text" formControlName="label" />
-          <mat-error
-            ><span *ngIf="label?.errors?.required"
-              >Create a label for your auth token</span
-            ><span *ngIf="label?.errors?.serverErrorLabel">{{
-              label.errors?.serverErrorLabel
-            }}</span></mat-error
-          >
+          <mat-error>
+            @if (label.errors?.required) {
+              <span>Create a label for your auth token</span>
+            }
+            @if (label.errors?.serverErrorLabel) {
+              <span>{{ label.errors?.serverErrorLabel }}</span>
+            }
+          </mat-error>
         </mat-form-field>
         <h2>Scopes</h2>
         <p>Set the kind of access you want this token to have to your app.</p>
@@ -42,23 +43,23 @@
           <b>Full Access</b>
         </mat-checkbox>
         <ul>
-          <li
-            formArrayName="scopes"
-            *ngFor="let scope of scopes.controls; let i = index"
-          >
-            <mat-checkbox [formControlName]="i">
-              {{ scopeOptions[i] }}
-            </mat-checkbox>
-          </li>
+          @for (scope of scopes.controls; track scope; let i = $index) {
+            <li formArrayName="scopes">
+              <mat-checkbox [formControlName]="i">
+                {{ scopeOptions[i] }}
+              </mat-checkbox>
+            </li>
+          }
         </ul>
 
-        <mat-error class="checkbox-error"
-          ><span *ngIf="scopes?.errors?.selectOne"
-            >Select at least one scope</span
-          ><span *ngIf="scopes?.errors?.serverErrorScopes">{{
-            scopes.errors?.serverErrorScopes
-          }}</span></mat-error
-        >
+        <mat-error class="checkbox-error">
+          @if (scopes.errors?.selectOne) {
+            <span>Select at least one scope</span>
+          }
+          @if (scopes.errors?.serverErrorScopes) {
+            <span>{{ scopes.errors?.serverErrorScopes }}</span>
+          }
+        </mat-error>
         <gt-loading-button
           [loading]="(createLoading$ | async) === true"
           buttonText="Create Token"

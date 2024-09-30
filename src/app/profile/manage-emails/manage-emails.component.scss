@@ -1,17 +1,14 @@
 @import "variables";
 
-.mat-list-base .mat-list-item {
+.email-list-item {
   height: auto;
-  padding-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 8px;
   padding-bottom: 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
-  ::ng-deep .mat-list-item-content {
-    padding-left: 0;
-    padding-right: 0;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
 }
 
 .email-info {
@@ -24,11 +21,17 @@
 }
 
 .email-actions {
+  display: flex;
+  align-items: center;
   margin-top: 4px;
   padding-bottom: 8px;
+
+  gt-loading-button {
+    margin-right: 5px;
+  }
 }
 
-mat-chip-list {
+mat-chip-set {
   display: inline-block;
   margin-right: 15px;
   pointer-events: none;
@@ -37,8 +40,9 @@ mat-chip-list {
 
 mat-chip {
   font-size: 0.8em;
-  padding: 0 10px;
-  min-height: 24px;
+  font-weight: 500;
+  padding: 0;
+  height: 24px;
 }
 
 .delete-spinner-container {
@@ -63,13 +67,10 @@ mat-chip {
     flex-direction: column;
   }
 
-  .mat-form-field {
+  mat-form-field {
     flex: 1;
-    margin-right: 15px;
-  }
-
-  ::ng-deep .mat-form-field-wrapper {
     max-width: 400px;
+    margin-right: 15px;
   }
 
   gt-loading-button {
