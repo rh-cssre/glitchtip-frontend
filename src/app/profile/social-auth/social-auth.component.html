@@ -1,62 +1,72 @@
-<ng-container
-  *ngIf="(socialApps$ | async)?.length || (user$ | async)?.identities?.length"
->
-  <mat-card *ngIf="user$ | async as user">
-    <mat-card-header>
-      <mat-card-title>Social Auth Accounts</mat-card-title>
-      <ng-container *ngIf="(socialApps$ | async)?.length">
-        <mat-form-field *ngIf="socialApps$ | async as socialApps">
-          <mat-label>Add Account</mat-label>
-          <mat-select (selectionChange)="addAccount()" [formControl]="account">
-            <mat-option
-              *ngFor="let socialApp of socialApps"
-              [value]="socialApp"
-            >
-              <gt-auth-svg
-                source="dropdown"
-                [provider]="socialApp.provider"
-                [text]="socialApp.name"
-              ></gt-auth-svg>
-            </mat-option>
-          </mat-select> </mat-form-field
-      ></ng-container>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content
-      ><ng-container
-        *ngIf="(user$ | async)?.identities?.length === 0; else authAccountsList"
-      >
-        <p class="empty-auth">
-          You haven't connected any social auth accounts.
-        </p>
-      </ng-container>
-      <ng-template #authAccountsList>
-        <div class="button-wrapper">
-          <ng-container
-            *ngFor="
-              let socialAccount of (user$ | async)?.identities;
-              let i = index
-            "
-          >
-            <button
-              mat-stroked-button
-              class="full-width margin"
-              (click)="disconnect(socialAccount.id)"
-              [disabled]="(disconnectLoading$ | async) === socialAccount.id"
-            >
-              <gt-auth-svg
-                [loading]="(disconnectLoading$ | async) === socialAccount.id"
-                source="disconnect"
-                text="Disconnect
-            {{
-                  socialAccount.username
-                    ? socialAccount.username
-                    : socialAccount.email
-                }}"
-                [provider]="socialAccount.provider"
-              ></gt-auth-svg></button
-          ></ng-container></div
-      ></ng-template>
-    </mat-card-content>
-  </mat-card>
-</ng-container>
+@if ((socialApps$ | async)?.length || (user$ | async)?.identities?.length) {
+  @if (user$ | async; as user) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Social Auth Accounts</mat-card-title>
+        @if ((socialApps$ | async)?.length) {
+          @if (socialApps$ | async; as socialApps) {
+            <mat-form-field
+              appearance="outline"
+              >
+              <mat-label>Add Account</mat-label>
+              <mat-select (selectionChange)="addAccount()" [formControl]="account">
+                @for (socialApp of socialApps; track socialApp) {
+                  <mat-option
+                    [value]="socialApp"
+                    >
+                    <gt-auth-svg
+                      source="dropdown"
+                      [provider]="socialApp.provider"
+                      [text]="socialApp.name"
+                    ></gt-auth-svg>
+                  </mat-option>
+                }
+              </mat-select> </mat-form-field
+              >
+            }
+          }
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content
+          >@if ((user$ | async)?.identities?.length === 0) {
+          <p class="empty-auth">
+            You haven't connected any social auth accounts.
+          </p>
+        } @else {
+          <div class="socialaccount-list-wrapper">
+            @for (
+              socialAccount of (user$ | async)?.identities; track
+              socialAccount; let lastItem = $last) {
+              <div class="socialaccount-wrapper">
+                <button
+                  mat-stroked-button
+                (click)="
+                  disconnect(
+                    socialAccount.id,
+                    socialAccount.provider,
+                    socialAccount.uid
+                  )
+                "
+                  [disabled]="disconnectLoadingId() === socialAccount.id"
+                  >
+                  <gt-auth-svg
+                    [loading]="disconnectLoadingId() === socialAccount.id"
+                    source="disconnect"
+                    text="Disconnect {{ socialAccount.name }}"
+                    [provider]="socialAccount.provider"
+                  ></gt-auth-svg>
+                </button>
+                <div class="email">
+                  {{ socialAccount.email }}
+                </div>
+              </div>
+              @if (!lastItem) {
+                <mat-divider></mat-divider>
+              }
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+}

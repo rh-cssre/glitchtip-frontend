@@ -1,0 +1,23 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+
+  gt-monitor-list {
+    .status-color {
+      &--true:after {
+        background-color: #54a65a;
+      }
+
+      &--false:after {
+        background-color: mat.m2-get-color-from-palette($primary);;
+      }
+
+      // For monitors that do not yet have a check
+      &--:after {
+        background-color: gray;
+      }
+    }
+  }
+}
