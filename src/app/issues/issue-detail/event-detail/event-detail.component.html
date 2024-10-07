@@ -1,128 +1,144 @@
-<section
-  class="mat-typography"
-  *ngIf="(initialLoadComplete$ | async) && (event$ | async) === null"
->
-  <h2>Event not found</h2>
-  <p class="mat-body-1">
-    This may be because the URL is pointing to an event that doesn't exist or
-    was deleted.
-  </p>
-</section>
+@if ((initialLoadComplete$ | async) && (event$ | async) === null) {
+  <section
+    class="mat-typography"
+    >
+    <h2>Event not found</h2>
+    <p class="mat-body-1">
+      This may be because the URL is pointing to an event that doesn't exist or
+      was deleted.
+    </p>
+  </section>
+}
 
-<section *ngIf="event$ | async as event" class="mat-typography">
-  <section class="header">
-    <div>
-      <h2>Event</h2>
-      <p>
-        <a>{{ event?.eventID }}</a>
-      </p>
-      <p>
-        <span *ngIf="event?.dateCreated" class="space">{{
-          event?.dateCreated | date: "long"
-        }}</span>
-        <a
-          target="_blank"
+@if (event$ | async; as event) {
+  <section class="mat-typography">
+    <section class="header">
+      <div>
+        <h2>Event</h2>
+        <p>
+          <a>{{ event?.eventID }}</a>
+        </p>
+        <p>
+          @if (event?.dateCreated) {
+            <span class="space">{{
+              event?.dateCreated | date : "long"
+            }}</span>
+          }
+          <a
+            target="_blank"
           [href]="
             '/organizations/' +
             (orgSlug$ | async) +
             '/issues/' +
-            event.issue +
+            event.groupID +
             '/events/' +
             event?.eventID +
             '/json/'
           "
-          >JSON</a
-        >
-      </p>
-    </div>
-    <nav class="navigation-buttons">
-      <button
-        mat-button
-        [routerLink]="(previousEventUrl$ | async) || ''"
-        [disabled]="(previousEvent$ | async) === false"
-      >
-        <mat-icon>keyboard_arrow_left</mat-icon> Older
-      </button>
-      <button
-        mat-button
-        [routerLink]="(nextEventUrl$ | async) || ''"
-        [disabled]="(nextEvent$ | async) === false"
-      >
-        Newer <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
-    </nav>
-  </section>
-  <mat-divider *ngIf="event?.contexts || event?.user"></mat-divider>
-  <gt-contexts></gt-contexts>
-  <mat-divider></mat-divider>
-
-  <section class="tags" *ngIf="event?.tags && event.tags.length > 0">
-    <h2>Tags</h2>
-    <ul class="pseudo-chip-list">
-      <li *ngFor="let tag of event.tags" class="pseudo-chip">
-        <a
-          [routerLink]="['..']"
-          [relativeTo]="route.parent"
-          [queryParams]="generateQuery(tag)"
-          queryParamsHandling="merge"
-        >
-          <span class="pseudo-chip-key">{{ tag.key }}</span>
-          <span class="pseudo-chip-value">{{ tag.value }}</span></a
-        >
-      </li>
-    </ul>
-  </section>
-
-  <gt-entry-message></gt-entry-message>
-  <gt-entry-exception
-    [eventTitle]="event?.title"
-    [eventPlatform]="event?.platform"
-  ></gt-entry-exception>
-  <gt-entry-csp></gt-entry-csp>
-  <gt-entry-breadcrumbs></gt-entry-breadcrumbs>
-  <gt-entry-request></gt-entry-request>
-  <section *ngFor="let context of event.contexts | keyvalue">
-    <mat-divider></mat-divider>
-    <h3>
-      {{ context.value.type }}
-
-      <ng-container *ngIf="context.value.type; else elseBlock">
-        ({{ context.key }})
-      </ng-container>
-      <ng-template #elseBlock>{{ context.key }}</ng-template>
-    </h3>
-    <dl>
-      <ng-container *ngFor="let context_entry of context.value | keyvalue">
-        <gt-entry-data
-          *ngIf="context_entry.key !== 'type'"
-          [key]="context_entry.key"
-          [value]="context_entry.value"
-        ></gt-entry-data>
-      </ng-container>
-    </dl>
-  </section>
-
-  <section *ngIf="event.context">
-    <mat-divider></mat-divider>
-    <h3>Additional Data</h3>
-    <dl>
-      <gt-entry-data
-        *ngFor="let context of event.context | keyvalue"
-        [key]="context.key"
-        [value]="context.value | json"
-      >
-      </gt-entry-data>
-    </dl>
-  </section>
-  <section *ngIf="event?.sdk">
-    <mat-divider></mat-divider>
-    <h3>SDK</h3>
-    <dl>
-      <gt-entry-data key="name" [value]="event?.sdk?.name"></gt-entry-data>
-      <gt-entry-data
-        key="version"
-        [value]="event?.sdk?.version"
-      ></gt-entry-data>
-    </dl>
-  </section>
-</section>
+            >JSON</a
+            >
+          </p>
+        </div>
+        <nav class="navigation-buttons">
+          <button
+            mat-button
+            [routerLink]="(previousEventUrl$ | async) || ''"
+            [disabled]="(previousEvent$ | async) === false"
+            >
+            <mat-icon>keyboard_arrow_left</mat-icon> Older
+          </button>
+          <button
+            mat-button
+            [routerLink]="(nextEventUrl$ | async) || ''"
+            [disabled]="(nextEvent$ | async) === false"
+            >
+            Newer <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
+          </button>
+        </nav>
+      </section>
+      @if (event?.contexts || event?.user) {
+        <mat-divider></mat-divider>
+      }
+      <gt-contexts></gt-contexts>
+      <mat-divider></mat-divider>
+      @if (event?.tags && event.tags.length > 0) {
+        <section class="tags">
+          <h2>Tags</h2>
+          <ul class="pseudo-chip-list">
+            @for (tag of event.tags; track tag) {
+              <li class="pseudo-chip">
+                <a
+                  [routerLink]="['..']"
+                  [relativeTo]="route.parent"
+                  [queryParams]="generateQuery(tag)"
+                  queryParamsHandling="merge"
+                  >
+                  <span class="pseudo-chip-key">{{ tag.key }}</span>
+                  <span class="pseudo-chip-value">{{ tag.value }}</span></a
+                  >
+                </li>
+              }
+            </ul>
+          </section>
+        }
+        <gt-entry-message></gt-entry-message>
+        <gt-entry-exception
+          [eventTitle]="event?.title"
+          [eventPlatform]="event?.platform"
+        ></gt-entry-exception>
+        <gt-entry-csp></gt-entry-csp>
+        <gt-entry-breadcrumbs></gt-entry-breadcrumbs>
+        <gt-entry-request></gt-entry-request>
+        @for (context of event.contexts | keyvalue; track context) {
+          <section>
+            <mat-divider></mat-divider>
+            <h3>
+              {{ context.value.type }}
+              @if (context.value.type) {
+                ({{ context.key }})
+              } @else {
+                {{ context.key }}
+              }
+            </h3>
+            <dl>
+              @for (context_entry of context.value | keyvalue; track context_entry) {
+                @if (context_entry.key !== 'type') {
+                  <gt-entry-data
+                    [key]="context_entry.key"
+                    [value]="context_entry.value"
+                  ></gt-entry-data>
+                }
+              }
+            </dl>
+          </section>
+        }
+        @if (event.context) {
+          <section>
+            <mat-divider></mat-divider>
+            <h3>Additional Data</h3>
+            <dl>
+              @for (context of event.context | keyvalue; track context) {
+                <gt-entry-data
+                  [key]="context.key"
+                  [value]="context.value"
+                  >
+                </gt-entry-data>
+              }
+            </dl>
+          </section>
+        }
+        @if (event?.sdk) {
+          <section>
+            <mat-divider></mat-divider>
+            <h3>SDK</h3>
+            <dl>
+              <gt-entry-data key="name" [value]="event?.sdk?.name"></gt-entry-data>
+              <gt-entry-data
+                key="version"
+                [value]="event?.sdk?.version"
+              ></gt-entry-data>
+            </dl>
+          </section>
+        }
+      </section>
+    }

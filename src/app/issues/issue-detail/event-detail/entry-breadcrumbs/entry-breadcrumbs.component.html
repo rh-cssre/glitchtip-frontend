@@ -1,73 +1,78 @@
-<section *ngIf="breadcrumbs$ | async as breadcrumbs">
-  <mat-divider></mat-divider>
-  <h3>Breadcrumbs</h3>
-  <div
-    #breadBox
-    class="wrapper"
-    [ngClass]="(showShowMore$ | async) ? 'bread-box' : 'bread-box--expanded'"
-    [class.bread-box--expanded]="(showShowMore$| async) === false"
-  >
-    <button
-      *ngIf="showShowMore$ | async"
-      class="expand-button"
-      mat-button
-      color="primary"
-      (click)="expandBreadcrumbs()"
-    >
-      <mat-icon>more_horiz</mat-icon> Show All
-      {{ breadcrumbs?.values?.length }} Breadcrumbs
-    </button>
-    <ul>
-      <li *ngFor="let value of breadcrumbs?.values; let i = index">
-        <ng-container>
-          <mat-divider *ngIf="i !== 0"></mat-divider>
-          <div class="table-wrapper" [class.error]="value.level === 'error'">
-            <table cdk-table>
-              <ng-container>
-                <tr>
-                  <td class="column-one">
-                    <ng-container
-                      *ngIf="value.level === 'error'; else useCategory"
-                    >
-                      <mat-icon class="error">warning</mat-icon>
-                    </ng-container>
-                    <ng-template #useCategory>
-                      <ng-container [ngSwitch]="value.category">
-                        <ng-container *ngSwitchCase="'ui.click'">
-                          <mat-icon class="ui">person</mat-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="'xhr'">
-                          <mat-icon class="xhr">cached</mat-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchDefault
-                          ><mat-icon>code</mat-icon>
-                        </ng-container>
-                      </ng-container></ng-template
-                    >
-                  </td>
-
-                  <td class="column-two category">
-                    {{ value.category }}
-                  </td>
-                  <td class="column-three">{{ value.message }}</td>
-                  <td class="column-four">
-                    {{ value.timestamp | date: "HH:mm:ss.SSS" }}
-                  </td>
-                </tr>
-                <ng-container>
-                  <tr *ngFor="let data of value.data | keyvalue: keepOrder">
-                    <td class="column-one"></td>
-                    <td class="column-two">{{ data.key }}</td>
-                    <td class="column-three">
-                      {{ data.value | json }}
-                    </td>
-                  </tr></ng-container
-                >
-              </ng-container>
-            </table>
-          </div></ng-container
-        >
-      </li>
-    </ul>
-  </div>
-</section>
+@if (breadcrumbs$ | async; as breadcrumbs) {
+  <section class="mat-typography">
+    <mat-divider></mat-divider>
+    <h3>Breadcrumbs</h3>
+    <div
+      #breadBox
+      class="wrapper"
+      [ngClass]="(showShowMore$ | async) ? 'bread-box' : 'bread-box--expanded'"
+      [class.bread-box--expanded]="(showShowMore$ | async) === false"
+      >
+      @if (showShowMore$ | async) {
+        <button
+          class="expand-button"
+          mat-button
+          color="primary"
+          (click)="expandBreadcrumbs()"
+          >
+          <mat-icon>more_horiz</mat-icon> Show All
+          {{ breadcrumbs?.values?.length }} Breadcrumbs
+        </button>
+      }
+      <ul>
+        @for (value of breadcrumbs?.values; track value; let i = $index) {
+          <li>
+            <ng-container>
+              @if (i !== 0) {
+                <mat-divider></mat-divider>
+              }
+              <div class="table-wrapper" [class.error]="value.level === 'error'">
+                <table cdk-table>
+                  <ng-container>
+                    <tr>
+                      <td class="column-one">
+                        @if (value.level === 'error') {
+                          <mat-icon class="error">warning</mat-icon>
+                        } @else {
+                          @switch (value.category) {
+                            @case ('ui.click') {
+                              <mat-icon class="ui">person</mat-icon>
+                            }
+                            @case ('xhr') {
+                              <mat-icon class="xhr">cached</mat-icon>
+                            }
+                            @default {
+                              <mat-icon>code</mat-icon>
+                            }
+                          }
+                        }
+                      </td>
+                      <td class="column-two category">
+                        {{ value.category }}
+                      </td>
+                      <td class="column-three">{{ value.message }}</td>
+                      <td class="column-four">
+                        {{ value.timestamp | date : "HH:mm:ss.SSS" }}
+                      </td>
+                    </tr>
+                    <ng-container>
+                      @for (data of value.data | keyvalue : keepOrder; track data) {
+                        <tr>
+                          <td class="column-one"></td>
+                          <td class="column-two">{{ data.key }}</td>
+                          <td class="column-three">
+                            {{ data.value | json }}
+                          </td>
+                        </tr>
+                        }</ng-container
+                        >
+                      </ng-container>
+                    </table>
+                  </div></ng-container
+                  >
+                </li>
+              }
+            </ul>
+          </div>
+        </section>
+      }

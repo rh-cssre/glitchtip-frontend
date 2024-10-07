@@ -1,40 +1,46 @@
-<ng-container *ngIf="planOptions$ | async as planOptions">
+@if (productOptions$ | async; as productOptions) {
   <div class="plans mat-elevation-z1">
-    <mat-card *ngFor="let product of planOptions; let i = index">
-      <mat-card-content>
-        <mat-card-title>{{ product.name }}</mat-card-title>
-        <p>{{ product.description }}</p>
-        <ul class="value-props">
-          <li>
-            <mat-icon color="primary">check_circle</mat-icon>
-            <ng-container i18n>Error tracking</ng-container>
-          </li>
-          <li>
-            <mat-icon color="primary">check_circle</mat-icon>
-            <ng-container i18n>Unlimited projects</ng-container>
-          </li>
-          <li>
-            <mat-icon color="primary">check_circle</mat-icon>
-            <ng-container i18n>Unlimited team members</ng-container>
-          </li>
-        </ul>
-        <p>
-          <span class="mat-display-1">
-            ${{ product.plans[0].amount | number }}
-          </span>
-          / month
-        </p>
-        <gt-loading-button
-          buttonText="Select"
-          [loading]="selectedSubscription === i"
-          (click)="onSubmit(product.plans[0], i)"
-        ></gt-loading-button>
-      </mat-card-content>
-    </mat-card>
+    @for (product of productOptions; track product; let i = $index) {
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title>{{ product.name }}</mat-card-title>
+          <p>{{ product.description }}</p>
+          <ul class="value-props">
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              <ng-container i18n>Error tracking</ng-container>
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              <ng-container i18n>Unlimited projects</ng-container>
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              <ng-container i18n>Unlimited team members</ng-container>
+            </li>
+          </ul>
+          <p>
+            <span class="mat-headline-4">
+              ${{ product.mainUnitPrice | number }}
+            </span>
+            / month
+          </p>
+          <gt-loading-button
+            buttonText="Select"
+            [loading]="
+              (subscriptionCreationLoadingId$ | async) === product.prices[0].id
+            "
+            (buttonClick)="onSubmit(product.prices[0])"
+          ></gt-loading-button>
+        </mat-card-content>
+      </mat-card>
+    }
   </div>
   <div class="event-info">
     <mat-card>
-      <mat-card-title i18n>Events</mat-card-title>
+      <mat-card-header>
+        <mat-card-title i18n>Events</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         <gt-event-info></gt-event-info>
@@ -45,6 +51,6 @@
     >Questions about subscriptions? Need assistance, or a bigger plan? Contact
     us at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
     >.</p
-  >
-</ng-container>
-<!-- TODO: add state for user who is not owner, since they cannot sign up for an org-->
+    >
+  }
+  <!-- TODO: add state for user who is not owner, since they cannot sign up for an org-->

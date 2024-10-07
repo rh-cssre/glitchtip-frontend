@@ -1,30 +1,42 @@
-The simplest way to send an event to GlitchTip is to paste this into your HTML file somewhere:
+GlitchTip is an open-source alternative to Sentry that works seamlessly with the Sentry browser SDK.
+
+## Step 1: Include the SDK via CDN or NPM
+
+To get started, you have two options for including the Sentry SDK:
+
+### Option 1: CDN
+
+Add the following script tag to your HTML file.
 
 ```html
-<script
-  src="https://unpkg.com/@sentry/browser@latest/build/bundle.min.js"
-  crossorigin="anonymous"
-></script>
-
-<script>
-  Sentry.init({ dsn: "your DSN here" });
-
-  undefinedFunction();
-</script>
+<script src="https://browser.sentry-cdn.com/7.60.0/bundle.min.js" crossorigin="anonymous"></script>
 ```
 
-First, install the SDK. This code sample uses [unpkg](https://unpkg.com), but you can save that file and use it locally, or install with NPM by running `npm i @sentry/browser`.
+Consider checking the Sentry GitHub repository for the latest available version number.
 
-Then, initialize the SDK as shown above, using your DSN. Do this as early as possible in your loading sequence so it can capture errors from the start.
+### Option 2: NPM
 
-If you've properly added and initialized the SDK, it should capture all of your errors without any further configuration.
+If you prefer using NPM for managing dependencies, you can install the Sentry SDK like this:
 
-If you want to throw errors more manually, you can do that as well. Here's an example:
+```bash
+npm install @sentry/browser
+```
+
+## Step 2: Initialize the SDK
+
+Next, initialize the Sentry SDK as early as possible during your page load. Retrieve your DSN from your Glitchtip project settings and use it to configure the SDK. Additionally, you can set the `tracesSampleRate` option to specify the rate at which performance monitoring data should be sent (e.g., `0.01` for 1% of transactions).
 
 ```javascript
-try {
-  someFunction();
-} catch (error) {
-  Sentry.captureException(error);
-}
+Sentry.init({
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
+  tracesSampleRate: 0.01,
+});
+```
+
+## Step 3: Verify Error Reporting
+
+To ensure that error reporting works correctly, you can create a simple test by calling an undefined function:
+
+```javascript
+myUndefinedFunction();
 ```

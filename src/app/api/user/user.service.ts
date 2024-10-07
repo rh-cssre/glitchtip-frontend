@@ -1,45 +1,75 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, EMPTY, Subject } from "rxjs";
+import { EMPTY, lastValueFrom, Subject } from "rxjs";
 import { tap, map, catchError, exhaustMap } from "rxjs/operators";
-import { User } from "./user.interfaces";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { User, UserOptions } from "./user.interfaces";
+import { UserAPIService } from "./user-api.service";
 
 interface UserState {
   user: User | null;
+  userDeleteError: string | null;
+  userDeleteLoading: boolean;
   disconnectLoading: number | null;
 }
 
 const initialState: UserState = {
   user: null,
+  userDeleteError: null,
+  userDeleteLoading: false,
   disconnectLoading: null,
 };
 
 @Injectable({
   providedIn: "root",
 })
-export class UserService {
-  private readonly state = new BehaviorSubject<UserState>(initialState);
+export class UserService extends StatefulService<UserState> {
   readonly userDetails$ = this.state.pipe(map((state) => state.user));
+  readonly userDeleteError$ = this.state.pipe(
+    map((state) => state.userDeleteError),
+  );
+  readonly userDeleteLoading$ = this.state.pipe(
+    map((state) => state.userDeleteLoading),
+  );
   readonly disconnectLoading$ = this.state.pipe(
-    map((state) => state.disconnectLoading)
+    map((state) => state.disconnectLoading),
   );
   private readonly getUserDetailsAction = new Subject();
 
   readonly activeUserEmail$ = this.userDetails$.pipe(
-    map((userDetails) => userDetails?.email)
+    map((userDetails) => userDetails?.email),
   );
-  private readonly url = "/api/0/users/me/";
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
+  constructor(
+    private snackBar: MatSnackBar,
+    private userAPIService: UserAPIService,
+  ) {
+    super(initialState);
     this.getUserDetailsAction
       .pipe(
         exhaustMap(() =>
-          this.retrieveUserDetails().pipe(
-            tap((resp: User) => this.setUserDetails(resp)),
-            catchError(() => EMPTY)
-          )
-        )
+          this.userAPIService.retrieve().pipe(
+            tap((resp: User) => {
+              this.setUserDetails(resp);
+              if (resp.chatwootIdentifierHash) {
+                let chatwootUser = {
+                  email: resp.email,
+                  identifier_hash: resp.chatwootIdentifierHash,
+                };
+                // Chatwoot may not always be ready at this point
+                if ((window as any).$chatwoot) {
+                  (window as any).$chatwoot.setUser(resp.id, chatwootUser);
+                } else {
+                  window.addEventListener("chatwoot:ready", function () {
+                    (window as any).$chatwoot.setUser(resp.id, chatwootUser);
+                  });
+                }
+              }
+            }),
+            catchError(() => EMPTY),
+          ),
+        ),
       )
       .subscribe();
   }
@@ -49,57 +79,53 @@ export class UserService {
     this.getUserDetailsAction.next(undefined);
   }
 
-  private retrieveUserDetails() {
-    return this.http.get<User>(this.url);
-  }
-
   deleteUser() {
-    return this.http.delete(this.url);
-  }
-
-  updateUserOptions(name: string, options: { [key: string]: string }) {
-    return this.patchUser({ name, options })
-      .pipe(
-        tap(() => {
-          this.getUserDetails();
-          this.snackBar.open("Preferences have been updated")
-        })
-      )
-      .toPromise();
-  }
-
-  private patchUser(user: Partial<User>) {
-    return this.http.patch(this.url, user);
-  }
-
-  disconnectSocialAccount(accountId: number) {
-    this.setDisconnectLoading(accountId);
-    this.http
-      .post("/api/socialaccounts/" + accountId + "/disconnect/", {})
-      .pipe(
-        tap(() => {
-          this.setDisconnectLoading(null);
-          this.getUserDetails();
-          this.snackBar.open(
-            "You have successfully disconnected your social auth account"
+    this.setUserDeleteLoadingStart();
+    return this.userAPIService.destroy().pipe(
+      catchError((err) => {
+        if (err instanceof HttpErrorResponse) {
+          this.setUserDeleteError(
+            err.error?.message ? err.error?.message : "Unable to delete user",
           );
+        }
+        return EMPTY;
+      }),
+    );
+  }
+
+  updateUser(name: string, options: UserOptions) {
+    lastValueFrom(
+      this.userAPIService.update({ name, options }).pipe(
+        tap((resp) => {
+          this.setUserDetails(resp);
+          this.snackBar.open("Preferences have been updated");
         }),
-        catchError((err: HttpErrorResponse) => {
-          this.setDisconnectLoading(null);
-          if (Array.isArray(err.error) && err.error.length) {
-            this.snackBar.open(err.error[0]);
-          }
-          return EMPTY;
-        })
-      )
-      .toPromise();
+      ),
+    );
   }
 
-  private setDisconnectLoading(loading: number | null) {
-    this.state.next({ ...this.state.getValue(), disconnectLoading: loading });
+  clearUserUIState() {
+    this.setState({
+      userDeleteError: initialState.userDeleteError,
+      userDeleteLoading: initialState.userDeleteLoading,
+      disconnectLoading: initialState.disconnectLoading,
+    });
   }
 
-  private setUserDetails(userDetails: User) {
-    this.state.next({ ...this.state.getValue(), user: userDetails });
+  private setUserDeleteLoadingStart() {
+    this.setState({
+      userDeleteLoading: true,
+    });
+  }
+
+  private setUserDetails(user: User) {
+    this.setState({ user });
+  }
+
+  private setUserDeleteError(error: string) {
+    this.setState({
+      userDeleteLoading: false,
+      userDeleteError: error,
+    });
   }
 }

@@ -1,0 +1,27 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+    <mat-card-content>
+        <div class="centered-block">
+            <h1 class="fancy mat-headline-2">GlitchTip Blog</h1>
+            @for (post of posts; track post.route; let i = $index) {
+            <article>
+                <h2>
+                    <a [routerLink]="[post.route]">{{ post.title }}</a>
+                </h2>
+
+                @if (post.date) {
+                <time class="mat-caption" [dateTime]="post.date">
+                    {{ post.date | date: 'longDate' }}
+                </time>
+                }
+                @if (post.description && i < 25) { <p>
+                    {{ post.description }}
+                    </p>
+                    }
+            </article>
+            }
+
+        </div>
+    </mat-card-content>
+</mat-card>
