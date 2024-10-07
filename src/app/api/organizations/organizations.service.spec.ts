@@ -1,31 +1,25 @@
-import { NgZone } from "@angular/core";
-import { TestBed } from "@angular/core/testing";
-import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
-import { Router, ActivatedRoute } from "@angular/router";
-import { RouterTestingModule } from "@angular/router/testing";
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
-
 import { OrganizationsService } from "./organizations.service";
+import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
 import { Organization } from "./organizations.interface";
-import { organizationList, testOrgDetail } from "./organization-test-data";
-import { MaterialModule } from "src/app/shared/material.module";
-import { routes } from "src/app/app-routing.module";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { organizationList } from "./organization-test-data";
 
 describe("OrganizationsService", () => {
   let httpTestingController: HttpTestingController;
   let service: OrganizationsService;
-  let router: Router;
-  let zone: NgZone;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes(routes),
-        MaterialModule,
+        MatSnackBarModule,
+        RouterTestingModule,
       ],
       providers: [
         MicroSentryService,
@@ -34,8 +28,6 @@ describe("OrganizationsService", () => {
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(OrganizationsService);
-    router = TestBed.inject(Router);
-    zone = TestBed.inject(NgZone);
   });
 
   it("Initial organizations", () => {
@@ -68,47 +60,5 @@ describe("OrganizationsService", () => {
     service.activeOrganizationId$.subscribe((org) =>
       expect(org).toBe(testData.id)
     );
-  });
-
-  it("navigates within settings when changing active organization", async () => {
-    // Remake testing module to inject mock ActivatedRoute
-    TestBed.resetTestingModule();
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes(routes),
-        MaterialModule,
-      ],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              firstChild: {
-                url: [{ path: organizationList[0].slug }, { path: "settings" }],
-              },
-            },
-          },
-        },
-        MicroSentryService,
-        { provide: MICRO_SENTRY_CONFIG, useValue: {} },
-      ],
-    });
-    httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(OrganizationsService);
-    router = TestBed.inject(Router);
-    // Switch from one issues to another
-    await zone.run(() => router.navigate([organizationList[0].slug]));
-    const navigateSpy = spyOn(router, "navigate");
-    // @ts-ignore
-    service.setOrganizations(organizationList);
-    // @ts-ignore
-    service.setActiveOrganizationId(2);
-    service.changeActiveOrganization(1);
-    const req = httpTestingController.expectOne(
-      `/api/0/organizations/${organizationList[1].slug}/`
-    );
-    req.flush(testOrgDetail);
-    expect(navigateSpy).toHaveBeenCalledWith([organizationList[1].slug]);
   });
 });

@@ -1,0 +1,167 @@
+@use '@angular/material' as mat;
+@import 'prismjs/themes/prism.css';
+$font-path: '../../../src/assets/fonts';
+@import '../../../src/assets/styles/themes';
+@import '../../../src/assets/styles/variables';
+@import '../../../src/assets/styles/font-files';
+@import '../../../src/assets/styles/resets';
+@import './app/shared/payment/_payment.component.scss';
+
+// Common styles for Angular Material. Included so that we only have to load a
+// single CSS file for Angular Material in our app.
+// Don't include this anywhere else!
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-4)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy($custom-typography);`
+@include mat.core();
+@include mat.all-component-typographies($custom-typography);
+@include mat.card-typography($custom-card-typography);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($candy-app-theme);
+
+// Responsive type maybe?
+@media screen and (max-width: 767px) {
+  @include mat.all-component-typographies($mobile-typography);
+  @include mat.card-typography($custom-card-typography);
+}
+
+app-root,
+app-root-scully {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+mat-card-content {
+  font-family: $font-sans-serif;
+}
+
+body.loaded app-root {
+  display: flex !important;
+}
+
+a {
+  color: $amaranth;
+  font-weight: 500;
+}
+
+.fancy {
+  color: white;
+  background: $amaranth;
+  background: -webkit-linear-gradient(to left, #8a2387, #e94057, #f27121);
+  background: linear-gradient(to left, #8a2387, #e94057, #f27121);
+  background-clip: border-box;
+  font-style: italic;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  margin: 0.75em 0 0.5em;
+  padding-right: 0.1em;
+  padding-bottom: 0.05em;
+  display: inline-block;
+}
+
+.hero-and-nav-container {
+  position: relative;
+  overflow: hidden;
+  background: #ead5d0;
+  background: linear-gradient(45deg, #faddff 0%, #ffd3b9 100%);
+  background-size: cover, cover;
+  padding-bottom: 70px;
+}
+
+.big-card-wrapper {
+  width: 1180px;
+  min-height: 700px;
+  margin: -70px auto 50px;
+
+  @media screen and (max-width: 1199px) {
+    width: auto;
+    margin-left: 10vw;
+    margin-right: 10vw;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+
+  @media screen and (max-width: 450px) {
+    margin-top: -40px;
+  }
+}
+
+.centered-block {
+  padding: 20px 10vw 40px;
+  overflow: hidden;
+
+  @media screen and (max-width: 767px) {
+    padding: 5px 16px 20px;
+  }
+
+  .content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.markdown-container {
+  h1 {
+    display: inline-block;
+    margin: 0.75em 0 0.5em;
+
+    &:first-child {
+      @extend .fancy;
+    }
+  }
+
+  h1 {
+    @extend .mat-headline-2;
+  }
+
+  h2 {
+    @extend .mat-headline-3;
+    margin: 0.75em 0 0.5em;
+  }
+
+  h3 {
+    @extend .mat-headline-4;
+    margin: 0.75em 0 0.5em;
+  }
+
+  li {
+    margin: 7px 0;
+    line-height: 1.4em;
+  }
+
+  img {
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  code {
+    padding: 0 5px;
+    background-color: #eee;
+    font-size: 0.9em;
+  }
+
+  pre {
+    padding: 10px 15px;
+    background-color: #efefef;
+    overflow-x: scroll;
+    font-size: 0.9em;
+    line-height: 1.5em;
+  }
+}
+
+.just-the-image {
+  padding: 75px 0;
+}
