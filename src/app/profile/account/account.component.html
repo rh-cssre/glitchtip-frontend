@@ -4,7 +4,9 @@
 <gt-manage-emails class="spacing"></gt-manage-emails>
 
 <mat-card>
-  <mat-card-title i18n>Delete User Account</mat-card-title>
+  <mat-card-header>
+    <mat-card-title i18n>Delete User Account</mat-card-title>
+  </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="remove-content">
     <div>
@@ -12,21 +14,25 @@
         >By deleting your user account, you will permanently lose all data,
         including access to organization projects and their associated
         events.</p
-      >
-      <p i18n
-        >Make sure to delete or transfer ownership of any organizations before
+        >
+        <p i18n
+          >Make sure to delete or transfer ownership of any organizations before
         deleting your account. Owners of paid organization subscriptions are not
         able to delete their account.</p
-      >
-      <mat-error>{{ deleteError }}</mat-error>
-    </div>
-    <gt-loading-button
-      data-test
-      buttonText="Delete User Account"
-      [loading]="deleteLoading"
-      (click)="deleteUser()"
-      id="delete-user"
-    >
-    </gt-loading-button>
-  </mat-card-content>
-</mat-card>
+          >
+          @if (userDeleteError$ | async; as error) {
+            <mat-error>
+              {{ error }}
+            </mat-error>
+          }
+        </div>
+        <gt-loading-button
+          data-test
+          buttonText="Delete User Account"
+          [loading]="(userDeleteLoading$ | async) === true"
+          (buttonClick)="deleteUser()"
+          id="delete-user"
+          >
+        </gt-loading-button>
+      </mat-card-content>
+    </mat-card>

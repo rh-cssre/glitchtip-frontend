@@ -1,28 +1,28 @@
 <section class="l-body">
   <header class="page-header">
-    <h2 class="mat-display-1" i18n>Subscription</h2>
-  </header>
-  <ng-container *ngIf="subscription$ | async as subscription">
-    <mat-card>
-      <mat-card-content>
-        <div>
-          <ng-container
-            *ngIf="
-              subscription.status === 'active' ||
+    <h2 class="mat-headline-4" i18n>Subscription</h2>
+    @if (fromStripe$ | async) {
+      <span class="mat-subtitle-1"
+        >Redirected from Stripe</span
+        >
+      }
+    </header>
+    @if (!(subscriptionLoading$ | async)) {
+      @if (subscription$ | async; as subscription) {
+        <mat-card>
+          <mat-card-content>
+            <div>
+              @if (
+                subscription.status === 'active' ||
                 subscription.status === 'trialing' ||
-                subscription.status === 'past_due';
-              else noSubscription
-            "
-          >
-            <ng-container *ngIf="subscription.plan">
-              <p *ngIf="subscription.status === 'active'" class="mat-body-1">
-                <ng-container
-                  *ngIf="
-                    subscription.plan.amount === '0.00';
-                    else paidSubscription
-                  "
-                  i18n
-                  >You have selected the free plan. Please consider making a
+                subscription.status === 'past_due') {
+                @if (subscription.status === 'active') {
+                  <p class="mat-body-1">
+                    @if (
+                      subscription.mainUnitPrice === 0) {
+                      <ng-container
+                        i18n
+                        >You have selected the free plan. Please consider making a
                   monthly
                   <a
                     href="https://liberapay.com/GlitchTip/donate"
@@ -31,178 +31,205 @@
                   >
                   to help keep open source development sustainable. Thank you
                   for choosing GlitchTip!</ng-container
-                ><ng-template #paidSubscription i18n
-                  >This organization has an active subscription to GlitchTip.
-                  Thank you!</ng-template
-                >
-              </p>
-              <p
-                *ngIf="subscription.status === 'trialing'"
-                class="mat-body-1"
-                i18n
-                >This organization has a trial subscription to GlitchTip.</p
-              >
-              <p
-                *ngIf="subscription.status === 'past_due'"
-                class="mat-body-1"
-                i18n
-                >This organization has a subscription to GlitchTip, but the
+                          >
+                        } @else {
+                          <ng-container i18n>This organization has an active subscription to GlitchTip.
+                  Thank you!</ng-container>
+                        }
+                      </p>
+                    }
+                    @if (subscription.status === 'trialing') {
+                      <p
+                        class="mat-body-1 no-bottom-margin"
+                        i18n
+                        >This organization has a trial subscription to GlitchTip.</p
+                        >
+                      }
+                      @if (subscription.status === 'past_due') {
+                        <p
+                          class="mat-body-1"
+                          i18n
+                          >This organization has a subscription to GlitchTip, but the
                 payment is past due.</p
-              >
-              <ng-container>
-                <mat-card-subtitle i18n>Details</mat-card-subtitle>
-                <h3>{{ subscription.plan.product.name }}</h3>
-                {{ subscription.plan.product.description }}
-                <div
-                  class="visualization"
-                  *ngIf="eventsPercent$ | async as eventsPercent"
-                >
-                  <div class="total-events">
-                    {{ totalEventsAllowed$ | async }}
-                  </div>
-                  <div class="display-bar">
-                    <div
-                      class="file-size-percent"
-                      style="width: {{ eventsPercent.fileSize }}%"
-                    ></div>
-                    <div
-                      class="error-event"
-                      style="width: {{ eventsPercent.errorEvents }}%"
-                    ></div>
-                    <div
-                      class="uptime-event"
-                      style="width: {{ eventsPercent.uptimeEvents }}%"
-                    ></div>
-                    <div
-                      class="transaction-event"
-                      style="width: {{ eventsPercent.transactionEvents }}%"
-                    ></div>
-                  </div>
-                  <ng-container *ngIf="eventsCountWithTotal$ | async as count">
-                    <div
-                      class="event-count"
-                      [class.event-count--left]="eventsPercent.total < 25"
-                      [class.event-count--right]="eventsPercent.total > 75"
+                          >
+                        }
+                        <ng-container>
+                          <mat-card-subtitle i18n>Details</mat-card-subtitle>
+                          <h3>{{ subscription.productName }}</h3>
+                          {{ subscription.productDescription }}
+                          @if (eventsPercent$ | async; as eventsPercent) {
+                            <div
+                              class="visualization"
+                              >
+                              <div class="total-events">
+                                {{ totalEventsAllowed$ | async }}
+                              </div>
+                              <div class="display-bar">
+                                <div
+                                  class="file-size-percent"
+                                  style="width: {{ eventsPercent.fileSize }}%"
+                                ></div>
+                                <div
+                                  class="error-event"
+                                  style="width: {{ eventsPercent.errorEvents }}%"
+                                ></div>
+                                <div
+                                  class="uptime-event"
+                                  style="width: {{ eventsPercent.uptimeEvents }}%"
+                                ></div>
+                                <div
+                                  class="transaction-event"
+                                  style="width: {{ eventsPercent.transactionEvents }}%"
+                                ></div>
+                              </div>
+                              @if (eventsCountWithTotal$ | async; as count) {
+                                <div
+                                  class="event-count"
+                                  [class.event-count--left]="eventsPercent.total < 25"
+                                  [class.event-count--right]="eventsPercent.total > 75"
                       style="left: {{
                         eventsPercent.total < 100 ? eventsPercent.total : 100
                       }}%"
-                    >
-                      {{ count.total }}
-                    </div>
-                    <div>
-                      <ul>
-                        <li>
-                          <b class="error" i18n>Issue events:</b>
-                          {{ count.eventCount }}
-                        </li>
-                        <li>
-                          <b class="uptime" i18n>Uptime events:</b>
-                          {{ count.uptimeCheckEventCount }}
-                        </li>
-                        <li>
-                          <b class="performance" i18n>Performance events:</b>
-                          {{ count.transactionEventCount }}
-                        </li>
-                        <li>
-                          <b class="file-size" i18n>File storage:</b>
-                          {{ count.fileSizeMB }} MB
-                        </li>
-                        <li i18n
-                          >Total
+                                  >
+                                  {{ count.total }}
+                                </div>
+                                <div>
+                                  <ul>
+                                    <li>
+                                      <b class="error" i18n>Issue events:</b>
+                                      {{ count.eventCount }}
+                                    </li>
+                                    <li>
+                                      <b class="uptime" i18n>Uptime events:</b>
+                                      {{ count.uptimeCheckEventCount }}
+                                    </li>
+                                    <li>
+                                      <b class="performance" i18n>Performance events:</b>
+                                      {{ count.transactionEventCount }}
+                                    </li>
+                                    <li>
+                                      <b class="file-size" i18n>File storage:</b>
+                                      {{ count.fileSizeMB }} MB
+                                    </li>
+                                    <li i18n
+                                      >Total
                           <a [routerLink]="[]" (click)="openEventInfoDialog()"
                             >events</a
                           >
                           used in billing period: {{ count.total }}</li
-                        >
-                      </ul>
-                    </div>
-                  </ng-container>
-                </div>
-                <ul>
-                  <li class="mat-body-1" i18n
-                    >Start date for this plan:
+                                        >
+                                      </ul>
+                                    </div>
+                                  }
+                                </div>
+                              }
+                              <ul>
+                                <li class="mat-body-1" i18n
+                                  >Start date for this plan:
                     {{ subscription.start_date | date }}</li
-                  >
-                  <li class="mat-body-1" i18n
-                    >Plan cost: {{ subscription.plan.amount | currency }}</li
-                  >
-                  <li class="mat-body-1">
-                    <ng-container i18n>Billing</ng-container>:
-                    <ng-container
-                      *ngIf="
-                        subscription.collection_method ===
-                        'charge_automatically'
-                      "
-                      i18n
-                      >Automatic</ng-container
-                    >
-                    <ng-container
-                      *ngIf="subscription.collection_method === 'send_invoice'"
-                      i18n
-                      >Send invoice</ng-container
-                    >
-                  </li>
-                  <li class="mat-body-1" i18n
-                    >Billing period:
+                                  >
+                                  <li class="mat-body-1" i18n
+                                    >Plan cost: {{ subscription.mainUnitPrice | currency }}</li
+                                    >
+                                    <li class="mat-body-1">
+                                      <ng-container i18n>Billing</ng-container>:
+                                      @if (
+                                        subscription.collection_method ===
+                                        'charge_automatically'
+                                        ) {
+                                        <ng-container
+                                          i18n
+                                          >Automatic</ng-container
+                                          >
+                                        }
+                                        @if (subscription.collection_method === 'send_invoice') {
+                                          <ng-container
+                                            i18n
+                                            >Send invoice</ng-container
+                                            >
+                                          }
+                                        </li>
+                                        <li class="mat-body-1" i18n
+                                          >Billing period:
                     {{ subscription.current_period_start | date }} to
                     {{ subscription.current_period_end | date }}</li
-                  >
-                </ul>
-              </ng-container>
-            </ng-container>
-            <p class="mat-body-1" i18n
-              >If you have questions about your subscription, please contact us
-              at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-              >.</p
-            >
-            <mat-error>{{ error$ | async }}</mat-error>
-            <button
-              mat-flat-button
-              color="primary"
-              (click)="manageSubscription()"
-              i18n
-              >Manage Subscription</button
-            >
-          </ng-container>
-          <ng-template #noSubscription>
-            <p class="mat-body-1" i18n
-              >This organization does not have an active subscription to
-              GlitchTip. Pick a plan to get started.</p
-            >
-          </ng-template>
-        </div>
-        <div *ngIf="(subscription$ | async) === null as subscription">
-          <p class="mat-body-1" i18n
-            >This organization does not have an active subscription to
-            GlitchTip.</p
-          >
-          <a [routerLink]="['/payment']" i18n>Subscription Options</a>
-          <p class="mat-body-1" i18n
-            >If you would like to purchase a subscription, please contact us at
-            <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-            >.</p
-          >
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card *ngIf="promptForProject$ | async">
-      <mat-card-content>
-        <p i18n
-          >Now that you have an organization and a subscription, create a
-          project.</p
-        >
-        <a
-          *ngIf="activeOrganizationSlug$ | async as slug"
-          mat-flat-button
-          [routerLink]="['/', slug, 'settings', 'projects', 'new']"
-          color="primary"
-          i18n
-          >Create New Project</a
-        >
-      </mat-card-content>
-    </mat-card>
-    <gt-payment
-      *ngIf="subscription.status === null || subscription.status === 'canceled'"
-    ></gt-payment>
-  </ng-container>
-</section>
+                                          >
+                                        </ul>
+                                      </ng-container>
+                                      <p class="mat-body-1" i18n
+                                        >If you have questions about your subscription, please contact
+                us at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+                >.</p
+                                        >
+                                        <mat-error>{{ error$ | async }}</mat-error>
+                                        <button
+                                          mat-flat-button
+                                          color="primary"
+                                          (click)="manageSubscription()"
+                                          i18n
+                                          >Manage Subscription</button
+                                          >
+                                        } @else {
+                                          <p class="mat-body-1" i18n
+                                            >This organization does not have an active subscription to
+                GlitchTip. Pick a plan to get started.</p
+                                            >
+                                          }
+                                        </div>
+                                      </mat-card-content>
+                                    </mat-card>
+                                    @if (promptForProject$ | async) {
+                                      <mat-card>
+                                        <mat-card-content>
+                                          <p i18n
+                                            >Now that you have an organization and a subscription, create a
+            project.</p
+                                            >
+                                            @if (activeOrganizationSlug$ | async; as slug) {
+                                              <a
+                                                mat-flat-button
+                                                [routerLink]="['/', slug, 'settings', 'projects', 'new']"
+                                                color="primary"
+                                                i18n
+                                                >Create New Project</a
+                                                >
+                                              }
+                                            </mat-card-content>
+                                          </mat-card>
+                                        }
+                                      }
+                                      @if (
+                                        ((subscriptionLoading$ | async) == false &&
+                                        (subscription$ | async) === null) ||
+                                        (subscription$ | async)!.status === 'canceled'
+                                        ) {
+                                        <gt-payment
+                                        ></gt-payment>
+                                      }
+                                    } @else {
+                                      @if (
+                                        (subscriptionLoading$ | async) || (subscriptionLoadingTimeout$ | async)
+                                        ) {
+                                        <mat-card
+                                          >
+                                          <mat-card-header></mat-card-header>
+                                          <mat-card-content>
+                                            @if (subscriptionLoading$ | async) {
+                                              <div class="spinner-container">
+                                                <mat-spinner diameter="36"></mat-spinner>
+                                              </div>
+                                            }
+                                            @if (subscriptionLoadingTimeout$ | async) {
+                                              <div>
+                                                GlitchTip was unable to find a subscription for your account. If you
+                                                just signed up for a subscription on our payment platform, please
+                                                contact us at
+                                                <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+                                                  >.
+                                                </div>
+                                              }
+                                            </mat-card-content>
+                                          </mat-card>
+                                        }
+                                      }
+                                    </section>

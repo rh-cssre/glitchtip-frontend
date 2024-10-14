@@ -1,52 +1,46 @@
 <section>
   <mat-card>
-    <h1>
+    <mat-card-header>
       <mat-card-title>Environments</mat-card-title>
-    </h1>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <ng-container *ngIf="(initialLoad$ | async) === false; else afterLoad">
+      @if ((initialLoad$ | async) === false) {
         <div class="loading"></div>
-      </ng-container>
-      <ng-template #afterLoad>
-        <ng-container
-          *ngIf="
-            sortedEnvironments$ | async as sortedEnvironments;
-            else noEnvironments
-          "
-        >
-          <ng-container *ngFor="let sortedEnvironment of sortedEnvironments">
+      } @else {
+        @if (
+          sortedEnvironments$ | async; as sortedEnvironments) {
+          @for (sortedEnvironment of sortedEnvironments; track sortedEnvironment) {
             <h2>{{ sortedEnvironment.heading }}</h2>
             <mat-list>
-              <ng-container
-                *ngFor="let environment of sortedEnvironment.environments"
-              >
+              @for (environment of sortedEnvironment.environments; track environment) {
                 <mat-list-item>
-                  <span>
-                    {{ environment.name }}
-                  </span>
-                  <gt-loading-button
-                    (click)="toggleHidden(environment)"
-                    [loading]="
-                      environment.id === (toggleHiddenloading$ | async)
-                    "
-                    [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
-                    buttonStyle="stroked"
-                  ></gt-loading-button>
+                  <div class="environment-list-item">
+                    <span class="mat-body-1">
+                      {{ environment.name }}
+                    </span>
+                    <gt-loading-button
+                      (buttonClick)="toggleHidden(environment)"
+                      [loading]="
+                        environment.id === (toggleHiddenloading$ | async)
+                      "
+                      [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
+                      buttonStyle="stroked"
+                    ></gt-loading-button>
+                  </div>
                 </mat-list-item>
-              </ng-container>
+              }
             </mat-list>
-          </ng-container>
-        </ng-container>
-      </ng-template>
-      <ng-template #noEnvironments>
-        <p class="mat-body-1">
-          If you initialize an open-source Sentry SDK with an environment, it
-          will tag events with that environment and GlitchTip will keep a record
-          of them. The environments persist even if the event that reported it
-          is deleted, which is why hiding is an option.
-        </p>
-      </ng-template>
+          }
+        } @else {
+          <p class="mat-body-1">
+            If you initialize an open-source Sentry SDK with an environment, it
+            will tag events with that environment and GlitchTip will keep a record
+            of them. The environments persist even if the event that reported it
+            is deleted, which is why hiding is an option.
+          </p>
+        }
+      }
     </mat-card-content>
   </mat-card>
 </section>

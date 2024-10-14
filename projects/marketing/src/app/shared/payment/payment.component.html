@@ -1,0 +1,234 @@
+<mat-tab-group (selectedIndexChange)="setSelectedTab($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <div class="tab-label-header mat-body-1">Hosted version</div>
+        <div class="tab-label-description mat-caption">
+          Sign up at app.glitchtip.com
+        </div>
+      </div>
+    </ng-template>
+    <div class="plans mat-elevation-z1">
+      @for (product of planOptions; track product; let i = $index) {
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ product.name }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="spaced-card-content">
+            <p class="product-description">{{ product.description }}</p>
+            <ul class="value-props">
+              <li>
+                <mat-icon color="primary">check_circle</mat-icon>
+                Error tracking
+              </li>
+              <li>
+                <mat-icon color="primary">check_circle</mat-icon>
+                Unlimited projects
+              </li>
+              <li>
+                <mat-icon color="primary">check_circle</mat-icon>
+                Unlimited team members
+              </li>
+            </ul>
+            <div class="price-cta">
+              <p>
+                <span class="mat-headline-4">
+                  ${{ product.plans[0].amount | number }}
+                </span>
+                / month
+              </p>
+              <a
+                mat-flat-button
+                color="primary"
+                buttonText="Select"
+                target="_blank"
+                [href]="registerLink"
+              >
+                Get started
+              </a>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tabl-label">
+        <div class="tab-label-header mat-body-1">Self-hosted version</div>
+        <div class="tab-label-description mat-caption">
+          Run on your own server
+        </div>
+      </div>
+    </ng-template>
+    <div class="plans mat-elevation-z1">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Free and open source</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="spaced-card-content">
+          <ul class="value-props">
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Unlimited usage
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Host on your infrastructure
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Community support
+            </li>
+          </ul>
+          <div class="price-cta">
+            <p>
+              <span class="mat-headline-4"> FREE </span>
+            </p>
+            <a
+              mat-flat-button
+              color="primary"
+              buttonText="Select"
+              href="https://glitchtip.com/documentation/install"
+            >
+              Get started
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Premium Support</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="spaced-card-content">
+          <ul class="value-props">
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Host on your infrastructure
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Installation (optional $500 one-time fee)
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Priority email and livechat support
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Update assistance
+            </li>
+          </ul>
+          <div class="price-cta">
+            <p><span class="mat-headline-4">$15</span>/user/month</p>
+            <a
+              mat-flat-button
+              color="primary"
+              buttonText="Select"
+              href="mailto:sales@glitchtip.com"
+            >
+              Email sales&#64;glitchtip.com
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Enterprise Support</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="spaced-card-content">
+          <ul class="value-props">
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Custom pricing
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Host on your infrastructure
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Single Sign On integrations with LDAP, Google Apps, and more
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Custom Branding
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Priority Email and Live chat support
+            </li>
+            <li>
+              <mat-icon color="primary">check_circle</mat-icon>
+              Development support
+            </li>
+          </ul>
+          <div class="price-cta">
+            <p><span class="mat-headline-4">CUSTOM</span></p>
+            <a
+              mat-flat-button
+              color="primary"
+              buttonText="Select"
+              href="mailto:sales@glitchtip.com"
+            >
+              Email sales&#64;glitchtip.com
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+@if (selectedTab === 0) {
+  <p class="mat-body-1">
+    An <strong>event</strong> is when your project sends us data one time. For
+    example, if ten users trigger the same bug, GlitchTip will
+    receive&nbsp;ten&nbsp;events.
+  </p>
+  <p class="mat-body-1">
+    This pricing is for our hosted version of GlitchTip. If you want to run your
+    own version, you are always free to do so!
+    <a [routerLink]="['/documentation', 'install']"
+      >Read our installation instructions</a
+    >
+    if you want to give it a try.
+  </p>
+  <p class="mat-body-1">
+    We offer discounted plans for non-profits and open source projects starting
+    at $5 per month.
+  </p>
+  <p class="mat-body-1">
+    Questions about subscriptions? Need assistance, or a bigger plan? Contact us
+    at
+    <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+    >.
+  </p>
+} @else if (selectedTab === 1 && pricingPage) {
+  <h2 class="mat-headline-4">Self-hosted support FAQs</h2>
+  <dl>
+    <mkt-question-and-answer
+      question="Can you install GlitchTip for me?"
+      answer="For a one time $500 fee, we'll set up GlitchTip for you on your infrastructure or a platform such as DigitalOcean, AWS, or Heroku."
+    >
+    </mkt-question-and-answer>
+
+    <mkt-question-and-answer
+      question="What is update assistance?"
+      answer="We can assist with updating GlitchTip. You may update it yourself at any time OR request that we update for you monthly. For the later, you will need to give us sufficient access to your environment and we will manage it for you."
+    ></mkt-question-and-answer>
+
+    <mkt-question-and-answer question="What type of support is provided?">
+      <p>
+        We'll respond via email and live chat during US Eastern Time (UTC-5)
+        business hours. With Enterprise, we can join your companies chat service
+        such as Slack or Rocket.Chat. We will help you use GlitchTip and
+        integrate your apps with it.
+      </p>
+
+      <p>
+        Development requests will be prioritized and specific features can be
+        developed at additional costs.
+      </p>
+    </mkt-question-and-answer>
+  </dl>
+}
