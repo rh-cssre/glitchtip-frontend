@@ -1,0 +1,66 @@
+<header>
+  <mat-toolbar color="transparent">
+    <a [routerLink]="['']">
+      <img class="logo" src="../assets/logo-again.svg" alt="GlitchTip" /></a>
+    <div>
+      <a [routerLink]="['pricing']">Pricing</a>
+      <a [routerLink]="['blog']">Blog</a>
+      <a class="u-hidden-small" [routerLink]="['documentation']">
+        <span>Documentation</span>
+      </a>
+      <a class="u-visible-small" [routerLink]="['documentation']">
+        <span>Docs</span>
+      </a>
+      <a class [href]="loginLink">Login</a>
+      <a mat-flat-button class="mat-primary" [href]="registerLink">Register</a>
+    </div>
+  </mat-toolbar>
+</header>
+
+<router-outlet></router-outlet>
+
+<footer class="mat-typography">
+  <div class="big-card-wrapper">
+    <div>
+      <img src="assets/home/glitchtip-g.png" alt="GlitchTip" />
+    </div>
+    <div class="colophon">
+      <div>
+        GlitchTip, by
+        <a href="https://burkesoftware.com" target="_blank" rel="noopener">
+          Burke Software and Consulting
+        </a>
+      </div>
+      <div>
+        <a href="/legal/tos">Terms of Service</a>
+      </div>
+      <div>
+        <a href="/legal/privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div>
+      <ul>
+        <li>
+          <a href="https://gitter.im/GlitchTip/community" target="_blank" rel="noopener">
+            Gitter
+          </a>
+        </li>
+        <li>
+          <a href="https://gitlab.com/glitchtip" target="_blank" rel="noopener">
+            GitLab
+          </a>
+        </li>
+        <li>
+          <a href="https://mastodon.online/@glitchtip" rel="me" target="_blank">
+            Mastodon
+          </a>
+        </li>
+        <li>
+          <a href="mailto:info@burkesoftware.com?Subject=Moving to GlitchTip">
+            Email
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>

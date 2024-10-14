@@ -1,32 +1,31 @@
-<ng-container *ngIf="dateForm">
-  <ng-container *ngIf="sortForm">
+@if (dateForm) {
+  @if (sortForm) {
     <div class="action-group">
       <form
         class="date-form"
         [formGroup]="dateForm"
         (ngSubmit)="onDateFormSubmit()"
-      >
-        <mat-form-field>
+        >
+        <mat-form-field appearance="outline">
           <mat-label>Start Date</mat-label>
           <input
             matInput
             [matDatepicker]="startPicker"
             formControlName="startDate"
-          />
+            />
           <mat-datepicker-toggle
             matSuffix
             [for]="startPicker"
           ></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
-
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>End Date</mat-label>
           <input
             matInput
             [matDatepicker]="endPicker"
             formControlName="endDate"
-          />
+            />
           <mat-datepicker-toggle
             matSuffix
             [for]="endPicker"
@@ -41,7 +40,7 @@
             !(dateForm.value.startDate || dateForm.value.endDate) ||
             dateForm.pristine
           "
-        >
+          >
           Filter
         </button>
         <button
@@ -50,58 +49,57 @@
           mat-stroked-button
           color="primary"
           [disabled]="!dateForm.value.startDate && !dateForm.value.endDate"
-        >
+          >
           Clear
         </button>
       </form>
       <form [formGroup]="sortForm" class="sort-form">
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Sort by</mat-label>
           <mat-select
             (selectionChange)="sortByChanged.emit($event)"
             formControlName="sort"
-          >
-            <mat-option *ngFor="let sort of sorts" [value]="sort.param">
-              {{ sort.display }}
-            </mat-option>
+            >
+            @for (sort of sorts; track sort) {
+              <mat-option [value]="sort.param">
+                {{ sort.display }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </form>
-      <ng-container *ngIf="environmentForm">
+      @if (environmentForm) {
         <form [formGroup]="environmentForm" class="environment-form">
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Environment</mat-label>
             <mat-select
               (selectionChange)="filterByEnvironment.emit($event)"
               formControlName="environment"
-            >
-              <mat-option [value]="null">All Environments</mat-option>
-              <mat-option
-                *ngFor="let environment of organizationEnvironments"
-                [value]="environment"
               >
-                {{ environment }}
-              </mat-option>
+              <mat-option [value]="null">All Environments</mat-option>
+              @for (environment of organizationEnvironments; track environment) {
+                <mat-option
+                  [value]="environment"
+                  >
+                  {{ environment }}
+                </mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </form>
-      </ng-container>
-      <ng-container *ngIf="searchForm">
+      }
+      @if (searchForm) {
         <form
           [formGroup]="searchForm"
           (ngSubmit)="searchSubmit.emit()"
           class="search-form"
-        >
-          <mat-form-field>
-            <input
-              matInput
-              type="search"
-              placeholder="Search"
-              formControlName="query"
-            />
+          >
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput type="search" formControlName="query" />
           </mat-form-field>
         </form>
-      </ng-container>
+      }
     </div>
-  </ng-container>
-</ng-container>
+  }
+}

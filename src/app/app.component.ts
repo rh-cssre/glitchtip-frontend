@@ -3,60 +3,32 @@ import {
   ActivatedRoute,
   NavigationEnd,
   Router,
-  RoutesRecognized,
+  RouterOutlet,
 } from "@angular/router";
-import { map, filter, take, exhaustMap, tap } from "rxjs/operators";
-import { combineLatest } from "rxjs";
-import { AuthService } from "./api/auth/auth.service";
-import { OrganizationsService } from "./api/organizations/organizations.service";
+import { lastValueFrom } from "rxjs";
 import { SettingsService } from "./api/settings.service";
 import { UserService } from "./api/user/user.service";
+import { setTheme } from "./shared/shared.utils";
+import { AuthService } from "./auth.service";
 
 @Component({
   selector: "gt-root",
   templateUrl: "./app.component.html",
+  standalone: true,
+  imports: [RouterOutlet],
 })
 export class AppComponent implements OnInit {
-  isLoggedIn$ = this.auth.isLoggedIn;
-
-  /**
-   * Need RoutesRecognized to fire before retrieving organizations since doing
-   * so relies on the organization slug to set the active org
-   */
-  routesAreRecognized$ = this.router.events.pipe(
-    map((event) => {
-      if (event instanceof RoutesRecognized) {
-        return true;
-      }
-      return false;
-    }),
-    filter((isRecognized) => !!isRecognized),
-    take(1)
-  );
-
   constructor(
-    private auth: AuthService,
-    private userService: UserService,
-    private organizationService: OrganizationsService,
     private settings: SettingsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private userService: UserService,
   ) {}
 
   ngOnInit() {
     this.settings.getSettings().subscribe();
-
     this.router.events.subscribe((event) => {
-      if (event instanceof RoutesRecognized && event.state.root.firstChild) {
-        const params = event.state.root.firstChild.params;
-        const orgSlug = params["org-slug"];
-        if (orgSlug !== undefined) {
-          this.organizationService.setActiveOrganizationFromRouteChange(
-            orgSlug
-          );
-        }
-      }
-
       if (event instanceof NavigationEnd) {
         const params = this.route.snapshot.firstChild?.params;
         const orgSlug = params ? params["org-slug"] : undefined;
@@ -64,12 +36,17 @@ export class AppComponent implements OnInit {
       }
     });
 
-    combineLatest([this.isLoggedIn$, this.routesAreRecognized$])
-      .pipe(
-        filter(([isLoggedIn, _]) => !!isLoggedIn),
-        exhaustMap(() => this.organizationService.retrieveOrganizations()),
-        tap(() => this.userService.getUserDetails())
-      )
-      .subscribe();
+    const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+    this.userService.userDetails$.subscribe((user) => {
+      setTheme(user?.options.preferredTheme || localStorage.getItem("theme"));
+    });
+    systemTheme.addEventListener("change", () => {
+      const s = this.userService.userDetails$.subscribe((user) => {
+        setTheme(user?.options.preferredTheme);
+      });
+      s.unsubscribe();
+    });
+
+    lastValueFrom(this.authService.checkServerAuthStatus());
   }
 }
