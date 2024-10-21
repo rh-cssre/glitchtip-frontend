@@ -6,7 +6,7 @@ Add `CeleryIntegration()` to your `integrations` list:
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
 
-sentry_sdk.init("your DSN here", integrations=[CeleryIntegration()])
+sentry_sdk.init("YOUR-GLITCHTIP-DSN-HERE", integrations=[CeleryIntegration()])
 ```
 
 Additionally, the Python SDK will set the transaction on the event to the task name, and it will improve the grouping for global Celery errors such as timeouts.

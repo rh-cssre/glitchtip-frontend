@@ -3,7 +3,8 @@
   "compilerOptions": {
     "types": [
       "node"
-    ]
+    ],
+    "skipLibCheck": true
   },
   "exclude": [
     "../src/test.ts",
@@ -15,6 +16,7 @@
     "../projects/**/*"
   ],
   "files": [
+    "./preview.ts",
     "./typings.d.ts"
   ]
 }

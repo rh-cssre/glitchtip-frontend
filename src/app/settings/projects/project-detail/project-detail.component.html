@@ -1,139 +1,166 @@
-<section class="l-body" *ngIf="activeProject$ | async as project">
-  <header class="page-header">
-    <h1 class="mat-display-1" i18n>Settings for {{ project.name }}</h1>
-  </header>
-  <mat-card *ngIf="project.isMember === false"
-    ><mat-card-content class="note-padding">
-      <p class="mat-body-strong" i18n>Note</p>
-      <p i18n>
+@if (activeProject$ | async; as project) {
+  <section class="l-body">
+    <gt-detail-header
+      [title]="'Settings for ' + project.name"
+      backLinkText="Back to Projects"
+      />
+    @if (project.isMember === false) {
+      <mat-card
+        ><mat-card-content class="note-padding">
+        <p class="mat-body-strong" i18n>Note</p>
+        <p i18n>
         Because you are an admin for {{ project.organization.name }}, you have
         access to all of its projects. However, if you want to view issues for
         {{ project.name }}, you must be a member of one of its teams.
       </p></mat-card-content
-    ></mat-card
-  >
-  <mat-card>
-    <mat-card-title i18n>Update Project</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <mat-error class="server-error" *ngIf="updateNameError">{{
-        updateNameError
-      }}</mat-error>
-      <form
-        [formGroup]="nameForm"
-        (ngSubmit)="updateName()"
-        class="project-form"
-      >
-        <mat-form-field>
-          <mat-label i18n>Name</mat-label>
-          <input matInput formControlName="name" [value]="project.name" />
-          <mat-error>
-            <span *ngIf="name?.errors?.required" i18n
-              >Enter a project name</span
-            ></mat-error
-          >
-        </mat-form-field>
-        <gt-loading-button
-          [disabled]="name?.value === project.name"
-          buttonText="Update Name"
-          id="update-project-name"
+        ></mat-card
         >
-        </gt-loading-button>
-      </form>
-      <mat-error class="server-error" *ngIf="updatePlatformError">
-        {{ updatePlatformError }}
-      </mat-error>
-      <form
-        [formGroup]="platformForm"
-        (ngSubmit)="updatePlatform(project.name)"
-        class="platform-form"
-      >
-        <gt-platform-picker
-          formControlName="platform"
-          template="dropdown"
-        ></gt-platform-picker>
-        <a
-          *ngIf="platform && platform.value !== ''"
-          href="https://glitchtip.com/sdkdocs/{{ platform.value }}"
-          target="_blank"
-          class="documentation-link"
-          i18n
-        >
+      }
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title i18n>Update Project</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          @if (updateNameError) {
+            <mat-error class="server-error">{{
+              updateNameError
+            }}</mat-error>
+          }
+          <form
+            [formGroup]="nameForm"
+            (ngSubmit)="updateName()"
+            class="project-form"
+            >
+            <mat-form-field appearance="outline">
+              <mat-label i18n>Name</mat-label>
+              <input matInput formControlName="name" [value]="project.name" />
+              <mat-error>
+                @if (name?.errors?.required) {
+                  <span
+                    data-cy="project-name-error-required"
+                    >Enter a project name</span
+                    >
+                  }
+                  @if (name?.errors?.maxlength) {
+                    <span
+                      data-cy="project-name-error-length"
+                      >Name must be 64 characters or less</span
+                      >
+                    }
+                  </mat-error>
+                </mat-form-field>
+                <gt-loading-button
+                  [disabled]="name?.value === project.name"
+                  buttonText="Update Name"
+                  id="update-project-name"
+                  >
+                </gt-loading-button>
+              </form>
+              @if (updatePlatformError) {
+                <mat-error class="server-error">
+                  {{ updatePlatformError }}
+                </mat-error>
+              }
+              <form
+                [formGroup]="platformForm"
+                (ngSubmit)="updatePlatform(project.name)"
+                class="platform-form"
+                >
+                <gt-platform-picker
+                  formControlName="platform"
+                  template="dropdown"
+                ></gt-platform-picker>
+                @if (platform && platform.value !== '') {
+                  <a
+                    href="https://glitchtip.com/sdkdocs/{{ platform.value }}"
+                    target="_blank"
+                    class="documentation-link"
+                    i18n
+                    >
           Platform Documentation
         </a>
-        <gt-loading-button
-          [disabled]="platform?.value === project.platform"
-          buttonText="Update Platform"
-          id="update-project-platform"
-        >
-        </gt-loading-button>
-      </form>
-    </mat-card-content>
-  </mat-card>
-  <mat-card *ngFor="let projectKey of (projectKeys$ | async) || []">
-    <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
-    <p class="mat-caption" i18n>
-      Data Source Name: The code that connects your project to GlitchTip.
-      Install a library into your project, then configure it with the DSN so
-      that it knows how to send errors to your GlitchTip account.
-    </p>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <gt-copy-input
-        [value]="projectKey.dsn.public"
-        placeholder="DSN"
-      ></gt-copy-input>
-      <gt-copy-input
-        [value]="projectKey.dsn.security"
-        placeholder="Security Endpoint"
-      ></gt-copy-input>
-    </mat-card-content>
-  </mat-card>
-
-  <gt-project-environments></gt-project-environments>
-
-  <gt-project-alerts></gt-project-alerts>
-
-  <mat-card>
-    <mat-card-title i18n>Personal Project Notifications</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content class="remove-content">
-      <div>
-        <p i18n
-          >Edit whether or not you want to receive notifications for this
+                }
+                <gt-loading-button
+                  [disabled]="platform?.value === project.platform"
+                  buttonText="Update Platform"
+                  id="update-project-platform"
+                  >
+                </gt-loading-button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+          @for (projectKey of (projectKeys$ | async) || []; track projectKey) {
+            <mat-card>
+              <mat-card-header class="vertical-card-header">
+                <mat-card-title i18n>Client Keys (DSN)</mat-card-title>
+                <p class="mat-caption" i18n>
+        Data Source Name: The code that connects your project to GlitchTip.
+        Install a library into your project, then configure it with the DSN so
+        that it knows how to send errors to your GlitchTip account.
+      </p>
+              </mat-card-header>
+              <mat-divider></mat-divider>
+              <mat-card-content>
+                <gt-copy-input
+                  [value]="projectKey.dsn.public"
+                  placeholder="DSN"
+                ></gt-copy-input>
+                <gt-copy-input
+                  [value]="projectKey.dsn.security"
+                  placeholder="Security Endpoint"
+                ></gt-copy-input>
+              </mat-card-content>
+            </mat-card>
+          }
+          <gt-project-environments></gt-project-environments>
+          <gt-project-alerts></gt-project-alerts>
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title i18n>Personal Project Notifications</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-card-content class="remove-content">
+              <div>
+                <p i18n
+                  >Edit whether or not you want to receive notifications for this
           project</p
-        >
-      </div>
-      <div>
-        <a
-          mat-flat-button
-          color="primary"
-          routerLink="/profile/notifications"
-          i18n
-          >Edit Preferences</a
-        >
-      </div>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-title i18n>Delete Project</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content class="remove-content">
-      <div>
-        <p i18n
-          >By deleting your project, you will lose all associated data. This
-          cannot be undone.</p
-        >
-        <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
-      </div>
-      <gt-loading-button
-        buttonText="Delete Project"
-        [loading]="deleteLoading"
-        (click)="deleteProject()"
-        id="delete-project"
-      >
-      </gt-loading-button>
-    </mat-card-content>
-  </mat-card>
-</section>
+                  >
+                </div>
+                <div>
+                  <a
+                    mat-flat-button
+                    color="primary"
+                    routerLink="/profile/notifications"
+                    i18n
+                    >Edit Preferences</a
+                    >
+                  </div>
+                </mat-card-content>
+              </mat-card>
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title i18n>Delete Project</mat-card-title>
+                </mat-card-header>
+                <mat-divider></mat-divider>
+                <mat-card-content class="remove-content">
+                  <div>
+                    <p i18n
+                      >By deleting your project, you will lose all associated data. This
+                      cannot be undone.</p
+                      >
+                      @if (deleteError) {
+                        <mat-error>{{ deleteError }}</mat-error>
+                      }
+                    </div>
+                    <gt-loading-button
+                      buttonText="Delete Project"
+                      [loading]="deleteLoading"
+                      (buttonClick)="deleteProject()"
+                      id="delete-project"
+                      >
+                    </gt-loading-button>
+                  </mat-card-content>
+                </mat-card>
+              </section>
+            }
