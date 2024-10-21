@@ -1,237 +1,268 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { EMPTY, throwError } from "rxjs";
-import { catchError, exhaustMap, map, tap } from "rxjs/operators";
+import { Injectable, computed } from "@angular/core";
 import {
-  BackupCodes,
-  TOTPResponse,
-  UserKey,
-  UserKeysService,
-} from "src/app/api/mfa/user-keys.service";
-import { ServerError } from "src/app/shared/django.interfaces";
-import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+  RegistrationPublicKeyCredential,
+  create,
+  parseCreationOptionsFromJSON,
+} from "@github/webauthn-json/browser-ponyfill";
+import {
+  EMPTY,
+  catchError,
+  exhaustMap,
+  lastValueFrom,
+  of,
+  tap,
+  throwError,
+} from "rxjs";
+import { AccountService } from "src/app/api/allauth/account.service";
+import {
+  AllAuthError,
+  AllAuthHttpErrorResponse,
+  Authenticator,
+  AuthenticatorTOTPStatusNotFound,
+  TOTPAuthenticator,
+  WebAuthnAuthenticator,
+} from "src/app/api/allauth/allauth.interfaces";
+import { handleAllAuthErrorResponse } from "src/app/api/allauth/allauth.utils";
+import {
+  messagesLookup,
+  reduceParamErrors,
+} from "src/app/api/allauth/errorMessages";
+import { SERVER_ERROR } from "src/app/constants";
+import { APIState } from "src/app/shared/shared.interfaces";
+import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 
-interface MFAState {
-  userKeys: UserKey[];
-  initialLoad: boolean;
+export interface MFAState extends APIState {
+  initialLoadComplete: boolean;
+  authenticators: Authenticator[];
   setupTOTPStage: number;
-  TOTPResponse: TOTPResponse | null;
-  serverError: ServerError;
-  backupCodes: BackupCodes | null;
-  copiedCodes: boolean;
-  /** User has successfully entered one of the backup codes, confirming they have them */
-  enteredCode: boolean;
+  recoveryCodes: string[];
   regenCodes: boolean;
-  credential: PublicKeyCredential | null;
-  setupFIDO2Stage: number;
+  error: string | null; // Simplistic error, not from allauth
+  errors: AllAuthError[];
+  copiedCodes: boolean;
+  totp: {
+    secret: string;
+    totpUrl: string;
+  } | null;
+  webAuthnStage: number;
+  credential: RegistrationPublicKeyCredential | null;
 }
 
 const initialState: MFAState = {
-  userKeys: [],
-  initialLoad: false,
+  initialLoadComplete: false,
+  loading: false,
+  authenticators: [],
   setupTOTPStage: 1,
-  TOTPResponse: null,
-  serverError: {},
-  backupCodes: null,
-  copiedCodes: false,
-  enteredCode: false,
+  recoveryCodes: [],
   regenCodes: false,
+  error: null,
+  errors: [],
+  copiedCodes: false,
+  totp: null,
+  webAuthnStage: 1,
   credential: null,
-  setupFIDO2Stage: 0,
 };
 
 @Injectable({
   providedIn: "root",
 })
 export class MultiFactorAuthService extends StatefulService<MFAState> {
-  initialLoad$ = this.getState$.pipe(map((state) => state.initialLoad));
-  userKeys$ = this.getState$.pipe(map((state) => state.userKeys));
-  TOTPKey$ = this.userKeys$.pipe(
-    map((userKeys) => userKeys.find((key) => key.key_type === "TOTP"))
+  initialLoadComplete = computed(() => this.state().initialLoadComplete);
+  loading = computed(() => this.state().loading);
+  setupTOTPStage = computed(() => this.state().setupTOTPStage);
+  error = computed(() => this.state().error);
+  formErrors = computed(() =>
+    messagesLookup(this.state().errors.filter((err) => !err.param)),
   );
-  FIDO2Keys$ = this.userKeys$.pipe(
-    map((keys) => keys.filter((key) => key.key_type === "FIDO2"))
+  fieldErrors = computed(() =>
+    reduceParamErrors(this.state().errors.filter((err) => err.param)),
   );
-  setupTOTPStage$ = this.getState$.pipe(map((state) => state.setupTOTPStage));
-  totp$ = this.getState$.pipe(map((state) => state.TOTPResponse));
-  serverError$ = this.getState$.pipe(map((state) => state.serverError));
-  backupCodes$ = this.getState$.pipe(map((state) => state.backupCodes));
-  copiedCodes$ = this.getState$.pipe(
-    map((state) => state.backupCodes !== null && state.copiedCodes)
+  copiedCodes = computed(() => this.state().copiedCodes);
+  totp = computed(() => this.state().totp);
+  TOTPAuthenticator = computed(
+    () =>
+      this.state().authenticators.filter((auth) => auth.type === "totp")[0] as
+        | TOTPAuthenticator
+        | undefined,
   );
-  enteredCodeSuccess$ = this.getState$.pipe(
-    map((state) => state.copiedCodes && state.enteredCode)
+  webAuthnAuthenticators = computed(
+    () =>
+      this.state().authenticators.filter(
+        (auth) => auth.type === "webauthn",
+      ) as WebAuthnAuthenticator[],
   );
-  regenCodes$ = this.getState$.pipe(map((state) => state.regenCodes));
-  setupFIDO2Stage$ = this.getState$.pipe(map((state) => state.setupFIDO2Stage));
+  codes = computed(() => this.state().recoveryCodes);
+  regenCodes = computed(() => this.state().regenCodes);
+  webAuthnState = computed(() => this.state().webAuthnStage);
 
-  constructor(private api: UserKeysService, private snackBar: MatSnackBar) {
+  constructor(private accountService: AccountService) {
     super(initialState);
   }
 
-  getUserKeys() {
-    return this.api
-      .list()
-      .pipe(tap((userKeys) => this.setState({ userKeys, initialLoad: true })));
-  }
-
-  // Will need to rework snackbar messaging when FIDO2 is added.
-  deleteKey(keyId: number, keyType: string) {
-    return this.api.destroy(keyId.toString()).pipe(
-      exhaustMap(() => this.getUserKeys()),
-      tap(() => {
-        if (keyType === "TOTP") {
-          this.snackBar.open("TOTP authentication deactivated.");
-        } else {
-          this.snackBar.open("Security key removed.");
-        }
-      })
+  getAuthenticators() {
+    this.setState({ loading: true });
+    return this.accountService.listAuthenticators().pipe(
+      tap((resp) => {
+        this.setState({
+          ...initialState,
+          initialLoadComplete: true,
+          authenticators: resp.data,
+        });
+      }),
     );
   }
 
   incrementTOTPStage() {
-    const setupTOTPStage = this.state.getValue().setupTOTPStage;
+    const setupTOTPStage = this.setupTOTPStage();
     if (setupTOTPStage === 1) {
-      this.getTOTP().subscribe();
-      this.getBackupCodes().subscribe();
+      lastValueFrom(this.generateRecoveryCodes());
+    } else if (setupTOTPStage === 3) {
     }
     this.setState({ setupTOTPStage: setupTOTPStage + 1 });
   }
 
-  decrementTOTPStage() {
-    const setupTOTPStage = this.state.getValue().setupTOTPStage;
-    this.setState({ setupTOTPStage: setupTOTPStage - 1 });
+  generateRecoveryCodes() {
+    return this.accountService
+      .generateRecoveryCodes()
+      .pipe(tap((resp) => this.setState({ recoveryCodes: resp.codes })));
   }
 
-  enableTOTP(code: string) {
-    const state = this.state.getValue();
-    this.setState({ serverError: {} });
-    if (state.TOTPResponse) {
-      return this.api
-        .totpCreate({
-          answer: code,
-          secret_key: state.TOTPResponse.secret_key,
-        })
-        .pipe(
-          tap(() => {
-            this.clearState();
-            this.getUserKeys().subscribe();
-          }),
-          catchError((err) => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.error) {
-                this.setState({ serverError: err.error });
-              }
-            }
-            return EMPTY;
-          })
-        );
-    }
-    return EMPTY;
-  }
-
-  getTOTP() {
-    return this.api
-      .totp()
-      .pipe(tap((resp) => this.setState({ TOTPResponse: resp })));
-  }
-
-  getBackupCodes() {
-    return this.api.backupCodes().pipe(
+  regenerateRecoveryCodes() {
+    this.setState({ loading: true, regenCodes: false });
+    return this.accountService.regenerateRecoveryCodes().pipe(
       tap((resp) =>
         this.setState({
-          backupCodes: resp.codes,
-          copiedCodes: false,
-          enteredCode: false,
-        })
-      )
+          loading: false,
+          regenCodes: true,
+          recoveryCodes: resp.data.unused_codes,
+        }),
+      ),
     );
+  }
+
+  decrementTOTPStage() {
+    this.state.update((state) => ({
+      ...state,
+      setupTOTPStage: state.setupTOTPStage - 1,
+    }));
   }
 
   setCopiedCodes() {
     this.setState({ copiedCodes: true });
   }
 
-  setRegenCodes() {
-    this.setState({ regenCodes: true });
-    this.getBackupCodes().subscribe();
-  }
-
-  verifyBackupCode(code: string) {
-    const state = this.state.getValue();
-    if (state.backupCodes !== null && state.backupCodes.includes(code)) {
-      return this.api
-        .backupCodesCreate({
-          name: "Backup Codes",
-          codes: state.backupCodes,
-        })
-        .pipe(
-          tap(() => {
-            if (state.regenCodes) {
-              this.snackBar.open("Your new backup codes are now active.");
-              this.setState({
-                regenCodes: false,
-                backupCodes: null,
-                serverError: {},
-              });
-            } else {
-              this.setState({
-                setupTOTPStage: state.setupTOTPStage + 1,
-                backupCodes: null,
-                serverError: {},
-              });
-            }
-          })
-        );
-    } else {
-      this.setState({ serverError: { non_field_errors: ["Invalid code"] } });
-    }
-    return EMPTY;
-  }
-
-  activateFido2() {
-    this.setState({ serverError: {} });
-    this.setState({ setupFIDO2Stage: 1 });
-    return this.api.fido2().pipe(
-      exhaustMap(async (options) => {
-        return await navigator.credentials.create(options);
-      }),
-      map((credResult) => {
-        if (credResult === null) {
-          return throwError;
-        } else {
-          this.setState({ credential: credResult as PublicKeyCredential });
-          this.setState({ setupFIDO2Stage: 2 });
-          return EMPTY;
+  getTOTPStatus() {
+    return this.accountService.totpAuthenticatorStatus().pipe(
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 404) {
+          const resp = err.error as AuthenticatorTOTPStatusNotFound;
+          this.setState({
+            totp: { secret: resp.meta.secret, totpUrl: resp.meta.totp_url },
+          });
         }
+        return of(undefined);
       }),
-      catchError((err) => {
-        console.warn(err);
-        this.setState({
-          serverError: {
-            non_field_errors: ["Device activation was unsuccessful."],
-          },
-        });
-        this.setState({ setupFIDO2Stage: 0 });
-        return EMPTY;
-      })
     );
   }
 
-  registerFido2(name: string) {
-    const state = this.state.getValue();
-    if (state.credential) {
-      const attestationResponse = state.credential
-        .response as AuthenticatorAttestationResponse;
-      return this.api.fido2Create(attestationResponse, name).pipe(
-        tap(() => {
-          this.clearState();
-          this.snackBar.open("Your security key has been registered.");
-          this.getUserKeys().subscribe();
-        })
-      );
+  activateTOTP(code: string) {
+    this.setState({ loading: true });
+    return this.accountService.activateTOTP(code).pipe(
+      tap(() =>
+        this.state.update((state) => ({
+          ...state,
+          loading: false,
+          setupTOTPStage: state.setupTOTPStage + 1,
+        })),
+      ),
+      exhaustMap(() => this.getAuthenticators()),
+      catchError((err: AllAuthHttpErrorResponse) => {
+        this.setState({
+          loading: false,
+          errors: handleAllAuthErrorResponse(err),
+        });
+        if ([400, 500].includes(err.status)) {
+          return of(undefined);
+        }
+        return throwError(() => err);
+      }),
+    );
+  }
+
+  deactivateTOTP() {
+    this.setState({ loading: true });
+    return this.accountService
+      .deactivateTOTP()
+      .pipe(exhaustMap(() => this.getAuthenticators()));
+  }
+
+  setRecoveryCodes(code: string) {
+    this.setState({ loading: true });
+    return this.accountService.setRecoveryCodes(code).pipe(
+      tap(() =>
+        this.state.update((state) => ({
+          ...state,
+          loading: false,
+          setupTOTPStage: state.setupTOTPStage + 1,
+        })),
+      ),
+      exhaustMap(() => this.getTOTPStatus()),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 400) {
+          this.setState({ error: err.error.detail });
+          return of(undefined);
+        } else if (err.status === 500) {
+          this.setState({ error: SERVER_ERROR });
+          return of(undefined);
+        }
+        return throwError(() => err);
+      }),
+    );
+  }
+
+  getWebauthn() {
+    this.setState({ loading: true, errors: [] });
+    return this.accountService.getWebAuthn().pipe(
+      exhaustMap(async (resp) => {
+        return await create(
+          parseCreationOptionsFromJSON(resp.data.creation_options),
+        );
+      }),
+      tap((credential) => {
+        this.setState({ webAuthnStage: 2, loading: false, credential });
+      }),
+      catchError((err: HttpErrorResponse) => {
+        console.warn(err);
+        this.setState({
+          error: $localize`Device activation was unsuccessful.`,
+          webAuthnStage: 1,
+        });
+        return EMPTY;
+      }),
+    );
+  }
+
+  addWebAuthn(name: string) {
+    const credential = this.state().credential;
+    if (credential) {
+      this.setState({ loading: true, errors: [] });
+      return this.accountService
+        .addWebAuthn(name, this.state().credential)
+        .pipe(
+          tap(() => {
+            this.clearState();
+          }),
+          exhaustMap(() => this.getAuthenticators()),
+        );
     }
     return EMPTY;
+  }
+
+  deleteWebAuthn(id: number) {
+    this.setState({ loading: true, errors: [] });
+    return this.accountService
+      .deleteWebAuthn([id])
+      .pipe(exhaustMap(() => this.getAuthenticators()));
   }
 }

@@ -1,0 +1,17 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $foreground: map.get($theme, foreground);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-entry-breadcrumbs {
+    .error {
+      background-color: if(
+          $is-dark-theme,
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 800),
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 100)
+        );
+    }
+  }
+}
