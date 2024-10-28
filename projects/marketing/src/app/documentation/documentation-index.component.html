@@ -1,0 +1,80 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+    <mat-card-content>
+        <div class="centered-block">
+            <h1 class="fancy mat-headline-2">Documentation</h1>
+
+            <p>
+                Bugs are inevitable in web development. The important thing is to catch
+                them when they appear. With GlitchTip, you can rest easy knowing that if
+                your web app throws an error or goes down, you will be notified
+                immediately. GlitchTip combines error tracking and uptime monitoring in
+                one open-source package to keep you and your team fully up-to-date on
+                the status of your projects.
+            </p>
+
+            <h2 class="mat-headline-4">Using Hosted GlitchTip</h2>
+
+            <p>
+                If you want to sign up for GlitchTip like you would with any other web
+                app, this is your place.
+            </p>
+
+            <ul>
+                <li>
+                    <a [href]="registerLink">Register for GlitchTip</a>
+                </li>
+                <li>
+                    <a [routerLink]="['getting-started']">Creating your first organization and project</a>
+                </li>
+            </ul>
+
+            <h2 class="mat-headline-4">Feature guides</h2>
+
+            <p>Quick guides to get GlitchTip up and running for your web app.</p>
+
+            <ul>
+                <li>
+                    <a [routerLink]="['error-tracking']">Error Tracking</a>
+                </li>
+                <li>
+                    <a [routerLink]="['/sdkdocs']">Sentry Client Integration</a>
+                </li>
+                <li>
+                    <a [routerLink]="['uptime-monitoring']">Uptime Monitoring</a>
+                </li>
+                <li>
+                    <a [routerLink]="['integrations']">Integrations</a>
+                </li>
+            </ul>
+
+            <h2 class="mat-headline-4">Hosting GlitchTip on your own server</h2>
+
+            <p>
+                If you want to run the source code on a server you control, start here.
+            </p>
+
+            <ul>
+                <li>
+                    <a [routerLink]="['install']">Installation Guide</a>
+                </li>
+            </ul>
+            <h2 class="mat-headline-4">Working with GlitchTip's code</h2>
+
+            <p>Help make GlitchTip better by contributing to the project.</p>
+
+            <ul>
+                <li>
+                    <a [routerLink]="['contribute']">Contributor Guide</a>
+                </li>
+                <li>
+                    <a target="_blank" href="https://app.glitchtip.com/api/docs">API Documentation</a>
+                </li>
+                <li>
+                    <a [routerLink]="['hosted-architecture']"> Hosted Architecture </a>
+                </li>
+            </ul>
+        </div>
+    </mat-card-content>
+</mat-card>
