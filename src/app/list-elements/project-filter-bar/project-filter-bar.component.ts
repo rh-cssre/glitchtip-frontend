@@ -6,17 +6,40 @@ import {
   HostListener,
   ElementRef,
 } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { filter, map, startWith, tap } from "rxjs/operators";
 import { Observable, combineLatest, BehaviorSubject } from "rxjs";
-import { UntypedFormControl } from "@angular/forms";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
+import { FormControl } from "@angular/forms";
+import { OrganizationProject } from "src/app/api/projects/projects-api.interfaces";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 
 @Component({
+  standalone: true,
   selector: "gt-project-filter-bar",
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatIconModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+  ],
   templateUrl: "./project-filter-bar.component.html",
   styleUrls: ["./project-filter-bar.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,14 +59,12 @@ export class ProjectFilterBarComponent implements OnInit {
   appliedProjectIds$ = this.route.queryParams.pipe(
     map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
-      this.selectedProjectIds.next(
-        normalizedParams.map((id: string) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.next(normalizedParams);
       return normalizedParams;
-    })
+    }),
   );
 
-  appliedProjectIds?: string[];
+  appliedProjectIds?: number[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
   selectedProjectsString$ = combineLatest([
@@ -64,7 +85,7 @@ export class ProjectFilterBarComponent implements OnInit {
             .map((id) => projects?.find((project) => id === project.id)?.name)
             .join(", ");
       }
-    })
+    }),
   );
 
   selectedAndAppliedIdsAreEqual$ = combineLatest([
@@ -73,12 +94,12 @@ export class ProjectFilterBarComponent implements OnInit {
   ]).pipe(
     map(
       ([selected, applied]) =>
-        selected.sort().join(",") === applied.sort().join(",")
-    )
+        selected.sort().join(",") === applied.sort().join(","),
+    ),
   );
 
   /** Used to filter project names */
-  filterProjectInput = new UntypedFormControl();
+  filterProjectInput = new FormControl();
 
   /** Projects that are filtered via the text field form control */
   filteredProjects$: Observable<OrganizationProject[] | null> = combineLatest([
@@ -88,14 +109,14 @@ export class ProjectFilterBarComponent implements OnInit {
     map(([projects, value]) =>
       projects
         ? projects.filter((project) =>
-            project.name.toLowerCase().includes(value.toLowerCase())
+            project.name.toLowerCase().includes(value.toLowerCase()),
           )
-        : null
-    )
+        : null,
+    ),
   );
 
   someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
-    map((ids) => ids.length !== 0)
+    map((ids) => ids.length !== 0),
   );
 
   singleProjectSlug$ = combineLatest([
@@ -105,7 +126,7 @@ export class ProjectFilterBarComponent implements OnInit {
     map(([projects, ids]) => {
       if (ids.length === 1 && projects) {
         const matchedProject = projects.find(
-          (project) => project.id === ids[0]
+          (project) => project.id === ids[0],
         );
         if (matchedProject) {
           return matchedProject.slug;
@@ -113,7 +134,7 @@ export class ProjectFilterBarComponent implements OnInit {
         return false;
       }
       return false;
-    })
+    }),
   );
 
   @ViewChild("expansionPanel", { static: false })
@@ -123,7 +144,7 @@ export class ProjectFilterBarComponent implements OnInit {
   filterInput?: ElementRef<HTMLInputElement>;
 
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
-    event: KeyboardEvent
+    event: KeyboardEvent,
   ) {
     if (this.expansionPanel?.expanded) {
       if (event.key === "Escape") {
@@ -147,14 +168,14 @@ export class ProjectFilterBarComponent implements OnInit {
 
   moveDown() {
     const projectButtons = Array.from(
-      document.querySelectorAll(".picker-button")
+      document.querySelectorAll(".picker-button"),
     ) as HTMLElement[];
     // If the text box is focused, go to the first item
     if (this.filterInput?.nativeElement.id === document.activeElement?.id) {
       projectButtons[0]?.focus();
     } else {
       const indexOfActive = projectButtons.findIndex(
-        (button) => button.id === document.activeElement?.id
+        (button) => button.id === document.activeElement?.id,
       );
       if (indexOfActive <= projectButtons.length - 2) {
         // If we're in the list items, go to the next list item
@@ -168,10 +189,10 @@ export class ProjectFilterBarComponent implements OnInit {
 
   moveUp() {
     const projectButtons = Array.from(
-      document.querySelectorAll(".picker-button")
+      document.querySelectorAll(".picker-button"),
     ) as HTMLElement[];
     const indexOfActive = projectButtons.findIndex(
-      (button) => button.id === document.activeElement?.id
+      (button) => button.id === document.activeElement?.id,
     );
     if (indexOfActive > 0) {
       // If we're in the list items, go to the previous list item
@@ -182,9 +203,9 @@ export class ProjectFilterBarComponent implements OnInit {
     }
   }
 
-  navigate(project: number[] | null) {
+  navigate(project: string[] | null) {
     this.router.navigate([], {
-      queryParams: { project: project ? project : null },
+      queryParams: { project: project ? project : null, cursor: null },
       queryParamsHandling: "merge",
     });
   }
@@ -198,7 +219,7 @@ export class ProjectFilterBarComponent implements OnInit {
   }
 
   selectProjectAndClose(projectId: number) {
-    this.navigate([projectId]);
+    this.navigate([projectId.toString()]);
     this.selectedProjectIds.next([projectId]);
     this.expansionPanel?.close();
   }
@@ -216,15 +237,15 @@ export class ProjectFilterBarComponent implements OnInit {
 
   resetPanel() {
     if (this.appliedProjectIds !== undefined) {
-      this.selectedProjectIds.next(
-        this.appliedProjectIds.map((id) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.next(this.appliedProjectIds);
       this.expansionPanel?.close();
     }
   }
 
   closePanel() {
-    this.navigate(this.selectedProjectIds.getValue());
+    this.navigate(
+      this.selectedProjectIds.getValue().map((id) => id.toString()),
+    );
     this.expansionPanel?.close();
   }
 
@@ -237,7 +258,7 @@ export class ProjectFilterBarComponent implements OnInit {
       .pipe(
         map((params) => params["org-slug"]),
         filter((orgSlug: string) => orgSlug !== undefined),
-        tap(() => this.expansionPanel?.close())
+        tap(() => this.expansionPanel?.close()),
       )
       .subscribe();
   }
@@ -245,6 +266,6 @@ export class ProjectFilterBarComponent implements OnInit {
   constructor(
     private organizationsService: OrganizationsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 }

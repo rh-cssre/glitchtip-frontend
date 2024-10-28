@@ -1,0 +1,193 @@
+<div class="hero-and-nav-container">
+    <div class="hero">
+        <h2 class="fancy mat-headline-2">
+            Simple, open source error&nbsp;tracking
+        </h2>
+        <div class="content">
+            <p class="mat-body-1">
+                Collect every error from your project in real time, organize them to
+                make them useful, and receive alerts when and where you want...without
+                breaking the budget.
+            </p>
+
+            <p class="mat-body-1">
+                <a mat-flat-button color="primary" [href]="registerLink">
+                    Try GlitchTip for free
+                </a>
+            </p>
+        </div>
+    </div>
+    <picture class="bot-hero-image">
+        <source media="(max-width: 479px)" type="image/webp" srcset="
+          /assets/home/bots-assembled-mobile@1x.webp,
+          /assets/home/bots-assembled-mobile@2x.webp 2x,
+          /assets/home/bots-assembled-mobile@3x.webp 3x
+        " />
+        <source media="(max-width: 479px)" srcset="
+          /assets/home/bots-assembled-mobile@1x.png,
+          /assets/home/bots-assembled-mobile@2x.png 2x,
+          /assets/home/bots-assembled-mobile@3x.png 3x
+        " />
+        <source type="image/webp" srcset="
+          /assets/home/bots-assembled@1x.webp,
+          /assets/home/bots-assembled@2x.webp 2x,
+          /assets/home/bots-assembled@3x.webp 3x
+        " />
+        <img src="/assets/home/bots-assembled@1x.png" srcset="
+          /assets/home/bots-assembled@1x.png,
+          /assets/home/bots-assembled@2x.png 2x,
+          /assets/home/bots-assembled@3x.png 3x
+        " alt="" loading="eager" />
+    </picture>
+</div>
+
+<mat-card class="big-card-wrapper">
+    <mat-card-content>
+        <div class="centered-block">
+            <h2 class="fancy mat-headline-2">Have some bugs in your code?</h2>
+
+            <mkt-responsive-image src1x="assets/home/glitchtip-report-graphic-generic@1x.jpg"
+                alt="Illustration that shows errors from various sites/apps reporting to GlitchTip"
+                class="fancy-graphic"></mkt-responsive-image>
+
+            <div class="content">
+                <p class="mat-body-1">
+                    GlitchTip makes monitoring software easy. Track errors, monitor
+                    performance, and check site uptime all in one place. Our app is
+                    compatible with Sentry client SDKs, but easier to run.
+                </p>
+
+                <p class="mat-body-1">
+                    It's also open source, so you can view, modify, and use the code as
+                    you see fit.
+                    <a [routerLink]="['documentation', 'install']">Run it on your server</a>, or let us host it
+                    for&nbsp;you. All you need to do is
+                    <a [href]="registerLink">register</a> with your email and password.
+                    Then, select the subscription that works best for you.
+                </p>
+
+                <p class="mat-body-1">
+                    GlitchTip is the right choice if you value simplicity, affordability,
+                    and the freedom provided by open source.
+                </p>
+            </div>
+        </div>
+        <div class="divider feature-description">
+            <div class="screenshot-header">
+                <h2 class="fancy mat-headline-2">Error Tracking</h2>
+            </div>
+            <div class="screenshots left-right-row">
+                <mkt-responsive-image src1x="assets/home/issues-page@1x.png" alt="Screenshot of GlitchTip Issues Page"
+                    class="screenshot"></mkt-responsive-image>
+                <div class="description pad-left">
+                    <p class="mat-body-1">
+                        Report your website or application's exceptions, log messages,
+                        Content Security Policy violations, and more to one place to triage
+                        and resolve. GlitchTip can use
+                        <a href="https://docs.sentry.io/platforms/">
+                            Sentry's open source SDKs</a>
+                        to receive error data from your&nbsp;application.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="divider feature-description">
+            <div class="screenshot-header">
+                <h2 class="fancy mat-headline-2">Application Performance Monitoring</h2>
+            </div>
+            <div class="screenshots right-left-row">
+                <mkt-responsive-image src1x="assets/blog-images/glitchtip-1-12/transaction-groups-list@1x.png"
+                    alt="Screenshot of GlitchTip Performance Page" class="screenshot"></mkt-responsive-image>
+                <div class="description pad-right">
+                    <p class="mat-body-1">
+                        Find out where your app is slow. GlitchTip takes a simple, works out
+                        of the box approach. No dashboard building and metrics hunting. Just
+                        find your slowest web requests, database calls, and other
+                        transactions.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="divider feature-description">
+            <div class="screenshot-header">
+                <h2 class="fancy mat-headline-2">Uptime Monitoring</h2>
+            </div>
+            <div class="screenshots left-right-row">
+                <mkt-responsive-image src1x="assets/blog-images/glitchtip-1-11/GT-uptime-list-charts@1x.png"
+                    alt="Screenshot of GlitchTip uptime monitors list" class="screenshot"></mkt-responsive-image>
+                <div class="description pad-left">
+                    <p class="mat-body-1">
+                        GlitchTip can ping your site and warn you when it's not responding.
+                        Or reverse it and send GlitchTip a request on schedule. If GlitchTip
+                        doesn't receive your ping, it will send you an alert via email or
+                        webhook.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="centered-block divider" id="pricing">
+            <h2 class="fancy mat-headline-2">Pricing</h2>
+            <mkt-payment></mkt-payment>
+        </div>
+
+        <div class="centered-block divider">
+            <h2 class="fancy mat-headline-2">
+                Stay up-to-date on our latest features and releases
+            </h2>
+
+            <!-- Begin Mailchimp Signup Form -->
+            <div id="mc_embed_signup">
+                <form
+                    action="https://burkesoftware.us7.list-manage.com/subscribe/post?u=894614c6582c030b526699146&amp;id=116edb1090"
+                    method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate"
+                    target="_blank" novalidate>
+                    <div class="subscribe-wrapper" id="mc_embed_signup_scroll">
+                        <div class="mc-field-group">
+                            <mat-form-field appearance="outline">
+                                <div style="position: absolute; left: -5000px">
+                                    Email Address
+                                </div>
+                                <mat-label>Email Address</mat-label>
+                                <input matInput type="email" value="" name="EMAIL" class="required email"
+                                    id="mce-EMAIL" />
+                            </mat-form-field>
+                        </div>
+                        <div id="mce-responses" class="clear">
+                            <div class="response" id="mce-error-response" style="display: none"></div>
+                            <div class="response" id="mce-success-response" style="display: none"></div>
+                        </div>
+                        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                        <div style="position: absolute; left: -5000px" aria-hidden="true">
+                            <input type="text" name="b_894614c6582c030b526699146_116edb1090" tabindex="-1" value="" />
+                        </div>
+                        <div class="clear">
+                            <button mat-stroked-button color="primary" type="submit" name="subscribe"
+                                id="mc-embedded-subscribe">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!--End mc_embed_signup-->
+            <h2 class="fancy mat-headline-2">Who's making this?</h2>
+
+            <div class="content">
+                <p class="mat-body-1">
+                    GlitchTip was created by Burke Software and Consulting, a small team
+                    of software developers doing consulting work and supporting open
+                    source software development. We also created
+                    <a href="https://passit.io">Passit</a>.
+                </p>
+
+                <p class="mat-body-1">
+                    GlitchTip is open source, which means that you can be making it too!
+                    If you’re interested in doing so,
+                    <a href="https://gitlab.com/glitchtip">visit our GitLab page</a> for
+                    more information, or start a live chat on this&nbsp;page.
+                </p>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

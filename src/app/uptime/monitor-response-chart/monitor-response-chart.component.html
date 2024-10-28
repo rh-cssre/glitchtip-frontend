@@ -1,5 +1,5 @@
-<ng-container *ngIf="data">
-  <ng-container *ngIf="scale">
+@if (data) {
+  @if (scale) {
     <div #containerRef class="chart-container">
       <ngx-charts-area-chart
         [showXAxisLabel]="false"
@@ -15,16 +15,16 @@
         [yScaleMin]="scale.yScaleMin"
         [yScaleMax]="scale.yScaleMax"
         [results]="data"
-      >
+        >
         <ng-template #tooltipTemplate let-model="model">
-          {{ model.name | date: "short" }}<br />
+          {{ model.name | date : "short" }}<br />
           {{ model.value }}ms
         </ng-template>
         <ng-template #seriesTooltipTemplate let-model="model">
-          {{ model[0].name | date: "short" }}<br />
+          {{ model[0].name | date : "short" }}<br />
           {{ model[0].value }}ms
         </ng-template>
       </ngx-charts-area-chart>
     </div>
-  </ng-container>
-</ng-container>
+  }
+}

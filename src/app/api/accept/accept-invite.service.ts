@@ -23,7 +23,7 @@ export class AcceptInviteService {
   private readonly state = new BehaviorSubject<AcceptState>(initialState);
   readonly acceptInfo$ = this.state.pipe(map((state) => state.acceptInfo));
   readonly orgSlug$ = this.acceptInfo$.pipe(
-    map((acceptInfo) => acceptInfo?.org_user.organization.slug)
+    map((acceptInfo) => acceptInfo?.orgUser.organization.slug)
   );
   readonly alreadyInOrg$ = combineLatest([
     this.orgSlug$,
@@ -80,7 +80,7 @@ export class AcceptInviteService {
         tap((response: AcceptAPIResponse) => {
           this.orgService.retrieveOrganizations().subscribe();
           this.snackBar.open(
-            `You have been added to ${response.org_user.organization.name}.`
+            `You have been added to ${response.orgUser.organization.name}.`
           );
           this.router.navigate(["/"]);
         }),
@@ -118,7 +118,7 @@ export class AcceptInviteService {
     return this.http.post<AcceptAPIResponse>(
       `${this.url}${memberId}/${token}/`,
       {
-        accept_invite: true,
+        acceptInvite: true,
       }
     );
   }
