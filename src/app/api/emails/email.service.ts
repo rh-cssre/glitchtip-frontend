@@ -113,9 +113,9 @@ export class EmailService {
                 on the list. You may need to try again, or try a different
                 email address.`);
             } else if (error.status === 400) {
-              this.setAddEmailError("There was a problem. Please try again.");
+              this.setAddEmailError("This email address is already being used.");
             } else {
-              this.setAddEmailError("Error: " + error.statusText);
+              this.setAddEmailError("There was a problem. Please try again.");
             }
           }
           return EMPTY;

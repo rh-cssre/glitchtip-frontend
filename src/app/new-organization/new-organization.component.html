@@ -1,36 +1,38 @@
 <div class="l-body">
-  <mat-card *ngIf="contextLoaded$ | async">
-    <mat-card-content>
-      <ng-container>
-        <ng-container *ngIf="canCreateOrg$ | async; else elseBlock">
-          <mat-card-title i18n>Create a New Organization</mat-card-title>
-          <p *ngIf="(organizationCount$ | async) === 0" i18n
-            >This is the first step to get started with GlitchTip.</p
-          >
-          <form
-            [formGroup]="form"
-            (ngSubmit)="onSubmit()"
-            id="create-organization-form"
-          >
-            <mat-error *ngIf="error$ | async as error">{{ error }}</mat-error>
-            <mat-form-field>
-              <input
-                matInput
-                formControlName="name"
-                placeholder="Name"
-                i18n-placeholder
-              />
-            </mat-form-field>
-            <button id="submit" mat-flat-button color="primary" i18n
-              >Create Organization</button
-            >
-          </form>
-        </ng-container>
-        <ng-template #elseBlock i18n>
-          Organization creation has been disabled on this instance of GlitchTip.
-          Contact an administrator to be invited into an existing organization.
-        </ng-template>
-      </ng-container>
-    </mat-card-content>
-  </mat-card>
-</div>
+  @if (contextLoaded$ | async) {
+    <mat-card>
+      <mat-card-content>
+        <ng-container>
+          @if (canCreateOrg$ | async) {
+            <mat-card-title i18n>Create a New Organization</mat-card-title>
+            @if ((organizationCount$ | async) === 0) {
+              <p i18n
+                >This is the first step to get started with GlitchTip.</p
+                >
+              }
+              <form
+                [formGroup]="form"
+                (ngSubmit)="onSubmit()"
+                id="create-organization-form"
+                >
+                @if (error$ | async; as error) {
+                  <mat-error>{{ error }}</mat-error>
+                }
+                <mat-form-field appearance="outline">
+                  <mat-label>Name</mat-label>
+                  <input matInput formControlName="name" i18n-placeholder />
+                </mat-form-field>
+                <button id="submit" mat-flat-button color="primary" i18n
+                  >Create Organization</button
+                  >
+                </form>
+              } @else {
+                <ng-container i18n>Organization creation has been disabled on this instance of
+          GlitchTip. Contact an administrator to be invited into an existing
+          organization.</ng-container>
+              }
+            </ng-container>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>

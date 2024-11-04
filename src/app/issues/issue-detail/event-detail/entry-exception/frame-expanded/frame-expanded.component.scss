@@ -1,4 +1,3 @@
-@use '@angular/material' as mat;
 @import "variables";
 
 pre {
@@ -22,11 +21,6 @@ pre {
 .context {
   padding-top: 1px;
   padding-bottom: 1px;
-}
-
-.highlight {
-  background: mat.get-color-from-palette($amaranth-palette, 100);
-  width: 100vw;
 }
 
 .var-wrapper {

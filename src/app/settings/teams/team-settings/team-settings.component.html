@@ -1,49 +1,57 @@
-<mat-card *ngIf="team$ | async as team">
-  <mat-card-title i18n>Settings</mat-card-title>
-
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    <mat-error
-      *ngIf="(errors$ | async)?.updateName"
-      class="server-error center-text"
-      >{{ (errors$ | async)?.updateName }}</mat-error
-    >
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field>
-        <mat-label>Slug</mat-label>
-        <input matInput formControlName="slug" [value]="team.slug" />
-        <mat-error>
-          <span *ngIf="this.form.get('slug')?.errors?.required" i18n
-            >Enter a team name</span
-          ></mat-error
-        >
-      </mat-form-field>
-      <gt-loading-button
-        [disabled]="this.form.get('slug')?.value === team.slug"
-        [loading]="(loading$ | async)?.updateName"
-        buttonText="Update Name"
-        id="update-project-name"
-      >
-      </gt-loading-button>
-    </form>
-  </mat-card-content>
-</mat-card>
-<mat-card>
-  <mat-card-title i18n>Delete Team</mat-card-title>
-  <mat-divider></mat-divider>
-  <mat-card-content class="remove-content">
-    <div>
-      <p i18n
-        >By deleting your team, you will lose all associated data. This cannot
+@if (team$ | async; as team) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title i18n>Settings</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      @if ((errors$ | async)?.updateName) {
+        <mat-error
+          class="server-error center-text"
+          >{{ (errors$ | async)?.updateName }}</mat-error
+          >
+        }
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Slug</mat-label>
+            <input matInput formControlName="slug" [value]="team.slug" />
+            <mat-error>
+              @if (this.form.get('slug')?.errors?.required) {
+                <span i18n
+                  >Enter a team name</span
+                  >
+                  }</mat-error
+                  >
+                </mat-form-field>
+                <gt-loading-button
+                  [disabled]="this.form.get('slug')?.value === team.slug"
+                  [loading]="(loading$ | async)?.updateName"
+                  buttonText="Update Name"
+                  id="update-project-name"
+                  >
+                </gt-loading-button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        }
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title i18n>Delete Team</mat-card-title>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content class="remove-content">
+            <div>
+              <p i18n
+                >By deleting your team, you will lose all associated data. This cannot
         be undone.</p
-      >
-      <mat-error></mat-error>
-    </div>
-    <gt-loading-button
-      buttonText="Delete Team"
-      [loading]="(loading$ | async)?.deleteTeam"
-      (click)="deleteTeam()"
-    >
-    </gt-loading-button>
-  </mat-card-content>
-</mat-card>
+                >
+                <mat-error></mat-error>
+              </div>
+              <gt-loading-button
+                buttonText="Delete Team"
+                [loading]="(loading$ | async)?.deleteTeam"
+                (buttonClick)="deleteTeam()"
+                >
+              </gt-loading-button>
+            </mat-card-content>
+          </mat-card>
