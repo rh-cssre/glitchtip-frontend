@@ -1,129 +1,141 @@
-<div *ngFor="let value of rawStacktraceValues$ | async" class="wrapper">
-  <p>
-    <ng-container *ngIf="eventPlatform === 'java'; else defaultTitle">
-      <ng-container *ngIf="value.module"
-        >{{ value.module }}.<ng-container
+@for (value of rawStacktraceValues$ | async; track value) {
+  <div class="wrapper">
+    <p>
+      @if (eventPlatform === 'java') {
+        @if (value.module) {
+          {{ value.module }}.<ng-container
           >{{ value.type }}&#58; {{ value.value }}</ng-container
-        >
-      </ng-container>
-    </ng-container>
-    <ng-template #defaultTitle>{{ value.type }}:{{ value.value }}</ng-template>
-  </p>
-  <ng-container *ngIf="checkStacktraceInterface(value.stacktrace)">
-    <div
-      class="indent"
-      *ngFor="let frame of value.stacktrace.frames; let i = index"
-      [ngSwitch]="frame.platform || eventPlatform"
-    >
-      <ng-container *ngSwitchCase="'javascript'">
-        <ng-container *ngIf="frame.function; else notJSFunction"
-          >&ensp;at {{ frame.function }} &#40;</ng-container
-        >
-        <ng-template #notJSFunction>&ensp;at ? &#40;</ng-template>
-        <ng-container *ngIf="frame.filename">{{ frame.filename }}</ng-container>
-        <ng-container *ngIf="!frame.filename && frame.module">{{
-          frame.module
-        }}</ng-container>
-        <ng-container *ngIf="frame.lineNo && frame.lineNo > 0"
-          >&#58;{{ frame.lineNo }}</ng-container
-        >
-        <ng-container *ngIf="frame.colNo && frame.colNo > 0"
-          >&#58;{{ frame.colNo }}</ng-container
-        >&#41;
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'ruby'"
-        >&ensp;from
-        <ng-container *ngIf="frame.filename; else rubyModule">{{
-          frame.filename
-        }}</ng-container>
-        <ng-template #rubyModule>
-          <ng-container *ngIf="frame.module; else rubyElse"
-            >&#40;{{ frame.module }}&#41;</ng-container
           >
-        </ng-template>
-        <ng-template #rubyElse>?</ng-template>
-
-        <ng-container *ngIf="frame.lineNo && frame.lineNo > 0"
-          >&#58;{{ frame.lineNo }}</ng-container
-        >
-        <ng-container *ngIf="frame.colNo && frame.colNo > 0"
-          >&#58;{{ frame.colNo }}</ng-container
-        >
-        <ng-container *ngIf="frame.function"
-          >&#58;in &#96;{{ frame.function }}&apos;</ng-container
-        >
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'php'"
-        >&#96;{{ i }} {{ frame.filename || frame.module }}&#40;{{
-          frame.lineNo
-        }}&#41;&#58;
-        {{ frame.function ? frame.function : "&#123;main&#125;" }}</ng-container
-      >
-
-      <ng-container *ngSwitchCase="'java'"
-        >&nbsp;&nbsp;&nbsp;&nbsp;at
-        <ng-container *ngIf="frame.module"> {{ frame.module }}.</ng-container>
-        <ng-container *ngIf="frame.function">{{ frame.function }}</ng-container>
-        <ng-container *ngIf="frame.filename"
-          >&#40;{{ frame.filename
-          }}<ng-container *ngIf="frame.lineNo && frame.lineNo > 0"
-            >&#58;{{ frame.lineNo }}</ng-container
-          >&#41;
-        </ng-container>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'objc' || 'cocoa'">
-        <!-- fallthrough -->
-      </ng-container>
-
-      <!--TODO: Add ljust and trim logic https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/rawStacktraceContent.jsx#L105 -->
-      <ng-container *ngSwitchCase="'native'"
-        >&ensp;
-        <ng-container *ngIf="frame.package">{{ frame.package }} </ng-container>
-        <ng-container *ngIf="frame.instructionAddr"
-          >{{ frame.instructionAddr }}
-        </ng-container>
-        <ng-container> {{ frame.function || frame.symbolAddr }}</ng-container>
-        <ng-container *ngIf="frame.filename">
-          &#40;{{ frame.filename
-          }}<ng-container *ngIf="frame.lineNo && frame.lineNo > 0"
-            >&#58;{{ frame.lineNo }}</ng-container
-          >&#41;</ng-container
-        >
-      </ng-container>
-
-      <ng-container *ngSwitchDefault>
-        <ng-container *ngIf="frame.filename; else defaultModule"
-          >File "{{ frame.filename }}"</ng-container
-        >
-        <ng-template #defaultModule>
-          <ng-container *ngIf="frame.module; else defaultElse"
-            >Module "{{ frame.module }}"</ng-container
+        }
+      } @else {
+        {{ value.type }}:{{ value.value }}
+      }
+    </p>
+    @if (checkStacktraceInterface(value.stacktrace)) {
+      @for (frame of value.stacktrace.frames; track frame; let i = $index) {
+        <div
+          class="indent"
           >
-        </ng-template>
-        <ng-template #defaultElse> ?</ng-template>
-
-        <ng-container *ngIf="frame.lineNo && frame.lineNo > 0"
-          >, line {{ frame.lineNo }}</ng-container
-        >
-        <ng-container *ngIf="frame.colNo && frame.colNo > 0"
-          >, col {{ frame.colNo }}</ng-container
-        >
-        <ng-container *ngIf="frame.function"
-          >, in {{ frame.function }}</ng-container
-        >
-        <ng-container *ngIf="frame.context">
-          <ng-container *ngFor="let context of frame.context">
-            <ng-container *ngIf="context[0] === frame.lineNo">
-              <div *ngIf="context[1]">
-                &nbsp;&nbsp;&nbsp;&nbsp;{{ context[1] }}
-              </div>
-            </ng-container>
-          </ng-container>
-        </ng-container></ng-container
-      >
+          @switch (frame.platform || eventPlatform) {
+            @case ('javascript') {
+              @if (frame.function) {
+                &ensp;at {{ frame.function }} &#40;
+              } @else {
+                &ensp;at ? &#40;
+              }
+              @if (frame.filename) {
+                {{ frame.filename }}
+              }
+              @if (!frame.filename && frame.module) {
+                {{
+                frame.module
+                }}
+              }
+              @if (frame.lineNo && frame.lineNo > 0) {
+                &#58;{{ frame.lineNo }}
+              }
+              @if (frame.colNo && frame.colNo > 0) {
+                &#58;{{ frame.colNo }}
+                }&#41;
+              }
+              @case ('ruby') {
+                &ensp;from
+                @if (frame.filename) {
+                  {{
+                  frame.filename
+                  }}
+                } @else {
+                  @if (frame.module) {
+                    &#40;{{ frame.module }}&#41;
+                  } @else {
+                    ?
+                  }
+                }
+                @if (frame.lineNo && frame.lineNo > 0) {
+                  &#58;{{ frame.lineNo }}
+                }
+                @if (frame.colNo && frame.colNo > 0) {
+                  &#58;{{ frame.colNo }}
+                }
+                @if (frame.function) {
+                  &#58;in &#96;{{ frame.function }}&apos;
+                }
+              }
+              @case ('php') {
+                &#96;{{ i }} {{ frame.filename || frame.module }}&#40;{{
+                frame.lineNo
+                }}&#41;&#58;
+                {{ frame.function ? frame.function : "&#123;main&#125;" }}
+              }
+              @case ('java') {
+                &nbsp;&nbsp;&nbsp;&nbsp;at
+                @if (frame.module) {
+                  {{ frame.module }}.
+                }
+                @if (frame.function) {
+                  {{ frame.function }}
+                }
+                @if (frame.filename) {
+                  &#40;{{ frame.filename
+                  }}@if (frame.lineNo && frame.lineNo > 0) {
+                  &#58;{{ frame.lineNo }}
+                  }&#41;
+                }
+              }
+              @case ('objc' || 'cocoa') {
+                <!-- fallthrough -->
+              }
+              <!--TODO: Add ljust and trim logic https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/rawStacktraceContent.jsx#L105 -->
+              @case ('native') {
+                &ensp;
+                @if (frame.package) {
+                  {{ frame.package }}
+                }
+                @if (frame.instructionAddr) {
+                  {{ frame.instructionAddr }}
+                }
+                <ng-container> {{ frame.function || frame.symbolAddr }}</ng-container>
+                @if (frame.filename) {
+                  &#40;{{ frame.filename
+                  }}@if (frame.lineNo && frame.lineNo > 0) {
+                  &#58;{{ frame.lineNo }}
+                  }&#41;
+                }
+              }
+              @default {
+                @if (frame.filename) {
+                  File "{{ frame.filename }}"
+                } @else {
+                  @if (frame.module) {
+                    Module "{{ frame.module }}"
+                  } @else {
+                    ?
+                  }
+                }
+                @if (frame.lineNo && frame.lineNo > 0) {
+                  , line {{ frame.lineNo }}
+                }
+                @if (frame.colNo && frame.colNo > 0) {
+                  , col {{ frame.colNo }}
+                }
+                @if (frame.function) {
+                  , in {{ frame.function }}
+                }
+                @if (frame.context) {
+                  @for (context of frame.context; track context) {
+                    @if (context[0] === frame.lineNo) {
+                      @if (context[1]) {
+                        <div>
+                          &nbsp;&nbsp;&nbsp;&nbsp;{{ context[1] }}
+                        </div>
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          </div>
+        }
+      }
     </div>
-  </ng-container>
-</div>
+  }
