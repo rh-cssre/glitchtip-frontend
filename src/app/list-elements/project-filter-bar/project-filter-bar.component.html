@@ -1,106 +1,109 @@
-<section
-  *ngIf="projects$ | async as projects"
-  [class.no-projects]="(projects$ | async)?.length === 0"
->
-  <div [class.no-projects__picker]="!projects.length" id="project-picker">
-    <mat-accordion displayMode="flat" [hideToggle]="projects.length < 2">
-      <mat-expansion-panel
-        #expansionPanel
-        class="mat-elevation-z1"
-        (afterExpand)="focusPanel()"
-        [disabled]="projects.length < 2"
-      >
-        <mat-expansion-panel-header
-          [class.disabled-looking]="projects.length === 0"
-        >
-          <mat-panel-title>
-            {{ selectedProjectsString$ | async }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-form-field>
-          <input
-            #filterInput
-            type="text"
-            placeholder="Filter projects"
-            aria-label="Filter projects"
-            matInput
-            [formControl]="filterProjectInput"
-          />
-        </mat-form-field>
-
-        <mat-list>
-          <mat-list-item
-            class="list-item"
-            *ngFor="let project of filteredProjects$ | async"
-          >
-            <button
-              id="picker-button-{{ project.id }}"
-              class="picker-button mat-body-1"
-              [class.disabled]="!project.isMember"
-              (click)="selectProjectAndClose(project.id)"
-            >
-              {{ project.name }}
-            </button>
-            <mat-checkbox
-              (change)="toggleProject(project.id)"
-              [checked]="isSelected(project.id)"
-              [disabled]="!project.isMember"
-            >
-            </mat-checkbox>
-          </mat-list-item>
-        </mat-list>
-
-        <div class="button-group">
-          <button
-            *ngIf="someProjectsAreSelected$ | async"
-            mat-stroked-button
-            (click)="navigate(null); expansionPanel.close()"
-          >
-            View All
-          </button>
-          <button mat-flat-button (click)="closePanel()" color="primary">
-            <ng-container
-              *ngIf="(selectedAndAppliedIdsAreEqual$ | async) === false"
-            >
-              Apply &
-            </ng-container>
-            Close
-          </button>
-        </div>
-      </mat-expansion-panel>
-      <button
-        mat-button
-        class="reset-button"
-        *ngIf="(appliedProjectIds$ | async)?.length"
-        (click)="resetProjects()"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-accordion>
-  </div>
-  <div class="nav-action-group" *ngIf="orgSlug$ | async as orgSlug">
-    <a
-      mat-stroked-button
-      color="primary"
-      class="nav-action"
-      [routerLink]="['/', orgSlug, 'settings', 'projects', 'new']"
+@if (projects$ | async; as projects) {
+  <section
+    [class.no-projects]="(projects$ | async)?.length === 0"
     >
-      <mat-icon>add</mat-icon>
-      <ng-container i18n>Add Project</ng-container>
-    </a>
-    <a
-      *ngIf="projects.length > 0"
-      mat-stroked-button
-      color="primary"
-      class="nav-action"
+    <div [class.no-projects__picker]="!projects.length" id="project-picker">
+      <mat-accordion displayMode="flat" [hideToggle]="projects.length < 2">
+        <mat-expansion-panel
+          #expansionPanel
+          class="mat-elevation-z1"
+          (afterExpand)="focusPanel()"
+          [disabled]="projects.length < 2"
+          >
+          <mat-expansion-panel-header
+            [class.disabled-looking]="projects.length === 0"
+            >
+            <mat-panel-title class="mat-body-1">
+              {{ selectedProjectsString$ | async }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="outline">
+            <mat-label>Filter projects</mat-label>
+            <input
+              #filterInput
+              type="text"
+              aria-label="Filter projects"
+              matInput
+              [formControl]="filterProjectInput"
+              />
+          </mat-form-field>
+          <ul>
+            @for (project of filteredProjects$ | async; track project) {
+              <li
+                class="list-item"
+                >
+                <button
+                  id="picker-button-{{ project.id }}"
+                  class="picker-button mat-body-1"
+                  [class.disabled]="!project.isMember"
+                  (click)="selectProjectAndClose(project.id)"
+                  >
+                  {{ project.name }}
+                </button>
+                <mat-checkbox
+                  (change)="toggleProject(project.id)"
+                  [checked]="isSelected(project.id)"
+                  [disabled]="!project.isMember"
+                  >
+                </mat-checkbox>
+              </li>
+            }
+          </ul>
+          <div class="button-group">
+            @if (someProjectsAreSelected$ | async) {
+              <button
+                mat-stroked-button
+                (click)="navigate(null); expansionPanel.close()"
+                >
+                View All
+              </button>
+            }
+            <button mat-flat-button (click)="closePanel()" color="primary">
+              @if ((selectedAndAppliedIdsAreEqual$ | async) === false) {
+                Apply &
+              }
+              Close
+            </button>
+          </div>
+        </mat-expansion-panel>
+        @if ((appliedProjectIds$ | async)?.length) {
+          <button
+            mat-button
+            class="reset-button"
+            (click)="resetProjects()"
+            >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-accordion>
+    </div>
+    @if (orgSlug$ | async; as orgSlug) {
+      <div class="nav-action-group">
+        <a
+          mat-stroked-button
+          color="primary"
+          class="nav-action"
+          [routerLink]="['/', orgSlug, 'settings', 'projects', 'new']"
+          >
+          <mat-icon>add</mat-icon>
+          <ng-container i18n>Add Project</ng-container>
+        </a>
+        @if (projects.length > 0) {
+          <a
+            mat-stroked-button
+            color="primary"
+            class="nav-action"
       [routerLink]="
         (singleProjectSlug$ | async)
           ? ['/', orgSlug, 'settings', 'projects', singleProjectSlug$ | async]
           : ['/', orgSlug, 'settings', 'projects']
       "
-    >
-      <mat-icon>settings</mat-icon>
-      Project Settings
-    </a>
-  </div>
-</section>
+            >
+            <mat-icon>settings</mat-icon>
+            Project Settings
+          </a>
+        }
+      </div>
+    }
+  </section>
+}

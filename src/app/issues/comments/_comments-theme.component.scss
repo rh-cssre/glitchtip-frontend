@@ -1,0 +1,30 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-comments {
+    .delete-loading-overlay {
+      background-color: if(
+        $is-dark-theme,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.5)
+      );
+    }
+
+    .comment-markdown {
+      blockquote {
+        border-left: 5px solid
+          if(
+            $is-dark-theme,
+            mat.m2-get-color-from-palette($primary, 300),
+            mat.m2-get-color-from-palette($primary, 200)
+          );
+        // hex colors match prism backgrounds
+        background-color: if($is-dark-theme, #141414, #f5f2f0);
+      }
+    }
+  }
+}
