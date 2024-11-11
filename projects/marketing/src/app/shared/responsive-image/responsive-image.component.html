@@ -1,0 +1,9 @@
+<picture>
+  <source type="image/webp" [srcset]="webPSrcset" />
+  <img
+    [src]="fallbackSrc"
+    [srcset]="mainSrcset"
+    [attr.loading]="loading"
+    [alt]="alt ? alt : ''"
+  />
+</picture>
