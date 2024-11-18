@@ -1,24 +1,36 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { BehaviorSubject, EMPTY } from "rxjs";
-import { tap, map, catchError } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { EMPTY, lastValueFrom, timer } from "rxjs";
+import { catchError, delay, expand, map, tap, takeUntil } from "rxjs/operators";
 import {
   Subscription,
+  BasePrice,
   Product,
-  CreateSubscriptionResp,
   EventsCount,
 } from "./subscriptions.interfaces";
-import { baseUrl } from "src/app/constants";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { Organization } from "../organizations/organizations.interface";
+import { ProductsAPIService } from "./products-api.service";
+import { StripeService } from "src/app/settings/subscription/stripe.service";
+import { SubscriptionsAPIService } from "./subscriptions-api.service";
 
 interface SubscriptionsState {
+  subscriptionCreationLoadingId: string | null;
   subscription: Subscription | null;
+  subscriptionLoading: boolean;
+  subscriptionLoadingTimeout: boolean;
+  fromStripe: boolean;
   eventsCount: EventsCount | null;
   products: Product[] | null;
 }
 
 const initialState: SubscriptionsState = {
+  subscriptionCreationLoadingId: null,
   subscription: null,
+  subscriptionLoading: false,
+  subscriptionLoadingTimeout: false,
+  fromStripe: false,
   eventsCount: null,
   products: null,
 };
@@ -26,16 +38,40 @@ const initialState: SubscriptionsState = {
 @Injectable({
   providedIn: "root",
 })
-export class SubscriptionsService {
-  private readonly state = new BehaviorSubject<SubscriptionsState>(
-    initialState
-  );
-  private readonly getState$ = this.state.asObservable();
-  private readonly url = baseUrl + "/subscriptions/";
-
+export class SubscriptionsService extends StatefulService<SubscriptionsState> {
   readonly subscription$ = this.getState$.pipe(
-    map((state) => state.subscription)
+    map((state) => state.subscription),
   );
+  readonly formattedSubscription$ = this.subscription$.pipe(
+    map((subscription) => {
+      if (subscription) {
+        let price = subscription.items[0]?.price
+          ? subscription.items[0].price
+          : null;
+        return {
+          ...subscription,
+          mainUnitPrice: price ? price.unit_amount / 100 : null,
+          productName: price ? subscription.items[0].price.product.name : null,
+          productDescription: price
+            ? subscription.items[0].price.product.description
+            : null,
+        };
+      } else {
+        return null;
+      }
+    }),
+  );
+  readonly subscriptionLoading$ = this.getState$.pipe(
+    map((state) => state.subscriptionLoading),
+  );
+  readonly subscriptionLoadingTimeout$ = this.getState$.pipe(
+    map((state) => state.subscriptionLoadingTimeout),
+  );
+  readonly subscriptionCreationLoadingId$ = this.getState$.pipe(
+    map((state) => state.subscriptionCreationLoadingId),
+  );
+  readonly fromStripe$ = this.getState$.pipe(map((state) => state.fromStripe));
+
   readonly eventsCountWithTotal$ = this.getState$.pipe(
     map((state) => {
       let total = 0;
@@ -53,34 +89,87 @@ export class SubscriptionsService {
       } else {
         return state.eventsCount;
       }
-    })
+    }),
   );
 
-  readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
-  readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
-    map((plans) => {
-      return plans?.map((plan) => ({
-        ...plan,
-        name: plan.name.startsWith("GlitchTip ")
-          ? plan.name.substring(10)
-          : plan.name,
+  readonly totalEventsAllowed$ = this.subscription$.pipe(
+    map((subscription) =>
+      subscription && subscription.items[0]
+        ? parseInt(subscription.items[0].price.product.metadata.events, 10)
+        : null,
+    ),
+  );
+
+  readonly productOptions$ = this.getState$.pipe(
+    map((state) => state.products),
+  );
+  readonly formattedProductOptions = this.productOptions$.pipe(
+    map((products) => {
+      return products?.map((product) => ({
+        ...product,
+        name: product.name.startsWith("GlitchTip ")
+          ? product.name.substring(10)
+          : product.name,
+        mainUnitPrice: product.prices[0].unit_amount / 100,
       }));
-    })
+    }),
   );
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private productsAPIService: ProductsAPIService,
+    private subscriptionsAPIService: SubscriptionsAPIService,
+    private stripe: StripeService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+  ) {
+    super(initialState);
+  }
 
   /**
    * Retrieve subscription for this organization
    * @param slug Organization Slug for requested subscription
    */
   retrieveSubscription(slug: string) {
-    return this.http.get<Subscription>(`${this.url}${slug}/`).pipe(
-      tap((subscription) => this.setSubscription(subscription)),
-      catchError((error) => {
-        this.clearState();
-        return EMPTY;
-      })
+    this.setSubscriptionLoadingStart();
+    lastValueFrom(
+      this.subscriptionsAPIService.retrieve(slug).pipe(
+        tap((subscription) => {
+          this.setSubscription(subscription);
+        }),
+        catchError(() => {
+          this.setSubscriptionLoadingError();
+          return EMPTY;
+        }),
+      ),
+      { defaultValue: null },
+    );
+  }
+
+  /**
+   * Keep trying to get subscription, for users redirected from Stripe
+   * @param slug Organization Slug for requested subscription
+   */
+  retrieveUntilSubscriptionOrTimeout(slug: string) {
+    this.setSubscriptionLoadingStart(true);
+    lastValueFrom(
+      this.subscriptionsAPIService.retrieve(slug).pipe(
+        expand((subscription) => {
+          if (!subscription.created) {
+            return this.subscriptionsAPIService
+              .retrieve(slug)
+              .pipe(delay(2000));
+          } else {
+            this.setSubscription(subscription);
+            return EMPTY;
+          }
+        }),
+        catchError(() => {
+          this.setSubscriptionLoadingError();
+          return EMPTY;
+        }),
+        takeUntil(this.subscriptionRetryTimer()),
+      ),
+      { defaultValue: null },
     );
   }
 
@@ -88,12 +177,15 @@ export class SubscriptionsService {
    * Retrieve event count for current active subscription for this organization
    * @param slug Organization Slug for requested subscription event count
    */
-  retrieveSubscriptionCount(slug: string) {
-    return this.http.get<EventsCount>(`${this.url}${slug}/events_count/`).pipe(
-      tap((count) => this.setSubscriptionCount(count)),
-      catchError((error) => {
-        return EMPTY;
-      })
+  retrieveSubscriptionEventCount(slug: string) {
+    lastValueFrom(
+      this.subscriptionsAPIService.retrieveEventsCount(slug).pipe(
+        tap((count) => this.setSubscriptionCount(count)),
+        catchError((error) => {
+          return EMPTY;
+        }),
+      ),
+      { defaultValue: null },
     );
   }
 
@@ -101,65 +193,114 @@ export class SubscriptionsService {
    * Retrieve subscription plans
    * productAmountSorted converts product prices to ints and sorts from low to high
    */
-  retrieveSubscriptionPlans() {
-    return this.http.get<Product[]>("/api/0/products/").pipe(
-      tap((products) => {
-        const productAmountSorted = products
-          .map((product) => ({
-            ...product,
-            plans: product.plans.map((plans) => ({
-              ...plans,
-              amount: +plans.amount,
-            })),
-          }))
-          .sort((a, b) => a.plans[0].amount - b.plans[0].amount);
-        this.setProducts(productAmountSorted);
-      })
+  retrieveProducts() {
+    lastValueFrom(
+      this.productsAPIService.list().pipe(
+        tap((products) => {
+          const productAmountSorted = products.sort(
+            (a, b) => a.prices[0].unit_amount - b.prices[0].unit_amount,
+          );
+          this.setProducts(productAmountSorted);
+        }),
+      ),
     );
   }
 
-  createFreeSubscription(organizationId: number, planId: string) {
-    const data = {
-      organization: organizationId,
-      plan: planId,
-    };
-    return this.http
-      .post<CreateSubscriptionResp>("/api/0/subscriptions/", data)
-      .pipe(
-        tap((resp) => {
-          this.setSubscription(resp.subscription);
-        })
+  dispatchSubscriptionCreation(organization: Organization, price: BasePrice) {
+    this.setSubscriptionCreationStart(price.id);
+    if (price.unit_amount === 0) {
+      lastValueFrom(
+        this.subscriptionsAPIService.create(organization.id, price.id).pipe(
+          tap((resp) => {
+            this.setSubscription(resp.subscription);
+            this.router.navigate([organization.slug, "issues"]);
+          }),
+          catchError((err) => {
+            if (err.status === 409) {
+              this.setSubscriptionCreationError();
+              this.snackBar.open(
+                "This organization already has a subscription. Please reload page for latest details.",
+              );
+            }
+            return EMPTY;
+          }),
+        ),
+        { defaultValue: null },
       );
+    } else {
+      this.stripe.redirectToSubscriptionCheckout(organization.slug, price.id);
+    }
   }
 
   /**
    * Retrieve Subscription and navigate to subscription page if no subscription exists
    */
   checkIfUserHasSubscription(orgSlug: string) {
-    this.retrieveSubscription(orgSlug)
-      .pipe(
-        tap((subscription) => {
-          if (subscription.status === null) {
-            this.router.navigate([orgSlug, "settings", "subscription"]);
-          }
-        })
-      )
-      .toPromise();
+    const subscriptionRoute = [orgSlug, "settings", "subscription"];
+    if (
+      !this.router.isActive(this.router.createUrlTree(subscriptionRoute), {
+        paths: "exact",
+        queryParams: "subset",
+        fragment: "ignored",
+        matrixParams: "ignored",
+      })
+    ) {
+      lastValueFrom(
+        this.subscriptionsAPIService.retrieve(orgSlug).pipe(
+          tap((subscription) => {
+            if (subscription === null) {
+              this.router.navigate(subscriptionRoute);
+            }
+          }),
+        ),
+      );
+    }
   }
 
-  clearState() {
-    this.state.next(initialState);
+  private subscriptionRetryTimer() {
+    return timer(60000).pipe(
+      tap(() => {
+        this.setSubscriptionLoadingTimeout();
+      }),
+    );
   }
 
   private setProducts(products: Product[]) {
-    this.state.next({ ...this.state.getValue(), products });
+    this.setState({ products });
   }
 
   private setSubscription(subscription: Subscription) {
-    this.state.next({ ...this.state.getValue(), subscription });
+    this.setState({
+      subscription,
+      subscriptionLoading: false,
+      subscriptionCreationLoadingId: null,
+    });
+  }
+
+  private setSubscriptionLoadingStart(fromStripe: boolean = false) {
+    this.setState({ subscriptionLoading: true, fromStripe });
+  }
+
+  private setSubscriptionLoadingError() {
+    this.setState({ subscriptionLoading: false });
+  }
+
+  private setSubscriptionLoadingTimeout() {
+    this.setState({
+      subscriptionLoading: false,
+      subscriptionLoadingTimeout: true,
+    });
+  }
+
+  private setSubscriptionCreationStart(subscriptionCreationLoadingId: string) {
+    this.setState({ subscriptionCreationLoadingId });
+  }
+
+  private setSubscriptionCreationError() {
+    this.setState({ subscriptionCreationLoadingId: null });
   }
 
   private setSubscriptionCount(eventsCount: EventsCount) {
-    this.state.next({ ...this.state.getValue(), eventsCount });
+    this.setState({ eventsCount });
   }
 }

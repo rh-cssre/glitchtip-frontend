@@ -1,6 +1,8 @@
 <section class="l-body">
   <mat-card>
-    <mat-card-title>Notifications</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>Notifications</mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div class="default-settings">
@@ -13,59 +15,63 @@
         </div>
         <div class="button-group">
           <div class="button-and-loading">
-            <mat-spinner
-              *ngIf="(subscribeByDefaultLoading$ | async) === true"
-              diameter="24"
-            ></mat-spinner>
+            @if ((subscribeByDefaultLoading$ | async) === true) {
+              <mat-spinner
+                diameter="24"
+              ></mat-spinner>
+            }
             <mat-button-toggle-group
               name="defaultNotifications"
               aria-label="Default Notifications"
-            >
+              >
               <mat-button-toggle
                 value="onDefault"
                 (change)="toggleDefaultNotifications(true)"
                 [class.underline]="(subscribeByDefault$ | async) === true"
                 [checked]="(subscribeByDefault$ | async) === true"
                 >On</mat-button-toggle
-              >
-              <mat-button-toggle
-                value="offDefault"
-                (change)="toggleDefaultNotifications(false)"
-                [class.underline]="(subscribeByDefault$ | async) === false"
-                [checked]="(subscribeByDefault$ | async) === false"
-                >Off</mat-button-toggle
-              >
-            </mat-button-toggle-group>
-          </div>
-          <mat-error
-            *ngIf="subscribeByDefaultError$ | async as error"
-            class="mat-small"
-            >{{ error }}</mat-error
-          >
-        </div>
-      </div>
-      <button
-        *ngIf="(projectViewExpanded$ | async) === false"
-        mat-flat-button
-        color="primary"
-        class="expand-button"
-        (click)="toggleProjectView()"
-      >
-        <span>Edit By Project</span><mat-icon>keyboard_arrow_down</mat-icon>
-      </button>
+                >
+                <mat-button-toggle
+                  value="offDefault"
+                  (change)="toggleDefaultNotifications(false)"
+                  [class.underline]="(subscribeByDefault$ | async) === false"
+                  [checked]="(subscribeByDefault$ | async) === false"
+                  >Off</mat-button-toggle
+                  >
+                </mat-button-toggle-group>
+              </div>
+              @if (subscribeByDefaultError$ | async; as error) {
+                <mat-error
+                  class="mat-small"
+                  >{{ error }}</mat-error
+                  >
+                }
+              </div>
+            </div>
+            @if ((projectViewExpanded$ | async) === false) {
+              <button
+                mat-flat-button
+                color="primary"
+                class="expand-button"
+                (click)="toggleProjectView()"
+                >
+                <span>Edit By Project</span><mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+            }
 
-      <ng-container *ngIf="projectViewExpanded$ | async">
-        <div *ngFor="let projects of groupedProjects$ | async | keyvalue">
-          <div class="org-name mat-h3 mat-body-strong">
-            {{ projects.value[0].organization.name }}
-          </div>
-          <div class="border">
-            <div
-              class="mat-list-item"
-              *ngFor="let project of projects.value; let i = index"
-            >
-              <div class="project">
-                <a
+            @if (projectViewExpanded$ | async) {
+              @for (projects of groupedProjects$ | async | keyvalue; track projects) {
+                <div>
+                  <div class="org-name mat-h3 mat-body-strong">
+                    {{ projects.value[0].organization.name }}
+                  </div>
+                  <div class="border">
+                    @for (project of projects.value; track project; let i = $index) {
+                      <div
+                        class="project-list-item"
+                        >
+                        <div class="project">
+                          <a
                   [routerLink]="[
                     '/',
                     project.organization.slug,
@@ -73,63 +79,68 @@
                     'projects',
                     project.slug
                   ]"
-                  >{{ project.name }}</a
-                >
-              </div>
-              <div class="button-group">
-                <div class="button-and-loading">
-                  <mat-spinner
-                    *ngIf="(projectAlertLoading$ | async) === project.id"
-                    diameter="24"
-                  ></mat-spinner>
-                  <mat-button-toggle-group
-                    aria-label="`Notifications for ${project}`"
-                  >
-                    <mat-button-toggle
-                      (change)="updateUserAlertSettings(project.id, 1)"
-                      [class.underline]="project.alertStatus === 1"
-                      [checked]="project.alertStatus === 1"
-                      >On</mat-button-toggle
-                    >
-                    <mat-button-toggle
-                      (change)="updateUserAlertSettings(project.id, 0)"
-                      [class.underline]="project.alertStatus === 0"
-                      [checked]="project.alertStatus === 0"
-                      >Off</mat-button-toggle
-                    >
-                    <mat-button-toggle
-                      (change)="updateUserAlertSettings(project.id, -1)"
-                      [class.underline]="project.alertStatus === -1"
-                      [checked]="project.alertStatus === -1"
-                      >Default
-                      <span
-                        >({{
-                          (subscribeByDefault$ | async) === true ? "On" : "Off"
-                        }})</span
-                      ></mat-button-toggle
-                    >
-                  </mat-button-toggle-group>
-                </div>
-                <mat-error
-                  *ngIf="(projectAlertsError$ | async)?.id === project.id"
-                  class="mat-small"
-                  >{{ (projectAlertsError$ | async)?.error }}</mat-error
-                >
-              </div>
-            </div>
-          </div>
-        </div></ng-container
-      >
+                            >{{ project.name }}</a
+                            >
+                          </div>
+                          <div class="button-group">
+                            <div class="button-and-loading">
+                              @if ((projectAlertLoading$ | async) === project.id) {
+                                <mat-spinner
+                                  diameter="24"
+                                ></mat-spinner>
+                              }
+                              <mat-button-toggle-group
+                                aria-label="`Notifications for ${project}`"
+                                >
+                                <mat-button-toggle
+                                  (change)="updateUserAlertSettings(project.id, 1)"
+                                  [class.underline]="project.alertStatus === 1"
+                                  [checked]="project.alertStatus === 1"
+                                  >On</mat-button-toggle
+                                  >
+                                  <mat-button-toggle
+                                    (change)="updateUserAlertSettings(project.id, 0)"
+                                    [class.underline]="project.alertStatus === 0"
+                                    [checked]="project.alertStatus === 0"
+                                    >Off</mat-button-toggle
+                                    >
+                                    <mat-button-toggle
+                                      (change)="updateUserAlertSettings(project.id, -1)"
+                                      [class.underline]="project.alertStatus === -1"
+                                      [checked]="project.alertStatus === -1"
+                                      >Default
+                                      <span
+                                        >({{
+                                        (subscribeByDefault$ | async) === true ? "On" : "Off"
+                                        }})</span
+                                        ></mat-button-toggle
+                                        >
+                                      </mat-button-toggle-group>
+                                    </div>
+                                    @if ((projectAlertsError$ | async)?.id === project.id) {
+                                      <mat-error
+                                        class="mat-small"
+                                        >{{ (projectAlertsError$ | async)?.error }}</mat-error
+                                        >
+                                      }
+                                    </div>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          }
+                        }
 
-      <button
-        *ngIf="(projectViewExpanded$ | async) === true"
-        mat-flat-button
-        color="primary"
-        class="expand-button"
-        (click)="toggleProjectView()"
-      >
-        <span>Hide Projects</span><mat-icon>keyboard_arrow_up</mat-icon>
-      </button>
-    </mat-card-content>
-  </mat-card>
-</section>
+                        @if ((projectViewExpanded$ | async) === true) {
+                          <button
+                            mat-flat-button
+                            color="primary"
+                            class="expand-button"
+                            (click)="toggleProjectView()"
+                            >
+                            <span>Hide Projects</span><mat-icon>keyboard_arrow_up</mat-icon>
+                          </button>
+                        }
+                      </mat-card-content>
+                    </mat-card>
+                  </section>
