@@ -5,13 +5,17 @@ import {
   RoutesRecognized,
   ActivatedRoute,
   NavigationStart,
+  ActivatedRouteSnapshot,
 } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
-  BehaviorSubject,
   combineLatest,
+  delay,
+  expand,
   lastValueFrom,
   Observable,
+  takeUntil,
+  timer,
   EMPTY,
 } from "rxjs";
 import {
@@ -44,6 +48,7 @@ import { EnvironmentsAPIService } from "../environments/environments-api.service
 import { MembersAPIService } from "./members-api.service";
 import { OrganizationAPIService } from "./organizations-api.service";
 import { TeamsAPIService } from "../teams/teams-api.service";
+import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 
 interface OrganizationsState {
   organizations: Organization[];
@@ -82,12 +87,8 @@ const initialState: OrganizationsState = {
 @Injectable({
   providedIn: "root",
 })
-export class OrganizationsService {
-  private readonly organizationsState = new BehaviorSubject<OrganizationsState>(
-    initialState
-  );
-  private readonly getState$ = this.organizationsState.asObservable();
-  private routeParams?: { [key: string]: string };
+export class OrganizationsService extends StatefulService<OrganizationsState> {
+  orgSlug: string | null = null;
   initialLoad$ = this.getState$.pipe(
     map((data) => data.initialLoad),
     distinct()
@@ -210,10 +211,6 @@ export class OrganizationsService {
     filter((event) => event instanceof RoutesRecognized)
   ) as Observable<RoutesRecognized>;
 
-  readonly routeParams$ = this.routesRecognized$.pipe(
-    map((event) => event.state.root.firstChild?.params)
-  );
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -226,7 +223,7 @@ export class OrganizationsService {
     private teamsAPIService: TeamsAPIService,
     private teamsService: TeamsService
   ) {
-    this.routeParams$.subscribe((params) => (this.routeParams = params));
+    super(initialState);
 
     // When billing is enabled, check if active org has subscription
     combineLatest([
@@ -292,12 +289,8 @@ export class OrganizationsService {
       tap(([organizations, activeOrgId]) => {
         if (activeOrgId === null && organizations.length) {
           let activeOrg: Organization | undefined;
-          if (this.routeParams) {
-            activeOrg = organizations.find(
-              (org) =>
-                org.slug ===
-                (this.routeParams ? this.routeParams["org-slug"] : null)
-            );
+          if (this.orgSlug) {
+            activeOrg = organizations.find((org) => org.slug === this.orgSlug);
           }
           if (activeOrg) {
             this.changeActiveOrganization(activeOrg.id);
@@ -308,6 +301,14 @@ export class OrganizationsService {
         }
       })
     );
+  }
+
+  watchRoute(state: ActivatedRouteSnapshot) {
+    this.orgSlug = state.paramMap.get("org-slug");
+    if (this.orgSlug) {
+      this.setActiveOrganizationFromRouteChange(this.orgSlug);
+    }
+    return true; // We use canActivate as a way to follow this param
   }
 
   /**
@@ -321,13 +322,12 @@ export class OrganizationsService {
         take(1),
         filter((slug) => slug !== null),
         tap((slug) => {
-          const firstChild = this.route.snapshot.firstChild;
-          if (
-            this.routeParams &&
-            this.routeParams["org-slug"] &&
-            slug !== this.routeParams["org-slug"] &&
-            firstChild
-          ) {
+          const oldSlug =
+            this.route.snapshot.firstChild?.firstChild?.paramMap.get(
+              "org-slug"
+            );
+          const firstChild = this.route.snapshot.firstChild?.firstChild;
+          if (oldSlug && slug !== oldSlug && firstChild) {
             if (
               firstChild.firstChild?.url &&
               firstChild.firstChild.url.length >= 1
@@ -370,7 +370,7 @@ export class OrganizationsService {
 
   updateOrganization(orgName: string) {
     const data = { name: orgName };
-    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    const orgSlug = this.state.getValue().activeOrganization?.slug;
     if (orgSlug) {
       return this.organizationAPIService.update(orgSlug, data).pipe(
         tap((resp) => {
@@ -407,6 +407,37 @@ export class OrganizationsService {
     );
   }
 
+  /**
+   * Silently attempt to refresh active org details every 2 seconds
+   * until event rate throttle is 0 or 12 seconds passes.
+   */
+  repeatRefreshOrgDetail() {
+    lastValueFrom(
+      this.activeOrganizationSlug$.pipe(
+        filter((orgSlug) => !!orgSlug),
+        mergeMap((orgSlug) =>
+          this.organizationAPIService.retrieve(orgSlug!).pipe(
+            expand((orgDetail) => {
+              if (orgDetail.eventThrottleRate > 0) {
+                return this.organizationAPIService
+                  .retrieve(orgSlug!)
+                  .pipe(delay(2000));
+              } else {
+                this.setActiveOrganization(orgDetail);
+                return EMPTY;
+              }
+            }),
+            catchError(() => {
+              return EMPTY;
+            }),
+            takeUntil(timer(12000)),
+          ),
+        ),
+      ),
+      { defaultValue: null },
+    );
+  }
+
   retrieveOrganizationMembers(orgSlug: string) {
     return this.membersAPIService.list(orgSlug).pipe(
       tap((members) => {
@@ -423,8 +454,10 @@ export class OrganizationsService {
   ) {
     const data = {
       email: emailInput,
-      role: roleInput,
-      teams: teamsInput,
+      orgRole: roleInput,
+      teamRoles: teamsInput.map((teamSlug) => {
+        return { teamSlug, role: "" };
+      }),
     };
     return this.activeOrganizationSlug$
       .pipe(
@@ -442,10 +475,16 @@ export class OrganizationsService {
           this.router.navigate([orgSlug, "settings", "members"]);
         }),
         catchError((error: HttpErrorResponse) => {
-          if (error.error?.detail) {
+          if (error.status === 403) {
+            this.setAddMemberError(
+              "Only organization members with a role of manager or owner can invite new members."
+            );
+          } else if (error.error?.detail) {
             this.setAddMemberError(error.error?.detail);
           } else {
-            this.setAddMemberError(`${error.statusText}: ${error.status}`);
+            this.setAddMemberError(
+              "There was an error processing this request."
+            );
           }
           return EMPTY;
         })
@@ -484,7 +523,7 @@ export class OrganizationsService {
   }
 
   removeTeamMember(memberId: number, teamSlug: string) {
-    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    const orgSlug = this.state.getValue().activeOrganization?.slug;
     if (orgSlug) {
       return this.teamsAPIService
         .removeTeamMember(memberId, orgSlug, teamSlug)
@@ -499,7 +538,7 @@ export class OrganizationsService {
   }
 
   leaveTeam(teamSlug: string) {
-    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    const orgSlug = this.state.getValue().activeOrganization?.slug;
     this.setLeaveTeamLoading(teamSlug);
     lastValueFrom(
       this.teamsAPIService.leaveTeam(orgSlug!, teamSlug).pipe(
@@ -516,7 +555,7 @@ export class OrganizationsService {
   }
 
   joinTeam(teamSlug: string) {
-    const orgSlug = this.organizationsState.getValue().activeOrganization?.slug;
+    const orgSlug = this.state.getValue().activeOrganization?.slug;
     this.setJoinTeamLoading(teamSlug);
     lastValueFrom(
       this.teamsAPIService.joinTeam(orgSlug!, teamSlug).pipe(
@@ -540,19 +579,6 @@ export class OrganizationsService {
     this.updateTeamSlug(id, newSlug);
   }
 
-  observeOrgEnvironments(
-    queryParamsObs: Observable<{
-      orgSlug: string | undefined;
-    }>
-  ) {
-    return queryParamsObs.pipe(
-      distinctUntilChanged((a, b) => a.orgSlug === b.orgSlug),
-      mergeMap(({ orgSlug }) =>
-        orgSlug ? this.getOrganizationEnvironments(orgSlug) : EMPTY
-      )
-    );
-  }
-
   getOrganizationEnvironments(orgSlug: string) {
     return this.retrieveOrganizationEnvironments(orgSlug);
   }
@@ -570,17 +596,14 @@ export class OrganizationsService {
   }
 
   private setInitialErrorState() {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    this.setState({
       errors: initialState.errors,
     });
   }
 
   private setLeaveTeamLoading(team: string) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       loading: {
         ...state.loading,
         removeTeamMember: team,
@@ -589,9 +612,8 @@ export class OrganizationsService {
   }
 
   private setJoinTeamLoading(team: string) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       loading: {
         ...state.loading,
         addTeamMember: team,
@@ -600,9 +622,8 @@ export class OrganizationsService {
   }
 
   private setAddMemberLoading(loading: boolean) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       loading: {
         ...state.loading,
         addOrganizationMember: loading,
@@ -611,9 +632,8 @@ export class OrganizationsService {
   }
 
   private setCreateOrgError(error: string) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       errors: {
         ...state.errors,
         createOrganization: error,
@@ -622,9 +642,8 @@ export class OrganizationsService {
   }
 
   private setAddMemberError(error: string) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       errors: {
         ...state.errors,
         addOrganizationMember: error,
@@ -637,9 +656,8 @@ export class OrganizationsService {
   }
 
   private setLeaveTeamError(error: HttpErrorResponse) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       errors: {
         ...state.errors,
         removeTeamMember: `${error.statusText}: ${error.status}`,
@@ -652,9 +670,8 @@ export class OrganizationsService {
   }
 
   private setJoinTeamError(error: HttpErrorResponse) {
-    const state = this.organizationsState.getValue();
-    this.organizationsState.next({
-      ...state,
+    const state = this.state.getValue();
+    this.setState({
       errors: {
         ...state.errors,
         addTeamMember: `${error.statusText}: ${error.status}`,
@@ -667,18 +684,16 @@ export class OrganizationsService {
   }
 
   private setOrganizations(organizations: Organization[]) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
+    this.setState({
       organizations,
       initialLoad: true,
     });
   }
 
   private updateOrgName(orgName: Organization) {
-    const state = this.organizationsState.getValue();
+    const state = this.state.getValue();
     if (state.organizations) {
-      this.organizationsState.next({
-        ...state,
+      this.setState({
         organizations: state.organizations.map((organization) =>
           orgName.id === organization.id
             ? { ...organization, name: orgName.name }
@@ -689,50 +704,44 @@ export class OrganizationsService {
   }
 
   private setActiveOrganizationId(activeOrganizationId: number) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
+    this.setState({
       activeOrganizationId,
     });
   }
 
   private setActiveOrganization(organization: OrganizationDetail) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
+    this.setState({
       activeOrganization: organization,
     });
   }
 
   private removeOrganization(orgSlug: string) {
-    const filteredOrgs = this.organizationsState
+    const filteredOrgs = this.state
       .getValue()
       .organizations.filter((organization) => organization.slug !== orgSlug);
     if (filteredOrgs) {
-      this.organizationsState.next({
-        ...this.organizationsState.getValue(),
+      this.setState({
         organizations: filteredOrgs,
       });
     }
   }
 
   private setActiveOrganizationMembers(members: Member[]) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
+    this.setState({
       organizationMembers: members,
     });
   }
 
   private setOrganizationTeams(teams: Team[]) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
+    this.setState({
       organizationTeams: teams,
     });
   }
 
   private setTeamsView(teamSlug: string, member: boolean, members: number) {
-    const state = this.organizationsState.getValue();
+    const state = this.state.getValue();
     if (state.activeOrganization?.teams) {
-      this.organizationsState.next({
-        ...state,
+      this.setState({
         activeOrganization: {
           ...state.activeOrganization,
           teams: state.activeOrganization?.teams.map((team) =>
@@ -751,10 +760,9 @@ export class OrganizationsService {
   }
 
   private updateTeamsView(slug: string) {
-    const state = this.organizationsState.getValue();
+    const state = this.state.getValue();
     if (state.activeOrganization?.teams) {
-      this.organizationsState.next({
-        ...state,
+      this.setState({
         activeOrganization: {
           ...state.activeOrganization,
           teams: state.activeOrganization?.teams.filter(
@@ -766,10 +774,9 @@ export class OrganizationsService {
   }
 
   private updateTeamSlug(id: number, newSlug: string) {
-    const state = this.organizationsState.getValue();
+    const state = this.state.getValue();
     if (state.activeOrganization?.teams) {
-      this.organizationsState.next({
-        ...state,
+      this.setState({
         activeOrganization: {
           ...state.activeOrganization,
           teams: state.activeOrganization?.teams.map((team) =>
@@ -781,8 +788,7 @@ export class OrganizationsService {
   }
 
   private setOrganizationEnvironments(environments: Environment[]) {
-    this.organizationsState.next({
-      ...this.organizationsState.getValue(),
+    this.setState({
       organizationEnvironments: environments,
     });
   }

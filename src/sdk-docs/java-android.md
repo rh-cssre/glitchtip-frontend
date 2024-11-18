@@ -35,7 +35,7 @@ Add this `<meta-data>` tag inside the `<application>` element of your AndroidMan
 
 ```xml
 <application>
-  <meta-data android:name="io.sentry.dsn" android:value="your DSN here" />
+  <meta-data android:name="io.sentry.dsn" android:value="YOUR-GLITCHTIP-DSN-HERE" />
 </application>
 ```
 

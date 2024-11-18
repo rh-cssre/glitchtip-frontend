@@ -5,6 +5,6 @@ export const user = {
 
 export const changePassword = {
   incorrect_password: "bananas7",
-  new_password1: "drawmark47",
+  new_password: "drawmark47",
   new_password2: "drawmark47",
 };
