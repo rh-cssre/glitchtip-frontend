@@ -1,29 +1,36 @@
+import { I18nPluralPipe } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import {
-  UntypedFormGroup,
-  UntypedFormControl,
+  FormGroup,
+  FormControl,
   Validators,
   FormGroupDirective,
   NgForm,
   ValidatorFn,
   AbstractControl,
   ValidationErrors,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
-import { numberValidator } from "src/app/shared/validators";
+import { intRegex } from "src/app/shared/validators";
+import { LoadingButtonComponent } from "../../../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: UntypedFormControl | null,
-    form: FormGroupDirective | NgForm | null
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null,
   ): boolean {
     return !!(control && control.invalid && form?.touched);
   }
 }
 
 export const selectionRequiredValidator: ValidatorFn = (
-  control: AbstractControl
+  control: AbstractControl,
 ): ValidationErrors | null => {
   const errorAlert = control.get("errorAlert");
   const uptime = control.get("uptime");
@@ -37,6 +44,16 @@ export const selectionRequiredValidator: ValidatorFn = (
   selector: "gt-alert-form",
   templateUrl: "./alert-form.component.html",
   styleUrls: ["./alert-form.component.scss"],
+  standalone: true,
+  imports: [
+    I18nPluralPipe,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LoadingButtonComponent,
+  ],
 })
 export class AlertFormComponent implements OnInit {
   @Input() loading: boolean | null = false;
@@ -45,43 +62,53 @@ export class AlertFormComponent implements OnInit {
   @Input() uptime: boolean | null = false;
   @Input() errorAlert: boolean = true;
   @Output() alertSubmit = new EventEmitter<{
-    timespan_minutes: number;
+    timespanMinutes: number;
     quantity: number;
     uptime: boolean;
   }>();
   @Input() newAlert: boolean | undefined = false;
 
+  timesI18nMapping = {
+    '=1': $localize `time`,
+    'other': $localize `times`
+  };
+
+  minutesI18nMapping = {
+    '=1': $localize `minute`,
+    'other': $localize `minutes`
+  }
+
   intervalValidators = [
     Validators.min(0),
-    numberValidator,
+    Validators.pattern(intRegex),
     Validators.required,
   ];
 
-  projectAlertForm = new UntypedFormGroup({
-    optionsGroup: new UntypedFormGroup(
+  projectAlertForm = new FormGroup({
+    optionsGroup: new FormGroup(
       {
-        uptime: new UntypedFormControl(""),
-        errorAlert: new UntypedFormControl(""),
+        uptime: new FormControl(""),
+        errorAlert: new FormControl(""),
       },
-      selectionRequiredValidator
+      selectionRequiredValidator,
     ),
-    timespan_minutes: new UntypedFormControl(""),
-    quantity: new UntypedFormControl(""),
+    timespanMinutes: new FormControl(""),
+    quantity: new FormControl(""),
   });
 
   projectFormTimespan = this.projectAlertForm.get(
-    "timespan_minutes"
-  ) as UntypedFormControl;
-  projectFormQuantity = this.projectAlertForm.get("quantity") as UntypedFormControl;
+    "timespanMinutes",
+  ) as FormControl;
+  projectFormQuantity = this.projectAlertForm.get("quantity") as FormControl;
   projectFormUptime = this.projectAlertForm.get(
-    "optionsGroup.uptime"
-  ) as UntypedFormControl;
+    "optionsGroup.uptime",
+  ) as FormControl;
   projectFormErrorAlert = this.projectAlertForm.get(
-    "optionsGroup.errorAlert"
-  ) as UntypedFormControl;
+    "optionsGroup.errorAlert",
+  ) as FormControl;
   projectFormOptionsGroup = this.projectAlertForm.get(
-    "optionsGroup"
-  ) as UntypedFormGroup;
+    "optionsGroup",
+  ) as FormGroup;
 
   matcher = new LessAnnoyingErrorStateMatcher();
   newFormMatcher = new NewAlertErrorStateMatcher();
@@ -90,11 +117,11 @@ export class AlertFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectAlertForm.setValue({
-      timespan_minutes: this.timespan,
-      quantity: this.quantity,
+      timespanMinutes: this.timespan ? this.timespan.toString() : null,
+      quantity: this.quantity ? this.quantity.toString() : null,
       optionsGroup: {
-        uptime: this.uptime,
-        errorAlert: this.errorAlert,
+        uptime: this.uptime as any,
+        errorAlert: this.errorAlert as any,
       },
     });
 
@@ -142,7 +169,7 @@ export class AlertFormComponent implements OnInit {
   onSubmit(): void {
     if (this.projectAlertForm.valid) {
       this.alertSubmit.emit({
-        timespan_minutes: this.projectFormErrorAlert.value
+        timespanMinutes: this.projectFormErrorAlert.value
           ? this.projectFormTimespan.value
           : null,
         quantity: this.projectFormErrorAlert.value

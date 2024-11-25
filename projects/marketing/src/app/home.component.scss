@@ -1,0 +1,184 @@
+@import '../../../../../glitchtip-frontend/src/assets/styles/variables';
+
+.bot-hero-image {
+  display: block;
+  // position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 70px;
+  left: 0;
+  max-width: 1180px;
+  padding: 0 16px;
+  margin: -180px auto 0;
+
+  @media screen and (max-width: 1199px) {
+    margin-top: -10vw;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-top: -5vw;
+  }
+
+  @media screen and (max-width: 499px) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  ::ng-deep img {
+    display: block;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 -60px 0 auto;
+
+    @media screen and (max-width: 1199px) {
+      max-width: 800px;
+      margin-right: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      right: auto;
+    }
+  }
+}
+
+.hero {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 100px 16px 0;
+
+  @media screen and (max-width: 1199px) {
+    margin: 0 10vw;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+
+  @media screen and (max-width: 479px) {
+    padding: 65px 0 0;
+    font-size: 0.85em;
+
+    .fancy {
+      font-size: 28px;
+      line-height: 32px;
+    }
+  }
+
+  .content {
+    max-width: 550px;
+    margin: 0;
+
+    > p:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .mat-body-1 {
+    font-size: 1.25em;
+    line-height: 1.5em;
+  }
+}
+
+.newsletter {
+  margin-top: 30px;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.centered-block {
+  text-align: center;
+}
+
+.divider {
+  border-top: 1px solid lightgray;
+}
+
+.subscribe-wrapper {
+  display: flex;
+
+  @media screen and (min-width: 501px) {
+    margin: 0 50px;
+  }
+
+  .mc-field-group {
+    flex: 1;
+
+    mat-form-field {
+      width: 100%;
+      padding-right: 20px;
+    }
+  }
+
+  button {
+    top: 9px;
+  }
+}
+
+.fancy-graphic ::ng-deep img {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.feature-description {
+  padding-top: 20px;
+  padding-bottom: 40px;
+
+  .screenshot-header {
+    text-align: center;
+  }
+
+  .screenshots {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 10%;
+
+    @media screen and (max-width: 1199px) {
+      flex-direction: column;
+    }
+
+    .description {
+      width: 45%;
+      text-align: center;
+
+      @media screen and (max-width: 1199px) {
+        width: 100%;
+      }
+    }
+
+    .pad-left {
+      @media screen and (min-width: 1200px) {
+        padding-left: 40px;
+      }
+    }
+
+    .pad-right {
+      @media screen and (min-width: 1200px) {
+        padding-right: 40px;
+      }
+    }
+
+    ::ng-deep img {
+      width: 100%;
+      height: auto;
+      margin: 20px 0;
+      box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .left-right-row {
+    @media screen and (min-width: 1200px) {
+      flex-direction: row;
+    }
+  }
+
+  .right-left-row {
+    @media screen and (min-width: 1200px) {
+      flex-direction: row-reverse;
+    }
+  }
+}

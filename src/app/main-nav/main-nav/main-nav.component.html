@@ -1,221 +1,224 @@
 <mat-sidenav-container>
-  <mat-sidenav
-    #sidenav
-    *ngIf="isLoggedIn$ | async"
-    class="mat-elevation-z4"
-    [opened]="navOpen$ | async"
-    (closed)="closeSideNav()"
-    [mode]="(mobileNav$ | async) === true ? 'over' : 'side'"
-  >
-    <mat-toolbar class="logo-toolbar">
-      <img
-        class="main-logo"
-        routerLink="."
-        src="static/assets/images/glitchtip-logo-v1.svg"
-        alt="GlitchTip"
-      />
-    </mat-toolbar>
-    <mat-nav-list>
-      <ng-container
-        *ngIf="
-          (contextLoaded$ | async) &&
-            (organizations$ | async)?.length === 0 &&
-            (canCreateOrg$ | async);
-          else showOrgMenu
-        "
+  @if (isLoggedIn$ | async) {
+    <mat-sidenav
+      #sidenav
+      class="mat-elevation-z4"
+      [opened]="navOpen$ | async"
+      (closed)="closeSideNav()"
+      [mode]="(mobileNav$ | async) === true ? 'over' : 'side'"
       >
+      <mat-toolbar class="logo-toolbar">
+        <img
+          class="main-logo"
+          routerLink="."
+          src="static/assets/images/glitchtip-logo-v1.svg"
+          alt="GlitchTip"
+          />
+      </mat-toolbar>
+      @if (
+        (contextLoaded$ | async) &&
+        (organizations$ | async)?.length === 0 &&
+        (canCreateOrg$ | async)) {
         <a
-          mat-menu-item
+          mat-button
           id="create-new-link"
           routerLink="/organizations/new"
-          class="no-org-create"
+          class="org-create no-org-create"
           i18n
           >Create New Organization</a
-        >
-      </ng-container>
-      <ng-template #showOrgMenu>
-        <mat-list-item
-          id="org-dropdown"
-          [disabled]="(contextLoaded$ | async) === false"
-          color="accent"
-          [matMenuTriggerFor]="menu"
-          class="org-dropdown-list-item"
-        >
-          <span class="overflow">
-            {{ (activeOrganizationDetail$ | async)?.name }}
-          </span>
-          <span class="down-caret">▼</span>
-        </mat-list-item>
-      </ng-template>
-      <mat-menu #menu="matMenu">
-        <button
-          *ngFor="let organization of organizations$ | async"
-          (click)="setOrganization(organization.id)"
-          mat-menu-item
-        >
-          {{ organization.name }}
-        </button>
-        <mat-divider></mat-divider>
-        <ng-container *ngIf="canCreateOrg$ | async; else creationDisabled">
-          <a
-            mat-menu-item
-            id="create-new-link"
-            routerLink="/organizations/new"
-            i18n
-            >Create New Organization</a
           >
-        </ng-container>
-        <ng-template #creationDisabled>
-          <span
-            mat-menu-item
-            disabled
-            matTooltip="Organization creation is currently disabled"
-            matTooltipPosition="below"
-          >
-            Create New Organization
-          </span>
-        </ng-template>
-      </mat-menu>
-
-      <a
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'issues']"
-        routerLinkActive="active-route"
-        i18n
-        >Issues</a
-      >
-      <a
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'uptime-monitors']"
-        routerLinkActive="active-route"
-        i18n
-        >Uptime Monitors</a
-      >
-      <a
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
+        } @else {
+          <button
+            mat-button
+            id="org-dropdown"
+            [disabled]="(contextLoaded$ | async) === false"
+            [matMenuTriggerFor]="menu"
+            class="org-dropdown"
+            >
+            <div class="label-container">
+              <span class="overflow">
+                {{ (activeOrganizationDetail$ | async)?.name }}
+              </span>
+              <span class="down-caret">▼</span>
+            </div>
+          </button>
+        }
+        <mat-menu #menu="matMenu">
+          @for (organization of organizations$ | async; track organization) {
+            <button
+              (click)="setOrganization(organization.id)"
+              mat-menu-item
+              >
+              {{ organization.name }}
+            </button>
+          }
+          <mat-divider></mat-divider>
+          @if (canCreateOrg$ | async) {
+            <a
+              mat-menu-item
+              id="create-new-link"
+              routerLink="/organizations/new"
+              i18n
+              >Create New Organization</a
+              >
+            } @else {
+              <span
+                mat-menu-item
+                disabled
+                matTooltip="Organization creation is currently disabled"
+                matTooltipPosition="below"
+                >
+                Create New Organization
+              </span>
+            }
+          </mat-menu>
+          <mat-nav-list class="nav-link-list">
+            <a
+              mat-list-item
+              [disabled]="!activeOrganizationLoaded"
+              [routerLink]="[activeOrganizationSlug, 'issues']"
+              routerLinkActive="active-route"
+              i18n
+              >Issues</a
+              >
+              <a
+                mat-list-item
+                [disabled]="!activeOrganizationLoaded"
+                [routerLink]="[activeOrganizationSlug, 'uptime-monitors']"
+                routerLinkActive="active-route"
+                i18n
+                >Uptime Monitors</a
+                >
+                <a
+                  mat-list-item
+                  [disabled]="!activeOrganizationLoaded"
         [routerLink]="[
           activeOrganizationSlug,
           'performance',
           'transaction-groups'
         ]"
-        routerLinkActive="active-route"
-        i18n
-        >Performance</a
-      >
-      <mat-divider class="org-details-divider"></mat-divider>
-      <a
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'projects']"
-        routerLinkActive="active-route"
-        i18n
-        >Projects</a
-      >
-      <a
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'releases']"
-        routerLinkActive="active-route"
-        i18n
-        >Releases</a
-      >
-      <a
-        data-test-settings
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
-        [routerLink]="[activeOrganizationSlug, 'settings']"
-        routerLinkActive="active-route"
-        i18n
-        >Settings</a
-      >
-      <a
-        class="sub-items"
-        mat-list-item
-        [disabled]="!activeOrganizationLoaded"
-        [routerLink]="['/', activeOrganizationSlug, 'settings', 'projects']"
-        routerLinkActive="active-route"
-        i18n
-        >Projects</a
-      >
-      <a
-        *ngIf="billingEnabled$ | async"
-        class="sub-items"
-        mat-list-item
-        [routerLink]="['/', activeOrganizationSlug, 'settings', 'subscription']"
-        routerLinkActive="active-route"
-        i18n
-        >Subscription</a
-      >
-      <a
-        mat-list-item
-        [routerLink]="['/', activeOrganizationSlug, 'settings', 'teams']"
-        routerLinkActive="active-route"
-        class="sub-items"
-        i18n
-        >Teams</a
-      >
-      <a
-        mat-list-item
-        [routerLink]="['/', activeOrganizationSlug, 'settings', 'members']"
-        routerLinkActive="active-route"
-        class="sub-items"
-        i18n
-        >Members</a
-      >
-      <mat-divider class="org-details-divider"></mat-divider>
-      <a
-        mat-list-item
-        [routerLink]="['/profile']"
-        routerLinkActive="active-route"
-        i18n
-        >Profile</a
-      >
-      <a
-        mat-list-item
-        [routerLink]="['/profile']"
-        routerLinkActive="active-route"
-        class="sub-items"
-        i18n
-        >Account</a
-      >
-      <a
-        mat-list-item
-        [routerLink]="['/profile', 'multi-factor-auth']"
-        routerLinkActive="active-route"
-        class="sub-items"
-        i18n
-        >Multi-factor Authentication</a
-      >
-      <a
-        mat-list-item
-        [routerLink]="['/profile', 'notifications']"
-        routerLinkActive="active-route"
-        class="sub-items"
-        i18n
-        >Notifications</a
-      >
-      <a
-        mat-list-item
-        [routerLink]="['/profile', 'auth-tokens']"
-        routerLinkActive="active-route"
-        class="sub-items"
-        i18n
-        >Auth Tokens</a
-      >
-      <button mat-menu-item (click)="this.logout()" i18n>Log Out</button>
-    </mat-nav-list>
-
-    <mat-card *ngIf="(paidForGlitchTip$ | async) === false" class="nagware">
-      <mat-card-title>
-        <h3 class="mat-display-1" i18n>Support GlitchTip</h3>
-      </mat-card-title>
-      <mat-card-content>
-        <ul>
-          <li i18n
-            >Donate
+                  routerLinkActive="active-route"
+                  i18n
+                  >Performance</a
+                  >
+                  <mat-divider class="org-details-divider"></mat-divider>
+                  <a
+                    mat-list-item
+                    [disabled]="!activeOrganizationLoaded"
+                    [routerLink]="[activeOrganizationSlug, 'projects']"
+                    routerLinkActive="active-route"
+                    i18n
+                    >Projects</a
+                    >
+                    <a
+                      mat-list-item
+                      [disabled]="!activeOrganizationLoaded"
+                      [routerLink]="[activeOrganizationSlug, 'releases']"
+                      routerLinkActive="active-route"
+                      i18n
+                      >Releases</a
+                      >
+                      <a
+                        data-test-settings
+                        mat-list-item
+                        [disabled]="!activeOrganizationLoaded"
+                        [routerLink]="[activeOrganizationSlug, 'settings']"
+                        routerLinkActive="active-route"
+                        i18n
+                        >Settings</a
+                        >
+                        <a
+                          class="sub-items"
+                          mat-list-item
+                          [disabled]="!activeOrganizationLoaded"
+                          [routerLink]="['/', activeOrganizationSlug, 'settings', 'projects']"
+                          routerLinkActive="active-route"
+                          i18n
+                          >Projects</a
+                          >
+                          @if (billingEnabled$ | async) {
+                            <a
+                              class="sub-items"
+                              mat-list-item
+                              [routerLink]="['/', activeOrganizationSlug, 'settings', 'subscription']"
+                              routerLinkActive="active-route"
+                              i18n
+                              >Subscription</a
+                              >
+                            }
+                            <a
+                              mat-list-item
+                              [routerLink]="['/', activeOrganizationSlug, 'settings', 'teams']"
+                              routerLinkActive="active-route"
+                              class="sub-items"
+                              i18n
+                              >Teams</a
+                              >
+                              <a
+                                mat-list-item
+                                [routerLink]="['/', activeOrganizationSlug, 'settings', 'members']"
+                                routerLinkActive="active-route"
+                                class="sub-items"
+                                i18n
+                                >Members</a
+                                >
+                                <mat-divider class="org-details-divider"></mat-divider>
+                                <a
+                                  mat-list-item
+                                  [routerLink]="['/profile']"
+                                  routerLinkActive="active-route"
+                                  i18n
+                                  >Profile</a
+                                  >
+                                  <a
+                                    mat-list-item
+                                    [routerLink]="['/profile']"
+                                    routerLinkActive="active-route"
+                                    [routerLinkActiveOptions]="{ exact: true }"
+                                    class="sub-items"
+                                    i18n
+                                    >Account</a
+                                    >
+                                    <a
+                                      mat-list-item
+                                      [routerLink]="['/profile', 'multi-factor-auth']"
+                                      routerLinkActive="active-route"
+                                      [routerLinkActiveOptions]="{ exact: true }"
+                                      class="sub-items"
+                                      i18n
+                                      >Multi-factor Authentication</a
+                                      >
+                                      <a
+                                        mat-list-item
+                                        [routerLink]="['/profile', 'notifications']"
+                                        routerLinkActive="active-route"
+                                        [routerLinkActiveOptions]="{ exact: true }"
+                                        class="sub-items"
+                                        i18n
+                                        >Notifications</a
+                                        >
+                                        <a
+                                          mat-list-item
+                                          [routerLink]="['/profile', 'auth-tokens']"
+                                          routerLinkActive="active-route"
+                                          [routerLinkActiveOptions]="{ exact: true }"
+                                          class="sub-items"
+                                          i18n
+                                          >Auth Tokens</a
+                                          >
+                                          <button mat-menu-item (click)="this.logout()" i18n>Log Out</button>
+                                        </mat-nav-list>
+                                        @if ((paidForGlitchTip$ | async) === false) {
+                                          <mat-card class="nagware">
+                                            <mat-card-header>
+                                              <mat-card-title>
+                                                <h3 i18n>Support GlitchTip</h3>
+                                              </mat-card-title>
+                                            </mat-card-header>
+                                            <mat-card-content>
+                                              <ul class="mat-body-1">
+                                                <li i18n
+                                                  >Donate
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -224,7 +227,7 @@
               via Liberapay
             </a>
           </li>
-          <li i18n>
+                                                <li i18n>
             Switch to
             <a
               target="_blank"
@@ -233,35 +236,37 @@
               >Hosted GlitchTip</a
             >
           </li>
-          <li i18n>
+                                                  <li i18n>
             Purchase support:
             <a
               href="mailto:sales@glitchtip.com?subject=Purchase support inquiry"
-              >sales@glitchtip.com</a
+              >sales&#64;glitchtip.com</a
             >
           </li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
-  </mat-sidenav>
+                                                  </ul>
+                                                </mat-card-content>
+                                              </mat-card>
+                                            }
+                                            <div class="mat-typography version">
+                                              <a
+                                                [routerLink]="['/system-info']"
+                                                routerLinkActive="active-route"
+                                                i18n
+                                                >GlitchTip {{ version$ | async }}</a
+                                                >
+                                              </div>
+                                            </mat-sidenav>
+                                          }
 
-  <mat-sidenav-content>
-    <mat-toolbar
-      *ngIf="isLoggedIn$ | async"
-      (click)="toggleSideNav()"
-      color="primary"
-    >
-      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon> </button
-      ><span
-        class="active-org"
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        >{{ orgDetails?.name }}</span
-      >
-    </mat-toolbar>
-
-    <div class="wrapper">
-      <ng-content></ng-content>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+                                          <mat-sidenav-content>
+                                            @if (isLoggedIn$ | async) {
+                                              <gt-mobile-nav-toolbar
+                                                [activeOrg]="activeOrganizationDetail$ | async"
+                                                (buttonClicked)="toggleSideNav()"
+                                              ></gt-mobile-nav-toolbar>
+                                            }
+                                            <div class="wrapper">
+                                              <ng-content></ng-content>
+                                            </div>
+                                          </mat-sidenav-content>
+                                        </mat-sidenav-container>

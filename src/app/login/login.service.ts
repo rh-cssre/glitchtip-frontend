@@ -1,236 +1,168 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { EMPTY } from "rxjs";
-import { catchError, map, tap, exhaustMap, withLatestFrom } from "rxjs/operators";
-import { encode, decode } from "cborg";
-import { StatefulService } from "../shared/stateful-service/stateful-service";
-import { ServerError } from "../shared/django.interfaces";
-import { AuthService } from "../api/auth/auth.service";
-import { LoginResponse, ValidAuth } from "../api/auth/auth.interfaces";
+import { Injectable, computed } from "@angular/core";
+import { catchError, of, tap, throwError } from "rxjs";
+import { APIState } from "../shared/shared.interfaces";
+import { AuthService } from "../auth.service";
+import {
+  AllAuthError,
+  AllAuthHttpErrorResponse,
+  AllAuthLoginNotAuthResponse,
+  AuthFlow,
+} from "../api/allauth/allauth.interfaces";
+import {
+  messagesLookup,
+  reduceParamErrors,
+} from "../api/allauth/errorMessages";
+import { handleAllAuthErrorResponse } from "../api/allauth/allauth.utils";
+import { StatefulService } from "../shared/stateful-service/signal-state.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
-const baseUrl = "/rest-auth";
-
-interface LoginState {
-  loading: boolean;
-  error: ServerError | null;
-  validAuth: ValidAuth[] | null;
-  useTOTP: boolean;
-  authInProg: boolean;
+export interface LoginState extends APIState {
+  errors: AllAuthError[];
+  validAuth: null;
   rememberRequest: boolean;
+  authFlows: AuthFlow[] | null;
+  preferTOTP: boolean; // User selected totp/recovery over webauthn
 }
 
 const initialState: LoginState = {
   loading: false,
-  error: null,
+  errors: [],
   validAuth: null,
-  useTOTP: false,
-  authInProg: false,
   rememberRequest: false,
+  authFlows: null,
+  preferTOTP: false,
 };
 
 @Injectable({
   providedIn: "root",
 })
 export class LoginService extends StatefulService<LoginState> {
-  loading$ = this.getState$.pipe(map((state) => state.loading));
-  error$ = this.getState$.pipe(map((state) => state.error));
-  requiresMFA$ = this.getState$.pipe(map((state) => !!state.validAuth));
-  hasFIDO2$ = this.getState$.pipe(
-    map((state) => state.validAuth?.includes("FIDO2"))
+  mfaAuthenticate = computed(() => {
+    let authMfaFlows = this.authService.mfaFlows();
+    const authFlows = this.state().authFlows;
+
+    if (authFlows) {
+      authMfaFlows = authMfaFlows.concat(authFlows);
+    }
+    return authMfaFlows.find((authFlow) => authFlow.id === "mfa_authenticate");
+  });
+  hasWebAuthn = computed(
+    () => this.mfaAuthenticate()?.types?.includes("webauthn") || false,
   );
-  hasTOTP$ = this.getState$.pipe(
-    map((state) => state.validAuth?.includes("TOTP"))
+  requiresMfa = computed(() => !!this.mfaAuthenticate());
+  preferTOTP = computed(() => this.state().preferTOTP && this.hasWebAuthn());
+  loading = computed(() => this.state().loading);
+  formErrors = computed(() =>
+    messagesLookup(
+      this.state().errors.filter(
+        (err) => err.code === "email_password_mismatch" || !err.param,
+      ),
+    ),
   );
-  authInProg$ = this.getState$.pipe(map((state) => state.authInProg));
-  rememberRequest$ = this.getState$.pipe(map((state) => state.rememberRequest));
-  useTOTP$ = this.getState$.pipe(map((state) => state.useTOTP));
-  constructor(private http: HttpClient, private authService: AuthService) {
+  fieldErrors = computed(() =>
+    reduceParamErrors(
+      this.state().errors.filter(
+        (err) => err.param && err.code !== "email_password_mismatch",
+      ),
+    ),
+  );
+
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     super(initialState);
   }
 
+  reset() {
+    this.state.set(initialState);
+  }
+
+  /** User initiated request to bail on MFA */
+  restartLogin() {
+    this.setState({ authFlows: null });
+    this.authService.restartLogin();
+  }
+
   login(email: string, password: string) {
-    const url = baseUrl + "/login/";
-    const data = {
-      email,
-      password,
-    };
-    this.setState({ loading: true, error: null });
-    return this.http.post<LoginResponse | null>(url, data).pipe(
+    this.setState({ loading: true, errors: [] });
+    return this.authService.login(email, password).pipe(
+      tap(() => this.state.set(initialState)),
       tap((resp) => {
-        if (resp?.requires_mfa) {
-          this.promptForMFA(resp.valid_auth);
-        } else {
-          this.authService.afterLogin();
+        if (resp.meta.is_authenticated) {
+          this.redirect();
         }
       }),
-      catchError((err) => {
-        let error: ServerError | null = null;
-        if (err.status === 400) {
-          error = err.error;
+      catchError((err: AllAuthHttpErrorResponse) => {
+        if (err.status === 401) {
+          // Valid login, but not yet authenticated
+          const resp = err.error as AllAuthLoginNotAuthResponse;
+          this.setState({ loading: false, authFlows: resp.data.flows });
+          return of(undefined);
         } else {
-          error = { non_field_errors: ["Error"] };
+          this.setState({
+            loading: false,
+            errors: handleAllAuthErrorResponse(err),
+          });
+          if ([400, 500].includes(err.status)) {
+            return of(undefined);
+          }
+          return throwError(() => err);
         }
-        this.setState({ loading: false, error });
-        return EMPTY;
-      })
+      }),
     );
   }
 
-  promptForMFA(validAuth: ValidAuth[]) {
-    this.setState({ validAuth, loading: false, error: null });
+  redirect() {
+    const nextUrl = this.route.snapshot.queryParamMap.get("next");
+    if (nextUrl) {
+      if (nextUrl.startsWith("/admin/")) {
+        // Load Django, not JS router
+        window.location.href = nextUrl;
+      } else {
+        this.router.navigateByUrl(nextUrl);
+      }
+    } else {
+      this.router.navigate(["/"]);
+    }
+  }
+
+  socialLogin(provider: string, callbackUrl = "/") {
+    this.setState({ loading: true, errors: [] });
+    this.authService.providerRedirect(provider, callbackUrl, "login");
   }
 
   switchMethod() {
-    const currentVal = this.state.value.useTOTP;
-    this.setState({ useTOTP: !currentVal, error: null });
+    this.state.update((state) => ({ ...state, preferTOTP: !state.preferTOTP }));
   }
 
-  authenticateFIDO2() {
-    const url = "/api/mfa/authenticate/fido2/";
-    this.setState({ loading: true, error: null, authInProg: true });
-    return this.http
-      .get(url, {
-        headers: {
-          Accept: "application/octet-stream",
-        },
-        responseType: "arraybuffer",
-      })
-      .pipe(
-        map((response) => {
-          const converted = new Uint8Array(response);
-          return decode(converted);
-        }),
-        exhaustMap(async (options) => {
-          const credResult = await navigator.credentials.get(options);
-          if (credResult == null) {
-            throw Error;
-          } else {
-            return credResult as PublicKeyCredential;
-          }
-        }),
-        map((resp) => {
-          if (resp === undefined) {
-            throw Error;
-          } else {
-            const assertionResponse =
-              resp.response as AuthenticatorAssertionResponse;
-            return encode({
-              credentialId: new Uint8Array(resp.rawId),
-              authenticatorData: new Uint8Array(
-                assertionResponse.authenticatorData
-              ),
-              clientDataJSON: new Uint8Array(assertionResponse.clientDataJSON),
-              signature: new Uint8Array(assertionResponse.signature),
-            });
-          }
-        }),
-        exhaustMap((body) => {
-          if (body === undefined) {
-            throw Error;
-          } else {
-            return this.http.post(url, body.buffer, {
-              headers: {
-                "content-type": "application/cbor",
-              },
-            });
-          }
-        }),
-        withLatestFrom(this.rememberRequest$),
-        tap(([_, rememberRequest]) => {
-          if (rememberRequest) {
-            this.rememberDevice().toPromise();
-          }
-          this.clearState();
-          this.authService.afterLogin();
-        }),
-        catchError((err) => {
-          let error: ServerError | null = null;
-          if (this.state.value.useTOTP === false) {
-            if (err.status === 400) {
-              error = { non_field_errors: err.error };
-            } else {
-              error = {
-                non_field_errors: [
-                  "Security key authentication was unsuccessful.",
-                ],
-              };
-            }
-            this.setState({ loading: false, error, authInProg: false });
-          }
-          return EMPTY;
-        })
-      );
-  }
-
-  toggleRemember(request = false) {
-    this.setState({ rememberRequest: request });
-  }
-
-  authenticateTOTP(code: string, remember = false) {
-    const url = "/api/mfa/authenticate/totp/";
-    const data = {
-      otp: code,
-    };
-    this.setState({ loading: true, error: null });
-    return this.http.post(url, data).pipe(
-      tap(() => {
-        this.clearState();
-        if (remember) {
-          this.rememberDevice().toPromise();
+  webAuthnAuthenticate() {
+    return this.authService.webAuthnAuthenticate().pipe(
+      tap((resp) => {
+        if (resp.meta.is_authenticated) {
+          this.redirect();
         }
-        this.authService.afterLogin();
       }),
-      catchError((err) => {
-        let error: ServerError | null = null;
-        if (err.status === 400) {
-          error = { non_field_errors: err.error };
-        } else {
-          error = { non_field_errors: ["Error"] };
-        }
-        this.setState({ loading: false, error });
-        return EMPTY;
-      })
     );
   }
 
-  /** Create a new trusted device key, save as cookie */
-  rememberDevice() {
-    const url = "/api/mfa/user_keys/trusted_device/";
-    return this.http.get<{ key: string; user_agent: string }>(url).pipe(
-      exhaustMap((response) => {
-        const expire = new Date();
-        expire.setTime(expire.getTime() + 1000 * 86400 * 180); // 180 days
-        document.cookie = `remember_device_key=${response.key}; expires=${expire}; path=/`;
-        return this.http.post(url, response);
-      })
-    );
-  }
-
-  authenticateBackupCode(code: string) {
-    const url = "/api/mfa/authenticate/backup_codes/";
-    const data = {
-      code,
-    };
-    this.setState({ loading: true, error: null });
-    return this.http.post(url, data).pipe(
-      tap(() => {
-        this.clearState();
-        this.authService.afterLogin();
-      }),
-      catchError((err) => {
-        let error: ServerError | null = null;
-        if (err.status === 400) {
-          if (err.error.code) {
-            error = err.error;
-          } else {
-            error = { non_field_errors: err.error };
-          }
-        } else {
-          error = { non_field_errors: ["Error"] };
+  totpAuthenticate(code: string) {
+    return this.authService.mfaAuthenticate(code).pipe(
+      tap((resp) => {
+        if (resp.meta.is_authenticated) {
+          this.redirect();
         }
-        this.setState({ loading: false, error });
-        return EMPTY;
-      })
+      }),
+      catchError((err: AllAuthHttpErrorResponse) => {
+        this.setState({
+          errors: handleAllAuthErrorResponse(err),
+        });
+        if ([400, 500].includes(err.status)) {
+          return of(undefined);
+        }
+        return throwError(() => err);
+      }),
     );
   }
 }
