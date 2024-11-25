@@ -1,12 +1,13 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 mat-card-header {
-  padding-bottom: 12px;
-}
+  align-items: center;
+  margin-bottom: 12px;
 
-mat-card-title {
-  margin-left: -16px;
+  mat-card-title {
+    padding-bottom: 0;
+  }
 }
 
 .mat-card-title {
@@ -24,7 +25,6 @@ mat-card-title {
 }
 
 .new-alert {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
   margin-left: -16px;
   margin-right: -16px;
   padding-left: 16px;
@@ -75,7 +75,7 @@ mat-card-title {
 .tooltip {
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
+  text-decoration-color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 500);
   cursor: help;
 }
 
@@ -88,11 +88,11 @@ mat-card-title {
 .no-recipients {
   width: 50%;
   padding: 8px 16px;
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+  background-color: color-mix(in srgb, var(--mat-expansion-container-background-color) 92%, gray);
 }
 
 .no-recipients-new {
-  background-color: #ffffff;
+  background-color: var(--mat-expansion-container-background-color);
 }
 
 .recipients {

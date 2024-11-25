@@ -1,96 +1,113 @@
 <div class="auth-form-wrapper">
   <mat-card class="auth-form">
-    <h1 i18n>Register</h1>
+    <mat-card-header>
+      <mat-card-title>
+        <h3 i18n>Register</h3>
+      </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-error *ngIf="error">{{ error }}</mat-error>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            autofocus
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-          />
+        <gt-form-error [errors]="formErrors()"></gt-form-error>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput autofocus type="email" formControlName="email" />
           <mat-error>
-            <span *ngIf="email?.errors?.required"
-              >Your email is required to sign up</span
-            >
-            <span *ngIf="email?.errors?.email"
-              >Enter a valid email address</span
-            >
-            <span *ngIf="email?.errors?.serverError">{{
-              email?.errors?.serverError
-            }}</span>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            type="password"
-            placeholder="Password"
-            formControlName="password1"
-          />
-          <mat-error>
-            <span *ngIf="password1?.errors"
-              >Your password should be at least 8 characters long</span
-            >
-            <span *ngIf="password1?.errors?.required"
-              >A password is required to sign up</span
-            >
-            <span *ngIf="password1?.errors?.serverError">{{
-              password1?.errors?.serverError
-            }}</span>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <input
-            matInput
-            type="password"
-            placeholder="Confirm Password"
-            formControlName="password2"
-            gtInputMatcher="password1"
-          />
+            @if (email?.errors?.required) {
+              <span
+                >Your email is required to sign up</span
+                >
+              }
+              @if (email?.errors?.email) {
+                <span
+                  >Enter a valid email address</span
+                  >
+                }
+                @if (email?.errors?.serverError) {
+                  <span>{{
+                    email?.errors?.serverError
+                  }}</span>
+                }
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label i18n>Password</mat-label>
+              <input matInput type="password" formControlName="password" />
+              <mat-error>
+                @if (password?.errors?.minlength) {
+                  <span
+                    >Your password should be at least 8 characters long</span
+                    >
+                  }
+                  @if (password?.errors?.required) {
+                    <span
+                      >A password is required to sign up</span
+                      >
+                    }
+                    @if (password?.errors?.serverError) {
+                      <span>{{
+                        password?.errors?.serverError
+                      }}</span>
+                    }
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label i18n>Confirm password</mat-label>
+                  <input
+                    matInput
+                    type="password"
+                    placeholder="Confirm Password"
+                    formControlName="password2"
+                    gtInputMatcher="password"
+                    />
 
-          <mat-error>
-            <span *ngIf="password2?.errors?.required"
-              >A password is required to sign up</span
-            >
-            <span *ngIf="password2?.errors?.notEqual"
-              >Your passwords don't match</span
-            >
-            <span *ngIf="password2?.errors?.serverError">{{
-              password2?.errors?.serverError
-            }}</span>
-          </mat-error>
-        </mat-form-field>
-        <button id="submit" class="full-width" mat-flat-button color="primary">
-          Register
-        </button>
-      </form>
-      <ng-container *ngIf="socialApps$ | async as socialApps">
-        <div *ngIf="socialApps.length" class="or">
-          <span class="mat-body-strong mat-body-2">or</span>
-        </div>
-        <div class="o-auth">
-          <button
-            *ngFor="let socialApp of socialApps"
-            mat-stroked-button
-            class="full-width margin"
-            (click)="onSocialApp(socialApp)"
-          >
-            <gt-auth-svg
-              source="auth"
-              text="Register with {{ socialApp.name }}"
-              [provider]="socialApp.provider"
-            ></gt-auth-svg>
-          </button>
-        </div>
-      </ng-container>
-    </mat-card-content>
-    <p class="mat-body-1 sign-up">
-      <ng-container i18n>Already have an account?</ng-container>
-      <br><a routerLink="../login" i18n>Log In</a>
-    </p>
-  </mat-card>
-</div>
+                  <mat-error>
+                    @if (password2?.errors?.required) {
+                      <span
+                        >A password is required to sign up</span
+                        >
+                      }
+                      @if (password2?.errors?.notEqual) {
+                        <span
+                          >Your passwords don't match</span
+                          >
+                        }
+                        @if (password2?.errors?.serverError) {
+                          <span>{{
+                            password2?.errors?.serverError
+                          }}</span>
+                        }
+                      </mat-error>
+                    </mat-form-field>
+                    <button id="submit" class="full-width" mat-flat-button color="primary">
+                      Register
+                    </button>
+                  </form>
+                  @if (socialApps$ | async; as socialApps) {
+                    @if (socialApps.length) {
+                      <div class="or">
+                        <span class="mat-body-strong">or</span>
+                      </div>
+                    }
+                    <div class="o-auth">
+                      @for (socialApp of socialApps; track socialApp) {
+                        <button
+                          mat-stroked-button
+                          class="full-width margin"
+                          (click)="onSocialApp(socialApp)"
+                          >
+                          <gt-auth-svg
+                            source="auth"
+                            text="Register with {{ socialApp.name }}"
+                            [provider]="socialApp.provider"
+                          ></gt-auth-svg>
+                        </button>
+                      }
+                    </div>
+                  }
+                </mat-card-content>
+                <p class="mat-body-1 sign-up">
+                  <ng-container i18n>Already have an account?</ng-container>
+                  <br /><a routerLink="../login" i18n>Log In</a>
+                </p>
+              </mat-card>
+            </div>

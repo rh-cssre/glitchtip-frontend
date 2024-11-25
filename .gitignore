@@ -47,3 +47,8 @@ testem.log
 Thumbs.db
 cypress/screenshots
 cypress/videos
+
+projects/marketing/routes.txt
+buildStaticSite.js
+projects/marketing/public/blog/blogIndex.json
+projects/marketing/public/blog/rss.xml

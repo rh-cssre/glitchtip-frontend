@@ -1,74 +1,112 @@
 <section class="l-body">
   <mat-card>
-    <mat-card-title> Add Member to Organization </mat-card-title>
+    <mat-card-header>
+      <mat-card-title> Add Member to Organization </mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-error
-          class="server-error"
-          *ngIf="(errors$ | async)?.addOrganizationMember as error"
-          >{{ error }}</mat-error
-        >
-        <div>
-          <h2>Email(s)</h2>
-          <p class="email-paragraph">
-            Invite a member to join this organization via their email address.
-            <span *ngIf="enableUserRegistration$ | async;else restrictedRegistration">If they do not already have an account, they will first be asked to create one</span>
-            <ng-template #restrictedRegistration>Only existing GlitchTip users may be invited.</ng-template>
-            Multiple emails delimited by commas.
-          </p>
-          <mat-form-field>
-            <input
-              matInput
-              type="email"
-              placeholder="Email"
-              formControlName="email"
-            />
-            <mat-error *ngIf="form.get('email')?.errors">
-              <span *ngIf="form.get('email')?.errors?.invalidEmails">
-                Enter a valid email</span
-              >
-              <span *ngIf="form.get('email')?.errors?.required"
-                >Enter at least one email</span
-              >
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div>
-          <h2>Role</h2>
-          <mat-radio-group formControlName="role">
-            <mat-radio-button value="member">Member</mat-radio-button>
-            <mat-radio-button value="admin">Admin</mat-radio-button>
-            <mat-radio-button value="manager">Manager</mat-radio-button>
-            <mat-radio-button value="owner">Owner</mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <p>Organization member status grants view access to all of an organization’s issues handled by GlitchTip.</p>
-        <div>
-          <h2>Team</h2>
-          <mat-form-field>
-            <mat-label>Add Team</mat-label>
-            <mat-select multiple formControlName="teams" disableOptionCentering>
-              <ng-container
-                *ngIf="(organizationTeams$ | async)?.length; else emptyState"
-              >
-                <mat-option
-                  *ngFor="let team of organizationTeams$ | async"
-                  [value]="team.slug"
-                >
-                  {{ team.slug }}
-                </mat-option></ng-container
-              ><ng-template #emptyState>
-                <mat-option disabled>No Teams</mat-option>
-              </ng-template>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <gt-loading-button
-          buttonText="Add Member(s)"
-          [loading]="(loading$ | async)?.addOrganizationMember"
-        ></gt-loading-button>
-      </form>
-    </mat-card-content>
-  </mat-card>
-</section>
+        @if ((errors$ | async)?.addOrganizationMember; as error) {
+          <mat-error
+            class="server-error"
+            >{{ error }}</mat-error
+            >
+          }
+          <div>
+            <h2>Email(s)</h2>
+            <p class="email-paragraph">
+              Invite a member to join this organization via their email address.
+              @if (
+                enableUserRegistration$ | async) {
+                <span
+                  >If they do not already have an account, they will first be asked
+                  to create one.</span
+                  >
+                } @else {
+                  Only existing GlitchTip users may be invited.
+                }
+                Multiple emails delimited by commas.
+              </p>
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" />
+                @if (form.get('email')?.errors) {
+                  <mat-error>
+                    @if (form.get('email')?.errors?.invalidEmails) {
+                      <span>
+                        Enter a valid email</span
+                        >
+                      }
+                      @if (form.get('email')?.errors?.required) {
+                        <span
+                          >Enter at least one email</span
+                          >
+                        }
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div>
+                  <h2>Role</h2>
+                  <mat-radio-group formControlName="role">
+                    <mat-radio-button value="member">Member</mat-radio-button>
+                    <mat-radio-button value="admin">Admin</mat-radio-button>
+                    <mat-radio-button value="manager">Manager</mat-radio-button>
+                    <mat-radio-button value="owner">Owner</mat-radio-button>
+                  </mat-radio-group>
+                  <div class="role-description">
+                    @if (formRole.value === 'member') {
+                      <span i18n
+                        >Members can view and act on events, as well as view most other
+              data within the organization.</span
+                        >
+                      }
+                      @if (formRole.value === 'admin') {
+                        <span i18n
+                          >Admin privileges on any teams of which user is a member. They can
+              create new teams and projects, as well as delete teams and
+              projects they are already members of. Additionally, they can
+              manage memberships of teams that they are members of.</span
+                          >
+                        }
+                        @if (formRole.value === 'manager') {
+                          <span i18n
+                            >Gains admin access on all teams as well as the ability to add and
+              remove members.</span
+                            >
+                          }
+                          @if (formRole.value === 'owner') {
+                            <span i18n
+                              >Unrestricted access to the organization, its data, and its
+              settings. Can add, modify, and delete projects and members.</span
+                              >
+                            }
+                          </div>
+                        </div>
+                        <div>
+                          <h2>Team</h2>
+                          <mat-form-field appearance="outline">
+                            <mat-label>Add Team</mat-label>
+                            <mat-select multiple formControlName="teams" disableOptionCentering>
+                              @if ((organizationTeams$ | async)?.length) {
+                                @for (team of organizationTeams$ | async; track team) {
+                                  <mat-option
+                                    [value]="team.slug"
+                                    >
+                                    {{ team.slug }}
+                                  </mat-option>
+                                }
+                              } @else {
+                                <mat-option disabled>No Teams</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <gt-loading-button
+                          buttonText="Add Member(s)"
+                          [loading]="(loading$ | async)?.addOrganizationMember"
+                        ></gt-loading-button>
+                      </form>
+                    </mat-card-content>
+                  </mat-card>
+                </section>

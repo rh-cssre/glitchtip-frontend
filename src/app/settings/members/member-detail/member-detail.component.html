@@ -1,73 +1,160 @@
-<section class="l-body" *ngIf="memberDetail$ | async as member">
-  <header class="page-header">
-    <h1 class="mat-display-1">
-      {{ member.email }}
-    </h1>
-    <a mat-flat-button [routerLink]="['..']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      Back to Members
-    </a>
-  </header>
-  <mat-card>
-    <mat-card-title>Basics</mat-card-title><mat-divider></mat-divider>
-    <mat-card-content class="basics-content">
-      <div class="column">
-        <div class="mat-body-strong">Email</div>
-        <div>{{ member.email }}</div>
-      </div>
-      <div class="column">
-        <div class="mat-body-strong">Role</div>
-        <div>{{ member.roleName }}</div>
-      </div>
-      <div class="column">
-        <div class="mat-body-strong">Added</div>
-        <div>{{ member.dateCreated | date }}</div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>Role</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-error *ngIf="updateMemberError$ | async as error">{{
-          error
-        }}</mat-error>
-        <div>
-          <mat-radio-group formControlName="role">
-            <mat-radio-button value="member">Member</mat-radio-button>
-            <mat-radio-button value="admin">Admin</mat-radio-button>
-            <mat-radio-button value="manager">Manager</mat-radio-button>
-            <mat-radio-button value="owner">Owner</mat-radio-button>
-          </mat-radio-group>
-          <gt-loading-button
-            *ngIf="member.role !== form.get('role')?.value"
-            [loading]="(updateMemberLoading$ | async) === true"
-            buttonText="Update Member"
-          ></gt-loading-button>
+@if (member$ | async; as member) {
+  <section class="l-body">
+    <gt-detail-header [title]="member.email" backLinkText="Back to Members" />
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title il8n>Basics</mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content class="basics-content">
+        <div class="column">
+          <div class="mat-body-strong" i18n>Email</div>
+          <div>{{ member.email }}</div>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>Team(s)</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <ng-container *ngIf="member.teams.length === 0; else listMembers">
-        <p class="center-text">This user isn't on any teams.</p>
-      </ng-container>
-      <ng-template #listMembers>
-        <mat-list>
-          <mat-list-item *ngFor="let team of member?.teams">
-            <a
-              mat-line
-              [routerLink]="['teams', team, 'members']"
-              [relativeTo]="this.route.parent?.parent"
-              >{{ team }}</a
-            >
-          </mat-list-item>
-        </mat-list></ng-template
-      >
-    </mat-card-content>
-  </mat-card>
-</section>
+        <div class="column">
+          <div class="mat-body-strong" i18n>Role</div>
+          <div>{{ member.roleName }}</div>
+        </div>
+        <div class="column">
+          <div class="mat-body-strong" i18n>Added</div>
+          <div>{{ member.dateCreated | date }}</div>
+        </div>
+        @if (member.isOwner) {
+          <div class="column">
+            <mat-chip color="primary" highlighted="true" i18n
+              >Account Owner</mat-chip
+              >
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title i18n>Role</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            @if (updateMemberError$ | async; as error) {
+              <mat-error>{{
+                error
+              }}</mat-error>
+            }
+            <div class="role-form-elements">
+              <mat-radio-group formControlName="role">
+                <mat-radio-button value="member">Member</mat-radio-button>
+                <mat-radio-button value="admin">Admin</mat-radio-button>
+                <mat-radio-button value="manager">Manager</mat-radio-button>
+                <mat-radio-button value="owner">Owner</mat-radio-button>
+              </mat-radio-group>
+              <div class="role-button-container">
+                <gt-loading-button
+                  [disabled]="member.role === formRole.value"
+                  [loading]="(updateMemberLoading$ | async) === true"
+                  buttonText="Update Member"
+                ></gt-loading-button>
+              </div>
+            </div>
+          </form>
+          <div class="role-description">
+            @if (formRole.value === 'member') {
+              <span i18n
+                >Members can view and act on events, as well as view most other data
+          within the organization.</span
+                >
+              }
+              @if (formRole.value === 'admin') {
+                <span i18n
+                  >Admin privileges on any teams of which user is a member. They can
+          create new teams and projects, as well as delete teams and projects
+          they are already members of. Additionally, they can manage memberships
+          of teams that they are members of.</span
+                  >
+                }
+                @if (formRole.value === 'manager') {
+                  <span i18n
+                    >Gains admin access on all teams as well as the ability to add and
+          remove members.</span
+                    >
+                  }
+                  @if (formRole.value === 'owner') {
+                    <span i18n
+                      >Unrestricted access to the organization, its data, and its settings.
+          Can add, modify, and delete projects and members.</span
+                      >
+                    }
+                  </div>
+                  <div class="role-scopes">
+                    @if (selectedRoleScopes$ | async; as scopes) {
+                      <div class="mat-body-strong" i18n>Scopes:</div>
+                      <div>{{ scopes }}</div>
+                    }
+                  </div>
+                </mat-card-content>
+              </mat-card>
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title i18n>Organization Account Ownership</mat-card-title>
+                </mat-card-header>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                  @if (!member.isOwner) {
+                    @if (transferOrgOwnershipError$ | async; as error) {
+                      <mat-error>{{
+                        error
+                      }}</mat-error>
+                    }
+                    <p i18n>
+          The account owner has access to the organization's GlitchTip
+          subscription settings. If you are the current account owner or have an
+          owner role, you may transfer ownership to this member.
+        </p>
+                    <gt-loading-button
+                      buttonText="Transfer Ownership"
+                      [loading]="(transferOrgOwnershipLoading$ | async) === true"
+                      (buttonClick)="transferOrgOwnership()"
+                      >
+                      Change Password
+                    </gt-loading-button>
+                  } @else {
+                    <p i18n>
+          This member is the organization account owner and has access to the
+          organization's GlitchTip subscription settings.
+        </p>
+                  }
+                  <ng-template #isOwner>
+                    <p i18n>
+          This member is the organization account owner and has access to the
+          organization's GlitchTip subscription settings.
+        </p>
+                  </ng-template>
+                </mat-card-content>
+              </mat-card>
+              @if (memberTeams$ | async; as memberTeams) {
+                <mat-card>
+                  <mat-card-header>
+                    <mat-card-title i18n>Team(s)</mat-card-title>
+                  </mat-card-header>
+                  <mat-divider></mat-divider>
+                  <mat-card-content>
+                    @if (memberTeams.length === 0) {
+                      <p class="center-text" i18n>This user isn't on any teams.</p>
+                    } @else {
+                      <mat-list>
+                        @for (team of memberTeams; track team) {
+                          <mat-list-item>
+                            <a
+                              mat-line
+                              [routerLink]="['teams', team, 'members']"
+                              [relativeTo]="this.route.parent?.parent"
+                              >{{ team }}</a
+                              >
+                            </mat-list-item>
+                          }
+                        </mat-list>
+                      }
+                    </mat-card-content>
+                  </mat-card>
+                }
+              </section>
+            }
