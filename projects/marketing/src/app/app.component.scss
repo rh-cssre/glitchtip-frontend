@@ -1,0 +1,119 @@
+@import '/src/assets/styles/themes';
+
+.mat-toolbar {
+  position: absolute;
+  justify-content: space-between;
+  background: transparent;
+  z-index: 1;
+  max-width: 1180px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+
+  @media screen and (max-width: 1199px) {
+    width: 80vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    left: 0;
+    transform: none;
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 90vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    padding: 0;
+  }
+
+  @media screen and (max-width: 450px) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .logo {
+    width: 130px;
+    margin-top: 15px;
+
+    @media screen and (max-width: 767px) {
+      width: 100px;
+    }
+  }
+
+  > div a {
+    margin-left: 15px;
+  }
+}
+
+footer {
+  width: 100%;
+  background: $amaranth;
+  // This pushes it to the bottom when not enough content is on the page
+  margin-top: auto;
+  margin-bottom: -5px;
+  padding: 30px 0;
+  color: white;
+
+  .big-card-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 0;
+    > div:not(:last-child) {
+      margin-right: 25px;
+    }
+  }
+
+  a {
+    color: white;
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+    margin-top: 10px;
+  }
+
+  .colophon {
+    flex: 1;
+  }
+
+  ul {
+    column-count: 3;
+    margin: 0;
+    padding: 0;
+
+    @media screen and (max-width: 1199px) {
+      column-count: 3;
+    }
+
+    @media screen and (max-width: 767px) {
+      column-count: 2;
+    }
+
+    @media screen and (max-width: 450px) {
+      column-count: 1;
+    }
+  }
+
+  li {
+    list-style-type: none;
+    margin: 0 24px;
+  }
+}
+
+.u-visible-small {
+  display: none;
+
+  @media screen and (max-width: $small) {
+    display: inline-block;
+  }
+}
+
+.u-hidden-small {
+  display: inline-block;
+
+  @media screen and (max-width: $small) {
+    display: none;
+  }
+}

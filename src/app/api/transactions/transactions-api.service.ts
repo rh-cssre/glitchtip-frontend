@@ -27,7 +27,7 @@ export class TransactionsAPIService extends APIBaseService {
 
   retrieve(organizationSlug: string, id: string) {
     return this.http.get<TransactionDetail>(
-      this.detailURL(organizationSlug, id)
+      this.detailURL(organizationSlug, id),
     );
   }
 

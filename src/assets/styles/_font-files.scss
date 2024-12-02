@@ -1,6 +1,7 @@
 @font-face {
   font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-sans/woff/IBMPlexSans-Regular-Latin1.woff")
       format("woff");
@@ -10,7 +11,8 @@
 
 @font-face {
   font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-sans/woff/IBMPlexSans-Medium-Latin1.woff")
       format("woff");
@@ -20,7 +22,8 @@
 
 @font-face {
   font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-sans/woff/IBMPlexSans-BoldItalic-Latin1.woff")
       format("woff");
@@ -30,7 +33,8 @@
 
 @font-face {
   font-family: $font-mono;
-  src: url("#{$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-mono/woff/IBMPlexMono-Regular-Latin1.woff")
       format("woff");

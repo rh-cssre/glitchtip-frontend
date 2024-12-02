@@ -1,18 +1,40 @@
 import { Component, ChangeDetectionStrategy, ViewChild } from "@angular/core";
-import { MatMenuTrigger } from "@angular/material/menu";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
+import { MatMenuTrigger, MatMenuModule } from "@angular/material/menu";
+import { combineLatest, firstValueFrom } from "rxjs";
+import { map, tap } from "rxjs/operators";
 import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { AuthService } from "src/app/api/auth/auth.service";
 import { MainNavService } from "../main-nav.service";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
+import { MobileNavToolbarComponent } from "../../mobile-nav-toolbar/mobile-nav-toolbar.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatButtonModule } from "@angular/material/button";
+import { RouterLink, RouterLinkActive } from "@angular/router";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { AsyncPipe } from "@angular/common";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { AuthService } from "src/app/auth.service";
 
 @Component({
   selector: "gt-main-nav",
   templateUrl: "./main-nav.component.html",
   styleUrls: ["./main-nav.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatSidenavModule,
+    MatToolbarModule,
+    RouterLink,
+    MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatListModule,
+    RouterLinkActive,
+    MatCardModule,
+    MobileNavToolbarComponent,
+    AsyncPipe,
+  ],
 })
 export class MainNavComponent {
   activeOrganizationLoaded = false;
@@ -23,11 +45,12 @@ export class MainNavComponent {
     this.organizationsService.activeOrganizationDetail$;
   organizations$ = this.organizationsService.organizations$;
   organizationsInitialLoad$ = this.organizationsService.initialLoad$;
-  isLoggedIn$ = this.auth.isLoggedIn;
-  navOpen$ = this.mainNav.navOpen$;
+  isLoggedIn = this.auth.isAuthenticated;
+  navOpen = this.mainNav.navOpen;
   billingEnabled$ = this.settingsService.billingEnabled$;
   paidForGlitchTip$ = this.settingsService.paidForGlitchTip$;
-  mobileNav$ = this.mainNav.mobileNav$;
+  mobileNav = this.mainNav.mobileNav;
+  version$ = this.settingsService.version$;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger | undefined = undefined;
 
   contextLoaded$ = combineLatest([
@@ -67,7 +90,9 @@ export class MainNavComponent {
   }
 
   logout() {
-    this.auth.logout();
+    firstValueFrom(
+      this.auth.logout().pipe(tap(() => (window.location.href = "/login")))
+    );
   }
 
   toggleSideNav() {

@@ -4,8 +4,11 @@
     [class.is-doing]="isDone === 'doing'"
     [class.is-done]="isDone === 'true'"
   >
-    <div class="icon-align">{{ title }}
-      <mat-icon *ngIf="isDone === 'true'">checkbox</mat-icon>
+    <div class="icon-align"
+      >{{ title }}
+      @if (isDone === "true") {
+        <mat-icon>checkbox</mat-icon>
+      }
     </div>
   </span>
 </div>

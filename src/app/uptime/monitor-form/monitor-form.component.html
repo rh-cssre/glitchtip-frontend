@@ -1,0 +1,288 @@
+<mat-card>
+  <mat-card-content>
+    <div class="form-center">
+      @for (error of formError?.non_field_errors; track error) {
+        <mat-error>{{ error }}</mat-error>
+      }
+    </div>
+    <form [formGroup]="monitorForm" (ngSubmit)="submit()">
+      <div>
+        <mat-form-field class="wide-field" appearance="outline">
+          <mat-label i18n>Monitor Name</mat-label>
+          <input
+            id="monitor-name"
+            matInput
+            formControlName="name"
+            maxlength="200"
+            required
+          />
+          @if (formName.errors?.required) {
+            <mat-error> Enter a monitor name </mat-error>
+          }
+          @if (formName.errors?.maxlength) {
+            <mat-error>
+              Name may not be more than
+              {{ formName.errors?.maxlength.requiredLength }} characters
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="monitor-type">
+          <mat-label i18n>Monitor type</mat-label>
+          <mat-select
+            formControlName="monitorType"
+            required
+            (selectionChange)="updateRequiredFields()"
+          >
+            @for (type of typeChoices; track type) {
+              <mat-option [value]="type">
+                {{ type }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (formMonitorType.errors?.required) {
+            <mat-error> Choose a monitor type </mat-error>
+          }
+        </mat-form-field>
+        <div class="help-text mat-caption">
+          @if (formMonitorType.value === "Ping") {
+            <span i18n>
+              GlitchTip will "ping" the specified URL using an HTTP HEAD request
+              with no payload.
+            </span>
+          }
+          @if (formMonitorType.value === "POST") {
+            <span i18n>
+              GlitchTip will send an HTTP POST request to the specified URL. If
+              the expected response is not received, the site will be marked as
+              Down.
+            </span>
+          }
+          @if (formMonitorType.value === "GET") {
+            <span i18n>
+              GlitchTip will send an HTTP GET request to the specified URL. If
+              the expected response is not received, the site will be marked as
+              Down.
+            </span>
+          }
+          @if (formMonitorType.value === "Heartbeat") {
+            <p class="mat-caption" i18n
+              >GlitchTip will await requests from your site to ensure it is
+              active. If it doesn't receive the request, the site will be marked
+              as Down.</p
+            >
+          }
+          @if (formMonitorType.value === "TCP Port") {
+            <span i18n
+              >GlitchTip will check to make sure the port at the specified URL
+              is accessible.</span
+            >
+          }
+        </div>
+      </div>
+      @if (formMonitorType.value !== "Heartbeat") {
+        <div class="url-spacing">
+          <mat-form-field
+            class="wide-field"
+            appearance="outline"
+            data-cy="site-url"
+          >
+            <mat-label i18n>Site URL</mat-label>
+            <input matInput formControlName="url" required />
+            <mat-hint>
+              <ng-container *ngTemplateOutlet="urlHint"></ng-container>
+            </mat-hint>
+            @if (formUrl.errors) {
+              <mat-error>
+                @if (formUrl.errors.maxlength) {
+                  <span i18n
+                    >URL may not be more than
+                    {{ formUrl.errors.maxlength.requiredLength }}
+                    characters</span
+                  >
+                } @else {
+                  <ng-container
+                    *ngTemplateOutlet="
+                      formMonitorType?.value === 'TCP Port'
+                        ? portUrl
+                        : standardUrl
+                    "
+                  >
+                  </ng-container>
+                }
+              </mat-error>
+            }
+            <ng-template #urlHint>
+              <ng-container
+                *ngTemplateOutlet="
+                  formMonitorType?.value === 'TCP Port' ? portUrl : standardUrl
+                "
+              >
+              </ng-container>
+            </ng-template>
+            <ng-template #standardUrl>
+              <span i18n
+                >Enter a valid URL with protocol (ex. https://example.com)</span
+              >
+            </ng-template>
+            <ng-template #portUrl>
+              <span i18n>Enter a host name and port (ex. example.com:80)</span>
+            </ng-template>
+          </mat-form-field>
+        </div>
+      }
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="associated-project">
+          <mat-label i18n>Associated Project</mat-label>
+          <mat-select formControlName="project">
+            @if (orgProjects$ | async; as orgProjects) {
+              <mat-option value="">None</mat-option>
+              @for (orgProject of orgProjects; track orgProject) {
+                <mat-option [value]="orgProject.id">
+                  {{ orgProject.name }}
+                </mat-option>
+              }
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="help-text mat-caption" i18n
+          >Uptime email notifications are sent to the team assigned to the
+          associated project.</div
+        >
+      </div>
+      @if (
+        formMonitorType.value === "GET" || formMonitorType.value === "POST"
+      ) {
+        <div class="short-field-container">
+          <mat-form-field appearance="outline">
+            <mat-label i18n>Expected Status</mat-label>
+            <input
+              matInput
+              min="0"
+              max="1000"
+              type="number"
+              autocomplete="off"
+              formControlName="expectedStatus"
+              placeholder="Status code"
+              data-cy="expected-status"
+              required
+            />
+            @if (formExpectedStatus.errors?.min) {
+              <mat-error i18n>
+                The quantity needs to be greater than or equal to 100.
+              </mat-error>
+            }
+            @if (
+              formExpectedStatus.errors?.pattern ||
+              formExpectedStatus.errors?.required
+            ) {
+              <mat-error i18n>Enter a status code number </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (
+        formMonitorType.value === "GET" || formMonitorType.value === "POST"
+      ) {
+        <div class="short-field-container">
+          <mat-form-field appearance="outline">
+            <mat-label i18n>Expected Response Body</mat-label>
+            <input
+              matInput
+              autocomplete="off"
+              formControlName="expectedBody"
+              placeholder="Status code"
+              data-cy="expected-body"
+            />
+          </mat-form-field>
+          <div class="help-text mat-caption">
+            <span i18n
+              >If string isn't found in response body, the monitor will report
+              as down</span
+            >
+          </div>
+        </div>
+      }
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="interval">
+          <mat-label i18n>Interval (seconds)</mat-label>
+          <input
+            matInput
+            min="0"
+            type="number"
+            autocomplete="off"
+            formControlName="interval"
+            placeholder="60"
+            required
+          />
+          @if (formInterval.errors?.min) {
+            <mat-error i18n>Must be 60 or higher.</mat-error>
+          }
+          @if (formInterval.errors?.max) {
+            <mat-error i18n>Must be less than 32768.</mat-error>
+          }
+          @if (formInterval.errors?.pattern || formInterval.errors?.required) {
+            <mat-error i18n>Enter an integer.</mat-error>
+          }
+        </mat-form-field>
+        @if (totalEventsAllowed$ | async; as totalEventsAllowed) {
+          @if (intervalPerMonth$ | async; as intervalPerMonth) {
+            <div class="help-text mat-caption">
+              @if (intervalPerMonth <= totalEventsAllowed) {
+                This will use approximately
+                {{ intervalPerMonth | number: "1.0-0" }}
+                <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+                per month out of the
+                {{ totalEventsAllowed | number: "1.0-0" }} events your
+                organization's subscription allows for.
+              } @else {
+                This will use approximately
+                {{ intervalPerMonth | number: "1.0-0" }}
+                <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+                per month, exceeding the
+                {{ totalEventsAllowed | number: "1.0-0" }} events your
+                organization's subscription allows for.
+              }
+            </div>
+          }
+        }
+      </div>
+      @if (formMonitorType.value !== "Heartbeat") {
+        <div class="short-field-container">
+          <mat-form-field appearance="outline">
+            <mat-label i18n>Timeout</mat-label>
+            <input
+              id="timeout"
+              matInput
+              min="0"
+              max="60"
+              type="number"
+              default="20"
+              autocomplete="off"
+              formControlName="timeout"
+            />
+            @if (formTimeout.errors) {
+              <mat-error>
+                <span i18n>Enter an integer between 1 and 60.</span>
+              </mat-error>
+            }
+          </mat-form-field>
+          <div class="help-text mat-caption">
+            <span i18n
+              >Time in seconds GlitchTip will wait for a response from your app.
+              Defaults to 20 seconds.</span
+            >
+          </div>
+        </div>
+      }
+      <gt-loading-button
+        class="submit"
+        [loading]="loading === true"
+        [buttonText]="monitorSettings ? 'Update Monitor' : 'Create Monitor'"
+        data-cy="monitor-submit"
+      >
+      </gt-loading-button>
+    </form> </mat-card-content
+></mat-card>
