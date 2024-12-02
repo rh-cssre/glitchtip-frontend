@@ -6,12 +6,27 @@ export function seedBackend(doExtraStuff = false) {
 }
 
 export function requestLogin() {
-  const url = "/rest-auth/login/";
-  cy.setLocalStorage("auth", JSON.stringify({ isLoggedIn: true }));
-  return cy.request("POST", url, {
-    email: user.email,
-    password: user.password,
-  });
+  const url = "/_allauth/browser/v1/auth/login";
+  cy.setLocalStorage("isAuthenticated", "true");
+
+  return cy
+    .request({ method: "HEAD", url, failOnStatusCode: false })
+    .then((response) => {
+      const headers = response.headers["set-cookie"] as string[];
+      const csrfTokenCookie = headers.find((cookie) =>
+        cookie.startsWith("csrftoken"),
+      )!;
+      const csrfToken = csrfTokenCookie.split(";")[0].split("=")[1];
+      return cy.request({
+        method: "POST",
+        url,
+        body: {
+          email: user.email,
+          password: user.password,
+        },
+        headers: { "X-CSRFToken": csrfToken },
+      });
+    });
 }
 
 export function uniqueId(length = 32) {

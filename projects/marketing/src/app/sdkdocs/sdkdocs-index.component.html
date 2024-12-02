@@ -1,0 +1,29 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+    <mat-card-content>
+        <div class="centered-block">
+            <h1 class="fancy mat-headline-2">SDK Documentation</h1>
+            <p class="mat-body-1">
+                After you have create a GlitchTip account, you will need to install a
+                SDK in order to connect your project to GlitchTip so that your site can
+                report events to us. These instructions will help you install the SDK.
+            </p>
+            <ul class="unstyled">
+                @for (platform of platforms; track platform.id) {
+                <li>
+                    <h2>{{ platform.name }}</h2>
+                    <ul>
+                        @for (integration of platform.integrations; track integration.id) {
+                        <li>
+                            <a [routerLink]="[integration.id]">{{ integration.name }}</a>
+                        </li>
+                        }
+                    </ul>
+                </li>
+
+                }
+            </ul>
+        </div>
+    </mat-card-content>
+</mat-card>

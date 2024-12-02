@@ -1,55 +1,68 @@
 <mat-card class="half-width">
-  <mat-card-content>
+  <mat-card-header>
     <mat-card-title i18n>Preferences</mat-card-title>
-    <mat-divider></mat-divider>
-    <form
-      *ngIf="userDetails$ | async"
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()"
-    >
-      <mat-form-field class="full-width first-field">
-        <input
-          matInput
-          placeholder="Name"
-          formControlName="name"
-          maxlength="255"
-        />
-      </mat-form-field>
-      <mat-form-field class="timezone full-width">
-        <input
-          type="text"
-          placeholder="Time Zone"
-          matInput
-          formControlName="timeZone"
-          [matAutocomplete]="auto"
-          [errorStateMatcher]="matcher"
-        />
-        <button
-          [class.invalid]="formTimeZone.invalid"
-          mat-button
-          mat-icon-button
-          matSuffix
-          type="button"
-          (click)="clearTimeZone()"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option
-            *ngFor="let timeZone of filteredOptions | async"
-            [value]="timeZone"
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    @if (userDetails$ | async) {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field class="full-width first-field" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" maxlength="255" />
+        </mat-form-field>
+        <mat-form-field class="timezone full-width" appearance="outline">
+          <mat-label>Time Zone</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="timeZone"
+            [matAutocomplete]="auto"
+          />
+          <button
+            [class.invalid]="formTimeZone.invalid"
+            class="small-icon-button"
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clearTimeZone()"
           >
-            {{ timeZone }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error>
-          <span *ngIf="formTimeZone?.errors?.invalidAutocompleteString" i18n>
-            Select a valid time zone
-          </span>
-        </mat-error>
-        <mat-hint>Your system time zone is {{ currentTimeZone }}</mat-hint>
-      </mat-form-field>
-      <gt-loading-button buttonText="Update Preferences"></gt-loading-button>
-    </form>
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #auto="matAutocomplete">
+            @for (timeZone of filteredOptions | async; track timeZone) {
+              <mat-option [value]="timeZone">
+                {{ timeZone }}
+              </mat-option>
+            }
+          </mat-autocomplete>
+          <mat-error>
+            @if (formTimeZone.errors?.invalidAutocompleteString) {
+              <span i18n>Select a valid time zone</span>
+            }
+          </mat-error>
+          <mat-hint>Your system time zone is {{ currentTimeZone }}</mat-hint>
+        </mat-form-field>
+        <mat-form-field
+          floatLabel="always"
+          class="full-width mt-2"
+          appearance="outline"
+        >
+          <mat-label>Theme</mat-label>
+          <mat-button-toggle-group formControlName="theme" aria-label="Theme">
+            <mat-button-toggle value="system" title="System">
+              <mat-icon>brightness_medium</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="light" title="Light">
+              <mat-icon>light_mode</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="dark" title="Dark">
+              <mat-icon>dark_mode</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+          <textarea matInput style="display: none"></textarea>
+        </mat-form-field>
+        <gt-loading-button buttonText="Update Preferences"></gt-loading-button>
+      </form>
+    }
   </mat-card-content>
 </mat-card>

@@ -1,0 +1,11 @@
+h2 {
+    margin-bottom: 10px;
+    &:not(:first-of-type) {
+      margin-top: 40px;
+    }
+  }
+  
+  ul {
+    font-size: 18px;
+  }
+  
