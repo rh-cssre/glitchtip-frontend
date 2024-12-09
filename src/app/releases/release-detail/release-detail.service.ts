@@ -8,6 +8,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "src/app/shared/shared.utils";
 
 export interface ReleaseDetailState extends PaginationStatefulServiceState {
   release: Release | null;
@@ -29,14 +30,14 @@ export class ReleaseDetailService extends PaginationStatefulService<ReleaseDetai
   release$ = this.getState$.pipe(map((state) => state.release));
   releaseFiles$ = this.getState$.pipe(map((state) => state.releaseFiles));
   releaseFileErrors$ = this.getState$.pipe(
-    map((state) => state.releaseFileErrors)
+    map((state) => state.releaseFileErrors),
   );
   constructor(private releasesAPIService: ReleasesAPIService) {
     super(initialState);
   }
 
   /** Get release detail and associated files */
-  getRelease(orgSlug: string, version: string, cursor: string | undefined) {
+  getRelease(orgSlug: string, version: string, cursor?: string | null) {
     this.retrieveRelease(orgSlug, version).subscribe();
     this.retrieveReleaseFiles(orgSlug, version, cursor).subscribe();
   }
@@ -44,7 +45,7 @@ export class ReleaseDetailService extends PaginationStatefulService<ReleaseDetai
   getReleaseFiles(
     orgSlug: string,
     version: string,
-    cursor: string | undefined
+    cursor: string | undefined,
   ) {
     this.retrieveReleaseFiles(orgSlug, version, cursor).subscribe();
   }
@@ -58,19 +59,19 @@ export class ReleaseDetailService extends PaginationStatefulService<ReleaseDetai
   private retrieveReleaseFiles(
     orgSlug: string,
     version: string,
-    cursor: string | undefined
+    cursor?: string | null,
   ) {
     this.startPaginatedLoading();
     return this.releasesAPIService
       .listReleaseFiles(orgSlug, version, cursor)
       .pipe(
         tap((res) =>
-          this.setStateAndPagination({ releaseFiles: res.body! }, res)
+          this.setStateAndPagination({ releaseFiles: res.body! }, res),
         ),
         catchError((err: HttpErrorResponse) => {
           this.setReleaseFileErrors(err);
           return EMPTY;
-        })
+        }),
       );
   }
 
@@ -89,21 +90,12 @@ export class ReleaseDetailService extends PaginationStatefulService<ReleaseDetai
   private setReleaseFileErrors(err: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      releaseFileErrors: this.updateErrorMessage(err),
+      releaseFileErrors: parseErrorMessage(err),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 }
