@@ -13,7 +13,7 @@ export class MonitorsAPIService extends APIBaseService {
     super(http);
   }
 
-  list(organizationSlug: string, cursor?: string) {
+  list(organizationSlug: string, cursor?: string | null) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
@@ -30,7 +30,7 @@ export class MonitorsAPIService extends APIBaseService {
 
   retrieve(organizationSlug: string, monitorId: string) {
     return this.http.get<MonitorDetail>(
-      this.detailURL(organizationSlug, monitorId)
+      this.detailURL(organizationSlug, monitorId),
     );
   }
 
@@ -41,7 +41,7 @@ export class MonitorsAPIService extends APIBaseService {
   update(organizationSlug: string, monitorId: string, data: MonitorInput) {
     return this.http.put<MonitorDetail>(
       this.detailURL(organizationSlug, monitorId),
-      data
+      data,
     );
   }
 

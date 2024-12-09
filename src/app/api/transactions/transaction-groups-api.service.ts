@@ -16,13 +16,13 @@ export class TransactionGroupsAPIService extends APIBaseService {
 
   list(
     organizationSlug: string,
-    cursor?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    cursor?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null,
   ) {
     const url = this.listURL(organizationSlug);
     let httpParams = new HttpParams();
@@ -57,7 +57,7 @@ export class TransactionGroupsAPIService extends APIBaseService {
 
   retrieve(id: number, organizationSlug: string) {
     return this.http.get<TransactionGroup>(
-      this.detailURL(id, organizationSlug)
+      this.detailURL(id, organizationSlug),
     );
   }
 

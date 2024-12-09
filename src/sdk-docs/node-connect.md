@@ -13,7 +13,7 @@ const connect = require("connect");
 const Sentry = require("@sentry/node");
 
 // Must configure Sentry before doing anything else with it
-Sentry.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "YOUR-GLITCHTIP-DSN-HERE" });
 
 function mainHandler(req, res) {
   throw new Error("My first GlitchTip error!");
@@ -38,7 +38,7 @@ connect(
   Sentry.handlers.errorHandler(),
 
   // Optional fallthrough error handler
-  onError
+  onError,
 ).listen(3000);
 ```
 
@@ -71,7 +71,7 @@ app.use(
   Sentry.handlers.requestHandler({
     serverName: false,
     user: ["email"],
-  })
+  }),
 );
 ```
 
@@ -87,6 +87,6 @@ app.use(
       }
       return false;
     },
-  })
+  }),
 );
 ```

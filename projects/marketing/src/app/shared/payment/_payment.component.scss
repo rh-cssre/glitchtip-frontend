@@ -1,0 +1,22 @@
+@import 'variables';
+
+app-payment {
+  .mat-mdc-tab-labels {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .mat-mdc-card-content {
+    height: 100%;
+  }
+
+  @media (min-width: $large) {
+    .mat-mdc-card {
+      background: transparent;
+      border-right: 1px solid mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300);
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}

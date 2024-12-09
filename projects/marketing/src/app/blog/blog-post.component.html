@@ -1,0 +1,13 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+    <mat-card-content>
+        <div class="centered-block markdown-container mat-typography">
+            <h1>{{ title }}</h1>
+            <div>
+                <markdown [data]="cleanedMarkdown"></markdown>
+            </div>
+            <div data-chirpy-comment="true"></div>
+        </div>
+    </mat-card-content>
+</mat-card>
