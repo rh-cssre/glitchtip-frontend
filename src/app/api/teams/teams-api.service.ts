@@ -44,13 +44,13 @@ export class TeamsAPIService extends APIBaseService {
   addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
     return this.http.post<Team>(
       this.teamMemberURL(member.id, orgSlug, teamSlug),
-      member
+      member,
     );
   }
 
   removeTeamMember(memberId: number, orgSlug: string, teamSlug: string) {
     return this.http.delete<Team>(
-      this.teamMemberURL(memberId, orgSlug, teamSlug)
+      this.teamMemberURL(memberId, orgSlug, teamSlug),
     );
   }
 
