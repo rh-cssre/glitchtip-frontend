@@ -15,14 +15,7 @@ npx @sentry/wizard --url=https://your-server-url
 Following the wizard's instructions will connect your app to GlitchTip. You can verify GlitchTip is now monitoring your app by adding a link that will generate a simple error:
 
 ```html
-<button
-  onClick={() => {
-    throw Error("Generic Error Message");
-  }}
-  className={styles.card}
->
-  Generic Error Message
-</button>
+<button onClick="{()" =""> { throw Error("Generic Error Message"); }} className={styles.card} > Generic Error Message </button>
 ```
 
 Then check your GlitchTip Issues page to see the error.
