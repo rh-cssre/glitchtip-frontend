@@ -23,18 +23,18 @@ const initialState: TransactionGroupDetailState = {
 })
 export class TransactionGroupDetailService extends StatefulService<TransactionGroupDetailState> {
   readonly transactionGroup$ = this.getState$.pipe(
-    map((state) => state.transactionGroup)
+    map((state) => state.transactionGroup),
   );
 
   readonly transactionGroupLoading$ = this.getState$.pipe(
-    map((state) => state.transactionGroupLoading)
+    map((state) => state.transactionGroupLoading),
   );
   readonly transactionGroupInitialLoadComplete$ = this.getState$.pipe(
-    map((state) => state.transactionGroupInitialLoadComplete)
+    map((state) => state.transactionGroupInitialLoadComplete),
   );
 
   constructor(
-    private transactionGroupsAPIService: TransactionGroupsAPIService
+    private transactionGroupsAPIService: TransactionGroupsAPIService,
   ) {
     super(initialState);
   }
@@ -50,7 +50,7 @@ export class TransactionGroupDetailService extends StatefulService<TransactionGr
             this.clearTransactionGroup();
           }
           return EMPTY;
-        })
+        }),
       );
   }
 
