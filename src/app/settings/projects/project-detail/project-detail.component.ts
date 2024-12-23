@@ -1,22 +1,51 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
-  UntypedFormGroup,
-  UntypedFormControl,
+  FormGroup,
+  FormControl,
   Validators,
   FormGroupDirective,
+  ReactiveFormsModule,
 } from "@angular/forms";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { filter, first, map, tap } from "rxjs/operators";
 import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
 import { ProjectDetail } from "src/app/api/projects/projects-api.interfaces";
 import { ProjectSettingsService } from "../project-settings.service";
+import { MatButtonModule } from "@angular/material/button";
+import { ProjectAlertsComponent } from "./project-alerts/project-alerts.component";
+import { ProjectEnvironmentsComponent } from "./project-environments/project-environments.component";
+import { CopyInputComponent } from "../../../shared/copy-input/copy-input.component";
+import { PlatformPickerComponent } from "../platform-picker/platform-picker.component";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { CommonModule } from "@angular/common";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 
 @Component({
   selector: "gt-project-detail",
   templateUrl: "./project-detail.component.html",
   styleUrls: ["./project-detail.component.scss"],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    LoadingButtonComponent,
+    PlatformPickerComponent,
+    CopyInputComponent,
+    ProjectEnvironmentsComponent,
+    ProjectAlertsComponent,
+    MatButtonModule,
+    RouterLink,
+    DetailHeaderComponent,
+  ],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
@@ -34,12 +63,12 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   updatePlatformLoading = false;
   updatePlatformError = "";
 
-  nameForm = new UntypedFormGroup({
-    name: new UntypedFormControl("", [Validators.required]),
+  nameForm = new FormGroup({
+    name: new FormControl("", [Validators.required, Validators.maxLength(64)]),
   });
 
-  platformForm = new UntypedFormGroup({
-    platform: new UntypedFormControl(""),
+  platformForm = new FormGroup({
+    platform: new FormControl(""),
   });
 
   constructor(
@@ -47,7 +76,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private projectsService: ProjectSettingsService,
     private snackBar: MatSnackBar,
-    private orgService: OrganizationsService
+    private orgService: OrganizationsService,
   ) {}
 
   ngOnDestroy() {
@@ -74,7 +103,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
           this.orgSlug = orgSlug;
           this.projectSlug = projectSlug;
           return { orgSlug, projectSlug };
-        })
+        }),
       )
       .subscribe(({ orgSlug, projectSlug }) => {
         if (orgSlug && projectSlug) {
@@ -93,7 +122,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
           this.platformForm.patchValue({
             platform: data!.platform,
           });
-        })
+        }),
       )
       .subscribe();
   }
@@ -117,19 +146,19 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
           (err) => {
             this.deleteLoading = false;
             this.deleteError = `${err.statusText}: ${err.status}`;
-          }
+          },
         );
     }
   }
 
   updateName() {
     this.updateNameLoading = true;
-    if (this.orgSlug && this.projectSlug) {
+    if (this.nameForm.valid && this.orgSlug && this.projectSlug) {
       this.projectsService
         .updateProjectName(
           this.orgSlug,
           this.projectSlug,
-          this.nameForm.value.name
+          this.nameForm.value.name!,
         )
         .subscribe(
           (resp: ProjectDetail) => {
@@ -138,12 +167,12 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
               this.updateNameError = "";
             }
             this.snackBar.open(
-              `The name of your project has been updated to ${resp.name}`
+              `The name of your project has been updated to ${resp.name}`,
             );
           },
           (err) => {
             this.updateNameError = `${err.statusText}: ${err.status}`;
-          }
+          },
         );
     }
   }
@@ -155,8 +184,8 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         .updateProjectPlatform(
           this.orgSlug,
           this.projectSlug,
-          this.platformForm.value.platform,
-          projectName
+          this.platformForm.value.platform ?? "",
+          projectName,
         )
         .subscribe(
           (resp: ProjectDetail) => {
@@ -166,14 +195,14 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
             }
             this.snackBar.open(
               `Your project platform has been updated to ${this.getPlatformName(
-                resp.platform
-              )}.`
+                resp.platform,
+              )}.`,
             );
             this.platformForm.setValue({ platform: resp.platform });
           },
           (err) => {
             this.updatePlatformError = `${err.statusText}: ${err.status}`;
-          }
+          },
         );
     }
   }

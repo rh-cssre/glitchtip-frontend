@@ -15,13 +15,13 @@ export class ProjectKeysAPIService extends APIBaseService {
 
   list(organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectKey[]>(
-      this.listURL(organizationSlug, projectSlug)
+      this.listURL(organizationSlug, projectSlug),
     );
   }
 
   retrieve(organizationSlug: string, projectSlug: string, id: string) {
     return this.http.get<ProjectKey>(
-      this.detailURL(organizationSlug, projectSlug, id)
+      this.detailURL(organizationSlug, projectSlug, id),
     );
   }
 
@@ -36,11 +36,11 @@ export class ProjectKeysAPIService extends APIBaseService {
   protected detailURL(
     organizationSlug: string,
     projectSlug: string,
-    id: string
+    id: string,
   ) {
     return `${this.listURL(
       organizationSlug,
-      projectSlug
+      projectSlug,
     )}${projectSlug}/${id}/`;
   }
 }

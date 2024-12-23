@@ -6,7 +6,7 @@ export interface APIBaseService {
     id: unknown,
     obj: unknown,
     slug1?: unknown,
-    slug2?: unknown
+    slug2?: unknown,
   ): Observable<unknown>;
   create(obj: unknown, slug1?: string, slug2?: string): Observable<unknown>;
   destroy(id: string, slug1?: string, slug2?: string): Observable<unknown>;
@@ -26,7 +26,7 @@ export abstract class APIBaseService {
   abstract retrieve(
     id: string | number,
     slug1?: string,
-    slug2?: string
+    slug2?: string,
   ): Observable<unknown>;
 
   protected detailURL(id: string | number, slug1?: string, slug2?: string) {

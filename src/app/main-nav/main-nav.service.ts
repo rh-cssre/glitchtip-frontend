@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { computed, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, fromEvent } from "rxjs";
-import { debounceTime, map, tap } from "rxjs/operators";
+import { fromEvent } from "rxjs";
+import { debounceTime, tap } from "rxjs/operators";
 
 interface MainNavState {
   navOpen: boolean;
@@ -17,11 +17,11 @@ const initialState: MainNavState = {
   providedIn: "root",
 })
 export class MainNavService {
-  private readonly state = new BehaviorSubject<MainNavState>(initialState);
-  private readonly getState$ = this.state.asObservable();
+  private readonly state = signal<MainNavState>(initialState);
 
-  readonly navOpen$ = this.getState$.pipe(map((state) => state.navOpen));
-  readonly mobileNav$ = this.getState$.pipe(map((state) => state.mobileNav));
+  // Use computed signals for derived state
+  readonly navOpen = computed(() => this.state().navOpen);
+  readonly mobileNav = computed(() => this.state().mobileNav);
 
   constructor(private router: Router) {
     const tabletSize = 768; // same as $tablet for scss
@@ -47,7 +47,7 @@ export class MainNavService {
           } else {
             this.desktopNavSettings();
           }
-        })
+        }),
       )
       .subscribe();
   }
@@ -71,31 +71,18 @@ export class MainNavService {
   }
 
   private setMobileNav(isMobile: boolean) {
-    this.state.next({
-      ...this.state.getValue(),
-      mobileNav: isMobile,
-    });
+    this.state.update((state) => ({ ...state, mobileNav: isMobile }));
   }
 
   private setCloseNav() {
-    this.state.next({
-      ...this.state.getValue(),
-      navOpen: false,
-    });
+    this.state.update((state) => ({ ...state, navOpen: false }));
   }
 
   private setOpenNav() {
-    this.state.next({
-      ...this.state.getValue(),
-      navOpen: true,
-    });
+    this.state.update((state) => ({ ...state, navOpen: true }));
   }
 
   private setToggleNav() {
-    const navOpen = this.state.getValue().navOpen;
-    this.state.next({
-      ...this.state.getValue(),
-      navOpen: !navOpen,
-    });
+    this.state.update((state) => ({ ...state, navOpen: !state.navOpen }));
   }
 }

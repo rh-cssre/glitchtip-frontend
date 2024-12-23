@@ -1,25 +1,8 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { moduleMetadata } from "@storybook/angular";
-
-import { MaterialModule } from "./material.module";
-
 export default {
   title: "Styles/General Styling",
-  decorators: [
-    moduleMetadata({
-      imports: [
-        MaterialModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-      ],
-    }),
-  ],
 };
 
-export const typography = () => ({
+export const Typography = () => ({
   template: `
   <section>
     <article class="mat-typography">
@@ -32,34 +15,34 @@ export const typography = () => ({
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-      mat-display-4: Large, one-off header, usually at the top of the page (e.g.
+      mat-headline-1: Large, one-off header, usually at the top of the page (e.g.
       a hero header).
     </p>
-    <p class="mat-display-4">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-1">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-      mat-display-3: Large, one-off header, usually at the top of the page (e.g.
+      mat-headline-2: Large, one-off header, usually at the top of the page (e.g.
       a hero header).
     </p>
-    <p class="mat-display-3">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-2">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-display-2: Large, one-off header, usually at the top of the page (e.g.
+    mat-headline-3: Large, one-off header, usually at the top of the page (e.g.
     a hero header).
     </p>
-    <p class="mat-display-2">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-3">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-display-1: Large, one-off header, usually at the top of the page (e.g.
+    mat-headline-4: Large, one-off header, usually at the top of the page (e.g.
     a hero header).
     </p>
-    <p class="mat-display-1">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-headline-4">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
@@ -99,9 +82,9 @@ export const typography = () => ({
     <mat-divider></mat-divider>
 
     <p class="mat-h4 mat-subheading-1">
-    mat-body-strong OR mat-body-2: Bolder body text.
+    mat-body-strong: Bolder body text.
     </p>
-    <p class="mat-body-strong mat-body-2">The quick brown fox jumps over the lazy dog</p>
+    <p class="mat-body-strong">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
@@ -115,7 +98,7 @@ export const typography = () => ({
   `,
 });
 
-export const icons = () => ({
+export const Icons = () => ({
   template: `
   <section class="mat-typography">
     <h1>Icons</h1>
@@ -150,7 +133,7 @@ export const icons = () => ({
   `,
 });
 
-export const colors = () => ({
+export const Colors = () => ({
   template: `
   <section class="mat-typography">
     <p class="mat-h1">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>

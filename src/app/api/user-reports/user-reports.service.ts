@@ -34,7 +34,7 @@ export class UserReportsService extends PaginationStatefulService<UserReportsSta
     super(initialState);
   }
 
-  getReportsForIssue(issue: number, cursor: string | undefined) {
+  getReportsForIssue(issue: number, cursor?: string | null) {
     this.setLoadingReports(true);
     this.resetUserReports();
     this.getIssueReports(issue, cursor)
@@ -49,22 +49,22 @@ export class UserReportsService extends PaginationStatefulService<UserReportsSta
         catchError((error) => {
           this.setLoadingReports(false);
           this.setErrorsReports(
-            "Something went wrong. Try reloading the page."
+            "Something went wrong. Try reloading the page.",
           );
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
 
-  private getIssueReports(issueId: number, cursor: string | undefined) {
+  private getIssueReports(issueId: number, cursor?: string | null) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
     }
     return this.http.get<UserReport[]>(
       `${this.issuePageUrl}${issueId}/user-reports/`,
-      { observe: "response", params: httpParams }
+      { observe: "response", params: httpParams },
     );
   }
 

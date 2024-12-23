@@ -22,7 +22,7 @@ const initialState: ProjectsState = {
 export class ProjectsService extends StatefulService<ProjectsState> {
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
   readonly initialLoadComplete$ = this.getState$.pipe(
-    map((state) => state.initialLoadComplete)
+    map((state) => state.initialLoadComplete),
   );
   readonly loading$ = this.getState$.pipe(map((state) => state.loading));
 
