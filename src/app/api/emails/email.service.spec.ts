@@ -30,11 +30,11 @@ describe("EmailService", () => {
       expect(emails[0].email).toEqual(sampleEmailAddressData[0].email);
     });
     const primaryIndex = sampleEmailAddressData.findIndex(
-      (email) => email.isPrimary === true
+      (email) => email.isPrimary === true,
     );
     service.emailAddressesSorted$.subscribe((emails) => {
       expect(emails[0].email).toEqual(
-        sampleEmailAddressData[primaryIndex].email
+        sampleEmailAddressData[primaryIndex].email,
       );
     });
   });

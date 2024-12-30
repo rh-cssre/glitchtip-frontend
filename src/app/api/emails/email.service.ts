@@ -51,13 +51,13 @@ export class EmailService {
   private readonly state = new BehaviorSubject<EmailState>(initialState);
   readonly resetFormSubject = new Subject();
   readonly emailAddresses$ = this.state.pipe(
-    map((state) => state.emailAddresses)
+    map((state) => state.emailAddresses),
   );
   readonly loadingStates$ = this.state.pipe(
-    map((state) => state.loadingStates)
+    map((state) => state.loadingStates),
   );
   readonly addEmailError$ = this.state.pipe(
-    map((state) => state.addEmailError)
+    map((state) => state.addEmailError),
   );
   /**
    * A list of the user's email addresses, with primary email on top
@@ -69,13 +69,16 @@ export class EmailService {
     map((emailAddresses) =>
       // Sort by boolean https://stackoverflow.com/a/17387454/443457
       [...emailAddresses].sort((a, b) =>
-        a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
-      )
-    )
+        a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1,
+      ),
+    ),
   );
 
   private readonly url = baseUrl + "/users/me/emails/";
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+  ) {}
 
   retrieveEmailAddresses() {
     this.getEmailAddresses()
@@ -101,11 +104,11 @@ export class EmailService {
             if (
               error.status === 500 &&
               (error.error as string).includes(
-                `'to' parameter is not a valid address`
+                `'to' parameter is not a valid address`,
               )
             ) {
               this.setAddEmailError(
-                "This is not a valid email address. Please try another one."
+                "This is not a valid email address. Please try another one.",
               );
             } else if (error.status === 500) {
               this
@@ -113,13 +116,15 @@ export class EmailService {
                 on the list. You may need to try again, or try a different
                 email address.`);
             } else if (error.status === 400) {
-              this.setAddEmailError("There was a problem. Please try again.");
+              this.setAddEmailError(
+                "This email address is already being used.",
+              );
             } else {
-              this.setAddEmailError("Error: " + error.statusText);
+              this.setAddEmailError("There was a problem. Please try again.");
             }
           }
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -132,14 +137,14 @@ export class EmailService {
           this.setRemovedEmailAddress(email);
           this.resetLoadingDelete();
           this.setSnackbarMessage(
-            `${email} has been removed from your account.`
+            `${email} has been removed from your account.`,
           );
         }),
         catchError((_) => {
           this.resetLoadingDelete();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -152,14 +157,14 @@ export class EmailService {
           this.setNewPrimaryEmail(response);
           this.resetLoadingMakePrimary();
           this.setSnackbarMessage(
-            `${email} is now your primary email address.`
+            `${email} is now your primary email address.`,
           );
         }),
         catchError((error) => {
           this.resetLoadingMakePrimary();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -171,14 +176,14 @@ export class EmailService {
         tap((_) => {
           this.resetLoadingResend();
           this.setSnackbarMessage(
-            `A confirmation email has been sent to ${email}.`
+            `A confirmation email has been sent to ${email}.`,
           );
         }),
         catchError((_) => {
           this.resetLoadingResend();
           this.setSnackbarMessage(`There was a problem. Try again later.`);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -259,7 +264,7 @@ export class EmailService {
   private setRemovedEmailAddress(emailToDelete: string) {
     const current = this.state.getValue();
     const indexToDelete = current.emailAddresses.findIndex(
-      (email) => email.email === emailToDelete
+      (email) => email.email === emailToDelete,
     );
     let emailAddresses = current.emailAddresses;
     if (indexToDelete > -1) {
@@ -268,8 +273,8 @@ export class EmailService {
         .concat(
           current.emailAddresses.slice(
             indexToDelete + 1,
-            current.emailAddresses.length
-          )
+            current.emailAddresses.length,
+          ),
         );
     }
 
