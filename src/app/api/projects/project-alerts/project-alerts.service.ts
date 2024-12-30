@@ -19,24 +19,24 @@ export class ProjectAlertsAPIService extends APIBaseService {
 
   list(organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectAlert[]>(
-      this.listURL(organizationSlug, projectSlug)
+      this.listURL(organizationSlug, projectSlug),
     );
   }
 
   retrieve(id: string, organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectAlert>(
-      this.detailURL(id, organizationSlug, projectSlug)
+      this.detailURL(id, organizationSlug, projectSlug),
     );
   }
 
   create(
     newProjectAlert: NewProjectAlert,
     organizationSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     return this.http.post<ProjectAlert>(
       this.listURL(organizationSlug, projectSlug),
-      newProjectAlert
+      newProjectAlert,
     );
   }
 
@@ -48,11 +48,11 @@ export class ProjectAlertsAPIService extends APIBaseService {
     id: string,
     projectAlert: NewProjectAlert,
     organizationSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     return this.http.put<ProjectAlert>(
       this.detailURL(id, organizationSlug, projectSlug),
-      projectAlert
+      projectAlert,
     );
   }
 
@@ -63,7 +63,7 @@ export class ProjectAlertsAPIService extends APIBaseService {
   protected detailURL(
     id: string,
     organizationSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     return this.listURL(organizationSlug, projectSlug) + id + "/";
   }

@@ -10,6 +10,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
 
 export interface PerformanceState extends PaginationStatefulServiceState {
   transactionGroups: TransactionGroup[];
@@ -27,7 +28,7 @@ const initialState: PerformanceState = {
 })
 export class PerformanceService extends PaginationStatefulService<PerformanceState> {
   transactionGroups$ = this.getState$.pipe(
-    map((state) => state.transactionGroups)
+    map((state) => state.transactionGroups),
   );
 
   transactionGroupsDisplay$ = combineLatest([
@@ -38,36 +39,36 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     map(([projects, groups]) => {
       return groups.map((group) => {
         const projectSlug = projects?.find(
-          (project) => project.id === group.project
+          (project) => +project.id === group.project,
         )?.name;
         return {
           ...group,
           projectSlug,
         };
       });
-    })
+    }),
   );
 
   errors$ = this.getState$.pipe(map((state) => state.errors));
 
   constructor(
     private transactionGroupsAPIService: TransactionGroupsAPIService,
-    private organizationsService: OrganizationsService
+    private organizationsService: OrganizationsService,
   ) {
     super(initialState);
   }
 
   getTransactionGroups(
     orgSlug: string,
-    cursor: string | undefined,
-    project: string[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined,
-    query: string | undefined
+    cursor: string | undefined | null,
+    project: number[] | null,
+    start: string | undefined | null,
+    end: string | undefined | null,
+    sort: string | undefined | null,
+    environment: string | undefined | null,
+    query: string | undefined | null,
   ) {
-    this.retrieveTransactionGroups(
+    return this.retrieveTransactionGroups(
       orgSlug,
       cursor,
       project,
@@ -75,19 +76,19 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
       end,
       sort,
       environment,
-      query
-    ).subscribe();
+      query,
+    );
   }
 
   private retrieveTransactionGroups(
     orgSlug: string,
-    cursor?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    cursor?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null,
   ) {
     this.setLoadingStart();
     return this.transactionGroupsAPIService
@@ -99,29 +100,20 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
         catchError((err: HttpErrorResponse) => {
           this.setTransactionGroupsError(err);
           return EMPTY;
-        })
+        }),
       );
   }
 
   private setTransactionGroupsError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      errors: this.updateErrorMessage(errors),
+      errors: parseErrorMessage(errors),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 
   private setLoadingStart() {

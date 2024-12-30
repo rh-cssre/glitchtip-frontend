@@ -1,28 +1,62 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { tap } from "rxjs/operators";
-import { AuthService, AuthState } from "../api/auth/auth.service";
+import { Injectable, computed } from "@angular/core";
+import { catchError, of, tap, throwError } from "rxjs";
+import { AuthService } from "../auth.service";
+import { APIState } from "../shared/shared.interfaces";
+import {
+  AllAuthError,
+  AllAuthHttpErrorResponse,
+} from "../api/allauth/allauth.interfaces";
+import {
+  messagesLookup,
+  reduceParamErrors,
+} from "../api/allauth/errorMessages";
+import { handleAllAuthErrorResponse } from "../api/allauth/allauth.utils";
+import { StatefulService } from "../shared/stateful-service/signal-state.service";
 
-const baseUrl = "/rest-auth";
+export interface RegisterState extends APIState {
+  errors: AllAuthError[];
+}
+
+const initialState: RegisterState = {
+  loading: false,
+  errors: [],
+};
 
 @Injectable({
   providedIn: "root",
 })
-export class RegisterService {
-  constructor(private http: HttpClient, private authService: AuthService) {}
-
-  register(email: string, password1: string, password2: string, tags: string) {
-    const url = baseUrl + "/registration/";
-    const data = {
-      email,
-      password1,
-      password2,
-      tags
-    };
-    return this.http.post<AuthState>(url, data).pipe(tap(() => this.setAuth()));
+export class RegisterService extends StatefulService<RegisterState> {
+  formErrors = computed(() =>
+    messagesLookup(this.state().errors.filter((err) => !err.param)),
+  );
+  fieldErrors = computed(() =>
+    reduceParamErrors(this.state().errors.filter((err) => err.param)),
+  );
+  constructor(private authService: AuthService) {
+    super(initialState);
   }
 
-  setAuth() {
-    this.authService.afterLogin();
+  register(email: string, password: string) {
+    this.state.set({ ...this.state(), loading: true, errors: [] });
+    this.authService.signup(email, password);
+    return this.authService.signup(email, password).pipe(
+      tap(() => this.state.set(initialState)),
+      catchError((err: AllAuthHttpErrorResponse) => {
+        this.state.set({
+          ...this.state(),
+          loading: false,
+          errors: handleAllAuthErrorResponse(err),
+        });
+        if ([400, 500].includes(err.status)) {
+          return of(undefined);
+        }
+        return throwError(() => err);
+      }),
+    );
+  }
+
+  socialRegister(provider: string, callbackUrl = "/") {
+    this.setState({ loading: true, errors: [] });
+    this.authService.providerRedirect(provider, callbackUrl, "login");
   }
 }
