@@ -9,10 +9,14 @@ import { baseUrl } from "src/app/constants";
   selector: "gt-wizard",
   templateUrl: "./wizard.component.html",
   styleUrls: ["./wizard.component.scss"],
+  standalone: true,
 })
 export class WizardComponent implements OnInit {
   message = "Connecting to @sentry/wizard...";
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap
@@ -26,14 +30,14 @@ export class WizardComponent implements OnInit {
             .pipe(
               tap(
                 () =>
-                  (this.message = "Successfully connected to @sentry/wizard.")
-              )
-            )
+                  (this.message = "Successfully connected to @sentry/wizard."),
+              ),
+            ),
         ),
         catchError(() => {
           this.message = "Unable to connect to @sentry/wizard";
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }

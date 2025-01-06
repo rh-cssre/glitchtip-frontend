@@ -11,7 +11,7 @@ import { StatefulService } from "./stateful-service";
 @Directive()
 export abstract class StatefulBaseComponent<
   TState,
-  TService extends StatefulService<TState>
+  TService extends StatefulService<TState>,
 > implements OnDestroy
 {
   protected readonly destroy$ = new Subject<boolean>();

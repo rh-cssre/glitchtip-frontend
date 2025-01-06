@@ -1,4 +1,9 @@
+import { ClipboardModule } from "@angular/cdk/clipboard";
+import { CommonModule } from "@angular/common";
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { BehaviorSubject, timer } from "rxjs";
 import { take } from "rxjs/operators";
 
@@ -8,7 +13,13 @@ import { take } from "rxjs/operators";
 @Component({
   selector: "gt-copy-input",
   templateUrl: "./copy-input.component.html",
-  styleUrls: ["./copy-input.component.scss"],
+  imports: [
+    CommonModule,
+    ClipboardModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyInputComponent {
@@ -23,7 +34,7 @@ export class CopyInputComponent {
     timer(0, 4000)
       .pipe(take(2))
       .subscribe((i) =>
-        i === 0 ? this.copied$.next(true) : this.copied$.next(false)
+        i === 0 ? this.copied$.next(true) : this.copied$.next(false),
       );
   }
 }

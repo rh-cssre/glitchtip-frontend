@@ -1,12 +1,14 @@
 import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import type { Frame } from "src/app/issues/interfaces";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: "gt-frame-title",
   templateUrl: "./frame-title.component.html",
-  styleUrls: ["./frame-title.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatTooltipModule, MatButtonModule, MatIconModule],
 })
 export class FrameTitleComponent {
   @Input() frame: Frame | undefined;
@@ -16,7 +18,7 @@ export class FrameTitleComponent {
   showToolTip(
     absPath: string | null,
     filename: string | null,
-    module: string | null
+    module: string | null,
   ): string {
     if ((absPath && absPath !== filename) || (absPath && absPath !== module)) {
       return absPath;
@@ -30,7 +32,7 @@ export class FrameTitleComponent {
   displayFilenameOrModule(
     platform: string | null,
     filename: string | null,
-    module: string | null
+    module: string | null,
   ): string | undefined {
     switch (this.eventPlatform || platform) {
       case "java":
@@ -43,18 +45,16 @@ export class FrameTitleComponent {
 
   isUrl(str: string | null): boolean {
     if (str) {
-      return str.startsWith("http") ? true : false;
+      return /^https?:/.test(str);
     } else {
       return false;
     }
   }
 
-  sanitizeUrl(str: string): string | null {
-    const url = sanitizeUrl(str);
+  sanitizeUrl(url: string): string | null {
     if (url === "about:blank") {
       return null;
-    } else {
-      return url;
     }
+    return url;
   }
 }
