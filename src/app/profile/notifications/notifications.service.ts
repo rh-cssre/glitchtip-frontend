@@ -20,8 +20,8 @@ interface NotificationsState {
   subscribeByDefaultLoading: boolean;
   subscribeByDefaultError: string;
   groupedProjects: GroupedProjects;
-  projectAlertLoading: string;
-  projectAlertError: ProjectError;
+  projectAlertLoading: number | null;
+  projectAlertError: ProjectError | null;
 }
 
 const initialState: NotificationsState = {
@@ -30,8 +30,8 @@ const initialState: NotificationsState = {
   subscribeByDefaultLoading: false,
   subscribeByDefaultError: "",
   groupedProjects: [],
-  projectAlertLoading: "",
-  projectAlertError: { error: "", id: "" },
+  projectAlertLoading: null,
+  projectAlertError: null,
 };
 
 @Injectable({
@@ -39,35 +39,35 @@ const initialState: NotificationsState = {
 })
 export class NotificationsService {
   private readonly notificationsState = new BehaviorSubject<NotificationsState>(
-    initialState
+    initialState,
   );
   private readonly getState$ = this.notificationsState.asObservable();
   private readonly url = `${baseUrl}/users/me/notifications/`;
   readonly subscribeByDefault$ = this.getState$.pipe(
-    map((data) => data.subscribeByDefault)
+    map((data) => data.subscribeByDefault),
   );
   readonly projectViewExpanded$ = this.getState$.pipe(
-    map((data) => data.projectViewExpanded)
+    map((data) => data.projectViewExpanded),
   );
   readonly subscribeByDefaultLoading$ = this.getState$.pipe(
-    map((data) => data.subscribeByDefaultLoading)
+    map((data) => data.subscribeByDefaultLoading),
   );
   readonly subscribeByDefaultError$ = this.getState$.pipe(
-    map((data) => data.subscribeByDefaultError)
+    map((data) => data.subscribeByDefaultError),
   );
   readonly groupedProjects$ = this.getState$.pipe(
-    map((data) => data.groupedProjects)
+    map((data) => data.groupedProjects),
   );
   readonly projectAlertLoading$ = this.getState$.pipe(
-    map((data) => data.projectAlertLoading)
+    map((data) => data.projectAlertLoading),
   );
   readonly projectAlertsError$ = this.getState$.pipe(
-    map((data) => data.projectAlertError)
+    map((data) => data.projectAlertError),
   );
 
   constructor(
     private projectsService: ProjectsService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {}
 
   subscribeToEndpoints() {
@@ -94,7 +94,7 @@ export class NotificationsService {
           if (projects) {
             const projectsWithAlerts = projects.map((project) => {
               const matchingId = Object.keys(projectAlerts).find(
-                (element) => element === project.id
+                (element) => parseInt(element, 10) === project.id,
               );
               return {
                 ...project,
@@ -103,7 +103,7 @@ export class NotificationsService {
             });
             this.groupProjectsByOrg(projectsWithAlerts);
           }
-        })
+        }),
       )
       .subscribe();
   }
@@ -114,12 +114,12 @@ export class NotificationsService {
         r[a.organization.id] = [...(r[a.organization.id] || []), a];
         return r;
       },
-      {}
+      {},
     );
     this.setGroupedProjects(groupedProjects);
   }
 
-  alertsUpdate(projectId: string, status: NotificationStatus) {
+  alertsUpdate(projectId: number, status: NotificationStatus) {
     const data: ProjectAlerts = {
       [projectId]: status,
     };
@@ -129,15 +129,15 @@ export class NotificationsService {
       .pipe(
         tap((_) => {
           this.retrieveUserAlertSettings();
-          this.setProjectAlertLoading("");
+          this.setProjectAlertLoading(null);
         }),
         catchError((error) => {
           if (error) {
-            this.setProjectAlertLoading("");
+            this.setProjectAlertLoading(null);
             this.setProjectAlertError(this.error(error), projectId);
           }
           return EMPTY;
-        })
+        }),
       )
       .toPromise();
   }
@@ -158,7 +158,7 @@ export class NotificationsService {
             this.setSubscribeByDefaultError(this.error(error));
           }
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -179,8 +179,8 @@ export class NotificationsService {
   }
 
   private setToggleProjectView() {
-    const projectViewExpanded = this.notificationsState.getValue()
-      .projectViewExpanded;
+    const projectViewExpanded =
+      this.notificationsState.getValue().projectViewExpanded;
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectViewExpanded: !projectViewExpanded,
@@ -201,14 +201,14 @@ export class NotificationsService {
     });
   }
 
-  private setProjectAlertLoading(projectId: string) {
+  private setProjectAlertLoading(projectId: number | null) {
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectAlertLoading: projectId,
     });
   }
 
-  private setProjectAlertError(error: string, id: string) {
+  private setProjectAlertError(error: string, id: number) {
     this.notificationsState.next({
       ...this.notificationsState.getValue(),
       projectAlertError: { error, id },

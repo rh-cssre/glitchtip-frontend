@@ -7,11 +7,12 @@ import { ConfirmEmailService } from "../../api/confirm-email/confirm-email.servi
   selector: "gt-confirm-email",
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ConfirmEmailComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
-    private confirmEmailService: ConfirmEmailService
+    private confirmEmailService: ConfirmEmailService,
   ) {}
 
   ngOnInit(): void {
