@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Team, TeamErrors, TeamLoading } from "./teams.interfaces";
 import { BehaviorSubject, combineLatest, lastValueFrom, EMPTY } from "rxjs";
@@ -8,6 +8,7 @@ import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { TeamsAPIService } from "./teams-api.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 interface TeamsState {
   teams: Team[] | null;
@@ -29,6 +30,11 @@ const initialState: TeamsState = {
   providedIn: "root",
 })
 export class TeamsService {
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private teamsAPIService = inject(TeamsAPIService);
+
   private readonly state = new BehaviorSubject<TeamsState>(initialState);
   private readonly getState$ = this.state.asObservable();
 
@@ -42,7 +48,7 @@ export class TeamsService {
 
   readonly userTeamRole$ = combineLatest([
     this.teamMembers$,
-    this.userService.activeUserEmail$,
+    toObservable(this.userService.activeUserEmail),
   ]).pipe(
     map(([teamMembers, userEmail]) => {
       const activeTeamMember = teamMembers.find(
@@ -51,13 +57,6 @@ export class TeamsService {
       return activeTeamMember?.role;
     })
   );
-
-  constructor(
-    private userService: UserService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private teamsAPIService: TeamsAPIService
-  ) {}
 
   retrieveTeamsByOrg(orgSlug: string) {
     return this.teamsAPIService

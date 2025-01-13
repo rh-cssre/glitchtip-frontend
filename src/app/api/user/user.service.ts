@@ -1,105 +1,137 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { computed, effect, inject, Injectable, resource } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { BehaviorSubject, EMPTY, Subject } from "rxjs";
-import { tap, map, catchError, exhaustMap } from "rxjs/operators";
-import { User } from "./user.interfaces";
+import { client } from "../api";
+import { components } from "../api-schema";
+import { AuthService } from "src/app/auth.service";
+import { refreshInterval } from "src/app/shared/shared.utils";
+import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
+
+type UserOptions = components["schemas"]["UserOptions"];
 
 interface UserState {
-  user: User | null;
+  userDeleteError: string | null;
+  userDeleteLoading: boolean;
   disconnectLoading: number | null;
 }
 
 const initialState: UserState = {
-  user: null,
+  userDeleteError: null,
+  userDeleteLoading: false,
   disconnectLoading: null,
 };
+
+const mePath = { user_id: "me" } as const;
 
 @Injectable({
   providedIn: "root",
 })
-export class UserService {
-  private readonly state = new BehaviorSubject<UserState>(initialState);
-  readonly userDetails$ = this.state.pipe(map((state) => state.user));
-  readonly disconnectLoading$ = this.state.pipe(
-    map((state) => state.disconnectLoading)
-  );
-  private readonly getUserDetailsAction = new Subject();
+export class UserService extends StatefulService<UserState> {
+  private snackBar = inject(MatSnackBar);
 
-  readonly activeUserEmail$ = this.userDetails$.pipe(
-    map((userDetails) => userDetails?.email)
-  );
-  private readonly url = "/api/0/users/me/";
+  authService = inject(AuthService);
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
-    this.getUserDetailsAction
-      .pipe(
-        exhaustMap(() =>
-          this.retrieveUserDetails().pipe(
-            tap((resp: User) => this.setUserDetails(resp)),
-            catchError(() => EMPTY)
-          )
-        )
-      )
-      .subscribe();
+  userResource = resource({
+    request: () => ({ isAuthenticated: this.authService.isAuthenticated() }),
+    loader: async ({ request }) => {
+      if (!request.isAuthenticated) {
+        return undefined;
+      }
+      const { data } = await client.GET("/api/0/users/{user_id}/", {
+        params: { path: mePath },
+      });
+      return data;
+    },
+  });
+  user = computed(() => this.userResource.value());
+  activeUserEmail = computed(() => this.user()?.email);
+  readonly userDeleteError = computed(() => this.state().userDeleteError);
+  readonly userDeleteLoading = computed(() => this.state().userDeleteLoading);
+  readonly disconnectLoading = computed(() => this.state().disconnectLoading);
+
+  constructor() {
+    super(initialState);
+    this.refresh();
+    effect(() => {
+      const user = this.user();
+      if (user?.chatwootIdentifierHash) {
+        let chatwootUser = {
+          email: user.email,
+          identifier_hash: user.chatwootIdentifierHash,
+        };
+        // Chatwoot may not always be ready at this point
+        if ((window as any).$chatwoot) {
+          (window as any).$chatwoot.setUser(user.id, chatwootUser);
+        } else {
+          window.addEventListener("chatwoot:ready", function () {
+            (window as any).$chatwoot.setUser(user.id, chatwootUser);
+          });
+        }
+      }
+    });
   }
 
   /** Get and set current logged in user details from backend */
   getUserDetails() {
-    this.getUserDetailsAction.next(undefined);
-  }
-
-  private retrieveUserDetails() {
-    return this.http.get<User>(this.url);
+    this.userResource.reload();
   }
 
   deleteUser() {
-    return this.http.delete(this.url);
+    this.setUserDeleteLoadingStart();
+    return client
+      .DELETE("/api/0/users/{user_id}/", {
+        params: { path: mePath },
+      })
+      .then((result) => {
+        if (result.error) {
+          // TODO get error message
+          this.setUserDeleteError("Unable to delete user");
+        }
+      });
   }
 
-  updateUserOptions(name: string, options: { [key: string]: string }) {
-    return this.patchUser({ name, options })
-      .pipe(
-        tap(() => {
-          this.getUserDetails();
-          this.snackBar.open("Preferences have been updated")
-        })
-      )
-      .toPromise();
+  updateUser(name: string, options: UserOptions) {
+    client
+      .PUT("/api/0/users/{user_id}/", {
+        params: {
+          path: mePath,
+        },
+        body: { name, options },
+      })
+      .then((result) => {
+        if (result.data) {
+          this.userResource.set(result.data);
+          this.snackBar.open("Preferences have been updated");
+        } else {
+          this.snackBar.open("Error attempting to update preferences");
+        }
+      });
   }
 
-  private patchUser(user: Partial<User>) {
-    return this.http.patch(this.url, user);
+  clearUserUIState() {
+    this.setState({
+      userDeleteError: initialState.userDeleteError,
+      userDeleteLoading: initialState.userDeleteLoading,
+      disconnectLoading: initialState.disconnectLoading,
+    });
   }
 
-  disconnectSocialAccount(accountId: number) {
-    this.setDisconnectLoading(accountId);
-    this.http
-      .post("/api/socialaccounts/" + accountId + "/disconnect/", {})
-      .pipe(
-        tap(() => {
-          this.setDisconnectLoading(null);
-          this.getUserDetails();
-          this.snackBar.open(
-            "You have successfully disconnected your social auth account"
-          );
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setDisconnectLoading(null);
-          if (Array.isArray(err.error) && err.error.length) {
-            this.snackBar.open(err.error[0]);
-          }
-          return EMPTY;
-        })
-      )
-      .toPromise();
+  private setUserDeleteLoadingStart() {
+    this.setState({
+      userDeleteLoading: true,
+    });
   }
 
-  private setDisconnectLoading(loading: number | null) {
-    this.state.next({ ...this.state.getValue(), disconnectLoading: loading });
+  private setUserDeleteError(error: string) {
+    this.setState({
+      userDeleteLoading: false,
+      userDeleteError: error,
+    });
   }
 
-  private setUserDetails(userDetails: User) {
-    this.state.next({ ...this.state.getValue(), user: userDetails });
+  private refresh() {
+    // Refresh 10s, 3m, 15m...
+    refreshInterval([10, 60 * 3], 60 * 15).subscribe(() =>
+      this.userResource.reload()
+    );
   }
 }

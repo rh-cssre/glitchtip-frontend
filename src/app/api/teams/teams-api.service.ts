@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
 import { Member } from "src/app/api/organizations/organizations.interface";
@@ -9,10 +9,16 @@ import { Team } from "./teams.interfaces";
   providedIn: "root",
 })
 export class TeamsAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = "/teams/";
 
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+  
+    this.http = http;
   }
 
   create(orgSlug: string, teamSlug: string) {
@@ -44,13 +50,13 @@ export class TeamsAPIService extends APIBaseService {
   addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
     return this.http.post<Team>(
       this.teamMemberURL(member.id, orgSlug, teamSlug),
-      member
+      member,
     );
   }
 
   removeTeamMember(memberId: number, orgSlug: string, teamSlug: string) {
     return this.http.delete<Team>(
-      this.teamMemberURL(memberId, orgSlug, teamSlug)
+      this.teamMemberURL(memberId, orgSlug, teamSlug),
     );
   }
 

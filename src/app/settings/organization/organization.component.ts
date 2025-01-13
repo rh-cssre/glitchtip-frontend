@@ -1,40 +1,54 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { tap, take } from "rxjs/operators";
-import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { OrganizationDetail } from "src/app/api/organizations/organizations.interface";
+import { OrganizationDetailService } from "../../api/organizations/organization-detail.service";
+import { Organization } from "src/app/api/organizations/organizations.interface";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { AsyncPipe } from "@angular/common";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-organization",
   templateUrl: "./organization.component.html",
   styleUrls: ["./organization.component.scss"],
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LoadingButtonComponent,
+    AsyncPipe,
+  ],
 })
 export class OrganizationComponent implements OnInit {
-  activeOrganizationDetail$ = this.organizationsService
-    .activeOrganizationDetail$;
+  private organizationsService = inject(OrganizationsService);
+  private organizationDetailService = inject(OrganizationDetailService);
+  private snackBar = inject(MatSnackBar);
+
+  activeOrganizationDetail$ = this.organizationsService.activeOrganization$;
   updateError = "";
   updateLoading = false;
   deleteError = "";
   deleteLoading = false;
-  form = new UntypedFormGroup({
-    name: new UntypedFormControl(""),
+  form = new FormGroup({
+    name: new FormControl(""),
   });
-
-  constructor(
-    private organizationsService: OrganizationsService,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit() {
     // Ignore first load, on subsequent inits refresh org data
-    this.organizationsService.initialLoad$
+    this.organizationDetailService.initialLoad$
       .pipe(
         take(1),
         tap((initialLoad) => {
           if (initialLoad) {
-            this.organizationsService.retrieveOrganizations().toPromise();
-            this.organizationsService.refreshOrganizationDetail().subscribe();
+            // this.organizationsService.retrieveOrganizations().toPromise();
+            this.organizationsService.refreshActiveOrganization();
           }
         })
       )
@@ -50,10 +64,10 @@ export class OrganizationComponent implements OnInit {
 
   updateOrganization() {
     this.updateLoading = true;
-    this.organizationsService
-      .updateOrganization(this.form.value.name)
+    this.organizationDetailService
+      .updateOrganization(this.form.value.name!)
       .subscribe(
-        (org: OrganizationDetail) => {
+        (org: Organization) => {
           this.updateLoading = false;
           this.snackBar.open(
             `The name of your organization has been updated to ${org.name}`
@@ -73,18 +87,17 @@ export class OrganizationComponent implements OnInit {
       )
     ) {
       this.deleteLoading = true;
-      this.organizationsService.deleteOrganization(slug).subscribe(
-        () => {
+      this.organizationDetailService.deleteOrganization(slug).then((result) => {
+        if (result.response.status === 204) {
           this.deleteLoading = false;
           this.snackBar.open(
             `You have successfully deleted ${name} from your organizations`
           );
-        },
-        (err) => {
+        } else {
           this.deleteLoading = false;
-          this.deleteError = "Error: " + err.statusText;
+          this.deleteError = "Error";
         }
-      );
+      });
     }
   }
 }
