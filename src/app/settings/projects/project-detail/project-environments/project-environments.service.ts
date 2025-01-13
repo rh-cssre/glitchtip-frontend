@@ -1,18 +1,11 @@
-import { Injectable } from "@angular/core";
-import { combineLatest, EMPTY, Observable } from "rxjs";
-import {
-  filter,
-  distinctUntilChanged,
-  map,
-  mergeMap,
-  takeWhile,
-  tap,
-} from "rxjs/operators";
+import { Injectable, inject } from "@angular/core";
+import { combineLatest, EMPTY } from "rxjs";
+import { filter, map, mergeMap, takeWhile, tap } from "rxjs/operators";
 import { ProjectEnvironment } from "src/app/api/organizations/organizations.interface";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectsAPIService } from "src/app/api/projects/projects-api.service";
 import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
 import { ProjectSettingsService } from "../../project-settings.service";
+import { ProjectEnvironmentsAPIService } from "src/app/api/projects/project-environments-api.service";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 interface ProjectsState {
   initialLoad: boolean;
@@ -32,6 +25,10 @@ const initialState: ProjectsState = {
   providedIn: "root",
 })
 export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
+  private projectEnvironmentsAPIService = inject(ProjectEnvironmentsAPIService);
+  private organizationsService = inject(OrganizationsService);
+  private projectSettingsService = inject(ProjectSettingsService);
+
   readonly initialLoad$ = this.getState$.pipe(map((data) => data.initialLoad));
   readonly toggleHiddenLoading$ = this.getState$.pipe(
     map((data) => data.toggleHiddenLoading)
@@ -77,11 +74,7 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
     )
   );
 
-  constructor(
-    private projectsAPIService: ProjectsAPIService,
-    private organizationsService: OrganizationsService,
-    private projectSettingsService: ProjectSettingsService
-  ) {
+  constructor() {
     super(initialState);
   }
 
@@ -93,8 +86,8 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
       takeWhile(([orgSlug, projectSlug]) => !orgSlug || !projectSlug, true),
       mergeMap(([orgSlug, projectSlug]) => {
         if (orgSlug && projectSlug) {
-          return this.projectsAPIService
-            .listEnvironments(orgSlug, projectSlug)
+          return this.projectEnvironmentsAPIService
+            .list(orgSlug, projectSlug)
             .pipe(
               tap((environments) =>
                 this.setState({
@@ -109,39 +102,8 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
     );
   }
 
-  observeProjectEnvironments(
-    queryParamsObs: Observable<{
-      orgSlug: string | undefined;
-      project: string[] | null;
-    }>
-  ) {
-    return combineLatest([
-      queryParamsObs,
-      this.organizationsService.activeOrganizationProjects$,
-    ]).pipe(
-      filter(
-        ([urlData, projects]) =>
-          urlData.orgSlug !== undefined &&
-          urlData.project?.length === 1 &&
-          projects !== null
-      ),
-      distinctUntilChanged((a, b) => a[0].project![0] === b[0].project![0]),
-      map(([urlData, projects]) => {
-        const matchedProject = projects!.find(
-          (project) => project.id === parseInt(urlData.project![0], 10)
-        );
-        if (urlData.orgSlug && matchedProject) {
-          this.retrieveEnvironmentsWithProperties(
-            urlData.orgSlug,
-            matchedProject.slug
-          ).subscribe();
-        }
-      })
-    );
-  }
-
   retrieveEnvironmentsWithProperties(orgSlug: string, projectSlug: string) {
-    return this.projectsAPIService.listEnvironments(orgSlug, projectSlug).pipe(
+    return this.projectEnvironmentsAPIService.list(orgSlug, projectSlug).pipe(
       tap((environments) =>
         this.setState({
           environments: this.sortEnvironments(environments),
@@ -161,8 +123,8 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
         if (orgSlug && projectSlug) {
           this.setState({ toggleHiddenLoading: environment.id });
 
-          return this.projectsAPIService
-            .updateEnvironment(orgSlug, projectSlug, environment)
+          return this.projectEnvironmentsAPIService
+            .update(orgSlug, projectSlug, environment)
             .pipe(
               tap((updatedEnvironment) =>
                 this.setState({

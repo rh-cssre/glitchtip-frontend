@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
 import { ProjectKey } from "./projects-api.interfaces";
@@ -8,20 +8,26 @@ import { ProjectKey } from "./projects-api.interfaces";
   providedIn: "root",
 })
 export class ProjectKeysAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = `${baseUrl}/projects/`;
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+  
+    this.http = http;
   }
 
   list(organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectKey[]>(
-      this.listURL(organizationSlug, projectSlug)
+      this.listURL(organizationSlug, projectSlug),
     );
   }
 
   retrieve(organizationSlug: string, projectSlug: string, id: string) {
     return this.http.get<ProjectKey>(
-      this.detailURL(organizationSlug, projectSlug, id)
+      this.detailURL(organizationSlug, projectSlug, id),
     );
   }
 
@@ -36,11 +42,11 @@ export class ProjectKeysAPIService extends APIBaseService {
   protected detailURL(
     organizationSlug: string,
     projectSlug: string,
-    id: string
+    id: string,
   ) {
     return `${this.listURL(
       organizationSlug,
-      projectSlug
+      projectSlug,
     )}${projectSlug}/${id}/`;
   }
 }

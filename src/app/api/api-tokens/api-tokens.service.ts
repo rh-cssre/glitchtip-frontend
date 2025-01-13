@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { baseUrl } from "../../constants";
 import { APIToken, NewAPIToken } from "./api-tokens.interfaces";
@@ -8,9 +8,15 @@ import { APIBaseService } from "../api-base.service";
   providedIn: "root",
 })
 export class APITokenService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = baseUrl + "/api-tokens/";
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+  
+    this.http = http;
   }
 
   list() {
