@@ -1,24 +1,28 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { computed, Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, EMPTY } from "rxjs";
-import { tap, map, catchError } from "rxjs/operators";
-import {
-  Subscription,
-  Product,
-  CreateSubscriptionResp,
-  EventsCount,
-} from "./subscriptions.interfaces";
-import { baseUrl } from "src/app/constants";
+import { EMPTY, lastValueFrom, timer } from "rxjs";
+import { catchError, delay, expand, tap, takeUntil } from "rxjs/operators";
+import { Subscription, Product, EventsCount } from "./subscriptions.interfaces";
+import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
+import { ProductsAPIService } from "./products-api.service";
+import { SubscriptionsAPIService } from "./subscriptions-api.service";
 
 interface SubscriptionsState {
+  subscriptionCreationLoadingId: string | null;
   subscription: Subscription | null;
+  subscriptionLoading: boolean;
+  subscriptionLoadingTimeout: boolean;
+  fromStripe: boolean;
   eventsCount: EventsCount | null;
   products: Product[] | null;
 }
 
 const initialState: SubscriptionsState = {
+  subscriptionCreationLoadingId: null,
   subscription: null,
+  subscriptionLoading: false,
+  subscriptionLoadingTimeout: false,
+  fromStripe: false,
   eventsCount: null,
   products: null,
 };
@@ -26,61 +30,112 @@ const initialState: SubscriptionsState = {
 @Injectable({
   providedIn: "root",
 })
-export class SubscriptionsService {
-  private readonly state = new BehaviorSubject<SubscriptionsState>(
-    initialState
-  );
-  private readonly getState$ = this.state.asObservable();
-  private readonly url = baseUrl + "/subscriptions/";
+export class SubscriptionsService extends StatefulService<SubscriptionsState> {
+  private productsAPIService = inject(ProductsAPIService);
+  private subscriptionsAPIService = inject(SubscriptionsAPIService);
+  private router = inject(Router);
 
-  readonly subscription$ = this.getState$.pipe(
-    map((state) => state.subscription)
-  );
-  readonly eventsCountWithTotal$ = this.getState$.pipe(
-    map((state) => {
-      let total = 0;
-      if (state.eventsCount) {
-        total +=
-          state.eventsCount.eventCount! +
-          state.eventsCount.transactionEventCount! +
-          state.eventsCount.uptimeCheckEventCount! +
-          state.eventsCount.fileSizeMB!;
+  subscription = computed(() => this.state().subscription);
+  formattedSubscription = computed(() => {
+    const subscription = this.subscription();
+    if (!subscription?.items[0]?.price) return null;
 
-        return {
-          ...state.eventsCount,
-          total,
-        };
-      } else {
-        return state.eventsCount;
-      }
-    })
+    const { unit_amount } = subscription.items[0].price;
+    const { name, description } = subscription.items[0].price.product;
+
+    return {
+      ...subscription,
+      mainUnitPrice: unit_amount / 100,
+      productName: name,
+      productDescription: description,
+    };
+  });
+  subscriptionLoading = computed(() => this.state().subscriptionLoading);
+  subscriptionLoadingTimeout = computed(
+    () => this.state().subscriptionLoadingTimeout
+  );
+  subscriptionCreationLoadingId = computed(
+    () => this.state().subscriptionCreationLoadingId
+  );
+  fromStripe = computed(() => this.state().fromStripe);
+  eventsCountWithTotal = computed(() => {
+    const state = this.state();
+    if (!state.eventsCount) return state.eventsCount;
+
+    const total =
+      state.eventsCount.eventCount! +
+      state.eventsCount.transactionEventCount! +
+      state.eventsCount.uptimeCheckEventCount! +
+      state.eventsCount.fileSizeMB!;
+
+    return { ...state.eventsCount, total };
+  });
+  totalEventsAllowed = computed(() => {
+    const subscription = this.subscription();
+    return subscription?.items[0]?.price?.product?.metadata?.events
+      ? parseInt(subscription.items[0].price.product.metadata.events, 10)
+      : null;
+  });
+  productOptions = computed(() => this.state().products);
+  formattedProductOptions = computed(() =>
+    this.productOptions()?.map((product) => ({
+      ...product,
+      name: product.name.startsWith("GlitchTip ")
+        ? product.name.slice(10)
+        : product.name,
+      mainUnitPrice: product.prices[0].unit_amount / 100,
+    }))
   );
 
-  readonly planOptions$ = this.getState$.pipe(map((state) => state.products));
-  readonly planOptionsWithShortNames$ = this.planOptions$.pipe(
-    map((plans) => {
-      return plans?.map((plan) => ({
-        ...plan,
-        name: plan.name.startsWith("GlitchTip ")
-          ? plan.name.substring(10)
-          : plan.name,
-      }));
-    })
-  );
-
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor() {
+    super(initialState);
+  }
 
   /**
    * Retrieve subscription for this organization
    * @param slug Organization Slug for requested subscription
    */
   retrieveSubscription(slug: string) {
-    return this.http.get<Subscription>(`${this.url}${slug}/`).pipe(
-      tap((subscription) => this.setSubscription(subscription)),
-      catchError((error) => {
-        this.clearState();
-        return EMPTY;
-      })
+    this.setSubscriptionLoadingStart();
+    lastValueFrom(
+      this.subscriptionsAPIService.retrieve(slug).pipe(
+        tap((subscription) => {
+          this.setSubscription(subscription);
+        }),
+        catchError(() => {
+          this.setSubscriptionLoadingError();
+          return EMPTY;
+        })
+      ),
+      { defaultValue: null }
+    );
+  }
+
+  /**
+   * Keep trying to get subscription, for users redirected from Stripe
+   * @param slug Organization Slug for requested subscription
+   */
+  retrieveUntilSubscriptionOrTimeout(slug: string) {
+    this.setSubscriptionLoadingStart(true);
+    lastValueFrom(
+      this.subscriptionsAPIService.retrieve(slug).pipe(
+        expand((subscription) => {
+          if (!subscription.created) {
+            return this.subscriptionsAPIService
+              .retrieve(slug)
+              .pipe(delay(2000));
+          } else {
+            this.setSubscription(subscription);
+            return EMPTY;
+          }
+        }),
+        catchError(() => {
+          this.setSubscriptionLoadingError();
+          return EMPTY;
+        }),
+        takeUntil(this.subscriptionRetryTimer())
+      ),
+      { defaultValue: null }
     );
   }
 
@@ -88,12 +143,15 @@ export class SubscriptionsService {
    * Retrieve event count for current active subscription for this organization
    * @param slug Organization Slug for requested subscription event count
    */
-  retrieveSubscriptionCount(slug: string) {
-    return this.http.get<EventsCount>(`${this.url}${slug}/events_count/`).pipe(
-      tap((count) => this.setSubscriptionCount(count)),
-      catchError((error) => {
-        return EMPTY;
-      })
+  retrieveSubscriptionEventCount(slug: string) {
+    lastValueFrom(
+      this.subscriptionsAPIService.retrieveEventsCount(slug).pipe(
+        tap((count) => this.setSubscriptionCount(count)),
+        catchError((error) => {
+          return EMPTY;
+        })
+      ),
+      { defaultValue: null }
     );
   }
 
@@ -101,65 +159,80 @@ export class SubscriptionsService {
    * Retrieve subscription plans
    * productAmountSorted converts product prices to ints and sorts from low to high
    */
-  retrieveSubscriptionPlans() {
-    return this.http.get<Product[]>("/api/0/products/").pipe(
-      tap((products) => {
-        const productAmountSorted = products
-          .map((product) => ({
-            ...product,
-            plans: product.plans.map((plans) => ({
-              ...plans,
-              amount: +plans.amount,
-            })),
-          }))
-          .sort((a, b) => a.plans[0].amount - b.plans[0].amount);
-        this.setProducts(productAmountSorted);
-      })
-    );
-  }
-
-  createFreeSubscription(organizationId: number, planId: string) {
-    const data = {
-      organization: organizationId,
-      plan: planId,
-    };
-    return this.http
-      .post<CreateSubscriptionResp>("/api/0/subscriptions/", data)
-      .pipe(
-        tap((resp) => {
-          this.setSubscription(resp.subscription);
+  retrieveProducts() {
+    lastValueFrom(
+      this.productsAPIService.list().pipe(
+        tap((products) => {
+          const productAmountSorted = products.sort(
+            (a, b) => a.prices[0].unit_amount - b.prices[0].unit_amount
+          );
+          this.setProducts(productAmountSorted);
         })
-      );
+      )
+    );
   }
 
   /**
    * Retrieve Subscription and navigate to subscription page if no subscription exists
    */
   checkIfUserHasSubscription(orgSlug: string) {
-    this.retrieveSubscription(orgSlug)
-      .pipe(
-        tap((subscription) => {
-          if (subscription.status === null) {
-            this.router.navigate([orgSlug, "settings", "subscription"]);
-          }
-        })
-      )
-      .toPromise();
+    const subscriptionRoute = [orgSlug, "settings", "subscription"];
+    if (
+      !this.router.isActive(this.router.createUrlTree(subscriptionRoute), {
+        paths: "exact",
+        queryParams: "subset",
+        fragment: "ignored",
+        matrixParams: "ignored",
+      })
+    ) {
+      lastValueFrom(
+        this.subscriptionsAPIService.retrieve(orgSlug).pipe(
+          tap((subscription) => {
+            if (subscription === null) {
+              this.router.navigate(subscriptionRoute);
+            }
+          })
+        )
+      );
+    }
   }
 
-  clearState() {
-    this.state.next(initialState);
+  private subscriptionRetryTimer() {
+    return timer(60000).pipe(
+      tap(() => {
+        this.setSubscriptionLoadingTimeout();
+      })
+    );
   }
 
   private setProducts(products: Product[]) {
-    this.state.next({ ...this.state.getValue(), products });
+    this.setState({ products });
   }
 
-  private setSubscription(subscription: Subscription) {
-    this.state.next({ ...this.state.getValue(), subscription });
+  setSubscription(subscription: Subscription) {
+    this.setState({
+      subscription,
+      subscriptionLoading: false,
+      subscriptionCreationLoadingId: null,
+    });
+  }
+
+  private setSubscriptionLoadingStart(fromStripe: boolean = false) {
+    this.setState({ subscriptionLoading: true, fromStripe });
+  }
+
+  private setSubscriptionLoadingError() {
+    this.setState({ subscriptionLoading: false });
+  }
+
+  private setSubscriptionLoadingTimeout() {
+    this.setState({
+      subscriptionLoading: false,
+      subscriptionLoadingTimeout: true,
+    });
   }
 
   private setSubscriptionCount(eventsCount: EventsCount) {
-    this.state.next({ ...this.state.getValue(), eventsCount });
+    this.setState({ eventsCount });
   }
 }

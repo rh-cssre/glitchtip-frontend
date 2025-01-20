@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { EMPTY } from "rxjs";
 import { tap, map, catchError } from "rxjs/operators";
@@ -34,30 +34,30 @@ const initialState: AuthTokensState = {
   providedIn: "root",
 })
 export class AuthTokensService extends StatefulService<AuthTokensState> {
+  private apiTokenService = inject(APITokenService);
+  private router = inject(Router);
+
   readonly apiTokens$ = this.getState$.pipe(map((state) => state.apiTokens));
   readonly initialLoad$ = this.getState$.pipe(
-    map((state) => state.loading.apiTokens)
+    map((state) => state.loading.apiTokens),
   );
   readonly createError$ = this.getState$.pipe(
-    map((state) => state.createError)
+    map((state) => state.createError),
   );
   readonly createErrorLabel$ = this.getState$.pipe(
-    map((state) => state.createErrorLabel)
+    map((state) => state.createErrorLabel),
   );
   readonly createErrorScopes$ = this.getState$.pipe(
-    map((state) => state.createErrorScopes)
+    map((state) => state.createErrorScopes),
   );
   readonly createLoading$ = this.getState$.pipe(
-    map((state) => state.loading.create)
+    map((state) => state.loading.create),
   );
   readonly deleteLoading$ = this.getState$.pipe(
-    map((state) => state.loading.delete)
+    map((state) => state.loading.delete),
   );
 
-  constructor(
-    private apiTokenService: APITokenService,
-    private router: Router
-  ) {
+  constructor() {
     super(initialState);
   }
 
@@ -68,7 +68,7 @@ export class AuthTokensService extends StatefulService<AuthTokensState> {
         tap((apiTokens) => {
           this.setAPITokensLoading();
           this.setAPITokens(apiTokens);
-        })
+        }),
       )
       .toPromise();
   }
@@ -102,7 +102,7 @@ export class AuthTokensService extends StatefulService<AuthTokensState> {
             }
           }
           return EMPTY;
-        })
+        }),
       )
       .toPromise();
   }
@@ -114,7 +114,7 @@ export class AuthTokensService extends StatefulService<AuthTokensState> {
       .pipe(
         tap(() => {
           this.loadAuthTokens();
-        })
+        }),
       )
       .toPromise();
   }
