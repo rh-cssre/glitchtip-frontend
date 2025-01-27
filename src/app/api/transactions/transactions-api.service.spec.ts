@@ -25,7 +25,7 @@ describe("TransactionsService", () => {
       .list("test")
       .subscribe((data) => expect(data.body).toEqual([testTransaction]));
     const req = httpTestingController.expectOne(
-      "/api/0/organizations/test/transactions/"
+      "/api/0/organizations/test/transactions/",
     );
     expect(req.request.method).toEqual("GET");
     req.flush([testTransaction]);

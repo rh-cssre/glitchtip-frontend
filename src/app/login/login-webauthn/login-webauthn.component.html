@@ -1,0 +1,30 @@
+<div class="margin-set">
+  <h1 class="header-left" i18n>Log in with security key</h1>
+  <div class="instructions" i18n
+    >Plug in your security key and follow the prompt from your browser to finish
+    logging in.</div
+  >
+  @if (authInProg) {
+    <div class="progress-bar">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  } @else {
+    <div class="auth-button">
+      <button mat-flat-button color="primary" (click)="retryAuth()" i18n
+        >Retry</button
+      >
+    </div>
+  }
+  <!-- <mat-checkbox class="remember-me-checkbox mat-caption" (change)="toggleRemember($event.checked)">Don't prompt again on
+    this device</mat-checkbox> -->
+  <div>
+    <a [routerLink]="[]" (click)="switchMethod()" i18n
+      >Log in with authenticator app instead</a
+    >
+  </div>
+  <div>
+    <a [routerLink]="[]" (click)="restartLogin()" i18n
+      >Return to initial login page</a
+    >
+  </div>
+</div>
