@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { map, tap } from "rxjs/operators";
 import { Project } from "../api/projects/projects-api.interfaces";
 import { ProjectsAPIService } from "../api/projects/projects-api.service";
@@ -20,13 +20,15 @@ const initialState: ProjectsState = {
   providedIn: "root",
 })
 export class ProjectsService extends StatefulService<ProjectsState> {
+  private projectsAPIService = inject(ProjectsAPIService);
+
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
   readonly initialLoadComplete$ = this.getState$.pipe(
-    map((state) => state.initialLoadComplete)
+    map((state) => state.initialLoadComplete),
   );
   readonly loading$ = this.getState$.pipe(map((state) => state.loading));
 
-  constructor(private projectsAPIService: ProjectsAPIService) {
+  constructor() {
     super(initialState);
   }
 
