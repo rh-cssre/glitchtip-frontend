@@ -1,5 +1,6 @@
 import { User } from "../user/user.interfaces";
 import { Team } from "../teams/teams.interfaces";
+import { OrganizationProject } from "../projects/projects-api.interfaces";
 
 export interface OrganizationNew {
   name: string;
@@ -14,6 +15,7 @@ export interface Organization extends OrganizationNew {
   isEarlyAdopter: boolean;
   require2FA: boolean;
   isAcceptingEvents: boolean;
+  eventThrottleRate: number;
   slug: string;
 }
 
@@ -33,23 +35,20 @@ export interface Avatar {
   avatarUuid: string | null;
 }
 
-export interface OrganizationProject {
-  name: string;
-  slug: string;
-  platform: string | null;
-  id: number;
-  isMember: boolean;
-}
-
 export interface Member {
-  role: string;
+  role: MemberRole;
   id: number;
   user: User | null;
   roleName: string;
   dateCreated: string;
   email: string;
   pending: boolean;
+  isOwner: boolean;
+}
+
+export interface MemberDetail extends Member {
   teams: string[];
+  roles: MemberRoleDetail[];
 }
 
 export interface MemberSelector extends Member {
@@ -64,10 +63,27 @@ export interface OrganizationUser extends Member {
 
 export type MemberRole = "member" | "admin" | "manager" | "owner";
 
-export interface OrganizationMembersRequest {
+export interface MemberRoleDetail {
+  id: MemberRole;
+  name: string;
+  desc: string;
+  scopes: string[];
+}
+
+export interface TeamRole {
+  teamSlug: string;
+  role: string;
+}
+
+export interface OrgMemberUpdate {
+  orgRole: MemberRole;
+  teamRoles: TeamRole[];
+}
+
+export interface OrgMemberIn extends OrgMemberUpdate {
   email: string;
-  role: MemberRole;
-  teams: string[];
+  sendInvite?: boolean;
+  reinvite?: boolean;
 }
 
 export interface OrganizationLoading {

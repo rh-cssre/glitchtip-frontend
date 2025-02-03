@@ -97,12 +97,6 @@
         <target>Pour continuer, vous devez soit vous connecter avec votre compte existant, soit en créer un nouveau.</target>
       </segment>
     </unit>
-    <unit id="3961541970784414950">
-      <segment state="translated">
-        <source>There was an error connecting to your social authentication provider.</source>
-        <target>Une erreur s&apos;est produite lors de la connexion à votre fournisseur d&apos;authentification sociale.</target>
-      </segment>
-    </unit>
     <unit id="1095247315180807956">
       <segment state="translated">
         <source>New to GlitchTip?</source>
@@ -271,9 +265,9 @@
         <target>ou</target>
       </segment>
     </unit>
-    <unit id="315190807015121967">
-      <segment state="translated">
-        <source>Code must be of length 6 or 16</source>
+    <unit id="2152994175880724805">
+      <segment state="initial">
+        <source>Code must be of length 6, 8, or 16</source>
         <target>Le code doit avoir une longueur de 6 ou 16</target>
       </segment>
     </unit>
@@ -343,9 +337,9 @@
         <target>Votre mot de passe doit comporter au moins 8 caractères</target>
       </segment>
     </unit>
-    <unit id="6745305564776759454">
+    <unit id="2935794773842380882">
       <segment state="initial">
-        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization.</source>
         <target> L&apos;enregistrement a été désactivé sur cette instance de GlitchTip. Contactez un administrateur pour être invité dans une organisation existante. </target>
       </segment>
     </unit>
@@ -367,12 +361,6 @@
         <target>Connexion</target>
       </segment>
     </unit>
-    <unit id="3517932573606350122">
-      <segment state="initial">
-        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
-        <target> Intervalle de test de disponibilité : </target>
-      </segment>
-    </unit>
     <unit id="4426319772533875265">
       <segment state="initial">
         <source> Settings </source>
@@ -380,6 +368,9 @@
       </segment>
     </unit>
     <unit id="375247309021166846">
+      <notes>
+        <note category="description">Uptime check reports down</note>
+      </notes>
       <segment state="translated">
         <source>Down</source>
         <target>Indisponible</target>
@@ -398,6 +389,9 @@
       </segment>
     </unit>
     <unit id="5573486145935722913">
+      <notes>
+        <note category="description">Uptime check reports up</note>
+      </notes>
       <segment state="translated">
         <source>Up</source>
         <target>Disponible</target>
@@ -535,9 +529,9 @@
         <target>ou votre application TOTP préférée sur votre appareil mobile</target>
       </segment>
     </unit>
-    <unit id="3099741642167775297">
-      <segment state="translated">
-        <source>Download</source>
+    <unit id="1738896816778317550">
+      <segment state="initial">
+        <source>Download </source>
         <target>Télécharger</target>
       </segment>
     </unit>
@@ -601,40 +595,10 @@
         <target>Entrez un mot de passe à six chiffres généré par votre application d&apos;authentification et validez ce formulaire pour activer l&apos;authentification TOTP :</target>
       </segment>
     </unit>
-    <unit id="1114702394872457328">
-      <segment state="translated">
-        <source>so you can keep track of errors</source>
-        <target>afin que vous puissiez garder une trace des erreurs</target>
-      </segment>
-    </unit>
     <unit id="520980174761118864">
       <segment state="initial">
         <source>Log in with <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></source>
         <target>Se connecter avec <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></target>
-      </segment>
-    </unit>
-    <unit id="2303592265389969112">
-      <segment state="initial">
-        <source>then create an account for or log into the account that this invite link was intended for</source>
-        <target>puis créez un compte ou connectez-vous au compte auquel ce lien d&apos;invitation était destiné</target>
-      </segment>
-    </unit>
-    <unit id="5113632876676621367">
-      <segment state="translated">
-        <source>log out</source>
-        <target>se déconnecter</target>
-      </segment>
-    </unit>
-    <unit id="6058250631075928277">
-      <segment state="translated">
-        <source>You have been invited to join</source>
-        <target>Vous avez été invité à rejoindre</target>
-      </segment>
-    </unit>
-    <unit id="6609789944031289762">
-      <segment state="initial">
-        <source>The account you&apos;re logged into is already a part of this organization. You might want to</source>
-        <target>Le compte auquel vous êtes connecté fait déjà partie de cette organisation. Vous pourriez vouloir</target>
       </segment>
     </unit>
     <unit id="5715233980836936433">
@@ -675,8 +639,8 @@
     </unit>
     <unit id="79938863716203390">
       <segment state="initial">
-        <source>To add a project to this organization, press the &quot;Add Project&quot; button.</source>
-        <target>To add a project to this organization, press the &quot;Add Project&quot; button.</target>
+        <source>To add a project to this organization, press the &quot;Add Project&quot; button.</source>
+        <target>To add a project to this organization, press the &quot;Add Project&quot; button.</target>
       </segment>
     </unit>
     <unit id="8267592046747299006">
@@ -705,14 +669,14 @@
     </unit>
     <unit id="1120098013104989112">
       <segment state="initial">
-        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, &apos;settings&apos;, activeOrganizationSlug$ | async, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
-        <target>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, &apos;settings&apos;, activeOrganizationSlug$ | async, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</target>
+        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
+        <target>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug$ | async, &apos;settings&apos;, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</target>
       </segment>
     </unit>
-    <unit id="6401078118236139749">
+    <unit id="4739937000925855165">
       <segment state="initial">
-        <source>Most instructions will have a spot that says &quot;your DSN here&quot;. Copy the DSN and paste it into that spot.</source>
-        <target>Most instructions will have a spot that says &quot;your DSN here&quot;. Copy the DSN and paste it into that spot.</target>
+        <source>Most instructions will have a spot that says &quot;YOUR-GLITCHTIP-DSN-HERE&quot;. Copy the DSN and paste it into that spot.</source>
+        <target>Most instructions will have a spot that says &quot;YOUR-GLITCHTIP-DSN-HERE&quot;. Copy the DSN and paste it into that spot.</target>
       </segment>
     </unit>
     <unit id="5874780279351956748">
@@ -745,12 +709,6 @@
         <target>You have multiple projects selected. Select a single project to learn more about why there&apos;s nothing here.</target>
       </segment>
     </unit>
-    <unit id="5010578757780115993">
-      <segment state="initial">
-        <source>Settings for <ph id="0" equiv="INTERPOLATION" disp="{{ project.name }}"/></source>
-        <target>Settings for <ph id="0" equiv="INTERPOLATION" disp="{{ project.name }}"/></target>
-      </segment>
-    </unit>
     <unit id="4388879716045736175">
       <segment state="initial">
         <source>Note</source>
@@ -767,12 +725,6 @@
       <segment state="initial">
         <source>Update Project</source>
         <target>Update Project</target>
-      </segment>
-    </unit>
-    <unit id="365917971431677426">
-      <segment state="initial">
-        <source>Enter a project name</source>
-        <target>Enter a project name</target>
       </segment>
     </unit>
     <unit id="5923980840626905087">
@@ -861,8 +813,8 @@
     </unit>
     <unit id="6940348790913679018">
       <segment state="initial">
-        <source>To add a project to this organization, press the &quot;Create New Project&quot; button.</source>
-        <target>To add a project to this organization, press the &quot;Create New Project&quot; button.</target>
+        <source>To add a project to this organization, press the &quot;Create New Project&quot; button.</source>
+        <target>To add a project to this organization, press the &quot;Create New Project&quot; button.</target>
       </segment>
     </unit>
     <unit id="3834295552674710150">
@@ -897,8 +849,8 @@
     </unit>
     <unit id="4894116049835995028">
       <segment state="initial">
-        <source>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd=".&lt;/p &gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
-        <target>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd=".&lt;/p &gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</target>
+        <source>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>.</source>
+        <target>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>.</target>
       </segment>
     </unit>
     <unit id="2506462652585445837">
@@ -969,8 +921,8 @@
     </unit>
     <unit id="1219619838898772490">
       <segment state="initial">
-        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.plan.amount | currency }}"/></source>
-        <target>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.plan.amount | currency }}"/></target>
+        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.mainUnitPrice | currency }}"/></source>
+        <target>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.mainUnitPrice | currency }}"/></target>
       </segment>
     </unit>
     <unit id="5875130684997376720">
@@ -999,8 +951,8 @@
     </unit>
     <unit id="6147245107718647120">
       <segment state="initial">
-        <source>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
-        <target>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</target>
+        <source>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>.</source>
+        <target>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>.</target>
       </segment>
     </unit>
     <unit id="6095052631454715389">
@@ -1013,24 +965,6 @@
       <segment state="initial">
         <source>This organization does not have an active subscription to GlitchTip. Pick a plan to get started.</source>
         <target>This organization does not have an active subscription to GlitchTip. Pick a plan to get started.</target>
-      </segment>
-    </unit>
-    <unit id="2174410207450829295">
-      <segment state="initial">
-        <source>This organization does not have an active subscription to GlitchTip.</source>
-        <target>This organization does not have an active subscription to GlitchTip.</target>
-      </segment>
-    </unit>
-    <unit id="1432670211434533721">
-      <segment state="initial">
-        <source>Subscription Options</source>
-        <target>Subscription Options</target>
-      </segment>
-    </unit>
-    <unit id="1676493260360867666">
-      <segment state="initial">
-        <source>If you would like to purchase a subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="."><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
-        <target>If you would like to purchase a subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="."><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</target>
       </segment>
     </unit>
     <unit id="2115863840021276098">
@@ -1055,12 +989,6 @@
       <segment state="initial">
         <source>Enter a valid slug to create a team</source>
         <target>Enter a valid slug to create a team</target>
-      </segment>
-    </unit>
-    <unit id="6234831298944462737">
-      <segment state="initial">
-        <source>Back to Teams</source>
-        <target>Back to Teams</target>
       </segment>
     </unit>
     <unit id="5105557512709552795">
@@ -1153,10 +1081,10 @@
         <target>Other Teams</target>
       </segment>
     </unit>
-    <unit id="2405706490874342359">
+    <unit id="9153853260021860021">
       <segment state="initial">
-        <source> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </source>
-        <target> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </target>
+        <source>If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>.</source>
+        <target>If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>.</target>
       </segment>
     </unit>
     <unit id="8951128623878467862">
@@ -1165,10 +1093,608 @@
         <target>Preferences</target>
       </segment>
     </unit>
-    <unit id="3893164255729997778">
+    <unit id="5279770905523465379">
       <segment state="initial">
-        <source> Select a valid time zone </source>
-        <target> Select a valid time zone </target>
+        <source>Select a valid time zone</source>
+        <target>Select a valid time zone</target>
+      </segment>
+    </unit>
+    <unit id="8433883189750412090">
+      <segment state="initial">
+        <source>You have been invited to join<pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"> <ph id="1" equiv="INTERPOLATION" disp="{{ acceptInfo.orgUser.organization.name }}"/> </pc> so you can keep track of errors.</source>
+        <target>You have been invited to join<pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"> <ph id="1" equiv="INTERPOLATION" disp="{{ acceptInfo.orgUser.organization.name }}"/> </pc> so you can keep track of errors.</target>
+      </segment>
+    </unit>
+    <unit id="4185629687342786413">
+      <segment state="initial">
+        <source>The account you&apos;re logged into is already a part of this organization. You might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;" dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account that this invite link was intended for.</source>
+        <target>The account you&apos;re logged into is already a part of this organization. You might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;" dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account that this invite link was intended for.</target>
+      </segment>
+    </unit>
+    <unit id="6921336596257236722">
+      <segment state="initial">
+        <source>New version available. Load New Version?</source>
+        <target>New version available. Load New Version?</target>
+      </segment>
+    </unit>
+    <unit id="4768749765465246664">
+      <segment state="initial">
+        <source>Email</source>
+        <target>Email</target>
+      </segment>
+    </unit>
+    <unit id="4145496584631696119">
+      <segment state="initial">
+        <source>Role</source>
+        <target>Role</target>
+      </segment>
+    </unit>
+    <unit id="231679111972850796">
+      <segment state="initial">
+        <source>Added</source>
+        <target>Added</target>
+      </segment>
+    </unit>
+    <unit id="1581886603273423006">
+      <segment state="initial">
+        <source>Account Owner</source>
+        <target>Account Owner</target>
+      </segment>
+    </unit>
+    <unit id="6895800612787584413">
+      <segment state="initial">
+        <source>Members can view and act on events, as well as view most other data within the organization.</source>
+        <target>Members can view and act on events, as well as view most other data within the organization.</target>
+      </segment>
+    </unit>
+    <unit id="1922838090212936091">
+      <segment state="initial">
+        <source>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</source>
+        <target>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</target>
+      </segment>
+    </unit>
+    <unit id="1740276691614535252">
+      <segment state="initial">
+        <source>Gains admin access on all teams as well as the ability to add and remove members.</source>
+        <target>Gains admin access on all teams as well as the ability to add and remove members.</target>
+      </segment>
+    </unit>
+    <unit id="4729000058409517470">
+      <segment state="initial">
+        <source>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</source>
+        <target>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</target>
+      </segment>
+    </unit>
+    <unit id="3444805486131364421">
+      <segment state="initial">
+        <source>Scopes:</source>
+        <target>Scopes:</target>
+      </segment>
+    </unit>
+    <unit id="2267387778265004491">
+      <segment state="initial">
+        <source>Organization Account Ownership</source>
+        <target>Organization Account Ownership</target>
+      </segment>
+    </unit>
+    <unit id="6146979090477797496">
+      <segment state="initial">
+        <source> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </source>
+        <target> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </target>
+      </segment>
+    </unit>
+    <unit id="5909691734964157223">
+      <segment state="initial">
+        <source> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </source>
+        <target> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </target>
+      </segment>
+    </unit>
+    <unit id="3916787140877704867">
+      <segment state="initial">
+        <source>Team(s)</source>
+        <target>Team(s)</target>
+      </segment>
+    </unit>
+    <unit id="9208909205064884220">
+      <segment state="initial">
+        <source>This user isn&apos;t on any teams.</source>
+        <target>This user isn&apos;t on any teams.</target>
+      </segment>
+    </unit>
+    <unit id="1398754421418372278">
+      <segment state="initial">
+        <source>Monitor Name</source>
+        <target>Monitor Name</target>
+      </segment>
+    </unit>
+    <unit id="7307117116794596244">
+      <segment state="initial">
+        <source>Monitor type</source>
+        <target>Monitor type</target>
+      </segment>
+    </unit>
+    <unit id="1418979860895365047">
+      <segment state="initial">
+        <source> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </source>
+        <target> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </target>
+      </segment>
+    </unit>
+    <unit id="4970236371480835408">
+      <segment state="initial">
+        <source> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+        <target> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </target>
+      </segment>
+    </unit>
+    <unit id="7679156164610222177">
+      <segment state="initial">
+        <source> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+        <target> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </target>
+      </segment>
+    </unit>
+    <unit id="2118666744161927873">
+      <segment state="initial">
+        <source>GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down.</source>
+        <target>GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down.</target>
+      </segment>
+    </unit>
+    <unit id="1312433286376470649">
+      <segment state="initial">
+        <source>Site URL</source>
+        <target>Site URL</target>
+      </segment>
+    </unit>
+    <unit id="1107238992361664159">
+      <segment state="initial">
+        <source>Enter a valid URL with protocol (ex. https://example.com)</source>
+        <target>Enter a valid URL with protocol (ex. https://example.com)</target>
+      </segment>
+    </unit>
+    <unit id="8190727095346221313">
+      <segment state="initial">
+        <source>Associated Project</source>
+        <target>Associated Project</target>
+      </segment>
+    </unit>
+    <unit id="6910864712437104509">
+      <segment state="initial">
+        <source>Uptime email notifications are sent to the team assigned to the associated project.</source>
+        <target>Uptime email notifications are sent to the team assigned to the associated project.</target>
+      </segment>
+    </unit>
+    <unit id="3335933778689867657">
+      <segment state="initial">
+        <source>Expected Status</source>
+        <target>Expected Status</target>
+      </segment>
+    </unit>
+    <unit id="8098214202153793679">
+      <segment state="initial">
+        <source> The quantity needs to be greater than or equal to 100. </source>
+        <target> The quantity needs to be greater than or equal to 100. </target>
+      </segment>
+    </unit>
+    <unit id="3255939212816298806">
+      <segment state="initial">
+        <source>Enter a status code number </source>
+        <target>Enter a status code number </target>
+      </segment>
+    </unit>
+    <unit id="3802089991568977129">
+      <segment state="initial">
+        <source>Interval (seconds)</source>
+        <target>Interval (seconds)</target>
+      </segment>
+    </unit>
+    <unit id="4140044682969484412">
+      <segment state="initial">
+        <source> Must be 60 or higher. </source>
+        <target> Must be 60 or higher. </target>
+      </segment>
+    </unit>
+    <unit id="3698833851158228660">
+      <segment state="initial">
+        <source> Must be less than 86400 (24 hours). </source>
+        <target> Must be less than 86400 (24 hours). </target>
+      </segment>
+    </unit>
+    <unit id="3939246603683357406">
+      <segment state="initial">
+        <source>Enter an integer. </source>
+        <target>Enter an integer. </target>
+      </segment>
+    </unit>
+    <unit id="5956316725115867558">
+      <segment state="initial">
+        <source>Timeout</source>
+        <target>Timeout</target>
+      </segment>
+    </unit>
+    <unit id="5049957255900483968">
+      <segment state="initial">
+        <source>Enter an integer between 1 and 60.</source>
+        <target>Enter an integer between 1 and 60.</target>
+      </segment>
+    </unit>
+    <unit id="3724940541438351467">
+      <segment state="initial">
+        <source>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</source>
+        <target>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</target>
+      </segment>
+    </unit>
+    <unit id="6164834099500157112">
+      <segment state="initial">
+        <source>Unable to log in with provided credentials.</source>
+        <target>Unable to log in with provided credentials.</target>
+      </segment>
+    </unit>
+    <unit id="4591000937604211863">
+      <segment state="initial">
+        <source>500 Server Error</source>
+        <target>500 Server Error</target>
+      </segment>
+    </unit>
+    <unit id="960665565485640516">
+      <segment state="initial">
+        <source>Something went wrong</source>
+        <target>Something went wrong</target>
+      </segment>
+    </unit>
+    <unit id="3221948488301825969">
+      <segment state="initial">
+        <source>Issue not found</source>
+        <target>Issue not found</target>
+      </segment>
+    </unit>
+    <unit id="5478056060243048045">
+      <segment state="initial">
+        <source>This may be because the URL is pointing to an issue that doesn&apos;t exist or was deleted.</source>
+        <target>This may be because the URL is pointing to an issue that doesn&apos;t exist or was deleted.</target>
+      </segment>
+    </unit>
+    <unit id="6306074632981769484">
+      <segment state="initial">
+        <source>It&apos;s also possible that this issue was reported to a project that you are not able to access.</source>
+        <target>It&apos;s also possible that this issue was reported to a project that you are not able to access.</target>
+      </segment>
+    </unit>
+    <unit id="4841998368096526659">
+      <segment state="initial">
+        <source>View all issues in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
+        <target>View all issues in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></target>
+      </segment>
+    </unit>
+    <unit id="8916408973006340984">
+      <segment state="initial">
+        <source>GlitchTip <ph id="0" equiv="INTERPOLATION" disp="{{ version$ | async }}"/></source>
+        <target>GlitchTip <ph id="0" equiv="INTERPOLATION" disp="{{ version$ | async }}"/></target>
+      </segment>
+    </unit>
+    <unit id="6582573664846559511">
+      <segment state="initial">
+        <source>Change Password</source>
+        <target>Change Password</target>
+      </segment>
+    </unit>
+    <unit id="1846542227840529109">
+      <segment state="initial">
+        <source>Current Password</source>
+        <target>Current Password</target>
+      </segment>
+    </unit>
+    <unit id="8483269670688589838">
+      <segment state="initial">
+        <source>Your current is required to change your password</source>
+        <target>Your current is required to change your password</target>
+      </segment>
+    </unit>
+    <unit id="1221596867309460035">
+      <segment state="initial">
+        <source>New Password</source>
+        <target>New Password</target>
+      </segment>
+    </unit>
+    <unit id="6796247291544680076">
+      <segment state="initial">
+        <source>Type in your new password</source>
+        <target>Type in your new password</target>
+      </segment>
+    </unit>
+    <unit id="911145468998987410">
+      <segment state="initial">
+        <source>Confirm New Password</source>
+        <target>Confirm New Password</target>
+      </segment>
+    </unit>
+    <unit id="2172491100431008170">
+      <segment state="initial">
+        <source>Your passwords don&apos;t match</source>
+        <target>Your passwords don&apos;t match</target>
+      </segment>
+    </unit>
+    <unit id="7994060186123483149">
+      <segment state="initial">
+        <source>Your new password has been saved.</source>
+        <target>Your new password has been saved.</target>
+      </segment>
+    </unit>
+    <unit id="1944173575291952346">
+      <segment state="initial">
+        <source>Supports Slack, Microsoft Teams, Rocket.Chat, and more</source>
+        <target>Supports Slack, Microsoft Teams, Rocket.Chat, and more</target>
+      </segment>
+    </unit>
+    <unit id="7135122203377475337">
+      <segment state="initial">
+        <source>Use only letters, numbers, underscores and/or hyphens</source>
+        <target>Use only letters, numbers, underscores and/or hyphens</target>
+      </segment>
+    </unit>
+    <unit id="3811407979880504315">
+      <segment state="initial">
+        <source>System Info</source>
+        <target>System Info</target>
+      </segment>
+    </unit>
+    <unit id="4052010728262248283">
+      <segment state="initial">
+        <source>Backend configuration</source>
+        <target>Backend configuration</target>
+      </segment>
+    </unit>
+    <unit id="4895326106573044490">
+      <segment state="initial">
+        <source>Documentation</source>
+        <target>Documentation</target>
+      </segment>
+    </unit>
+    <unit id="451200972202964504">
+      <segment state="initial">
+        <source>Show all checks</source>
+        <target>Show all checks</target>
+      </segment>
+    </unit>
+    <unit id="6735249038962761269">
+      <segment state="initial">
+        <source>Show incidents</source>
+        <target>Show incidents</target>
+      </segment>
+    </unit>
+    <unit id="8316175416734096923">
+      <segment state="initial">
+        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | number }}"/> seconds </source>
+        <target> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | number }}"/> seconds </target>
+      </segment>
+    </unit>
+    <unit id="7464216857382824881">
+      <segment state="initial">
+        <source>GlitchTip will check to make sure the port at the specified URL is accessible.</source>
+        <target>GlitchTip will check to make sure the port at the specified URL is accessible.</target>
+      </segment>
+    </unit>
+    <unit id="7276967761111129879">
+      <segment state="initial">
+        <source>URL may not be more than <ph id="0" equiv="INTERPOLATION" disp="{{ formUrl.errors.maxlength.requiredLength }}"/> characters</source>
+        <target>URL may not be more than <ph id="0" equiv="INTERPOLATION" disp="{{ formUrl.errors.maxlength.requiredLength }}"/> characters</target>
+      </segment>
+    </unit>
+    <unit id="8797007391593964199">
+      <segment state="initial">
+        <source>Enter a host name and port (ex. example.com:80)</source>
+        <target>Enter a host name and port (ex. example.com:80)</target>
+      </segment>
+    </unit>
+    <unit id="2118438278570914652">
+      <segment state="initial">
+        <source>Expected Response Body</source>
+        <target>Expected Response Body</target>
+      </segment>
+    </unit>
+    <unit id="830996102207481987">
+      <segment state="initial">
+        <source>If string isn&apos;t found in response body, the monitor will report as down</source>
+        <target>If string isn&apos;t found in response body, the monitor will report as down</target>
+      </segment>
+    </unit>
+    <unit id="7704379049286251361">
+      <segment state="initial">
+        <source>Your current password is incorrect.</source>
+        <target>Your current password is incorrect.</target>
+      </segment>
+    </unit>
+    <unit id="6373761293150491680">
+      <segment state="initial">
+        <source>Return to initial login page</source>
+        <target>Return to initial login page</target>
+      </segment>
+    </unit>
+    <unit id="7308123627289097296">
+      <segment state="initial">
+        <source>Unknown problem using Social Authentication</source>
+        <target>Unknown problem using Social Authentication</target>
+      </segment>
+    </unit>
+    <unit id="1538995058317034003">
+      <segment state="initial">
+        <source>Device activation was unsuccessful.</source>
+        <target>Device activation was unsuccessful.</target>
+      </segment>
+    </unit>
+    <unit id="4663796819689603423">
+      <segment state="initial">
+        <source>Regenerate backup codes</source>
+        <target>Regenerate backup codes</target>
+      </segment>
+    </unit>
+    <unit id="4622788799334711424">
+      <segment state="initial">
+        <source>If you have lost your backup codes you can generate new ones, invalidating all previous codes. <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">Print out these new codes or save them someplace safe.</pc></source>
+        <target>If you have lost your backup codes you can generate new ones, invalidating all previous codes. <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">Print out these new codes or save them someplace safe.</pc></target>
+      </segment>
+    </unit>
+    <unit id="6430072333383968514">
+      <segment state="initial">
+        <source>Regenerate codes</source>
+        <target>Regenerate codes</target>
+      </segment>
+    </unit>
+    <unit id="2167241020391967059">
+      <segment state="initial">
+        <source>Download or copy a list of backup codes. If you ever lose your phone, each of these recovery codes can be used one time to regain access to your account. <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">Print them out or save them someplace safe.</pc></source>
+        <target>Download or copy a list of backup codes. If you ever lose your phone, each of these recovery codes can be used one time to regain access to your account. <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">Print them out or save them someplace safe.</pc></target>
+      </segment>
+    </unit>
+    <unit id="3099741642167775297">
+      <segment state="initial">
+        <source>Download</source>
+        <target>Download</target>
+      </segment>
+    </unit>
+    <unit id="4323470180912194028">
+      <segment state="initial">
+        <source>Copy</source>
+        <target>Copy</target>
+      </segment>
+    </unit>
+    <unit id="2617201451708142937">
+      <segment state="initial">
+        <source>Enter one of the backup codes to confirm that you have saved them:</source>
+        <target>Enter one of the backup codes to confirm that you have saved them:</target>
+      </segment>
+    </unit>
+    <unit id="305233477996347721">
+      <segment state="initial">
+        <source>Code must be 8 digits</source>
+        <target>Code must be 8 digits</target>
+      </segment>
+    </unit>
+    <unit id="187187500641108332">
+      <segment state="initial">
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ backupCode?.errors?.serverError }}"/>
+        </source>
+        <target>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ backupCode?.errors?.serverError }}"/>
+        </target>
+      </segment>
+    </unit>
+    <unit id="9053544882734151327">
+      <segment state="initial">
+        <source>Provide a name for your device to complete registration.</source>
+        <target>Provide a name for your device to complete registration.</target>
+      </segment>
+    </unit>
+    <unit id="8489391551429309663">
+      <segment state="initial">
+        <source>Your security key has been registered.</source>
+        <target>Your security key has been registered.</target>
+      </segment>
+    </unit>
+    <unit id="3677197196283475273">
+      <segment state="initial">
+        <source>You have successfully disconnected your social auth account</source>
+        <target>You have successfully disconnected your social auth account</target>
+      </segment>
+    </unit>
+    <unit id="8434191191397593923">
+      <segment state="initial">
+        <source>Your account has no password set up.</source>
+        <target>Your account has no password set up.</target>
+      </segment>
+    </unit>
+    <unit id="1431416938026210429">
+      <segment state="initial">
+        <source>Password</source>
+        <target>Password</target>
+      </segment>
+    </unit>
+    <unit id="3782563238994348625">
+      <segment state="initial">
+        <source>Confirm password</source>
+        <target>Confirm password</target>
+      </segment>
+    </unit>
+    <unit id="1017066204420437090">
+      <segment state="initial">
+        <source>Set New Password</source>
+        <target>Set New Password</target>
+      </segment>
+    </unit>
+    <unit id="6359908116364527838">
+      <segment state="initial">
+        <source>Project Alerts</source>
+        <target>Project Alerts</target>
+      </segment>
+    </unit>
+    <unit id="8222747160094057941">
+      <segment state="initial">
+        <source>If you have an account with GlitchTip, an email has been sent to the email address you provided.</source>
+        <target>If you have an account with GlitchTip, an email has been sent to the email address you provided.</target>
+      </segment>
+    </unit>
+    <unit id="3084686770297988088">
+      <segment state="initial">
+        <source>Return to login</source>
+        <target>Return to login</target>
+      </segment>
+    </unit>
+    <unit id="5966633327405012171">
+      <segment state="initial">
+        <source> If an <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;tooltip&quot; matTooltip=&quot;An event is every occurrence of the same error (aka: issue) in your application.&quot; &gt;" dispEnd="&lt;/span &gt;">event</pc> happens</source>
+        <target> If an <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;tooltip&quot; matTooltip=&quot;An event is every occurrence of the same error (aka: issue) in your application.&quot; &gt;" dispEnd="&lt;/span &gt;">event</pc> happens</target>
+      </segment>
+    </unit>
+    <unit id="3595833482001508466">
+      <segment state="initial">
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }}"/> in</source>
+        <target><ph id="0" equiv="INTERPOLATION" disp="{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }}"/> in</target>
+      </segment>
+    </unit>
+    <unit id="2045774391739296209">
+      <segment state="initial">
+        <source>Timespan</source>
+        <target>Timespan</target>
+      </segment>
+    </unit>
+    <unit id="2582356557395842562">
+      <segment state="initial">
+        <source>Enter an integer greater than 0.</source>
+        <target>Enter an integer greater than 0.</target>
+      </segment>
+    </unit>
+    <unit id="5718859187781924335">
+      <segment state="initial">
+        <source>in <ph id="0" equiv="INTERPOLATION" disp="{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}"/>, send an alert.</source>
+        <target>in <ph id="0" equiv="INTERPOLATION" disp="{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}"/>, send an alert.</target>
+      </segment>
+    </unit>
+    <unit id="2342149656142683501">
+      <segment state="initial">
+        <source>If an uptime monitor is triggered.</source>
+        <target>If an uptime monitor is triggered.</target>
+      </segment>
+    </unit>
+    <unit id="3695251475145999588">
+      <segment state="initial">
+        <source>time</source>
+        <target>time</target>
+      </segment>
+    </unit>
+    <unit id="7074388989229825051">
+      <segment state="initial">
+        <source>times</source>
+        <target>times</target>
+      </segment>
+    </unit>
+    <unit id="5405071297219936776">
+      <segment state="initial">
+        <source>minute</source>
+        <target>minute</target>
+      </segment>
+    </unit>
+    <unit id="982745398054129955">
+      <segment state="initial">
+        <source>minutes</source>
+        <target>minutes</target>
       </segment>
     </unit>
   </file>

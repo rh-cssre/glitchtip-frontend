@@ -1,44 +1,43 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Input,
-} from "@angular/core";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { Component, OnInit, ChangeDetectionStrategy, Input, computed, inject } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 import { ProjectsService } from "src/app/projects/projects.service";
+import { ProjectCardComponent } from "../project-card/project-card.component";
+import { EmptyProjectsComponent } from "../project-card/empty-projects/empty-projects.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "gt-project-list",
+  imports: [
+    RouterModule,
+    MatButtonModule,
+    DatePipe,
+    MatCardModule,
+    ProjectCardComponent,
+    EmptyProjectsComponent,
+  ],
   templateUrl: "./project-list.component.html",
   styleUrls: ["./project-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectListComponent implements OnInit {
+  private organizationsService = inject(OrganizationsService);
+  private projectsService = inject(ProjectsService);
+
   @Input() activeOrgOnly = false;
 
-  activeOrganizationDetail$ = this.organizationsService
-    .activeOrganizationDetail$;
-  projects$ = this.projectsService.projects$;
-  organizations$ = this.organizationsService.organizations$;
-  orgsAndProjects$ = combineLatest([this.organizations$, this.projects$]).pipe(
-    map(([organizations, projects]) =>
-      organizations.map((organization) => ({
-        ...organization,
-        projects: projects
-          ? projects.filter(
-              (project) => project.organization.id === organization.id
-            )
-          : [],
-      }))
-    )
+  activeOrganization = this.organizationsService.activeOrganization;
+  projects = toSignal(this.projectsService.projects$);
+  organizations = this.organizationsService.organizations;
+  orgsAndProjects = computed(() =>
+    this.organizations().map((organization) => ({
+      ...organization,
+      projects: this.projects()?.filter((project) => project.organization.id),
+    }))
   );
-
-  constructor(
-    private organizationsService: OrganizationsService,
-    private projectsService: ProjectsService
-  ) {}
 
   ngOnInit() {
     this.projectsService.retrieveProjects();

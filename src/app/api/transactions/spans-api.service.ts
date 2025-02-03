@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Span } from "./transactions.interfaces";
 import { baseUrl } from "../../constants";
@@ -8,10 +8,16 @@ import { APIBaseService } from "../api-base.service";
   providedIn: "root",
 })
 export class SpansAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = "/spans/";
 
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+  
+    this.http = http;
   }
 
   list(organizationSlug: string, cursor?: string) {
