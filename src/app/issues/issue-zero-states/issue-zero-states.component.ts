@@ -1,37 +1,55 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit, ChangeDetectionStrategy, computed, inject } from "@angular/core";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { distinctUntilChanged, filter, map, switchMap } from "rxjs/operators";
+import { CommonModule } from "@angular/common";
+import { MarkdownModule } from "ngx-markdown";
 
 import { IssuesService } from "../issues.service";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
-import { OrganizationProject } from "src/app/api/organizations/organizations.interface";
+import { OrganizationProject } from "src/app/api/projects/projects-api.interfaces";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectKeysAPIService } from "src/app/api/projects/project-keys-api.service";
 import { flattenedPlatforms } from "src/app/settings/projects/platform-picker/platforms-for-picker";
+import { CopyInputComponent } from "../../shared/copy-input/copy-input.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-issue-zero-states",
   templateUrl: "./issue-zero-states.component.html",
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, RouterLink, CopyInputComponent, MarkdownModule],
 })
 export class IssueZeroStatesComponent implements OnInit {
+  private issuesService = inject(IssuesService);
+  private organizationsService = inject(OrganizationsService);
+  private projectKeysAPIService = inject(ProjectKeysAPIService);
+  private projectsService = inject(ProjectsService);
+  private activatedRoute = inject(ActivatedRoute);
+
   loading$ = combineLatest([
     this.issuesService.loading$,
     this.projectsService.loading$,
-  ]).pipe(map((loads) => loads.every((load) => !!load)));
+  ]).pipe(map((loads) => !loads.every((load) => !load)));
   initialLoadComplete$ = combineLatest([
     this.issuesService.initialLoadComplete$,
     this.projectsService.initialLoadComplete$,
   ]).pipe(map((loads) => loads.every((load) => !!load)));
-  orgHasAProject$ = this.organizationsService.orgHasAProject$;
+  displayZeroStates$ = combineLatest([
+    this.loading$,
+    this.initialLoadComplete$,
+  ]).pipe(
+    map(([loading, initialLoadComplete]) => !loading && initialLoadComplete)
+  );
+  orgHasAProject = computed(
+    () => this.organizationsService.projectsCount() > 0
+  );
   projectsFromParams$ = this.activatedRoute.queryParams.pipe(
     map((params) => normalizeProjectParams(params.project))
   );
-  activeOrganizationProjects$ = this.organizationsService
-    .activeOrganizationProjects$;
+  activeOrganizationProjects$ =
+    this.organizationsService.activeOrganizationProjects$;
   activeOrganizationSlug$ = this.organizationsService.activeOrganizationSlug$;
   activeProjectID$ = combineLatest([
     this.projectsFromParams$,
@@ -42,7 +60,7 @@ export class IssueZeroStatesComponent implements OnInit {
         return projectIDs[0];
       }
       if (activeOrgProjects?.length === 1) {
-        return activeOrgProjects[0].id.toString();
+        return activeOrgProjects[0].id;
       }
       return null;
     }),
@@ -131,10 +149,10 @@ export class IssueZeroStatesComponent implements OnInit {
       const projectsMatchedFromParams: OrganizationProject[] = [];
       projectsFromParams.forEach((projectId) => {
         const matchedProject = activeOrgProjects?.find(
-          (project) => project.id === parseInt(projectId, 10)
+          (project) => (project.id as any) === projectId
         );
         if (matchedProject) {
-          projectsMatchedFromParams.push(matchedProject);
+          projectsMatchedFromParams.push(matchedProject as any);
         }
       });
       return projectsMatchedFromParams.filter(
@@ -153,15 +171,17 @@ export class IssueZeroStatesComponent implements OnInit {
     )
   );
 
-  constructor(
-    private issuesService: IssuesService,
-    private organizationsService: OrganizationsService,
-    private projectKeysAPIService: ProjectKeysAPIService,
-    private projectsService: ProjectsService,
-    private activatedRoute: ActivatedRoute
-  ) {}
-
   ngOnInit() {
     this.projectsService.retrieveProjects();
+    // Attempt to replace YOUR-GLITCHTIP-DSN-HERE with actual project DSN
+    this.firstProjectKey$.subscribe((project) => {
+      const dsn = project.dsn.public;
+      const elements = document.querySelectorAll("span.token.string");
+      for (const element of Array.from(elements)) {
+        if (element.textContent === '"YOUR-GLITCHTIP-DSN-HERE"') {
+          element.innerHTML = '"' + dsn + '"';
+        }
+      }
+    });
   }
 }
