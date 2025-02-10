@@ -1,0 +1,59 @@
+@use "@angular/material" as mat;
+@import "variables";
+
+.plans {
+  margin: 20px 2px;
+}
+
+.tab-label {
+  opacity: 1;
+}
+
+.tab-label-header {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+.mat-tab-label-content {
+  flex-direction: column;
+}
+
+.spaced-card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 16px;
+}
+
+.product-description {
+  margin-top: 0;
+}
+
+.value-props {
+  flex: 1;
+  margin-bottom: 15px;
+
+  li {
+    margin: 2px 0;
+    line-height: 1.2;
+  }
+}
+
+.price-cta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+h2.mat-headline-4 {
+  margin: 0px 0 20px;
+}
+
+.plans {
+  mat-card {
+    @media (min-width: $large) {
+      border-right: 1px solid
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300);
+    }
+  }
+}

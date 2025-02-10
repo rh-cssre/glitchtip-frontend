@@ -1,59 +1,52 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { exhaustMap, filter, first, tap, withLatestFrom } from "rxjs/operators";
-import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { Component, ChangeDetectionStrategy, OnInit, inject } from "@angular/core";
 import { environment } from "../../../../environments/environment";
-import { Plan } from "src/app/api/subscriptions/subscriptions.interfaces";
-import { StripeService } from "../stripe.service";
+import { BasePrice } from "src/app/api/subscriptions/subscriptions.interfaces";
+import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
+import { EventInfoComponent } from "../../../shared/event-info/event-info.component";
+import { MatDividerModule } from "@angular/material/divider";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { DecimalPipe } from "@angular/common";
+import { PaymentService } from "./payment.service";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-payment",
   templateUrl: "./payment.component.html",
   styleUrls: ["./payment.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatCardModule,
+    MatIconModule,
+    LoadingButtonComponent,
+    MatDividerModule,
+    EventInfoComponent,
+    DecimalPipe,
+  ],
 })
 export class PaymentComponent implements OnInit {
-  planOptions$ = this.subscriptionService.planOptionsWithShortNames$;
-  billingEmail = environment.billingEmail;
-  selectedSubscription: number | null = null;
+  private subscriptionService = inject(SubscriptionsService);
+  private organizationService = inject(OrganizationsService);
+  private paymentService = inject(PaymentService);
 
-  constructor(
-    private subscriptionService: SubscriptionsService,
-    private organizationService: OrganizationsService,
-    private stripe: StripeService,
-    private router: Router
-  ) {}
+  productOptions = this.subscriptionService.formattedProductOptions;
+  subscriptionCreationLoadingId =
+    this.subscriptionService.subscriptionCreationLoadingId;
+  billingEmail = environment.billingEmail;
 
   ngOnInit() {
-    this.subscriptionService.retrieveSubscriptionPlans().subscribe();
-    this.organizationService.retrieveOrganizations().subscribe();
+    this.subscriptionService.retrieveProducts();
+    this.organizationService.activeOrganizationResource.reload();
   }
 
-  onSubmit(plan: Plan, selectedIndex: number) {
-    this.selectedSubscription = selectedIndex;
-    this.organizationService.activeOrganizationId$
-      .pipe(
-        first(),
-        filter((activeOrganizationId) => !!activeOrganizationId),
-        exhaustMap((activeOrganizationId) => {
-          if (plan.amount === 0) {
-            return this.subscriptionService
-              .createFreeSubscription(activeOrganizationId!, plan.id)
-              .pipe(
-                withLatestFrom(
-                  this.organizationService.activeOrganizationSlug$
-                ),
-                tap(([_, orgSlug]) => {
-                  this.selectedSubscription = null;
-                  this.router.navigate([orgSlug, "issues"]);
-                })
-              );
-          } else {
-            return this.stripe.redirectToSubscriptionCheckout(plan.id);
-          }
-        })
-      )
-      .toPromise();
+  onSubmit(price: BasePrice) {
+    const activeOrganization = this.organizationService.activeOrganization();
+    if (activeOrganization) {
+      this.paymentService.dispatchSubscriptionCreation(
+        activeOrganization,
+        price
+      );
+    }
   }
 }

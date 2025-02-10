@@ -1,18 +1,20 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, ChangeDetectionStrategy, input, inject } from "@angular/core";
 import { isStacktrace } from "src/app/issues/utils";
 import { IssueDetailService } from "../../../issue-detail.service";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "gt-raw-stacktrace",
   templateUrl: "./raw-stacktrace.component.html",
   styleUrls: ["./raw-stacktrace.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [AsyncPipe],
 })
 export class RawStacktraceComponent {
-  @Input() eventPlatform: string | null | undefined;
-  rawStacktraceValues$ = this.issueService.rawStacktraceValues$;
+  private issueService = inject(IssueDetailService);
 
-  constructor(private issueService: IssueDetailService) {}
+  readonly eventPlatform = input<string | null>();
+  rawStacktraceValues$ = this.issueService.rawStacktraceValues$;
 
   checkStacktraceInterface = isStacktrace;
 }

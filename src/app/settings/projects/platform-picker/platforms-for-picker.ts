@@ -20,7 +20,7 @@ const otherPlatform: Platform = {
 export const flattenedPlatforms: FlatPlatform[] = [...platforms, otherPlatform]
   .map((platform) => {
     const flatPlatforms: FlatPlatform[] = platform.integrations.map(
-      (integration) => ({ ...integration, language: platform.id })
+      (integration) => ({ ...integration, language: platform.id }),
     );
     return flatPlatforms;
   })
