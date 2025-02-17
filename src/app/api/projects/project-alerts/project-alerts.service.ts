@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { NewProjectAlert, ProjectAlert } from "./project-alerts.interface";
 import { baseUrl } from "../../../constants";
@@ -12,31 +12,37 @@ import { APIBaseService } from "../../api-base.service";
   providedIn: "root",
 })
 export class ProjectAlertsAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = baseUrl + "/projects/";
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+  
+    this.http = http;
   }
 
   list(organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectAlert[]>(
-      this.listURL(organizationSlug, projectSlug)
+      this.listURL(organizationSlug, projectSlug),
     );
   }
 
   retrieve(id: string, organizationSlug: string, projectSlug: string) {
     return this.http.get<ProjectAlert>(
-      this.detailURL(id, organizationSlug, projectSlug)
+      this.detailURL(id, organizationSlug, projectSlug),
     );
   }
 
   create(
     newProjectAlert: NewProjectAlert,
     organizationSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     return this.http.post<ProjectAlert>(
       this.listURL(organizationSlug, projectSlug),
-      newProjectAlert
+      newProjectAlert,
     );
   }
 
@@ -48,11 +54,11 @@ export class ProjectAlertsAPIService extends APIBaseService {
     id: string,
     projectAlert: NewProjectAlert,
     organizationSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     return this.http.put<ProjectAlert>(
       this.detailURL(id, organizationSlug, projectSlug),
-      projectAlert
+      projectAlert,
     );
   }
 
@@ -63,7 +69,7 @@ export class ProjectAlertsAPIService extends APIBaseService {
   protected detailURL(
     id: string,
     organizationSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     return this.listURL(organizationSlug, projectSlug) + id + "/";
   }

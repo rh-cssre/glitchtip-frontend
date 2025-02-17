@@ -14,7 +14,7 @@ package main
 import "github.com/getsentry/raven-go"
 
 func init() {
-	raven.SetDSN("your DSN here")
+	raven.SetDSN("YOUR-GLITCHTIP-DSN-HERE")
 }
 ```
 
