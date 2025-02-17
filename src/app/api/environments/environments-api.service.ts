@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
 import { Environment } from "../organizations/organizations.interface";
@@ -8,10 +8,16 @@ import { Environment } from "../organizations/organizations.interface";
   providedIn: "root",
 })
 export class EnvironmentsAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = "/environments/";
 
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+  
+    this.http = http;
   }
 
   retrieve(id: string, organizationSlug: string) {

@@ -10,8 +10,11 @@ import { EMPTY } from "rxjs";
 import { take } from "rxjs/operators";
 import { IssueDetailService } from "./issue-detail.service";
 import { IssueDetail, EventDetail, AnnotatedContexts } from "../interfaces";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { sampleIssueDetail } from "./issue-detail-test-data";
+import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
+import {
+  sampleApiIssueDetail,
+  sampleIssueDetail,
+} from "./issue-detail-test-data";
 import { databaseError } from "./event-detail/test-data/database-error";
 import { RouterTestingModule } from "@angular/router/testing";
 import { zeroDivisionDotnet } from "./event-detail/test-data/zero-division-dotnet";
@@ -20,7 +23,7 @@ import { breadcrumbError } from "./event-detail/test-data/breadcrumb-error";
 describe("IssueDetailService", () => {
   let httpTestingController: HttpTestingController;
   let service: IssueDetailService;
-  let mockOrgService: OrganizationsService;
+  let mockOrgService: OrganizationDetailService;
 
   beforeEach(() => {
     mockOrgService = jasmine.createSpyObj(["retrieveIssue"]);
@@ -31,7 +34,7 @@ describe("IssueDetailService", () => {
         RouterTestingModule,
       ],
       providers: [
-        { provide: OrganizationsService, useValue: mockOrgService },
+        { provide: OrganizationDetailService, useValue: mockOrgService },
         MicroSentryService,
         { provide: MICRO_SENTRY_CONFIG, useValue: {} },
       ],
@@ -45,13 +48,15 @@ describe("IssueDetailService", () => {
   });
 
   it("should retieve issue detail", () => {
-    const testData: IssueDetail = sampleIssueDetail;
-    service.retrieveIssue(testData.id).toPromise();
+    const testApiData = sampleApiIssueDetail;
+    service.retrieveIssue(testApiData.id).toPromise();
     const req = httpTestingController.expectOne(
-      `/api/0/issues/${testData.id}/`
+      `/api/0/issues/${testApiData.id}/`
     );
-    req.flush(testData);
-    service.issue$.subscribe((issue) => expect(issue).toEqual(testData));
+    req.flush(testApiData);
+    service.issue$.subscribe((issue) =>
+      expect(issue).toEqual(sampleIssueDetail)
+    );
   });
 
   it("should clear the issue state", () => {

@@ -1,20 +1,46 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import {
-  UntypedFormGroup,
-  UntypedFormControl,
+  FormGroup,
+  FormControl,
   Validators,
   FormGroupDirective,
   AbstractControl,
+  ReactiveFormsModule,
 } from "@angular/forms";
 import { EmailService } from "../../api/emails/email.service";
 import { map, first } from "rxjs/operators";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatChipsModule } from "@angular/material/chips";
+import { AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-manage-emails",
   templateUrl: "./manage-emails.component.html",
   styleUrls: ["./manage-emails.component.scss"],
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    MatChipsModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    AsyncPipe,
+  ],
 })
 export class ManageEmailsComponent implements OnInit {
+  private emailService = inject(EmailService);
+
   emailAddresses$ = this.emailService.emailAddressesSorted$;
   loadingStates$ = this.emailService.loadingStates$;
   addEmailError$ = this.emailService.addEmailError$;
@@ -40,23 +66,21 @@ export class ManageEmailsComponent implements OnInit {
     this.emailAddresses$.pipe(
       map((emails) => {
         const matchedEmail = emails.find(
-          (email) => email.email === control.value
+          (email) => email.email === control.value,
         );
         return matchedEmail ? { matchesExistingValidator: true } : null;
       }),
-      first()
+      first(),
     );
 
   // tslint:disable:member-ordering
-  form = new UntypedFormGroup({
-    email_address: new UntypedFormControl(
+  form = new FormGroup({
+    email_address: new FormControl(
       "",
       [Validators.email, Validators.required],
-      this.matchesExistingValidator
+      this.matchesExistingValidator,
     ),
   });
-
-  constructor(private emailService: EmailService) {}
 
   ngOnInit(): void {
     this.emailService.retrieveEmailAddresses();
@@ -70,7 +94,7 @@ export class ManageEmailsComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.emailService.addEmailAddress(this.form.value.email_address);
+      this.emailService.addEmailAddress(this.form.value.email_address!);
     }
   }
 }
