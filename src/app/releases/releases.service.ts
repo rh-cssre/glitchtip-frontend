@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { catchError, EMPTY, map, tap } from "rxjs";
 import { ReleasesAPIService } from "src/app/api/releases/releases-api.service";
 import { Release } from "../api/releases/releases.interfaces";
@@ -8,6 +8,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
 
 export interface ReleasesState extends PaginationStatefulServiceState {
   releases: Release[];
@@ -24,47 +25,40 @@ const initialState: ReleasesState = {
   providedIn: "root",
 })
 export class ReleasesService extends PaginationStatefulService<ReleasesState> {
+  private releasesAPIService = inject(ReleasesAPIService);
+
   releases$ = this.getState$.pipe(map((state) => state.releases));
   errors$ = this.getState$.pipe(map((state) => state.errors));
 
-  constructor(private releasesAPIService: ReleasesAPIService) {
+  constructor() {
     super(initialState);
   }
 
-  getReleases(orgSlug: string, cursor: string | undefined) {
+  getReleases(orgSlug: string, cursor: string | undefined | null) {
     this.retrieveReleases(orgSlug, cursor).subscribe();
   }
 
-  private retrieveReleases(orgSlug: string, cursor: string | undefined) {
+  private retrieveReleases(orgSlug: string, cursor: string | undefined | null) {
     this.startPaginatedLoading();
     return this.releasesAPIService.list(orgSlug, cursor).pipe(
       tap((res) => this.setStateAndPagination({ releases: res.body! }, res)),
       catchError((err: HttpErrorResponse) => {
         this.setReleasesError(err);
         return EMPTY;
-      })
+      }),
     );
   }
 
   private setReleasesError(err: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      errors: this.updateErrorMessage(err),
+      errors: parseErrorMessage(err),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 
   startPaginatedLoading() {

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap, catchError, map } from "rxjs/operators";
 import { EMPTY, BehaviorSubject, combineLatest } from "rxjs";
@@ -6,7 +6,8 @@ import { baseUrl } from "../../constants";
 import { AcceptAPIResponse } from "./accept-invite.interfaces";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { OrganizationsService } from "../organizations/organizations.service";
+import { OrganizationsService } from "../organizations.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 interface AcceptState {
   acceptInfo: AcceptAPIResponse | null;
@@ -20,14 +21,19 @@ const initialState: AcceptState = {
   providedIn: "root",
 })
 export class AcceptInviteService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private organizationsService = inject(OrganizationsService);
+
   private readonly state = new BehaviorSubject<AcceptState>(initialState);
   readonly acceptInfo$ = this.state.pipe(map((state) => state.acceptInfo));
   readonly orgSlug$ = this.acceptInfo$.pipe(
-    map((acceptInfo) => acceptInfo?.org_user.organization.slug)
+    map((acceptInfo) => acceptInfo?.orgUser.organization.slug)
   );
   readonly alreadyInOrg$ = combineLatest([
     this.orgSlug$,
-    this.orgService.organizations$,
+    toObservable(this.organizationsService.organizations),
   ]).pipe(
     map(([orgSlugToMatch, organizations]) => {
       if (orgSlugToMatch) {
@@ -44,13 +50,6 @@ export class AcceptInviteService {
     })
   );
   private readonly url = baseUrl + "/accept/";
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private orgService: OrganizationsService
-  ) {}
 
   getAcceptInviteDetails(memberId: string, token: string) {
     this.getAcceptInvite(memberId, token)
@@ -78,9 +77,9 @@ export class AcceptInviteService {
     this.postAcceptInvite(memberId, token)
       .pipe(
         tap((response: AcceptAPIResponse) => {
-          this.orgService.retrieveOrganizations().subscribe();
+          this.organizationsService.reload()
           this.snackBar.open(
-            `You have been added to ${response.org_user.organization.name}.`
+            `You have been added to ${response.orgUser.organization.name}.`
           );
           this.router.navigate(["/"]);
         }),
@@ -118,7 +117,7 @@ export class AcceptInviteService {
     return this.http.post<AcceptAPIResponse>(
       `${this.url}${memberId}/${token}/`,
       {
-        accept_invite: true,
+        acceptInvite: true,
       }
     );
   }
