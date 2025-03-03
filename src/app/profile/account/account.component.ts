@@ -1,23 +1,36 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { Component } from "@angular/core";
-import { EMPTY } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
-import { AuthService } from "src/app/api/auth/auth.service";
+import { Component, OnDestroy, inject } from "@angular/core";
 import { UserService } from "src/app/api/user/user.service";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { ManageEmailsComponent } from "../manage-emails/manage-emails.component";
+import { SocialAuthComponent } from "../social-auth/social-auth.component";
+import { ChangePasswordComponent } from "../change-password/change-password.component";
+import { PreferencesComponent } from "../preferences/preferences.component";
+import { AuthService } from "src/app/auth.service";
 
 @Component({
   selector: "gt-account",
   templateUrl: "./account.component.html",
   styleUrls: ["./account.component.scss"],
+  imports: [
+    PreferencesComponent,
+    ChangePasswordComponent,
+    SocialAuthComponent,
+    ManageEmailsComponent,
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    LoadingButtonComponent,
+  ],
 })
-export class AccountComponent {
-  deleteLoading = false;
-  deleteError = "";
+export class AccountComponent implements OnDestroy {
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
 
-  constructor(
-    private userService: UserService,
-    private authService: AuthService
-  ) {}
+  userDeleteLoading = this.userService.userDeleteLoading;
+  userDeleteError = this.userService.userDeleteError;
 
   deleteUser() {
     if (
@@ -25,20 +38,14 @@ export class AccountComponent {
         `Are you sure you want to delete your user account? You will permanently lose access to all organizations, projects, and teams associated with it.`
       )
     ) {
-      this.deleteLoading = true;
-      this.userService
-        .deleteUser()
-        .pipe(
-          tap(() => this.authService.removeAuth()),
-          catchError((err) => {
-            this.deleteLoading = false;
-            if (err instanceof HttpErrorResponse) {
-              this.deleteError = "Unable to delete user";
-            }
-            return EMPTY;
-          })
-        )
-        .toPromise();
+      this.userService.deleteUser().then((result) => {
+        this.authService.expireAuth();
+        window.location.href = "/login";
+      });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.userService.clearUserUIState();
   }
 }
