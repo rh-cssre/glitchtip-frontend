@@ -37,8 +37,7 @@ export const noReverseMatch = {
               ],
               vars: {
                 request: "<WSGIRequest: GET '/template-error/'>",
-                exc:
-                  "NoReverseMatch(\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\")",
+                exc: "NoReverseMatch(\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\")",
                 get_response:
                   "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7fc14cb6efa0>>",
               },
@@ -67,8 +66,7 @@ export const noReverseMatch = {
                 '        """',
               ],
               vars: {
-                self:
-                  "<django.core.handlers.wsgi.WSGIHandler object at 0x7fc14cb6efa0>",
+                self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7fc14cb6efa0>",
                 request: "<WSGIRequest: GET '/template-error/'>",
                 response:
                   '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
@@ -108,8 +106,7 @@ export const noReverseMatch = {
                 "",
               ],
               vars: {
-                self:
-                  "<django.core.handlers.wsgi.WSGIHandler object at 0x7fc14cb6efa0>",
+                self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7fc14cb6efa0>",
                 request: "<WSGIRequest: GET '/template-error/'>",
                 response:
                   '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
@@ -149,8 +146,7 @@ export const noReverseMatch = {
                 "        return retval",
               ],
               vars: {
-                self:
-                  '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
+                self: '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                 retval:
                   '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
               },
@@ -209,8 +205,7 @@ export const noReverseMatch = {
               context_line: "        raise NoReverseMatch(msg)",
               post_context: [],
               vars: {
-                self:
-                  "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
+                self: "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                 lookup_view: "'nope'",
                 _prefix: "'/'",
                 args: [],
@@ -219,8 +214,7 @@ export const noReverseMatch = {
                 n: "None",
                 lookup_view_s: "'nope'",
                 patterns: [],
-                msg:
-                  "\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\"",
+                msg: "\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\"",
               },
             },
           ],
