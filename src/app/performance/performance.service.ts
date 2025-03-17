@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { combineLatest, EMPTY } from "rxjs";
 import { catchError, filter, map, tap } from "rxjs/operators";
-import { OrganizationsService } from "../api/organizations/organizations.service";
 import { TransactionGroupsAPIService } from "../api/transactions/transaction-groups-api.service";
 import { TransactionGroup } from "../api/transactions/transactions.interfaces";
 import {
@@ -10,6 +9,8 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "../shared/stateful-service/pagination-stateful-service";
+import { parseErrorMessage } from "../shared/shared.utils";
+import { OrganizationsService } from "../api/organizations.service";
 
 export interface PerformanceState extends PaginationStatefulServiceState {
   transactionGroups: TransactionGroup[];
@@ -26,6 +27,9 @@ const initialState: PerformanceState = {
   providedIn: "root",
 })
 export class PerformanceService extends PaginationStatefulService<PerformanceState> {
+  private transactionGroupsAPIService = inject(TransactionGroupsAPIService);
+  private organizationsService = inject(OrganizationsService);
+
   transactionGroups$ = this.getState$.pipe(
     map((state) => state.transactionGroups)
   );
@@ -38,7 +42,7 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
     map(([projects, groups]) => {
       return groups.map((group) => {
         const projectSlug = projects?.find(
-          (project) => project.id === group.project
+          (project) => +project.id === group.project
         )?.name;
         return {
           ...group,
@@ -50,24 +54,21 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
 
   errors$ = this.getState$.pipe(map((state) => state.errors));
 
-  constructor(
-    private transactionGroupsAPIService: TransactionGroupsAPIService,
-    private organizationsService: OrganizationsService
-  ) {
+  constructor() {
     super(initialState);
   }
 
   getTransactionGroups(
     orgSlug: string,
-    cursor: string | undefined,
-    project: string[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined,
-    query: string | undefined
+    cursor: string | undefined | null,
+    project: number[] | null,
+    start: string | undefined | null,
+    end: string | undefined | null,
+    sort: string | undefined | null,
+    environment: string | undefined | null,
+    query: string | undefined | null
   ) {
-    this.retrieveTransactionGroups(
+    return this.retrieveTransactionGroups(
       orgSlug,
       cursor,
       project,
@@ -76,18 +77,18 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
       sort,
       environment,
       query
-    ).subscribe();
+    );
   }
 
   private retrieveTransactionGroups(
     orgSlug: string,
-    cursor?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    cursor?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null
   ) {
     this.setLoadingStart();
     return this.transactionGroupsAPIService
@@ -106,22 +107,13 @@ export class PerformanceService extends PaginationStatefulService<PerformanceSta
   private setTransactionGroupsError(errors: HttpErrorResponse) {
     const state = this.state.getValue();
     this.setState({
-      errors: this.updateErrorMessage(errors),
+      errors: parseErrorMessage(errors),
       pagination: {
         ...state.pagination,
         loading: false,
         initialLoadComplete: true,
       },
     });
-  }
-
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
   }
 
   private setLoadingStart() {
