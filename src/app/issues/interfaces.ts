@@ -1,4 +1,4 @@
-import { ProjectIssueView } from "../api/projects/projects-api.interfaces";
+import { ProjectReference } from "../api/projects/projects-api.interfaces";
 import { Json } from "../interface-primitives";
 
 interface Tag {
@@ -59,7 +59,6 @@ export interface EventDetail extends Event {
   fingerprints?: string[];
   context?: { [key: string]: Json } | null;
   release?: { [key: string]: Json[] } | null;
-  issue?: number;
   sdkUpdates?: [];
 }
 
@@ -123,6 +122,7 @@ export interface Breadcrumb {
 
 export interface Message {
   formatted: string;
+  message: string;
   params?: string[] | { [key: string]: string };
 }
 
@@ -147,10 +147,9 @@ export interface Request {
   } | null;
   headers: string[][];
   url: string;
-  query?: { [key: string]: Json }[];
+  query?: string[][];
   data?: { [key: string]: string } | null;
   method?: string | null;
-  query_string?: string[][];
 }
 
 export interface AnnotatedRequest extends Request {
@@ -178,7 +177,7 @@ export interface Issue {
   metadata: IssueMetadata;
   numComments: number;
   permalink: string;
-  project: ProjectIssueView;
+  project: ProjectReference;
   shareId: string | null;
   shortId: string;
   stats: Stats;
@@ -252,7 +251,7 @@ interface FirstRelease {
   lastEvent: string;
   newGroups: number;
   owner: string | null;
-  projects: ProjectIssueView[];
+  projects: ProjectReference[];
   ref: string | null;
   shortVersion: string;
   url: string | null;
@@ -305,11 +304,16 @@ export interface Frame {
   symbolAddr: string | null;
   trust: string | null;
   inApp: boolean;
-  context: (string | number)[][] | null;
+  context: FrameContextTuple[] | null;
   vars: { [key: string]: Json } | null;
   errors?: string | null;
   lineNo: number | null;
   colNo: number | null;
+}
+
+export interface FrameContextTuple extends Array<string | number> {
+  0: number;
+  1: string;
 }
 
 interface GroupingConfig {

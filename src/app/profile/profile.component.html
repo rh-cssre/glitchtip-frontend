@@ -2,52 +2,28 @@
   <mat-drawer class="mat-elevation-z2" mode="side" opened>
     <nav>
       <mat-nav-list>
-        <a
-          mat-list-item
-          routerLink="/profile"
-          routerLinkActive="active-route"
-          [routerLinkActiveOptions]="{ exact: true }"
-          >Account</a
-        >
-        <a
-          mat-list-item
-          routerLink="./multi-factor-auth"
-          routerLinkActive="active-route"
-          [routerLinkActiveOptions]="{ exact: true }"
-          >Multi-factor Authentication</a
-        >
-        <a
-          mat-list-item
-          routerLink="./notifications"
-          routerLinkActive="active-route"
-          [routerLinkActiveOptions]="{ exact: true }"
-          >Notifications</a
-        >
-        <a
-          mat-list-item
-          routerLink="./auth-tokens"
-          routerLinkActive="active-route"
-          >Auth Tokens</a
-        >
+        <a mat-list-item routerLink="/profile" routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }">Account</a>
+        <a mat-list-item routerLink="./multi-factor-auth" routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }">Multi-factor Authentication</a>
+        <a mat-list-item routerLink="./notifications" routerLinkActive="active-route"
+          [routerLinkActiveOptions]="{ exact: true }">Notifications</a>
+        <a mat-list-item routerLink="./auth-tokens" routerLinkActive="active-route">Auth Tokens</a>
       </mat-nav-list>
     </nav>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-toolbar color="primary" (click)="toggleSideNav()">
-      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon></button
-      ><span
-        class="active-org"
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        >{{ orgDetails?.name }}</span
-      >
-    </mat-toolbar>
+    @if (isLoggedIn()) {
+    <gt-mobile-nav-toolbar [activeOrg]="activeOrganization()" (buttonClicked)="toggleSideNav()"></gt-mobile-nav-toolbar>
+    }
     <section class="l-body">
       <header class="page-header">
-        <h1 class="mat-display-1">User Profile</h1>
-        <p class="mat-body-1 subtitle" *ngIf="user$ | async as user">
+        <h1 class="mat-headline-4">User Profile</h1>
+        @if (user(); as user) {
+        <p class="mat-body-1 subtitle">
           {{ user.email }}
         </p>
+        }
       </header>
       <router-outlet></router-outlet>
     </section>

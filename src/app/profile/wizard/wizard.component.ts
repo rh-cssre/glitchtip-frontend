@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { EMPTY } from "rxjs";
 import { catchError, exhaustMap, map, tap } from "rxjs/operators";
@@ -9,10 +9,13 @@ import { baseUrl } from "src/app/constants";
   selector: "gt-wizard",
   templateUrl: "./wizard.component.html",
   styleUrls: ["./wizard.component.scss"],
+  standalone: true,
 })
 export class WizardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+
   message = "Connecting to @sentry/wizard...";
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.route.paramMap
@@ -26,14 +29,14 @@ export class WizardComponent implements OnInit {
             .pipe(
               tap(
                 () =>
-                  (this.message = "Successfully connected to @sentry/wizard.")
-              )
-            )
+                  (this.message = "Successfully connected to @sentry/wizard."),
+              ),
+            ),
         ),
         catchError(() => {
           this.message = "Unable to connect to @sentry/wizard";
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }

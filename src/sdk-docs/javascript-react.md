@@ -21,7 +21,7 @@ import React from "react";
 import * as Sentry from "@sentry/browser";
 import App from "src/App";
 
-Sentry.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "YOUR-GLITCHTIP-DSN-HERE" });
 
 ReactDOM.render(<App />, document.getElementById("root"));
 ```
