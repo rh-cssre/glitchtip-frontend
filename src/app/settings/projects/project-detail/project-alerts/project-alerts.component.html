@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header class="flex-common">
-    <mat-card-title>Project Alerts</mat-card-title>
+    <mat-card-title i18n>Project Alerts</mat-card-title>
     <button
       mat-flat-button
       id="create-new-alert"
@@ -14,241 +14,270 @@
   <mat-divider></mat-divider>
 
   <mat-card-content>
-    <ng-container *ngIf="(initialLoad$ | async) === true">
+    @if ((initialLoad$ | async) === true) {
       <!-- New Alert -->
-      <div *ngIf="(newAlertOpen$ | async) === true" class="new-alert">
-        <div class="alert-header">
-          <h3 i18n>New Alert</h3>
-        </div>
-        <p
-          *ngIf="newAlertError$ | async as error"
-          class="error new-alert-error"
-        >
-          {{ error }}
-        </p>
-        <gt-alert-form
-          #newAlert
-          [newAlert]="true"
-          (alertSubmit)="newAlertProperties($event)"
-        ></gt-alert-form>
-        <h4 class="mat-body-strong">Recipients:</h4>
-        <p
-          *ngIf="(newProjectAlertRecipients$ | async)?.length === 0"
-          class="no-recipients no-recipients-new"
-          i18n
-          >This alert isn't being sent anywhere. Select "Add An Alert Recipient"
-          below to get started.</p
-        >
-        <ul>
-          <li
-            *ngFor="
-              let recipient of newProjectAlertRecipients$ | async;
-              let recipientIndex = index
-            "
-          >
-            <div class="recipients" [class.border-top]="recipientIndex === 0">
-              <ng-container *ngIf="recipient.recipientType === 'email'">
-                <mat-icon class="alert-type">email</mat-icon>
-                <div class="recipient-info">
-                  <span
-                    class="tooltip"
-                    matTooltip="Send an email to team members on this project."
-                    matTooltipClass="tt-wrapping"
-                    i18n
-                    >Send an email to team members on this project.</span
-                  >
-                </div>
-              </ng-container>
-              <ng-container *ngIf="recipient.recipientType === 'webhook'">
-                <div class="svg-box">
-                  <svg class="svg">
-                    <use xlink:href="#webhook"></use>
-                  </svg>
-                </div>
-                <div class="recipient-info">
-                  <span
-                    class="tooltip"
-                    matTooltip="{{ recipient.url }}"
-                    matTooltipClass="tt-wrapping"
-                    >{{ recipient.url }}
-                  </span>
-                </div>
-              </ng-container>
-              <button
-                class="trash"
-                mat-icon-button
-                color="primary"
-                attr.aria-label="Delete Alert For {{ recipient.url }}"
-                (click)="removeNewAlertRecipient(recipient.url)"
-              >
-                <mat-icon>delete_outline</mat-icon>
-              </button>
-            </div>
-          </li>
-        </ul>
-        <button
-          mat-stroked-button
-          color="primary"
-          (click)="openCreateRecipientDialog()"
-        >
-          <mat-icon>add</mat-icon>
-          <ng-container i18n>Add An Alert Recipient</ng-container>
-        </button>
-        <div class="new-alert-actions">
-          <gt-loading-button
-            buttonText="submit"
-            [loading]="(newAlertLoading$ | async) === true"
-            (click)="submitCreateAlert()"
-            i18n
-            >Submit</gt-loading-button
-          >
-          <button (click)="closeNewAlert()" mat-stroked-button i18n
-            >Cancel</button
-          >
-        </div>
-      </div>
-      <ng-container
-        *ngIf="
-          (projectAlerts$ | async)?.length === 0 &&
-            (newAlertOpen$ | async) === false;
-          else showAlerts
-        "
-        ><p class="no-alerts" i18n
-          >You don't have any alerts set up. Click "Create New Alert" on the top
-          right of this card to get started.</p
-        ></ng-container
-      ><ng-template #showAlerts>
-        <div
-          *ngFor="let alert of projectAlerts$ | async; let i = index"
-          class="alert"
-        >
-          <mat-divider *ngIf="i !== 0"></mat-divider>
-
-          <p
-            *ngIf="(removeAlertError$ | async)?.pk === alert.pk"
-            class="error alert-error"
-          >
-            {{ (removeAlertError$ | async)?.error }}
-          </p>
-          <div class="flex-common alert-header">
-            <h3>Alert {{ i + 1 }}</h3>
-            <gt-loading-button
-              [buttonText]="'Remove Alert ' + (i + 1)"
-              buttonStyle="stroked"
-              (click)="removeAlert(alert.pk)"
-              [loading]="(removeAlertLoading$ | async) === alert.pk"
-            >
-            </gt-loading-button>
+      @if ((newAlertOpen$ | async) === true) {
+        <div class="new-alert">
+          <div class="alert-header">
+            <h3 i18n>New Alert</h3>
           </div>
-          <p
-            *ngIf="(updatePropertiesError$ | async)?.pk === alert.pk"
-            class="error alert-form-error"
-          >
-            {{ (updatePropertiesError$ | async)?.error }}
-          </p>
+          @if (newAlertError$ | async; as error) {
+            <p class="error new-alert-error">
+              {{ error }}
+            </p>
+          }
           <gt-alert-form
-            [newAlert]="false"
-            [loading]="(updatePropertiesLoading$ | async) === alert.pk"
-            [timespan]="alert.timespan_minutes"
-            [quantity]="alert.quantity"
-            [uptime]="alert.uptime"
-            [errorAlert]="alert.errorAlert"
-            (alertSubmit)="updateProperties($event, alert)"
+            #newAlert
+            [newAlert]="true"
+            (alertSubmit)="newAlertProperties($event)"
           ></gt-alert-form>
           <h4 class="mat-body-strong">Recipients:</h4>
-          <p
-            *ngIf="deleteRecipientError$ | async as error"
-            class="error recipients-error"
-          >
-            {{ error }}
-          </p>
-          <p *ngIf="alert.alertRecipients.length === 0" class="no-recipients">
-            This alert isn't being sent anywhere. Select "Add An Alert
-            Recipient" below to get started.
-          </p>
-          <ul>
-            <li
-              *ngFor="
-                let recipient of alert.alertRecipients;
-                let recipientIndex = index
-              "
+          @if ((newProjectAlertRecipients$ | async)?.length === 0) {
+            <p class="no-recipients no-recipients-new" i18n
+              >This alert isn't being sent anywhere. Select "Add An Alert
+              Recipient" below to get started.</p
             >
-              <div class="recipients" [class.border-top]="recipientIndex === 0">
-                <ng-container *ngIf="recipient.recipientType === 'email'">
-                  <mat-icon class="alert-type">email</mat-icon>
-                  <div class="recipient-info">
-                    <span
-                      class="tooltip"
-                      matTooltip="Send an email to team members on this project."
-                      matTooltipClass="tt-wrapping"
-                      >Send an email to team members on this project.
-                    </span>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="recipient.recipientType === 'webhook'">
-                  <div class="svg-box">
-                    <svg class="svg">
-                      <use xlink:href="#webhook"></use>
-                    </svg>
-                  </div>
-                  <div class="recipient-info">
-                    <span
-                      class="tooltip"
-                      matTooltip="{{ recipient.url }}"
-                      matTooltipClass="tt-wrapping"
-                      >{{ recipient.url }}
-                    </span>
-                  </div>
-                </ng-container>
-                <ng-container
-                  *ngIf="
-                    (deleteRecipientLoading$ | async) === recipient.pk;
-                    else notLoading
-                  "
+          }
+          <ul>
+            @for (
+              recipient of newProjectAlertRecipients$ | async;
+              track recipient;
+              let recipientIndex = $index
+            ) {
+              <li>
+                <div
+                  class="recipients"
+                  [class.border-top]="recipientIndex === 0"
                 >
-                  <mat-progress-spinner
-                    [diameter]="20"
-                    color="primary"
-                    mode="indeterminate"
-                  ></mat-progress-spinner>
-                </ng-container>
-                <ng-template #notLoading>
+                  @if (recipient.recipientType === "email") {
+                    <mat-icon class="alert-type">email</mat-icon>
+                    <div class="recipient-info">
+                      <span
+                        class="tooltip"
+                        matTooltip="Send an email to team members on this project."
+                        matTooltipClass="tt-wrapping"
+                        i18n
+                        >Send an email to team members on this project.</span
+                      >
+                    </div>
+                  }
+                  @if (
+                    recipient.recipientType === "webhook" ||
+                    recipient.recipientType === "discord" ||
+                    recipient.recipientType === "googlechat"
+                  ) {
+                    <div class="svg-box">
+                      <svg class="svg">
+                        @if (recipient.recipientType === "discord") {
+                          <use xlink:href="#discord"></use>
+                        }
+                        @if (recipient.recipientType === "googlechat") {
+                          <use xlink:href="#googlechat"></use>
+                        }
+                        @if (recipient.recipientType === "webhook") {
+                          <use xlink:href="#webhook"></use>
+                        }
+                      </svg>
+                    </div>
+                    <div class="recipient-info">
+                      <span
+                        class="tooltip"
+                        matTooltip="{{ recipient.url }}"
+                        matTooltipClass="tt-wrapping"
+                        >{{ recipient.url }}
+                      </span>
+                    </div>
+                  }
                   <button
-                    class="trash"
-                    id="delete-recipient"
+                    class="trash medium-icon-button"
                     mat-icon-button
                     color="primary"
-                    attr.aria-label="Delete Alert {{ i + 0 }}"
-                    (click)="removeAlertRecipient(recipient, alert)"
+                    attr.aria-label="Delete Alert For {{ recipient.url }}"
+                    (click)="removeNewAlertRecipient(recipient.url)"
                   >
                     <mat-icon>delete_outline</mat-icon>
                   </button>
-                </ng-template>
-              </div>
-            </li>
+                </div>
+              </li>
+            }
           </ul>
           <button
             mat-stroked-button
             color="primary"
-            (click)="openUpdateRecipientDialog(alert)"
+            (click)="openCreateRecipientDialog()"
           >
             <mat-icon>add</mat-icon>
-            Add An Alert Recipient
+            <ng-container i18n>Add An Alert Recipient</ng-container>
           </button>
-        </div></ng-template
-      ></ng-container
-    ><ng-container *ngIf="(initialLoad$ | async) === false">
+          <div class="new-alert-actions">
+            <gt-loading-button
+              buttonText="submit"
+              [loading]="(newAlertLoading$ | async) === true"
+              (buttonClick)="submitCreateAlert()"
+              i18n
+              >Submit</gt-loading-button
+            >
+            <button (click)="closeNewAlert()" mat-stroked-button i18n
+              >Cancel</button
+            >
+          </div>
+        </div>
+      }
+      @if (
+        (projectAlerts$ | async)?.length === 0 &&
+        (newAlertOpen$ | async) === false
+      ) {
+        <p class="no-alerts" i18n
+          >You don't have any alerts set up. Click "Create New Alert" on the top
+          right of this card to get started.</p
+        >
+      } @else {
+        @for (alert of projectAlerts$ | async; track alert; let i = $index) {
+          <div class="alert">
+            @if (i !== 0) {
+              <mat-divider></mat-divider>
+            }
+            @if ((removeAlertError$ | async)?.id === alert.id) {
+              <p class="error alert-error">
+                {{ (removeAlertError$ | async)?.error }}
+              </p>
+            }
+            <div class="flex-common alert-header">
+              @if (alert.name) {
+                <h3>{{ alert.name }}</h3>
+              } @else {
+                <h3>Alert {{ i + 1 }}</h3>
+              }
+              <gt-loading-button
+                [buttonText]="'Remove Alert ' + (i + 1)"
+                buttonStyle="stroked"
+                (buttonClick)="removeAlert(alert.id)"
+                [loading]="(removeAlertLoading$ | async) === alert.id"
+              >
+              </gt-loading-button>
+            </div>
+            @if ((updatePropertiesError$ | async)?.id === alert.id) {
+              <p class="error alert-form-error">
+                {{ (updatePropertiesError$ | async)?.error }}
+              </p>
+            }
+            <gt-alert-form
+              [newAlert]="false"
+              [loading]="(updatePropertiesLoading$ | async) === alert.id"
+              [timespan]="alert.timespanMinutes"
+              [quantity]="alert.quantity"
+              [uptime]="alert.uptime"
+              [errorAlert]="alert.errorAlert"
+              (alertSubmit)="updateProperties($event, alert)"
+            ></gt-alert-form>
+            <h4 class="mat-body-strong">Recipients:</h4>
+            @if (deleteRecipientError$ | async; as error) {
+              <p class="error recipients-error">
+                {{ error }}
+              </p>
+            }
+            @if (alert.alertRecipients.length === 0) {
+              <p class="no-recipients">
+                This alert isn't being sent anywhere. Select "Add An Alert
+                Recipient" below to get started.
+              </p>
+            }
+            <ul>
+              @for (
+                recipient of alert.alertRecipients;
+                track recipient;
+                let recipientIndex = $index
+              ) {
+                <li>
+                  <div
+                    class="recipients"
+                    [class.border-top]="recipientIndex === 0"
+                  >
+                    @if (recipient.recipientType === "email") {
+                      <mat-icon class="alert-type">email</mat-icon>
+                      <div class="recipient-info">
+                        <span
+                          class="tooltip"
+                          matTooltip="Send an email to team members on this project."
+                          matTooltipClass="tt-wrapping"
+                          >Send an email to team members on this project.
+                        </span>
+                      </div>
+                    }
+                    @if (
+                      recipient.recipientType === "webhook" ||
+                      recipient.recipientType === "discord" ||
+                      recipient.recipientType === "googlechat"
+                    ) {
+                      <div class="svg-box">
+                        <svg class="svg">
+                          @if (recipient.recipientType === "discord") {
+                            <use xlink:href="#discord"></use>
+                          }
+                          @if (recipient.recipientType === "googlechat") {
+                            <use xlink:href="#googlechat"></use>
+                          }
+                          @if (recipient.recipientType === "webhook") {
+                            <use xlink:href="#webhook"></use>
+                          }
+                        </svg>
+                      </div>
+                      <div class="recipient-info">
+                        <span
+                          class="tooltip"
+                          matTooltip="{{ recipient.url }}"
+                          matTooltipClass="tt-wrapping"
+                          >{{ recipient.url }}
+                        </span>
+                      </div>
+                    }
+                    @if ((deleteRecipientLoading$ | async) === recipient.id) {
+                      <mat-progress-spinner
+                        [diameter]="20"
+                        color="primary"
+                        mode="indeterminate"
+                      ></mat-progress-spinner>
+                    } @else {
+                      <button
+                        class="trash medium-icon-button"
+                        id="delete-recipient"
+                        mat-icon-button
+                        color="primary"
+                        attr.aria-label="Delete Alert {{ i + 0 }}"
+                        (click)="removeAlertRecipient(recipient, alert)"
+                      >
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
+                    }
+                  </div>
+                </li>
+              }
+            </ul>
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="openUpdateRecipientDialog(alert)"
+            >
+              <mat-icon>add</mat-icon>
+              Add An Alert Recipient
+            </button>
+          </div>
+        }
+      }
+    }
+    @if ((initialLoad$ | async) === false) {
       <div class="initial-loading">
         <mat-progress-spinner
           [diameter]="40"
           color="primary"
           mode="indeterminate"
-        ></mat-progress-spinner></div
-    ></ng-container>
-    <ng-container *ngIf="initialLoadError$ | async as error">
+        ></mat-progress-spinner
+      ></div>
+    }
+    @if (initialLoadError$ | async; as error) {
       <div class="error initial-load-error">
         {{ error }}
-      </div></ng-container
-    >
+      </div>
+    }
   </mat-card-content>
 </mat-card>
