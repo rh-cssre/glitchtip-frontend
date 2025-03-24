@@ -20,5 +20,5 @@ export interface GroupedProjects {
 
 export interface ProjectError {
   error: string;
-  id: string;
+  id: number;
 }
