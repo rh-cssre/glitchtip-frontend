@@ -1,10 +1,7 @@
-import { UserKey } from "src/app/api/mfa/user-keys.service";
+import { TOTPAuthenticator } from "src/app/api/allauth/allauth.interfaces";
 
-export const totpUserKey: UserKey = {
-  id: 1,
-  created: "",
-  key_type: "TOTP",
-  last_used: "",
-  name: "TOTP Key",
-  user: 1,
+export const totpUserKey: TOTPAuthenticator = {
+  type: "totp",
+  created_at: 1,
+  last_used_at: 1,
 };

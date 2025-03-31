@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Team, TeamErrors, TeamLoading } from "./teams.interfaces";
 import { BehaviorSubject, combineLatest, lastValueFrom, EMPTY } from "rxjs";
@@ -8,6 +8,8 @@ import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { TeamsAPIService } from "./teams-api.service";
+import { toObservable } from "@angular/core/rxjs-interop";
+import { client } from "../api";
 
 interface TeamsState {
   teams: Team[] | null;
@@ -29,6 +31,11 @@ const initialState: TeamsState = {
   providedIn: "root",
 })
 export class TeamsService {
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  private teamsAPIService = inject(TeamsAPIService);
+
   private readonly state = new BehaviorSubject<TeamsState>(initialState);
   private readonly getState$ = this.state.asObservable();
 
@@ -42,7 +49,7 @@ export class TeamsService {
 
   readonly userTeamRole$ = combineLatest([
     this.teamMembers$,
-    this.userService.activeUserEmail$,
+    toObservable(this.userService.activeUserEmail),
   ]).pipe(
     map(([teamMembers, userEmail]) => {
       const activeTeamMember = teamMembers.find(
@@ -51,13 +58,6 @@ export class TeamsService {
       return activeTeamMember?.role;
     })
   );
-
-  constructor(
-    private userService: UserService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private teamsAPIService: TeamsAPIService
-  ) {}
 
   retrieveTeamsByOrg(orgSlug: string) {
     return this.teamsAPIService
@@ -101,19 +101,22 @@ export class TeamsService {
     );
   }
 
-  deleteTeam(orgSlug: string, teamSlug: string) {
+  async deleteTeam(orgSlug: string, teamSlug: string) {
     this.setDeleteTeamLoading(true);
-    return this.teamsAPIService.destroy(orgSlug, teamSlug).pipe(
-      tap(() => {
-        this.setDeleteTeamLoading(false);
-        this.snackBar.open(`You have successfully deleted #${teamSlug}`);
-        this.router.navigate([orgSlug, "settings", "teams"]);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.setDeleteTeamError(error);
-        return EMPTY;
-      })
+    const result = await client.DELETE(
+      "/api/0/teams/{organization_slug}/{team_slug}/",
+      {
+        params: { path: { organization_slug: orgSlug, team_slug: teamSlug } },
+      }
     );
+    this.setDeleteTeamLoading(false);
+    if (result.error) {
+      // this.setDeleteTeamError(result.response);
+    } else {
+      this.snackBar.open(`You have successfully deleted #${teamSlug}`);
+      this.router.navigate([orgSlug, "settings", "teams"]);
+    }
+    return result;
   }
 
   private setDeleteTeamLoading(loading: boolean) {
@@ -127,20 +130,20 @@ export class TeamsService {
     });
   }
 
-  private setDeleteTeamError(error: HttpErrorResponse) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      errors: {
-        ...state.errors,
-        deleteTeam: `${error.statusText}: ${error.status}`,
-      },
-      loading: {
-        ...state.loading,
-        deleteTeam: false,
-      },
-    });
-  }
+  // private setDeleteTeamError(error: HttpErrorResponse) {
+  //   const state = this.state.getValue();
+  //   this.state.next({
+  //     ...state,
+  //     errors: {
+  //       ...state.errors,
+  //       deleteTeam: `${error.statusText}: ${error.status}`,
+  //     },
+  //     loading: {
+  //       ...state.loading,
+  //       deleteTeam: false,
+  //     },
+  //   });
+  // }
 
   addTeam(team: Team) {
     this.addOneTeam(team);
