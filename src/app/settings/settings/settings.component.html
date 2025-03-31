@@ -2,29 +2,17 @@
   <mat-drawer class="mat-elevation-z2" mode="side" opened>
     <nav>
       <mat-nav-list>
-        <a
-          mat-list-item
-          routerLink="./"
-          routerLinkActive="active-route"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <a mat-list-item routerLink="./" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true }">
           General Settings
         </a>
-        <a
-          mat-list-item
-          routerLink="./projects"
-          routerLinkActive="active-route"
-        >
+        <a mat-list-item routerLink="./projects" routerLinkActive="active-route">
           Projects
         </a>
-        <a
-          *ngIf="billingEnabled$ | async"
-          mat-list-item
-          routerLink="./subscription"
-          routerLinkActive="active-route"
-        >
+        @if (billingEnabled()) {
+        <a mat-list-item routerLink="./subscription" routerLinkActive="active-route">
           Subscription
         </a>
+        }
         <a mat-list-item routerLink="./teams" routerLinkActive="active-route">
           Teams
         </a>
@@ -35,15 +23,10 @@
     </nav>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-toolbar color="primary" (click)="toggleSideNav()">
-      <button *ngIf="isLoggedIn$ | async" mat-button class="sidenav-toggle">
-        <mat-icon>menu</mat-icon></button
-      ><span
-        class="active-org"
-        *ngIf="activeOrganizationDetail$ | async as orgDetails"
-        >{{ orgDetails?.name }}</span
-      >
-    </mat-toolbar>
+    @if (isLoggedIn()) {
+    <gt-mobile-nav-toolbar [activeOrg]="activeOrganizationDetail()"
+      (buttonClicked)="toggleSideNav()"></gt-mobile-nav-toolbar>
+    }
     <router-outlet></router-outlet>
   </mat-drawer-content>
 </mat-drawer-container>
