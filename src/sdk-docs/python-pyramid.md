@@ -14,7 +14,7 @@ The Pyramid integration adds support for the [Pyramid Web Framework](https://try
    from sentry_sdk.integrations.pyramid import PyramidIntegration
 
    sentry_sdk.init(
-       dsn="your DSN here",
+       dsn="YOUR-GLITCHTIP-DSN-HERE",
        integrations=[PyramidIntegration()]
    )
 

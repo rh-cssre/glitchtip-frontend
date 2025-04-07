@@ -3,7 +3,11 @@
     "target": "http://backend:8080",
     "secure": false
   },
-  "/rest-auth": {
+  "/accounts": {
+    "target": "http://backend:8080",
+    "secure": false
+  },
+  "/_allauth": {
     "target": "http://backend:8080",
     "secure": false
   }

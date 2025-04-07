@@ -1,0 +1,84 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-issues-page {
+    .bulk-project-select {
+      &__inner {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        background-color: if(
+          $is-dark-theme,
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 900),
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 50)
+        );
+      }
+
+      &__text {
+        color: if(
+          $is-dark-theme,
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 50),
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 900)
+        );
+      }
+    }
+
+    .resolved {
+      background: if(
+        $is-dark-theme,
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 800),
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 100)
+      );
+    }
+
+    .ignored {
+      background: if(
+        $is-dark-theme,
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 800),
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 100)
+      );
+    }
+
+    .level {
+      &--sample:after {
+        background-color: if(
+          $is-dark-theme,
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 400),
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 100)
+        );
+      }
+
+      &--debug:after {
+        background-color: if(
+          $is-dark-theme,
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 600),
+          mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300)
+        );
+      }
+
+      &--info:after {
+        background-color: #4b60b4;
+      }
+
+      &--warning:after {
+        background-color: #e9b949;
+      }
+
+      &--error:after {
+        background-color: mat.m2-get-color-from-palette($primary);
+      }
+
+      &--fatal:after {
+        background-image: repeating-linear-gradient(
+          -60deg,
+          mat.m2-get-color-from-palette($primary),
+          mat.m2-get-color-from-palette($primary) 5px,
+          white 5px,
+          white 10px
+        );
+      }
+    }
+  }
+}
