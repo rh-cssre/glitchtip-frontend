@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { TransactionGroup } from "./transactions.interfaces";
 import { baseUrl } from "../../constants";
@@ -8,21 +8,27 @@ import { APIBaseService } from "../api-base.service";
   providedIn: "root",
 })
 export class TransactionGroupsAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = "/transaction-groups/";
 
-  constructor(protected http: HttpClient) {
+  constructor() {
+    const http = inject(HttpClient);
+
     super(http);
+
+    this.http = http;
   }
 
   list(
     organizationSlug: string,
-    cursor?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string,
-    query?: string
+    cursor?: string | null,
+    project?: number[] | null,
+    start?: string | null,
+    end?: string | null,
+    sort?: string | null,
+    environment?: string | null,
+    query?: string | null,
   ) {
     const url = this.listURL(organizationSlug);
     let httpParams = new HttpParams();
@@ -57,7 +63,7 @@ export class TransactionGroupsAPIService extends APIBaseService {
 
   retrieve(id: number, organizationSlug: string) {
     return this.http.get<TransactionGroup>(
-      this.detailURL(id, organizationSlug)
+      this.detailURL(id, organizationSlug),
     );
   }
 
