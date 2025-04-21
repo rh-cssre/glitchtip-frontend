@@ -1,16 +1,24 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+} from "@angular/core";
 import { IssueDetailService } from "../../issue-detail.service";
+import { MatIconModule } from "@angular/material/icon";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "gt-contexts",
   templateUrl: "./contexts.component.html",
   styleUrls: ["./contexts.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatIconModule, AsyncPipe],
 })
 export class ContextsComponent implements OnInit {
-  specialContexts$ = this.issueDetailService.specialContexts$;
+  private issueDetailService = inject(IssueDetailService);
 
-  constructor(private issueDetailService: IssueDetailService) {}
+  specialContexts$ = this.issueDetailService.specialContexts$;
 
   ngOnInit() {
     this.issueDetailService.specialContexts$.subscribe();
