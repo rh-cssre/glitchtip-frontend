@@ -4,7 +4,7 @@
     "baseUrl": "../node_modules",
     "target": "es6",
     "module": "es6",
-    "lib": ["es5", "dom"],
+    "lib": ["es6", "dom"],
     "types": ["cypress", "cypress-localstorage-commands"]
   },
   "include": ["**/*.ts"]

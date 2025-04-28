@@ -15,19 +15,19 @@ export const stringError: EventDetail = {
     {
       data: {
         url: "http://localhost:4200/polyfills.js",
-        value: "<class 'requests.exceptions.ConnectionError'>"
+        value: "<class 'requests.exceptions.ConnectionError'>",
       },
       message: "Unable to fetch HTTP resource",
-      type: "fetch_generic_error"
+      type: "fetch_generic_error",
     },
     {
       data: {
         url: "http://localhost:4200/vendor.js",
-        value: "<class 'requests.exceptions.ConnectionError'>"
+        value: "<class 'requests.exceptions.ConnectionError'>",
       },
       message: "Unable to fetch HTTP resource",
-      type: "fetch_generic_error"
-    }
+      type: "fetch_generic_error",
+    },
   ],
   culprit: "viewWrappedDebugError(/vendor.js)",
   title: "Error: an error string",
@@ -39,7 +39,7 @@ export const stringError: EventDetail = {
     function: "viewWrappedDebugError",
     type: "Error",
     value: "an error string",
-    filename: "/vendor.js"
+    filename: "/vendor.js",
   },
   groupingConfig: { id: "legacy:2019-03-12" },
   crashFile: null,
@@ -55,8 +55,8 @@ export const stringError: EventDetail = {
       query: "user.ip:208.53.32.36",
       value: "ip:208.53.32.36",
       key: "user",
-      _meta: null
-    }
+      _meta: null,
+    },
   ],
   dateCreated: "2020-01-28T20:19:56.151Z",
   dateReceived: "2020-01-28T20:19:56.151Z",
@@ -66,7 +66,7 @@ export const stringError: EventDetail = {
     ip_address: "208.53.32.36",
     email: null,
     data: {},
-    id: null
+    id: null,
   },
   entries: [
     {
@@ -92,7 +92,7 @@ export const stringError: EventDetail = {
                   filename: "/polyfills.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "invokeTask",
@@ -110,7 +110,7 @@ export const stringError: EventDetail = {
                   filename: "/polyfills.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "invokeTask",
@@ -128,7 +128,7 @@ export const stringError: EventDetail = {
                   filename: "/polyfills.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "runTask",
@@ -146,7 +146,7 @@ export const stringError: EventDetail = {
                   filename: "/polyfills.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "invokeTask",
@@ -164,7 +164,7 @@ export const stringError: EventDetail = {
                   filename: "/polyfills.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "onInvokeTask",
@@ -182,7 +182,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "invokeTask",
@@ -200,7 +200,7 @@ export const stringError: EventDetail = {
                   filename: "/polyfills.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "sentryWrapped",
@@ -218,7 +218,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "decoratePreventDefault/<",
@@ -236,7 +236,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "renderEventHandlerClosure/<",
@@ -254,7 +254,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "dispatchEvent",
@@ -272,7 +272,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "debugHandleEvent",
@@ -290,7 +290,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "callWithDebugContext",
@@ -308,7 +308,7 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
+                  symbolAddr: null,
                 },
                 {
                   function: "viewWrappedDebugError",
@@ -326,28 +326,28 @@ export const stringError: EventDetail = {
                   filename: "/vendor.js",
                   platform: null,
                   context: [],
-                  symbolAddr: null
-                }
+                  symbolAddr: null,
+                },
               ],
               framesOmitted: null,
               registers: null,
-              hasSystemFrames: false
+              hasSystemFrames: false,
             },
             module: null,
             rawStacktrace: null,
             mechanism: {
               data: { function: "<anonymous>" },
               type: "instrument",
-              handled: true
+              handled: true,
             },
             threadId: null,
             value: "an error string",
-            type: "Error"
-          }
+            type: "Error",
+          },
         ],
         excOmitted: null,
-        hasSystemFrames: false
-      }
+        hasSystemFrames: false,
+      },
     },
     {
       type: "breadcrumbs",
@@ -362,13 +362,13 @@ export const stringError: EventDetail = {
               logger: "console",
               extra: {
                 arguments: [
-                  "Angular is running in the development mode. Call enableProdMode() to enable the production mode."
-                ]
-              }
+                  "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
+                ],
+              },
             },
             message:
               "Angular is running in the development mode. Call enableProdMode() to enable the production mode.",
-            type: "default"
+            type: "default",
           },
           {
             category: "ui.click",
@@ -377,7 +377,7 @@ export const stringError: EventDetail = {
             timestamp: "2020-01-28T20:19:53.548Z",
             data: null,
             message: "body > app-root > ol > li > a",
-            type: "default"
+            type: "default",
           },
           {
             category: "xhr",
@@ -387,10 +387,10 @@ export const stringError: EventDetail = {
             data: {
               url: "http://localhost:4200/sockjs-node/info?t=1580242793552",
               status_code: 200,
-              method: "GET"
+              method: "GET",
             },
             message: null,
-            type: "http"
+            type: "http",
           },
           {
             category: "ui.click",
@@ -399,10 +399,10 @@ export const stringError: EventDetail = {
             timestamp: "2020-01-28T20:19:55.949Z",
             data: null,
             message: "body > app-root > ol > li > a",
-            type: "default"
-          }
-        ]
-      }
+            type: "default",
+          },
+        ],
+      },
     },
     {
       type: "request",
@@ -414,21 +414,21 @@ export const stringError: EventDetail = {
         headers: [
           [
             "User-Agent",
-            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"
-          ]
+            "Mozilla/5.0 (X11; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0",
+          ],
         ],
         url: "http://localhost:4200/",
         query: [],
         data: null,
-        method: null
-      }
-    }
+        method: null,
+      },
+    },
   ],
   packages: {},
   sdk: {
     version: "5.11.1",
     name: "sentry.javascript.browser",
-    upstream: { url: null, isNewer: false, name: "sentry.javascript.browser" }
+    upstream: { url: null, isNewer: false, name: "sentry.javascript.browser" },
   },
   _meta: {
     user: null,
@@ -438,14 +438,14 @@ export const stringError: EventDetail = {
     message: null,
     packages: null,
     tags: {},
-    sdk: null
+    sdk: null,
   },
   contexts: {
     os: { type: "os", name: "Linux" },
-    browser: { version: "72.0", type: "browser", name: "Firefox" }
+    browser: { version: "72.0", type: "browser", name: "Firefox" },
   },
   fingerprints: ["cd05695f108567c9cd4e56c8945ade8b"],
   context: { arguments: [] },
   release: null,
-  groupID: "7"
+  groupID: "7",
 };
