@@ -1,4 +1,6 @@
 // tslint:disable:max-line-length
+import { HttpErrorResponse } from "@angular/common/http";
+import { concat, delayWhen, interval, of, repeat } from "rxjs";
 
 /**
  * generateClassName comes from
@@ -157,13 +159,86 @@ export function timedeltaToMS(value: string) {
 }
 
 export function normalizeProjectParams(
-  projects: string | string[] | undefined
+  projects: string | string[] | undefined | null,
 ) {
   if (Array.isArray(projects)) {
-    return projects;
+    return projects.map((id) => parseInt(id, 10));
   }
   if (typeof projects === "string") {
-    return [projects];
+    return [parseInt(projects, 10)];
   }
   return [];
+}
+
+export function parseErrorMessage(err: HttpErrorResponse): string[] {
+  if (err.error && typeof err.error === "object") {
+    const errorValues: string[][] = Object.values<string[]>(err.error);
+    return errorValues.reduce((a, v) => a.concat(v), []);
+  } else {
+    return [err.message];
+  }
+}
+
+export function setTheme(preferredTheme?: string | null) {
+  function setDark() {
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }
+
+  function setLight() {
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
+    localStorage.setItem("theme", "light");
+  }
+
+  const systemTheme = matchMedia("(prefers-color-scheme: dark)");
+  const isSystem = preferredTheme === "system";
+
+  if (isSystem) {
+    if (systemTheme.matches) {
+      setDark();
+    } else {
+      setLight();
+    }
+  } else if (preferredTheme === "dark") {
+    setDark();
+  } else {
+    setLight();
+  }
+}
+
+function getCookie(name: string) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+export function getCSRFToken() {
+  return getCookie("csrftoken");
+}
+
+export function refreshInterval(
+  initialDelaysInSeconds: number[],
+  repeatIntervalInSeconds: number,
+) {
+  const toMilliseconds = (seconds: number) => seconds * 1000;
+  const initialDelays = initialDelaysInSeconds.map(toMilliseconds);
+  const repeatInterval = toMilliseconds(repeatIntervalInSeconds);
+
+  return concat(
+    ...initialDelays.map((delay) =>
+      of(null).pipe(delayWhen(() => interval(delay))),
+    ),
+    interval(repeatInterval),
+  ).pipe(repeat());
 }
