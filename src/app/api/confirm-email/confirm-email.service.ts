@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap, catchError } from "rxjs/operators";
 import { EMPTY } from "rxjs";
@@ -9,13 +9,11 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   providedIn: "root",
 })
 export class ConfirmEmailService {
-  private readonly url = "/rest-auth/registration/verify-email/";
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+  private readonly url = "/_allauth/browser/v1/auth/email/verify";
 
   confirmEmail(key: string) {
     this.postConfirmEmailKey(key)
@@ -35,7 +33,7 @@ export class ConfirmEmailService {
           }
           this.router.navigate(["profile"]);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
