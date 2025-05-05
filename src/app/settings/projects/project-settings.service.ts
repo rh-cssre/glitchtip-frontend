@@ -1,22 +1,23 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { EMPTY } from "rxjs";
 import { tap, map, catchError, filter, first } from "rxjs/operators";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
 import {
   initialPaginationState,
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
 import {
-  Project,
+  OrganizationProject,
   ProjectDetail,
   ProjectKey,
   ProjectNew,
 } from "../../api/projects/projects-api.interfaces";
 import { ProjectsAPIService } from "../../api/projects/projects-api.service";
 import { ProjectKeysAPIService } from "../../api/projects/project-keys-api.service";
+import { OrganizationProjectsAPIService } from "../../api/projects/organization-projects-api.service";
+import { ProjectTeamsAPIService } from "src/app/api/projects/project-teams-api.service";
 
 interface ProjectLoading {
   addProjectToTeam: boolean;
@@ -29,9 +30,9 @@ interface ProjectError {
 }
 
 interface ProjectSettingsState extends PaginationStatefulServiceState {
-  projects: Project[] | null;
-  projectsOnTeam: Project[];
-  projectsNotOnTeam: Project[];
+  projects: OrganizationProject[] | null;
+  projectsOnTeam: OrganizationProject[];
+  projectsNotOnTeam: OrganizationProject[];
   projectDetail: ProjectDetail | null;
   projectKeys: ProjectKey[] | null;
   loading: ProjectLoading;
@@ -53,30 +54,32 @@ const initialState: ProjectSettingsState = {
   providedIn: "root",
 })
 export class ProjectSettingsService extends PaginationStatefulService<ProjectSettingsState> {
+  private snackBar = inject(MatSnackBar);
+  private projectsAPIService = inject(ProjectsAPIService);
+  private projectTeamsAPIService = inject(ProjectTeamsAPIService);
+  private orgProjectsAPIService = inject(OrganizationProjectsAPIService);
+  private projectKeysAPIService = inject(ProjectKeysAPIService);
+
   readonly projects$ = this.getState$.pipe(map((data) => data.projects));
 
   readonly activeProject$ = this.getState$.pipe(
-    map((data) => data.projectDetail)
+    map((data) => data.projectDetail),
   );
   readonly activeProjectSlug$ = this.activeProject$.pipe(
-    map((data) => data?.slug)
+    map((data) => data?.slug),
   );
   readonly projectKeys$ = this.getState$.pipe(map((data) => data.projectKeys));
 
   readonly projectsOnTeam$ = this.getState$.pipe(
-    map((data) => data.projectsOnTeam)
+    map((data) => data.projectsOnTeam),
   );
   readonly projectsNotOnTeam$ = this.getState$.pipe(
-    map((data) => data.projectsNotOnTeam)
+    map((data) => data.projectsNotOnTeam),
   );
   readonly addRemoveLoading$ = this.getState$.pipe(map((data) => data.loading));
   readonly errors$ = this.getState$.pipe(map((data) => data.errors));
 
-  constructor(
-    private snackBar: MatSnackBar,
-    private projectsAPIService: ProjectsAPIService,
-    private projectKeysAPIService: ProjectKeysAPIService
-  ) {
+  constructor() {
     super(initialState);
   }
 
@@ -87,7 +90,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
   }
 
   retrieveProjects(organizationSlug: string) {
-    this.projectsAPIService
+    this.orgProjectsAPIService
       .list(organizationSlug)
       .pipe(tap((projects) => this.setProjects(projects)))
       .subscribe();
@@ -102,15 +105,15 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
    * @param orgSlug Active organization slug
    */
   getProjectDetails(
-    project: string[] | null,
+    project: number[] | null,
     activeOrgProjects: OrganizationProject[] | null,
-    orgSlug: string
+    orgSlug: string,
   ) {
     if (activeOrgProjects) {
       let matchingProject: OrganizationProject | null = null;
       if (project && project.length === 1) {
         const match = activeOrgProjects.find(
-          (activeOrgProject) => activeOrgProject.id === parseInt(project[0], 10)
+          (activeOrgProject) => activeOrgProject.id === project[0],
         );
         if (match) matchingProject = match;
       } else if (activeOrgProjects.length === 1) {
@@ -125,7 +128,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
 
   addProjectToTeam(orgSlug: string, teamSlug: string, projectSlug: string) {
     this.setAddProjectToTeamLoading(true);
-    this.projectsAPIService
+    this.projectTeamsAPIService
       .addProjectToTeam(orgSlug, teamSlug, projectSlug)
       .pipe(
         tap((resp) => {
@@ -135,7 +138,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
         catchError((error: HttpErrorResponse) => {
           this.setAddProjectToTeamError(error);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
@@ -143,10 +146,10 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
   removeProjectFromTeam(
     orgSlug: string,
     teamSlug: string,
-    projectSlug: string
+    projectSlug: string,
   ) {
     this.setRemoveProjectFromTeamLoading(projectSlug);
-    return this.projectsAPIService
+    return this.projectTeamsAPIService
       .removeProjectFromTeam(orgSlug, teamSlug, projectSlug)
       .pipe(
         tap((resp) => {
@@ -156,14 +159,14 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
         catchError((error: HttpErrorResponse) => {
           this.setRemoveProjectFromTeamLoadingError(error);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
 
   retrieveProjectsOnTeam(orgSlug: string, teamSlug: string) {
     const query = `team:${teamSlug}`;
-    this.projectsAPIService
+    this.orgProjectsAPIService
       .list(orgSlug, query)
       .pipe(tap((resp) => this.setProjectsPerTeam(resp)))
       .subscribe();
@@ -171,7 +174,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
 
   retrieveProjectsNotOnTeam(orgSlug: string, teamSlug: string) {
     const query = `!team:${teamSlug}`;
-    return this.projectsAPIService
+    return this.orgProjectsAPIService
       .list(orgSlug, query)
       .pipe(tap((resp) => this.setProjectsNotOnTeam(resp)))
       .subscribe();
@@ -194,7 +197,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
             .list(organizationSlug, project!.slug)
             .pipe(tap((projectKeys) => this.setKeys(projectKeys)))
             .subscribe();
-        })
+        }),
       )
       .subscribe();
   }
@@ -210,7 +213,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
     orgSlug: string,
     projectSlug: string,
     projectPlatform: string,
-    projectName: string
+    projectName: string,
   ) {
     const data = { name: projectName, platform: projectPlatform };
     return this.projectsAPIService
@@ -270,17 +273,17 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
     });
   }
 
-  private setProjects(projects: Project[]) {
+  private setProjects(projects: OrganizationProject[]) {
     this.setState({ projects });
   }
 
-  private setProjectsPerTeam(projectsOnTeam: Project[]) {
+  private setProjectsPerTeam(projectsOnTeam: OrganizationProject[]) {
     this.setState({
       projectsOnTeam,
     });
   }
 
-  private setProjectsNotOnTeam(projectsNotOnTeam: Project[]) {
+  private setProjectsNotOnTeam(projectsNotOnTeam: OrganizationProject[]) {
     this.setState({
       projectsNotOnTeam,
     });
@@ -292,7 +295,7 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
     });
   }
 
-  private addOneProject(project: Project) {
+  private addOneProject(project: OrganizationProject) {
     const newProjects = this.state.getValue().projects?.concat([project]);
     if (newProjects) {
       this.setState({
@@ -301,11 +304,11 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
     }
   }
 
-  private setRemoveProjectFromTeam(project: Project) {
+  private setRemoveProjectFromTeam(project: OrganizationProject) {
     const filteredTeams = this.state
       .getValue()
       .projectsOnTeam.filter(
-        (currentProject) => currentProject.slug !== project.slug
+        (currentProject) => currentProject.slug !== project.slug,
       );
     const notOnTeam = this.state
       .getValue()
@@ -320,11 +323,11 @@ export class ProjectSettingsService extends PaginationStatefulService<ProjectSet
     });
   }
 
-  private setAddProjectToTeam(project: Project) {
+  private setAddProjectToTeam(project: OrganizationProject) {
     const notOnTeam = this.state
       .getValue()
       .projectsNotOnTeam.filter(
-        (currentProject) => currentProject.slug !== project.slug
+        (currentProject) => currentProject.slug !== project.slug,
       );
     const onTeam = this.state.getValue().projectsOnTeam?.concat([project]);
     this.setState({
