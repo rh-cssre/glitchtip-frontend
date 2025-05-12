@@ -12,7 +12,7 @@ describe("Organization Settings", () => {
     cy.contains(organization.name);
     cy.get("input[formcontrolname=name]").clear().type(organization.otherOrg);
     cy.get("#update-org").click();
-    cy.contains(organization.otherOrg);
+    cy.get("input[formcontrolname=name]").should('have.value', organization.otherOrg);
     // clear db
     cy.get("#delete-org").click();
   });
