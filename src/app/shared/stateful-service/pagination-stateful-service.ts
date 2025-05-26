@@ -1,26 +1,7 @@
 import { HttpResponse } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { StatefulService } from "./stateful-service";
-
-/**
- * Pagination info exists in a header, this parses it out for storing.
- */
-const processLinkHeader = (linkHeader: string) =>
-  linkHeader.split(",").reduce<{ [key: string]: string }>((acc, link) => {
-    // Only return results url when results are present
-    const match = link.match(/<(.*)>; rel="(\w*)"/);
-    const results = link
-      .split("; ")
-      .find((x) => x.startsWith("results"))
-      ?.includes("true");
-    if (results && match) {
-      const url = match[1];
-      const rel = match[2];
-      acc[rel] = url;
-      return acc;
-    }
-    return acc;
-  }, {});
+import { processLinkHeader, urlParamsToObject } from "../pagination.utils";
 
 export interface PaginationState {
   hits: number | null;
@@ -51,11 +32,24 @@ export interface PaginationStatefulServiceState {
  * If working with a CRUD view that is paginated, use this as the base class
  */
 export abstract class PaginationStatefulService<
-  TState extends PaginationStatefulServiceState
+  TState extends PaginationStatefulServiceState,
 > extends StatefulService<TState> {
   pagination$ = this.getState$.pipe(map((state) => state.pagination));
+  paginator$ = this.pagination$.pipe(
+    map((pagination) => ({
+      ...pagination,
+      hasNextPage: !!pagination.nextPageURL,
+      hasPreviousPage: !!pagination.previousPageURL,
+      nextPageParams: urlParamsToObject(pagination.nextPageURL),
+      previousPageParams: urlParamsToObject(pagination.previousPageURL),
+      count:
+        pagination.hits && pagination.hits === pagination.maxHits
+          ? pagination.hits.toString() + "+"
+          : pagination.hits?.toString(),
+    })),
+  );
   initialLoadComplete$ = this.pagination$.pipe(
-    map((pagination) => pagination.initialLoadComplete)
+    map((pagination) => pagination.initialLoadComplete),
   );
   loading$ = this.pagination$.pipe(map((pagination) => pagination.loading));
   constructor(initialState: TState) {
@@ -91,10 +85,10 @@ export interface Paginator extends PaginationState {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
   nextPageParams: {
-    [key: string]: string;
+    [key: string]: string[];
   } | null;
   previousPageParams: {
-    [key: string]: string;
+    [key: string]: string[];
   } | null;
   /** Human readable object count string that appends "+" to indicate max hits */
   count: string | undefined;

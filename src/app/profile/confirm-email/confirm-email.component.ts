@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map } from "rxjs/operators";
 import { ConfirmEmailService } from "../../api/confirm-email/confirm-email.service";
@@ -7,12 +12,11 @@ import { ConfirmEmailService } from "../../api/confirm-email/confirm-email.servi
   selector: "gt-confirm-email",
   template: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ConfirmEmailComponent implements OnInit {
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private confirmEmailService: ConfirmEmailService
-  ) {}
+  private activatedRoute = inject(ActivatedRoute);
+  private confirmEmailService = inject(ConfirmEmailService);
 
   ngOnInit(): void {
     this.activatedRoute.params

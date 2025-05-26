@@ -1,21 +1,14 @@
-import { moduleMetadata } from "@storybook/angular";
 import { of } from "rxjs";
 
 import { ContextsComponent } from "./contexts.component";
 import { generateIconPath, iconDictionary } from "src/app/shared/shared.utils";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
 
 export default {
   title: "Events/Contexts",
-  decorators: [
-    moduleMetadata({
-      imports: [GlitchtipTestingModule],
-      declarations: [],
-    }),
-  ],
+  component: ContextsComponent,
 };
 
-export const contexts = () => {
+export const Contexts = () => {
   const fullContext = [
     {
       title: "em@jay.com",
@@ -46,7 +39,7 @@ export const contexts = () => {
       subtitle: "20.0.4",
       key: "Version",
       type: "os",
-      icon: "static/assets/images/os-logos/ubuntu.png",
+      icon: "static/assets/images/os-logos/UBT.png",
       matIcon: null,
     },
     {
@@ -68,18 +61,17 @@ export const contexts = () => {
   ];
 
   return {
-    component: ContextsComponent,
     props: {
       specialContexts$: of(fullContext),
     },
   };
 };
 
-contexts.story = {
+Contexts.story = {
   name: "Event Detail Full Context",
 };
 
-export const unknownContexts = () => {
+export const UnknownContexts = () => {
   const transformedContexts: any = [
     {
       type: "user",
@@ -123,14 +115,13 @@ export const unknownContexts = () => {
     },
   ];
   return {
-    component: ContextsComponent,
     props: {
       specialContexts$: of(transformedContexts),
     },
   };
 };
 
-unknownContexts.story = {
+UnknownContexts.story = {
   name: "Event Detail Contexts - Unknown Scenario",
 };
 
@@ -145,7 +136,7 @@ export const IconPaths = () => {
         src="${generateIconPath(icon)}"
       />
     </div>
-  `
+  `,
   );
 
   return {
