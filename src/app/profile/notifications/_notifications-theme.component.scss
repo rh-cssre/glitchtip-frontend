@@ -1,0 +1,18 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-notifications {
+    .border,
+    .project-list-item {
+      border-color: if(
+        $is-dark-theme,
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 700),
+        mat.m2-get-color-from-palette(mat.$m2-gray-palette, 200)
+      );
+    }
+  }
+}
