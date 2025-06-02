@@ -1,20 +1,43 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, inject } from "@angular/core";
 import {
   AlertRecipient,
   ProjectAlert,
 } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { ProjectAlertsService } from "./project-alerts.service";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
 import { distinctUntilChanged } from "rxjs";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { LoadingButtonComponent } from "../../../../shared/loading-button/loading-button.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
+import { AsyncPipe } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-project-alerts",
   templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatDividerModule,
+    AlertFormComponent,
+    MatIconModule,
+    MatTooltipModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    AsyncPipe,
+  ],
 })
 export class ProjectAlertsComponent implements OnInit, OnDestroy {
+  private alertsService = inject(ProjectAlertsService);
+  dialog = inject(MatDialog);
+
   @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
   projectAlerts$ = this.alertsService.projectAlerts$;
   newProjectAlertRecipients$ = this.alertsService.newProjectAlertRecipients$;
@@ -30,11 +53,6 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
   newAlertLoading$ = this.alertsService.newAlertLoading$;
   newAlertError$ = this.alertsService.newAlertError$;
-
-  constructor(
-    private alertsService: ProjectAlertsService,
-    public dialog: MatDialog
-  ) {}
 
   ngOnInit(): void {
     this.alertsService.listProjectAlerts();
@@ -68,27 +86,27 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
     this.alertsService.closeNewAlert();
   }
 
-  removeAlert(pk: number) {
+  removeAlert(id: number) {
     if (window.confirm("Are you sure you want to remove this notification?")) {
-      this.alertsService.deleteProjectAlert(pk);
+      this.alertsService.deleteProjectAlert(id);
     }
   }
 
   updateProperties(
     event: {
-      timespan_minutes: number;
+      timespanMinutes: number;
       quantity: number;
       uptime: boolean;
     },
-    alert: ProjectAlert
+    alert: ProjectAlert,
   ): void {
-    if (alert.pk) {
+    if (alert.id) {
       this.alertsService.updateAlertProperties(
-        event.timespan_minutes,
+        event.timespanMinutes,
         event.quantity,
         event.uptime,
-        alert.pk,
-        alert.alertRecipients
+        alert.id,
+        alert.alertRecipients,
       );
     }
   }
@@ -98,7 +116,7 @@ export class ProjectAlertsComponent implements OnInit, OnDestroy {
   }
 
   newAlertProperties(event: {
-    timespan_minutes: number;
+    timespanMinutes: number;
     quantity: number;
     uptime: boolean;
   }) {

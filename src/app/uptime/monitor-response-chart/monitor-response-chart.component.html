@@ -1,5 +1,5 @@
-<ng-container *ngIf="data">
-  <ng-container *ngIf="scale">
+@if (data) {
+  @if (scale) {
     <div #containerRef class="chart-container">
       <ngx-charts-area-chart
         [showXAxisLabel]="false"
@@ -26,5 +26,5 @@
         </ng-template>
       </ngx-charts-area-chart>
     </div>
-  </ng-container>
-</ng-container>
+  }
+}
