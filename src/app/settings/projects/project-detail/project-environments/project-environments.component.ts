@@ -1,33 +1,46 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ProjectEnvironment } from "src/app/api/organizations/organizations.interface";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  input,
+  OnInit,
+} from "@angular/core";
 import { ProjectEnvironmentsService } from "./project-environments.service";
+import { LoadingButtonComponent } from "../../../../shared/loading-button/loading-button.component";
+import { MatListModule } from "@angular/material/list";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: "gt-project-environments",
   templateUrl: "./project-environments.component.html",
   styleUrls: ["./project-environments.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    MatListModule,
+    LoadingButtonComponent,
+  ],
+  providers: [ProjectEnvironmentsService],
 })
-export class ProjectEnvironmentsComponent implements OnDestroy {
-  initialLoad$ = this.environmentsService.initialLoad$;
-  toggleHiddenloading$ = this.environmentsService.toggleHiddenLoading$;
-  error$ = this.environmentsService.error$;
-  sortedEnvironments$ = this.environmentsService.sortedEnvironments$;
+export class ProjectEnvironmentsComponent implements OnInit {
+  private service = inject(ProjectEnvironmentsService);
+  orgSlug = input.required<string>();
+  projectSlug = input.required<string>();
 
-  constructor(private environmentsService: ProjectEnvironmentsService) {
-    this.environmentsService.retrieveEnvironments().subscribe();
+  initialLoad = this.service.initialLoad;
+  toggleHiddenloading = this.service.toggleHiddenLoading;
+  sortedEnvironments = this.service.sortedEnvironments;
+
+  ngOnInit(): void {
+    this.service.setParams(this.orgSlug(), this.projectSlug());
   }
 
-  ngOnDestroy(): void {
-    this.environmentsService.clearState();
-  }
-
-  toggleHidden(environment: ProjectEnvironment) {
-    this.environmentsService
-      .updateEnvironment({
-        ...environment,
-        isHidden: !environment.isHidden,
-      })
-      .subscribe();
+  toggleHidden(environment: any) {
+    this.service.updateEnvironment({
+      ...environment,
+      isHidden: !environment.isHidden,
+    });
   }
 }
