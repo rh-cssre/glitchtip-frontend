@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { tap, catchError, map } from "rxjs/operators";
 import { EMPTY } from "rxjs";
@@ -9,6 +9,7 @@ import {
   PaginationStatefulService,
   PaginationStatefulServiceState,
 } from "src/app/shared/stateful-service/pagination-stateful-service";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 export interface UserReportsState extends PaginationStatefulServiceState {
   reports: UserReport[] | null;
@@ -25,16 +26,18 @@ const initialState: UserReportsState = {
   providedIn: "root",
 })
 export class UserReportsService extends PaginationStatefulService<UserReportsState> {
+  private http = inject(HttpClient);
+
   private readonly issuePageUrl = baseUrl + "/issues/";
 
-  reports$ = this.getState$.pipe(map((state) => state.reports));
-  errors$ = this.getState$.pipe(map((state) => state.errors));
+  reports = toSignal(this.getState$.pipe(map((state) => state.reports)));
+  errors = toSignal(this.getState$.pipe(map((state) => state.errors)));
 
-  constructor(private http: HttpClient) {
+  constructor() {
     super(initialState);
   }
 
-  getReportsForIssue(issue: number, cursor: string | undefined) {
+  getReportsForIssue(issue: string, cursor?: string | null) {
     this.setLoadingReports(true);
     this.resetUserReports();
     this.getIssueReports(issue, cursor)
@@ -49,22 +52,22 @@ export class UserReportsService extends PaginationStatefulService<UserReportsSta
         catchError((error) => {
           this.setLoadingReports(false);
           this.setErrorsReports(
-            "Something went wrong. Try reloading the page."
+            "Something went wrong. Try reloading the page.",
           );
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }
 
-  private getIssueReports(issueId: number, cursor: string | undefined) {
+  private getIssueReports(issueId: string, cursor?: string | null) {
     let httpParams = new HttpParams();
     if (cursor) {
       httpParams = httpParams.set("cursor", cursor);
     }
     return this.http.get<UserReport[]>(
       `${this.issuePageUrl}${issueId}/user-reports/`,
-      { observe: "response", params: httpParams }
+      { observe: "response", params: httpParams },
     );
   }
 

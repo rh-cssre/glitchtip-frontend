@@ -1,44 +1,78 @@
-import { Component, OnInit } from "@angular/core";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router, ActivatedRoute } from "@angular/router";
-import { EMPTY } from "rxjs";
-import { map, filter, tap, exhaustMap, catchError } from "rxjs/operators";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  effect,
+  inject,
+  input,
+} from "@angular/core";
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { NewTeamComponent } from "../../teams/new-team/new-team.component";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { ProjectSettingsService } from "../project-settings.service";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatButtonModule } from "@angular/material/button";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
+import { PlatformPickerComponent } from "../platform-picker/platform-picker.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { NewProjectService } from "./new-project.service";
+import { Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "gt-new-project",
   templateUrl: "./new-project.component.html",
   styleUrls: ["./new-project.component.scss"],
+  imports: [
+    MatCardModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    PlatformPickerComponent,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    LoadingButtonComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [NewProjectService],
 })
 export class NewProjectComponent implements OnInit {
-  teams$ = this.teamsService.teams$;
-  loading = false;
-  error?: string;
-  orgSlug?: string;
-  form = new UntypedFormGroup({
-    name: new UntypedFormControl("", [Validators.required]),
-    platform: new UntypedFormControl(""),
-    team: new UntypedFormControl("", [Validators.required]),
+  private teamsService = inject(TeamsService);
+  private service = inject(NewProjectService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  dialog = inject(MatDialog);
+
+  orgSlug = input.required<string>({ alias: "org-slug" });
+  teams = this.teamsService.teams;
+  error = this.service.error;
+  loading = this.service.loading;
+  form = new FormGroup({
+    name: new FormControl("", [Validators.required, Validators.maxLength(64)]),
+    platform: new FormControl(""),
+    team: new FormControl("", [Validators.required]),
   });
 
-  constructor(
-    private orgService: OrganizationsService,
-    private projectsService: ProjectSettingsService,
-    private teamsService: TeamsService,
-    private router: Router,
-    private route: ActivatedRoute,
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {
-    this.teams$.subscribe((data) => {
-      if (data && data[0]) {
+  constructor() {
+    effect(() => {
+      const teams = this.teams();
+      if (teams?.length) {
         this.form.patchValue({
-          team: data[0].slug,
+          team: teams[0].slug,
         });
       }
     });
@@ -53,57 +87,34 @@ export class NewProjectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params
-      .pipe(
-        map((params) => params["org-slug"] as string),
-        filter((slug) => !!slug),
-        tap((slug) => (this.orgSlug = slug))
-      )
-      .subscribe((slug) => {
-        this.teamsService.retrieveTeamsByOrg(slug).toPromise();
-      });
+    this.teamsService.retrieveTeamsByOrg(this.orgSlug());
   }
 
   openCreateTeamDialog() {
     this.dialog.open(NewTeamComponent, {
       maxWidth: "500px",
       data: {
-        orgSlug: this.orgSlug,
+        orgSlug: this.orgSlug(),
       },
     });
   }
 
-  onSubmit() {
-    if (this.form.valid && this.orgSlug) {
-      this.loading = true;
-      this.projectsService
-        .createProject(
-          {
-            name: this.form.value.name,
-            platform: this.form.value.platform,
-          },
-          this.form.value.team,
-          this.orgSlug
-        )
-        .pipe(
-          tap(() => (this.loading = false)),
-          exhaustMap((project) =>
-            this.orgService.refreshOrganizationDetail().pipe(
-              tap((organization) => {
-                this.snackBar.open(`${project.name} has been created`);
-                this.router.navigate([organization.slug, "issues"], {
-                  queryParams: { project: project.id },
-                });
-              })
-            )
-          ),
-          catchError((err) => {
-            this.loading = false;
-            this.error = `${err.statusText}: ${err.status}`;
-            return EMPTY;
-          })
-        )
-        .toPromise();
+  async onSubmit() {
+    if (this.form.valid) {
+      const data = await this.service.createProject(
+        {
+          name: this.form.value.name!,
+          platform: this.form.value.platform ?? "",
+        } as any,
+        this.form.value.team!,
+        this.orgSlug(),
+      );
+      if (data) {
+        this.snackBar.open($localize`${data.name} has been created`);
+        this.router.navigate([this.orgSlug(), "issues"], {
+          queryParams: { project: data.id },
+        });
+      }
     }
   }
 }
