@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { APIBaseService } from "../api-base.service";
 import { baseUrl } from "../../constants";
 import { Member } from "src/app/api/organizations/organizations.interface";
@@ -9,14 +9,16 @@ import { Team } from "./teams.interfaces";
   providedIn: "root",
 })
 export class TeamsAPIService extends APIBaseService {
+  protected http: HttpClient;
+
   readonly url = "/teams/";
 
-  constructor(protected http: HttpClient) {
-    super(http);
-  }
+  constructor() {
+    const http = inject(HttpClient);
 
-  create(orgSlug: string, teamSlug: string) {
-    return this.http.post<Team>(this.listURL(orgSlug), { slug: teamSlug });
+    super(http);
+
+    this.http = http;
   }
 
   retrieve(orgSlug: string, teamSlug: string) {
@@ -41,16 +43,16 @@ export class TeamsAPIService extends APIBaseService {
     return this.http.get<Member[]>(this.teamMembersListURL(orgSlug, teamSlug));
   }
 
-  addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
+  addTeamMember(member: any, orgSlug: string, teamSlug: string) {
     return this.http.post<Team>(
       this.teamMemberURL(member.id, orgSlug, teamSlug),
-      member
+      member,
     );
   }
 
   removeTeamMember(memberId: number, orgSlug: string, teamSlug: string) {
     return this.http.delete<Team>(
-      this.teamMemberURL(memberId, orgSlug, teamSlug)
+      this.teamMemberURL(memberId, orgSlug, teamSlug),
     );
   }
 

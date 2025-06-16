@@ -1,41 +1,74 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  effect,
+  input,
+} from "@angular/core";
+import { AsyncPipe, I18nPluralPipe } from "@angular/common";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
-import { combineLatest, withLatestFrom, takeUntil } from "rxjs";
-import { map, tap } from "rxjs/operators";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { PerformanceService, PerformanceState } from "../performance.service";
-import { ProjectEnvironmentsService } from "src/app/settings/projects/project-detail/project-environments/project-environments.service";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import { takeUntilDestroyed, toObservable } from "@angular/core/rxjs-interop";
+import { combineLatest, EMPTY } from "rxjs";
+import { map, switchMap, tap } from "rxjs/operators";
+import { PerformanceService } from "../performance.service";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
 import { TransactionGroup } from "src/app/api/transactions/transactions.interfaces";
+import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
+import { ListFooterComponent } from "../../list-elements/list-footer/list-footer.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { DataFilterBarComponent } from "../../list-elements/data-filter-bar/data-filter-bar.component";
+import { MatTableModule } from "@angular/material/table";
+import { ProjectFilterBarComponent } from "../../list-elements/project-filter-bar/project-filter-bar.component";
+import { ListTitleComponent } from "../../list-elements/list-title/list-title.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { EnvironmentsService } from "src/app/api/environments.service";
 
 @Component({
   selector: "gt-transaction-groups",
   templateUrl: "./transaction-groups.component.html",
   styleUrls: ["./transaction-groups.component.scss"],
+  imports: [
+    AsyncPipe,
+    I18nPluralPipe,
+    ListTitleComponent,
+    ProjectFilterBarComponent,
+    MatTableModule,
+    DataFilterBarComponent,
+    MatTooltipModule,
+    RouterLink,
+    ListFooterComponent,
+    HumanizeDurationPipe,
+  ],
 })
-export class TransactionGroupsComponent
-  extends PaginationBaseComponent<PerformanceState, PerformanceService>
-  implements OnInit, OnDestroy
-{
+export class TransactionGroupsComponent implements OnInit, OnDestroy {
+  private organizationsService = inject(OrganizationsService);
+  protected service = inject(PerformanceService);
+  #environmentsService = inject(EnvironmentsService);
+  protected router = inject(Router);
+  protected route = inject(ActivatedRoute);
+
+  paginator$ = this.service.paginator$;
+  orgSlug = input.required<string>({ alias: "org-slug" });
+  orgSlug$ = toObservable(this.orgSlug);
   displayedColumns = ["name-and-project", "avgDuration"];
-  sortForm = new UntypedFormGroup({
-    sort: new UntypedFormControl({
+  sortForm = new FormGroup({
+    sort: new FormControl({
       value: "",
       disabled: true,
     }),
   });
-  dateForm = new UntypedFormGroup({
-    startDate: new UntypedFormControl(""),
-    endDate: new UntypedFormControl(""),
+  dateForm = new FormGroup({
+    startDate: new FormControl(""),
+    endDate: new FormControl(""),
   });
-  environmentForm = new UntypedFormGroup({
-    environment: new UntypedFormControl({ value: "" }),
+  environmentForm = new FormGroup({
+    environment: new FormControl({ value: "", disabled: true }),
   });
-  searchForm = new UntypedFormGroup({
-    query: new UntypedFormControl(""),
+  searchForm = new FormGroup({
+    query: new FormControl(""),
   });
 
   sorts = [
@@ -50,34 +83,16 @@ export class TransactionGroupsComponent
     other: "# Transactions",
   };
 
+  environmentNames = this.#environmentsService.environmentNames;
   transactionGroupsDisplay$ = this.service.transactionGroupsDisplay$;
   errors$ = this.service.errors$;
   loading$ = this.service.loading$;
   initialLoadComplete$ = this.service.initialLoadComplete$;
-  navigationEnd$ = this.cursorNavigationEnd$.pipe(
-    withLatestFrom(this.route.params, this.route.queryParams),
-    map(([_, params, queryParams]) => {
-      const orgSlug: string | undefined = params["org-slug"];
-      const cursor: string | undefined = queryParams.cursor;
-      let project: string[] | null = null;
-      if (typeof queryParams.project === "string") {
-        project = [queryParams.project];
-      } else if (typeof queryParams.project === "object") {
-        project = queryParams.project;
-      }
-      const start: string | undefined = queryParams.start;
-      const end: string | undefined = queryParams.end;
-      const sort: string | undefined = queryParams.sort;
-      const environment: string | undefined = queryParams.environment;
-      const query: string | undefined = queryParams.query;
-      return { orgSlug, cursor, project, start, end, sort, environment, query };
-    })
-  );
   activeOrganizationProjects$ =
     this.organizationsService.activeOrganizationProjects$;
 
   projectsFromParams$ = this.route.queryParams.pipe(
-    map((params) => normalizeProjectParams(params.project))
+    map((params) => normalizeProjectParams(params.project)),
   );
 
   appliedProjectCount$ = this.projectsFromParams$.pipe(
@@ -86,91 +101,56 @@ export class TransactionGroupsComponent
         return projects.length;
       }
       return 0;
-    })
+    }),
   );
 
-  organizationEnvironments$ = combineLatest([
-    this.appliedProjectCount$,
-    this.organizationsService.organizationEnvironmentsProcessed$,
-    this.projectEnvironmentsService.visibleEnvironments$,
-  ]).pipe(
-    map(([appliedProjectCount, orgEnvironments, projectEnvironments]) =>
-      appliedProjectCount !== 1 ? orgEnvironments : projectEnvironments
-    )
-  );
+  environments = this.#environmentsService.orgEnvironments;
 
-  constructor(
-    private organizationsService: OrganizationsService,
-    protected service: PerformanceService,
-    private projectEnvironmentsService: ProjectEnvironmentsService,
-    protected router: Router,
-    protected route: ActivatedRoute
-  ) {
-    super(service, router, route);
-
-    this.navigationEnd$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        ({
-          orgSlug,
-          cursor,
-          project,
-          start,
-          end,
-          sort,
-          environment,
-          query,
-        }) => {
+  constructor() {
+    combineLatest([this.orgSlug$, this.route.queryParamMap])
+      .pipe(
+        switchMap(([orgSlug, params]) => {
           if (orgSlug) {
-            this.service.getTransactionGroups(
+            const project = normalizeProjectParams(params.getAll("project"));
+            return this.service.getTransactionGroups(
               orgSlug,
-              cursor,
+              params.get("cursor"),
               project,
-              start,
-              end,
-              sort,
-              environment,
-              query
+              params.get("start"),
+              params.get("end"),
+              params.get("sort"),
+              params.get("environment"),
+              params.get("query"),
             );
           }
-        }
-      );
+          return EMPTY;
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe();
 
-    this.organizationEnvironments$.subscribe((environments) =>
-      environments.length === 0
+    effect(() =>
+      this.environments().length === 0
         ? this.environmentForm.controls.environment.disable()
-        : this.environmentForm.controls.environment.enable()
+        : this.environmentForm.controls.environment.enable(),
     );
 
     this.transactionGroupsDisplay$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed())
       .subscribe((groups) =>
         groups.length === 0
           ? this.sortForm.controls.sort.disable()
-          : this.sortForm.controls.sort.enable()
+          : this.sortForm.controls.sort.enable(),
       );
 
-    this.organizationsService
-      .observeOrgEnvironments(this.navigationEnd$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
-
-    this.projectEnvironmentsService
-      .observeProjectEnvironments(this.navigationEnd$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
-
-    combineLatest([
-      this.projectEnvironmentsService.visibleEnvironmentsLoaded$,
-      this.route.queryParams,
-    ])
+    combineLatest([toObservable(this.environments), this.route.queryParams])
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
         tap(([projectEnvironments, queryParams]) => {
           if (
             queryParams.project &&
             queryParams.environment &&
-            !projectEnvironments.includes(queryParams.environment)
+            !projectEnvironments!.includes(queryParams.environment)
           ) {
             this.environmentForm.setValue({ environment: null });
             this.router.navigate([], {
@@ -178,7 +158,7 @@ export class TransactionGroupsComponent
               queryParamsHandling: "merge",
             });
           }
-        })
+        }),
       )
       .subscribe();
   }
@@ -222,13 +202,14 @@ export class TransactionGroupsComponent
         sort: sort !== undefined ? sort : "-avg_duration",
       });
       this.dateForm.setValue({
-        startDate: start ? new Date(start.replace("Z", "")) : null,
-        endDate: end ? new Date(end.replace("Z", "")) : null,
+        startDate: (start ? new Date(start.replace("Z", "")) : null) as any,
+        endDate: (end ? new Date(end.replace("Z", "")) : null) as any,
       });
       this.searchForm.setValue({
         query: query !== undefined ? query : "",
       });
     });
+    this.#environmentsService.reload();
   }
 
   onDateFormSubmit(queryParams: object) {
@@ -275,7 +256,6 @@ export class TransactionGroupsComponent
   }
 
   ngOnDestroy() {
-    super.ngOnDestroy();
-    this.projectEnvironmentsService.clearState();
+    this.service.clearState();
   }
 }
