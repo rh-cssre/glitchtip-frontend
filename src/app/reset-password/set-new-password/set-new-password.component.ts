@@ -1,59 +1,97 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { UntypedFormGroup, UntypedFormControl, Validators } from "@angular/forms";
-import { map } from "rxjs/operators";
-import { ResetPasswordService } from "src/app/api/reset-password/reset-password.service";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  input,
+  effect,
+} from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+import {
+  Validators,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+} from "@angular/forms";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+
+import { MatCardModule } from "@angular/material/card";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { InputMatcherDirective } from "../../shared/input-matcher.directive";
+import {
+  ResetPasswordService,
+  ResetPasswordState,
+} from "../reset-password.service";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 
 @Component({
-  selector: "gt-set-new-password",
   templateUrl: "./set-new-password.component.html",
   styleUrls: ["./set-new-password.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatCardModule,
+    ReactiveFormsModule,
+    FormErrorComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    InputMatcherDirective,
+    LoadingButtonComponent,
+    RouterLink,
+  ],
 })
-export class SetNewPasswordComponent {
-  params$ = this.activatedRoute.params.pipe(
-    map((params) => ({ uid: params.uidb64, token: params.token }))
-  );
-  setNewPasswordError$ = this.resetService.setNewPasswordError$;
-  setnewPasswordLoading$ = this.resetService.setNewPasswordLoading$;
-  form = new UntypedFormGroup({
-    new_password1: new UntypedFormControl("", [
+export class SetNewPasswordComponent extends StatefulComponent<
+  ResetPasswordState,
+  ResetPasswordService
+> {
+  private router = inject(Router);
+  protected service: ResetPasswordService;
+  private snackBar = inject(MatSnackBar);
+  readonly key = input.required<string>();
+
+  formErrors = this.service.formErrors;
+  success = this.service.success;
+  loading = this.service.loading;
+  form = new FormGroup({
+    password: new FormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
-    new_password2: new UntypedFormControl("", [
+    password2: new FormControl("", [
       Validators.required,
       Validators.minLength(8),
     ]),
   });
 
-  get new_password1() {
-    return this.form.get("new_password1");
+  get password() {
+    return this.form.get("password");
   }
 
-  get new_password2() {
-    return this.form.get("new_password2");
+  get password2() {
+    return this.form.get("password2");
   }
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private resetService: ResetPasswordService
-  ) {}
+  constructor() {
+    const service = inject(ResetPasswordService);
 
-  onSubmit() {
+    effect(() => mapFormErrors(service.fieldErrors(), this.form));
+    super(service);
+
+    this.service = service;
+  }
+
+  async onSubmit() {
     if (this.form.valid) {
-      this.params$
-        .pipe(
-          map((params) => {
-            this.resetService.setNewPassword(
-              this.form.value.new_password1,
-              this.form.value.new_password2,
-              params.uid,
-              params.token
-            );
-          })
-        )
-        .subscribe();
+      const data = await this.service.resetPassword(
+        this.key(),
+        this.form.value.password!,
+      );
+      if (data) {
+        this.snackBar.open("Your password has been changed.");
+        this.router.navigate(["/login"]);
+      }
     }
   }
 }
