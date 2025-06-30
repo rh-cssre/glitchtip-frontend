@@ -1,47 +1,63 @@
-import { Component, OnInit } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { tap, take } from "rxjs/operators";
-import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { OrganizationDetail } from "src/app/api/organizations/organizations.interface";
+import { OrganizationDetailService } from "../../api/organizations/organization-detail.service";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatDialog } from "@angular/material/dialog";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCardModule } from "@angular/material/card";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { toObservable } from "@angular/core/rxjs-interop";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "gt-organization",
   templateUrl: "./organization.component.html",
   styleUrls: ["./organization.component.scss"],
+  imports: [
+    MatCardModule,
+    MatDividerModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LoadingButtonComponent,
+  ],
 })
-export class OrganizationComponent implements OnInit {
-  activeOrganizationDetail$ = this.organizationsService
-    .activeOrganizationDetail$;
-  updateError = "";
-  updateLoading = false;
-  deleteError = "";
-  deleteLoading = false;
-  form = new UntypedFormGroup({
-    name: new UntypedFormControl(""),
-  });
+export class OrganizationComponent implements OnDestroy, OnInit {
+  private organizationsService = inject(OrganizationsService);
+  private organizationDetailService = inject(OrganizationDetailService);
+  private dialog = inject(MatDialog);
 
-  constructor(
-    private organizationsService: OrganizationsService,
-    private snackBar: MatSnackBar
-  ) {}
+  activeOrganizationDetail = this.organizationsService.activeOrganization;
+  initialLoad$ = toObservable(this.organizationDetailService.initialLoad);
+  activeOrganizationDetail$ = toObservable(this.activeOrganizationDetail);
+  loading = this.organizationDetailService.loading;
+  errors = this.organizationDetailService.errors;
+  form = new FormGroup({
+    name: new FormControl(""),
+  });
 
   ngOnInit() {
     // Ignore first load, on subsequent inits refresh org data
-    this.organizationsService.initialLoad$
+    this.initialLoad$
       .pipe(
         take(1),
         tap((initialLoad) => {
           if (initialLoad) {
-            this.organizationsService.retrieveOrganizations().toPromise();
-            this.organizationsService.refreshOrganizationDetail().subscribe();
+            // this.organizationsService.retrieveOrganizations().toPromise();
+            this.organizationsService.refreshActiveOrganization();
           }
-        })
+        }),
       )
       .toPromise();
-    this.activeOrganizationDetail$.subscribe((data) =>
-      data ? this.form.patchValue({ name: data.name }) : undefined
-    );
+    this.activeOrganizationDetail$.subscribe((data) => {
+      this.organizationDetailService.resetLoadingState();
+      if (data) {
+        this.form.patchValue({ name: data.name });
+      }
+    });
   }
 
   get name() {
@@ -49,42 +65,29 @@ export class OrganizationComponent implements OnInit {
   }
 
   updateOrganization() {
-    this.updateLoading = true;
-    this.organizationsService
-      .updateOrganization(this.form.value.name)
-      .subscribe(
-        (org: OrganizationDetail) => {
-          this.updateLoading = false;
-          this.snackBar.open(
-            `The name of your organization has been updated to ${org.name}`
-          );
-        },
-        (err) => {
-          this.updateLoading = false;
-          this.updateError = `${err.statusText}: ${err.status}`;
-        }
-      );
+    this.organizationDetailService.updateOrganization(this.form.value.name!);
   }
 
   removeOrganization(slug: string, name: string) {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${name}? You will permanently lose all projects and teams associated with it.`
-      )
-    ) {
-      this.deleteLoading = true;
-      this.organizationsService.deleteOrganization(slug).subscribe(
-        () => {
-          this.deleteLoading = false;
-          this.snackBar.open(
-            `You have successfully deleted ${name} from your organizations`
-          );
-        },
-        (err) => {
-          this.deleteLoading = false;
-          this.deleteError = "Error: " + err.statusText;
-        }
-      );
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      restoreFocus: false,
+      height: "225px",
+      width: "375px",
+      data: {
+        title: $localize`Remove organization`,
+        message: $localize`Are you sure you want to remove ${name}? You will permanently lose all projects and teams associated with it.`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.organizationDetailService.deleteOrganization(slug, name);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.organizationDetailService.resetLoadingState();
   }
 }
