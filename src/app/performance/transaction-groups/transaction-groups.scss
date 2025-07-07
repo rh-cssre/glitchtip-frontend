@@ -1,0 +1,63 @@
+@import "variables";
+
+$iconWidth: 56px;
+
+table {
+  width: 100%;
+  margin-bottom: 40px;
+
+  &.fixedLayout {
+    table-layout: fixed;
+  }
+}
+
+.table-header {
+  padding: 20px 24px 8px;
+}
+
+.mat-column-name-and-project {
+  padding-left: 24px;
+}
+
+.mat-column-avgDuration {
+  padding-right: 24px;
+}
+
+.name-and-project {
+  width: 500px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  @media screen and (max-width: $large - 1) {
+    width: 300px;
+  }
+  @media screen and (max-width: $medium - 1) {
+    width: 200px;
+  }
+  @media screen and (max-width: $tablet - 1) {
+    width: 160px;
+  }
+
+  .group-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: fit-content;
+  }
+
+  div {
+    width: inherit;
+
+    .mat-caption {
+      color: inherit;
+    }
+  }
+}
+
+.avg-duration-cell {
+  width: 140px;
+}
+
+.empty-states {
+  padding: 1.5em 24px 0.5em;
+}

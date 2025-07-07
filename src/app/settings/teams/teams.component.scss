@@ -2,36 +2,35 @@ mat-card {
   margin-top: 24px;
   margin-bottom: 24px;
 
+  mat-card-header {
+    flex-direction: column;
+  }
+
   mat-card-content {
     padding-top: 16px;
   }
-}
-
-mat-list {
-  width: 100%;
-  padding-top: 0;
 }
 
 mat-error {
   display: block;
 }
 
+.description {
+  margin-top: 12px;
+}
+
 .center-text {
   text-align: center;
 }
 
-.mat-list-item {
+.team-list-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
 
   &:nth-last-child(n + 2) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  }
-
-  ::ng-deep .mat-list-item-content {
-    width: 100%;
-    padding-left: 0;
-    padding-right: 0;
   }
 }
 
