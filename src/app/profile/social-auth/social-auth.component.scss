@@ -24,17 +24,24 @@ mat-card-header {
   text-align: center;
 }
 
-.button-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax((334px), 1fr));
-  grid-gap: 0 24px;
-  padding-top: 16px;
+.socialaccount-list-wrapper {
+  mat-divider {
+    margin-top: 12px;
+  }
+}
 
-  @media (max-width: $tablet - 1) {
-    grid-template-columns: auto;
+.socialaccount-wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  button {
+    width: fit-content;
+    margin: 12px 16px 0 0;
   }
 
-  .margin {
-    margin-bottom: 8px;
+  .email {
+    margin-top: 12px;
+    height: fit-content;
   }
 }
