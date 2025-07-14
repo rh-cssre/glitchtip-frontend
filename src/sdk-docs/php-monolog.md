@@ -21,7 +21,7 @@ Alternatively you can manually install it:
 Monolog supports GlitchTip out of the box. The only thing you’ll need to do is configure a handler:
 
 ```php
-$client = new Raven_Client('your DSN here');
+$client = new Raven_Client('YOUR-GLITCHTIP-DSN-HERE');
 
 $handler = new Monolog\Handler\RavenHandler($client);
 $handler->setFormatter(new Monolog\Formatter\LineFormatter("%message% %context% %extra%\n"));
@@ -58,7 +58,7 @@ $monolog->pushProcessor(function ($record) {
 GlitchTip provides a breadcrumb handler to automatically send logs along as crumbs:
 
 ```php
-$client = new Raven_Client('your DSN here');
+$client = new Raven_Client('YOUR-GLITCHTIP-DSN-HERE');
 
 $handler = new \Raven_Breadcrumbs_MonologHandler($client);
 $monolog->pushHandler($handler);

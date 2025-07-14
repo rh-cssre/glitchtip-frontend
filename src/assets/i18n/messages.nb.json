@@ -15,7 +15,6 @@
   "4406952910598958793": "For å fortsette må du enten logge inn med en eksisterende konto, eller lage en ny.",
   "4648253303476880511": "Lag ny konto",
   "7055509398589474309": "Logg inn med eksisterende konto",
-  "3961541970784414950": "Det oppsto en feil ved tilkobling til ekstern autentiseringstilbyder.",
   "1176990449799757498": "Problemer",
   "6312371663219634282": "Merk som løst",
   "6722197117273372334": "Åpne igjen",
@@ -31,7 +30,7 @@
   "22386476955637539": "Skriv inn koden fra autentiserings-appen på telefonen din. Hvis du har mistet telefonen, skriv inn en av gjenopprettingskodene.",
   "7451233168808859381": "Verifikasjonskode",
   "7045123878111147511": "Påkrevd",
-  "315190807015121967": "Koden må være 6 eller 16 tegn lang",
+  "2152994175880724805": "Koden må være 6 eller 16 tegn lang",
   "2454050363478003966": "Logg inn",
   "9040838861188606319": "Logg inn med sikkerhetsnøkkel i stedet",
   "4253861884986496315": "Epost er påkrevd for å logge inn",
@@ -56,7 +55,7 @@
   "1399934467160441489": "Opprett en ny organisasjon",
   "7079167664042577585": "Dette er første steg for å komme i gang med GlitchTip.",
   "4551866846795587701": "Lag organisasjon",
-  "6745305564776759454": " Registrering er deaktivert. Kontakt en administrator for å bli invitert til en eksisterende organisasjon. ",
+  "2935794773842380882": " Registrering er deaktivert. Kontakt en administrator for å bli invitert til en eksisterende organisasjon. ",
   "3301086086650990787": "Opprett konto",
   "5277739594710154939": "Har du allerede en konto?",
   "8520023152129279437": "Logg inn",
@@ -68,7 +67,6 @@
   "4355002072406321718": "Forespørsel ikke mottatt",
   "663614338028506842": "Responstid",
   "8470311110519302542": "Ingen data",
-  "3517932573606350122": " Intervall for sjekk av oppetid: {$INTERPOLATION}",
   "4426319772533875265": " Innstillinger ",
   "6998318993417414160": "Responstid",
   "8154453727027523235": "Varsler",
@@ -91,7 +89,7 @@
   "7156742322731584028": "Deaktiver TOTP",
   "7822329547663295003": "Øk sikkerheten for din konto ved å benytte et tidsbegrenset engangspassord (TOTP) sammen med innlogging.",
   "2045779543869682721": "Kom igang",
-  "3099741642167775297": "Last ned",
+  "1738896816778317550": "Last ned",
   "2876784140114247021": "eller din foretrukne TOTP-applikasjon på din telefon",
   "3885497195825665706": "Neste",
   "2726971803372813135": "Scan QR-koden i autentiserings-appen eller skriv inn koden under:",
@@ -99,35 +97,116 @@
   "4071496549933477149": "Sekssifret kode",
   "5995673810894749629": "Koden må være seks tall",
   "3971398713275316255": "Aktiver TOTP",
-  "6058250631075928277": "Du har blitt invitert til",
-  "1114702394872457328": "så du kan følge med på programvarefeil",
-  "6609789944031289762": "Kontoen du er logget inn med er allerede med i en organisasjon.",
-  "5113632876676621367": "Logg ut",
-  "2303592265389969112": "og opprett en konto, eller logg inn med kontoen denne linken var ment for",
-  "520980174761118864": "Logg inn med {$INTERPOLATION}",
-  "5715233980836936433": "Donate {$START_LINK} via that Liberapay {$CLOSE_LINK}",
-  "5349000458605027240": " Switch to {$START_LINK}Hosted GlitchTip{$CLOSE_LINK}",
-  "3509639242131814864": " Purchase support: {$START_LINK}sales@glitchtip.com{$CLOSE_LINK}",
-  "1223506099460240555": "There was an error processing your request",
-  "6410378746872498039": "There were errors while processing your request",
+  "520980174761118864": [
+    "Logg inn med ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ socialApp.name }}"
+      }
+    }
+  ],
+  "5715233980836936433": [
+    "Donate ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://liberapay.com/GlitchTip/donate\" >",
+        "dispEnd": "</a>",
+        "contents": " via that Liberapay "
+      }
+    }
+  ],
+  "5349000458605027240": [
+    " Switch to ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a target=\"_blank\" rel=\"noopener\" href=\"https://app.glitchtip.com/register?utm_medium=website&utm_source=glitchtip&utm_campaign=selfhost_nagware\" >",
+        "dispEnd": "</a >",
+        "contents": "Hosted GlitchTip"
+      }
+    }
+  ],
+  "3509639242131814864": [
+    " Purchase support: ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a href=\"mailto:sales@glitchtip.com?subject=Purchase support inquiry\" >",
+        "dispEnd": "</a >",
+        "contents": "sales@glitchtip.com"
+      }
+    }
+  ],
   "1830742686550996935": "This organization has no projects.",
-  "79938863716203390": "To add a project to this organization, press the \"Add Project\" button.",
+  "79938863716203390": "To add a project to this organization, press the \"Add Project\" button.",
   "8267592046747299006": "You can't see issues for this project because you're not on the team.",
   "5183247000083361116": "Out of the projects you have selected, you are not a part of that project's team for at least one of them.",
-  "100331146953492785": "Connect your {$INTERPOLATION} project to GlitchTip",
+  "100331146953492785": [
+    "Connect your ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ activeProjectPlatformName() }}"
+      }
+    },
+    " project to GlitchTip"
+  ],
   "3647474424920112919": "Connect your project to GlitchTip",
-  "1120098013104989112": "If you go to this project's {$START_LINK} settings page{$CLOSE_LINK}, you can pick a platform. If you do, you'll get more specific instructions about how to get started.",
-  "6401078118236139749": "Most instructions will have a spot that says \"your DSN here\". Copy the DSN and paste it into that spot.",
+  "177080935354192505": [
+    "If you go to this project's ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a [routerLink]=\"[ '/', activeOrganizationSlug(), 'settings', 'projects', activeProjectSlug(), ]\" >",
+        "dispEnd": "</a >",
+        "contents": " settings page"
+      }
+    },
+    ", you can pick a platform. If you do, you'll get more specific instructions about how to get started. "
+  ],
+  "4739937000925855165": "Most instructions will have a spot that says \"YOUR-GLITCHTIP-DSN-HERE\". Copy the DSN and paste it into that spot.",
   "5874780279351956748": "What's this all about?",
   "6481795403650848876": "This page is showing instructions on how to connect GlitchTip to your project based on the platform you specified.",
   "5448343062628656309": "No events match your filters.",
   "8251107285080064288": "Try changing your search parameters to get something to show here.",
   "1002135012519641907": "You have multiple projects selected. Select a single project to learn more about why there's nothing here.",
-  "5010578757780115993": "Settings for {$INTERPOLATION}",
   "4388879716045736175": "Note",
-  "3821671973040323145": " Because you are an admin for {$INTERPOLATION}, you have access to all of its projects. However, if you want to view issues for {$INTERPOLATION_1}, you must be a member of one of its teams. ",
+  "3821671973040323145": [
+    " Because you are an admin for ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ project.organization.name }}"
+      }
+    },
+    ", you have access to all of its projects. However, if you want to view issues for ",
+    {
+      "Standalone": {
+        "id": "1",
+        "equiv": "INTERPOLATION_1",
+        "disp": "{{ project.name }}"
+      }
+    },
+    ", you must be a member of one of its teams. "
+  ],
   "5621052107213107389": "Update Project",
-  "365917971431677426": "Enter a project name",
   "5923980840626905087": " Platform Documentation ",
   "7033296732013526864": "Client Keys (DSN)",
   "1744184913467319832": " Data Source Name: The code that connects your project to GlitchTip. Install a library into your project, then configure it with the DSN so that it knows how to send errors to your GlitchTip account. ",
@@ -138,18 +217,100 @@
   "7226346166840376717": "By deleting your project, you will lose all associated data. This cannot be undone.",
   "5729418620241283277": "Events",
   "848861324662209850": "Events are the unit of measure for tracking GlitchTip usage. An organization's maximum number of events per month is determined by its subscription type. Events are used to measure four GlitchTip features:",
-  "7350070325817798539": "{$START_BOLD_TEXT}Issues:{$CLOSE_BOLD_TEXT} Each occurrence of an event reported to GlitchTip",
-  "4605329245463156030": "{$START_BOLD_TEXT}Performance:{$CLOSE_BOLD_TEXT} Each time your app sends GlitchTip a transaction report for a tracked activity on your app",
-  "44869671307620538": "{$START_BOLD_TEXT}Releases:{$CLOSE_BOLD_TEXT} Each megabyte of file storage is counted as an event",
+  "7350070325817798539": [
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_BOLD_TEXT",
+        "equivEnd": "CLOSE_BOLD_TEXT",
+        "type": "fmt",
+        "dispStart": "<b>",
+        "dispEnd": "</b>",
+        "contents": "Issues:"
+      }
+    },
+    " Each occurrence of an event reported to GlitchTip"
+  ],
+  "4605329245463156030": [
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_BOLD_TEXT",
+        "equivEnd": "CLOSE_BOLD_TEXT",
+        "type": "fmt",
+        "dispStart": "<b>",
+        "dispEnd": "</b>",
+        "contents": "Performance:"
+      }
+    },
+    " Each time your app sends GlitchTip a transaction report for a tracked activity on your app"
+  ],
+  "44869671307620538": [
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_BOLD_TEXT",
+        "equivEnd": "CLOSE_BOLD_TEXT",
+        "type": "fmt",
+        "dispStart": "<b>",
+        "dispEnd": "</b>",
+        "contents": "Releases:"
+      }
+    },
+    " Each megabyte of file storage is counted as an event"
+  ],
   "7819314041543176992": "Close",
-  "6940348790913679018": "To add a project to this organization, press the \"Create New Project\" button.",
+  "6940348790913679018": "To add a project to this organization, press the \"Create New Project\" button.",
   "3834295552674710150": "In order to use GlitchTip, you'll need to create an organization.",
-  "6960036943669975538": "Create new project in {$INTERPOLATION}",
+  "6960036943669975538": [
+    "Create new project in ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ organization.name }}"
+      }
+    }
+  ],
   "1935221132513179654": "Error tracking",
   "2336062695979702768": "Unlimited projects",
   "6204819636508367774": "Unlimited team members",
-  "4894116049835995028": "Questions about subscriptions? Need assistance, or a bigger plan? Contact us at {$START_LINK}[object Object]{$CLOSE_LINK}.",
-  "2506462652585445837": "You have selected the free plan. Please consider making a monthly {$START_LINK}donation{$CLOSE_LINK} to help keep open source development sustainable. Thank you for choosing GlitchTip!",
+  "4894116049835995028": [
+    "Questions about subscriptions? Need assistance, or a bigger plan? Contact us at ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a href=\"mailto:{{ billingEmail }}\">",
+        "dispEnd": "</a >",
+        "contents": {
+          "Standalone": {
+            "id": "1",
+            "equiv": "INTERPOLATION",
+            "disp": "{{ billingEmail }}"
+          }
+        }
+      }
+    },
+    "."
+  ],
+  "2506462652585445837": [
+    "You have selected the free plan. Please consider making a monthly ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a href=\"https://liberapay.com/GlitchTip/donate\" target=\"_blank\" >",
+        "dispEnd": "</a >",
+        "contents": "donation"
+      }
+    },
+    " to help keep open source development sustainable. Thank you for choosing GlitchTip!"
+  ],
   "1109945939275542736": "This organization has an active subscription to GlitchTip. Thank you!",
   "5363625141068095814": "This organization has a trial subscription to GlitchTip.",
   "8120474743695089696": "This organization has a subscription to GlitchTip, but the payment is past due.",
@@ -158,24 +319,95 @@
   "105639553198587677": "Uptime events:",
   "2333988009900140990": "Performance events:",
   "6168919365016053724": "File storage:",
-  "7229999489442894650": "Total {$START_LINK}events{$CLOSE_LINK} used in billing period: {$INTERPOLATION}",
-  "1098433909560821849": "Start date for this plan: {$INTERPOLATION}",
-  "1219619838898772490": "Plan cost: {$INTERPOLATION}",
+  "1651520185990416775": [
+    "Total ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a [routerLink]=\"[]\" (click)=\"openEventInfoDialog()\" >",
+        "dispEnd": "</a >",
+        "contents": "events"
+      }
+    },
+    " used in billing period: ",
+    {
+      "Standalone": {
+        "id": "1",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ count.total }}"
+      }
+    }
+  ],
+  "1098433909560821849": [
+    "Start date for this plan: ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ subscription.startDate | date }}"
+      }
+    }
+  ],
+  "1219619838898772490": [
+    "Plan cost: ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ subscription.effectivePrice | currency }}"
+      }
+    }
+  ],
   "5875130684997376720": "Billing",
   "810888510148304696": "Automatic",
   "2432384855929218388": "Send invoice",
-  "5618100320383468888": "Billing period: {$INTERPOLATION} to {$INTERPOLATION_1}",
-  "6147245107718647120": "If you have questions about your subscription, please contact us at {$START_LINK}[object Object]{$CLOSE_LINK}.",
-  "6095052631454715389": "Manage Subscription",
+  "5618100320383468888": [
+    "Billing period: ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ subscription.currentPeriodStart | date }}"
+      }
+    },
+    " to ",
+    {
+      "Standalone": {
+        "id": "1",
+        "equiv": "INTERPOLATION_1",
+        "disp": "{{ subscription.currentPeriodEnd | date }}"
+      }
+    }
+  ],
+  "7486830422791899026": [
+    "If you have questions about your subscription, please contact us at ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a href=\"mailto:{{ billingEmail }}\">",
+        "dispEnd": "</a >",
+        "contents": {
+          "Standalone": {
+            "id": "1",
+            "equiv": "INTERPOLATION",
+            "disp": "{{ billingEmail }}"
+          }
+        }
+      }
+    },
+    ". "
+  ],
   "5799782740550832490": "This organization does not have an active subscription to GlitchTip. Pick a plan to get started.",
-  "2174410207450829295": "This organization does not have an active subscription to GlitchTip.",
-  "1432670211434533721": "Subscription Options",
-  "1676493260360867666": "If you would like to purchase a subscription, please contact us at {$START_LINK}[object Object]{$CLOSE_LINK}.",
   "2115863840021276098": "Now that you have an organization and a subscription, create a project.",
   "2167503793894173335": "Create a New Team",
   "6240182255609880044": "Your team slug can only consist of letters, numbers, underscores and/or hyphens.",
   "182653714972067036": "Enter a valid slug to create a team",
-  "6234831298944462737": "Back to Teams",
   "5105557512709552795": "Add Member",
   "3348547714642337740": "No members",
   "5432975988429346472": "This team doesn't have any members",
@@ -186,12 +418,519 @@
   "2501480779300161804": "By deleting your team, you will lose all associated data. This cannot be undone.",
   "1678548018195726594": "Create Team",
   "1743088859194300989": "Your Teams",
-  "7478140689790892603": "Teams are for managing issue notifications and workflow. View permissions are handled through {$START_LINK} organization membership.{$CLOSE_LINK}",
+  "7478140689790892603": [
+    "Teams are for managing issue notifications and workflow. View permissions are handled through ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a routerLink=\"../members\">",
+        "dispEnd": "</a>",
+        "contents": " organization membership."
+      }
+    }
+  ],
   "4479333657075318113": "You aren't part of any teams. Join a team below or press the \"Create Team\" button in the upper right.",
   "4687980611669913181": "You don't have any teams set up. Teams determine which users have access to projects in your organization.",
   "6560990714812373531": "To create a new team, press the \"Create Team\" button in the upper right.",
   "4358157694468493157": "Other Teams",
-  "2405706490874342359": " If you ever lose access to your codes, you can recover your account with your {$START_TAG_STRONG}backup codes{$CLOSE_TAG_STRONG}. ",
+  "9153853260021860021": [
+    "If you ever lose access to your codes, you can recover your account with your ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_TAG_STRONG",
+        "equivEnd": "CLOSE_TAG_STRONG",
+        "type": "other",
+        "dispStart": "<strong>",
+        "dispEnd": "</strong>",
+        "contents": "backup codes"
+      }
+    },
+    "."
+  ],
   "8951128623878467862": "Preferences",
-  "3893164255729997778": " Select a valid time zone "
+  "5279770905523465379": "Select a valid time zone",
+  "8433883189750412090": [
+    "You have been invited to join",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_TAG_STRONG",
+        "equivEnd": "CLOSE_TAG_STRONG",
+        "type": "other",
+        "dispStart": "<strong>",
+        "dispEnd": "</strong>",
+        "contents": {
+          "Standalone": {
+            "id": "1",
+            "equiv": "INTERPOLATION",
+            "disp": "{{ acceptInfo.orgUser.organization.name }}"
+          }
+        }
+      }
+    },
+    " so you can keep track of errors."
+  ],
+  "4185629687342786413": [
+    "The account you're logged into is already a part of this organization. You might want to ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_LINK",
+        "equivEnd": "CLOSE_LINK",
+        "type": "link",
+        "dispStart": "<a (click)=\"logout()\" href=\"javascript:void(0)\">",
+        "dispEnd": "</a>",
+        "contents": "log out"
+      }
+    },
+    ", then create an account for or log into the account that this invite link was intended for."
+  ],
+  "6921336596257236722": "New version available. Load New Version?",
+  "4768749765465246664": "Email",
+  "4145496584631696119": "Role",
+  "231679111972850796": "Added",
+  "1581886603273423006": "Account Owner",
+  "6895800612787584413": "Members can view and act on events, as well as view most other data within the organization.",
+  "1922838090212936091": "Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.",
+  "1740276691614535252": "Gains admin access on all teams as well as the ability to add and remove members.",
+  "4729000058409517470": "Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.",
+  "3444805486131364421": "Scopes:",
+  "2267387778265004491": "Organization Account Ownership",
+  "6146979090477797496": " The account owner has access to the organization's GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. ",
+  "5909691734964157223": " This member is the organization account owner and has access to the organization's GlitchTip subscription settings. ",
+  "3916787140877704867": "Team(s)",
+  "9208909205064884220": "This user isn't on any teams.",
+  "1398754421418372278": "Monitor Name",
+  "7307117116794596244": "Monitor type",
+  "1418979860895365047": " GlitchTip will \"ping\" the specified URL using an HTTP HEAD request with no payload. ",
+  "4970236371480835408": " GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. ",
+  "7679156164610222177": " GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. ",
+  "2118666744161927873": "GlitchTip will await requests from your site to ensure it is active. If it doesn't receive the request, the site will be marked as Down.",
+  "1312433286376470649": "Site URL",
+  "1107238992361664159": "Enter a valid URL with protocol (ex. https://example.com)",
+  "8190727095346221313": "Associated Project",
+  "6910864712437104509": "Uptime email notifications are sent to the team assigned to the associated project.",
+  "3335933778689867657": "Expected Status",
+  "8098214202153793679": " The quantity needs to be greater than or equal to 100. ",
+  "3255939212816298806": "Enter a status code number ",
+  "3802089991568977129": "Interval (seconds)",
+  "8658719885168030493": "Must be 60 or higher.",
+  "2168400886938239735": "Enter an integer.",
+  "5956316725115867558": "Timeout",
+  "5049957255900483968": "Enter an integer between 1 and 60.",
+  "3724940541438351467": "Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.",
+  "6164834099500157112": "Unable to log in with provided credentials.",
+  "4591000937604211863": "500 Server Error",
+  "960665565485640516": "Something went wrong",
+  "3221948488301825969": "Issue not found",
+  "5478056060243048045": "This may be because the URL is pointing to an issue that doesn't exist or was deleted.",
+  "6306074632981769484": "It's also possible that this issue was reported to a project that you are not able to access.",
+  "4841998368096526659": [
+    "View all issues in ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ organization.name }}"
+      }
+    }
+  ],
+  "8916408973006340984": [
+    "GlitchTip ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ version() }}"
+      }
+    }
+  ],
+  "6582573664846559511": "Change Password",
+  "1846542227840529109": "Current Password",
+  "8483269670688589838": "Your current is required to change your password",
+  "1221596867309460035": "New Password",
+  "6796247291544680076": "Type in your new password",
+  "911145468998987410": "Confirm New Password",
+  "2172491100431008170": "Your passwords don't match",
+  "7994060186123483149": "Your new password has been saved.",
+  "1944173575291952346": "Supports Slack, Microsoft Teams, Rocket.Chat, and more",
+  "7135122203377475337": "Use only letters, numbers, underscores and/or hyphens",
+  "3811407979880504315": "System Info",
+  "4052010728262248283": "Backend configuration",
+  "4895326106573044490": "Documentation",
+  "451200972202964504": "Show all checks",
+  "6735249038962761269": "Show incidents",
+  "8316175416734096923": [
+    " Uptime check interval: ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ monitor.interval | number }}"
+      }
+    },
+    " seconds "
+  ],
+  "7464216857382824881": "GlitchTip will check to make sure the port at the specified URL is accessible.",
+  "7276967761111129879": [
+    "URL may not be more than ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ formUrl.errors.maxlength.requiredLength }}"
+      }
+    },
+    " characters"
+  ],
+  "8797007391593964199": "Enter a host name and port (ex. example.com:80)",
+  "2118438278570914652": "Expected Response Body",
+  "830996102207481987": "If string isn't found in response body, the monitor will report as down",
+  "7704379049286251361": "Your current password is incorrect.",
+  "6373761293150491680": "Return to initial login page",
+  "7308123627289097296": "Unknown problem using Social Authentication",
+  "1538995058317034003": "Device activation was unsuccessful.",
+  "4663796819689603423": "Regenerate backup codes",
+  "4622788799334711424": [
+    "If you have lost your backup codes you can generate new ones, invalidating all previous codes. ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_TAG_STRONG",
+        "equivEnd": "CLOSE_TAG_STRONG",
+        "type": "other",
+        "dispStart": "<strong>",
+        "dispEnd": "</strong>",
+        "contents": "Print out these new codes or save them someplace safe."
+      }
+    }
+  ],
+  "6430072333383968514": "Regenerate codes",
+  "2167241020391967059": [
+    "Download or copy a list of backup codes. If you ever lose your phone, each of these recovery codes can be used one time to regain access to your account. ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_TAG_STRONG",
+        "equivEnd": "CLOSE_TAG_STRONG",
+        "type": "other",
+        "dispStart": "<strong>",
+        "dispEnd": "</strong>",
+        "contents": "Print them out or save them someplace safe."
+      }
+    }
+  ],
+  "3099741642167775297": "Download",
+  "4323470180912194028": "Copy",
+  "2617201451708142937": "Enter one of the backup codes to confirm that you have saved them:",
+  "305233477996347721": "Code must be 8 digits",
+  "187187500641108332": {
+    "Standalone": {
+      "id": "0",
+      "equiv": "INTERPOLATION",
+      "disp": "{{ backupCode?.errors?.serverError }}"
+    }
+  },
+  "9053544882734151327": "Provide a name for your device to complete registration.",
+  "8489391551429309663": "Your security key has been registered.",
+  "3677197196283475273": "You have successfully disconnected your social auth account",
+  "8434191191397593923": "Your account has no password set up.",
+  "1431416938026210429": "Password",
+  "3782563238994348625": "Confirm password",
+  "1017066204420437090": "Set New Password",
+  "6359908116364527838": "Project Alerts",
+  "8222747160094057941": "If you have an account with GlitchTip, an email has been sent to the email address you provided.",
+  "3084686770297988088": "Return to login",
+  "5966633327405012171": [
+    " If an ",
+    {
+      "Span": {
+        "id": "0",
+        "equivStart": "START_TAG_SPAN",
+        "equivEnd": "CLOSE_TAG_SPAN",
+        "type": "other",
+        "dispStart": "<span class=\"tooltip\" matTooltip=\"An event is every occurrence of the same error (aka: issue) in your application.\" >",
+        "dispEnd": "</span >",
+        "contents": "event"
+      }
+    },
+    " happens"
+  ],
+  "3595833482001508466": [
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }}"
+      }
+    },
+    " in"
+  ],
+  "2045774391739296209": "Timespan",
+  "2582356557395842562": "Enter an integer greater than 0.",
+  "5718859187781924335": [
+    "in ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "INTERPOLATION",
+        "disp": "{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}"
+      }
+    },
+    ", send an alert."
+  ],
+  "2342149656142683501": "If an uptime monitor is triggered.",
+  "3695251475145999588": "time",
+  "7074388989229825051": "times",
+  "5405071297219936776": "minute",
+  "982745398054129955": "minutes",
+  "168526128992551302": [
+    "You have been added to ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.orgUser.organization.name"
+      }
+    },
+    "."
+  ],
+  "8848756484835270621": " There was an error, probably because you tried to join an organization that you're already a part of. ",
+  "1874370182429640371": " There was an error. Try again later. ",
+  "8396934914861741559": " This invitation link expired or is invalid. Please issue a new invitation request. ",
+  "1417995330725483974": [
+    "The name of your organization has been updated to ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.name"
+      }
+    }
+  ],
+  "6566431624195050143": "Only users with a role of manager or above can update organizations.",
+  "7131676118619088880": "Only users with a role of manager or above can delete organizations.",
+  "5974237347502898380": "Email invites have been sent to the addresses you provided.",
+  "7753116604377136747": "An email invite has been sent to",
+  "3944070578105872601": "There was an error. Please try again.",
+  "7823379790822798031": "Too many invitations attempted. Not all invitations were sent. Please try again later",
+  "7831613273502162805": "Too many invitations attempted. Please try again later.",
+  "2499193577100705366": [
+    "You have left ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.slug"
+      }
+    }
+  ],
+  "4000360891880872696": [
+    "You joined ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.slug"
+      }
+    }
+  ],
+  "712588482447231923": [
+    "Your team slug has been changed to #",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.slug"
+      }
+    }
+  ],
+  "2815134129784182138": "Something went wrong. Try reloading the page.",
+  "6270991639782521904": "There was an error deleting this comment. Please try again.",
+  "1655069838040430737": "Event Details",
+  "689538422335046890": "User Reports",
+  "855933412451231239": "Comments ",
+  "3807699453257291879": "Comments",
+  "1554838717931748985": "Merged",
+  "525202038336328287": [
+    "Issue ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "id"
+      }
+    },
+    " has been deleted."
+  ],
+  "3206542606001340679": "Merge",
+  "6318415796179463435": "Merge issues",
+  "9058835702501543425": "This action will merge your selected issues into a single issue.",
+  "2347464874722958215": "There was an error when attempting to load issues.",
+  "2764329308967524576": "Error, unable to update issue",
+  "1277316148999198227": "Unmerge",
+  "21729799810425671": "No title found for this merged issue",
+  "3869317699802216328": "Unable to unmerge selected hashes.",
+  "7828159368784233084": "Unmerged seleced hashes.",
+  "339150322539484059": "Finalizing your login",
+  "4461430420011995077": "Delete Auth Token",
+  "3333500469510040036": "Are you sure you want to delete this authentication token?",
+  "7022070615528435141": "Delete",
+  "5963361173550459881": " There was an error deleting your token, please try again. ",
+  "2420295336574381180": "Confirming email…",
+  "2047102130540283011": " This e-mail confirmation link expired or is invalid. Please issue a new e-mail confirmation request. ",
+  "344300948538394896": "Your email address has been confirmed.",
+  "7233514443257462364": "There was a problem. Try again later.",
+  "3685661039544326124": [
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "email"
+      }
+    },
+    " has been removed from your account."
+  ],
+  "8983558994144621668": [
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "email"
+      }
+    },
+    " is now your primary email address."
+  ],
+  "781140390035637726": "Connecting to @sentry/wizard…",
+  "1232610167578746045": "Unable to connect to @sentry/wizard",
+  "5521710262088082373": "Successfully connected to @sentry/wizard.",
+  "6776045478354313726": [
+    "Successfully updated ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.email"
+      }
+    },
+    "'s role to ",
+    {
+      "Standalone": {
+        "id": "1",
+        "equiv": "PH_1",
+        "disp": "data.roleName"
+      }
+    }
+  ],
+  "45527735672619032": [
+    "Successfully transferred organization account ownership to ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.email"
+      }
+    },
+    "."
+  ],
+  "627180059350047308": [
+    "Error attempting to remove ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "member.email"
+      }
+    },
+    " from organization"
+  ],
+  "2323166636157815284": [
+    "Successfully removed ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "member.email"
+      }
+    },
+    " from organization"
+  ],
+  "8913962995110224982": "Remove organization",
+  "2110065830957672842": [
+    "Are you sure you want to remove ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "name"
+      }
+    },
+    "? You will permanently lose all projects and teams associated with it."
+  ],
+  "4814285799071780083": "Remove",
+  "3976301030203826563": "You lack permission to create a new project",
+  "917481646578897614": [
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "data.name"
+      }
+    },
+    " has been created"
+  ],
+  "6193408969997737484": "There was an error loading your alerts. Try refreshing the page.",
+  "806152040251876311": "Success: Your recipient has been deleted",
+  "8592656378036261137": "Your project has been sucessfully deleted",
+  "7589121772315788199": [
+    "The name of your project has been updated to ",
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "resp.name"
+      }
+    }
+  ],
+  "8455768552389044425": "You do not have permission to create a team",
+  "4935617373107665748": [
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "member.email"
+      }
+    },
+    " has been added to #",
+    {
+      "Standalone": {
+        "id": "1",
+        "equiv": "PH_1",
+        "disp": "team.slug"
+      }
+    }
+  ],
+  "8781927759674212057": [
+    {
+      "Standalone": {
+        "id": "0",
+        "equiv": "PH",
+        "disp": "memberEmail"
+      }
+    },
+    " has been removed from #",
+    {
+      "Standalone": {
+        "id": "1",
+        "equiv": "PH_1",
+        "disp": "team.slug"
+      }
+    }
+  ],
+  "751755198881789855": "Must be less than 32768.",
+  "7167798427319552621": "There was an error retrieving your uptime monitors."
 }
