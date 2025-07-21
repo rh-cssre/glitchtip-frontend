@@ -1,16 +1,10 @@
-import {
-  componentWrapperDecorator,
-  Meta,
-  moduleMetadata,
-} from "@storybook/angular";
-import { SharedModule } from "../shared.module";
+import { componentWrapperDecorator, Meta } from "@storybook/angular";
 import { ToDoItemComponent } from "./to-do-item.component";
 
 export default {
   title: "shared/to-do-item",
   component: ToDoItemComponent,
   decorators: [
-    moduleMetadata({ imports: [SharedModule] }),
     componentWrapperDecorator((story) => `<mat-card>${story}</mat-card>`),
   ],
 } as Meta;
