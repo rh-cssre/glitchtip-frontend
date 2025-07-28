@@ -17,7 +17,7 @@ However, the integration with the development version (0.13) doesn't work proper
    from sentry_sdk.integrations.bottle import BottleIntegration
 
    sentry_sdk.init(
-       dsn="your DSN here",
+       dsn="YOUR-GLITCHTIP-DSN-HERE",
        integrations=[BottleIntegration()]
    )
 
