@@ -1,0 +1,142 @@
+@if (paginator(); as paginator) {
+<section class="l-body l-body--full-width mat-elevation-z0">
+  <header class="page-header">
+    <gt-list-title
+      title="Transaction Groups"
+      [searchHits]="paginator.count"
+    ></gt-list-title>
+  </header>
+  <gt-project-filter-bar></gt-project-filter-bar>
+  @if (transactionGroupsDisplay(); as transactionGroups) {
+  <div>
+    <table
+      mat-table
+      class="mat-elevation-z2"
+      [dataSource]="transactionGroupsDisplay()"
+    >
+      <ng-container matColumnDef="actions">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [attr.colspan]="displayedColumns.length"
+          class="table-header"
+        >
+          @if (environmentNames(); as environments) {
+          <gt-data-filter-bar
+            [dateForm]="dateForm"
+            [environmentForm]="environmentForm"
+            [sortForm]="sortForm"
+            [searchForm]="searchForm"
+            [sorts]="sorts"
+            [organizationEnvironments]="environments"
+            (dateFormSubmission)="onDateFormSubmit($event)"
+            (dateFormReset)="dateFormReset()"
+            (filterByEnvironment)="filterByEnvironment($event)"
+            (sortByChanged)="sortByChanged($event)"
+            (searchSubmit)="searchSubmit()"
+          ></gt-data-filter-bar>
+          }
+        </th>
+      </ng-container>
+      <ng-container matColumnDef="name-and-project">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let group">
+          <div class="name-and-project">
+            <div
+              class="group-title"
+              (mouseover)="checkIfTooltipIsNecessary($event)"
+            >
+              <span
+                matTooltipPosition="above"
+                [matTooltip]="setTitleTooltip(group)"
+                [matTooltipDisabled]="tooltipDisabled"
+              >
+                <a [routerLink]="group.id" queryParamsHandling="merge">
+                  @if (group.method) {
+                  <span>{{ group.method }}&nbsp;</span>
+                  } {{ group.transaction }} @if (!group.method) {
+                  <span>;</span>
+                  }
+                </a>
+                @if (!group.method) {
+                <span>&nbsp;{{ group.op }}</span>
+                }
+              </span>
+            </div>
+            <div class="mat-caption">
+              @if ((appliedProjectCount()) !== 1) {
+              <span> {{ group.projectSlug }} </span>
+              }
+              <span>
+                @if ((appliedProjectCount()) !== 1) { &mdash; } {{
+                group.transactionCount | i18nPlural:
+                transactionCountPluralMapping }}
+              </span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="avgDuration">
+        <th mat-header-cell *matHeaderCellDef>Average Duration</th>
+        <td
+          mat-cell
+          *matCellDef="let group"
+          class="avg-duration-cell mat-body-1"
+        >
+          {{ group.avgDuration | humanizeDuration }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="pagination">
+        <td
+          mat-footer-cell
+          *matFooterCellDef
+          [attr.colspan]="displayedColumns.length"
+          class="footer"
+        >
+          <gt-list-footer [paginator]="paginator"> </gt-list-footer>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="['actions']"></tr>
+      <tr
+        mat-header-row
+        class="overlay"
+        *matHeaderRowDef="displayedColumns"
+        [class.u-hidden]="transactionGroups.length === 0"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="monitor-row"
+      ></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <div class="empty-states">
+            @if ( (initialLoadComplete()) === true && (loading()) === false ) {
+            @if ((errors())?.length) { @if ((errors())?.length === 1) {
+            <h3 class="mat-headline-4">
+              There was an error processing your request
+            </h3>
+            } @else {
+            <h3 class="mat-headline-4">
+              There were errors while processing your request
+            </h3>
+            }
+            <ul>
+              @for (error of errors(); track error) {
+              <li>{{ error }}</li>
+              }
+            </ul>
+            } @else { No transaction groups were found. } }
+          </div>
+        </td>
+      </tr>
+      <tr
+        mat-footer-row
+        class="pagination-row"
+        *matFooterRowDef="['pagination']"
+      ></tr>
+    </table>
+  </div>
+  }
+</section>
+}

@@ -1,0 +1,24 @@
+diff --git a/node_modules/@swimlane/ngx-charts/fesm2022/swimlane-ngx-charts.mjs b/node_modules/@swimlane/ngx-charts/fesm2022/swimlane-ngx-charts.mjs
+index e7a3a1a..fe413d7 100644
+--- a/node_modules/@swimlane/ngx-charts/fesm2022/swimlane-ngx-charts.mjs
++++ b/node_modules/@swimlane/ngx-charts/fesm2022/swimlane-ngx-charts.mjs
+@@ -3858,7 +3858,8 @@ class TooltipArea {
+         y="0"
+         [attr.width]="dims.width"
+         [attr.height]="dims.height"
+-        style="opacity: 0; cursor: 'auto';"
++	[style.opacity]="0"
++        [style.cursor]="'auto'"
+         (mousemove)="mouseMove($event)"
+         (mouseleave)="hideTooltip()"
+       />
+@@ -3919,7 +3920,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.4", ngImpor
+         y="0"
+         [attr.width]="dims.width"
+         [attr.height]="dims.height"
+-        style="opacity: 0; cursor: 'auto';"
++	[style.opacity]="0"
++        [style.cursor]="'auto'"
+         (mousemove)="mouseMove($event)"
+         (mouseleave)="hideTooltip()"
+       />
