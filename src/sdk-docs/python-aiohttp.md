@@ -21,7 +21,7 @@ Framework](https://docs.aiohttp.org/en/stable/web.html). A Python version of
    from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
    sentry_sdk.init(
-       dsn="your DSN here",
+       dsn="YOUR-GLITCHTIP-DSN-HERE",
        integrations=[AioHttpIntegration()]
    )
 

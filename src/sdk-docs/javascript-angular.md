@@ -1,4 +1,4 @@
-For most use cases, GlitchTip recommends using [@micro-sentry/angular](https://github.com/Tinkoff/micro-sentry). Users who need performance data need to use `@sentry/angular`.
+GlitchTip recommends using [@micro-sentry/angular](https://github.com/taiga-family/micro-sentry). Alternatively, users who want performance data need to use `@sentry/angular`.
 
 # @micro-sentry
 
@@ -18,7 +18,7 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 @NgModule({
   imports: [
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR-GLITCHTIP-DSN-HERE",
     }),
   ],
 })
@@ -34,7 +34,7 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 
 ```javascript
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR-GLITCHTIP-DSN-HERE",
       environment: "production",
       release: "1.0.0"
     }),
@@ -42,7 +42,7 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 
 # @sentry/angular
 
-@sentry/angular has more features including performance tracking. The package adds [25 KB](https://bundlephobia.com/result?p=@sentry/angular) to your JS bundle size.
+@sentry/angular has more features including performance tracking. The package adds up to [578 KB](https://bundlephobia.com/result?p=@sentry/angular) to your JS bundle size.
 
 Install `@sentry/angular`:
 
@@ -53,10 +53,10 @@ $ npm install --save @sentry/angular
 For best results, add this snippet to your main.ts. If you need to set the DSN dynamically, you may set this elsewhere as well.
 
 ```javascript
-import * as Sentry from "@sentry/browser";
+import { init } from "@sentry/angular";
 
-Sentry.init({
-  dsn: "your GlitchTip DSN here",
+init({
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   autoSessionTracking: false,
 });
 ```
@@ -66,10 +66,10 @@ Sentry.init({
 A more robust configuration example:
 
 ```javascript
-import * as Sentry from "@sentry/browser";
+import { init } from '@sentry/angular';
 
-Sentry.init({
-  dsn: "your GlitchTip DSN here",
+.init({
+  dsn: "YOUR-GLITCHTIP-DSN-HERE",
   environment: "production",
   release: "1.0.0",
   autoSessionTracking: false,
@@ -107,7 +107,7 @@ Sentry.init({
 
 ### Show user feedback dialog
 
-Provide a custom Angular ErrorHandler. In your root modules file, adjust providers:
+Provide a custom Angular ErrorHandler. Adjust your providers:
 
 ```javascript
 providers: [
