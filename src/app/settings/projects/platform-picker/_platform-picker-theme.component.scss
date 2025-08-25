@@ -1,0 +1,32 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+  $is-dark-theme: map.get($theme, is-dark);
+
+  gt-platform-picker {
+    li {
+      button.active {
+        border: 1px solid mat.m2-get-color-from-palette($primary);
+      }
+    }
+
+    .list-item {
+      button:focus {
+        border: 1px solid mat.m2-get-color-from-palette($primary);
+      }
+    }
+
+    mat-tab-group {
+      .mat-mdc-tab-header {
+        border-bottom: 1px solid
+          if(
+            $is-dark-theme,
+            mat.m2-get-color-from-palette(mat.$m2-gray-palette, 600),
+            mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300)
+          );
+      }
+    }
+  }
+}
