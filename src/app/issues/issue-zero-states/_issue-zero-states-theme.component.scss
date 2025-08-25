@@ -1,0 +1,13 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+
+  gt-issue-zero-states {
+    .not-on-team {
+      border: 2px solid mat.m2-get-color-from-palette($primary);
+      color: mat.m2-get-color-from-palette($primary);
+    }
+  }
+}

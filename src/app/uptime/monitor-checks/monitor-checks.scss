@@ -1,0 +1,42 @@
+@import "variables";
+
+$iconWidth: 56px;
+
+table {
+  width: 100%;
+}
+
+.mat-column-status {
+  padding: 0 10px 0 24px;
+}
+
+.mat-column-reason {
+  padding-right: 10px;
+}
+
+.mat-column-responseTime {
+  padding-right: 75px;
+  @media screen and (max-width: ($small - 1)) {
+    display: none;
+  }
+}
+
+.mat-column-startCheck {
+  padding-right: 24px;
+}
+
+.status-color {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+}
+
+button {
+  margin-bottom: 8px;
+}

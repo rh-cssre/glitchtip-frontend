@@ -1,4 +1,3 @@
-@use '@angular/material' as mat;
 @import "variables";
 
 .heading {
@@ -23,11 +22,9 @@
 }
 
 mat-tab-group {
-  ::ng-deep .mat-tab-label {
+  ::ng-deep .mat-mdc-tab {
     min-width: 50px;
   }
-
-  border-bottom: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
 }
 
 ul {
@@ -59,10 +56,6 @@ li {
     width: 100%;
     padding-left: 0;
     padding-right: 0;
-
-    &.active {
-      border: 1px solid $amaranth;
-    }
   }
 }
 
@@ -77,20 +70,19 @@ mat-accordion {
   height: 48px;
   max-width: 400px;
   margin: 5px 40px 20px 0;
-  z-index: 1;
+  z-index: 2;
 }
 
 mat-expansion-panel.mat-expansion-panel {
+  .expansion-panel-title {
+    font-weight: 400;
+  }
+
   flex: 1;
   &:first-of-type,
   &:last-of-type {
     border-radius: 0;
   }
-
-  // ::ng-deep .mat-expansion-panel-body {
-  //   padding-left: 0;
-  //   padding-right: 0;
-  // }
 
   mat-form-field {
     width: 100%;
@@ -108,6 +100,8 @@ mat-list {
 }
 
 .list-item {
+  padding: 0;
+
   button {
     // borrowed from some "button unstyled" classes I've done elsewhere
     display: inline-block;
@@ -120,13 +114,8 @@ mat-list {
     -webkit-appearance: none;
     cursor: pointer;
     color: inherit;
-    font-weight: inherit;
 
     width: 100%;
     text-align: left;
-
-    &:focus {
-      border: 1px solid $amaranth;
-    }
   }
 }
