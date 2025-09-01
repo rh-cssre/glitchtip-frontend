@@ -1,0 +1,55 @@
+@if (errorReports()) {
+<p class="mat-body-1"> {{ errorReports() }} </p>
+} @if (reports().length === 0) {
+<mat-card class="mat-elevation-z0">
+  <mat-card-content>
+    <p i18n>No user reports have been submitted.</p>
+    <p i18n
+      >To enable user reports, take a look at `showReportDialog` in the JS
+      SDK.</p
+    >
+  </mat-card-content>
+</mat-card>
+}
+
+<div class="reports">
+  @for (report of reports(); track report) {
+  <div class="report">
+    <p class="name">{{ report.name }} ({{ report.email }})</p>
+    <p class="date">{{ report.dateCreated | date: "medium" }}</p>
+    <p>{{ report.comments }}</p>
+  </div>
+  <mat-divider></mat-divider>
+  }
+</div>
+
+@if (paginator(); as paginator) { @if (loading() === false) {
+<div class="nav-arrows">
+  <a
+    [routerLink]="[]"
+    [queryParams]="paginator.previousPageParams || {}"
+    queryParamsHandling="merge"
+    mat-button
+    [disabled]="paginator.hasPreviousPage === false"
+  >
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </a>
+  <a
+    [routerLink]="[]"
+    [queryParams]="paginator.nextPageParams || {}"
+    queryParamsHandling="merge"
+    mat-button
+    [disabled]="paginator.hasNextPage === false"
+  >
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </a>
+</div>
+} @if (loading()) {
+<div class="spinner-container">
+  <mat-progress-spinner
+    [diameter]="33"
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+</div>
+} }
