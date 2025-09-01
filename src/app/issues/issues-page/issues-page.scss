@@ -1,0 +1,170 @@
+@import "variables";
+
+$iconWidth: 56px;
+
+.wrapper {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 40px;
+
+  &.fixedLayout {
+    table-layout: fixed;
+  }
+}
+
+.button-group {
+  button {
+    font-size: 0.95em;
+    line-height: 30px;
+    padding: 0 12px;
+
+    &:not(:last-of-type) {
+      margin-right: 10px;
+
+      @media screen and (max-width: $small - 1) {
+        margin-right: 5px;
+      }
+    }
+
+    @media screen and (max-width: $small - 1) {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+  }
+
+  @media screen and (max-width: $small - 1) {
+    margin: -4px 0;
+  }
+}
+
+.table-header {
+  padding: 20px 24px 8px;
+}
+
+.bulk-project-select {
+  &__hide {
+    display: none;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &__inner {
+    text-align: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    button {
+      margin: 8px;
+    }
+  }
+
+  &__text {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-family: $font-sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.mat-column-title {
+  max-width: 500px;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.mat-column-select {
+  padding-left: 14px;
+  padding-right: 0;
+}
+
+.mat-column-events {
+  padding-right: 24px;
+}
+
+.zero-states-cell {
+  padding: 0 24px;
+}
+
+.resolved {
+  > a {
+    text-decoration: line-through;
+  }
+}
+
+.mute-icon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.checkbox-cell {
+  width: 50px;
+}
+
+@media screen and (max-width: $tablet - 1) {
+  th.mat-header-cell:first-of-type,
+  td.mat-cell:first-of-type,
+  td.mat-footer-cell:first-of-type {
+    padding-left: 20px;
+  }
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.status-cell {
+  width: 120px;
+
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.status-header-cell,
+.event-header-cell {
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.event-cell {
+  width: 80px;
+
+  @media screen and (max-width: $tablet - 1) {
+    display: none;
+  }
+}
+
+.title-cell {
+  padding-right: 10px;
+}
+
+.other-cell-info {
+  margin: 0 0 -4px;
+  font-weight: 500;
+
+  @media screen and (min-width: $tablet) {
+    display: none;
+  }
+}
+
+.level {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+}

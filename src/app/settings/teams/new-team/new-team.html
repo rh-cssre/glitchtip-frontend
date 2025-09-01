@@ -1,0 +1,41 @@
+<h1 mat-dialog-title i18n>Create a New Team</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" id="create-team-form">
+  <mat-dialog-content class="mat-typography">
+    <p class="description" i18n
+      >Your team slug can only consist of letters, numbers, underscores and/or
+      hyphens.</p
+    >
+    <mat-error class="error mat-caption">
+      @for (error of errors(); track error) {
+        <span>{{ error }}</span>
+      }
+    </mat-error>
+    <mat-form-field appearance="outline">
+      <mat-label>Slug</mat-label>
+      <input matInput gtSlugify formControlName="slug" />
+      @if (slug?.errors?.required) {
+        <mat-error>
+          <span i18n>Enter a valid slug to create a team</span>
+        </mat-error>
+      }
+      @if (slug?.errors?.pattern) {
+        <mat-error>
+          <span i18n
+            >Use only letters, numbers, underscores and/or hyphens</span
+          >
+        </mat-error>
+      }
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <gt-loading-button
+      id="create-team-submit"
+      buttonText="Create Team"
+      [loading]="loading()"
+    >
+    </gt-loading-button>
+    <button type="button" mat-flat-button (click)="closeDialog()" i18n
+      >Cancel</button
+    >
+  </mat-dialog-actions>
+</form>
