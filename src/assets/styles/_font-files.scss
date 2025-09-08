@@ -1,6 +1,7 @@
 @font-face {
   font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-sans/woff/IBMPlexSans-Regular-Latin1.woff")
       format("woff");
@@ -10,7 +11,8 @@
 
 @font-face {
   font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-sans/woff/IBMPlexSans-Medium-Latin1.woff")
       format("woff");
@@ -20,7 +22,8 @@
 
 @font-face {
   font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-sans/woff/IBMPlexSans-BoldItalic-Latin1.woff")
       format("woff");
@@ -30,10 +33,37 @@
 
 @font-face {
   font-family: $font-mono;
-  src: url("#{$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
+  src:
+    url("#{$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
       format("woff2"),
     url("#{$font-path}/plex-mono/woff/IBMPlexMono-Regular-Latin1.woff")
       format("woff");
   font-weight: 400;
   font-style: normal;
+}
+
+// https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,add,brightness_medium,check_circle,close,code,computer,dark_mode,delete,delete_outline,devices_other,done,edit,email,favorite,file_copy,keyboard_arrow_down,keyboard_arrow_left,keyboard_arrow_right,keyboard_arrow_up,light_mode,menu,settings,tab,warning
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  src: url("#{$font-path}/material-symbols.woff2") format("woff2");
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  font-feature-settings: "liga";
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 1; // Default to material symbols filled
 }
