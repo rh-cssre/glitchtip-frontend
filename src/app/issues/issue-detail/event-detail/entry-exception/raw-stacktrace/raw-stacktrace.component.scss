@@ -1,9 +1,9 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "variables";
 
 .wrapper {
   padding: 8px;
-  border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
+  border: 1px solid mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300);
   border-radius: 4px;
   overflow-x: auto;
 }

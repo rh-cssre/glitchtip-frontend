@@ -1,0 +1,12 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin theme($theme) {
+  $primary: map.get($theme, primary);
+
+  .active-route {
+    .mdc-list-item__primary-text {
+      color: mat.m2-get-color-from-palette($primary, "default");
+    }
+  }
+}
