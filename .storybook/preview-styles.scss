@@ -1,0 +1,17 @@
+.gallery {
+  max-width: 300px;
+}
+
+.gallery-label {
+    margin-bottom: 10px;
+}
+
+.gallery-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+mat-divider {
+    padding: 10px 0;
+}

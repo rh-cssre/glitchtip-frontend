@@ -1,4 +1,3 @@
-@use '@angular/material' as mat;
 @import "variables";
 
 .table-actions {
@@ -56,7 +55,7 @@
   .date-form,
   .search-form {
     flex: 1;
-    max-width: 400px;
+    max-width: 500px;
 
     @media screen and (max-width: $tablet - 1) {
       padding-bottom: 5px;
@@ -89,7 +88,7 @@
     }
 
     > mat-form-field {
-      width: 100px;
+      width: 140px;
       margin-right: 15px;
     }
 
