@@ -1,0 +1,86 @@
+<section class="l-body">
+  <header class="page-header">
+    <h1 class="mat-headline-4">Create a New Project</h1>
+  </header>
+  <mat-card>
+    <mat-card-content>
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        data-cy="create-project-form"
+      >
+        <div class="form-center">
+          @if (error()) {
+            <mat-error>{{ error() }}</mat-error>
+          }
+          <gt-platform-picker
+            formControlName="platform"
+            template="buttons"
+          ></gt-platform-picker>
+          <mat-form-field class="project-name" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+            <mat-error>
+              @if (name?.errors?.required) {
+                <span data-cy="project-name-error-required"
+                  >Enter a project name</span
+                >
+              }
+              @if (name?.errors?.maxlength) {
+                <span data-cy="project-name-error-length"
+                  >Name must be 64 characters or less</span
+                >
+              }
+            </mat-error>
+          </mat-form-field>
+          <div class="teams">
+            @if (teams(); as teams) {
+              <mat-form-field appearance="outline">
+                <mat-select
+                  (click)="teams.length ? undefined : openCreateTeamDialog()"
+                  [placeholder]="
+                    teams.length ? 'Assign a team' : 'Create a team'
+                  "
+                  formControlName="team"
+                >
+                  @for (team of teams; track team) {
+                    <mat-option [value]="team.slug">
+                      {{ team.slug }}
+                    </mat-option>
+                  }
+                </mat-select>
+                <mat-error>
+                  @if (name?.errors?.required) {
+                    <span>Add a team to this project</span>
+                  }
+                </mat-error>
+                <mat-hint>
+                  Teams are for managing issue notifications and workflow.
+                </mat-hint>
+              </mat-form-field>
+            }
+
+            <button
+              mat-icon-button
+              class="icon-button-shift"
+              color="primary"
+              aria-label="Add a team"
+              (click)="openCreateTeamDialog()"
+              id="create-team-from-projects"
+              matTooltip="Create a new team for this project"
+              matTooltipPosition="above"
+              type="button"
+            >
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+        <gt-loading-button
+          data-cy="create-project-submit"
+          [loading]="loading()"
+          buttonText="Create Project"
+        >
+        </gt-loading-button>
+      </form> </mat-card-content
+  ></mat-card>
+</section>
