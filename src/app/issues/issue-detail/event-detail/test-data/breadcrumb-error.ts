@@ -3,7 +3,7 @@ import { EventDetail } from "src/app/issues/interfaces";
 export const breadcrumbError: EventDetail = {
   eventID: "5fe7c33003844db6a0c36a10be8bc8ee",
   id: "5fe7c33003844db6a0c36a10be8bc8ee",
-  issue: 234,
+  groupID: "234",
   context: null,
   contexts: {
     os: { name: "Linux" },
