@@ -15,13 +15,12 @@ describe("Create New Project", () => {
   it("should render appropriate field and server side errors", () => {
     cy.visit(`/${organization.slug}/settings/projects/new`);
     cy.contains("Create a New Project");
-    cy.get("#create-project-submit").click();
-    cy.contains("Enter a project name");
+    cy.get("[data-cy=create-project-submit]").click();
+    cy.get("[data-cy='project-name-error-required']");
     cy.get("input[formcontrolname=name]").type(
       "While having too many characters in a project name would be rare, this test ensures that the server error field works."
     );
-    cy.get("#create-project-submit").click();
-    cy.contains("Bad Request: 400");
+    cy.get("[data-cy=project-name-error-length]");
   });
 
   it("create new project with new team but no platform", () => {
@@ -34,14 +33,19 @@ describe("Create New Project", () => {
     cy.get("input[formcontrolname=slug]").type(newTeam.slug);
     cy.get("#create-team-submit").click();
     cy.contains(new RegExp("^" + newTeam.slug + "$", "g"));
+    cy.intercept("POST", "api/0/teams/business-company-inc/*/projects/").as(
+      "createProjectRequest"
+    );
     cy.get("input[formcontrolname=name]").type(newProject.name);
-    cy.get("#create-project-submit").click();
-    cy.contains(`${newProject.name} has been created`);
-    // Don't think I can get the project ID for the test
-    // cy.url().should(
-    //   "contain",
-    //   `http://localhost:4200/${organization.slug}/issues?project`
-    // );
+    cy.get("[data-cy=create-project-form]").submit();
+    cy.wait("@createProjectRequest").then(({ response }) =>
+      cy
+        .url()
+        .should(
+          "contain",
+          `/${organization.slug}/issues?project=${response?.body.id}`
+        )
+    );
   });
 
   it("create new project with platform and existing team", () => {
@@ -49,12 +53,7 @@ describe("Create New Project", () => {
     cy.contains("Create a New Project");
     cy.get("input[formcontrolname=name]").type(newProject.name);
     cy.get("[formcontrolname=platform] [data-test]").first().click();
-    cy.get("#create-project-submit").click();
-    // cy.contains(`${newProject.name} has been created`);
-    //   cy.url().should(
-    //     "contain",
-    //     `http://localhost:4200/${organization.slug}/issues?project`
-    //   );
+    cy.get("[data-cy=create-project-submit]").click();
   });
 });
 
@@ -72,10 +71,10 @@ describe("Edit and Delete a project", () => {
         "While having too many characters in a project name would be rare, this test ensures that the server error field works."
       );
     cy.get("#update-project-name").click();
-    cy.get("mat-error").contains("Bad Request: 400");
+    cy.get("[data-cy='project-name-error-length']");
     cy.get("input[formcontrolname=name]").clear();
     cy.get("#update-project-name").click();
-    cy.get("mat-error").contains("Enter a project name");
+    cy.get("[data-cy='project-name-error-required']");
     cy.get("input[formcontrolname=name]").type("New Project Name");
     cy.get("#update-project-name").click();
     cy.contains("Settings for New Project Name");
@@ -118,8 +117,9 @@ describe("Add and edit alerts", () => {
     cy.contains("This alert isn't being sent anywhere.");
 
     cy.get("button").contains("Add An Alert Recipient").click();
-    cy.get("#recipient-type")
+    cy.get("[data-cy=recipient-type]")
       .click()
+      .get("mat-select")
       .get("mat-option")
       .contains("Email")
       .click();
