@@ -1,0 +1,138 @@
+<section class="l-body">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Notifications</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="default-settings">
+        <div class="default-alerts">
+          <p class="mat-body-strong">Send me project alerts</p>
+          <p class="mat-body-1">
+            This is the default setting for project alerts. You can change the
+            setting per project below.
+          </p>
+        </div>
+        <div class="button-group">
+          <div class="button-and-loading">
+            @if ((subscribeByDefaultLoading()) === true) {
+              <mat-spinner diameter="24"></mat-spinner>
+            }
+            <mat-button-toggle-group
+              name="defaultNotifications"
+              aria-label="Default Notifications"
+            >
+              <mat-button-toggle
+                value="onDefault"
+                (change)="toggleDefaultNotifications(true)"
+                [class.underline]="(subscribeByDefault()) === true"
+                [checked]="(subscribeByDefault()) === true"
+                >On</mat-button-toggle
+              >
+              <mat-button-toggle
+                value="offDefault"
+                (change)="toggleDefaultNotifications(false)"
+                [class.underline]="(subscribeByDefault()) === false"
+                [checked]="(subscribeByDefault()) === false"
+                >Off</mat-button-toggle
+              >
+            </mat-button-toggle-group>
+          </div>
+          @if (subscribeByDefaultError(); as error) {
+            <mat-error class="mat-small">{{ error }}</mat-error>
+          }
+        </div>
+      </div>
+      @if ((projectViewExpanded()) === false) {
+        <button
+          mat-flat-button
+          color="primary"
+          class="expand-button"
+          (click)="toggleProjectView()"
+        >
+          <span>Edit By Project</span><mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+      }
+
+      @if (projectViewExpanded()) {
+        @for (projects of groupedProjects() | keyvalue; track projects) {
+          <div>
+            <div class="org-name mat-h3 mat-body-strong">
+              {{ projects.value[0].organization.name }}
+            </div>
+            <div class="border">
+              @for (project of projects.value; track project; let i = $index) {
+                <div class="project-list-item">
+                  <div class="project">
+                    <a
+                      [routerLink]="[
+                        '/',
+                        project.organization.slug,
+                        'settings',
+                        'projects',
+                        project.slug,
+                      ]"
+                      >{{ project.name }}</a
+                    >
+                  </div>
+                  <div class="button-group">
+                    <div class="button-and-loading">
+                      @if ((projectAlertLoading()) === project.id) {
+                        <mat-spinner diameter="24"></mat-spinner>
+                      }
+                      <mat-button-toggle-group
+                        aria-label="`Notifications for ${project}`"
+                      >
+                        <mat-button-toggle
+                          (change)="updateUserAlertSettings(project.id, 1)"
+                          [class.underline]="project.alertStatus === 1"
+                          [checked]="project.alertStatus === 1"
+                          >On</mat-button-toggle
+                        >
+                        <mat-button-toggle
+                          (change)="updateUserAlertSettings(project.id, 0)"
+                          [class.underline]="project.alertStatus === 0"
+                          [checked]="project.alertStatus === 0"
+                          >Off</mat-button-toggle
+                        >
+                        <mat-button-toggle
+                          (change)="updateUserAlertSettings(project.id, -1)"
+                          [class.underline]="project.alertStatus === -1"
+                          [checked]="project.alertStatus === -1"
+                          >Default
+                          <span
+                            >({{
+                              (subscribeByDefault()) === true
+                                ? "On"
+                                : "Off"
+                            }})</span
+                          ></mat-button-toggle
+                        >
+                      </mat-button-toggle-group>
+                    </div>
+                    @if ((projectAlertsError())?.id === project.id) {
+                      <mat-error class="mat-small">{{
+                        (projectAlertsError())?.error
+                      }}</mat-error>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+
+      @if ((projectViewExpanded()) === true) {
+        <button
+          mat-flat-button
+          color="primary"
+          class="expand-button"
+          (click)="toggleProjectView()"
+        >
+          <span>Hide Projects</span><mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+      }
+    </mat-card-content>
+  </mat-card>
+</section>

@@ -1,0 +1,67 @@
+@import "variables";
+
+mat-card {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  mat-card-content {
+    padding-top: 16px;
+  }
+}
+
+mat-card-title {
+  margin-bottom: 8px;
+}
+
+.activation-error {
+  margin-bottom: 5px;
+}
+
+.register-button {
+  margin-left: 10px;
+}
+
+.key_list_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.key_headings {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 0.3fr;
+  background-color: #e5e5e5;
+  padding-left: 7px;
+}
+
+.key_row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1.7fr 1fr 0.3fr;
+  border: 1px solid black;
+  margin-bottom: -1px;
+  padding-left: 7px;
+}
+
+.cell {
+  min-width: 0;
+  max-width: 100%;
+
+  span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    max-width: fit-content;
+  }
+}
+
+.trash {
+  justify-self: right;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.negative-margin {
+  margin-top: -12px;
+}
