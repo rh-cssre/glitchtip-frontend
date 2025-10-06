@@ -1,13 +1,11 @@
-import { componentWrapperDecorator, moduleMetadata } from "@storybook/angular";
-import { Meta } from "@storybook/angular/types-6-0";
-import { SharedModule } from "src/app/shared/shared.module";
+import { componentWrapperDecorator } from "@storybook/angular";
+import { Meta } from "@storybook/angular";
 import { FormErrorComponent } from "./form-error.component";
 
 export default {
   title: "shared/forms/form-error",
   component: FormErrorComponent,
   decorators: [
-    moduleMetadata({ imports: [SharedModule] }),
     componentWrapperDecorator((story) => `<mat-card>${story}</mat-card>`),
   ],
 } as Meta;

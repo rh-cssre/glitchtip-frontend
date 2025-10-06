@@ -5,45 +5,76 @@ import {
   OnInit,
   HostListener,
   ElementRef,
+  inject,
+  signal,
+  computed,
 } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { filter, map, startWith, tap } from "rxjs/operators";
-import { Observable, combineLatest, BehaviorSubject } from "rxjs";
-import { UntypedFormControl } from "@angular/forms";
-import { OrganizationProject } from "../../api/organizations/organizations.interface";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { combineLatest } from "rxjs";
+import { FormControl } from "@angular/forms";
+import { OrganizationProject } from "src/app/api/projects/projects-api.interfaces";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatExpansionPanel } from "@angular/material/expansion";
 import { normalizeProjectParams } from "src/app/shared/shared.utils";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "gt-project-filter-bar",
+  imports: [
+    MatButtonModule,
+    MatDatepickerModule,
+    MatExpansionModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatIconModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+  ],
   templateUrl: "./project-filter-bar.component.html",
   styleUrls: ["./project-filter-bar.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectFilterBarComponent implements OnInit {
-  orgSlug$ = this.organizationsService.activeOrganizationSlug$;
+  private organizationsService = inject(OrganizationsService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  orgSlug = this.organizationsService.activeOrganizationSlug;
   /** All projects available */
-  projects$ = this.organizationsService.activeOrganizationProjects$;
+  projects = this.organizationsService.activeOrganizationProjects;
+  projects$ = toObservable(
+    this.organizationsService.activeOrganizationProjects,
+  );
+  accessProjectWrite = this.organizationsService.accessProjectWrite
 
   /** Projects that are selected in this component but not yet applied */
-  selectedProjectIds = new BehaviorSubject<number[]>([]);
+  selectedProjectIds = signal<number[]>([]);
 
   /** Observable of selectedProjectIds, intended to separate concerns */
-  selectedProjectIds$ = this.selectedProjectIds.asObservable();
+  selectedProjectIds$ = toObservable(this.selectedProjectIds);
 
   /** Projects that were previously selected and applied */
   appliedProjectIds$ = this.route.queryParams.pipe(
     map((params) => {
       const normalizedParams = normalizeProjectParams(params.project);
-      this.selectedProjectIds.next(
-        normalizedParams.map((id: string) => parseInt(id, 10))
-      );
+      this.selectedProjectIds.set(normalizedParams);
       return normalizedParams;
-    })
+    }),
   );
+  appliedProjectIds = toSignal(this.appliedProjectIds$);
 
-  appliedProjectIds?: string[];
+  _appliedProjectIds?: number[];
 
   /** Use selected projects to generate a string that's displayed in the UI */
   selectedProjectsString$ = combineLatest([
@@ -61,60 +92,64 @@ export class ProjectFilterBarComponent implements OnInit {
           return "All Projects";
         default:
           return ids
-            .map((id) => projects?.find((project) => id === project.id)?.name)
+            .map(
+              (id) =>
+                projects?.find((project) => id.toString() === project.id)?.name,
+            )
             .join(", ");
       }
-    })
+    }),
   );
+  selectedProjectsString = toSignal(this.selectedProjectsString$);
 
-  selectedAndAppliedIdsAreEqual$ = combineLatest([
-    this.selectedProjectIds$,
-    this.appliedProjectIds$,
-  ]).pipe(
-    map(
-      ([selected, applied]) =>
-        selected.sort().join(",") === applied.sort().join(",")
-    )
-  );
+  selectedAndAppliedIdsAreEqual = computed(() => {
+    const selected = this.selectedProjectIds();
+    const applied = this.appliedProjectIds();
+    return selected?.sort().join(",") === applied?.sort().join(",");
+  });
+
+  //** Yikes delete this please */
+  forceString(value: string | number) {
+    return String(value);
+  }
 
   /** Used to filter project names */
-  filterProjectInput = new UntypedFormControl();
+  filterProjectInput = new FormControl();
 
   /** Projects that are filtered via the text field form control */
-  filteredProjects$: Observable<OrganizationProject[] | null> = combineLatest([
+  filteredProjects$ = combineLatest([
     this.projects$.pipe(startWith([] as OrganizationProject[])),
     this.filterProjectInput.valueChanges.pipe(startWith("")),
   ]).pipe(
     map(([projects, value]) =>
       projects
         ? projects.filter((project) =>
-            project.name.toLowerCase().includes(value.toLowerCase())
+            project.name.toLowerCase().includes(value.toLowerCase()),
           )
-        : null
-    )
+        : null,
+    ),
+  );
+  filteredProjects = toSignal(this.filteredProjects$);
+
+  someProjectsAreSelected = computed(
+    () => this.appliedProjectIds()?.length !== 0,
   );
 
-  someProjectsAreSelected$ = this.appliedProjectIds$.pipe(
-    map((ids) => ids.length !== 0)
-  );
+  singleProjectSlug = computed(() => {
+    const projects = this.projects();
+    const ids = this.selectedProjectIds();
 
-  singleProjectSlug$ = combineLatest([
-    this.projects$,
-    this.selectedProjectIds$,
-  ]).pipe(
-    map(([projects, ids]) => {
-      if (ids.length === 1 && projects) {
-        const matchedProject = projects.find(
-          (project) => project.id === ids[0]
-        );
-        if (matchedProject) {
-          return matchedProject.slug;
-        }
-        return false;
+    if (ids.length === 1 && projects) {
+      const matchedProject = projects.find(
+        (project) => project.id === ids[0].toString(),
+      );
+      if (matchedProject) {
+        return matchedProject.slug;
       }
       return false;
-    })
-  );
+    }
+    return false;
+  });
 
   @ViewChild("expansionPanel", { static: false })
   expansionPanel?: MatExpansionPanel;
@@ -123,7 +158,7 @@ export class ProjectFilterBarComponent implements OnInit {
   filterInput?: ElementRef<HTMLInputElement>;
 
   @HostListener("document:keydown", ["$event"]) onKeydownHandler(
-    event: KeyboardEvent
+    event: KeyboardEvent,
   ) {
     if (this.expansionPanel?.expanded) {
       if (event.key === "Escape") {
@@ -147,14 +182,14 @@ export class ProjectFilterBarComponent implements OnInit {
 
   moveDown() {
     const projectButtons = Array.from(
-      document.querySelectorAll(".picker-button")
+      document.querySelectorAll(".picker-button"),
     ) as HTMLElement[];
     // If the text box is focused, go to the first item
     if (this.filterInput?.nativeElement.id === document.activeElement?.id) {
       projectButtons[0]?.focus();
     } else {
       const indexOfActive = projectButtons.findIndex(
-        (button) => button.id === document.activeElement?.id
+        (button) => button.id === document.activeElement?.id,
       );
       if (indexOfActive <= projectButtons.length - 2) {
         // If we're in the list items, go to the next list item
@@ -168,10 +203,10 @@ export class ProjectFilterBarComponent implements OnInit {
 
   moveUp() {
     const projectButtons = Array.from(
-      document.querySelectorAll(".picker-button")
+      document.querySelectorAll(".picker-button"),
     ) as HTMLElement[];
     const indexOfActive = projectButtons.findIndex(
-      (button) => button.id === document.activeElement?.id
+      (button) => button.id === document.activeElement?.id,
     );
     if (indexOfActive > 0) {
       // If we're in the list items, go to the previous list item
@@ -182,69 +217,63 @@ export class ProjectFilterBarComponent implements OnInit {
     }
   }
 
-  navigate(project: number[] | null) {
+  navigate(project: string[] | null) {
     this.router.navigate([], {
-      queryParams: { project: project ? project : null },
+      queryParams: { project: project ? project : null, cursor: null },
       queryParamsHandling: "merge",
     });
   }
 
-  isSelected(projectId: number) {
-    return !!this.selectedProjectIds.getValue().find((id) => id === projectId);
+  isSelected(projectId: string) {
+    return !!this.selectedProjectIds().find(
+      (id) => id.toString() === projectId,
+    );
   }
 
   focusPanel() {
     this.filterInput?.nativeElement.focus();
   }
 
-  selectProjectAndClose(projectId: number) {
-    this.navigate([projectId]);
-    this.selectedProjectIds.next([projectId]);
+  selectProjectAndClose(projectId: string) {
+    this.navigate([projectId.toString()]);
+    this.selectedProjectIds.set([parseInt(projectId)]);
     this.expansionPanel?.close();
   }
 
-  toggleProject(projectId: number) {
-    const selectedIds = [...this.selectedProjectIds.getValue()];
-    const idMatchIndex = selectedIds.indexOf(projectId);
+  toggleProject(projectId: string) {
+    const selectedIds = [...this.selectedProjectIds()];
+    const idMatchIndex = selectedIds.indexOf(parseInt(projectId));
     if (idMatchIndex > -1) {
       selectedIds.splice(idMatchIndex, 1);
     } else {
-      selectedIds.push(projectId);
+      selectedIds.push(parseInt(projectId));
     }
-    this.selectedProjectIds.next(selectedIds);
+    this.selectedProjectIds.set(selectedIds);
   }
 
   resetPanel() {
-    if (this.appliedProjectIds !== undefined) {
-      this.selectedProjectIds.next(
-        this.appliedProjectIds.map((id) => parseInt(id, 10))
-      );
+    if (this._appliedProjectIds !== undefined) {
+      this.selectedProjectIds.set(this._appliedProjectIds);
       this.expansionPanel?.close();
     }
   }
 
   closePanel() {
-    this.navigate(this.selectedProjectIds.getValue());
+    this.navigate(this.selectedProjectIds().map((id) => id.toString()));
     this.expansionPanel?.close();
   }
 
   ngOnInit() {
     this.appliedProjectIds$.subscribe((ids) => {
-      this.appliedProjectIds = ids;
+      this._appliedProjectIds = ids;
     });
 
     this.route.params
       .pipe(
         map((params) => params["org-slug"]),
         filter((orgSlug: string) => orgSlug !== undefined),
-        tap(() => this.expansionPanel?.close())
+        tap(() => this.expansionPanel?.close()),
       )
       .subscribe();
   }
-
-  constructor(
-    private organizationsService: OrganizationsService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
 }
