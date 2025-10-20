@@ -1,303 +1,370 @@
-import { Injectable } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
+import { Injectable, computed, inject, resource, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { combineLatest, Observable, EMPTY } from "rxjs";
-import { tap, catchError, map, take, filter } from "rxjs/operators";
-import {
-  Issue,
-  IssueWithSelected,
-  IssueWithMatchingEvent,
-  IssueStatus,
-} from "./interfaces";
-import { IssuesAPIService } from "../api/issues/issues-api.service";
-import {
-  initialPaginationState,
-  PaginationStatefulService,
-  PaginationStatefulServiceState,
-} from "../shared/stateful-service/pagination-stateful-service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { client } from "../shared/api/api";
+import { StatefulService } from "../shared/stateful-service/signal-state.service";
+import { getPaginationHeaders, getPaginator } from "../shared/pagination.utils";
+import { IssueStatus } from "./interfaces";
+import { apiResource } from "../shared/api/api-resource-factory";
 
-export interface IssuesState extends PaginationStatefulServiceState {
-  issues: Issue[];
-  directHit?: IssueWithMatchingEvent;
-  selectedIssues: number[];
-  selectedProjectInfo: { orgSlug?: string; projectId?: string; query?: string };
-  areIssuesForProjectSelected: boolean;
-  errors: string[];
+export interface DataParams {
+  orgSlug: string;
+  cursor?: string;
+  query?: string;
+  start?: string;
+  end?: string;
+  sort?: string;
+  project?: string[];
+  environment?: string;
+}
+
+export interface IssuesState {
+  selectedIssues: string[];
+  allResultsSelected: boolean;
 }
 
 const initialState: IssuesState = {
-  issues: [],
   selectedIssues: [],
-  pagination: initialPaginationState,
-  selectedProjectInfo: {},
-  areIssuesForProjectSelected: false,
-  errors: [],
+  allResultsSelected: false,
 };
 
-@Injectable({
-  providedIn: "root",
-})
-export class IssuesService extends PaginationStatefulService<IssuesState> {
-  issues$ = this.getState$.pipe(map((state) => state.issues));
-  selectedIssues$ = this.getState$.pipe(map((state) => state.selectedIssues));
-  issuesWithSelected$: Observable<IssueWithSelected[]> = combineLatest([
-    this.issues$,
-    this.selectedIssues$,
-  ]).pipe(
-    map(([issues, selectedIssues]) =>
-      issues.map((issue) => ({
-        ...issue,
-        isSelected: selectedIssues.includes(issue.id) ? true : false,
-        projectSlug: issue.project?.slug,
-      }))
-    )
-  );
-  areAllSelected$ = combineLatest([this.issues$, this.selectedIssues$]).pipe(
-    map(
-      ([issues, selectedIssues]) =>
-        issues.length === selectedIssues.length && issues.length > 0
-    )
-  );
-  readonly searchHits$ = this.getState$.pipe(
-    map((state) => state.pagination.hits)
-  );
-  readonly searchDirectHit$ = this.getState$.pipe(
-    map((state) => state.directHit),
-    filter((directHit): directHit is IssueWithMatchingEvent => !!directHit)
-  );
-  readonly thereAreSelectedIssues$ = this.selectedIssues$.pipe(
-    map((selectedIssues) => selectedIssues.length > 0)
-  );
-  readonly numberOfSelectedIssues$ = this.getState$.pipe(
-    map((state) => state.selectedIssues.length)
-  );
-  readonly selectedProjectInfo$ = this.getState$.pipe(
-    map((state) => state.selectedProjectInfo)
-  );
-  readonly errors$ = this.getState$.pipe(map((state) => state.errors));
+type AllowedSortKey =
+  | "priority"
+  | "first_seen"
+  | "count"
+  | "-last_seen"
+  | "-count"
+  | "-priority";
 
-  constructor(
-    private snackbar: MatSnackBar,
-    private issuesAPIService: IssuesAPIService
-  ) {
+const allowedSortKeys = [
+  "priority",
+  "first_seen",
+  "count",
+  "-last_seen",
+  "-count",
+  "-priority",
+] as const;
+
+function isAllowedSortKey(key: string): key is AllowedSortKey {
+  return (allowedSortKeys as readonly string[]).includes(key);
+}
+
+@Injectable()
+export class IssuesService extends StatefulService<IssuesState> {
+  private snackbar = inject(MatSnackBar);
+  private router = inject(Router);
+  protected route = inject(ActivatedRoute);
+  private params = signal<DataParams | undefined>(undefined);
+
+  private issuesResource = resource({
+    params: () => ({ params: this.params() }),
+    loader: async ({ params }) => {
+      if (!params.params) {
+        return undefined;
+      }
+      const sort: AllowedSortKey | undefined =
+        params.params?.sort && isAllowedSortKey(params.params.sort)
+          ? params.params.sort
+          : undefined;
+      const { error, data, response } = await client.GET(
+        "/api/0/organizations/{organization_slug}/issues/",
+        {
+          params: {
+            path: { organization_slug: params.params.orgSlug },
+            query: {
+              cursor: params.params.cursor,
+              query: params.params.query,
+              start: params.params.start,
+              end: params.params.end,
+              sort,
+              project: params.params.project?.map((p) => parseInt(p)),
+              environment: params.params.environment
+                ? [params.params.environment]
+                : undefined,
+            },
+          },
+        },
+      );
+      if (error) {
+        this.snackbar.open(
+          $localize`There was an error when attempting to load issues.`,
+        );
+      }
+      const pagination = getPaginationHeaders(response);
+      if (
+        response.headers.has("x-sentry-direct-hit") &&
+        response.headers.get("x-sentry-direct-hit") === "1" &&
+        data.length &&
+        data[0].matchingEventId
+      ) {
+        const directHit = data[0];
+        this.router.navigate(
+          [directHit.id, "events", directHit.matchingEventId],
+          {
+            relativeTo: this.route,
+            queryParams: { query: null },
+            queryParamsHandling: "merge",
+            replaceUrl: true, // so the browser back button works
+          },
+        );
+      }
+      return { data, pagination };
+    },
+  });
+  loading = computed(() => this.issuesResource.isLoading());
+  issues = computed(() => this.issuesResource.value()?.data);
+  private issueStatsParams = computed(() => {
+    const params = this.params();
+    const issues = this.issues();
+    if (!params || !issues) {
+      return undefined;
+    }
+    return {
+      issueIDs: issues.map((issue) => parseInt(issue.id)),
+      orgSlug: params.orgSlug,
+    };
+  });
+  private issueStatsResource = apiResource(this.issueStatsParams, (params) => ({
+    url: "/api/0/organizations/{organization_slug}/issues-stats/",
+    options: {
+      params: {
+        path: {
+          organization_slug: params.orgSlug,
+        },
+        query: {
+          groups: params.issueIDs,
+        },
+      },
+    },
+  }));
+
+  pagination = computed(() => this.issuesResource.value()?.pagination);
+  paginator = computed(() => getPaginator(this.pagination()));
+  initialLoad = computed(
+    () => !this.issuesResource.isLoading() && this.issuesResource.hasValue(),
+  );
+  issueStatsLoading = computed(() => this.issueStatsResource.isLoading());
+  issuesWithStats = computed(() => {
+    const issues = this.issues();
+    if (!issues) {
+      return [];
+    }
+    // Overwrite stats from the issue API (which is always empty and for compat only)
+    return issues.map((issue) => ({
+      ...issue,
+      stats:
+        this.issueStatsResource.value()?.find((stat) => stat.id === issue.id)
+          ?.stats || issue.stats,
+    }));
+  });
+  selectedIssues = computed(() => this.state().selectedIssues);
+  issuesWithSelected = computed(() =>
+    this.issuesWithStats().map((issue) => ({
+      ...issue,
+      isSelected: this.selectedIssues().includes(issue.id),
+      projectSlug: issue.project?.slug,
+    })),
+  );
+  areAllSelected = computed(() => {
+    const issues = this.issues();
+    return (
+      issues && issues.length === this.selectedIssues().length && issues.length
+    );
+  });
+  numberOfSelectedIssues = computed(() => this.selectedIssues().length);
+  thereAreSelectedIssues = computed(() => this.numberOfSelectedIssues() > 0);
+  allResultsSelected = computed(() => this.state().allResultsSelected);
+
+  constructor() {
     super(initialState);
   }
 
-  /** Refresh issues data. orgSlug is required. */
-  getIssues(
-    orgSlug: string,
-    cursor: string | undefined,
-    query: string = "is:unresolved",
-    project: string[] | null,
-    start: string | undefined,
-    end: string | undefined,
-    sort: string | undefined,
-    environment: string | undefined
-  ) {
-    return this.retrieveIssues(
-      orgSlug,
-      cursor,
-      query,
-      project,
-      start,
-      end,
-      sort,
-      environment
-    );
+  updateParams(params: DataParams) {
+    this.params.set(params);
   }
 
-  toggleSelected(issueId: number) {
-    const state = this.state.getValue();
-    let selectedIssues: number[];
-    if (state.selectedIssues.includes(issueId)) {
-      selectedIssues = state.selectedIssues.filter(
-        (issue) => issue !== issueId
-      );
+  toggleSelectOne(issueId: string) {
+    const selectedIssues = this.selectedIssues();
+    let updatedSelection = [];
+    if (selectedIssues.includes(issueId)) {
+      updatedSelection = selectedIssues.filter((issue) => issue !== issueId);
     } else {
-      selectedIssues = state.selectedIssues.concat([issueId]);
+      updatedSelection = selectedIssues.concat([issueId]);
     }
-    this.state.next({ ...state, selectedIssues, directHit: undefined });
+    this.setUpdateSelectedIssues(updatedSelection);
   }
 
-  toggleSelectAll() {
-    const state = this.state.getValue();
-    if (state.issues.length === state.selectedIssues.length) {
-      this.state.next({
-        ...state,
-        directHit: undefined,
-        selectedIssues: [],
-      });
-      this.clearBulkProjectUpdate();
+  toggleSelectAllOnPage() {
+    if (this.issues()?.length === this.selectedIssues().length) {
+      this.setCancelAllOnPageSelection();
     } else {
-      this.state.next({
-        ...state,
-        directHit: undefined,
-        selectedIssues: state.issues.map((issue) => issue.id),
-      });
+      this.setSelectAllOnPage();
     }
   }
 
-  /** Set one specified issue ID as status */
-  setStatus(id: number, status: IssueStatus) {
-    return this.updateStatus(status, [id]);
+  selectAllResults() {
+    this.setAllResultsSelected();
   }
 
-  /** Set all selected issues to this status */
-  bulkSetStatus(status: IssueStatus) {
-    combineLatest([this.selectedIssues$, this.selectedProjectInfo$])
-      .pipe(
-        take(1),
-        map(([selectedIssues, selectedProjectInfo]) => {
-          return this.updateStatus(
+  cancelAllResultsSelection() {
+    this.setCancelAllResultsSelection();
+  }
+
+  async updateStatusByIssueId(orgSlug: string, status: IssueStatus) {
+    const issues = this.selectedIssues();
+    if (status === "merge") {
+      await this.mergeIssues(orgSlug, issues);
+    } else {
+      const { data, error } = await client.PUT(
+        "/api/0/organizations/{organization_slug}/issues/",
+        {
+          params: {
+            path: {
+              organization_slug: orgSlug,
+            },
+            query: {
+              id: issues.map((issue) => parseInt(issue)),
+            },
+          },
+          body: {
             status,
-            selectedIssues,
-            selectedProjectInfo.orgSlug,
-            selectedProjectInfo.projectId,
-            selectedProjectInfo.query
-          ).toPromise();
-        })
-      )
-      .subscribe();
-  }
-
-  bulkUpdateIssuesForProject(
-    orgSlug: string,
-    projectId: string,
-    query: string
-  ) {
-    this.setBulkUpdateIssuesForProject(orgSlug, projectId, query);
-  }
-
-  clearProjectInfo() {
-    this.clearBulkProjectUpdate();
-  }
-
-  /** Get issues from backend using appropriate endpoint based on organization */
-  private retrieveIssues(
-    organizationSlug?: string,
-    cursor?: string,
-    query?: string,
-    project?: string[] | null,
-    start?: string,
-    end?: string,
-    sort?: string,
-    environment?: string
-  ) {
-    this.setIssuesLoading();
-    return this.issuesAPIService
-      .list(
-        organizationSlug,
-        cursor,
-        query,
-        project,
-        start,
-        end,
-        sort,
-        environment
-      )
-      .pipe(
-        tap((res) => {
-          let directHit: IssueWithMatchingEvent | undefined;
-          if (
-            res.headers.has("x-sentry-direct-hit") &&
-            res.headers.get("x-sentry-direct-hit") === "1" &&
-            res.body![0] &&
-            (res.body![0] as IssueWithMatchingEvent).matchingEventId
-          ) {
-            directHit = res.body![0] as IssueWithMatchingEvent;
-          }
-          this.setStateAndPagination({ issues: res.body!, directHit }, res);
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setIssuesError(err);
-          return EMPTY;
-        })
+          },
+        },
       );
+      if (data?.status) {
+        this.setUpdateStatusByIssueIdComplete(issues, data?.status);
+      }
+      if (error) {
+        this.snackbar.open($localize`Error, unable to update issue`);
+      }
+    }
   }
 
-  private updateStatus(
+  async mergeIssues(orgSlug: string, issues: string[]) {
+    await client.PUT("/api/0/organizations/{organization_slug}/issues/", {
+      params: {
+        path: {
+          organization_slug: orgSlug,
+        },
+        query: {
+          id: issues.map((issue) => parseInt(issue)),
+        },
+      },
+      body: { merge: 1 },
+    });
+    this.issuesResource.reload();
+  }
+
+  async bulkUpdateStatus(
     status: IssueStatus,
-    ids: number[],
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
+    orgSlug: string,
+    projectIds: string[],
+    query?: string | null,
+    start?: string | undefined,
+    end?: string | undefined,
+    environment?: string | undefined,
   ) {
-    return this.issuesAPIService
-      .update(status, ids, orgSlug, projectId, query)
-      .pipe(
-        tap((resp) => {
-          this.setIssueStatuses(ids, resp.status);
-          this.clearBulkProjectUpdate();
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.snackbar.open("Error, unable to update issue");
-          return EMPTY;
-        })
-      );
+    if (status === "merge") {
+      return;
+    }
+    const { data, error } = await client.PUT(
+      "/api/0/organizations/{organization_slug}/issues/",
+      {
+        params: {
+          path: {
+            organization_slug: orgSlug,
+          },
+          query: {
+            project: projectIds?.map((id) => parseInt(id)),
+            query,
+            start,
+            end,
+            environment: environment ? [environment] : undefined,
+          },
+        },
+        body: {
+          status,
+        },
+      },
+    );
+    if (error) {
+      this.snackbar.open($localize`Error, unable to update issue`);
+    }
+    if (data) {
+      this.setBulkUpdateComplete(status);
+    }
   }
 
-  private clearBulkProjectUpdate() {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      directHit: undefined,
-      selectedProjectInfo: {},
-    });
-  }
-
-  private setBulkUpdateIssuesForProject(
-    orgSlug?: string,
-    projectId?: string,
-    query?: string
-  ) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      directHit: undefined,
-      selectedProjectInfo: { orgSlug, projectId, query },
-    });
-  }
-
-  private setIssuesLoading() {
-    const state = this.state.getValue();
+  private setUpdateSelectedIssues(selectedIssues: string[]) {
     this.setState({
-      directHit: undefined,
-      errors: [],
-      pagination: { ...state.pagination, loading: true },
+      selectedIssues,
+      allResultsSelected: false,
     });
   }
 
-  private setIssueStatuses(issueIds: number[], status: IssueStatus) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      directHit: undefined,
-      issues: state.issues.map((issue) =>
-        issueIds.includes(issue.id) ? { ...issue, status } : issue
-      ),
+  private setSelectAllOnPage() {
+    const issues = this.issues();
+    if (issues) {
+      this.setState({
+        selectedIssues: issues.map((issue) => issue.id),
+      });
+    }
+  }
+
+  private setCancelAllOnPageSelection() {
+    this.setState({
+      selectedIssues: [],
+      allResultsSelected: false,
+    });
+  }
+
+  private setAllResultsSelected() {
+    this.setState({
+      allResultsSelected: true,
+    });
+  }
+
+  private setCancelAllResultsSelection() {
+    this.setState({
+      allResultsSelected: false,
+    });
+  }
+
+  private setUpdateStatusByIssueIdComplete(
+    issueIds: string[],
+    status: IssueStatus,
+  ) {
+    this.setState({
       selectedIssues: [],
     });
-  }
-
-  private setIssuesError(errors: HttpErrorResponse) {
-    const state = this.state.getValue();
-    this.setState({
-      directHit: undefined,
-      errors: this.updateErrorMessage(errors),
-      pagination: {
-        ...state.pagination,
-        loading: false,
-        initialLoadComplete: true,
-      },
+    this.issuesResource.update((update) => {
+      if (update !== undefined) {
+        return {
+          ...update,
+          data: [
+            ...update.data.map((issue) =>
+              issueIds.includes(issue.id) ? { ...issue, status } : issue,
+            ),
+          ],
+        };
+      }
+      return update;
     });
   }
 
-  private updateErrorMessage(err: HttpErrorResponse): string[] {
-    if (err.error) {
-      const errorValues: string[][] = Object.values<string[]>(err.error);
-      return errorValues.reduce((a, v) => a.concat(v), []);
-    } else {
-      return [err.message];
-    }
+  private setBulkUpdateComplete(status: IssueStatus) {
+    this.setState({
+      selectedIssues: [],
+      allResultsSelected: false,
+    });
+    this.issuesResource.update((update) => {
+      if (update !== undefined) {
+        return {
+          ...update,
+          data: [...update.data.map((issue) => ({ ...issue, status }))],
+        };
+      }
+      return update;
+    });
   }
 }

@@ -1,17 +1,35 @@
 import { user } from "../fixtures/users";
 
-export function seedBackend(doExtraStuff = false) {
-  const url = `/api/test/seed/${doExtraStuff ? "?extras=true" : ""}`;
-  cy.request("POST", url);
+export function seedBackend(generateExtras = false, seedIssues = false) {
+  let paramString = generateExtras ? "?extras=true" : ""
+  if (paramString)
+    paramString += seedIssues ? "&seedIssues=true" : ""
+  const url = `/api/test/seed/` + paramString;
+  return cy.request("POST", url);
 }
 
 export function requestLogin() {
-  const url = "/rest-auth/login/";
-  cy.setLocalStorage("auth", JSON.stringify({ isLoggedIn: true }));
-  return cy.request("POST", url, {
-    email: user.email,
-    password: user.password,
-  });
+  const url = "/_allauth/browser/v1/auth/login";
+  cy.setLocalStorage("isAuthenticated", "true");
+
+  return cy
+    .request({ method: "HEAD", url, failOnStatusCode: false })
+    .then((response) => {
+      const headers = response.headers["set-cookie"] as string[];
+      const csrfTokenCookie = headers.find((cookie) =>
+        cookie.startsWith("csrftoken"),
+      )!;
+      const csrfToken = csrfTokenCookie.split(";")[0].split("=")[1];
+      return cy.request({
+        method: "POST",
+        url,
+        body: {
+          email: user.email,
+          password: user.password,
+        },
+        headers: { "X-CSRFToken": csrfToken },
+      });
+    });
 }
 
 export function uniqueId(length = 32) {
