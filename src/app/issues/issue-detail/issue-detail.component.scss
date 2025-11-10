@@ -1,35 +1,12 @@
-@import "variables";
+@use "variables" as vars;
 
-.mat-h1 {
-  padding-right: 20px;
-}
-
-.issue-404 h1 {
-  text-align: left;
-}
-
-header {
-  margin: -16px 0 5px;
-
-  @media screen and (max-width: $tablet - 1) {
-    margin-bottom: 20px;
+.issue-404 {
+  h1 {
+    text-align: left;
   }
 
-  .header-group {
-    display: flex;
-    justify-content: space-between;
-
-    @media screen and (max-width: $tablet - 1) {
-      flex-direction: column;
-    }
-  }
-
-  .button-row button {
-    margin-right: 8px;
-  }
-
-  gt-issue-detail-title {
-    margin-right: 20px;
+  p {
+    margin: 16px 0;
   }
 }
 
@@ -56,7 +33,12 @@ dl {
 .event-detail-card {
   margin-right: 16px;
 
-  @media screen and (max-width: $medium - 1) {
+  .tab-nav-container {
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  @media screen and (max-width: vars.$medium - 1) {
     margin-right: 0;
   }
 
@@ -79,7 +61,7 @@ mat-grid-list {
   align-items: flex-start;
   margin-bottom: 30px;
 
-  @media screen and (max-width: $medium - 1) {
+  @media screen and (max-width: vars.$medium - 1) {
     flex-direction: column-reverse;
   }
 
@@ -87,7 +69,7 @@ mat-grid-list {
     flex: 75%;
     overflow: hidden;
 
-    @media screen and (max-width: $medium - 1) {
+    @media screen and (max-width: vars.$medium - 1) {
       width: 100%;
     }
   }
@@ -95,7 +77,7 @@ mat-grid-list {
   .right {
     flex: 25%;
 
-    @media screen and (max-width: $medium - 1) {
+    @media screen and (max-width: vars.$medium - 1) {
       width: 100%;
       margin-bottom: 30px;
     }
@@ -106,10 +88,66 @@ table.mat-table {
   background: none;
 }
 
-.project-issues-link {
-  margin: 0 0 20px;
-}
-
 .report-badge > span {
   text-overflow: initial;
+}
+
+.issue-header-wrapper {
+  display: flex;
+
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.top-bar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  min-height: 48px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  align-self: stretch;
+
+  mat-icon {
+    color: var(--mat-sys-on-primary);
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  &.level--sample {
+    background-color: var(--mat-sys-outline);
+  }
+
+  &.level--debug {
+    background-color: var(--mat-sys-outline-variant);
+  }
+
+  &.level--info {
+    background-color: var(--info-color);
+  }
+
+  &.level--warning {
+    background-color: var(--warning-color);
+  }
+
+  &.level--error {
+    background-color: var(--mat-sys-error);
+  }
+
+  &.level--fatal {
+    background-image: repeating-linear-gradient(
+      -60deg,
+      var(--mat-sys-error),
+      var(--mat-sys-error) 5px,
+      var(--mat-sys-surface) 5px,
+      var(--mat-sys-surface) 10px
+    );
+  }
 }
