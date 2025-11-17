@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+@use "variables" as vars;
+
+
+.project-multiselect-formfield {
+  width: 225px;
+
+  @media screen and (max-width: vars.$small - 1) {
+    width: 100%;
+  }
+}
