@@ -1,0 +1,93 @@
+@use "variables" as vars;
+
+// Ensure that layout stays aligned between this component
+// and top-app-bar, on which it is based
+
+.list-app-bar-primary-content {
+  display: flex;
+  height: 80px;
+  align-content: center;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 100%;
+}
+
+.left-section {
+  flex: 1;
+}
+
+.right-section:has(*) {
+  border-left: 1px solid var(--mat-sys-outline-variant);
+}
+
+.list-app-bar-expanded-content {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.add-project-button {
+  width: 150px;
+}
+
+@media screen and (min-width: vars.$medium) {
+  .project-multiselect-container {
+    padding: 0 24px 0 0;
+  }
+
+  .time-range-select-container {
+    padding: 0 0 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-left: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+@media screen and (min-width: vars.$small) {
+  @media screen and (max-width: vars.$medium - 1) {
+    .list-app-bar-expanded-content {
+      display: flex;
+      align-items: center;
+      height: 80px;
+      padding: 0 24px;
+    }
+
+    .project-multiselect-container {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .time-range-select-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      height: 100%;
+      flex: 1;
+    }
+  }
+}
+
+@media screen and (max-width: vars.$small - 1) {
+  // Slightly inconsistent with top-app-bar because
+  // vertical space is at a premium
+  .list-app-bar-primary-content {
+    height: 60px;
+  }
+
+  .project-multiselect-container {
+    padding: 0 15px;
+    margin: 10px 0;
+  }
+
+  .time-range-select-container {
+    padding: 0 15px;
+    margin-bottom: 10px;
+  }
+}

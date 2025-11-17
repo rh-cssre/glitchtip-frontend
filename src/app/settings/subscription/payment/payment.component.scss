@@ -1,36 +1,31 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables" as vars;
 
 // THIS IS BEING SHARED WITH A MARKETING COMPONENT
 // Make sure edits work fine in both spots
 
 .plans {
-  @media (max-width: $large - 1) {
+  @media (max-width: vars.$large - 1) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax((285px), 1fr));
     grid-gap: 24px;
     box-shadow: none !important;
   }
 
-  @media (min-width: $large) {
+  @media (min-width: vars.$large) {
     display: flex;
     border-radius: 4px;
-    background: white;
+
+    mat-card + mat-card {
+      border-left: none;
+    }
   }
 
   mat-card {
     text-align: left;
 
-    @media (min-width: $large) {
+    @media (min-width: vars.$large) {
       flex: 1;
-      background: transparent;
-      border-right: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
-      border-radius: 0;
-      box-shadow: none !important;
-
-      &:last-child {
-        border-right: 0;
-      }
     }
   }
 }
@@ -52,9 +47,13 @@
     font-size: 1em;
     float: left;
   }
+
+  mat-icon {
+    color: var(--mat-sys-primary);
+  }
 }
 
 .event-info {
-    margin-top: 24px;
-    margin-bottom: 24px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
