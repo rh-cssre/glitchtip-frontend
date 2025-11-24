@@ -12,7 +12,7 @@ Then, inform the Node SDK about your DSN:
 
 ```javascript
 const Sentry = require("@sentry/node");
-Sentry.init({ dsn: "your DSN here" });
+Sentry.init({ dsn: "YOUR-GLITCHTIP-DSN-HERE" });
 ```
 
 One way to break your JavaScript application is to call an undefined function:
