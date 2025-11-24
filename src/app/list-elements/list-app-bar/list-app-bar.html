@@ -1,0 +1,71 @@
+<ng-template #filters>
+  @if (queriedProjects(); as queriedProjects) {
+  <div class="project-multiselect-container">
+    @if (displayAddProject() && activeOrgHasNoProjects()) {
+    <a
+      mat-flat-button
+      color="primary"
+      [disabled]="!accessProjectWrite()"
+      class="add-project-button"
+      [routerLink]="['/', activeOrgSlug(), 'settings', 'projects', 'new']"
+    >
+      <mat-icon>add</mat-icon>
+      <ng-container i18n>Add Project</ng-container>
+    </a>
+    } @else {
+    <gt-project-multiselect [queriedProjects]="queriedProjects" />
+    }
+  </div>
+  } @if (includeTimeRangeSelect()) {
+  <div class="time-range-select-container">
+    <gt-time-range-select
+      [queriedTimeRangeStart]="queriedTimeRangeStart()"
+      [queriedTimeRangeEnd]="queriedTimeRangeEnd()"
+    />
+  </div>
+  }
+</ng-template>
+
+<div class="list-app-bar">
+  <div class="list-app-bar-primary-content">
+    <div class="left-section">
+      <gt-list-title
+        i18n-title
+        [title]="listTitle()"
+        [searchHits]="searchHits()"
+      ></gt-list-title>
+    </div>
+    @if (activeOrgLoaded()) {
+    <div class="right-section">
+      @if (displayAddProject() && activeOrgHasNoProjects()) {
+      <a
+        mat-flat-button
+        color="primary"
+        [disabled]="!accessProjectWrite()"
+        class="add-project-button"
+        [routerLink]="['/', activeOrgSlug(), 'settings', 'projects', 'new']"
+      >
+        <mat-icon>add</mat-icon>
+        <ng-container i18n>Add Project</ng-container>
+      </a>
+      } @else { @if (isLargeScreen()) {
+      <ng-container *ngTemplateOutlet="filters" />
+      } @else {
+      <button
+        matIconButton
+        [matBadge]="filtersApplied() ? filtersApplied() : null"
+        matBadgeSize="medium"
+        (click)="toggleExpandedFilters()"
+      >
+        <mat-icon>filter_list</mat-icon>
+      </button>
+      } }
+    </div>
+    }
+  </div>
+  @if (showExpandedFilters()) {
+  <div class="list-app-bar-expanded-content">
+    <ng-container *ngTemplateOutlet="filters" />
+  </div>
+  }
+</div>
