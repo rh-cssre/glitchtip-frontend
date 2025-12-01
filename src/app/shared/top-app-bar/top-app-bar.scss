@@ -1,0 +1,22 @@
+.top-app-bar {
+  display: flex;
+  height: 80px;
+  align-items: center;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 100%;
+}
+
+.left-section {
+  flex: 1;
+}
+
+.right-section:has(*) {
+  border-left: 1px solid var(--mat-sys-outline-variant);
+}

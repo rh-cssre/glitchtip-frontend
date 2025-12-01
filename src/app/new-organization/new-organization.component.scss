@@ -1,8 +1,7 @@
-@import "variables";
+@use "variables" as vars;
 
 mat-form-field,
-button,
-mat-checkbox {
+button {
   width: 100%;
 }
 
@@ -11,11 +10,11 @@ mat-card {
   margin-left: auto;
   margin-right: auto;
 
-  @media screen and (min-width: $tablet) {
+  @media screen and (min-width: vars.$tablet) {
     min-width: 480px;
   }
 
-  @media screen and (max-width: $tablet - 1) {
+  @media screen and (max-width: vars.$tablet - 1) {
     width: 100%;
     max-width: 480px;
   }
