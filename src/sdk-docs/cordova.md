@@ -9,7 +9,7 @@ You should `init` the SDK in the `deviceReady` function, to make sure the native
 ```javascript
 onDeviceReady: function() {
   var Sentry = cordova.require("sentry-cordova.Sentry");
-  Sentry.init({ dsn: 'your DSN here' });
+  Sentry.init({ dsn: 'YOUR-GLITCHTIP-DSN-HERE' });
 }
 ```
 
