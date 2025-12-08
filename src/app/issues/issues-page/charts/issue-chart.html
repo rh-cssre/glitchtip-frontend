@@ -1,0 +1,34 @@
+<div class="chart-container">
+  <ngx-charts-bar-vertical
+    [results]="formattedStats()"
+    [customColors]="customColors()"
+    [xAxis]="true"
+    [animations]="true"
+    [showDataLabel]="false"
+    [barPadding]="statsPeriod() === '14d' ? 17 : 8"
+    [trimXAxisTicks]="false"
+    [roundEdges]="false"
+  >
+    <ng-template #tooltipTemplate let-model="model">
+      <div class="tooltip">
+        @if (statsPeriod() === "14d") {
+        <!--
+        Daily stats are calculated from midnight on a given day
+        according to the server timezone. So rather than localizing the date,
+        we use the server tz and make that explicit to the user.
+        -->
+        <div>
+          {{ model.name | date: 'M/d/yy': serverTimeZone() }}
+          ({{serverTimeZone()}})</div
+        >
+        } @else {
+        <div> {{ model.name | date: 'M/d/yy, h:mm a'}}</div>
+        }
+        <div
+          >{{ model.value | i18nPlural: {'=0': 'events', '=1': '# event',
+          'other': '# events'} }}
+        </div>
+      </div>
+    </ng-template>
+  </ngx-charts-bar-vertical>
+</div>
