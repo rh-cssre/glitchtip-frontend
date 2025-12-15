@@ -1,161 +1,96 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { computed, effect, Injectable, inject } from "@angular/core";
 import { MicroSentryService } from "@micro-sentry/angular";
-import { BehaviorSubject } from "rxjs";
-import { tap, map } from "rxjs/operators";
-import { SocialApp } from "./user/user.interfaces";
+import { apiResource } from "../shared/api/api-resource-factory";
 
 export const DSN_REGEXP =
   /^(?:(\w+):)\/\/(?:(\w+)(?::(\w+))?@)([\w.-]+)(?::(\d+))?\/(.+)/;
-
-interface SettingsState {
-  socialApps: SocialApp[];
-  billingEnabled: boolean;
-  iPaidForGlitchTip: boolean | null;
-  enableUserRegistration: boolean;
-  enableOrganizationCreation: boolean;
-  plausibleURL: string | null;
-  plausibleDomain: string | null;
-  chatwootWebsiteToken: string | null;
-  stripePublicKey: string | null;
-  sentryDSN: string | null;
-  environment: string | null;
-  version: string | null;
-  serverTimeZone: string | null;
-  initialLoad: boolean;
-}
-
-const initialState: SettingsState = {
-  socialApps: [],
-  billingEnabled: false,
-  iPaidForGlitchTip: null,
-  enableUserRegistration: false,
-  enableOrganizationCreation: false,
-  plausibleURL: null,
-  plausibleDomain: null,
-  chatwootWebsiteToken: null,
-  stripePublicKey: null,
-  sentryDSN: null,
-  environment: null,
-  version: null,
-  serverTimeZone: null,
-  initialLoad: false,
-};
 
 @Injectable({
   providedIn: "root",
 })
 export class SettingsService {
-  private readonly state = new BehaviorSubject<SettingsState>(initialState);
-  socialApps$ = this.state.pipe(map((settings) => settings.socialApps));
-  billingEnabled$ = this.state.pipe(map((settings) => settings.billingEnabled));
-  paidForGlitchTip$ = this.state.pipe(
-    map((settings) => settings.iPaidForGlitchTip)
-  );
-  stripePublicKey$ = this.state.pipe(
-    map((settings) => settings.stripePublicKey)
-  );
-  enableUserRegistration$ = this.state.pipe(
-    map((settings) => settings.enableUserRegistration)
-  );
-  enableOrganizationCreation$ = this.state.pipe(
-    map((settings) => settings.enableOrganizationCreation)
-  );
-  serverTimeZone$ = this.state.pipe(map((settings) => settings.serverTimeZone));
-  initialLoad$ = this.state.pipe(
-    map((settings) => settings.initialLoad)
-  );
-  private readonly url = "/api/settings/";
+  private microSentry = inject(MicroSentryService);
 
-  constructor(
-    private http: HttpClient,
-    private microSentry: MicroSentryService
-  ) {}
+  settingsResource = apiResource(() => ({ url: "/api/settings/" }));
+  settings = computed(() => this.settingsResource.value());
+  socialApps = computed(() => this.settings()?.socialApps || []);
+  billingEnabled = computed(() => this.settings()?.billingEnabled);
+  paidForGlitchTip = computed(() => this.settings()?.iPaidForGlitchTip);
+  stripePublicKey = computed(() => this.settings()?.stripePublicKey);
+  sentryDSN = computed(() => this.settings()?.sentryDSN);
+  environment = computed(() => this.settings()?.environment);
+  chatwootWebsiteToken = computed(() => this.settings()?.chatwootWebsiteToken);
+  enableUserRegistration = computed(
+    () => this.settings()?.enableUserRegistration,
+  );
+  enableSocialAppsUserRegistration = computed(
+    () => this.settings()?.enableSocialAppsUserRegistration,
+  );
+  enableOrganizationCreation = computed(
+    () => this.settings()?.enableOrganizationCreation,
+  );
+  serverTimeZone = computed(() => this.settings()?.serverTimeZone);
+  initialLoad = computed(() => this.settingsResource.hasValue());
+  version = computed(() => this.settings()?.version);
+  instanceName = computed(() => this.settings()?.glitchtipInstanceName);
 
-  /** Get and set conf settings from backend. Typically run on application start */
-  getSettings() {
-    return this.retrieveSettings().pipe(
-      tap((settings) => this.setSettings({ ...settings, initialLoad: true })),
-      tap((settings) => {
-        // tslint:disable:only-arrow-functions
-        // tslint:disable:space-before-function-paren
-        // tslint:disable:one-variable-per-declaration
-        if (settings.plausibleDomain && settings.plausibleURL) {
-          const g = document.createElement("script");
-          const s = document.getElementsByTagName("script")[0];
-          g.type = "text/javascript";
-          g.defer = true;
-          g.dataset.domain = settings.plausibleDomain;
-          g.src = settings.plausibleURL;
-          s.parentNode!.insertBefore(g, s);
-          window.plausible =
-            window.plausible ||
-            function () {
-              ((window as any).plausible.q =
-                (window as any).plausible.q || []).push(arguments);
-            };
+  constructor() {
+    setTimeout(() => this.refreshSettings(), 5000);
+    effect(() => {
+      // Configure microsentry and chatwoot. Use computed functions to avoid
+      // running when unnecessary
+      const sentryDSN = this.sentryDSN();
+      const environment = this.environment();
+      const version = this.version();
+      const chatwootWebsiteToken = this.chatwootWebsiteToken();
+      if (sentryDSN) {
+        // Micro-sentry does not support dynamic configuration, force it to
+        const options = {
+          dsn: sentryDSN,
+          environment: environment ? environment : undefined,
+          release: version ? "glitchtip@" + version : undefined,
+        };
+        // https://github.com/Tinkoff/micro-sentry/blob/main/libs/core/src/lib/service/micro-sentry-client.ts#L14
+        const searched = DSN_REGEXP.exec(options.dsn);
+        const dsn = searched ? searched.slice(1) : [];
+        const pathWithProjectId = dsn[5].split("/");
+        const path = pathWithProjectId.slice(0, -1).join("/");
+        (this.microSentry.apiUrl as string) =
+          dsn[0] +
+          "://" +
+          dsn[3] +
+          (dsn[4] ? ":" + dsn[4] : "") +
+          (path ? "/" + path : "") +
+          "/api/" +
+          pathWithProjectId.pop() +
+          "/store/";
+        (this.microSentry.authHeader as string) =
+          "Sentry sentry_version=7,sentry_key=" +
+          dsn[1] +
+          (dsn[2] ? ",sentry_secret=" + dsn[2] : "");
+        if (options.environment) {
+          (this.microSentry.environment as string) = options.environment;
         }
-      }),
-      tap((settings) => {
-        if (settings.sentryDSN) {
-          // Micro-sentry does not support dynamic configuration, force it to
-          const options = {
-            dsn: settings.sentryDSN,
-            environment: settings.environment
-              ? settings.environment
-              : undefined,
-            release: settings.version
-              ? "glitchtip@" + settings.version
-              : undefined,
+        if (options.release) {
+          (this.microSentry as any).release = options.release;
+        }
+      }
+      if (chatwootWebsiteToken) {
+        (function (d, t) {
+          const BASE_URL = "https://app.chatwoot.com";
+          const g: any = d.createElement(t),
+            s: any = d.getElementsByTagName(t)[0];
+          g.src = BASE_URL + "/packs/js/sdk.js";
+          s.parentNode.insertBefore(g, s);
+          g.onload = function () {
+            (window as any).chatwootSDK.run({
+              websiteToken: chatwootWebsiteToken,
+              baseUrl: BASE_URL,
+            });
           };
-
-          // https://github.com/Tinkoff/micro-sentry/blob/main/libs/core/src/lib/service/micro-sentry-client.ts#L14
-          const searched = DSN_REGEXP.exec(options.dsn);
-          const dsn = searched ? searched.slice(1) : [];
-          const pathWithProjectId = dsn[5].split("/");
-          const path = pathWithProjectId.slice(0, -1).join("/");
-
-          (this.microSentry.apiUrl as string) =
-            dsn[0] +
-            "://" +
-            dsn[3] +
-            (dsn[4] ? ":" + dsn[4] : "") +
-            (path ? "/" + path : "") +
-            "/api/" +
-            pathWithProjectId.pop() +
-            "/store/";
-
-          (this.microSentry.authHeader as string) =
-            "Sentry sentry_version=7,sentry_key=" +
-            dsn[1] +
-            (dsn[2] ? ",sentry_secret=" + dsn[2] : "");
-
-          if (options.environment) {
-            (this.microSentry.environment as string) = options.environment;
-          }
-          if (options.release) {
-            (this.microSentry as any).release = options.release;
-          }
-        }
-      }),
-      tap((settings) => {
-        if (settings.chatwootWebsiteToken) {
-          (function (d, t) {
-            const BASE_URL = "https://app.chatwoot.com";
-            const g: any = d.createElement(t),
-              s: any = d.getElementsByTagName(t)[0];
-            g.src = BASE_URL + "/packs/js/sdk.js";
-            s.parentNode.insertBefore(g, s);
-            g.onload = function () {
-              (window as any).chatwootSDK.run({
-                websiteToken: settings.chatwootWebsiteToken,
-                baseUrl: BASE_URL,
-              });
-            };
-          })(document, "script");
-        }
-      })
-    );
+        })(document, "script");
+      }
+    });
   }
 
   triggerPlausibleReport(orgSlug: string | undefined) {
@@ -169,11 +104,12 @@ export class SettingsService {
     }
   }
 
-  private retrieveSettings() {
-    return this.http.get<SettingsState>(this.url);
+  reload() {
+    this.settingsResource.reload();
   }
 
-  private setSettings(settings: SettingsState) {
-    this.state.next(settings);
+  private refreshSettings() {
+    this.reload();
+    setTimeout(() => this.refreshSettings(), 30 * 60 * 1000); // 30 min
   }
 }

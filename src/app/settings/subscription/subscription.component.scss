@@ -1,8 +1,10 @@
-@import "variables";
-
 mat-card {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.body-text {
+  margin-bottom: 0;
 }
 
 mat-error {
@@ -10,49 +12,30 @@ mat-error {
   display: block;
 }
 
+.page-header {
+  flex-wrap: wrap;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .visualization {
   position: relative;
   margin: -10px 0 20px;
   font-size: 0.9em;
   font-weight: 500;
-
-  .error {
-    color: $amaranth;
-  }
-
-  .uptime {
-    color: #8a2387;
-  }
-
-  .performance {
-    color: #f27121;
-  }
 }
 
 .display-bar {
-  background-color: #f4c6cd;
   width: 100%;
   height: 8px;
   margin-top: 4px;
   margin-bottom: 4px;
   display: flex;
   justify-content: flex-start;
-
-  .error-event {
-    background-color: $amaranth;
-  }
-
-  .transaction-event {
-    background-color: #f27121;
-  }
-
-  .uptime-event {
-    background-color: #8a2387;
-  }
-
-  .file-size-percent {
-    background-color: black;
-  }
 }
 
 .total-events {
@@ -71,5 +54,40 @@ mat-error {
 
   &--right {
     transform: translateX(-100%);
+  }
+}
+
+// TODO: Integrate colors with theming
+.visualization {
+  .error {
+    color: var(--mat-sys-primary);
+  }
+
+  .uptime {
+    color: #944c92;
+  }
+
+  .performance {
+    color: #f27121;
+  }
+}
+
+.display-bar {
+  background-color: #f4c6cd;
+
+  .error-event {
+    background-color: var(--mat-sys-primary);
+  }
+
+  .transaction-event {
+    background-color: #f27121;
+  }
+
+  .uptime-event {
+    background-color: #8a2387;
+  }
+
+  .file-size-percent {
+    background-color: var(--mat-sys-on-background);
   }
 }
