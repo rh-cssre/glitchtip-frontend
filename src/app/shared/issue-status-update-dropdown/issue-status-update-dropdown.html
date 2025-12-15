@@ -1,0 +1,19 @@
+<button mat-flat-button color="primary" [matMenuTriggerFor]="menu">
+  <mat-icon>arrow_drop_down</mat-icon>
+  {{ buttonLabel }}
+</button>
+<mat-menu #menu="matMenu">
+  @for (option of options; track option.value) {
+  <button
+    mat-menu-item
+    (click)="onOptionClick(option.value)"
+    [disabled]="option.disabled"
+  >
+    {{ option.label }} @if (selectedValue() !== undefined) {
+    <mat-icon [class.invisible]="option.value !== selectedValue()"
+      >done</mat-icon
+    >
+    }
+  </button>
+  }
+</mat-menu>

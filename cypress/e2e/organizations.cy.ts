@@ -1,5 +1,5 @@
 import { seedBackend, requestLogin } from "./utils.cy";
-import { organization } from "../fixtures/variables";
+import { seededOrg } from "../fixtures/variables";
 
 describe("Organizations", () => {
   beforeEach(() => {
@@ -8,33 +8,20 @@ describe("Organizations", () => {
   });
 
   it("should create an org and more", () => {
-    const secondOrg = "cypress second org";
+    const newOrg = "e2etestobj-second-org";
     cy.visit(`/`);
-    cy.get("#org-dropdown").click();
-    cy.get("#create-new-link").click();
-    cy.get("#create-organization-form input").type(secondOrg);
-    cy.get("#create-organization-form").submit();
-    // cy.get(".mat-list-item-content").contains(secondOrg);
+    cy.get("[data-cy=orgSelect]").click();
+    cy.get("[data-cy=createNewLink]").click();
+    cy.url().should("eq", "http://localhost:4200/organizations/new");
+    cy.get("[data-cy=create-organization-input]").type(newOrg);
+    cy.get("[data-cy=create-organization-form]").submit();
+    cy.get("[data-cy=orgSelect]").contains(newOrg);
 
-    // glitchtip-frontend#55: org slug in URL should always match active org.
-    // It got out of sync with a back button.
-
-    // cy.visit(`/settings/${organization.slug}/`);
-    // cy.get("#org-dropdown").click();
-    // cy.get(".mat-menu-content button:nth-child(1)").click();
-    // cy.go("back");
-    // cy.get("#org-dropdown span").contains(organization.slug);
-  });
-
-  it("should delete an org", () => {
-    const doomedOrg = "cypress doomed org";
-    cy.visit(`/organizations/new`);
-    cy.get("#create-organization-form input").type(doomedOrg);
-    cy.get("#create-organization-form").submit();
-    cy.get("[data-test-settings]").click();
-    // cy.get("[data-test] button").click();
-    // cy.get(".cdk-overlay-container").contains(
-    //   `You have successfully deleted ${doomedOrg}`
-    // );
+    // Ensure url and displayed org in select component are in sync
+    cy.visit(`/${seededOrg.slug}/settings`);
+    cy.get("[data-cy=orgSelect]").contains(seededOrg.name).click();
+    cy.get("mat-option").contains(newOrg).click();
+    cy.url().should("eq", `http://localhost:4200/${newOrg}/settings`);
+    cy.get("[data-cy=orgSelect]").should("contain", newOrg);
   });
 });
