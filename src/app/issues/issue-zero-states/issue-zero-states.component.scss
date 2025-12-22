@@ -1,15 +1,15 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "variables" as vars;
 
 .empty-states {
   padding: 1.5em 0 0.5em;
 }
 
 .not-on-team {
-  background: mat.get-color-from-palette($amaranth-palette, 50);
   padding: 10px;
   margin-top: 0;
   margin-bottom: 20px;
+  border: 2px solid var(--mat-sys-primary);
+  color: var(--mat-sys-primary);
 }
 
 markdown {
@@ -20,7 +20,7 @@ markdown {
 .install-wrapper {
   display: flex;
 
-  @media (max-width: $medium - 1) {
+  @media (max-width: vars.$medium - 1) {
     flex-direction: column;
   }
 }
@@ -29,11 +29,11 @@ markdown {
   width: calc(100% - 300px);
   flex-shrink: 0;
 
-  @media (max-width: $large - 1) {
+  @media (max-width: vars.$large - 1) {
     width: calc(100% - 250px);
   }
 
-  @media (max-width: $medium - 1) {
+  @media (max-width: vars.$medium - 1) {
     width: 100%;
   }
 }
@@ -43,17 +43,17 @@ markdown {
   padding-left: 30px;
   flex-shrink: 0;
 
-  @media (max-width: $large - 1) {
+  @media (max-width: vars.$large - 1) {
     width: 250px;
   }
 
-  @media (max-width: $medium - 1) {
+  @media (max-width: vars.$medium - 1) {
     width: 100%;
     padding-left: 0;
     padding-top: 30px;
   }
 
-  .mat-body-1 {
+  .body-text {
     margin: 0;
   }
 
