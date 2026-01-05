@@ -1,40 +1,89 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { UntypedFormControl } from "@angular/forms";
-import { GlitchTipOAuthService } from "src/app/api/oauth/oauth.service";
-import { SettingsService } from "src/app/api/settings.service";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+} from "@angular/core";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from "src/app/api/user/user.service";
-import { SocialApp } from "../../api/user/user.interfaces";
+import { AuthenticationService } from "src/app/api/allauth/authentication.service";
+import { AuthSvgComponent } from "../../shared/auth-svg/auth-svg.component";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { SocialAuthService, SocialAuthState } from "./social-auth.service";
 
 @Component({
   selector: "gt-social-auth",
   templateUrl: "./social-auth.component.html",
   styleUrls: ["./social-auth.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    AuthSvgComponent,
+    MatDividerModule,
+    MatButtonModule,
+  ],
 })
-export class SocialAuthComponent implements OnInit {
-  user$ = this.userService.userDetails$;
-  disconnectLoading$ = this.userService.disconnectLoading$;
-  socialApps$ = this.settingsService.socialApps$;
-  account = new UntypedFormControl();
+export class SocialAuthComponent
+  extends StatefulComponent<SocialAuthState, SocialAuthService>
+  implements OnInit
+{
+  protected service: SocialAuthService;
+  private userService = inject(UserService);
+  private authenticationService = inject(AuthenticationService);
+  private snackBar = inject(MatSnackBar);
 
-  constructor(
-    private userService: UserService,
-    private oauthService: GlitchTipOAuthService,
-    private settingsService: SettingsService
-  ) {}
+  socialApps = this.service.socialApps;
+  user = this.service.user;
+  disconnectLoadingId = this.service.loadingId;
+  account = new FormControl();
 
-  ngOnInit(): void {
+  constructor() {
+    const service = inject(SocialAuthService);
+
+    super(service);
+
+    this.service = service;
+  }
+
+  ngOnInit() {
     this.userService.getUserDetails();
   }
 
   addAccount() {
-    // No connection for GitHub because it doesn't allow for multiple redirect URI's
-    // Can connect to GitHub on the log in page
-    const socialApp: SocialApp = this.account.value;
-    this.oauthService.initOAuthLogin(socialApp);
+    this.authenticationService.providerRedirect(
+      this.account.value.provider,
+      window.location.href,
+      "connect",
+    );
   }
 
-  disconnect(socialAccountId: number) {
-    this.userService.disconnectSocialAccount(socialAccountId);
+  async disconnect(id: number, provider: string, account: string) {
+    const user = this.user();
+    if (user) {
+      if (user.hasPasswordAuth || user.identities!.length > 1) {
+        await this.service.disconnect(id, provider, account);
+        this.snackBar.open(
+          $localize`You have successfully disconnected your social auth account`,
+        );
+        // if (err.status === 400 && err.error.errors?.length) {
+        //   this.snackBar.open(err.error.errors[0].message);
+        //   return of(undefined);
+        // }
+        // this.snackBar.open(UNHANDLED_ERROR);
+      } else {
+        this.snackBar.open($localize`Your account has no password set up.`);
+      }
+    }
   }
 }

@@ -1,0 +1,15 @@
+<span matSnackBarLabel>
+  <span i18n>
+    You've reached the maximum number of events that your plan allows for this
+    billing period.
+  </span>
+  <a class="subscription-link" [routerLink]="[activeOrgSlug, 'settings', 'subscription']" (onclick)="snackBarRef.dismiss()" i18n>
+    Change your subscription
+  </a>
+  <span i18n> if you'd like to get things moving again.</span>
+</span>
+<span matSnackBarActions>
+  <button matSnackBarAction matIconButton class="dismiss-button" (click)="snackBarRef.dismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</span>
