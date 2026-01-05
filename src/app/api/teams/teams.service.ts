@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
-import { Team, TeamErrors, TeamLoading } from "./teams.interfaces";
-import { BehaviorSubject, combineLatest, lastValueFrom, EMPTY } from "rxjs";
-import { map, tap, catchError } from "rxjs/operators";
-import { Member } from "../organizations/organizations.interface";
+import { Injectable, computed, inject } from "@angular/core";
+import { TeamErrors, TeamLoading } from "./teams.interfaces";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { TeamsAPIService } from "./teams-api.service";
+import { client, handleError } from "../../shared/api/api";
+import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
+import { components } from "../api-schema";
+type Team = components["schemas"]["TeamProjectSchema"];
+type Member = components["schemas"]["OrganizationUserSchema"];
 
 interface TeamsState {
   teams: Team[] | null;
@@ -28,116 +28,135 @@ const initialState: TeamsState = {
 @Injectable({
   providedIn: "root",
 })
-export class TeamsService {
-  private readonly state = new BehaviorSubject<TeamsState>(initialState);
-  private readonly getState$ = this.state.asObservable();
+export class TeamsService extends StatefulService<TeamsState> {
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
-  readonly teams$ = this.getState$.pipe(map((state) => state.teams));
-  readonly team$ = this.getState$.pipe(map((data) => data.team));
-  readonly teamMembers$ = this.getState$.pipe(
-    map((state) => state.teamMembers)
-  );
-  readonly loading$ = this.getState$.pipe(map((data) => data.loading));
-  readonly errors$ = this.getState$.pipe(map((data) => data.errors));
-
-  readonly userTeamRole$ = combineLatest([
-    this.teamMembers$,
-    this.userService.activeUserEmail$,
-  ]).pipe(
-    map(([teamMembers, userEmail]) => {
-      const activeTeamMember = teamMembers.find(
-        (teamMember) => teamMember.email === userEmail
-      );
-      return activeTeamMember?.role;
-    })
-  );
-
-  constructor(
-    private userService: UserService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private teamsAPIService: TeamsAPIService
-  ) {}
-
-  retrieveTeamsByOrg(orgSlug: string) {
-    return this.teamsAPIService
-      .list(orgSlug)
-      .pipe(tap((teams) => this.setTeams(teams)));
-  }
-
-  retrieveSingleTeam(orgSlug: string, teamSlug: string) {
-    lastValueFrom(
-      this.teamsAPIService
-        .retrieve(orgSlug, teamSlug)
-        .pipe(tap((resp) => this.setSingleTeam(resp)))
+  readonly teams = computed(() => this.state().teams);
+  readonly team = computed(() => this.state().team);
+  readonly teamMembers = computed(() => this.state().teamMembers);
+  readonly loading = computed(() => this.state().loading);
+  readonly errors = computed(() => this.state().errors);
+  readonly userTeamRole = computed(() => {
+    const userEmail = this.userService.activeUserEmail();
+    const activeTeamMember = this.teamMembers().find(
+      (teamMember) => teamMember.email === userEmail,
     );
+    return activeTeamMember?.role;
+  });
+
+  constructor() {
+    super(initialState);
   }
 
-  retrieveTeamMembers(orgSlug: string, teamSlug: string) {
-    return this.teamsAPIService
-      .retrieveTeamMembers(orgSlug, teamSlug)
-      .pipe(tap((teamMembers) => this.setTeamMembers(teamMembers)));
+  async retrieveTeamsByOrg(orgSlug: string) {
+    const { data } = await client.GET(
+      "/api/0/organizations/{organization_slug}/teams/",
+      {
+        params: { path: { organization_slug: orgSlug } },
+      },
+    );
+    if (data) {
+      this.setTeams(data as any);
+    }
   }
 
-  updateTeamSlug(orgSlug: string, teamSlug: string, newTeamSlug: string) {
+  async retrieveSingleTeam(orgSlug: string, teamSlug: string) {
+    const { data } = await client.GET(
+      "/api/0/teams/{organization_slug}/{team_slug}/",
+      {
+        params: {
+          path: {
+            organization_slug: orgSlug,
+            team_slug: teamSlug,
+          },
+        },
+      },
+    );
+    if (data) {
+      this.setSingleTeam(data);
+    }
+  }
+
+  async retrieveTeamMembers(orgSlug: string, teamSlug: string) {
+    const { data } = await client.GET(
+      "/api/0/teams/{organization_slug}/{team_slug}/members/",
+      {
+        params: {
+          path: {
+            organization_slug: orgSlug,
+            team_slug: teamSlug,
+          },
+        },
+      },
+    );
+    if (data) {
+      this.setTeamMembers(data);
+    }
+  }
+
+  async updateTeamSlug(orgSlug: string, teamSlug: string, newTeamSlug: string) {
     this.setUpdateTeamSlugLoading(true);
-    return this.teamsAPIService.update(orgSlug, teamSlug, newTeamSlug).pipe(
-      tap((resp) => {
-        this.router.navigate([
-          orgSlug,
-          "settings",
-          "teams",
-          resp.slug,
-          "settings",
-        ]);
-        this.setUpdateTeamSlugLoading(false);
-        this.snackBar.open(`Your team slug has been changed to #${resp.slug}`);
-        this.setSingleTeam(resp);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.setUpdateTeamSlugError(error);
-        return EMPTY;
-      })
+    const { data, error, response } = await client.PUT(
+      "/api/0/teams/{organization_slug}/{team_slug}/",
+      {
+        params: {
+          path: {
+            organization_slug: orgSlug,
+            team_slug: teamSlug,
+          },
+        },
+        body: {
+          slug: newTeamSlug,
+        },
+      },
     );
+    if (data) {
+      this.router.navigate([
+        orgSlug,
+        "settings",
+        "teams",
+        data.slug,
+        "settings",
+      ]);
+      this.setUpdateTeamSlugLoading(false);
+      this.snackBar.open(
+        $localize`Your team slug has been changed to #${data.slug}`,
+      );
+      this.setSingleTeam(data);
+    } else {
+      const errors = handleError(error, response);
+      if (errors.detail.length) {
+        this.setUpdateTeamSlugError(errors.detail[0].msg);
+      }
+    }
   }
 
-  deleteTeam(orgSlug: string, teamSlug: string) {
+  async deleteTeam(orgSlug: string, teamSlug: string) {
     this.setDeleteTeamLoading(true);
-    return this.teamsAPIService.destroy(orgSlug, teamSlug).pipe(
-      tap(() => {
-        this.setDeleteTeamLoading(false);
-        this.snackBar.open(`You have successfully deleted #${teamSlug}`);
-        this.router.navigate([orgSlug, "settings", "teams"]);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.setDeleteTeamError(error);
-        return EMPTY;
-      })
+    const result = await client.DELETE(
+      "/api/0/teams/{organization_slug}/{team_slug}/",
+      {
+        params: { path: { organization_slug: orgSlug, team_slug: teamSlug } },
+      },
     );
+    this.setDeleteTeamLoading(false);
+    if (result.error) {
+      // this.setDeleteTeamError(result.response);
+    } else {
+      this.snackBar.open(`You have successfully deleted #${teamSlug}`);
+      this.router.navigate([orgSlug, "settings", "teams"]);
+    }
+    return result;
   }
 
   private setDeleteTeamLoading(loading: boolean) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
+    const state = this.state();
+    this.setState({
       loading: {
         ...state.loading,
         deleteTeam: loading,
-      },
-    });
-  }
-
-  private setDeleteTeamError(error: HttpErrorResponse) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      errors: {
-        ...state.errors,
-        deleteTeam: `${error.statusText}: ${error.status}`,
-      },
-      loading: {
-        ...state.loading,
-        deleteTeam: false,
       },
     });
   }
@@ -151,47 +170,37 @@ export class TeamsService {
   }
 
   private setTeams(teams: Team[]) {
-    this.state.next({ ...this.state.getValue(), teams });
+    this.setState({ teams });
   }
 
   private setSingleTeam(team: Team) {
-    this.state.next({ ...this.state.getValue(), team });
+    this.setState({ team });
   }
 
   private setTeamMembers(teamMembers: Member[]) {
-    this.state.next({ ...this.state.getValue(), teamMembers });
+    this.setState({ teamMembers });
   }
 
   private removeTeamMember(memberId: number) {
-    const filteredMembers = this.state
-      .getValue()
-      .teamMembers.filter((teamMember) => teamMember.id !== memberId);
+    const filteredMembers = this.state().teamMembers.filter(
+      (teamMember) => teamMember.id !== memberId.toString(),
+    );
     if (filteredMembers) {
-      this.state.next({
-        ...this.state.getValue(),
-        teamMembers: filteredMembers,
-      });
+      this.setState({ teamMembers: filteredMembers });
     }
   }
 
   private setUpdateTeamSlugLoading(loading: boolean) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      loading: {
-        ...state.loading,
-        updateName: loading,
-      },
-    });
+    const state = this.state();
+    this.setState({ loading: { ...state.loading, updateName: loading } });
   }
 
-  private setUpdateTeamSlugError(error: HttpErrorResponse) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
+  private setUpdateTeamSlugError(error: string) {
+    const state = this.state();
+    this.setState({
       errors: {
         ...state.errors,
-        updateName: `${error.statusText}: ${error.status}`,
+        updateName: error,
       },
       loading: {
         ...state.loading,
@@ -205,15 +214,12 @@ export class TeamsService {
    * The new team needs to be added to the beginning of the Teams array
    */
   private addOneTeam(team: Team) {
-    const getTeamsState = this.state.getValue().teams;
+    const getTeamsState = this.state().teams;
     const teams = getTeamsState ? getTeamsState : [];
 
     const newTeams = [team].concat(teams);
     if (newTeams) {
-      this.state.next({
-        ...this.state.getValue(),
-        teams: newTeams,
-      });
+      this.setState({ teams: newTeams });
     }
   }
 }
