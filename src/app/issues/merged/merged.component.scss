@@ -1,0 +1,27 @@
+.unmerge-button {
+  margin-bottom: 16px;
+}
+
+.merged-items-list {
+  .merged-item:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  word-break: break-word;
+}
+
+.merged-item-checkbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.merged-item {
+  display: flex;
+}
+
+.merged-item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
