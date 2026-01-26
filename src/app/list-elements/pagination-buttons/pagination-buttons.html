@@ -1,0 +1,33 @@
+<div class="pagination-buttons-container">
+  @if (paginator === undefined || loading) {
+    <div class="spinner-container">
+      <mat-progress-spinner
+        [diameter]="24"
+        color="primary"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+    </div>
+  } @else {
+    <button
+      class="button-left"
+      [routerLink]="[]"
+      [queryParams]="paginator.previousPageParams || {}"
+      queryParamsHandling="merge"
+      matIconButton
+      [disabled]="paginator.hasPreviousPage === false"
+    >
+      <mat-icon class="page-icon">keyboard_arrow_left</mat-icon>
+    </button>
+    <button
+      data-cy="keyboard-right"
+      class="button-right"
+      [routerLink]="[]"
+      [queryParams]="paginator.nextPageParams || {}"
+      queryParamsHandling="merge"
+      matIconButton
+      [disabled]="paginator.hasNextPage === false"
+    >
+      <mat-icon class="page-icon">keyboard_arrow_right</mat-icon>
+    </button>
+  }
+</div>

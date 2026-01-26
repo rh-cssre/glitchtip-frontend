@@ -1,0 +1,60 @@
+@use "variables" as vars;
+
+table {
+  width: 100%;
+}
+
+.mat-button-toggle-group {
+  height: 30px;
+  align-items: center;
+}
+
+
+.mat-column-status {
+  width: 15%
+}
+
+.mat-column-reason {
+  width: 20%;
+  padding-right: 10px;
+}
+
+.mat-column-responseTime {
+  width: 45%;
+  padding-right: 75px;
+  @media screen and (max-width: (vars.$small - 1)) {
+    display: none;
+  }
+}
+
+.mat-column-startCheck {
+  width: 20%;
+}
+
+.pagination-buttons-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-color {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--true:after {
+    background-color: var(--success-color);
+  }
+
+  &--false:after {
+    background-color: var(--mat-sys-error);
+  }
+}
