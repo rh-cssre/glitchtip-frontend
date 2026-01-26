@@ -1,6 +1,15 @@
 import { Issue } from "../interfaces";
+import { ProjectReference } from "src/app/api/projects/projects-api.interfaces";
 
-export const issueList: Issue[] = [
+interface APIProjectReference extends Omit<ProjectReference, "id"> {
+  id: string;
+}
+
+interface APIIssue extends Omit<Issue, "project"> {
+  project: APIProjectReference;
+}
+
+export const apiIssueList: APIIssue[] = [
   {
     lastSeen: "2021-02-19T18:56:01.952Z",
     numComments: 0,
@@ -250,3 +259,13 @@ export const issueList: Issue[] = [
     statusDetails: {},
   },
 ];
+
+export const issueList: Issue[] = apiIssueList.map((apiIssue) => {
+  return {
+    ...apiIssue,
+    project: {
+      ...apiIssue.project,
+      id: parseInt(apiIssue.project.id, 10),
+    },
+  };
+});
