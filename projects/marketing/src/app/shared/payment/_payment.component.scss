@@ -1,0 +1,11 @@
+@import "variables";
+
+mkt-payment {
+  .mat-mdc-tab-labels {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .mat-mdc-card-content {
+    height: 100%;
+  }
+}
