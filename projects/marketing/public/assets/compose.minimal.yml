@@ -1,0 +1,40 @@
+x-environment: &default-environment
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+  VALKEY_URL: "" # Set to enable Valkey. Ex: redis://valkey:6379
+  SECRET_KEY: change_me_to_something_random # best to run openssl rand -hex 32
+  EMAIL_URL: consolemail:// # Example smtp://email:password@smtp_url:port https://glitchtip.com/documentation/install#configuration
+  GLITCHTIP_DOMAIN: https://glitchtip.example.com # Change this to your domain
+  DEFAULT_FROM_EMAIL: email@example.com # Change this to your email
+  ENABLE_ADMIN: "False" # Set to True to enable Django Admin at /admin/
+  ENABLE_OPENAPI: "False" # Set to True to enable OpenAPI spec at /api/docs
+  # PORT: 8000 # If changing, change the web service port too
+
+x-depends_on: &default-depends_on
+  - postgres
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust" # Consider removing this and setting a password
+    restart: unless-stopped
+    volumes:
+      - pg-data:/var/lib/postgresql
+  # valkey: # Recommended for larger instances. Uncomment and set VALKEY_URL to enable.
+  #  image: valkey/valkey:9
+  #  restart: unless-stopped
+  web:
+    image: glitchtip/glitchtip:6 # Check https://glitchtip.com/blog/ for new major versions
+    depends_on: *default-depends_on
+    ports:
+      - "8000:8000"
+    environment:
+      <<: *default-environment
+      SERVER_ROLE: all_in_one
+    restart: unless-stopped
+    volumes:
+      - uploads:/code/uploads
+
+volumes:
+  pg-data:
+  uploads:

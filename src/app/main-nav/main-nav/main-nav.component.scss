@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables";
 
 // This make the app cover the whole screen at all times
 mat-sidenav-container {
@@ -11,10 +11,23 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
-  width: 240px;
+  width: variables.$side-nav-width;
+}
+
+mat-nav-list {
+  padding: 10px;
+
+  // TODO: Find a more reliable way to change icon color
+  .mdc-list-item--disabled {
+    mat-icon {
+      opacity: .25;
+    }
+  }
 }
 
 .logo-toolbar {
+  height: fit-content;
+  padding-top: 16px;
   background-color: transparent;
 
   .main-logo {
@@ -23,107 +36,40 @@ mat-sidenav {
   }
 }
 
-.sub-items {
-  display: none !important;
+.org-create-button-container,
+.org-dropdown-container {
+  width: 100%;
+  padding: 25px 15px 0px 15px;
+}
 
-  @media (max-width: $tablet - 1) {
-    display: block !important;
-    margin-left: 24px;
-    max-width: calc(100% - 24px);
-    color: mat.get-color-from-palette(mat.$gray-palette, 600);
+.org-create-button {
+  height: 48px;
+}
+.support-cta-divider {
+  border-color: var(--mat-sys-outline-variant);
+}
+
+.support-cta-container {
+  margin: 15px 0 0 26px;
+}
+
+.support-cta-list {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin-top: 8px;
+
+  a {
+    text-decoration: underline;
   }
 }
 
-mat-sidenav-content {
-  mat-toolbar {
-    display: none;
-    cursor: pointer; // The whole toolbar is clickable
+.version {
+  text-align: center;
 
-    @media (max-width: $tablet - 1) {
-      display: flex;
-      padding-left: 0;
-    }
-
-    .sidenav-toggle {
-      height: 100%;
-      transform: translateY(-1px);
-    }
-  }
-  
-  .active-org {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.overflow {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-height: 40px;
-  line-height: 1.11111;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.down-caret {
-  transform: scale(1, 0.5);
-  margin-left: 8px;
-}
-
-.org-details-divider {
-  margin: 10px 0;
-}
-
-.org-dropdown-list-item ::ng-deep .mat-list-item-content {
-  justify-content: space-between;
-}
-
-.mat-nav-list > button.mat-menu-item,
-.no-org-create {
-  font-weight: 500;
-}
-
-.mat-list-item-disabled {
-  background-color: white;
-  color: mat.get-color-from-palette(mat.$gray-palette, 500) !important;
-}
-
-.subdued {
-  color: mat.get-color-from-palette(mat.$gray-palette, 700);
-  font-weight: 300;
-}
-
-.nagware {
-  margin: 10px;
-  font-size: 0.8em;
-
-  h3 {
-    font-size: 0.8em;
-    margin-bottom: 0.5em;
-  }
-
-  button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    appearance: none;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    margin: 0;
-    padding: 5px;
-  }
-
-  ul {
-    padding-left: 15px;
-  }
-
-  li {
-    padding-left: 0;
-  }
-
-  mat-icon {
-    font-size: 20px;
+  a {
+    color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 700);
+    font-weight: 300;
+    font-size: small;
+    text-decoration: none;
   }
 }
