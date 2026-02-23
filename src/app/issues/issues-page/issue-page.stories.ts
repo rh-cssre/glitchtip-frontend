@@ -1,43 +1,10 @@
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
-import { MatTableModule } from "@angular/material/table";
-import { moduleMetadata } from "@storybook/angular";
-import { MarkdownModule } from "ngx-markdown";
-import { of } from "rxjs";
-
-import { IssuesPageComponent } from "./issues-page.component";
-import { IssuesService } from "../issues.service";
+import { signal } from "@angular/core";
+import { IssuesPage } from "./issues-page";
 import { issueList } from "./issues-test-data";
-import { ProjectFilterBarComponent } from "src/app/list-elements/project-filter-bar/project-filter-bar.component";
-import { OrganizationsService } from "../../api/organizations/organizations.service";
-import { IssueZeroStatesComponent } from "../issue-zero-states/issue-zero-states.component";
-import { LazyMarkdownModule } from "src/app/lazy-markdown/lazy-markdown.module";
-import { GlitchtipTestingModule } from "src/app/glitchtip-testing/glitchtip-testing.module";
-import { DataFilterBarComponent } from "src/app/list-elements/data-filter-bar/data-filter-bar.component";
-import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
 
 export default {
   title: "Issues/Issues Page",
-  component: IssuesPageComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [
-        GlitchtipTestingModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatTableModule,
-        MarkdownModule,
-        LazyMarkdownModule,
-      ],
-      providers: [IssuesService, MatDatepickerModule, OrganizationsService],
-      declarations: [
-        ListTitleComponent,
-        DataFilterBarComponent,
-        ProjectFilterBarComponent,
-        IssueZeroStatesComponent,
-      ],
-    }),
-  ],
+  component: IssuesPage,
 };
 
 const sampleProjects = [
@@ -181,12 +148,12 @@ function selectProps(stateSelection: string) {
   const state = pageStateConfig[stateSelection];
   return {
     props: {
-      loading$: of(state.loading),
-      appliedProjectCount$: of(state.appliedProjectCount),
-      areAllSelected$: of(state.areAllSelected),
-      thereAreSelectedIssues$: of(state.thereAreSelectedIssues),
-      projectsFromParams$: of([2, 3, 4]),
-      issues$: of(issueList.slice(0, state.issueLength)),
+      loading: signal(state.loading),
+      appliedProjectCount: signal(state.appliedProjectCount),
+      areAllSelected: signal(state.areAllSelected),
+      thereAreSelectedIssues: signal(state.thereAreSelectedIssues),
+      projectsFromParams: signal([2, 3, 4]),
+      issues: signal(issueList.slice(0, state.issueLength)),
     },
   };
 }
@@ -217,7 +184,7 @@ export const NormalIssuesSelected = () => {
   return selectProps("normalIssuesSelected");
 };
 
-export const normalIssuesAllSelected = () => {
+export const NormalIssuesAllSelected = () => {
   return selectProps("normalIssuesAllSelected");
 };
 

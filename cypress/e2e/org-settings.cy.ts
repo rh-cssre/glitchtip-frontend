@@ -1,5 +1,5 @@
 import { requestLogin, seedBackend } from "./utils.cy";
-import { organization } from "../fixtures/variables";
+import { seededOrg } from "../fixtures/variables";
 
 describe("Organization Settings", () => {
   beforeEach(() => {
@@ -7,19 +7,20 @@ describe("Organization Settings", () => {
     requestLogin();
   });
 
-  it("updates the org name", () => {
-    cy.visit(`/${organization.slug}/settings`);
-    cy.contains(organization.name);
-    cy.get("input[formcontrolname=name]").clear().type(organization.otherOrg);
+  it("updates the org name, deletes org and returns to empty org state", () => {
+    const newOrgName = "e2etestobj-other-org"
+    cy.visit(`/${seededOrg.slug}/settings`);
+    cy.contains(seededOrg.name);
+    cy.get("input[formcontrolname=name]").clear().type(newOrgName);
     cy.get("#update-org").click();
-    cy.contains(organization.otherOrg);
+    cy.get("input[formcontrolname=name]").should(
+      "have.value",
+      newOrgName,
+    );
     // clear db
     cy.get("#delete-org").click();
-  });
-
-  it("deleting only org results in empty org state", () => {
-    cy.visit(`/${organization.slug}/settings`);
-    cy.get("#delete-org").click();
+    cy.get("[data-cy='dialog-confirm']").click();
+    cy.contains("successfully deleted");
     cy.url().should("eq", "http://localhost:4200/");
     cy.contains("In order to use GlitchTip, you'll need to create an");
   });

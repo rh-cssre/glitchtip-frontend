@@ -10,10 +10,9 @@ import { By } from "@angular/platform-browser";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MICRO_SENTRY_CONFIG, MicroSentryService } from "@micro-sentry/angular";
-import { MaterialModule } from "src/app/shared/material.module";
-import { SharedModule } from "src/app/shared/shared.module";
 
 import { NewRecipientComponent } from "./new-recipient.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("NewRecipientComponent", () => {
   let component: NewRecipientComponent;
@@ -25,15 +24,14 @@ describe("NewRecipientComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NewRecipientComponent],
       imports: [
         MatDialogModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        SharedModule,
         NoopAnimationsModule,
+        MatSnackBarModule,
         ReactiveFormsModule,
-        MaterialModule,
+        NewRecipientComponent,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
@@ -64,7 +62,7 @@ describe("NewRecipientComponent", () => {
     expect(component.url.errors).toBeFalsy();
 
     component.url.setValue(
-      "https://XXXXXXX.webhook.office.com/webhookb2/1f3c20aa-88db-428c-8033-8b1c71fd87c7@57d0d75c-1369-4dd3-a130-72e62ec186e4/IncomingWebhook/9d645ab454dc4e6c922ab8a95cce525f/fda473a8-4c45-458f-a19c-2bdaacf561db"
+      "https://XXXXXXX.webhook.office.com/webhookb2/1f3c20aa-88db-428c-8033-8b1c71fd87c7@57d0d75c-1369-4dd3-a130-72e62ec186e4/IncomingWebhook/9d645ab454dc4e6c922ab8a95cce525f/fda473a8-4c45-458f-a19c-2bdaacf561db",
     );
     fixture.detectChanges();
     expect(component.url.errors).toBeFalsy();
