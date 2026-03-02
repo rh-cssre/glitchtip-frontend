@@ -1,0 +1,44 @@
+@use "../../../../../src/assets/styles/variables" as vars;
+
+// Custom typography classes for marketing site
+// Using Material Design tokens as a foundation with custom sizing for marketing needs
+
+.marketing-heading {
+  font: var(--mat-sys-headline-large);
+  font-size: 45px;
+  line-height: 55px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.marketing-subheading {
+  font: var(--mat-sys-headline-medium);
+  font-size: 34px;
+  line-height: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marketing-small-heading {
+  font: var(--mat-sys-headline-small);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marketing-body {
+  font: var(--mat-sys-body-large);
+  letter-spacing: normal;
+}
+
+.marketing-body-strong {
+  font: var(--mat-sys-body-large);
+  letter-spacing: normal;
+  font-weight: 500;
+}
+
+.marketing-caption {
+  font: var(--mat-sys-body-small);
+  letter-spacing: normal;
+}
