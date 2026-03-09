@@ -1,0 +1,165 @@
+@use "variables" as vars;
+@use "@angular/material" as mat;
+
+$iconWidth: 56px;
+$selectColumnWidth: 60px;
+
+.wrapper {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 40px;
+
+  &.fixedLayout {
+    table-layout: fixed;
+  }
+}
+
+.table-card {
+  overflow: hidden;
+}
+
+.action-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.status-button-group {
+  button {
+    font-size: 0.85em;
+    line-height: 25px;
+    padding: 0 12px;
+
+    &:not(:last-of-type) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.hideLowerBorder {
+  th {
+    border-color: var(--mat-sys-surface-container-high);
+  }
+}
+
+.bulk-project-select {
+  text-align: center;
+  padding-bottom: 8px;
+
+  button {
+    margin: 0 8px;
+  }
+
+  &__text {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-family: vars.$font-sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.mat-column-selectAll {
+  width: $selectColumnWidth;
+}
+
+.mat-column-select {
+  width: $selectColumnWidth;
+  padding-left: 14px;
+  padding-right: 0;
+}
+
+.mat-column-title {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  @media screen and (min-width: vars.$large) {
+    width: 450px;
+  }
+}
+
+.mat-column-events {
+  width: 125px;
+}
+
+.zero-states-cell {
+  padding: 0 24px;
+}
+
+.resolved {
+  > a {
+    text-decoration: line-through;
+  }
+}
+
+.resolved-icon,
+.unresolved-icon,
+.mute-icon {
+  margin-right: 5px;
+  padding-right: 4px;
+  color: var(--mat-sys-outline);
+  border-right: 1px solid var(--mat-sys-outline);
+  vertical-align: middle;
+}
+
+.small-screen-event-count {
+  margin: 0 0 -4px;
+  font-weight: 500;
+
+  @media screen and (min-width: vars.$small) {
+    display: none;
+  }
+}
+
+.level {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--sample:after {
+    background-color: var(--mat-sys-outline);
+  }
+  &--debug:after {
+    background-color: var(--mat-sys-outline-variant);
+  }
+  &--info:after {
+    background-color: var(--info-color);
+  }
+  &--warning:after {
+    background-color: var(--warning-color);
+  }
+  &--error:after {
+    background-color: var(--mat-sys-error);
+  }
+  &--fatal:after {
+    background-image: repeating-linear-gradient(
+      -60deg,
+      var(--mat-sys-error),
+      var(--mat-sys-error) 5px,
+      var(--mat-sys-surface) 5px,
+      var(--mat-sys-surface) 10px
+    );
+  }
+}
+
+.stats-cell-content {
+  display: flex;
+  justify-content: center;
+}
+
+.stats-header-label {
+  display: flex;
+  justify-content: flex-start;
+  width: 270px;
+}

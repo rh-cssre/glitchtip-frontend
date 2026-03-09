@@ -1,0 +1,50 @@
+x-environment: &default-environment
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+  VALKEY_URL: redis://valkey:6379 # Or set to blank string to disable
+  SECRET_KEY: change_me_to_something_random # best to run openssl rand -hex 32
+  EMAIL_URL: consolemail:// # Example smtp://email:password@smtp_url:port https://glitchtip.com/documentation/install#configuration
+  GLITCHTIP_DOMAIN: https://glitchtip.example.com # Change this to your domain
+  DEFAULT_FROM_EMAIL: email@example.com # Change this to your email
+  # PORT: 8000 # If changing, change the web service port too
+
+x-depends_on: &default-depends_on
+  - postgres
+  - valkey # Comment out when disabling valkey
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust" # Consider removing this and setting a password
+    restart: unless-stopped
+    volumes:
+      - pg-data:/var/lib/postgresql
+  valkey: # Recommended. Postgres can be used as a fallback by removing this and setting VALKEY_URL to blank.
+    image: valkey/valkey:9
+    restart: unless-stopped
+  web:
+    image: glitchtip/glitchtip:6 # Check https://glitchtip.com/blog/ for new major versions
+    depends_on: *default-depends_on
+    ports:
+      - "8000:8000"
+    environment: *default-environment
+    restart: unless-stopped
+    volumes:
+      - uploads:/code/uploads
+  worker:
+    image: glitchtip/glitchtip:6 # Check https://glitchtip.com/blog/ for new major versions
+    command: ./bin/run-worker.sh
+    depends_on: *default-depends_on
+    environment: *default-environment
+    restart: unless-stopped
+    volumes:
+      - uploads:/code/uploads
+  migrate: # Runs database migrations on startup, then exits. This is normal.
+    image: glitchtip/glitchtip:6 # Check https://glitchtip.com/blog/ for new major versions
+    depends_on: *default-depends_on
+    command: ./bin/run-migrate.sh
+    environment: *default-environment
+
+volumes:
+  pg-data:
+  uploads:
