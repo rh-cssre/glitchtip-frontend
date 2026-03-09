@@ -1,26 +1,21 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { moduleMetadata, Story } from "@storybook/angular";
+import { Meta, StoryObj } from "@storybook/angular";
 
-import { SharedModule } from "src/app/shared/shared.module";
 import { FrameTitleComponent } from "./frame-title.component";
 
-export default {
+type FrameTitleandCustomArgs = FrameTitleComponent & {
+  hasFunction: boolean;
+  colNo: number | null;
+  hasModule: boolean;
+  hasLineNo: boolean;
+  absPath: string;
+  hasFileName: boolean;
+  platform: string;
+  contextLineNo: number | null;
+};
+
+const meta: Meta<FrameTitleandCustomArgs> = {
   title: "Events/Event Detail/Frame Title",
   component: FrameTitleComponent,
-  decorators: [
-    moduleMetadata({
-      imports: [
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        SharedModule,
-      ],
-    }),
-  ],
   argTypes: {
     hasFunction: {
       options: [true, false],
@@ -62,6 +57,66 @@ export default {
       control: { type: "select" },
     },
   },
+};
+
+export default meta;
+type Story = StoryObj<FrameTitleandCustomArgs>;
+
+const absPathOptions: { [index: string]: any } = {
+  "Not Null": "/code/errors/views.py",
+  "Match Filename": "django/core/handlers/exception.py",
+  MatchModule: "django.core.handlers.exception",
+  "Is Url": "http://bing.com",
+  "Malicious Url": "javascript:alert('attack!')",
+  Null: null,
+};
+
+export const FrameTitle: Story = {
+  name: "Frame Title",
+  render: (args) => {
+    const {
+      hasFunction,
+      colNo,
+      hasModule,
+      hasLineNo,
+      absPath,
+      hasFileName,
+      platform,
+      contextLineNo,
+    } = args;
+    const frameTestData: any = {
+      function: hasFunction ? "inner" : null,
+      colNo: colNo,
+      vars: {
+        get_response:
+          "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>>",
+        request: "<WSGIRequest: GET '/divide-zero/'>",
+        exc: "ZeroDivisionError('division by zero')",
+      },
+      symbol: null,
+      module: hasModule ? "django.core.handlers.exception" : null,
+      lineNo: hasLineNo ? 34 : null,
+      trust: null,
+      errors: null,
+      package: "1.0.7",
+      absPath: absPathOptions[absPath],
+      inApp: false,
+      instructionAddr:
+        "/usr/local/lib/python3.8/site-packages/django/core/handlers/exception.py",
+      filename: hasFileName ? "django/core/handlers/exception.py" : null,
+      platform: platform === "java" || platform === "python" ? platform : null,
+      context: [
+        [33, " try:"],
+        [contextLineNo, " response = get_response(request)"],
+      ],
+      symbolAddr: null,
+    };
+    return {
+      props: {
+        frame: frameTestData,
+      },
+    };
+  },
   args: {
     hasFunction: true,
     colNo: 18,
@@ -72,59 +127,4 @@ export default {
     platform: "java",
     contextLineNo: 34,
   },
-};
-
-export const FrameTitle: Story = (args) => {
-  const {
-    hasFunction,
-    colNo,
-    hasModule,
-    hasLineNo,
-    absPath,
-    hasFileName,
-    platform,
-    contextLineNo,
-  } = args;
-  const absPathOptions: { [index: string]: any } = {
-    "Not Null": "/code/errors/views.py",
-    "Match Filename": "django/core/handlers/exception.py",
-    MatchModule: "django.core.handlers.exception",
-    "Is Url": "http://bing.com",
-    "Malicious Url": "javascript:alert('attack!')",
-    Null: null,
-  };
-
-  const frameTestData: any = {
-    function: hasFunction ? "inner" : null,
-    colNo: colNo,
-    vars: {
-      get_response:
-        "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>>",
-      request: "<WSGIRequest: GET '/divide-zero/'>",
-      exc: "ZeroDivisionError('division by zero')",
-    },
-    symbol: null,
-    module: hasModule ? "django.core.handlers.exception" : null,
-    lineNo: hasLineNo ? 34 : null,
-    trust: null,
-    errors: null,
-    package: "1.0.7",
-    absPath: absPathOptions[absPath],
-    inApp: false,
-    instructionAddr:
-      "/usr/local/lib/python3.8/site-packages/django/core/handlers/exception.py",
-    filename: hasFileName ? "django/core/handlers/exception.py" : null,
-    platform: platform === "java" || platform === "python" ? platform : null,
-    context: [
-      [33, " try:"],
-      [contextLineNo, " response = get_response(request)"],
-    ],
-    symbolAddr: null,
-  };
-
-  return {
-    props: {
-      frame: frameTestData,
-    },
-  };
 };
