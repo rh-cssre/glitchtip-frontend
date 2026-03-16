@@ -1,0 +1,112 @@
+@use "../../../../../../src/assets/styles/variables" as vars;
+
+:host {
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.screenshots {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10%;
+
+  @media screen and (max-width: vars.$large) {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .screenshot {
+    @media screen and (min-width: vars.$large) {
+      flex-shrink: 0;
+      width: 55%;
+    }
+  }
+
+  .description-card {
+    width: 45%;
+    text-align: left;
+
+    @media screen and (max-width: vars.$large) {
+      width: 100%;
+      padding: 0 16px;
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: first baseline;
+      gap: 12px;
+    }
+
+    .feature-icon {
+      color: var(--mat-sys-on-primary);
+      font-size: 24px;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      border-radius: var(--mat-sys-corner-medium, 12px);
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--mat-sys-primary) 85%, var(--mat-sys-on-primary)) 0%,
+        var(--mat-sys-primary) 100%
+      );
+      box-shadow:
+        0 2px 4px color-mix(in srgb, var(--mat-sys-primary) 30%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--mat-sys-on-primary) 20%, transparent);
+    }
+
+    .fancy {
+      margin-top: 0;
+    }
+
+    .marketing-body {
+      line-height: 1.6em;
+    }
+  }
+
+  .pad-left {
+    @media screen and (min-width: vars.$large) {
+      margin-left: 40px;
+    }
+  }
+
+  .pad-right {
+    @media screen and (min-width: vars.$large) {
+      margin-right: 40px;
+    }
+  }
+
+  .screenshot:not(.main-promo) {
+    border-radius: var(--mat-sys-corner-large, 16px);
+    border: 6px solid var(--mat-sys-outline-variant);
+    box-shadow: var(--mat-sys-shadow-1);
+    overflow: hidden;
+  }
+}
+
+.left-right-row {
+  @media screen and (min-width: vars.$large) {
+    flex-direction: row;
+    margin-left: 0;
+
+    .screenshot {
+      margin-left: -4%;
+    }
+  }
+}
+
+.right-left-row {
+  @media screen and (min-width: vars.$large) {
+    flex-direction: row-reverse;
+    margin-right: 0;
+
+    .screenshot {
+      margin-right: -4.5%;
+    }
+  }
+}
