@@ -1,0 +1,313 @@
+@use "@angular/material" as mat;
+@use "./app/styles/_theme-colors" as custom-theme;
+@use "../../../src/assets/styles/variables" as vars;
+@use "../../../src/assets/styles/font-files" as main-font-files;
+@use "../../../src/assets/styles/resets";
+@use "app/styles/font-files" as marketing-font-files;
+@use "app/styles/material-overrides";
+@import "prismjs/themes/prism.css";
+@import "./app/shared/payment/_payment.component.scss";
+$font-path: "../../../src/assets/fonts";
+
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: custom-theme.$primary-palette,
+      typography: vars.$font-sans-serif,
+    )
+  );
+}
+
+// Brand color override
+:root {
+  --mat-sys-primary: #d94a5f;
+  --mkt-accent-blue: #4a7fd9;
+  --mkt-accent-yellow: #d9b44a;
+  --mat-sys-corner-full: 8px;
+}
+
+// Common styles for Angular Material. Included so that we only have to load a
+// single CSS file for Angular Material in our app.
+// Don't include this anywhere else!
+// Custom typography classes are defined in app/styles/font-files.scss
+// These use Material Design tokens (e.g. var(--mat-sys-headline-large))
+
+body {
+  --bg: var(--mat-sys-surface-container-highest);
+
+  background-color: var(--bg);
+  background-image: radial-gradient(
+    circle,
+    var(--mat-sys-outline) 1.3px,
+    transparent 1.3px
+  );
+  background-size: 22px 22px;
+  background-attachment: fixed;
+
+  &::before,
+  &::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 700px;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  }
+
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  }
+}
+
+app-root,
+app-root-scully,
+mkt-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+mat-card-content {
+  font-family: vars.$font-sans-serif;
+}
+
+body.loaded app-root {
+  display: flex !important;
+}
+
+a {
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+}
+
+.fancy {
+  color: var(--mat-sys-primary);
+  font-style: italic;
+  margin: 0.75em 0 0.5em;
+  padding-right: 0.1em;
+  padding-bottom: 0.05em;
+  display: inline-block;
+}
+
+.hero-and-nav-container {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 70px;
+}
+
+.big-card-wrapper {
+  width: 95%;
+  max-width: 1800px;
+  min-height: 700px;
+  margin: -70px auto 50px;
+  background-color: var(--mat-sys-surface-container);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: conic-gradient(
+      from 90deg at 1px 1px,
+      #0000 90deg,
+      color-mix(in srgb, var(--mat-sys-outline-variant) 25%, transparent) 0
+    );
+    background-size: 36px 36px;
+    pointer-events: none;
+    mask-image:
+      radial-gradient(ellipse 50% 35% at 5% 5%, black 0%, transparent 60%),
+      radial-gradient(ellipse 35% 25% at 95% 3%, black 0%, transparent 55%),
+      radial-gradient(ellipse 30% 20% at 15% 30%, black 0%, transparent 60%),
+      radial-gradient(ellipse 25% 18% at 60% 20%, black 0%, transparent 55%),
+      radial-gradient(ellipse 20% 15% at 35% 45%, black 0%, transparent 60%),
+      radial-gradient(ellipse 30% 20% at 80% 40%, black 0%, transparent 55%),
+      radial-gradient(ellipse 25% 20% at 10% 60%, black 0%, transparent 60%),
+      radial-gradient(ellipse 20% 15% at 55% 65%, black 0%, transparent 55%),
+      radial-gradient(ellipse 35% 25% at 90% 70%, black 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 30% 85%, black 0%, transparent 55%),
+      radial-gradient(ellipse 30% 25% at 70% 90%, black 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 5% 95%, black 0%, transparent 55%);
+    mask-composite: add;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    // Scattered colored squares along the edges, aligned to the 36px grid
+    $red: var(--mat-sys-primary);
+    $blue: var(--mkt-accent-blue);
+    $yellow: var(--mkt-accent-yellow);
+    background-image:
+      // Top edge
+      linear-gradient($red, $red),
+      linear-gradient($blue, $blue),
+      linear-gradient($red, $red),
+      linear-gradient($yellow, $yellow),
+      linear-gradient($blue, $blue),
+      // Right edge
+      linear-gradient($yellow, $yellow),
+      linear-gradient($red, $red),
+      linear-gradient($blue, $blue),
+      linear-gradient($yellow, $yellow),
+      // Bottom edge
+      linear-gradient($blue, $blue),
+      linear-gradient($yellow, $yellow),
+      linear-gradient($red, $red),
+      linear-gradient($blue, $blue),
+      linear-gradient($red, $red),
+      // Left edge
+      linear-gradient($red, $red),
+      linear-gradient($yellow, $yellow),
+      linear-gradient($blue, $blue),
+      linear-gradient($red, $red);
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position:
+      // Top edge
+      108px 0px,
+      252px 0px,
+      540px 36px,
+      828px 0px,
+      1116px 36px,
+      // Right edge
+      calc(100% - 0px) 144px,
+      calc(100% - 36px) 396px,
+      calc(100% - 0px) 612px,
+      calc(100% - 36px) 864px,
+      // Bottom edge
+      72px calc(100% - 0px),
+      324px calc(100% - 36px),
+      648px calc(100% - 0px),
+      936px calc(100% - 0px),
+      1188px calc(100% - 36px),
+      // Left edge
+      0px 216px,
+      36px 504px,
+      0px 720px,
+      36px 936px;
+    opacity: 0.15;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.centered-block {
+  padding: 20px 10vw 80px;
+  overflow: hidden;
+
+  @media screen and (max-width: vars.$tablet) {
+    padding: 5px 16px 60px;
+  }
+
+  .content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.markdown-container {
+  @extend .marketing-body;
+
+  .anchor {
+    scroll-margin-top: 80px;
+  }
+
+  h1 {
+    @extend .marketing-heading;
+    display: inline-block;
+    margin: 0.75em 0 0.5em;
+
+    &:first-child {
+      @extend .fancy;
+    }
+
+    a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  h2 {
+    @extend .marketing-subheading;
+    margin: 0.75em 0 0.5em;
+
+    a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  h3 {
+    @extend .marketing-small-heading;
+    margin: 0.75em 0 0.5em;
+
+    a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  li {
+    margin: 7px 0;
+    line-height: 1.4em;
+  }
+
+  img {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: var(--mat-sys-corner-large, 16px);
+    border: 6px solid var(--mat-sys-outline-variant);
+  }
+
+  code {
+    padding: 0 5px;
+    background-color: var(--mat-sys-surface-variant);
+    font-size: 0.9em;
+  }
+
+  pre {
+    padding: 10px 15px;
+    background-color: var(--mat-sys-surface-variant);
+    overflow-x: scroll;
+    font-size: 0.9em;
+    line-height: 1.5em;
+  }
+}
+
+.faq-section {
+  margin-top: 32px;
+
+  h2 {
+    margin: 0 0 24px;
+  }
+
+  mat-expansion-panel {
+    --mat-expansion-container-elevation-shadow: none;
+    --mat-expansion-header-collapsed-state-height: 56px;
+
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+.just-the-image {
+  padding: 1.5rem 0 75px;
+}

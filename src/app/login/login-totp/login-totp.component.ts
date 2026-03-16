@@ -2,24 +2,52 @@ import {
   Component,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  OnInit,
   ElementRef,
   ViewChild,
   AfterViewInit,
+  inject,
+  Signal,
+  effect,
 } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { LoginService } from "../login.service";
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { LoginState, LoginService } from "../login.service";
 
 @Component({
   selector: "gt-login-totp",
   templateUrl: "./login-totp.component.html",
   styleUrls: ["./login-totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    RouterLink,
+  ],
 })
-export class LoginTotpComponent implements OnInit, AfterViewInit {
+export class LoginTotpComponent
+  extends StatefulComponent<LoginState, LoginService>
+  implements AfterViewInit
+{
+  private changeDetector = inject(ChangeDetectorRef);
+  private loginService: LoginService;
+  private router = inject(Router);
+
+  hasWebAuthn: Signal<boolean> | undefined;
   @ViewChild("input") input!: ElementRef;
-  error$ = this.loginService.error$;
-  hasFIDO2$ = this.loginService.hasFIDO2$;
   form = new FormGroup({
     code: new FormControl("", [
       Validators.required,
@@ -29,17 +57,13 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
     remember: new FormControl(false),
   });
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private loginService: LoginService
-  ) {}
+  constructor() {
+    const loginService = inject(LoginService);
 
-  ngOnInit() {
-    this.error$.subscribe((error) => {
-      if (error?.code) {
-        this.code?.setErrors({ serverError: error.code });
-      }
-    });
+    effect(() => mapFormErrors(loginService.fieldErrors(), this.form));
+    super(loginService);
+    this.hasWebAuthn = loginService.hasWebAuthn;
+    this.loginService = loginService;
   }
 
   ngAfterViewInit() {
@@ -55,15 +79,16 @@ export class LoginTotpComponent implements OnInit, AfterViewInit {
     this.loginService.switchMethod();
   }
 
-  onSubmit() {
+  restartLogin() {
+    this.loginService.restartLogin();
+  }
+
+  async onSubmit() {
     if (this.form.valid && this.code) {
       const code = this.code.value!;
-      if (code.length === 6) {
-        this.loginService
-          .authenticateTOTP(code, this.form.value.remember === true)
-          .subscribe();
-      } else {
-        this.loginService.authenticateBackupCode(code).subscribe();
+      const data = await this.loginService.totpAuthenticate(code);
+      if (data) {
+        this.router.navigate(["/"]);
       }
     }
   }
