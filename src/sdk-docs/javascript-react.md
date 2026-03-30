@@ -1,35 +1,55 @@
-To use GlitchTip with your React application, you will need to use the `@sentry/browser` SDK.
-
-Add the SDK as a dependency using `yarn` or `npm`:
-
-### Installation
+Install the sentry React SDK:
 
 ```bash
-# Using yarn
-$ yarn add @sentry/browser
-
-# Using npm
-$ npm install @sentry/browser
+npm install @sentry/react
 ```
 
-### Connecting the SDK to GlitchTip
+Initialize the SDK **before** mounting your React app:
 
-You should `init` the browser SDK as soon as possible during your application load up, before initializing React:
-
-```jsx
+```javascript
 import React from "react";
-import * as Sentry from "@sentry/browser";
-import App from "src/App";
+import ReactDOM from "react-dom/client";
+import * as Sentry from "@sentry/react";
+import App from "./App";
 
-Sentry.init({ dsn: "your DSN here" });
+Sentry.init({
+  dsn: "YOUR_DSN",
+  tracesSampleRate: 0.01, // 1% of transactions — adjust to your needs
+  autoSessionTracking: false, // GlitchTip does not support sessions
+});
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 ```
 
-On its own, `@sentry/browser` will report any uncaught exceptions triggered from your application.
+The SDK automatically captures unhandled exceptions and promise rejections.
 
-You can trigger your first event from your development environment by raising an exception somewhere within your application. An example of this would be rendering a button:
+Verify your setup:
 
 ```jsx
-return <button onClick={methodDoesNotExist}>Break the world</button>;
+<button onClick={() => { throw new Error("Test GlitchTip error"); }}>
+  Test Error
+</button>
+```
+
+## Error Boundary
+
+Wrap components with `Sentry.ErrorBoundary` to catch rendering errors:
+
+```jsx
+<Sentry.ErrorBoundary fallback={<p>Something went wrong.</p>}>
+  <MyComponent />
+</Sentry.ErrorBoundary>
+```
+
+## Source Maps
+
+Upload source maps for readable stack traces. Use the [GlitchTip CLI](/documentation/cli):
+
+```bash
+glitchtip-cli sourcemaps inject ./dist
+glitchtip-cli sourcemaps upload ./dist --org my-org --project my-project
 ```
