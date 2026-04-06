@@ -1,0 +1,116 @@
+<div class="auth-form-wrapper">
+  <mat-card class="auth-form">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 i18n>Register</h3>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (enableUserRegistration()) {
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <gt-form-error [errors]="formErrors()"></gt-form-error>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput autofocus type="email" formControlName="email" />
+            <mat-error>
+              @if (email?.errors?.required) {
+                <span>Your email is required to sign up</span>
+              }
+              @if (email?.errors?.email) {
+                <span>Enter a valid email address</span>
+              }
+              @if (email?.errors?.serverError) {
+                <span>{{ email?.errors?.serverError }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label i18n>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            <mat-error>
+              @if (password?.errors?.minlength) {
+                <span>Your password should be at least 8 characters long</span>
+              }
+              @if (password?.errors?.required) {
+                <span>A password is required to sign up</span>
+              }
+              @if (password?.errors?.serverError) {
+                <span>{{ password?.errors?.serverError }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label i18n>Confirm password</mat-label>
+            <input
+              matInput
+              type="password"
+              placeholder="Confirm Password"
+              formControlName="password2"
+              gtInputMatcher="password"
+            />
+
+            <mat-error>
+              @if (password2?.errors?.required) {
+                <span>A password is required to sign up</span>
+              }
+              @if (password2?.errors?.notEqual) {
+                <span>Your passwords don't match</span>
+              }
+              @if (password2?.errors?.serverError) {
+                <span>{{ password2?.errors?.serverError }}</span>
+              }
+            </mat-error>
+          </mat-form-field>
+          <gt-loading-button
+            class="full-width"
+            i18n-buttonText
+            buttonText="Register"
+            [fullWidth]="true"
+            [loading]="loading()"
+            id="submit"
+          >
+          </gt-loading-button>
+        </form>
+      }
+      @if (enableSocialAppsUserRegistration()) {
+        @if (socialApps(); as socialApps) {
+          @if (socialApps.length && enableUserRegistration()) {
+            <div class="or">
+              <span class="body-text-strong">or</span>
+            </div>
+          }
+          <div class="o-auth">
+            @for (socialApp of socialApps; track socialApp) {
+              <button
+                mat-stroked-button
+                class="full-width margin"
+                (click)="onSocialApp(socialApp)"
+              >
+                <gt-auth-svg
+                  source="auth"
+                  text="Register with {{ socialApp.name }}"
+                  [provider]="socialApp.provider"
+                ></gt-auth-svg>
+              </button>
+            }
+          </div>
+        }
+      }
+      @if (!enableSocialAppsUserRegistration() && !enableUserRegistration()) {
+        <div>
+          <p class="body-text" i18n>
+            Registration is currently unavailable. Contact your server
+            administrator.
+          </p>
+        </div>
+      }
+      <p class="body-text sign-up">
+        <ng-container i18n>Already have an account?</ng-container>
+        <br />
+        <a class="auth-link" routerLink="../login" i18n>Log In</a>
+        <br />
+        <span class="alternative-instance" markdown>{{ instanceName() }}</span>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
