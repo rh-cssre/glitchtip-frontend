@@ -1,30 +1,27 @@
-The Tornado integration adds support for the [Tornado Web Framework](https://www.tornadoweb.org/). A Tornado version of 5 or greater and Python 3.6 or greater is required.
+Install the sentry Python SDK:
 
-1. Install `sentry-sdk` from PyPI:
+```bash
+pip install sentry-sdk
+```
 
-   ```bash
-   $ pip install --upgrade sentry-sdk
-   ```
+Initialize the SDK before starting your Tornado application:
 
-2. If you're on Python 3.6, you also need the `aiocontextvars` package:
+```python
+import sentry_sdk
+import tornado.web
+import tornado.ioloop
 
-   ```bash
-   $ pip install --upgrade aiocontextvars
-   ```
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-3. Initialize the SDK before starting the server:
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("Hello, world")
 
-   ```python
-   import sentry_sdk
-   from sentry_sdk.integrations.tornado import TornadoIntegration
+app = tornado.web.Application([(r"/", MainHandler)])
+```
 
-   sentry_sdk.init(
-       dsn="your DSN here",
-       integrations=[TornadoIntegration()]
-   )
-
-   # Your app code here, without changes
-
-   class MyHandler(...):
-       ...
-   ```
+The SDK auto-detects Tornado and captures unhandled exceptions in request handlers.

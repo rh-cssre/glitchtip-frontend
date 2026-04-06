@@ -1,0 +1,78 @@
+<div class="summary-cards">
+  <gt-summary-card
+    title="This Month"
+    [value]="eventsCountCurrentPeriod()?.total ?? null"
+    [eventsAllowed]="totalEventsAllowed()"
+    [loading]="currentPeriodLoading()"
+    i18n-title
+  />
+  <gt-summary-card
+    title="Last Month"
+    [value]="previousPeriodTotal()"
+    [eventsAllowed]="totalEventsAllowed()"
+    [loading]="previousPeriodLoading()"
+    i18n-title
+  />
+  <gt-summary-card
+    title="Predicted End of Month"
+    [value]="predictedTotal()"
+    [eventsAllowed]="totalEventsAllowed()"
+    [limitThreshold]="100"
+    [loading]="currentPeriodLoading()"
+    i18n-title
+  />
+</div>
+<gt-daily-events-chart
+  [dailyEvents]="dailyEvents()"
+  [periodEnd]="periodEnd()"
+  [predictedTotal]="predictedTotal()"
+/>
+@if (eventBreakdown(); as breakdown) {
+  <mat-card appearance="outlined" class="breakdown-card">
+    <mat-card-content>
+      <div class="breakdown-header">
+        <span class="breakdown-title body-text-strong" i18n>Event Breakdown</span>
+        <button mat-icon-button (click)="openEventInfo()" class="info-button" aria-label="How are events counted?">
+          <mat-icon>help_outline</mat-icon>
+        </button>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label" i18n>Performance</span>
+        <div class="breakdown-bar-track">
+          <div class="breakdown-bar breakdown-bar--performance" [style.width.%]="breakdown.performance.percent"></div>
+        </div>
+        <span class="breakdown-value">{{ breakdown.performance.count | number: "1.0-0" }} ({{ breakdown.performance.percent }}%)</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label" i18n>Issues</span>
+        <div class="breakdown-bar-track">
+          <div class="breakdown-bar breakdown-bar--issues" [style.width.%]="breakdown.issues.percent"></div>
+        </div>
+        <span class="breakdown-value">{{ breakdown.issues.count | number: "1.0-0" }} ({{ breakdown.issues.percent }}%)</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label" i18n>Uptime</span>
+        <div class="breakdown-bar-track">
+          <div class="breakdown-bar breakdown-bar--uptime" [style.width.%]="breakdown.uptime.percent"></div>
+        </div>
+        <span class="breakdown-value">{{ breakdown.uptime.count | number: "1.0-0" }} ({{ breakdown.uptime.percent }}%)</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label" i18n>Logs</span>
+        <div class="breakdown-bar-track">
+          <div class="breakdown-bar breakdown-bar--logs" [style.width.%]="breakdown.logs.percent"></div>
+        </div>
+        <span class="breakdown-value">{{ breakdown.logs.count | number: "1.0-0" }} ({{ breakdown.logs.percent }}%)</span>
+      </div>
+      <div class="breakdown-file-storage" i18n>File storage: {{ breakdown.fileSizeMb }} MB</div>
+    </mat-card-content>
+  </mat-card>
+} @else if (currentPeriodLoading()) {
+  <mat-card appearance="outlined" class="breakdown-card">
+    <mat-card-content>
+      <div class="spinner-container">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}
