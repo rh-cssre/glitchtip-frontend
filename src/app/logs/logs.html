@@ -1,0 +1,148 @@
+<gt-list-app-bar
+  listTitle="Logs"
+  [searchHits]="hitCount()"
+  [queriedProjects]="projects()"
+  [includeTimeRangeSelect]="true"
+  [queriedTimeRangeStart]="start()"
+  [queriedTimeRangeEnd]="end()"
+></gt-list-app-bar>
+
+<section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <form
+      [formGroup]="searchForm"
+      (ngSubmit)="searchSubmit()"
+      class="search-form"
+    >
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label i18n>Search logs</mat-label>
+        <input
+          matInput
+          formControlName="query"
+          placeholder="Search message body..."
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="submit"
+          class="small-icon-button"
+          aria-label="Search"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label i18n>Level</mat-label>
+      <mat-select
+        [formControl]="levelForm.controls.level"
+        multiple
+        (selectionChange)="onLevelChange($event)"
+      >
+        @for (opt of levelOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label i18n>Service</mat-label>
+      <mat-select
+        [formControl]="serviceForm.controls.service"
+        (selectionChange)="onServiceChange($event)"
+      >
+        <mat-option value="">All services</mat-option>
+        @for (opt of serviceOptions(); track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (query() || level().length || service_() || start() || end()) {
+      <button mat-button (click)="clearFilters()" class="clear-btn">
+        <mat-icon>clear</mat-icon>
+        <span i18n>Clear filters</span>
+      </button>
+    }
+  </div>
+
+  <!-- Log output (terminal style) -->
+  <div class="log-container">
+    <div class="log-output">
+      @if (errors()?.length) {
+        <div class="log-empty">
+          <div class="log-error">
+            @for (error of errors(); track $index) {
+              <span>{{ error.msg || error }}</span>
+            }
+          </div>
+        </div>
+      } @else if (logs(); as logs) {
+        @if (logs.length > 0) {
+          @for (log of logs; track log.id) {
+            <div
+              class="log-line"
+              [class]="'log-line--' + log.level?.toLowerCase()"
+            >
+              <span class="log-timestamp">{{
+                log.timestamp | date: "yyyy-MM-dd HH:mm:ss.SSS"
+              }}</span>
+              <span
+                [class]="'log-level log-level--' + log.level?.toLowerCase()"
+                >{{ log.level | uppercase }}</span
+              >
+              @if (log.service) {
+                <span class="log-service">[{{ log.service }}]</span>
+              }
+              <span
+                class="log-body"
+                [matTooltip]="log.body"
+                matTooltipPosition="above"
+                >{{ log.body }}</span
+              >
+            </div>
+          }
+        } @else if (initialLoadComplete() && !isLoading()) {
+          <div class="log-empty">
+            <div class="log-no-data">
+              <span i18n>No logs found.</span>
+              @if (query() || level().length || service_()) {
+                <span i18n> Try adjusting your filters.</span>
+              } @else {
+                <span i18n> Configure your SDK to start capturing logs.</span>
+              }
+            </div>
+          </div>
+        }
+      }
+
+      @if (isLoading() && !logs().length) {
+        <div class="log-loading">
+          <span>Loading logs...</span>
+        </div>
+      }
+    </div>
+
+    @if (hasNextPage() || isLoadingMore()) {
+      <div class="log-footer">
+        <button
+          mat-stroked-button
+          (click)="loadMore()"
+          [disabled]="isLoadingMore()"
+          class="load-more-btn"
+        >
+          @if (isLoadingMore()) {
+            <span>Loading...</span>
+          } @else {
+            <div class="load-more-icon-text">
+              <mat-icon matButtonIcon>expand_more</mat-icon>
+              <span i18n>Load more</span>
+            </div>
+          }
+        </button>
+      </div>
+    }
+  </div>
+</section>
