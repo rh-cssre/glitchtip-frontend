@@ -1,0 +1,60 @@
+<mat-card appearance="outlined" class="daily-chart-card">
+  <mat-card-content>
+    <div class="chart-header">
+      <span class="body-text-strong" i18n>Number of Events</span>
+      <div class="chart-legend">
+        <span class="legend-item">
+          <span class="legend-swatch legend-swatch--performance"></span>
+          <span i18n>Performance</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-swatch legend-swatch--issues"></span>
+          <span i18n>Issues</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-swatch legend-swatch--uptime"></span>
+          <span i18n>Uptime</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-swatch legend-swatch--logs"></span>
+          <span i18n>Logs</span>
+        </span>
+        <span class="legend-item">
+          <span class="legend-swatch legend-swatch--projected"></span>
+          <span i18n>Projected</span>
+        </span>
+      </div>
+    </div>
+    @if (chartData().length > 0) {
+      <div class="chart-container" #containerRef>
+        <ng-charts-bar-vertical-stacked
+          [results]="chartData()"
+          [view]="view()"
+          [customColors]="customColors"
+          [xAxis]="true"
+          [yAxis]="true"
+          [animations]="true"
+          [showXAxisLabel]="false"
+          [showYAxisLabel]="false"
+          [legend]="false"
+          [barPadding]="4"
+          [xAxisTickFormatting]="xAxisTickFormatting"
+          [noBarWhenZero]="true"
+        >
+          <ng-template #tooltipTemplate let-model="model">
+            <div class="tooltip">
+              <div>{{ model.name }}: {{ model.value }}</div>
+            </div>
+          </ng-template>
+        </ng-charts-bar-vertical-stacked>
+      </div>
+    } @else {
+      <div class="chart-no-data body-text-strong" i18n>No event data available for this period.</div>
+    }
+    <div class="chart-footer">
+      @if (predictedTotal() !== null) {
+        <span class="caption-text" i18n>Predicted end of month: ~{{ predictedTotal() | number: "1.0-0" }}</span>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
