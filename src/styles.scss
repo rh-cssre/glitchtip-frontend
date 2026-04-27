@@ -1,48 +1,135 @@
-$font-path: "../fonts";
-@use '@angular/material' as mat;
-@import "prismjs/themes/prism.css";
-@import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-@import "prismjs/plugins/line-highlight/prism-line-highlight.css";
-@import "./assets/styles/variables";
-@import "./assets/styles/font-files";
-@import "./assets/styles/resets";
+@use "sass:meta";
+@use "sass:map";
+@use "@angular/material" as mat;
+@use "./assets/styles/theme-colors" as custom-theme;
+@use "./assets/styles/material-overrides";
+@use "./assets/styles/variables" as vars;
+@use "./assets/styles/font-files";
+@use "./assets/styles/resets";
+@use "./scss/auth-forms";
 
-// material-icons
-@import "~material-icons/iconfont/material-icons.css";
+html {
+  color-scheme: light dark;
+  @include mat.theme(
+    (
+      color: custom-theme.$primary-palette,
+      typography: vars.$font-sans-serif,
+      density: -4,
+    )
+  );
+}
 
-// partials
-@import "./scss/auth-forms";
+// Brand color override
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mat-sys-primary: #d94a5f;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-error: #f54e6f;
+  }
+}
 
-// Common styles for Angular Material. Included so that we only have to load a
-// single CSS file for Angular Material in our app.
-// Don't include this anywhere else!
-@include mat.core($custom-typography);
+// Extended color
+:root {
+  --warning-color: #e9b949;
+  --warning-container: #ffe7a3;
+  --on-warning: #2b1e00;
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($candy-app-theme);
+  --info-color: #4b60b4;
+  --info-container: #d5d8ff;
+  --on-info: #001946;
 
-// @include mat.typography-hierarchy($custom-typography);
+  --success-color: #4caf50;
+  --success-container: #c8e6c9;
+  --on-success: #1b5e20;
 
-// Responsive type maybe?
-@media screen and (max-width: 767px) {
-  @include mat.core($mobile-typography);
+  --issues-color: #f27121;
+  --uptime-color: #8a2387;
+  --logs-color: #2196f3;
+}
+
+.light {
+  @include meta.load-css("prismjs/themes/prism.css");
+}
+
+.dark {
+  @include meta.load-css("prismjs/themes/prism-tomorrow.css");
+}
+
+.light,
+.dark {
+  @include meta.load-css("prismjs/plugins/line-numbers/prism-line-numbers.css");
+  @include meta.load-css(
+    "prismjs/plugins/line-highlight/prism-line-highlight.css"
+  );
+
+  pre[class*="language-"] {
+    border-radius: vars.$shape-radius;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+mat-card-content {
+  font-family: vars.$font-sans-serif;
 }
 
 a {
-  color: $amaranth;
-  font-weight: 500;
+  color: var(--mat-sys-on-background);
+  text-decoration: none;
+  font-weight: bold;
 }
 
-ul {
+a:hover {
+  text-decoration: underline;
+}
+
+// Used across auth components
+.auth-link {
+  color: var(--mat-sys-primary);
+  text-decoration: underline;
+}
+
+// Global rule because link is rendered in markdown
+.alternative-instance {
+  margin-bottom: 0;
+  p {
+    margin-bottom: 0;
+  }
+  a {
+    color: var(--mat-sys-primary);
+    text-decoration: underline;
+  }
+}
+
+mat-card-title {
+  padding-bottom: 8px;
+}
+
+ul:not(markdown ul) {
   list-style: none;
   padding: unset;
 }
 
-.active-route {
-  font-weight: 700;
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+markdown ul {
+  list-style: disc outside;
+  padding-left: 20px;
+}
+
+markdown ol {
+  list-style: decimal outside;
+  padding-left: 20px;
+}
+
+body {
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+}
+
+.flex-common {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .project-card-wrapper {
@@ -51,15 +138,11 @@ ul {
   grid-gap: 24px;
 }
 
-.mat-stroked-button {
-  background-color: #fefefe;
-}
-
-header.page-header {
+header.page-header,
+header.projects-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: -16px;
   margin-bottom: 20px;
 
   > * {
@@ -67,11 +150,32 @@ header.page-header {
   }
 }
 
+mat-sidenav-content {
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+mat-sidenav-container {
+  @include mat.list-overrides(
+    (
+      list-item-disabled-state-layer-color: var(
+          --mat-sys-surface-container-high
+        ),
+    )
+  );
+}
+
+// This makes the dropdown menus the full size of the sidenav
+.mat-mdc-menu-panel.nav-menu {
+  max-width: none !important;
+  width: 220px !important;
+}
+
 .l-body {
   max-width: 1100px;
   padding-left: 24px;
   padding-right: 24px;
-  margin-top: 32px;
+  margin-top: 15px;
+  margin-bottom: 16px;
   margin-left: auto;
   margin-right: auto;
 
@@ -79,7 +183,21 @@ header.page-header {
     max-width: 100%;
   }
 
-  @media screen and (max-width: $small - 1) {
+  &--flex {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: calc(100vh - vars.$top-app-bar-height);
+    padding-top: 15px;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    @media screen and (max-width: vars.$small - 1) {
+      height: calc(100vh - vars.$top-app-bar-height - vars.$mobile-nav-height);
+    }
+  }
+
+  @media screen and (max-width: vars.$small - 1) {
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -89,23 +207,8 @@ header.page-header {
   display: none;
 }
 
-.mat-display-1,
-.mat-display-2 {
-  margin-bottom: 1.2em;
-}
-
-.marginless {
-  margin: 0;
-}
-
 .full-width {
   width: 100%;
-}
-
-.flex-common {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .tt-wrapping {
@@ -113,10 +216,182 @@ header.page-header {
   height: auto;
 }
 
-.ngx-charts-tooltip-content.type-tooltip {
-  font-family: $font-sans-serif !important;
+// Taken from https://stackoverflow.com/a/57759753
+// TODO: Figure out a way to do this with material overrides
+.small-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"],
+  mat-spinner {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 }
 
-.line-highlight {
-  max-width: 100%;
+.input-icon-button {
+  @extend .small-icon-button;
+  margin-right: 8px;
+}
+
+.medium-icon-button {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0px !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  & > *[role="img"] {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+gt-issue-chart {
+  .ng-charts {
+    // Hide tick labels
+    .tick text {
+      display: none !important;
+    }
+  }
+}
+
+.comment-markdown {
+  ul {
+    list-style: disc outside;
+    padding-left: 20px;
+  }
+
+  pre {
+    margin-bottom: 20px;
+  }
+
+  blockquote {
+    margin: 0 0 20px 0;
+    padding: 20px 20px 20px 20px;
+    border-left: 5px solid var(--mat-sys-primary);
+    background-color: var(--mat-sys-surface-container-highest);
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    blockquote:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.system-info-instance-name {
+  p {
+    margin: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ng-charts {
+    text {
+      fill: var(--mat-sys-on-background) !important;
+    }
+  }
+}
+// Overrides for ngx-mat-select-search
+.project-multiselect__search-field.mdc-list-item--disabled {
+  mat-checkbox {
+    padding-left: 10px;
+  }
+
+  .mdc-checkbox {
+    opacity: 1 !important;
+  }
+
+  .mat-select-search-input::placeholder {
+    opacity: 0.5;
+  }
+
+  .mat-select-search-clear {
+    position: relative;
+  }
+}
+
+//Override for routerLinkActiveOptions in the side-nav
+.mat-mdc-list-item.mdc-list-item--activated {
+  background-color: var(--mat-sys-primary) !important;
+
+  .mdc-list-item__primary-text {
+    color: var(--mat-sys-on-primary) !important;
+  }
+
+  mat-icon {
+    color: var(--mat-sys-on-primary) !important;
+  }
+}
+
+gt-pagination-buttons {
+  @include mat.icon-button-density(-5);
+  @include mat.icon-button-overrides(
+    (
+      icon-color: var(--mat-sys-primary),
+    )
+  );
+}
+
+.table-container {
+  @include mat.checkbox-density(-5);
+  @include mat.table-density(-3);
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 4px;
+}
+
+.table-header {
+  background-color: var(--mat-sys-surface-container-high) !important;
+}
+
+.table-header__actions {
+  height: fit-content;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.table-group-label {
+  font-weight: 600;
+}
+
+.table-empty-states {
+  padding: 1.5em 24px 0.5em;
+}
+
+// TODO: Find a better way to match this height with the height of mat formfield items
+.mat-button-toggle-group {
+  height: 40px;
+  align-items: center;
+
+  .mat-button-toggle-label-content {
+    line-height: 38px !important;
+  }
 }

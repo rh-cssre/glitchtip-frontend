@@ -1,144 +1,177 @@
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterTestingModule } from "@angular/router/testing";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatIconModule } from "@angular/material/icon";
 import { moduleMetadata } from "@storybook/angular";
 
-import { MaterialModule } from "./material.module";
-
 export default {
-  title: "Styles/General Styling",
   decorators: [
     moduleMetadata({
-      imports: [
-        MaterialModule,
-        ReactiveFormsModule,
-        RouterTestingModule,
-        HttpClientTestingModule,
-      ],
+      imports: [MatIconModule, MatDividerModule],
     }),
   ],
+  title: "Styles/General Styling",
 };
 
-export const typography = () => ({
+export const Typography = () => ({
   template: `
   <section>
     <article class="mat-typography">
       <h1>Angular Material typography</h1>
-      <p><a href="https://material.angular.io/guide/typography">Reference</a></p>
-      <p>This section is wrapped with class "mat-typography"</p>
-      <p>You can also cutomize with specific classes, as displayed below</p>
+      <p><a href="https://m3.material.io/styles/typography/type-scale-tokens">Reference</a></p>
+      <p>We use a small number of custom classes for text in the app</p>
     </article>
-
     <mat-divider></mat-divider>
 
-    <p class="mat-h4 mat-subheading-1">
-      mat-display-4: Large, one-off header, usually at the top of the page (e.g.
-      a hero header).
+    <p class="mat-title-medium">
+      section-header-text: Primarily used for page titles
     </p>
-    <p class="mat-display-4">The quick brown fox jumps over the lazy dog</p>
+    <p class="section-header-text">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
-    <p class="mat-h4 mat-subheading-1">
-      mat-display-3: Large, one-off header, usually at the top of the page (e.g.
-      a hero header).
+    <p class="mat-title-medium">
+      section-header-text-light: non-bold variant for issue titles
     </p>
-    <p class="mat-display-3">The quick brown fox jumps over the lazy dog</p>
+    <p class="section-header-text-light">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
-    <p class="mat-h4 mat-subheading-1">
-    mat-display-2: Large, one-off header, usually at the top of the page (e.g.
-    a hero header).
+    <p class="mat-title-medium">
+      body-text: default style for longer text blocks
     </p>
-    <p class="mat-display-2">The quick brown fox jumps over the lazy dog</p>
+    <p class="body-text">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
-    <p class="mat-h4 mat-subheading-1">
-    mat-display-1: Large, one-off header, usually at the top of the page (e.g.
-    a hero header).
+    <p class="mat-title-medium">
+      body-text-strong: bold variant
     </p>
-    <p class="mat-display-1">The quick brown fox jumps over the lazy dog</p>
+    <p class="body-text-strong">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
-    <p class="mat-h4 mat-subheading-1">
-    mat-h1 OR mat-headline: Section heading corresponding to the h1 tag.
+    <p class="mat-title-medium">
+      caption-text: small
     </p>
-    <h1 class="mat-h1 mat-headline">The quick brown fox jumps over the lazy dog</h1>
+    <p class="caption-text">The quick brown fox jumps over the lazy dog</p>
 
     <mat-divider></mat-divider>
 
-    <p class="mat-h4 mat-subheading-1">
-    mat-h2 OR mat-title: Section heading corresponding to the h2 tag.
-    </p>
-    <h2 class="mat-h2 mat-title">The quick brown fox jumps over the lazy dog</h2>
-
-    <mat-divider></mat-divider>
-
-    <p class="mat-h4 mat-subheading-1">
-    mat-h3 OR mat-subheading-2: Section heading corresponding to the h3 tag.
-    </p>
-    <h3 class="mat-h3 mat-subheading-2">The quick brown fox jumps over the lazy dog</h3>
-
-    <mat-divider></mat-divider>
-
-    <p class="mat-h4 mat-subheading-1">
-    mat-h4 OR mat-subheading-1: Section heading corresponding to the h4 tag.
-    </p>
-    <h4 class="mat-h4 mat-subheading-1">The quick brown fox jumps over the lazy dog</h4>
-
-    <mat-divider></mat-divider>
-
-    <p class="mat-h4 mat-subheading-1">
-    mat-body OR mat-body-1: Base body text.
-    </p>
-    <p class="mat-body mat-body-1">The quick brown fox jumps over the lazy dog</p>
-
-    <mat-divider></mat-divider>
-
-    <p class="mat-h4 mat-subheading-1">
-    mat-body-strong OR mat-body-2: Bolder body text.
-    </p>
-    <p class="mat-body-strong mat-body-2">The quick brown fox jumps over the lazy dog</p>
-
-    <mat-divider></mat-divider>
-
-    <p class="mat-h4 mat-subheading-1">
-    mat-small OR mat-caption: Smaller body and hint text.
-    </p>
-    <p class="mat-small mat-caption">The quick brown fox jumps over the lazy dog</p>
-
-    <mat-divider></mat-divider>
   </section>
   `,
 });
 
-export const icons = () => ({
+const iconNames = [
+  "account_circle",
+  "account_tree",
+  "add",
+  "arrow_drop_down",
+  "arrow_right",
+  "avg_pace",
+  "breaking_news",
+  "brightness_medium",
+  "chat",
+  "check_box",
+  "check_circle",
+  "clear",
+  "close",
+  "code",
+  "computer",
+  "dark_mode",
+  "delete",
+  "devices_other",
+  "done",
+  "done_outline",
+  "edit",
+  "email",
+  "error",
+  "exclamation",
+  "expand_more",
+  "favorite",
+  "file_copy",
+  "filter_list",
+  "folder",
+  "groups",
+  "help",
+  "keyboard_arrow_down",
+  "keyboard_arrow_left",
+  "keyboard_arrow_right",
+  "keyboard_arrow_up",
+  "left_panel_close",
+  "left_panel_open",
+  "light_mode",
+  "logout",
+  "menu",
+  "more",
+  "more_horiz",
+  "more_vert",
+  "notifications",
+  "notifications_off",
+  "open_in_new",
+  "payment",
+  "people",
+  "person",
+  "priority_high",
+  "rocket_launch",
+  "search",
+  "security",
+  "send",
+  "settings",
+  "share_eta",
+  "tab",
+  "team_dashboard",
+  "text_snippet",
+  "volume_off",
+  "vpn_key",
+  "warning",
+];
+const iconURL = `https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD&#64;20..48,100..700,0..1,-50..200&icon_names=${iconNames.join(
+  ",",
+)}`;
+export const Icons = () => ({
   template: `
   <section class="mat-typography">
     <h1>Icons</h1>
-    <p>Angular material has a bunch of icons. You can find a pretty exhaustive list of them <a href="https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list/" target="_blank">here</a>
-    <p>Also, <a href="https://material.angular.io/components/icon/overview" target="_blank">here's</a> Angular's documentation on icons</p>
-    <p>Make sure to add the appropriate aria classes for accessibility!</p>
+
+    We use Material Symbols with Angular Material. Icons default to the 'filled' style.
+    Add "material-icons-outlined" to a mat-icon's classes for 'outlined' style:
+
+    <h2>Filled</h2>
+    <div class="icon-grid">
+      ${iconNames
+        .map(
+          (icon) => `
+        <div class="icon-container">
+          <mat-icon>${icon}</mat-icon>
+          <span class="icon-name">${icon}</span>
+        </div>
+      `,
+        )
+        .join("")}
+    </div>
+    <h2>Outlined</h2>
+    <div class="icon-grid">
+      ${iconNames
+        .map(
+          (icon) => `
+        <div class="icon-container">
+          <mat-icon class="material-symbols-outlined">${icon}</mat-icon>
+          <span class="icon-name">${icon}</span>
+        </div>
+      `,
+        )
+        .join("")}
+    </div>
     <mat-divider></mat-divider>
-    <mat-icon>delete</mat-icon>
-    <p aria-hidden="false" aria-label="this is trash">This is an icon</p>
-    <button mat-icon-button color="accent" aria-label="Example icon-button with a heart icon">
-      <mat-icon>favorite</mat-icon>
-    </button>
-    <p>This is a button icon</p>
-    <button mat-flat-button color="primary">
-      <mat-icon aria-hidden="true">done</mat-icon>
-      Resolve
-    </button>
-    <p>If the icon is purely decorative, you can make aria hidden true</p>
+    We self host a minimal set of symbol fonts. To add more, add to this stories list, then download from <a href="${iconURL}">fonts.googleapis.com</a> and copy to src/assets/fonts/.
   </section>
+
+  <br/>
   <section class="mat-typography">
     <h1>Custom Icons</h1>
     <p>In addition to Angular's icons, we have added custom ones in 'index.html'</p>
     <div style="display: flex; align-items: center; margin: 16px">
+      <div>#github:</div>
+      <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#github"></use></svg>
       <div>#gitlab:</div>
       <svg style="width: 32px; height: 32px; margin-left: 8px; margin-right: 32px"><use xlink:href="#gitlab"></use></svg>
       <div>#google:</div>
@@ -148,12 +181,30 @@ export const icons = () => ({
     </div>
   </section>
   `,
+  styles: [
+    `
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 20px;
+    }
+    .icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .icon-name {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  `,
+  ],
 });
 
-export const colors = () => ({
+export const Colors = () => ({
   template: `
   <section class="mat-typography">
-    <p class="mat-h1">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>
+    <p class="section-header-text-light">Sometimes you will want to customize the colors you are using. For this, refer to $amaranth-palette in _variables.scss</p>
     <p>Use mat-color($amaranth-palette, 50) to get a color from the palette: <a href="https://v5.material.angular.io/guide/theming-your-components#using-colors-from-a-palette" target="_blank">Material Reference</a></p>
     <div style="width: 100%; height: 100px; background-color: #fce8ed"></div>
     <p style="margin-top: 50px">Use mat-contrast($amaranth-palette, 50) to get the contrasting color:</p>
