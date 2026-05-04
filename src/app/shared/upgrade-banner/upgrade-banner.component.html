@@ -1,0 +1,41 @@
+<mat-card appearance="outlined" class="upgrade-banner">
+  <mat-card-content>
+    <div class="banner-content">
+      @if (variant() === "get-started") {
+        <h2 class="banner-headline fancy" i18n>Get started with GlitchTip</h2>
+        <p class="banner-description" i18n>Start free with {{ freeEventLabel() }} events/month, or support open source and go paid for up to {{ topPlanLabel() }} events and priority support.</p>
+      } @else {
+        <h2 class="banner-headline fancy" i18n>Don't lose events!</h2>
+        @if (usagePercent() !== null) {
+          <p class="banner-usage" i18n>
+            You're at <strong>{{ usagePercent() }}%</strong> of your limit, upgrade now to avoid losing events.
+          </p>
+        }
+        <p class="banner-description" i18n>Support open source and get up to {{ topPlanLabel() }} events/month and priority support.</p>
+      }
+      @if (!hideActions()) {
+        <div class="banner-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            class="upgrade-button"
+            [disabled]="upgradeLoading()"
+            (click)="onUpgrade()"
+          >
+            <span
+              [style.visibility]="upgradeLoading() ? 'hidden' : 'visible'"
+              i18n
+              >Upgrade to {{ nextPlanLabel() }} events/mo</span
+            >
+            @if (upgradeLoading()) {
+              <mat-spinner class="upgrade-button-spinner" diameter="18" />
+            }
+          </button>
+          <button mat-stroked-button (click)="onComparePlans()" i18n>
+            Compare Plans
+          </button>
+        </div>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,56 @@
+<div class="time-range-form-container">
+  <form
+    class="custom-time-range-form"
+    [formGroup]="customTimeRange"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="input-group-header body-text">
+      <span class="body-text-strong"> {{ dateRangeHeader() }} </span>
+      <span>{{ dateRangeCtrl.value?.start | date: "shortDate" }}</span>
+      @if (dateRangeCtrl.value?.end; as endDate) {
+      <span> - {{ endDate | date: "shortDate" }}</span>
+      }
+    </div>
+    <mat-calendar
+      [selected]="dateRangeCtrl.value"
+      (selectedChange)="onCalendarChange($event)"
+    ></mat-calendar>
+    <div class="input-group-header body-text-strong" i18n>Time range:</div>
+    <div class="time-pickers">
+      <mat-form-field appearance="outline">
+        <mat-label>Start time</mat-label>
+        <input
+          matInput
+          formControlName="startTime"
+          [matTimepicker]="startTimepicker"
+        />
+        <mat-timepicker-toggle matIconSuffix [for]="startTimepicker" />
+        <mat-timepicker #startTimepicker />
+        @if (this.startTimeCtrl.errors?.['matTimepickerParse']) {
+        <mat-error>Pick a valid time</mat-error>
+        } @if (this.startTimeCtrl.errors?.['required']) {
+        <mat-error>Pick a time</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>End time</mat-label>
+        <input
+          matInput
+          [formControl]="endTimeCtrl"
+          [matTimepicker]="endTimepicker"
+        />
+        <mat-timepicker-toggle matIconSuffix [for]="endTimepicker" />
+        <mat-timepicker #endTimepicker />
+        @if (this.endTimeCtrl.errors?.['matTimepickerParse']) {
+        <mat-error>Pick a valid time</mat-error>
+        } @if (this.startTimeCtrl.errors?.['required']) {
+        <mat-error>Pick a time</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="button-container">
+      <button matButton i18n type="button" (click)="cancel()">Cancel</button>
+      <button mat-flat-button type="submit" i18n>Apply</button>
+    </div>
+  </form>
+</div>
