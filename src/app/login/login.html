@@ -1,0 +1,107 @@
+<div class="auth-form-wrapper">
+  <mat-card class="auth-form">
+    <mat-card-content>
+      <div class="logo-container">
+        <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
+      </div>
+      @if (requiresMFA()) {
+        @if (!hasWebAuthn() || preferTOTP()) {
+          <gt-login-totp></gt-login-totp>
+        } @else {
+          <gt-login-webauthn></gt-login-webauthn>
+        }
+      } @else {
+        <mat-card-title>
+          <h3 i18n>Login</h3>
+        </mat-card-title>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <gt-form-error [errors]="formErrors()"></gt-form-error>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput autofocus type="email" formControlName="email" />
+            @if (email?.errors) {
+              <mat-error>
+                @if (email?.errors?.['required']) {
+                  <span i18n>Your email is required to log in</span>
+                }
+                @if (email?.errors?.['email']) {
+                  <span i18n>Enter a valid email address</span>
+                }
+                @if (email?.errors?.['serverError']) {
+                  <span>{{ email?.errors?.['serverError'] }}</span>
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            @if (password?.errors) {
+              <mat-error>
+                @if (password?.errors?.['minlength']) {
+                  <span i18n
+                    >Your password should be at least 8 characters long</span
+                  >
+                }
+                @if (password?.errors?.['required']) {
+                  <span i18n>Your password is required to log in</span>
+                }
+                @if (password?.errors?.['serverError']) {
+                  <span>{{ password?.errors?.['serverError'] }}</span>
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+          <gt-loading-button
+            class="full-width"
+            i18n-buttonText
+            buttonText="Log in"
+            [fullWidth]="true"
+            [loading]="loading()"
+            id="submit"
+          >
+          </gt-loading-button>
+        </form>
+        @if (socialApps(); as socialApps) {
+          @if (socialApps.length) {
+            <div class="or">
+              <span class="body-text-strong" i18n>or</span>
+            </div>
+          }
+          <div class="o-auth">
+            @for (socialApp of socialApps; track socialApp) {
+              <button
+                mat-stroked-button
+                class="full-width margin"
+                (click)="onSocialApp(socialApp)"
+              >
+                <gt-auth-svg
+                  source="auth"
+                  text="Log in with {{ socialApp.name }}"
+                  i18n-text
+                  [provider]="socialApp.provider"
+                ></gt-auth-svg>
+              </button>
+            }
+          </div>
+        }
+        <div class="sign-up">
+          @if (enableUserRegistration() || enableSocialAppsUserRegistration()) {
+            <p class="body-text">
+              <ng-container i18n>New to GlitchTip?</ng-container>
+              <a class="auth-link" routerLink="../register" i18n>Sign Up</a>
+            </p>
+          }
+          <p class="body-text">
+            <a class="auth-link" routerLink="/reset-password" i18n>Reset Password</a>
+          </p>
+
+          <p class="alternative-instance" markdown>
+            {{ instanceName() }}
+          </p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+<div cdkFocusRegionEnd></div>

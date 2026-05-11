@@ -1,0 +1,20 @@
+<mat-card [class.over-limit]="isOverLimit()" appearance="outlined">
+  <mat-card-content>
+    <div class="summary-title">{{ title() }}</div>
+    <div class="summary-value" [class.over-limit-text]="isOverLimit()">
+      @if (loading()) {
+        <mat-spinner diameter="24"></mat-spinner>
+      } @else if (value() !== null) {
+        {{ value() | number: "1.0-0" }}
+      } @else {
+        —
+      }
+    </div>
+    <div class="summary-subtitle">{{ subtitle() }}</div>
+    <mat-progress-bar
+      mode="determinate"
+      [value]="percent() > 100 ? 100 : percent()"
+      [color]="isOverLimit() ? 'warn' : 'primary'"
+    />
+  </mat-card-content>
+</mat-card>
