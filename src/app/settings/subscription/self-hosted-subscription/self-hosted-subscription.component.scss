@@ -1,0 +1,117 @@
+@use "variables" as vars;
+
+mat-card,
+.contribute-grid {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.body-text {
+  margin-bottom: 0;
+}
+
+.contribute-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @media screen and (min-width: vars.$small) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.contribute-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: vars.$shape-radius;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--mat-sys-surface-container);
+  }
+
+  .contribute-icon {
+    color: var(--mat-sys-on-surface);
+    flex-shrink: 0;
+  }
+
+  .contribute-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .external-icon {
+    flex-shrink: 0;
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.plan-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+
+  mat-divider {
+    display: none;
+  }
+
+  .body-text {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  @media screen and (min-width: vars.$small) {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+
+    .body-text {
+      font-size: inherit;
+    }
+
+    mat-divider {
+      display: block;
+      height: 24px;
+    }
+  }
+}
+
+.cloud-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .cloud-cta-icon {
+    flex-shrink: 0;
+    color: var(--mat-sys-primary);
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .cloud-cta-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+    gap: 2px;
+  }
+}
+
+.caption-text {
+  color: var(--mat-sys-on-surface-variant);
+}
