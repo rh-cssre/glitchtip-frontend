@@ -1,0 +1,27 @@
+<mat-card appearance="outlined" class="addon-card">
+  <mat-icon class="addon-icon">{{ icon() }}</mat-icon>
+  <div class="addon-text">
+    <span class="marketing-body-strong">{{ title() }}</span>
+    <span class="marketing-caption addon-subtitle">{{ subtitle() }}</span>
+  </div>
+  @if (isExternal()) {
+    <a
+      mat-flat-button
+      color="primary"
+      class="addon-button"
+      [href]="buttonUrl()"
+    >
+      {{ buttonText() }}
+    </a>
+  } @else {
+    <a
+      mat-flat-button
+      color="primary"
+      class="addon-button"
+      [routerLink]="routerPath()"
+      [fragment]="routerFragment()"
+    >
+      {{ buttonText() }}
+    </a>
+  }
+</mat-card>
