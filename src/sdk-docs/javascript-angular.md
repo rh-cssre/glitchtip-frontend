@@ -1,4 +1,4 @@
-For most use cases, GlitchTip recommends using [@micro-sentry/angular](https://github.com/Tinkoff/micro-sentry). Users who need performance data need to use `@sentry/angular`.
+GlitchTip recommends using [@micro-sentry/angular](https://github.com/taiga-family/micro-sentry). Alternatively, users who want performance data need to use `@sentry/angular`.
 
 # @micro-sentry
 
@@ -7,7 +7,7 @@ For most use cases, GlitchTip recommends using [@micro-sentry/angular](https://g
 Install `@micro-sentry/angular`:
 
 ```bash
-$ npm install --save @micro-sentry/angular
+npm install @micro-sentry/angular
 ```
 
 In `app.module.ts` add MicroSentryModule with your GlitchTip DSN.
@@ -18,104 +18,55 @@ import { MicroSentryModule } from '@micro-sentry/angular';
 @NgModule({
   imports: [
     MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
+      dsn: "YOUR_DSN",
     }),
   ],
 })
 ```
 
-## Configuration
-
-- dsn - Where to send event data too, found in GlitchTip in project settings.
-- environment - Set the running environment name, such as "production". When running in Node, such as Angular Universal, this defaults to environment variable `SENTRY_ENVIRONMENT`. No default is used in browser.
-- release - Set release name such as "1.0". Required to make use of uploaded sourcemaps.
-- ignoreErrors
-- blacklistUrls
-
-```javascript
-    MicroSentryModule.forRoot({
-      dsn: 'your GlitchTip DSN here',
-      environment: "production",
-      release: "1.0.0"
-    }),
-```
-
 # @sentry/angular
 
-@sentry/angular has more features including performance tracking. The package adds [25 KB](https://bundlephobia.com/result?p=@sentry/angular) to your JS bundle size.
+@sentry/angular has more features including performance tracking. The package adds up to [578 KB](https://bundlephobia.com/result?p=@sentry/angular) to your JS bundle size.
 
 Install `@sentry/angular`:
 
 ```bash
-$ npm install --save @sentry/angular
+npm install @sentry/angular
 ```
 
-For best results, add this snippet to your main.ts. If you need to set the DSN dynamically, you may set this elsewhere as well.
+Initialize the SDK in your `main.ts` **before** bootstrapping the app:
 
-```javascript
-import * as Sentry from "@sentry/browser";
+```typescript
+import { ErrorHandler } from "@angular/core";
+import { bootstrapApplication } from "@angular/platform-browser";
+import * as Sentry from "@sentry/angular";
+import { AppComponent } from "./app/app.component";
 
 Sentry.init({
-  dsn: "your GlitchTip DSN here",
-  autoSessionTracking: false,
+  dsn: "YOUR_DSN",
+  tracesSampleRate: 0.01, // 1% of transactions — adjust to your needs
+  autoSessionTracking: false, // GlitchTip does not support sessions
 });
-```
 
-## Configuration
-
-A more robust configuration example:
-
-```javascript
-import * as Sentry from "@sentry/browser";
-
-Sentry.init({
-  dsn: "your GlitchTip DSN here",
-  environment: "production",
-  release: "1.0.0",
-  autoSessionTracking: false,
-  tracesSampleRate: 0.01,
-});
-```
-
-- dsn - Where to send event data too, found in GlitchTip in project settings.
-- release - Set release name such as "1.0". Defaults to environment variable `SENTRY_RELEASE`.
-- environment - Set the running environment name, such as "production". When running in Node, such as Angular Universal, this defaults to environment variable `SENTRY_ENVIRONMENT`. No default is used in browser.
-- sampleRate - Percent of error events to send to GlitchTip. 0.5 would be 50%. Defaults to 1.0.
-- tracesSampleRate - Percent of performance transactions to send to GlitchTip. 0.01 would be 1%. We recommend a lower value to save costs/hard drive space.
-
-### Performance Monitoring
-
-It's possible to send performance transactions to GlitchTip.
-
-Install `@sentry/tracing`
-
-Add integration to SDK configuration:
-
-```javascript
-Sentry.init({
-  dsn: "GlitchTip DSN",
-  integrations: [
-    new Integrations.BrowserTracing({
-      tracingOrigins: ["localhost", "https://example.com"],
-      routingInstrumentation: Sentry.routingInstrumentation,
-    }),
+bootstrapApplication(AppComponent, {
+  providers: [
+    { provide: ErrorHandler, useValue: Sentry.createErrorHandler() },
   ],
-  // Capture 1% of transactions
-  tracesSampleRate: 0.01,
 });
 ```
 
-### Show user feedback dialog
+Providing `Sentry.createErrorHandler()` as the Angular `ErrorHandler` ensures component errors are captured automatically.
 
-Provide a custom Angular ErrorHandler. In your root modules file, adjust providers:
+## Source Maps
 
-```javascript
-providers: [
-  {
-    provide: ErrorHandler,
-    useValue: Sentry.createErrorHandler({
-      showDialog: true,
-    }),
-  },
-],
+Upload source maps for readable stack traces. Use the [GlitchTip CLI](/documentation/cli):
+
+```bash
+glitchtip-cli sourcemaps inject ./dist
+glitchtip-cli sourcemaps upload ./dist --org my-org --project my-project
 ```
+
+## Tips
+
+- Set `tracesSampleRate` to a low value in production to save disk space.
+- Use `release` and `environment` options to track which deployments introduce errors.

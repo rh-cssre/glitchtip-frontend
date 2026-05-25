@@ -1,0 +1,54 @@
+@use "variables" as vars;
+
+table {
+  width: 100%;
+
+  &.fixedLayout {
+    table-layout: fixed;
+  }
+}
+
+.mat-column-name-and-project, .mat-column-header-spacing {
+  width: 90%;
+  padding-left: 24px;
+}
+
+.mat-column-avgDuration, .mat-column-pagination {
+  width: 10%;
+  padding-right: 24px;
+}
+
+.name-and-project {
+  width: 500px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  @media screen and (max-width: vars.$large - 1) {
+    width: 300px;
+  }
+  @media screen and (max-width: vars.$medium - 1) {
+    width: 200px;
+  }
+  @media screen and (max-width: vars.$tablet - 1) {
+    width: 160px;
+  }
+
+  .group-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: fit-content;
+  }
+
+  div {
+    width: inherit;
+
+    .caption-text {
+      color: inherit;
+    }
+  }
+}
+
+.avg-duration-cell {
+  width: 140px;
+}
