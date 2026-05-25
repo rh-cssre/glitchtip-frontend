@@ -1,83 +1,85 @@
-import { Component, OnDestroy } from "@angular/core";
-import { Router } from "@angular/router";
 import {
-  UntypedFormGroup,
-  UntypedFormControl,
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+  computed,
+} from "@angular/core";
+import {
+  FormGroup,
+  FormControl,
   Validators,
+  ReactiveFormsModule,
 } from "@angular/forms";
-import { combineLatest } from "rxjs";
-import { map, tap, withLatestFrom } from "rxjs/operators";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
 import { SettingsService } from "../api/settings.service";
 import { UserService } from "../api/user/user.service";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatCardModule } from "@angular/material/card";
+import { OrganizationsService } from "../api/organizations.service";
+import { Router } from "@angular/router";
+import { Autofocus } from "../shared/autofocus";
 
 @Component({
-  selector: "gt-new-organizations",
   templateUrl: "./new-organization.component.html",
   styleUrls: ["./new-organization.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Autofocus,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
-export class NewOrganizationsComponent implements OnDestroy {
-  organizationCount$ = this.organizationsService.organizationCount$;
-  userDetails$ = this.userService.userDetails$;
-  error$ = this.organizationsService.errors$.pipe(
-    map((errors) => errors.createOrganization)
-  );
+export class NewOrganizationsComponent {
+  private organizationsService = inject(OrganizationsService);
+  private settingsService = inject(SettingsService);
+  private userService = inject(UserService);
+  private router = inject(Router);
 
-  canCreateOrg$ = combineLatest([
-    this.userDetails$,
-    this.organizationCount$,
-    this.settingsService.enableOrganizationCreation$,
-  ]).pipe(
-    map(([user, orgCount, enableOrgCreation]) => {
-      return enableOrgCreation || user?.isSuperuser || orgCount === 0;
-    })
-  );
+  organizationCount = this.organizationsService.organizationsCount;
+  userDetails = this.userService.user;
+  error = signal<string | null>(null);
 
-  contextLoaded$ = combineLatest([
-    this.settingsService.initialLoad$,
-    this.organizationsService.initialLoad$,
-    this.userDetails$,
-  ]).pipe(
-    map(([settingsLoaded, orgsLoaded, user]) => {
-      return settingsLoaded && orgsLoaded && !!user;
-    })
-  );
+  canCreateOrg = computed(() => {
+    const user = this.userDetails();
+    const orgCount = this.organizationCount();
+    const enableOrgCreation = this.settingsService.enableOrganizationCreation();
+    return enableOrgCreation || user?.isSuperuser || orgCount === 0;
+  });
+
+  contextLoaded = computed(() => {
+    const settingsLoaded = this.settingsService.initialLoad();
+    const orgsLoaded = this.organizationsService.initialLoad();
+    const user = this.userDetails();
+    return settingsLoaded && orgsLoaded && !!user;
+  });
 
   loading = false;
-  form = new UntypedFormGroup({
-    name: new UntypedFormControl("", [Validators.required]),
+  form = new FormGroup({
+    name: new FormControl("", [Validators.required, Validators.maxLength(200)]),
   });
-  constructor(
-    private organizationsService: OrganizationsService,
-    private settingsService: SettingsService,
-    private userService: UserService,
-    private router: Router
-  ) {}
 
   onSubmit() {
+    this.error.set(null);
     if (this.form.valid) {
       this.loading = true;
       this.organizationsService
-        .createOrganization(this.form.value.name)
-        .pipe(
-          withLatestFrom(this.settingsService.billingEnabled$),
-          tap(([organization, billingEnabled]) => {
-            if (billingEnabled) {
-              this.router.navigate([
-                organization.slug,
-                "settings",
-                "subscription",
-              ]);
-            } else {
-              this.router.navigate(["/"]);
-            }
-          })
-        )
-        .toPromise();
+        .createOrganization(this.form.value.name!)
+        .then(({ data, error }) => {
+          if (error) {
+            this.error.set(error);
+          }
+          if (data && this.settingsService.billingEnabled()) {
+            this.router.navigate([data.slug, "settings", "subscription"]);
+          } else if (data) {
+            this.organizationsService.setActiveOrganizationSlug(data.slug);
+            this.router.navigate(["/"]);
+          }
+        });
     }
-  }
-
-  ngOnDestroy() {
-    this.organizationsService.clearErrorState();
   }
 }

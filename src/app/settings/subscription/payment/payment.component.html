@@ -1,50 +1,86 @@
-<ng-container *ngIf="planOptions$ | async as planOptions">
-  <div class="plans mat-elevation-z1">
-    <mat-card *ngFor="let product of planOptions; let i = index">
-      <mat-card-content>
-        <mat-card-title>{{ product.name }}</mat-card-title>
-        <p>{{ product.description }}</p>
-        <ul class="value-props">
-          <li>
-            <mat-icon color="primary">check_circle</mat-icon>
-            <ng-container i18n>Error tracking</ng-container>
-          </li>
-          <li>
-            <mat-icon color="primary">check_circle</mat-icon>
-            <ng-container i18n>Unlimited projects</ng-container>
-          </li>
-          <li>
-            <mat-icon color="primary">check_circle</mat-icon>
-            <ng-container i18n>Unlimited team members</ng-container>
-          </li>
-        </ul>
-        <p>
-          <span class="mat-display-1">
-            ${{ product.plans[0].amount | number }}
-          </span>
-          / month
-        </p>
-        <gt-loading-button
-          buttonText="Select"
-          [loading]="selectedSubscription === i"
-          (click)="onSubmit(product.plans[0], i)"
-        ></gt-loading-button>
-      </mat-card-content>
-    </mat-card>
+@if (products(); as products) {
+  @if (products.length) {
+  <div [class.dialog-body]="isDialog">
+    <div class="plans">
+      @for (product of products; track product; let i = $index) {
+        <mat-card>
+          <mat-card-content>
+            <div class="plan-top">
+              <div class="plan-top-row">
+                <mat-card-title>{{ product.name }}</mat-card-title>
+                @if (product.defaultPrice.price > 0 && hasAnnualPrice(product)) {
+                  <mat-button-toggle-group
+                    class="plan-interval-toggle"
+                    [value]="billingInterval()"
+                    (change)="billingInterval.set($event.value)"
+                    hideSingleSelectionIndicator
+                  >
+                    <mat-button-toggle value="month" i18n>Monthly</mat-button-toggle>
+                    <mat-button-toggle value="year" i18n>Annual</mat-button-toggle>
+                  </mat-button-toggle-group>
+                }
+              </div>
+              <p class="plan-tagline">{{ product.description }}</p>
+            </div>
+            <div class="plan-features">
+              @if (i > 0) {
+                <p class="features-heading" i18n>
+                  Everything from {{ products[i - 1].name }} +
+                </p>
+              }
+              @if (product.marketingFeatures.length > 0) {
+                <ul class="value-props">
+                  @for (feature of product.marketingFeatures; track feature) {
+                    <li>
+                      <mat-icon color="primary">check_circle</mat-icon>
+                      {{ feature }}
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+            <div class="plan-bottom">
+              @if (getActivePrice(product); as activePrice) {
+                @if (activePrice.price === 0) {
+                  <p class="plan-price" i18n>
+                    <span class="price-amount">Free</span>
+                    <span class="price-detail">($0)</span>
+                  </p>
+                } @else {
+                  <p class="plan-price">
+                    <span class="price-amount"
+                      >${{ activePrice.price | number }}</span
+                    >
+                    <span class="price-detail" i18n>/ {{ activePrice.interval === "year" ? "year" : "month" }}</span>
+                  </p>
+                }
+                <gt-loading-button
+                  buttonText="Select"
+                  [loading]="
+                    subscriptionCreationLoadingId() ===
+                    activePrice.stripeID
+                  "
+                  (buttonClick)="onSubmit(activePrice)"
+                ></gt-loading-button>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+    <div class="event-info">
+      <mat-card>
+        <mat-card-content>
+          <gt-event-info></gt-event-info>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <p class="body-text" i18n
+      >Questions about subscriptions? Need assistance, or a bigger plan? Contact
+      us at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+      >.</p
+    >
   </div>
-  <div class="event-info">
-    <mat-card>
-      <mat-card-title i18n>Events</mat-card-title>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        <gt-event-info></gt-event-info>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <p class="mat-body-1" i18n
-    >Questions about subscriptions? Need assistance, or a bigger plan? Contact
-    us at <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
-    >.</p
-  >
-</ng-container>
+  }
+}
 <!-- TODO: add state for user who is not owner, since they cannot sign up for an org-->
