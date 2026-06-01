@@ -1,0 +1,97 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+  <div class="centered-block">
+    <h1 class="fancy marketing-heading">HIPAA-Compliant Error Tracking</h1>
+
+      <p class="marketing-body">
+        GlitchTip provides HIPAA-aligned error monitoring for covered entities and
+        business associates building software in regulated environments.<br />
+        Business Associate Agreements (BAA) are available on a
+        <a routerLink="/pricing">Large plan</a>, hosted on app.glitchtip.com
+        (US — DigitalOcean NYC1, New York).
+      </p>
+
+      <div class="cta-wrapper">
+        <a
+          mat-flat-button
+          color="primary"
+          href="mailto:sales@glitchtip.com"
+        >
+          Contact Sales
+        </a>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <h2 class="marketing-subheading">
+        Is GlitchTip Right for your Application?
+      </h2>
+      <p class="marketing-body">
+        If your application generates error events or logs that may contain
+        Protected Health Information (PHI), you need a monitoring vendor willing
+        to sign a BAA and operate under HIPAA's Security Rule requirements.
+        GlitchTip is designed for teams who also want:
+      </p>
+      <ul class="marketing-body">
+        <li>An open-source, auditable codebase with no hidden data pipelines. You don't need a lawyer to understand our license.</li>
+        <li>A vendor that does not use your data to train AI models</li>
+      </ul>
+
+      <h2 class="marketing-subheading">Security Controls</h2>
+      <p class="marketing-body">
+        GlitchTip's hosted infrastructure is designed to align with the HIPAA
+        Security Rule: covering encryption, access controls, audit trails,
+        backup retention, and breach notification. For a full breakdown, see our
+        <a routerLink="/documentation/hosted-architecture">Security &amp; Architecture page</a>.
+      </p>
+
+      <h2 class="marketing-subheading">Sub-Processors</h2>
+      <p class="marketing-body">
+        Burke Software operates as the data processor. We maintain a minimized
+        set of sub-processors:
+      </p>
+      <mkt-simple-table
+        [columns]="subProcessorColumns"
+        [rows]="subProcessorRows"
+      />
+
+      <h2 class="marketing-subheading">Plan Options</h2>
+      <p class="marketing-body-strong">Hosted: HIPAA Add-On</p>
+      <p class="marketing-body">
+        All hosted plans run on the same security-controlled infrastructure:
+        encryption at rest, TLS in transit, private VPC, and 90-day data
+        retention. The difference is contractual:
+      </p>
+      <ul class="marketing-body">
+        <li>
+          Free, Small, Medium: HIPAA-aligned security controls in place, but
+          no BAA is available. Suitable for organizations that need the technical
+          safeguards but do not require a signed agreement.
+        </li>
+        <li>
+          Large: BAA available. Required if your organization is a covered
+          entity or business associate that must have a signed BAA with all
+          vendors handling PHI.
+        </li>
+      </ul>
+      <p class="marketing-body">
+        To discuss Enterprise pricing and get a BAA in place, contact
+        <a href="mailto:sales@glitchtip.com">sales&#64;glitchtip.com</a>.
+      </p>
+
+      <section class="faq-section">
+        <h2 class="marketing-subheading">Frequently Asked HIPAA Questions</h2>
+        <mat-accordion>
+          @for (faq of faqs; track faq.question) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>{{ faq.question }}</mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>{{ faq.answer }}</p>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      </section>
+  </div>
+</mat-card>
