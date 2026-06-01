@@ -1,10 +1,14 @@
 {
   "/api": {
-    "target": "http://backend:8080",
+    "target": "http://backend:8000",
     "secure": false
   },
-  "/rest-auth": {
-    "target": "http://backend:8080",
+  "/accounts": {
+    "target": "http://backend:8000",
+    "secure": false
+  },
+  "/_allauth": {
+    "target": "http://backend:8000",
     "secure": false
   }
 }

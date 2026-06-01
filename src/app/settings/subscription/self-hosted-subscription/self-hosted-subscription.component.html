@@ -1,0 +1,81 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 class="section-header-text" i18n>Subscription</h1>
+  </ng-container>
+</gt-top-app-bar>
+<section class="l-body">
+  <div class="contribute-grid">
+    <a
+      class="contribute-card"
+      href="https://liberapay.com/GlitchTip/donate"
+      target="_blank"
+      rel="noopener"
+    >
+      <mat-icon class="contribute-icon">favorite</mat-icon>
+      <div class="contribute-text">
+        <span class="body-text-strong" i18n>Donate</span>
+        <span class="caption-text" i18n
+          >Support open source development on Liberapay</span
+        >
+      </div>
+      <mat-icon class="external-icon">open_in_new</mat-icon>
+    </a>
+    <a
+      class="contribute-card"
+      href="https://gitlab.com/glitchtip/glitchtip"
+      target="_blank"
+      rel="noopener"
+    >
+      <mat-icon class="contribute-icon">code</mat-icon>
+      <div class="contribute-text">
+        <span class="body-text-strong" i18n>Contribute Code</span>
+        <span class="caption-text" i18n>Help build GlitchTip on GitLab</span>
+      </div>
+      <mat-icon class="external-icon">open_in_new</mat-icon>
+    </a>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="plan-header">
+        <span class="body-text-strong" i18n>Self-Hosted</span>
+        <mat-divider vertical />
+        <span class="body-text" i18n>Usage: Last 30 Days</span>
+      </div>
+      <mat-divider />
+      <gt-subscription-charts
+        [totalEventsAllowed]="null"
+        [showLimits]="false"
+      />
+      @if (billingEmail) {
+        <p class="body-text" i18n>
+          Questions? Contact us at
+          <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a>.
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="cloud-cta">
+        <mat-icon class="cloud-cta-icon">cloud</mat-icon>
+        <div class="cloud-cta-text">
+          <span class="body-text-strong" i18n>Try GlitchTip Cloud</span>
+          <span class="caption-text" i18n
+            >Let us handle hosting, updates, and backups for you.</span
+          >
+        </div>
+        <a
+          mat-flat-button
+          color="primary"
+          href="https://app.glitchtip.com"
+          target="_blank"
+          rel="noopener"
+          i18n
+          >Get Started</a
+        >
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>
