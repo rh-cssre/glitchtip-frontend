@@ -6,11 +6,12 @@
     "glitchtip-frontend": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        },
         "@schematics/angular:application": {
           "strict": true
+        },
+        "@schematics/angular:component": {
+          "style": "scss",
+          "changeDetection": "OnPush"
         }
       },
       "root": "",
@@ -29,12 +30,13 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/glitchtip-frontend",
+            "outputPath": {
+              "base": "dist/glitchtip-frontend"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -62,18 +64,13 @@
             ],
             "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src/assets/styles"]
+              "includePaths": ["./src/assets/styles", "", "."]
             },
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "prod-no-static": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "outputHashing": "all"
             },
             "production": {
@@ -87,12 +84,6 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "3kb",
                   "maximumError": "6kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "optimization": {
@@ -119,9 +110,7 @@
               ]
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -130,16 +119,16 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "glitchtip-frontend:build:production"
+              "buildTarget": "glitchtip-frontend:build:production"
             },
             "development": {
-              "browserTarget": "glitchtip-frontend:build:development"
+              "buildTarget": "glitchtip-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -147,29 +136,22 @@
         "extract-i18n": {
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
-            "browserTarget": "glitchtip-frontend:build",
             "format": "xlf2",
             "outputPath": "src/locale",
             "targetFiles": [
               "../locale/messages.fr.xlf",
               "../locale/messages.nb.xlf"
-            ]
+            ],
+            "buildTarget": "glitchtip-frontend:build",
+            "prettyNestedTags": true,
+            "sort": "stableAppendNew"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
-            "stylePreprocessorOptions": {
-              "includePaths": ["./src/assets/styles"]
-            },
-            "scripts": []
+            "runner": "vitest"
           }
         },
         "lint": {
@@ -177,6 +159,174 @@
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
+        }
+      }
+    },
+    "marketing": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/marketing",
+      "sourceRoot": "projects/marketing/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/marketing",
+            "index": "projects/marketing/src/index.html",
+            "browser": "projects/marketing/src/main.ts",
+            "polyfills": ["zone.js", "@angular/localize/init"],
+            "tsConfig": "projects/marketing/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/marketing/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/sdk-docs",
+                "output": "static/sdk-docs"
+              }
+            ],
+            "styles": ["projects/marketing/src/styles.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["./src/assets/styles", ""]
+            },
+            "scripts": ["projects/marketing/src/analytics.js"],
+            "server": "projects/marketing/src/main.server.ts",
+            "prerender": {
+              "discoverRoutes": true,
+              "routesFile": "projects/marketing/routes.txt"
+            },
+            "ssr": {
+              "entry": "projects/marketing/server.ts"
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "marketing:build:production"
+            },
+            "development": {
+              "buildTarget": "marketing:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n",
+          "options": {
+            "prettyNestedTags": true,
+            "sort": "stableAppendNew"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/marketing/**/*.ts",
+              "projects/marketing/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "component-preview": {
+      "projectType": "application",
+      "root": "projects/component-preview",
+      "sourceRoot": "projects/component-preview/src",
+      "prefix": "preview",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/component-preview",
+            "index": "projects/component-preview/src/index.html",
+            "browser": "projects/component-preview/src/main.ts",
+            "polyfills": ["zone.js", "@angular/localize/init"],
+            "tsConfig": "projects/component-preview/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.ico",
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "static/assets"
+              },
+              {
+                "glob": "**/*+(.svg|_48x48.png)",
+                "input": "./node_modules/@browser-logos/",
+                "output": "./static/assets/images/browser-svgs"
+              },
+              {
+                "glob": "**/*.png",
+                "input": "./node_modules/@egoistdeveloper/operating-system-logos/src/48x48/",
+                "output": "./static/assets/images/os-logos"
+              }
+            ],
+            "styles": [
+              "src/styles.scss",
+              "projects/component-preview/src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["./src/assets/styles", "", "."]
+            },
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "component-preview:build:production"
+            },
+            "development": {
+              "buildTarget": "component-preview:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }
