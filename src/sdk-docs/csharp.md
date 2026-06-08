@@ -1,37 +1,28 @@
-### Installation
-
-Install the **NuGet** package:
+Install the sentry .NET SDK:
 
 ```shell
-# Using Package Manager
-Install-Package Sentry
-
-# Or using .NET Core CLI
 dotnet add package Sentry
 ```
 
-<!--
-### Using .NET Framework prior to 4.6.1?
-
-[The legacy SDK](https://docs.sentry.io/clients/csharp/) supports .NET Framework as early as 3.5.
--->
-
-### Configuration
-
-You should initialize the SDK as early as possible, like in the `Main` method in `Program.cs`:
+Initialize the SDK as early as possible (e.g., in `Program.cs`):
 
 ```csharp
-using (SentrySdk.Init("your DSN here"))
+using Sentry;
+
+SentrySdk.Init(options =>
 {
-    // App code
-}
+    options.Dsn = "YOUR_DSN";
+    options.TracesSampleRate = 0.01; // 1% of transactions
+});
 ```
 
-You can verify GlitchTip is capturing unhandled exceptions by raising an exception. For example, you can use the following snippet to raise a `DivideByZeroException`:
+Verify your setup:
 
 ```csharp
-using (SentrySdk.Init("your DSN here"))
-{
-    Console.WriteLine(1 / 0);
-}
+SentrySdk.CaptureMessage("Test GlitchTip error!");
 ```
+
+## Tips
+
+- Call `await SentrySdk.FlushAsync(TimeSpan.FromSeconds(2))` before your application exits.
+- Set `TracesSampleRate` to a low value in production to save disk space.

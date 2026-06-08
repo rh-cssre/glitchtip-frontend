@@ -1,0 +1,13 @@
+# 6.1.7
+
+- Feat: Add a "copy for AI" action to event detail, with a gated hint for the MCP endpoint.
+- Feat: Add a marketing Support page with a contact form, linked from the primary nav, that requires a license key and auto-fills the email from the URL.
+- Feat: Manage billing through the Stripe Portal via a new InstanceLicenseService, gated on paid instances.
+- Feat: Add Feishu (Lark) webhook alert recipient support.
+- Feat: Deep-link the marketing pricing tab via a `?plan` query param.
+- Feat: Pre-fill MCP setup examples with the caller's instance URL.
+- Fix: Correct subscription, organization, and user fetch behavior, and stop an effect/setState self-loop from crashing the subscription tab.
+- Fix: Preserve the deep path when switching organizations without leaking dynamic IDs.
+- Fix: Respect the selected environment instead of clearing it before the environment service finishes loading.
+- Chore: Upgrade to Angular 22, remove Storybook in favor of a component-preview app, add Vitest unit tests, and enable lint.
+- Deps: Upgrade Cypress to 15.16.0 so the e2e image ships Node >= 24.15.
