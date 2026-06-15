@@ -1,12 +1,16 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables" as vars;
 
 mat-card-header {
-  padding-bottom: 12px;
-}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 
-mat-card-title {
-  margin-left: -16px;
+  mat-card-title {
+    padding-bottom: 0;
+  }
 }
 
 .mat-card-title {
@@ -24,7 +28,6 @@ mat-card-title {
 }
 
 .new-alert {
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
   margin-left: -16px;
   margin-right: -16px;
   padding-left: 16px;
@@ -40,7 +43,7 @@ mat-card-title {
   display: flex;
   justify-content: flex-end;
 
-  @media screen and (max-width: $medium - 1) {
+  @media screen and (max-width: vars.$medium - 1) {
     padding-top: 10px;
     justify-content: flex-start;
   }
@@ -68,14 +71,26 @@ mat-card-title {
 }
 
 .alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   padding-top: 16px;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 8px;
 }
 
 // Move to global styles if we decide to implement in other places in app
 .tooltip {
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
+  text-decoration-color: mat.m2-get-color-from-palette(
+    mat.$m2-gray-palette,
+    500
+  );
   cursor: help;
 }
 
@@ -88,11 +103,15 @@ mat-card-title {
 .no-recipients {
   width: 50%;
   padding: 8px 16px;
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+  background-color: color-mix(
+    in srgb,
+    var(--mat-expansion-container-background-color) 92%,
+    gray
+  );
 }
 
 .no-recipients-new {
-  background-color: #ffffff;
+  background-color: var(--mat-expansion-container-background-color);
 }
 
 .recipients {
@@ -103,7 +122,7 @@ mat-card-title {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   padding: 8px 0;
 
-  @media screen and (max-width: $large - 1) {
+  @media screen and (max-width: vars.$large - 1) {
     width: 100%;
   }
 
@@ -112,7 +131,6 @@ mat-card-title {
   }
 
   .alert-type {
-    padding-left: 2px;
     margin-right: 8px;
     font-size: 20px;
     width: 24px;
@@ -139,18 +157,17 @@ mat-card-title {
     text-overflow: ellipsis;
   }
 
-  .trash {
-    justify-self: flex-end;
-    margin-left: 16px;
+  .recipient-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 6px;
+  }
+
+  .recipient-action {
     width: 28px;
     height: 28px;
     line-height: 28px;
-
-    mat-icon {
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-    }
   }
 }
 
