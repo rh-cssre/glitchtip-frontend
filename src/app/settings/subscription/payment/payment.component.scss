@@ -1,38 +1,92 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables" as vars;
 
-// THIS IS BEING SHARED WITH A MARKETING COMPONENT
-// Make sure edits work fine in both spots
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dialog-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 24px 0px;
+  background-color: var(--mat-sys-surface-container-low);
+}
 
 .plans {
-  @media (max-width: $large - 1) {
+  @media (max-width: vars.$large - 1) {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax((285px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
     grid-gap: 24px;
-    box-shadow: none !important;
   }
 
-  @media (min-width: $large) {
+  @media (min-width: vars.$large) {
     display: flex;
-    border-radius: 4px;
-    background: white;
+    border-radius: vars.$shape-radius;
+
+    mat-card + mat-card {
+      border-left: none;
+    }
   }
 
   mat-card {
     text-align: left;
 
-    @media (min-width: $large) {
+    @media (min-width: vars.$large) {
       flex: 1;
-      background: transparent;
-      border-right: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
       border-radius: 0;
-      box-shadow: none !important;
+      --mat-card-container-elevation-shadow: none;
+
+      &:first-child {
+        border-radius: vars.$shape-radius 0 0 vars.$shape-radius;
+      }
 
       &:last-child {
-        border-right: 0;
+        border-radius: 0 vars.$shape-radius vars.$shape-radius 0;
       }
     }
+
+    mat-card-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
   }
+}
+
+.plan-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  mat-card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+.plan-interval-toggle {
+  flex-shrink: 0;
+}
+
+.plan-tagline {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.875rem;
+  margin: 4px 0 0;
+}
+
+.plan-features {
+  flex: 1;
+  margin-top: 16px;
+}
+
+.features-heading {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin: 0 0 8px;
 }
 
 .value-props {
@@ -43,6 +97,7 @@
     list-style: none;
     font-size: 0.85em;
     clear: both;
+    margin-bottom: 4px;
   }
 
   mat-icon {
@@ -51,10 +106,29 @@
     margin: 0.07em 0.3em 0.5em 0;
     font-size: 1em;
     float: left;
+    color: var(--mat-sys-primary);
   }
 }
 
+.plan-bottom {
+  margin-top: 16px;
+}
+
+.plan-price {
+  margin: 0 0 12px;
+}
+
+.price-amount {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.price-detail {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
 .event-info {
-    margin-top: 24px;
-    margin-bottom: 24px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
