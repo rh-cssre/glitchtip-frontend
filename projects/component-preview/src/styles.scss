@@ -1,0 +1,85 @@
+// Layout-only styles for the component-preview shell. The real app theme
+// (Material 3 system variables, typography, fonts) is pulled in by also
+// building `src/styles.scss`, so previewed components look exactly as they
+// do in the app.
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.preview-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "toolbar toolbar"
+    "nav     canvas";
+  height: 100vh;
+}
+
+.preview-toolbar {
+  grid-area: toolbar;
+}
+
+.preview-nav {
+  grid-area: nav;
+  overflow-y: auto;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.preview-nav__group-label {
+  padding: 12px 16px 4px;
+  font: var(--mat-sys-label-small);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+// The canvas hosts the previewed component. `color-scheme` here flips every
+// Material `light-dark()` system variable for the subtree, which is how the
+// light / dark / system override works without touching the app's own theme.
+.preview-canvas {
+  grid-area: canvas;
+  overflow: auto;
+  padding: 32px;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-background);
+}
+
+.preview-canvas--light {
+  color-scheme: light;
+}
+
+.preview-canvas--dark {
+  color-scheme: dark;
+}
+
+.preview-canvas--system {
+  color-scheme: light dark;
+}
+
+// Helpers reused by individual previews.
+.preview-section {
+  margin-bottom: 32px;
+}
+
+.preview-section__title {
+  font: var(--mat-sys-title-medium);
+  margin-bottom: 12px;
+}
+
+.preview-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
