@@ -1,0 +1,111 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+  <div class="centered-block">
+    <h1 class="fancy marketing-heading">Support</h1>
+
+    <h2 class="marketing-subheading">Contact support</h2>
+    <p class="marketing-body">
+      Send a support request to our team. A valid license key is required —
+      this form is for self-hosted operators with an active support plan.
+    </p>
+
+    <form
+      class="contact-form"
+      [formGroup]="contactForm"
+      (submit)="$event.preventDefault(); composeSupportEmail()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Your email</mat-label>
+        <input
+          matInput
+          type="email"
+          autocomplete="email"
+          formControlName="email"
+          placeholder="you@example.com"
+        />
+        @if (
+          contactForm.controls.email.touched &&
+          contactForm.controls.email.errors?.["required"]
+        ) {
+          <mat-error>Email is required.</mat-error>
+        } @else if (
+          contactForm.controls.email.touched &&
+          contactForm.controls.email.errors?.["email"]
+        ) {
+          <mat-error>Enter a valid email address.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>License key</mat-label>
+        <input
+          matInput
+          formControlName="licenseKey"
+          placeholder="sub_xxxxxxxxxxxxxxxxxxxxxxxx"
+        />
+        @if (
+          contactForm.controls.licenseKey.touched &&
+          contactForm.controls.licenseKey.errors?.["required"]
+        ) {
+          <mat-error>License key is required.</mat-error>
+        } @else if (
+          contactForm.controls.licenseKey.touched &&
+          contactForm.controls.licenseKey.errors?.["pattern"]
+        ) {
+          <mat-error>License key should start with "sub_".</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>What do you need help with?</mat-label>
+        <textarea
+          matInput
+          rows="5"
+          formControlName="message"
+          placeholder="Describe your issue or question…"
+        ></textarea>
+        @if (
+          contactForm.controls.message.touched &&
+          contactForm.controls.message.errors?.["required"]
+        ) {
+          <mat-error>A message is required.</mat-error>
+        } @else if (
+          contactForm.controls.message.touched &&
+          contactForm.controls.message.errors?.["minlength"]
+        ) {
+          <mat-error
+            >Please add a bit more detail (10 characters min).</mat-error
+          >
+        }
+      </mat-form-field>
+
+      <div class="cta-wrapper">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="contactForm.invalid"
+        >
+          Send email
+        </button>
+      </div>
+    </form>
+
+    <h2 class="marketing-subheading">Don't have a support plan yet?</h2>
+    <p class="marketing-body">
+      Support plans are available for self-hosted GlitchTip instances.
+    </p>
+    <div class="cta-wrapper">
+      <a mat-stroked-button [routerLink]="['/pricing']">View plans</a>
+    </div>
+
+    <h2 class="marketing-subheading">Using GlitchTip Cloud?</h2>
+    <p class="marketing-body">
+      Support is built into the app. Sign in and use the in-app help.
+    </p>
+    <div class="cta-wrapper">
+      <a mat-stroked-button [href]="appUrl">Sign in</a>
+    </div>
+  </div>
+</mat-card>
