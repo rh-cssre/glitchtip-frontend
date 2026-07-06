@@ -1,12 +1,7 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, computed, inject, resource, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { combineLatest, EMPTY } from "rxjs";
-import { tap, map, catchError, withLatestFrom } from "rxjs/operators";
 import {
-  IssueDetail,
-  EventDetail,
   IssueStatus,
   ExceptionValueData,
   Request,
@@ -21,171 +16,161 @@ import {
   IssueTagsAdjusted,
 } from "../interfaces";
 import { generateIconPath } from "../../shared/shared.utils";
-import { IssuesAPIService } from "src/app/api/issues/issues-api.service";
-import { IssuesService } from "../issues.service";
 import { Json } from "src/app/interface-primitives";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
+import { client } from "src/app/shared/api/api";
+import { components } from "src/app/api/api-schema";
+
+type EventDetail = components["schemas"]["IssueEventDetailSchema"];
+type IssueDetail = components["schemas"]["IssueDetailSchema"];
 
 interface IssueDetailState {
-  issue: IssueDetail | null;
-  issueLoading: boolean;
-  issueInitialLoadComplete: boolean;
-  event: EventDetail | null;
-  eventLoading: boolean;
-  eventInitialLoadComplete: boolean;
   tags: IssueTags[] | null;
   isReversed: boolean;
   showShowMore: boolean;
 }
 
 const initialState: IssueDetailState = {
-  issue: null,
-  event: null,
   tags: null,
   isReversed: true,
   showShowMore: false,
-  issueLoading: false,
-  issueInitialLoadComplete: false,
-  eventLoading: false,
-  eventInitialLoadComplete: false,
 };
 
 @Injectable({
   providedIn: "root",
 })
 export class IssueDetailService extends StatefulService<IssueDetailState> {
-  readonly issue$ = this.getState$.pipe(map((state) => state.issue));
-  readonly issueInitialLoadComplete$ = this.getState$.pipe(
-    map((state) => state.issueInitialLoadComplete)
-  );
-  readonly event$ = this.getState$.pipe(map((state) => state.event));
-  readonly tags$ = this.getState$.pipe(
-    map((state) => state.tags && this.tagsWithPercent(state.tags))
-  );
-  readonly eventInitialLoadComplete$ = this.getState$.pipe(
-    map((state) => state.eventInitialLoadComplete)
-  );
-  readonly isReversed$ = this.getState$.pipe(map((state) => state.isReversed));
-  readonly showShowMore$ = this.getState$.pipe(
-    map((state) => state.showShowMore)
-  );
-  readonly hasNextEvent$ = this.event$.pipe(
-    map((event) => event && event.nextEventID !== null)
-  );
-  readonly hasPreviousEvent$ = this.event$.pipe(
-    map((event) => event && event.previousEventID !== null)
-  );
-  readonly nextEventUrl$ = combineLatest([
-    this.organization.activeOrganizationSlug$,
-    this.issue$,
-    this.event$,
-  ]).pipe(
-    map(([orgSlug, issue, event]) => {
-      if (event && event.nextEventID) {
-        return this.eventUrl(orgSlug, issue, event.nextEventID);
-      }
-      return null;
-    })
-  );
-  readonly previousEventUrl$ = combineLatest([
-    this.organization.activeOrganizationSlug$,
-    this.issue$,
-    this.event$,
-  ]).pipe(
-    map(([orgSlug, issue, event]) => {
-      if (event && event.previousEventID) {
-        return this.eventUrl(orgSlug, issue, event.previousEventID);
-      }
-      return null;
-    })
-  );
-  readonly eventEntryException$ = combineLatest([
-    this.event$,
-    this.isReversed$,
-  ]).pipe(
-    map(([event, isReversed]) =>
-      event ? this.reverseFrames(event, isReversed) : undefined
-    )
-  );
-  readonly rawStacktraceValues$ = this.event$.pipe(
-    map((event) => (event ? this.rawStacktraceValues(event) : undefined))
-  );
-  readonly eventEntryRequest$ = this.event$.pipe(
-    map((event) => (event ? this.entryRequestData(event) : undefined))
-  );
-  readonly eventEntryCSP$ = this.event$.pipe(
-    map((event) => (event ? this.eventEntryCSP(event) : undefined))
-  );
-  readonly eventEntryMessage$ = this.event$.pipe(
-    map((event) => (event ? this.eventEntryMessage(event) : undefined))
-  );
-  readonly specialContexts$ = this.event$.pipe(
-    map((event) => (event ? this.specialContexts(event) : undefined))
-  );
-  readonly breadcrumbs$ = this.event$.pipe(
-    map((event) => (event ? this.eventEntryBreadcrumbs(event) : undefined))
-  );
+  private organization = inject(OrganizationsService);
+  private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
-  constructor(
-    private organization: OrganizationsService,
-    private issueService: IssuesService,
-    private issuesAPIService: IssuesAPIService,
-    private snackBar: MatSnackBar,
-    private router: Router
-  ) {
+  readonly issue = computed(() => this.#issueResource.value());
+  readonly issueInitialLoadComplete = computed(() =>
+    this.#issueResource.hasValue(),
+  );
+  readonly event = computed(() => this.#eventResource.value());
+  readonly tags = computed(() => {
+    const state = this.state();
+    return state.tags && this.tagsWithPercent(state.tags);
+  });
+  readonly eventInitialLoadComplete = computed(() =>
+    this.#eventResource.hasValue(),
+  );
+  readonly isReversed = computed(() => this.state().isReversed);
+  readonly showShowMore = computed(() => this.state().showShowMore);
+  readonly hasNextEvent = computed(
+    () => this.event() && this.event()?.nextEventID !== null,
+  );
+  readonly hasPreviousEvent = computed(
+    () => this.event() && this.event()?.previousEventID !== null,
+  );
+  readonly nextEventUrl = computed(() => {
+    const orgSlug = this.organization.activeOrganizationSlug();
+    const issue = this.issue();
+    const event = this.event();
+
+    if (event && event.nextEventID) {
+      return this.eventUrl(orgSlug, issue!, event.nextEventID);
+    }
+    return null;
+  });
+  readonly previousEventUrl = computed(() => {
+    const orgSlug = this.organization.activeOrganizationSlug();
+    const issue = this.issue();
+    const event = this.event();
+
+    if (event && event.previousEventID) {
+      return this.eventUrl(orgSlug, issue!, event.previousEventID);
+    }
+    return null;
+  });
+  readonly eventEntryException = computed(() => {
+    const event = this.event();
+    const isReversed = this.isReversed();
+
+    return event ? this.reverseFrames(event, isReversed) : undefined;
+  });
+  readonly rawStacktraceValues = computed(() => {
+    const event = this.event();
+    return event ? this.getRawStacktraceValues(event) : undefined;
+  });
+  readonly eventEntryRequest = computed(() => {
+    const event = this.event();
+    return event ? this.getEntryRequestData(event) : undefined;
+  });
+  readonly eventEntryCSP = computed(() => {
+    const event = this.event();
+    return event ? this.getEventEntryCSP(event) : undefined;
+  });
+  readonly eventEntryMessage = computed(() => {
+    const event = this.event();
+    return event ? this.getEventEntryMessage(event) : undefined;
+  });
+  readonly specialContexts = computed(() => {
+    const event = this.event();
+    return event ? this.getSpecialContexts(event) : undefined;
+  });
+  readonly breadcrumbs = computed(() => {
+    const event = this.event();
+    return event ? this.eventEntryBreadcrumbs(event) : undefined;
+  });
+
+  issueID = signal("");
+  eventID = signal<string | null>(null);
+  #issueResource = resource({
+    params: () => ({ issueID: this.issueID() }),
+    loader: async ({ params }) => {
+      if (!params.issueID) {
+        return;
+      }
+      const { data } = await client.GET("/api/0/issues/{issue_id}/", {
+        params: { path: { issue_id: parseInt(params.issueID) } },
+      });
+      return data;
+    },
+  });
+  #eventResource = resource({
+    params: () => ({ issueID: this.issueID(), eventID: this.eventID() }),
+    loader: async ({ params }) => {
+      const issueID = parseInt(params.issueID);
+      const eventID = params.eventID;
+      if (!issueID) {
+        return undefined;
+      }
+      if (eventID) {
+        const { data } = await client.GET(
+          "/api/0/issues/{issue_id}/events/{event_id}/",
+          {
+            params: {
+              path: { issue_id: issueID, event_id: eventID },
+            },
+          },
+        );
+        return data;
+      }
+      const { data } = await client.GET(
+        "/api/0/issues/{issue_id}/events/latest/",
+        {
+          params: { path: { issue_id: issueID } },
+        },
+      );
+      return data;
+    },
+  });
+
+  constructor() {
     super(initialState);
   }
 
-  retrieveIssue(id: number) {
-    this.setState({ issueLoading: true });
-    return this.issuesAPIService.retrieve(id.toString()).pipe(
-      tap((issue) => this.setIssue(issue)),
-      catchError((error) => {
-        if (error instanceof HttpErrorResponse && error.status === 404) {
-          this.clearIssue();
-        }
-        return EMPTY;
-      })
-    );
-  }
-
-  getPreviousEvent() {
-    const state = this.state.getValue();
-    if (state.issue && state.event && state.event.previousEventID) {
-      this.retrieveEvent(state.issue.id, state.event.previousEventID);
+  async retrieveTags(id: number, query?: string) {
+    const queryParams: any = query ? { query: query } : {};
+    const { data } = await client.GET("/api/0/issues/{issue_id}/tags/", {
+      params: { path: { issue_id: id }, query: queryParams },
+    });
+    if (data) {
+      this.setTags(data as any);
     }
-  }
-
-  getNextEvent() {
-    const state = this.state.getValue();
-    if (state.issue && state.event && state.event.nextEventID) {
-      this.retrieveEvent(state.issue.id, state.event.nextEventID);
-    }
-  }
-
-  getLatestEvent() {
-    const issue = this.state.getValue().issue;
-    if (issue) {
-      return this.retrieveLatestEvent(issue.id);
-    }
-    return EMPTY;
-  }
-
-  getEventByID(eventID: string) {
-    const issue = this.state.getValue().issue;
-    if (issue) {
-      return this.retrieveEvent(issue.id, eventID);
-    }
-    return EMPTY;
-  }
-
-  retrieveTags(id: number, query?: string) {
-    return this.issuesAPIService.retrieveTags(id.toString(), query).pipe(
-      tap((resp) => {
-        this.setTags(resp);
-      })
-    );
   }
 
   getReversedFrames() {
@@ -193,40 +178,71 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   }
 
   setShowShowMore(value: boolean) {
-    this.state.next({
-      ...this.state.getValue(),
-      showShowMore: value,
-    });
+    this.setState({ showShowMore: value });
   }
 
-  setStatus(status: IssueStatus) {
-    const issue = this.state.getValue().issue;
+  async setStatus(
+    status: IssueStatus,
+    statusDetails?: components["schemas"]["StatusDetailsSchema"],
+  ) {
+    const issue = this.issue();
     if (issue) {
-      return this.issueService
-        .setStatus(issue.id, status)
-        .pipe(tap((resp) => this.setIssueStatus(resp.status)))
-        .toPromise();
+      const body: components["schemas"]["UpdateIssueSchema"] = { status };
+      if (statusDetails) {
+        body.statusDetails = statusDetails;
+      }
+      const { data, error } = await client.PUT(
+        "/api/0/organizations/{organization_slug}/issues/{issue_id}/",
+        {
+          params: {
+            path: {
+              organization_slug: this.organization.activeOrganizationSlug(),
+              issue_id: parseInt(this.issueID()),
+            },
+          },
+          body,
+        },
+      );
+      if (error) {
+        this.snackBar.open($localize`Error, unable to update issue`);
+      }
+      if (data) {
+        const resolvedInRelease = data.statusDetails?.["inRelease"];
+        this.#issueResource.update((issue) => ({
+          ...issue!,
+          status: data.status as IssueStatus,
+          statusDetails: data.statusDetails ?? {},
+        }));
+        if (statusDetails?.inNextRelease) {
+          this.snackBar.open(
+            resolvedInRelease
+              ? $localize`Issue will be resolved as of release ${resolvedInRelease}.`
+              : $localize`Issue resolved. No release was found to tie it to.`,
+          );
+        }
+      }
     }
-    return;
   }
 
-  deleteIssue(id: string) {
-    this.issuesAPIService
-      .destroy(id)
-      .pipe(
-        withLatestFrom(this.organization.activeOrganizationSlug$),
-        tap(([_, activeOrgSlug]) => {
-          this.snackBar.open(`Issue ${id} has been deleted.`);
-          this.router.navigate([activeOrgSlug, "issues"]);
-        }),
-        catchError((_) => {
-          this.snackBar.open(
-            `There was an error deleting this issue. Please try again.`
-          );
-          return EMPTY;
-        })
-      )
-      .subscribe();
+  updateCommentCount(num: number) {
+    this.setUpdatedCommentCount(num);
+  }
+
+  async deleteIssue(id: string) {
+    const { error } = await client.DELETE("/api/0/issues/{issue_id}/", {
+      params: { path: { issue_id: parseInt(id) } },
+    });
+    if (error) {
+      this.snackBar.open(
+        `There was an error deleting this issue. Please try again.`,
+      );
+    } else {
+      this.snackBar.open($localize`Issue ${id} has been deleted.`);
+      this.router.navigate([
+        this.organization.activeOrganizationSlug(),
+        "issues",
+      ]);
+    }
   }
 
   private tagsWithPercent(tags: IssueTags[]): IssueTagsAdjusted[] | undefined {
@@ -247,7 +263,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
         });
         const sumOfPercents = tagWithPercent.reduce(
           (accum, item) => accum + item.percent,
-          0
+          0,
         );
         if (sumOfPercents < 100) {
           return {
@@ -265,75 +281,11 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     return;
   }
 
-  /** Set local state issue state */
-  private setIssueStatus(status: IssueStatus) {
-    const state = this.state.getValue();
-    if (state.issue) {
-      const issue = { ...state.issue, status };
-      this.state.next({ ...state, issue });
-    }
-  }
-
-  private retrieveLatestEvent(issueId: number) {
-    this.setState({ eventLoading: true });
-    return this.issuesAPIService.retrieveLatestEvent(issueId).pipe(
-      tap((event) => this.setEvent(event)),
-      catchError((error) => {
-        if (error instanceof HttpErrorResponse && error.status === 404) {
-          this.clearEvent();
-        }
-        return EMPTY;
-      })
-    );
-  }
-
-  // private removed for testing
-  retrieveEvent(issueId: number, eventID: string) {
-    this.setState({ eventLoading: true });
-    return this.issuesAPIService.retrieveEvent(issueId, eventID).pipe(
-      tap((event) => this.setEvent(event)),
-      catchError((error) => {
-        if (error instanceof HttpErrorResponse && error.status === 404) {
-          this.clearEvent();
-        }
-        return EMPTY;
-      })
-    );
-  }
-
-  // private removed for testing
-  setIssue(issue: IssueDetail) {
-    this.setState({
-      issue,
-      issueLoading: false,
-      issueInitialLoadComplete: true,
-    });
-  }
-
-  private clearIssue() {
-    this.setState({
-      issue: null,
-      issueLoading: false,
-      issueInitialLoadComplete: true,
-      event: null,
-    });
-  }
-
-  // private removed for testing
-  setEvent(event: EventDetail) {
-    this.setState({
-      event,
-      eventLoading: false,
-      eventInitialLoadComplete: true,
-    });
-  }
-
-  clearEvent() {
-    this.setState({
-      event: null,
-      eventLoading: false,
-      eventInitialLoadComplete: true,
-    });
+  private setUpdatedCommentCount(num: number) {
+    this.#issueResource.update((issue) => ({
+      ...issue!,
+      numComments: issue!.numComments + num,
+    }));
   }
 
   setTags(tags: IssueTags[]) {
@@ -341,12 +293,12 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   }
 
   private toggleIsReversed() {
-    const isReversed = this.state.getValue().isReversed;
+    const isReversed = this.state().isReversed;
     this.setState({ isReversed: !isReversed });
   }
 
   /* Return the message entry type for an event */
-  private eventEntryMessage(event: EventDetail): Message | undefined {
+  private getEventEntryMessage(event: EventDetail): Message | undefined {
     const eventMessage = this.getMessageEntryData(event);
 
     if (eventMessage) {
@@ -356,7 +308,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   }
 
   /* Return the CSP entry type for an event */
-  private eventEntryCSP(event: EventDetail): CSP | undefined {
+  private getEventEntryCSP(event: EventDetail): CSP | undefined {
     const eventCSP = this.getCspEntryData(event);
 
     if (eventCSP) {
@@ -367,7 +319,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
 
   /* Return the breadcrumbs entry type for an event */
   private eventEntryBreadcrumbs(
-    event: EventDetail
+    event: EventDetail,
   ): BreadcrumbValueData | undefined {
     const breadcrumbs = this.getBreadcrumbs(event);
     if (breadcrumbs) {
@@ -377,7 +329,9 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   }
 
   /* Return the request entry type for an event with additional fields parsed from url */
-  private entryRequestData(event: EventDetail): AnnotatedRequest | undefined {
+  private getEntryRequestData(
+    event: EventDetail,
+  ): AnnotatedRequest | undefined {
     const eventRequest = this.getRequestEntryData(event);
     if (eventRequest) {
       let urlDomainName = "";
@@ -397,7 +351,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   /* Reverse frame array, nested in the event object */
   private reverseFrames(
     event: EventDetail,
-    isReversed: boolean
+    isReversed: boolean,
   ): ExceptionValueData | undefined {
     const eventException = this.getExceptionEntryData(event);
 
@@ -424,7 +378,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
     return;
   }
 
-  rawStacktraceValues(event: EventDetail): Values[] | undefined {
+  getRawStacktraceValues(event: EventDetail): Values[] | undefined {
     const platform = event.platform;
     const eventException = this.getExceptionEntryData(event);
 
@@ -451,7 +405,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
 
   checkContextName(
     contextsObject: { [key: string]: Json },
-    defaultUnknown: string
+    defaultUnknown: string,
   ) {
     if (
       contextsObject.name !== "Other" &&
@@ -468,14 +422,14 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
    * The order they are return in should always be user, browser, runtime
    * os, device, gpu
    */
-  specialContexts(event: EventDetail): AnnotatedContexts[] {
-    const user = event.user;
+  getSpecialContexts(event: EventDetail): AnnotatedContexts[] {
+    const user: any = event.user;
     const contexts = event.contexts;
     const contextsArray: AnnotatedContexts[] = [];
 
     for (const key in contexts) {
       if (key) {
-        const contextsObject = contexts[key];
+        const contextsObject: any = contexts[key];
 
         if (key === "browser") {
           contextsArray.unshift({
@@ -516,13 +470,13 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
             subtitle: contextsObject.version
               ? (contextsObject.version as string)
               : contextsObject.kernel_version
-              ? (contextsObject.kernel_version as string)
-              : "Unknown",
+                ? (contextsObject.kernel_version as string)
+                : "Unknown",
             key: contextsObject.version
               ? "Version"
               : contextsObject.kernel_version
-              ? "Kernel"
-              : "Version",
+                ? "Kernel"
+                : "Version",
           });
         }
         if (key === "device") {
@@ -538,13 +492,13 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
             subtitle: contextsObject.arch
               ? (contextsObject.arch as string)
               : contextsObject.model_id
-              ? (contextsObject.model_id as string)
-              : null,
+                ? (contextsObject.model_id as string)
+                : null,
             key: contextsObject.arch
               ? "Arch"
               : contextsObject.model_id
-              ? "Model"
-              : null,
+                ? "Model"
+                : null,
           });
         }
         if (key === "gpu") {
@@ -629,7 +583,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
    * property or undefined
    */
   private getEntryData(event: EventDetail, entryType: EntryType) {
-    const entries = event.entries.find((entry) => entry.type === entryType);
+    const entries = event.entries!.find((entry) => entry.type === entryType);
     if (!entries) {
       return undefined;
     }
@@ -640,7 +594,7 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
   private eventUrl(
     orgSlug: string | null,
     issue: IssueDetail | null,
-    eventID: string
+    eventID: string,
   ) {
     if (orgSlug && issue) {
       return `/${orgSlug}/issues/${issue.id}/events/${eventID}`;
