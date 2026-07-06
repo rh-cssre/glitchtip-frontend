@@ -1,0 +1,50 @@
+@use "variables" as vars;
+
+.time-range-form-container {
+  width: 400px;
+  padding: 20px;
+
+  @media screen and (min-width: vars.$Xsmall - 1) {
+    width: 325px;
+  }
+}
+
+.date-range-preview {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.custom-time-range-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-group-header {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.time-pickers,
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.time-pickers {
+  width: 100%;
+  gap: 25px;
+
+  mat-form-field {
+    width: 150px;
+  }
+}
+
+mat-calendar {
+  width: 100%;
+  border: 1px solid var(--mat-sys-outline-variant);
+  margin-bottom: 15px;
+  border-radius: vars.$shape-radius;
+}
