@@ -1,0 +1,202 @@
+@use "../../../../src/assets/styles/variables" as vars;
+
+.hero-card {
+  --mat-card-container-color: var(--mat-sys-surface-container);
+
+  width: 95%;
+  max-width: 1800px;
+  margin: 1.5rem auto 40px;
+  padding: 24px clamp(40px, 4vw, 80px) 40px;
+  border-radius: var(--mat-sys-corner-extra-large, 28px);
+  overflow: hidden;
+  position: relative;
+  background-image:
+    url("/assets/home/background-art-light.webp"),
+    conic-gradient(from 90deg at 1px 1px, #0000 90deg, color-mix(in srgb, var(--mat-sys-outline-variant) 35%, transparent) 0);
+  background-size: cover, 36px 36px;
+  background-position: center center, 0 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.7) 0%,
+      rgba(255, 255, 255, 0.3) 15%,
+      transparent 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: vars.$large) {
+    padding: 24px;
+  }
+
+  mat-card-content {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.hero-images-container {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  overflow: visible;
+
+  @media screen and (max-width: vars.$large) {
+    flex-direction: column;
+    position: relative;
+  }
+}
+
+.hero-content-left {
+  width: 45%;
+  flex-shrink: 0;
+  position: relative;
+
+  @media screen and (max-width: vars.$large) {
+    width: 100%;
+  }
+}
+
+.hero {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  position: relative;
+
+  @media screen and (max-width: vars.$small) {
+    padding: 65px 0 0;
+    font-size: 0.85em;
+  }
+
+  .content {
+    max-width: 550px;
+    margin: 0;
+
+    > p:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .marketing-body {
+    font-size: 1.25em;
+    line-height: 1.5em;
+  }
+}
+
+.bot-hero-image {
+  position: relative;
+  display: block;
+  margin-top: 2rem;
+  padding: 0;
+  z-index: 1;
+
+  @media screen and (max-width: vars.$large) {
+    z-index: 2;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  @media screen and (min-width: vars.$large) {
+    margin-right: -20%;
+  }
+
+  img {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+.hero-screenshot {
+  width: 85%;
+  flex-shrink: 0;
+  margin-right: -35%;
+  perspective: 1000px;
+
+  @media screen and (max-width: vars.$large) {
+    display: none;
+  }
+
+  picture {
+    display: block;
+    transform: rotateY(-12deg) rotateX(3deg);
+    border-radius: var(--mat-sys-corner-large, 16px);
+    box-shadow:
+      0 25px 80px rgba(0, 0, 0, 0.3),
+      0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--mat-sys-corner-large, 16px);
+    border: 6px solid var(--mat-sys-outline-variant);
+  }
+}
+
+.centered-block {
+  text-align: center;
+}
+
+.divider {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.subscribe-wrapper {
+  display: flex;
+  gap: 0 20px;
+
+  @media screen and (min-width: vars.$small) {
+    margin: 0 50px;
+  }
+
+  @media screen and (max-width: vars.$small) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .mc-field-group {
+    flex: 1;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .clear:last-child {
+    align-self: flex-start;
+    margin-top: 9px;
+
+    @media screen and (max-width: vars.$small) {
+      align-self: stretch;
+      margin-top: 0;
+    }
+  }
+}
+
+.squiggle {
+  text-decoration: underline wavy var(--mat-sys-error, #b3261e);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 4px;
+  font-size: inherit;
+  text-decoration-thickness: 2px;
+}
+
+.main-promo-section {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
