@@ -320,16 +320,6 @@ body {
   --mkt-container-narrow: 600px;
   --mkt-gutter: 48px;
   --mkt-section: clamp(40px, 5vw, 64px);
-
-  // --gt-space-* scale, mirrored so the reference app is self-contained.
-  --gt-space-0: 0;
-  --gt-space-1: 4px;
-  --gt-space-2: 8px;
-  --gt-space-3: 12px;
-  --gt-space-4: 16px;
-  --gt-space-5: 24px;
-  --gt-space-6: 32px;
-  --gt-space-7: 48px;
 }
 
 .marketing-display {
