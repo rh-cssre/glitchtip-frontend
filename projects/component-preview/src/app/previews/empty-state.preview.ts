@@ -124,6 +124,12 @@ export class EmptyStatePreview {
       description: "One line of guidance; omit for title only",
     },
     {
+      name: "headingLevel",
+      type: "number",
+      default: "3",
+      description: "aria-level for the title; match the surrounding page",
+    },
+    {
       name: "(content)",
       type: "projected",
       default: "",

@@ -4,7 +4,9 @@ import { MatIconModule } from "@angular/material/icon";
 /**
  * Shared empty state: a centered icon, title, a short message and one optional
  * action. Use it wherever a list, table or panel has no data so every empty
- * state reads the same. Project a single button for the action.
+ * state reads the same. Project a single button for the action. Set headingLevel
+ * to match the surrounding page so the title lands in the right place in the
+ * heading outline.
  */
 @Component({
   selector: "gt-empty-state",
@@ -17,7 +19,13 @@ import { MatIconModule } from "@angular/material/icon";
           icon()
         }}</mat-icon>
       }
-      <p class="empty-state__title">{{ title() }}</p>
+      <p
+        class="empty-state__title"
+        role="heading"
+        [attr.aria-level]="headingLevel()"
+      >
+        {{ title() }}
+      </p>
       @if (message()) {
         <p class="empty-state__message">{{ message() }}</p>
       }
@@ -62,4 +70,5 @@ export class EmptyStateComponent {
   readonly icon = input<string>("");
   readonly title = input.required<string>();
   readonly message = input<string>("");
+  readonly headingLevel = input<number>(3);
 }
