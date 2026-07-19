@@ -62,9 +62,13 @@
             </div>
           }
         } @else {
-          <p class="empty-state" i18n
-            >Once you create a token, it will show up here.</p
-          >
+          <gt-empty-state
+            icon="vpn_key"
+            i18n-title
+            title="No tokens"
+            i18n-message
+            message="Create a token to use the GlitchTip API."
+          />
         }
       </mat-card-content>
     </mat-card>

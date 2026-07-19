@@ -28,9 +28,13 @@
       <mat-divider></mat-divider>
       <mat-card-content>
         @if (user.identities!.length === 0) {
-          <p class="empty-auth">
-            You haven't connected any social auth accounts.
-          </p>
+          <gt-empty-state
+            icon="account_circle"
+            i18n-title
+            title="No connected accounts"
+            i18n-message
+            message="Connect a social login to sign in with it."
+          />
         } @else {
           <div class="socialaccount-list-wrapper">
             @for (

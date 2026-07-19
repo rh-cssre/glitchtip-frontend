@@ -17,6 +17,7 @@ import { AuthenticationService } from "src/app/api/allauth/authentication.servic
 import { AuthSvgComponent } from "../../shared/auth-svg/auth-svg.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { SocialAuthService, SocialAuthState } from "./social-auth.service";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-social-auth",
@@ -32,6 +33,7 @@ import { SocialAuthService, SocialAuthState } from "./social-auth.service";
     AuthSvgComponent,
     MatDividerModule,
     MatButtonModule,
+    EmptyStateComponent,
   ],
 })
 export class SocialAuthComponent
