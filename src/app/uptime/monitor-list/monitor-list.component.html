@@ -106,9 +106,13 @@
             [attr.colspan]="displayedColumns().length"
           >
             @if (!loading()) {
-              <div i18n class="body-text-strong table-empty-states">
-                No monitors were found.
-              </div>
+              <gt-empty-state
+                icon="share_eta"
+                i18n-title
+                title="No uptime monitors"
+                i18n-message
+                message="Add a monitor to get alerted when a site or service goes down."
+              />
             }
           </td>
         </tr>
