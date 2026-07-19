@@ -153,10 +153,13 @@
         </div>
       }
       @if (projectAlerts()?.length === 0 && newAlertOpen() === false) {
-        <p class="no-alerts" i18n
-          >You don't have any alerts set up. Click "Create New Alert" on the top
-          right of this card to get started.</p
-        >
+        <gt-empty-state
+          icon="notifications"
+          i18n-title
+          title="No alerts"
+          i18n-message
+          message="Create an alert to get notified when this project has new issues."
+        />
       } @else {
         @for (alert of projectAlerts(); track alert; let i = $index) {
           <div class="alert">
