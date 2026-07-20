@@ -1,25 +1,30 @@
-The Bottle integration adds support for the [Bottle Web Framework](https://bottlepy.org/).
-Currently it works well with the stable version of Bottle (0.12).
-However, the integration with the development version (0.13) doesn't work properly.
+Install the sentry Python SDK:
 
-1. Install `sentry-sdk` from PyPI with the `bottle` extra:
+```bash
+pip install sentry-sdk
+```
 
-   ```bash
-   $ pip install --upgrade sentry-sdk[bottle]
-   ```
+Initialize the SDK before creating your Bottle app:
 
-2. To configure the SDK, initialize it with the integration before your app has been initialized:
+```python
+import sentry_sdk
+from bottle import Bottle
 
-   ```python
-   import sentry_sdk
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-   from bottle import Bottle, run
-   from sentry_sdk.integrations.bottle import BottleIntegration
+app = Bottle()
+```
 
-   sentry_sdk.init(
-       dsn="your DSN here",
-       integrations=[BottleIntegration()]
-   )
+The SDK auto-detects Bottle and captures unhandled exceptions and request data.
 
-   app = Bottle()
-   ```
+Verify your setup:
+
+```python
+@app.route("/error")
+def trigger_error():
+    division_by_zero = 1 / 0
+```
