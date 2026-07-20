@@ -14,9 +14,9 @@ span {
 }
 
 .is-not-done {
-  color: #e22a46;
+  color: var(--mat-sys-error);
 }
 
 .is-done {
-  color: #54A65A;
+  color: var(--success-color);
 }
