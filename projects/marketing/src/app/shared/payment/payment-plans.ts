@@ -26,6 +26,7 @@ export const planOptions: PlanOption[] = [
     features: [
       { text: "Up to 1,000 events/mo" },
       { text: "Error tracking" },
+      { text: "30 days of event retention"},
       { text: "Ideal for testing before upgrading"}
     ],
     monthlyPrice: "Free",
@@ -38,6 +39,7 @@ export const planOptions: PlanOption[] = [
       { text: "Unlimited projects" },
       { text: "Unlimited team members" },
       { text: "Up to 100k events/mo" },
+      { text: "90 days of event retention"},
       { text: "Support access" },
     ],
     monthlyPrice: 15,
