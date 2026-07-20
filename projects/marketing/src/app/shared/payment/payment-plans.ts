@@ -21,13 +21,12 @@ export interface PlanOption {
 
 export const planOptions: PlanOption[] = [
   {
-    name: "Free",
-    subtitle: "For Personal Projects",
+    name: "Hobby & Trial",
+    subtitle: "Explore features or build side projects",
     features: [
       { text: "Up to 1,000 events/mo" },
       { text: "Error tracking" },
-      { text: "Unlimited projects" },
-      { text: "Unlimited team members" },
+      { text: "Ideal for testing before upgrading"}
     ],
     monthlyPrice: "Free",
   },
@@ -36,6 +35,8 @@ export const planOptions: PlanOption[] = [
     subtitle: "For small teams",
     includesFrom: "Free",
     features: [
+      { text: "Unlimited projects" },
+      { text: "Unlimited team members" },
       { text: "Up to 100k events/mo" },
       { text: "Support access" },
     ],
