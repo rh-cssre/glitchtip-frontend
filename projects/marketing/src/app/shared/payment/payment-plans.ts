@@ -36,10 +36,10 @@ export const planOptions: PlanOption[] = [
     subtitle: "For small teams",
     includesFrom: "Free",
     features: [
-      { text: "Unlimited projects" },
-      { text: "Unlimited team members" },
       { text: "Up to 100k events/mo" },
       { text: "90 days of event retention"},
+      { text: "Unlimited projects" },
+      { text: "Unlimited team members" },
       { text: "Support access" },
     ],
     monthlyPrice: 15,
