@@ -23,6 +23,7 @@ export class SupportMenuComponent {
   private settings = inject(SettingsService);
 
   protected paidForGlitchTip = this.settings.paidForGlitchTip;
+  protected billingEnabled = this.settings.billingEnabled;
   protected supportUrl = signal<string | null>(null);
   // Fallback when no license-prefilled link is available — still routes to the support page.
   protected readonly fallbackSupportUrl = "https://glitchtip.com/support";

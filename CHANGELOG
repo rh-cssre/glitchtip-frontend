@@ -1,3 +1,21 @@
+# 6.2.2
+
+- Fix: Hide the "Open Support Chat" item in the Support menu on hosted instances — it linked to a self-hosted, license-key-gated support page that hosted users cannot use. Hosted support remains the in-app chat widget.
+- Chore: Update dependencies (Angular 22.0.7).
+
+# 6.2.1
+
+- Feat: Converge the issue status controls into a single dropdown, add a "resolve in next release" option, and confirm the action with a chip and snackbar.
+- Feat: Add a purpose-built default Open Graph social card for the marketing site.
+- Fix: Hide the self-hosted upsell and donation links in the Support menu on hosted.
+- Fix: Disable the add-alert and delete actions in project settings for organization members without permission.
+- Fix: Handle Chatwoot failures gracefully on the Support page, tidy the license-key error message, and attach the license to the conversation.
+- Fix: Repair the static build under TypeScript 6.
+- Refactor: Rebuild the TOTP two-factor setup as a stepper flow.
+- Refactor: Replace hardcoded colors with Material 3 design tokens.
+- Chore: Consolidate contact emails to support@glitchtip.com across the app and marketing site.
+- Chore: Update dependencies.
+
 # 6.2.0
 
 - Feat: Offer self-serve Stripe Payment Links for self-hosted tiers, with live links and a pricing deep-link.
