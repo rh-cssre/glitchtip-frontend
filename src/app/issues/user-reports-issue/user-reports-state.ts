@@ -8,6 +8,7 @@ import {
   getPaginationHeaders,
   getPaginator,
 } from "src/app/shared/pagination.utils";
+import { keepPreviousValue } from "src/app/shared/signal.utils";
 
 @Injectable()
 export class UserReportsService {
@@ -37,9 +38,13 @@ export class UserReportsService {
       return { data, pagination, errors };
     },
   });
-  reports = computed(() => this.#reportsResource.value()?.data || []);
+  // Keep the last page visible during a reload so the list doesn't blank out.
+  #reportsData = keepPreviousValue(() => this.#reportsResource.value()?.data);
+  reports = computed(() => this.#reportsData() ?? []);
   errors = computed(() => this.#reportsResource.value()?.errors?.detail[0].msg);
-  pagination = computed(() => this.#reportsResource.value()?.pagination);
+  pagination = keepPreviousValue(
+    () => this.#reportsResource.value()?.pagination,
+  );
   paginator = computed(() => getPaginator(this.pagination()));
   loading = computed(() => this.#reportsResource.isLoading());
 

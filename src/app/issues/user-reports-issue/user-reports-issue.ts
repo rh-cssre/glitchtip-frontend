@@ -7,12 +7,12 @@ import {
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { UserReportsService } from "./user-reports-state";
+import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 
 @Component({
   selector: "gt-user-reports-issue",
@@ -26,7 +26,7 @@ import { UserReportsService } from "./user-reports-state";
     MatButtonModule,
     RouterLink,
     MatIconModule,
-    MatProgressSpinnerModule,
+    LoadingOverlayComponent,
   ],
   providers: [UserReportsService],
 })
