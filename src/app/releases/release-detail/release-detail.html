@@ -9,14 +9,13 @@
     <gt-detail-header [title]="title" />
   }
   <div class="table-container">
-    <table mat-table class="mat-elevation-z2" [dataSource]="releaseFiles()">
+    <gt-loading-overlay [loading]="loading()" label="Loading release files">
+      <table mat-table class="mat-elevation-z2" [dataSource]="releaseFiles()">
       <ng-container matColumnDef="pagination">
         <th mat-header-cell *matHeaderCellDef class="table-header__actions">
           <div class="pagination-buttons-container">
-            <gt-pagination-buttons
-              [paginator]="paginator()"
-              [loading]="loading()"
-            />
+            <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+            <gt-pagination-buttons [paginator]="paginator()" />
           </div>
         </th>
       </ng-container>
@@ -73,6 +72,7 @@
           </div>
         </td>
       </tr>
-    </table>
+      </table>
+    </gt-loading-overlay>
   </div>
 </section>

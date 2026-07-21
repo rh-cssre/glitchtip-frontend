@@ -1,5 +1,7 @@
 import { computed, Injectable, signal } from "@angular/core";
 import { apiResource } from "../shared/api/api-resource-factory";
+import { keepPreviousValue } from "../shared/signal.utils";
+import { getPaginator } from "../shared/pagination.utils";
 
 @Injectable()
 export class ReleasesService {
@@ -19,9 +21,14 @@ export class ReleasesService {
       },
     },
   }));
-  releases = computed(() => this.#releasesResource.value()?.data || []);
+  // Keep the last page visible during a reload so the table doesn't blank out.
+  #releasesData = keepPreviousValue(() => this.#releasesResource.value()?.data);
+  #pagination = keepPreviousValue(
+    () => this.#releasesResource.value()?.pagination,
+  );
+  releases = computed(() => this.#releasesData() ?? []);
   errors = computed(() => this.#releasesResource.serverError()?.detail);
-  paginator = computed(() => this.#releasesResource.paginator());
+  paginator = computed(() => getPaginator(this.#pagination()));
   isLoading = computed(() => this.#releasesResource.isLoading());
   initialLoadComplete = computed(
     () => this.#releasesResource.hasValue() || !this.isLoading(),

@@ -9,8 +9,9 @@
 </gt-top-app-bar>
 <section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
   <div class="table-container">
-    @if (releases(); as releases) {
-      <table mat-table class="mat-elevation-z2" [dataSource]="releases">
+    <gt-loading-overlay [loading]="isLoading()" label="Loading releases">
+      @if (releases(); as releases) {
+        <table mat-table class="mat-elevation-z2" [dataSource]="releases">
         <ng-container matColumnDef="header-spacing">
           <!-- Empty cell for spacing -->
           <th mat-header-cell *matHeaderCellDef> </th>
@@ -18,10 +19,8 @@
         <ng-container matColumnDef="pagination">
           <th mat-header-cell *matHeaderCellDef class="table-header__actions">
             <div>
-              <gt-pagination-buttons
-                [paginator]="paginator()"
-                [loading]="isLoading()"
-              />
+              <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+              <gt-pagination-buttons [paginator]="paginator()" />
             </div>
           </th>
         </ng-container>
@@ -88,7 +87,8 @@
             </div>
           </td>
         </tr>
-      </table>
-    }
+        </table>
+      }
+    </gt-loading-overlay>
   </div>
 </section>
