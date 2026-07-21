@@ -21,6 +21,7 @@ import { MonitorListService } from "./monitor-list.service";
 import { MatCardModule } from "@angular/material/card";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
+import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 
 @Component({
   selector: "gt-monitor-list",
@@ -39,6 +40,7 @@ import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagi
     ListTitleComponent,
     TopAppBar,
     PaginationButtons,
+    LoadingOverlayComponent,
   ],
   providers: [MonitorListService],
 })

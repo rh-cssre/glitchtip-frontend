@@ -8,6 +8,7 @@ import {
   getPaginationHeaders,
   getPaginator,
 } from "src/app/shared/pagination.utils";
+import { keepPreviousValue } from "src/app/shared/signal.utils";
 
 @Injectable()
 export class MonitorChecksService {
@@ -49,12 +50,16 @@ export class MonitorChecksService {
       return { data, errors, pagination };
     },
   });
-  monitorChecks = computed(() => this.#monitorChecks.value()?.data || []);
+  // Keep the last page visible during a reload so the table doesn't blank out.
+  #monitorChecksData = keepPreviousValue(
+    () => this.#monitorChecks.value()?.data,
+  );
+  monitorChecks = computed(() => this.#monitorChecksData() ?? []);
   loading = computed(() => this.#monitorChecks.isLoading());
   initialLoadComplete = computed(
     () => this.#monitorChecks.hasValue() || !this.#monitorChecks.isLoading(),
   );
-  pagination = computed(() => this.#monitorChecks.value()?.pagination);
+  pagination = keepPreviousValue(() => this.#monitorChecks.value()?.pagination);
   paginator = computed(() => getPaginator(this.pagination()));
 
   setParams(

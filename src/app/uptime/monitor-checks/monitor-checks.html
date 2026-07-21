@@ -1,5 +1,6 @@
 <div class="table-container">
-  <table mat-table [dataSource]="monitorChecks()" class="mat-elevation-z2">
+  <gt-loading-overlay [loading]="loading()" label="Loading monitor checks">
+    <table mat-table [dataSource]="monitorChecks()" class="mat-elevation-z2">
     <ng-container matColumnDef="actions">
       <th
         mat-header-cell
@@ -15,10 +16,8 @@
             <mat-button-toggle [value]="false">All checks</mat-button-toggle>
             <mat-button-toggle [value]="true">Incidents</mat-button-toggle>
           </mat-button-toggle-group>
-          <gt-pagination-buttons
-            [paginator]="paginator()"
-            [loading]="loading()"
-          />
+          <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+          <gt-pagination-buttons [paginator]="paginator()" />
         </div>
       </th>
     </ng-container>
@@ -91,5 +90,6 @@
         </div>
       </td>
     </tr>
-  </table>
+    </table>
+  </gt-loading-overlay>
 </div>
