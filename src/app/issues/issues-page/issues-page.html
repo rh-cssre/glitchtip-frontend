@@ -25,6 +25,11 @@
     />
   }
   <div class="table-container">
+    <div class="issues-loading-bar">
+      @if (loading()) {
+        <mat-progress-bar mode="indeterminate" aria-label="Loading issues" />
+      }
+    </div>
     @if (issues(); as issues) {
       <table
         mat-table
@@ -32,6 +37,8 @@
         [trackBy]="trackIssues"
         class="mat-elevation-z2"
         [class.fixedLayout]="issues.length === 0 && !loading()"
+        [class.is-reloading]="loading()"
+        [attr.aria-busy]="loading()"
       >
         <ng-container matColumnDef="selectAll">
           <th mat-header-cell *matHeaderCellDef class="table-header__actions">
@@ -155,10 +162,8 @@
                   >
                 </mat-menu>
               }
-              <gt-pagination-buttons
-                [paginator]="paginator()"
-                [loading]="loading()"
-              />
+              <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+              <gt-pagination-buttons [paginator]="paginator()" />
             </div>
           </th>
         </ng-container>

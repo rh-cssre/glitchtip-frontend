@@ -11,14 +11,37 @@ $selectColumnWidth: 60px;
 table {
   width: 100%;
   margin-bottom: 40px;
+  transition: opacity 150ms ease;
 
   &.fixedLayout {
     table-layout: fixed;
+  }
+
+  // Dim + block interaction on stale rows during a reload.
+  &.is-reloading {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 
 .table-card {
   overflow: hidden;
+}
+
+// Positioning context for the overlaid loading bar.
+.table-container {
+  position: relative;
+}
+
+.issues-loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 2;
+  // The bar only conveys progress; never let its 4px strip swallow header clicks.
+  pointer-events: none;
 }
 
 .action-button-container {
