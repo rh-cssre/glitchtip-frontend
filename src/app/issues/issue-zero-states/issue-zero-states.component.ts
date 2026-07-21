@@ -8,12 +8,15 @@ import {
   resource,
 } from "@angular/core";
 import { NgTemplateOutlet } from "@angular/common";
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { MarkdownComponent, provideMarkdown } from "ngx-markdown";
 
 import { IssuesService } from "../issues.service";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { CopyInputComponent } from "../../shared/copy-input/copy-input.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { client } from "src/app/shared/api/api";
 
@@ -22,7 +25,15 @@ import { client } from "src/app/shared/api/api";
   templateUrl: "./issue-zero-states.component.html",
   styleUrls: ["./issue-zero-states.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, NgTemplateOutlet, CopyInputComponent, MarkdownComponent],
+  imports: [
+    RouterLink,
+    NgTemplateOutlet,
+    MatButtonModule,
+    MatIconModule,
+    CopyInputComponent,
+    EmptyStateComponent,
+    MarkdownComponent,
+  ],
   providers: [provideMarkdown()],
 })
 export class IssueZeroStatesComponent implements OnInit {
@@ -30,6 +41,8 @@ export class IssueZeroStatesComponent implements OnInit {
   private issuesService = inject(IssuesService);
   private organizationsService = inject(OrganizationsService);
   private projectsService = inject(ProjectsService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   projectKeyResource = resource({
     params: () => ({
@@ -66,6 +79,7 @@ export class IssueZeroStatesComponent implements OnInit {
       this.projectsService.initialLoadComplete() &&
       this.issuesService.initialLoad(),
   );
+
   displayZeroStates = computed(
     () => !this.loading() && this.initialLoadComplete(),
   );
@@ -171,6 +185,36 @@ export class IssueZeroStatesComponent implements OnInit {
         projectsFromParams.includes(project.id) && project.isMember === false,
     );
   });
+
+  adminNotOnTeam = computed(() => {
+    const notOnTeam = this.projectsWhereAdminIsNotOnTheTeam();
+    return notOnTeam.length > 0 && notOnTeam.length < 2;
+  });
+
+  /**
+   * The single zero-state to show. Setup instructions, no-access and the empty
+   * states are mutually exclusive, so the page never stacks two of them.
+   */
+  zeroStateKind = computed<
+    "no-projects" | "no-access" | "onboarding" | "no-results" | null
+  >(() => {
+    if (!this.displayZeroStates()) return null;
+    if (!this.orgHasAProject()) return "no-projects";
+    if (this.adminNotOnTeam()) return "no-access";
+    if (this.singleProjectApplied() && this.showOnboarding())
+      return "onboarding";
+    return "no-results";
+  });
+
+  noAccessMessage = computed(() =>
+    this.singleProjectApplied()
+      ? $localize`You're not on this project's team. Ask an organization admin to add you.`
+      : $localize`You're not on the team for at least one of the selected projects. Ask an organization admin to add you.`,
+  );
+
+  clearFilters() {
+    this.router.navigate([], { relativeTo: this.route, queryParams: {} });
+  }
 
   ngOnInit() {
     this.projectsService.retrieveProjects();
