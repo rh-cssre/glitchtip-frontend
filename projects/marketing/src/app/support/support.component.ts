@@ -51,7 +51,6 @@ export class SupportComponent {
     licenseKey: new FormControl("", {
       nonNullable: true,
       validators: [
-        Validators.required,
         Validators.pattern(LICENSE_KEY_PATTERN),
       ],
     }),
