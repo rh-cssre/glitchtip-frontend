@@ -1,7 +1,7 @@
 import { Type } from "@angular/core";
 import { LoadingButtonPreview } from "./previews/loading-button.preview";
 import { CopyInputPreview } from "./previews/copy-input.preview";
-import { ToDoItemPreview } from "./previews/to-do-item.preview";
+import { StepperPreview } from "./previews/stepper.preview";
 import { TablePatternPreview } from "./previews/table-pattern.preview";
 import { ChartsPreview } from "./previews/charts.preview";
 import { FormsPreview } from "./previews/forms.preview";
@@ -136,10 +136,10 @@ export const PREVIEWS: PreviewEntry[] = [
     status: "stable",
   },
   {
-    id: "to-do-item",
-    label: "To-do item",
+    id: "stepper",
+    label: "Stepper",
     group: "Components",
-    component: ToDoItemPreview,
+    component: StepperPreview,
     status: "stable",
   },
   {
