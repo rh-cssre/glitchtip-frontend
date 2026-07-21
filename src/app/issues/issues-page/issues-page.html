@@ -25,21 +25,15 @@
     />
   }
   <div class="table-container">
-    <div class="issues-loading-bar">
-      @if (loading()) {
-        <mat-progress-bar mode="indeterminate" aria-label="Loading issues" />
-      }
-    </div>
-    @if (issues(); as issues) {
-      <table
-        mat-table
-        [dataSource]="issues"
-        [trackBy]="trackIssues"
-        class="mat-elevation-z2"
-        [class.fixedLayout]="issues.length === 0 && !loading()"
-        [class.is-reloading]="loading()"
-        [attr.aria-busy]="loading()"
-      >
+    <gt-loading-overlay [loading]="loading()" label="Loading issues">
+      @if (issues(); as issues) {
+        <table
+          mat-table
+          [dataSource]="issues"
+          [trackBy]="trackIssues"
+          class="mat-elevation-z2"
+          [class.fixedLayout]="issues.length === 0 && !loading()"
+        >
         <ng-container matColumnDef="selectAll">
           <th mat-header-cell *matHeaderCellDef class="table-header__actions">
             <mat-checkbox
@@ -350,6 +344,7 @@
           </td>
         </tr>
       </table>
-    }
+      }
+    </gt-loading-overlay>
   </div>
 </section>

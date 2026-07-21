@@ -19,7 +19,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSelectChange } from "@angular/material/select";
 import { MatTable, MatTableModule } from "@angular/material/table";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { IssuesService } from "../issues.service";
 import { SettingsService } from "src/app/api/settings.service";
@@ -35,6 +34,7 @@ import {
   stringAttribute,
 } from "src/app/shared/shared.utils";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EnvironmentsService } from "src/app/api/environments.service";
 import { ListAppBar } from "src/app/list-elements/list-app-bar/list-app-bar";
 import { IssueChart } from "./charts/issue-chart";
@@ -55,7 +55,7 @@ import { SearchHelpConfig } from "../../list-elements/data-filter-bar/data-filte
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatProgressBarModule,
+    LoadingOverlayComponent,
     RouterLink,
     IssueZeroStatesComponent,
     DatePipe,
