@@ -15,7 +15,7 @@ Burke Software functions as a data processor. We do not sell or share user data 
 - Analytics: Plausible (Privacy-focused, GDPR compliant, no cookies) runs solely on this marketing website https://glitchtip.com and not on our GlitchTip hosted servers (ex: https://app.glitchtip.com)
 - Payments: Stripe (PCI-DSS Service Provider Level 1) - a global payment processor. Stripe receives only the billing details needed to process a subscription (e.g. name and billing contact); error events, logs, and PHI are never transmitted to Stripe.
 
-This list has not changed since GlitchTip was founded. If we add or replace a sub-processor, we will notify account holders by email at least 30 days in advance and record the change below, so that customers have an opportunity to object.
+This list has not changed since GlitchTip was founded. If we add or replace a sub-processor, we will notify account holders by email at least 10 business days in advance and record the change below. Customers then have 30 days after notice to object, as provided in our [Data Processing Agreement](/legal/data-processing-agreement).
 
 **Sub-processor changes:** none to date.
 

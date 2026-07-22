@@ -24,7 +24,7 @@ support@glitchtip.com
 
 ### Security Policy
 
-As defined in the Agreement.
+The technical and organizational security measures described in Annex II below, together with the controls published at [Hosted GlitchTip: Architecture & Security Compliance](/documentation/hosted-architecture).
 
 ### Notices
 
@@ -97,7 +97,7 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 ### Special Category Data
 
-Is special category data (as defined in Article 9 of the GDPR) Processed? No
+Is special category data (as defined in Article 9 of the GDPR) Processed? Not intentionally. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Where Customer has executed a Business Associate Agreement with Provider, protected health information may be Processed subject to that agreement.
 
 ### Frequency of Transfer
 
@@ -123,7 +123,7 @@ The supervisory authority will be the supervisory authority of the data exporter
 
 ## Annex II Technical and Organizational Security Measures
 
-See Security Policy.
+The measures below, together with the controls published at [Hosted GlitchTip: Architecture & Security Compliance](/documentation/hosted-architecture), are the Security Policy.
 
 **User identification and authorization process and protection:**
 
