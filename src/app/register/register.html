@@ -104,6 +104,29 @@
           </p>
         </div>
       }
+      @if (
+        billingEnabled() &&
+        (enableUserRegistration() || enableSocialAppsUserRegistration())
+      ) {
+        <p class="body-text terms-notice" i18n>
+          By creating an account, you agree to our
+          <a
+            class="auth-link"
+            href="https://glitchtip.com/legal/tos"
+            target="_blank"
+            rel="noopener"
+            >Terms of Service</a
+          >
+          and
+          <a
+            class="auth-link"
+            href="https://glitchtip.com/legal/privacy"
+            target="_blank"
+            rel="noopener"
+            >Privacy Policy</a
+          >.
+        </p>
+      }
       <p class="body-text sign-up">
         <ng-container i18n>Already have an account?</ng-container>
         <br />
