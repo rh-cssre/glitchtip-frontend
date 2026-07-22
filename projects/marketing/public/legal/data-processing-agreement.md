@@ -1,10 +1,12 @@
 # Data Processing Agreement
 
-_This Data Processing Agreement ("DPA") forms part of GlitchTip's [Terms of Service](/legal/tos) and applies automatically to Customers processing personal data through the Services. No signature or separate acceptance is required._
+_This Data Processing Agreement (“DPA”) forms part of GlitchTip’s [Terms of Service](/legal/tos) and applies automatically in the circumstances described in the Data Processing section of those Terms. No signature or separate acceptance is required._
 
 Version 1.0 — Last Updated July 22, 2026
 
-This DPA has 2 parts: (1) the Key Terms on this page and (2) the Common Paper DPA Standard Terms Version 1.1 posted at <a href="https://commonpaper.com/standards/data-processing-agreement/1.1" target="blank">commonpaper.com/standards/data-processing-agreement/1.1</a> (“DPA Standard Terms”), which is incorporated by reference. If there is any inconsistency between the parts of the DPA, the Key Terms on this page will control over the DPA Standard Terms. Capitalized words have the meanings given on this page. However, if this page omits or does not define a word, the default meaning will be “none” or “not applicable” and the correlating clause, sentence, or section does not apply to this DPA. All other capitalized words have the meanings given in the DPA Standard Terms or the Agreement.
+This DPA has 2 parts: (1) the Key Terms on this page and (2) the Common Paper DPA Standard Terms Version 1.1 posted at <a href="https://commonpaper.com/standards/data-processing-agreement/1.1" target="_blank" rel="noopener noreferrer">commonpaper.com/standards/data-processing-agreement/1.1</a> (“DPA Standard Terms”), which is incorporated by reference. If there is any inconsistency between the parts of the DPA, the Key Terms on this page will control over the DPA Standard Terms. The Key Terms below have the meanings given on this page. However, if this page omits or does not define a Key Term, the default meaning will be “none” or “not applicable” and the correlating clause, sentence, or section does not apply to this DPA. All other capitalized words have the meanings given in the DPA Standard Terms or the Agreement.
+
+This page is the Cover Page for purposes of the DPA Standard Terms. Every reference in the DPA Standard Terms to the “Cover Page” means this page, including its Key Terms and Annexes. Customer electronically accepts this Cover Page by accepting the Agreement, and the parties are deemed to have agreed to a Cover Page for purposes of Section 10.1 of the DPA Standard Terms at that time.
 
 ## Key Terms
 
@@ -28,13 +30,13 @@ As defined in the Agreement.
 
 Provider: david@burkesoftware.com
 
-Customer: the email address registered to Customer's GlitchTip account.
+Customer: the email address registered to Customer’s GlitchTip account.
 
 ## Changes to the Agreement
 
 ### DPA Liability Cap
 
-The Provider's total cumulative liability arising out of the related DPA Covered Claims will not be more than the greater of $3,000.00 or 1 times the fees payable by Customer to Provider in the 12 month period immediately before the claim.
+The Provider’s total cumulative liability arising out of the related DPA Covered Claims will not be more than the greater of $3,000.00 or 1 times the fees payable by Customer to Provider in the 12 month period immediately before the claim.
 
 ### Service Provider Relationship
 
@@ -80,8 +82,8 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 ### Categories of Data Subjects
 
-- Customer's end users or customers
-- Customer's employees
+- Customer’s end users or customers
+- Customer’s employees
 - Contractors and other authorized users of the Customer who log into and manage the GlitchTip platform.
 
 ### Categories of Personal Data
@@ -91,7 +93,7 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 - Financial information such as bank account numbers
 - User activity and analysis such as device information or IP address
 - Location information
-- Telemetry Data: application error logs, stack traces, HTTP request parameters, device metadata, operating system and browser versions, IP addresses, and unstructured text strings automatically or manually captured by the Customer's error reporting configuration.
+- Telemetry Data: application error logs, stack traces, HTTP request parameters, device metadata, operating system and browser versions, IP addresses, and unstructured text strings automatically or manually captured by the Customer’s error reporting configuration.
 
 ### Special Category Data
 
@@ -149,14 +151,16 @@ Captured event data and associated Telemetry Data are retained for 90 days by de
 
 ## Other Changes to Standard Terms
 
-Modification to Standard Terms Section 5.2 (Security Reports) and the defined term “Report.” Provider is a small organization that performs internal security self-assessments and does not undergo audits by independent third-party auditors. Accordingly, the references in Section 5.2 to audits by independent third-party auditors and to a "Report" do not apply to Provider. In their place, upon Customer's written request to the Provider Security Contact (no more than once per calendar year), Provider will provide a summary of its then-current internal security documentation and self-assessment records sufficient for Customer to verify Provider's compliance with the technical and organizational security measures described in Annex II. This modification does not affect Customer's rights under Section 5.1 (Audit Rights) or Section 5.3 (Security Due Diligence).
+Modification to Standard Terms Section 5.2 (Security Reports) and the defined term “Report.” Provider is a small organization that performs internal security self-assessments and does not undergo audits by independent third-party auditors. Accordingly, the references in Section 5.2 to audits by independent third-party auditors and to a “Report” do not apply to Provider. In their place, upon Customer’s written request to the Provider Security Contact (no more than once per calendar year), Provider will provide a summary of its then-current internal security documentation and self-assessment records sufficient for Customer to verify Provider’s compliance with the technical and organizational security measures described in Annex II. This modification does not affect Customer’s rights under Section 5.1 (Audit Rights) or Section 5.3 (Security Due Diligence).
 
 ## Acceptance
 
-Provider and Customer have not changed the Standard Terms, except for the details on this page. By accepting the Terms of Service, Customer agrees to this DPA as of the date it first accepted the Terms of Service.
+Provider and Customer have not changed the Standard Terms, except for the details on this page. Customer accepts this DPA by accepting the Agreement, and this DPA takes effect on the later of (a) the date Customer accepted the Agreement and (b) the Last Updated date of this page. It continues for as long as Provider Processes Customer Personal Data.
 
-Customers on a paid plan who need a countersigned copy of this DPA for their records can request one by emailing support@glitchtip.com. The terms are provided as published and are not negotiable.
+If a PDF or other rendering of this DPA differs from this page, this page controls.
+
+Customers on a paid plan whose procurement process requires a signed artifact can request a copy of this DPA executed by Burke Software by emailing support@glitchtip.com. It restates these published terms without modification and does not alter the DPA already in effect. The terms are provided as published and are not negotiable.
 
 <hr />
 
-The Common Paper DPA Standard Terms Version 1.1 are published by <a href="https://commonpaper.com" target="blank">Common Paper</a> and are incorporated into this DPA by reference.
+The Common Paper DPA Standard Terms Version 1.1 are published by <a href="https://commonpaper.com" target="_blank" rel="noopener noreferrer">Common Paper</a> and are incorporated into this DPA by reference.
