@@ -1,6 +1,6 @@
 # GlitchTip Terms of Service
 
-Last Updated October 5, 2022
+Last Updated July 22, 2026
 
 ## The Gist
 
@@ -14,6 +14,10 @@ Please read these Terms carefully before accessing or using our Services. By acc
 ## Specific Service Terms
 
 Glitchtip.com enables you to track errors, performance and uptime on your web applications. Glitchtip.com’s basic subscription is free and allows a limited number of events to be recorded each month. We also offer [paid subscriptions](/pricing) that allow for more events to be recorded.
+
+## Data Processing
+
+If, in providing the Services, we process personal data on your behalf — where you act as a data controller and we act as a data processor — and that personal data is subject to the EU General Data Protection Regulation (GDPR), the UK GDPR, or an equivalent law, our [Data Processing Agreement](/legal/data-processing-agreement) applies and forms part of this Agreement. It applies automatically; no signature or separate request is needed. Customers on a paid plan who need a countersigned copy for their records can request one by emailing support@glitchtip.com.
 
 ## Fees and Charges
 
