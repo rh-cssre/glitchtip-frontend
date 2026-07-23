@@ -16,9 +16,9 @@ Events above your plan quota are billed per 1,000 events on a tiered scale:
 
 | Events over quota | Price per 1,000 |
 | --- | --- |
-| First 400,000 | $0.15 |
-| 400,000 to 2,000,000 | $0.10 |
-| Above 2,000,000 | $0.08 |
+| First 1,000,000 | $0.20 |
+| 1,000,000 to 10,000,000 | $0.15 |
+| Above 10,000,000 | $0.10 |
 
 Each tier prices only the events that fall within it, the same way income tax brackets work. Charges appear on your regular Stripe invoice, which is always the source of truth for what you actually owe.
 

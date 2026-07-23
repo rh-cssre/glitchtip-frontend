@@ -22,7 +22,7 @@ export const hostedFaqs: Faq[] = [
   {
     question: "How does on-demand usage work?",
     answer:
-      "On-demand usage (labeled Overage billing in your subscription settings) is opt-in and available on any paid plan. When you turn it on, events above your plan quota are billed per 1,000 events on a tiered scale: $0.15 per 1k for the first 400k events over quota, $0.10 per 1k from 400k to 2M, and $0.08 per 1k after that. The important part is the cap. You set a monthly spend limit, and once you reach it we stop billing and resume throttling, so your bill never goes over your cap. Only organization owners can turn it on.",
+      "On-demand usage (labeled Overage billing in your subscription settings) is opt-in and available on any paid plan. When you turn it on, events above your plan quota are billed per 1,000 events on a tiered scale: $0.20 per 1k for the first 1M events over quota, $0.15 per 1k from 1M to 10M, and $0.10 per 1k after that. The important part is the cap. You set a monthly spend limit, and once you reach it we stop billing and resume throttling, so your bill never goes over your cap. Only organization owners can turn it on.",
   },
   {
     question: "Can I change plans at any time?",
