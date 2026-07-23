@@ -1323,6 +1323,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/stripe/subscriptions/{organization_slug}/overage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Overage Status */
+        get: operations["apps_stripe_api_get_overage_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/stripe/organizations/{organization_slug}/overage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Configure Overage
+         * @description Enable/disable metered overage billing and set the spend cap (owner-only).
+         *
+         *     Enabling attaches the metered overage price as a second subscription item;
+         *     disabling removes it. Either way a throttle re-check is enqueued so the new
+         *     headroom (or block) takes effect promptly.
+         */
+        post: operations["apps_stripe_api_configure_overage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/organizations/{organization_slug}/repos/": {
         parameters: {
             query?: never;
@@ -4820,6 +4861,39 @@ export interface components {
             /** Data */
             data: components["schemas"]["DailyEventCountEntry"][];
         };
+        /** OverageStatusSchema */
+        OverageStatusSchema: {
+            /** Enabled */
+            enabled: boolean;
+            /** Eligible */
+            eligible: boolean;
+            /** Configured */
+            configured: boolean;
+            /** Capcents */
+            capCents: number;
+            /** Capunits */
+            capUnits: number;
+            /** Quota */
+            quota: number;
+            /** Usage */
+            usage: number;
+            /** Overageunits */
+            overageUnits: number;
+            /** Overagecostcents */
+            overageCostCents: number;
+            /** Throttlerate */
+            throttleRate: number;
+        };
+        /** OverageConfigIn */
+        OverageConfigIn: {
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Capcents
+             * @default 0
+             */
+            capCents: number;
+        };
         /** RepositorySchema */
         RepositorySchema: {
             /** Id */
@@ -7827,6 +7901,54 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DailyEventsCountSchema"];
+                };
+            };
+        };
+    };
+    apps_stripe_api_get_overage_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverageStatusSchema"];
+                };
+            };
+        };
+    };
+    apps_stripe_api_configure_overage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OverageConfigIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverageStatusSchema"];
                 };
             };
         };

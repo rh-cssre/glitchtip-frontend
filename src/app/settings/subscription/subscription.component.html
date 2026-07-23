@@ -117,6 +117,9 @@
                 <gt-subscription-charts
                   [totalEventsAllowed]="totalEventsAllowed()"
                 />
+                @if (showOverageCard()) {
+                  <gt-overage-card />
+                }
                 <p class="body-text" i18n
                   >If you have questions about your subscription, please contact
                   us at

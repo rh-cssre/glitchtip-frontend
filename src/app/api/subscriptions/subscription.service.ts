@@ -1,7 +1,7 @@
 import { computed, Injectable, inject, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
-import { client } from "../../shared/api/api";
+import { client, handleError } from "../../shared/api/api";
 import { OrganizationsService } from "../organizations.service";
 import { SettingsService } from "../settings.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
@@ -12,6 +12,8 @@ export interface SubscriptionState {
   subscriptionRefreshing: boolean;
   subscriptionRefreshTimeout: boolean;
   fromStripe: boolean;
+  overageConfigLoading: boolean;
+  overageConfigError: string;
 }
 
 const initialState: SubscriptionState = {
@@ -20,6 +22,8 @@ const initialState: SubscriptionState = {
   subscriptionRefreshing: false,
   subscriptionRefreshTimeout: false,
   fromStripe: false,
+  overageConfigLoading: false,
+  overageConfigError: "",
 };
 
 @Injectable({
@@ -135,6 +139,20 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     return this.dailyEventsResource.value()?.data ?? [];
   });
 
+  // Overage status. Gated on detailSlug like the usage resources; fails soft.
+  overageStatusResource = apiResource(this.detailSlug, (orgSlug) => ({
+    url: "/api/0/stripe/subscriptions/{organization_slug}/overage/",
+    options: {
+      params: {
+        path: { organization_slug: orgSlug },
+      },
+    },
+  }));
+  overageStatus = computed(() => {
+    if (this.overageStatusResource.error()) return null;
+    return this.overageStatusResource.value() ?? null;
+  });
+
   predictedEndOfMonth = computed(() => {
     const subscription = this.subscription();
     const eventsCountCurrentPeriod = this.eventsCountCurrentPeriod();
@@ -160,6 +178,42 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       ((eventsCountCurrentPeriod.total ?? 0) / elapsedDays) * totalDays,
     );
   });
+
+  overageEnabled = computed(() => this.overageStatus()?.enabled ?? false);
+  overageEligible = computed(() => this.overageStatus()?.eligible ?? false);
+  overageConfigured = computed(() => this.overageStatus()?.configured ?? false);
+
+  // Progress by units, not cost (floored capUnits keep cost just under the cap).
+  capProgressPercent = computed(() => {
+    const s = this.overageStatus();
+    if (!s || !s.capUnits) return 0;
+    return Math.min(100, Math.round((s.overageUnits / s.capUnits) * 100));
+  });
+
+  // Cap reached when units hit the ceiling. By units, not throttleRate (noisy)
+  // or cost (floored, see above).
+  capReached = computed(() => {
+    const s = this.overageStatus();
+    if (!s || !s.enabled) return false;
+    return s.capUnits > 0 && s.overageUnits >= s.capUnits;
+  });
+
+  // Forecast cap hit this cycle, in units (clients have no tier rates for $).
+  private predictedOverageUnits = computed(() => {
+    const predicted = this.predictedEndOfMonth();
+    const s = this.overageStatus();
+    if (predicted == null || !s) return null;
+    return Math.max(0, predicted - s.quota);
+  });
+  willReachCap = computed(() => {
+    const s = this.overageStatus();
+    const predUnits = this.predictedOverageUnits();
+    if (!s || !s.enabled || !s.capUnits || predUnits == null) return false;
+    return predUnits >= s.capUnits;
+  });
+
+  overageConfigLoading = computed(() => this.state().overageConfigLoading);
+  overageConfigError = computed(() => this.state().overageConfigError);
 
   billingPortalLoading = computed(() => this.state().billingPortalLoading);
   billingPortalLoadingError = computed(
@@ -224,6 +278,45 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       this.setState({ billingPortalLoading: false });
       window.location.href = data.url;
     }
+  }
+
+  /**
+   * Enable/disable metered overage billing and set the spend cap (owner-only).
+   * Enabling migrates the Stripe subscription from classic to flexible (one-way)
+   * and attaches a metered item; the caller confirms that with the user first.
+   */
+  async configureOverage(enabled: boolean, capCents: number) {
+    this.setState({ overageConfigLoading: true, overageConfigError: "" });
+    const orgSlug = this.organizationSlug();
+    const { data, error, response } = await client.POST(
+      "/api/0/stripe/organizations/{organization_slug}/overage/",
+      {
+        params: { path: { organization_slug: orgSlug } },
+        body: { enabled, capCents },
+      },
+    );
+    const status = response.status;
+    if (status === 404) {
+      this.setState({
+        overageConfigLoading: false,
+        overageConfigError:
+          "Only organization owners can change billing settings.",
+      });
+      return null;
+    }
+    if (error || !data) {
+      this.setState({
+        overageConfigLoading: false,
+        overageConfigError: handleError(error, response).detail[0].msg,
+      });
+      return null;
+    }
+    // Success: reflect the returned status immediately and refresh the
+    // subscription (billing mode may have migrated to flexible).
+    this.overageStatusResource.set(data);
+    this.subscriptionResource.reload();
+    this.setState({ overageConfigLoading: false, overageConfigError: "" });
+    return data;
   }
 
   /**
@@ -304,6 +397,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     this.eventsCountCurrentPeriodResource.set(undefined);
     this.dailyEventsResource.set(undefined);
     this.eventsCountPreviousPeriodResource.set(undefined);
+    this.overageStatusResource.set(undefined);
     clearInterval(this.refreshTimerRef);
     this.refreshTimerRef = undefined;
   }

@@ -92,7 +92,12 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
 
       if (billingEnabled && activeOrg?.eventThrottleRate && !warningDismissed) {
         const snackBarRef = this.snackBar.openFromComponent(OverLimitSnackbar, {
-          data: activeOrgSlug,
+          // Already-enrolled orgs are throttled because they hit their cap, so
+          // offer "raise your cap"; overageEnabled is false until status loads.
+          data: {
+            activeOrgSlug,
+            overageEnabled: this.subscription.overageEnabled(),
+          },
           verticalPosition: "top",
           duration: snackbarDurationSeconds * 1000,
         });

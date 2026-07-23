@@ -28,6 +28,7 @@ import { UpgradeBannerComponent } from "src/app/shared/upgrade-banner/upgrade-ba
 import { environment } from "../../../environments/environment";
 import { PaymentComponent } from "./payment/payment.component";
 import { PaymentService } from "./payment/payment.service";
+import { OverageCardComponent } from "./overage-card/overage-card.component";
 import { SelfHostedSubscriptionComponent } from "./self-hosted-subscription/self-hosted-subscription.component";
 import { SubscriptionChartsComponent } from "./subscription-charts/subscription-charts.component";
 
@@ -50,6 +51,7 @@ import { SubscriptionChartsComponent } from "./subscription-charts/subscription-
     UpgradeBannerComponent,
     PaymentComponent,
     SelfHostedSubscriptionComponent,
+    OverageCardComponent,
   ],
 })
 export class SubscriptionComponent extends StatefulComponent<
@@ -82,6 +84,10 @@ export class SubscriptionComponent extends StatefulComponent<
   readonly subscriptionLoading = this.service.subscriptionLoading;
   readonly subscriptionRefreshTimeout = this.service.subscriptionRefreshTimeout;
   readonly totalEventsAllowed = this.service.totalEventsAllowed;
+  // Overage card renders only for paid (eligible), server-provisioned orgs.
+  readonly showOverageCard = computed(
+    () => this.service.overageEligible() && this.service.overageConfigured(),
+  );
   readonly activeOrganization = this.orgService.activeOrganization;
   readonly activeOrganizationSlug = this.orgService.activeOrganizationSlug;
   readonly billingPortalLoading = this.service.billingPortalLoading;
