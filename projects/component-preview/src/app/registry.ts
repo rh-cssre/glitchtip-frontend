@@ -35,6 +35,7 @@ import { TabsPreview } from "./previews/tabs.preview";
 import { ToastsPreview } from "./previews/toasts.preview";
 import { DialogsPreview } from "./previews/dialogs.preview";
 import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
+import { EmptyStatePreview } from "./previews/empty-state.preview";
 
 /**
  * Component lifecycle status, following the practice of published design
@@ -190,6 +191,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Summary card",
     group: "Components",
     component: SummaryCardPreview,
+    status: "stable",
+  },
+  {
+    id: "empty-state",
+    label: "Empty state",
+    group: "Components",
+    component: EmptyStatePreview,
     status: "stable",
   },
   {

@@ -15,6 +15,7 @@ import { ReleasesService } from "./releases-state";
 import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "../list-elements/pagination-buttons/pagination-buttons";
 import { LoadingOverlayComponent } from "../shared/loading-overlay/loading-overlay.component";
+import { EmptyStateComponent } from "../shared/empty-state/empty-state.component";
 
 @Component({
   templateUrl: "./releases.html",
@@ -28,6 +29,7 @@ import { LoadingOverlayComponent } from "../shared/loading-overlay/loading-overl
     TopAppBar,
     PaginationButtons,
     LoadingOverlayComponent,
+    EmptyStateComponent,
   ],
   providers: [ReleasesService],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -60,10 +60,10 @@
         ></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         <tr *matNoDataRow>
-          <td>
-            <div class="table-empty-states">
-              @if (initialLoadComplete() === true && isLoading() === false) {
-                @if (errors()?.length) {
+          <td [attr.colspan]="displayedColumns.length">
+            @if (initialLoadComplete() === true && isLoading() === false) {
+              @if (errors()?.length) {
+                <div class="table-empty-states">
                   @if (errors()?.length === 1) {
                     <h3 class="body-text-strong">
                       There was an error processing your request
@@ -78,13 +78,17 @@
                       <li>{{ error }}</li>
                     }
                   </ul>
-                } @else {
-                  <div i18n class="body-text-strong"
-                    >There are no releases for this organization.</div
-                  >
-                }
+                </div>
+              } @else {
+                <gt-empty-state
+                  icon="rocket_launch"
+                  i18n-title
+                  title="No releases"
+                  i18n-message
+                  message="Releases appear here once you send release data with your events."
+                />
               }
-            </div>
+            }
           </td>
         </tr>
         </table>

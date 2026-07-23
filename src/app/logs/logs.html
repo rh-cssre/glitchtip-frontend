@@ -105,16 +105,23 @@
             </div>
           }
         } @else if (initialLoadComplete() && !isLoading()) {
-          <div class="log-empty">
-            <div class="log-no-data">
-              <span i18n>No logs found.</span>
-              @if (query() || level().length || service_()) {
-                <span i18n> Try adjusting your filters.</span>
-              } @else {
-                <span i18n> Configure your SDK to start capturing logs.</span>
-              }
-            </div>
-          </div>
+          @if (query() || level().length || service_()) {
+            <gt-empty-state
+              icon="search"
+              i18n-title
+              title="No matching logs"
+              i18n-message
+              message="Try adjusting or clearing your filters."
+            />
+          } @else {
+            <gt-empty-state
+              icon="text_snippet"
+              i18n-title
+              title="No logs yet"
+              i18n-message
+              message="Configure your SDK to start capturing logs."
+            />
+          }
         }
       }
 
