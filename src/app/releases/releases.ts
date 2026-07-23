@@ -14,6 +14,7 @@ import { ListTitleComponent } from "../list-elements/list-title/list-title.compo
 import { ReleasesService } from "./releases-state";
 import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "../list-elements/pagination-buttons/pagination-buttons";
+import { EmptyStateComponent } from "../shared/empty-state/empty-state.component";
 
 @Component({
   templateUrl: "./releases.html",
@@ -25,7 +26,8 @@ import { PaginationButtons } from "../list-elements/pagination-buttons/paginatio
     RouterLink,
     MatTooltipModule,
     TopAppBar,
-    PaginationButtons
+    PaginationButtons,
+    EmptyStateComponent,
   ],
   providers: [ReleasesService],
   changeDetection: ChangeDetectionStrategy.OnPush,

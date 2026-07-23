@@ -116,9 +116,9 @@
         ></tr>
         <tr *matNoDataRow>
           <td [attr.colspan]="displayedColumns.length">
-            <div class="table-empty-states">
-              @if (initialLoadComplete() === true && loading() === false) {
-                @if (errors()?.length) {
+            @if (initialLoadComplete() === true && loading() === false) {
+              @if (errors()?.length) {
+                <div class="table-empty-states">
                   @if (errors()?.length === 1) {
                     <h3 class="body-text-strong">
                       There was an error processing your request
@@ -133,13 +133,17 @@
                       <li>{{ error }}</li>
                     }
                   </ul>
-                } @else {
-                  <div i18n class="body-text-strong"
-                    >No transaction groups were found.</div
-                  >
-                }
+                </div>
+              } @else {
+                <gt-empty-state
+                  icon="avg_pace"
+                  i18n-title
+                  title="No transactions"
+                  i18n-message
+                  message="Performance data appears here once your app sends transactions."
+                />
               }
-            </div>
+            }
           </td>
         </tr>
       </table>

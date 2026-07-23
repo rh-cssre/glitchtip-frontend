@@ -25,6 +25,7 @@ import { EnvironmentsService } from "src/app/api/environments.service";
 import { MatCardModule } from "@angular/material/card";
 import { ListAppBar } from "src/app/list-elements/list-app-bar/list-app-bar";
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-transaction-groups",
@@ -40,6 +41,7 @@ import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagi
     HumanizeDurationPipe,
     ListAppBar,
     PaginationButtons,
+    EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [PerformanceService],

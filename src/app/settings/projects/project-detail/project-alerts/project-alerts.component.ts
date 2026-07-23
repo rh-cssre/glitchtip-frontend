@@ -23,6 +23,7 @@ import { MatCardModule } from "@angular/material/card";
 import { components } from "src/app/api/api-schema";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 type ProjectAlert = components["schemas"]["ProjectAlertSchema"];
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
@@ -49,6 +50,7 @@ export function resolveRecipientIcon(type: RecipientType): string {
     MatTooltipModule,
     LoadingButtonComponent,
     MatProgressSpinnerModule,
+    EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ProjectAlertsService],

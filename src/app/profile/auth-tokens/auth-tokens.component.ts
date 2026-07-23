@@ -15,6 +15,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-auth-tokens",
@@ -28,6 +29,7 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
     MatDividerModule,
     CopyInputComponent,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
 })
 export class AuthTokensComponent

@@ -19,6 +19,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { LogsService } from "./logs-state";
 import { ListAppBar } from "../list-elements/list-app-bar/list-app-bar";
 import { stringArrAttribute, stringAttribute } from "../shared/shared.utils";
+import { EmptyStateComponent } from "../shared/empty-state/empty-state.component";
 
 @Component({
   templateUrl: "./logs.html",
@@ -35,6 +36,7 @@ import { stringArrAttribute, stringAttribute } from "../shared/shared.utils";
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
+    EmptyStateComponent,
   ],
   providers: [LogsService],
   changeDetection: ChangeDetectionStrategy.OnPush,
