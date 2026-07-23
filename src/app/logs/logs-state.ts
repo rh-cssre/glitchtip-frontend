@@ -116,9 +116,12 @@ export class LogsService {
     });
   }
 
-  // Reset accumulated logs when filters change (called by component)
-  resetAccumulation() {
-    this.#accumulatedLogs.set([]);
+  // Reset the cached hit count when filters change (called by component) so the
+  // header count reflects the new query. The accumulated rows are intentionally
+  // NOT cleared here: the previous rows stay visible (dimmed by
+  // gt-loading-overlay) until the new page arrives and replaces them, matching
+  // the app-wide reload treatment instead of blanking the list.
+  resetHitCount() {
     this.#initialHitCount.set(undefined);
   }
 }
