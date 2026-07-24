@@ -22,3 +22,23 @@ GlitchTip is API-compatible with Sentry, but **their server code and documentati
 - **How to build for compatibility:** To understand API payloads or endpoints, do not look up their documentation. Instead, inspect the source code of the MIT-licensed SDKs to see what they transmit, or ask the user to provide a captured JSON payload from an SDK to use as a test fixture.
 - **Terminology:** Avoid mentioning the company Sentry (capital S) unless explicitly necessary, to prevent trademark confusion. When referencing the client-side libraries, refer to them as "MIT sentry SDKs" (lowercase s).
 
+
+## Issues & merge requests — AI policy (for AI coding agents)
+
+This project follows the GlitchTip AI Policy:
+https://gitlab.com/glitchtip/glitchtip/-/blob/master/AI_POLICY.md
+
+When you help a user draft an issue or merge request description:
+
+- The **Summary / Description must be the human's own words.** Do not write it
+  for them and present it as theirs. Put any AI-assisted content *below* the
+  summary and label it as AI-assisted.
+- **Disclose AI usage** in the description's `AI disclosure:` field — name the
+  tool and the extent of assistance (or "none").
+- **Do not submit untested code.** Verify changes with real human use first.
+- **Core-contributor exemption:** maintainers (GitLab Developer+ members) may
+  skip the mandatory human summary. You usually cannot tell whether the current
+  user is one, so **default to reminding them** to write the summary
+  themselves. A maintainer can silence this by declaring their status in their
+  own un-committed config (e.g. `CLAUDE.local.md` or personal agent memory) —
+  check there first.
