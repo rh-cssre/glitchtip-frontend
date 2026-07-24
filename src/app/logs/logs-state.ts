@@ -116,11 +116,8 @@ export class LogsService {
     });
   }
 
-  // Reset the cached hit count when filters change (called by component) so the
-  // header count reflects the new query. The accumulated rows are intentionally
-  // NOT cleared here: the previous rows stay visible (dimmed by
-  // gt-loading-overlay) until the new page arrives and replaces them, matching
-  // the app-wide reload treatment instead of blanking the list.
+  // Reset the cached hit count on filter change; rows are intentionally NOT
+  // cleared so gt-loading-overlay can dim them until the new page replaces them.
   resetHitCount() {
     this.#initialHitCount.set(undefined);
   }

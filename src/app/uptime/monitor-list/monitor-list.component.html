@@ -25,96 +25,96 @@
     <div class="table-container">
       <gt-loading-overlay [loading]="loading()" label="Loading monitors">
         <table mat-table [dataSource]="monitors" class="mat-elevation-z2">
-        <ng-container matColumnDef="pagination">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            [attr.colspan]="displayedColumns().length"
-            class="table-header__actions"
-          >
-            <div class="pagination-container">
-              <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
-              <gt-pagination-buttons [paginator]="paginator()" />
-            </div>
-          </th>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <td
-            mat-cell
-            class="status-color--{{ monitor.isUp }}"
-            *matCellDef="let monitor"
-          >
-            <div class="name-and-url-container">
-              <div (mouseover)="checkIfTooltipIsNecessary($event)">
-                <a
-                  [matTooltip]="monitor.name"
-                  class="table-group-label"
-                  matTooltipPosition="above"
-                  [matTooltipDisabled]="tooltipDisabled"
-                  [routerLink]="[monitor.id]"
-                  >{{ monitor.name }}</a
-                >
+          <ng-container matColumnDef="pagination">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              [attr.colspan]="displayedColumns().length"
+              class="table-header__actions"
+            >
+              <div class="pagination-container">
+                <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+                <gt-pagination-buttons [paginator]="paginator()" />
               </div>
-              <div (mouseover)="checkIfTooltipIsNecessary($event)">
-                <a
-                  href="{{ monitor.url }}"
-                  target="_blank"
-                  class="caption-text monitor-link"
-                  [matTooltip]="monitor.url"
-                  matTooltipPosition="above"
-                  [matTooltipDisabled]="tooltipDisabled"
-                  >{{ monitor.url }}
-                </a>
+            </th>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <td
+              mat-cell
+              class="status-color--{{ monitor.isUp }}"
+              *matCellDef="let monitor"
+            >
+              <div class="name-and-url-container">
+                <div (mouseover)="checkIfTooltipIsNecessary($event)">
+                  <a
+                    [matTooltip]="monitor.name"
+                    class="table-group-label"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="tooltipDisabled"
+                    [routerLink]="[monitor.id]"
+                    >{{ monitor.name }}</a
+                  >
+                </div>
+                <div (mouseover)="checkIfTooltipIsNecessary($event)">
+                  <a
+                    href="{{ monitor.url }}"
+                    target="_blank"
+                    class="caption-text monitor-link"
+                    [matTooltip]="monitor.url"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="tooltipDisabled"
+                    >{{ monitor.url }}
+                  </a>
+                </div>
               </div>
-            </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="checkChart">
-          <td mat-cell *matCellDef="let monitor" class="chart-container">
-            <div class="monitor-chart">
-              <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
-            </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <td mat-cell *matCellDef="let monitor">
-            @if (monitor.isUp) {
-              <span>Up</span>
-            }
-            @if (monitor.isUp === false) {
-              <span>Down</span>
-            }
-            @if (monitor.lastChange) {
-              {{ monitor.lastChange | timeFor }}
-            }
-          </td>
-        </ng-container>
-        <tr
-          mat-header-row
-          *matHeaderRowDef="['pagination']; sticky: true"
-          class="table-header"
-        ></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumns()"
-          class="monitor-row"
-        ></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td
-            class="zero-states-cell"
-            [attr.colspan]="displayedColumns().length"
-          >
-            @if (!loading()) {
-              <gt-empty-state
-                icon="share_eta"
-                i18n-title
-                title="No uptime monitors"
-                i18n-message
-                message="Add a monitor to get alerted when a site or service goes down."
-              />
-            }
-          </td>
-        </tr>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="checkChart">
+            <td mat-cell *matCellDef="let monitor" class="chart-container">
+              <div class="monitor-chart">
+                <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <td mat-cell *matCellDef="let monitor">
+              @if (monitor.isUp) {
+                <span>Up</span>
+              }
+              @if (monitor.isUp === false) {
+                <span>Down</span>
+              }
+              @if (monitor.lastChange) {
+                {{ monitor.lastChange | timeFor }}
+              }
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="['pagination']; sticky: true"
+            class="table-header"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns()"
+            class="monitor-row"
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td
+              class="zero-states-cell"
+              [attr.colspan]="displayedColumns().length"
+            >
+              @if (!loading()) {
+                <gt-empty-state
+                  icon="share_eta"
+                  i18n-title
+                  title="No uptime monitors"
+                  i18n-message
+                  message="Add a monitor to get alerted when a site or service goes down."
+                />
+              }
+            </td>
+          </tr>
         </table>
       </gt-loading-overlay>
     </div>

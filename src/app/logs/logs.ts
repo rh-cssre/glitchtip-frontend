@@ -96,9 +96,7 @@ export class Logs {
   );
 
   constructor() {
-    // Reset the header hit count when filters change (not cursor). The rows
-    // themselves are kept and dimmed by gt-loading-overlay during the reload
-    // rather than blanked, so this only clears the cached count.
+    // Reset the header hit count when filters change (not cursor).
     effect(() => {
       // Read all filter signals to track them
       this.query();
