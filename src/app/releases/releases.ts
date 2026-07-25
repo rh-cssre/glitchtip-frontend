@@ -14,6 +14,7 @@ import { ListTitleComponent } from "../list-elements/list-title/list-title.compo
 import { ReleasesService } from "./releases-state";
 import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "../list-elements/pagination-buttons/pagination-buttons";
+import { LoadingOverlayComponent } from "../shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "../shared/empty-state/empty-state.component";
 
 @Component({
@@ -27,6 +28,7 @@ import { EmptyStateComponent } from "../shared/empty-state/empty-state.component
     MatTooltipModule,
     TopAppBar,
     PaginationButtons,
+    LoadingOverlayComponent,
     EmptyStateComponent,
   ],
   providers: [ReleasesService],

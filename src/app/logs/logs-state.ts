@@ -116,9 +116,9 @@ export class LogsService {
     });
   }
 
-  // Reset accumulated logs when filters change (called by component)
-  resetAccumulation() {
-    this.#accumulatedLogs.set([]);
+  // Reset the cached hit count on filter change; rows are intentionally NOT
+  // cleared so gt-loading-overlay can dim them until the new page replaces them.
+  resetHitCount() {
     this.#initialHitCount.set(undefined);
   }
 }

@@ -25,6 +25,7 @@ import { EnvironmentsService } from "src/app/api/environments.service";
 import { MatCardModule } from "@angular/material/card";
 import { ListAppBar } from "src/app/list-elements/list-app-bar/list-app-bar";
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
+import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
@@ -41,6 +42,7 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
     HumanizeDurationPipe,
     ListAppBar,
     PaginationButtons,
+    LoadingOverlayComponent,
     EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,

@@ -15,6 +15,7 @@ import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.com
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
 import { stringAttribute } from "src/app/shared/shared.utils";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 
 @Component({
   templateUrl: "./release-detail.html",
@@ -26,6 +27,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
     BackLinkComponent,
     PaginationButtons,
     TopAppBar,
+    LoadingOverlayComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ReleaseDetailService],

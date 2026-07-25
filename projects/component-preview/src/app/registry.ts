@@ -34,6 +34,7 @@ import { TokensCatalogPreview } from "./previews/tokens-catalog.preview";
 import { TabsPreview } from "./previews/tabs.preview";
 import { ToastsPreview } from "./previews/toasts.preview";
 import { DialogsPreview } from "./previews/dialogs.preview";
+import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
 import { EmptyStatePreview } from "./previews/empty-state.preview";
 
 /**
@@ -170,6 +171,13 @@ export const PREVIEWS: PreviewEntry[] = [
     group: "Components",
     component: PaginationPreview,
     status: "legacy",
+  },
+  {
+    id: "loading-overlay",
+    label: "Loading overlay",
+    group: "Components",
+    component: LoadingOverlayPreview,
+    status: "stable",
   },
   {
     id: "entry-data",
