@@ -1,0 +1,89 @@
+<div class="hero-and-nav-container just-the-image"></div>
+
+<mat-card class="big-card-wrapper">
+  <div class="centered-block">
+    <h1 class="fancy marketing-heading">Support</h1>
+
+    <h2 class="marketing-subheading">Contact support</h2>
+    <p class="marketing-body">
+      Direct support is available for paid GlitchTip users. If you are using 
+      the free tier, please visit our community support channels on 
+      <a href="https://gitter.im/GlitchTip/community">Gitter</a> or 
+      <a href="https://gemini.google.com/app/e90f55a72340ba60">Gitlab</a>, or 
+      reach out to us for sales inquiries.
+    </p>
+
+
+    <form
+      class="contact-form"
+      [formGroup]="contactForm"
+      (submit)="$event.preventDefault()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>License key (Optional)</mat-label>
+        <input
+          matInput
+          formControlName="licenseKey"
+          placeholder="sub_xxxxxxxxxxxxxxxxxxxxxxxx"
+        />
+        @if (
+          contactForm.controls.licenseKey.touched &&
+          contactForm.controls.licenseKey.errors?.["required"]
+        ) {
+          <mat-error>License key is required.</mat-error>
+        } @else if (
+          contactForm.controls.licenseKey.touched &&
+          contactForm.controls.licenseKey.errors?.["pattern"]
+        ) {
+          <mat-error>License key should start with "sub_".</mat-error>
+        }
+      </mat-form-field>
+
+      <p id="response-disclaimer" class="marketing-caption">
+        We are a small team, so our support response times may vary. We monitor
+        our inbox Monday-Friday during US Eastern business hours and will do our
+        best to assist you as quickly as possible!
+      </p>
+
+      <div class="cta-wrapper">
+        @if (chatwootReady()) {
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="handleChatwoot()"
+            [disabled]="contactForm.invalid"
+          >
+            Talk to us
+          </button>
+        }
+
+        <button
+          mat-flat-button
+          type="button"
+          color="primary"
+          (click)="composeSupportEmail()"
+          [disabled]="contactForm.invalid"
+        >
+          Send an email
+        </button>
+      </div>
+    </form>
+
+    <h2 class="marketing-subheading">Don't have a support plan yet?</h2>
+    <p class="marketing-body">
+      Support plans are available for self-hosted GlitchTip instances.
+    </p>
+    <div class="cta-wrapper">
+      <a mat-stroked-button [routerLink]="['/pricing']">View plans</a>
+    </div>
+
+    <h2 class="marketing-subheading">Using GlitchTip Cloud?</h2>
+    <p class="marketing-body">
+      Support is built into the app. Sign in and use the in-app help.
+    </p>
+    <div class="cta-wrapper">
+      <a mat-stroked-button [href]="appUrl">Sign in</a>
+    </div>
+  </div>
+</mat-card>
