@@ -191,6 +191,8 @@
         </div>
         <gt-loading-button
           buttonText="Delete Project"
+          buttonStyle="stroked"
+          color="warn"
           [loading]="deleteLoading()"
           (buttonClick)="deleteProject()"
           [disabled]="!accessProjectWrite()"

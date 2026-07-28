@@ -116,15 +116,16 @@
                         <mat-icon>edit</mat-icon>
                       </button>
                     }
-                    <button
+                    <gt-loading-button
                       class="recipient-action small-icon-button"
-                      mat-icon-button
+                      buttonStyle="stroked" 
+                      color="warn"
                       color="primary"
                       attr.aria-label="Delete Alert For {{ recipient.url }}"
                       (click)="removeNewAlertRecipient(recipient.url)"
                     >
                       <mat-icon>delete</mat-icon>
-                    </button>
+                    </gt-loading-button>
                   </div>
                 </div>
               </li>
@@ -140,7 +141,7 @@
           </button>
           <div class="new-alert-actions">
             <gt-loading-button
-              buttonText="submit"
+              buttonText="Submit"
               [loading]="newAlertLoading() === true"
               (buttonClick)="submitCreateAlert()"
               i18n
@@ -180,6 +181,7 @@
               <gt-loading-button
                 [buttonText]="'Remove Alert ' + (i + 1)"
                 buttonStyle="stroked"
+                color="warn"
                 (buttonClick)="removeAlert(alert.id!)"
                 [disabled]="!accessProjectWrite()"
                 [loading]="removeAlertLoading() === alert.id"
