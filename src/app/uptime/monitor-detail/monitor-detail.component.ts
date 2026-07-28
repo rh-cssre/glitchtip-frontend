@@ -28,6 +28,8 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
   return value === undefined ? true : booleanAttribute(value);
@@ -63,6 +65,7 @@ export class MonitorDetailComponent
 {
   protected service: MonitorService;
   private breakpointObserver = inject(BreakpointObserver);
+  private dialog = inject(MatDialog);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -130,12 +133,18 @@ export class MonitorDetailComponent
   }
 
   delete() {
-    if (
-      window.confirm(
-        `Are you sure you want delete this monitor? You will permanently lose all associated uptime data.`,
-      )
-    ) {
-      this.service.deleteMonitor();
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete monitor`,
+        message: $localize`Are you sure you want delete this monitor? You will permanently lose all associated uptime data.`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.service.deleteMonitor();
+      }
+    });
   }
 }
