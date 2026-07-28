@@ -66,10 +66,8 @@ body {
   }
 }
 
-// `color-scheme` is set on the whole layout so the toolbar, sidebar and canvas
-// theme together — the app dogfoods its own design system rather than framing
-// it in fixed chrome. It flips every Material `light-dark()` system variable
-// for the subtree, which is how the light / dark / system toggle works.
+// color-scheme on the whole layout flips Material's light-dark() vars for the
+// subtree; this drives the light / dark / system toggle.
 .preview-theme--light {
   color-scheme: light;
 }
@@ -82,10 +80,6 @@ body {
   color-scheme: light dark;
 }
 
-// Outlined icon button. Angular Material 22 has no native outlined icon-button
-// variant (MatIconButton takes no appearance), so this adds the treatment for
-// standalone secondary icon actions. The product needs a shared version of
-// this (see the design audit); the rulebook demonstrates the intended look.
 // Bare mode (?bare=1): hosts a single preview for the example-width iframe.
 // Transparent so the iframe's own background (matched to .doc-example) shows
 // through; padding comes from the example wrapper. No min-height so the body
@@ -157,10 +151,8 @@ body {
   border-right: 1px solid var(--mat-sys-outline-variant);
   background-color: var(--mat-sys-surface-container-low);
 
-  // Match the product's sidenav: the list is padded so items render as inset
-  // pills that never touch the container edges or the section dividers
-  // (main-nav.component.scss uses the same 10px inset). Top padding is
-  // smaller so the first group header does not sit low.
+  // Match product sidenav's 10px inset (main-nav.component.scss); smaller top
+  // pad so the first group header sits high.
   mat-nav-list {
     padding: var(--gt-space-1) 10px 10px;
   }
@@ -298,9 +290,28 @@ body {
   --mkt-accent-blue: #4a7fd9;
   --mkt-accent-yellow: #d9b44a;
 
-  // Spacing scale (8px base grid). Defined here so the reference app is
-  // self-contained and does not depend on the product stylesheet. Promoting
-  // this same scale into the product's :root is a roadmap ticket.
+  // Marketing layout tokens, mirrored so the Brand > Layout page can resolve
+  // them live. KEEP IN SYNC with the :root block in
+  // projects/marketing/src/styles.scss.
+  --mkt-space-1: 4px;
+  --mkt-space-2: 8px;
+  --mkt-space-3: 12px;
+  --mkt-space-4: 16px;
+  --mkt-space-5: 24px;
+  --mkt-space-6: 32px;
+  --mkt-space-7: 48px;
+  --mkt-space-8: 64px;
+  --mkt-space-9: 96px;
+  --mkt-container-wide: 1800px;
+  --mkt-container-docs: 1500px;
+  --mkt-container-content: 1040px;
+  --mkt-container-reading: 760px;
+  --mkt-container-narrow: 600px;
+  --mkt-gutter: 48px;
+  --mkt-section: clamp(64px, 7vw, 104px);
+  --mkt-section-sm: clamp(40px, 5vw, 64px);
+
+  // --gt-space-* scale, mirrored so the reference app is self-contained.
   --gt-space-0: 0;
   --gt-space-1: 4px;
   --gt-space-2: 8px;
@@ -311,10 +322,18 @@ body {
   --gt-space-7: 48px;
 }
 
+.marketing-display {
+  font: var(--mat-sys-headline-large);
+  font-size: clamp(2.4rem, 1.1rem + 5vw, 3.75rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
 .marketing-heading {
   font: var(--mat-sys-headline-large);
   font-size: 45px;
-  line-height: 55px;
+  line-height: 50px;
   font-weight: 700;
   letter-spacing: -0.035em;
 }
@@ -322,7 +341,7 @@ body {
 .marketing-subheading {
   font: var(--mat-sys-headline-medium);
   font-size: 34px;
-  line-height: 40px;
+  line-height: 37px;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -335,8 +354,25 @@ body {
   letter-spacing: -0.02em;
 }
 
+.marketing-title {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.marketing-title-sm {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
 .marketing-body {
   font: var(--mat-sys-body-large);
+  line-height: 1.6;
   letter-spacing: normal;
 }
 
@@ -351,6 +387,16 @@ body {
   letter-spacing: normal;
 }
 
+.marketing-eyebrow {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mat-sys-primary);
+}
+
 .fancy {
   color: var(--mat-sys-primary);
   font-style: italic;
@@ -358,6 +404,45 @@ body {
   padding-right: 0.1em;
   padding-bottom: 0.05em;
   display: inline-block;
+}
+
+// The marketing card primitives, mirrored so brand examples render the real ones.
+.mkt-surface {
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large, 16px);
+}
+
+.mkt-card {
+  @extend .mkt-surface;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--mat-sys-primary);
+  }
+}
+
+.mkt-card__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-card:hover .mkt-card__title {
+  color: var(--mat-sys-primary);
+}
+
+.mkt-row__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-row:hover .mkt-row__title {
+  color: var(--mat-sys-primary);
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mkt-space-3);
 }
 
 // Helpers reused by individual previews. Spacing uses the --gt-space-* scale.
@@ -387,8 +472,9 @@ body {
   align-items: center;
 }
 
-.preview-grid {
+// Do/Don't two-column pair, shared by the brand Foundations pages.
+.dodont-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: var(--gt-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--gt-space-5);
 }

@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { resolveComputedColor } from "../foundations/tokens";
 import { ThemeStore } from "../theme-store";
+import { DocBulletsComponent } from "../docs/doc-bullets.component";
 
 const BRAND_COLOR_TOKENS: { name: string; usage: string }[] = [
   { name: "--mat-sys-primary", usage: "Brand red; CTAs and the fancy accent" },
@@ -27,6 +28,7 @@ interface ResolvedSwatch {
  */
 @Component({
   selector: "preview-brand-colors",
+  imports: [DocBulletsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
@@ -93,6 +95,29 @@ interface ResolvedSwatch {
         }
       </div>
     </div>
+
+    <div class="preview-section">
+      <div class="preview-section__title">Usage rules</div>
+      <div class="dodont-grid">
+        <doc-bullets label="Do" tone="do" [items]="dos" />
+        <doc-bullets label="Don't" tone="dont" [items]="donts" />
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section__title">Dark mode</div>
+      <p class="preview-section__note">
+        <strong>The marketing site is intentionally light-only.</strong> Unlike
+        the product app (fully dark-ready), marketing pins
+        <code>color-scheme: light</code> in
+        <code>projects/marketing/src/styles.scss</code>. The brand's dot-grid
+        background, grid-textured banners, and hero block art are tuned for a
+        single light canvas. This is a deliberate product-vs-marketing
+        difference; don't add per-page dark overrides. (This preview's dark
+        toggle flips the shared Material tokens so you can inspect them, but the
+        shipped marketing site never renders dark.)
+      </p>
+    </div>
   `,
 })
 export class BrandColorsPreview {
@@ -100,6 +125,16 @@ export class BrandColorsPreview {
   private readonly themeStore = inject(ThemeStore);
 
   readonly swatches = signal<ResolvedSwatch[]>([]);
+
+  readonly dos = [
+    "Reserve primary red for brand identity: primary CTAs, links, and the .fancy accent",
+    "Pull surfaces from Material surface roles, text from on-* roles, hairlines from outline-variant",
+    "Use the blue and yellow accents only in illustrations, diagrams, and data marks",
+  ];
+  readonly donts = [
+    "Use the accents for text, CTAs, borders, or backgrounds",
+    "Hardcode hex or rgb; derive from a token instead (a color-mix() off a token is fine)",
+  ];
 
   constructor() {
     effect(() => {

@@ -1,0 +1,161 @@
+@use "../../../../../../src/assets/styles/variables" as vars;
+
+:host {
+  display: block;
+}
+
+.banner {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 7vw, 104px) 0;
+
+  // Surface fill that dissolves into the page's dotted background at the top and
+  // bottom, so the section blends in instead of starting on a hard edge.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--mat-sys-surface-container);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 14%,
+      #000 86%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 14%,
+      #000 86%,
+      transparent 100%
+    );
+  }
+
+  // Faded line-grid over the surface. Organic patches cluster on the sides at
+  // mid-height (clear centre so content reads; clear of the top/bottom fade),
+  // so the texture sits inside the blended band.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: conic-gradient(
+      from 90deg at 1px 1px,
+      #0000 90deg,
+      color-mix(in srgb, var(--mat-sys-outline-variant) 60%, transparent) 0
+    );
+    background-size: 36px 36px;
+    -webkit-mask-image:
+      radial-gradient(ellipse 22% 34% at 7% 42%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 18% 30% at 15% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 20% 30% at 4% 52%, #000 0%, transparent 66%),
+      radial-gradient(ellipse 22% 34% at 94% 44%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 20% 32% at 86% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 18% 28% at 96% 38%, #000 0%, transparent 66%);
+    mask-image:
+      radial-gradient(ellipse 22% 34% at 7% 42%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 18% 30% at 15% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 20% 30% at 4% 52%, #000 0%, transparent 66%),
+      radial-gradient(ellipse 22% 34% at 94% 44%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 20% 32% at 86% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 18% 28% at 96% 38%, #000 0%, transparent 66%);
+    mask-composite: add;
+    -webkit-mask-composite: source-over;
+  }
+}
+
+// The hero is a large section, so it carries a fuller spread of the grid than
+// the default (compact "switch") band: more, larger patches across the width.
+:host(.hero-banner) .banner::after {
+  $hero-grid:
+    radial-gradient(ellipse 28% 40% at 6% 26%, #000 0%, transparent 74%),
+    radial-gradient(ellipse 26% 42% at 17% 58%, #000 0%, transparent 72%),
+    radial-gradient(ellipse 24% 36% at 7% 78%, #000 0%, transparent 70%),
+    radial-gradient(ellipse 28% 38% at 35% 34%, #000 0%, transparent 72%),
+    radial-gradient(ellipse 26% 40% at 30% 76%, #000 0%, transparent 70%),
+    radial-gradient(ellipse 26% 40% at 58% 24%, #000 0%, transparent 70%),
+    radial-gradient(ellipse 24% 38% at 62% 78%, #000 0%, transparent 68%),
+    radial-gradient(ellipse 30% 44% at 92% 30%, #000 0%, transparent 74%),
+    radial-gradient(ellipse 26% 40% at 83% 60%, #000 0%, transparent 72%),
+    radial-gradient(ellipse 24% 36% at 96% 80%, #000 0%, transparent 70%);
+  -webkit-mask-image: $hero-grid;
+  mask-image: $hero-grid;
+}
+
+// Block art on its own layer above the grid; hero-only (opts in below),
+// transparent elsewhere.
+.banner__art {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  // Fill the band exactly (no repeat/cover): the art isn't a seamless tile and
+  // cover would crop the edge clusters. The band is wider than the art, so blocks
+  // stretch slightly; the edge-fade mask softens it.
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  // Dissolve into all four band edges (not just top/bottom) so clusters near the
+  // sides fade out instead of hard-clipping on wide screens. Intersect the two
+  // fades so the art only shows where both are opaque.
+  $edge-fade:
+    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: $edge-fade;
+  mask-image: $edge-fade;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+:host(.hero-banner) .banner__art {
+  background-image: url("/assets/home/background-art-light.webp");
+  opacity: 0.9;
+  // Fade art in on load (opacity only, `backwards` so it starts at 0). Avoid an
+  // animated transform: it forces a GPU layer that rasterizes the art blurry on
+  // high-DPI screens.
+  animation: banner-art-fade-in 0.7s ease-out backwards;
+}
+
+@keyframes banner-art-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+// Honour reduced-motion: skip the fade-in, showing the art at its resting opacity.
+@media (prefers-reduced-motion: reduce) {
+  :host(.hero-banner) .banner__art {
+    animation: none;
+  }
+}
+
+// The block art is a desktop flourish; on small/medium screens the hero stacks
+// into a tighter column, where the clusters only add clutter.
+@media screen and (max-width: vars.$large) {
+  .banner__art {
+    display: none;
+  }
+}
+
+// Centred, width-capped content column matching the page's .home-sections.
+// min(95%, 100% - 40px) keeps ~2.5% gutters on desktop but never less than a
+// 20px gutter on phones.
+.banner__inner {
+  position: relative;
+  z-index: 3;
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-wide);
+  margin: 0 auto;
+}
+
+// Extra horizontal room for the hero text.
+:host(.hero-banner) .banner__inner {
+  padding-inline: clamp(4px, 3vw, 60px);
+}
