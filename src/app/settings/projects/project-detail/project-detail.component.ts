@@ -192,7 +192,6 @@ export class ProjectDetailComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (confirmed) => {
-      // Is this going to 500 because it's sync?
       if (confirmed) {
         const result = await this.#service.deleteProject();
         if (result) {

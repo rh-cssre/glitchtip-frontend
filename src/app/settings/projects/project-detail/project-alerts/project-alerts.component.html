@@ -116,7 +116,8 @@
                         <mat-icon>edit</mat-icon>
                       </button>
                     }
-                    <gt-loading-button
+                    <button
+                      mat-icon-button
                       class="recipient-action small-icon-button"
                       buttonStyle="stroked" 
                       color="warn"
@@ -125,7 +126,7 @@
                       (click)="removeNewAlertRecipient(recipient.url)"
                     >
                       <mat-icon>delete</mat-icon>
-                    </gt-loading-button>
+                    </button>
                   </div>
                 </div>
               </li>
