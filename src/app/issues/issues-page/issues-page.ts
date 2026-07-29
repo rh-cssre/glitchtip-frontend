@@ -363,6 +363,7 @@ export class IssuesPage implements OnInit, OnDestroy {
         title: $localize`Merge issues`,
         message: $localize`This action will merge your selected issues into a single issue.`,
         confirmText: $localize`Merge`,
+        destructive: false,
       },
     });
 
