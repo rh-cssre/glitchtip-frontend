@@ -28,6 +28,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.contains(seededMonitorName).click();
     cy.get("#monitor-settings").click();
     cy.get("#delete-monitor").click();
+    cy.contains("Are you sure you want delete this monitor?");
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Monitor has been deleted.");
     cy.visit(`/${seededOrg.slug}/uptime-monitors`);
