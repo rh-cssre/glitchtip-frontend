@@ -107,7 +107,6 @@
                       <button
                         class="recipient-action small-icon-button"
                         mat-icon-button
-                        color="primary"
                         attr.aria-label="Edit recipient"
                         (click)="
                           openEditNewRecipientDialog(recipient, recipientIndex)
@@ -117,11 +116,8 @@
                       </button>
                     }
                     <button
-                      mat-icon-button
                       class="recipient-action small-icon-button"
-                      buttonStyle="stroked" 
-                      color="warn"
-                      color="primary"
+                      mat-icon-button
                       attr.aria-label="Delete Alert For {{ recipient.url }}"
                       (click)="removeNewAlertRecipient(recipient.url)"
                     >
@@ -292,7 +288,6 @@
                           <button
                             class="recipient-action small-icon-button"
                             mat-icon-button
-                            color="primary"
                             attr.aria-label="Test recipient"
                             matTooltip="Send test notification"
                             [disabled]="testAlertLoading() === recipient.id"
@@ -307,7 +302,6 @@
                           <button
                             class="recipient-action small-icon-button"
                             mat-icon-button
-                            color="primary"
                             attr.aria-label="Edit recipient"
                             (click)="openEditRecipientDialog(recipient, alert)"
                           >
@@ -318,7 +312,6 @@
                           class="recipient-action small-icon-button"
                           id="delete-recipient"
                           mat-icon-button
-                          color="primary"
                           attr.aria-label="Delete Alert {{ i + 0 }}"
                           (click)="removeAlertRecipient(recipient, alert)"
                         >
