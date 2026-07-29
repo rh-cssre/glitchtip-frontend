@@ -1,5 +1,9 @@
 import { seedBackend, requestLogin } from "./utils.cy";
-import { seededOrg, seededProject1, seededMonitorName } from "../fixtures/variables";
+import {
+  seededOrg,
+  seededProject1,
+  seededMonitorName,
+} from "../fixtures/variables";
 
 describe("List, add, update and delete uptime Monitors", () => {
   beforeEach(() => {
