@@ -178,6 +178,7 @@ export class IssueDetailComponent implements OnInit {
 
   deleteIssue() {
     const id = this.issueID();
+    if (!id) return;
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -188,7 +189,7 @@ export class IssueDetailComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((confirmed) => {
-      if (id && confirmed) {
+      if (confirmed) {
         this.issueService.deleteIssue(id.toString());
       }
     });
