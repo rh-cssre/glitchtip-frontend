@@ -182,7 +182,7 @@ export class ProjectDetailComponent implements OnInit {
     this.#service.setParams(this.orgSlug(), this.projectSlug());
   }
 
-  async deleteProject() {
+  deleteProject() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: $localize`Delete project`,
