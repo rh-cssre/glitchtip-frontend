@@ -17,7 +17,7 @@ describe("Organization Settings", () => {
       cy.get("#update-org").click();
       cy.get("input[formcontrolname=name]").should("have.value", newOrgName);
       cy.get("#delete-org").click();
-      cy.intercept("GET", `api/0/projects/*`).as("getProjectsRequest");
+      cy.contains("Are you sure you sure");
       cy.get("[data-cy='dialog-confirm']").click();
       cy.contains("successfully deleted");
       cy.url().should("eq", "http://localhost:4200/");
