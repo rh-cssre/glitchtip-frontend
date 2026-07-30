@@ -6,7 +6,7 @@
     <ng-container slot="right">
       @if (subscription() && subscription()!.status !== "canceled") {
         <button
-          mat-flat-button
+          mat-stroked-button
           color="primary"
           class="manage-subscription-button"
           (click)="manageSubscription()"
