@@ -49,6 +49,8 @@
         <gt-loading-button
           data-test
           buttonText="Delete Organization"
+          buttonStyle="stroked"
+          color="warn"
           [loading]="loading().deleteOrganization"
           [disabled]="!accessOrgAdmin()"
           (buttonClick)="removeOrganization(activeOrg.slug, activeOrg.name)"
