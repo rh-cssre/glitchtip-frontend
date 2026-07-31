@@ -322,7 +322,8 @@ a {
     width: 100%;
     margin: 20px 0;
     border-radius: var(--mat-sys-corner-large, 16px);
-    border: 6px solid var(--mat-sys-outline-variant);
+    // Hairline to match the feature/product screenshots (was a heavy 6px).
+    border: 1px solid var(--mat-sys-outline-variant);
   }
 
   table {
@@ -344,17 +345,94 @@ a {
   }
 
   code {
-    padding: 0 5px;
-    background-color: var(--mat-sys-surface-variant);
-    font-size: 0.9em;
+    padding: 2px 6px;
+    border-radius: var(--mat-sys-corner-small, 8px);
+    background-color: var(--mat-sys-surface-container-high);
+    font-family: var(--mkt-font-mono);
+    font-size: 0.88em;
   }
 
   pre {
-    padding: 10px 15px;
-    background-color: var(--mat-sys-surface-variant);
-    overflow-x: scroll;
-    font-size: 0.9em;
-    line-height: 1.5em;
+    position: relative;
+    margin: 20px 0;
+    padding: 16px 18px;
+    background-color: var(--mat-sys-surface-container);
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-medium, 12px);
+    overflow-x: auto;
+    font-size: 0.85em;
+    line-height: 1.6;
+
+    code {
+      padding: 0;
+      background: none;
+      border-radius: 0;
+      font-size: inherit;
+    }
+  }
+
+  // Copy-to-clipboard button injected onto each code block by addCodeCopyButtons
+  // (blog + docs). Renders a Material Symbols glyph (content_copy, swapped to
+  // check on copy). Always visible but low-emphasis, brightening on hover/focus.
+  .doc-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-small, 8px);
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface-variant);
+    cursor: pointer;
+    opacity: 0.6;
+    transition:
+      opacity 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+
+    // Material Symbols glyph (filled, matching mkt-code-card's copy icon).
+    font-family: "Material Symbols Outlined";
+    font-size: 18px;
+    font-feature-settings: "liga";
+    font-variation-settings:
+      "FILL" 1,
+      "wght" 300,
+      "GRAD" 200,
+      "opsz" 24;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--mat-sys-on-surface);
+      border-color: var(--mat-sys-outline);
+    }
+
+    &.is-copied {
+      opacity: 1;
+      color: var(--mkt-success);
+      border-color: var(--mkt-success);
+    }
+  }
+
+  // Callout / admonition: a styled blockquote for notes and warnings.
+  blockquote {
+    margin: 20px 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--mat-sys-primary);
+    border-radius: 0 var(--mat-sys-corner-medium, 12px)
+      var(--mat-sys-corner-medium, 12px) 0;
+    background: color-mix(in srgb, var(--mat-sys-primary) 6%, var(--bg));
+
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
