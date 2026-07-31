@@ -6,7 +6,6 @@
     @if (paidForGlitchTip()) {
       <button
         mat-stroked-button
-        color="primary"
         class="manage-billing-button"
         (click)="manageBilling()"
         [disabled]="manageBillingLoading()"
@@ -101,7 +100,6 @@
         </div>
         <a
           mat-stroked-button
-          color="primary"
           href="https://app.glitchtip.com"
           target="_blank"
           rel="noopener"

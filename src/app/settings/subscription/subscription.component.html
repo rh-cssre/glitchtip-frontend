@@ -7,7 +7,6 @@
       @if (subscription() && subscription()!.status !== "canceled") {
         <button
           mat-stroked-button
-          color="primary"
           class="manage-subscription-button"
           (click)="manageSubscription()"
           [disabled]="billingPortalLoading()"

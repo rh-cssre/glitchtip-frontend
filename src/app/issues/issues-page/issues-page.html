@@ -249,7 +249,6 @@
                   <button
                     data-cy="bulkUpdateProject"
                     mat-stroked-button
-                    color="primary"
                     (click)="selectAllResults()"
                   >
                     @if (paginator()?.hits; as hits) {
@@ -261,11 +260,7 @@
                     >All {{ paginator()?.hits }} issues are currently
                     selected.</span
                   >
-                  <button
-                    mat-stroked-button
-                    color="primary"
-                    (click)="clearSelectAllResults()"
-                  >
+                  <button mat-stroked-button (click)="clearSelectAllResults()">
                     Undo
                   </button>
                 }

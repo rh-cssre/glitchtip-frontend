@@ -130,11 +130,7 @@
               </li>
             }
           </ul>
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="openCreateRecipientDialog()"
-          >
+          <button mat-stroked-button (click)="openCreateRecipientDialog()">
             <mat-icon>add</mat-icon>
             <ng-container i18n>Add An Alert Recipient</ng-container>
           </button>
@@ -146,9 +142,7 @@
               i18n
               >Submit</gt-loading-button
             >
-            <button (click)="closeNewAlert()" mat-stroked-button i18n
-              >Cancel</button
-            >
+            <button (click)="closeNewAlert()" mat-button i18n>Cancel</button>
           </div>
         </div>
       }
@@ -329,7 +323,6 @@
             </ul>
             <button
               mat-stroked-button
-              color="primary"
               (click)="openUpdateRecipientDialog(alert)"
             >
               <mat-icon>add</mat-icon>
