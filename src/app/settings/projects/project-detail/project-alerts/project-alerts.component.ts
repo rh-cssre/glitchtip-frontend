@@ -191,7 +191,19 @@ export class ProjectAlertsComponent implements OnInit {
   }
 
   removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
-    this.#service.deleteAlertRecipient(recipient, alert);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove recipient`,
+        message: $localize`Are you sure you want to remove this recipient?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteAlertRecipient(recipient, alert);
+      }
+    });
   }
 
   newAlertProperties(event: {
