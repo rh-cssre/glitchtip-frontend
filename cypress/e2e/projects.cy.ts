@@ -117,6 +117,8 @@ describe("Add and edit alerts", () => {
     cy.get("[data-cy=quantity]").should("have.value", "2");
 
     cy.get("#delete-recipient").click();
+    cy.contains("Are you sure you want to remove this recipient?");
+    cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("This alert isn't being sent anywhere.");
 
     cy.get("button").contains("Add An Alert Recipient").click();
