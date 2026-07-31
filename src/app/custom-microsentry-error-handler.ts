@@ -25,8 +25,9 @@ export class CustomMicroSentryErrorHandler implements ErrorHandler {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
           title: $localize`Load new version?`,
-          message: $localize`New version available. Load New Version??`,
+          message: $localize`New version available. Load New Version?`,
           confirmText: $localize`Load`,
+          destructive: false
         },
       });
 
