@@ -1,0 +1,16 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 class="section-header-text">User Profile</h1>
+  </ng-container>
+  @if (user(); as user) {
+    <ng-container slot="right">
+      <p class="body-text">
+        {{ user.email }}
+      </p>
+    </ng-container>
+  }
+</gt-top-app-bar>
+<section class="l-body">
+  <header class="page-header"> </header>
+  <router-outlet></router-outlet>
+</section>

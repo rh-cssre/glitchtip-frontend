@@ -1,201 +1,194 @@
-<div class="empty-states">
-  <!-- Don't show any of this until loading state is resolved -->
-  <ng-container
-    *ngIf="
-      (initialLoadComplete$ | async) === true && (loading$ | async) === false
-    "
-  >
-    <!-- If there are errors, only show the error -->
-    <ng-container *ngIf="(errors$ | async)?.length; else emptyState">
-      <ng-container *ngIf="(errors$ | async)?.length === 1; else multipleErrors"
-        ><h3 class="mat-display-1" i18n
-          >There was an error processing your request</h3
-        ></ng-container
-      ><ng-template #multipleErrors
-        ><h3 class="mat-display-1" i18n
-          >There were errors while processing your request</h3
-        ></ng-template
-      >
-      <ul>
-        <li *ngFor="let error of errors$ | async">{{ error }}</li>
-      </ul>
-    </ng-container>
-
-    <!-- If there are no errors, show an empty state option -->
-    <ng-template #emptyState>
-      <!-- If there are zero projects -->
-      <ng-container
-        *ngIf="(orgHasAProject$ | async) === false; else hasProject"
-      >
-        <h3 class="mat-display-1" i18n>This organization has no projects.</h3>
-        <p class="mat-body-1" i18n
-          >To add a project to this organization, press the
-          "Add&nbsp;Project"&nbsp;button.</p
-        >
-      </ng-container>
-
-      <ng-template #hasProject>
-        <!-- You're an admin, but you're not on the team -->
-        <ng-container
-          *ngIf="projectsWhereAdminIsNotOnTheTeam$ | async as notOnTeam"
-        >
-          <ng-container *ngIf="notOnTeam.length > 0 && notOnTeam.length < 2">
-            <p class="not-on-team">
-              <ng-container
-                *ngIf="singleProjectApplied$ | async; else notOnTeamMultiple"
-                i18n
-                >You can't see issues for this project because you're not on the
-                team.</ng-container
-              >
-              <ng-template #notOnTeamMultiple i18n
-                >Out of the projects you have selected, you are not a part of
-                that project's team for at least one of them.</ng-template
-              >
-            </p>
-          </ng-container>
-          <ng-container *ngIf="notOnTeam.length > 2"> </ng-container>
-        </ng-container>
-
-        <!-- If there is one project applied -->
-        <ng-container
-          *ngIf="singleProjectApplied$ | async; else multipleProjects"
-        >
-          <!-- If no event has been sent -->
-          <ng-container *ngIf="showOnboarding$ | async; else noIssueMessaging">
-            <div class="install-wrapper">
-              <div
-                class="install-instructions"
-                *ngIf="
-                  activeProjectPlatform$ | async as activeProjectPlatform;
-                  else noPlatform
-                "
-              >
-                <ng-container
-                  *ngIf="
-                    activeProjectPlatform !== 'other' &&
-                      activeProjectPlatform !== '' &&
-                      (activeProjectPlatformName$ | async);
-                    else otherTemplate
-                  "
-                >
-                  <h2 class="mat-display-1" i18n
-                    >Connect your
-                    {{ activeProjectPlatformName$ | async }} project to
-                    GlitchTip</h2
-                  >
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/{{
-                      activeProjectPlatform
-                    }}.md"
-                  ></gt-lazy-markdown>
-                </ng-container>
-
-                <ng-template #otherTemplate>
-                  <h2 class="mat-display-1" i18n
-                    >Connect your project to GlitchTip</h2
-                  >
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/all-sdks.md"
-                  ></gt-lazy-markdown>
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/other.md"
-                  ></gt-lazy-markdown>
-                </ng-template>
-              </div>
-
-              <ng-template #noPlatform>
-                <div class="install-instructions">
-                  <h2 class="mat-display-1" i18n
-                    >Connect your project to GlitchTip</h2
-                  >
-
-                  <gt-lazy-markdown
-                    markdownSrc="/static/sdk-docs/all-sdks.md"
-                  ></gt-lazy-markdown>
-
-                  <p class="mat-body-1" i18n
-                    >If you go to this project's
-                    <a
-                      [routerLink]="[
-                        '/',
-                        'settings',
-                        activeOrganizationSlug$ | async,
-                        'projects',
-                        activeProjectSlug$ | async
-                      ]"
-                    >
-                      settings page</a
-                    >, you can pick a platform. If you do, you'll get more
-                    specific instructions about how to get started.</p
-                  >
-                </div>
-              </ng-template>
-              <div
-                class="dsn"
-                *ngIf="firstProjectKey$ | async as firstProjectKey"
-              >
-                <h2 class="mat-display-1">DSN</h2>
-
-                <p class="mat-body-1" i18n
-                  >Most instructions will have a spot that says "your DSN here".
-                  Copy the DSN and paste it into that spot.</p
-                >
-
-                <div class="dsn-area">
-                  <gt-copy-input
-                    [value]="firstProjectKey.dsn.public"
-                    placeholder="DSN"
-                  ></gt-copy-input>
-                  <gt-copy-input
-                    [value]="firstProjectKey.dsn.security"
-                    placeholder="Security Endpoint"
-                  ></gt-copy-input>
-                </div>
-
-                <ng-container
-                  *ngIf="
-                    activeProjectPlatform$ | async as activeProjectPlatform
-                  "
-                >
-                  <ng-container *ngIf="activeProjectPlatform !== 'other'">
-                    <h2 class="mat-body-2" i18n>What's this all about?</h2>
-
-                    <gt-lazy-markdown
-                      markdownSrc="/static/sdk-docs/all-sdks.md"
-                    ></gt-lazy-markdown>
-
-                    <p class="mat-body-1" i18n
-                      >This page is showing instructions on how to connect
-                      GlitchTip to your project based on the platform you
-                      specified.</p
-                    >
-                  </ng-container>
-                </ng-container>
-              </div>
-            </div>
-          </ng-container>
-
-          <ng-template #noIssueMessaging>
-            <!-- No issues match the filters, in general -->
-            <h3 class="mat-display-1" i18n>No events match your filters.</h3>
-            <p class="mat-body-1" i18n
-              >Try changing your search parameters to get something to show
-              here.</p
-            >
-          </ng-template>
-        </ng-container>
-
-        <ng-template #multipleProjects>
-          <h3 i18n>No events match your filters.</h3>
-          <p class="mat-body-1" i18n
-            >You have multiple projects selected. Select a single project to
-            learn more about why there's nothing here.</p
-          >
-        </ng-template>
-      </ng-template></ng-template
+<ng-template #gettingStarted>
+  <p i18n>To start using GlitchTip, you need to:</p>
+  <ol>
+    <li i18n>Install the sentry SDK for your platform into your project.</li>
+    <li i18n
+      >Configure it with your <strong>DSN</strong> (Data Source Name) so it
+      knows where to send events. Your DSN is shown on this page, and can also
+      be found in your project's settings.</li
     >
-  </ng-container>
+    <li i18n>Initialize the SDK early in your application's startup.</li>
+  </ol>
+  <details class="advanced-config">
+    <summary i18n>Optional setup</summary>
+    <h3 i18n>Configuration options</h3>
+    <p i18n>Most SDKs support these options:</p>
+    <ul>
+      <li i18n
+        ><strong>release</strong>: your application version (e.g.,
+        <code>"1.0.0"</code>). Helps track which releases introduce errors.</li
+      >
+      <li i18n
+        ><strong>environment</strong>: the running environment name (e.g.,
+        <code>"production"</code>, <code>"staging"</code>).</li
+      >
+      <li i18n
+        ><strong>traces_sample_rate</strong>: sample rate for performance
+        transactions (<code>0.0</code> to <code>1.0</code>). Use a low value
+        like <code>0.01</code> (1%) in production to save disk space.</li
+      >
+      <li i18n
+        ><strong>auto_session_tracking</strong>: set to <code>false</code>.
+        GlitchTip does not support session tracking.</li
+      >
+    </ul>
+    <h3 i18n>Performance Monitoring</h3>
+    <p i18n
+      >Enable
+      <a target="_blank" href="https://glitchtip.com/documentation/performance"
+        >performance monitoring</a
+      >
+      by setting <code>traces_sample_rate</code>. Sample your transactions to
+      keep data volume manageable — most teams find 1–10% sufficient.</p
+    >
+    <h3 i18n>Logs</h3>
+    <p i18n
+      >GlitchTip can ingest
+      <a target="_blank" href="https://glitchtip.com/documentation/logs"
+        >application logs</a
+      >
+      via OpenTelemetry. See the logs documentation for setup.</p
+    >
+    <h3 i18n>Source Maps &amp; Debug Symbols</h3>
+    <p i18n
+      >Use the
+      <a target="_blank" href="https://glitchtip.com/documentation/cli"
+        >GlitchTip CLI</a
+      >
+      to upload source maps and debug symbols for readable stack traces in
+      production.</p
+    >
+    <h3 i18n>AI-Assisted Debugging</h3>
+    <p i18n
+      >GlitchTip includes an
+      <a target="_blank" href="https://glitchtip.com/documentation/mcp"
+        >MCP server</a
+      >
+      that lets AI assistants investigate errors, analyze performance, and query
+      logs.</p
+    >
+  </details>
+</ng-template>
+
+<div class="empty-states">
+  @switch (zeroStateKind()) {
+    @case ("no-projects") {
+      <gt-empty-state
+        data-cy="no-projects"
+        icon="team_dashboard"
+        i18n-title
+        title="No projects yet"
+        i18n-message
+        message="Add a project to start capturing errors."
+      />
+    }
+    @case ("no-access") {
+      <gt-empty-state
+        icon="security"
+        i18n-title
+        title="No access"
+        [message]="noAccessMessage()"
+      />
+    }
+    @case ("no-results") {
+      <gt-empty-state
+        icon="search"
+        i18n-title
+        title="No matching issues"
+        i18n-message
+        message="Try adjusting your search, or clear your filters to see everything."
+      >
+        <button mat-button data-cy="no-results" (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          <span i18n>Clear filters</span>
+        </button>
+      </gt-empty-state>
+    }
+    @case ("onboarding") {
+      <div class="install-wrapper">
+        @if (activeProjectPlatform(); as activeProjectPlatform) {
+          <div class="install-instructions body-text">
+            @if (platformHasDocs() && activeProjectPlatformName()) {
+              <h2 class="section-header-text" i18n
+                >Connect your {{ activeProjectPlatformName() }} project to
+                GlitchTip</h2
+              >
+              @if (platformMdContent(); as platformMd) {
+                <markdown data-cy="sdk-docs" [data]="platformMd"></markdown>
+              } @else if (!platformMdLoading()) {
+                <ng-container
+                  [ngTemplateOutlet]="gettingStarted"
+                ></ng-container>
+              }
+            } @else {
+              <h2 class="section-header-text" i18n
+                >Connect your project to GlitchTip</h2
+              >
+              <ng-container [ngTemplateOutlet]="gettingStarted"></ng-container>
+              <p data-cy="platform-other-notice" i18n
+                >The platform you selected doesn't have specific setup
+                instructions yet. Many sentry-compatible SDKs are available as
+                open-source packages — search for a sentry SDK for your language
+                or framework on your package manager.</p
+              >
+            }
+          </div>
+        } @else {
+          <div class="install-instructions body-text">
+            <h2 class="section-header-text" i18n
+              >Connect your project to GlitchTip</h2
+            >
+            <ng-container [ngTemplateOutlet]="gettingStarted"></ng-container>
+            @if (activeProjectSlug(); as projectSlug) {
+              <p class="body-text" i18n
+                >If you go to this project's
+                <a
+                  data-cy="platform-settings-link"
+                  [routerLink]="[
+                    '/',
+                    activeOrganizationSlug(),
+                    'settings',
+                    'projects',
+                    projectSlug,
+                  ]"
+                >
+                  settings page</a
+                >, you can pick a platform. If you do, you'll get more specific
+                instructions about how to get started.
+              </p>
+            }
+          </div>
+        }
+        @if (firstProjectKey(); as projectKey) {
+          <div class="dsn">
+            <h2 class="section-header-text">DSN</h2>
+            @if (platformHasDocs()) {
+              <p class="body-text" i18n
+                >Your DSN is pre-filled in the setup instructions. Copy it here
+                if you need it for additional environments or tools. The
+                Security Endpoint is used for browser Content Security Policy
+                (CSP) reporting.</p
+              >
+            } @else {
+              <p class="body-text" i18n
+                >Your DSN tells your SDK how to send events to your GlitchTip
+                project. The Security Endpoint is used for browser Content
+                Security Policy (CSP) reporting.</p
+              >
+            }
+            <div class="dsn-area">
+              <gt-copy-input
+                [value]="projectKey.dsn.public"
+                placeholder="DSN"
+              ></gt-copy-input>
+              <gt-copy-input
+                [value]="projectKey.dsn.security"
+                placeholder="Security Endpoint"
+              ></gt-copy-input>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
 </div>

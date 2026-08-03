@@ -1,39 +1,132 @@
+@use "variables" as vars;
+
 @font-face {
-  font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
+  font-family: vars.$font-sans-serif;
+  src:
+    url("#{ vars.$font-path}/plex-sans/woff2/IBMPlexSans-Regular-Latin1.woff2")
       format("woff2"),
-    url("#{$font-path}/plex-sans/woff/IBMPlexSans-Regular-Latin1.woff")
+    url("#{ vars.$font-path}/plex-sans/woff/IBMPlexSans-Regular-Latin1.woff")
       format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
+  font-family: vars.$font-sans-serif;
+  src:
+    url("#{ vars.$font-path}/plex-sans/woff2/IBMPlexSans-Medium-Latin1.woff2")
       format("woff2"),
-    url("#{$font-path}/plex-sans/woff/IBMPlexSans-Medium-Latin1.woff")
+    url("#{ vars.$font-path}/plex-sans/woff/IBMPlexSans-Medium-Latin1.woff")
       format("woff");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: $font-sans-serif;
-  src: url("#{$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
+  font-family: vars.$font-sans-serif;
+  src:
+    url("#{ vars.$font-path}/plex-sans/woff2/IBMPlexSans-BoldItalic-Latin1.woff2")
       format("woff2"),
-    url("#{$font-path}/plex-sans/woff/IBMPlexSans-BoldItalic-Latin1.woff")
+    url("#{ vars.$font-path}/plex-sans/woff/IBMPlexSans-BoldItalic-Latin1.woff")
       format("woff");
   font-weight: 700;
   font-style: italic;
 }
 
 @font-face {
-  font-family: $font-mono;
-  src: url("#{$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
+  font-family: vars.$font-mono;
+  src:
+    url("#{ vars.$font-path}/plex-mono/woff2/IBMPlexMono-Regular-Latin1.woff2")
       format("woff2"),
-    url("#{$font-path}/plex-mono/woff/IBMPlexMono-Regular-Latin1.woff")
+    url("#{ vars.$font-path}/plex-mono/woff/IBMPlexMono-Regular-Latin1.woff")
       format("woff");
   font-weight: 400;
   font-style: normal;
+}
+
+// Material symbols file downloaded via link in typography section on storybook
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  src: url("#{ vars.$font-path}/material-symbols.woff2") format("woff2");
+}
+
+.material-symbols-filled {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  font-feature-settings: "liga";
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 300,
+    "GRAD" 200,
+    "opsz" 24;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 300,
+    "GRAD" 200,
+    "opsz" 24;
+}
+
+.section-header-text {
+  font: var(--mat-sys-headline-small);
+  letter-spacing: var(--mat-sys-headline-small-tracking);
+  font-weight: 700;
+
+  @media screen and (max-width: vars.$medium - 1) {
+    font: var(--mat-sys-title-large);
+    font-weight: 700;
+    letter-spacing: var(--mat-sys-title-large-tracking);
+  }
+}
+
+.section-header-text-light {
+  font: var(--mat-sys-headline-small);
+  letter-spacing: var(--mat-sys-headline-small-tracking);
+
+  @media screen and (max-width: vars.$medium - 1) {
+    font: var(--mat-sys-title-large);
+    letter-spacing: var(--mat-sys-title-large-tracking);
+  }
+}
+
+.body-text {
+  font: var(--mat-sys-body-large);
+  letter-spacing: var(--mat-sys-body-large-tracking);
+
+  @media screen and (max-width: vars.$medium - 1) {
+    font: var(--mat-sys-body-medium);
+    letter-spacing: var(--mat-sys-body-medium-tracking);
+  }
+}
+
+.body-text-strong {
+  font: var(--mat-sys-body-large);
+  font-weight: 500;
+  letter-spacing: var(--mat-sys-body-large-tracking);
+
+  @media screen and (max-width: vars.$medium - 1) {
+    font: var(--mat-sys-body-medium);
+    font-weight: 500;
+    letter-spacing: var(--mat-sys-body-medium-tracking);
+  }
+}
+
+.caption-text {
+  font: var(--mat-sys-body-small);
+  letter-spacing: var(--mat-sys-body-large-small);
 }
