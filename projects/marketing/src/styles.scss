@@ -11,6 +11,10 @@ $font-path: "../../../src/assets/fonts";
 
 html {
   color-scheme: light;
+  // Offset anchor / #fragment scrolling so a targeted heading lands just below
+  // the sticky top app bar instead of behind it. Keep in sync with ANCHOR_OFFSET
+  // in documentation-page.component.ts.
+  scroll-padding-top: 88px;
   @include mat.theme(
     (
       color: custom-theme.$primary-palette,
