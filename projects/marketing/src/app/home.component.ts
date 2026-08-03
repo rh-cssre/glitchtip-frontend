@@ -1,24 +1,30 @@
-import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { LinksService } from "./links.service";
-import { MatCard, MatCardContent } from "@angular/material/card";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { RouterLink } from "@angular/router";
 import { PaymentComponent } from "./shared/payment/payment.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { FeatureSectionComponent } from "./shared/feature-section/feature-section.component";
+import { RevealDirective } from "./shared/reveal.directive";
+import { BannerComponent } from "./shared/banner/banner.component";
 
 @Component({
   selector: "marketing-home",
   imports: [
     MatButtonModule,
-    MatCard,
-    MatCardContent,
     MatInputModule,
     MatFormFieldModule,
     RouterLink,
     PaymentComponent,
     FeatureSectionComponent,
+    RevealDirective,
+    BannerComponent,
   ],
   templateUrl: "./home.component.html",
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -28,4 +34,22 @@ export class HomeComponent {
   private links = inject(LinksService);
 
   registerLink = this.links.registerLink;
+
+  // Mobile feature carousel: dot pagination + active-slide tracking.
+  protected readonly featureDots = [0, 1, 2, 3];
+  protected readonly activeFeature = signal(0);
+
+  protected onFeatureScroll(el: HTMLElement): void {
+    const n = this.featureDots.length;
+    const i = Math.round(el.scrollLeft / (el.scrollWidth / n));
+    this.activeFeature.set(Math.min(n - 1, Math.max(0, i)));
+  }
+
+  protected scrollToFeature(el: HTMLElement, i: number): void {
+    (el.children[i] as HTMLElement | undefined)?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }
 }

@@ -1,48 +1,17 @@
 @use "../../../../src/assets/styles/variables" as vars;
 
-.hero-card {
-  --mat-card-container-color: var(--mat-sys-surface-container);
-
-  width: 95%;
-  max-width: 1800px;
-  margin: 1.5rem auto 40px;
-  padding: 24px clamp(40px, 4vw, 80px) 40px;
-  border-radius: var(--mat-sys-corner-extra-large, 28px);
-  overflow: hidden;
-  position: relative;
-  background-image:
-    url("/assets/home/background-art-light.webp"),
-    conic-gradient(from 90deg at 1px 1px, #0000 90deg, color-mix(in srgb, var(--mat-sys-outline-variant) 35%, transparent) 0);
-  background-size: cover, 36px 36px;
-  background-position: center center, 0 0;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.7) 0%,
-      rgba(255, 255, 255, 0.3) 15%,
-      transparent 100%
-    );
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  @media screen and (max-width: vars.$large) {
-    padding: 24px;
-  }
-
-  mat-card-content {
-    position: relative;
-    z-index: 1;
-  }
+// Feature screenshots bleed outward by design (negative margins on the
+// alternating rows). Clip horizontal overflow at the viewport so that
+// intentional bleed never turns into page-level horizontal scroll on wide
+// screens. `overflow-x: clip` keeps vertical drop-shadows visible and, unlike
+// `hidden`, creates no scroll container.
+:host {
+  display: block;
+  overflow-x: clip;
 }
 
+// The hero sits in the shared mkt-banner grid section (see .hero-banner below);
+// the banner owns the surface, faded grid and top/bottom blend.
 .hero-images-container {
   display: flex;
   gap: 3rem;
@@ -80,14 +49,26 @@
     max-width: 550px;
     margin: 0;
 
-    > p:first-child {
-      margin-top: 0;
+    // Roomier rhythm: a clear gap after the headline and before the CTA.
+    > p,
+    > .cta-row {
+      margin-top: 1.5rem;
     }
+  }
+
+  // Bigger, more confident hero headline than the shared 45px class, scaled
+  // with the viewport (much smaller floor so it never overflows on phones).
+  // Shared .marketing-heading is untouched elsewhere.
+  .marketing-heading {
+    font-size: clamp(1.9rem, 1.05rem + 4.2vw, 3.6rem);
+    line-height: 1.08;
+    margin-bottom: 0.35em;
+    overflow-wrap: break-word;
   }
 
   .marketing-body {
     font-size: 1.25em;
-    line-height: 1.5em;
+    line-height: 1.6em;
   }
 }
 
@@ -118,10 +99,10 @@
 }
 
 .hero-screenshot {
-  width: 85%;
+  width: 95%;
   flex-shrink: 0;
-  margin-right: -35%;
-  perspective: 1000px;
+  margin-right: -40%;
+  perspective: 1200px;
 
   @media screen and (max-width: vars.$large) {
     display: none;
@@ -129,11 +110,10 @@
 
   picture {
     display: block;
-    transform: rotateY(-12deg) rotateX(3deg);
+    transform: rotateY(-15deg) rotateX(3deg);
     border-radius: var(--mat-sys-corner-large, 16px);
-    box-shadow:
-      0 25px 80px rgba(0, 0, 0, 0.3),
-      0 10px 30px rgba(0, 0, 0, 0.2);
+    // Warm-toned depth shadow to match the robot art's glow.
+    filter: drop-shadow(0 22px 42px rgba(120, 74, 60, 0.32));
   }
 
   img {
@@ -141,16 +121,151 @@
     width: 100%;
     height: auto;
     border-radius: var(--mat-sys-corner-large, 16px);
-    border: 6px solid var(--mat-sys-outline-variant);
+    border: 1px solid var(--mat-sys-outline-variant);
   }
 }
 
 .centered-block {
   text-align: center;
+  // Dot-fade behind copy is handled globally by the page's central wash
+  // (styles.scss body background), so no per-block gradient here.
 }
 
-.divider {
-  border-top: 1px solid var(--mat-sys-outline-variant);
+// Sections sit directly on the page background (no card shell); this centers and
+// caps the content column, like the big card used to.
+.home-sections {
+  // ~2.5% gutters on desktop, but never less than a 24px gutter on phones.
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-wide);
+  margin: 0 auto;
+}
+
+// Feature sections: full-width alternating rows on desktop (wrapper transparent
+// via display:contents); a sleek, swipeable slide carousel on small screens
+// (native scroll-snap, faded neighbours, dot pagination below). No cards.
+.feature-scroller {
+  display: contents;
+
+  @media screen and (max-width: vars.$large) {
+    display: grid;
+    position: relative;
+    grid-auto-flow: column;
+    // Full-width slides (no peek); the dots signal there's more.
+    grid-auto-columns: 100%;
+    gap: 24px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    mkt-feature-section {
+      scroll-snap-align: center;
+      margin: 0;
+      padding: 0;
+      // No divider rhythm inside the carousel (removes the line atop slides).
+      border: none;
+
+      // Carousel slides are shown regardless of the scroll-reveal state.
+      &.is-reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      // Product shot fills the top of the slide and dissolves into the copy.
+      ::ng-deep .screenshots {
+        margin: 0;
+      }
+
+      ::ng-deep .screenshot {
+        width: 100%;
+        margin: 0;
+        border: none;
+        border-radius: var(--mat-sys-corner-large, 16px)
+          var(--mat-sys-corner-large, 16px) 0 0;
+        overflow: hidden;
+        mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
+      }
+
+      ::ng-deep .description-card {
+        width: 100%;
+        padding: 0 8px;
+      }
+
+      // Smaller, tighter title + icon on mobile so the header reads as one neat
+      // unit; a consistent min-height keeps every slide's copy aligned.
+      ::ng-deep .feature-header {
+        min-height: 2.9em;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      ::ng-deep .feature-header .marketing-subheading {
+        font-size: 1.55rem;
+        line-height: 1.15;
+      }
+
+      ::ng-deep .feature-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+    }
+
+    // Sleek fade of neighbouring slides by scroll position (progressive
+    // enhancement; unsupported browsers just show full-opacity slides).
+    @supports (animation-timeline: view()) {
+      mkt-feature-section {
+        animation: feat-slide-fade linear both;
+        animation-timeline: view(inline);
+      }
+    }
+  }
+}
+
+@keyframes feat-slide-fade {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// Slide pagination dots (mobile only).
+.feature-dots {
+  display: none;
+
+  @media screen and (max-width: vars.$large) {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+}
+
+.feature-dot {
+  appearance: none;
+  border: none;
+  padding: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mat-sys-outline-variant);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+
+  &.is-active {
+    background: var(--mat-sys-primary);
+    transform: scale(1.3);
+  }
 }
 
 .subscribe-wrapper {
@@ -189,11 +304,31 @@
 }
 
 .squiggle {
-  text-decoration: underline wavy var(--mat-sys-error, #b3261e);
-  text-decoration-skip-ink: none;
-  text-underline-offset: 4px;
+  // A slow-flowing wavy underline under the highlighted word. `text-decoration:
+  // wavy` can't be animated, so the wave is a repeating inline-SVG background
+  // pinned to the baseline that drifts one wavelength sideways on a loop, which
+  // reads as the wave flowing. Reduced-motion pins it still (the wave stays, it
+  // just stops moving). Colour is the brand error red to match the old static
+  // underline.
   font-size: inherit;
-  text-decoration-thickness: 2px;
+  padding-bottom: 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='6' viewBox='0 0 24 6'><path d='M0 3 Q6 0 12 3 T24 3' fill='none' stroke='%23b3261e' stroke-width='2' stroke-linecap='round'/></svg>");
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 24px 6px;
+  animation: squiggle-drift 1.8s linear infinite;
+}
+
+@keyframes squiggle-drift {
+  to {
+    background-position: 24px 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .squiggle {
+    animation: none;
+  }
 }
 
 .main-promo-section {
