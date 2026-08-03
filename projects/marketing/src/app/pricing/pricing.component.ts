@@ -3,12 +3,12 @@ import {
   ViewEncapsulation,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { MatCard } from "@angular/material/card";
 import { PaymentComponent } from "../shared/payment/payment.component";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 
 @Component({
   selector: "mkt-pricing",
-  imports: [MatCard, PaymentComponent],
+  imports: [PageShellComponent, PaymentComponent],
   templateUrl: "./pricing.component.html",
   preserveWhitespaces: true,
   changeDetection: ChangeDetectionStrategy.Eager,

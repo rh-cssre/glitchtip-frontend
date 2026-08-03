@@ -259,17 +259,27 @@ a {
 }
 
 .centered-block {
-  padding: 20px 10vw 80px;
+  // Shared content column, capped and centered. The page gutter (page-shell)
+  // owns the side margin, so don't add per-block horizontal padding.
+  width: min(100%, var(--mkt-container-content));
+  margin-inline: auto;
+  padding: 20px 0 80px;
   overflow: hidden;
 
   @media screen and (max-width: vars.$tablet) {
-    padding: 5px 16px 60px;
+    padding: 5px 0 60px;
   }
 
   .content {
     max-width: 600px;
     margin: 0 auto;
   }
+}
+
+// Long-form prose (legal, SDK docs) reads better at the narrower reading measure
+// than the default content width; list/grid pages keep the content width.
+.centered-block.markdown-container {
+  max-width: var(--mkt-container-reading);
 }
 
 .markdown-container {

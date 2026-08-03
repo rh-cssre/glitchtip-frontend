@@ -1,15 +1,15 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { MatCard } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDivider } from "@angular/material/divider";
 import { RouterLink } from "@angular/router";
 import { SimpleTableComponent } from "../shared/simple-table/simple-table.component";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 
 @Component({
   selector: "mkt-hipaa",
   imports: [
-    MatCard,
+    PageShellComponent,
     MatButtonModule,
     MatExpansionModule,
     MatDivider,
