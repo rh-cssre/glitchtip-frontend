@@ -70,6 +70,8 @@ Install and run certbot. Follow [instructions](https://certbot.eff.org/instructi
 
 Database migrations will automatically happen.
 
+If your `compose.yml` predates the `command: -c max_locks_per_transaction=512` line on the postgres service, add it — see [PostgreSQL tuning](#postgresql-tuning). A `docker compose pull` won't add it for you, and a long-running instance is exactly the one that needs it.
+
 ## PikaPods
 
 <a href="https://www.pikapods.com/pods?run=glitchtip">
@@ -143,6 +145,8 @@ Installing GlitchTip with Helm for Kubernetes is a good option for high throughp
 3. Install the chart `helm install glitchtip glitchtip/glitchtip -f your-values.yaml`. You'll need to specify your own values.yml file or make use of `--set`.
 
 For postgresql, we recommend an externally managed database and providing only the `DATABASE_URL` environment variable.
+
+Whichever database you use, set `max_locks_per_transaction=512` on it — see [PostgreSQL tuning](#postgresql-tuning).
 
 For high availability, production servers we recommend using multiple Kubernetes Nodes, an ingress and/or load balancer, a pod disruption budget, anti-affinity, and a managed PostgreSQL high availability database.
 
@@ -271,6 +275,26 @@ Sentinel is supported for high availability. Set `CACHE_SENTINEL_URL` to overrid
 - `CACHE_SENTINEL_URL` Set to host:port of the sentinel instance(s). Comma-separated for multiple. Do not include the protocol nor password. For example `valkey:26379` or `sentinel1:26379,sentinel2:26379`.
 - `CACHE_SENTINEL_SERVICE_NAME` (Default `mymaster`) Sentinel service name.
 - `CACHE_SENTINEL_DB` (Default 0) Sentinel database number.
+
+### PostgreSQL tuning
+
+PostgreSQL's built-in defaults are deliberately conservative and are not meant for a production workload. Run your `postgresql.conf` through a generator such as [pgconfig.io](https://pgconfig.io/) or [PGTune](https://pgtune.leopard.in.ua/): enter your RAM, CPU count, and storage type, and pick the web-application or OLTP profile. That covers `shared_buffers`, `work_mem`, `effective_cache_size`, and WAL sizing. Managed database providers generally handle those for you. The setting below is the exception — no provider raises it by default, and on a managed instance it is usually a parameter-group change plus a restart.
+
+```
+max_locks_per_transaction = 512
+```
+
+GlitchTip partitions its event, transaction, log, and uptime tables — and their hourly aggregate tables — by time and by organization. A query that can't be narrowed to a single partition takes a lock on every partition *and* on every index of every partition, which at the default 90-day retention runs to a few thousand locks for one query.
+
+Despite the name, this setting is not a per-query limit. It sizes a lock table shared by the whole instance, holding roughly `max_locks_per_transaction` × `max_connections` locks — about 6,400 at the defaults. A single wide query can exceed that per-transaction number quite happily; what fails is the moment several of them overlap and fill the table. Then anything that needs a new lock errors with `out of shared memory`, event ingestion included, even though an insert takes only a couple of locks itself. Note that the two settings multiply, so if a generator lowers `max_connections` for a small host, raise `max_locks_per_transaction` to compensate.
+
+Changing this requires a PostgreSQL restart. It costs roughly 24 MB of shared memory at otherwise-default settings, scaling with `max_connections`. A streaming replica must be set at least as high as the primary or it will refuse to run queries.
+
+Three things determine how much of this budget GlitchTip needs:
+
+- Cold storage — see [Cold Storage](#cold-storage). Archiving to Parquet is the largest lever by far, because it shortens how far back PostgreSQL keeps partitions at all.
+- Retention — see [Data Retention](#data-retention). More days means more partitions.
+- `PARTITION_HASH_BUCKETS` (Default 2 since 6.2.4; 4 in earlier versions) Hash sub-partitions per time partition. Most instances should leave this alone; raise it if you host many organizations, and scale `max_locks_per_transaction` in proportion. Changing it only affects partitions created afterward, so an upgraded install keeps its previous bucket count until old partitions age out.
 
 ### Advanced database permissions
 
