@@ -1,8 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  Input,
-  HostBinding,
   input,
 } from "@angular/core";
 import type {
@@ -31,6 +29,7 @@ import { UpperCasePipe } from "@angular/common";
   templateUrl: "./project-card.component.html",
   styleUrls: ["./project-card.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { "[class.sample-card]": "sampleCard()" },
 })
 export class ProjectCardComponent {
   readonly cardLink = input<string | unknown[]>();
@@ -46,12 +45,8 @@ export class ProjectCardComponent {
   >();
   readonly isMember = input<boolean>();
 
-  @Input() primaryButton?: ProjectCardButtonWithQuery;
-  @Input() secondaryButton?: ProjectCardButton;
+  readonly primaryButton = input<ProjectCardButtonWithQuery>();
+  readonly secondaryButton = input<ProjectCardButton>();
 
   readonly sampleCard = input(false);
-
-  @HostBinding("class.sample-card") get isSampleCard() {
-    return this.sampleCard();
-  }
 }

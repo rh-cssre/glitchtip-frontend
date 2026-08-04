@@ -20,7 +20,7 @@
       }
       @if (error) {
         <div class="activation-error">
-          <gt-form-error [error]="error"></gt-form-error>
+          <gt-form-error [errors]="error ? [error] : []"></gt-form-error>
         </div>
       }
       <span
