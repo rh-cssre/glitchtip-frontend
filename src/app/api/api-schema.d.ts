@@ -2859,6 +2859,11 @@ export interface components {
              * @default false
              */
             uptime: boolean;
+            /**
+             * Environments
+             * @description Only alert on events from these environments. Empty matches every environment.
+             */
+            environments: string[];
         };
         /** EmailAlertRecipientIn */
         EmailAlertRecipientIn: {
@@ -2891,6 +2896,8 @@ export interface components {
              * @default false
              */
             uptime: boolean;
+            /** Environments */
+            environments?: string[];
         };
         /** WebhookAlertRecipientIn */
         WebhookAlertRecipientIn: {

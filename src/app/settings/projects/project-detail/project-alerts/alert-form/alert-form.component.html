@@ -78,6 +78,28 @@
         ></mat-checkbox
       >
     </div>
+    @if (environmentOptions().length > 0) {
+      <div class="environment-option">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label i18n>Environments</mat-label>
+          <mat-select
+            data-cy="environments"
+            formControlName="environments"
+            multiple
+            placeholder="All environments"
+            i18n-placeholder
+          >
+            @for (environment of environmentOptions(); track environment) {
+              <mat-option [value]="environment">{{ environment }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint i18n
+            >Only events from these environments trigger this alert. Leave
+            empty for all.</mat-hint
+          >
+        </mat-form-field>
+      </div>
+    }
   </div>
   <div class="update" data-cy="update-container">
     @if (!newAlert()) {
@@ -87,7 +109,8 @@
         [disabled]="
           projectFormTimespan.value === timespan() &&
           projectFormQuantity.value === quantity() &&
-          projectFormUptime.value === uptime()
+          projectFormUptime.value === uptime() &&
+          environmentsUnchanged()
         "
         buttonStyle="stroked"
         [loading]="loading() === true"

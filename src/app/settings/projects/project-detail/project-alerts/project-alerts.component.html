@@ -29,6 +29,7 @@
           <gt-alert-form
             #newAlert
             [newAlert]="true"
+            [availableEnvironments]="availableEnvironments()"
             (alertSubmit)="newAlertProperties($event)"
           ></gt-alert-form>
           <h4 class="body-text-strong">Recipients:</h4>
@@ -191,6 +192,8 @@
               [quantity]="alert.quantity!"
               [uptime]="alert.uptime"
               [errorAlert]="alert.errorAlert"
+              [environments]="alert.environments"
+              [availableEnvironments]="availableEnvironments()"
               (alertSubmit)="updateProperties($event, alert)"
             ></gt-alert-form>
             <h4 class="body-text-strong">Recipients:</h4>
