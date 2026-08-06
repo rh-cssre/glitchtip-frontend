@@ -382,7 +382,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         timespanMinutes: activeAlert.timespanMinutes,
         quantity: activeAlert.quantity,
         uptime: activeAlert.uptime,
-        environments: activeAlert.environments,
+        environments: activeAlert.environments ?? [],
         alertRecipients: recipientsWithoutId as any,
       };
       const { data, error } = await client.PUT(
@@ -442,7 +442,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       timespanMinutes: alert.timespanMinutes,
       quantity: alert.quantity,
       uptime: alert.uptime,
-      environments: alert.environments,
+      environments: alert.environments ?? [],
       alertRecipients: recipientsWithoutId as any,
     };
     const params = this.#params();
@@ -764,7 +764,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
           timespanMinutes: newAlert.timespanMinutes,
           quantity: newAlert.quantity,
           uptime: newAlert.uptime,
-          environments: newAlert.environments,
+          environments: newAlert.environments ?? [],
         };
       } else return alert;
     });

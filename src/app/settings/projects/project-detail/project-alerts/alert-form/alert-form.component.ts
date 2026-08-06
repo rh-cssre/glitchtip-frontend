@@ -70,10 +70,13 @@ export class AlertFormComponent implements OnInit {
   readonly quantity = input<number | null>(1);
   readonly uptime = input<boolean | null>(false);
   readonly errorAlert = input<boolean>(true);
-  /** Environments already selected on this alert */
-  readonly environments = input<string[]>([]);
+  /**
+   * Environments already selected on this alert. Undefined when the API predates
+   * the field, so every read has to tolerate it.
+   */
+  readonly environments = input<string[] | undefined>([]);
   /** Environment names seen on this project, offered as options */
-  readonly availableEnvironments = input<string[]>([]);
+  readonly availableEnvironments = input<string[] | undefined>([]);
   readonly alertSubmit = output<{
     timespanMinutes: number;
     quantity: number;
@@ -134,7 +137,10 @@ export class AlertFormComponent implements OnInit {
    * vanish from the dropdown while still filtering the alert.
    */
   environmentOptions = computed(() => [
-    ...new Set([...this.availableEnvironments(), ...this.environments()]),
+    ...new Set([
+      ...(this.availableEnvironments() ?? []),
+      ...(this.environments() ?? []),
+    ]),
   ]);
 
   matcher = new LessAnnoyingErrorStateMatcher();
@@ -148,7 +154,7 @@ export class AlertFormComponent implements OnInit {
     this.projectAlertForm.setValue({
       timespanMinutes: timespan ? timespan.toString() : null,
       quantity: quantity ? quantity.toString() : null,
-      environments: [...this.environments()],
+      environments: [...(this.environments() ?? [])],
       optionsGroup: {
         uptime: this.uptime() as any,
         errorAlert: this.errorAlert() as any,
@@ -199,7 +205,7 @@ export class AlertFormComponent implements OnInit {
   /** Arrays compare by reference, so the Update button needs a value check */
   environmentsUnchanged(): boolean {
     const selected: string[] = this.projectFormEnvironments.value ?? [];
-    const original = this.environments();
+    const original = this.environments() ?? [];
     return (
       selected.length === original.length &&
       selected.every((environment) => original.includes(environment))

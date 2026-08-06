@@ -26,6 +26,24 @@ describe("AlertFormComponent environments", () => {
     fixture.detectChanges();
   }
 
+  it("still applies the other settings when the API omits environments", () => {
+    // A backend without the environments field returns undefined for it. The
+    // form must not blow up, or it never applies quantity/timespan/uptime.
+    fixture.componentRef.setInput("timespan", 10);
+    fixture.componentRef.setInput("quantity", 2);
+    fixture.componentRef.setInput("uptime", true);
+    fixture.componentRef.setInput("environments", undefined);
+    fixture.componentRef.setInput("availableEnvironments", undefined);
+    fixture.detectChanges();
+
+    expect(component.projectFormQuantity.value).toEqual("2");
+    expect(component.projectFormTimespan.value).toEqual("10");
+    expect(component.projectFormUptime.value).toBe(true);
+    expect(component.projectFormEnvironments.value).toEqual([]);
+    expect(component.environmentOptions()).toEqual([]);
+    expect(component.environmentsUnchanged()).toBe(true);
+  });
+
   it("offers the project's environments as options", () => {
     setInputs([], ["production", "staging"]);
     expect(component.environmentOptions()).toEqual(["production", "staging"]);
