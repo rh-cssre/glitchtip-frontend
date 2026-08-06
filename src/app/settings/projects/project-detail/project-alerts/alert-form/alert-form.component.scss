@@ -52,6 +52,20 @@ mat-form-field {
   margin-top: 12px;
 }
 
+// The mat-form-field width above is sized for the Quantity and Timespan number
+// inputs; a select holding several environment names needs far more room.
+.environment-option {
+  margin-top: 16px;
+  width: 100%;
+
+  mat-form-field {
+    width: 320px;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 .error {
   color: var(--mat-sys-error);
   text-align: center;

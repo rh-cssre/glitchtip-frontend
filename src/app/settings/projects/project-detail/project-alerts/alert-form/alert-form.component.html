@@ -71,16 +71,13 @@
       >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send
       an alert.</span
     >
-    <div class="uptime-option" formGroupName="optionsGroup">
-      <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-        ><span class="body-text" i18n
-          >If an uptime monitor is triggered.</span
-        ></mat-checkbox
-      >
-    </div>
     @if (environmentOptions().length > 0) {
       <div class="environment-option">
-        <mat-form-field appearance="outline" floatLabel="always">
+        <mat-form-field
+          appearance="outline"
+          floatLabel="always"
+          subscriptSizing="dynamic"
+        >
           <mat-label i18n>Environments</mat-label>
           <mat-select
             data-cy="environments"
@@ -93,13 +90,17 @@
               <mat-option [value]="environment">{{ environment }}</mat-option>
             }
           </mat-select>
-          <mat-hint i18n
-            >Only events from these environments trigger this alert. Leave
-            empty for all.</mat-hint
-          >
+          <mat-hint i18n>Leave empty to match every environment.</mat-hint>
         </mat-form-field>
       </div>
     }
+    <div class="uptime-option" formGroupName="optionsGroup">
+      <mat-checkbox data-cy="uptime-check" formControlName="uptime"
+        ><span class="body-text" i18n
+          >If an uptime monitor is triggered.</span
+        ></mat-checkbox
+      >
+    </div>
   </div>
   <div class="update" data-cy="update-container">
     @if (!newAlert()) {
