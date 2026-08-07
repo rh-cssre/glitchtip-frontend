@@ -278,13 +278,13 @@ Sentinel is supported for high availability. Set `CACHE_SENTINEL_URL` to overrid
 
 ### PostgreSQL tuning
 
-PostgreSQL's built-in defaults are deliberately conservative and are not meant for a production workload. Run your `postgresql.conf` through a generator such as [pgconfig.io](https://pgconfig.io/) or [PGTune](https://pgtune.leopard.in.ua/): enter your RAM, CPU count, and storage type, and pick the web-application or OLTP profile. That covers `shared_buffers`, `work_mem`, `effective_cache_size`, and WAL sizing. Managed database providers generally handle those for you. The setting below is the exception — no provider raises it by default, and on a managed instance it is usually a parameter-group change plus a restart.
+PostgreSQL's built-in defaults are conservative and are not meant for a production workload. Run your `postgresql.conf` through a generator like [pgconfig.io](https://pgconfig.io/) or [PGTune](https://pgtune.leopard.in.ua/): enter your RAM, CPU count, and storage type, and pick the web-application or OLTP profile. That covers `shared_buffers`, `work_mem`, `effective_cache_size`, and WAL sizing. Managed database providers generally handle those for you. That said, **no provider** raises the number of `max_locks_per_transaction` by default, and on a managed instance it is usually a parameter-group change with a restart. We suggest setting:
 
 ```
 max_locks_per_transaction = 512
 ```
 
-GlitchTip partitions its event, transaction, log, and uptime tables — and their hourly aggregate tables — by time and by organization. A query that can't be narrowed to a single partition takes a lock on every partition *and* on every index of every partition, which at the default 90-day retention runs to a few thousand locks for one query.
+GlitchTip partitions its event, transaction, log, and uptime tables (and their hourly aggregate tables) by time and by organization. A query that can't be narrowed to a single partition takes a lock on every partition *and* on every index of every partition, which at the default 90-day retention runs to a few thousand locks for one query.
 
 Despite the name, this setting is not a per-query limit. It sizes a lock table shared by the whole instance, holding roughly `max_locks_per_transaction` × `max_connections` locks — about 6,400 at the defaults. A single wide query can exceed that per-transaction number quite happily; what fails is the moment several of them overlap and fill the table. Then anything that needs a new lock errors with `out of shared memory`, event ingestion included, even though an insert takes only a couple of locks itself. Note that the two settings multiply, so if a generator lowers `max_connections` for a small host, raise `max_locks_per_transaction` to compensate.
 
