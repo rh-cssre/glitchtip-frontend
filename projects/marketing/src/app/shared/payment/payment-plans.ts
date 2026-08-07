@@ -34,7 +34,7 @@ export const planOptions: PlanOption[] = [
   {
     name: "Small",
     subtitle: "For small teams",
-    includesFrom: "Free",
+    includesFrom: "Hobby & Trial",
     features: [
       { text: "Up to 100k events/mo" },
       { text: "90 days of event retention"},
