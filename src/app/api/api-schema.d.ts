@@ -2863,7 +2863,7 @@ export interface components {
              * Environments
              * @description Only alert on events from these environments. Empty matches every environment.
              */
-            environments: string[];
+            environments?: string[];
         };
         /** EmailAlertRecipientIn */
         EmailAlertRecipientIn: {

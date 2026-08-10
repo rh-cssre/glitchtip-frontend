@@ -4,6 +4,7 @@
 import type {} from "@angular/localize/init";
 import { beforeEach, describe, it, expect } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
 import { AlertFormComponent } from "./alert-form.component";
 
 describe("AlertFormComponent environments", () => {
@@ -84,5 +85,32 @@ describe("AlertFormComponent environments", () => {
 
     component.projectFormEnvironments.setValue(["staging"]);
     expect(component.environmentsUnchanged()).toBe(false);
+  });
+
+  it("renders the environments select wired to the form control", () => {
+    // Class-only tests stay green on a broken template; assert real render + wiring.
+    setInputs(["production"], ["production", "staging"]);
+    const select = fixture.debugElement.query(
+      By.css('[data-cy="environments"]'),
+    );
+    expect(select).toBeTruthy();
+    expect(select.componentInstance.value).toEqual(["production"]);
+  });
+
+  it("hides the environments field when the project has none", () => {
+    setInputs([], []);
+    expect(
+      fixture.debugElement.query(By.css('[data-cy="environments"]')),
+    ).toBeNull();
+  });
+
+  it("emits an empty array (applies to all environments) when none selected", () => {
+    setInputs([], ["production", "staging"]);
+    let emitted: string[] | undefined;
+    component.alertSubmit.subscribe((event) => {
+      emitted = event.environments;
+    });
+    component.onSubmit();
+    expect(emitted).toEqual([]);
   });
 });
