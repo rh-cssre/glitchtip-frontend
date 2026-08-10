@@ -1,0 +1,150 @@
+@if (status(); as status) {
+  <mat-card appearance="outlined" class="overage-card">
+    <mat-card-content>
+      <div class="overage-top">
+        <div class="overage-top-text">
+          <span class="body-text-strong" i18n>Overage billing</span>
+          <p class="overage-tagline body-text" i18n>
+            Keep ingesting past your plan quota and pay only for the overflow, up
+            to a monthly cap you set. At the cap, throttling resumes, so your
+            bill never goes over the cap.
+          </p>
+        </div>
+        <div class="overage-top-control">
+          @if (loading()) {
+            <mat-spinner diameter="20" />
+          }
+          <mat-slide-toggle
+            [checked]="enabled()"
+            [disabled]="loading() || !canManage()"
+            (change)="onToggle($event)"
+            aria-label="Toggle overage billing"
+            i18n-aria-label
+          />
+        </div>
+      </div>
+
+      @if (!canManage()) {
+        <p class="overage-sub overage-owner-note" i18n>
+          Only organization owners can change overage billing.
+        </p>
+      }
+
+      @if (enabled()) {
+        <mat-divider />
+        <div class="overage-row">
+          <div class="overage-row-main">
+            <span class="overage-amount"
+              >≈ {{ costDollars() | currency }}
+              <span class="overage-est-note" i18n
+                >this cycle (estimate)</span
+              ></span
+            >
+            @if (resetDate(); as reset) {
+              <span class="overage-sub" i18n>Resets {{ reset | date }}</span>
+            }
+          </div>
+          <span class="overage-percent"
+            >{{ capProgressPercent() }}% <span i18n>of cap</span></span
+          >
+        </div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="capProgressPercent()"
+          [color]="capReached() ? 'warn' : 'primary'"
+        />
+
+        @if (capReached()) {
+          <p class="overage-alert overage-alert--warn" i18n>
+            Spend cap reached. Events above your quota are being throttled again.
+            Raise the cap to keep ingesting.
+          </p>
+        } @else if (willReachCap()) {
+          <p class="overage-alert" i18n>
+            On track to reach your cap before the cycle ends.
+          </p>
+        }
+
+        <mat-divider />
+        <div class="overage-row">
+          @if (editingCap()) {
+            <mat-form-field appearance="outline" class="cap-field">
+              <mat-label i18n>Monthly spend cap</mat-label>
+              <span matTextPrefix>$&nbsp;</span>
+              <input
+                matInput
+                type="number"
+                step="1"
+                [min]="minCapDollars"
+                [max]="maxCapDollars"
+                [value]="capInputDollars()"
+                (input)="onCapInput($any($event.target).value)"
+              />
+              @if (!capValid()) {
+                <mat-error i18n
+                  >Enter a cap between {{ minCapDollars | currency }} and
+                  {{ maxCapDollars | currency }}.</mat-error
+                >
+              }
+            </mat-form-field>
+            <div class="overage-actions">
+              <button
+                mat-flat-button
+                color="primary"
+                [disabled]="loading() || !capValid()"
+                (click)="saveCap()"
+                i18n
+              >
+                Save
+              </button>
+              <button
+                mat-button
+                [disabled]="loading()"
+                (click)="cancelEditCap()"
+                i18n
+              >
+                Cancel
+              </button>
+            </div>
+          } @else {
+            <div class="overage-row-main">
+              <span class="overage-amount">{{
+                capDollarsCurrent() | currency
+              }}</span>
+              <span class="overage-sub" i18n>Monthly spend cap</span>
+            </div>
+            <button
+              mat-stroked-button
+              [disabled]="!canManage()"
+              (click)="startEditCap()"
+              i18n
+            >
+              Adjust cap
+            </button>
+          }
+        </div>
+      }
+
+      @if (error()) {
+        <mat-error class="overage-error">{{ error() }}</mat-error>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+
+<ng-template #migrationDialog>
+  <h2 mat-dialog-title i18n>Turn on overage billing?</h2>
+  <mat-dialog-content class="mat-typography">
+    <p class="body-text" i18n>
+      You're only charged for events above your plan quota, up to a
+      <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
+      change anytime. Your bill never goes over the cap.
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close i18n>Cancel</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="true" i18n>
+      Turn on overage billing
+    </button>
+  </mat-dialog-actions>
+</ng-template>
