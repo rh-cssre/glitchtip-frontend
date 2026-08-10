@@ -44,7 +44,7 @@ export class AccountComponent implements OnDestroy {
   deleteUser() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete account`,
+        title: $localize`Delete account?`,
         message: $localize`Are you sure you want to delete your user account? You will permanently lose access to all organizations, projects, and teams associated with it.`,
         confirmText: $localize`Delete`,
       },

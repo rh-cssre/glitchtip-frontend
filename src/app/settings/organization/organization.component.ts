@@ -81,7 +81,7 @@ export class OrganizationComponent implements OnDestroy, OnInit {
   removeOrganization(slug: string, name: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Remove organization`,
+        title: $localize`Remove organization?`,
         message: $localize`Are you sure you want to remove ${name}? You will permanently lose all projects and teams associated with it.`,
         confirmText: $localize`Remove`,
       },

@@ -182,7 +182,7 @@ export class IssueDetailComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete issue`,
+        title: $localize`Delete issue?`,
         message: $localize`Are you sure you want to delete this issue? You will permanently lose this issue and all associated events.`,
         confirmText: $localize`Delete`,
       },

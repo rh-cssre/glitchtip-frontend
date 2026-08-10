@@ -63,7 +63,7 @@ export class TeamSettingsComponent {
   deleteTeam() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete team`,
+        title: $localize`Delete team?`,
         message: $localize`Are you sure you want to delete this team?`,
         confirmText: $localize`Delete`,
       },

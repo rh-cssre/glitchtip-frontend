@@ -185,7 +185,7 @@ export class ProjectDetailComponent implements OnInit {
   deleteProject() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete project`,
+        title: $localize`Delete project?`,
         message: $localize`Are you sure you want to delete this project?`,
         confirmText: $localize`Delete`,
       },

@@ -65,8 +65,8 @@ export class MonitorUpdateComponent
   delete() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete monitor`,
-        message: $localize`Are you sure you want delete this monitor? You will permanently lose all associated uptime data.`,
+        title: $localize`Delete monitor?`,
+        message: $localize`Are you sure you want to delete this monitor? You will permanently lose all associated uptime data.`,
         confirmText: $localize`Delete`,
       },
     });

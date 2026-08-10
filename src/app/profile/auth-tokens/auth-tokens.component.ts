@@ -63,7 +63,7 @@ export class AuthTokensComponent
   deleteAuthToken(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete Auth Token`,
+        title: $localize`Delete auth token?`,
         message: $localize`Are you sure you want to delete this authentication token?`,
         confirmText: $localize`Delete`,
       },

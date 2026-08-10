@@ -76,7 +76,7 @@ export class CommentsComponent implements OnInit {
   deleteComment(commentId: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete comment`,
+        title: $localize`Delete comment?`,
         message: $localize`Are you sure you want to delete this comment?`,
         confirmText: $localize`Delete`,
       },

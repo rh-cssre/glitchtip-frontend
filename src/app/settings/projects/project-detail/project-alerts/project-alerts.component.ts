@@ -139,7 +139,7 @@ export class ProjectAlertsComponent implements OnInit {
   removeAlert(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Remove notification`,
+        title: $localize`Remove notification?`,
         message: $localize`Are you sure you want to remove this notification?`,
         confirmText: $localize`Remove`,
       },
@@ -193,7 +193,7 @@ export class ProjectAlertsComponent implements OnInit {
   removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Remove recipient`,
+        title: $localize`Remove recipient?`,
         message: $localize`Are you sure you want to remove this recipient?`,
         confirmText: $localize`Remove`,
       },
