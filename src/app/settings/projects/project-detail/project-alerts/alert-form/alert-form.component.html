@@ -1,76 +1,79 @@
 @if (projectFormOptionsGroup.errors?.selectionRequired) {
   <p class="error alert-form-error">
-    Please select events or uptime monitor triggers for your alert.
+    Select at least one condition: event frequency or uptime.
   </p>
 }
 
-<form
-  class="flex-common"
-  (ngSubmit)="onSubmit()"
-  [formGroup]="projectAlertForm"
->
-  <div>
-    <mat-checkbox
-      data-cy="error-check"
-      [checked]="projectFormErrorAlert.value"
-      (change)="toggleErrorAlerts()"
-    >
-      <span class="body-text" i18n>
-        If an
-        <span
-          class="tooltip"
-          matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
-          >event</span
-        >
-        happens</span
+<form (ngSubmit)="onSubmit()" [formGroup]="projectAlertForm">
+  <p class="alert-form__group-label body-text-strong" i18n>
+    Alert when any of these:
+  </p>
+
+  <div class="trigger">
+    <div class="trigger__line">
+      <mat-checkbox
+        data-cy="error-check"
+        [checked]="projectFormErrorAlert.value"
+        (change)="toggleErrorAlerts()"
       >
-    </mat-checkbox>
-    <mat-form-field floatLabel="always" appearance="outline">
-      <mat-label>Quantity</mat-label>
-      <input
-        matInput
-        data-cy="quantity"
-        min="0"
-        max="10000"
-        type="number"
-        autocomplete="off"
-        (click)="toggleFromInput()"
-        formControlName="quantity"
-        placeholder="#"
-        [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
-      />
-      @if (projectFormQuantity.errors) {
-        <mat-error>
-          <span>Enter an integer greater than 0.</span>
-        </mat-error>
-      }
-    </mat-form-field>
-    <span i18n
-      >{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }} in</span
-    >
-    <mat-form-field floatLabel="always" appearance="outline">
-      <mat-label i18n>Timespan</mat-label>
-      <input
-        matInput
-        min="0"
-        max="10000"
-        type="number"
-        autocomplete="off"
-        (click)="toggleFromInput()"
-        formControlName="timespanMinutes"
-        placeholder="#"
-        [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
-      />
-      @if (projectFormTimespan.errors) {
-        <mat-error>
-          <span i18n>Enter an integer greater than 0.</span>
-        </mat-error>
-      }
-    </mat-form-field>
-    <span i18n
-      >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send
-      an alert.</span
-    >
+        <span class="body-text" i18n>
+          If an
+          <span
+            class="tooltip"
+            matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
+            >event</span
+          >
+          happens</span
+        >
+      </mat-checkbox>
+      <mat-form-field floatLabel="always" appearance="outline">
+        <mat-label>Quantity</mat-label>
+        <input
+          matInput
+          data-cy="quantity"
+          min="0"
+          max="10000"
+          type="number"
+          autocomplete="off"
+          (click)="toggleFromInput()"
+          formControlName="quantity"
+          placeholder="#"
+          [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
+        />
+        @if (projectFormQuantity.errors) {
+          <mat-error>
+            <span>Enter an integer greater than 0.</span>
+          </mat-error>
+        }
+      </mat-form-field>
+      <span i18n
+        >{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }} in</span
+      >
+      <mat-form-field floatLabel="always" appearance="outline">
+        <mat-label i18n>Timespan</mat-label>
+        <input
+          matInput
+          min="0"
+          max="10000"
+          type="number"
+          autocomplete="off"
+          (click)="toggleFromInput()"
+          formControlName="timespanMinutes"
+          placeholder="#"
+          [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
+        />
+        @if (projectFormTimespan.errors) {
+          <mat-error>
+            <span i18n>Enter an integer greater than 0.</span>
+          </mat-error>
+        }
+      </mat-form-field>
+      <span i18n
+        >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send
+        an alert.</span
+      >
+    </div>
+
     @if (environmentOptions().length > 0) {
       <div class="environment-option">
         <mat-form-field
@@ -78,7 +81,7 @@
           floatLabel="always"
           subscriptSizing="dynamic"
         >
-          <mat-label i18n>Environments</mat-label>
+          <mat-label i18n>Limit to environments (optional)</mat-label>
           <mat-select
             data-cy="environments"
             formControlName="environments"
@@ -90,18 +93,29 @@
               <mat-option [value]="environment">{{ environment }}</mat-option>
             }
           </mat-select>
-          <mat-hint i18n>Leave empty to match every environment.</mat-hint>
+          <mat-hint i18n
+            >Only events from these environments count toward the alert. Leave
+            empty to include all.</mat-hint
+          >
         </mat-form-field>
       </div>
     }
-    <div class="uptime-option" formGroupName="optionsGroup">
-      <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-        ><span class="body-text" i18n
-          >If an uptime monitor is triggered.</span
-        ></mat-checkbox
-      >
-    </div>
   </div>
+
+  <div class="trigger uptime-option" formGroupName="optionsGroup">
+    <mat-checkbox data-cy="uptime-check" formControlName="uptime"
+      ><span class="body-text" i18n
+        >If an
+        <span
+          class="tooltip"
+          matTooltip="An uptime monitor checks a URL on a schedule and triggers when the site stops responding."
+          >uptime monitor</span
+        >
+        detects downtime.</span
+      ></mat-checkbox
+    >
+  </div>
+
   <div class="update" data-cy="update-container">
     @if (!newAlert()) {
       <gt-loading-button
