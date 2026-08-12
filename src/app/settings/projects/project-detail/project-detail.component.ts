@@ -42,6 +42,8 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { MatIconModule } from "@angular/material/icon";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -97,6 +99,7 @@ export class ProjectDetailComponent implements OnInit {
   #orgService = inject(OrganizationsService);
   #snackBar = inject(MatSnackBar);
   #router = inject(Router);
+  private dialog = inject(MatDialog);
 
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
 
@@ -179,21 +182,29 @@ export class ProjectDetailComponent implements OnInit {
     this.#service.setParams(this.orgSlug(), this.projectSlug());
   }
 
-  async deleteProject() {
-    if (window.confirm("Are you sure you want to delete this project?")) {
-      const result = await this.#service.deleteProject();
-      if (result) {
-        this.#orgService.refreshActiveOrganization();
-        this.#snackBar.open(
-          $localize`Your project has been successfully deleted`,
-        );
-        this.#router.navigate([this.orgSlug(), "settings", "projects"]);
-      } else {
-        this.#snackBar.open(
-          this.deleteError(),
-        );
+  deleteProject() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete project?`,
+        message: $localize`Are you sure you want to delete this project?`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async (confirmed) => {
+      if (confirmed) {
+        const result = await this.#service.deleteProject();
+        if (result) {
+          this.#orgService.refreshActiveOrganization();
+          this.#snackBar.open(
+            $localize`Your project has been successfully deleted`,
+          );
+          this.#router.navigate([this.orgSlug(), "settings", "projects"]);
+        } else {
+          this.#snackBar.open(this.deleteError());
+        }
       }
-    }
+    });
   }
 
   async updateName() {

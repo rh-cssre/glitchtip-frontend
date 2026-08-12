@@ -1,5 +1,9 @@
 import { seedBackend, requestLogin } from "./utils.cy";
-import { seededOrg, seededProject1, seededMonitorName } from "../fixtures/variables";
+import {
+  seededOrg,
+  seededProject1,
+  seededMonitorName,
+} from "../fixtures/variables";
 
 describe("List, add, update and delete uptime Monitors", () => {
   beforeEach(() => {
@@ -27,12 +31,12 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains(seededMonitorName).click();
     cy.get("#monitor-settings").click();
-    cy.on("window:confirm", (text) => {
-      expect(text).to.contains("Are you sure you want delete this monitor?");
-    });
     cy.get("#delete-monitor").click();
+    cy.contains("Are you sure you want to delete this monitor?");
+    cy.get("[data-cy='dialog-confirm']").click();
+    cy.contains("Monitor has been deleted.");
     cy.visit(`/${seededOrg.slug}/uptime-monitors`);
-    cy.contains("cytestmonitor").should("not.exist");
+    cy.contains(seededMonitorName).should("not.exist");
   });
 
   it("Should not be able to add monitor with invalid values", () => {
