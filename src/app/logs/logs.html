@@ -70,7 +70,7 @@
 
   <!-- Log output (terminal style) -->
   <div class="log-container">
-    <gt-loading-overlay [loading]="isLoading()" label="Loading logs">
+    <gt-loading-overlay [loading]="isLoading()" label="Loading logs" fullHeight>
       <div class="log-output">
         @if (errors()?.length) {
           <div class="log-empty">
