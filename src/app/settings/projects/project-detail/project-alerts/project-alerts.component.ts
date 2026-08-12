@@ -24,6 +24,7 @@ import { components } from "src/app/api/api-schema";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 type ProjectAlert = components["schemas"]["ProjectAlertSchema"];
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
@@ -136,9 +137,19 @@ export class ProjectAlertsComponent implements OnInit {
   }
 
   removeAlert(id: number) {
-    if (window.confirm("Are you sure you want to remove this notification?")) {
-      this.#service.deleteProjectAlert(id);
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove notification?`,
+        message: $localize`Are you sure you want to remove this notification?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteProjectAlert(id);
+      }
+    });
   }
 
   updateProperties(
@@ -180,7 +191,19 @@ export class ProjectAlertsComponent implements OnInit {
   }
 
   removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
-    this.#service.deleteAlertRecipient(recipient, alert);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove recipient?`,
+        message: $localize`Are you sure you want to remove this recipient?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteAlertRecipient(recipient, alert);
+      }
+    });
   }
 
   newAlertProperties(event: {

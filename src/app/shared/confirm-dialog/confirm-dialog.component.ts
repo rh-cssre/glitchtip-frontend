@@ -11,6 +11,8 @@ export interface ConfirmDialogData {
   message: string;
   confirmText: string;
   cancelText?: string;
+  /** Styles the confirm button as outlined warn. Defaults to true. */
+  destructive?: boolean;
 }
 
 @Component({
@@ -24,6 +26,8 @@ export class ConfirmDialogComponent {
   readonly dialogRef = inject(MatDialogRef<ConfirmDialogComponent>);
   readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
   defaultCancelText = $localize`Cancel`;
+
+  readonly destructive = this.data.destructive ?? true;
 
   respond(response: boolean): void {
     this.dialogRef.close(response);

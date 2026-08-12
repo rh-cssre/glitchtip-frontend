@@ -44,7 +44,7 @@ export class WebAuthnComponent {
 
   stage = this.service.webAuthnState;
   hasTOTP = this.service.TOTPAuthenticator;
-  error = null;
+  error: string | null = null;
   authenticators = this.service.webAuthnAuthenticators;
   tooltipDisabled = false;
   // TOTPKey$ = this.service.TOTPKey$;

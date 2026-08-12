@@ -113,9 +113,7 @@ export const routes: Routes = [
           {
             path: "releases",
             loadChildren: () => import("./releases/routes"),
-            data: {
-              title: "Releases",
-            },
+            title: "Releases",
           },
           {
             path: "settings",

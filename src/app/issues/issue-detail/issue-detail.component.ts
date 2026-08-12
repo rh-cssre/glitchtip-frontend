@@ -27,6 +27,8 @@ import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.com
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { IssueStatusUpdateDropdownComponent } from "src/app/shared/issue-status-update-dropdown/issue-status-update-dropdown";
 import { IssueStatus } from "../interfaces";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 const STATUS_CONFIG = {
   resolved: { label: "Resolved", icon: "done" },
@@ -63,6 +65,7 @@ export class IssueDetailComponent implements OnInit {
   private organizationsService = inject(OrganizationsService);
   private route = inject(ActivatedRoute);
   protected breakPointObserver = inject(BreakpointObserver);
+  private dialog = inject(MatDialog);
 
   issue = this.issueService.issue;
   issueTitle = computed(() => {
@@ -175,14 +178,21 @@ export class IssueDetailComponent implements OnInit {
 
   deleteIssue() {
     const id = this.issueID();
-    if (
-      id &&
-      window.confirm(
-        `Are you sure you want delete this issue? You will permanently lose this issue and all associated events.`,
-      )
-    ) {
-      this.issueService.deleteIssue(id.toString());
-    }
+    if (!id) return;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete issue?`,
+        message: $localize`Are you sure you want to delete this issue? You will permanently lose this issue and all associated events.`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.issueService.deleteIssue(id.toString());
+      }
+    });
   }
 
   generateBackLink(projectId: string) {
