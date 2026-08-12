@@ -37,7 +37,6 @@
             : 'To view issues for this project, add yourself to the corresponding team.'
         "
         matTooltipPosition="right"
-        color="primary"
         [routerLink]="isMember() ? cardLink() : undefined"
         [queryParams]="isMember() ? primary.query || {} : {}"
       >

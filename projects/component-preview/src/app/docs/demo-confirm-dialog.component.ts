@@ -12,9 +12,9 @@ export interface DemoConfirmData {
 /**
  * The confirmation dialog as it SHOULD look, per the destructive rule: a plain
  * text cancel and an outlined warn confirm, so the two read differently and the
- * destructive action is marked without being a filled red button. The shipped
- * ConfirmDialogComponent still uses a raised primary confirm (tracked as ticket
- * P12); the guide, as the source of truth, demonstrates the intended treatment.
+ * destructive action is marked without being a filled red button. Cancel comes
+ * first and takes initial focus, so an accidental Enter cancels rather than
+ * deletes. The shipped ConfirmDialogComponent now matches this (ticket P12).
  */
 @Component({
   selector: "preview-demo-confirm-dialog",
@@ -24,7 +24,7 @@ export interface DemoConfirmData {
     <h2 mat-dialog-title>{{ data.title }}</h2>
     <mat-dialog-content>{{ data.message }}</mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button [mat-dialog-close]="false">
+      <button mat-button cdkFocusInitial [mat-dialog-close]="false">
         {{ data.cancelText || "Cancel" }}
       </button>
       <button mat-stroked-button color="warn" [mat-dialog-close]="true">

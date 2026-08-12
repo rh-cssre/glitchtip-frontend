@@ -28,7 +28,6 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
     <preview-doc
       title="Confirm dialog"
       status="stable"
-      [designNotes]="['example shows the intended treatment; the shipped confirm button is still a legacy raised primary (ticket P12)']"
       description="The confirmation step in front of every destructive or irreversible action (deleting an organization, revoking a token, bulk-resolving issues). Open it with MatDialog and act on the boolean it resolves with."
       [whenToUse]="whenToUse"
       [dos]="dos"
@@ -44,7 +43,7 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
       <div class="preview-section">
         <div class="preview-section__title">Live example</div>
         <div class="demo-row">
-          <button mat-flat-button color="primary" (click)="openDialog()">
+          <button mat-stroked-button color="warn" (click)="openDialog()">
             Delete project
           </button>
           @if (lastResponse() !== null) {
@@ -69,6 +68,8 @@ export class ConfirmDialogPreview {
     "Name the consequence in the message (what exactly gets deleted)",
     "Use a verb for confirmText (Delete, Revoke), not Yes/OK",
     "Make the two actions read differently: the confirm is an outlined warn button, cancel is plain text (see Buttons & actions)",
+    "Put cancel first (left) and the destructive action second (right)",
+    "Give cancel cdkFocusInitial, so an accidental Enter cancels instead of deleting",
     "Act only when the dialog resolves true",
   ];
   readonly donts = [
