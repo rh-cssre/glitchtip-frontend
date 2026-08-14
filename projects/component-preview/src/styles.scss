@@ -290,6 +290,15 @@ body {
   --mkt-accent-blue: #4a7fd9;
   --mkt-accent-yellow: #d9b44a;
 
+  // Brand monospace stack. Mirrors --mkt-font-mono in
+  // projects/marketing/src/styles.scss so the real mkt-code-card (and any other
+  // component that pins it with no fallback) renders in Plex Mono instead of
+  // falling back to the browser serif here. --gt-font-mono aliases it so the
+  // preview's own inline code samples use the brand mono too. Plex Mono is
+  // already loaded via the product @font-face (src/styles.scss).
+  --mkt-font-mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --gt-font-mono: var(--mkt-font-mono);
+
   // Marketing layout tokens, mirrored so the Brand > Layout page can resolve
   // them live. KEEP IN SYNC with the :root block in
   // projects/marketing/src/styles.scss.
