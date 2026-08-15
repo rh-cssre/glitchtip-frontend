@@ -71,8 +71,14 @@ mat-card {
 
   .mat-mdc-card-header {
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     min-height: 48px;
+  }
+
+  // Reserve two lines so wrapping plan names stay aligned with single-line ones.
+  .mat-mdc-card-title {
+    min-height: 2.4em;
+    line-height: 1.2;
   }
 }
 
