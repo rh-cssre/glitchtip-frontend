@@ -1,0 +1,350 @@
+<gt-list-app-bar
+  listTitle="Issues"
+  [searchHits]="$safeNavigationMigration(paginator()?.count)"
+  [queriedProjects]="projects()"
+  [queriedTimeRangeStart]="start()"
+  [queriedTimeRangeEnd]="end()"
+  [includeTimeRangeSelect]="true"
+  [displayAddProject]="true"
+/>
+<section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
+  @if (availableEnvironments(); as availableEnvironments) {
+    <gt-data-filter-bar
+      [environmentForm]="environmentForm"
+      [searchForm]="form"
+      [searchHelp]="searchHelp"
+      [sortForm]="sortForm"
+      [currentStatsPeriod]="statsPeriod()"
+      [sorts]="sorts"
+      [organizationEnvironments]="availableEnvironments"
+      (onStatsPeriodToggle)="toggleStatsPeriod($event)"
+      [statsPeriodToggleDisabled]="issues().length === 0"
+      (filterByEnvironment)="filterByEnvironment($event)"
+      (searchSubmit)="searchSubmit()"
+      (sortByChanged)="sortByChanged($event)"
+    />
+  }
+  <div class="table-container">
+    <gt-loading-overlay [loading]="loading()" label="Loading issues">
+      @if (issues(); as issues) {
+        <table
+          mat-table
+          [dataSource]="issues"
+          [trackBy]="trackIssues"
+          class="mat-elevation-z2"
+          [class.fixedLayout]="issues.length === 0 && !loading()"
+        >
+          <ng-container matColumnDef="selectAll">
+            <th mat-header-cell *matHeaderCellDef class="table-header__actions">
+              <mat-checkbox
+                (change)="toggleSelectAllOnPage()"
+                [checked]="areAllSelected()"
+                [disabled]="issues.length === 0"
+                data-cy="selectAll"
+              />
+            </th>
+          </ng-container>
+          <ng-container matColumnDef="select">
+            <!-- Empty header cell -->
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td
+              mat-cell
+              *matCellDef="let row"
+              [class.resolved]="row.status === 'resolved'"
+              [class.ignored]="row.status === 'ignored'"
+              class="checkbox-cell level level--{{ row.level }}"
+            >
+              <mat-checkbox
+                (click)="toggleCheck($event, row.id)"
+                [checked]="row.isSelected"
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actionButtons">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              [attr.colspan]="displayedColumns().length - 1"
+              class="table-header__actions"
+            >
+              <div class="action-button-container">
+                @if (isLargeScreen()) {
+                  <div class="status-button-group">
+                    <button
+                      data-cy="bulkMarkResolved"
+                      mat-flat-button
+                      color="primary"
+                      (click)="updateStatus('resolved')"
+                      [disabled]="thereAreSelectedIssues() === false"
+                      i18n
+                      >Mark resolved</button
+                    >
+                    <button
+                      mat-stroked-button
+                      (click)="updateStatus('unresolved')"
+                      [disabled]="thereAreSelectedIssues() === false"
+                      i18n
+                      >Mark unresolved</button
+                    >
+                    <button
+                      mat-stroked-button
+                      (click)="updateStatus('ignored')"
+                      [disabled]="thereAreSelectedIssues() === false"
+                      i18n
+                      >Mark ignored</button
+                    >
+                    <button
+                      mat-stroked-button
+                      (click)="mergeSelectedIssues()"
+                      [disabled]="
+                        numberOfSelectedIssues() < 2 ||
+                        allResultsSelected() ||
+                        multipleProjectIssuesSelected()
+                      "
+                      i18n
+                      >Merge</button
+                    >
+                    <button
+                      mat-stroked-button
+                      color="warn"
+                      (click)="deleteSelectedIssues()"
+                      [disabled]="thereAreSelectedIssues() === false"
+                      i18n
+                      >Delete</button
+                    >
+                  </div>
+                } @else {
+                  <button
+                    mat-icon-button
+                    [disabled]="thereAreSelectedIssues() === false"
+                    [matMenuTriggerFor]="menu"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button
+                      mat-menu-item
+                      (click)="updateStatus('resolved')"
+                      i18n
+                      >Mark resolved</button
+                    >
+                    <button
+                      mat-menu-item
+                      (click)="updateStatus('unresolved')"
+                      i18n
+                      >Mark unresolved</button
+                    >
+                    <button mat-menu-item (click)="updateStatus('ignored')" i18n
+                      >Mark ignored</button
+                    >
+                    <button
+                      mat-menu-item
+                      (click)="mergeSelectedIssues()"
+                      [disabled]="
+                        numberOfSelectedIssues() < 2 ||
+                        allResultsSelected() ||
+                        multipleProjectIssuesSelected()
+                      "
+                      i18n
+                      >Merge</button
+                    >
+                    <button
+                      mat-menu-item
+                      (click)="deleteSelectedIssues()"
+                      [disabled]="thereAreSelectedIssues() === false"
+                      i18n
+                      >Delete</button
+                    >
+                  </mat-menu>
+                }
+                <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+                <gt-pagination-buttons [paginator]="paginator()" />
+              </div>
+            </th>
+          </ng-container>
+          <ng-container matColumnDef="title">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="status-header-cell"
+            >
+              Issue
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [class.resolved]="element.status === 'resolved'"
+              [class.ignored]="element.status === 'ignored'"
+              class="title-cell"
+            >
+              <div class="table-group-label">
+                @if (element.status === "resolved") {
+                  <mat-icon inline="true" class="resolved-icon">
+                    done
+                  </mat-icon>
+                }
+                @if (element.status === "ignored") {
+                  <mat-icon inline="true" class="mute-icon">
+                    notifications_off
+                  </mat-icon>
+                }
+                <a [routerLink]="element.id" queryParamsHandling="merge">{{
+                  element.title
+                }}</a>
+              </div>
+              <div class="small-screen-event-count caption-text">
+                {{ element.count | i18nPlural: eventCountPluralMapping }}
+              </div>
+              <div>
+                @if (appliedProjectCount() !== 1) {
+                  <span class="caption-text"> {{ element.projectSlug }} </span>
+                }
+                <span class="caption-text">
+                  @if (appliedProjectCount() !== 1) {
+                    &mdash;
+                  }
+                  <time
+                    [dateTime]="element.firstSeen"
+                    [title]="element.firstSeen | date: 'medium'"
+                  >
+                    {{ element.firstSeen | daysOld }}</time
+                  >
+                  @if (element.firstSeen !== element.lastSeen) {
+                    , seen
+                    <time
+                      [dateTime]="element.lastSeen"
+                      [title]="element.lastSeen | date: 'medium'"
+                    >
+                      {{ element.lastSeen | daysAgo }}
+                    </time>
+                  }
+                </span>
+                @if (element.type && element.type === "csp") {
+                  <span class="caption-text">
+                    @if (appliedProjectCount() !== 1 && element.type) {
+                      <span> &mdash; </span>
+                    }
+                    {{ element.type }} report</span
+                  >
+                }
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="bulkProjectSelect">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              colspan="4"
+              class="bulk-project-select"
+            >
+              @if (showBulkSelectProject() === true) {
+                @if (allResultsSelected() === false) {
+                  <span class="bulk-project-select__text"
+                    >{{ numberOfSelectedIssues() }} issues on this page
+                    selected.</span
+                  >
+                  <button
+                    data-cy="bulkUpdateProject"
+                    mat-stroked-button
+                    (click)="selectAllResults()"
+                  >
+                    @if (paginator()?.hits; as hits) {
+                      Select all {{ hits }} issues that match this query
+                    }
+                  </button>
+                } @else {
+                  <span class="bulk-project-select__text"
+                    >All {{ paginator()?.hits }} issues are currently
+                    selected.</span
+                  >
+                  <button mat-stroked-button (click)="clearSelectAllResults()">
+                    Undo
+                  </button>
+                }
+              }
+            </th>
+          </ng-container>
+          <ng-container matColumnDef="events">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="status-header-cell"
+            >
+              Events
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [class.resolved]="element.status === 'resolved'"
+              [class.ignored]="element.status === 'ignored'"
+              class="event-cell body-text"
+            >
+              <p>{{ element.count }}</p>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="trend">
+            <th mat-header-cell *matHeaderCellDef>
+              <div class="stats-cell-content">
+                <div class="stats-header-label">Trend</div>
+              </div>
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [class.resolved]="element.status === 'resolved'"
+              [class.ignored]="element.status === 'ignored'"
+            >
+              <div class="stats-cell-content">
+                <gt-issue-chart
+                  [formattedStats]="element.formattedStats"
+                  [loading]="issueStatsLoading()"
+                  [serverTimeZone]="serverTimeZone()"
+                  [statsChartDataFrame]="statsChartDataFrame()"
+                  [statsPeriod]="statsPeriod()"
+                />
+              </div>
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            class="table-header"
+            [hidden]="issues.length === 0 && !loading()"
+            [class.hideLowerBorder]="showBulkSelectProject()"
+            *matHeaderRowDef="['selectAll', 'actionButtons']; sticky: true"
+          ></tr>
+          <tr
+            mat-header-row
+            class="table-header"
+            *matHeaderRowDef="
+              ['bulkProjectSelect'];
+              sticky: showBulkSelectProject()
+            "
+            [hidden]="!showBulkSelectProject()"
+          ></tr>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns()"
+            [hidden]="(issues.length === 0 && !loading()) || !isLargeScreen()"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td
+              class="zero-states-cell"
+              [attr.colspan]="displayedColumns().length"
+            >
+              @if (initialLoad()) {
+                <gt-issue-zero-states
+                  [projects]="projects()"
+                ></gt-issue-zero-states>
+              }
+            </td>
+          </tr>
+        </table>
+      }
+    </gt-loading-overlay>
+  </div>
+</section>
