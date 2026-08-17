@@ -1,0 +1,19 @@
+<span matSnackBarLabel>
+  <span i18n>
+    You've hit your plan's event limit for this billing period, so new events
+    are being throttled.
+  </span>
+  <a class="subscription-link" [routerLink]="[activeOrgSlug, 'settings', 'subscription']" (click)="snackBarRef.dismiss()" i18n>
+    Manage your subscription
+  </a>
+  @if (overageEnabled) {
+    <span i18n> to upgrade or raise your overage spend cap and keep ingesting.</span>
+  } @else {
+    <span i18n> to upgrade or turn on overage billing and keep ingesting.</span>
+  }
+</span>
+<span matSnackBarActions>
+  <button matSnackBarAction matIconButton class="dismiss-button" (click)="snackBarRef.dismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</span>

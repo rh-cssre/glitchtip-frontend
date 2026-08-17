@@ -1,0 +1,100 @@
+.overage-card {
+  margin-top: 16px;
+}
+
+.overage-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.overage-top-text {
+  flex: 1;
+}
+
+.overage-tagline {
+  margin: 4px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.overage-top-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+mat-divider {
+  margin: 16px 0;
+}
+
+.overage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.overage-row-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.overage-amount {
+  font: var(--mat-sys-title-medium);
+}
+
+.overage-est-note,
+.overage-sub {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.overage-owner-note {
+  margin: 8px 0 0;
+}
+
+.overage-percent {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+}
+
+mat-progress-bar {
+  border-radius: 4px;
+}
+
+.overage-alert {
+  margin: 10px 0 0;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.overage-alert--warn {
+  color: var(--mat-sys-error);
+}
+
+.cap-field {
+  width: 200px;
+}
+
+.overage-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.overage-error {
+  display: block;
+  margin-top: 12px;
+}
+
+// Match the canonical confirm-dialog actions (right-aligned, gap).
+mat-dialog-actions {
+  padding: 0 24px 24px;
+  justify-content: flex-end;
+  gap: 10px;
+}
