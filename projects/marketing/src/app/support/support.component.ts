@@ -52,12 +52,6 @@ const SUPPORT_CHANNELS: SupportChannel[] = [
     link: "/documentation/frequently-asked-questions",
   },
   {
-    title: "Community chat",
-    description: "Ask the community in real time on Gitter.",
-    icon: "forum",
-    href: "https://gitter.im/GlitchTip/community",
-  },
-  {
     title: "Issue tracker",
     description: "Report a bug or request a feature on GitLab.",
     icon: "code",
