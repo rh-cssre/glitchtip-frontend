@@ -1,8 +1,11 @@
-@use "../../../../../src/assets/styles/variables" as vars;
+@use "../styles/side-pattern" as *;
+
+:host {
+  @include side-pattern-host;
+}
 
 .blog-article {
-  max-width: var(--mkt-container-reading);
-  margin: 0 auto;
+  @include side-pattern(var(--mkt-container-reading));
 }
 
 // Header block: breadcrumb + title + date, separated from the body by a
