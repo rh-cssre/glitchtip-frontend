@@ -317,8 +317,7 @@ body {
   --mkt-container-reading: 760px;
   --mkt-container-narrow: 600px;
   --mkt-gutter: 48px;
-  --mkt-section: clamp(64px, 7vw, 104px);
-  --mkt-section-sm: clamp(40px, 5vw, 64px);
+  --mkt-section: clamp(40px, 5vw, 64px);
 
   // --gt-space-* scale, mirrored so the reference app is self-contained.
   --gt-space-0: 0;

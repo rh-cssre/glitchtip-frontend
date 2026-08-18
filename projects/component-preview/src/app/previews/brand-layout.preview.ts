@@ -133,9 +133,6 @@ interface ResolvedSpace {
         font-size: 0.72rem;
         color: var(--mat-sys-on-surface-variant);
       }
-      .bl-rhythm-band--sm {
-        padding-block: var(--mkt-section-sm);
-      }
       .bl-divider {
         height: 1px;
         border: none;
@@ -161,6 +158,37 @@ interface ResolvedSpace {
       .bl-token-table code {
         font-family: var(--gt-font-mono, monospace);
         font-size: 0.85em;
+      }
+      .bl-sidepattern-demo {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        min-height: 180px;
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-radius: 6px;
+        overflow: hidden;
+        background-color: var(--mat-sys-surface-container-low);
+      }
+      .bl-sidepattern-band {
+        width: 96px;
+        background-image: url("/static/assets/patterns/side-pattern.webp");
+        background-size: 140px auto;
+        -webkit-mask-image: linear-gradient(to right, #000 20%, transparent 100%);
+        mask-image: linear-gradient(to right, #000 20%, transparent 100%);
+        opacity: 0.6;
+      }
+      .bl-sidepattern-band--right {
+        transform: scaleX(-1);
+      }
+      .bl-sidepattern-col {
+        align-self: center;
+        flex: 0 1 420px;
+        text-align: center;
+        padding: var(--gt-space-4);
+        font-family: var(--gt-font-mono, monospace);
+        font-size: 0.72rem;
+        color: var(--mat-sys-on-surface-variant);
+        border-inline: 1px dashed var(--mat-sys-outline-variant);
       }
     `,
   ],
@@ -238,9 +266,9 @@ interface ResolvedSpace {
         Vertical space between major sections is a fluid clamp, not a fixed
         value, so bands breathe more on wide screens and tighten on phones. It
         drives band padding and the <code>.divider</code> spacing, so vertical
-        rhythm is never re-invented per page. This is markedly taller than the
-        product's densest steps by design: marketing pages are meant to feel
-        open, not packed.
+        rhythm is never re-invented per page. One token, one rhythm: pages that
+        need tighter spacing don't get a smaller token, they get fewer
+        sections.
       </p>
       <table class="bl-token-table">
         <thead>
@@ -254,21 +282,33 @@ interface ResolvedSpace {
           <tr>
             <td><code>--mkt-section</code></td>
             <td><code>{{ section() }}</code></td>
-            <td>Standard band padding, gap between major sections</td>
-          </tr>
-          <tr>
-            <td><code>--mkt-section-sm</code></td>
-            <td><code>{{ sectionSm() }}</code></td>
-            <td>Tighter bands, sub-sections within a page</td>
+            <td>Band padding, gap between major sections, .divider spacing</td>
           </tr>
         </tbody>
       </table>
       <div class="bl-rhythm" style="margin-top: var(--gt-space-4)">
         <div class="bl-rhythm-band">padding-block: --mkt-section</div>
         <hr class="bl-divider" />
-        <div class="bl-rhythm-band bl-rhythm-band--sm">
-          padding-block: --mkt-section-sm
-        </div>
+        <div class="bl-rhythm-band">padding-block: --mkt-section</div>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section__title">Side pattern</div>
+      <p class="preview-section__note">
+        Decorative brand-pattern bands down the left and right screen edges of
+        sparse pages (support, blog). The
+        <code>side-pattern($content-width)</code> mixin owns the column cap and
+        the band math: each band's width tracks the free margin beside the
+        centred column (capped at 330px), fades inward along an organic edge,
+        and disappears below the small breakpoint. Pages pair it with
+        <code>side-pattern-host</code> on the :host to clip horizontal
+        overflow.
+      </p>
+      <div class="bl-sidepattern-demo">
+        <div class="bl-sidepattern-band"></div>
+        <div class="bl-sidepattern-col">content column</div>
+        <div class="bl-sidepattern-band bl-sidepattern-band--right"></div>
       </div>
     </div>
   `,
@@ -280,7 +320,6 @@ export class BrandLayoutPreview {
   readonly containers = signal<ResolvedContainer[]>([]);
   readonly spaces = signal<ResolvedSpace[]>([]);
   readonly section = signal<string>("");
-  readonly sectionSm = signal<string>("");
 
   private readonly containerDefs = [
     { name: "--mkt-container-wide", usage: "Heroes, full-width bands, page chrome" },
@@ -330,7 +369,6 @@ export class BrandLayoutPreview {
       );
 
       this.section.set(resolveCssVar("--mkt-section", el));
-      this.sectionSm.set(resolveCssVar("--mkt-section-sm", el));
     });
   }
 }
