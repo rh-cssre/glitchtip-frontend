@@ -1,8 +1,11 @@
-@use "../../../../../src/assets/styles/variables" as vars;
+@use "../styles/side-pattern" as *;
+
+:host {
+  @include side-pattern-host;
+}
 
 .support {
-  max-width: var(--mkt-container-content);
-  margin: 0 auto;
+  @include side-pattern(var(--mkt-container-content));
 }
 
 .support__head {
@@ -11,9 +14,11 @@
 }
 
 // Self-serve + community channel cards (mirrors the docs-index card treatment).
+// Capped card width + centred group, so a small number sits in the middle.
 .support-channels {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 300px));
+  justify-content: center;
   gap: 16px;
   margin-top: 28px;
   text-align: left;
