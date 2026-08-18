@@ -5,8 +5,7 @@
   display: block;
 }
 
-// Flat one-line pills; the active one fills with the brand colour. They wrap
-// and centre on small screens so several stay visible above the panel.
+// Flat pills; the active one fills with the brand colour.
 .tabs {
   display: flex;
   flex-wrap: wrap;
@@ -80,9 +79,8 @@
   }
 }
 
-// Card (composes the global .mkt-surface): copy stacked on the left, product
-// screenshot on the right. Grid areas reorder the content (title, screenshot,
-// body) when it stacks on mobile.
+// Card (composes the global .mkt-surface); grid areas reorder head/media/body
+// when it stacks on mobile.
 .panel {
   position: relative;
   display: grid;
@@ -94,8 +92,7 @@
   gap: 8px clamp(48px, 6vw, 88px);
   padding: clamp(28px, 3.5vw, 52px);
   @include card-clip;
-  // Filled-cell accents along the top/right border, clear of the head and body
-  // copy on the left.
+  // Filled-cell accents, clear of the copy.
   @include grid-texture(
     $cells:
       (1 0 $cell-grey-soft) (4 0 $cell-red-soft) (17 0 $cell-grey-soft)
@@ -139,7 +136,6 @@
   }
 }
 
-// Media spans both rows on desktop so the copy sits vertically centred beside it.
 .panel-media {
   grid-area: media;
   align-self: center;
@@ -152,8 +148,7 @@
 
     ::ng-deep img {
       display: block;
-      // Scale the screenshot up past the card's right edge (clipped by the
-      // panel's overflow) so it reads larger; reset to fit on mobile.
+      // Oversized on purpose; the panel clips the right edge.
       width: calc(100% + clamp(56px, 9vw, 168px));
       max-width: none;
       height: auto;

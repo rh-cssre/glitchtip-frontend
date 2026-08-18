@@ -9,8 +9,7 @@
   overflow: hidden;
   padding: clamp(56px, 7vw, 104px) 0;
 
-  // Surface fill that dissolves into the page's dotted background at the top and
-  // bottom, so the section blends in instead of starting on a hard edge.
+  // Surface fill, dissolving into the page background at top and bottom.
   &::before {
     content: "";
     position: absolute;
@@ -34,9 +33,7 @@
     );
   }
 
-  // Faded line-grid over the surface. Organic patches cluster on the sides at
-  // mid-height (clear centre so content reads; clear of the top/bottom fade),
-  // so the texture sits inside the blended band.
+  // Faded line-grid: organic patches on the sides, clear centre for content.
   &::after {
     content: "";
     position: absolute;
@@ -114,8 +111,7 @@
   max-width: none;
 }
 
-// The hero is a large section, so it carries a fuller spread of the grid than
-// the default (compact "switch") band: more, larger patches across the width.
+// The hero carries a fuller spread of grid patches than the default band.
 :host(.hero-banner) .banner::after {
   $hero-grid:
     radial-gradient(ellipse 28% 40% at 6% 26%, #000 0%, transparent 74%),
@@ -132,8 +128,7 @@
   mask-image: $hero-grid;
 }
 
-// Centred, width-capped content column matching the page's .home-sections:
-// ~2.5% gutters on desktop, never less than half --mkt-gutter on phones.
+// Centred, width-capped content column matching the page's .home-sections.
 .banner__inner {
   position: relative;
   z-index: 3;
@@ -142,8 +137,7 @@
   margin: 0 auto;
 }
 
-// Extra horizontal room for the hero text; never less than a comfortable 22px
-// gutter on phones so the copy doesn't crowd the card border.
+// Extra horizontal room for the hero text.
 :host(.hero-banner) .banner__inner {
   padding-inline: clamp(22px, 3vw, 60px);
 }

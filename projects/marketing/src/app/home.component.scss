@@ -1,18 +1,13 @@
 @use "../../../../src/assets/styles/variables" as vars;
 @use "./styles/grid-texture" as *;
 
-// Feature screenshots bleed outward by design (negative margins on the
-// alternating rows). Clip horizontal overflow at the viewport so that
-// intentional bleed never turns into page-level horizontal scroll on wide
-// screens. `overflow-x: clip` keeps vertical drop-shadows visible and, unlike
-// `hidden`, creates no scroll container.
+// Screenshots bleed outward by design; `clip` (unlike `hidden`) swallows the
+// overflow without creating a scroll container.
 :host {
   display: block;
   overflow-x: clip;
 }
 
-// The hero sits in the shared mkt-banner grid section (see .hero-banner below);
-// the banner owns the surface, faded grid and top/bottom blend.
 .hero-images-container {
   display: flex;
   gap: 3rem;
@@ -57,9 +52,7 @@
     }
   }
 
-  // Bigger, more confident hero headline than the shared 45px class, scaled
-  // with the viewport (much smaller floor so it never overflows on phones).
-  // Shared .marketing-heading is untouched elsewhere.
+  // Hero-only headline size; the shared .marketing-heading is untouched.
   .marketing-heading {
     font-size: clamp(1.9rem, 1.05rem + 4.2vw, 3.6rem);
     line-height: 1.08;
@@ -113,7 +106,6 @@
     display: block;
     transform: rotateY(-15deg) rotateX(3deg);
     border-radius: var(--mat-sys-corner-large, 16px);
-    // Warm-toned depth shadow to match the robot art's glow.
     filter: drop-shadow(0 22px 42px rgba(120, 74, 60, 0.32));
   }
 
@@ -128,11 +120,7 @@
 
 .centered-block {
   text-align: center;
-  // Dot-fade behind copy is handled globally by the page's central wash
-  // (styles.scss body background), so no per-block gradient here.
-
-  // Fill the home body column; the global .centered-block cap (1040px) is
-  // narrower.
+  // Fill the home body column; the global .centered-block cap is narrower.
   width: 100%;
 }
 
@@ -205,12 +193,8 @@
 }
 
 .squiggle {
-  // A slow-flowing wavy underline under the highlighted word. `text-decoration:
-  // wavy` can't be animated, so the wave is a repeating inline-SVG background
-  // pinned to the baseline that drifts one wavelength sideways on a loop, which
-  // reads as the wave flowing. Reduced-motion pins it still (the wave stays, it
-  // just stops moving). Colour is the brand error red to match the old static
-  // underline.
+  // `text-decoration: wavy` can't animate, so the wave is an inline-SVG
+  // background drifting one wavelength on a loop; reduced-motion pins it.
   font-size: inherit;
   padding-bottom: 6px;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='6' viewBox='0 0 24 6'><path d='M0 3 Q6 0 12 3 T24 3' fill='none' stroke='%23b3261e' stroke-width='2' stroke-linecap='round'/></svg>");
