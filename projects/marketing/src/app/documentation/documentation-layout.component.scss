@@ -1,4 +1,5 @@
 @use "../../../../../src/assets/styles/variables" as vars;
+@use "../styles/hidden-scrollbar" as *;
 
 .docs {
   width: min(95%, 100% - var(--mkt-gutter));
@@ -55,11 +56,7 @@
   color: var(--mat-sys-on-surface-variant);
   white-space: nowrap;
   overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  @include hidden-scrollbar;
 
   a {
     color: var(--mat-sys-on-surface-variant);
@@ -87,6 +84,8 @@
     max-height: calc(100vh - 104px);
     overflow-y: auto;
     overscroll-behavior: contain;
+
+    @include hidden-scrollbar;
   }
 
   @media screen and (max-width: vars.$large) {

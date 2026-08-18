@@ -1,4 +1,4 @@
-@use "../../../../../src/assets/styles/variables" as vars;
+@use "../styles/hidden-scrollbar" as *;
 
 .doc-page {
   display: grid;
@@ -21,6 +21,8 @@
   align-self: start;
   max-height: calc(100vh - 104px);
   overflow-y: auto;
+
+  @include hidden-scrollbar;
 
   @media screen and (max-width: 1180px) {
     display: none;
