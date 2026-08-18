@@ -1,0 +1,5 @@
+// .fancy is inline-block by default; the page title reads as a centred block.
+h1.fancy {
+  display: block;
+  text-align: center;
+}

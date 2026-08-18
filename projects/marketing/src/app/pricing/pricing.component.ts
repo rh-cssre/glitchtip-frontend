@@ -10,18 +10,9 @@ import { PageShellComponent } from "../shared/page-shell/page-shell.component";
   selector: "mkt-pricing",
   imports: [PageShellComponent, PaymentComponent],
   templateUrl: "./pricing.component.html",
+  styleUrl: "./pricing.component.scss",
   preserveWhitespaces: true,
   changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.Emulated,
 })
-export class PricingComponent {
-  constructor() {}
-
-  //   pricingRoutes$ = this.scully.available$.pipe(
-  //     map((availableRoutes) =>
-  //       availableRoutes
-  //         .filter((routeObject) => routeObject.route.startsWith('/pricing'))
-  //         .reverse()
-  //     )
-  //   );
-}
+export class PricingComponent {}

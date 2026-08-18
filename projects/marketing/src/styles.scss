@@ -51,7 +51,8 @@ html {
   // Layout containers. Every page/band picks ONE of these max-widths; the gutter
   // formula below gives them a single shared edge.
   --mkt-container-wide: 1800px; // heroes, full-width bands, page chrome
-  --mkt-container-docs: 1500px; // wide structured layouts: docs shell, pricing table
+  --mkt-container-docs: 1500px; // wide structured layouts: docs shell
+  --mkt-container-table: 1280px; // pricing plan table
   --mkt-container-content: 1040px; // standard content pages (support, etc.)
   --mkt-container-reading: 760px; // prose / blog reading column
   --mkt-container-narrow: 600px; // forms, centered copy
@@ -263,7 +264,7 @@ a {
   // owns the side margin, so don't add per-block horizontal padding.
   width: min(100%, var(--mkt-container-content));
   margin-inline: auto;
-  padding: 20px 0 80px;
+  padding: 0 0 80px;
   overflow: hidden;
 
   @media screen and (max-width: vars.$tablet) {
@@ -286,7 +287,7 @@ a {
 // Override `width`, not max-width: the base sets width via min(), so a max-width
 // would stay capped at the smaller content width.
 .centered-block.wide-content {
-  width: min(100%, var(--mkt-container-docs));
+  width: min(100%, var(--mkt-container-table));
 }
 
 .markdown-container {
