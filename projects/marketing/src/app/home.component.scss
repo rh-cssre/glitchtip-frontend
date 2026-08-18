@@ -1,4 +1,5 @@
 @use "../../../../src/assets/styles/variables" as vars;
+@use "./styles/grid-texture" as *;
 
 // Feature screenshots bleed outward by design (negative margins on the
 // alternating rows). Clip horizontal overflow at the viewport so that
@@ -41,8 +42,8 @@
   position: relative;
 
   @media screen and (max-width: vars.$small) {
-    padding: 65px 0 0;
-    font-size: 0.85em;
+    padding: 0;
+    font-size: 0.9em;
   }
 
   .content {
@@ -129,152 +130,52 @@
   text-align: center;
   // Dot-fade behind copy is handled globally by the page's central wash
   // (styles.scss body background), so no per-block gradient here.
+
+  // Fill the home body column; the global .centered-block cap (1040px) is
+  // narrower.
+  width: 100%;
 }
 
-// Sections sit directly on the page background (no card shell); this centers and
-// caps the content column, like the big card used to.
+// Centers and caps the shared home body column; every section lines up on it.
 .home-sections {
   // ~2.5% gutters on desktop, but never less than a 24px gutter on phones.
   width: min(95%, 100% - var(--mkt-gutter));
-  max-width: var(--mkt-container-wide);
+  max-width: var(--mkt-container-home);
   margin: 0 auto;
 }
 
-// Feature sections: full-width alternating rows on desktop (wrapper transparent
-// via display:contents); a sleek, swipeable slide carousel on small screens
-// (native scroll-snap, faded neighbours, dot pagination below). No cards.
-.feature-scroller {
-  display: contents;
+// Newsletter signup card (composes the global .mkt-surface card primitive).
+.newsletter {
+  position: relative;
+  margin: 8px auto 0;
+  padding: clamp(28px, 4vw, 48px);
+  @include card-clip;
+  // Filled-cell accents on the corners/edges, clear of the centred copy + form.
+  @include grid-texture(
+    $cells:
+      (1 1 $cell-red-soft) (2 0 $cell-grey-soft) (0 3 $cell-grey)
+      (1 5 $cell-grey-soft) (0 6 $cell-red-soft) (33 0 $cell-grey-soft)
+      (34 1 $cell-red-soft) (35 2 $cell-grey) (34 4 $cell-grey-soft)
+      (35 5 $cell-red-soft)
+  );
 
-  @media screen and (max-width: vars.$large) {
-    display: grid;
-    position: relative;
-    grid-auto-flow: column;
-    // Full-width slides (no peek); the dots signal there's more.
-    grid-auto-columns: 100%;
-    gap: 24px;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    mkt-feature-section {
-      scroll-snap-align: center;
-      margin: 0;
-      padding: 0;
-      // No divider rhythm inside the carousel (removes the line atop slides).
-      border: none;
-
-      // Carousel slides are shown regardless of the scroll-reveal state.
-      &.is-reveal {
-        opacity: 1;
-        transform: none;
-      }
-
-      // Product shot fills the top of the slide and dissolves into the copy.
-      ::ng-deep .screenshots {
-        margin: 0;
-      }
-
-      ::ng-deep .screenshot {
-        width: 100%;
-        margin: 0;
-        border: none;
-        border-radius: var(--mat-sys-corner-large, 16px)
-          var(--mat-sys-corner-large, 16px) 0 0;
-        overflow: hidden;
-        mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
-      }
-
-      ::ng-deep .description-card {
-        width: 100%;
-        padding: 0 8px;
-      }
-
-      // Smaller, tighter title + icon on mobile so the header reads as one neat
-      // unit; a consistent min-height keeps every slide's copy aligned.
-      ::ng-deep .feature-header {
-        min-height: 2.9em;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-
-      ::ng-deep .feature-header .marketing-subheading {
-        font-size: 1.55rem;
-        line-height: 1.15;
-      }
-
-      ::ng-deep .feature-icon {
-        width: 34px;
-        height: 34px;
-        font-size: 20px;
-      }
-    }
-
-    // Sleek fade of neighbouring slides by scroll position (progressive
-    // enhancement; unsupported browsers just show full-opacity slides).
-    @supports (animation-timeline: view()) {
-      mkt-feature-section {
-        animation: feat-slide-fade linear both;
-        animation-timeline: view(inline);
-      }
-    }
+  .marketing-heading {
+    margin-top: 0;
+    color: var(--mat-sys-primary);
   }
 }
 
-@keyframes feat-slide-fade {
-  0%,
-  100% {
-    opacity: 0.32;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-// Slide pagination dots (mobile only).
-.feature-dots {
-  display: none;
-
-  @media screen and (max-width: vars.$large) {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 18px;
-  }
-}
-
-.feature-dot {
-  appearance: none;
-  border: none;
-  padding: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--mat-sys-outline-variant);
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-
-  &.is-active {
-    background: var(--mat-sys-primary);
-    transform: scale(1.3);
-  }
+.newsletter-sub {
+  max-width: 44ch;
+  margin: 8px auto 26px;
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .subscribe-wrapper {
   display: flex;
   gap: 0 20px;
-
-  @media screen and (min-width: vars.$small) {
-    margin: 0 50px;
-  }
+  max-width: 500px;
+  margin: 0 auto;
 
   @media screen and (max-width: vars.$small) {
     flex-direction: column;
@@ -332,6 +233,6 @@
 }
 
 .main-promo-section {
-  padding-top: 40px;
+  // Top spacing comes from the shared .divider rhythm.
   padding-bottom: 40px;
 }

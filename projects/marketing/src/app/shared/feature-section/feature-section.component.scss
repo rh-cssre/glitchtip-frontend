@@ -3,7 +3,7 @@
 :host {
   display: block;
   padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 }
 
 .screenshots {
@@ -11,6 +11,11 @@
   justify-content: space-between;
   align-items: center;
   margin: 0 10%;
+
+  // Opt-out of the 10% inset for hosts that align to their page's own column.
+  :host(.flush-media) & {
+    margin-inline: 0;
+  }
 
   @media screen and (max-width: vars.$large) {
     flex-direction: column;
@@ -83,7 +88,7 @@
 
   .screenshot:not(.main-promo) {
     border-radius: var(--mat-sys-corner-large, 16px);
-    border: 6px solid var(--mat-sys-outline-variant);
+    border: 1px solid var(--mat-sys-outline-variant);
     box-shadow: var(--mat-sys-shadow-1);
     overflow: hidden;
   }
