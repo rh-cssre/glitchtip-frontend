@@ -52,6 +52,7 @@ html {
   // formula below gives them a single shared edge.
   --mkt-container-wide: 1800px; // heroes, full-width bands, page chrome
   --mkt-container-docs: 1500px; // wide structured layouts: docs shell
+  --mkt-container-home: 1320px; // home body column + hero card
   --mkt-container-table: 1280px; // pricing plan table
   --mkt-container-content: 1040px; // standard content pages (support, etc.)
   --mkt-container-reading: 760px; // prose / blog reading column
@@ -528,6 +529,8 @@ a {
 // 1px outline-variant hairline + the large 16px corner for media/cards). No
 // in-flow drop shadow. Compose padding/hover/layout on top per use; code blocks
 // use the small corner instead, so they are deliberately not this primitive.
+// Marquee cards (hero, feature switcher, newsletter) override to the
+// extra-large 28px corner.
 .mkt-surface {
   background: var(--mat-sys-surface);
   border: 1px solid var(--mat-sys-outline-variant);

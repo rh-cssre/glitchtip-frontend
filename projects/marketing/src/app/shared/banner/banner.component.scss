@@ -1,4 +1,4 @@
-@use "../../../../../../src/assets/styles/variables" as vars;
+@use "../../styles/grid-texture" as *;
 
 :host {
   display: block;
@@ -68,6 +68,52 @@
   }
 }
 
+// Hero-only: enclose the entire hero in a single flat card, capped to the home
+// body column so it lines up with the sections below it.
+:host(.hero-banner) .banner {
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-home);
+  margin: 40px auto 0;
+  padding: clamp(28px, 3vw, 44px) 0;
+  border: 1px solid var(--mat-sys-outline-variant);
+  @include card-clip;
+}
+
+// Solid surface (no top/bottom fade) with filled cells painted under the
+// ::after grid lines, so each reads as a framed cell of the live grid.
+:host(.hero-banner) .banner::before {
+  // (col row tone) cell clusters.
+  $cells:
+    // top-left corner
+    (1 1 $cell-red) (2 2 $cell-red-soft) (3 1 $cell-grey) (2 0 $cell-grey-soft)
+    // left edge, mid-height
+    (0 8 $cell-grey) (1 9 $cell-red-soft) (0 10 $cell-red) (1 11 $cell-grey-soft)
+    // bottom-left corner
+    (2 17 $cell-red-soft) (1 18 $cell-grey-soft) (3 18 $cell-grey)
+    (2 19 $cell-red) (3 20 $cell-grey-soft)
+    // top strip accents
+    (9 1 $cell-grey-soft) (10 0 $cell-red-soft) (20 0 $cell-red-soft)
+    (21 1 $cell-grey-soft)
+    // top-right corner
+    (32 1 $cell-grey) (33 0 $cell-grey-soft) (34 1 $cell-red) (35 0 $cell-red-soft)
+    // bottom-right corner
+    (32 19 $cell-grey-soft) (33 20 $cell-red-soft) (34 19 $cell-grey)
+    (35 20 $cell-red)
+    // bottom-centre accent
+    (14 20 $cell-grey-soft) (15 19 $cell-red-soft);
+
+  background-color: var(--mat-sys-surface-container-lowest);
+  @include grid-cells($cells);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+// The card itself caps the width, so drop the inner's own full-bleed cap.
+:host(.hero-banner) .banner__inner {
+  width: auto;
+  max-width: none;
+}
+
 // The hero is a large section, so it carries a fuller spread of the grid than
 // the default (compact "switch") band: more, larger patches across the width.
 :host(.hero-banner) .banner::after {
@@ -86,67 +132,8 @@
   mask-image: $hero-grid;
 }
 
-// Block art on its own layer above the grid; hero-only (opts in below),
-// transparent elsewhere.
-.banner__art {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  // Fill the band exactly (no repeat/cover): the art isn't a seamless tile and
-  // cover would crop the edge clusters. The band is wider than the art, so blocks
-  // stretch slightly; the edge-fade mask softens it.
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-  // Dissolve into all four band edges (not just top/bottom) so clusters near the
-  // sides fade out instead of hard-clipping on wide screens. Intersect the two
-  // fades so the art only shows where both are opaque.
-  $edge-fade:
-    linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%),
-    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  -webkit-mask-image: $edge-fade;
-  mask-image: $edge-fade;
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-
-:host(.hero-banner) .banner__art {
-  background-image: url("/assets/home/background-art-light.webp");
-  opacity: 0.9;
-  // Fade art in on load (opacity only, `backwards` so it starts at 0). Avoid an
-  // animated transform: it forces a GPU layer that rasterizes the art blurry on
-  // high-DPI screens.
-  animation: banner-art-fade-in 0.7s ease-out backwards;
-}
-
-@keyframes banner-art-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.9;
-  }
-}
-
-// Honour reduced-motion: skip the fade-in, showing the art at its resting opacity.
-@media (prefers-reduced-motion: reduce) {
-  :host(.hero-banner) .banner__art {
-    animation: none;
-  }
-}
-
-// The block art is a desktop flourish; on small/medium screens the hero stacks
-// into a tighter column, where the clusters only add clutter.
-@media screen and (max-width: vars.$large) {
-  .banner__art {
-    display: none;
-  }
-}
-
-// Centred, width-capped content column matching the page's .home-sections.
-// min(95%, 100% - 40px) keeps ~2.5% gutters on desktop but never less than a
-// 20px gutter on phones.
+// Centred, width-capped content column matching the page's .home-sections:
+// ~2.5% gutters on desktop, never less than half --mkt-gutter on phones.
 .banner__inner {
   position: relative;
   z-index: 3;
@@ -155,7 +142,8 @@
   margin: 0 auto;
 }
 
-// Extra horizontal room for the hero text.
+// Extra horizontal room for the hero text; never less than a comfortable 22px
+// gutter on phones so the copy doesn't crowd the card border.
 :host(.hero-banner) .banner__inner {
-  padding-inline: clamp(4px, 3vw, 60px);
+  padding-inline: clamp(22px, 3vw, 60px);
 }
