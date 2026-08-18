@@ -53,10 +53,9 @@ html {
   --mkt-container-narrow: 600px; // forms, centered copy
   --mkt-gutter: 48px; // used as: width: min(95%, 100% - var(--mkt-gutter))
 
-  // Section rhythm — vertical space between major sections. Drives .divider,
-  // page/band padding, etc. so spacing isn't re-invented per page.
-  --mkt-section: clamp(64px, 7vw, 104px);
-  --mkt-section-sm: clamp(40px, 5vw, 64px);
+  // Section rhythm — vertical space between major sections (drives .divider)
+  // so spacing isn't re-invented per page.
+  --mkt-section: clamp(40px, 5vw, 64px);
 }
 
 // Common styles for Angular Material. Included so that we only have to load a
