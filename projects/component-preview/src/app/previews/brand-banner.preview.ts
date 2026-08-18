@@ -36,11 +36,11 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Banner"
       status="stable"
-      description="A full-width standout band on a subtle surface, carrying a faded line-grid texture that fades into the page's dotted background at the top and bottom. Use it to mark a highlighted full-width zone. The .hero-banner host-class variant carries a fuller grid and scattered block art for the top-of-page hero. Content projects into a centered, width-capped column matching the rest of the page."
+      description="A full-width standout band on a subtle surface, carrying a faded line-grid texture that fades into the page's dotted background at the top and bottom. Use it to mark a highlighted full-width zone. The .hero-banner host-class variant becomes the top-of-page hero: a solid, bordered card capped to the home column, with a fuller grid and filled grid cells (brand red + grey) clustered at the edges. Content projects into a centered, width-capped column matching the rest of the page."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
-      a11y="The banner is decorative chrome around projected content: the grid, surface fill, and block art are all pointer-events:none and carry no semantics. Keep a single h2 (via mkt-section-header) inside so the heading order stays intact, and let the CTAs be real focusable links. The hero art's fade-in and drift are disabled under prefers-reduced-motion."
+      a11y="The banner is decorative chrome around projected content: the grid, surface fill, and filled cells are all pointer-events:none and carry no semantics. Keep a single h2 (via mkt-section-header) inside so the heading order stays intact, and let the CTAs be real focusable links."
       [api]="api"
       [anatomy]="anatomy"
       [code]="code"
@@ -72,8 +72,9 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <div class="preview-section__title">Hero variant (.hero-banner)</div>
         <p class="preview-section__note">
           Add the <code>hero-banner</code> host class for the top-of-page hero:
-          a fuller spread of the grid plus the scattered block art layer. The
-          art is desktop-only and hides below the large breakpoint.
+          the band becomes a solid, bordered card with a fuller grid spread and
+          filled-cell block art on the card's own 36px grid. The cells are
+          desktop-only and hide below the large breakpoint.
         </p>
         <mkt-banner class="hero-banner">
           <mkt-section-header
@@ -103,9 +104,9 @@ export class BrandBannerPreview {
   ];
   readonly donts = [
     "Stack two banners back to back; the texture stops reading as a standout",
-    "Use the hero-banner variant for an ordinary switch band (its fuller grid and block art are hero-only)",
+    "Use the hero-banner variant for an ordinary switch band (its card chrome and block cells are hero-only)",
     "Add your own background, border, or card chrome. The faded grid and surface fill are the band's own treatment.",
-    "Rely on the grid or block art in a dark context; both are tuned light-only",
+    "Rely on the grid or filled cells in a dark context; both are tuned light-only",
   ];
   readonly api: ApiRow[] = [
     { name: "mkt-banner", type: "element", default: "", description: "The full-width band; projects content into a centered, capped column" },
