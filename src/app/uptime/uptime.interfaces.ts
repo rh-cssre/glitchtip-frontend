@@ -28,6 +28,7 @@ interface MonitorBase {
 export interface MonitorInput extends MonitorBase {
   project?: string | null;
   timeout?: number | null;
+  environmentID?: number | null;
 }
 
 export interface ResponseTimeDataItem extends Omit<DataItem, "name"> {

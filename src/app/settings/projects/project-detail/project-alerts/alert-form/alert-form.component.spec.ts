@@ -97,6 +97,17 @@ describe("AlertFormComponent environments", () => {
     expect(select.componentInstance.value).toEqual(["production"]);
   });
 
+  it("scopes the whole alert rather than the event condition", () => {
+    // Nesting the field under the event line would read as if uptime
+    // notifications ignore it, which they do not.
+    setInputs([], ["production", "staging"]);
+    const eventLine = fixture.debugElement.query(By.css(".trigger__line"));
+    expect(eventLine.query(By.css('[data-cy="environments"]'))).toBeNull();
+    expect(
+      fixture.debugElement.query(By.css('[data-cy="environments"]')),
+    ).toBeTruthy();
+  });
+
   it("hides the environments field when the project has none", () => {
     setInputs([], []);
     expect(

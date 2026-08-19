@@ -32,6 +32,7 @@ import { SubscriptionService } from "src/app/api/subscriptions/subscription.serv
 import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
 import { ServerError } from "src/app/shared/django.interfaces";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { EnvironmentsService } from "src/app/api/environments.service";
 import { components } from "src/app/api/api-schema";
 
 type MonitorDetail = components["schemas"]["MonitorDetailSchema"];
@@ -84,6 +85,7 @@ const portUrlValidators = [
 })
 export class MonitorFormComponent implements OnInit {
   private organizationsService = inject(OrganizationsService);
+  private environmentsService = inject(EnvironmentsService);
   private subscriptionService = inject(SubscriptionService);
   dialog = inject(MatDialog);
 
@@ -94,6 +96,7 @@ export class MonitorFormComponent implements OnInit {
   readonly formSubmitted = output<MonitorInput>();
 
   orgProjects = this.organizationsService.activeOrganizationProjects;
+  orgEnvironments = this.environmentsService.orgEnvironments;
   totalEventsAllowed = this.subscriptionService.totalEventsAllowed;
 
   intervalPerMonth = signal<number | null>(null);
@@ -136,6 +139,8 @@ export class MonitorFormComponent implements OnInit {
 
   formProject = new FormControl<string | null>(null);
 
+  formEnvironment = new FormControl<number | null>(null);
+
   monitorForm = new FormGroup({
     monitorType: this.formMonitorType,
     name: this.formName,
@@ -145,6 +150,7 @@ export class MonitorFormComponent implements OnInit {
     interval: this.formInterval,
     timeout: this.formTimeout,
     project: this.formProject,
+    environmentID: this.formEnvironment,
   });
 
   ngOnInit() {
@@ -169,6 +175,7 @@ export class MonitorFormComponent implements OnInit {
       this.formInterval.patchValue(monitorSettings.interval);
       this.formTimeout.patchValue(monitorSettings.timeout!);
       this.formProject.patchValue(monitorSettings.projectID);
+      this.formEnvironment.patchValue(monitorSettings.environmentID ?? null);
     }
 
     this.updateRequiredFields();
@@ -212,6 +219,7 @@ export class MonitorFormComponent implements OnInit {
         interval: this.formInterval.value,
         monitorType: this.formMonitorType.value!,
         project: this.formProject.value ? this.formProject.value : null,
+        environmentID: this.formEnvironment.value,
         expectedStatus: this.formExpectedStatus.enabled
           ? this.formExpectedStatus.value
           : null,

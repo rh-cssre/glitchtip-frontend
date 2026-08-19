@@ -2861,7 +2861,7 @@ export interface components {
             uptime: boolean;
             /**
              * Environments
-             * @description Only alert on events from these environments. Empty matches every environment.
+             * @description Only alert on events and uptime monitors from these environments. Empty matches every environment.
              */
             environments?: string[];
         };
@@ -2896,7 +2896,10 @@ export interface components {
              * @default false
              */
             uptime: boolean;
-            /** Environments */
+            /**
+             * Environments
+             * @description Only alert on events and uptime monitors from these environments. Empty matches every environment.
+             */
             environments?: string[];
         };
         /** WebhookAlertRecipientIn */
@@ -5065,6 +5068,8 @@ export interface components {
             timeout: number | null;
             /** Project */
             project?: string | null;
+            /** Environmentid */
+            environmentID?: number | null;
             /**
              * Monitor Type
              * @default Ping

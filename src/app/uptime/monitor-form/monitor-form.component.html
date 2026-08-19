@@ -152,6 +152,24 @@
           associated project.</div
         >
       </div>
+      <div class="short-field-container">
+        <mat-form-field appearance="outline" data-cy="monitor-environment">
+          <mat-label i18n>Environment</mat-label>
+          <mat-select formControlName="environmentID">
+            <mat-option [value]="null" i18n>None</mat-option>
+            @for (environment of orgEnvironments(); track environment.id) {
+              <mat-option [value]="environment.id">
+                {{ environment.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="help-text caption-text" i18n
+          >A project alert limited to environments only covers monitors in one
+          of them.</div
+        >
+      </div>
       @if (
         formMonitorType.value === "GET" || formMonitorType.value === "POST"
       ) {
