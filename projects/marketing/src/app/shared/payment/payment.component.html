@@ -34,7 +34,7 @@
             <ul class="value-props">
               @for (feature of product.features; track feature.text) {
                 <li>
-                  <mat-icon color="primary">check_circle</mat-icon>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
                   {{ feature.text }}
                   @if (feature.tooltip) {
                     <mat-icon
@@ -95,7 +95,7 @@
             above your plan, and never more than your cap.
           </p>
           <a
-            mat-flat-button
+            mat-stroked-button
             color="primary"
             class="spend-control-cta"
             routerLink="/documentation/on-demand-billing"
@@ -161,7 +161,7 @@
             <ul class="value-props">
               @for (feature of product.features; track feature.text) {
                 <li>
-                  <mat-icon color="primary">check_circle</mat-icon>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
                   {{ feature.text }}
                   @if (feature.tooltip) {
                     <mat-icon
