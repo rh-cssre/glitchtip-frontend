@@ -27,6 +27,7 @@ export const DOCS_NAV: DocGroup[] = [
         title: "Frequently asked questions",
       },
       { slug: "getting-started", title: "Getting started" },
+      { slug: "on-demand-billing", title: "On-demand billing and spend caps" },
     ],
   },
   {
