@@ -12,10 +12,18 @@ import { DetailPagePreview } from "./previews/detail-page.preview";
 import { PermissionGatingPreview } from "./previews/permission-gating.preview";
 import { BrandTypographyPreview } from "./previews/brand-typography.preview";
 import { BrandColorsPreview } from "./previews/brand-colors.preview";
+import { BrandCtaPreview } from "./previews/brand-cta.preview";
+import { BrandCardPreview } from "./previews/brand-card.preview";
 import { BrandOverviewPreview } from "./previews/brand-overview.preview";
 import { BrandPricingCardPreview } from "./previews/brand-pricing-card.preview";
 import { BrandQaPreview } from "./previews/brand-qa.preview";
 import { BrandSimpleTablePreview } from "./previews/brand-simple-table.preview";
+import { BrandLayoutPreview } from "./previews/brand-layout.preview";
+import { BrandSectionHeaderPreview } from "./previews/brand-section-header.preview";
+import { BrandCodeCardPreview } from "./previews/brand-code-card.preview";
+import { BrandPageShellPreview } from "./previews/brand-page-shell.preview";
+import { BrandBannerPreview } from "./previews/brand-banner.preview";
+import { BrandMotionPreview } from "./previews/brand-motion.preview";
 import { ProjectCardPreview } from "./previews/project-card.preview";
 import { BannersPreview } from "./previews/banners.preview";
 import { IconsPreview } from "./previews/icons.preview";
@@ -285,6 +293,37 @@ export const PREVIEWS: PreviewEntry[] = [
     component: BrandColorsPreview,
   },
   {
+    id: "brand-layout",
+    label: "Layout",
+    group: "Foundations",
+    section: "brand",
+    component: BrandLayoutPreview,
+  },
+  {
+    id: "brand-cta",
+    label: "Buttons & CTAs",
+    group: "Patterns",
+    section: "brand",
+    component: BrandCtaPreview,
+    status: "stable",
+  },
+  {
+    id: "brand-card",
+    label: "Cards & surfaces",
+    group: "Patterns",
+    section: "brand",
+    component: BrandCardPreview,
+    status: "stable",
+  },
+  {
+    id: "brand-motion",
+    label: "Motion",
+    group: "Patterns",
+    section: "brand",
+    component: BrandMotionPreview,
+    status: "stable",
+  },
+  {
     id: "brand-pricing-card",
     label: "Pricing card",
     group: "Components",
@@ -306,6 +345,38 @@ export const PREVIEWS: PreviewEntry[] = [
     group: "Components",
     section: "brand",
     component: BrandSimpleTablePreview,
+    status: "stable",
+  },
+  {
+    id: "brand-section-header",
+    label: "Section header",
+    group: "Components",
+    section: "brand",
+    component: BrandSectionHeaderPreview,
+    status: "stable",
+  },
+  {
+    id: "brand-code-card",
+    label: "Code card",
+    group: "Components",
+    section: "brand",
+    component: BrandCodeCardPreview,
+    status: "stable",
+  },
+  {
+    id: "brand-page-shell",
+    label: "Page shell",
+    group: "Components",
+    section: "brand",
+    component: BrandPageShellPreview,
+    status: "stable",
+  },
+  {
+    id: "brand-banner",
+    label: "Banner",
+    group: "Components",
+    section: "brand",
+    component: BrandBannerPreview,
     status: "stable",
   },
   {

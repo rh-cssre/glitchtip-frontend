@@ -24,7 +24,38 @@ html {
   --mat-sys-primary: #d94a5f;
   --mkt-accent-blue: #4a7fd9;
   --mkt-accent-yellow: #d9b44a;
+  --mkt-success: #1f9d6b;
+  --mkt-font-mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --mat-sys-corner-full: 8px;
+
+  // Shared motion feel, so reveals/floats/hovers stay consistent.
+  --mkt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --mkt-duration: 0.6s;
+
+  // Spacing scale (4px base). Use these instead of ad-hoc px so vertical rhythm
+  // and gaps stay on one grid.
+  --mkt-space-1: 4px;
+  --mkt-space-2: 8px;
+  --mkt-space-3: 12px;
+  --mkt-space-4: 16px;
+  --mkt-space-5: 24px;
+  --mkt-space-6: 32px;
+  --mkt-space-7: 48px;
+  --mkt-space-8: 64px;
+  --mkt-space-9: 96px;
+
+  // Layout containers. Every page/band picks ONE of these max-widths; the gutter
+  // formula below gives them a single shared edge.
+  --mkt-container-wide: 1800px; // heroes, full-width bands, page chrome
+  --mkt-container-docs: 1500px; // the docs shell (sidebar + content)
+  --mkt-container-content: 1040px; // standard content pages (support, etc.)
+  --mkt-container-reading: 760px; // prose / blog reading column
+  --mkt-container-narrow: 600px; // forms, centered copy
+  --mkt-gutter: 48px; // used as: width: min(95%, 100% - var(--mkt-gutter))
+
+  // Section rhythm — vertical space between major sections (drives .divider)
+  // so spacing isn't re-invented per page.
+  --mkt-section: clamp(40px, 5vw, 64px);
 }
 
 // Common styles for Angular Material. Included so that we only have to load a
@@ -36,14 +67,30 @@ html {
 body {
   --bg: var(--mat-sys-surface-container-highest);
 
+  // Base brand font for plain elements (e.g. card titles, blog article markup)
+  // that don't inherit a Material typography class. Without this they fall back
+  // to the browser serif.
+  font-family: vars.$font-sans-serif;
+
   background-color: var(--bg);
-  background-image: radial-gradient(
-    circle,
-    var(--mat-sys-outline) 1.3px,
-    transparent 1.3px
-  );
-  background-size: 22px 22px;
-  background-attachment: fixed;
+  // Two layers: a soft central wash that mutes the dot grid under content so
+  // text stays readable, over the dot grid itself. The wash scales with the
+  // viewport, so it covers the reading area on large screens too.
+  background-image:
+    radial-gradient(
+      ellipse 82% 135% at 50% 50%,
+      color-mix(in srgb, var(--bg) 80%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 80%, transparent) 40%,
+      transparent 82%
+    ),
+    radial-gradient(circle, var(--mat-sys-outline) 1.3px, transparent 1.3px);
+  background-size:
+    100% 100%,
+    22px 22px;
+  background-position:
+    center center,
+    center center;
+  background-attachment: fixed, fixed;
 
   &::before,
   &::after {
@@ -328,4 +375,137 @@ a {
 
 .just-the-image {
   padding: 1.5rem 0 75px;
+}
+
+// ── Marketing design-system primitives ──────────────────────────────────────
+// Additive, shared building blocks consumed by the marketing pages. Kept in one
+// place so pages compose them instead of re-inventing surfaces, rows, and CTAs.
+
+// Scroll-reveal: sections fade/rise the first time they enter the viewport.
+// The .is-reveal class is added by RevealDirective in the browser only, so the
+// prerendered HTML (no class) stays fully visible for no-JS and crawlers.
+.is-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--mkt-duration) var(--mkt-ease),
+    transform var(--mkt-duration) var(--mkt-ease);
+  will-change: opacity, transform;
+}
+
+.is-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// Shared hairline section separator on the --mkt-section rhythm.
+.divider {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  margin-top: var(--mkt-section);
+  padding-top: var(--mkt-section);
+}
+
+// Shared CTA row: the standard flex row for a primary + secondary CTA pair (or
+// a lone CTA). Left-aligned by default; centered heroes/bands opt in with
+// `justify-content: center`. One gap token so every CTA pair reads the same.
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mkt-space-3);
+}
+
+// The one marketing card primitive: a flat, border-only surface (surface fill +
+// 1px outline-variant hairline + the large 16px corner for media/cards). No
+// in-flow drop shadow. Compose padding/hover/layout on top per use; code blocks
+// use the small corner instead, so they are deliberately not this primitive.
+.mkt-surface {
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large, 16px);
+}
+
+// Interactive surface card: a .mkt-surface whose border and .mkt-card__title
+// lift to primary on hover. Used for feature/support/doc cards that are links.
+.mkt-card {
+  @extend .mkt-surface;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--mat-sys-primary);
+  }
+}
+
+.mkt-card__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-card:hover .mkt-card__title {
+  color: var(--mat-sys-primary);
+}
+
+// Divider-row title: lifts to primary when its .mkt-row link is hovered (the
+// row itself is a plain link with a bottom hairline, no box).
+.mkt-row__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-row:hover .mkt-row__title {
+  color: var(--mat-sys-primary);
+}
+
+// Prev/next pager (blog posts, docs pages): plain on the surface, set apart by a
+// top hairline; the title goes primary on hover.
+.mkt-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  @media screen and (max-width: vars.$small) {
+    flex-direction: column;
+  }
+}
+
+.mkt-pager__link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 48%;
+  text-decoration: none;
+
+  &.is-next {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &:hover .mkt-pager__title {
+    color: var(--mat-sys-primary);
+  }
+
+  @media screen and (max-width: vars.$small) {
+    max-width: none;
+  }
+
+  .mkt-pager__dir {
+    font-size: 12px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .mkt-pager__title {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+    transition: color 0.15s ease;
+  }
 }
