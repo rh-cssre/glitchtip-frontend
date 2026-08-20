@@ -17,7 +17,12 @@ export const hostedFaqs: Faq[] = [
   {
     question: "What happens when I exceed my event limit?",
     answer:
-      "After your quota is full, we throttle by 10%. We increase this gradually until at 2x the quota we block fully. You can upgrade your plan at any time to increase your limit.",
+      "You're in control. By default we throttle: once your quota is full we start dropping about 10% of events and increase that gradually, blocking fully at twice your quota. You can upgrade your plan at any time. You can also turn on on-demand events and keep ingesting, paying only for what goes over your quota, up to a monthly spend cap you set. Your bill never goes over that cap.",
+  },
+  {
+    question: "How does on-demand usage work?",
+    answer:
+      "On-demand usage (labeled Overage billing in your subscription settings) is opt-in and available on any paid plan. When you turn it on, events above your plan quota are billed per 1,000 events on a tiered scale: $0.17 per 1k for the first 1M events over quota, $0.15 per 1k from 1M to 10M, and $0.12 per 1k after that. The important part is the cap. You set a monthly spend limit, and once you reach it we stop billing and resume throttling, so your bill never goes over your cap. Only organization owners can turn it on.",
   },
   {
     question: "Can I change plans at any time?",

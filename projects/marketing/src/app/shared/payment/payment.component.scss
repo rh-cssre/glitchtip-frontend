@@ -44,6 +44,10 @@
     line-height: 1.2;
   }
 
+  .check-icon {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
   .tooltip-icon {
     float: none;
     font-size: 0.9em;
@@ -93,6 +97,62 @@ mat-card {
   font-size: 0.8em;
   color: var(--mat-sys-primary);
   font-weight: 500;
+}
+
+.spend-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 32px 0 8px;
+  padding: 28px;
+}
+
+.spend-control-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+// Scoped overrides: the pricing page renders this inside `.markdown-container`,
+// which forces h2 to 34px and adds a 6px border to every img. Beat that here.
+.spend-control .spend-control-heading {
+  margin: 0 0 8px;
+  // Medium tier (Material title); explicit so it wins over the markdown h2 size.
+  font: var(--mat-sys-title-large);
+  font-weight: 600;
+}
+
+.spend-control-body {
+  margin: 0 0 20px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.spend-control-cta {
+  white-space: nowrap;
+}
+
+// Layout only; the border opt-out lives in the reusable `.no-frame` modifier.
+.spend-control .spend-control-visual {
+  flex-shrink: 0;
+  width: 280px;
+  max-width: 45%;
+  height: auto;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .spend-control {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  // SVG stays crisp, so stretch it full width (and centered) on mobile.
+  .spend-control .spend-control-visual {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 8px;
+  }
 }
 
 mat-divider {

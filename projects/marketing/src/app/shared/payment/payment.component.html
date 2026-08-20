@@ -34,7 +34,7 @@
             <ul class="value-props">
               @for (feature of product.features; track feature.text) {
                 <li>
-                  <mat-icon color="primary">check_circle</mat-icon>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
                   {{ feature.text }}
                   @if (feature.tooltip) {
                     <mat-icon
@@ -84,6 +84,32 @@
       }
     </div>
     @if (pricingPage()) {
+      <mat-card appearance="outlined" class="spend-control">
+        <div class="spend-control-text">
+          <h2 class="spend-control-heading">
+            Spike past your plan, not your budget
+          </h2>
+          <p class="marketing-body spend-control-body">
+            Turn on on-demand events, set a monthly spend cap, and we resume
+            throttling before you ever go over it. You're only billed for usage
+            above your plan, and never more than your cap.
+          </p>
+          <a
+            mat-stroked-button
+            color="primary"
+            class="spend-control-cta"
+            routerLink="/documentation/on-demand-billing"
+          >
+            Learn how on-demand billing works
+          </a>
+        </div>
+        <img
+          class="spend-control-visual no-frame"
+          src="/assets/pricing/spend-cap-chart.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </mat-card>
       <mkt-pricing-addon-card
         icon="medical_information"
         title="US Healthcare: HIPAA-compliant hosting available"
@@ -135,7 +161,7 @@
             <ul class="value-props">
               @for (feature of product.features; track feature.text) {
                 <li>
-                  <mat-icon color="primary">check_circle</mat-icon>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
                   {{ feature.text }}
                   @if (feature.tooltip) {
                     <mat-icon

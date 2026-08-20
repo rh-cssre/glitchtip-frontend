@@ -6,7 +6,7 @@
   </div>
   @if (isExternal()) {
     <a
-      mat-flat-button
+      mat-stroked-button
       color="primary"
       class="addon-button"
       [href]="buttonUrl()"
@@ -15,7 +15,7 @@
     </a>
   } @else {
     <a
-      mat-flat-button
+      mat-stroked-button
       color="primary"
       class="addon-button"
       [routerLink]="routerPath()"

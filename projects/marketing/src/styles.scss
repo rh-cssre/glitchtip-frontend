@@ -333,6 +333,12 @@ a {
     margin: 20px 0;
     border-radius: var(--mat-sys-corner-large, 16px);
     border: 1px solid var(--mat-sys-outline-variant);
+
+    // Opt out of the default screenshot frame for decorative/inline images.
+    &.no-frame {
+      border: none;
+      border-radius: 0;
+    }
   }
 
   table {
