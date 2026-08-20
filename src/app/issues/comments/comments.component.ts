@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CommentsService } from "./comments.service";
 import { UserService } from "src/app/api/user/user.service";
@@ -9,6 +16,8 @@ import { MatDividerModule } from "@angular/material/divider";
 import { CommentFormComponent } from "./comment-form/comment-form.component";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { DatePipe } from "@angular/common";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "gt-comments",
@@ -23,11 +32,13 @@ import { DatePipe } from "@angular/common";
     MarkdownComponent,
     DatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [CommentsService, provideMarkdown()],
 })
 export class CommentsComponent implements OnInit {
   private userService = inject(UserService);
   protected route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
   commentsService = inject(CommentsService);
 
   comments = this.commentsService.commentsWithUIState;
@@ -63,8 +74,18 @@ export class CommentsComponent implements OnInit {
   }
 
   deleteComment(commentId: number) {
-    if (window.confirm("Are you sure you want to delete this comment?")) {
-      this.commentsService.deleteComment(+this.issueID(), commentId);
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete comment?`,
+        message: $localize`Are you sure you want to delete this comment?`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.commentsService.deleteComment(+this.issueID(), commentId);
+      }
+    });
   }
 }

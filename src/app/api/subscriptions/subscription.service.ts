@@ -1,7 +1,7 @@
 import { computed, Injectable, inject, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
-import { client } from "../../shared/api/api";
+import { client, handleError } from "../../shared/api/api";
 import { OrganizationsService } from "../organizations.service";
 import { SettingsService } from "../settings.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
@@ -12,6 +12,8 @@ export interface SubscriptionState {
   subscriptionRefreshing: boolean;
   subscriptionRefreshTimeout: boolean;
   fromStripe: boolean;
+  overageConfigLoading: boolean;
+  overageConfigError: string;
 }
 
 const initialState: SubscriptionState = {
@@ -20,6 +22,8 @@ const initialState: SubscriptionState = {
   subscriptionRefreshing: false,
   subscriptionRefreshTimeout: false,
   fromStripe: false,
+  overageConfigLoading: false,
+  overageConfigError: "",
 };
 
 @Injectable({
@@ -32,10 +36,17 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   stripePublicKey = this.settingsService.stripePublicKey;
 
+  // The explicitly-selected org (route / switcher), not the activeOrganizationSlug
+  // fallback which defaults to organizations()[0]. These resources are read
+  // app-wide (e.g. the Chatwoot effect in UserService), so keying on the fallback
+  // briefly fetches the first org's data before the route resolves — the "loads
+  // both orgs' subscriptions" / wrong-org fetch.
+  private selectedSlug = computed(
+    () => this.organizationsService.selectedOrganizationSlug() ?? "",
+  );
+  // Subscription fetch is billing-gated: no Stripe calls on self-hosted.
   organizationSlug = computed(() =>
-    this.settingsService.billingEnabled()
-      ? (this.organizationsService.activeOrganizationSlug() ?? "")
-      : "",
+    this.settingsService.billingEnabled() ? this.selectedSlug() : "",
   );
   subscriptionResource = apiResource(this.organizationSlug, (orgSlug) => ({
     url: "/api/0/stripe/subscriptions/{organization_slug}/",
@@ -65,8 +76,17 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     () => this.state().subscriptionRefreshTimeout,
   );
 
-  /** Set to load event count and daily event resources (subscription detail page only) */
-  private detailSlug = signal<string>("");
+  // Gates the detail-page resources below; component owns the on/off lifecycle.
+  // Keyed on selectedSlug, not the billing-gated organizationSlug, so the
+  // self-hosted usage charts load too.
+  private detailActive = signal(false);
+  private detailSlug = computed(() =>
+    this.detailActive() ? this.selectedSlug() : "",
+  );
+
+  setDetailActive(active: boolean) {
+    this.detailActive.set(active);
+  }
 
   eventsCountCurrentPeriodResource = apiResource(
     this.detailSlug,
@@ -119,6 +139,20 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     return this.dailyEventsResource.value()?.data ?? [];
   });
 
+  // Overage status. Gated on detailSlug like the usage resources; fails soft.
+  overageStatusResource = apiResource(this.detailSlug, (orgSlug) => ({
+    url: "/api/0/stripe/subscriptions/{organization_slug}/overage/",
+    options: {
+      params: {
+        path: { organization_slug: orgSlug },
+      },
+    },
+  }));
+  overageStatus = computed(() => {
+    if (this.overageStatusResource.error()) return null;
+    return this.overageStatusResource.value() ?? null;
+  });
+
   predictedEndOfMonth = computed(() => {
     const subscription = this.subscription();
     const eventsCountCurrentPeriod = this.eventsCountCurrentPeriod();
@@ -145,6 +179,42 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     );
   });
 
+  overageEnabled = computed(() => this.overageStatus()?.enabled ?? false);
+  overageEligible = computed(() => this.overageStatus()?.eligible ?? false);
+  overageConfigured = computed(() => this.overageStatus()?.configured ?? false);
+
+  // Progress by units, not cost (floored capUnits keep cost just under the cap).
+  capProgressPercent = computed(() => {
+    const s = this.overageStatus();
+    if (!s || !s.capUnits) return 0;
+    return Math.min(100, Math.round((s.overageUnits / s.capUnits) * 100));
+  });
+
+  // Cap reached when units hit the ceiling. By units, not throttleRate (noisy)
+  // or cost (floored, see above).
+  capReached = computed(() => {
+    const s = this.overageStatus();
+    if (!s || !s.enabled) return false;
+    return s.capUnits > 0 && s.overageUnits >= s.capUnits;
+  });
+
+  // Forecast cap hit this cycle, in units (clients have no tier rates for $).
+  private predictedOverageUnits = computed(() => {
+    const predicted = this.predictedEndOfMonth();
+    const s = this.overageStatus();
+    if (predicted == null || !s) return null;
+    return Math.max(0, predicted - s.quota);
+  });
+  willReachCap = computed(() => {
+    const s = this.overageStatus();
+    const predUnits = this.predictedOverageUnits();
+    if (!s || !s.enabled || !s.capUnits || predUnits == null) return false;
+    return predUnits >= s.capUnits;
+  });
+
+  overageConfigLoading = computed(() => this.state().overageConfigLoading);
+  overageConfigError = computed(() => this.state().overageConfigError);
+
   billingPortalLoading = computed(() => this.state().billingPortalLoading);
   billingPortalLoadingError = computed(
     () => this.state().billingPortalLoadingError,
@@ -166,13 +236,6 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   constructor() {
     super(initialState);
-  }
-
-  /** Load event count and daily event data for the subscription detail page */
-  loadDetailData(orgSlug: string) {
-    if (orgSlug) {
-      this.detailSlug.set(orgSlug);
-    }
   }
 
   /**
@@ -215,6 +278,45 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       this.setState({ billingPortalLoading: false });
       window.location.href = data.url;
     }
+  }
+
+  /**
+   * Enable/disable metered overage billing and set the spend cap (owner-only).
+   * Enabling migrates the Stripe subscription from classic to flexible (one-way)
+   * and attaches a metered item; the caller confirms that with the user first.
+   */
+  async configureOverage(enabled: boolean, capCents: number) {
+    this.setState({ overageConfigLoading: true, overageConfigError: "" });
+    const orgSlug = this.organizationSlug();
+    const { data, error, response } = await client.POST(
+      "/api/0/stripe/organizations/{organization_slug}/overage/",
+      {
+        params: { path: { organization_slug: orgSlug } },
+        body: { enabled, capCents },
+      },
+    );
+    const status = response.status;
+    if (status === 404) {
+      this.setState({
+        overageConfigLoading: false,
+        overageConfigError:
+          "Only organization owners can change billing settings.",
+      });
+      return null;
+    }
+    if (error || !data) {
+      this.setState({
+        overageConfigLoading: false,
+        overageConfigError: handleError(error, response).detail[0].msg,
+      });
+      return null;
+    }
+    // Success: reflect the returned status immediately and refresh the
+    // subscription (billing mode may have migrated to flexible).
+    this.overageStatusResource.set(data);
+    this.subscriptionResource.reload();
+    this.setState({ overageConfigLoading: false, overageConfigError: "" });
+    return data;
   }
 
   /**
@@ -283,11 +385,19 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   clearState() {
     super.clearState();
-    this.detailSlug.set("");
-    this.subscriptionResource.set(undefined);
+    this.detailActive.set(false);
+    // Intentionally NOT clearing subscriptionResource here: it is keyed on the
+    // selected org slug, which is unchanged on client-side re-entry within the
+    // same org, so once cleared it would not refetch and the page would render
+    // the empty "no subscription" view until a full page reload. It updates
+    // reactively on org change and is reloaded by the flows that mutate it
+    // (free-tier creation, post-Stripe return). The per-page usage resources
+    // below are safe to clear; they refetch reactively once setDetailActive(true)
+    // re-flips detailSlug back to the current org on re-entry.
     this.eventsCountCurrentPeriodResource.set(undefined);
     this.dailyEventsResource.set(undefined);
     this.eventsCountPreviousPeriodResource.set(undefined);
+    this.overageStatusResource.set(undefined);
     clearInterval(this.refreshTimerRef);
     this.refreshTimerRef = undefined;
   }

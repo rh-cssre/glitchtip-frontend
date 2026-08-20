@@ -18,7 +18,10 @@ https://your-glitchtip.example.com/mcp
 
 ## Authentication
 
-The MCP server uses OAuth 2.0 for authentication. AI clients authenticate using GlitchTip API tokens. The server supports dynamic client registration, so compatible MCP clients can register automatically.
+The MCP server supports two ways to authenticate:
+
+- **OAuth 2.0** — Compatible clients connect with no manual setup. The server supports dynamic client registration, so the client registers itself and handles the OAuth flow for you.
+- **API token** — Alternatively, authenticate with a GlitchTip API token, for clients that don't support OAuth or when you'd rather use a static credential.
 
 ## Connecting an AI Client
 
@@ -37,6 +40,16 @@ Add GlitchTip as an MCP server in your Claude Desktop configuration:
 ```
 
 Claude Desktop will handle the OAuth flow automatically when you first connect.
+
+### Claude Code
+
+Add GlitchTip from the command line with `claude mcp add`:
+
+```
+claude mcp add --transport http glitchtip https://your-glitchtip.example.com/mcp
+```
+
+On first connect, Claude Code walks you through authentication.
 
 ### Other MCP Clients
 
@@ -73,7 +86,7 @@ The MCP server exposes 17 tools across several categories:
 - **list_alerts** — List alert rules for an organization, optionally filtered by project
 - **list_monitors** — List uptime monitors for an organization
 
-### Logs (when `GLITCHTIP_ENABLE_LOGS=True`)
+### Logs
 
 - **list_logs** — Search log events by level, service, environment, trace ID, or text query
 - **get_log** — Get a single log event by ID

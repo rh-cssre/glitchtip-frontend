@@ -45,6 +45,14 @@ html {
   --issues-color: #f27121;
   --uptime-color: #8a2387;
   --logs-color: #2196f3;
+
+  // Log severity palette: AA-compliant per mode (darker on light, bright on dark)
+  --log-error-color: light-dark(#c62828, #ef4444);
+  --log-warn-color: light-dark(#a16207, #f59e0b);
+  --log-info-color: light-dark(#1d4ed8, #3b82f6);
+  --log-debug-color: light-dark(#6d28d9, #a78bfa);
+  --log-trace-color: light-dark(#4b5563, #9ca3af);
+  --log-service-color: light-dark(#047857, #10b981);
 }
 
 .light {
@@ -170,6 +178,11 @@ mat-sidenav-container {
   width: 220px !important;
 }
 
+// Underline on hover signals external links without needing an icon.
+.mat-mdc-menu-panel.support-menu-panel .mat-mdc-menu-item:hover > span {
+  text-decoration: underline;
+}
+
 .l-body {
   max-width: 1100px;
   padding-left: 24px;
@@ -211,7 +224,6 @@ mat-sidenav-container {
   width: 100%;
 }
 
-
 .tt-wrapping {
   overflow-wrap: break-word;
   height: auto;
@@ -243,6 +255,85 @@ mat-sidenav-container {
 .input-icon-button {
   @extend .small-icon-button;
   margin-right: 8px;
+}
+
+// Search-syntax help popover (rendered in the CDK overlay; styles must be global).
+// Wider than a regular menu because rows contain chip groups and short prose.
+.mat-mdc-menu-panel.search-help-menu {
+  max-width: min(420px, calc(100vw - 32px)) !important;
+
+  // Re-enable text selection so users can copy operator tokens.
+  .mat-mdc-menu-content {
+    padding: 0;
+    user-select: text;
+  }
+}
+
+.search-help {
+  padding: 16px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.search-help__heading {
+  font: var(--mat-sys-title-small);
+  margin: 0;
+}
+
+.search-help__section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.search-help__section-title {
+  font: var(--mat-sys-label-large);
+  margin: 0;
+}
+
+.search-help__section-note {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+}
+
+.search-help__footer {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin: 4px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.search-help__chip {
+  cursor: pointer;
+
+  code {
+    font-family: vars.$font-mono;
+    font-size: 0.85em;
+  }
+}
+
+.search-help__samples {
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+
+  code {
+    font-family: vars.$font-mono;
+    font-size: 0.9em;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--mat-sys-surface-container-high);
+  }
+}
+
+.search-help__samples-sep {
+  color: var(--mat-sys-outline);
 }
 
 .medium-icon-button {

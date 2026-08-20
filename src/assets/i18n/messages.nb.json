@@ -100,7 +100,7 @@
   "520980174761118864": "Logg inn med {$INTERPOLATION}",
   "5715233980836936433": "Donate {$START_LINK} via that Liberapay {$CLOSE_LINK}",
   "5349000458605027240": " Switch to {$START_LINK}Hosted GlitchTip{$CLOSE_LINK}",
-  "3509639242131814864": " Purchase support: {$START_LINK}sales@glitchtip.com{$CLOSE_LINK}",
+  "3509639242131814864": " Purchase support: {$START_LINK}support@glitchtip.com{$CLOSE_LINK}",
   "1830742686550996935": "This organization has no projects.",
   "79938863716203390": "To add a project to this organization, press the \"Add Project\" button.",
   "8267592046747299006": "You can't see issues for this project because you're not on the team.",

@@ -1,7 +1,7 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  OnInit,
+  effect,
   inject,
   input,
 } from "@angular/core";
@@ -27,7 +27,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   ],
   providers: [SettingsProjectsService],
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent {
   private service = inject(SettingsProjectsService);
   private organizationsService = inject(OrganizationsService);
 
@@ -36,7 +36,9 @@ export class ProjectsComponent implements OnInit {
   projects = this.service.projects;
   accessProjectWrite = this.organizationsService.accessProjectWrite;
 
-  ngOnInit() {
-    this.service.orgSlug.set(this.orgSlug());
+  constructor() {
+    effect(() => {
+      this.service.orgSlug.set(this.orgSlug());
+    });
   }
 }

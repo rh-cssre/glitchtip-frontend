@@ -1,77 +1,109 @@
 @if (eventEntryRequest(); as request) {
-<section class="mat-typography">
-  <mat-divider></mat-divider>
-  <section class="location">
-    <span class="method mat-body-strong">{{
-      request?.method ? request?.method : "GET"
+  <section class="mat-typography">
+    <mat-divider></mat-divider>
+    <section class="location">
+      <span class="method mat-body-strong">{{
+        request?.method ? request?.method : "GET"
       }}</span>
-    <a [matTooltip]="request.url" matTooltipPosition="above" color="primary" target="_blank" [href]="request?.url">{{
-      request?.path
-      }}</a>
-    <span class="domain">{{ request?.domainName }}</span>
-  </section>
-  <section>
-    @if (request.data) {
-    <div>
-      <mat-divider></mat-divider>
-      <div class="title-bar">
-        <h3>Body</h3>
-        <mat-button-toggle-group #group="matButtonToggleGroup" [value]="viewMode()" (change)="viewMode.set(group.value)"
-          aria-label="Request Body View">
-          <mat-button-toggle value="structured">Structured</mat-button-toggle>
-          <mat-button-toggle value="raw">Raw</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-      @if (viewMode() === "structured") {
-      <dl>
-        @for (requestData of request.data | keyvalue; track requestData) {
-        <gt-entry-data [key]="requestData.key" [value]="requestData.value"></gt-entry-data>
-        }
-      </dl>
-      } @else {
-      <div class="json-container">
-        @if (rawBody()) {
-        <button mat-icon-button class="copy-button" [class.copied]="copied()" [cdkCopyToClipboard]="rawBody()!"
-          (cdkCopyToClipboardCopied)="copy()" matTooltip="Copy JSON to clipboard" aria-label="Copy JSON to clipboard">
-          <mat-icon>file_copy</mat-icon>
-        </button>
-        }
-        <pre class="line-numbers"><code gtPrism [language]="'json'">{{ rawBody() }}</code></pre>
-      </div>
+      <a
+        [matTooltip]="request.url"
+        matTooltipPosition="above"
+        color="primary"
+        target="_blank"
+        [href]="$safeNavigationMigration(request?.url)"
+        >{{ request?.path }}</a
+      >
+      <span class="domain">{{ request?.domainName }}</span>
+    </section>
+    <section>
+      @if (request.data) {
+        <div>
+          <mat-divider></mat-divider>
+          <div class="title-bar">
+            <h3>Body</h3>
+            <mat-button-toggle-group
+              #group="matButtonToggleGroup"
+              [value]="viewMode()"
+              (change)="viewMode.set(group.value)"
+              aria-label="Request Body View"
+            >
+              <mat-button-toggle value="structured"
+                >Structured</mat-button-toggle
+              >
+              <mat-button-toggle value="raw">Raw</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          @if (viewMode() === "structured") {
+            <dl>
+              @for (requestData of request.data | keyvalue; track requestData) {
+                <gt-entry-data
+                  [key]="requestData.key"
+                  [value]="requestData.value"
+                ></gt-entry-data>
+              }
+            </dl>
+          } @else {
+            <div class="json-container">
+              @if (rawBody()) {
+                <button
+                  mat-icon-button
+                  class="copy-button"
+                  [class.copied]="copied()"
+                  [cdkCopyToClipboard]="rawBody()!"
+                  (cdkCopyToClipboardCopied)="copy()"
+                  matTooltip="Copy JSON to clipboard"
+                  aria-label="Copy JSON to clipboard"
+                >
+                  <mat-icon>file_copy</mat-icon>
+                </button>
+              }
+              <pre
+                class="line-numbers"
+              ><code gtPrism [language]="'json'">{{ rawBody() }}</code></pre>
+            </div>
+          }
+        </div>
       }
-    </div>
-    }
-    @if (request?.query) {
-    <section>
-      <h3>Query String</h3>
-      <dl>
-        @for (query of request?.query; track query) {
-        <gt-entry-data [key]="query[0]" [value]="query[1]"></gt-entry-data>
-        }
-      </dl>
+      @if (request?.query) {
+        <section>
+          <h3>Query String</h3>
+          <dl>
+            @for (query of request?.query; track query) {
+              <gt-entry-data
+                [key]="query[0]"
+                [value]="query[1]"
+              ></gt-entry-data>
+            }
+          </dl>
+        </section>
+      }
+      @if (request?.headers) {
+        <section>
+          <h3>Headers</h3>
+          <dl>
+            @for (header of request?.headers; track header) {
+              <gt-entry-data
+                [key]="header[0]"
+                [value]="header[1]"
+              ></gt-entry-data>
+            }
+          </dl>
+        </section>
+      }
+      @if (request?.env) {
+        <section>
+          <mat-divider></mat-divider>
+          <h3>Environment</h3>
+          <dl>
+            @for (env of request.env | keyvalue; track env) {
+              <gt-entry-data
+                [key]="env.key"
+                [value]="env.value"
+              ></gt-entry-data>
+            }
+          </dl>
+        </section>
+      }
     </section>
-    }
-    @if (request?.headers) {
-    <section>
-      <h3>Headers</h3>
-      <dl>
-        @for (header of request?.headers; track header) {
-        <gt-entry-data [key]="header[0]" [value]="header[1]"></gt-entry-data>
-        }
-      </dl>
-    </section>
-    }
-    @if (request?.env) {
-    <section>
-      <mat-divider></mat-divider>
-      <h3>Environment</h3>
-      <dl>
-        @for (env of request.env | keyvalue; track env) {
-        <gt-entry-data [key]="env.key" [value]="env.value"></gt-entry-data>
-        }
-      </dl>
-    </section>
-    }
   </section>
-</section>
 }

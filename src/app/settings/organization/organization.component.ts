@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { tap, take } from "rxjs/operators";
 import { OrganizationDetailService } from "../../api/organizations/organization-detail.service";
@@ -17,6 +23,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   selector: "gt-organization",
   templateUrl: "./organization.component.html",
   styleUrls: ["./organization.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatDividerModule,
@@ -24,7 +31,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
     MatFormFieldModule,
     MatInputModule,
     LoadingButtonComponent,
-    TopAppBar
+    TopAppBar,
   ],
 })
 export class OrganizationComponent implements OnDestroy, OnInit {
@@ -73,11 +80,8 @@ export class OrganizationComponent implements OnDestroy, OnInit {
 
   removeOrganization(slug: string, name: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      restoreFocus: false,
-      height: "225px",
-      width: "375px",
       data: {
-        title: $localize`Remove organization`,
+        title: $localize`Remove organization?`,
         message: $localize`Are you sure you want to remove ${name}? You will permanently lose all projects and teams associated with it.`,
         confirmText: $localize`Remove`,
       },

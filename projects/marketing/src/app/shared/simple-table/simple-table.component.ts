@@ -1,8 +1,9 @@
-import { Component, input } from "@angular/core";
+import { Component, input, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
   selector: "mkt-simple-table",
   templateUrl: "./simple-table.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./simple-table.component.scss"],
 })
 export class SimpleTableComponent {

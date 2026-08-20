@@ -34,6 +34,24 @@ section {
   }
 }
 
+// "copy for AI" rendered as a sibling that visually matches the "raw JSON"
+// anchor next to it (bold, on-surface colour, no underline).
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+}
+
+.action-separator {
+  margin: 0 6px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
 .tags {
   margin-top: 16px;
 }

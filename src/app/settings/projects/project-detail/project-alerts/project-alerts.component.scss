@@ -18,7 +18,7 @@ mat-card-header {
 }
 
 .error {
-  color: #f44336;
+  color: var(--mat-sys-error);
   text-align: center;
 
   span {
@@ -51,14 +51,6 @@ mat-card-header {
   gt-loading-button {
     margin-right: 16px;
   }
-}
-
-.no-alerts {
-  text-align: center;
-  padding-top: 24px;
-  padding-bottom: 16px;
-  margin-left: 16px;
-  margin-right: 16px;
 }
 
 .alert {
@@ -119,7 +111,7 @@ mat-card-header {
   justify-content: flex-start;
   align-items: center;
   width: 50%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
   padding: 8px 0;
 
   @media screen and (max-width: vars.$large - 1) {
@@ -127,7 +119,7 @@ mat-card-header {
   }
 
   &.border-top {
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid var(--mat-sys-outline-variant);
   }
 
   .alert-type {

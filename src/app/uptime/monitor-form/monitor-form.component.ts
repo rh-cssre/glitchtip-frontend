@@ -5,6 +5,7 @@ import {
   output,
   inject,
   signal,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import {
@@ -64,6 +65,7 @@ const portUrlValidators = [
   selector: "gt-monitor-form",
   templateUrl: "./monitor-form.component.html",
   styleUrls: ["./monitor-form.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DecimalPipe,
     NgTemplateOutlet,

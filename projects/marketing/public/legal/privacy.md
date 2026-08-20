@@ -12,7 +12,7 @@ fundamental principles:
 Below is our privacy policy which incorporates these goals.
 
 If you have questions about deleting or correcting your personal data
-please contact us at [privacy@mail.glitchtip.com](mailto:privacy@mail.glitchtip.com).
+please contact us at [support@glitchtip.com](mailto:support@glitchtip.com).
 GlitchTip operates several websites including glitchtip.com. It is
 GlitchTip’s policy to respect your privacy regarding any information we
 may collect while operating our websites.

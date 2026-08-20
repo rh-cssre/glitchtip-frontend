@@ -1,15 +1,14 @@
-import { Component, inject } from "@angular/core";
-import { LinksService } from "../links.service";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { DOCS_NAV } from "./docs-nav";
 
 @Component({
-  imports: [RouterLink, MatCardModule],
+  imports: [RouterLink, MatIconModule],
   templateUrl: "./documentation-index.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./documentation-index.component.scss"],
 })
 export class DocumentationIndexComponent {
-  private links = inject(LinksService);
-
-  registerLink = this.links.registerLink;
+  protected readonly nav = DOCS_NAV;
 }

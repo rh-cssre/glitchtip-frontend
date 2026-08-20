@@ -1,14 +1,12 @@
 @if (TOTPAuthenticator()) {
   <div>
-    <p class="mat-h2"><strong i18n>Regenerate backup codes</strong></p>
-    <p class="mat-h4" i18n
-      >If you have lost your backup codes you can generate new ones,
-      invalidating all previous codes.
-      <strong>Print out these new codes or save them someplace safe.</strong>
+    <p class="mat-h2"><strong i18n>Backup codes</strong></p>
+    <p class="mat-h4" i18n>
+      Lost your codes? Generate a new set. This invalidates the old one, so save
+      the new codes somewhere safe.
     </p>
     <button
       mat-stroked-button
-      color="primary"
       (click)="startRegenCodes()"
       [disabled]="regenCodes()"
       i18n
@@ -19,26 +17,20 @@
 @if (regenCodes() || TOTPAuthenticator() === undefined) {
   <div>
     @if (TOTPAuthenticator() === undefined) {
-      <p class="mat-h4" i18n
-        >Download or copy a list of backup codes. If you ever lose your phone,
-        each of these recovery codes can be used one time to regain access to
-        your account.
-        <strong>Print them out or save them someplace safe.</strong>
+      <p i18n>
+        Save these codes somewhere safe. Each one lets you sign in once if you
+        lose your phone.
       </p>
     }
     <div class="button-group">
-      <button mat-flat-button color="primary" (click)="downloadCodes()" i18n
+      <button mat-stroked-button (click)="downloadCodes()" i18n
         >Download</button
       >
-      <button mat-flat-button color="primary" (click)="copyCodes()" i18n
-        >Copy</button
-      >
+      <button mat-stroked-button (click)="copyCodes()" i18n>Copy</button>
     </div>
     @if (!regenCodes()) {
       <ng-container>
-        <p class="body-text-strong" i18n
-          >Enter one of the backup codes to confirm that you have saved them:</p
-        >
+        <p i18n>Enter one of the codes to confirm you have saved them:</p>
         <form [formGroup]="backupCodeForm">
           <gt-form-error></gt-form-error>
           <mat-form-field appearance="outline">

@@ -3,5 +3,6 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  billingEmail: "sales@glitchtip.com",
+  billingEmail: "support@glitchtip.com",
+  stripePortalLoginUrl: "https://billing.stripe.com/p/login/aFa8wQbQngs69vu6SRds401",
 };

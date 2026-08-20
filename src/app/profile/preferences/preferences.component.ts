@@ -1,4 +1,11 @@
-import { Component, OnInit, effect, inject, signal } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  effect,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   AbstractControl,
   FormControl,
@@ -33,6 +40,7 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   selector: "gt-preferences",
   templateUrl: "./preferences.component.html",
   styleUrls: ["./preferences.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatDividerModule,
@@ -103,7 +111,7 @@ export class PreferencesComponent implements OnInit {
           this.form.controls.theme.setValue("light");
         }
         // Ensure effect only runs once after user details are loaded
-        userDetailsInit.destroy()
+        userDetailsInit.destroy();
       }
     });
   }

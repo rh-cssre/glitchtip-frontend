@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -15,6 +15,7 @@ import { RouterModule } from "@angular/router";
     RouterModule,
   ],
   templateUrl: "./pagination-buttons.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./pagination-buttons.scss"],
 })
 export class PaginationButtons {

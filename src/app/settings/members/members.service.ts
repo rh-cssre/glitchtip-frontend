@@ -115,9 +115,7 @@ export class MembersService extends StatefulService<MembersState> {
         this.router.navigate(["/"]);
       }
       if (orgSlug) {
-        await this.organizationDetailService.retrieveOrganizationMembers(
-          orgSlug,
-        );
+        this.organizationDetailService.organizationMembersResource.reload();
       }
     }
   }

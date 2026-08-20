@@ -1,15 +1,15 @@
-import { Component } from "@angular/core";
-import { MatCard } from "@angular/material/card";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDivider } from "@angular/material/divider";
 import { RouterLink } from "@angular/router";
 import { SimpleTableComponent } from "../shared/simple-table/simple-table.component";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 
 @Component({
   selector: "mkt-hipaa",
   imports: [
-    MatCard,
+    PageShellComponent,
     MatButtonModule,
     MatExpansionModule,
     MatDivider,
@@ -17,6 +17,7 @@ import { SimpleTableComponent } from "../shared/simple-table/simple-table.compon
     SimpleTableComponent,
   ],
   templateUrl: "./hipaa.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./hipaa.component.scss"],
 })
 export class HipaaComponent {
@@ -25,14 +26,14 @@ export class HipaaComponent {
     ["DigitalOcean (NYC1)", "Infrastructure & hosting"],
     ["Mailgun", "Transactional email (alerts)"],
     ["Stripe", "Payment processing (billing data only)"],
-    ["Cloudflare", "DNS & network proxy (app.glitchtip.com)"],
+    ["Cloudflare", "DNS only on the US instance (app.glitchtip.com)"],
   ];
 
   faqs = [
     {
       question: "Does GlitchTip sign a Business Associate Agreement?",
       answer:
-        "Yes. BAAs are available on our Large plan. Contact sales@glitchtip.com to get a BAA in place before processing PHI.",
+        "Yes. BAAs are available on our Large plan. Contact support@glitchtip.com to get a BAA in place before processing PHI.",
     },
     {
       question:

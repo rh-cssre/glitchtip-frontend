@@ -6,6 +6,7 @@ import {
   getPaginationHeaders,
   getPaginator,
 } from "src/app/shared/pagination.utils";
+import { keepPreviousValue } from "src/app/shared/signal.utils";
 
 @Injectable()
 export class MonitorListService {
@@ -39,8 +40,12 @@ export class MonitorListService {
     },
   });
   loading = computed(() => this.monitorsResource.isLoading());
-  monitors = computed(() => this.monitorsResource.value()?.data ?? []);
-  pagination = computed(() => this.monitorsResource.value()?.pagination);
+  // Keep the last page visible during a reload so the table doesn't blank out.
+  #monitorsData = keepPreviousValue(() => this.monitorsResource.value()?.data);
+  monitors = computed(() => this.#monitorsData() ?? []);
+  pagination = keepPreviousValue(
+    () => this.monitorsResource.value()?.pagination,
+  );
   paginator = computed(() => getPaginator(this.pagination()));
   activeOrganizationSlug = this.organizationsService.activeOrganizationSlug;
 }

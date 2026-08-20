@@ -1,0 +1,58 @@
+<mat-menu
+  #supportMenu="matMenu"
+  xPosition="after"
+  class="nav-menu support-menu-panel"
+>
+  <a
+    mat-menu-item
+    href="https://glitchtip.com/documentation"
+    target="_blank"
+    rel="noopener"
+  >
+    <mat-icon>developer_guide</mat-icon>
+    <span i18n>Documentation</span>
+  </a>
+  <a
+    mat-menu-item
+    href="https://gitlab.com/glitchtip/glitchtip/-/issues"
+    target="_blank"
+    rel="noopener"
+  >
+    <mat-icon>code</mat-icon>
+    <span i18n>Report a bug</span>
+  </a>
+  @if (paidForGlitchTip() === false && billingEnabled() === false) {
+    <a
+      mat-menu-item
+      href="https://liberapay.com/GlitchTip/donate"
+      target="_blank"
+      rel="noopener"
+    >
+      <mat-icon>favorite</mat-icon>
+      <span i18n>Sponsor on Liberapay</span>
+    </a>
+  }
+  @if (paidForGlitchTip() === true && billingEnabled() === false) {
+    <mat-divider />
+    <a
+      mat-menu-item
+      [href]="supportUrl() || fallbackSupportUrl"
+      target="_blank"
+      rel="noopener"
+    >
+      <mat-icon>chat</mat-icon>
+      <span i18n>Open Support Chat</span>
+    </a>
+  } @else if (paidForGlitchTip() === false && billingEnabled() === false) {
+    <mat-divider />
+    <a
+      mat-menu-item
+      href="https://glitchtip.com/pricing?plan=self-hosted"
+      target="_blank"
+      rel="noopener"
+    >
+      <mat-icon>support</mat-icon>
+      <span i18n>Get Priority Support</span>
+    </a>
+  }
+</mat-menu>

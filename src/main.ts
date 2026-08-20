@@ -21,6 +21,7 @@ import {
   HttpRequest,
   provideHttpClient,
   withInterceptors,
+  withXhr,
 } from "@angular/common/http";
 import {
   provideRouter,
@@ -95,7 +96,7 @@ const bootstrap = () =>
           paramsInheritanceStrategy: "always",
         }),
       ),
-      provideHttpClient(withInterceptors([...extraInterceptors])),
+      provideHttpClient(withXhr(), withInterceptors([...extraInterceptors])),
       provideMicroSentry({
         ignoreErrors: [serverErrorsRegex],
       }),
@@ -105,7 +106,7 @@ const bootstrap = () =>
       },
       {
         provide: MAT_CARD_CONFIG,
-        useValue: { appearance: 'outlined' },
+        useValue: { appearance: "outlined" },
       },
       { provide: ErrorHandler, useClass: CustomMicroSentryErrorHandler },
       { provide: TitleStrategy, useClass: TemplatePageTitleStrategy },

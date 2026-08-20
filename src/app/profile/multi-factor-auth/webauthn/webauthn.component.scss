@@ -28,7 +28,7 @@ mat-card-title {
 .key_headings {
   display: grid;
   grid-template-columns: 1.7fr 1fr 0.3fr;
-  background-color: #e5e5e5;
+  background-color: var(--mat-sys-surface-container);
   padding-left: 7px;
 }
 

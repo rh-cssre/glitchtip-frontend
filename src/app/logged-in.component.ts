@@ -1,18 +1,15 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { MainNavComponent } from "./main-nav/main-nav/main-nav.component";
-import { UserService } from "./api/user/user.service";
 
 @Component({
   selector: "gt-logged-in",
   templateUrl: "./logged-in.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MainNavComponent, RouterOutlet],
 })
-export class LoggedInComponent implements OnInit {
-  private userService = inject(UserService);
-
-  ngOnInit() {
-    // this.organizationService.retrieveOrganizations().subscribe();
-    this.userService.getUserDetails();
-  }
+export class LoggedInComponent {
+  // The current user is loaded reactively by UserService.userResource (keyed on
+  // AuthService.isAuthenticated), so this shell no longer fetches it explicitly
+  // on init — doing so duplicated GET /api/0/users/me/ on every app load.
 }

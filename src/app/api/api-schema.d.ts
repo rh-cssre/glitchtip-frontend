@@ -21,6 +21,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/instance-license/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Instance License */
+        get: operations["glitchtip_api_api_get_instance_license"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/instance-license/support-link/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Support Link */
+        get: operations["glitchtip_api_api_get_support_link"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/": {
         parameters: {
             query?: never;
@@ -1289,6 +1323,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/stripe/subscriptions/{organization_slug}/overage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Overage Status */
+        get: operations["apps_stripe_api_get_overage_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/stripe/organizations/{organization_slug}/overage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Configure Overage
+         * @description Enable/disable metered overage billing and set the spend cap (owner-only).
+         *
+         *     Enabling attaches the metered overage price as a second subscription item;
+         *     disabling removes it. Either way a throttle re-check is enqueued so the new
+         *     headroom (or block) takes effect promptly.
+         */
+        post: operations["apps_stripe_api_configure_overage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/organizations/{organization_slug}/repos/": {
         parameters: {
             query?: never;
@@ -1942,8 +2017,6 @@ export interface components {
             billingEnabled: boolean;
             /** Ipaidforglitchtip */
             iPaidForGlitchTip: boolean;
-            /** Licensekey */
-            licenseKey: string;
             /** Enableuserregistration */
             enableUserRegistration: boolean;
             /** Enablesocialappsuserregistration */
@@ -1988,6 +2061,16 @@ export interface components {
             client_id: string;
             /** Provider */
             provider: string;
+        };
+        /** InstanceLicenseOut */
+        InstanceLicenseOut: {
+            /** Billingemail */
+            billingEmail: string;
+        };
+        /** SupportLinkOut */
+        SupportLinkOut: {
+            /** Url */
+            url: string;
         };
         /** APIRootSchema */
         APIRootSchema: {
@@ -2815,7 +2898,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            recipientType: "discord" | "googlechat" | "ntfy" | "teams" | "webhook";
+            recipientType: "discord" | "feishu" | "googlechat" | "ntfy" | "teams" | "webhook";
             /**
              * Url
              * Format: uri
@@ -3968,16 +4051,6 @@ export interface components {
              * @default true
              */
             openMembership: boolean;
-            /**
-             * Licensekey
-             * @default
-             */
-            licenseKey?: string;
-            /**
-             * Licensebillingemail
-             * @default
-             */
-            licenseBillingEmail?: string;
         };
         /**
          * ProjectTeamSchema
@@ -4085,16 +4158,6 @@ export interface components {
              * @description The name of the organization
              */
             name: string;
-            /**
-             * Licensekey
-             * @default
-             */
-            licenseKey?: string;
-            /**
-             * Licensebillingemail
-             * @default
-             */
-            licenseBillingEmail?: string;
         };
         /** OrganizationUserSchema */
         OrganizationUserSchema: {
@@ -4659,11 +4722,6 @@ export interface components {
              * @default month
              */
             interval: string;
-            /**
-             * Is Public
-             * @default false
-             */
-            isPublic: boolean;
         };
         /** StripeProductExpandedPriceSchema */
         StripeProductExpandedPriceSchema: {
@@ -4802,6 +4860,39 @@ export interface components {
         DailyEventsCountSchema: {
             /** Data */
             data: components["schemas"]["DailyEventCountEntry"][];
+        };
+        /** OverageStatusSchema */
+        OverageStatusSchema: {
+            /** Enabled */
+            enabled: boolean;
+            /** Eligible */
+            eligible: boolean;
+            /** Configured */
+            configured: boolean;
+            /** Capcents */
+            capCents: number;
+            /** Capunits */
+            capUnits: number;
+            /** Quota */
+            quota: number;
+            /** Usage */
+            usage: number;
+            /** Overageunits */
+            overageUnits: number;
+            /** Overagecostcents */
+            overageCostCents: number;
+            /** Throttlerate */
+            throttleRate: number;
+        };
+        /** OverageConfigIn */
+        OverageConfigIn: {
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Capcents
+             * @default 0
+             */
+            capCents: number;
         };
         /** RepositorySchema */
         RepositorySchema: {
@@ -5438,6 +5529,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SettingsOut"];
+                };
+            };
+        };
+    };
+    glitchtip_api_api_get_instance_license: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InstanceLicenseOut"];
+                };
+            };
+        };
+    };
+    glitchtip_api_api_get_support_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupportLinkOut"];
                 };
             };
         };
@@ -7770,6 +7901,54 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DailyEventsCountSchema"];
+                };
+            };
+        };
+    };
+    apps_stripe_api_get_overage_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverageStatusSchema"];
+                };
+            };
+        };
+    };
+    apps_stripe_api_configure_overage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OverageConfigIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OverageStatusSchema"];
                 };
             };
         };

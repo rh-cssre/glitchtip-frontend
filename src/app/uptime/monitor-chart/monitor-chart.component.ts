@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core";
+import { Component, input, ChangeDetectionStrategy } from "@angular/core";
 import { DownReason } from "../uptime.interfaces";
 import { reasonTextConversions } from "../uptime.utils";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -10,6 +10,7 @@ type MonitorCheck = components["schemas"]["MonitorCheckSchema"];
   selector: "gt-monitor-chart",
   templateUrl: "./monitor-chart.component.html",
   styleUrls: ["./monitor-chart.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DatePipe, MatTooltipModule],
 })
 export class MonitorChartComponent {

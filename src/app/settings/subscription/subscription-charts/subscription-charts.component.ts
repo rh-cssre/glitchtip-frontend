@@ -41,6 +41,9 @@ export class SubscriptionChartsComponent {
 
   totalEventsAllowed = input.required<number | null>();
   showLimits = input(true);
+  // Summary-card labels; self-hosted overrides these (rolling window, no cycle).
+  currentPeriodLabel = input($localize`This Month`);
+  previousPeriodLabel = input($localize`Last Month`);
 
   eventsCountCurrentPeriod = this.subscriptionService.eventsCountCurrentPeriod;
   previousPeriod = this.subscriptionService.eventsCountPreviousPeriod;
@@ -59,12 +62,14 @@ export class SubscriptionChartsComponent {
   previousPeriodTotal = computed(() => {
     const prev = this.previousPeriod();
     if (!prev) return null;
+    // API returns billed-event units (uptime/logs weighted 0.1 server-side), so
+    // this fallback is a plain sum (only used when server `total` is absent).
     return (
       prev.total ??
       prev.eventCount +
         prev.transactionEventCount +
-        prev.uptimeCheckEventCount +
-        (prev.logEventCount ?? 0) * 0.1
+        (prev.uptimeCheckEventCount ?? 0) +
+        (prev.logEventCount ?? 0)
     );
   });
 

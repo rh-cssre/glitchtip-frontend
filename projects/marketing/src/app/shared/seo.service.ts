@@ -7,7 +7,7 @@ const SITE_URL = "https://glitchtip.com";
 const SITE_NAME = "GlitchTip";
 const DEFAULT_DESCRIPTION =
   "GlitchTip is an open source, Sentry API compatible error tracking platform.";
-const DEFAULT_IMAGE = `${SITE_URL}/assets/glitchtip-saas.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/assets/og-default.png`;
 
 export interface PageSeo {
   title?: string;

@@ -147,7 +147,9 @@
                   <a
                     mat-line
                     [routerLink]="['teams', team, 'members']"
-                    [relativeTo]="this.route.parent?.parent"
+                    [relativeTo]="
+                      $safeNavigationMigration(this.route.parent?.parent)
+                    "
                     >{{ team }}</a
                   >
                 </mat-list-item>

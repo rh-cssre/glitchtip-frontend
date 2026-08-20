@@ -32,7 +32,7 @@ export const hostedFaqs: Faq[] = [
   {
     question: "Do you offer annual billing?",
     answer:
-      'Yes, we offer annual billing with a discount. Contact us at <a href="mailto:sales@glitchtip.com">sales@glitchtip.com</a> for details.',
+      'Yes, we offer annual billing with a discount. Contact us at <a href="mailto:support@glitchtip.com">support@glitchtip.com</a> for details.',
   },
   {
     question: "Can I choose where my data is hosted?",
@@ -42,12 +42,12 @@ export const hostedFaqs: Faq[] = [
   {
     question: "Do you offer discounts for non-profits or open source projects?",
     answer:
-      'Yes, we offer discounted plans for non-profits and open source projects starting at $5 per month. Contact us at <a href="mailto:sales@glitchtip.com">sales@glitchtip.com</a>.',
+      'Yes, we offer discounted plans for non-profits and open source projects starting at $5 per month. Contact us at <a href="mailto:support@glitchtip.com">support@glitchtip.com</a>.',
   },
   {
     question: "What payment methods do you accept?",
     answer:
-      'We accept all major credit cards through our payment processor. For annual plans, invoicing, or contract-based arrangements, contact us at <a href="mailto:sales@glitchtip.com">sales@glitchtip.com</a>.',
+      'We accept all major credit cards through our payment processor. For annual plans, invoicing, or contract-based arrangements, contact us at <a href="mailto:support@glitchtip.com">support@glitchtip.com</a>.',
   },
   {
     question:
@@ -107,7 +107,7 @@ export const selfHostedFaqs: Faq[] = [
   {
     question: "Can I migrate from hosted to self-hosted (or vice versa)?",
     answer:
-      'Yes. Contact us at <a href="mailto:sales@glitchtip.com">sales@glitchtip.com</a> and we can assist with migrating your data between hosted and self-hosted instances.',
+      'Yes. Contact us at <a href="mailto:support@glitchtip.com">support@glitchtip.com</a> and we can assist with migrating your data between hosted and self-hosted instances.',
   },
   {
     question: "How do updates work for self-hosted?",

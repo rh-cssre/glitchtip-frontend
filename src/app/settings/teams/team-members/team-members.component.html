@@ -35,7 +35,7 @@
             <a
               mat-line
               [routerLink]="['../', 'members', teamMember.id]"
-              [relativeTo]="route.parent?.parent"
+              [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
               >{{ teamMember.email }}</a
             >
             <gt-loading-button

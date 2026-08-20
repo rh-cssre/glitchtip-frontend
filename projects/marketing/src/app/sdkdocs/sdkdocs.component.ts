@@ -4,20 +4,22 @@ import {
   OnInit,
   ViewEncapsulation,
   inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { HighlightService } from "../shared/highlight.service";
 import { SeoService } from "../shared/seo.service";
 import { MarkdownComponent } from "ngx-markdown";
 import { ActivatedRoute } from "@angular/router";
-import { MatCard, MatCardContent } from "@angular/material/card";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 import { flattenedPlatforms } from "src/app/settings/projects/new-project/platform-picker/platforms-for-picker";
 
 @Component({
-  imports: [MarkdownComponent, MatCard, MatCardContent],
+  imports: [MarkdownComponent, PageShellComponent],
   templateUrl: "./sdkdocs.component.html",
   styleUrls: ["./sdkdocs.component.scss"],
   preserveWhitespaces: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class SDKDocsComponent implements AfterViewChecked, OnInit {

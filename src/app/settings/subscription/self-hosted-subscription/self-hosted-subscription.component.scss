@@ -1,23 +1,38 @@
 @use "variables" as vars;
 
 mat-card,
-.contribute-grid {
+.contribute-row {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.contribute-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media screen and (min-width: vars.$small) {
+    flex-direction: row;
+
+    .contribute-card {
+      flex: 1;
+    }
+  }
 }
 
 .body-text {
   margin-bottom: 0;
 }
 
-.contribute-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+.manage-billing-button {
+  position: relative;
+}
 
-  @media screen and (min-width: vars.$small) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.manage-billing-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .contribute-card {

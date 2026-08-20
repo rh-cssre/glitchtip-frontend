@@ -1,4 +1,9 @@
-import { Component, Input, output } from "@angular/core";
+import {
+  Component,
+  Input,
+  output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import type { components } from "src/app/api/api-schema";
 
 import { MatIconModule } from "@angular/material/icon";
@@ -11,6 +16,7 @@ type Organization = components["schemas"]["OrganizationDetailSchema"];
   selector: "gt-mobile-nav-toolbar",
   templateUrl: "./mobile-nav-toolbar.component.html",
   styleUrls: ["./mobile-nav-toolbar.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatToolbarModule, MatButtonModule, MatIconModule],
 })
 export class MobileNavToolbarComponent {

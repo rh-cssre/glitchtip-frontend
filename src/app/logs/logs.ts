@@ -19,6 +19,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { LogsService } from "./logs-state";
 import { ListAppBar } from "../list-elements/list-app-bar/list-app-bar";
 import { stringArrAttribute, stringAttribute } from "../shared/shared.utils";
+import { EmptyStateComponent } from "../shared/empty-state/empty-state.component";
+import { LoadingOverlayComponent } from "../shared/loading-overlay/loading-overlay.component";
 
 @Component({
   templateUrl: "./logs.html",
@@ -35,6 +37,8 @@ import { stringArrAttribute, stringAttribute } from "../shared/shared.utils";
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
+    EmptyStateComponent,
+    LoadingOverlayComponent,
   ],
   providers: [LogsService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -92,7 +96,7 @@ export class Logs {
   );
 
   constructor() {
-    // Reset accumulation when filters change (not cursor)
+    // Reset the header hit count when filters change (not cursor).
     effect(() => {
       // Read all filter signals to track them
       this.query();
@@ -102,7 +106,7 @@ export class Logs {
       this.service_();
       this.projects();
       // Reset when any filter changes
-      this.service.resetAccumulation();
+      this.service.resetHitCount();
     });
 
     // Sync URL params to service

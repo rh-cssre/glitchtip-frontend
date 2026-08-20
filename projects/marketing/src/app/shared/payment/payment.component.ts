@@ -1,4 +1,13 @@
-import { Component, ViewChild, AfterViewChecked, OnInit, input, inject, signal } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  AfterViewChecked,
+  OnInit,
+  input,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { LinksService } from "../../links.service";
 import { environment } from "src/environments/environment";
@@ -43,6 +52,7 @@ import { planOptions, selfHostedPlanOptions } from "./payment-plans";
     RouterLink,
     PricingAddonCardComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: [
     "../../../../../../src/app/settings/subscription/payment/payment.component.scss",
     "./payment.component.scss",
@@ -73,12 +83,16 @@ export class PaymentComponent implements AfterViewChecked, OnInit {
 
   setSelectedTab(value: number) {
     this.selectedTab.set(value);
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { plan: value === 1 ? "self-hosted" : null },
-      queryParamsHandling: "merge",
-      replaceUrl: true,
-    });
+    // Sync ?plan= only on the pricing page: navigating the current route from
+    // an embedding page (e.g. home) triggers scroll restoration.
+    if (this.pricingPage()) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { plan: value === 1 ? "self-hosted" : null },
+        queryParamsHandling: "merge",
+        replaceUrl: true,
+      });
+    }
   }
 
   ngAfterViewChecked() {

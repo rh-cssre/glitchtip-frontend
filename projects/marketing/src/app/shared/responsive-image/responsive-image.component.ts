@@ -1,9 +1,15 @@
-import { Component, Input, input } from "@angular/core";
+import {
+  Component,
+  Input,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 
 @Component({
   standalone: true,
   selector: "mkt-responsive-image",
   templateUrl: "./responsive-image.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: "./responsive-image.component.scss",
 })
 export class ResponsiveImageComponent {

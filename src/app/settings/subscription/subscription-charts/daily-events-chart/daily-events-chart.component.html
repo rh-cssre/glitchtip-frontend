@@ -43,7 +43,7 @@
         >
           <ng-template #tooltipTemplate let-model="model">
             <div class="tooltip">
-              <div>{{ model.name }}: {{ model.value }}</div>
+              <div>{{ model.name }}: {{ model.value | number: "1.0-1" }}</div>
             </div>
           </ng-template>
         </ng-charts-bar-vertical-stacked>

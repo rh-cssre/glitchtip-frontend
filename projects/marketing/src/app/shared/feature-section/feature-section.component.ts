@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core";
+import { Component, input, ChangeDetectionStrategy } from "@angular/core";
 import { MatIcon } from "@angular/material/icon";
 import { ResponsiveImageComponent } from "../responsive-image/responsive-image.component";
 
@@ -6,6 +6,7 @@ import { ResponsiveImageComponent } from "../responsive-image/responsive-image.c
   selector: "mkt-feature-section",
   imports: [MatIcon, ResponsiveImageComponent],
   templateUrl: "./feature-section.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./feature-section.component.scss"],
 })
 export class FeatureSectionComponent {

@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   effect,
   inject,
   input,
@@ -49,7 +48,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [NewProjectService],
 })
-export class NewProject implements OnInit {
+export class NewProject {
   private teamsService = inject(TeamsService);
   private service = inject(NewProjectService);
   private router = inject(Router);
@@ -68,6 +67,9 @@ export class NewProject implements OnInit {
 
   constructor() {
     effect(() => {
+      this.teamsService.setTeamsOrgSlug(this.orgSlug());
+    });
+    effect(() => {
       const teams = this.teams();
       if (teams?.length) {
         this.form.patchValue({
@@ -83,10 +85,6 @@ export class NewProject implements OnInit {
 
   get team() {
     return this.form.get("team");
-  }
-
-  ngOnInit() {
-    this.teamsService.retrieveTeamsByOrg(this.orgSlug());
   }
 
   openCreateTeamDialog() {

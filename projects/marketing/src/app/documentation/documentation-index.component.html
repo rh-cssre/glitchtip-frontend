@@ -1,106 +1,40 @@
-<div class="hero-and-nav-container just-the-image"></div>
+<div class="doc-landing">
+  <h1 class="fancy marketing-heading">Documentation</h1>
+  <p class="marketing-body doc-landing__lede">
+    Everything you need to run GlitchTip: error tracking, performance and uptime
+    monitoring, self-hosting, and contributing. Pick a guide below or use the
+    navigation to jump straight in.
+  </p>
 
-<mat-card class="big-card-wrapper">
-  <mat-card-content>
-    <div class="centered-block">
-      <h1 class="fancy marketing-heading">Documentation</h1>
-
-      <p>
-        Bugs are inevitable in web development. The important thing is to catch
-        them when they appear. With GlitchTip, you can rest easy knowing that if
-        your web app throws an error or goes down, you will be notified
-        immediately. GlitchTip combines error tracking and uptime monitoring in
-        one open-source package to keep you and your team fully up-to-date on
-        the status of your projects.
-      </p>
-
-      <h2 class="marketing-small-heading">Using GlitchTip</h2>
-
-      <p> Basic information to help you get started </p>
-
-      <ul>
-        <li>
-          <a [routerLink]="['frequently-asked-questions']"
-            >Frequently asked questions</a
-          >
-        </li>
-        <li>
-          <a [href]="registerLink">Register for Hosted GlitchTip</a>
-        </li>
-        <li>
-          <a [routerLink]="['getting-started']"
-            >Creating your first organization and project</a
-          >
-        </li>
-        <li>
-          <a [routerLink]="['on-demand-billing']"
-            >On-demand billing and spend caps</a
-          >
-        </li>
-      </ul>
-
-      <h2 class="marketing-small-heading">Feature guides</h2>
-
-      <p>Quick guides to get GlitchTip up and running for your web app.</p>
-
-      <ul>
-        <li>
-          <a [routerLink]="['error-tracking']">Error Tracking</a>
-        </li>
-        <li>
-          <a [routerLink]="['/sdkdocs']">SDK Integration</a>
-        </li>
-        <li>
-          <a [routerLink]="['performance']">Performance Monitoring</a>
-        </li>
-        <li>
-          <a [routerLink]="['uptime-monitoring']">Uptime Monitoring</a>
-        </li>
-        <li>
-          <a [routerLink]="['logs']">Logs</a>
-        </li>
-        <li>
-          <a [routerLink]="['integrations']">Integrations</a>
-        </li>
-        <li>
-          <a [routerLink]="['mcp']">MCP (AI Integration)</a>
-        </li>
-        <li>
-          <a [routerLink]="['cli']">CLI (Beta)</a>
-        </li>
-      </ul>
-
-      <h2 class="marketing-small-heading">Hosting GlitchTip on your own server</h2>
-
-      <p>
-        If you want to run the source code on a server you control, start here.
-      </p>
-
-      <ul>
-        <li>
-          <a [routerLink]="['install']">Installation Guide</a>
-        </li>
-      </ul>
-      <h2 class="marketing-small-heading">Working with GlitchTip's code</h2>
-
-      <p>Help make GlitchTip better by contributing to the project.</p>
-
-      <ul>
-        <li>
-          <a [routerLink]="['contribute']">Contributor Guide</a>
-        </li>
-        <li>
-          <a target="_blank" href="https://app.glitchtip.com/api/docs"
-            >API Documentation</a
-          >
-        </li>
-        <li>
-          <a [routerLink]="['hosted-architecture']"> Hosted Architecture </a>
-        </li>
-        <li>
-          <a routerLink="/hipaa">HIPAA Compliance</a>
-        </li>
-      </ul>
-    </div>
-  </mat-card-content>
-</mat-card>
+  <div class="doc-landing__grid">
+    @for (group of nav; track group.title) {
+      <section class="mkt-surface doc-card">
+        <h2 class="marketing-small-heading">{{ group.title }}</h2>
+        <p class="doc-card__summary">{{ group.summary }}</p>
+        <ul>
+          @for (item of group.items; track item.title) {
+            <li>
+              @if (item.slug) {
+                <a [routerLink]="['/documentation', item.slug]">{{
+                  item.title
+                }}</a>
+              } @else {
+                <!-- Leaves the docs section (separate /sdkdocs, /hipaa, or an
+                     external URL): open in a new tab so this page stays as the
+                     way back, marked with the shared open_in_new icon. -->
+                <a
+                  class="doc-card__ext"
+                  [href]="item.href"
+                  target="_blank"
+                  rel="noopener"
+                  >{{ item.title
+                  }}<mat-icon class="doc-card__ext-icon">open_in_new</mat-icon></a
+                >
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+</div>

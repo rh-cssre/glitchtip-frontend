@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core";
+import { Component, input, ChangeDetectionStrategy } from "@angular/core";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
@@ -10,6 +10,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 @Component({
   templateUrl: "./team-details.component.html",
   styleUrls: ["./team-details.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatButtonModule,
     RouterLink,

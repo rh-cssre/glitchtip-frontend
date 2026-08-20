@@ -14,6 +14,14 @@ export class OrganizationsService {
     () =>
       this.#activeOrganizationSlug() ?? this.organizations()?.[0]?.slug ?? null,
   );
+  /**
+   * The org slug explicitly set from the route / org switcher, WITHOUT the
+   * "default to the first org" fallback that activeOrganizationSlug applies. Use
+   * this to key data fetches that must target the org the user is actually
+   * viewing: keying on the fallback can fetch the first org's data during the
+   * brief window before the route resolves (wrong-org fetch / "loads both orgs").
+   */
+  readonly selectedOrganizationSlug = this.#activeOrganizationSlug.asReadonly();
   organizationsResource = apiResource.fetchAll(
     this.authService.isAuthenticated,
     () => ({

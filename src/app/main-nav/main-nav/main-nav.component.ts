@@ -10,6 +10,7 @@ import { MainNavService } from "../main-nav.service";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
 import { MobileNavToolbarComponent } from "../../mobile-nav-toolbar/mobile-nav-toolbar.component";
+import { SupportMenuComponent } from "../support-menu/support-menu.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
 import { MatDividerModule } from "@angular/material/divider";
@@ -55,6 +56,7 @@ interface NavItem {
     RouterLinkActive,
     MatCardModule,
     MobileNavToolbarComponent,
+    SupportMenuComponent,
   ],
 })
 export class MainNavComponent {

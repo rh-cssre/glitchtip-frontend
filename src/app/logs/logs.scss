@@ -1,4 +1,4 @@
-// Retro terminal style blended with Material Design 3
+// Log stream styled with Material Design 3 tokens
 
 .filter-bar {
   display: flex;
@@ -6,8 +6,6 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: var(--sys-surface-container);
-  border-bottom: 1px solid var(--sys-outline-variant);
 }
 
 .search-form {
@@ -28,17 +26,17 @@
   white-space: nowrap;
 }
 
-// Terminal-style log container
+// Log container
 .log-container {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 400px;
-  background: #1a1a2e;
+  background: var(--mat-sys-surface);
   border-radius: 8px;
+  border: 1px solid var(--mat-sys-outline-variant);
   margin: 0 16px 16px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .log-output {
@@ -62,35 +60,35 @@
   transition: background-color 0.15s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--mat-sys-surface-container-high);
   }
 
   // Level-based left border colors
   &.log-line--error,
   &.log-line--fatal {
-    border-left-color: #ef4444;
+    border-left-color: var(--log-error-color);
   }
 
   &.log-line--warn,
   &.log-line--warning {
-    border-left-color: #f59e0b;
+    border-left-color: var(--log-warn-color);
   }
 
   &.log-line--info {
-    border-left-color: #3b82f6;
+    border-left-color: var(--log-info-color);
   }
 
   &.log-line--debug {
-    border-left-color: #8b5cf6;
+    border-left-color: var(--log-debug-color);
   }
 
   &.log-line--trace {
-    border-left-color: #6b7280;
+    border-left-color: var(--log-trace-color);
   }
 }
 
 .log-timestamp {
-  color: #6b7280;
+  color: var(--mat-sys-on-surface-variant);
   flex-shrink: 0;
 }
 
@@ -101,52 +99,51 @@
 
   &.log-level--error,
   &.log-level--fatal {
-    color: #ef4444;
+    color: var(--log-error-color);
   }
 
   &.log-level--warn,
   &.log-level--warning {
-    color: #f59e0b;
+    color: var(--log-warn-color);
   }
 
   &.log-level--info {
-    color: #3b82f6;
+    color: var(--log-info-color);
   }
 
   &.log-level--debug {
-    color: #8b5cf6;
+    color: var(--log-debug-color);
   }
 
   &.log-level--trace {
-    color: #6b7280;
+    color: var(--log-trace-color);
   }
 }
 
 .log-service {
-  color: #10b981;
+  color: var(--log-service-color);
   flex-shrink: 0;
 }
 
 .log-body {
-  color: #e5e7eb;
+  color: var(--mat-sys-on-surface);
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: default;
 }
 
-.log-empty,
-.log-loading {
+.log-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 48px 24px;
-  color: #9ca3af;
+  color: var(--mat-sys-on-surface-variant);
   text-align: center;
 }
 
 .log-error {
-  color: #ef4444;
+  color: var(--mat-sys-error);
 
   ul {
     margin-top: 8px;
@@ -155,24 +152,20 @@
   }
 }
 
-.log-no-data {
-  color: #9ca3af;
-}
-
 .log-footer {
   display: flex;
   justify-content: center;
   padding: 12px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
 .load-more-btn {
-  color: #9ca3af;
-  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--mat-sys-on-surface-variant);
+  border-color: var(--mat-sys-outline-variant);
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.05);
-    color: #e5e7eb;
+    background: var(--mat-sys-surface-container-high);
+    color: var(--mat-sys-on-surface);
   }
 
   mat-icon {
@@ -183,18 +176,6 @@
 .load-more-icon-text {
   display: flex;
   align-items: center;
-}
-
-// Light mode adjustments
-@media (prefers-color-scheme: light) {
-  .log-container {
-    background: #1e293b;
-  }
-
-  .log-header {
-    background: #0f172a;
-    border-bottom-color: #334155;
-  }
 }
 
 // Responsive adjustments

@@ -1,4 +1,10 @@
-import { Component, OnInit, effect, inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  effect,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -14,6 +20,7 @@ import { MatIconRegistry } from "@angular/material/icon";
 @Component({
   selector: "gt-root",
   templateUrl: "./app.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterOutlet],
 })
 export class AppComponent implements OnInit {

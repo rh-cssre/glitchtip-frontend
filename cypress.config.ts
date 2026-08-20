@@ -7,10 +7,20 @@ export default defineConfig({
     runMode: 1,
   },
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      return require("./cypress/plugins/index.js")(on, config);
+    setupNodeEvents(on) {
+      // High-res screenshots when the SCREENSHOT env var is set.
+      on("before:browser:launch", (browser = {}, launchOptions) => {
+        if (
+          browser.name === "electron" &&
+          browser.isHeadless &&
+          process.env.SCREENSHOT
+        ) {
+          launchOptions.preferences.width = 2570;
+          launchOptions.preferences.height = 1600;
+          launchOptions.preferences.webPreferences.zoomFactor = 2;
+        }
+        return launchOptions;
+      });
     },
     viewportWidth: 1280,
     experimentalRunAllSpecs: true,

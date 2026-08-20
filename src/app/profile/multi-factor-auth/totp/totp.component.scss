@@ -11,25 +11,42 @@ mat-card-title {
   margin-bottom: 8px;
 }
 
-mat-form-field {
-  margin-right: 10px;
-}
-
-:host ::ng-deep .body-text-strong {
-  margin-bottom: 0px;
-}
-
 button {
-  margin-top: 5px;
-  margin-bottom: 10px;
-  margin-right: 10px;
+  margin-top: 8px;
+  margin-right: 8px;
 }
 
-#canvas {
-  margin-left: -13px;
-  margin-top: -13px;
+// Progress rail only; the setup stage drives navigation, not clicks.
+.totp-stepper ::ng-deep .mat-step-header {
+  pointer-events: none;
+}
+
+.totp-scan {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.totp-key {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.totp-key__label {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .totp-string {
+  font-family: monospace;
   word-break: break-word;
+}
+
+form mat-form-field {
+  display: block;
+  max-width: 220px;
 }

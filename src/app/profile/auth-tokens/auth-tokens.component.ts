@@ -1,4 +1,10 @@
-import { Component, computed, OnInit, inject } from "@angular/core";
+import {
+  Component,
+  computed,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { AuthTokensService, AuthTokensState } from "./auth-tokens.service";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { CopyInputComponent } from "../../shared/copy-input/copy-input.component";
@@ -9,11 +15,13 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-auth-tokens",
   templateUrl: "./auth-tokens.component.html",
   styleUrls: ["./auth-tokens.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatButtonModule,
@@ -21,6 +29,7 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
     MatDividerModule,
     CopyInputComponent,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
 })
 export class AuthTokensComponent
@@ -53,11 +62,8 @@ export class AuthTokensComponent
 
   deleteAuthToken(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      restoreFocus: false,
-      height: "200px",
-      width: "350px",
       data: {
-        title: $localize`Delete Auth Token`,
+        title: $localize`Delete auth token?`,
         message: $localize`Are you sure you want to delete this authentication token?`,
         confirmText: $localize`Delete`,
       },

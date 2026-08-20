@@ -22,7 +22,7 @@ mat-card-content {
     padding: 16px 0;
 
     &:nth-last-child(n + 2) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      border-bottom: 1px solid var(--mat-sys-outline-variant);
     }
   }
 }

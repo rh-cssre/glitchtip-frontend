@@ -17,7 +17,7 @@
         <mat-icon color="primary">share_eta</mat-icon>
         <span i18n>Uptime</span>
       </dt>
-      <dd i18n>Each health check of your app, whether polled by GlitchTip or pushed from your app</dd>
+      <dd i18n>Each health check counts as 1/10 of an event &mdash; 10 checks equal 1 event, whether polled by GlitchTip or pushed from your app</dd>
     </div>
     <div class="event-def">
       <dt>
@@ -43,7 +43,7 @@
   </dl>
   @if (dialog) {
     <div class="dialog-actions">
-      <button mat-flat-button color="primary" (click)="closeDialog()" i18n
+      <button mat-button (click)="closeDialog()" i18n
         >Close</button
       >
     </div>

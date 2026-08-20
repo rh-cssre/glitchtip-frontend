@@ -509,7 +509,7 @@
     </unit>
     <unit id="3509639242131814864">
       <segment>
-        <source> Purchase support: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:sales@glitchtip.com?subject=Purchase support inquiry&quot; &gt;" dispEnd="&lt;/a &gt;">sales@glitchtip.com</pc></source>
+        <source> Purchase support: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:support@glitchtip.com?subject=Purchase support inquiry&quot; &gt;" dispEnd="&lt;/a &gt;">support@glitchtip.com</pc></source>
       </segment>
     </unit>
     <unit id="5349000458605027240">

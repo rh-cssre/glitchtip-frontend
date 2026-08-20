@@ -1,4 +1,10 @@
-import { Component, OnInit, inject, effect } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  inject,
+  effect,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   Validators,
   ReactiveFormsModule,
@@ -43,7 +49,8 @@ type SocialApp = components["schemas"]["SocialAppSchema"];
     AuthSvgComponent,
     RouterLink,
   ],
-  providers: [provideMarkdown()]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  providers: [provideMarkdown()],
 })
 export class LoginComponent
   extends StatefulComponent<LoginState, LoginService>
@@ -70,7 +77,8 @@ export class LoginComponent
 
   socialApps = this.settings.socialApps;
   enableUserRegistration = this.settings.enableUserRegistration;
-  enableSocialAppsUserRegistration = this.settings.enableSocialAppsUserRegistration;
+  enableSocialAppsUserRegistration =
+    this.settings.enableSocialAppsUserRegistration;
 
   constructor() {
     const service = inject(LoginService);

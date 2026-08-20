@@ -6,8 +6,7 @@
     <ng-container slot="right">
       @if (subscription() && subscription()!.status !== "canceled") {
         <button
-          mat-flat-button
-          color="primary"
+          mat-stroked-button
           class="manage-subscription-button"
           (click)="manageSubscription()"
           [disabled]="billingPortalLoading()"
@@ -117,6 +116,9 @@
                 <gt-subscription-charts
                   [totalEventsAllowed]="totalEventsAllowed()"
                 />
+                @if (showOverageCard()) {
+                  <gt-overage-card />
+                }
                 <p class="body-text" i18n
                   >If you have questions about your subscription, please contact
                   us at

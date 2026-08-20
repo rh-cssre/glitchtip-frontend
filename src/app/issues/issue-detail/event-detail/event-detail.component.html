@@ -18,7 +18,9 @@
         </p>
         <p>
           @if (event?.dateCreated) {
-            <span class="space">{{ event?.dateCreated | date: "long" }}</span>
+            <span class="space">{{
+              $safeNavigationMigration(event?.dateCreated) | date: "long"
+            }}</span>
           }
           <a
             target="_blank"
@@ -28,11 +30,21 @@
               '/issues/' +
               event.groupID +
               '/events/' +
-              event?.id +
+              $safeNavigationMigration(event?.id) +
               '/json/'
             "
-            >JSON</a
+            >raw JSON</a
           >
+          <span class="action-separator" aria-hidden="true">·</span>
+          <button
+            type="button"
+            class="link-button"
+            [cdkCopyToClipboard]="aiPayload()"
+            (cdkCopyToClipboardCopied)="onCopiedForAI()"
+            i18n
+          >
+            copy for AI
+          </button>
         </p>
       </div>
       <nav class="navigation-buttons">
@@ -74,12 +86,17 @@
                   {{ tag.value }}
                 </span>
               </a>
-               @if (isValidUrl(tag.value)) {
-                 <span class="pseudo-chip-divider"></span>
-                 <a [href]="tag.value" target="_blank" rel="noopener noreferrer" class="pseudo-chip-external-link">
+              @if (isValidUrl(tag.value)) {
+                <span class="pseudo-chip-divider"></span>
+                <a
+                  [href]="tag.value"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="pseudo-chip-external-link"
+                >
                   <mat-icon color="primary">open_in_new</mat-icon>
-                 </a>
-               }
+                </a>
+              }
             </li>
           }
         </ul>
@@ -87,8 +104,8 @@
     }
     <gt-entry-message></gt-entry-message>
     <gt-entry-exception
-      [eventTitle]="event?.title"
-      [eventPlatform]="event?.platform!"
+      [eventTitle]="$safeNavigationMigration(event?.title)"
+      [eventPlatform]="$safeNavigationMigration(event?.platform)!"
     ></gt-entry-exception>
     <gt-entry-csp></gt-entry-csp>
     <gt-entry-breadcrumbs></gt-entry-breadcrumbs>
@@ -136,10 +153,13 @@
         <mat-divider></mat-divider>
         <h3>SDK</h3>
         <dl>
-          <gt-entry-data key="name" [value]="event?.sdk?.name"></gt-entry-data>
+          <gt-entry-data
+            key="name"
+            [value]="$safeNavigationMigration(event?.sdk?.name)"
+          ></gt-entry-data>
           <gt-entry-data
             key="version"
-            [value]="event?.sdk?.version"
+            [value]="$safeNavigationMigration(event?.sdk?.version)"
           ></gt-entry-data>
         </dl>
       </section>

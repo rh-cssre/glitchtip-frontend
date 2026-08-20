@@ -1,4 +1,10 @@
-import { Component, OnInit, input, output } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormControl,
   FormGroup,
@@ -20,6 +26,7 @@ type Comment = components["schemas"]["CommentSchema"];
   selector: "gt-comment-form",
   templateUrl: "./comment-form.component.html",
   styleUrls: ["./comment-form.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,

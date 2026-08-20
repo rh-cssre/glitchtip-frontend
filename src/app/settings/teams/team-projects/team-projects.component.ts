@@ -1,4 +1,10 @@
-import { Component, OnInit, inject, input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { TeamsService } from "src/app/api/teams/teams.service";
@@ -14,6 +20,7 @@ import { MatCardModule } from "@angular/material/card";
   selector: "gt-team-projects",
   templateUrl: "./team-projects.component.html",
   styleUrls: ["./team-projects.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatFormFieldModule,

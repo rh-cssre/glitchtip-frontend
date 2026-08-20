@@ -17,7 +17,79 @@
               formControlName="query"
               data-cy="list-search-field"
             />
+            @if (searchHelp()) {
+              <button
+                matSuffix
+                type="button"
+                mat-icon-button
+                class="input-icon-button"
+                [matMenuTriggerFor]="searchHelpMenu"
+                aria-label="Search syntax help"
+                i18n-aria-label
+                data-cy="list-search-help"
+              >
+                <mat-icon>help_outline</mat-icon>
+              </button>
+            }
           </mat-form-field>
+          <mat-menu
+            #searchHelpMenu="matMenu"
+            class="search-help-menu"
+            xPosition="before"
+          >
+            @if (searchHelp(); as help) {
+              <div class="search-help" (click)="$event.stopPropagation()">
+                <h3 class="search-help__heading">{{ help.heading }}</h3>
+                @for (section of help.sections; track section.title) {
+                  <div class="search-help__section">
+                    <p class="search-help__section-title">
+                      {{ section.title }}
+                    </p>
+                    @if (section.examples?.length) {
+                      <mat-chip-set>
+                        @for (example of section.examples; track example) {
+                          <mat-chip
+                            class="search-help__chip"
+                            [highlighted]="isTokenActive(example)"
+                            (click)="
+                              toggleSearchToken(
+                                example,
+                                !!section.mutuallyExclusive
+                              )
+                            "
+                          >
+                            <code>{{ example }}</code>
+                          </mat-chip>
+                        }
+                      </mat-chip-set>
+                    }
+                    @if (section.samples?.length) {
+                      <p class="search-help__samples">
+                        @for (
+                          sample of section.samples;
+                          track sample;
+                          let last = $last
+                        ) {
+                          <code>{{ sample }}</code>
+                          @if (!last) {
+                            <span class="search-help__samples-sep">·</span>
+                          }
+                        }
+                      </p>
+                    }
+                    @if (section.note) {
+                      <p class="search-help__section-note">
+                        {{ section.note }}
+                      </p>
+                    }
+                  </div>
+                }
+                @if (help.footer) {
+                  <p class="search-help__footer">{{ help.footer }}</p>
+                }
+              </div>
+            }
+          </mat-menu>
         </form>
       }
     </ng-template>

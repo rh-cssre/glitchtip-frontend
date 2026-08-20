@@ -17,8 +17,8 @@ $narrow-desktop: vars.$medium;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 95%;
-    max-width: 1800px;
+    width: min(95%, 100% - var(--mkt-gutter));
+    max-width: var(--mkt-container-wide);
     margin: 0 auto;
     padding: 8px 24px;
   }
@@ -166,8 +166,8 @@ footer {
   }
 
   .footer-content {
-    width: 95%;
-    max-width: 1800px;
+    width: min(95%, 100% - var(--mkt-gutter));
+    max-width: var(--mkt-container-wide);
     margin: 0 auto;
   }
 

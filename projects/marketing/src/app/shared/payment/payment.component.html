@@ -204,7 +204,7 @@
               <a
                 mat-flat-button
                 color="primary"
-                [href]="product.ctaUrl"
+                [href]="product.paymentLinks ? product.paymentLinks[billingPeriod()] : product.ctaUrl"
               >
                 {{ product.ctaText }}
               </a>

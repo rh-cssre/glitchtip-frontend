@@ -62,12 +62,12 @@ mat-card-actions {
     mat-card-title span,
     p span,
     .mat-button-wrapper span {
-      background-color: #eee;
-      color: #eee;
+      background-color: var(--mat-sys-surface-container-high);
+      color: var(--mat-sys-surface-container-high);
     }
     .action-button .mat-icon {
-      background-color: #eee;
-      color: #eee;
+      background-color: var(--mat-sys-surface-container-high);
+      color: var(--mat-sys-surface-container-high);
     }
   }
 }

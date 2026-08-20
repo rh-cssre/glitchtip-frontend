@@ -52,6 +52,7 @@ export class NewRecipientComponent implements OnInit {
     { viewValue: "ntfy", value: "ntfy" },
     { viewValue: "Microsoft Teams", value: "teams" },
     { viewValue: "Zulip", value: "zulip" },
+    { viewValue: "Feishu (Lark) Webhook", value: "feishu" },
   ];
 
   recipientForm = new FormGroup({
@@ -90,6 +91,12 @@ export class NewRecipientComponent implements OnInit {
         if (!this.data.editRecipient) this.url.setValue("");
       } else if (type === "discord") {
         if (!this.data.editRecipient) this.url.setValue("https://");
+      } else if (type === "feishu") {
+        if (!this.data.editRecipient) this.url.setValue("https://open.feishu.cn/open-apis/bot/v2/hook/");
+        this.url.setValidators([
+          Validators.required,
+          Validators.pattern(urlRegex),
+        ]);
       } else if (type === "googlechat") {
         if (!this.data.editRecipient) this.url.setValue("https://chat.googleapis.com/v1/spaces/");
         this.url.setValidators([Validators.required]);

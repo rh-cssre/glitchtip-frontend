@@ -8,8 +8,14 @@
   "include": ["src/**/*.d.ts"],
   "exclude": [
     "src/test.ts",
-    "src/**/*.spec.ts",
-    "**/*.stories.ts",
-    "**/*.stories.*"
-  ]
+    "src/**/*.spec.ts"
+  ],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }

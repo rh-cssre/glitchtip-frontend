@@ -26,6 +26,7 @@ export type RecipientType =
   | "email"
   | "webhook"
   | "discord"
+  | "feishu"
   | "googlechat"
   | "ntfy"
   | "teams"

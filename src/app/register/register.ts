@@ -1,4 +1,11 @@
-import { Component, OnInit, effect, inject, input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  effect,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   Validators,
   ReactiveFormsModule,
@@ -42,6 +49,7 @@ type SocialApp = components["schemas"]["SocialAppSchema"];
     LoadingButtonComponent,
     RouterLink,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideMarkdown()],
 })
 export class Register
@@ -57,8 +65,9 @@ export class Register
 
   tags = "";
   socialApps = this.settings.socialApps;
-  enableUserRegistration = this.settings.enableUserRegistration
-  enableSocialAppsUserRegistration = this.settings.enableSocialAppsUserRegistration
+  enableUserRegistration = this.settings.enableUserRegistration;
+  enableSocialAppsUserRegistration =
+    this.settings.enableSocialAppsUserRegistration;
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [

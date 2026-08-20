@@ -1,4 +1,12 @@
-import { Component, OnInit, computed, inject, input, signal } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  input,
+  signal,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { PercentPipe } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
@@ -31,6 +39,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
     HumanizeDurationPipe,
     DetailHeaderComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [TransactionGroupDetailService],
 })
 export class TransactionGroupDetail implements OnInit {
@@ -45,7 +54,15 @@ export class TransactionGroupDetail implements OnInit {
   transactionGroup = this.transactionGroupDetailService.transactionGroup;
   spansLoading = this.transactionGroupDetailService.spansLoading;
 
-  spanColumns = ["op", "description", "count", "avgDuration", "p95Duration", "totalTime", "pctTime"];
+  spanColumns = [
+    "op",
+    "description",
+    "count",
+    "avgDuration",
+    "p95Duration",
+    "totalTime",
+    "pctTime",
+  ];
 
   selectedOp = signal<string | null>(null);
 
@@ -82,7 +99,9 @@ export class TransactionGroupDetail implements OnInit {
         merged.set(s.op, { totalTime: s.totalTime, count: s.count });
       }
     }
-    const sorted = Array.from(merged.entries()).sort((a, b) => b[1].totalTime - a[1].totalTime);
+    const sorted = Array.from(merged.entries()).sort(
+      (a, b) => b[1].totalTime - a[1].totalTime,
+    );
     const maxVisible = 5;
     const top = sorted.slice(0, maxVisible);
     const rest = sorted.slice(maxVisible);

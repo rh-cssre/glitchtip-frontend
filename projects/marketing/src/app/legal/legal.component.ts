@@ -1,12 +1,18 @@
-import { Component, ViewEncapsulation, inject } from "@angular/core";
-import { MatCard, MatCardContent } from "@angular/material/card";
+import {
+  Component,
+  ViewEncapsulation,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 import { ActivatedRoute } from "@angular/router";
 import { MarkdownComponent } from "ngx-markdown";
 
 @Component({
-  imports: [MatCard, MatCardContent, MarkdownComponent],
+  imports: [PageShellComponent, MarkdownComponent],
   templateUrl: "./legal.component.html",
   preserveWhitespaces: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class LegalComponent {

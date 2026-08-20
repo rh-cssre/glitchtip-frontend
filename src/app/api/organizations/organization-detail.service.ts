@@ -1,4 +1,4 @@
-import { Injectable, computed, inject } from "@angular/core";
+import { Injectable, computed, inject, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
@@ -11,13 +11,13 @@ import { Team } from "../teams/teams.interfaces";
 import { OrganizationsService } from "../organizations.service";
 import { ProjectsService } from "../../projects/projects.service";
 import { client, handleError } from "../../shared/api/api";
+import { apiResource } from "../../shared/api/api-resource-factory";
 import { components } from "../api-schema";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 
 type Member = components["schemas"]["OrganizationUserSchema"];
 
 interface OrganizationsState {
-  organizationMembers: Member[];
   organizationTeams: Team[];
   errors: OrganizationErrors;
   loading: OrganizationLoading;
@@ -26,7 +26,6 @@ interface OrganizationsState {
 }
 
 const initialState: OrganizationsState = {
-  organizationMembers: [],
   organizationTeams: [],
   errors: {
     createOrganization: "",
@@ -57,9 +56,22 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
   private projectsService = inject(ProjectsService);
 
   readonly initialLoad = computed(() => this.state().initialLoad);
-  readonly organizationMembers = computed(
-    () => this.state().organizationMembers,
+
+  private membersOrgSlug = signal<string>("");
+  organizationMembersResource = apiResource(
+    this.membersOrgSlug,
+    (orgSlug) => ({
+      url: "/api/0/organizations/{organization_slug}/members/",
+      options: { params: { path: { organization_slug: orgSlug } } },
+    }),
   );
+  readonly organizationMembers = computed(
+    () => this.organizationMembersResource.value() ?? [],
+  );
+
+  setMembersOrgSlug(orgSlug: string) {
+    this.membersOrgSlug.set(orgSlug);
+  }
 
   readonly orgHasAProject = computed(() => {
     const projects = this.organizationsService.activeOrganizationProjects();
@@ -176,19 +188,6 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
         this.setDeleteOrganizationError(errors.detail[0].msg);
       }
     }
-  }
-
-  async retrieveOrganizationMembers(orgSlug: string) {
-    const result = await client.GET(
-      "/api/0/organizations/{organization_slug}/members/",
-      {
-        params: { path: { organization_slug: orgSlug } },
-      },
-    );
-    if (result.data) {
-      this.setActiveOrganizationMembers(result.data!);
-    }
-    return result;
   }
 
   /** Invite a list of users via email to join an organization */
@@ -329,8 +328,8 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       },
     );
     if (data) {
-      this.teamsService.retrieveTeamMembers(orgSlug, data.slug);
-      await this.retrieveOrganizationMembers(orgSlug);
+      this.teamsService.teamMembersResource.reload();
+      this.organizationMembersResource.reload();
       return data;
     }
     return;
@@ -492,12 +491,6 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
         ...state.loading,
         addTeamMember: "",
       },
-    });
-  }
-
-  private setActiveOrganizationMembers(members: Member[]) {
-    this.setState({
-      organizationMembers: members,
     });
   }
 

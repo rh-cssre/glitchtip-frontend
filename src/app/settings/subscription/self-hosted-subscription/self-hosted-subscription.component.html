@@ -2,24 +2,60 @@
   <ng-container slot="left">
     <h1 class="section-header-text" i18n>Subscription</h1>
   </ng-container>
+  <ng-container slot="right">
+    @if (paidForGlitchTip()) {
+      <button
+        mat-stroked-button
+        class="manage-billing-button"
+        (click)="manageBilling()"
+        [disabled]="manageBillingLoading()"
+      >
+        <span
+          [style.visibility]="manageBillingLoading() ? 'hidden' : 'visible'"
+          i18n
+          >Manage Billing</span
+        >
+        <mat-icon
+          [style.visibility]="manageBillingLoading() ? 'hidden' : 'visible'"
+          >open_in_new</mat-icon
+        >
+        @if (manageBillingLoading()) {
+          <mat-spinner class="manage-billing-spinner" diameter="18" />
+        }
+      </button>
+    }
+  </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <div class="contribute-grid">
-    <a
-      class="contribute-card"
-      href="https://liberapay.com/GlitchTip/donate"
-      target="_blank"
-      rel="noopener"
-    >
-      <mat-icon class="contribute-icon">favorite</mat-icon>
-      <div class="contribute-text">
-        <span class="body-text-strong" i18n>Donate</span>
-        <span class="caption-text" i18n
-          >Support open source development on Liberapay</span
-        >
+  @if (!paidForGlitchTip()) {
+    <gt-support-banner [isSuperuser]="isSuperuser()" />
+  }
+
+  <mat-card>
+    <mat-card-content>
+      <div class="plan-header">
+        <span class="body-text-strong" i18n>Self-Hosted</span>
+        <mat-divider vertical />
+        <span class="body-text" i18n>Usage: Last 30 Days</span>
       </div>
-      <mat-icon class="external-icon">open_in_new</mat-icon>
-    </a>
+      <mat-divider />
+      <gt-subscription-charts
+        [totalEventsAllowed]="null"
+        [showLimits]="false"
+        [currentPeriodLabel]="currentPeriodLabel"
+        [previousPeriodLabel]="previousPeriodLabel"
+      />
+      @if (billingEmail) {
+        <p class="body-text" i18n>
+          Questions? Contact us at
+          <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a
+          >.
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <div class="contribute-row">
     <a
       class="contribute-card"
       href="https://gitlab.com/glitchtip/glitchtip"
@@ -33,28 +69,24 @@
       </div>
       <mat-icon class="external-icon">open_in_new</mat-icon>
     </a>
+    @if (!paidForGlitchTip()) {
+      <a
+        class="contribute-card"
+        href="https://liberapay.com/GlitchTip/donate"
+        target="_blank"
+        rel="noopener"
+      >
+        <mat-icon class="contribute-icon">favorite</mat-icon>
+        <div class="contribute-text">
+          <span class="body-text-strong" i18n>Donate</span>
+          <span class="caption-text" i18n
+            >Support open source development on Liberapay</span
+          >
+        </div>
+        <mat-icon class="external-icon">open_in_new</mat-icon>
+      </a>
+    }
   </div>
-
-  <mat-card>
-    <mat-card-content>
-      <div class="plan-header">
-        <span class="body-text-strong" i18n>Self-Hosted</span>
-        <mat-divider vertical />
-        <span class="body-text" i18n>Usage: Last 30 Days</span>
-      </div>
-      <mat-divider />
-      <gt-subscription-charts
-        [totalEventsAllowed]="null"
-        [showLimits]="false"
-      />
-      @if (billingEmail) {
-        <p class="body-text" i18n>
-          Questions? Contact us at
-          <a href="mailto:{{ billingEmail }}">{{ billingEmail }}</a>.
-        </p>
-      }
-    </mat-card-content>
-  </mat-card>
 
   <mat-card>
     <mat-card-content>
@@ -67,8 +99,7 @@
           >
         </div>
         <a
-          mat-flat-button
-          color="primary"
+          mat-stroked-button
           href="https://app.glitchtip.com"
           target="_blank"
           rel="noopener"

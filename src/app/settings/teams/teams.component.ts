@@ -1,8 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   computed,
+  effect,
   inject,
   input,
 } from "@angular/core";
@@ -37,7 +37,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TeamsComponent implements OnInit {
+export class TeamsComponent {
   private teamsService = inject(TeamsService);
   private organizationsService = inject(OrganizationsService);
   private organizationDetailService = inject(OrganizationDetailService);
@@ -60,8 +60,10 @@ export class TeamsComponent implements OnInit {
     other: "# Members",
   };
 
-  ngOnInit() {
-    this.teamsService.retrieveTeamsByOrg(this.orgSlug());
+  constructor() {
+    effect(() => {
+      this.teamsService.setTeamsOrgSlug(this.orgSlug());
+    });
   }
 
   openCreateTeamDialog() {

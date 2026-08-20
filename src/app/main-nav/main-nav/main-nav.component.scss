@@ -13,8 +13,6 @@ mat-sidenav-container {
 mat-nav-list {
   padding: 10px;
 
-
-
   button[mat-list-item] {
     border: none;
     text-align: inherit;
@@ -67,7 +65,6 @@ mat-sidenav {
 
     .org-create-button-container,
     .org-dropdown-container,
-    .support-cta-container,
     .version {
       display: none;
     }
@@ -134,24 +131,6 @@ mat-sidenav {
 
 .org-create-button {
   height: 48px;
-}
-
-.support-cta-divider {
-  border-color: var(--mat-sys-outline-variant);
-}
-
-.support-cta-container {
-  margin: 15px 0 0 26px;
-}
-
-.support-cta-list {
-  list-style-type: disc;
-  list-style-position: inside;
-  margin-top: 8px;
-
-  a {
-    text-decoration: underline;
-  }
 }
 
 .version {

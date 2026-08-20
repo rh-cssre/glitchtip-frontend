@@ -2,10 +2,10 @@ import {
   Component,
   ChangeDetectionStrategy,
   computed,
+  DestroyRef,
   effect,
   inject,
   input,
-  OnInit,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
@@ -28,6 +28,7 @@ import { UpgradeBannerComponent } from "src/app/shared/upgrade-banner/upgrade-ba
 import { environment } from "../../../environments/environment";
 import { PaymentComponent } from "./payment/payment.component";
 import { PaymentService } from "./payment/payment.service";
+import { OverageCardComponent } from "./overage-card/overage-card.component";
 import { SelfHostedSubscriptionComponent } from "./self-hosted-subscription/self-hosted-subscription.component";
 import { SubscriptionChartsComponent } from "./subscription-charts/subscription-charts.component";
 
@@ -50,12 +51,13 @@ import { SubscriptionChartsComponent } from "./subscription-charts/subscription-
     UpgradeBannerComponent,
     PaymentComponent,
     SelfHostedSubscriptionComponent,
+    OverageCardComponent,
   ],
 })
-export class SubscriptionComponent
-  extends StatefulComponent<SubscriptionState, SubscriptionService>
-  implements OnInit
-{
+export class SubscriptionComponent extends StatefulComponent<
+  SubscriptionState,
+  SubscriptionService
+> {
   private orgService = inject(OrganizationsService);
   private settingsService = inject(SettingsService);
   private paymentService = inject(PaymentService);
@@ -82,6 +84,10 @@ export class SubscriptionComponent
   readonly subscriptionLoading = this.service.subscriptionLoading;
   readonly subscriptionRefreshTimeout = this.service.subscriptionRefreshTimeout;
   readonly totalEventsAllowed = this.service.totalEventsAllowed;
+  // Overage card renders only for paid (eligible), server-provisioned orgs.
+  readonly showOverageCard = computed(
+    () => this.service.overageEligible() && this.service.overageConfigured(),
+  );
   readonly activeOrganization = this.orgService.activeOrganization;
   readonly activeOrganizationSlug = this.orgService.activeOrganizationSlug;
   readonly billingPortalLoading = this.service.billingPortalLoading;
@@ -140,10 +146,15 @@ export class SubscriptionComponent
 
   constructor() {
     const service = inject(SubscriptionService);
+    const destroyRef = inject(DestroyRef);
 
     super(service);
 
     this.service = service;
+
+    // Gate detail-page resources to this component's lifetime; org-reactive while active.
+    service.setDetailActive(true);
+    destroyRef.onDestroy(() => service.setDetailActive(false));
 
     // Fire hosted-only fetches once settings confirm billing is enabled.
     effect(() => {
@@ -158,11 +169,6 @@ export class SubscriptionComponent
     });
   }
 
-  ngOnInit(): void {
-    this.orgService.activeOrganizationResource.reload();
-    this.service.loadDetailData(this.orgSlug());
-  }
-
   manageSubscription() {
     this.service.redirectToBillingPortal();
   }
@@ -175,11 +181,8 @@ export class SubscriptionComponent
     const currentInterval = subscription?.price?.interval;
     const price =
       (product.defaultPrice.interval === currentInterval &&
-        product.defaultPrice.isPublic &&
         product.defaultPrice) ||
-      product.prices.find(
-        (p) => p.interval === currentInterval && p.isPublic,
-      );
+      product.prices.find((p) => p.interval === currentInterval);
     if (!price) return;
     this.paymentService.dispatchSubscriptionCreation(org, price);
   }

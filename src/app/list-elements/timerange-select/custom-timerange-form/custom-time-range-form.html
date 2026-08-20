@@ -6,9 +6,11 @@
   >
     <div class="input-group-header body-text">
       <span class="body-text-strong"> {{ dateRangeHeader() }} </span>
-      <span>{{ dateRangeCtrl.value?.start | date: "shortDate" }}</span>
+      <span>{{
+        $safeNavigationMigration(dateRangeCtrl.value?.start) | date: "shortDate"
+      }}</span>
       @if (dateRangeCtrl.value?.end; as endDate) {
-      <span> - {{ endDate | date: "shortDate" }}</span>
+        <span> - {{ endDate | date: "shortDate" }}</span>
       }
     </div>
     <mat-calendar
@@ -26,10 +28,11 @@
         />
         <mat-timepicker-toggle matIconSuffix [for]="startTimepicker" />
         <mat-timepicker #startTimepicker />
-        @if (this.startTimeCtrl.errors?.['matTimepickerParse']) {
-        <mat-error>Pick a valid time</mat-error>
-        } @if (this.startTimeCtrl.errors?.['required']) {
-        <mat-error>Pick a time</mat-error>
+        @if (this.startTimeCtrl.errors?.["matTimepickerParse"]) {
+          <mat-error>Pick a valid time</mat-error>
+        }
+        @if (this.startTimeCtrl.errors?.["required"]) {
+          <mat-error>Pick a time</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -41,10 +44,11 @@
         />
         <mat-timepicker-toggle matIconSuffix [for]="endTimepicker" />
         <mat-timepicker #endTimepicker />
-        @if (this.endTimeCtrl.errors?.['matTimepickerParse']) {
-        <mat-error>Pick a valid time</mat-error>
-        } @if (this.startTimeCtrl.errors?.['required']) {
-        <mat-error>Pick a time</mat-error>
+        @if (this.endTimeCtrl.errors?.["matTimepickerParse"]) {
+          <mat-error>Pick a valid time</mat-error>
+        }
+        @if (this.startTimeCtrl.errors?.["required"]) {
+          <mat-error>Pick a time</mat-error>
         }
       </mat-form-field>
     </div>

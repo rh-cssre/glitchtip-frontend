@@ -27,7 +27,7 @@
       </mat-form-field>
       <div class="recipientDetails">
         @if (
-          ["discord", "googlechat", "webhook", "ntfy", "teams"].includes(
+          ["discord", "feishu", "googlechat", "webhook", "ntfy", "teams"].includes(
             recipientType.value
           )
         ) {
@@ -52,6 +52,11 @@
             @if (recipientType.value === "ntfy") {
               <mat-hint i18n
                 >ntfy.sh topic URL or self-hosted endpoint</mat-hint
+              >
+            }
+            @if (recipientType.value === "feishu") {
+              <mat-hint i18n
+                >Feishu custom bot webhook URL (https://open.feishu.cn/open-apis/bot/v2/hook/...)</mat-hint
               >
             }
             @if (recipientType.value === "teams") {
@@ -153,7 +158,7 @@
         "
       >
       </gt-loading-button>
-      <button type="button" mat-flat-button mat-dialog-close> Cancel </button>
+      <button type="button" mat-button mat-dialog-close> Cancel </button>
     </mat-dialog-actions>
   </form>
 </div>

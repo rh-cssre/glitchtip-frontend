@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -45,6 +51,7 @@ function emailsValidator(control: AbstractControl): ValidationErrors | null {
   selector: "gt-new-member",
   templateUrl: "./new-member.component.html",
   styleUrls: ["./new-member.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatDividerModule,

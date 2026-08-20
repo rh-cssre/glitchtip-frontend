@@ -82,9 +82,9 @@ An Enterprise License provides:
 
 ### Support the project
 
-- 🛡️ [Get Enterprise Support](mailto:sales@glitchtip.com?subject=Purchasing%20enterprise%20support) (For Business) for $15 per user per month
+- 🛡️ [Get Enterprise Support](mailto:support@glitchtip.com?subject=Purchasing%20enterprise%20support) (For Business) for $15 per user per month
 
-- 💖 [Individual License](mailto:sales@glitchtip.com?subject=Purchasing%20an%20individual%20license) (For Supporters) for $5 per month
+- 💖 [Individual License](mailto:support@glitchtip.com?subject=Purchasing%20an%20individual%20license) (For Supporters) for $5 per month
 
 - 💸 Donate via [Liberapay](https://en.liberapay.com/GlitchTip). We currently receive $30.52 per week from 21 patrons.
 

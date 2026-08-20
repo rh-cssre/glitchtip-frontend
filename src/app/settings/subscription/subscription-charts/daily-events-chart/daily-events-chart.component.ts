@@ -60,8 +60,15 @@ export class DailyEventsChartComponent implements OnDestroy {
     }
 
     if (endDate && predicted !== null && events.length > 0) {
+      // API returns billed-event units (uptime/logs weighted 0.1 server-side),
+      // so the actual billed total is a plain sum.
       const totalActual = events.reduce(
-        (sum, e) => sum + e.eventCount + e.transactionEventCount + e.uptimeCheckEventCount + e.logEventCount * 0.1,
+        (sum, e) =>
+          sum +
+          e.eventCount +
+          e.transactionEventCount +
+          e.uptimeCheckEventCount +
+          e.logEventCount,
         0,
       );
       const remaining = Math.max(0, predicted - totalActual);

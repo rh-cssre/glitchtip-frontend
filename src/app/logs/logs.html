@@ -70,60 +70,63 @@
 
   <!-- Log output (terminal style) -->
   <div class="log-container">
-    <div class="log-output">
-      @if (errors()?.length) {
-        <div class="log-empty">
-          <div class="log-error">
-            @for (error of errors(); track $index) {
-              <span>{{ error.msg || error }}</span>
-            }
-          </div>
-        </div>
-      } @else if (logs(); as logs) {
-        @if (logs.length > 0) {
-          @for (log of logs; track log.id) {
-            <div
-              class="log-line"
-              [class]="'log-line--' + log.level?.toLowerCase()"
-            >
-              <span class="log-timestamp">{{
-                log.timestamp | date: "yyyy-MM-dd HH:mm:ss.SSS"
-              }}</span>
-              <span
-                [class]="'log-level log-level--' + log.level?.toLowerCase()"
-                >{{ log.level | uppercase }}</span
-              >
-              @if (log.service) {
-                <span class="log-service">[{{ log.service }}]</span>
-              }
-              <span
-                class="log-body"
-                [matTooltip]="log.body"
-                matTooltipPosition="above"
-                >{{ log.body }}</span
-              >
-            </div>
-          }
-        } @else if (initialLoadComplete() && !isLoading()) {
+    <gt-loading-overlay [loading]="isLoading()" label="Loading logs">
+      <div class="log-output">
+        @if (errors()?.length) {
           <div class="log-empty">
-            <div class="log-no-data">
-              <span i18n>No logs found.</span>
-              @if (query() || level().length || service_()) {
-                <span i18n> Try adjusting your filters.</span>
-              } @else {
-                <span i18n> Configure your SDK to start capturing logs.</span>
+            <div class="log-error">
+              @for (error of errors(); track $index) {
+                <span>{{ error.msg || error }}</span>
               }
             </div>
           </div>
+        } @else if (logs(); as logs) {
+          @if (logs.length > 0) {
+            @for (log of logs; track log.id) {
+              <div
+                class="log-line"
+                [class]="'log-line--' + log.level?.toLowerCase()"
+              >
+                <span class="log-timestamp">{{
+                  log.timestamp | date: "yyyy-MM-dd HH:mm:ss.SSS"
+                }}</span>
+                <span
+                  [class]="'log-level log-level--' + log.level?.toLowerCase()"
+                  >{{ log.level | uppercase }}</span
+                >
+                @if (log.service) {
+                  <span class="log-service">[{{ log.service }}]</span>
+                }
+                <span
+                  class="log-body"
+                  [matTooltip]="log.body"
+                  matTooltipPosition="above"
+                  >{{ log.body }}</span
+                >
+              </div>
+            }
+          } @else if (initialLoadComplete() && !isLoading()) {
+            @if (query() || level().length || service_()) {
+              <gt-empty-state
+                icon="search"
+                i18n-title
+                title="No matching logs"
+                i18n-message
+                message="Try adjusting or clearing your filters."
+              />
+            } @else {
+              <gt-empty-state
+                icon="text_snippet"
+                i18n-title
+                title="No logs yet"
+                i18n-message
+                message="Configure your SDK to start capturing logs."
+              />
+            }
+          }
         }
-      }
-
-      @if (isLoading() && !logs().length) {
-        <div class="log-loading">
-          <span>Loading logs...</span>
-        </div>
-      }
-    </div>
+      </div>
+    </gt-loading-overlay>
 
     @if (hasNextPage() || isLoadingMore()) {
       <div class="log-footer">

@@ -56,7 +56,7 @@ GlitchTip is an open source reimplementation of Sentry’s proprietary backend s
 
 If you're interested in running GlitchTip on your own, read our [installation guide](https://glitchtip.com/documentation/install).
 
-To contribute, talk to us with the live chat at [glitchtip.com](https://glitchtip.com) or open an issue on our [GitLab](https://gitlab.com/groups/glitchtip/-/issues). If your company is interested in open source error tracking, you can contribute by signing up for our hosted SaaS GlitchTip service. Contact [sales@glitchtip.com](mailto:sales@glitchtip.com) for more information. Prices start at \$15/month for up to 100k events. Hosted GlitchTip uses the same open source code available to all and always will.
+To contribute, talk to us with the live chat at [glitchtip.com](https://glitchtip.com) or open an issue on our [GitLab](https://gitlab.com/groups/glitchtip/-/issues). If your company is interested in open source error tracking, you can contribute by signing up for our hosted SaaS GlitchTip service. Contact [support@glitchtip.com](mailto:support@glitchtip.com) for more information. Prices start at \$15/month for up to 100k events. Hosted GlitchTip uses the same open source code available to all and always will.
 
 ## What’s next?
 

@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, effect, inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  effect,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -24,6 +31,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
   selector: "gt-new-token",
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatButtonModule,

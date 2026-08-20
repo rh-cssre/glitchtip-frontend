@@ -53,7 +53,7 @@ mat-form-field {
 }
 
 .error {
-  color: #f44336;
+  color: var(--mat-sys-error);
   text-align: center;
   margin-top: -15px;
   margin-bottom: 5px;

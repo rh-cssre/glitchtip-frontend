@@ -1,7 +1,7 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
+  effect,
   inject,
   input,
 } from "@angular/core";
@@ -17,6 +17,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "gt-team-settings",
@@ -32,8 +34,9 @@ import { MatCardModule } from "@angular/material/card";
     LoadingButtonComponent,
   ],
 })
-export class TeamSettingsComponent implements OnInit {
+export class TeamSettingsComponent {
   private teamsService = inject(TeamsService);
+  private dialog = inject(MatDialog);
 
   team = this.teamsService.team;
   loading = this.teamsService.loading;
@@ -44,9 +47,12 @@ export class TeamSettingsComponent implements OnInit {
   orgSlug = input.required<string>({ alias: "org-slug" });
   teamSlug = input.required<string>({ alias: "team-slug" });
 
-  ngOnInit(): void {
-    this.teamsService.retrieveSingleTeam(this.orgSlug(), this.teamSlug());
-    this.form.patchValue({ slug: this.teamSlug() });
+  constructor() {
+    effect(() => {
+      const teamSlug = this.teamSlug();
+      this.teamsService.setTeamKey(this.orgSlug(), teamSlug);
+      this.form.patchValue({ slug: teamSlug });
+    });
   }
 
   onSubmit() {
@@ -55,8 +61,18 @@ export class TeamSettingsComponent implements OnInit {
   }
 
   deleteTeam() {
-    if (window.confirm("Are you sure you want to delete this team?")) {
-      this.teamsService.deleteTeam(this.orgSlug(), this.teamSlug());
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete team?`,
+        message: $localize`Are you sure you want to delete this team?`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.teamsService.deleteTeam(this.orgSlug(), this.teamSlug());
+      }
+    });
   }
 }

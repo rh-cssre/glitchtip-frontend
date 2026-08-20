@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { client } from "../shared/api/api";
 import { StatefulService } from "../shared/stateful-service/signal-state.service";
 import { getPaginationHeaders, getPaginator } from "../shared/pagination.utils";
+import { keepPreviousValue } from "../shared/signal.utils";
 import { IssueStatus, IssueStatusUpdate, StatsPeriod } from "./interfaces";
 import { apiResource } from "../shared/api/api-resource-factory";
 
@@ -114,7 +115,8 @@ export class IssuesService extends StatefulService<IssuesState> {
     },
   });
   loading = computed(() => this.issuesResource.isLoading());
-  issues = computed(() => this.issuesResource.value()?.data);
+  // Keep the last page visible during a reload so the table doesn't blank out.
+  issues = keepPreviousValue(() => this.issuesResource.value()?.data);
   private issueStatsParams = computed(() => {
     const params = this.params();
     const issues = this.issues();
@@ -203,7 +205,7 @@ export class IssuesService extends StatefulService<IssuesState> {
     });
   });
 
-  pagination = computed(() => this.issuesResource.value()?.pagination);
+  pagination = keepPreviousValue(() => this.issuesResource.value()?.pagination);
   paginator = computed(() => getPaginator(this.pagination()));
   initialLoad = computed(
     () => !this.issuesResource.isLoading() && this.issuesResource.hasValue(),

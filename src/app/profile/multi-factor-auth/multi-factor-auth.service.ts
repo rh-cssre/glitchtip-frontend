@@ -102,7 +102,6 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
     const setupTOTPStage = this.setupTOTPStage();
     if (setupTOTPStage === 1) {
       this.generateRecoveryCodes();
-    } else if (setupTOTPStage === 3) {
     }
     this.setState({ setupTOTPStage: setupTOTPStage + 1 });
   }
@@ -126,13 +125,6 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
         recoveryCodes: (data as any).data.unused_codes,
       });
     }
-  }
-
-  decrementTOTPStage() {
-    this.state.update((state) => ({
-      ...state,
-      setupTOTPStage: state.setupTOTPStage - 1,
-    }));
   }
 
   setCopiedCodes() {

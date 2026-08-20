@@ -1,12 +1,15 @@
-import { Component, ViewEncapsulation } from "@angular/core";
-import { MatCard, MatCardContent } from "@angular/material/card";
+import {
+  Component,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 import { RouterLink } from "@angular/router";
 import { platforms } from "src/app/settings/projects/new-project/platform-picker/platforms";
 
-
 @Component({
   templateUrl: "./sdkdocs-index.component.html",
-  imports: [RouterLink, MatCard, MatCardContent],
+  imports: [RouterLink, PageShellComponent],
   styles: [
     `
       .unstyled {
@@ -16,6 +19,7 @@ import { platforms } from "src/app/settings/projects/new-project/platform-picker
     `,
   ],
   preserveWhitespaces: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class SDKDocsIndexComponent {

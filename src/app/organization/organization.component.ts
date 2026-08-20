@@ -34,7 +34,7 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
   subscription = inject(SubscriptionService);
   user = inject(UserService);
   private snackBar = inject(MatSnackBar);
-  private firstChildRoute: string = "";
+  private childRoutePath: string[] = [];
   private subscriptions: Subscription[] = [];
   private isNavigationFromBackButton = false;
   organizationService = inject(OrganizationsService);
@@ -63,10 +63,8 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
             this.organizationService.setActiveOrganizationSlug(orgSlug);
           } else {
             this.router.navigate(
-              ["../", activeOrganizationSlug, this.firstChildRoute],
-              {
-                relativeTo: this.route,
-              },
+              ["../", activeOrganizationSlug, ...this.childRoutePath],
+              { relativeTo: this.route },
             );
           }
         }
@@ -94,7 +92,12 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
 
       if (billingEnabled && activeOrg?.eventThrottleRate && !warningDismissed) {
         const snackBarRef = this.snackBar.openFromComponent(OverLimitSnackbar, {
-          data: activeOrgSlug,
+          // Already-enrolled orgs are throttled because they hit their cap, so
+          // offer "raise your cap"; overageEnabled is false until status loads.
+          data: {
+            activeOrgSlug,
+            overageEnabled: this.subscription.overageEnabled(),
+          },
           verticalPosition: "top",
           duration: snackbarDurationSeconds * 1000,
         });
@@ -107,7 +110,7 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.extractFirstChildRoute();
+    this.extractChildRoutePath();
     this.organizationService.setActiveOrganizationSlug(this.orgSlug());
     this.subscribeToRouteChanges();
   }
@@ -129,13 +132,21 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe(() => {
-          this.extractFirstChildRoute();
+          this.extractChildRoutePath();
         }),
     );
   }
 
-  private extractFirstChildRoute() {
-    const firstChild = this.route.firstChild;
-    this.firstChildRoute = firstChild ? firstChild.snapshot.url[0]?.path : "";
+  /** Stop at the first dynamic-segment route (`:id`, `:slug`) — never carry per-org IDs across an org switch. */
+  private extractChildRoutePath() {
+    const segments: string[] = [];
+    let child = this.route.firstChild;
+    while (child && !child.routeConfig?.path?.includes(":")) {
+      for (const segment of child.snapshot.url) {
+        segments.push(segment.path);
+      }
+      child = child.firstChild;
+    }
+    this.childRoutePath = segments;
   }
 }

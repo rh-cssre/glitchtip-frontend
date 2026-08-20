@@ -51,7 +51,7 @@ Premium support for $15 per user per month.
 
 Enterprise plans are available as well. They come with custom branding and single sign in integrations. LDAP, Google Apps, and more.
 
-Contact us to get started by emailing [sales@glitchtip.com](mailto:sales@glitchtip.com)
+Contact us to get started by emailing [support@glitchtip.com](mailto:support@glitchtip.com)
 
 ## How we handle support
 

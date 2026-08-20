@@ -10,7 +10,7 @@ variables:
   FF_NETWORK_PER_BUILD: 1
   DEBUG: "true"
   GIT_SUBMODULE_STRATEGY: normal
-  SAST_EXCLUDED_PATHS: "*.stories.ts, *.spec.ts, cypress"
+  SAST_EXCLUDED_PATHS: "*.spec.ts, cypress"
 
 include:
   - template: SAST.gitlab-ci.yml
@@ -25,9 +25,10 @@ test:
   stage: test
   image: node:24-alpine
   script:
-    - npm ci --force
-    # Disabled because storybook :(
-    #- npm run lint
+    - npm ci
+    - npm run lint
+    # Vitest unit tests run in Node via jsdom (no browser needed).
+    - npm test -- --watch=false
 
 test-e2e:
   stage: test
@@ -40,10 +41,10 @@ test-e2e:
       alias: backend
       command: ["./bin/run-all-in-one.sh"]
   image:
-    name: cypress/included:15.10.0
+    name: cypress/included:15.16.0
     entrypoint: [""]
   script:
-    - npm ci --force
+    - npm ci
     - cp src/proxy.conf.ci.json src/proxy.conf.json
     - npm run e2e
   except:
@@ -59,7 +60,7 @@ test-e2e:
 build-assets:
   stage: test
   script:
-    - npm ci --force
+    - npm ci
     - npm run build-prod
   artifacts:
     paths:
@@ -120,20 +121,23 @@ deploy-staging:
   environment:
     name: staging
     url: https://staging.glitchtip.com
-  only:
-    refs:
-      - master
-    variables:
-      - $CI_COMMIT_REF_PROTECTED
+  rules:
+    - if: '$CI_PROJECT_PATH == "glitchtip/glitchtip-frontend" && $CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_REF_PROTECTED == "true"'
 
 pages:
   stage: deploy
   script:
-    - npm ci --cache .npm --prefer-offline --force
+    - npm ci --cache .npm --prefer-offline
     - npm run build-static
     - npm run build-marketing
     - mv dist/marketing/browser public
     - cp 404.html public/
+    # One Pages site serves both apps: marketing at the root, the component
+    # preview (style guide) at /style-guide/. A GitLab project gets a single
+    # Pages site, so the style guide ships inside this job. base-href must
+    # match the subpath or the guide's assets 404.
+    - npx ng build component-preview --configuration production --base-href /style-guide/
+    - mv dist/component-preview/browser public/style-guide
   artifacts:
     paths:
       - public

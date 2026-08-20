@@ -6,6 +6,7 @@ import {
   computed,
   input,
   signal,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ResponseTimeSeries } from "../uptime.interfaces";
 import { AreaChartComponent } from "@glitchtip/ng-charts";
@@ -21,6 +22,7 @@ import { DatePipe } from "@angular/common";
       float: right;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [AreaChartComponent, DatePipe],
 })
 export class MonitorResponseChart implements OnDestroy {

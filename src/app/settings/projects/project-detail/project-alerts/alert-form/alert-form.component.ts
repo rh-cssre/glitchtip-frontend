@@ -1,5 +1,11 @@
 import { I18nPluralPipe } from "@angular/common";
-import { Component, OnInit, input, output } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -44,6 +50,7 @@ export const selectionRequiredValidator: ValidatorFn = (
   selector: "gt-alert-form",
   templateUrl: "./alert-form.component.html",
   styleUrls: ["./alert-form.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     I18nPluralPipe,
     ReactiveFormsModule,

@@ -1,4 +1,9 @@
-import { Component, ViewChild, inject } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -22,6 +27,7 @@ import { EmailsService } from "src/app/api/emails/emails.service";
   selector: "gt-manage-emails",
   templateUrl: "./manage-emails.html",
   styleUrls: ["./manage-emails.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatDividerModule,

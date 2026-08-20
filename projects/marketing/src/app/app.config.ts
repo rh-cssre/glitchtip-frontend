@@ -13,7 +13,10 @@ import {
 
 import { routes } from "./app.routes";
 import { SeoTitleStrategy } from "./shared/seo-title-strategy";
-import { provideClientHydration } from "@angular/platform-browser";
+import {
+  provideClientHydration,
+  withNoIncrementalHydration,
+} from "@angular/platform-browser";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { provideMarkdown } from "ngx-markdown";
 import { provideHttpClient, withFetch } from "@angular/common/http";
@@ -40,7 +43,7 @@ export const appConfig: ApplicationConfig = {
         useValue: SecurityContext.STYLE,
       },
     }),
-    provideClientHydration(),
+    provideClientHydration(withNoIncrementalHydration()),
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
   ],
 };

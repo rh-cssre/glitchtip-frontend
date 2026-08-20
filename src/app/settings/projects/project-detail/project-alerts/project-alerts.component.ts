@@ -1,6 +1,16 @@
-import { Component, OnInit, ViewChild, inject, input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { NewAlertRecipient, ProjectAlertsService } from "./project-alerts.service";
+import {
+  NewAlertRecipient,
+  ProjectAlertsService,
+} from "./project-alerts.service";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
@@ -13,11 +23,14 @@ import { MatCardModule } from "@angular/material/card";
 import { components } from "src/app/api/api-schema";
 import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 type ProjectAlert = components["schemas"]["ProjectAlertSchema"];
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
 
 export const iconXrefMapping: Partial<Record<RecipientType, string>> = {
+  feishu: "webhook",
   teams: "microsoft",
 };
 export function resolveRecipientIcon(type: RecipientType): string {
@@ -38,7 +51,9 @@ export function resolveRecipientIcon(type: RecipientType): string {
     MatTooltipModule,
     LoadingButtonComponent,
     MatProgressSpinnerModule,
+    EmptyStateComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ProjectAlertsService],
 })
 export class ProjectAlertsComponent implements OnInit {
@@ -122,9 +137,19 @@ export class ProjectAlertsComponent implements OnInit {
   }
 
   removeAlert(id: number) {
-    if (window.confirm("Are you sure you want to remove this notification?")) {
-      this.#service.deleteProjectAlert(id);
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove notification?`,
+        message: $localize`Are you sure you want to remove this notification?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteProjectAlert(id);
+      }
+    });
   }
 
   updateProperties(
@@ -166,7 +191,19 @@ export class ProjectAlertsComponent implements OnInit {
   }
 
   removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
-    this.#service.deleteAlertRecipient(recipient, alert);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove recipient?`,
+        message: $localize`Are you sure you want to remove this recipient?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteAlertRecipient(recipient, alert);
+      }
+    });
   }
 
   newAlertProperties(event: {

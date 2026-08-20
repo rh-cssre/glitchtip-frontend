@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map } from "rxjs/operators";
@@ -18,6 +23,7 @@ import { MatCardModule } from "@angular/material/card";
   selector: "gt-team-members",
   templateUrl: "./team-members.component.html",
   styleUrls: ["./team-members.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCardModule,
     MatFormFieldModule,
@@ -61,8 +67,8 @@ export class TeamMembersComponent implements OnInit {
       )
       .subscribe(({ orgSlug, teamSlug }) => {
         if (orgSlug && teamSlug) {
-          this.teamsService.retrieveTeamMembers(orgSlug, teamSlug);
-          this.organizationsService.retrieveOrganizationMembers(orgSlug);
+          this.teamsService.setTeamMembersKey(orgSlug, teamSlug);
+          this.organizationsService.setMembersOrgSlug(orgSlug);
         }
       });
     this.userService.getUserDetails();
