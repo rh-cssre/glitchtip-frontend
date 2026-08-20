@@ -80,6 +80,7 @@ describe("Edit and Delete a project", () => {
     cy.contains("Settings for New Project Name");
     // delete from db
     cy.get("#delete-project").click();
+    cy.get("[data-cy='dialog-confirm']").click();
   });
 
   it("edit the project platform", () => {
@@ -91,6 +92,8 @@ describe("Edit and Delete a project", () => {
 
   it("should remove the project and redirect to projects page", () => {
     cy.get("#delete-project").click();
+    cy.contains("Are you sure you want to delete this project?");
+    cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Your project has been successfully deleted");
     cy.url().should(
       "eq",
@@ -109,11 +112,13 @@ describe("Add and edit alerts", () => {
   it("should add a project alert, remove email recipient, add email recipient back", () => {
     cy.get("#create-new-alert").click();
     cy.get("[data-cy=quantity]").clear().type("2");
-    cy.get("button").contains("submit").click();
+    cy.get("button").contains("Submit").click();
     cy.contains("Remove Alert 1");
     cy.get("[data-cy=quantity]").should("have.value", "2");
 
     cy.get("#delete-recipient").click();
+    cy.contains("Are you sure you want to remove this recipient?");
+    cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("This alert isn't being sent anywhere.");
 
     cy.get("button").contains("Add An Alert Recipient").click();
@@ -134,7 +139,7 @@ describe("Add and edit alerts", () => {
       "Please select events or uptime monitor triggers for your alert.",
     );
     cy.get("[data-cy=uptime-check]").click();
-    cy.get("button").contains("submit").click();
+    cy.get("button").contains("Submit").click();
     cy.contains("Success! Your new alert has been added.");
 
     cy.get("[data-cy=error-check]").find("input").should("not.be.checked");

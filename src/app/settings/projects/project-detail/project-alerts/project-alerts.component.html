@@ -107,7 +107,6 @@
                       <button
                         class="recipient-action small-icon-button"
                         mat-icon-button
-                        color="primary"
                         attr.aria-label="Edit recipient"
                         (click)="
                           openEditNewRecipientDialog(recipient, recipientIndex)
@@ -119,7 +118,6 @@
                     <button
                       class="recipient-action small-icon-button"
                       mat-icon-button
-                      color="primary"
                       attr.aria-label="Delete Alert For {{ recipient.url }}"
                       (click)="removeNewAlertRecipient(recipient.url)"
                     >
@@ -130,25 +128,19 @@
               </li>
             }
           </ul>
-          <button
-            mat-stroked-button
-            color="primary"
-            (click)="openCreateRecipientDialog()"
-          >
+          <button mat-stroked-button (click)="openCreateRecipientDialog()">
             <mat-icon>add</mat-icon>
             <ng-container i18n>Add An Alert Recipient</ng-container>
           </button>
           <div class="new-alert-actions">
             <gt-loading-button
-              buttonText="submit"
+              buttonText="Submit"
               [loading]="newAlertLoading() === true"
               (buttonClick)="submitCreateAlert()"
               i18n
               >Submit</gt-loading-button
             >
-            <button (click)="closeNewAlert()" mat-stroked-button i18n
-              >Cancel</button
-            >
+            <button (click)="closeNewAlert()" mat-button i18n>Cancel</button>
           </div>
         </div>
       }
@@ -180,6 +172,7 @@
               <gt-loading-button
                 [buttonText]="'Remove Alert ' + (i + 1)"
                 buttonStyle="stroked"
+                color="warn"
                 (buttonClick)="removeAlert(alert.id!)"
                 [disabled]="!accessProjectWrite()"
                 [loading]="removeAlertLoading() === alert.id"
@@ -289,7 +282,6 @@
                           <button
                             class="recipient-action small-icon-button"
                             mat-icon-button
-                            color="primary"
                             attr.aria-label="Test recipient"
                             matTooltip="Send test notification"
                             [disabled]="testAlertLoading() === recipient.id"
@@ -304,7 +296,6 @@
                           <button
                             class="recipient-action small-icon-button"
                             mat-icon-button
-                            color="primary"
                             attr.aria-label="Edit recipient"
                             (click)="openEditRecipientDialog(recipient, alert)"
                           >
@@ -315,7 +306,6 @@
                           class="recipient-action small-icon-button"
                           id="delete-recipient"
                           mat-icon-button
-                          color="primary"
                           attr.aria-label="Delete Alert {{ i + 0 }}"
                           (click)="removeAlertRecipient(recipient, alert)"
                         >
@@ -329,7 +319,6 @@
             </ul>
             <button
               mat-stroked-button
-              color="primary"
               (click)="openUpdateRecipientDialog(alert)"
             >
               <mat-icon>add</mat-icon>

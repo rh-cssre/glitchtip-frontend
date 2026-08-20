@@ -76,12 +76,12 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             <span class="btn-item__use">Filled: the main action</span>
           </div>
           <div class="btn-item">
-            <button mat-stroked-button>Cancel</button>
+            <button mat-stroked-button>Invite member</button>
             <span class="btn-item__use">Outlined: a secondary action</span>
           </div>
           <div class="btn-item">
-            <button mat-button>Learn more</button>
-            <span class="btn-item__use">Text: a low-emphasis action</span>
+            <button mat-button>Cancel</button>
+            <span class="btn-item__use">Text: cancel, dismiss, tertiary</span>
           </div>
           <div class="btn-item">
             <button mat-icon-button aria-label="More">
@@ -193,6 +193,8 @@ export class ButtonsPreview {
   readonly dos = [
     "Use one filled button per view, for the primary action",
     "Use outlined for the secondary action next to it",
+    "Keep cancel, close, and dismiss as text buttons",
+    "Leave a secondary outlined button uncolored: primary and warn are both red, so a color on an outline reads as destructive",
     "Put the icon before the label",
     "Style destructive actions as an outlined warn button plus a confirm dialog",
     "Use the two standard icon-button sizes, not ad-hoc ones",
@@ -217,9 +219,9 @@ export class ButtonsPreview {
     { name: "gt-loading-button", type: "our async wrapper", default: "flat", description: "Server actions; shows a spinner" },
     { name: `color`, type: `"primary" | "warn"`, default: "", description: "primary for key actions, warn for destructive" },
   ];
-  readonly code = `<!-- primary + secondary -->
+  readonly code = `<!-- primary + cancel -->
 <button mat-flat-button color="primary" (click)="save()">Save</button>
-<button mat-stroked-button (click)="cancel()">Cancel</button>
+<button mat-button (click)="cancel()">Cancel</button>
 
 <!-- destructive: outlined warn, lower emphasis, always confirmed -->
 <button mat-stroked-button color="warn" (click)="confirmDelete()">

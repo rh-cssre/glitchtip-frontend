@@ -7,16 +7,10 @@
   overflow-x: clip;
 }
 
-// Decorative brand pattern down the left and right screen edges, fading inward
-// along an organic edge. The bands are fixed to the viewport and their width
-// tracks the margin beside the centred content column, so they never reach
-// behind the content. Include on the page's content wrapper; the mixin owns the
-// column cap ($content-width) so the band math always matches it.
-@mixin side-pattern($content-width) {
-  position: relative;
-  max-width: $content-width;
-  margin-inline: auto;
-
+// Just the fixed decorative edge bands, keyed to the centred content column so
+// they never reach behind it. Use directly on a page (e.g. the home host) that
+// caps its own content; for a single content wrapper use side-pattern() below.
+@mixin side-pattern-bands($content-width) {
   // Organic inner edge: a shallow base fade unioned with varied radial blobs at
   // different depths and heights, instead of a straight line.
   $band-fade:
@@ -75,4 +69,13 @@
     // Mirror so the right band fades inward.
     transform: scaleX(-1);
   }
+}
+
+// Content wrapper that both caps its column at $content-width and carries the
+// decorative edge bands (support, blog).
+@mixin side-pattern($content-width) {
+  position: relative;
+  max-width: $content-width;
+  margin-inline: auto;
+  @include side-pattern-bands($content-width);
 }

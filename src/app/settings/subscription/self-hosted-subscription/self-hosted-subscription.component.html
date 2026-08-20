@@ -5,8 +5,7 @@
   <ng-container slot="right">
     @if (paidForGlitchTip()) {
       <button
-        mat-flat-button
-        color="primary"
+        mat-stroked-button
         class="manage-billing-button"
         (click)="manageBilling()"
         [disabled]="manageBillingLoading()"
@@ -100,8 +99,7 @@
           >
         </div>
         <a
-          mat-flat-button
-          color="primary"
+          mat-stroked-button
           href="https://app.glitchtip.com"
           target="_blank"
           rel="noopener"

@@ -356,13 +356,11 @@ export class IssuesPage implements OnInit, OnDestroy {
 
   mergeSelectedIssues() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      restoreFocus: false,
-      height: "200px",
-      width: "350px",
       data: {
-        title: $localize`Merge issues`,
+        title: $localize`Merge issues?`,
         message: $localize`This action will merge your selected issues into a single issue.`,
         confirmText: $localize`Merge`,
+        destructive: false,
       },
     });
 
@@ -381,11 +379,8 @@ export class IssuesPage implements OnInit, OnDestroy {
       : this.numberOfSelectedIssues();
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      restoreFocus: false,
-      height: "200px",
-      width: "350px",
       data: {
-        title: $localize`Delete issues`,
+        title: $localize`Delete issues?`,
         message: $localize`Are you sure you want to delete ${count} issue(s)? You will permanently lose these issues and all associated events.`,
         confirmText: $localize`Delete`,
       },

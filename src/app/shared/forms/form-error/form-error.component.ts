@@ -10,5 +10,4 @@ import { MatInputModule } from "@angular/material/input";
 })
 export class FormErrorComponent {
   errors = input<string[]>();
-  readonly error = input<any>(); // Do not use
 }
