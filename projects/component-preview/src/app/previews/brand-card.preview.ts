@@ -64,7 +64,7 @@ import { PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Cards & surfaces"
       status="stable"
-      description="Two archetypes only. One shared primitive: surface fill + 1px outline-variant border + a large (16px) corner. Flat, border-only depth with no in-flow drop shadows."
+      description="Two archetypes only. One shared primitive: surface fill + 1px outline-variant border + a large (16px) corner. Flat, border-only depth with no in-flow drop shadows. Marquee cards (hero, feature switcher, newsletter) compose the same primitive with the extra-large (28px) corner."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
