@@ -324,6 +324,8 @@ export class BrandLayoutPreview {
   private readonly containerDefs = [
     { name: "--mkt-container-wide", usage: "Heroes, full-width bands, page chrome" },
     { name: "--mkt-container-docs", usage: "The docs shell (sidebar + content)" },
+    { name: "--mkt-container-home", usage: "Home body column + hero card (1320, grows to 1500 on large screens)" },
+    { name: "--mkt-container-table", usage: "The pricing plan table" },
     { name: "--mkt-container-content", usage: "Standard content pages (support, etc.)" },
     { name: "--mkt-container-reading", usage: "Prose / blog reading column" },
     { name: "--mkt-container-narrow", usage: "Forms, centered copy" },

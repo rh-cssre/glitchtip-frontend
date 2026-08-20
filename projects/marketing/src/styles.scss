@@ -11,9 +11,8 @@ $font-path: "../../../src/assets/fonts";
 
 html {
   color-scheme: light;
-  // Offset anchor / #fragment scrolling so a targeted heading lands just below
-  // the sticky top app bar instead of behind it. Keep in sync with ANCHOR_OFFSET
-  // in documentation-page.component.ts.
+  // Land #fragment targets below the sticky app bar. Keep in sync with
+  // ANCHOR_OFFSET in documentation-page.component.ts.
   scroll-padding-top: 88px;
   @include mat.theme(
     (
@@ -36,8 +35,7 @@ html {
   --mkt-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --mkt-duration: 0.6s;
 
-  // Spacing scale (4px base). Use these instead of ad-hoc px so vertical rhythm
-  // and gaps stay on one grid.
+  // Spacing scale (4px base).
   --mkt-space-1: 4px;
   --mkt-space-2: 8px;
   --mkt-space-3: 12px;
@@ -48,38 +46,33 @@ html {
   --mkt-space-8: 64px;
   --mkt-space-9: 96px;
 
-  // Layout containers. Every page/band picks ONE of these max-widths; the gutter
-  // formula below gives them a single shared edge.
+  // Layout containers: every page/band picks ONE of these max-widths.
   --mkt-container-wide: 1800px; // heroes, full-width bands, page chrome
-  --mkt-container-docs: 1500px; // the docs shell (sidebar + content)
+  --mkt-container-docs: 1500px; // wide structured layouts: docs shell
+  // Home column: holds 1320 on laptops (up to ~1750px viewport), then grows to
+  // 1500 on large monitors so the content fills the width instead of leaving
+  // wide empty margins. Hero card + body sections both read this, so they grow
+  // together and stay aligned.
+  --mkt-container-home: min(1500px, max(1320px, 100vw - 430px));
+  --mkt-container-table: 1280px; // pricing plan table
   --mkt-container-content: 1040px; // standard content pages (support, etc.)
   --mkt-container-reading: 760px; // prose / blog reading column
   --mkt-container-narrow: 600px; // forms, centered copy
   --mkt-gutter: 48px; // used as: width: min(95%, 100% - var(--mkt-gutter))
 
-  // Section rhythm — vertical space between major sections (drives .divider)
-  // so spacing isn't re-invented per page.
+  // Section rhythm — vertical space between major sections (drives .divider).
   --mkt-section: clamp(40px, 5vw, 64px);
 }
-
-// Common styles for Angular Material. Included so that we only have to load a
-// single CSS file for Angular Material in our app.
-// Don't include this anywhere else!
-// Custom typography classes are defined in app/styles/font-files.scss
-// These use Material Design tokens (e.g. var(--mat-sys-headline-large))
 
 body {
   --bg: var(--mat-sys-surface-container-highest);
 
-  // Base brand font for plain elements (e.g. card titles, blog article markup)
-  // that don't inherit a Material typography class. Without this they fall back
-  // to the browser serif.
+  // Elements without a Material typography class fall back to the browser
+  // serif without this.
   font-family: vars.$font-sans-serif;
 
   background-color: var(--bg);
-  // Two layers: a soft central wash that mutes the dot grid under content so
-  // text stays readable, over the dot grid itself. The wash scales with the
-  // viewport, so it covers the reading area on large screens too.
+  // A soft central wash over the dot grid keeps text readable above it.
   background-image:
     radial-gradient(
       ellipse 82% 135% at 50% 50%,
@@ -259,17 +252,30 @@ a {
 }
 
 .centered-block {
-  padding: 20px 10vw 80px;
+  // Shared content column; page-shell owns the side margin.
+  width: min(100%, var(--mkt-container-content));
+  margin-inline: auto;
+  padding: 0 0 80px;
   overflow: hidden;
 
   @media screen and (max-width: vars.$tablet) {
-    padding: 5px 16px 60px;
+    padding: 5px 0 60px;
   }
 
   .content {
     max-width: 600px;
     margin: 0 auto;
   }
+}
+
+// Long-form prose reads at the narrower reading measure.
+.centered-block.markdown-container {
+  max-width: var(--mkt-container-reading);
+}
+
+// Override `width`, not max-width: the base sets width via min().
+.centered-block.wide-content {
+  width: min(100%, var(--mkt-container-table));
 }
 
 .markdown-container {
@@ -326,7 +332,6 @@ a {
     width: 100%;
     margin: 20px 0;
     border-radius: var(--mat-sys-corner-large, 16px);
-    // Hairline to match the feature/product screenshots (was a heavy 6px).
     border: 1px solid var(--mat-sys-outline-variant);
   }
 
@@ -375,9 +380,7 @@ a {
     }
   }
 
-  // Copy-to-clipboard button injected onto each code block by addCodeCopyButtons
-  // (blog + docs). Renders a Material Symbols glyph (content_copy, swapped to
-  // check on copy). Always visible but low-emphasis, brightening on hover/focus.
+  // Copy button injected onto code blocks by addCodeCopyButtons (blog + docs).
   .doc-copy {
     position: absolute;
     top: 8px;
@@ -398,7 +401,6 @@ a {
       color 0.15s ease,
       border-color 0.15s ease;
 
-    // Material Symbols glyph (filled, matching mkt-code-card's copy icon).
     font-family: "Material Symbols Outlined";
     font-size: 18px;
     font-feature-settings: "liga";
@@ -460,12 +462,9 @@ a {
 }
 
 // ── Marketing design-system primitives ──────────────────────────────────────
-// Additive, shared building blocks consumed by the marketing pages. Kept in one
-// place so pages compose them instead of re-inventing surfaces, rows, and CTAs.
 
-// Scroll-reveal: sections fade/rise the first time they enter the viewport.
-// The .is-reveal class is added by RevealDirective in the browser only, so the
-// prerendered HTML (no class) stays fully visible for no-JS and crawlers.
+// Scroll-reveal. RevealDirective adds .is-reveal in the browser only, so
+// prerendered HTML stays fully visible for no-JS and crawlers.
 .is-reveal {
   opacity: 0;
   transform: translateY(18px);
@@ -496,9 +495,7 @@ a {
   padding-top: var(--mkt-section);
 }
 
-// Shared CTA row: the standard flex row for a primary + secondary CTA pair (or
-// a lone CTA). Left-aligned by default; centered heroes/bands opt in with
-// `justify-content: center`. One gap token so every CTA pair reads the same.
+// Shared CTA row; centered contexts opt in with justify-content: center.
 .cta-row {
   display: flex;
   flex-wrap: wrap;
@@ -506,18 +503,16 @@ a {
   gap: var(--mkt-space-3);
 }
 
-// The one marketing card primitive: a flat, border-only surface (surface fill +
-// 1px outline-variant hairline + the large 16px corner for media/cards). No
-// in-flow drop shadow. Compose padding/hover/layout on top per use; code blocks
-// use the small corner instead, so they are deliberately not this primitive.
+// The one marketing card primitive: flat, border-only, no drop shadow.
+// Marquee cards (hero, feature switcher, newsletter) override the 16px corner
+// to the extra-large 28px; code blocks use the small corner instead.
 .mkt-surface {
   background: var(--mat-sys-surface);
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: var(--mat-sys-corner-large, 16px);
 }
 
-// Interactive surface card: a .mkt-surface whose border and .mkt-card__title
-// lift to primary on hover. Used for feature/support/doc cards that are links.
+// Interactive card: border and __title lift to primary on hover.
 .mkt-card {
   @extend .mkt-surface;
   transition: border-color 0.15s ease;
@@ -535,8 +530,7 @@ a {
   color: var(--mat-sys-primary);
 }
 
-// Divider-row title: lifts to primary when its .mkt-row link is hovered (the
-// row itself is a plain link with a bottom hairline, no box).
+// Divider-row title: lifts to primary when its .mkt-row link is hovered.
 .mkt-row__title {
   transition: color 0.15s ease;
 }
@@ -545,8 +539,7 @@ a {
   color: var(--mat-sys-primary);
 }
 
-// Prev/next pager (blog posts, docs pages): plain on the surface, set apart by a
-// top hairline; the title goes primary on hover.
+// Prev/next pager (blog posts, docs pages).
 .mkt-pager {
   display: flex;
   justify-content: space-between;

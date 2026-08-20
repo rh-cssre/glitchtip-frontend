@@ -17,7 +17,7 @@ import {
   MatCardHeader,
   MatCardTitle,
 } from "@angular/material/card";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatIcon } from "@angular/material/icon";
 import { MatTooltip } from "@angular/material/tooltip";
 import { MatExpansionModule } from "@angular/material/expansion";
@@ -47,7 +47,6 @@ import { planOptions, selfHostedPlanOptions } from "./payment-plans";
     MatExpansionModule,
     MatDivider,
     MatButtonToggleModule,
-    RouterLink,
     PricingAddonCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -81,12 +80,16 @@ export class PaymentComponent implements AfterViewChecked, OnInit {
 
   setSelectedTab(value: number) {
     this.selectedTab.set(value);
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { plan: value === 1 ? "self-hosted" : null },
-      queryParamsHandling: "merge",
-      replaceUrl: true,
-    });
+    // Sync ?plan= only on the pricing page: navigating the current route from
+    // an embedding page (e.g. home) triggers scroll restoration.
+    if (this.pricingPage()) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { plan: value === 1 ? "self-hosted" : null },
+        queryParamsHandling: "merge",
+        replaceUrl: true,
+      });
+    }
   }
 
   ngAfterViewChecked() {

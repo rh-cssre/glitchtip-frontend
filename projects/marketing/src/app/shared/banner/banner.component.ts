@@ -10,10 +10,9 @@ import {
  */
 @Component({
   selector: "mkt-banner",
-  template: `<div class="banner"
-    ><div class="banner__art"></div
-    ><div class="banner__inner"><ng-content /></div
-  ></div>`,
+  template: `<div class="banner">
+    <div class="banner__inner"><ng-content /></div>
+  </div>`,
   styleUrl: "./banner.component.scss",
   changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.Emulated,

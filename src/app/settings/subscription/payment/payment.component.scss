@@ -22,7 +22,10 @@
   }
 
   @media (min-width: vars.$large) {
-    display: flex;
+    // Equal columns; auto-flow keeps it count-agnostic (don't hard-code a count).
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
     border-radius: vars.$shape-radius;
 
     mat-card + mat-card {
@@ -34,7 +37,6 @@
     text-align: left;
 
     @media (min-width: vars.$large) {
-      flex: 1;
       border-radius: 0;
       --mat-card-container-elevation-shadow: none;
 

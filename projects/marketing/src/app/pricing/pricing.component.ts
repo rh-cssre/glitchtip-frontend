@@ -3,25 +3,16 @@ import {
   ViewEncapsulation,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { MatCard } from "@angular/material/card";
 import { PaymentComponent } from "../shared/payment/payment.component";
+import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 
 @Component({
   selector: "mkt-pricing",
-  imports: [MatCard, PaymentComponent],
+  imports: [PageShellComponent, PaymentComponent],
   templateUrl: "./pricing.component.html",
+  styleUrl: "./pricing.component.scss",
   preserveWhitespaces: true,
   changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.Emulated,
 })
-export class PricingComponent {
-  constructor() {}
-
-  //   pricingRoutes$ = this.scully.available$.pipe(
-  //     map((availableRoutes) =>
-  //       availableRoutes
-  //         .filter((routeObject) => routeObject.route.startsWith('/pricing'))
-  //         .reverse()
-  //     )
-  //   );
-}
+export class PricingComponent {}
