@@ -16,7 +16,7 @@ Events above your plan quota are billed per 1,000 events on a tiered scale:
 
 | Events over quota | Price per 1,000 |
 | --- | --- |
-| First 1,000,000 | $0.18 |
+| First 1,000,000 | $0.17 |
 | 1,000,000 to 10,000,000 | $0.15 |
 | Above 10,000,000 | $0.12 |
 
