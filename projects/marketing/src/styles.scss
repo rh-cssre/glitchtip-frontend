@@ -49,7 +49,11 @@ html {
   // Layout containers: every page/band picks ONE of these max-widths.
   --mkt-container-wide: 1800px; // heroes, full-width bands, page chrome
   --mkt-container-docs: 1500px; // wide structured layouts: docs shell
-  --mkt-container-home: 1320px; // home body column + hero card
+  // Home column: holds 1320 on laptops (up to ~1750px viewport), then grows to
+  // 1500 on large monitors so the content fills the width instead of leaving
+  // wide empty margins. Hero card + body sections both read this, so they grow
+  // together and stay aligned.
+  --mkt-container-home: min(1500px, max(1320px, 100vw - 430px));
   --mkt-container-table: 1280px; // pricing plan table
   --mkt-container-content: 1040px; // standard content pages (support, etc.)
   --mkt-container-reading: 760px; // prose / blog reading column
