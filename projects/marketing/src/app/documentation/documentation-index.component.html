@@ -1,0 +1,40 @@
+<div class="doc-landing">
+  <h1 class="fancy marketing-heading">Documentation</h1>
+  <p class="marketing-body doc-landing__lede">
+    Everything you need to run GlitchTip: error tracking, performance and uptime
+    monitoring, self-hosting, and contributing. Pick a guide below or use the
+    navigation to jump straight in.
+  </p>
+
+  <div class="doc-landing__grid">
+    @for (group of nav; track group.title) {
+      <section class="mkt-surface doc-card">
+        <h2 class="marketing-small-heading">{{ group.title }}</h2>
+        <p class="doc-card__summary">{{ group.summary }}</p>
+        <ul>
+          @for (item of group.items; track item.title) {
+            <li>
+              @if (item.slug) {
+                <a [routerLink]="['/documentation', item.slug]">{{
+                  item.title
+                }}</a>
+              } @else {
+                <!-- Leaves the docs section (separate /sdkdocs, /hipaa, or an
+                     external URL): open in a new tab so this page stays as the
+                     way back, marked with the shared open_in_new icon. -->
+                <a
+                  class="doc-card__ext"
+                  [href]="item.href"
+                  target="_blank"
+                  rel="noopener"
+                  >{{ item.title
+                  }}<mat-icon class="doc-card__ext-icon">open_in_new</mat-icon></a
+                >
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+</div>

@@ -1,0 +1,97 @@
+@use "sass:list";
+@use "../../../../../src/assets/styles/variables" as vars;
+
+// The card grid: 36px pitch with a 1px line, so a filled cell is 35px inset by
+// 1px. Filled-cell tones are brand red + grey.
+$cell: 36px;
+$cell-fill: $cell - 1px;
+$cell-red: color-mix(in srgb, var(--mat-sys-primary) 30%, transparent);
+$cell-red-soft: color-mix(in srgb, var(--mat-sys-primary) 15%, transparent);
+$cell-grey: color-mix(in srgb, var(--mat-sys-outline-variant) 70%, transparent);
+$cell-grey-soft: color-mix(in srgb, var(--mat-sys-outline-variant) 40%, transparent);
+
+@function -grid-lines() {
+  @return conic-gradient(
+    from 90deg at 1px 1px,
+    #0000 90deg,
+    color-mix(in srgb, var(--mat-sys-outline-variant) 55%, transparent) 0
+  );
+}
+
+// Paints $cells — (col row tone) entries on the grid — as background layers of
+// the including element, removed on small screens where the stacked layouts
+// have no room for flourish. Pass $grid: -grid-lines() to also paint the grid,
+// first, so its lines frame the filled cells.
+@mixin grid-cells($cells, $grid: null) {
+  $images: ();
+  $positions: ();
+  $sizes: ();
+  $repeats: ();
+  @if $grid {
+    $images: ($grid,);
+    $positions: (0 0,);
+    $sizes: ($cell $cell,);
+    $repeats: (repeat,);
+  }
+  @each $c in $cells {
+    $tone: list.nth($c, 3);
+    $images: list.append($images, linear-gradient($tone, $tone), comma);
+    $positions: list.append(
+      $positions,
+      (list.nth($c, 1) * $cell + 1px) (list.nth($c, 2) * $cell + 1px),
+      comma
+    );
+    $sizes: list.append($sizes, $cell-fill $cell-fill, comma);
+    $repeats: list.append($repeats, no-repeat, comma);
+  }
+  background-image: $images;
+  background-position: $positions;
+  background-size: $sizes;
+  background-repeat: $repeats;
+
+  @media screen and (max-width: vars.$large) {
+    @if $grid {
+      background-image: $grid;
+      background-position: 0 0;
+      background-size: $cell $cell;
+      background-repeat: repeat;
+    } @else {
+      background-image: none;
+    }
+  }
+}
+
+// Faint square grid behind card content (the hero-card texture), fading out
+// toward the bottom, optionally with filled cells. The including block must be
+// a positioned box with clipped overflow; the `> *` lift keeps its content
+// above the texture.
+@mixin grid-texture($cells: ()) {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    @if list.length($cells) > 0 {
+      @include grid-cells($cells, $grid: -grid-lines());
+    } @else {
+      background-image: -grid-lines();
+      background-size: $cell $cell;
+    }
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 82%);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 82%);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Rounded clip that composited layers respect — shadows of 3D-tilted children
+// escape plain overflow: hidden at the corners.
+@mixin card-clip($radius: var(--mat-sys-corner-extra-large, 28px)) {
+  overflow: hidden;
+  border-radius: $radius;
+  clip-path: inset(0 round $radius);
+}

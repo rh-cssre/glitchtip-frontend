@@ -1,63 +1,68 @@
+@let primary = primaryButton();
+@let secondary = secondaryButton();
 <mat-card>
   <a
-    [routerLink]="isMember ? cardLink : secondaryButton?.link"
-    [queryParams]="isMember ? cardLinkQueryParams || {} : {}"
-    [tabIndex]="sampleCard && -1"
+    [routerLink]="
+      isMember() ? cardLink() : $safeNavigationMigration(secondary?.link)
+    "
+    [queryParams]="isMember() ? cardLinkQueryParams() || {} : {}"
+    [tabIndex]="sampleCard() && -1"
   >
-    <mat-card-title>
-      <span>{{ title }}</span>
-    </mat-card-title>
+    <mat-card-header>
+      <mat-card-title>
+        <span>{{ title() }}</span>
+      </mat-card-title>
+    </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
-      <ng-container *ngFor="let description of descriptionList">
-        <p class="mat-small key">
+      @for (description of descriptionList(); track description) {
+        <p class="caption-text key">
           <span>{{ description.key | uppercase }}</span>
         </p>
         <p>
           <span>{{ description.value }}</span>
         </p>
-      </ng-container>
+      }
     </mat-card-content>
   </a>
   <mat-card-actions>
-    <a
-      *ngIf="primaryButton && primaryButton.text && primaryButton.link"
-      class="action-button"
-      mat-stroked-button
-      [disabled]="!isMember"
-      [matTooltip]="
-        isMember
-          ? ''
-          : 'To view issues for this project, add yourself to the corresponding team.'
-      "
-      matTooltipPosition="right"
-      color="primary"
-      [routerLink]="isMember ? cardLink : undefined"
-      [queryParams]="isMember ? primaryButton.query || {} : {}"
-    >
-      <mat-icon
-        *ngIf="primaryButton.icon"
-        class="icon__warning"
-        aria-hidden="true"
-        >{{ primaryButton.icon }}</mat-icon
+    @if (primary && primary.text && primary.link) {
+      <a
+        class="action-button"
+        mat-stroked-button
+        [disabled]="!isMember()"
+        [matTooltip]="
+          isMember()
+            ? ''
+            : 'To view issues for this project, add yourself to the corresponding team.'
+        "
+        matTooltipPosition="right"
+        [routerLink]="isMember() ? cardLink() : undefined"
+        [queryParams]="isMember() ? primary.query || {} : {}"
       >
-      <span>{{ primaryButton.text }}</span>
-    </a>
-    <a
-      *ngIf="secondaryButton && secondaryButton.text && secondaryButton.link"
-      class="action-button"
-      mat-button
-      color="primary"
-      [routerLink]="secondaryButton.link"
-      [disabled]="sampleCard"
-    >
-      <mat-icon
-        *ngIf="secondaryButton.icon"
-        class="icon__settings"
-        aria-hidden="true"
-        >{{ secondaryButton.icon }}</mat-icon
+        @if (primary.icon) {
+          <mat-icon class="icon__warning" aria-hidden="true">{{
+            primary.icon
+          }}</mat-icon>
+        }
+        <span>{{ primary.text }}</span>
+      </a>
+    }
+    @if (secondary && secondary.text && secondary.link) {
+      <a
+        class="action-button"
+        mat-button
+        color="primary"
+        [routerLink]="secondary.link"
+        [disabled]="sampleCard()"
       >
-      <span>{{ secondaryButton.text }}</span>
-    </a>
+        @if (secondary.icon) {
+          <mat-icon class="icon__settings" aria-hidden="true">{{
+            secondary.icon
+          }}</mat-icon>
+        }
+        <span>{{ secondary.text }}</span>
+      </a>
+    }
   </mat-card-actions>
 </mat-card>
