@@ -1,0 +1,52 @@
+# Unreleased
+
+- Feat: Keep lists on screen while they reload. Issues, logs, releases, release files, performance transactions, uptime monitors and checks, and user reports now dim the previous rows under a single top progress bar on a filter, sort, or page change, instead of blanking out or swapping in a centered spinner.
+- Feat: Give every no-data view a consistent empty state with an icon, a short explanation, and an action where one helps — uptime monitors, releases, performance, project alerts, logs, API tokens, and social logins. Empty-state titles render as real headings, so screen-reader users can navigate to them.
+- Feat: Distinguish "no logs yet" from "no matching logs" — a first run points at SDK setup, while a search or filter that returns nothing suggests adjusting the filters.
+- Fix: Show only one zero-state at a time on the issues page. The setup instructions, the "not on this project's team" notice, and the no-results state no longer stack, and no-results now offers a Clear filters action.
+- Change: Tidy the issues onboarding screen by folding the configuration reference and optional features behind an "Optional setup" expander, and only show the project settings pointer when a project is actually selected.
+- Change: Rework the hosted pricing page. The free tier is now presented as "Hobby & Trial" for evaluations and side projects, and the hosted plans now state event retention (30 days on the free tier, 90 days from Small up).
+- Change: Make the license key optional on the marketing support form, and explain that direct support covers paid plans while pointing free-tier users at the community channels.
+- Chore: Update dependencies (Angular 22.1).
+
+# 6.2.2
+
+- Fix: Hide the "Open Support Chat" item in the Support menu on hosted instances — it linked to a self-hosted, license-key-gated support page that hosted users cannot use. Hosted support remains the in-app chat widget.
+- Chore: Update dependencies (Angular 22.0.7).
+
+# 6.2.1
+
+- Feat: Converge the issue status controls into a single dropdown, add a "resolve in next release" option, and confirm the action with a chip and snackbar.
+- Feat: Add a purpose-built default Open Graph social card for the marketing site.
+- Fix: Hide the self-hosted upsell and donation links in the Support menu on hosted.
+- Fix: Disable the add-alert and delete actions in project settings for organization members without permission.
+- Fix: Handle Chatwoot failures gracefully on the Support page, tidy the license-key error message, and attach the license to the conversation.
+- Fix: Repair the static build under TypeScript 6.
+- Refactor: Rebuild the TOTP two-factor setup as a stepper flow.
+- Refactor: Replace hardcoded colors with Material 3 design tokens.
+- Chore: Consolidate contact emails to support@glitchtip.com across the app and marketing site.
+- Chore: Update dependencies.
+
+# 6.2.0
+
+- Feat: Offer self-serve Stripe Payment Links for self-hosted tiers, with live links and a pricing deep-link.
+- Feat: Replace the "Support GlitchTip" nav block with a Support menu dropdown, including an unlicensed support banner with role-aware copy and distinct icons.
+- Fix: Correct self-hosted usage reporting — weight uptime checks at 0.1, show billed usage as unfloored decimals, load usage on the self-hosted page, plain-sum the previous-period total, and round the daily-chart tooltip.
+- Fix: Tidy subscription calls to action — hide Donate and Sponsor for paying customers, keep Support Chat enabled with a fallback, and reposition Contribute Code.
+- Docs: Add a Data Processing Agreement and document Cloudflare's sub-processor role on the hosted architecture page.
+- Chore: Upgrade to Angular 22.0.1, migrate to the ESLint flat config for angular-eslint 22, and prune unused dependencies.
+- Fix: Externalize marked-katex-extension so the Vite dev server starts in CI.
+
+# 6.1.7
+
+- Feat: Add a "copy for AI" action to event detail, with a gated hint for the MCP endpoint.
+- Feat: Add a marketing Support page with a contact form, linked from the primary nav, that requires a license key and auto-fills the email from the URL.
+- Feat: Manage billing through the Stripe Portal via a new InstanceLicenseService, gated on paid instances.
+- Feat: Add Feishu (Lark) webhook alert recipient support.
+- Feat: Deep-link the marketing pricing tab via a `?plan` query param.
+- Feat: Pre-fill MCP setup examples with the caller's instance URL.
+- Fix: Correct subscription, organization, and user fetch behavior, and stop an effect/setState self-loop from crashing the subscription tab.
+- Fix: Preserve the deep path when switching organizations without leaking dynamic IDs.
+- Fix: Respect the selected environment instead of clearing it before the environment service finishes loading.
+- Chore: Upgrade to Angular 22, remove Storybook in favor of a component-preview app, add Vitest unit tests, and enable lint.
+- Deps: Upgrade Cypress to 15.16.0 so the e2e image ships Node >= 24.15.
