@@ -63,8 +63,10 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
     :host(.full-height),
     :host(.full-height) .loading-overlay,
     :host(.full-height) .loading-overlay__content {
-      display: block;
-      height: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
     }
   `,
 })
