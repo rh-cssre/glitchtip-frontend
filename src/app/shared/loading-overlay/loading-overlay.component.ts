@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  booleanAttribute,
+} from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 /**
@@ -31,6 +36,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
       </div>
     </div>
   `,
+  host: { "[class.full-height]": "fullHeight()" },
   styles: `
     .loading-overlay {
       position: relative;
@@ -54,6 +60,14 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
       opacity: 0.5;
       pointer-events: none;
     }
+    :host(.full-height),
+    :host(.full-height) .loading-overlay,
+    :host(.full-height) .loading-overlay__content {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
   `,
 })
 export class LoadingOverlayComponent {
@@ -61,4 +75,6 @@ export class LoadingOverlayComponent {
   readonly loading = input<boolean>(false);
   /** Accessible label for the progress bar, e.g. "Loading issues". */
   readonly label = input<string>("Loading");
+  /** Whether the loading overlay should fill its parent container. */
+  readonly fullHeight = input<boolean>(false, { transform: booleanAttribute });
 }
