@@ -84,9 +84,10 @@ export class SubscriptionComponent extends StatefulComponent<
   readonly subscriptionLoading = this.service.subscriptionLoading;
   readonly subscriptionRefreshTimeout = this.service.subscriptionRefreshTimeout;
   readonly totalEventsAllowed = this.service.totalEventsAllowed;
-  // Overage card renders only for paid (eligible), server-provisioned orgs.
+  // Paid, server-provisioned orgs, plus orgs with overage on but no longer
+  // billable, so they can still switch it off.
   readonly showOverageCard = computed(
-    () => this.service.overageEligible() && this.service.overageConfigured(),
+    () => this.service.canConfigureOverage() || this.service.overageEnabled(),
   );
   readonly activeOrganization = this.orgService.activeOrganization;
   readonly activeOrganizationSlug = this.orgService.activeOrganizationSlug;
@@ -160,6 +161,9 @@ export class SubscriptionComponent extends StatefulComponent<
     effect(() => {
       if (this.isHosted() !== true) return;
       this.paymentService.productsResource.reload();
+      // A throttled org already holds overage status for the snackbar, so its
+      // key does not flip on entry and it would otherwise never refetch here.
+      this.service.overageStatusResource.reload();
       if (this.sessionId()) {
         this.service.refreshUntilSubscriptionOrTimeout();
       }

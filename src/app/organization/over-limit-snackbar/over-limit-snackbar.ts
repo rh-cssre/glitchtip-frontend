@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import {
   MatSnackBarAction,
@@ -9,10 +9,11 @@ import {
 } from "@angular/material/snack-bar";
 import { MatIcon } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
 
 interface OverLimitSnackbarData {
   activeOrgSlug: string;
-  overageEnabled: boolean;
+  throttleRate: number;
 }
 
 @Component({
@@ -23,14 +24,14 @@ interface OverLimitSnackbarData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverLimitSnackbar {
-  readonly activeOrgSlug: string;
-  readonly overageEnabled: boolean;
+  private subscriptionService = inject(SubscriptionService);
+  private data = inject<OverLimitSnackbarData>(MAT_SNACK_BAR_DATA);
 
-  constructor(
-    public snackBarRef: MatSnackBarRef<OverLimitSnackbar>,
-    @Inject(MAT_SNACK_BAR_DATA) data: OverLimitSnackbarData,
-  ) {
-    this.activeOrgSlug = data.activeOrgSlug;
-    this.overageEnabled = data.overageEnabled;
-  }
+  readonly snackBarRef =
+    inject<MatSnackBarRef<OverLimitSnackbar>>(MatSnackBarRef);
+  readonly activeOrgSlug = this.data.activeOrgSlug;
+  /** Percent dropped, from the org payload; overage status loads later. */
+  readonly throttleRate = this.data.throttleRate;
+  /** Which remedy to offer; `unknown` until overage status loads. */
+  readonly throttleState = this.subscriptionService.throttleState;
 }

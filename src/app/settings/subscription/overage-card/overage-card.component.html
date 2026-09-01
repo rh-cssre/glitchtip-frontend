@@ -4,11 +4,18 @@
       <div class="overage-top">
         <div class="overage-top-text">
           <span class="body-text-strong" i18n>Overage billing</span>
-          <p class="overage-tagline body-text" i18n>
-            Keep ingesting past your plan quota and pay only for the overflow, up
-            to a monthly cap you set. At the cap, throttling resumes, so your
-            bill never goes over the cap.
-          </p>
+          @if (overageInactive()) {
+            <p class="overage-tagline body-text" i18n>
+              Overage billing is switched on, but your current plan cannot be
+              billed for it, so it is not adding any headroom.
+            </p>
+          } @else {
+            <p class="overage-tagline body-text" i18n>
+              Keep ingesting past your plan quota and pay only for the overflow,
+              up to a monthly cap you set. At the cap, throttling resumes, so
+              your bill never goes over the cap.
+            </p>
+          }
         </div>
         <div class="overage-top-control">
           @if (loading()) {
@@ -30,44 +37,97 @@
         </p>
       }
 
-      @if (enabled()) {
-        <mat-divider />
-        <div class="overage-row">
-          <div class="overage-row-main">
-            <span class="overage-amount"
-              >≈ {{ costDollars() | currency }}
-              <span class="overage-est-note" i18n
-                >this cycle (estimate)</span
-              ></span
-            >
-            @if (resetDate(); as reset) {
-              <span class="overage-sub" i18n>Resets {{ reset | date }}</span>
-            }
-          </div>
-          <span class="overage-percent"
-            >{{ capProgressPercent() }}% <span i18n>of cap</span></span
-          >
-        </div>
-        <mat-progress-bar
-          mode="determinate"
-          [value]="capProgressPercent()"
-          [color]="capReached() ? 'warn' : 'primary'"
-        />
-
-        @if (capReached()) {
+      @switch (throttleState()) {
+        @case ("stalled") {
+          <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Spend cap reached. Events above your quota are being throttled again.
-            Raise the cap to keep ingesting.
+            Your plan cannot be billed for overage, so this is not adding any
+            headroom and about {{ throttleRate() }}% of new events are being
+            dropped. Raising the spend cap will not change that.
           </p>
-        } @else if (willReachCap()) {
-          <p class="overage-alert" i18n>
-            On track to reach your cap before the cycle ends.
+        }
+        @case ("cap") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            Spend cap reached, so about {{ throttleRate() }}% of new events are
+            being dropped. Raise the cap to keep ingesting.
           </p>
+        }
+        @case ("throttled") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            About {{ throttleRate() }}% of new events are being dropped.
+          </p>
+        }
+        @case ("no-overage") {
+          <mat-divider />
+          @if (canManage()) {
+            <p class="overage-alert overage-alert--warn" i18n>
+              About {{ throttleRate() }}% of new events are being dropped. Turn
+              on overage billing to keep ingesting.
+            </p>
+          } @else {
+            <p class="overage-alert overage-alert--warn" i18n>
+              About {{ throttleRate() }}% of new events are being dropped. Ask
+              an organization owner to turn on overage billing.
+            </p>
+          }
+        }
+        @default {
+          @if (capReached()) {
+            <mat-divider />
+            <p class="overage-alert overage-alert--warn" i18n>
+              Spend cap reached. New events will be dropped until you raise the
+              cap.
+            </p>
+          } @else if (willReachCap()) {
+            <mat-divider />
+            <p class="overage-alert" i18n>
+              On track to reach your cap before the cycle ends.
+            </p>
+          }
+        }
+      }
+
+      @if (enabled()) {
+        <!-- Unbillable overage meters nothing, so no estimate or cap bar. -->
+        @if (!overageInactive()) {
+          <mat-divider />
+          <div class="overage-row">
+            <div class="overage-row-main">
+              <span class="overage-amount"
+                >≈ {{ costDollars() | currency }}
+                <span class="overage-est-note" i18n
+                  >this cycle (estimate)</span
+                ></span
+              >
+              @if (resetDate(); as reset) {
+                <span class="overage-sub" i18n>Resets {{ reset | date }}</span>
+              }
+            </div>
+            <span class="overage-percent"
+              >{{ capProgressPercent() }}% <span i18n>of cap</span></span
+            >
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="capProgressPercent()"
+            [color]="capReached() ? 'warn' : 'primary'"
+          />
         }
 
         <mat-divider />
         <div class="overage-row">
-          @if (editingCap()) {
+          @if (overageInactive()) {
+            <div class="overage-row-main">
+              <span class="overage-amount">{{
+                capDollarsCurrent() | currency
+              }}</span>
+              <span class="overage-sub" i18n
+                >Monthly spend cap (not in effect)</span
+              >
+            </div>
+          } @else if (editingCap()) {
             <mat-form-field appearance="outline" class="cap-field">
               <mat-label i18n>Monthly spend cap</mat-label>
               <span matTextPrefix>$&nbsp;</span>
@@ -113,14 +173,22 @@
               }}</span>
               <span class="overage-sub" i18n>Monthly spend cap</span>
             </div>
-            <button
-              mat-stroked-button
-              [disabled]="!canManage()"
-              (click)="startEditCap()"
-              i18n
-            >
-              Adjust cap
-            </button>
+            @if (capAdjustable()) {
+              <button
+                mat-stroked-button
+                [disabled]="!canManage()"
+                (click)="startEditCap()"
+                i18n
+              >
+                Adjust cap
+              </button>
+            } @else {
+              <!-- The cap POST would be rejected (no live overage price). -->
+              <span class="overage-sub" i18n
+                >Overage billing is not available on this server right now, so
+                the spend cap cannot be changed.</span
+              >
+            }
           }
         </div>
       }

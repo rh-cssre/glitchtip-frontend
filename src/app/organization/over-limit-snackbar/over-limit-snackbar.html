@@ -1,19 +1,45 @@
 <span matSnackBarLabel>
+  <!-- The plan limit is not the cause: an org at its cap is past it on purpose. -->
   <span i18n>
-    You've hit your plan's event limit for this billing period, so new events
-    are being throttled.
+    About {{ throttleRate }}% of your new events are being dropped.
   </span>
-  <a class="subscription-link" [routerLink]="[activeOrgSlug, 'settings', 'subscription']" (click)="snackBarRef.dismiss()" i18n>
+  <a
+    class="subscription-link"
+    [routerLink]="[activeOrgSlug, 'settings', 'subscription']"
+    (click)="snackBarRef.dismiss()"
+    i18n
+  >
     Manage your subscription
   </a>
-  @if (overageEnabled) {
-    <span i18n> to upgrade or raise your overage spend cap and keep ingesting.</span>
-  } @else {
-    <span i18n> to upgrade or turn on overage billing and keep ingesting.</span>
+  @switch (throttleState()) {
+    @case ("cap") {
+      <span i18n>
+        to upgrade or raise your overage spend cap and keep ingesting.</span
+      >
+    }
+    @case ("no-overage") {
+      <span i18n>
+        to upgrade or turn on overage billing and keep ingesting.</span
+      >
+    }
+    @case ("stalled") {
+      <span i18n>
+        to upgrade. Overage billing is on, but your plan cannot be billed for
+        it, so raising your spend cap will not change this.
+      </span>
+    }
+    @default {
+      <span i18n> to upgrade and keep ingesting.</span>
+    }
   }
 </span>
 <span matSnackBarActions>
-  <button matSnackBarAction matIconButton class="dismiss-button" (click)="snackBarRef.dismiss()">
+  <button
+    matSnackBarAction
+    matIconButton
+    class="dismiss-button"
+    (click)="snackBarRef.dismiss()"
+  >
     <mat-icon>close</mat-icon>
   </button>
 </span>

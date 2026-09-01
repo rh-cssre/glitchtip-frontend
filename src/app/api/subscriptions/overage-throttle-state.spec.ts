@@ -1,0 +1,163 @@
+import { describe, it, expect } from "vitest";
+import type { components } from "../api-schema";
+import {
+  capReached,
+  isOverageInactive,
+  overageThrottleState,
+} from "./overage-throttle-state";
+
+/**
+ * This is the logic behind the remedy the overage card and the over-limit
+ * snackbar offer. Getting it wrong points a throttled customer at a control
+ * that cannot help, so each state is pinned down here.
+ */
+
+type OverageStatus = components["schemas"]["OverageStatusSchema"];
+
+/** A healthy paid org, well inside its quota and not throttled. */
+const status = (overrides: Partial<OverageStatus> = {}): OverageStatus => ({
+  enabled: true,
+  eligible: true,
+  configured: true,
+  capCents: 5000,
+  capUnits: 294117,
+  quota: 500000,
+  usage: 400000,
+  overageUnits: 0,
+  overageCostCents: 0,
+  throttleRate: 0,
+  ...overrides,
+});
+
+describe("overageThrottleState", () => {
+  it("is unknown before the status loads", () => {
+    expect(overageThrottleState(null)).toBe("unknown");
+  });
+
+  it("is none while events are flowing", () => {
+    expect(overageThrottleState(status())).toBe("none");
+  });
+
+  it("offers overage when a throttled org has it switched off", () => {
+    expect(
+      overageThrottleState(
+        status({ enabled: false, throttleRate: 100, overageUnits: 50000 }),
+      ),
+    ).toBe("no-overage");
+  });
+
+  it("does not offer overage to a throttled org whose plan cannot take it", () => {
+    expect(
+      overageThrottleState(
+        status({ enabled: false, eligible: false, throttleRate: 100 }),
+      ),
+    ).toBe("unavailable");
+  });
+
+  it("does not offer overage when the server has no overage price", () => {
+    expect(
+      overageThrottleState(
+        status({ enabled: false, configured: false, throttleRate: 100 }),
+      ),
+    ).toBe("unavailable");
+  });
+
+  it("blames the cap when a live overage org is throttled", () => {
+    expect(
+      overageThrottleState(status({ throttleRate: 100, overageUnits: 294117 })),
+    ).toBe("cap");
+  });
+
+  it("is stalled when overage is on for a plan that cannot bill it", () => {
+    expect(
+      overageThrottleState(
+        status({ eligible: false, throttleRate: 100, overageUnits: 50000 }),
+      ),
+    ).toBe("stalled");
+  });
+
+  it("reads partial throttling as throttling", () => {
+    expect(
+      overageThrottleState(status({ throttleRate: 10, overageUnits: 294117 })),
+    ).toBe("cap");
+  });
+
+  it("does not blame the cap when usage sits below a freshly raised cap", () => {
+    expect(
+      overageThrottleState(
+        status({ throttleRate: 100, overageUnits: 50000, capUnits: 588235 }),
+      ),
+    ).toBe("throttled");
+  });
+
+  it("names the cap only once usage has reached it", () => {
+    expect(
+      overageThrottleState(
+        status({ throttleRate: 100, overageUnits: 294117, capUnits: 294117 }),
+      ),
+    ).toBe("cap");
+    expect(
+      overageThrottleState(
+        status({ throttleRate: 100, overageUnits: 294116, capUnits: 294117 }),
+      ),
+    ).toBe("throttled");
+  });
+
+  it("does not blame the cap when the archived overage price locks it", () => {
+    expect(
+      overageThrottleState(
+        status({ configured: false, throttleRate: 100, overageUnits: 294117 }),
+      ),
+    ).toBe("throttled");
+  });
+});
+
+describe("capReached", () => {
+  it("is false before the status loads", () => {
+    expect(capReached(null)).toBe(false);
+  });
+
+  it("is false when overage is off, whatever the numbers say", () => {
+    expect(capReached(status({ enabled: false, overageUnits: 294117 }))).toBe(
+      false,
+    );
+  });
+
+  it("is false with no cap set", () => {
+    expect(capReached(status({ capUnits: 0, overageUnits: 50000 }))).toBe(
+      false,
+    );
+  });
+
+  it("is true once overage units consume the cap", () => {
+    expect(capReached(status({ overageUnits: 294117 }))).toBe(true);
+  });
+});
+
+describe("isOverageInactive", () => {
+  it("is false before the status loads", () => {
+    expect(isOverageInactive(null)).toBe(false);
+  });
+
+  it("is false when overage is off", () => {
+    expect(isOverageInactive(status({ enabled: false }))).toBe(false);
+  });
+
+  it("is false when overage is off and the plan is ineligible", () => {
+    expect(isOverageInactive(status({ enabled: false, eligible: false }))).toBe(
+      false,
+    );
+  });
+
+  it("is false for a working setup", () => {
+    expect(isOverageInactive(status())).toBe(false);
+  });
+
+  it("is true when the plan can no longer be billed for overage", () => {
+    expect(isOverageInactive(status({ eligible: false }))).toBe(true);
+  });
+
+  it("is false when only the overage price is gone", () => {
+    expect(isOverageInactive(status({ configured: false }))).toBe(false);
+  });
+});
