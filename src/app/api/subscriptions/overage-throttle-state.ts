@@ -19,20 +19,18 @@ export type OverageThrottleState =
   | "cap"
   /** Throttled with overage live but no raisable cap to blame. */
   | "throttled"
-  /** Throttled while overage reads "on" but cannot bill, so it grants none. */
+  /** Throttled while overage reads "on" but is granting no headroom. */
   | "stalled";
 
 /**
- * `enabled` is sticky state that outlives the plan that justified it, so it
- * never means "working" on its own.
- *
- * Not derived from `configured`: archiving the overage price blocks new
- * enrolments but does not detach metered items already attached, so an enrolled
- * org keeps being metered. Treating that as inactive would hide a real charge.
+ * Overage reads "on" but is granting no headroom. `active` is the predicate the
+ * throttle task enforces, so this cannot drift from what the server does: it
+ * covers an ineligible plan, a cleared primary subscription, and a metered item
+ * that has gone from Stripe, which `enabled` alone hides in every case.
  */
 export function isOverageInactive(status: OverageStatus | null): boolean {
   if (!status) return false;
-  return status.enabled && !status.eligible;
+  return status.enabled && !status.active;
 }
 
 /** Usage has consumed the spend cap. Only meaningful with overage enabled. */
@@ -42,11 +40,11 @@ export function capReached(status: OverageStatus | null): boolean {
 }
 
 /**
- * Only eligibility can say overage is not working. Inferring it from usage
- * sitting below the cap reads across a lagging value, since `throttleRate` is
- * written by a background sweep while usage and the cap are computed per
- * request, and told customers their cap raise had failed right after it worked.
- * The cap is blamed only once usage has actually reached it (see `throttled`).
+ * Only `active` says overage is not working. Inferring it from usage sitting
+ * below the cap reads across a lagging value, since `throttleRate` is written by
+ * a background sweep while usage and the cap are computed per request, and told
+ * customers their cap raise had failed right after it worked. The cap is blamed
+ * only once usage has actually reached it (see `throttled`).
  */
 export function overageThrottleState(
   status: OverageStatus | null,

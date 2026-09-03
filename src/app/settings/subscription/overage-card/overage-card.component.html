@@ -6,8 +6,8 @@
           <span class="body-text-strong" i18n>Overage billing</span>
           @if (overageInactive()) {
             <p class="overage-tagline body-text" i18n>
-              Overage billing is switched on, but your current plan cannot be
-              billed for it, so it is not adding any headroom.
+              Overage billing is switched on, but it is not adding any headroom
+              on your current plan.
             </p>
           } @else {
             <p class="overage-tagline body-text" i18n>
@@ -41,9 +41,9 @@
         @case ("stalled") {
           <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Your plan cannot be billed for overage, so this is not adding any
-            headroom and about {{ throttleRate() }}% of new events are being
-            dropped. Raising the spend cap will not change that.
+            Overage billing is on but not adding any headroom, so about
+            {{ throttleRate() }}% of new events are being dropped. Raising the
+            spend cap will not change that.
           </p>
         }
         @case ("cap") {

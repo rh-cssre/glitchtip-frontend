@@ -19,6 +19,7 @@ const status = (overrides: Partial<OverageStatus> = {}): OverageStatus => ({
   enabled: true,
   eligible: true,
   configured: true,
+  active: true,
   capCents: 5000,
   capUnits: 294117,
   quota: 500000,
@@ -71,7 +72,23 @@ describe("overageThrottleState", () => {
   it("is stalled when overage is on for a plan that cannot bill it", () => {
     expect(
       overageThrottleState(
-        status({ eligible: false, throttleRate: 100, overageUnits: 50000 }),
+        status({
+          eligible: false,
+          active: false,
+          throttleRate: 100,
+          overageUnits: 50000,
+        }),
+      ),
+    ).toBe("stalled");
+  });
+
+  // Cancelling and resubscribing leaves the opt-in set with no metered item in
+  // Stripe. Every other field still reads healthy, so only the server's own
+  // predicate can see it.
+  it("is stalled when the metered item is gone but the plan still qualifies", () => {
+    expect(
+      overageThrottleState(
+        status({ active: false, throttleRate: 100, overageUnits: 50000 }),
       ),
     ).toBe("stalled");
   });
@@ -143,8 +160,8 @@ describe("isOverageInactive", () => {
     expect(isOverageInactive(status({ enabled: false }))).toBe(false);
   });
 
-  it("is false when overage is off and the plan is ineligible", () => {
-    expect(isOverageInactive(status({ enabled: false, eligible: false }))).toBe(
+  it("is false when overage is off and never became active", () => {
+    expect(isOverageInactive(status({ enabled: false, active: false }))).toBe(
       false,
     );
   });
@@ -153,10 +170,13 @@ describe("isOverageInactive", () => {
     expect(isOverageInactive(status())).toBe(false);
   });
 
-  it("is true when the plan can no longer be billed for overage", () => {
-    expect(isOverageInactive(status({ eligible: false }))).toBe(true);
+  it("is true when the server reports overage is granting no headroom", () => {
+    expect(isOverageInactive(status({ active: false }))).toBe(true);
   });
 
+  // `configured` reports whether an overage price exists for new enrolments.
+  // Archiving it does not detach metered items already attached, so the server
+  // keeps `active` true and the org keeps accruing cost.
   it("is false when only the overage price is gone", () => {
     expect(isOverageInactive(status({ configured: false }))).toBe(false);
   });
