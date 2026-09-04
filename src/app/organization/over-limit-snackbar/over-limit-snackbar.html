@@ -22,10 +22,16 @@
         to upgrade or turn on overage billing and keep ingesting.</span
       >
     }
-    @case ("stalled") {
+    @case ("stalled-plan") {
       <span i18n>
-        to upgrade. Overage billing is on but not adding headroom, so raising
+        to upgrade. Your current plan cannot be billed for overage, so raising
         your spend cap will not change this.
+      </span>
+    }
+    @case ("stalled-broken") {
+      <span i18n>
+        for details. Overage billing is switched on but is not running, so
+        raising your spend cap will not help. Please contact support.
       </span>
     }
     @default {

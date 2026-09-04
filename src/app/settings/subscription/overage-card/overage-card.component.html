@@ -4,10 +4,14 @@
       <div class="overage-top">
         <div class="overage-top-text">
           <span class="body-text-strong" i18n>Overage billing</span>
-          @if (overageInactive()) {
+          @if (throttleState() === "stalled-broken") {
             <p class="overage-tagline body-text" i18n>
-              Overage billing is switched on, but it is not adding any headroom
-              on your current plan.
+              Overage billing is switched on, but it is not running.
+            </p>
+          } @else if (overageInactive()) {
+            <p class="overage-tagline body-text" i18n>
+              Overage billing is switched on, but your current plan cannot be
+              billed for it.
             </p>
           } @else {
             <p class="overage-tagline body-text" i18n>
@@ -38,12 +42,21 @@
       }
 
       @switch (throttleState()) {
-        @case ("stalled") {
+        @case ("stalled-plan") {
           <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Overage billing is on but not adding any headroom, so about
-            {{ throttleRate() }}% of new events are being dropped. Raising the
-            spend cap will not change that.
+            Your current plan cannot be billed for overage, so it is not adding
+            any headroom and about {{ throttleRate() }}% of new events are being
+            dropped. Raising the spend cap will not change that.
+          </p>
+        }
+        @case ("stalled-broken") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            Overage billing is switched on but is not running, so about
+            {{ throttleRate() }}% of new events are being dropped. You are not
+            being charged for it, and raising the spend cap will not help.
+            Please contact support.
           </p>
         }
         @case ("cap") {

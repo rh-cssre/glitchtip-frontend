@@ -69,7 +69,7 @@ describe("overageThrottleState", () => {
     ).toBe("cap");
   });
 
-  it("is stalled when overage is on for a plan that cannot bill it", () => {
+  it("blames the plan when it is the plan that cannot be billed", () => {
     expect(
       overageThrottleState(
         status({
@@ -79,18 +79,18 @@ describe("overageThrottleState", () => {
           overageUnits: 50000,
         }),
       ),
-    ).toBe("stalled");
+    ).toBe("stalled-plan");
   });
 
   // Cancelling and resubscribing leaves the opt-in set with no metered item in
   // Stripe. Every other field still reads healthy, so only the server's own
   // predicate can see it.
-  it("is stalled when the metered item is gone but the plan still qualifies", () => {
+  it("owns the fault when the plan qualifies but overage is not running", () => {
     expect(
       overageThrottleState(
         status({ active: false, throttleRate: 100, overageUnits: 50000 }),
       ),
-    ).toBe("stalled");
+    ).toBe("stalled-broken");
   });
 
   it("reads partial throttling as throttling", () => {

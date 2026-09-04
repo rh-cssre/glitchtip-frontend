@@ -19,8 +19,10 @@ export type OverageThrottleState =
   | "cap"
   /** Throttled with overage live but no raisable cap to blame. */
   | "throttled"
-  /** Throttled while overage reads "on" but is granting no headroom. */
-  | "stalled";
+  /** Throttled with overage on, but the plan cannot be billed for it. */
+  | "stalled-plan"
+  /** Throttled with overage on and billable, but the server is not running it. */
+  | "stalled-broken";
 
 /**
  * Overage reads "on" but is granting no headroom. `active` is the predicate the
@@ -56,7 +58,14 @@ export function overageThrottleState(
   if (!status.enabled) {
     return status.eligible && status.configured ? "no-overage" : "unavailable";
   }
-  if (isOverageInactive(status)) return "stalled";
+  if (isOverageInactive(status)) {
+    // Both mean "no headroom", but they are the customer's problem and ours
+    // respectively, so they get different remedies. An ineligible plan is a
+    // consequence of their own change; an eligible plan that is still not
+    // active means the metered item has gone from Stripe, which they cannot
+    // fix and are not being billed for.
+    return status.eligible ? "stalled-broken" : "stalled-plan";
+  }
   // "cap" is a remedy claim. With the overage price archived (configured
   // false) the cap endpoint rejects changes, so never point anyone at the cap.
   return capReached(status) && status.configured ? "cap" : "throttled";

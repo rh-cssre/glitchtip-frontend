@@ -332,9 +332,12 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       });
       return null;
     }
-    // Reflect the returned status immediately and refresh the subscription
-    // (billing mode may have migrated to flexible).
-    this.overageStatusResource.set(data);
+    // Refetch rather than writing the response body in. The server recomputes
+    // the throttle rate in a task it enqueues on the way out, so the body it
+    // returns pairs the new cap with the pre-change rate; storing that leaves
+    // the card claiming events are being dropped after they have resumed.
+    // `set` would also park the resource, so nothing would correct it later.
+    this.overageStatusResource.reload();
     this.subscriptionResource.reload();
     this.setState({ overageConfigLoading: false, overageConfigError: "" });
     return data;
