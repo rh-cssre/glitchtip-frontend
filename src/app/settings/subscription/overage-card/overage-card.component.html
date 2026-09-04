@@ -68,8 +68,14 @@
         }
         @case ("throttled") {
           <mat-divider />
+          <!-- The rate is swept in the background while the cap and usage above
+               are computed per request, so the two disagree for a while after a
+               change. Say which number is catching up rather than leave a cap
+               bar with headroom sitting next to a total-loss figure. -->
           <p class="overage-alert overage-alert--warn" i18n>
-            About {{ throttleRate() }}% of new events are being dropped.
+            About {{ throttleRate() }}% of new events are being dropped. If you
+            just changed your cap or plan, this clears once the change takes
+            effect.
           </p>
         }
         @case ("no-overage") {
