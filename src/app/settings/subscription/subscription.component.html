@@ -65,6 +65,12 @@
             [usagePercent]="
               thisMonthPercent() >= 80 ? thisMonthPercent() : null
             "
+            [eventThrottleRate]="
+              activeOrganization()?.eventThrottleRate ?? null
+            "
+            [isAcceptingEvents]="
+              activeOrganization()?.isAcceptingEvents ?? null
+            "
             [nextPlanEvents]="nextProduct()?.events ?? null"
             [upgradeLoading]="upgradeLoading()"
             (upgradeClick)="upgradeToNextPlan()"
