@@ -160,14 +160,14 @@
                 type="number"
                 step="1"
                 [min]="minCapDollars"
-                [max]="maxCapDollars"
+                [max]="maxCapDollars()"
                 [value]="capInputDollars()"
                 (input)="onCapInput($any($event.target).value)"
               />
               @if (!capValid()) {
                 <mat-error i18n
                   >Enter a cap between {{ minCapDollars | currency }} and
-                  {{ maxCapDollars | currency }}.</mat-error
+                  {{ maxCapDollars() | currency }}.</mat-error
                 >
               }
             </mat-form-field>

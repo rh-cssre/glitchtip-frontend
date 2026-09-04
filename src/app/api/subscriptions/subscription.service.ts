@@ -206,6 +206,9 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   overageEnabled = computed(() => this.overageStatus()?.enabled ?? false);
   overageEligible = computed(() => this.overageStatus()?.eligible ?? false);
   overageConfigured = computed(() => this.overageStatus()?.configured ?? false);
+  // Server-enforced ceiling; env-configurable, so the client reads it rather
+  // than keeping a copy. Falls back to the server default before status loads.
+  maxCapCents = computed(() => this.overageStatus()?.maxCapCents ?? 1_000_000);
   // One definition, shared with overageThrottleState: whether the configure
   // endpoint would accept a cap change. Gates the render, the Adjust button and
   // the "raise the cap" remedy alike, so the three cannot disagree.

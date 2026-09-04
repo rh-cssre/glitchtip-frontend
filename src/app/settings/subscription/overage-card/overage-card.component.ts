@@ -25,10 +25,9 @@ import {
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
 
-// Cap bounds, hardcoded for now (ideally exposed by the API). Max mirrors the
-// backend max; min $1 is ours (the backend only requires > 0).
+// Min $1 is ours; the backend only requires > 0. The max comes from the server
+// (`maxCapCents`), which is env-configurable, so it is not duplicated here.
 const MIN_CAP_CENTS = 100;
-const MAX_CAP_CENTS = 100_000_000;
 const DEFAULT_CAP_DOLLARS = 50;
 
 /**
@@ -98,9 +97,13 @@ export class OverageCardComponent {
   readonly editingCap = signal(false);
 
   // Cap input. User edits override the default derived from the saved cap.
+  private readonly maxCapCents = this.service.maxCapCents;
+  // Clamped: an operator lowering the server ceiling would otherwise leave an
+  // org seeding the editor with its saved, now-invalid cap.
   private readonly defaultCapDollars = computed(() => {
     const cents = this.status()?.capCents ?? 0;
-    return cents > 0 ? cents / 100 : DEFAULT_CAP_DOLLARS;
+    const seeded = cents > 0 ? cents : DEFAULT_CAP_DOLLARS * 100;
+    return Math.min(seeded, this.maxCapCents()) / 100;
   });
   readonly capDollars = signal<number | null>(null);
   readonly capInputDollars = computed(
@@ -111,10 +114,10 @@ export class OverageCardComponent {
   );
   readonly capValid = computed(
     () =>
-      this.capCents() >= MIN_CAP_CENTS && this.capCents() <= MAX_CAP_CENTS,
+      this.capCents() >= MIN_CAP_CENTS && this.capCents() <= this.maxCapCents(),
   );
   readonly minCapDollars = MIN_CAP_CENTS / 100;
-  readonly maxCapDollars = MAX_CAP_CENTS / 100;
+  readonly maxCapDollars = computed(() => this.maxCapCents() / 100);
 
   onCapInput(value: string) {
     const parsed = Number.parseFloat(value);
