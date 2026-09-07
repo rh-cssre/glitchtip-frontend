@@ -1,0 +1,93 @@
+<mat-toolbar color="transparent">
+  <div class="toolbar-content">
+    <a [routerLink]="['']" class="logo-link">
+      <img class="logo" src="../assets/logo-again.svg" alt="GlitchTip" />
+    </a>
+    <div class="nav-center">
+      <a [routerLink]="['pricing']">Pricing</a>
+      <a [routerLink]="['blog']">Blog</a>
+      <a [routerLink]="['documentation']">
+        <span class="u-hidden-mobile">Documentation</span>
+        <span class="u-visible-mobile">Docs</span>
+      </a>
+      <a [routerLink]="['support']">Support</a>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-right">
+      <a mat-stroked-button [href]="loginLink">Login</a>
+      <a mat-flat-button color="primary" [href]="registerLink">Register</a>
+    </div>
+    <button
+      class="mobile-menu-btn"
+      mat-icon-button
+      (click)="toggleMobileMenu()"
+      aria-label="Toggle navigation menu"
+    >
+      @if (mobileMenuOpen()) {
+        <mat-icon>close</mat-icon>
+      } @else {
+        <mat-icon>menu</mat-icon>
+      }
+    </button>
+  </div>
+</mat-toolbar>
+
+@if (mobileMenuOpen()) {
+  <div class="mobile-menu-backdrop" (click)="closeMobileMenu()"></div>
+  <div class="mobile-menu-card">
+    <a [routerLink]="['pricing']" (click)="closeMobileMenu()">
+      <span>Pricing</span>
+      <mat-icon>arrow_forward</mat-icon>
+    </a>
+    <a [routerLink]="['blog']" (click)="closeMobileMenu()">
+      <span>Blog</span>
+      <mat-icon>arrow_forward</mat-icon>
+    </a>
+    <a [routerLink]="['documentation']" (click)="closeMobileMenu()">
+      <span>Documentation</span>
+      <mat-icon>arrow_forward</mat-icon>
+    </a>
+    <a [routerLink]="['support']" (click)="closeMobileMenu()">
+      <span>Support</span>
+      <mat-icon>arrow_forward</mat-icon>
+    </a>
+    <div class="mobile-menu-actions">
+      <a mat-stroked-button [href]="loginLink">Login</a>
+      <a mat-flat-button color="primary" [href]="registerLink">Register</a>
+    </div>
+  </div>
+}
+
+<router-outlet></router-outlet>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-top">
+      <img src="assets/home/glitchtip-g.png" alt="GlitchTip" />
+      <div class="colophon">
+        GlitchTip, by
+        <a href="https://burkesoftware.com" target="_blank" rel="noopener">
+          Burke Software and Consulting
+        </a>
+      </div>
+      <div class="legal">
+        <a href="/legal/tos">Terms of Service</a>
+        <a href="/legal/privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://gitlab.com/glitchtip" target="_blank" rel="noopener">
+        <mat-icon>code</mat-icon> GitLab
+      </a>
+      <a href="https://mastodon.online/@glitchtip" rel="me" target="_blank">
+        <mat-icon>public</mat-icon> Mastodon
+      </a>
+      <a href="mailto:support@glitchtip.com?Subject=Moving to GlitchTip">
+        <mat-icon>email</mat-icon> Email
+      </a>
+      <a [routerLink]="['blog', 'rss.xml']" target="_blank">
+        <mat-icon>rss_feed</mat-icon> RSS Feed
+      </a>
+    </div>
+  </div>
+</footer>
