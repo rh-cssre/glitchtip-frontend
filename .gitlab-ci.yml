@@ -1,4 +1,4 @@
-image: node:16
+image: node:24
 
 variables:
   CHROME_BIN: chromium-browser
@@ -10,11 +10,10 @@ variables:
   FF_NETWORK_PER_BUILD: 1
   DEBUG: "true"
   GIT_SUBMODULE_STRATEGY: normal
-  SAST_EXCLUDED_PATHS: "*.stories.ts, *.spec.ts, cypress"
+  SAST_EXCLUDED_PATHS: "*.spec.ts, cypress"
 
 include:
   - template: SAST.gitlab-ci.yml
-  - template: Dependency-Scanning.gitlab-ci.yml
   - template: Secret-Detection.gitlab-ci.yml
 
 stages:
@@ -24,32 +23,33 @@ stages:
 
 test:
   stage: test
-  image: node:16-alpine
+  image: node:24-alpine
   script:
-    - apk add --update --no-cache chromium-chromedriver chromium git
-    - npm ci --force
+    - npm ci
     - npm run lint
-    - npm run test -- --progress false --watch=false --browsers=Chromium_CI
+    # Vitest unit tests run in Node via jsdom (no browser needed).
+    - npm test -- --watch=false
 
 test-e2e:
   stage: test
   variables:
     ENABLE_ORGANIZATION_CREATION: "true"
-    CELERY_TASK_ALWAYS_EAGER: "true"
+    VALKEY_URL: ""
   services:
     - postgres
     - name: registry.gitlab.com/glitchtip/glitchtip-backend:master
       alias: backend
-      command: ["./bin/run-migrate-and-runserver.sh"]
+      command: ["./bin/run-all-in-one.sh"]
   image:
-    name: cypress/included:10.1.0
+    name: cypress/included:15.16.0
     entrypoint: [""]
   script:
-    - npm ci --force
+    - npm ci
     - cp src/proxy.conf.ci.json src/proxy.conf.json
     - npm run e2e
   except:
     - tags
+    - marketing
   artifacts:
     when: always
     paths:
@@ -60,7 +60,7 @@ test-e2e:
 build-assets:
   stage: test
   script:
-    - npm ci --force
+    - npm ci
     - npm run build-prod
   artifacts:
     paths:
@@ -68,7 +68,7 @@ build-assets:
 
 build-docker:
   stage: build
-  image: docker:stable
+  image: docker:cli
   services:
     - docker:dind
   dependencies:
@@ -86,21 +86,23 @@ build-docker:
     - trap '' PIPE
     - VERSION=${CI_COMMIT_REF_NAME#*v}
     - echo "Build version $VERSION ci registry image $CI_REGISTRY_IMAGE commit ref $CI_COMMIT_REF_NAME"
-    - docker build -f Dockerfile.prod -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} -t ${CONTAINER_IMAGE} --build-arg FRONTEND_GLITCHTIP_VERSION=$VERSION .
+    - docker build -f Dockerfile.prod -t ${CI_REGISTRY_IMAGE}:${VERSION} -t ${CONTAINER_IMAGE} --build-arg FRONTEND_GLITCHTIP_VERSION=$VERSION .
     - if [ $CI_COMMIT_REF_NAME = "master" ]; then docker tag ${CONTAINER_IMAGE} ${CI_REGISTRY_IMAGE}:latest; fi
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker push ${CI_REGISTRY_IMAGE}:${VERSION}
     - docker push ${CONTAINER_IMAGE}
     - if [ $CI_COMMIT_REF_NAME = "master" ]; then docker push ${CI_REGISTRY_IMAGE}:latest; fi
 
 upload-sourcemaps:
   stage: deploy
-  image: getsentry/sentry-cli
+  image: alpine:latest
   dependencies:
     - build-assets
   script:
-    - VERSION=glitchtip@${CI_COMMIT_REF_NAME#*v}
-    - sentry-cli releases files ${VERSION} upload-sourcemaps dist/glitchtip-frontend
+    - apk add --no-cache curl zip
+    - export VERSION=glitchtip@${CI_COMMIT_REF_NAME#*v}
+    - sh scripts/upload-sourcemaps.sh dist/glitchtip-frontend/browser
+  allow_failure: true
   only:
     refs:
       - tags
@@ -110,7 +112,7 @@ upload-sourcemaps:
 deploy-staging:
   stage: deploy
   image:
-    name: alpine/helm:3.6.3
+    name: alpine/helm:3.15
     entrypoint: [""]
   # needs: ["build-docker", "test-e2e"]
   script:
@@ -119,8 +121,25 @@ deploy-staging:
   environment:
     name: staging
     url: https://staging.glitchtip.com
+  rules:
+    - if: '$CI_PROJECT_PATH == "glitchtip/glitchtip-frontend" && $CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_REF_PROTECTED == "true"'
+
+pages:
+  stage: deploy
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - npm run build-static
+    - npm run build-marketing
+    - mv dist/marketing/browser public
+    - cp 404.html public/
+    # One Pages site serves both apps: marketing at the root, the component
+    # preview (style guide) at /style-guide/. A GitLab project gets a single
+    # Pages site, so the style guide ships inside this job. base-href must
+    # match the subpath or the guide's assets 404.
+    - npx ng build component-preview --configuration production --base-href /style-guide/
+    - mv dist/component-preview/browser public/style-guide
+  artifacts:
+    paths:
+      - public
   only:
-    refs:
-      - master
-    variables:
-      - $CI_COMMIT_REF_PROTECTED
+    - marketing

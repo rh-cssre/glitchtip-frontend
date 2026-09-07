@@ -1,75 +1,149 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
-import { UptimeState, UptimeService } from "../uptime.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { map } from "rxjs/operators";
-import { PaginationBaseComponent } from "src/app/shared/stateful-service/pagination-base.component";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  inject,
+  computed,
+  input,
+  booleanAttribute,
+  signal,
+  effect,
+} from "@angular/core";
+import { MonitorState, MonitorService } from "../monitor.service";
+import { RouterModule } from "@angular/router";
+import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";
+import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
+import { MonitorChecks } from "../monitor-checks/monitor-checks";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MonitorResponseChart } from "../monitor-response-chart/monitor-response-chart";
+import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
+import { TimeForPipe } from "src/app/shared/days-ago.pipe";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { DecimalPipe, I18nPluralPipe } from "@angular/common";
+import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+
+function booleanDefaultTrueAttribute(value: unknown): boolean {
+  return value === undefined ? true : booleanAttribute(value);
+}
 
 @Component({
   selector: "gt-monitor-detail",
   templateUrl: "./monitor-detail.component.html",
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    RouterModule,
+    MonitorChecks,
+    CopyInputComponent,
+    MonitorResponseChart,
+    I18nPluralPipe,
+    TimeForPipe,
+    DecimalPipe,
+    MatButtonModule,
+    MonitorChartComponent,
+    MatCardModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    DetailHeaderComponent,
+    TopAppBar,
+    BackLinkComponent,
+  ],
 })
-export class MonitorDetailComponent extends PaginationBaseComponent<
-  UptimeState,
-  UptimeService
-> {
-  monitor$ = this.service.activeMonitor$;
-  monitorChecks$ = this.service.monitorChecks$;
-  loading$ = this.service.getState$.pipe(
-    map((state) => state.pagination.loading)
-  );
-  uptimeAlertCount$ = this.service.uptimeAlertCount$;
-  alertCountLoading$ = this.service.alertCountLoading$;
-  associatedProjectSlug$ = this.service.associatedProjectSlug$;
+export class MonitorDetailComponent
+  extends StatefulComponent<MonitorState, MonitorService>
+  implements OnInit
+{
+  protected service: MonitorService;
+  private breakpointObserver = inject(BreakpointObserver);
+  private dialog = inject(MatDialog);
 
-  activeMonitorRecentChecksSeries$ =
-    this.service.activeMonitorRecentChecksSeries$;
-  responseChartScale$ = this.service.activeMonitorRecentChecksSeries$.pipe(
-    map((series) => {
-      let yScaleMax = 20;
-      let xScaleMin = new Date();
-      xScaleMin.setHours(xScaleMin.getHours() - 1);
-      series?.forEach((subseries) => {
-        subseries.series.forEach((dataItem) => {
-          if (dataItem.value > yScaleMax) {
-            yScaleMax = dataItem.value;
-          }
-          if (dataItem.name < xScaleMin) {
-            xScaleMin = dataItem.name;
-          }
-        });
-      });
-      return {
-        yScaleMax,
-        yScaleMin: 0 - yScaleMax / 6,
-        xScaleMin,
-      };
-    })
+  orgSlug = input.required<string>({ alias: "org-slug" });
+  monitorID = input.required<number>({ alias: "monitor-id" });
+  isChange = input.required({ transform: booleanDefaultTrueAttribute });
+  cursor = input<string | undefined>();
+
+  monitor = this.service.activeMonitor;
+  uptimeAlertCount = this.service.uptimeAlertCount;
+  alertCountLoading = this.service.alertCountLoading;
+  associatedProjectSlug = this.service.associatedProjectSlug;
+
+  isMobile = signal(false);
+  private smallBreakpointSignal = toSignal(
+    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]),
   );
+
+  activeMonitorRecentChecksSeries =
+    this.service.activeMonitorRecentChecksSeries;
+  responseChartScale = computed(() => {
+    const series = this.service.activeMonitorRecentChecksSeries();
+    let yScaleMax = 20;
+    let xScaleMin = new Date();
+    xScaleMin.setHours(xScaleMin.getHours() - 1);
+
+    series?.forEach((subseries) => {
+      subseries.series.forEach((dataItem) => {
+        if (dataItem.value > yScaleMax) {
+          yScaleMax = dataItem.value;
+        }
+        if (dataItem.name < xScaleMin) {
+          xScaleMin = dataItem.name;
+        }
+      });
+    });
+
+    return {
+      yScaleMax,
+      yScaleMin: 0 - yScaleMax / 6,
+      xScaleMin,
+    };
+  });
 
   alertCountPluralMapping: { [k: string]: string } = {
     "=1": "is 1 uptime alert",
     other: "are # uptime alerts",
   };
 
-  constructor(
-    protected service: UptimeService,
-    protected router: Router,
-    protected route: ActivatedRoute
-  ) {
-    super(service, router, route);
+  constructor() {
+    const service = inject(MonitorService);
+    super(service);
+    this.service = service;
 
-    this.activeCombinedParams$.subscribe(([params, queryParams]) => {
-      const orgSlug = params["org-slug"];
-      const monitorId = params["monitor-id"];
-      if (orgSlug && monitorId) {
-        this.service.retrieveMonitorDetails(orgSlug, monitorId);
-        this.service.retrieveMonitorChecks(
-          orgSlug,
-          monitorId,
-          queryParams.cursor
-        );
+    effect(() => {
+      const breakpointResult = this.smallBreakpointSignal();
+      if (breakpointResult?.matches) {
+        this.isMobile.set(true);
+      } else {
+        this.isMobile.set(false);
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.service.retrieveMonitorDetails(this.monitorID());
+  }
+
+  delete() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete monitor?`,
+        message: $localize`Are you sure you want to delete this monitor? You will permanently lose all associated uptime data.`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.service.deleteMonitor();
       }
     });
   }

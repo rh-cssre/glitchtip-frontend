@@ -1,0 +1,98 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <gt-list-title
+      i18n-title
+      title="Releases"
+      [searchHits]="$safeNavigationMigration(paginator()?.count)"
+    ></gt-list-title>
+  </ng-container>
+</gt-top-app-bar>
+<section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
+  <div class="table-container">
+    <gt-loading-overlay [loading]="isLoading()" label="Loading releases">
+      @if (releases(); as releases) {
+        <table mat-table class="mat-elevation-z2" [dataSource]="releases">
+          <ng-container matColumnDef="header-spacing">
+            <!-- Empty cell for spacing -->
+            <th mat-header-cell *matHeaderCellDef> </th>
+          </ng-container>
+          <ng-container matColumnDef="pagination">
+            <th mat-header-cell *matHeaderCellDef class="table-header__actions">
+              <div>
+                <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
+                <gt-pagination-buttons [paginator]="paginator()" />
+              </div>
+            </th>
+          </ng-container>
+          <ng-container matColumnDef="version">
+            <th mat-header-cell *matHeaderCellDef>Version</th>
+            <td mat-cell *matCellDef="let release">
+              <div
+                class="version"
+                (mouseover)="checkIfTooltipIsNecessary($event)"
+              >
+                <a
+                  [routerLink]="[release.version]"
+                  [matTooltip]="release.version"
+                  matTooltipPosition="above"
+                  [matTooltipDisabled]="tooltipDisabled"
+                  >{{ release.version }}</a
+                >
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="created">
+            <th mat-header-cell *matHeaderCellDef>Date Created</th>
+            <td mat-cell *matCellDef="let release" class="date-cell">
+              {{ release.dateCreated | date }}
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="['header-spacing', 'pagination']; sticky: true"
+            class="table-header"
+            [attr.colspan]="2"
+          ></tr>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns"
+            [class.u-hidden]="releases.length === 0 && !isLoading()"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr *matNoDataRow>
+            <td [attr.colspan]="displayedColumns.length">
+              @if (initialLoadComplete() === true && isLoading() === false) {
+                @if (errors()?.length) {
+                  <div class="table-empty-states">
+                    @if (errors()?.length === 1) {
+                      <h3 class="body-text-strong">
+                        There was an error processing your request
+                      </h3>
+                    } @else {
+                      <h3 class="body-text-strong">
+                        There were errors while processing your request
+                      </h3>
+                    }
+                    <ul>
+                      @for (error of errors(); track error) {
+                        <li>{{ error }}</li>
+                      }
+                    </ul>
+                  </div>
+                } @else {
+                  <gt-empty-state
+                    icon="rocket_launch"
+                    i18n-title
+                    title="No releases"
+                    i18n-message
+                    message="Releases appear here once you send release data with your events."
+                  />
+                }
+              }
+            </td>
+          </tr>
+        </table>
+      }
+    </gt-loading-overlay>
+  </div>
+</section>
