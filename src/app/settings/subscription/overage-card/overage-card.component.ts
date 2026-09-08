@@ -71,6 +71,7 @@ export class OverageCardComponent {
   readonly throttleRate = this.service.throttleRate;
   readonly throttleState = this.service.throttleState;
   readonly overageInactive = this.service.overageInactive;
+  readonly inactiveCause = this.service.inactiveCause;
   readonly capAdjustable = this.service.canConfigureOverage;
   readonly loading = this.service.overageConfigLoading;
   readonly error = this.service.overageConfigError;

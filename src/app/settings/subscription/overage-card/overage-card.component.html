@@ -4,11 +4,14 @@
       <div class="overage-top">
         <div class="overage-top-text">
           <span class="body-text-strong" i18n>Overage billing</span>
-          @if (throttleState() === "stalled-broken") {
+          <!-- The cause, not throttleState: nothing is throttled yet the moment
+               a resubscribe leaves overage on with no metered item. -->
+          @if (inactiveCause() === "broken") {
             <p class="overage-tagline body-text" i18n>
-              Overage billing is switched on, but it is not running.
+              Overage billing is switched on, but it is not running. You are not
+              being charged for it. Please contact support.
             </p>
-          } @else if (overageInactive()) {
+          } @else if (inactiveCause() === "plan") {
             <p class="overage-tagline body-text" i18n>
               Overage billing is switched on, but your current plan cannot be
               billed for it.

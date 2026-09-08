@@ -3,6 +3,7 @@ import type { components } from "../api-schema";
 import {
   capReached,
   isOverageInactive,
+  overageInactiveCause,
   overageThrottleState,
 } from "./overage-throttle-state";
 
@@ -185,5 +186,30 @@ describe("isOverageInactive", () => {
   // keeps `active` true and the org keeps accruing cost.
   it("is false when only the overage price is gone", () => {
     expect(isOverageInactive(status({ configured: false }))).toBe(false);
+  });
+});
+
+describe("overageInactiveCause", () => {
+  it("is null before the status loads", () => {
+    expect(overageInactiveCause(null)).toBe(null);
+  });
+
+  it("is null for a working setup", () => {
+    expect(overageInactiveCause(status())).toBe(null);
+  });
+
+  it("blames the plan when it cannot be billed", () => {
+    expect(overageInactiveCause(status({ active: false, eligible: false }))).toBe(
+      "plan",
+    );
+  });
+
+  // The regression: a resubscribe leaves overage on with no metered item, and
+  // the tagline blamed the plan until the first throttle sweep had run.
+  it("blames us on a billable plan, throttled or not", () => {
+    expect(overageInactiveCause(status({ active: false }))).toBe("broken");
+    expect(overageInactiveCause(status({ active: false, throttleRate: 50 }))).toBe(
+      "broken",
+    );
   });
 });
