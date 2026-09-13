@@ -10,6 +10,7 @@ import { handleAllAuthErrorResponse } from "../api/allauth/allauth.utils";
 import { StatefulService } from "../shared/stateful-service/signal-state.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { components } from "../api/allauth-schema";
+import { isServerRenderedUrl } from "../server-routes";
 
 type AuthFlow = components["schemas"]["Flow"];
 
@@ -111,7 +112,7 @@ export class LoginService extends StatefulService<LoginState> {
   redirect() {
     const nextUrl = this.route.snapshot.queryParamMap.get("next");
     if (nextUrl) {
-      if (nextUrl.startsWith("/admin/")) {
+      if (isServerRenderedUrl(nextUrl)) {
         // Load Django, not JS router
         window.location.href = nextUrl;
       } else {
