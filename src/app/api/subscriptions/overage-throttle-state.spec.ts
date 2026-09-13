@@ -174,6 +174,12 @@ describe("isOverageInactive", () => {
     expect(isOverageInactive(status({ active: false }))).toBe(true);
   });
 
+  // A server without the field omits it. Reading that as "not running" would
+  // send every enrolled org to support, so an absent value means healthy.
+  it("is false when the server does not serve the field", () => {
+    expect(isOverageInactive(status({ active: undefined }))).toBe(false);
+  });
+
   // `configured` reports whether an overage price exists for new enrolments.
   // Archiving it does not detach metered items already attached, so the server
   // keeps `active` true and the org keeps accruing cost.

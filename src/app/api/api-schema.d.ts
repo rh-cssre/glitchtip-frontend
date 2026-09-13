@@ -4870,7 +4870,7 @@ export interface components {
             /** Configured */
             configured: boolean;
             /** Active */
-            active: boolean;
+            active?: boolean;
             /** Capcents */
             capCents: number;
             /** Capunits */

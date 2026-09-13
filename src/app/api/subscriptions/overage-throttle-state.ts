@@ -29,10 +29,15 @@ export type OverageThrottleState =
  * throttle task enforces, so this cannot drift from what the server does: it
  * covers an ineligible plan, a cleared primary subscription, and a metered item
  * that has gone from Stripe, which `enabled` alone hides in every case.
+ *
+ * Tested against `false` rather than falsy: a server that does not serve the
+ * field yet omits it, and treating that absence as "not running" would tell
+ * every enrolled org to contact support. Absent means unknown, so assume
+ * healthy and let the states that do not need `active` speak.
  */
 export function isOverageInactive(status: OverageStatus | null): boolean {
   if (!status) return false;
-  return status.enabled && !status.active;
+  return status.enabled && status.active === false;
 }
 
 /** Usage has consumed the spend cap. Only meaningful with overage enabled. */
