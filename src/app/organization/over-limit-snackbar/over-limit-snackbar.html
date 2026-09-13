@@ -14,12 +14,13 @@
   @switch (throttleState()) {
     @case ("cap") {
       <span i18n>
-        to upgrade or raise your overage spend cap and keep ingesting.</span
+        to upgrade or raise your overage spend cap and keep collecting
+        events.</span
       >
     }
     @case ("no-overage") {
       <span i18n>
-        to upgrade or turn on overage billing and keep ingesting.</span
+        to upgrade or turn on overage billing and keep collecting events.</span
       >
     }
     @case ("stalled-plan") {
@@ -35,7 +36,7 @@
       </span>
     }
     @default {
-      <span i18n> to upgrade and keep ingesting.</span>
+      <span i18n> to upgrade and keep collecting events.</span>
     }
   }
 </span>

@@ -15,9 +15,9 @@
             </p>
           } @else {
             <p class="overage-tagline body-text" i18n>
-              Keep ingesting past your plan quota and pay only for the overflow,
-              up to a monthly cap you set. At the cap, throttling resumes, so
-              your bill never goes over the cap.
+              Keep collecting events past your plan limit and pay only for the
+              overflow, up to a monthly cap you set. At the cap, throttling
+              resumes, so your bill never goes over the cap.
             </p>
           }
         </div>
@@ -63,7 +63,7 @@
           <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
             Spend cap reached, so about {{ throttleRate() }}% of new events are
-            being dropped. Raise the cap to keep ingesting.
+            being dropped. Raise the cap to keep collecting events.
           </p>
         }
         @case ("throttled") {
@@ -83,7 +83,7 @@
           @if (canManage()) {
             <p class="overage-alert overage-alert--warn" i18n>
               About {{ throttleRate() }}% of new events are being dropped. Turn
-              on overage billing to keep ingesting.
+              on overage billing to keep collecting events.
             </p>
           } @else {
             <p class="overage-alert overage-alert--warn" i18n>
@@ -223,7 +223,7 @@
   <h2 mat-dialog-title i18n>Turn on overage billing?</h2>
   <mat-dialog-content class="mat-typography">
     <p class="body-text" i18n>
-      You're only charged for events above your plan quota, up to a
+      You're only charged for events above your plan limit, up to a
       <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
       change anytime. Your bill never goes over the cap.
     </p>
