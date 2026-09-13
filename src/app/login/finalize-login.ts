@@ -4,7 +4,7 @@ import {
   effect,
   inject,
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 import { LoginService } from "./login.service";
 
@@ -18,6 +18,7 @@ import { LoginService } from "./login.service";
 export class FinalizeLogin {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private loginService = inject(LoginService);
 
   constructor() {
@@ -26,7 +27,13 @@ export class FinalizeLogin {
         if (this.authService.isAuthenticated()) {
           this.loginService.redirect();
         } else {
-          this.router.navigate(["/login"]);
+          // Carry `next` to the login page, or the handoff it describes is
+          // lost before the user gets a chance to authenticate.
+          const next = this.route.snapshot.queryParamMap.get("next");
+          this.router.navigate(
+            ["/login"],
+            next ? { queryParams: { next } } : {},
+          );
         }
       }
     });

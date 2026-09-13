@@ -13,7 +13,6 @@ describe("isServerRenderedUrl", () => {
   it("claims the Django-rendered prefixes", () => {
     expect(isServerRenderedUrl("/admin/")).toBe(true);
     expect(isServerRenderedUrl("/oauth/authorize/")).toBe(true);
-    expect(isServerRenderedUrl("/accounts/social/login/")).toBe(true);
   });
 
   it("keeps the query string case working, which is the whole point", () => {
@@ -33,12 +32,28 @@ describe("isServerRenderedUrl", () => {
     expect(isServerRenderedUrl("/accept/abc/def/")).toBe(false);
   });
 
-  it("refuses to send a full page load off-origin", () => {
-    // A protocol-relative URL is a host, not a path: `//evil.test/admin/` would
-    // otherwise be handed to window.location.href.
+  it("does not claim /accounts/, which is headless-only on the backend", () => {
+    expect(isServerRenderedUrl("/accounts/social/login/")).toBe(false);
+  });
+
+  it("stays as narrow as the routes Django actually serves", () => {
+    // Only /oauth/authorize/ exists; the rest of /oauth/ 404s, so it should
+    // not earn a full page load.
+    expect(isServerRenderedUrl("/oauth/")).toBe(false);
+    expect(isServerRenderedUrl("/oauth/token")).toBe(false);
+  });
+
+  it("rejects anything that is not a path-absolute reference", () => {
+    // These are authorities or schemes, not paths. The prefix list would also
+    // reject them today, so these cases pin the origin check itself: they must
+    // keep failing even if the prefix list is edited.
     expect(isServerRenderedUrl("//evil.test/admin/")).toBe(false);
+    expect(isServerRenderedUrl("/\\evil.test/admin/")).toBe(false);
+    expect(isServerRenderedUrl("\\\\evil.test/admin/")).toBe(false);
     expect(isServerRenderedUrl("https://evil.test/admin/")).toBe(false);
+    expect(isServerRenderedUrl("javascript:alert(1)")).toBe(false);
     expect(isServerRenderedUrl("admin/")).toBe(false);
+    expect(isServerRenderedUrl("")).toBe(false);
   });
 
   it("does not match a prefix that merely appears later in the path", () => {

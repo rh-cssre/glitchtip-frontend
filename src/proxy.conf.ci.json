@@ -10,5 +10,13 @@
   "/_allauth": {
     "target": "http://backend:8000",
     "secure": false
+  },
+  "/oauth": {
+    "target": "http://backend:8000",
+    "secure": false
+  },
+  "/admin": {
+    "target": "http://backend:8000",
+    "secure": false
   }
 }

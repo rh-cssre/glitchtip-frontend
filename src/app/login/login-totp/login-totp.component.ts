@@ -15,7 +15,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
@@ -44,7 +44,6 @@ export class LoginTotpComponent
 {
   private changeDetector = inject(ChangeDetectorRef);
   private loginService: LoginService;
-  private router = inject(Router);
 
   hasWebAuthn: Signal<boolean> | undefined;
   @ViewChild("input") input!: ElementRef;
@@ -86,10 +85,10 @@ export class LoginTotpComponent
   async onSubmit() {
     if (this.form.valid && this.code) {
       const code = this.code.value!;
-      const data = await this.loginService.totpAuthenticate(code);
-      if (data) {
-        this.router.navigate(["/"]);
-      }
+      // totpAuthenticate redirects on success, honouring `next`. Navigating
+      // here as well would race that — and win, when `next` points at a
+      // Django-rendered page and the redirect is a full page load.
+      await this.loginService.totpAuthenticate(code);
     }
   }
 }

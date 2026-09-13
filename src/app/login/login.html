@@ -89,7 +89,13 @@
           @if (enableUserRegistration() || enableSocialAppsUserRegistration()) {
             <p class="body-text">
               <ng-container i18n>New to GlitchTip?</ng-container>
-              <a class="auth-link" routerLink="../register" i18n>Sign Up</a>
+              <a
+                class="auth-link"
+                routerLink="../register"
+                queryParamsHandling="preserve"
+                i18n
+                >Sign Up</a
+              >
             </p>
           }
           <p class="body-text">
