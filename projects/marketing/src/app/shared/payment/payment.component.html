@@ -1,0 +1,237 @@
+<mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="setSelectedTab($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <div class="tab-label-header marketing-body">Hosted version</div>
+        <div class="tab-label-description marketing-caption">
+          Sign up at app.glitchtip.com
+        </div>
+      </div>
+    </ng-template>
+    <div class="plans mat-elevation-z1">
+      @for (product of planOptions; track product; let i = $index) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ product.name }}</mat-card-title>
+            @if (product.annualPrice) {
+              <mat-button-toggle-group
+                [value]="billingPeriod()"
+                (change)="billingPeriod.set($event.value)"
+                class="billing-toggle"
+              >
+                <mat-button-toggle value="monthly">Monthly</mat-button-toggle>
+                <mat-button-toggle value="annual">Annual</mat-button-toggle>
+              </mat-button-toggle-group>
+            }
+          </mat-card-header>
+          <mat-card-content class="spaced-card-content">
+            <p class="product-subtitle">{{ product.subtitle }}</p>
+            @if (product.includesFrom) {
+              <p class="includes-from">
+                <strong>Everything from {{ product.includesFrom }} +</strong>
+              </p>
+            }
+            <ul class="value-props">
+              @for (feature of product.features; track feature.text) {
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  {{ feature.text }}
+                  @if (feature.tooltip) {
+                    <mat-icon
+                      class="tooltip-icon"
+                      [matTooltip]="feature.tooltip"
+                      matTooltipPosition="above"
+                    >info</mat-icon>
+                  }
+                </li>
+              }
+            </ul>
+            <div class="price-cta">
+              @if (product.monthlyPrice === 'Free') {
+                <p>
+                  <span class="marketing-small-heading">Free ($0)</span>
+                </p>
+              } @else if (billingPeriod() === 'annual' && product.annualPrice) {
+                <p>
+                  <span class="marketing-small-heading">
+                    ${{ product.annualPrice | number }}
+                  </span>
+                  / year
+                </p>
+                <p class="savings">
+                  <!-- "Free"/"Custom" strings excluded by @else if condition above -->
+                  Save ${{ $any(product.monthlyPrice) * 12 - $any(product.annualPrice) | number }} / year
+                </p>
+              } @else {
+                <p>
+                  <span class="marketing-small-heading">
+                    ${{ product.monthlyPrice | number }}
+                  </span>
+                  / month
+                </p>
+              }
+              <a
+                mat-flat-button
+                color="primary"
+                target="_blank"
+                [href]="registerLink"
+              >
+                Get started
+              </a>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+    @if (pricingPage()) {
+      <mat-card appearance="outlined" class="spend-control">
+        <div class="spend-control-text">
+          <h2 class="spend-control-heading">
+            Spike past your plan, not your budget
+          </h2>
+          <p class="marketing-body spend-control-body">
+            Turn on on-demand events, set a monthly spend cap, and we resume
+            throttling before you ever go over it. You're only billed for usage
+            above your plan, and never more than your cap.
+          </p>
+          <a
+            mat-stroked-button
+            color="primary"
+            class="spend-control-cta"
+            routerLink="/documentation/on-demand-billing"
+          >
+            Learn how on-demand billing works
+          </a>
+        </div>
+        <img
+          class="spend-control-visual no-frame"
+          src="/assets/pricing/spend-cap-chart.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </mat-card>
+      <mkt-pricing-addon-card
+        icon="medical_information"
+        title="US Healthcare: HIPAA-compliant hosting available"
+        subtitle="Add on to Large plans"
+        buttonText="Learn More"
+        buttonUrl="/hipaa"
+      />
+      <mkt-pricing-addon-card
+        icon="passport"
+        title="EU Hosting: Data sovereignty in Germany"
+        subtitle="All plans available on our EU instance"
+        buttonText="Learn More"
+        buttonUrl="/documentation/hosted-architecture#eu-hosting-data-sovereignty"
+      />
+    }
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <div class="tab-label-header marketing-body">Self-hosted version</div>
+        <div class="tab-label-description marketing-caption">
+          Run on your own server
+        </div>
+      </div>
+    </ng-template>
+    <div class="plans mat-elevation-z1">
+      @for (product of selfHostedPlanOptions; track product; let i = $index) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ product.name }}</mat-card-title>
+            @if (product.annualPrice && product.annualPrice !== 'Custom') {
+              <mat-button-toggle-group
+                [value]="billingPeriod()"
+                (change)="billingPeriod.set($event.value)"
+                class="billing-toggle"
+              >
+                <mat-button-toggle value="monthly">Monthly</mat-button-toggle>
+                <mat-button-toggle value="annual">Annual</mat-button-toggle>
+              </mat-button-toggle-group>
+            }
+          </mat-card-header>
+          <mat-card-content class="spaced-card-content">
+            <p class="product-subtitle">{{ product.subtitle }}</p>
+            @if (product.includesFrom) {
+              <p class="includes-from">
+                <strong>Everything from {{ product.includesFrom }} +</strong>
+              </p>
+            }
+            <ul class="value-props">
+              @for (feature of product.features; track feature.text) {
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  {{ feature.text }}
+                  @if (feature.tooltip) {
+                    <mat-icon
+                      class="tooltip-icon"
+                      [matTooltip]="feature.tooltip"
+                      matTooltipPosition="above"
+                    >info</mat-icon>
+                  }
+                </li>
+              }
+            </ul>
+            <div class="price-cta">
+              @if (product.monthlyPrice === 'Free') {
+                <p>
+                  <span class="marketing-small-heading">Free ($0)</span>
+                </p>
+              } @else if (product.monthlyPrice === 'Custom') {
+                <p>
+                  <span class="marketing-small-heading">Custom</span>
+                </p>
+              } @else if (billingPeriod() === 'annual' && product.annualPrice && product.annualPrice !== 'Custom') {
+                <p>
+                  <span class="marketing-small-heading">
+                    ${{ product.annualPrice | number }}
+                  </span>
+                  {{ product.priceSuffix ? '/user/year' : '/ year' }}
+                </p>
+                <p class="savings">
+                  <!-- "Free"/"Custom" strings excluded by @else if condition above -->
+                  Save ${{ $any(product.monthlyPrice) * 12 - $any(product.annualPrice) }}{{ product.priceSuffix ? '/user' : '' }} / year
+                </p>
+              } @else {
+                <p>
+                  <span class="marketing-small-heading">
+                    ${{ product.monthlyPrice | number }}
+                  </span>
+                  {{ product.priceSuffix || '/ month' }}
+                </p>
+              }
+              <a
+                mat-flat-button
+                color="primary"
+                [href]="product.paymentLinks ? product.paymentLinks[billingPeriod()] : product.ctaUrl"
+              >
+                {{ product.ctaText }}
+              </a>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </mat-tab>
+</mat-tab-group>
+@if (pricingPage()) {
+  <mat-divider></mat-divider>
+}
+@if (pricingPage()) {
+  <section class="faq-section">
+    <h2 class="marketing-body-strong">
+      Questions &amp; answers about {{ selectedTab() === 0 ? 'hosted pricing' : 'self-hosted support' }}
+    </h2>
+    <mat-accordion>
+      @for (faq of selectedTab() === 0 ? hostedFaqs : selfHostedFaqs; track faq.question) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ faq.question }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p [innerHTML]="faq.answer"></p>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </section>
+}

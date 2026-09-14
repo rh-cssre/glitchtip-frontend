@@ -1,0 +1,592 @@
+@use "@angular/material" as mat;
+@use "./app/styles/_theme-colors" as custom-theme;
+@use "../../../src/assets/styles/variables" as vars;
+@use "../../../src/assets/styles/font-files" as main-font-files;
+@use "../../../src/assets/styles/resets";
+@use "app/styles/font-files" as marketing-font-files;
+@use "app/styles/material-overrides";
+@import "prismjs/themes/prism.css";
+@import "./app/shared/payment/_payment.component.scss";
+$font-path: "../../../src/assets/fonts";
+
+html {
+  color-scheme: light;
+  // Land #fragment targets below the sticky app bar. Keep in sync with
+  // ANCHOR_OFFSET in documentation-page.component.ts.
+  scroll-padding-top: 88px;
+  @include mat.theme(
+    (
+      color: custom-theme.$primary-palette,
+      typography: vars.$font-sans-serif,
+    )
+  );
+}
+
+// Brand color override
+:root {
+  --mat-sys-primary: #d94a5f;
+  --mkt-accent-blue: #4a7fd9;
+  --mkt-accent-yellow: #d9b44a;
+  --mkt-success: #1f9d6b;
+  --mkt-font-mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --mat-sys-corner-full: 8px;
+
+  // Shared motion feel, so reveals/floats/hovers stay consistent.
+  --mkt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --mkt-duration: 0.6s;
+
+  // Spacing scale (4px base).
+  --mkt-space-1: 4px;
+  --mkt-space-2: 8px;
+  --mkt-space-3: 12px;
+  --mkt-space-4: 16px;
+  --mkt-space-5: 24px;
+  --mkt-space-6: 32px;
+  --mkt-space-7: 48px;
+  --mkt-space-8: 64px;
+  --mkt-space-9: 96px;
+
+  // Layout containers: every page/band picks ONE of these max-widths.
+  --mkt-container-wide: 1800px; // heroes, full-width bands, page chrome
+  --mkt-container-docs: 1500px; // wide structured layouts: docs shell
+  // Home column: holds 1320 on laptops (up to ~1750px viewport), then grows to
+  // 1500 on large monitors so the content fills the width instead of leaving
+  // wide empty margins. Hero card + body sections both read this, so they grow
+  // together and stay aligned.
+  --mkt-container-home: min(1500px, max(1320px, 100vw - 430px));
+  --mkt-container-table: 1280px; // pricing plan table
+  --mkt-container-content: 1040px; // standard content pages (support, etc.)
+  --mkt-container-reading: 760px; // prose / blog reading column
+  --mkt-container-narrow: 600px; // forms, centered copy
+  --mkt-gutter: 48px; // used as: width: min(95%, 100% - var(--mkt-gutter))
+
+  // Section rhythm — vertical space between major sections (drives .divider).
+  --mkt-section: clamp(40px, 5vw, 64px);
+}
+
+body {
+  --bg: var(--mat-sys-surface-container-highest);
+
+  // Elements without a Material typography class fall back to the browser
+  // serif without this.
+  font-family: vars.$font-sans-serif;
+
+  background-color: var(--bg);
+  // A soft central wash over the dot grid keeps text readable above it.
+  background-image:
+    radial-gradient(
+      ellipse 82% 135% at 50% 50%,
+      color-mix(in srgb, var(--bg) 80%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 80%, transparent) 40%,
+      transparent 82%
+    ),
+    radial-gradient(circle, var(--mat-sys-outline) 1.3px, transparent 1.3px);
+  background-size:
+    100% 100%,
+    22px 22px;
+  background-position:
+    center center,
+    center center;
+  background-attachment: fixed, fixed;
+
+  &::before,
+  &::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 700px;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  }
+
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  }
+}
+
+app-root,
+app-root-scully,
+mkt-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+mat-card-content {
+  font-family: vars.$font-sans-serif;
+}
+
+body.loaded app-root {
+  display: flex !important;
+}
+
+a {
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+}
+
+.fancy {
+  color: var(--mat-sys-primary);
+  font-style: italic;
+  margin: 0.75em 0 0.5em;
+  padding-right: 0.1em;
+  padding-bottom: 0.05em;
+  display: inline-block;
+}
+
+.hero-and-nav-container {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 70px;
+}
+
+.big-card-wrapper {
+  width: 95%;
+  max-width: 1800px;
+  min-height: 700px;
+  margin: -70px auto 50px;
+  background-color: var(--mat-sys-surface-container);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: conic-gradient(
+      from 90deg at 1px 1px,
+      #0000 90deg,
+      color-mix(in srgb, var(--mat-sys-outline-variant) 25%, transparent) 0
+    );
+    background-size: 36px 36px;
+    pointer-events: none;
+    mask-image:
+      radial-gradient(ellipse 50% 35% at 5% 5%, black 0%, transparent 60%),
+      radial-gradient(ellipse 35% 25% at 95% 3%, black 0%, transparent 55%),
+      radial-gradient(ellipse 30% 20% at 15% 30%, black 0%, transparent 60%),
+      radial-gradient(ellipse 25% 18% at 60% 20%, black 0%, transparent 55%),
+      radial-gradient(ellipse 20% 15% at 35% 45%, black 0%, transparent 60%),
+      radial-gradient(ellipse 30% 20% at 80% 40%, black 0%, transparent 55%),
+      radial-gradient(ellipse 25% 20% at 10% 60%, black 0%, transparent 60%),
+      radial-gradient(ellipse 20% 15% at 55% 65%, black 0%, transparent 55%),
+      radial-gradient(ellipse 35% 25% at 90% 70%, black 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 30% 85%, black 0%, transparent 55%),
+      radial-gradient(ellipse 30% 25% at 70% 90%, black 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 5% 95%, black 0%, transparent 55%);
+    mask-composite: add;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    // Scattered colored squares along the edges, aligned to the 36px grid
+    $red: var(--mat-sys-primary);
+    $blue: var(--mkt-accent-blue);
+    $yellow: var(--mkt-accent-yellow);
+    background-image:
+      // Top edge
+      linear-gradient($red, $red),
+      linear-gradient($blue, $blue),
+      linear-gradient($red, $red),
+      linear-gradient($yellow, $yellow),
+      linear-gradient($blue, $blue),
+      // Right edge
+      linear-gradient($yellow, $yellow),
+      linear-gradient($red, $red),
+      linear-gradient($blue, $blue),
+      linear-gradient($yellow, $yellow),
+      // Bottom edge
+      linear-gradient($blue, $blue),
+      linear-gradient($yellow, $yellow),
+      linear-gradient($red, $red),
+      linear-gradient($blue, $blue),
+      linear-gradient($red, $red),
+      // Left edge
+      linear-gradient($red, $red),
+      linear-gradient($yellow, $yellow),
+      linear-gradient($blue, $blue),
+      linear-gradient($red, $red);
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position:
+      // Top edge
+      108px 0px,
+      252px 0px,
+      540px 36px,
+      828px 0px,
+      1116px 36px,
+      // Right edge
+      calc(100% - 0px) 144px,
+      calc(100% - 36px) 396px,
+      calc(100% - 0px) 612px,
+      calc(100% - 36px) 864px,
+      // Bottom edge
+      72px calc(100% - 0px),
+      324px calc(100% - 36px),
+      648px calc(100% - 0px),
+      936px calc(100% - 0px),
+      1188px calc(100% - 36px),
+      // Left edge
+      0px 216px,
+      36px 504px,
+      0px 720px,
+      36px 936px;
+    opacity: 0.15;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.centered-block {
+  // Shared content column; page-shell owns the side margin.
+  width: min(100%, var(--mkt-container-content));
+  margin-inline: auto;
+  padding: 0 0 80px;
+  overflow: hidden;
+
+  @media screen and (max-width: vars.$tablet) {
+    padding: 5px 0 60px;
+  }
+
+  .content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+// Long-form prose reads at the narrower reading measure.
+.centered-block.markdown-container {
+  max-width: var(--mkt-container-reading);
+}
+
+// Override `width`, not max-width: the base sets width via min().
+.centered-block.wide-content {
+  width: min(100%, var(--mkt-container-table));
+}
+
+.markdown-container {
+  @extend .marketing-body;
+
+  .anchor {
+    scroll-margin-top: 80px;
+  }
+
+  h1 {
+    @extend .marketing-heading;
+    display: inline-block;
+    margin: 0.75em 0 0.5em;
+
+    &:first-child {
+      @extend .fancy;
+    }
+
+    a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  h2 {
+    @extend .marketing-subheading;
+    margin: 0.75em 0 0.5em;
+
+    a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  h3 {
+    @extend .marketing-small-heading;
+    margin: 0.75em 0 0.5em;
+
+    a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  li {
+    margin: 7px 0;
+    line-height: 1.4em;
+  }
+
+  img {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: var(--mat-sys-corner-large, 16px);
+    border: 1px solid var(--mat-sys-outline-variant);
+
+    // Opt out of the default screenshot frame for decorative/inline images.
+    &.no-frame {
+      border: none;
+      border-radius: 0;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    width: 100%;
+
+    th,
+    td {
+      padding: 8px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--mat-sys-outline-variant);
+    }
+
+    th {
+      font-weight: 600;
+      border-bottom: 2px solid var(--mat-sys-outline-variant);
+    }
+  }
+
+  code {
+    padding: 2px 6px;
+    border-radius: var(--mat-sys-corner-small, 8px);
+    background-color: var(--mat-sys-surface-container-high);
+    font-family: var(--mkt-font-mono);
+    font-size: 0.88em;
+  }
+
+  pre {
+    position: relative;
+    margin: 20px 0;
+    padding: 16px 18px;
+    background-color: var(--mat-sys-surface-container);
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-medium, 12px);
+    overflow-x: auto;
+    font-size: 0.85em;
+    line-height: 1.6;
+
+    code {
+      padding: 0;
+      background: none;
+      border-radius: 0;
+      font-size: inherit;
+    }
+  }
+
+  // Copy button injected onto code blocks by addCodeCopyButtons (blog + docs).
+  .doc-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    border-radius: var(--mat-sys-corner-small, 8px);
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface-variant);
+    cursor: pointer;
+    opacity: 0.6;
+    transition:
+      opacity 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+
+    font-family: "Material Symbols Outlined";
+    font-size: 18px;
+    font-feature-settings: "liga";
+    font-variation-settings:
+      "FILL" 1,
+      "wght" 300,
+      "GRAD" 200,
+      "opsz" 24;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--mat-sys-on-surface);
+      border-color: var(--mat-sys-outline);
+    }
+
+    &.is-copied {
+      opacity: 1;
+      color: var(--mkt-success);
+      border-color: var(--mkt-success);
+    }
+  }
+
+  // Callout / admonition: a styled blockquote for notes and warnings.
+  blockquote {
+    margin: 20px 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--mat-sys-primary);
+    border-radius: 0 var(--mat-sys-corner-medium, 12px)
+      var(--mat-sys-corner-medium, 12px) 0;
+    background: color-mix(in srgb, var(--mat-sys-primary) 6%, var(--bg));
+
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.faq-section {
+  margin-top: 32px;
+
+  h2 {
+    margin: 0 0 24px;
+  }
+
+  mat-expansion-panel {
+    --mat-expansion-container-elevation-shadow: none;
+    --mat-expansion-header-collapsed-state-height: 56px;
+
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+.just-the-image {
+  padding: 1.5rem 0 75px;
+}
+
+// ── Marketing design-system primitives ──────────────────────────────────────
+
+// Scroll-reveal. RevealDirective adds .is-reveal in the browser only, so
+// prerendered HTML stays fully visible for no-JS and crawlers.
+.is-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--mkt-duration) var(--mkt-ease),
+    transform var(--mkt-duration) var(--mkt-ease);
+  will-change: opacity, transform;
+}
+
+.is-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// Shared hairline section separator on the --mkt-section rhythm.
+.divider {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  margin-top: var(--mkt-section);
+  padding-top: var(--mkt-section);
+}
+
+// Shared CTA row; centered contexts opt in with justify-content: center.
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mkt-space-3);
+}
+
+// The one marketing card primitive: flat, border-only, no drop shadow.
+// Marquee cards (hero, feature switcher, newsletter) override the 16px corner
+// to the extra-large 28px; code blocks use the small corner instead.
+.mkt-surface {
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large, 16px);
+}
+
+// Interactive card: border and __title lift to primary on hover.
+.mkt-card {
+  @extend .mkt-surface;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--mat-sys-primary);
+  }
+}
+
+.mkt-card__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-card:hover .mkt-card__title {
+  color: var(--mat-sys-primary);
+}
+
+// Divider-row title: lifts to primary when its .mkt-row link is hovered.
+.mkt-row__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-row:hover .mkt-row__title {
+  color: var(--mat-sys-primary);
+}
+
+// Prev/next pager (blog posts, docs pages).
+.mkt-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  @media screen and (max-width: vars.$small) {
+    flex-direction: column;
+  }
+}
+
+.mkt-pager__link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 48%;
+  text-decoration: none;
+
+  &.is-next {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &:hover .mkt-pager__title {
+    color: var(--mat-sys-primary);
+  }
+
+  @media screen and (max-width: vars.$small) {
+    max-width: none;
+  }
+
+  .mkt-pager__dir {
+    font-size: 12px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .mkt-pager__title {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+    transition: color 0.15s ease;
+  }
+}
