@@ -161,9 +161,6 @@ export class SubscriptionComponent extends StatefulComponent<
     effect(() => {
       if (this.isHosted() !== true) return;
       this.paymentService.productsResource.reload();
-      // A throttled org already holds overage status for the snackbar, so its
-      // key does not flip on entry and it would otherwise never refetch here.
-      this.service.overageStatusResource.reload();
       if (this.sessionId()) {
         this.service.refreshUntilSubscriptionOrTimeout();
       }

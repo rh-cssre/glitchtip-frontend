@@ -91,6 +91,13 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   setDetailActive(active: boolean) {
     this.detailActive.set(active);
+    // Overage status is keyed on the org, not detailSlug, so entering the
+    // subscription page does not re-trigger its fetch the way it does for the
+    // usage resources. Reload explicitly, or the card renders whatever the
+    // snackbar last cached.
+    if (active) {
+      this.overageStatusResource.reload();
+    }
   }
 
   eventsCountCurrentPeriodResource = apiResource(
@@ -145,21 +152,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   });
 
   // The over-limit snackbar shows app-wide, so its advice needs overage status
-  // off the subscription page too. Keyed on the active org and only while
-  // throttled, so this stays a rare call.
-  // TODO: remove once the org payload carries overage state; the dual key below
-  // is interim and is what forces the reload in SubscriptionComponent.
-  private throttledSlug = computed(() => {
-    const org = this.organizationsService.activeOrganization();
-    return this.settingsService.billingEnabled() && org?.eventThrottleRate
-      ? this.organizationsService.activeOrganizationSlug()
-      : "";
-  });
-
-  private overageSlug = computed(
-    () => this.detailSlug() || this.throttledSlug(),
-  );
-  overageStatusResource = apiResource(this.overageSlug, (orgSlug) => ({
+  // off the subscription page too. Keyed on the org rather than detailSlug for
+  // that reason, which costs one call per billing-enabled org and in exchange
+  // keeps the key a plain signal instead of a pair that has to be kept in step.
+  overageStatusResource = apiResource(this.organizationSlug, (orgSlug) => ({
     url: "/api/0/stripe/subscriptions/{organization_slug}/overage/",
     options: {
       params: {
