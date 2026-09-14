@@ -37,6 +37,8 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
   private childRoutePath: string[] = [];
   private subscriptions: Subscription[] = [];
   private isNavigationFromBackButton = false;
+  // Orgs whose throttle warning has already been opened this session.
+  private throttleWarningShownFor = new Set<string>();
   organizationService = inject(OrganizationsService);
   orgSlug = input.required<string>({ alias: "org-slug" });
 
@@ -90,19 +92,34 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
         .includes(activeOrgSlug);
       const snackbarDurationSeconds = 60;
 
-      if (billingEnabled && activeOrg?.eventThrottleRate && !warningDismissed) {
-        const snackBarRef = this.snackBar.openFromComponent(OverLimitSnackbar, {
-          // The remedy is read inside the snackbar: reading overage status here
-          // would re-trigger this effect and open a second snackbar.
-          data: { activeOrgSlug, throttleRate: activeOrg.eventThrottleRate },
-          verticalPosition: "top",
-          duration: snackbarDurationSeconds * 1000,
-        });
-
-        snackBarRef
-          .afterDismissed()
-          .subscribe(() => this.user.dismissThrottleWarning(activeOrgSlug));
+      if (
+        !billingEnabled ||
+        !activeOrgSlug ||
+        !activeOrg?.eventThrottleRate ||
+        warningDismissed
+      ) {
+        return;
       }
+
+      // Every signal read above re-runs this effect, and a second open would
+      // both stack a snackbar and fire the first one's afterDismissed, which
+      // records a dismissal the customer never made. One per org per session.
+      if (this.throttleWarningShownFor.has(activeOrgSlug)) {
+        return;
+      }
+      this.throttleWarningShownFor.add(activeOrgSlug);
+
+      const snackBarRef = this.snackBar.openFromComponent(OverLimitSnackbar, {
+        // The remedy is read inside the snackbar: reading overage status here
+        // would re-trigger this effect and open a second snackbar.
+        data: { activeOrgSlug, throttleRate: activeOrg.eventThrottleRate },
+        verticalPosition: "top",
+        duration: snackbarDurationSeconds * 1000,
+      });
+
+      snackBarRef
+        .afterDismissed()
+        .subscribe(() => this.user.dismissThrottleWarning(activeOrgSlug));
     });
   }
 
