@@ -60,7 +60,11 @@
       </mat-card>
     } @else {
       @if (subscription(); as subscription) {
-        @if (subscription.effectivePrice === 0) {
+        @if (
+          subscription.effectivePrice === 0 ||
+          activeOrganization()?.eventThrottleRate ||
+          activeOrganization()?.isAcceptingEvents === false
+        ) {
           <gt-upgrade-banner
             [usagePercent]="
               thisMonthPercent() >= 80 ? thisMonthPercent() : null
