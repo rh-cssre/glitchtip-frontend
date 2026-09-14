@@ -101,9 +101,8 @@ export class OrganizationFrameComponent implements OnDestroy, OnInit {
         return;
       }
 
-      // Every signal read above re-runs this effect, and a second open would
-      // both stack a snackbar and fire the first one's afterDismissed, which
-      // records a dismissal the customer never made. One per org per session.
+      // A second open stacks a snackbar and fires the first one's
+      // afterDismissed, recording a dismissal the customer never made.
       if (this.throttleWarningShownFor.has(activeOrgSlug)) {
         return;
       }

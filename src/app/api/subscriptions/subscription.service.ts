@@ -91,10 +91,8 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   setDetailActive(active: boolean) {
     this.detailActive.set(active);
-    // Overage status is keyed on the org, not detailSlug, so entering the
-    // subscription page does not re-trigger its fetch the way it does for the
-    // usage resources. Reload explicitly, or the card renders whatever the
-    // snackbar last cached.
+    // Keyed on the org, not detailSlug, so entry does not re-trigger the fetch.
+    // Reload explicitly, or the card renders whatever the snackbar last cached.
     if (active) {
       this.overageStatusResource.reload();
     }
@@ -151,10 +149,8 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     return this.dailyEventsResource.value()?.data ?? [];
   });
 
-  // The over-limit snackbar shows app-wide, so its advice needs overage status
-  // off the subscription page too. Keyed on the org rather than detailSlug for
-  // that reason, which costs one call per billing-enabled org and in exchange
-  // keeps the key a plain signal instead of a pair that has to be kept in step.
+  // The snackbar shows app-wide, so this is keyed on the org rather than
+  // detailSlug: one call per billing-enabled org, and the key stays a signal.
   overageStatusResource = apiResource(this.organizationSlug, (orgSlug) => ({
     url: "/api/0/stripe/subscriptions/{organization_slug}/overage/",
     options: {
@@ -328,11 +324,9 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       });
       return null;
     }
-    // Refetch rather than writing the response body in. The server recomputes
-    // the throttle rate in a task it enqueues on the way out, so the body it
-    // returns pairs the new cap with the pre-change rate; storing that leaves
-    // the card claiming events are being dropped after they have resumed.
-    // `set` would also park the resource, so nothing would correct it later.
+    // Refetch rather than writing the body in: the server recomputes the
+    // throttle rate in a task, so the response pairs the new cap with the
+    // pre-change rate. `set` would also park the resource.
     this.overageStatusResource.reload();
     this.subscriptionResource.reload();
     this.setState({ overageConfigLoading: false, overageConfigError: "" });
@@ -414,8 +408,8 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     // (free-tier creation, post-Stripe return). The per-page usage resources
     // below are safe to clear; they refetch reactively once setDetailActive(true)
     // re-flips detailSlug back to the current org on re-entry.
-    // overageStatusResource is also excluded: its key stays put while an org
-    // is throttled, so clearing it would strand it empty.
+    // overageStatusResource is excluded for the same reason: it is keyed on the
+    // org slug too. setDetailActive(true) reloads it explicitly on re-entry.
     this.eventsCountCurrentPeriodResource.set(undefined);
     this.dailyEventsResource.set(undefined);
     this.eventsCountPreviousPeriodResource.set(undefined);

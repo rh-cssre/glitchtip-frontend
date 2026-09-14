@@ -26,14 +26,11 @@ export type OverageThrottleState =
 
 /**
  * Overage reads "on" but is granting no headroom. `active` is the predicate the
- * throttle task enforces, so this cannot drift from what the server does: it
- * covers an ineligible plan, a cleared primary subscription, and a metered item
- * that has gone from Stripe, which `enabled` alone hides in every case.
+ * throttle task enforces, so this cannot drift from the server.
  *
- * Tested against `false` rather than falsy: a server that does not serve the
- * field yet omits it, and treating that absence as "not running" would tell
- * every enrolled org to contact support. Absent means unknown, so assume
- * healthy and let the states that do not need `active` speak.
+ * Tested against `false`, not falsy: a server that does not serve the field
+ * omits it, and reading that as "not running" would send every enrolled org to
+ * support.
  */
 export function isOverageInactive(status: OverageStatus | null): boolean {
   if (!status) return false;
@@ -47,11 +44,9 @@ export function capReached(status: OverageStatus | null): boolean {
 }
 
 /**
- * Only `active` says overage is not working. Inferring it from usage sitting
- * below the cap reads across a lagging value, since `throttleRate` is written by
- * a background sweep while usage and the cap are computed per request, and told
- * customers their cap raise had failed right after it worked. The cap is blamed
- * only once usage has actually reached it (see `throttled`).
+ * Only `active` says overage is not working. `throttleRate` is written by a
+ * background sweep while usage and the cap are computed per request, so
+ * inferring it from usage below the cap reads across a lagging value.
  */
 export function overageThrottleState(
   status: OverageStatus | null,
@@ -64,11 +59,9 @@ export function overageThrottleState(
     return status.eligible && status.configured ? "no-overage" : "unavailable";
   }
   if (isOverageInactive(status)) {
-    // Both mean "no headroom", but they are the customer's problem and ours
-    // respectively, so they get different remedies. An ineligible plan is a
-    // consequence of their own change; an eligible plan that is still not
-    // active means the metered item has gone from Stripe, which they cannot
-    // fix and are not being billed for.
+    // Both mean "no headroom" but need different remedies: an ineligible plan
+    // is the customer's own change, while an eligible-but-inactive one means
+    // the metered item has gone from Stripe, which they cannot fix.
     return status.eligible ? "stalled-broken" : "stalled-plan";
   }
   // "cap" is a remedy claim. With the overage price archived (configured
