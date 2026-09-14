@@ -1,0 +1,14 @@
+@use "../styles/side-pattern" as *;
+
+// Decorative brand bands in the margins beside the plans table.
+:host {
+  @include side-pattern-host;
+  position: relative;
+  @include side-pattern-bands(var(--mkt-container-table));
+}
+
+// .fancy is inline-block by default; the page title reads as a centred block.
+h1.fancy {
+  display: block;
+  text-align: center;
+}
