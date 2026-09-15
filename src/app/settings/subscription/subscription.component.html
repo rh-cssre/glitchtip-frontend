@@ -62,8 +62,9 @@
       @if (subscription(); as subscription) {
         @if (
           subscription.effectivePrice === 0 ||
-          activeOrganization()?.eventThrottleRate ||
-          activeOrganization()?.isAcceptingEvents === false
+          (subscription.status !== "canceled" &&
+            (activeOrganization()?.eventThrottleRate ||
+              activeOrganization()?.isAcceptingEvents === false))
         ) {
           <gt-upgrade-banner
             [usagePercent]="
