@@ -96,14 +96,15 @@
         @default {
           <!-- Not throttled yet, so these are forecasts rather than causes. An
                inactive overage meters nothing, and the tagline above already
-               explains the stall, so skip them entirely. -->
-          @if (!overageInactive() && capReached()) {
+               explains the stall, so skip them entirely. Both name the cap as
+               the thing to act on, so both need it to be changeable. -->
+          @if (capAdjustable() && !overageInactive() && capReached()) {
             <mat-divider />
             <p class="overage-alert overage-alert--warn" i18n>
               Spend cap reached. New events will be dropped until you raise the
               cap.
             </p>
-          } @else if (!overageInactive() && willReachCap()) {
+          } @else if (capAdjustable() && !overageInactive() && willReachCap()) {
             <mat-divider />
             <p class="overage-alert" i18n>
               On track to reach your cap before the cycle ends.

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { components } from "../api-schema";
 import {
+  capAdjustable,
   capReached,
   isOverageInactive,
   overageInactiveCause,
@@ -127,6 +128,42 @@ describe("overageThrottleState", () => {
         status({ configured: false, throttleRate: 100, overageUnits: 294117 }),
       ),
     ).toBe("throttled");
+  });
+
+  // Until the server serves `active`, an org enrolled before it lost
+  // eligibility reads healthy here. It must not be pointed at a cap the
+  // configure endpoint would reject, which is what the card used to offer.
+  it("does not blame the cap when the plan cannot be billed, with no `active`", () => {
+    expect(
+      overageThrottleState(
+        status({
+          active: undefined,
+          eligible: false,
+          throttleRate: 100,
+          overageUnits: 294117,
+        }),
+      ),
+    ).toBe("throttled");
+  });
+});
+
+describe("capAdjustable", () => {
+  it("is false before the status loads", () => {
+    expect(capAdjustable(null)).toBe(false);
+  });
+
+  it("is true for a billable org on a provisioned server", () => {
+    expect(capAdjustable(status())).toBe(true);
+  });
+
+  // Both are rejections from the configure endpoint, which a cap adjustment
+  // reaches with `enabled: true`.
+  it("is false when the plan cannot be billed for overage", () => {
+    expect(capAdjustable(status({ eligible: false }))).toBe(false);
+  });
+
+  it("is false when the server has no live overage price", () => {
+    expect(capAdjustable(status({ configured: false }))).toBe(false);
   });
 });
 

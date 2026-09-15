@@ -6,6 +6,7 @@ import { OrganizationsService } from "../organizations.service";
 import { SettingsService } from "../settings.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import {
+  capAdjustable,
   capReached as overageCapReached,
   isOverageInactive,
   overageInactiveCause,
@@ -194,9 +195,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   overageEnabled = computed(() => this.overageStatus()?.enabled ?? false);
   overageEligible = computed(() => this.overageStatus()?.eligible ?? false);
   overageConfigured = computed(() => this.overageStatus()?.configured ?? false);
-  canConfigureOverage = computed(
-    () => this.overageEligible() && this.overageConfigured(),
-  );
+  // One definition, shared with overageThrottleState: whether the configure
+  // endpoint would accept a cap change. Gates the render, the Adjust button and
+  // the "raise the cap" remedy alike, so the three cannot disagree.
+  canConfigureOverage = computed(() => capAdjustable(this.overageStatus()));
 
   // Percent of new events being dropped (0 = none, 100 = all).
   throttleRate = computed(() => this.overageStatus()?.throttleRate ?? 0);

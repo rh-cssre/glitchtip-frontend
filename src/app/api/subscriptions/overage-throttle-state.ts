@@ -51,6 +51,18 @@ export function overageInactiveCause(
   return status.eligible ? "broken" : "plan";
 }
 
+/**
+ * The spend cap can actually be changed. Both terms are enforced by the
+ * configure endpoint, which an adjustment hits with `enabled: true`: an
+ * ineligible plan is rejected outright, and with no live overage price the
+ * request is rejected even when it only lowers the cap. Never name the cap as
+ * a remedy without this.
+ */
+export function capAdjustable(status: OverageStatus | null): boolean {
+  if (!status) return false;
+  return status.eligible && status.configured;
+}
+
 /** Usage has consumed the spend cap. Only meaningful with overage enabled. */
 export function capReached(status: OverageStatus | null): boolean {
   if (!status || !status.enabled) return false;
@@ -77,7 +89,9 @@ export function overageThrottleState(
   // the metered item has gone from Stripe, which they cannot fix.
   const cause = overageInactiveCause(status);
   if (cause) return cause === "broken" ? "stalled-broken" : "stalled-plan";
-  // "cap" is a remedy claim. With the overage price archived (configured
-  // false) the cap endpoint rejects changes, so never point anyone at the cap.
-  return capReached(status) && status.configured ? "cap" : "throttled";
+  // "cap" is a remedy claim, so it needs the cap to be changeable, not just
+  // reached. An archived overage price and an ineligible plan both freeze it,
+  // and until the server serves `active` an ineligible plan lands here rather
+  // than in "stalled-plan".
+  return capReached(status) && capAdjustable(status) ? "cap" : "throttled";
 }
