@@ -8,6 +8,28 @@
           scale up and support open source error tracking with priority
           support.</p
         >
+      } @else if (isLargestPlan() && !isHardStopped()) {
+        <!-- Nothing bigger to sell, so this branch never names an upgrade. The
+             remedies are the overage controls below and a conversation with
+             us; both are offered, neither is pushed. A hard stop is excluded
+             because overage grants no headroom once events are refused
+             outright, so it keeps the rejection message below. -->
+        <h2 class="banner-headline fancy" i18n>You've outgrown this plan</h2>
+        @if (overageEnabled()) {
+          <p class="banner-usage" i18n>
+            You've reached your overage spend cap, and about
+            <strong>{{ eventThrottleRate() }}%</strong> of your incoming events
+            are being dropped. Raise your cap below to keep collecting events,
+            or get in touch and we'll help you find a fit.
+          </p>
+        } @else {
+          <p class="banner-usage" i18n>
+            You're at your event limit on our largest plan, and about
+            <strong>{{ eventThrottleRate() }}%</strong> of your incoming events
+            are being dropped. Turn on overage billing below to keep collecting
+            events, or get in touch and we'll help you find a fit.
+          </p>
+        }
       } @else {
         <h2 class="banner-headline fancy" i18n>Don't lose events!</h2>
         @if (isHardStopped()) {
@@ -52,9 +74,18 @@
               }
             </button>
           }
-          <button mat-stroked-button (click)="onComparePlans()" i18n>
-            Compare Plans
-          </button>
+          <!-- On the largest plan the comparison table has nothing left to
+               show, so that click is a dead end; offer the conversation
+               instead. -->
+          @if (isLargestPlan() && contactEmail()) {
+            <a mat-stroked-button href="mailto:{{ contactEmail() }}" i18n>
+              Contact us
+            </a>
+          } @else {
+            <button mat-stroked-button (click)="onComparePlans()" i18n>
+              Compare Plans
+            </button>
+          }
         </div>
       }
     </div>

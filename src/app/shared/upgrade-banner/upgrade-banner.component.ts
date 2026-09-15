@@ -25,6 +25,20 @@ export class UpgradeBannerComponent {
   readonly nextPlanEvents = input<number | null>(null);
   readonly freeEventLimit = input<number | null>(null);
   readonly upgradeLoading = input(false);
+  /**
+   * Whether the plan list has arrived. Without it `nextPlanEvents === null`
+   * cannot tell "still loading" from "nothing bigger exists", and a mid-size
+   * org would flash the largest-plan copy on every page load.
+   */
+  readonly plansLoaded = input(false);
+  /**
+   * Whether raising the overage spend cap is the live remedy, i.e. overage is
+   * already on. Decides which of the two controls the largest-plan copy points
+   * at; the overage card that owns both sits directly below this banner.
+   */
+  readonly overageEnabled = input(false);
+  /** Where a customer with nothing left to upgrade to should write. */
+  readonly contactEmail = input<string | null>(null);
 
   readonly upgradeClick = output<void>();
   readonly comparePlansClick = output<void>();
@@ -42,6 +56,14 @@ export class UpgradeBannerComponent {
    * with an empty label and a click that does nothing.
    */
   readonly hasNextPlan = computed(() => this.nextPlanEvents() !== null);
+  /**
+   * On the largest plan we sell: the plans are in and none is bigger. Upgrading
+   * is not a remedy we can offer, so the copy has to name the controls that do
+   * work (the overage card below) instead of an action with no button.
+   */
+  readonly isLargestPlan = computed(
+    () => this.plansLoaded() && this.nextPlanEvents() === null,
+  );
   readonly isHardStopped = computed(() => this.isAcceptingEvents() === false);
   readonly isThrottling = computed(() => {
     const rate = this.eventThrottleRate();

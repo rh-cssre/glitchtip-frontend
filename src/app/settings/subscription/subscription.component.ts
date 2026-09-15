@@ -124,6 +124,8 @@ export class SubscriptionComponent extends StatefulComponent<
   });
   thisMonthPercent = this.service.thisMonthPercent;
   billingEmail = environment.billingEmail;
+  // Which overage control the largest-plan banner copy should point at.
+  readonly overageEnabled = this.service.overageEnabled;
 
   nextProduct = computed(() => {
     const subscription = this.subscription();
@@ -137,6 +139,12 @@ export class SubscriptionComponent extends StatefulComponent<
 
     return upgrades[0] ?? null;
   });
+
+  // Separates "no bigger plan exists" from "the plan list has not arrived",
+  // which nextProduct() returns null for alike.
+  readonly plansLoaded = computed(
+    () => this.paymentService.products().length > 0,
+  );
 
   readonly freeEventLimit = computed(() => {
     const products = this.paymentService.products();
