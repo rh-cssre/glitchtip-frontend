@@ -79,10 +79,10 @@ export function overageThrottleState(
 ): OverageThrottleState {
   if (!status) return "unknown";
   if (!status.throttleRate) return "none";
-  // Both conditions are what the enable endpoint itself checks, so offering the
-  // toggle without them is a dead end.
+  // Enabling overage hits the same endpoint a cap change does, with the same
+  // admission test, so offering the toggle without it is a dead end.
   if (!status.enabled) {
-    return status.eligible && status.configured ? "no-overage" : "unavailable";
+    return capAdjustable(status) ? "no-overage" : "unavailable";
   }
   // Both mean "no headroom" but need different remedies: an ineligible plan
   // is the customer's own change, while an eligible-but-inactive one means
