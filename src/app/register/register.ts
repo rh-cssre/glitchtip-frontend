@@ -68,6 +68,7 @@ export class Register
   enableUserRegistration = this.settings.enableUserRegistration;
   enableSocialAppsUserRegistration =
     this.settings.enableSocialAppsUserRegistration;
+  billingEnabled = this.settings.billingEnabled;
   form = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [
