@@ -274,6 +274,8 @@ Sentinel is supported for high availability. Set `CACHE_SENTINEL_URL` to overrid
 
 ### PostgreSQL tuning
 
+None of this is required — a low-volume install runs fine on PostgreSQL's defaults — but a few minutes here buys a faster database and heads off an outage that is hard to diagnose.
+
 Run your `postgresql.conf` through a generator like [pgconfig.io](https://pgconfig.io/) or [PGTune](https://pgtune.leopard.in.ua/): give it your RAM, CPU count, and storage type, and pick the web-application or OLTP profile. That settles `shared_buffers`, `work_mem`, `effective_cache_size`, and WAL sizing, and managed providers generally handle those for you.
 
 Then set the one thing neither does:
@@ -282,7 +284,7 @@ Then set the one thing neither does:
 max_locks_per_transaction = 512
 ```
 
-GlitchTip partitions its event, transaction, log, and uptime tables by time and by organization, so a query that can't be narrowed to one partition locks every partition *and* every index on it — a few thousand locks at the default 90-day retention. Despite the name this is not a per-query limit; it sizes an instance-wide lock table holding roughly `max_locks_per_transaction` × `max_connections` locks. Overlapping wide queries fill that table, and then anything needing a lock fails with `out of shared memory` — event ingestion included. The two settings multiply, so raise this further if a generator lowered `max_connections`.
+GlitchTip's tables are partitioned, so its queries take far more locks than PostgreSQL's default budget allows for — a few thousand apiece at the default 90-day retention. Despite the name, the setting is not a per-query limit: it sizes an instance-wide pool of roughly `max_locks_per_transaction` × `max_connections` locks. Once enough queries overlap and fill that pool, anything needing a lock fails with `out of shared memory` — event ingestion included. Raise it further if your generator lowered `max_connections`.
 
 The change needs a restart and costs about 24 MB of shared memory. A streaming replica must be set at least as high as its primary.
 
