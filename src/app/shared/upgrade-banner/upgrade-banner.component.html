@@ -8,6 +8,15 @@
           scale up and support open source error tracking with priority
           support.</p
         >
+      } @else if (isSuspended()) {
+        <!-- Switched off by hand, so no plan, cap or toggle changes it. This
+             comes before every other case because those all name something to
+             buy or adjust, and none of it would restore ingest. -->
+        <h2 class="banner-headline fancy" i18n>Event collection is paused</h2>
+        <p class="banner-usage" i18n>
+          We've paused event collection for this organization, so new events are
+          being rejected. Please get in touch and we'll sort it out with you.
+        </p>
       } @else if (isLargestPlan() && !isHardStopped()) {
         <!-- Nothing bigger to sell, so this branch never names an upgrade. The
              remedies are the overage controls below and a conversation with
@@ -56,7 +65,7 @@
       }
       @if (!hideActions()) {
         <div class="banner-actions">
-          @if (hasNextPlan()) {
+          @if (hasNextPlan() && !isSuspended()) {
             <button
               mat-flat-button
               color="primary"
@@ -74,10 +83,10 @@
               }
             </button>
           }
-          <!-- On the largest plan the comparison table has nothing left to
-               show, so that click is a dead end; offer the conversation
-               instead. -->
-          @if (isLargestPlan() && contactEmail()) {
+          <!-- Comparing plans is a dead end for both of these: the largest
+               plan has nothing above it, and a paused org is not paused over
+               capacity. Offer the conversation instead. -->
+          @if ((isSuspended() || isLargestPlan()) && contactEmail()) {
             <a mat-stroked-button href="mailto:{{ contactEmail() }}" i18n>
               Contact us
             </a>

@@ -64,7 +64,18 @@ export class UpgradeBannerComponent {
   readonly isLargestPlan = computed(
     () => this.plansLoaded() && this.nextPlanEvents() === null,
   );
-  readonly isHardStopped = computed(() => this.isAcceptingEvents() === false);
+  /**
+   * Event collection switched off for this org by hand. Nothing the customer
+   * can buy lifts it, so this outranks every other message: the ingest path
+   * refuses events on this flag alone, independently of the throttle ramp.
+   */
+  readonly isSuspended = computed(() => this.isAcceptingEvents() === false);
+  /**
+   * The quota ramp has reached a total block. Read from the throttle rate
+   * rather than `isAcceptingEvents`, which is a separate manual switch that
+   * upgrading does not clear; ingest tests the two independently.
+   */
+  readonly isHardStopped = computed(() => this.eventThrottleRate() === 100);
   readonly isThrottling = computed(() => {
     const rate = this.eventThrottleRate();
     return rate !== null && rate > 0;
