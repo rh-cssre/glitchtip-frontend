@@ -23,6 +23,9 @@ x-depends_on: &default-depends_on
 services:
   postgres:
     image: postgres:18
+    # GlitchTip's partitioned tables need more locks than Postgres allows by
+    # default. https://glitchtip.com/documentation/install#postgresql-tuning
+    command: -c max_locks_per_transaction=512
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust" # Consider removing this and setting a password
     restart: unless-stopped

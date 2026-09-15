@@ -272,6 +272,24 @@ Sentinel is supported for high availability. Set `CACHE_SENTINEL_URL` to overrid
 - `CACHE_SENTINEL_SERVICE_NAME` (Default `mymaster`) Sentinel service name.
 - `CACHE_SENTINEL_DB` (Default 0) Sentinel database number.
 
+### PostgreSQL tuning
+
+We recommend tuning PostgreSQL for better performance, though a low-volume install runs fine on the defaults.
+
+Run your `postgresql.conf` through a generator like [pgconfig.io](https://pgconfig.io/) or [PGTune](https://pgtune.leopard.in.ua/): give it your RAM, CPU count, and storage type, and pick the web-application or OLTP profile. That settles `shared_buffers`, `work_mem`, `effective_cache_size`, and WAL sizing, and managed providers generally handle those for you.
+
+Then set the one thing neither does:
+
+```
+max_locks_per_transaction = 512
+```
+
+GlitchTip's tables are partitioned, so its queries take far more locks than PostgreSQL's default budget allows for — a few thousand apiece at the default 90-day retention. Despite the name, the setting is not a per-query limit: it sizes an instance-wide pool of roughly `max_locks_per_transaction` × `max_connections` locks. Once enough queries overlap and fill that pool, anything needing a lock fails with `out of shared memory` — event ingestion included. Raise it further if your generator lowered `max_connections`.
+
+The change needs a restart and costs about 24 MB of shared memory. A streaming replica must be set at least as high as its primary.
+
+More partitions mean more locks, so shorter [retention](#data-retention) and [cold storage](#cold-storage) both ease the pressure — cold storage most, since archiving to Parquet shortens how far back PostgreSQL keeps partitions at all. `PARTITION_HASH_BUCKETS` (Default 2 since 6.2.4; 4 in earlier versions) sets hash sub-partitions per time partition; leave it alone unless you host many organizations, and scale `max_locks_per_transaction` in proportion.
+
 ### Advanced database permissions
 
 A best practice is to assign the least privledged role needed to each GlitchTip service.
