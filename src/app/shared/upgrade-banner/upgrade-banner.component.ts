@@ -35,6 +35,13 @@ export class UpgradeBannerComponent {
   readonly freeEventLabel = computed(() =>
     this.formatEvents(this.freeEventLimit()),
   );
+  /**
+   * Nothing to upgrade to: the products have not loaded yet, or the org is
+   * already on the largest plan. Both leave the upgrade action with no plan to
+   * name and no price to dispatch, so the button is hidden rather than shown
+   * with an empty label and a click that does nothing.
+   */
+  readonly hasNextPlan = computed(() => this.nextPlanEvents() !== null);
   readonly isHardStopped = computed(() => this.isAcceptingEvents() === false);
   readonly isThrottling = computed(() => {
     const rate = this.eventThrottleRate();

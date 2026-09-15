@@ -34,22 +34,24 @@
       }
       @if (!hideActions()) {
         <div class="banner-actions">
-          <button
-            mat-flat-button
-            color="primary"
-            class="upgrade-button"
-            [disabled]="upgradeLoading()"
-            (click)="onUpgrade()"
-          >
-            <span
-              [style.visibility]="upgradeLoading() ? 'hidden' : 'visible'"
-              i18n
-              >Upgrade to {{ nextPlanLabel() }} events/mo</span
+          @if (hasNextPlan()) {
+            <button
+              mat-flat-button
+              color="primary"
+              class="upgrade-button"
+              [disabled]="upgradeLoading()"
+              (click)="onUpgrade()"
             >
-            @if (upgradeLoading()) {
-              <mat-spinner class="upgrade-button-spinner" diameter="18" />
-            }
-          </button>
+              <span
+                [style.visibility]="upgradeLoading() ? 'hidden' : 'visible'"
+                i18n
+                >Upgrade to {{ nextPlanLabel() }} events/mo</span
+              >
+              @if (upgradeLoading()) {
+                <mat-spinner class="upgrade-button-spinner" diameter="18" />
+              }
+            </button>
+          }
           <button mat-stroked-button (click)="onComparePlans()" i18n>
             Compare Plans
           </button>
