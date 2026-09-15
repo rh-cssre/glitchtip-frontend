@@ -274,7 +274,7 @@ Sentinel is supported for high availability. Set `CACHE_SENTINEL_URL` to overrid
 
 ### PostgreSQL tuning
 
-None of this is required — a low-volume install runs fine on PostgreSQL's defaults — but a few minutes here buys a faster database and heads off an outage that is hard to diagnose.
+We recommend tuning PostgreSQL for better performance, though a low-volume install runs fine on the defaults.
 
 Run your `postgresql.conf` through a generator like [pgconfig.io](https://pgconfig.io/) or [PGTune](https://pgtune.leopard.in.ua/): give it your RAM, CPU count, and storage type, and pick the web-application or OLTP profile. That settles `shared_buffers`, `work_mem`, `effective_cache_size`, and WAL sizing, and managed providers generally handle those for you.
 
