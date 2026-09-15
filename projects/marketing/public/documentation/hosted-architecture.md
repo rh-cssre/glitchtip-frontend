@@ -75,11 +75,11 @@ Both instances offer identical plans and features. To get started with EU hostin
 
 ## Disaster Recovery & Availability
 
-Hosted GlitchTip relies on DigitalOcean’s Managed Kubernetes and Managed PostgreSQL for high availability.
+Hosted GlitchTip relies on DigitalOcean’s Managed Kubernetes (DOKS) for high availability. The US (HIPAA-eligible) instance runs a self-healing CloudNativePG PostgreSQL cluster in-cluster; the EU instance uses DigitalOcean’s Managed PostgreSQL.
 
 - Redundancy: Individual services (Kubernetes Pods) and Database Clusters are configured to self-heal.
 - Failover: In the event of a service interruption, our architecture ensures that the GlitchTip ingestion API fails closed; service interruptions on GlitchTip will not disrupt your application's core functionality.
-- Backups: Database snapshots are taken daily and retained for 7 days to ensure Recovery Point Objective (RPO) capabilities.
+- Backups: On the US instance, WAL-G continuously archives PostgreSQL write-ahead logs and periodic base backups to a separate, encrypted DigitalOcean Spaces bucket, enabling point-in-time recovery (PITR) with a Recovery Point Objective (RPO) of minutes. The EU instance uses DigitalOcean Managed Database automated daily backups.
 - Status: Platform status is available at [DigitalOcean Status](https://status.digitalocean.com/).
 
 ### Incident Response Targets
