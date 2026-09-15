@@ -73,6 +73,8 @@ export class OverageCardComponent {
   readonly overageInactive = this.service.overageInactive;
   readonly inactiveCause = this.service.inactiveCause;
   readonly capAdjustable = this.service.canConfigureOverage;
+  // The half of capAdjustable that is server-wide rather than this org's plan.
+  readonly overageConfigured = this.service.overageConfigured;
   readonly loading = this.service.overageConfigLoading;
   readonly error = this.service.overageConfigError;
   // org:admin is granted only to the Owner role, matching the backend's
