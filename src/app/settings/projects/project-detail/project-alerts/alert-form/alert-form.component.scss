@@ -70,6 +70,7 @@ mat-form-field {
 // the Quantity and Timespan number inputs; a select of environment names needs
 // far more room.
 .environment-scope {
+  width: 100%;
   margin-top: 24px;
 
   mat-form-field {
