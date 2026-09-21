@@ -1,0 +1,30 @@
+<mkt-page-shell>
+  <div class="centered-block">
+    <h1 class="fancy marketing-heading">SDK Documentation</h1>
+    <p class="marketing-body">
+      After you have create a GlitchTip account, you will need to install a SDK
+      in order to connect your project to GlitchTip so that your site can report
+      events to us. These instructions will help you install the SDK.
+    </p>
+    <ul class="unstyled">
+      @for (platform of platforms; track platform.id) {
+        <li>
+          <h2 class="marketing-title">{{ platform.name }}</h2>
+          <ul>
+            @for (integration of platform.integrations; track integration.id) {
+              <li>
+                <a [routerLink]="[integration.id]">{{ integration.name }}</a>
+              </li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+    <h2 class="marketing-small-heading">Can't find your platform?</h2>
+    <p class="marketing-body">
+      See our
+      <a [routerLink]="['all-sdks']">general SDK setup instructions</a> for
+      getting started with any Sentry-compatible SDK.
+    </p>
+  </div>
+</mkt-page-shell>
