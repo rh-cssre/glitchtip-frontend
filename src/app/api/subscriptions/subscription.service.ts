@@ -5,6 +5,13 @@ import { client, handleError } from "../../shared/api/api";
 import { OrganizationsService } from "../organizations.service";
 import { SettingsService } from "../settings.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
+import {
+  capAdjustable,
+  capReached as overageCapReached,
+  isOverageInactive,
+  overageInactiveCause,
+  overageThrottleState,
+} from "./overage-throttle-state";
 
 export interface SubscriptionState {
   billingPortalLoading: boolean;
@@ -86,6 +93,11 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   setDetailActive(active: boolean) {
     this.detailActive.set(active);
+    // Keyed on the org, not detailSlug, so entry does not re-trigger the fetch.
+    // Reload explicitly, or the card renders whatever the snackbar last cached.
+    if (active) {
+      this.overageStatusResource.reload();
+    }
   }
 
   eventsCountCurrentPeriodResource = apiResource(
@@ -139,8 +151,9 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     return this.dailyEventsResource.value()?.data ?? [];
   });
 
-  // Overage status. Gated on detailSlug like the usage resources; fails soft.
-  overageStatusResource = apiResource(this.detailSlug, (orgSlug) => ({
+  // The snackbar shows app-wide, so this is keyed on the org rather than
+  // detailSlug: one call per billing-enabled org, and the key stays a signal.
+  overageStatusResource = apiResource(this.organizationSlug, (orgSlug) => ({
     url: "/api/0/stripe/subscriptions/{organization_slug}/overage/",
     options: {
       params: {
@@ -182,6 +195,16 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   overageEnabled = computed(() => this.overageStatus()?.enabled ?? false);
   overageEligible = computed(() => this.overageStatus()?.eligible ?? false);
   overageConfigured = computed(() => this.overageStatus()?.configured ?? false);
+  // One definition, shared with overageThrottleState: whether the configure
+  // endpoint would accept a cap change. Gates the render, the Adjust button and
+  // the "raise the cap" remedy alike, so the three cannot disagree.
+  canConfigureOverage = computed(() => capAdjustable(this.overageStatus()));
+
+  // Percent of new events being dropped (0 = none, 100 = all).
+  throttleRate = computed(() => this.overageStatus()?.throttleRate ?? 0);
+  overageInactive = computed(() => isOverageInactive(this.overageStatus()));
+  inactiveCause = computed(() => overageInactiveCause(this.overageStatus()));
+  throttleState = computed(() => overageThrottleState(this.overageStatus()));
 
   // Progress by units, not cost (floored capUnits keep cost just under the cap).
   capProgressPercent = computed(() => {
@@ -190,13 +213,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     return Math.min(100, Math.round((s.overageUnits / s.capUnits) * 100));
   });
 
-  // Cap reached when units hit the ceiling. By units, not throttleRate (noisy)
-  // or cost (floored, see above).
-  capReached = computed(() => {
-    const s = this.overageStatus();
-    if (!s || !s.enabled) return false;
-    return s.capUnits > 0 && s.overageUnits >= s.capUnits;
-  });
+  capReached = computed(() => overageCapReached(this.overageStatus()));
 
   // Forecast cap hit this cycle, in units (clients have no tier rates for $).
   private predictedOverageUnits = computed(() => {
@@ -311,9 +328,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       });
       return null;
     }
-    // Success: reflect the returned status immediately and refresh the
-    // subscription (billing mode may have migrated to flexible).
-    this.overageStatusResource.set(data);
+    // Refetch rather than writing the body in: the server recomputes the
+    // throttle rate in a task, so the response pairs the new cap with the
+    // pre-change rate. `set` would also park the resource.
+    this.overageStatusResource.reload();
     this.subscriptionResource.reload();
     this.setState({ overageConfigLoading: false, overageConfigError: "" });
     return data;
@@ -394,10 +412,11 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     // (free-tier creation, post-Stripe return). The per-page usage resources
     // below are safe to clear; they refetch reactively once setDetailActive(true)
     // re-flips detailSlug back to the current org on re-entry.
+    // overageStatusResource is excluded for the same reason: it is keyed on the
+    // org slug too. setDetailActive(true) reloads it explicitly on re-entry.
     this.eventsCountCurrentPeriodResource.set(undefined);
     this.dailyEventsResource.set(undefined);
     this.eventsCountPreviousPeriodResource.set(undefined);
-    this.overageStatusResource.set(undefined);
     clearInterval(this.refreshTimerRef);
     this.refreshTimerRef = undefined;
   }

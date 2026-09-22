@@ -32,8 +32,8 @@ const MAX_CAP_CENTS = 100_000_000;
 const DEFAULT_CAP_DOLLARS = 50;
 
 /**
- * Overage billing card for the subscription page. Parent gates rendering on
- * eligible + configured.
+ * Overage billing card for the subscription page. Parent gates rendering on a
+ * billable org, or on overage being switched on for one that is not.
  */
 @Component({
   selector: "gt-overage-card",
@@ -68,6 +68,13 @@ export class OverageCardComponent {
   readonly capProgressPercent = this.service.capProgressPercent;
   readonly capReached = this.service.capReached;
   readonly willReachCap = this.service.willReachCap;
+  readonly throttleRate = this.service.throttleRate;
+  readonly throttleState = this.service.throttleState;
+  readonly overageInactive = this.service.overageInactive;
+  readonly inactiveCause = this.service.inactiveCause;
+  readonly capAdjustable = this.service.canConfigureOverage;
+  // The half of capAdjustable that is server-wide rather than this org's plan.
+  readonly overageConfigured = this.service.overageConfigured;
   readonly loading = this.service.overageConfigLoading;
   readonly error = this.service.overageConfigError;
   // org:admin is granted only to the Owner role, matching the backend's

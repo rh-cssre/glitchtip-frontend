@@ -4869,6 +4869,8 @@ export interface components {
             eligible: boolean;
             /** Configured */
             configured: boolean;
+            /** Active */
+            active?: boolean;
             /** Capcents */
             capCents: number;
             /** Capunits */

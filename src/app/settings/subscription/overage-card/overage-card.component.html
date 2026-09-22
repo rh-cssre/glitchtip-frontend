@@ -4,11 +4,25 @@
       <div class="overage-top">
         <div class="overage-top-text">
           <span class="body-text-strong" i18n>Overage billing</span>
-          <p class="overage-tagline body-text" i18n>
-            Keep ingesting past your plan quota and pay only for the overflow, up
-            to a monthly cap you set. At the cap, throttling resumes, so your
-            bill never goes over the cap.
-          </p>
+          <!-- The cause, not throttleState: nothing is throttled yet the moment
+               a resubscribe leaves overage on with no metered item. -->
+          @if (inactiveCause() === "broken") {
+            <p class="overage-tagline body-text" i18n>
+              Overage billing is switched on, but it is not running. You are not
+              being charged for it. Please contact support.
+            </p>
+          } @else if (inactiveCause() === "plan") {
+            <p class="overage-tagline body-text" i18n>
+              Overage billing is switched on, but your current plan cannot be
+              billed for it.
+            </p>
+          } @else {
+            <p class="overage-tagline body-text" i18n>
+              Keep collecting events past your plan limit and pay only for the
+              overflow, up to a monthly cap you set. At the cap, throttling
+              resumes, so your bill never goes over the cap.
+            </p>
+          }
         </div>
         <div class="overage-top-control">
           @if (loading()) {
@@ -30,44 +44,114 @@
         </p>
       }
 
-      @if (enabled()) {
-        <mat-divider />
-        <div class="overage-row">
-          <div class="overage-row-main">
-            <span class="overage-amount"
-              >≈ {{ costDollars() | currency }}
-              <span class="overage-est-note" i18n
-                >this cycle (estimate)</span
-              ></span
-            >
-            @if (resetDate(); as reset) {
-              <span class="overage-sub" i18n>Resets {{ reset | date }}</span>
-            }
-          </div>
-          <span class="overage-percent"
-            >{{ capProgressPercent() }}% <span i18n>of cap</span></span
-          >
-        </div>
-        <mat-progress-bar
-          mode="determinate"
-          [value]="capProgressPercent()"
-          [color]="capReached() ? 'warn' : 'primary'"
-        />
-
-        @if (capReached()) {
+      @switch (throttleState()) {
+        @case ("stalled-plan") {
+          <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Spend cap reached. Events above your quota are being throttled again.
-            Raise the cap to keep ingesting.
+            Your current plan cannot be billed for overage, so it is not adding
+            any headroom and about {{ throttleRate() }}% of new events are being
+            dropped. Raising the spend cap will not change that.
           </p>
-        } @else if (willReachCap()) {
-          <p class="overage-alert" i18n>
-            On track to reach your cap before the cycle ends.
+        }
+        @case ("stalled-broken") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            Overage billing is switched on but is not running, so about
+            {{ throttleRate() }}% of new events are being dropped. You are not
+            being charged for it, and raising the spend cap will not help.
+            Please contact support.
           </p>
+        }
+        @case ("cap") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            Spend cap reached, so about {{ throttleRate() }}% of new events are
+            being dropped. Raise the cap to keep collecting events.
+          </p>
+        }
+        @case ("throttled") {
+          <mat-divider />
+          <!-- The rate is swept in the background while the cap and usage
+               are computed per request, so the two disagree briefly. -->
+          <p class="overage-alert overage-alert--warn" i18n>
+            About {{ throttleRate() }}% of new events are being dropped. If you
+            just changed your cap or plan, this clears once the change takes
+            effect.
+          </p>
+        }
+        @case ("no-overage") {
+          <mat-divider />
+          @if (canManage()) {
+            <p class="overage-alert overage-alert--warn" i18n>
+              About {{ throttleRate() }}% of new events are being dropped. Turn
+              on overage billing to keep collecting events.
+            </p>
+          } @else {
+            <p class="overage-alert overage-alert--warn" i18n>
+              About {{ throttleRate() }}% of new events are being dropped. Ask
+              an organization owner to turn on overage billing.
+            </p>
+          }
+        }
+        @default {
+          <!-- Not throttled yet, so these are forecasts rather than causes. An
+               inactive overage meters nothing, and the tagline above already
+               explains the stall, so skip them entirely. Both name the cap as
+               the thing to act on, so both need it to be changeable. -->
+          @if (capAdjustable() && !overageInactive() && capReached()) {
+            <mat-divider />
+            <p class="overage-alert overage-alert--warn" i18n>
+              Spend cap reached. New events will be dropped until you raise the
+              cap.
+            </p>
+          } @else if (capAdjustable() && !overageInactive() && willReachCap()) {
+            <mat-divider />
+            <p class="overage-alert" i18n>
+              On track to reach your cap before the cycle ends.
+            </p>
+          }
+        }
+      }
+
+      @if (enabled()) {
+        <!-- Unbillable overage meters nothing, so no estimate or cap bar. -->
+        @if (!overageInactive()) {
+          <mat-divider />
+          <div class="overage-row">
+            <div class="overage-row-main">
+              <span class="overage-amount"
+                >≈ {{ costDollars() | currency }}
+                <span class="overage-est-note" i18n
+                  >this cycle (estimate)</span
+                ></span
+              >
+              @if (resetDate(); as reset) {
+                <span class="overage-sub" i18n>Resets {{ reset | date }}</span>
+              }
+            </div>
+            <span class="overage-percent"
+              >{{ capProgressPercent() }}% <span i18n>of cap</span></span
+            >
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="capProgressPercent()"
+            [color]="capReached() ? 'warn' : 'primary'"
+          />
         }
 
         <mat-divider />
         <div class="overage-row">
-          @if (editingCap()) {
+          @if (overageInactive()) {
+            <div class="overage-row-main">
+              <span class="overage-amount">{{
+                capDollarsCurrent() | currency
+              }}</span>
+              <span class="overage-sub" i18n
+                >Monthly spend cap (not in effect)</span
+              >
+            </div>
+          } @else if (editingCap()) {
             <mat-form-field appearance="outline" class="cap-field">
               <mat-label i18n>Monthly spend cap</mat-label>
               <span matTextPrefix>$&nbsp;</span>
@@ -113,14 +197,29 @@
               }}</span>
               <span class="overage-sub" i18n>Monthly spend cap</span>
             </div>
-            <button
-              mat-stroked-button
-              [disabled]="!canManage()"
-              (click)="startEditCap()"
-              i18n
-            >
-              Adjust cap
-            </button>
+            @if (capAdjustable()) {
+              <button
+                mat-stroked-button
+                [disabled]="!canManage()"
+                (click)="startEditCap()"
+                i18n
+              >
+                Adjust cap
+              </button>
+            } @else if (!overageConfigured()) {
+              <!-- The cap POST applies two tests, so name the one that fired.
+                   No live overage price stops every org on the server. -->
+              <span class="overage-sub" i18n
+                >Overage billing is not available on this server right now, so
+                the spend cap cannot be changed.</span
+              >
+            } @else {
+              <!-- The price is live, so it is this org's plan that fails. -->
+              <span class="overage-sub" i18n
+                >Your current plan cannot be billed for overage, so the spend
+                cap cannot be changed.</span
+              >
+            }
           }
         </div>
       }
@@ -136,7 +235,7 @@
   <h2 mat-dialog-title i18n>Turn on overage billing?</h2>
   <mat-dialog-content class="mat-typography">
     <p class="body-text" i18n>
-      You're only charged for events above your plan quota, up to a
+      You're only charged for events above your plan limit, up to a
       <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
       change anytime. Your bill never goes over the cap.
     </p>
