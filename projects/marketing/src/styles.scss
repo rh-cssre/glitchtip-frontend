@@ -141,116 +141,6 @@ a {
   display: inline-block;
 }
 
-.hero-and-nav-container {
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 70px;
-}
-
-.big-card-wrapper {
-  width: 95%;
-  max-width: 1800px;
-  min-height: 700px;
-  margin: -70px auto 50px;
-  background-color: var(--mat-sys-surface-container);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background-image: conic-gradient(
-      from 90deg at 1px 1px,
-      #0000 90deg,
-      color-mix(in srgb, var(--mat-sys-outline-variant) 25%, transparent) 0
-    );
-    background-size: 36px 36px;
-    pointer-events: none;
-    mask-image:
-      radial-gradient(ellipse 50% 35% at 5% 5%, black 0%, transparent 60%),
-      radial-gradient(ellipse 35% 25% at 95% 3%, black 0%, transparent 55%),
-      radial-gradient(ellipse 30% 20% at 15% 30%, black 0%, transparent 60%),
-      radial-gradient(ellipse 25% 18% at 60% 20%, black 0%, transparent 55%),
-      radial-gradient(ellipse 20% 15% at 35% 45%, black 0%, transparent 60%),
-      radial-gradient(ellipse 30% 20% at 80% 40%, black 0%, transparent 55%),
-      radial-gradient(ellipse 25% 20% at 10% 60%, black 0%, transparent 60%),
-      radial-gradient(ellipse 20% 15% at 55% 65%, black 0%, transparent 55%),
-      radial-gradient(ellipse 35% 25% at 90% 70%, black 0%, transparent 60%),
-      radial-gradient(ellipse 40% 30% at 30% 85%, black 0%, transparent 55%),
-      radial-gradient(ellipse 30% 25% at 70% 90%, black 0%, transparent 60%),
-      radial-gradient(ellipse 45% 35% at 5% 95%, black 0%, transparent 55%);
-    mask-composite: add;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    // Scattered colored squares along the edges, aligned to the 36px grid
-    $red: var(--mat-sys-primary);
-    $blue: var(--mkt-accent-blue);
-    $yellow: var(--mkt-accent-yellow);
-    background-image:
-      // Top edge
-      linear-gradient($red, $red),
-      linear-gradient($blue, $blue),
-      linear-gradient($red, $red),
-      linear-gradient($yellow, $yellow),
-      linear-gradient($blue, $blue),
-      // Right edge
-      linear-gradient($yellow, $yellow),
-      linear-gradient($red, $red),
-      linear-gradient($blue, $blue),
-      linear-gradient($yellow, $yellow),
-      // Bottom edge
-      linear-gradient($blue, $blue),
-      linear-gradient($yellow, $yellow),
-      linear-gradient($red, $red),
-      linear-gradient($blue, $blue),
-      linear-gradient($red, $red),
-      // Left edge
-      linear-gradient($red, $red),
-      linear-gradient($yellow, $yellow),
-      linear-gradient($blue, $blue),
-      linear-gradient($red, $red);
-    background-size: 36px 36px;
-    background-repeat: no-repeat;
-    background-position:
-      // Top edge
-      108px 0px,
-      252px 0px,
-      540px 36px,
-      828px 0px,
-      1116px 36px,
-      // Right edge
-      calc(100% - 0px) 144px,
-      calc(100% - 36px) 396px,
-      calc(100% - 0px) 612px,
-      calc(100% - 36px) 864px,
-      // Bottom edge
-      72px calc(100% - 0px),
-      324px calc(100% - 36px),
-      648px calc(100% - 0px),
-      936px calc(100% - 0px),
-      1188px calc(100% - 36px),
-      // Left edge
-      0px 216px,
-      36px 504px,
-      0px 720px,
-      36px 936px;
-    opacity: 0.15;
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
-}
-
 .centered-block {
   // Shared content column; page-shell owns the side margin.
   width: min(100%, var(--mkt-container-content));
@@ -461,10 +351,6 @@ a {
 
     border-bottom: 1px solid var(--mat-sys-outline-variant);
   }
-}
-
-.just-the-image {
-  padding: 1.5rem 0 75px;
 }
 
 // ── Marketing design-system primitives ──────────────────────────────────────
