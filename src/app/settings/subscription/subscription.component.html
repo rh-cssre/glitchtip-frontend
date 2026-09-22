@@ -60,12 +60,26 @@
       </mat-card>
     } @else {
       @if (subscription(); as subscription) {
-        @if (subscription.effectivePrice === 0) {
+        @if (
+          subscription.effectivePrice === 0 ||
+          (subscription.status !== "canceled" &&
+            (activeOrganization()?.eventThrottleRate ||
+              activeOrganization()?.isAcceptingEvents === false))
+        ) {
           <gt-upgrade-banner
             [usagePercent]="
               thisMonthPercent() >= 80 ? thisMonthPercent() : null
             "
+            [eventThrottleRate]="
+              activeOrganization()?.eventThrottleRate ?? null
+            "
+            [isAcceptingEvents]="
+              activeOrganization()?.isAcceptingEvents ?? null
+            "
             [nextPlanEvents]="nextProduct()?.events ?? null"
+            [plansLoaded]="plansLoaded()"
+            [overageEnabled]="overageEnabled()"
+            [contactEmail]="billingEmail"
             [upgradeLoading]="upgradeLoading()"
             (upgradeClick)="upgradeToNextPlan()"
             (comparePlansClick)="openBuiltInPricing()"
