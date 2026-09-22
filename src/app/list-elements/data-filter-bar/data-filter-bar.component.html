@@ -151,16 +151,6 @@
           </mat-select>
         </mat-form-field>
       </form>
-      @if (reverseForm) {
-        <form [formGroup]="reverseForm" class="reverse-form">
-          <mat-checkbox
-            formControlName="reverse"
-            (change)="reverseChanged.emit($event.checked)"
-          >
-            Reverse
-          </mat-checkbox>
-        </form>
-      }
       @if (!isLargeScreen()) {
         <ng-container *ngTemplateOutlet="searchFormTemplate"></ng-container>
       }

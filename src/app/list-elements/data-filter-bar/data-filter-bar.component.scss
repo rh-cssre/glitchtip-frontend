@@ -26,11 +26,6 @@
     }
   }
 }
-.reverse-form {
-  display: flex;
-  align-items: center;
-}
-
 .search-form {
   @media (min-width: vars.$small) {
     mat-form-field {

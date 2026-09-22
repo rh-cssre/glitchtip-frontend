@@ -24,9 +24,7 @@
   <gt-data-filter-bar
     [sortForm]="sortForm"
     [sorts]="sorts"
-    [reverseForm]="reverseForm"
     (sortByChanged)="sortByChanged($event)"
-    (reverseChanged)="reverseChanged($event)"
   />
   @if (monitors(); as monitors) {
     <div class="table-container">

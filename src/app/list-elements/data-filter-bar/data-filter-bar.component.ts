@@ -21,7 +21,6 @@ import {
 } from "@angular/material/button-toggle";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatMenuModule } from "@angular/material/menu";
 
@@ -55,7 +54,6 @@ export interface SearchHelpConfig {
     MatButtonToggleModule,
     MatTooltipModule,
     MatIconModule,
-    MatCheckboxModule,
     MatChipsModule,
     MatMenuModule,
     NgTemplateOutlet,
@@ -73,9 +71,6 @@ export class DataFilterBarComponent {
     }[]
   >();
   currentStatsPeriod = input<"24h" | "14d">();
-  // Optional: renders a "Reverse" box beside the sort select, for lists whose
-  // sort keys each have a sensible default direction rather than two entries.
-  @Input() reverseForm?: FormGroup;
   @Input() environmentForm?: FormGroup;
   @Input() searchForm?: FormGroup;
   readonly searchHelp = input<SearchHelpConfig>();
@@ -87,7 +82,6 @@ export class DataFilterBarComponent {
   readonly filterByEnvironment = output<MatSelectChange>();
   readonly searchSubmit = output();
   readonly sortByChanged = output<MatSelectChange>();
-  readonly reverseChanged = output<boolean>();
 
   isLargeScreen = signal(true);
 

@@ -20,9 +20,9 @@ import { checkForOverflow, stringAttribute } from "src/app/shared/shared.utils";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import {
+  DEFAULT_MONITOR_SORT,
   MonitorListService,
-  MonitorSortField,
-  fromMonitorSort,
+  MonitorSort,
   monitorSorts,
   toMonitorSort,
 } from "./monitor-list.service";
@@ -76,19 +76,17 @@ export class MonitorListComponent {
   );
   sorts = monitorSorts;
   sortForm = new FormGroup({
-    sort: new FormControl<MonitorSortField>("created"),
+    sort: new FormControl<MonitorSort>(DEFAULT_MONITOR_SORT),
   });
-  reverseForm = new FormGroup({ reverse: new FormControl(false) });
 
   constructor() {
     effect(() => {
       this.service.cursor.set(this.cursor());
     });
     effect(() => {
-      const { field, reverse } = fromMonitorSort(this.sort());
-      this.service.sort.set(toMonitorSort(field, reverse));
-      this.sortForm.setValue({ sort: field });
-      this.reverseForm.setValue({ reverse });
+      const sort = toMonitorSort(this.sort());
+      this.service.sort.set(sort);
+      this.sortForm.setValue({ sort });
     });
     effect(() => {
       const breakPointResult = this.smallBreakpointSignal();
@@ -105,17 +103,9 @@ export class MonitorListComponent {
   }
 
   sortByChanged(event: MatSelectChange) {
-    this.navigateToSort(event.value, this.reverseForm.value.reverse ?? false);
-  }
-
-  reverseChanged(reverse: boolean) {
-    this.navigateToSort(this.sortForm.value.sort ?? "created", reverse);
-  }
-
-  private navigateToSort(field: MonitorSortField, reverse: boolean) {
     // Drop the cursor: a page position from the old order means nothing here.
     this.router.navigate([], {
-      queryParams: { cursor: null, sort: toMonitorSort(field, reverse) },
+      queryParams: { cursor: null, sort: event.value },
       queryParamsHandling: "merge",
     });
   }

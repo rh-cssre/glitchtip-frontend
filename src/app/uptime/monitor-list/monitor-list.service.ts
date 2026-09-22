@@ -8,54 +8,39 @@ import {
 } from "src/app/shared/pagination.utils";
 import { keepPreviousValue } from "src/app/shared/signal.utils";
 
-export type MonitorSortField = "created" | "name" | "project" | "status";
-export type MonitorSort = MonitorSortField | `-${MonitorSortField}`;
+export type MonitorSort =
+  | "status"
+  | "-created"
+  | "created"
+  | "name"
+  | "project";
 
-// Sort fields in menu order. Direction is the reverse checkbox's job.
-export const monitorSorts: { param: MonitorSortField; display: string }[] = [
-  { param: "created", display: "Created" },
-  { param: "name", display: "Name" },
-  { param: "project", display: "Project" },
-  { param: "status", display: "Status" },
+export const DEFAULT_MONITOR_SORT: MonitorSort = "-created";
+
+// Menu order, and the only list of sorts: the dropdown renders it and
+// toMonitorSort validates against it. Each option carries its own direction,
+// so "Sort by" is the single control.
+export const monitorSorts: { param: MonitorSort; display: string }[] = [
+  { param: "status", display: "Down First" },
+  { param: "-created", display: "Newest" },
+  { param: "created", display: "Oldest" },
+  { param: "name", display: "Name (A-Z)" },
+  { param: "project", display: "Project (A-Z)" },
 ];
 
-// Each field's two directions. Unreversed is the one worth defaulting to:
-// newest first, names A-Z, and down before up -- what the list is opened for
-// during an incident.
-const directions: Record<
-  MonitorSortField,
-  { forward: MonitorSort; reversed: MonitorSort }
-> = {
-  created: { forward: "-created", reversed: "created" },
-  name: { forward: "name", reversed: "-name" },
-  project: { forward: "project", reversed: "-project" },
-  status: { forward: "status", reversed: "-status" },
-};
-
-export const toMonitorSort = (
-  field: MonitorSortField,
-  reverse: boolean,
-): MonitorSort =>
-  reverse ? directions[field].reversed : directions[field].forward;
-
-// Read the URL's sort back into the two controls. Anything unrecognised falls
-// back to the default, so a hand-edited URL cannot put the dropdown and the
-// request out of step.
-export const fromMonitorSort = (sort: string | undefined) => {
-  const fields = Object.keys(directions) as MonitorSortField[];
-  const field =
-    fields.find((candidate) =>
-      Object.values(directions[candidate]).includes(sort as MonitorSort),
-    ) ?? "created";
-  return { field, reverse: directions[field].reversed === sort };
-};
+// The sort arrives off the URL, so anything the menu does not offer -- a stale
+// bookmark, a hand-edited query string -- falls back to the default rather
+// than leaving the dropdown blank or taking a 422.
+export const toMonitorSort = (value: string | undefined): MonitorSort =>
+  monitorSorts.find((sort) => sort.param === value)?.param ??
+  DEFAULT_MONITOR_SORT;
 
 @Injectable()
 export class MonitorListService {
   private snackBar = inject(MatSnackBar);
   private organizationsService = inject(OrganizationsService);
   cursor = signal<string | undefined>(undefined);
-  sort = signal<MonitorSort>("-created");
+  sort = signal<MonitorSort>(DEFAULT_MONITOR_SORT);
   private monitorsResource = resource({
     params: () => ({
       organizationSlug: this.activeOrganizationSlug(),
