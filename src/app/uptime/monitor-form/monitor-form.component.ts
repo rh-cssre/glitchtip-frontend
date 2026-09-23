@@ -100,16 +100,7 @@ export class MonitorFormComponent implements OnInit {
   readonly formSubmitted = output<MonitorInput>();
 
   orgProjects = this.organizationsService.activeOrganizationProjects;
-  // The org endpoint joins through project associations without DISTINCT, so
-  // the same environment arrives once per association.
-  orgEnvironments = computed(() => {
-    const seen = new Set<number | null | undefined>();
-    return this.environmentsService.orgEnvironments().filter((environment) => {
-      if (seen.has(environment.id)) return false;
-      seen.add(environment.id);
-      return true;
-    });
-  });
+  orgEnvironments = this.environmentsService.orgEnvironments;
   totalEventsAllowed = this.subscriptionService.totalEventsAllowed;
 
   intervalPerMonth = signal<number | null>(null);
