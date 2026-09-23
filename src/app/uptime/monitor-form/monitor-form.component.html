@@ -156,7 +156,7 @@
         <mat-form-field appearance="outline" data-cy="monitor-environment">
           <mat-label i18n>Environment</mat-label>
           <mat-select formControlName="environmentID">
-            <mat-option [value]="null" i18n>None</mat-option>
+            <mat-option [value]="null" i18n>No environment</mat-option>
             @for (environment of environmentOptions(); track environment.id) {
               <mat-option [value]="environment.id">
                 {{ environment.name }}
