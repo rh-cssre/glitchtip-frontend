@@ -1,15 +1,15 @@
 @if (projectFormOptionsGroup.errors?.selectionRequired) {
   <p class="error alert-form-error">
-    Please select events or uptime monitor triggers for your alert.
+    Select at least one condition: event frequency or uptime.
   </p>
 }
 
-<form
-  class="flex-common"
-  (ngSubmit)="onSubmit()"
-  [formGroup]="projectAlertForm"
->
-  <div>
+<form (ngSubmit)="onSubmit()" [formGroup]="projectAlertForm">
+  <p class="alert-form__group-label body-text-strong" i18n>
+    Alert when any of these:
+  </p>
+
+  <div class="trigger trigger__line">
     <mat-checkbox
       data-cy="error-check"
       [checked]="projectFormErrorAlert.value"
@@ -68,17 +68,52 @@
       }
     </mat-form-field>
     <span i18n
-      >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send
-      an alert.</span
+      >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send an
+      alert.</span
     >
-    <div class="uptime-option" formGroupName="optionsGroup">
-      <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-        ><span class="body-text" i18n
-          >If an uptime monitor is triggered.</span
-        ></mat-checkbox
-      >
-    </div>
   </div>
+
+  <div class="trigger uptime-option" formGroupName="optionsGroup">
+    <mat-checkbox data-cy="uptime-check" formControlName="uptime"
+      ><span class="body-text" i18n
+        >If an
+        <span
+          class="tooltip"
+          matTooltip="An uptime monitor checks a URL on a schedule and triggers when the site stops responding."
+          >uptime monitor</span
+        >
+        detects downtime.</span
+      ></mat-checkbox
+    >
+  </div>
+
+  @if (environmentOptions().length > 0) {
+    <div class="environment-scope">
+      <mat-form-field
+        appearance="outline"
+        floatLabel="always"
+        subscriptSizing="dynamic"
+      >
+        <mat-label i18n>Limit to environments (optional)</mat-label>
+        <mat-select
+          data-cy="environments"
+          formControlName="environments"
+          multiple
+          placeholder="All environments"
+          i18n-placeholder
+        >
+          @for (environment of environmentOptions(); track environment) {
+            <mat-option [value]="environment">{{ environment }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint i18n
+          >Only events and uptime monitors in these environments trigger this
+          alert.</mat-hint
+        >
+      </mat-form-field>
+    </div>
+  }
+
   <div class="update" data-cy="update-container">
     @if (!newAlert()) {
       <gt-loading-button
@@ -87,7 +122,8 @@
         [disabled]="
           projectFormTimespan.value === timespan() &&
           projectFormQuantity.value === quantity() &&
-          projectFormUptime.value === uptime()
+          projectFormUptime.value === uptime() &&
+          environmentsUnchanged()
         "
         buttonStyle="stroked"
         [loading]="loading() === true"

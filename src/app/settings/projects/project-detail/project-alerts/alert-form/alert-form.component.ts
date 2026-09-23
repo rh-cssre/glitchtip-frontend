@@ -2,6 +2,7 @@ import { I18nPluralPipe } from "@angular/common";
 import {
   Component,
   OnInit,
+  computed,
   input,
   output,
   ChangeDetectionStrategy,
@@ -25,6 +26,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatSelectModule } from "@angular/material/select";
 
 export class NewAlertErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -58,6 +60,7 @@ export const selectionRequiredValidator: ValidatorFn = (
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     LoadingButtonComponent,
   ],
 })
@@ -67,10 +70,18 @@ export class AlertFormComponent implements OnInit {
   readonly quantity = input<number | null>(1);
   readonly uptime = input<boolean | null>(false);
   readonly errorAlert = input<boolean>(true);
+  /**
+   * Environments already selected on this alert. Undefined when the API predates
+   * the field, so every read has to tolerate it.
+   */
+  readonly environments = input<string[] | undefined>([]);
+  /** Environment names seen on this project, offered as options */
+  readonly availableEnvironments = input<string[] | undefined>([]);
   readonly alertSubmit = output<{
     timespanMinutes: number;
     quantity: number;
     uptime: boolean;
+    environments: string[];
   }>();
   readonly newAlert = input<boolean | undefined>(false);
 
@@ -100,6 +111,7 @@ export class AlertFormComponent implements OnInit {
     ),
     timespanMinutes: new FormControl(""),
     quantity: new FormControl(""),
+    environments: new FormControl<string[]>([]),
   });
 
   projectFormTimespan = this.projectAlertForm.get(
@@ -115,6 +127,21 @@ export class AlertFormComponent implements OnInit {
   projectFormOptionsGroup = this.projectAlertForm.get(
     "optionsGroup",
   ) as FormGroup;
+  projectFormEnvironments = this.projectAlertForm.get(
+    "environments",
+  ) as FormControl;
+
+  /**
+   * Already-selected environments are kept as options even when the project has
+   * stopped reporting them, otherwise an existing selection would silently
+   * vanish from the dropdown while still filtering the alert.
+   */
+  environmentOptions = computed(() => [
+    ...new Set([
+      ...(this.availableEnvironments() ?? []),
+      ...(this.environments() ?? []),
+    ]),
+  ]);
 
   matcher = new LessAnnoyingErrorStateMatcher();
   newFormMatcher = new NewAlertErrorStateMatcher();
@@ -127,6 +154,7 @@ export class AlertFormComponent implements OnInit {
     this.projectAlertForm.setValue({
       timespanMinutes: timespan ? timespan.toString() : null,
       quantity: quantity ? quantity.toString() : null,
+      environments: [...(this.environments() ?? [])],
       optionsGroup: {
         uptime: this.uptime() as any,
         errorAlert: this.errorAlert() as any,
@@ -174,6 +202,16 @@ export class AlertFormComponent implements OnInit {
     this.projectFormTimespan.setValidators(this.intervalValidators);
   }
 
+  /** Arrays compare by reference, so the Update button needs a value check */
+  environmentsUnchanged(): boolean {
+    const selected: string[] = this.projectFormEnvironments.value ?? [];
+    const original = this.environments() ?? [];
+    return (
+      selected.length === original.length &&
+      selected.every((environment) => original.includes(environment))
+    );
+  }
+
   onSubmit(): void {
     if (this.projectAlertForm.valid) {
       this.alertSubmit.emit({
@@ -184,6 +222,7 @@ export class AlertFormComponent implements OnInit {
           ? this.projectFormQuantity.value
           : null,
         uptime: this.projectFormUptime.value,
+        environments: this.projectFormEnvironments.value ?? [],
       });
     }
   }

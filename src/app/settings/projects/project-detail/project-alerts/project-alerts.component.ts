@@ -25,6 +25,7 @@ import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { ProjectEnvironmentsService } from "../project-environments/project-environments.service";
 
 type ProjectAlert = components["schemas"]["ProjectAlertSchema"];
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
@@ -54,10 +55,11 @@ export function resolveRecipientIcon(type: RecipientType): string {
     EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  providers: [ProjectAlertsService],
+  providers: [ProjectAlertsService, ProjectEnvironmentsService],
 })
 export class ProjectAlertsComponent implements OnInit {
   #service = inject(ProjectAlertsService);
+  #environmentsService = inject(ProjectEnvironmentsService);
   organizationsService = inject(OrganizationsService);
   dialog = inject(MatDialog);
   orgSlug = input.required<string>();
@@ -81,9 +83,11 @@ export class ProjectAlertsComponent implements OnInit {
   newAlertError = this.#service.newAlertError;
   accessProjectWrite = this.organizationsService.accessProjectWrite;
   resolveRecipientIcon = resolveRecipientIcon;
+  availableEnvironments = this.#environmentsService.visibleEnvironments;
 
   ngOnInit(): void {
     this.#service.setParams(this.orgSlug(), this.projectSlug());
+    this.#environmentsService.setParams(this.orgSlug(), this.projectSlug());
   }
 
   openNewAlert() {
@@ -157,6 +161,7 @@ export class ProjectAlertsComponent implements OnInit {
       timespanMinutes: number;
       quantity: number;
       uptime: boolean;
+      environments: string[];
     },
     alert: ProjectAlert,
   ): void {
@@ -165,6 +170,7 @@ export class ProjectAlertsComponent implements OnInit {
         event.timespanMinutes,
         event.quantity,
         event.uptime,
+        event.environments,
         alert.id,
         alert.alertRecipients,
       );
@@ -210,6 +216,7 @@ export class ProjectAlertsComponent implements OnInit {
     timespanMinutes: number;
     quantity: number;
     uptime: boolean;
+    environments: string[];
   }) {
     this.#service.createNewAlert(event);
   }
