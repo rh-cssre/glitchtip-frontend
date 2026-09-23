@@ -19,7 +19,8 @@ export interface SubscriptionState {
   billingPortalLoading: boolean;
   billingPortalLoadingError: string;
   subscriptionRefreshing: boolean;
-  subscriptionRefreshTimeout: boolean;
+  // Org slug, not a flag: switching org keeps the page mounted.
+  subscriptionRefreshTimeoutSlug: string | null;
   fromStripe: boolean;
   overageConfigLoading: boolean;
   overageConfigError: string;
@@ -29,7 +30,7 @@ const initialState: SubscriptionState = {
   billingPortalLoading: false,
   billingPortalLoadingError: "",
   subscriptionRefreshing: false,
-  subscriptionRefreshTimeout: false,
+  subscriptionRefreshTimeoutSlug: null,
   fromStripe: false,
   overageConfigLoading: false,
   overageConfigError: "",
@@ -66,6 +67,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     },
   }));
   subscription = computed(() => {
+    // value() throws in the error state.
+    if (!this.subscriptionResource.hasValue()) {
+      return null;
+    }
     const subscriptionResponse = this.subscriptionResource.value();
     if (!subscriptionResponse) {
       return null;
@@ -81,15 +86,11 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       this.subscriptionResource.isLoading() ||
       this.state().subscriptionRefreshing,
   );
-  // hasValue() guards the read: a resource throws from value() while it is in
-  // an error state, and this is the signal that renders the failure notice.
-  // It is not sufficient on its own -- the endpoint answers 200 with null for
-  // "no subscription yet", which resolves the resource without providing one.
   subscriptionRefreshTimeout = computed(() =>
     showSubscriptionRefreshTimeout(
-      this.state().subscriptionRefreshTimeout,
-      this.subscriptionResource.hasValue() &&
-        this.subscriptionResource.value() != null,
+      this.state().subscriptionRefreshTimeoutSlug,
+      this.organizationSlug(),
+      this.subscription() != null,
     ),
   );
 
@@ -361,6 +362,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   refreshUntilSubscriptionOrTimeout() {
     // Re-entry guard: only one polling timer should run at a time.
     if (this.refreshTimerRef !== undefined) return;
+    const orgSlug = this.organizationSlug();
     this.setSubscriptionRefreshingStart();
     let i = 0;
     this.refreshTimerRef = window.setInterval(() => {
@@ -370,7 +372,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
         clearInterval(this.refreshTimerRef);
         this.refreshTimerRef = undefined;
       } else if (i === 2) {
-        this.setSubscriptionRefreshingTimeout();
+        this.setSubscriptionRefreshingTimeout(orgSlug);
         clearInterval(this.refreshTimerRef);
         this.refreshTimerRef = undefined;
       }
@@ -401,10 +403,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     this.setState({ subscriptionRefreshing: false });
   }
 
-  private setSubscriptionRefreshingTimeout() {
+  private setSubscriptionRefreshingTimeout(orgSlug: string) {
     this.setState({
       subscriptionRefreshing: false,
-      subscriptionRefreshTimeout: true,
+      subscriptionRefreshTimeoutSlug: orgSlug,
     });
   }
 
