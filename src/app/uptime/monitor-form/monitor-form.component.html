@@ -157,7 +157,7 @@
           <mat-label i18n>Environment</mat-label>
           <mat-select formControlName="environmentID">
             <mat-option [value]="null" i18n>None</mat-option>
-            @for (environment of orgEnvironments(); track environment.id) {
+            @for (environment of environmentOptions(); track environment.id) {
               <mat-option [value]="environment.id">
                 {{ environment.name }}
               </mat-option>
@@ -165,10 +165,17 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="help-text caption-text" i18n
-          >Alerts limited to environments will only fire for monitors in one of
-          those environments.</div
-        >
+        @if (environmentDisabled()) {
+          <div class="help-text caption-text" i18n
+            >Select an associated project to scope this monitor to one of its
+            environments.</div
+          >
+        } @else {
+          <div class="help-text caption-text" i18n
+            >Alerts limited to environments will only fire for monitors in one
+            of those environments.</div
+          >
+        }
       </div>
       @if (
         formMonitorType.value === "GET" || formMonitorType.value === "POST"

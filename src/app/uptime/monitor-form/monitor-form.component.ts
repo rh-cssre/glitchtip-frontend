@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   computed,
+  effect,
   input,
   output,
   inject,
@@ -34,6 +35,8 @@ import { EventInfoComponent } from "src/app/shared/event-info/event-info.compone
 import { ServerError } from "src/app/shared/django.interfaces";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { EnvironmentsService } from "src/app/api/environments.service";
+import { apiResource } from "src/app/shared/api/api-resource-factory";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { components } from "src/app/api/api-schema";
 
 type MonitorDetail = components["schemas"]["MonitorDetailSchema"];
@@ -97,10 +100,8 @@ export class MonitorFormComponent implements OnInit {
   readonly formSubmitted = output<MonitorInput>();
 
   orgProjects = this.organizationsService.activeOrganizationProjects;
-  // The org environments endpoint joins through project associations without
-  // DISTINCT, so the same environment arrives once per association. Dedupe by
-  // id, the key the template tracks by: these are repeats of one row rather
-  // than distinct environments.
+  // The org endpoint joins through project associations without DISTINCT, so
+  // the same environment arrives once per association.
   orgEnvironments = computed(() => {
     const seen = new Set<number | null | undefined>();
     return this.environmentsService.orgEnvironments().filter((environment) => {
@@ -164,6 +165,91 @@ export class MonitorFormComponent implements OnInit {
     project: this.formProject,
     environmentID: this.formEnvironment,
   });
+
+  private selectedProjectID = toSignal(this.formProject.valueChanges, {
+    initialValue: this.formProject.value,
+  });
+
+  private selectedProjectSlug = computed(() => {
+    const projectID = this.selectedProjectID();
+    if (!projectID) return null;
+    return (
+      this.orgProjects().find((project) => project.id === projectID)?.slug ??
+      null
+    );
+  });
+
+  private projectEnvironmentsResource = apiResource.fetchAll(
+    computed(() => {
+      const orgSlug = this.organizationsService.activeOrganizationSlug();
+      const projectSlug = this.selectedProjectSlug();
+      return orgSlug && projectSlug ? { orgSlug, projectSlug } : undefined;
+    }),
+    (params) => ({
+      url: "/api/0/projects/{organization_slug}/{project_slug}/environments/",
+      options: {
+        params: {
+          path: {
+            organization_slug: params.orgSlug,
+            project_slug: params.projectSlug,
+          },
+        },
+      },
+    }),
+  );
+
+  // The project endpoint returns EnvironmentProject (association) ids, not
+  // Environment ids, so resolve each name against the org list to get the id
+  // the API expects. Names are unique within an organization.
+  environmentOptions = computed(() => {
+    const idsByName = new Map(
+      this.orgEnvironments().map((environment) => [
+        environment.name,
+        environment.id,
+      ]),
+    );
+    const projectEnvironments = this.projectEnvironmentsResource.value() ?? [];
+    return projectEnvironments
+      .filter((environment) => !environment.isHidden)
+      .map((environment) => ({
+        name: environment.name,
+        id: idsByName.get(environment.name) ?? null,
+      }))
+      .filter((environment) => environment.id !== null);
+  });
+
+  environmentDisabled = computed(() => !this.selectedProjectSlug());
+
+  constructor() {
+    // Disabled state lives on the control, not the template.
+    effect(() => {
+      const disabled = this.environmentDisabled();
+      if (disabled && this.formEnvironment.enabled) {
+        this.formEnvironment.disable({ emitEvent: false });
+      } else if (!disabled && this.formEnvironment.disabled) {
+        this.formEnvironment.enable({ emitEvent: false });
+      }
+
+      if (disabled) {
+        if (this.formEnvironment.value !== null) {
+          this.formEnvironment.setValue(null, { emitEvent: false });
+        }
+        return;
+      }
+
+      // An in-flight empty list would clear a valid selection.
+      if (!this.projectEnvironmentsResource.hasValue()) return;
+
+      const selected = this.formEnvironment.value;
+      if (selected === null) return;
+      const stillValid = this.environmentOptions().some(
+        (environment) => environment.id === selected,
+      );
+      if (!stillValid) {
+        this.formEnvironment.setValue(null, { emitEvent: false });
+      }
+    });
+  }
 
   ngOnInit() {
     const initialInterval = this.monitorSettings()?.interval ?? defaultInterval;
