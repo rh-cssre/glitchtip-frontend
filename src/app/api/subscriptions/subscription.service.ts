@@ -2,6 +2,7 @@ import { computed, Injectable, inject, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client, handleError } from "../../shared/api/api";
+import { UNHANDLED_ERROR } from "src/app/constants";
 import { OrganizationsService } from "../organizations.service";
 import { SettingsService } from "../settings.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
@@ -12,12 +13,14 @@ import {
   overageInactiveCause,
   overageThrottleState,
 } from "./overage-throttle-state";
+import { showSubscriptionRefreshTimeout } from "./subscription-refresh-state";
 
 export interface SubscriptionState {
   billingPortalLoading: boolean;
   billingPortalLoadingError: string;
   subscriptionRefreshing: boolean;
-  subscriptionRefreshTimeout: boolean;
+  // Org slug, not a flag: switching org keeps the page mounted.
+  subscriptionRefreshTimeoutSlug: string | null;
   fromStripe: boolean;
   overageConfigLoading: boolean;
   overageConfigError: string;
@@ -27,7 +30,7 @@ const initialState: SubscriptionState = {
   billingPortalLoading: false,
   billingPortalLoadingError: "",
   subscriptionRefreshing: false,
-  subscriptionRefreshTimeout: false,
+  subscriptionRefreshTimeoutSlug: null,
   fromStripe: false,
   overageConfigLoading: false,
   overageConfigError: "",
@@ -64,6 +67,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     },
   }));
   subscription = computed(() => {
+    // value() throws in the error state.
+    if (!this.subscriptionResource.hasValue()) {
+      return null;
+    }
     const subscriptionResponse = this.subscriptionResource.value();
     if (!subscriptionResponse) {
       return null;
@@ -79,8 +86,12 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       this.subscriptionResource.isLoading() ||
       this.state().subscriptionRefreshing,
   );
-  subscriptionRefreshTimeout = computed(
-    () => this.state().subscriptionRefreshTimeout,
+  subscriptionRefreshTimeout = computed(() =>
+    showSubscriptionRefreshTimeout(
+      this.state().subscriptionRefreshTimeoutSlug,
+      this.organizationSlug(),
+      this.subscription() != null,
+    ),
   );
 
   // Gates the detail-page resources below; component owns the on/off lifecycle.
@@ -305,36 +316,44 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   async configureOverage(enabled: boolean, capCents: number) {
     this.setState({ overageConfigLoading: true, overageConfigError: "" });
     const orgSlug = this.organizationSlug();
-    const { data, error, response } = await client.POST(
-      "/api/0/stripe/organizations/{organization_slug}/overage/",
-      {
-        params: { path: { organization_slug: orgSlug } },
-        body: { enabled, capCents },
-      },
-    );
-    const status = response.status;
-    if (status === 404) {
-      this.setState({
-        overageConfigLoading: false,
-        overageConfigError:
-          "Only organization owners can change billing settings.",
-      });
+    // openapi-fetch rethrows a rejected fetch, so without the finally an
+    // offline request would leave the spinner running and the toggle disabled
+    // with no way back.
+    try {
+      const { data, error, response } = await client.POST(
+        "/api/0/stripe/organizations/{organization_slug}/overage/",
+        {
+          params: { path: { organization_slug: orgSlug } },
+          body: { enabled, capCents },
+        },
+      );
+      if (response.status === 404) {
+        this.setState({
+          overageConfigError:
+            "Only organization owners can change billing settings.",
+        });
+        return null;
+      }
+      if (error || !data) {
+        this.setState({
+          overageConfigError: handleError(error, response).detail[0].msg,
+        });
+        return null;
+      }
+      // Refetch rather than writing the response body in. The server recomputes
+      // the throttle rate in a task it enqueues on the way out, so the body it
+      // returns pairs the new cap with the pre-change rate; storing that leaves
+      // the card claiming events are being dropped after they have resumed.
+      // `set` would also park the resource, so nothing would correct it later.
+      this.overageStatusResource.reload();
+      this.subscriptionResource.reload();
+      return data;
+    } catch {
+      this.setState({ overageConfigError: UNHANDLED_ERROR });
       return null;
+    } finally {
+      this.setState({ overageConfigLoading: false });
     }
-    if (error || !data) {
-      this.setState({
-        overageConfigLoading: false,
-        overageConfigError: handleError(error, response).detail[0].msg,
-      });
-      return null;
-    }
-    // Refetch rather than writing the body in: the server recomputes the
-    // throttle rate in a task, so the response pairs the new cap with the
-    // pre-change rate. `set` would also park the resource.
-    this.overageStatusResource.reload();
-    this.subscriptionResource.reload();
-    this.setState({ overageConfigLoading: false, overageConfigError: "" });
-    return data;
   }
 
   /**
@@ -343,6 +362,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   refreshUntilSubscriptionOrTimeout() {
     // Re-entry guard: only one polling timer should run at a time.
     if (this.refreshTimerRef !== undefined) return;
+    const orgSlug = this.organizationSlug();
     this.setSubscriptionRefreshingStart();
     let i = 0;
     this.refreshTimerRef = window.setInterval(() => {
@@ -352,7 +372,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
         clearInterval(this.refreshTimerRef);
         this.refreshTimerRef = undefined;
       } else if (i === 2) {
-        this.setSubscriptionRefreshingTimeout();
+        this.setSubscriptionRefreshingTimeout(orgSlug);
         clearInterval(this.refreshTimerRef);
         this.refreshTimerRef = undefined;
       }
@@ -383,10 +403,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     this.setState({ subscriptionRefreshing: false });
   }
 
-  private setSubscriptionRefreshingTimeout() {
+  private setSubscriptionRefreshingTimeout(orgSlug: string) {
     this.setState({
       subscriptionRefreshing: false,
-      subscriptionRefreshTimeout: true,
+      subscriptionRefreshTimeoutSlug: orgSlug,
     });
   }
 
