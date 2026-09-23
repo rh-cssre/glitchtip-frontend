@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  computed,
   input,
   output,
   inject,
@@ -96,7 +97,18 @@ export class MonitorFormComponent implements OnInit {
   readonly formSubmitted = output<MonitorInput>();
 
   orgProjects = this.organizationsService.activeOrganizationProjects;
-  orgEnvironments = this.environmentsService.orgEnvironments;
+  // The org environments endpoint joins through project associations without
+  // DISTINCT, so the same environment arrives once per association. Dedupe by
+  // id, the key the template tracks by: these are repeats of one row rather
+  // than distinct environments.
+  orgEnvironments = computed(() => {
+    const seen = new Set<number | null | undefined>();
+    return this.environmentsService.orgEnvironments().filter((environment) => {
+      if (seen.has(environment.id)) return false;
+      seen.add(environment.id);
+      return true;
+    });
+  });
   totalEventsAllowed = this.subscriptionService.totalEventsAllowed;
 
   intervalPerMonth = signal<number | null>(null);
