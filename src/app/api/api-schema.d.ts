@@ -2845,6 +2845,11 @@ export interface components {
         ProjectAlertSchema: {
             /** Alertrecipients */
             alertRecipients: components["schemas"]["AlertRecipientSchema"][];
+            /**
+             * Environments
+             * @description Only alert on events and uptime monitors from these environments. Empty matches every environment.
+             */
+            environments: string[];
             /** ID */
             id?: number | null;
             /** Name */
@@ -2859,11 +2864,6 @@ export interface components {
              * @default false
              */
             uptime: boolean;
-            /**
-             * Environments
-             * @description Only alert on events and uptime monitors from these environments. Empty matches every environment.
-             */
-            environments: string[];
         };
         /** EmailAlertRecipientIn */
         EmailAlertRecipientIn: {
@@ -2884,6 +2884,11 @@ export interface components {
         ProjectAlertIn: {
             /** Name */
             name?: string | null;
+            /**
+             * Environments
+             * @description Only alert on events and uptime monitors from these environments. Empty matches every environment.
+             */
+            environments?: string[];
             /** Alertrecipients */
             alertRecipients?: (components["schemas"]["EmailAlertRecipientIn"] | components["schemas"]["WebhookAlertRecipientIn"] | components["schemas"]["ZulipAlertRecipientIn"])[] | null;
             /** Timespan Minutes */
@@ -2896,11 +2901,6 @@ export interface components {
              * @default false
              */
             uptime: boolean;
-            /**
-             * Environments
-             * @description Only alert on events and uptime monitors from these environments. Empty matches every environment.
-             */
-            environments?: string[];
         };
         /** WebhookAlertRecipientIn */
         WebhookAlertRecipientIn: {
