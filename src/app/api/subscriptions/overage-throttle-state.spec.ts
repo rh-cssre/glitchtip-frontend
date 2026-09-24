@@ -23,6 +23,7 @@ const status = (overrides: Partial<OverageStatus> = {}): OverageStatus => ({
   configured: true,
   active: true,
   capCents: 5000,
+  maxCapCents: 1000000,
   capUnits: 294117,
   quota: 500000,
   usage: 400000,
