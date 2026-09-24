@@ -63,7 +63,7 @@ Your subscription settings show usage against your cap, including a projection f
 
 ### I hit my cap and raised it. Do events start flowing again?
 
-Yes. Raising the cap triggers an immediate re-check, so event intake usually resumes within a minute or two. If that check is ever missed, a periodic sweep catches it within a few hours.
+Yes. Raising the cap triggers an immediate re-check, so event intake resumes within a minute or two.
 
 ### Where do I see what I have actually been charged?
 
