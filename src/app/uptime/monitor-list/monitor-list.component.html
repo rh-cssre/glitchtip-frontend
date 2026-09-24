@@ -21,6 +21,11 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
+  <gt-data-filter-bar
+    [sortForm]="sortForm"
+    [sorts]="sorts"
+    (sortByChanged)="sortByChanged($event)"
+  />
   @if (monitors(); as monitors) {
     <div class="table-container">
       <gt-loading-overlay [loading]="loading()" label="Loading monitors">
@@ -66,6 +71,11 @@
                     >{{ monitor.url }}
                   </a>
                 </div>
+                @if (monitor.projectName) {
+                  <div class="caption-text project-name">
+                    {{ monitor.projectName }}
+                  </div>
+                }
               </div>
             </td>
           </ng-container>

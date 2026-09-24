@@ -8320,6 +8320,7 @@ export interface operations {
     apps_uptime_api_list_monitors: {
         parameters: {
             query?: {
+                sort?: "created" | "-created" | "name" | "-name" | "project" | "-project" | "status" | "-status";
                 /** @description Number of results to return per page. */
                 limit?: number | null;
                 /** @description The pagination cursor value. */
