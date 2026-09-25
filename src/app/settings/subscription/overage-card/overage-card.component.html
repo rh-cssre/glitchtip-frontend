@@ -71,12 +71,14 @@
         }
         @case ("throttled") {
           <mat-divider />
-          <!-- The rate is swept in the background while the cap and usage
-               are computed per request, so the two disagree briefly. -->
-          <p class="overage-alert overage-alert--warn" i18n>
-            About {{ throttleRate() }}% of new events are being dropped. If you
-            just changed your cap or plan, this clears once the change takes
-            effect.
+          <!-- The rate is recomputed by a task the server enqueues on every
+               cap or plan change, so this state only lasts until that task
+               lands: seconds, not a billing sweep. Stated as fact, styled as
+               information, because the server guarantees the clear-up
+               (overage active below the cap always recomputes to zero). -->
+          <p class="overage-alert" i18n>
+            About {{ throttleRate() }}% of new events are being dropped while
+            your change takes effect. Event collection resumes shortly.
           </p>
         }
         @case ("no-overage") {

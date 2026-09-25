@@ -124,8 +124,9 @@ export class SubscriptionComponent extends StatefulComponent<
   });
   thisMonthPercent = this.service.thisMonthPercent;
   billingEmail = environment.billingEmail;
-  // Which overage control the largest-plan banner copy should point at.
-  readonly overageEnabled = this.service.overageEnabled;
+  // The shared throttle diagnosis; the banner picks its copy (and whether to
+  // render at all) from the same state the overage card and snackbar use.
+  readonly throttleState = this.service.throttleState;
 
   nextProduct = computed(() => {
     const subscription = this.subscription();

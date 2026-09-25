@@ -78,7 +78,7 @@
             "
             [nextPlanEvents]="nextProduct()?.events ?? null"
             [plansLoaded]="plansLoaded()"
-            [overageEnabled]="overageEnabled()"
+            [throttleState]="throttleState()"
             [contactEmail]="billingEmail"
             [upgradeLoading]="upgradeLoading()"
             (upgradeClick)="upgradeToNextPlan()"

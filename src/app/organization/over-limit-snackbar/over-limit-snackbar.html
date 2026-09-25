@@ -36,13 +36,13 @@
       </span>
     }
     @case ("throttled") {
-      <!-- Overage is live and the cap is not the cause, which usually means
-           the throttle rate has not caught up with a cap or plan change yet.
-           Naming a remedy here would sell an upgrade the customer may have
-           already fixed, so say the same thing the overage card says. -->
+      <!-- Overage is live and the cap is not the cause: the server is
+           catching up with a cap or plan change and clears the rate on its
+           own. Naming a remedy here would sell an upgrade the customer may
+           have already fixed, so say the same thing the overage card says. -->
       <span i18n>
-        for details. If you just changed your cap or plan, this clears once the
-        change takes effect.
+        for details. Your change is taking effect, and event collection resumes
+        shortly.
       </span>
     }
     @default {

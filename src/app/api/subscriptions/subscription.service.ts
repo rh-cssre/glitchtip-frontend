@@ -36,6 +36,11 @@ const initialState: SubscriptionState = {
   overageConfigError: "",
 };
 
+// How long after a cap change to refetch overage status a second time. The
+// server clears the throttle rate in an enqueued task, so this only needs to
+// outlast typical task-queue latency, not a sweep interval.
+const THROTTLE_SETTLE_REFETCH_MS = 5_000;
+
 @Injectable({
   providedIn: "root",
 })
@@ -43,6 +48,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   private settingsService = inject(SettingsService);
   private organizationsService = inject(OrganizationsService);
   private router = inject(Router);
+  private throttleSettleTimer: ReturnType<typeof setTimeout> | undefined;
 
   stripePublicKey = this.settingsService.stripePublicKey;
 
@@ -350,6 +356,15 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       // `set` would also park the resource, so nothing would correct it later.
       this.overageStatusResource.reload();
       this.subscriptionResource.reload();
+      // The immediate reload above races that task and usually loses, showing
+      // the "taking effect" notice. One delayed refetch picks up the cleared
+      // rate so the notice dismisses itself; no polling, the state cannot
+      // outlive the task. Replaces, not stacks, on rapid saves.
+      clearTimeout(this.throttleSettleTimer);
+      this.throttleSettleTimer = setTimeout(
+        () => this.overageStatusResource.reload(),
+        THROTTLE_SETTLE_REFETCH_MS,
+      );
       return data;
     } catch {
       this.setState({ overageConfigError: UNHANDLED_ERROR });
