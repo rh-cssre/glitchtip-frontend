@@ -26,4 +26,9 @@ export class PaginationButtons {
     hasNextPage: boolean;
   };
   @Input() loading?: boolean;
+  /**
+   * Whether the request finished, successfully or not. An errored list has no
+   * paginator, so without this the buttons spin forever on a failed load.
+   */
+  @Input() settled?: boolean;
 }

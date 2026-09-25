@@ -1,9 +1,5 @@
 import { computed, Injectable, resource, signal } from "@angular/core";
-import {
-  client,
-  handleError,
-  NinjaErrorResponse,
-} from "src/app/shared/api/api";
+import { client, handleError } from "src/app/shared/api/api";
 import {
   getPaginationHeaders,
   getPaginator,
@@ -42,12 +38,19 @@ export class MonitorChecksService {
           },
         },
       );
-      const pagination = getPaginationHeaders(response);
-      let errors: NinjaErrorResponse | undefined;
       if (error) {
-        errors = handleError(error, response);
+        return {
+          data,
+          errors: handleError(error, response),
+          pagination: undefined,
+        };
       }
-      return { data, errors, pagination };
+      const pagination = getPaginationHeaders(response);
+      return {
+        data,
+        errors: undefined,
+        pagination,
+      };
     },
   });
   // Keep the last page visible during a reload so the table doesn't blank out.

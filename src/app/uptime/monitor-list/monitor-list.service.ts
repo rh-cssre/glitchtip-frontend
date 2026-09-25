@@ -63,6 +63,7 @@ export class MonitorListService {
         this.snackBar.open(
           $localize`There was an error retrieving your uptime monitors.`,
         );
+        return { data: undefined, pagination: undefined };
       }
       const pagination = getPaginationHeaders(response);
       return { data, pagination };
@@ -76,5 +77,8 @@ export class MonitorListService {
     () => this.monitorsResource.value()?.pagination,
   );
   paginator = computed(() => getPaginator(this.pagination()));
+  initialLoadComplete = computed(
+    () => this.monitorsResource.hasValue() || !this.loading(),
+  );
   activeOrganizationSlug = this.organizationsService.activeOrganizationSlug;
 }

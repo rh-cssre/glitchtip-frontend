@@ -68,6 +68,7 @@ export class MonitorListComponent {
   monitors = this.service.monitors;
   paginator = this.service.paginator;
   loading = this.service.loading;
+  initialLoadComplete = this.service.initialLoadComplete;
   allColumns: string[] = ["name", "checkChart", "status"];
   smallScreenColumns: string[] = ["name", "status"];
   displayedColumns = signal(this.allColumns);

@@ -39,7 +39,10 @@
             >
               <div class="pagination-container">
                 <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
-                <gt-pagination-buttons [paginator]="paginator()" />
+                <gt-pagination-buttons
+                  [paginator]="paginator()"
+                  [settled]="initialLoadComplete()"
+                />
               </div>
             </th>
           </ng-container>

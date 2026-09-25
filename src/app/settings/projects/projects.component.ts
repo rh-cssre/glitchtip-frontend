@@ -34,6 +34,8 @@ export class ProjectsComponent {
   orgSlug = input.required<string>({ alias: "org-slug" });
   activeOrganization = this.organizationsService.activeOrganization;
   projects = this.service.projects;
+  errors = this.service.errors;
+  hasError = this.service.hasError;
   accessProjectWrite = this.organizationsService.accessProjectWrite;
 
   constructor() {

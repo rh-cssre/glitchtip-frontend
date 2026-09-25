@@ -15,7 +15,11 @@
 </gt-top-app-bar>
 <section class="l-body">
   <div>
-    @if (projects()?.length === 0) {
+    @if (hasError()) {
+      @for (error of errors(); track $index) {
+        <p>{{ error.msg || error }}</p>
+      }
+    } @else if (projects()?.length === 0) {
       <gt-empty-projects [activeOrgOnly]="true"></gt-empty-projects>
     }
   </div>

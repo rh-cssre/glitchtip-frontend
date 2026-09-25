@@ -61,6 +61,11 @@ export class LogsService {
   constructor() {
     // When resource loads, handle accumulation
     effect(() => {
+      // .value() throws in the error state, which would abort this effect.
+      if (this.#logsResource.error()) {
+        this.#isLoadingMore.set(false);
+        return;
+      }
       const result = this.#logsResource.value();
       const data = result?.data;
       if (!data) return;
@@ -98,7 +103,12 @@ export class LogsService {
   hasNextPage = computed(() => this.paginator()?.hasNextPage ?? false);
   hitCount = computed(() => this.#initialHitCount() ?? this.paginator()?.count);
 
-  services = computed(() => this.#servicesResource.value() || []);
+  // A failed filter request should not take the page down with it.
+  services = computed(() =>
+    this.#servicesResource.error()
+      ? []
+      : (this.#servicesResource.value() ?? []),
+  );
   servicesLoading = computed(() => this.#servicesResource.isLoading());
 
   loadMore() {

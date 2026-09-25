@@ -8,7 +8,9 @@ import { getCSRFToken } from "../shared.utils";
 
 export {
   isNinjaErrorResponse,
+  getNinjaErrorResponse,
   handleError,
+  ApiError,
   type NinjaErrorResponse,
 } from "./api-errors";
 

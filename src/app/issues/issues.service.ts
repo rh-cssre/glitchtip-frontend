@@ -92,6 +92,8 @@ export class IssuesService extends StatefulService<IssuesState> {
         this.snackbar.open(
           $localize`There was an error when attempting to load issues.`,
         );
+        // An error response has no pagination headers to read below.
+        return undefined;
       }
       const pagination = getPaginationHeaders(response);
       if (
@@ -209,6 +211,10 @@ export class IssuesService extends StatefulService<IssuesState> {
   paginator = computed(() => getPaginator(this.pagination()));
   initialLoad = computed(
     () => !this.issuesResource.isLoading() && this.issuesResource.hasValue(),
+  );
+  // Unlike initialLoad, true once the request finishes either way.
+  initialLoadComplete = computed(
+    () => this.issuesResource.hasValue() || !this.issuesResource.isLoading(),
   );
   issueStatsLoading = computed(() => this.issueStatsResource.isLoading());
   issuesWithStats = computed(() => {
