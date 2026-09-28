@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, resource, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { client } from "src/app/shared/api/api";
+import { client, handleError } from "src/app/shared/api/api";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import {
   getPaginationHeaders,
@@ -63,10 +63,14 @@ export class MonitorListService {
         this.snackBar.open(
           $localize`There was an error retrieving your uptime monitors.`,
         );
-        return { data: undefined, pagination: undefined };
+        return {
+          data: undefined,
+          pagination: undefined,
+          errors: handleError(error, response),
+        };
       }
       const pagination = getPaginationHeaders(response);
-      return { data, pagination };
+      return { data, pagination, errors: undefined };
     },
   });
   loading = computed(() => this.monitorsResource.isLoading());
@@ -80,5 +84,7 @@ export class MonitorListService {
   initialLoadComplete = computed(
     () => this.monitorsResource.hasValue() || !this.loading(),
   );
+  errors = computed(() => this.monitorsResource.value()?.errors?.detail);
+  hasError = computed(() => !!this.monitorsResource.value()?.errors);
   activeOrganizationSlug = this.organizationsService.activeOrganizationSlug;
 }

@@ -88,7 +88,11 @@
       <tr *matNoDataRow>
         <td [attr.colspan]="displayedColumns.length">
           <div class="table-empty-states">
-            @if (initialLoadComplete() === true && loading() === false) {
+            @if (hasError()) {
+              @for (error of errors(); track $index) {
+                <div class="body-text-strong">{{ error.msg || error }}</div>
+              }
+            } @else if (initialLoadComplete() === true && loading() === false) {
               <div i18n class="body-text-strong"
                 >No monitor checks were found.</div
               >

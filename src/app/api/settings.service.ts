@@ -12,7 +12,10 @@ export class SettingsService {
   private microSentry = inject(MicroSentryService);
 
   settingsResource = apiResource(() => ({ url: "/api/settings/" }));
-  settings = computed(() => this.settingsResource.value());
+  settings = computed(() => {
+    if (this.settingsResource.error()) return undefined;
+    return this.settingsResource.value();
+  });
   socialApps = computed(() => this.settings()?.socialApps || []);
   billingEnabled = computed(() => this.settings()?.billingEnabled);
   paidForGlitchTip = computed(() => this.settings()?.iPaidForGlitchTip);

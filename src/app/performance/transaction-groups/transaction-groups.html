@@ -24,6 +24,24 @@
         [loading]="loading()"
         label="Loading transaction groups"
       >
+        @if (errors()?.length) {
+          <div class="table-empty-states">
+            @if (errors()?.length === 1) {
+              <h3 class="body-text-strong">
+                There was an error processing your request
+              </h3>
+            } @else {
+              <h3 class="body-text-strong">
+                There were errors while processing your request
+              </h3>
+            }
+            <ul>
+              @for (error of errors(); track $index) {
+                <li>{{ error.msg || error }}</li>
+              }
+            </ul>
+          </div>
+        }
         <table
           mat-table
           class="mat-elevation-z2"
@@ -121,33 +139,18 @@
           ></tr>
           <tr *matNoDataRow>
             <td [attr.colspan]="displayedColumns.length">
-              @if (initialLoadComplete() === true && loading() === false) {
-                @if (errors()?.length) {
-                  <div class="table-empty-states">
-                    @if (errors()?.length === 1) {
-                      <h3 class="body-text-strong">
-                        There was an error processing your request
-                      </h3>
-                    } @else {
-                      <h3 class="body-text-strong">
-                        There were errors while processing your request
-                      </h3>
-                    }
-                    <ul>
-                      @for (error of errors(); track error) {
-                        <li>{{ error }}</li>
-                      }
-                    </ul>
-                  </div>
-                } @else {
-                  <gt-empty-state
-                    icon="avg_pace"
-                    i18n-title
-                    title="No transactions"
-                    i18n-message
-                    message="Performance data appears here once your app sends transactions."
-                  />
-                }
+              @if (
+                initialLoadComplete() === true &&
+                loading() === false &&
+                !errors()?.length
+              ) {
+                <gt-empty-state
+                  icon="avg_pace"
+                  i18n-title
+                  title="No transactions"
+                  i18n-message
+                  message="Performance data appears here once your app sends transactions."
+                />
               }
             </td>
           </tr>

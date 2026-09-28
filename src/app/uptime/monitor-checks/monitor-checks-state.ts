@@ -62,6 +62,8 @@ export class MonitorChecksService {
   initialLoadComplete = computed(
     () => this.#monitorChecks.hasValue() || !this.#monitorChecks.isLoading(),
   );
+  errors = computed(() => this.#monitorChecks.value()?.errors?.detail);
+  hasError = computed(() => !!this.#monitorChecks.value()?.errors);
   pagination = keepPreviousValue(() => this.#monitorChecks.value()?.pagination);
   paginator = computed(() => getPaginator(this.pagination()));
 
