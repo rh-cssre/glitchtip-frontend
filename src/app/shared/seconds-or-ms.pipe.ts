@@ -3,11 +3,13 @@ import { timedeltaToMS } from "./shared.utils";
 
 @Pipe({
   name: "humanizeDuration",
+  standalone: true,
 })
 export class HumanizeDurationPipe implements PipeTransform {
-  transform(value: string, roundSeconds: boolean = false): string {
+  transform(value: string | number, roundSeconds: boolean = false): string {
     try {
-      const milliseconds = timedeltaToMS(value);
+      const milliseconds =
+        typeof value === "string" ? timedeltaToMS(value) : value;
       if (milliseconds > 999) {
         return `${
           roundSeconds
@@ -15,7 +17,7 @@ export class HumanizeDurationPipe implements PipeTransform {
             : (milliseconds / 1000).toFixed(2)
         } seconds`;
       } else {
-        return `${milliseconds}ms`;
+        return `${+milliseconds.toFixed(2)}ms`;
       }
     } catch (err) {
       console.warn("Provided string was not a valid timedelta");

@@ -1,0 +1,43 @@
+<mat-form-field
+  appearance="outline"
+  subscriptSizing="dynamic"
+  class="project-multiselect-formfield"
+>
+  <mat-select
+    [formControl]="projectsForm"
+    i18n-placeholder
+    placeholder="All projects"
+    multiple
+    (closed)="onSubmit()"
+  >
+    <mat-select-trigger>
+      @if (selectedProjectDisplay(); as selectedProjectDisplay) {
+      <span
+        [matBadge]="'+'+selectedProjectDisplay.additionalProjects"
+        [matBadgeHidden]="!selectedProjectDisplay.additionalProjects"
+        [matBadgeOverlap]="false"
+        class="selected-project-count"
+        >{{ selectedProjectDisplay.firstProjectName }}</span
+      >
+      } @else { All projects }
+    </mat-select-trigger>
+    <mat-option class="project-multiselect__search-field">
+      <ngx-mat-select-search
+        i18n-placeholderLabel
+        placeholderLabel="Search"
+        i18n-noEntriesFoundLabel
+        noEntriesFoundLabel="No projects found"
+        [formControl]="projectSearchForm"
+        [preventHomeEndKeyPropagation]="true"
+        [showToggleAllCheckbox]="true"
+        [toggleAllCheckboxIndeterminate]="someFilteredProjectsSelected()"
+        [toggleAllCheckboxChecked]="allFilteredProjectsSelected()"
+        (toggleAll)="toggleSelectAll($event)"
+        closeIcon="close"
+      />
+    </mat-option>
+    @for (project of filteredProjects(); track project) {
+    <mat-option [value]="project.id"> {{ project.name }} </mat-option>
+    }
+  </mat-select>
+</mat-form-field>

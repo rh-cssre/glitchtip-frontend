@@ -1,0 +1,62 @@
+<span matSnackBarLabel>
+  <!-- The plan limit is not the cause: an org at its cap is past it on purpose. -->
+  <span i18n>
+    About {{ throttleRate }}% of your new events are being dropped.
+  </span>
+  <a
+    class="subscription-link"
+    [routerLink]="[activeOrgSlug, 'settings', 'subscription']"
+    (click)="snackBarRef.dismiss()"
+    i18n
+  >
+    Manage your subscription
+  </a>
+  @switch (throttleState()) {
+    @case ("cap") {
+      <span i18n>
+        to upgrade or raise your overage spend cap and keep collecting
+        events.</span
+      >
+    }
+    @case ("no-overage") {
+      <span i18n>
+        to upgrade or turn on overage billing and keep collecting events.</span
+      >
+    }
+    @case ("stalled-plan") {
+      <span i18n>
+        to upgrade. Your current plan cannot be billed for overage, so raising
+        your spend cap will not change this.
+      </span>
+    }
+    @case ("stalled-broken") {
+      <span i18n>
+        for details. Overage billing is switched on but is not running, so
+        raising your spend cap will not help. Please contact support.
+      </span>
+    }
+    @case ("throttled") {
+      <!-- Overage is live and the cap is not the cause, which usually means
+           the throttle rate has not caught up with a cap or plan change yet.
+           Naming a remedy here would sell an upgrade the customer may have
+           already fixed, so say the same thing the overage card says. -->
+      <span i18n>
+        for details. If you just changed your cap or plan, this clears once the
+        change takes effect.
+      </span>
+    }
+    @default {
+      <span i18n> to upgrade and keep collecting events.</span>
+    }
+  }
+</span>
+<span matSnackBarActions>
+  <button
+    matSnackBarAction
+    matIconButton
+    class="dismiss-button"
+    (click)="snackBarRef.dismiss()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</span>
