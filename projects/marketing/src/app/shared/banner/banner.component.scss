@@ -1,0 +1,143 @@
+@use "../../styles/grid-texture" as *;
+
+:host {
+  display: block;
+}
+
+.banner {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 7vw, 104px) 0;
+
+  // Surface fill, dissolving into the page background at top and bottom.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--mat-sys-surface-container);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 14%,
+      #000 86%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 14%,
+      #000 86%,
+      transparent 100%
+    );
+  }
+
+  // Faded line-grid: organic patches on the sides, clear centre for content.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: conic-gradient(
+      from 90deg at 1px 1px,
+      #0000 90deg,
+      color-mix(in srgb, var(--mat-sys-outline-variant) 60%, transparent) 0
+    );
+    background-size: 36px 36px;
+    -webkit-mask-image:
+      radial-gradient(ellipse 22% 34% at 7% 42%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 18% 30% at 15% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 20% 30% at 4% 52%, #000 0%, transparent 66%),
+      radial-gradient(ellipse 22% 34% at 94% 44%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 20% 32% at 86% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 18% 28% at 96% 38%, #000 0%, transparent 66%);
+    mask-image:
+      radial-gradient(ellipse 22% 34% at 7% 42%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 18% 30% at 15% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 20% 30% at 4% 52%, #000 0%, transparent 66%),
+      radial-gradient(ellipse 22% 34% at 94% 44%, #000 0%, transparent 70%),
+      radial-gradient(ellipse 20% 32% at 86% 60%, #000 0%, transparent 68%),
+      radial-gradient(ellipse 18% 28% at 96% 38%, #000 0%, transparent 66%);
+    mask-composite: add;
+    -webkit-mask-composite: source-over;
+  }
+}
+
+// Hero-only: enclose the entire hero in a single flat card, capped to the home
+// body column so it lines up with the sections below it.
+:host(.hero-banner) .banner {
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-home);
+  margin: 40px auto 0;
+  padding: clamp(28px, 3vw, 44px) 0;
+  border: 1px solid var(--mat-sys-outline-variant);
+  @include card-clip;
+}
+
+// Solid surface (no top/bottom fade) with filled cells painted under the
+// ::after grid lines, so each reads as a framed cell of the live grid.
+:host(.hero-banner) .banner::before {
+  // (col row tone) cell clusters.
+  $cells:
+    // top-left corner
+    (1 1 $cell-red) (2 2 $cell-red-soft) (3 1 $cell-grey) (2 0 $cell-grey-soft)
+    // left edge, mid-height
+    (0 8 $cell-grey) (1 9 $cell-red-soft) (0 10 $cell-red) (1 11 $cell-grey-soft)
+    // bottom-left corner
+    (2 17 $cell-red-soft) (1 18 $cell-grey-soft) (3 18 $cell-grey)
+    (2 19 $cell-red) (3 20 $cell-grey-soft)
+    // top strip accents
+    (9 1 $cell-grey-soft) (10 0 $cell-red-soft) (20 0 $cell-red-soft)
+    (21 1 $cell-grey-soft)
+    // top-right corner
+    (32 1 $cell-grey) (33 0 $cell-grey-soft) (34 1 $cell-red) (35 0 $cell-red-soft)
+    // bottom-right corner
+    (32 19 $cell-grey-soft) (33 20 $cell-red-soft) (34 19 $cell-grey)
+    (35 20 $cell-red)
+    // bottom-centre accent
+    (14 20 $cell-grey-soft) (15 19 $cell-red-soft);
+
+  background-color: var(--mat-sys-surface-container-lowest);
+  @include grid-cells($cells);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+// The card itself caps the width, so drop the inner's own full-bleed cap.
+:host(.hero-banner) .banner__inner {
+  width: auto;
+  max-width: none;
+}
+
+// The hero carries a fuller spread of grid patches than the default band.
+:host(.hero-banner) .banner::after {
+  $hero-grid:
+    radial-gradient(ellipse 28% 40% at 6% 26%, #000 0%, transparent 74%),
+    radial-gradient(ellipse 26% 42% at 17% 58%, #000 0%, transparent 72%),
+    radial-gradient(ellipse 24% 36% at 7% 78%, #000 0%, transparent 70%),
+    radial-gradient(ellipse 28% 38% at 35% 34%, #000 0%, transparent 72%),
+    radial-gradient(ellipse 26% 40% at 30% 76%, #000 0%, transparent 70%),
+    radial-gradient(ellipse 26% 40% at 58% 24%, #000 0%, transparent 70%),
+    radial-gradient(ellipse 24% 38% at 62% 78%, #000 0%, transparent 68%),
+    radial-gradient(ellipse 30% 44% at 92% 30%, #000 0%, transparent 74%),
+    radial-gradient(ellipse 26% 40% at 83% 60%, #000 0%, transparent 72%),
+    radial-gradient(ellipse 24% 36% at 96% 80%, #000 0%, transparent 70%);
+  -webkit-mask-image: $hero-grid;
+  mask-image: $hero-grid;
+}
+
+// Centred, width-capped content column matching the page's .home-sections.
+.banner__inner {
+  position: relative;
+  z-index: 3;
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-wide);
+  margin: 0 auto;
+}
+
+// Extra horizontal room for the hero text.
+:host(.hero-banner) .banner__inner {
+  padding-inline: clamp(22px, 3vw, 60px);
+}
