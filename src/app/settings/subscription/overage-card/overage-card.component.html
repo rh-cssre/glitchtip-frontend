@@ -75,10 +75,14 @@
                cap or plan change, so this state only lasts until that task
                lands: seconds, not a billing sweep. Stated as fact, styled as
                information, because the server guarantees the clear-up
-               (overage active below the cap always recomputes to zero). -->
+               (overage active below the cap always recomputes to zero).
+               No deadline is named: ingest and a cap change both enqueue the
+               recheck, but an org that goes quiet right after entering this
+               state waits for the periodic sweep, so "resumes shortly" is a
+               promise we cannot always keep. -->
           <p class="overage-alert" i18n>
             About {{ throttleRate() }}% of new events are being dropped while
-            your change takes effect. Event collection resumes shortly.
+            your change takes effect.
           </p>
         }
         @case ("no-overage") {
