@@ -95,3 +95,31 @@ export function overageThrottleState(
   // than in "stalled-plan".
   return capReached(status) && capAdjustable(status) ? "cap" : "throttled";
 }
+
+/**
+ * Usage above quota has been served this cycle, so a charge is owed for it
+ * whatever the toggle now says. Switching overage off clears the flag and
+ * nothing else: the server keeps what it has already reported to the meter and
+ * still invoices it, so the card has to keep saying so.
+ *
+ * Read from `overageUnits` rather than `overageCostCents`, which the server
+ * zeroes once overage is inactive. The units survive, the priced figure does
+ * not.
+ */
+export function overageOwedThisCycle(status: OverageStatus | null): boolean {
+  if (!status) return false;
+  return status.overageUnits > 0;
+}
+
+/**
+ * The cap has been set below what this cycle has already accrued. The server
+ * floors the cap at the units it has already billed, so lowering it stops
+ * further growth but never retracts the charge: the estimate stays above the
+ * cap and that is what the invoice says.
+ *
+ * Only meaningful with overage live, which is the one case the card prices.
+ */
+export function capBelowAccrued(status: OverageStatus | null): boolean {
+  if (!status || !status.enabled || !status.capUnits) return false;
+  return status.overageUnits > status.capUnits;
+}

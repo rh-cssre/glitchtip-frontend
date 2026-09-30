@@ -72,6 +72,8 @@ export class OverageCardComponent {
   readonly overageInactive = this.service.overageInactive;
   readonly inactiveCause = this.service.inactiveCause;
   readonly capAdjustable = this.service.canConfigureOverage;
+  readonly overageOwed = this.service.overageOwed;
+  readonly capBelowAccrued = this.service.capBelowAccrued;
   // The half of capAdjustable that is server-wide rather than this org's plan.
   readonly overageConfigured = this.service.overageConfigured;
   readonly loading = this.service.overageConfigLoading;

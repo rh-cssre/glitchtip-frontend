@@ -2,9 +2,11 @@ import { describe, it, expect } from "vitest";
 import type { components } from "../api-schema";
 import {
   capAdjustable,
+  capBelowAccrued,
   capReached,
   isOverageInactive,
   overageInactiveCause,
+  overageOwedThisCycle,
   overageThrottleState,
 } from "./overage-throttle-state";
 
@@ -237,17 +239,79 @@ describe("overageInactiveCause", () => {
   });
 
   it("blames the plan when it cannot be billed", () => {
-    expect(overageInactiveCause(status({ active: false, eligible: false }))).toBe(
-      "plan",
-    );
+    expect(
+      overageInactiveCause(status({ active: false, eligible: false })),
+    ).toBe("plan");
   });
 
   // The regression: a resubscribe leaves overage on with no metered item, and
   // the tagline blamed the plan until the first throttle sweep had run.
   it("blames us on a billable plan, throttled or not", () => {
     expect(overageInactiveCause(status({ active: false }))).toBe("broken");
-    expect(overageInactiveCause(status({ active: false, throttleRate: 50 }))).toBe(
-      "broken",
+    expect(
+      overageInactiveCause(status({ active: false, throttleRate: 50 })),
+    ).toBe("broken");
+  });
+});
+
+describe("overageOwedThisCycle", () => {
+  it("is false before the status loads", () => {
+    expect(overageOwedThisCycle(null)).toBe(false);
+  });
+
+  it("is false for an org that has stayed inside its quota", () => {
+    expect(overageOwedThisCycle(status())).toBe(false);
+  });
+
+  it("is true once usage has run past the quota", () => {
+    expect(overageOwedThisCycle(status({ overageUnits: 6012 }))).toBe(true);
+  });
+
+  // The gap this exists for: switching overage off leaves the served usage
+  // billable, and the server zeroes the priced figure while keeping the units.
+  it("stays true after overage is switched off mid-cycle", () => {
+    expect(
+      overageOwedThisCycle(
+        status({ enabled: false, overageUnits: 6012, overageCostCents: 0 }),
+      ),
+    ).toBe(true);
+  });
+});
+
+describe("capBelowAccrued", () => {
+  it("is false before the status loads", () => {
+    expect(capBelowAccrued(null)).toBe(false);
+  });
+
+  it("is false while the cap still covers what has been used", () => {
+    expect(capBelowAccrued(status({ overageUnits: 6012 }))).toBe(false);
+  });
+
+  it("is false with no cap set", () => {
+    expect(capBelowAccrued(status({ capUnits: 0, overageUnits: 6012 }))).toBe(
+      false,
     );
+  });
+
+  it("is false at the cap, where nothing exceeds it yet", () => {
+    expect(
+      capBelowAccrued(status({ capUnits: 6012, overageUnits: 6012 })),
+    ).toBe(false);
+  });
+
+  it("is true once the cap is set below what the cycle has used", () => {
+    expect(
+      capBelowAccrued(status({ capUnits: 5882, overageUnits: 6012 })),
+    ).toBe(true);
+  });
+
+  // Overage off is the other disclosure's job; this one explains a cap bar
+  // that is only drawn while overage is live.
+  it("is false when overage is switched off", () => {
+    expect(
+      capBelowAccrued(
+        status({ enabled: false, capUnits: 5882, overageUnits: 6012 }),
+      ),
+    ).toBe(false);
   });
 });
