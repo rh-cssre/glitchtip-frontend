@@ -39,6 +39,13 @@ export class UpgradeBannerComponent {
    * rate had this banner selling upgrades while the card below said to wait.
    */
   readonly throttleState = input<OverageThrottleState>("unknown");
+  /**
+   * The throttle diagnosis could not be fetched, as distinct from not having
+   * arrived yet. The rate comes from the organization payload, so a throttled
+   * org stays visible on the plain pitch instead of going quiet about events
+   * we know are being dropped.
+   */
+  readonly throttleStateUnavailable = input(false);
   /** Where a customer with nothing left to upgrade to should write. */
   readonly contactEmail = input<string | null>(null);
 
@@ -102,12 +109,15 @@ export class UpgradeBannerComponent {
   /**
    * A throttled org whose diagnosis offers nothing to sell or explain here
    * gets no banner at all rather than a hedge: the overage card directly
-   * below owns the transient "taking effect" notice.
+   * below owns the transient "taking effect" notice. A diagnosis that failed
+   * to load is the exception, since the card hides itself on the same failure
+   * and silence would be the only thing a throttled org saw.
    */
   readonly visible = computed(() => {
     if (this.variant() === "get-started") return true;
     if (this.isSuspended()) return true;
-    if (this.isThrottling()) return this.actionableThrottle();
+    if (this.isThrottling())
+      return this.actionableThrottle() || this.throttleStateUnavailable();
     return true;
   });
   /**

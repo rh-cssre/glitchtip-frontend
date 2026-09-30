@@ -79,6 +79,7 @@
             [nextPlanEvents]="nextProduct()?.events ?? null"
             [plansLoaded]="plansLoaded()"
             [throttleState]="throttleState()"
+            [throttleStateUnavailable]="throttleStateUnavailable()"
             [contactEmail]="billingEmail"
             [upgradeLoading]="upgradeLoading()"
             (upgradeClick)="upgradeToNextPlan()"

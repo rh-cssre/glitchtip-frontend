@@ -127,6 +127,7 @@ export class SubscriptionComponent extends StatefulComponent<
   // The shared throttle diagnosis; the banner picks its copy (and whether to
   // render at all) from the same state the overage card and snackbar use.
   readonly throttleState = this.service.throttleState;
+  readonly throttleStateUnavailable = this.service.overageStatusUnavailable;
 
   nextProduct = computed(() => {
     const subscription = this.subscription();

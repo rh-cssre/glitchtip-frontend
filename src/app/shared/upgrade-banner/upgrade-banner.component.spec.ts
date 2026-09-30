@@ -47,6 +47,28 @@ describe("UpgradeBannerComponent throttle states", () => {
     expect(text.trim()).toBe("");
   });
 
+  it("keeps the plain pitch when the throttle diagnosis failed to load", () => {
+    // The overage card hides itself on the same failure, so dropping this
+    // banner too would leave a throttled org with nothing at all.
+    const text = render("unknown", { throttleStateUnavailable: true });
+    expect(text).toContain("Upgrade to restore full coverage");
+    expect(text).toContain("Upgrade to 500k events/mo");
+  });
+
+  it("names no overage control when the throttle diagnosis failed to load", () => {
+    const text = render("unknown", { throttleStateUnavailable: true });
+    expect(text).not.toContain("Raise your cap");
+    expect(text).not.toContain("turn on overage billing below");
+  });
+
+  it("stays quiet on a failed diagnosis when nothing is being dropped", () => {
+    const text = render("unknown", {
+      throttleStateUnavailable: true,
+      eventThrottleRate: 0,
+    });
+    expect(text).not.toContain("being dropped");
+  });
+
   it("offers both remedies at the spend cap", () => {
     const text = render("cap");
     expect(text).toContain("Raise your cap below");

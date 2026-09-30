@@ -85,7 +85,9 @@
             }
             @default {
               <!-- "unavailable" and "stalled-plan": upgrading is the one real
-                   remedy, so this is the plain upgrade pitch. -->
+                   remedy, so this is the plain upgrade pitch. Also where a
+                   diagnosis that failed to load lands, which is why this names
+                   no overage control: the rate is all we can stand behind. -->
               @if (isLargestPlan()) {
                 <p class="banner-usage" i18n>
                   About <strong>{{ eventThrottleRate() }}%</strong> of your

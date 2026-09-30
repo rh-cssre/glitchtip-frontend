@@ -182,6 +182,12 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     if (this.overageStatusResource.error()) return null;
     return this.overageStatusResource.value() ?? null;
   });
+  // Narrower than an "unknown" throttle state, which also covers the initial
+  // load. Surfaces only the failed fetch, where the organization payload can
+  // still report a throttle rate we would otherwise say nothing about.
+  overageStatusUnavailable = computed(
+    () => !!this.overageStatusResource.error(),
+  );
 
   predictedEndOfMonth = computed(() => {
     const subscription = this.subscription();
