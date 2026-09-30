@@ -71,15 +71,10 @@
         }
         @case ("throttled") {
           <mat-divider />
-          <!-- The rate is recomputed by a task the server enqueues on every
-               cap or plan change, so this state only lasts until that task
-               lands: seconds, not a billing sweep. Stated as fact, styled as
-               information, because the server guarantees the clear-up
-               (overage active below the cap always recomputes to zero).
-               No deadline is named: ingest and a cap change both enqueue the
-               recheck, but an org that goes quiet right after entering this
-               state waits for the periodic sweep, so "resumes shortly" is a
-               promise we cannot always keep. -->
+          <!-- A task the server enqueues on every cap or plan change clears
+               this, so it is transient. No deadline is named: an org that goes
+               quiet right after entering the state waits for the periodic
+               sweep instead. -->
           <p class="overage-alert" i18n>
             About {{ throttleRate() }}% of new events are being dropped while
             your change takes effect.
