@@ -12,7 +12,6 @@ import {
   capReached as overageCapReached,
   isOverageInactive,
   overageInactiveCause,
-  overageOwedThisCycle,
   overageThrottleState,
 } from "./overage-throttle-state";
 import { showSubscriptionRefreshTimeout } from "./subscription-refresh-state";
@@ -230,7 +229,6 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   });
 
   capReached = computed(() => overageCapReached(this.overageStatus()));
-  overageOwed = computed(() => overageOwedThisCycle(this.overageStatus()));
   capBelowAccrued = computed(() =>
     overageCapBelowAccrued(this.overageStatus()),
   );

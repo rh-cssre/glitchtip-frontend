@@ -117,19 +117,6 @@
         }
       }
 
-      @if (!enabled() && overageOwed()) {
-        <!-- Switching overage off clears the flag and nothing else: the server
-             keeps the usage it has already reported and still invoices it. No
-             amount is named because the server stops pricing it once overage
-             is off. -->
-        <mat-divider />
-        <p class="overage-alert" i18n>
-          Overage already used this cycle is still billed. Switching overage off
-          stops new overage charges from here on, it does not cancel what this
-          cycle has already run up.
-        </p>
-      }
-
       @if (enabled()) {
         <!-- Unbillable overage meters nothing, so no estimate or cap bar. -->
         @if (!overageInactive()) {

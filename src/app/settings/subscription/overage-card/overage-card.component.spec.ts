@@ -14,7 +14,6 @@ import {
   capReached,
   isOverageInactive,
   overageInactiveCause,
-  overageOwedThisCycle,
   overageThrottleState,
 } from "src/app/api/subscriptions/overage-throttle-state";
 import type { components } from "src/app/api/api-schema";
@@ -88,7 +87,6 @@ describe("OverageCardComponent money disclosures", () => {
             overageConfigured: computed(
               () => overageStatus()?.configured ?? false,
             ),
-            overageOwed: computed(() => overageOwedThisCycle(overageStatus())),
             capBelowAccrued: computed(() => capBelowAccrued(overageStatus())),
             maxCapCents: computed(
               () => overageStatus()?.maxCapCents ?? 1000000,
@@ -112,21 +110,6 @@ describe("OverageCardComponent money disclosures", () => {
     expect(text).toContain("this cycle (estimate)");
   });
 
-  it("says the cycle is still billed after overage is switched off", () => {
-    // The server zeroes the priced figure on disable but still invoices the
-    // usage, so the card has to keep saying a charge is coming.
-    const text = render({
-      enabled: false,
-      active: false,
-      overageCostCents: 0,
-      throttleRate: 10,
-    });
-    expect(text).toContain("still billed");
-    expect(text).toContain(
-      "does not cancel what this cycle has already run up",
-    );
-  });
-
   it("promises nothing about an amount it can no longer price", () => {
     const text = render({
       enabled: false,
@@ -136,11 +119,6 @@ describe("OverageCardComponent money disclosures", () => {
     });
     expect(text).not.toContain("$1.02");
     expect(text).not.toContain("$0.00");
-  });
-
-  it("stays quiet about billing for an org that never went over quota", () => {
-    const text = render({ enabled: false, active: false, overageUnits: 0 });
-    expect(text).not.toContain("still billed");
   });
 
   it("explains an estimate that sits above a lowered cap", () => {

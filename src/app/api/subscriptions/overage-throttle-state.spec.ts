@@ -6,7 +6,6 @@ import {
   capReached,
   isOverageInactive,
   overageInactiveCause,
-  overageOwedThisCycle,
   overageThrottleState,
 } from "./overage-throttle-state";
 
@@ -251,30 +250,6 @@ describe("overageInactiveCause", () => {
     expect(
       overageInactiveCause(status({ active: false, throttleRate: 50 })),
     ).toBe("broken");
-  });
-});
-
-describe("overageOwedThisCycle", () => {
-  it("is false before the status loads", () => {
-    expect(overageOwedThisCycle(null)).toBe(false);
-  });
-
-  it("is false for an org that has stayed inside its quota", () => {
-    expect(overageOwedThisCycle(status())).toBe(false);
-  });
-
-  it("is true once usage has run past the quota", () => {
-    expect(overageOwedThisCycle(status({ overageUnits: 6012 }))).toBe(true);
-  });
-
-  // The gap this exists for: switching overage off leaves the served usage
-  // billable, and the server zeroes the priced figure while keeping the units.
-  it("stays true after overage is switched off mid-cycle", () => {
-    expect(
-      overageOwedThisCycle(
-        status({ enabled: false, overageUnits: 6012, overageCostCents: 0 }),
-      ),
-    ).toBe(true);
   });
 });
 
