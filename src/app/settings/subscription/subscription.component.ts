@@ -81,7 +81,10 @@ export class SubscriptionComponent extends StatefulComponent<
 
   readonly fromStripe = this.service.fromStripe;
   readonly subscription = this.service.subscription;
-  readonly subscriptionLoading = this.service.subscriptionLoading;
+  readonly pageLoading = computed(
+    () =>
+      this.service.subscriptionLoading() || this.service.throttleStatePending(),
+  );
   readonly subscriptionRefreshTimeout = this.service.subscriptionRefreshTimeout;
   readonly totalEventsAllowed = this.service.totalEventsAllowed;
   // Paid, provisioned orgs, plus unbillable ones so they can switch it off.

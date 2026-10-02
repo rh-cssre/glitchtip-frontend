@@ -231,6 +231,14 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   overageInactive = computed(() => isOverageInactive(this.overageStatus()));
   inactiveCause = computed(() => overageInactiveCause(this.overageStatus()));
   throttleState = computed(() => overageThrottleState(this.overageStatus()));
+  // The banner's copy depends on this, so a throttled org's page waits for it.
+  // Reloads keep the previous value, so the post-save refetch won't trip it.
+  throttleStatePending = computed(
+    () =>
+      !!this.organizationsService.activeOrganization()?.eventThrottleRate &&
+      this.throttleState() === "unknown" &&
+      !this.overageStatusUnavailable(),
+  );
 
   // Progress by units, not cost (floored capUnits keep cost just under the cap).
   capProgressPercent = computed(() => {

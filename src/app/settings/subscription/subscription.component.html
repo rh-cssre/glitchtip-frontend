@@ -38,11 +38,11 @@
     @if (fromStripe()) {
       <span class="body-text-strong">Redirected from Stripe</span>
     }
-    @if (subscriptionLoading() || subscriptionRefreshTimeout()) {
+    @if (pageLoading() || subscriptionRefreshTimeout()) {
       <mat-card>
         <mat-card-header></mat-card-header>
         <mat-card-content>
-          @if (subscriptionLoading()) {
+          @if (pageLoading()) {
             <div class="spinner-container">
               <mat-spinner diameter="36"></mat-spinner>
             </div>
