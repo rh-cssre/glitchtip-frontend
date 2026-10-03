@@ -26,6 +26,15 @@ export class UpgradeBannerComponent {
   readonly nextPlanEvents = input<number | null>(null);
   readonly freeEventLimit = input<number | null>(null);
   readonly upgradeLoading = input(false);
+  readonly changePlanLoading = input(false);
+  /**
+   * The org already pays for a plan. Checkout creates a subscription, so it
+   * is the free org's path only; a paid org changes the plan it has in the
+   * billing portal, which does not take a target plan. The pitch therefore
+   * names no plan for a paid org and never opens the pricing dialog, whose
+   * Select button is Checkout as well.
+   */
+  readonly paid = input(false);
   /**
    * Whether the plan list has arrived. Without it `nextPlanEvents === null`
    * cannot tell "still loading" from "nothing bigger exists", and a mid-size
@@ -50,6 +59,7 @@ export class UpgradeBannerComponent {
   readonly contactEmail = input<string | null>(null);
 
   readonly upgradeClick = output<void>();
+  readonly changePlanClick = output<void>();
   readonly comparePlansClick = output<void>();
 
   readonly nextPlanLabel = computed(() =>
@@ -121,19 +131,39 @@ export class UpgradeBannerComponent {
     return true;
   });
   /**
-   * States where an upgrade is not the remedy, so the primary action is a
-   * conversation instead: nothing bigger to sell, a paused org, or an
-   * overage stall only we can fix.
+   * States where a plan change is not the remedy, so the primary action is a
+   * conversation instead: nothing bigger to sell, a paused org, an overage
+   * stall only we can fix, or a paid org at its cap. The last one is a
+   * portal limit: a subscription that also carries the metered overage item
+   * cannot change plan there, so the cap control below and a conversation
+   * are the honest offers.
    */
   readonly contactInstead = computed(
     () =>
       this.isSuspended() ||
       this.isLargestPlan() ||
-      this.throttleState() === "stalled-broken",
+      this.throttleState() === "stalled-broken" ||
+      (this.paid() && this.throttleState() === "cap"),
+  );
+  /** The free org's named upgrade, which goes through Checkout. */
+  readonly showUpgrade = computed(
+    () =>
+      !this.paid() &&
+      this.hasNextPlan() &&
+      !this.isSuspended() &&
+      this.throttleState() !== "stalled-broken",
+  );
+  /** The paid org's plan change, which goes through the billing portal. */
+  readonly showChangePlan = computed(
+    () => this.paid() && !this.contactInstead(),
   );
 
   onUpgrade() {
     this.upgradeClick.emit();
+  }
+
+  onChangePlan() {
+    this.changePlanClick.emit();
   }
 
   onComparePlans() {
