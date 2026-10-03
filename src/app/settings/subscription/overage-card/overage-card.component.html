@@ -17,10 +17,9 @@
               billed for it.
             </p>
           } @else {
-            <!-- The cap bounds what overage can still run up, not what a cycle
-                 has already run up: lowering it mid-cycle leaves the usage
-                 already served billable. Claiming the bill never exceeds the
-                 cap is false in exactly that case. -->
+            <!-- The cap bounds overage still to come, not what the cycle has
+                 already run up: lowering it mid-cycle leaves served usage
+                 billable, so the copy promises nothing about the total. -->
             <p class="overage-tagline body-text" i18n>
               Keep collecting events past your plan limit and pay only for the
               overflow, up to a monthly cap you set. At the cap, throttling
@@ -144,9 +143,8 @@
           />
           @if (capBelowAccrued()) {
             <!-- The server floors the cap at what it has already billed, so a
-                 cap set below that stops growth without retracting the charge.
-                 Unexplained, the clamped bar and the larger estimate above it
-                 read as a bug rather than the bill. -->
+                 cap set below that stops growth without retracting the charge;
+                 without this line the clamped bar reads as a bug. -->
             <p class="overage-alert" i18n>
               Your cap is set below what this cycle has already used. The
               estimate above is what you will be billed. Lowering the cap stops
@@ -250,8 +248,6 @@
 <ng-template #migrationDialog>
   <h2 mat-dialog-title i18n>Turn on on-demand billing?</h2>
   <mat-dialog-content class="mat-typography">
-    <!-- Lowering the cap later does not retract overage already used, so the
-         cap is described as a ceiling on what is still to come. -->
     <p class="body-text" i18n>
       You're only charged for events above your plan limit, up to a
       <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can

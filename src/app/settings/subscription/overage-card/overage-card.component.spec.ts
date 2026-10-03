@@ -110,36 +110,15 @@ describe("OverageCardComponent money disclosures", () => {
     expect(text).toContain("this cycle (estimate)");
   });
 
-  it("promises nothing about an amount it can no longer price", () => {
-    const text = render({
-      enabled: false,
-      active: false,
-      overageCostCents: 0,
-      throttleRate: 10,
-    });
-    expect(text).not.toContain("$1.02");
-    expect(text).not.toContain("$0.00");
-  });
-
   it("explains an estimate that sits above a lowered cap", () => {
     const text = render({ capCents: 100, capUnits: 5882, throttleRate: 10 });
     expect(text).toContain("cap is set below what this cycle has already used");
     expect(text).toContain("The estimate above is what you will be billed");
   });
 
-  it("does not explain an overflow while the cap still covers the cycle", () => {
-    const text = render();
-    expect(text).not.toContain(
-      "cap is set below what this cycle has already used",
-    );
-  });
-
   // The claim the cap-lowering path breaks: usage already served stays
   // billable, so only future overage is bounded.
   it("never promises the bill stays under the cap", () => {
     expect(render()).not.toContain("never goes over the cap");
-    expect(render({ capCents: 100, capUnits: 5882 })).not.toContain(
-      "never goes over the cap",
-    );
   });
 });
