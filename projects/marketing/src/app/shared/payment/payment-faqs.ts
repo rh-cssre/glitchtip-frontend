@@ -22,7 +22,7 @@ export const hostedFaqs: Faq[] = [
   {
     question: "How does on-demand billing work?",
     answer:
-      'On-demand billing is opt-in and available on any paid plan with an event limit. Turn it on, and events past your limit keep flowing, billed at $0.17 per 1,000 for the first million events over, $0.15 per 1,000 up to ten million, and $0.12 per 1,000 after that. Pricing is per event, so 200,000 extra events cost $34. You also set a monthly spend cap: overage billing stops the moment you reach it, so the overage on your invoice can never pass your cap. Your plan price stays the same and is billed as usual. See the details in our <a href="/documentation/on-demand-billing">on-demand billing docs</a>.',
+      'On-demand billing is opt-in and available on any paid plan with an event limit. Turn it on, and events past your limit keep flowing, billed at $0.17 per 1,000 for the first million events over, $0.15 per 1,000 up to ten million, and $0.12 per 1,000 after that. Pricing is per event, so 200,000 extra events cost $34. You also set a monthly spend cap: once you reach it, no further overage is charged and throttling resumes. Your plan price stays the same and is billed as usual. See the details in our <a href="/documentation/on-demand-billing">on-demand billing docs</a>.',
   },
   {
     question: "Can I change plans at any time?",

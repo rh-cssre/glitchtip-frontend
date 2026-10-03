@@ -49,13 +49,11 @@ Two things to know:
 - If you turn it on partway through a cycle while already over your limit, the events accepted above your limit earlier in that cycle are billed too, up to your cap.
 - You can turn it off at any time. Overage already used this cycle still appears on that cycle's invoice; nothing new is billed after you turn it off.
 
-Turning it on also moves your subscription to a Stripe billing mode that supports usage charges. The mode change is permanent even if you later turn on-demand billing off, but it does not change your plan, its price, or your billing dates.
-
 ## Common questions
 
 ### Can my bill surprise me?
 
-No. Your invoice is your plan price plus overage, and the overage can never pass your cap. At the cap we stop charging and go back to throttling.
+No. Your invoice is your plan price plus overage. Once you reach the cap, no further overage is charged and throttling resumes. The one thing to keep in mind is that lowering the cap mid-cycle does not reduce overage already used.
 
 ### Will you warn me before I hit my cap?
 
