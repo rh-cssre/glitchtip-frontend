@@ -7,6 +7,7 @@ import {
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
+  reportedCostOwedCents,
 } from "./overage-throttle-state";
 
 /**
@@ -291,5 +292,41 @@ describe("capBelowBilled", () => {
         status({ enabled: false, capCents: 100, overageCostCents: 102 }),
       ),
     ).toBe(false);
+  });
+});
+
+describe("reportedCostOwedCents", () => {
+  it("is zero before the status loads", () => {
+    expect(reportedCostOwedCents(null)).toBe(0);
+  });
+
+  // The estimate row already prices a live cycle; naming it twice would read
+  // as two charges.
+  it("is zero while overage is live", () => {
+    expect(reportedCostOwedCents(status({ reportedCostCents: 102 }))).toBe(0);
+  });
+
+  it("is what was reported once overage is switched off", () => {
+    expect(
+      reportedCostOwedCents(status({ enabled: false, reportedCostCents: 102 })),
+    ).toBe(102);
+  });
+
+  it("is what was reported when the plan can no longer be billed", () => {
+    expect(
+      reportedCostOwedCents(
+        status({ eligible: false, active: false, reportedCostCents: 102 }),
+      ),
+    ).toBe(102);
+  });
+
+  it("is zero when overage is off and nothing was reported", () => {
+    expect(
+      reportedCostOwedCents(status({ enabled: false, reportedCostCents: 0 })),
+    ).toBe(0);
+  });
+
+  it("is zero against a server that does not serve the field", () => {
+    expect(reportedCostOwedCents(status({ enabled: false }))).toBe(0);
   });
 });

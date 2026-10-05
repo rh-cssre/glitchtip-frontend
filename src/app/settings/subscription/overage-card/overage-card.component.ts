@@ -85,6 +85,9 @@ export class OverageCardComponent {
   readonly costDollars = computed(
     () => (this.status()?.overageCostCents ?? 0) / 100,
   );
+  readonly reportedOwedDollars = computed(
+    () => this.service.reportedCostOwedCents() / 100,
+  );
   readonly capDollarsCurrent = computed(
     () => (this.status()?.capCents ?? 0) / 100,
   );

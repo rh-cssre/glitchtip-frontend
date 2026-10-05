@@ -116,6 +116,16 @@
         }
       }
 
+      @if (reportedOwedDollars() > 0) {
+        <!-- No estimate row is drawn in this state, so this is the only place
+             the amount Stripe already holds for the cycle appears. -->
+        <mat-divider />
+        <p class="overage-alert" i18n>
+          {{ reportedOwedDollars() | currency }} of overage already used this
+          cycle will still be billed. No further overage is being charged.
+        </p>
+      }
+
       @if (enabled()) {
         <!-- Unbillable overage meters nothing, so no estimate or cap bar. -->
         @if (!overageInactive()) {

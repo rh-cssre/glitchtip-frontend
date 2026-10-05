@@ -4895,6 +4895,8 @@ export interface components {
             overageUnits: number;
             /** Overagecostcents */
             overageCostCents: number;
+            /** Reportedcostcents */
+            reportedCostCents?: number;
             /** Throttlerate */
             throttleRate: number;
         };

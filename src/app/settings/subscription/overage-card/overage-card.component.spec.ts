@@ -15,6 +15,7 @@ import {
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
+  reportedCostOwedCents,
 } from "src/app/api/subscriptions/overage-throttle-state";
 import type { components } from "src/app/api/api-schema";
 
@@ -88,6 +89,9 @@ describe("OverageCardComponent money disclosures", () => {
               () => overageStatus()?.configured ?? false,
             ),
             capBelowBilled: computed(() => capBelowBilled(overageStatus())),
+            reportedCostOwedCents: computed(() =>
+              reportedCostOwedCents(overageStatus()),
+            ),
             maxCapCents: computed(
               () => overageStatus()?.maxCapCents ?? 1000000,
             ),
@@ -134,6 +138,49 @@ describe("OverageCardComponent money disclosures", () => {
     expect(
       render({ capCents: 100, capUnits: 5882, throttleRate: 10 }).toLowerCase(),
     ).not.toContain("overage");
+  });
+
+  // Stripe still invoices what was reported before the switch; the status
+  // prices nothing once overage is off, so this line is the only disclosure.
+  it("names the amount still billed after overage is switched off", () => {
+    const text = render({
+      enabled: false,
+      active: false,
+      overageCostCents: 0,
+      reportedCostCents: 102,
+      throttleRate: 10,
+    });
+    expect(text).toContain("$1.02 of overage already used this cycle");
+    expect(text).toContain("will still be billed");
+  });
+
+  // Reached by a plan change too, where nobody switched anything off, so the
+  // line cannot blame the toggle.
+  it("names the amount when the plan can no longer be billed", () => {
+    const text = render({
+      eligible: false,
+      active: false,
+      overageCostCents: 0,
+      reportedCostCents: 102,
+    });
+    expect(text).toContain("$1.02 of overage already used this cycle");
+    expect(text).not.toContain("Switching overage off");
+  });
+
+  it("says nothing is owed when overage is off and nothing was reported", () => {
+    const text = render({
+      enabled: false,
+      active: false,
+      overageCostCents: 0,
+      reportedCostCents: 0,
+    });
+    expect(text).not.toContain("will still be billed");
+  });
+
+  it("does not repeat the charge while the estimate is showing it", () => {
+    expect(render({ reportedCostCents: 102 })).not.toContain(
+      "will still be billed",
+    );
   });
 
   // The claim the cap-lowering path breaks: usage already served stays
