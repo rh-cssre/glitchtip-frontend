@@ -1,61 +1,164 @@
 <div class="dialog-wrapper">
-  <h1 mat-dialog-title>Add Alert Recipient</h1>
+  <h1 mat-dialog-title>{{
+    data.editRecipient ? "Edit Alert Recipient" : "Add Alert Recipient"
+  }}</h1>
   <form
     [formGroup]="recipientForm"
     (ngSubmit)="onSubmit()"
     id="create-team-form"
   >
     <mat-dialog-content class="mat-typography">
-      <mat-form-field class="type">
+      <mat-form-field
+        class="type"
+        appearance="outline"
+        data-cy="recipient-type"
+      >
         <mat-label>Recipient Type</mat-label>
         <mat-select id="recipient-type" [formControl]="recipientType">
-          <mat-option
-            *ngFor="
-              let recipient of selectOptions(
-                recipientOptions,
-                emailSelected$ | async
-              )
-            "
-            [value]="recipient.value"
-          >
-            {{ recipient.viewValue }}
-          </mat-option>
+          @for (
+            recipient of selectOptions(recipientOptions, data.emailSelected);
+            track recipient.value
+          ) {
+            <mat-option [value]="recipient.value">
+              {{ recipient.viewValue }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
-      <div [ngSwitch]="recipientType.value" class="switch">
-        <mat-form-field class="webhook" *ngSwitchCase="'webhook'">
-          <mat-label>Webhook URL</mat-label>
-          <svg matPrefix class="slack">
-            <use xlink:href="#webhook"></use>
-          </svg>
-          <input matInput type="url" formControlName="url" placeholder="URL" />
-          <mat-error *ngIf="url?.errors">
-            <span *ngIf="url?.errors?.required || url?.errors?.pattern"
-              >Enter a valid URL with protocol (ex. https://example.com)</span
+      <div class="recipientDetails">
+        @if (
+          ["discord", "feishu", "googlechat", "webhook", "ntfy", "teams"].includes(
+            recipientType.value
+          )
+        ) {
+          <mat-form-field class="webhook" appearance="outline">
+            <mat-label>Webhook URL</mat-label>
+            <svg matPrefix>
+              <use
+                [attr.xlink:href]="'#' + resolveIcon(recipientType.value)"
+              ></use>
+            </svg>
+            <input
+              matInput
+              type="url"
+              formControlName="url"
+              placeholder="URL"
+            />
+            @if (recipientType.value === "webhook") {
+              <mat-hint i18n
+                >Supports Slack, Mattermost, Rocket.Chat, and more</mat-hint
+              >
+            }
+            @if (recipientType.value === "ntfy") {
+              <mat-hint i18n
+                >ntfy.sh topic URL or self-hosted endpoint</mat-hint
+              >
+            }
+            @if (recipientType.value === "feishu") {
+              <mat-hint i18n
+                >Feishu custom bot webhook URL (https://open.feishu.cn/open-apis/bot/v2/hook/...)</mat-hint
+              >
+            }
+            @if (recipientType.value === "teams") {
+              <mat-hint i18n>Microsoft Teams Workflows webhook URL</mat-hint>
+            }
+            @if (url.errors) {
+              <mat-error>
+                @if (url.errors.required || url.errors.pattern) {
+                  <span
+                    >Enter a valid URL with protocol (ex.
+                    https://example.com)</span
+                  >
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+        } @else if (recipientType.value === "zulip") {
+          <p class="zulip-help" i18n>
+            Create a <strong>Generic bot</strong> in your Zulip organization
+            settings under "Bots". Copy the bot's email and API key below.
+          </p>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Zulip Server URL</mat-label>
+            <input
+              matInput
+              type="url"
+              formControlName="url"
+              placeholder="https://yourorg.zulipchat.com"
+            />
+            <mat-hint i18n>Your Zulip organization URL</mat-hint>
+            @if (url.errors) {
+              <mat-error>
+                @if (url.errors.required || url.errors.pattern) {
+                  <span>Enter a valid Zulip server URL</span>
+                }
+              </mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Bot Email</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="botEmail"
+              placeholder="alert-bot@yourorg.zulipchat.com"
+            />
+            <mat-hint i18n>Found in the bot's settings under "Bots"</mat-hint>
+            @if (botEmail.errors?.required) {
+              <mat-error>Bot email is required</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>API Key</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="apiKey"
+              placeholder="Bot API key"
+            />
+            <mat-hint i18n
+              >The bot's API key, shown when the bot is created</mat-hint
             >
-          </mat-error>
-        </mat-form-field>
-        <p class="email" *ngSwitchCase="'email'">
-          An email will be sent to the members of this project.<br />
-          Select "Add Recipient" to continue.
-        </p>
-        <p class="default" *ngSwitchDefault>
-          Select an alert type to get started.
-        </p>
-        <p
-          *ngIf="recipientError$ | async as error"
-          class="error recipients-error"
-        >
-          {{ error }}
-        </p>
+            @if (apiKey.errors?.required) {
+              <mat-error>API key is required</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Channel</mat-label>
+            <input matInput formControlName="channel" placeholder="general" />
+            <mat-hint i18n>The channel to post alerts to</mat-hint>
+            @if (channel.errors?.required) {
+              <mat-error>Channel is required</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Topic</mat-label>
+            <input
+              matInput
+              formControlName="topic"
+              placeholder="GlitchTip Alerts"
+            />
+            <mat-hint i18n>Messages in a channel are grouped by topic</mat-hint>
+          </mat-form-field>
+        } @else if (recipientType.value === "email") {
+          <p class="email">
+            An email will be sent to the members of this project.<br />
+            Select "Add Recipient" to continue.
+          </p>
+        } @else {
+          <p class="default">Select an alert type to get started.</p>
+        }
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <gt-loading-button type="submit" buttonText="Add Recipient">
+      <gt-loading-button
+        type="submit"
+        [buttonText]="
+          data.editRecipient ? 'Save Changes' : 'Add Recipient'
+        "
+      >
       </gt-loading-button>
-      <button type="button" mat-flat-button (click)="closeDialog()">
-        Cancel
-      </button>
+      <button type="button" mat-button mat-dialog-close> Cancel </button>
     </mat-dialog-actions>
   </form>
 </div>

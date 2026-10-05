@@ -1,0 +1,43 @@
+<div class="switcher">
+  <div class="tabs" role="tablist" aria-label="GlitchTip features">
+    @for (f of features; track f.id; let i = $index) {
+      <button
+        type="button"
+        role="tab"
+        class="tab"
+        [class.is-active]="active() === i"
+        [attr.aria-selected]="active() === i"
+        id="feature-tab-{{ f.id }}"
+        aria-controls="feature-panel"
+        (click)="active.set(i)"
+      >
+        <mat-icon class="tab-icon">{{ f.icon }}</mat-icon>
+        <span class="tab-title">{{ f.title }}</span>
+      </button>
+    }
+  </div>
+
+  <div
+    class="panel mkt-surface"
+    id="feature-panel"
+    role="tabpanel"
+    [attr.aria-labelledby]="'feature-tab-' + current().id"
+  >
+    @for (f of [current()]; track active()) {
+      <div class="panel-head">
+        <p class="marketing-eyebrow">Feature</p>
+        <h2 class="fancy marketing-subheading">{{ f.title }}</h2>
+      </div>
+      <div class="panel-media">
+        <mkt-responsive-image
+          [src1x]="f.imageSrc"
+          [alt]="f.imageAlt"
+          class="screenshot"
+        ></mkt-responsive-image>
+      </div>
+      <div class="panel-body">
+        <p class="marketing-body">{{ f.body }}</p>
+      </div>
+    }
+  </div>
+</div>

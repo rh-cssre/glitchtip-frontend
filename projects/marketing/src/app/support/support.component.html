@@ -1,0 +1,120 @@
+<mkt-page-shell>
+  <div class="support">
+    <header class="support__head">
+      <h1 class="fancy marketing-heading">Support</h1>
+    </header>
+
+    <section mktReveal>
+      <div class="support-direct">
+        <div class="mkt-surface support-direct__col">
+          <h3 class="marketing-small-heading">Self-hosted support plan</h3>
+          <p class="marketing-body">
+            Talk to a real person on our team. With an active support plan, add
+            your license key below for priority technical support.
+          </p>
+
+          <form
+            class="contact-form"
+            [formGroup]="contactForm"
+            (submit)="$event.preventDefault()"
+          >
+            <mat-form-field appearance="outline">
+              <mat-label>License key (optional)</mat-label>
+              <input
+                matInput
+                formControlName="licenseKey"
+                placeholder="sub_xxxxxxxxxxxxxxxxxxxxxxxx"
+              />
+              @if (
+                contactForm.controls.licenseKey.touched &&
+                contactForm.controls.licenseKey.errors?.["pattern"]
+              ) {
+                <mat-error>License key should start with "sub_".</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="cta-row">
+              @if (chatwootReady()) {
+                <button
+                  mat-flat-button
+                  type="button"
+                  color="primary"
+                  (click)="handleChatwoot()"
+                  [disabled]="contactForm.invalid"
+                >
+                  Talk to us
+                </button>
+              }
+
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="composeSupportEmail()"
+                [disabled]="contactForm.invalid"
+              >
+                Send an email
+              </button>
+            </div>
+          </form>
+
+          <p class="support-direct__meta marketing-caption">
+            No support plan? We handle sales and plan questions here. For
+            technical help, ask the community below or
+            <a routerLink="/pricing">get a plan</a>.
+          </p>
+        </div>
+
+        <div class="mkt-surface support-direct__col">
+          <h3 class="marketing-small-heading">GlitchTip Cloud</h3>
+          <p class="marketing-body">
+            On our hosted service? Support is built right into the app. Sign in
+            and use the in-app help to reach the same team.
+          </p>
+          <div class="cta-row">
+            <a mat-stroked-button [href]="loginLink">Sign in</a>
+          </div>
+          <p class="support-direct__meta marketing-caption">
+            New to GlitchTip? <a [href]="registerLink">Create an account</a> to
+            get started on our hosted service.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section mktReveal>
+      <mkt-section-header
+        eyebrow="Self-serve"
+        title="Prefer to help yourself?"
+        subtitle="Most questions are answered in the docs or by the community."
+      />
+
+      <div class="support-channels">
+        @for (channel of channels; track channel.title) {
+          @if (channel.link) {
+            <a class="mkt-card support-card" [routerLink]="channel.link">
+              <mat-icon class="support-card__icon">{{ channel.icon }}</mat-icon>
+              <h3 class="mkt-card__title support-card__title">{{ channel.title }}</h3>
+              <p class="support-card__desc">{{ channel.description }}</p>
+            </a>
+          } @else {
+            <a
+              class="mkt-card support-card"
+              [href]="channel.href"
+              target="_blank"
+              rel="noopener"
+            >
+              <mat-icon class="support-card__icon">{{ channel.icon }}</mat-icon>
+              <h3 class="mkt-card__title support-card__title">
+                {{ channel.title }}
+                <mat-icon class="support-card__ext">open_in_new</mat-icon>
+              </h3>
+              <p class="support-card__desc">{{ channel.description }}</p>
+            </a>
+          }
+        }
+      </div>
+    </section>
+  </div>
+</mkt-page-shell>

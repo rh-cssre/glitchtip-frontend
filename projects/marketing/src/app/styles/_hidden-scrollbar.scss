@@ -1,0 +1,8 @@
+// Hide a scroll region's scrollbar; scrolling still works via wheel/trackpad.
+@mixin hidden-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
