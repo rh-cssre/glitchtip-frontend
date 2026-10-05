@@ -1,0 +1,57 @@
+@use "../styles/side-pattern" as *;
+
+:host {
+  @include side-pattern-host;
+}
+
+.blog-article {
+  @include side-pattern(var(--mkt-container-reading));
+}
+
+// Header block: breadcrumb + title + date, separated from the body by a
+// hairline (the same idiom as the docs sub-bar).
+.blog-article__head {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.blog-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--mat-sys-on-surface-variant);
+
+  a {
+    color: var(--mat-sys-on-surface-variant);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--mat-sys-primary);
+    }
+  }
+
+  .blog-crumbs__sep {
+    opacity: 0.5;
+  }
+
+  .blog-crumbs__current {
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+.blog-article__date {
+  display: block;
+  margin-top: 10px;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Prev/next nav uses the shared .mkt-pager primitive (styles.scss).

@@ -1,108 +1,224 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import {
-  AlertRecipient,
-  ProjectAlert,
-} from "src/app/api/projects/project-alerts/project-alerts.interface";
-import { ProjectAlertsService } from "./project-alerts.service";
-import { MatDialog } from "@angular/material/dialog";
-import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
+  Component,
+  OnInit,
+  ViewChild,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import {
+  NewAlertRecipient,
+  ProjectAlertsService,
+} from "./project-alerts.service";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { AlertFormComponent } from "./alert-form/alert-form.component";
-import { distinctUntilChanged } from "rxjs";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { LoadingButtonComponent } from "../../../../shared/loading-button/loading-button.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { components } from "src/app/api/api-schema";
+import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
+import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { ProjectEnvironmentsService } from "../project-environments/project-environments.service";
+
+type ProjectAlert = components["schemas"]["ProjectAlertSchema"];
+type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
+
+export const iconXrefMapping: Partial<Record<RecipientType, string>> = {
+  feishu: "webhook",
+  teams: "microsoft",
+};
+export function resolveRecipientIcon(type: RecipientType): string {
+  return iconXrefMapping[type] ?? type;
+}
 
 @Component({
   selector: "gt-project-alerts",
   templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatDividerModule,
+    AlertFormComponent,
+    MatIconModule,
+    MatTooltipModule,
+    LoadingButtonComponent,
+    MatProgressSpinnerModule,
+    EmptyStateComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  providers: [ProjectAlertsService, ProjectEnvironmentsService],
 })
-export class ProjectAlertsComponent implements OnInit, OnDestroy {
-  @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
-  projectAlerts$ = this.alertsService.projectAlerts$;
-  newProjectAlertRecipients$ = this.alertsService.newProjectAlertRecipients$;
-  initialLoad$ = this.alertsService.initialLoad$;
-  initialLoadError$ = this.alertsService.initialLoadError$;
-  removeAlertLoading$ = this.alertsService.removeAlertLoading$;
-  removeAlertError$ = this.alertsService.removeAlertError$;
-  updatePropertiesLoading$ = this.alertsService.updatePropertiesLoading$;
-  updatePropertiesError$ = this.alertsService.updatePropertiesError$;
-  deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
-  deleteRecipientError$ = this.alertsService.deleteRecipientError$;
-  newAlertOpen$ = this.alertsService.newAlertOpen$;
-  recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
-  newAlertLoading$ = this.alertsService.newAlertLoading$;
-  newAlertError$ = this.alertsService.newAlertError$;
+export class ProjectAlertsComponent implements OnInit {
+  #service = inject(ProjectAlertsService);
+  #environmentsService = inject(ProjectEnvironmentsService);
+  organizationsService = inject(OrganizationsService);
+  dialog = inject(MatDialog);
+  orgSlug = input.required<string>();
+  projectSlug = input.required<string>();
 
-  constructor(
-    private alertsService: ProjectAlertsService,
-    public dialog: MatDialog
-  ) {}
+  @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
+  projectAlerts = this.#service.projectAlerts;
+  newProjectAlertRecipients = this.#service.newProjectAlertRecipients;
+  initialLoad = this.#service.initialLoad;
+  initialLoadError = this.#service.initialLoadError;
+  removeAlertLoading = this.#service.removeAlertLoading;
+  removeAlertError = this.#service.removeAlertError;
+  updatePropertiesLoading = this.#service.updatePropertiesLoading;
+  updatePropertiesError = this.#service.updatePropertiesError;
+  deleteRecipientLoading = this.#service.deleteRecipientLoading;
+  deleteRecipientError = this.#service.deleteRecipientError;
+  testAlertLoading = this.#service.testAlertLoading;
+  newAlertOpen = this.#service.newAlertOpen;
+  recipientDialogOpen = this.#service.recipientDialogOpen;
+  newAlertLoading = this.#service.newAlertLoading;
+  newAlertError = this.#service.newAlertError;
+  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  resolveRecipientIcon = resolveRecipientIcon;
+  availableEnvironments = this.#environmentsService.visibleEnvironments;
 
   ngOnInit(): void {
-    this.alertsService.listProjectAlerts();
-
-    this.recipientDialogOpen$
-      .pipe(distinctUntilChanged())
-      .subscribe((resp) => resp && this.dialog.open(NewRecipientComponent));
-  }
-
-  ngOnDestroy() {
-    this.alertsService.clearState();
+    this.#service.setParams(this.orgSlug(), this.projectSlug());
+    this.#environmentsService.setParams(this.orgSlug(), this.projectSlug());
   }
 
   openNewAlert() {
-    this.alertsService.openNewAlert();
+    this.#service.openNewAlert();
   }
 
   removeNewAlertRecipient(url: string) {
-    this.alertsService.removeNewAlertRecipient(url);
-  }
-
-  openUpdateRecipientDialog(alert: ProjectAlert) {
-    this.alertsService.openUpdateRecipientDialog(alert);
+    this.#service.removeNewAlertRecipient(url);
   }
 
   openCreateRecipientDialog() {
-    this.alertsService.openCreateRecipientDialog();
+    this.#service.openCreateRecipientDialog();
+    const dialogRef = this.dialog.open(NewRecipientComponent, {
+      data: { emailSelected: this.#service.emailSelected() },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.#service.addAlertRecipient(result);
+      }
+    });
+  }
+
+  openEditNewRecipientDialog(recipient: NewAlertRecipient, index: number) {
+    const dialogRef = this.dialog.open(NewRecipientComponent, {
+      data: {
+        emailSelected: this.#service.emailSelected(),
+        editRecipient: recipient,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.#service.editNewAlertRecipient(index, result);
+      }
+    });
+  }
+
+  openUpdateRecipientDialog(alert: ProjectAlert) {
+    this.#service.openUpdateRecipientDialog(alert);
+    const dialogRef = this.dialog.open(NewRecipientComponent, {
+      data: { emailSelected: this.#service.emailSelected() },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.#service.addAlertRecipient(result);
+      }
+    });
   }
 
   closeNewAlert() {
-    this.alertsService.closeNewAlert();
+    this.#service.closeNewAlert();
   }
 
-  removeAlert(pk: number) {
-    if (window.confirm("Are you sure you want to remove this notification?")) {
-      this.alertsService.deleteProjectAlert(pk);
-    }
+  removeAlert(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove notification?`,
+        message: $localize`Are you sure you want to remove this notification?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteProjectAlert(id);
+      }
+    });
   }
 
   updateProperties(
     event: {
-      timespan_minutes: number;
+      timespanMinutes: number;
       quantity: number;
       uptime: boolean;
+      environments: string[];
     },
-    alert: ProjectAlert
+    alert: ProjectAlert,
   ): void {
-    if (alert.pk) {
-      this.alertsService.updateAlertProperties(
-        event.timespan_minutes,
+    if (alert.id) {
+      this.#service.updateAlertProperties(
+        event.timespanMinutes,
         event.quantity,
         event.uptime,
-        alert.pk,
-        alert.alertRecipients
+        event.environments,
+        alert.id,
+        alert.alertRecipients,
       );
     }
   }
 
+  testRecipient(alertId: number, recipientId: number) {
+    this.#service.testRecipient(alertId, recipientId);
+  }
+
+  openEditRecipientDialog(recipient: AlertRecipient, alert: ProjectAlert) {
+    this.#service.openUpdateRecipientDialog(alert);
+    const dialogRef = this.dialog.open(NewRecipientComponent, {
+      data: {
+        emailSelected: this.#service.emailSelected(),
+        editRecipient: recipient,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.#service.editAlertRecipient(result, recipient, alert);
+      }
+    });
+  }
+
   removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
-    this.alertsService.deleteAlertRecipient(recipient, alert);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Remove recipient?`,
+        message: $localize`Are you sure you want to remove this recipient?`,
+        confirmText: $localize`Remove`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.#service.deleteAlertRecipient(recipient, alert);
+      }
+    });
   }
 
   newAlertProperties(event: {
-    timespan_minutes: number;
+    timespanMinutes: number;
     quantity: number;
     uptime: boolean;
+    environments: string[];
   }) {
-    this.alertsService.createNewAlert(event);
+    this.#service.createNewAlert(event);
   }
 
   submitCreateAlert() {
