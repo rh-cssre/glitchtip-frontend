@@ -14,24 +14,24 @@
   @switch (throttleState()) {
     @case ("cap") {
       <span i18n>
-        to upgrade or raise your overage spend cap and keep collecting
-        events.</span
+        to upgrade or raise your spend cap and keep collecting events.</span
       >
     }
     @case ("no-overage") {
       <span i18n>
-        to upgrade or turn on overage billing and keep collecting events.</span
+        to upgrade or turn on on-demand billing and keep collecting
+        events.</span
       >
     }
     @case ("stalled-plan") {
       <span i18n>
-        to upgrade. Your current plan cannot be billed for overage, so raising
-        your spend cap will not change this.
+        to upgrade. Your current plan cannot be billed for on-demand usage, so
+        raising your spend cap will not change this.
       </span>
     }
     @case ("stalled-broken") {
       <span i18n>
-        for details. Overage billing is switched on but is not running, so
+        for details. On-demand billing is switched on but is not running, so
         raising your spend cap will not help. Please contact support.
       </span>
     }

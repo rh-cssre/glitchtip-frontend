@@ -26,7 +26,7 @@
         <h2 class="banner-headline fancy" i18n>You've outgrown this plan</h2>
         @if (overageEnabled()) {
           <p class="banner-usage" i18n>
-            You've reached your overage spend cap, and about
+            You've reached your spend cap, and about
             <strong>{{ eventThrottleRate() }}%</strong> of your incoming events
             are being dropped. Raise your cap below to keep collecting events,
             or get in touch and we'll help you find a fit.
@@ -35,8 +35,8 @@
           <p class="banner-usage" i18n>
             You're at your event limit on our largest plan, and about
             <strong>{{ eventThrottleRate() }}%</strong> of your incoming events
-            are being dropped. Turn on overage billing below to keep collecting
-            events, or get in touch and we'll help you find a fit.
+            are being dropped. Turn on on-demand billing below to keep
+            collecting events, or get in touch and we'll help you find a fit.
           </p>
         }
       } @else {
