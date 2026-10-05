@@ -117,8 +117,6 @@
       }
 
       @if (reportedOwedDollars() > 0) {
-        <!-- No estimate row is drawn in this state, so this is the only place
-             the amount Stripe already holds for the cycle appears. -->
         <mat-divider />
         <p class="overage-alert" i18n>
           {{ reportedOwedDollars() | currency }} of overage already used this

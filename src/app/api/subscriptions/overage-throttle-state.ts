@@ -112,12 +112,8 @@ export function capBelowBilled(status: OverageStatus | null): boolean {
 }
 
 /**
- * Cents already reported to Stripe this cycle that the card is not otherwise
- * showing. Switching overage off, or moving to a plan that cannot be billed
- * for it, stops further reporting but not the invoice for what was reported.
- *
- * Zero while overage is live, where the estimate already prices the cycle.
- * A server that predates the field omits it, which reads as nothing owed.
+ * Cents already reported to Stripe this cycle and still invoiced, in the
+ * states where the card shows no estimate. An older server omits the field.
  */
 export function reportedCostOwedCents(status: OverageStatus | null): number {
   if (!status) return 0;

@@ -300,8 +300,6 @@ describe("reportedCostOwedCents", () => {
     expect(reportedCostOwedCents(null)).toBe(0);
   });
 
-  // The estimate row already prices a live cycle; naming it twice would read
-  // as two charges.
   it("is zero while overage is live", () => {
     expect(reportedCostOwedCents(status({ reportedCostCents: 102 }))).toBe(0);
   });

@@ -140,8 +140,6 @@ describe("OverageCardComponent money disclosures", () => {
     ).not.toContain("overage");
   });
 
-  // Stripe still invoices what was reported before the switch; the status
-  // prices nothing once overage is off, so this line is the only disclosure.
   it("names the amount still billed after overage is switched off", () => {
     const text = render({
       enabled: false,
@@ -154,8 +152,6 @@ describe("OverageCardComponent money disclosures", () => {
     expect(text).toContain("will still be billed");
   });
 
-  // Reached by a plan change too, where nobody switched anything off, so the
-  // line cannot blame the toggle.
   it("names the amount when the plan can no longer be billed", () => {
     const text = render({
       eligible: false,
