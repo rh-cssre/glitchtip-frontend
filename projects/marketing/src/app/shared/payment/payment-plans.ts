@@ -37,6 +37,7 @@ export const planOptions: PlanOption[] = [
     includesFrom: "Hobby & Trial",
     features: [
       { text: "Up to 100k events/mo" },
+      { text: "On-demand events past your limit" },
       { text: "90 days of event retention"},
       { text: "Unlimited projects" },
       { text: "Unlimited team members" },

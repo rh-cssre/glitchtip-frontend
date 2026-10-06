@@ -3,17 +3,17 @@
     <mat-card-content>
       <div class="overage-top">
         <div class="overage-top-text">
-          <span class="body-text-strong" i18n>Overage billing</span>
+          <span class="body-text-strong" i18n>On-demand billing</span>
           <!-- The cause, not throttleState: nothing is throttled yet the moment
                a resubscribe leaves overage on with no metered item. -->
           @if (inactiveCause() === "broken") {
             <p class="overage-tagline body-text" i18n>
-              Overage billing is switched on, but it is not running. You are not
-              being charged for it. Please contact support.
+              On-demand billing is switched on, but it is not running. You are
+              not being charged for it. Please contact support.
             </p>
           } @else if (inactiveCause() === "plan") {
             <p class="overage-tagline body-text" i18n>
-              Overage billing is switched on, but your current plan cannot be
+              On-demand billing is switched on, but your current plan cannot be
               billed for it.
             </p>
           } @else {
@@ -32,7 +32,7 @@
             [checked]="enabled()"
             [disabled]="loading() || !canManage()"
             (change)="onToggle($event)"
-            aria-label="Toggle overage billing"
+            aria-label="Toggle on-demand billing"
             i18n-aria-label
           />
         </div>
@@ -40,7 +40,7 @@
 
       @if (!canManage()) {
         <p class="overage-sub overage-owner-note" i18n>
-          Only organization owners can change overage billing.
+          Only organization owners can change on-demand billing.
         </p>
       }
 
@@ -48,15 +48,15 @@
         @case ("stalled-plan") {
           <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Your current plan cannot be billed for overage, so it is not adding
-            any headroom and about {{ throttleRate() }}% of new events are being
-            dropped. Raising the spend cap will not change that.
+            Your current plan cannot be billed for on-demand usage, so it is not
+            adding any headroom and about {{ throttleRate() }}% of new events
+            are being dropped. Raising the spend cap will not change that.
           </p>
         }
         @case ("stalled-broken") {
           <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Overage billing is switched on but is not running, so about
+            On-demand billing is switched on but is not running, so about
             {{ throttleRate() }}% of new events are being dropped. You are not
             being charged for it, and raising the spend cap will not help.
             Please contact support.
@@ -85,12 +85,12 @@
           @if (canManage()) {
             <p class="overage-alert overage-alert--warn" i18n>
               About {{ throttleRate() }}% of new events are being dropped. Turn
-              on overage billing to keep collecting events.
+              on on-demand billing to keep collecting events.
             </p>
           } @else {
             <p class="overage-alert overage-alert--warn" i18n>
               About {{ throttleRate() }}% of new events are being dropped. Ask
-              an organization owner to turn on overage billing.
+              an organization owner to turn on on-demand billing.
             </p>
           }
         }
@@ -211,14 +211,14 @@
               <!-- The cap POST applies two tests, so name the one that fired.
                    No live overage price stops every org on the server. -->
               <span class="overage-sub" i18n
-                >Overage billing is not available on this server right now, so
+                >On-demand billing is not available on this server right now, so
                 the spend cap cannot be changed.</span
               >
             } @else {
               <!-- The price is live, so it is this org's plan that fails. -->
               <span class="overage-sub" i18n
-                >Your current plan cannot be billed for overage, so the spend
-                cap cannot be changed.</span
+                >Your current plan cannot be billed for on-demand usage, so the
+                spend cap cannot be changed.</span
               >
             }
           }
@@ -233,7 +233,7 @@
 }
 
 <ng-template #migrationDialog>
-  <h2 mat-dialog-title i18n>Turn on overage billing?</h2>
+  <h2 mat-dialog-title i18n>Turn on on-demand billing?</h2>
   <mat-dialog-content class="mat-typography">
     <p class="body-text" i18n>
       You're only charged for events above your plan limit, up to a
@@ -244,7 +244,7 @@
   <mat-dialog-actions>
     <button mat-button mat-dialog-close i18n>Cancel</button>
     <button mat-flat-button color="primary" [mat-dialog-close]="true" i18n>
-      Turn on overage billing
+      Turn on on-demand billing
     </button>
   </mat-dialog-actions>
 </ng-template>

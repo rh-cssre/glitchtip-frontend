@@ -12,3 +12,10 @@ h1.fancy {
   display: block;
   text-align: center;
 }
+
+.pricing-subhead {
+  max-width: 60ch;
+  margin: 0 auto 2rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
