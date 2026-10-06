@@ -29,7 +29,7 @@
                which picks the plan itself. -->
           @if (throttleState() === "stalled-broken") {
             <h2 class="banner-headline fancy" i18n
-              >Overage billing needs attention</h2
+              >On-demand billing needs attention</h2
             >
           } @else if (isLargestPlan()) {
             <h2 class="banner-headline fancy" i18n
@@ -44,7 +44,7 @@
                    and the portal cannot change its plan. The cap is the one
                    self-serve remedy; a larger plan is a conversation. -->
               <p class="banner-usage" i18n>
-                You've reached your overage spend cap, and about
+                You've reached your spend cap, and about
                 <strong>{{ eventThrottleRate() }}%</strong> of your incoming
                 events are being dropped. Raise your cap below to keep
                 collecting events, or get in touch and we'll help you find a
@@ -56,21 +56,21 @@
                 <p class="banner-usage" i18n>
                   You're at your event limit on our largest plan, and about
                   <strong>{{ eventThrottleRate() }}%</strong> of your incoming
-                  events are being dropped. Turn on overage billing below to
+                  events are being dropped. Turn on on-demand billing below to
                   keep collecting events, or get in touch and we'll help you
                   find a fit.
                 </p>
               } @else if (paid()) {
                 <p class="banner-usage" i18n>
                   About <strong>{{ eventThrottleRate() }}%</strong> of your
-                  incoming events are being dropped. Turn on overage billing
+                  incoming events are being dropped. Turn on on-demand billing
                   below to keep collecting events, or change your plan.
                 </p>
               } @else {
                 <p class="banner-usage" i18n>
                   About <strong>{{ eventThrottleRate() }}%</strong> of your
                   incoming events are being dropped. Upgrade to keep collecting
-                  events, or turn on overage billing below.
+                  events, or turn on on-demand billing below.
                 </p>
               }
             }
@@ -79,7 +79,7 @@
                    not restore a metered item that is gone on the billing side,
                    and the card below says raising the cap will not help. -->
               <p class="banner-usage" i18n>
-                Overage billing is switched on but is not running, and about
+                On-demand billing is switched on but is not running, and about
                 <strong>{{ eventThrottleRate() }}%</strong> of your incoming
                 events are being dropped. You are not being charged for it.
                 Please get in touch and we'll sort it out with you.

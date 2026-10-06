@@ -55,7 +55,7 @@ describe("UpgradeBannerComponent throttle states", () => {
     expect(text).toContain("Upgrade to restore full coverage");
     expect(text).toContain("Upgrade to 500k events/mo");
     expect(text).not.toContain("Raise your cap");
-    expect(text).not.toContain("turn on overage billing below");
+    expect(text).not.toContain("turn on on-demand billing below");
   });
 
   it("stays quiet on a failed diagnosis when nothing is being dropped", () => {
@@ -76,7 +76,7 @@ describe("UpgradeBannerComponent throttle states", () => {
 
   it("offers upgrade or the overage toggle when overage is off", () => {
     const text = render("no-overage");
-    expect(text).toContain("turn on overage billing below");
+    expect(text).toContain("turn on on-demand billing below");
     expect(text).toContain("Upgrade");
   });
 
@@ -139,7 +139,7 @@ describe("UpgradeBannerComponent for a paid org", () => {
   // into it (the named upgrade, the pricing dialog) is offered.
   it("offers a plan change, never a named upgrade or the pricing dialog", () => {
     const text = render("no-overage");
-    expect(text).toContain("Turn on overage billing below");
+    expect(text).toContain("Turn on on-demand billing below");
     expect(text).toContain("or change your plan");
     expect(buttons()).toEqual(["Change plan"]);
   });
