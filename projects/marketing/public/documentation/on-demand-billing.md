@@ -2,7 +2,7 @@
 
 On-demand billing lets a hosted GlitchTip organization keep collecting events after it passes its plan limit, instead of being throttled. You pay only for the events above your limit, and you set a monthly spend cap so the extra spend stops at an amount you choose.
 
-It is opt-in, off by default, and available on any paid plan with an event limit. In your subscription settings it is labeled "Overage billing".
+It is opt-in, off by default, and available on any paid plan with an event limit.
 
 ## What happens when you pass your limit
 
@@ -12,7 +12,7 @@ With on-demand billing on, events above your limit keep flowing and are billed a
 
 ## What counts as an event
 
-Overage uses the same event math as your plan limit. Each error and each performance transaction counts as one event. Uptime checks and logs are lighter: ten of either count as one event. Release and debug file uploads count as one event per megabyte.
+On-demand billing uses the same event math as your plan limit. Each error and each performance transaction counts as one event. Uptime checks and logs are lighter: ten of either count as one event. Release and debug file uploads count as one event per megabyte.
 
 ## How you're charged
 
@@ -26,34 +26,34 @@ Events above your plan limit are priced per event, quoted per 1,000 for readabil
 
 Each tier prices only the events that fall within it, the same way income tax brackets work.
 
-Here is a worked example. You're on the Small plan (100,000 events) and a bad deploy sends 300,000 events in one month. The extra 200,000 events cost $34. If your cap is $50, you pay $34. If the deploy had been far worse, $50 is the most the overage could ever be.
+Here is a worked example. You're on the Small plan (100,000 events) and a bad deploy sends 300,000 events in one month. The extra 200,000 events cost $34. If your cap is $50, you pay $34. If the deploy had been far worse, $50 is the most on-demand usage could ever cost.
 
-Overage charges appear on your regular Stripe invoice at the end of each usage cycle, on top of your plan price. Your invoice shows exactly what you owe. The figure in your subscription settings is an estimate, and where the two differ our billing is designed to err toward charging you less, not more.
+On-demand charges appear on your regular Stripe invoice at the end of each usage cycle, on top of your plan price. Your invoice shows exactly what you owe. The figure in your subscription settings is an estimate, and where the two differ our billing is designed to err toward charging you less, not more.
 
 ## Setting your spend cap
 
 You choose a monthly cap when you turn on on-demand billing, and you can change it anytime from your subscription settings. Caps up to $10,000 per cycle are self-serve; contact us if you need more.
 
-Raising the cap takes effect right away. Lowering it applies to future usage only: overage already billed this cycle stays on your invoice, so a mid-cycle decrease can't drop below what you've already used. Your spend against the cap resets at the start of each usage cycle; the cap itself stays until you change it.
+Raising the cap takes effect right away. Lowering it applies to future usage only: on-demand usage already billed this cycle stays on your invoice, so a mid-cycle decrease can't drop below what you've already used. Your spend against the cap resets at the start of each usage cycle; the cap itself stays until you change it.
 
 ## Annual plans
 
-Annual plans meter usage in monthly cycles, the same as monthly plans. Your event limit and your spend cap both apply per month, and any overage is invoiced monthly, separate from your annual plan payment.
+Annual plans meter usage in monthly cycles, the same as monthly plans. Your event limit and your spend cap both apply per month, and any on-demand usage is invoiced monthly, separate from your annual plan payment.
 
 ## Turning it on and off
 
-Only organization owners can turn on on-demand billing. Open Settings, go to Subscription, and use the Overage billing toggle.
+Only organization owners can turn on on-demand billing. Open Settings, go to Subscription, and use the On-demand billing toggle.
 
 Two things to know:
 
 - If you turn it on partway through a cycle while already over your limit, the events accepted above your limit earlier in that cycle are billed too, up to your cap.
-- You can turn it off at any time. Overage already used this cycle still appears on that cycle's invoice; nothing new is billed after you turn it off.
+- You can turn it off at any time. On-demand charges from this cycle still appear on that cycle's invoice; nothing new is billed after you turn it off.
 
 ## Common questions
 
 ### Can my bill surprise me?
 
-No. Your invoice is your plan price plus overage. Once you reach the cap, no further overage is charged and throttling resumes. The one thing to keep in mind is that lowering the cap mid-cycle does not reduce overage already used.
+No. Your invoice is your plan price plus on-demand usage. Once you reach the cap, no further on-demand usage is charged and throttling resumes. The one thing to keep in mind is that lowering the cap mid-cycle does not reduce on-demand charges already incurred.
 
 ### Will you warn me before I hit my cap?
 
