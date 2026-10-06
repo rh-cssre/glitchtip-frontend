@@ -24,7 +24,9 @@
                snackbar also branch on, so the three surfaces cannot disagree.
                visible() has already dropped the states with nothing honest to
                say ("throttled" is the server catching up with a change; the
-               card below owns that notice). -->
+               card below owns that notice). A paid org is told to change plan,
+               never to upgrade to a named one: its plan changes in the portal,
+               which picks the plan itself. -->
           @if (throttleState() === "stalled-broken") {
             <h2 class="banner-headline fancy" i18n
               >Overage billing needs attention</h2
@@ -38,22 +40,16 @@
           }
           @switch (throttleState()) {
             @case ("cap") {
-              @if (isLargestPlan()) {
-                <p class="banner-usage" i18n>
-                  You've reached your overage spend cap, and about
-                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
-                  events are being dropped. Raise your cap below to keep
-                  collecting events, or get in touch and we'll help you find a
-                  fit.
-                </p>
-              } @else {
-                <p class="banner-usage" i18n>
-                  You've reached your overage spend cap, and about
-                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
-                  events are being dropped. Raise your cap below to keep
-                  collecting events, or upgrade for more included events.
-                </p>
-              }
+              <!-- Overage is on, so the subscription carries the metered item
+                   and the portal cannot change its plan. The cap is the one
+                   self-serve remedy; a larger plan is a conversation. -->
+              <p class="banner-usage" i18n>
+                You've reached your overage spend cap, and about
+                <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                events are being dropped. Raise your cap below to keep
+                collecting events, or get in touch and we'll help you find a
+                fit.
+              </p>
             }
             @case ("no-overage") {
               @if (isLargestPlan()) {
@@ -63,6 +59,12 @@
                   events are being dropped. Turn on overage billing below to
                   keep collecting events, or get in touch and we'll help you
                   find a fit.
+                </p>
+              } @else if (paid()) {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Turn on overage billing
+                  below to keep collecting events, or change your plan.
                 </p>
               } @else {
                 <p class="banner-usage" i18n>
@@ -84,8 +86,8 @@
               </p>
             }
             @default {
-              <!-- "unavailable" and "stalled-plan": upgrading is the one real
-                   remedy, so this is the plain upgrade pitch. Also where a
+              <!-- "unavailable" and "stalled-plan": a plan change is the one
+                   real remedy, so this is the plain pitch. Also where a
                    diagnosis that failed to load lands, which is why this names
                    no overage control: the rate is all we can stand behind. -->
               @if (isLargestPlan()) {
@@ -95,9 +97,22 @@
                   you find a fit.
                 </p>
               } @else if (isHardStopped()) {
+                @if (paid()) {
+                  <p class="banner-usage" i18n>
+                    Your events are being rejected. Change your plan to resume
+                    event tracking.
+                  </p>
+                } @else {
+                  <p class="banner-usage" i18n>
+                    Your events are being rejected. Upgrade to resume event
+                    tracking.
+                  </p>
+                }
+              } @else if (paid()) {
                 <p class="banner-usage" i18n>
-                  Your events are being rejected. Upgrade to resume event
-                  tracking.
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Change your plan to restore
+                  full coverage.
                 </p>
               } @else {
                 <p class="banner-usage" i18n>
@@ -124,11 +139,7 @@
         }
         @if (!hideActions()) {
           <div class="banner-actions">
-            @if (
-              hasNextPlan() &&
-              !isSuspended() &&
-              throttleState() !== "stalled-broken"
-            ) {
+            @if (showUpgrade()) {
               <button
                 mat-flat-button
                 color="primary"
@@ -145,16 +156,36 @@
                   <mat-spinner class="upgrade-button-spinner" diameter="18" />
                 }
               </button>
+            } @else if (showChangePlan()) {
+              <button
+                mat-flat-button
+                color="primary"
+                class="upgrade-button"
+                [disabled]="changePlanLoading()"
+                (click)="onChangePlan()"
+              >
+                <span
+                  [style.visibility]="
+                    changePlanLoading() ? 'hidden' : 'visible'
+                  "
+                  i18n
+                  >Change plan</span
+                >
+                @if (changePlanLoading()) {
+                  <mat-spinner class="upgrade-button-spinner" diameter="18" />
+                }
+              </button>
             }
             <!-- Comparing plans is a dead end for all of these: the largest
                  plan has nothing above it, a paused org is not paused over
                  capacity, and a broken overage stall is ours to fix. Offer the
-                 conversation instead. -->
+                 conversation instead. A paid org never gets the comparison
+                 either: its Select button is Checkout. -->
             @if (contactInstead() && contactEmail()) {
               <a mat-stroked-button href="mailto:{{ contactEmail() }}" i18n>
                 Contact us
               </a>
-            } @else {
+            } @else if (!paid()) {
               <button mat-stroked-button (click)="onComparePlans()" i18n>
                 Compare Plans
               </button>
