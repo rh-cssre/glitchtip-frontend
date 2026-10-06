@@ -2,7 +2,7 @@
 // polyfill is already loaded by the test builder, and the app build picks the
 // type up via main.ts, which the spec tsconfig does not include.
 import type {} from "@angular/localize/init";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { UpgradeBannerComponent } from "./upgrade-banner.component";
 import type { OverageThrottleState } from "src/app/api/subscriptions/overage-throttle-state";
@@ -135,55 +135,46 @@ describe("UpgradeBannerComponent for a paid org", () => {
     fixture = TestBed.createComponent(UpgradeBannerComponent);
   });
 
-  // Checkout creates a subscription next to the paid one, so neither path
-  // into it (the named upgrade, the pricing dialog) is offered.
-  it("offers a plan change, never a named upgrade or the pricing dialog", () => {
+  // Checkout creates a subscription next to the paid one, and the portal
+  // cannot change the plan of one that has ever carried the metered item, so
+  // every paid state offers a conversation.
+  it("offers the on-demand toggle or a conversation, never Checkout", () => {
     const text = render("no-overage");
     expect(text).toContain("Turn on on-demand billing below");
-    expect(text).toContain("or change your plan");
-    expect(buttons()).toEqual(["Change plan"]);
+    expect(text).toContain("get in touch to change your plan");
+    expect(buttons()).toEqual(["Contact us"]);
   });
 
-  it("routes the plan change to its own output", () => {
-    render("no-overage");
-    const upgrade = vi.fn();
-    const changePlan = vi.fn();
-    fixture.componentInstance.upgradeClick.subscribe(upgrade);
-    fixture.componentInstance.changePlanClick.subscribe(changePlan);
-    (fixture.nativeElement as HTMLElement)
-      .querySelector<HTMLButtonElement>("button")!
-      .click();
-    expect(changePlan).toHaveBeenCalledOnce();
-    expect(upgrade).not.toHaveBeenCalled();
-  });
-
-  it("keeps the plain plan-change pitch when overage is not on offer", () => {
+  it("keeps the plain pitch, as a conversation, when on-demand is not on offer", () => {
     const text = render("unavailable");
-    expect(text).toContain("Change your plan to restore full coverage");
-    expect(buttons()).toEqual(["Change plan"]);
+    expect(text).toContain(
+      "Get in touch to change your plan and restore full coverage",
+    );
+    expect(buttons()).toEqual(["Contact us"]);
   });
 
-  it("names the plan change when events are rejected outright", () => {
+  it("asks for a conversation when events are rejected outright", () => {
     const text = render("unavailable", { eventThrottleRate: 100 });
-    expect(text).toContain("Change your plan to resume event tracking");
-    expect(buttons()).toEqual(["Change plan"]);
+    expect(text).toContain(
+      "Get in touch to change your plan and resume event tracking",
+    );
+    expect(buttons()).toEqual(["Contact us"]);
   });
 
-  // The portal cannot change the plan of a subscription that also carries
-  // the metered item, so a plan change is not offered at the cap.
+  it("asks for a conversation when on-demand is on but the plan cannot use it", () => {
+    render("stalled-plan");
+    expect(buttons()).toEqual(["Contact us"]);
+  });
+
+  it("asks for a conversation when the diagnosis failed to load", () => {
+    render("unknown", { throttleStateUnavailable: true });
+    expect(buttons()).toEqual(["Contact us"]);
+  });
+
   it("points an org at its cap to the cap control and a conversation", () => {
     const text = render("cap");
     expect(text).toContain("Raise your cap below");
     expect(text).toContain("get in touch");
     expect(buttons()).toEqual(["Contact us"]);
-  });
-
-  it("shows the portal spinner on the plan change", () => {
-    render("no-overage", { changePlanLoading: true });
-    const button = (
-      fixture.nativeElement as HTMLElement
-    ).querySelector<HTMLButtonElement>("button")!;
-    expect(button.disabled).toBe(true);
-    expect(button.querySelector("mat-spinner")).not.toBeNull();
   });
 });

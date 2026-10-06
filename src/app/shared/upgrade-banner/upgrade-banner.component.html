@@ -24,9 +24,8 @@
                snackbar also branch on, so the three surfaces cannot disagree.
                visible() has already dropped the states with nothing honest to
                say ("throttled" is the server catching up with a change; the
-               card below owns that notice). A paid org is told to change plan,
-               never to upgrade to a named one: its plan changes in the portal,
-               which picks the plan itself. -->
+               card below owns that notice). A paid org is asked to get in
+               touch to change plan, never to upgrade to a named one. -->
           @if (throttleState() === "stalled-broken") {
             <h2 class="banner-headline fancy" i18n
               >On-demand billing needs attention</h2
@@ -40,9 +39,8 @@
           }
           @switch (throttleState()) {
             @case ("cap") {
-              <!-- Overage is on, so the subscription carries the metered item
-                   and the portal cannot change its plan. The cap is the one
-                   self-serve remedy; a larger plan is a conversation. -->
+              <!-- The cap is the one self-serve remedy; a larger plan is a
+                   conversation. -->
               <p class="banner-usage" i18n>
                 You've reached your spend cap, and about
                 <strong>{{ eventThrottleRate() }}%</strong> of your incoming
@@ -64,7 +62,8 @@
                 <p class="banner-usage" i18n>
                   About <strong>{{ eventThrottleRate() }}%</strong> of your
                   incoming events are being dropped. Turn on on-demand billing
-                  below to keep collecting events, or change your plan.
+                  below to keep collecting events, or get in touch to change
+                  your plan.
                 </p>
               } @else {
                 <p class="banner-usage" i18n>
@@ -99,8 +98,8 @@
               } @else if (isHardStopped()) {
                 @if (paid()) {
                   <p class="banner-usage" i18n>
-                    Your events are being rejected. Change your plan to resume
-                    event tracking.
+                    Your events are being rejected. Get in touch to change your
+                    plan and resume event tracking.
                   </p>
                 } @else {
                   <p class="banner-usage" i18n>
@@ -111,8 +110,8 @@
               } @else if (paid()) {
                 <p class="banner-usage" i18n>
                   About <strong>{{ eventThrottleRate() }}%</strong> of your
-                  incoming events are being dropped. Change your plan to restore
-                  full coverage.
+                  incoming events are being dropped. Get in touch to change your
+                  plan and restore full coverage.
                 </p>
               } @else {
                 <p class="banner-usage" i18n>
@@ -156,31 +155,12 @@
                   <mat-spinner class="upgrade-button-spinner" diameter="18" />
                 }
               </button>
-            } @else if (showChangePlan()) {
-              <button
-                mat-flat-button
-                color="primary"
-                class="upgrade-button"
-                [disabled]="changePlanLoading()"
-                (click)="onChangePlan()"
-              >
-                <span
-                  [style.visibility]="
-                    changePlanLoading() ? 'hidden' : 'visible'
-                  "
-                  i18n
-                  >Change plan</span
-                >
-                @if (changePlanLoading()) {
-                  <mat-spinner class="upgrade-button-spinner" diameter="18" />
-                }
-              </button>
             }
             <!-- Comparing plans is a dead end for all of these: the largest
                  plan has nothing above it, a paused org is not paused over
-                 capacity, and a broken overage stall is ours to fix. Offer the
-                 conversation instead. A paid org never gets the comparison
-                 either: its Select button is Checkout. -->
+                 capacity, a broken on-demand stall is ours to fix, and a paid
+                 org's Select button would be Checkout. Offer the conversation
+                 instead. -->
             @if (contactInstead() && contactEmail()) {
               <a mat-stroked-button href="mailto:{{ contactEmail() }}" i18n>
                 Contact us
