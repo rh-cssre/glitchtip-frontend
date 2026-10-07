@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import {
   MatSnackBarAction,
@@ -34,4 +39,14 @@ export class OverLimitSnackbar {
   readonly throttleRate = this.data.throttleRate;
   /** Which remedy to offer; `unknown` until overage status loads. */
   readonly throttleState = this.subscriptionService.throttleState;
+  /**
+   * Only a free org can change plan itself; a paid one gets in touch, as the
+   * upgrade banner says. `null` until the subscription loads, so a paid org is
+   * never told to upgrade in the meantime.
+   */
+  readonly paid = computed(() => {
+    const resource = this.subscriptionService.subscriptionResource;
+    if (!resource.hasValue()) return null;
+    return (this.subscriptionService.subscription()?.effectivePrice ?? 0) > 0;
+  });
 }

@@ -13,21 +13,36 @@
   </a>
   @switch (throttleState()) {
     @case ("cap") {
+      <!-- This and "no-overage" need a plan on-demand billing can attach to,
+           so the org is paid and changes plan through us, never upgrades. -->
       <span i18n>
-        to upgrade or raise your spend cap and keep collecting events.</span
+        to raise your spend cap or change your plan and keep collecting
+        events.</span
       >
     }
     @case ("no-overage") {
       <span i18n>
-        to upgrade or turn on on-demand billing and keep collecting
+        to turn on on-demand billing or change your plan and keep collecting
         events.</span
       >
     }
     @case ("stalled-plan") {
-      <span i18n>
-        to upgrade. Your current plan cannot be billed for on-demand usage, so
-        raising your spend cap will not change this.
-      </span>
+      @if (paid()) {
+        <span i18n>
+          to change your plan. Your current plan cannot be billed for on-demand
+          usage, so raising your spend cap will not change this.
+        </span>
+      } @else if (paid() === false) {
+        <span i18n>
+          to upgrade. Your current plan cannot be billed for on-demand usage, so
+          raising your spend cap will not change this.
+        </span>
+      } @else {
+        <span i18n>
+          for details. Your current plan cannot be billed for on-demand usage,
+          so raising your spend cap will not change this.
+        </span>
+      }
     }
     @case ("stalled-broken") {
       <span i18n>
@@ -45,7 +60,13 @@
       </span>
     }
     @default {
-      <span i18n> to upgrade and keep collecting events.</span>
+      @if (paid()) {
+        <span i18n> to change your plan and keep collecting events.</span>
+      } @else if (paid() === false) {
+        <span i18n> to upgrade and keep collecting events.</span>
+      } @else {
+        <span i18n> for details.</span>
+      }
     }
   }
 </span>
