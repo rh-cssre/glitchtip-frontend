@@ -39,7 +39,10 @@
             >
               <div class="pagination-container">
                 <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
-                <gt-pagination-buttons [paginator]="paginator()" />
+                <gt-pagination-buttons
+                  [paginator]="paginator()"
+                  [settled]="initialLoadComplete()"
+                />
               </div>
             </th>
           </ng-container>
@@ -114,7 +117,11 @@
               class="zero-states-cell"
               [attr.colspan]="displayedColumns().length"
             >
-              @if (!loading()) {
+              @if (hasError()) {
+                @for (error of errors(); track $index) {
+                  <div class="body-text-strong">{{ error.msg || error }}</div>
+                }
+              } @else if (!loading()) {
                 <gt-empty-state
                   icon="share_eta"
                   i18n-title

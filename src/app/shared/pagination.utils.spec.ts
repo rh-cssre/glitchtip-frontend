@@ -65,6 +65,13 @@ describe("getPaginationHeaders", () => {
       /Missing required pagination headers/,
     );
   });
+
+  // Why every caller has to settle the error path before reaching this.
+  it("throws on a response with no pagination headers at all", () => {
+    expect(() => getPaginationHeaders(responseWith({}))).toThrowError(
+      /Missing required pagination headers/,
+    );
+  });
 });
 
 describe("getCursor", () => {

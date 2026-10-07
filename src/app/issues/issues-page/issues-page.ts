@@ -92,6 +92,7 @@ export class IssuesPage implements OnInit, OnDestroy {
   paginator = this.service.paginator;
   loading = this.service.loading;
   initialLoad = this.service.initialLoad;
+  initialLoadComplete = this.service.initialLoadComplete;
   form = new FormGroup({
     query: new FormControl(""),
   });

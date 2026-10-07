@@ -10,6 +10,24 @@
 <section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
   <div class="table-container">
     <gt-loading-overlay [loading]="isLoading()" label="Loading releases">
+      @if (errors()?.length) {
+        <div class="table-empty-states">
+          @if (errors()?.length === 1) {
+            <h3 class="body-text-strong">
+              There was an error processing your request
+            </h3>
+          } @else {
+            <h3 class="body-text-strong">
+              There were errors while processing your request
+            </h3>
+          }
+          <ul>
+            @for (error of errors(); track $index) {
+              <li>{{ error.msg || error }}</li>
+            }
+          </ul>
+        </div>
+      }
       @if (releases(); as releases) {
         <table mat-table class="mat-elevation-z2" [dataSource]="releases">
           <ng-container matColumnDef="header-spacing">
@@ -20,7 +38,10 @@
             <th mat-header-cell *matHeaderCellDef class="table-header__actions">
               <div>
                 <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
-                <gt-pagination-buttons [paginator]="paginator()" />
+                <gt-pagination-buttons
+                  [paginator]="paginator()"
+                  [settled]="initialLoadComplete()"
+                />
               </div>
             </th>
           </ng-container>
@@ -61,33 +82,18 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           <tr *matNoDataRow>
             <td [attr.colspan]="displayedColumns.length">
-              @if (initialLoadComplete() === true && isLoading() === false) {
-                @if (errors()?.length) {
-                  <div class="table-empty-states">
-                    @if (errors()?.length === 1) {
-                      <h3 class="body-text-strong">
-                        There was an error processing your request
-                      </h3>
-                    } @else {
-                      <h3 class="body-text-strong">
-                        There were errors while processing your request
-                      </h3>
-                    }
-                    <ul>
-                      @for (error of errors(); track error) {
-                        <li>{{ error }}</li>
-                      }
-                    </ul>
-                  </div>
-                } @else {
-                  <gt-empty-state
-                    icon="rocket_launch"
-                    i18n-title
-                    title="No releases"
-                    i18n-message
-                    message="Releases appear here once you send release data with your events."
-                  />
-                }
+              @if (
+                initialLoadComplete() === true &&
+                isLoading() === false &&
+                !errors()?.length
+              ) {
+                <gt-empty-state
+                  icon="rocket_launch"
+                  i18n-title
+                  title="No releases"
+                  i18n-message
+                  message="Releases appear here once you send release data with your events."
+                />
               }
             </td>
           </tr>

@@ -1,9 +1,5 @@
 import { computed, Injectable, resource, signal } from "@angular/core";
-import {
-  client,
-  handleError,
-  NinjaErrorResponse,
-} from "src/app/shared/api/api";
+import { client, handleError } from "src/app/shared/api/api";
 import {
   getPaginationHeaders,
   getPaginator,
@@ -30,12 +26,15 @@ export class UserReportsService {
           },
         },
       );
-      let errors: NinjaErrorResponse | null = null;
       if (!data) {
-        errors = handleError(error, response);
+        return {
+          data,
+          pagination: undefined,
+          errors: handleError(error, response),
+        };
       }
       const pagination = getPaginationHeaders(response);
-      return { data, pagination, errors };
+      return { data, pagination, errors: null };
     },
   });
   // Keep the last page visible during a reload so the list doesn't blank out.

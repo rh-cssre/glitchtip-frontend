@@ -46,7 +46,9 @@ export class MonitorChecks {
   monitorChecks = this.service.monitorChecks;
   paginator = this.service.paginator;
   loading = this.service.loading;
-  initialLoadComplete = this.service.initialLoadComplete
+  initialLoadComplete = this.service.initialLoadComplete;
+  errors = this.service.errors;
+  hasError = this.service.hasError;
   displayedColumns = ["status", "reason", "responseTime", "startCheck"];
 
   constructor() {

@@ -42,7 +42,10 @@ export class UserService extends StatefulService<UserState> {
       params: { path: mePath },
     },
   }));
-  user = computed(() => this.userResource.value());
+  user = computed(() => {
+    if (this.userResource.error()) return undefined;
+    return this.userResource.value();
+  });
   // Tracks throttle warnings dismissed by user in current session
   throttleWarningDismissedOrgs = computed(
     () => this.state().throttleWarningDismissedOrgs,

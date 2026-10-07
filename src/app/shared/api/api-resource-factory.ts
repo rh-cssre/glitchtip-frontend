@@ -15,10 +15,11 @@ import {
   PaginationState,
 } from "../pagination.utils";
 import {
+  ApiError,
   apiPaths,
   client,
+  getNinjaErrorResponse,
   handleError,
-  isNinjaErrorResponse,
   NinjaErrorResponse,
 } from "./api";
 
@@ -104,16 +105,13 @@ function createObjectResource<
 
       if (error) {
         if (abortSignal.aborted) return undefined;
-        throw handleError(error, response);
+        throw new ApiError(handleError(error, response));
       }
       return data as TData;
     },
   });
 
-  const serverError = computed(() => {
-    const err = res.error();
-    return isNinjaErrorResponse(err) ? err : undefined;
-  });
+  const serverError = computed(() => getNinjaErrorResponse(res.error()));
 
   return Object.assign(res, { serverError });
 }
@@ -202,7 +200,7 @@ function createFetchAllResource<
 
         if (error) {
           if (abortSignal.aborted) return undefined;
-          throw handleError(error, response);
+          throw new ApiError(handleError(error, response));
         }
 
         if (data && Array.isArray(data)) {
@@ -217,10 +215,7 @@ function createFetchAllResource<
     },
   });
 
-  const serverError = computed(() => {
-    const err = res.error();
-    return isNinjaErrorResponse(err) ? err : undefined;
-  });
+  const serverError = computed(() => getNinjaErrorResponse(res.error()));
 
   return Object.assign(res, { serverError });
 }
@@ -264,7 +259,7 @@ function createPaginatedResource<
         if (abortSignal.aborted) {
           return { data: undefined, pagination: undefined };
         }
-        throw handleError(error, response);
+        throw new ApiError(handleError(error, response));
       }
 
       return {
@@ -275,14 +270,15 @@ function createPaginatedResource<
   });
 
   const paginator = computed(() => {
+    // .value() throws in the error state, and there is no pagination anyway.
+    if (res.error()) {
+      return undefined;
+    }
     const paginationState = res.value()?.pagination;
     return getPaginator(paginationState);
   });
 
-  const serverError = computed(() => {
-    const err = res.error();
-    return isNinjaErrorResponse(err) ? err : undefined;
-  });
+  const serverError = computed(() => getNinjaErrorResponse(res.error()));
 
   return Object.assign(res, { paginator, serverError });
 }

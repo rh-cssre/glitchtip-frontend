@@ -17,7 +17,10 @@
               <mat-button-toggle [value]="true">Incidents</mat-button-toggle>
             </mat-button-toggle-group>
             <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
-            <gt-pagination-buttons [paginator]="paginator()" />
+            <gt-pagination-buttons
+              [paginator]="paginator()"
+              [settled]="initialLoadComplete()"
+            />
           </div>
         </th>
       </ng-container>
@@ -85,7 +88,11 @@
       <tr *matNoDataRow>
         <td [attr.colspan]="displayedColumns.length">
           <div class="table-empty-states">
-            @if (initialLoadComplete() === true && loading() === false) {
+            @if (hasError()) {
+              @for (error of errors(); track $index) {
+                <div class="body-text-strong">{{ error.msg || error }}</div>
+              }
+            } @else if (initialLoadComplete() === true && loading() === false) {
               <div i18n class="body-text-strong"
                 >No monitor checks were found.</div
               >

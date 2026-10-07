@@ -9,7 +9,12 @@ vi.hoisted(() => {
   ) => parts.join("");
 });
 
-import { handleError, isNinjaErrorResponse } from "./api-errors";
+import {
+  ApiError,
+  getNinjaErrorResponse,
+  handleError,
+  isNinjaErrorResponse,
+} from "./api-errors";
 import { SERVER_ERROR, UNHANDLED_ERROR } from "../../constants";
 
 /**
@@ -87,5 +92,44 @@ describe("handleError", () => {
 
   it("falls back to a generic message for an unhandled status", () => {
     expect(handleError(null, res(418)).detail[0].msg).toBe(UNHANDLED_ERROR);
+  });
+});
+
+/**
+ * Angular's `resource` only keeps a readable error state when the rejection is
+ * a real Error. A plain object made `.value()` throw on every read, freezing
+ * list views behind a spinner until the page was reloaded.
+ */
+describe("ApiError", () => {
+  it("is a real Error, so a resource can hold it as an error state", () => {
+    const err = new ApiError(handleError(null, res(500)));
+
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toBe(SERVER_ERROR);
+  });
+
+  it("carries the ninja payload for serverError to read back", () => {
+    const payload = handleError({ detail: [{ msg: "nope" }] }, res(422));
+
+    expect(new ApiError(payload).response).toBe(payload);
+  });
+});
+
+describe("getNinjaErrorResponse", () => {
+  it("unwraps the payload from a thrown ApiError", () => {
+    const payload = handleError(null, res(500));
+
+    expect(getNinjaErrorResponse(new ApiError(payload))).toBe(payload);
+  });
+
+  it("still accepts a bare payload thrown by older call sites", () => {
+    const payload = { detail: [{ msg: "nope" }] };
+
+    expect(getNinjaErrorResponse(payload)).toBe(payload);
+  });
+
+  it("returns undefined for anything else", () => {
+    expect(getNinjaErrorResponse(new Error("boom"))).toBeUndefined();
+    expect(getNinjaErrorResponse(undefined)).toBeUndefined();
   });
 });

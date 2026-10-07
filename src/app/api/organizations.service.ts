@@ -40,9 +40,15 @@ export class OrganizationsService {
       },
     }),
   );
-  organizations = computed(() => this.organizationsResource.value() || []);
+  organizations = computed(() => {
+    if (this.organizationsResource.error()) return [];
+    return this.organizationsResource.value() || [];
+  });
   organizationsCount = computed(() => this.organizations.length);
-  activeOrganization = computed(() => this.activeOrganizationResource.value());
+  activeOrganization = computed(() => {
+    if (this.activeOrganizationResource.error()) return undefined;
+    return this.activeOrganizationResource.value();
+  });
   organizationsLoaded = computed(
     () =>
       this.organizationsResource.hasValue() ||

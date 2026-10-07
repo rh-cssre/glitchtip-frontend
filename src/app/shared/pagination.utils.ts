@@ -37,7 +37,12 @@ export const processLinkHeader = (linkHeader: string) =>
     return acc;
   }, {});
 
-/** Parse pagination headers from API response */
+/**
+ * Parse pagination headers from API response.
+ *
+ * Throws when a header is missing, which is always the case on an error
+ * response, so callers must settle the error path before calling this.
+ */
 export function getPaginationHeaders(response: {
   headers: Headers;
 }): PaginationState {

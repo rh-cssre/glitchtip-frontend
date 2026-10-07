@@ -29,6 +29,31 @@ export function isNinjaErrorResponse(
   return true;
 }
 
+/**
+ * Carries a `NinjaErrorResponse` as a real `Error`.
+ *
+ * Angular's `resource` rejects a non-Error rejection: `.value()` then throws
+ * `ResourceValueError` on every read, which escapes change detection and
+ * freezes the view mid-render. Throwing this keeps the error state readable.
+ */
+export class ApiError extends Error {
+  constructor(readonly response: NinjaErrorResponse) {
+    super(response.detail[0]?.msg ?? UNHANDLED_ERROR);
+    this.name = "ApiError";
+  }
+}
+
+/** Type guard for the payload carried by a thrown `ApiError`. */
+export function getNinjaErrorResponse(
+  err: unknown,
+): NinjaErrorResponse | undefined {
+  if (err instanceof ApiError) {
+    return err.response;
+  }
+  // Tolerate a bare payload: callers threw one directly before ApiError existed.
+  return isNinjaErrorResponse(err) ? err : undefined;
+}
+
 export function handleError(
   error: any,
   response: Response,
