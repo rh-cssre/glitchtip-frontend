@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import type { components } from "../api-schema";
 import {
   capAdjustable,
-  capBelowAccrued,
+  capBelowBilled,
   capReached,
   isOverageInactive,
   overageInactiveCause,
@@ -253,30 +253,33 @@ describe("overageInactiveCause", () => {
   });
 });
 
-describe("capBelowAccrued", () => {
+describe("capBelowBilled", () => {
   it("is false before the status loads", () => {
-    expect(capBelowAccrued(null)).toBe(false);
+    expect(capBelowBilled(null)).toBe(false);
   });
 
-  it("is false while the cap still covers what has been used", () => {
-    expect(capBelowAccrued(status({ overageUnits: 6012 }))).toBe(false);
+  it("is false while the cap still covers what has been billed", () => {
+    expect(capBelowBilled(status({ overageCostCents: 102 }))).toBe(false);
   });
 
   it("is false with no cap set", () => {
-    expect(capBelowAccrued(status({ capUnits: 0, overageUnits: 6012 }))).toBe(
+    expect(capBelowBilled(status({ capCents: 0, overageCostCents: 102 }))).toBe(
       false,
     );
   });
 
-  it("is false at the cap, where nothing exceeds it yet", () => {
+  // The regression: usage keeps arriving while throttling ramps in, so a
+  // reached cap always has usage past it. That usage is free, and the cap was
+  // never lowered.
+  it("is false at a reached cap with usage past it", () => {
     expect(
-      capBelowAccrued(status({ capUnits: 6012, overageUnits: 6012 })),
+      capBelowBilled(status({ overageUnits: 300000, overageCostCents: 5000 })),
     ).toBe(false);
   });
 
-  it("is true once the cap is set below what the cycle has used", () => {
+  it("is true once the cap is lowered below what has been billed", () => {
     expect(
-      capBelowAccrued(status({ capUnits: 5882, overageUnits: 6012 })),
+      capBelowBilled(status({ capCents: 100, overageCostCents: 102 })),
     ).toBe(true);
   });
 
@@ -284,8 +287,8 @@ describe("capBelowAccrued", () => {
   // that is only drawn while overage is live.
   it("is false when overage is switched off", () => {
     expect(
-      capBelowAccrued(
-        status({ enabled: false, capUnits: 5882, overageUnits: 6012 }),
+      capBelowBilled(
+        status({ enabled: false, capCents: 100, overageCostCents: 102 }),
       ),
     ).toBe(false);
   });

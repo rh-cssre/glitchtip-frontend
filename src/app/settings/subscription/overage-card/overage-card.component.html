@@ -23,7 +23,7 @@
             <p class="overage-tagline body-text" i18n>
               Keep collecting events past your plan limit and pay only for the
               overflow, up to a monthly cap you set. At the cap, throttling
-              resumes, so no further overage is charged.
+              resumes, so no further on-demand usage is charged.
             </p>
           }
         </div>
@@ -141,15 +141,14 @@
             [value]="capProgressPercent()"
             [color]="capReached() ? 'warn' : 'primary'"
           />
-          @if (capBelowAccrued()) {
+          @if (capBelowBilled()) {
             <!-- The server floors the cap at what it has already billed, so a
                  cap set below that stops growth without retracting the charge;
                  without this line the clamped bar reads as a bug. -->
             <p class="overage-alert" i18n>
-              Your cap is set below what this cycle has already used. The
-              estimate above is what you will be billed. Lowering the cap stops
-              further overage charges, it does not reduce what has already been
-              used.
+              Your cap is below what this cycle has already billed. Lowering the
+              cap stops new on-demand charges, but charges already made stay on
+              your invoice. The estimate above is what you will pay.
             </p>
           }
         }
@@ -251,7 +250,8 @@
     <p class="body-text" i18n>
       You're only charged for events above your plan limit, up to a
       <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
-      change anytime. Once the cap is reached, no further overage is charged.
+      change anytime. Once the cap is reached, no further on-demand usage is
+      charged.
     </p>
   </mat-dialog-content>
   <mat-dialog-actions>

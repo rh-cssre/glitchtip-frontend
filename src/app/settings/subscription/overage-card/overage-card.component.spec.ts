@@ -10,7 +10,7 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
 import {
   capAdjustable,
-  capBelowAccrued,
+  capBelowBilled,
   capReached,
   isOverageInactive,
   overageInactiveCause,
@@ -87,7 +87,7 @@ describe("OverageCardComponent money disclosures", () => {
             overageConfigured: computed(
               () => overageStatus()?.configured ?? false,
             ),
-            capBelowAccrued: computed(() => capBelowAccrued(overageStatus())),
+            capBelowBilled: computed(() => capBelowBilled(overageStatus())),
             maxCapCents: computed(
               () => overageStatus()?.maxCapCents ?? 1000000,
             ),
@@ -112,8 +112,25 @@ describe("OverageCardComponent money disclosures", () => {
 
   it("explains an estimate that sits above a lowered cap", () => {
     const text = render({ capCents: 100, capUnits: 5882, throttleRate: 10 });
-    expect(text).toContain("cap is set below what this cycle has already used");
-    expect(text).toContain("The estimate above is what you will be billed");
+    expect(text).toContain("cap is below what this cycle has already billed");
+    expect(text).toContain("The estimate above is what you will pay");
+  });
+
+  it("does not blame a lowered cap when the cap was simply reached", () => {
+    const text = render({
+      overageUnits: 445000,
+      overageCostCents: 7500,
+      throttleRate: 20,
+    });
+    expect(text).toContain("Spend cap reached");
+    expect(text).not.toContain("already billed");
+  });
+
+  it("calls it on-demand, never overage", () => {
+    expect(render().toLowerCase()).not.toContain("overage");
+    expect(
+      render({ capCents: 100, capUnits: 5882, throttleRate: 10 }).toLowerCase(),
+    ).not.toContain("overage");
   });
 
   // The claim the cap-lowering path breaks: usage already served stays

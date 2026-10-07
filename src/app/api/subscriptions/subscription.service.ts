@@ -8,7 +8,7 @@ import { SettingsService } from "../settings.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import {
   capAdjustable,
-  capBelowAccrued as overageCapBelowAccrued,
+  capBelowBilled as overageCapBelowBilled,
   capReached as overageCapReached,
   isOverageInactive,
   overageInactiveCause,
@@ -229,9 +229,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   });
 
   capReached = computed(() => overageCapReached(this.overageStatus()));
-  capBelowAccrued = computed(() =>
-    overageCapBelowAccrued(this.overageStatus()),
-  );
+  capBelowBilled = computed(() => overageCapBelowBilled(this.overageStatus()));
 
   // Forecast cap hit this cycle, in units (clients have no tier rates for $).
   private predictedOverageUnits = computed(() => {

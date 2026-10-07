@@ -97,14 +97,16 @@ export function overageThrottleState(
 }
 
 /**
- * The cap has been set below what this cycle has already accrued. The server
- * floors the cap at the units it has already billed, so lowering it stops
+ * The cap has been lowered below what this cycle has already billed. The
+ * server floors the cap at what it has already billed, so lowering it stops
  * further growth but never retracts the charge: the estimate stays above the
  * cap and that is what the invoice says.
  *
- * Only meaningful with overage live, which is the one case the card prices.
+ * Compared in cents, not units: `overageUnits` is raw usage, which runs past
+ * `capUnits` at any reached cap while throttling ramps in, and that usage is
+ * not billed.
  */
-export function capBelowAccrued(status: OverageStatus | null): boolean {
-  if (!status || !status.enabled || !status.capUnits) return false;
-  return status.overageUnits > status.capUnits;
+export function capBelowBilled(status: OverageStatus | null): boolean {
+  if (!status || !status.enabled || !status.capCents) return false;
+  return status.overageCostCents > status.capCents;
 }
