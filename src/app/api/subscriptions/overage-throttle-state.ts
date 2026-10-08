@@ -97,10 +97,10 @@ export function overageThrottleState(
 }
 
 /**
- * The cap has been lowered below what this cycle has already billed. The
- * server floors the cap at what it has already billed, so lowering it stops
- * further growth but never retracts the charge: the estimate stays above the
- * cap and that is what the invoice says.
+ * The cap has been lowered below what this cycle has already counted towards
+ * the bill. The server floors the cap at what it has already reported to
+ * Stripe, so lowering it stops further growth but never retracts the charge:
+ * the estimate stays above the cap and that is what the invoice says.
  *
  * Compared in cents, not units: `overageUnits` is raw usage, which runs past
  * `capUnits` at any reached cap while throttling ramps in, and that usage is

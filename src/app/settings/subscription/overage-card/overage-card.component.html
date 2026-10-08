@@ -142,13 +142,14 @@
             [color]="capReached() ? 'warn' : 'primary'"
           />
           @if (capBelowBilled()) {
-            <!-- The server floors the cap at what it has already billed, so a
-                 cap set below that stops growth without retracting the charge;
-                 without this line the clamped bar reads as a bug. -->
+            <!-- The server floors the cap at what it has already reported to
+                 Stripe, so a cap set below that stops growth without retracting
+                 the charge; without this line the clamped bar reads as a bug. -->
             <p class="overage-alert" i18n>
-              Your cap is below what this cycle has already billed. Lowering the
-              cap stops new on-demand charges, but charges already made stay on
-              your invoice. The estimate above is what you will pay.
+              Your cap is below the usage already counted towards your bill this
+              cycle. Lowering the cap stops new on-demand charges, but usage
+              already counted will still be on your invoice. The estimate above
+              is your on-demand charge for this cycle.
             </p>
           }
         }

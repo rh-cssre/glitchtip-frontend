@@ -112,8 +112,11 @@ describe("OverageCardComponent money disclosures", () => {
 
   it("explains an estimate that sits above a lowered cap", () => {
     const text = render({ capCents: 100, capUnits: 5882, throttleRate: 10 });
-    expect(text).toContain("cap is below what this cycle has already billed");
-    expect(text).toContain("The estimate above is what you will pay");
+    expect(text).toContain("already counted towards your bill this");
+    expect(text).toContain(
+      "usage already counted will still be on your invoice",
+    );
+    expect(text).toContain("your on-demand charge for this cycle");
   });
 
   it("does not blame a lowered cap when the cap was simply reached", () => {
@@ -123,7 +126,7 @@ describe("OverageCardComponent money disclosures", () => {
       throttleRate: 20,
     });
     expect(text).toContain("Spend cap reached");
-    expect(text).not.toContain("already billed");
+    expect(text).not.toContain("already counted");
   });
 
   it("calls it on-demand, never overage", () => {
