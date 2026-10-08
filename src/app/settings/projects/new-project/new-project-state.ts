@@ -32,7 +32,7 @@ export class NewProjectService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug: this.orgService.orgIdOrSlug(orgSlug),
             team_slug: teamSlug,
           },
         },

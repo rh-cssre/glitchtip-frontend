@@ -1,9 +1,11 @@
 import { computed, inject, Injectable, resource, signal } from "@angular/core";
+import { OrganizationsService } from "../../api/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { client } from "src/app/shared/api/api";
 
 @Injectable()
 export class MergedService {
+  private organizationsService = inject(OrganizationsService);
   orgSlug = signal<string | undefined>(undefined);
   issueID = signal<number | undefined>(undefined);
   selectedHashes = signal<string[]>([]);
@@ -20,7 +22,9 @@ export class MergedService {
           params: {
             path: {
               issue_id: params.issueID,
-              organization_id_or_slug: params.orgSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.orgSlug,
+              ),
             },
           },
         },
@@ -65,7 +69,11 @@ export class MergedService {
       "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/",
       {
         params: {
-          path: { organization_id_or_slug: orgSlug, issue_id: issueID },
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+            issue_id: issueID,
+          },
           query: { id: hashIDs },
         },
       },

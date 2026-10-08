@@ -1,8 +1,10 @@
-import { computed, Injectable, resource, signal } from "@angular/core";
+import { computed, Injectable, resource, signal, inject } from "@angular/core";
+import { OrganizationsService } from "../../api/organizations.service";
 import { client } from "src/app/shared/api/api";
 
 @Injectable()
 export class TransactionGroupDetailService {
+  private organizationsService = inject(OrganizationsService);
   #params = signal<{ orgSlug: string; id: number } | undefined>(undefined);
   #transactionGroupResource = resource({
     params: () => ({ params: this.#params() }),
@@ -15,7 +17,9 @@ export class TransactionGroupDetailService {
         {
           params: {
             path: {
-              organization_id_or_slug: params.params.orgSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.params.orgSlug,
+              ),
               id: params.params.id,
             },
           },
@@ -36,7 +40,9 @@ export class TransactionGroupDetailService {
         {
           params: {
             path: {
-              organization_id_or_slug: params.params.orgSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.params.orgSlug,
+              ),
               id: params.params.id,
             },
           },

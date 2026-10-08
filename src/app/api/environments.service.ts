@@ -15,7 +15,7 @@ export class EnvironmentsService {
       url: "/api/0/organizations/{organization_id_or_slug}/environments/",
       options: {
         params: {
-          path: { organization_id_or_slug: slug },
+          path: { organization_id_or_slug: this.#orgService.orgIdOrSlug(slug) },
         },
       },
     }),
@@ -35,7 +35,9 @@ export class EnvironmentsService {
       options: {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.#orgService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             project_slug: params.projectSlug,
           },
         },

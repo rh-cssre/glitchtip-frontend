@@ -1,4 +1,5 @@
 import { Injectable, computed, effect, inject, signal } from "@angular/core";
+import { OrganizationsService } from "../../../../api/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { components } from "src/app/api/api-schema";
@@ -75,6 +76,7 @@ const initialState: ProjectAlertState = {
 
 @Injectable()
 export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
+  private organizationsService = inject(OrganizationsService);
   private snackBar = inject(MatSnackBar);
 
   #params = signal({ orgSlug: "", projectSlug: "" });
@@ -83,7 +85,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     options: {
       params: {
         path: {
-          organization_id_or_slug: params.orgSlug,
+          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+            params.orgSlug,
+          ),
           project_slug: params.projectSlug,
         },
         query: {
@@ -236,7 +240,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             project_slug: params.projectSlug,
           },
         },
@@ -262,7 +268,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              this.#params().orgSlug,
+            ),
             project_slug: this.#params().projectSlug,
             alert_id: id,
           },
@@ -289,7 +297,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             project_slug: params.projectSlug,
             alert_id: alertId,
           },
@@ -331,7 +341,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              this.#params().orgSlug,
+            ),
             project_slug: this.#params().projectSlug,
             alert_id: id,
           },
@@ -390,7 +402,8 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         {
           params: {
             path: {
-              organization_id_or_slug: orgSlug,
+              organization_id_or_slug:
+                this.organizationsService.orgIdOrSlug(orgSlug),
               project_slug: projectSlug,
               alert_id: activeAlert.id,
             },
@@ -451,7 +464,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             project_slug: params.projectSlug,
             alert_id: alert.id,
           },
@@ -492,7 +507,9 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             project_slug: params.projectSlug,
             alert_id: alert.id,
           },

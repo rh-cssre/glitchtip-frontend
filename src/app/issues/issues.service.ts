@@ -1,4 +1,5 @@
 import { Injectable, computed, inject, resource, signal } from "@angular/core";
+import { OrganizationsService } from "../api/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { client } from "../shared/api/api";
@@ -52,6 +53,7 @@ function isAllowedSortKey(key: string): key is AllowedSortKey {
 
 @Injectable()
 export class IssuesService extends StatefulService<IssuesState> {
+  private organizationsService = inject(OrganizationsService);
   private snackbar = inject(MatSnackBar);
   private router = inject(Router);
   protected route = inject(ActivatedRoute);
@@ -73,7 +75,11 @@ export class IssuesService extends StatefulService<IssuesState> {
         "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
-            path: { organization_id_or_slug: params.params.orgSlug },
+            path: {
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.params.orgSlug,
+              ),
+            },
             query: {
               cursor: params.params.cursor,
               query: params.params.query,
@@ -143,7 +149,9 @@ export class IssuesService extends StatefulService<IssuesState> {
       options: {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
           },
           query: queryParams,
         },
@@ -308,7 +316,8 @@ export class IssuesService extends StatefulService<IssuesState> {
         {
           params: {
             path: {
-              organization_id_or_slug: orgSlug,
+              organization_id_or_slug:
+                this.organizationsService.orgIdOrSlug(orgSlug),
             },
             query: {
               id: issues.map((issue) => parseInt(issue)),
@@ -336,7 +345,8 @@ export class IssuesService extends StatefulService<IssuesState> {
     await client.PUT("/api/0/organizations/{organization_id_or_slug}/issues/", {
       params: {
         path: {
-          organization_id_or_slug: orgSlug,
+          organization_id_or_slug:
+            this.organizationsService.orgIdOrSlug(orgSlug),
         },
         query: {
           id: issues.map((issue) => parseInt(issue)),
@@ -364,7 +374,8 @@ export class IssuesService extends StatefulService<IssuesState> {
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
           },
           query: {
             project: projectIds?.map((id) => parseInt(id)),
@@ -395,7 +406,8 @@ export class IssuesService extends StatefulService<IssuesState> {
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
           },
           query: {
             id: issues.map((issue) => parseInt(issue)),
@@ -423,7 +435,8 @@ export class IssuesService extends StatefulService<IssuesState> {
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
           },
           query: {
             project: projectIds?.map((id) => parseInt(id)),

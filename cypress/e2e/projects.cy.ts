@@ -33,7 +33,7 @@ describe("Create New Project", () => {
     cy.get("input[formcontrolname=slug]").type(secondSeededTeam.slug);
     cy.get("#create-team-submit").click();
     cy.contains(new RegExp("^" + secondSeededTeam.slug + "$", "g"));
-    cy.intercept("POST", `api/0/teams/${seededOrg.slug}/*/projects/`).as(
+    cy.intercept("POST", `api/0/teams/*/*/projects/`).as(
       "createProjectRequest",
     );
     cy.get("input[formcontrolname=name]").type(newProject.name);

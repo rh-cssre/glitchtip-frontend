@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal, untracked } from "@angular/core";
 import { client } from "../shared/api/api";
 import { AuthService } from "../auth.service";
 import { apiResource } from "../shared/api/api-resource-factory";
@@ -35,7 +35,7 @@ export class OrganizationsService {
       url: "/api/0/organizations/{organization_id_or_slug}/",
       options: {
         params: {
-          path: { organization_id_or_slug: slug },
+          path: { organization_id_or_slug: this.orgIdOrSlug(slug) },
         },
       },
     }),
@@ -44,6 +44,9 @@ export class OrganizationsService {
     if (this.organizationsResource.error()) return [];
     return this.organizationsResource.value() || [];
   });
+  #orgIdsBySlug = computed(
+    () => new Map(this.organizations().map((org) => [org.slug, org.id])),
+  );
   organizationsCount = computed(() => this.organizations.length);
   activeOrganization = computed(() => {
     if (this.activeOrganizationResource.error()) return undefined;
@@ -82,6 +85,16 @@ export class OrganizationsService {
 
   constructor() {
     setTimeout(() => this.refresh(), 30000);
+  }
+
+  /**
+   * The value for an API path's {organization_id_or_slug}: the org's id, which
+   * saves the backend a slug lookup. Falls back to the slug, which the backend
+   * also accepts, for an org the org list doesn't have (yet). Untracked, so a
+   * request keyed on it doesn't refetch once the org list loads.
+   */
+  orgIdOrSlug(slug: string): string {
+    return untracked(this.#orgIdsBySlug).get(slug) ?? slug;
   }
 
   setActiveOrganizationSlug(slug: string | null) {

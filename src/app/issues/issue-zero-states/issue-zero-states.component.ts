@@ -58,7 +58,9 @@ export class IssueZeroStatesComponent implements OnInit {
         {
           params: {
             path: {
-              organization_id_or_slug: params.organizationSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.organizationSlug,
+              ),
               project_slug: params.projectSlug,
             },
           },

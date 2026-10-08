@@ -24,7 +24,11 @@ export class PerformanceService {
     url: "/api/0/organizations/{organization_id_or_slug}/transaction-groups/",
     options: {
       params: {
-        path: { organization_id_or_slug: params.orgSlug },
+        path: {
+          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+            params.orgSlug,
+          ),
+        },
         query: {
           cursor: params.cursor,
           query: params.query,

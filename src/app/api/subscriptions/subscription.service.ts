@@ -62,7 +62,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/",
     options: {
       params: {
-        path: { organization_id_or_slug: orgSlug },
+        path: {
+          organization_id_or_slug:
+            this.organizationsService.orgIdOrSlug(orgSlug),
+        },
       },
     },
   }));
@@ -117,7 +120,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/period/",
       options: {
         params: {
-          path: { organization_id_or_slug: orgSlug },
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
           query: { periods_ago: 0 },
         },
       },
@@ -137,7 +143,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/period/",
       options: {
         params: {
-          path: { organization_id_or_slug: orgSlug },
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
           query: { periods_ago: 1 },
         },
       },
@@ -153,7 +162,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/daily/",
     options: {
       params: {
-        path: { organization_id_or_slug: orgSlug },
+        path: {
+          organization_id_or_slug:
+            this.organizationsService.orgIdOrSlug(orgSlug),
+        },
       },
     },
   }));
@@ -168,7 +180,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/overage/",
     options: {
       params: {
-        path: { organization_id_or_slug: orgSlug },
+        path: {
+          organization_id_or_slug:
+            this.organizationsService.orgIdOrSlug(orgSlug),
+        },
       },
     },
   }));
@@ -296,7 +311,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       "/api/0/stripe/organizations/{organization_id_or_slug}/create-billing-portal/",
       {
         params: {
-          path: { organization_id_or_slug: orgSlug },
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
         },
       },
     );
@@ -326,7 +344,12 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       const { data, error, response } = await client.POST(
         "/api/0/stripe/organizations/{organization_id_or_slug}/overage/",
         {
-          params: { path: { organization_id_or_slug: orgSlug } },
+          params: {
+            path: {
+              organization_id_or_slug:
+                this.organizationsService.orgIdOrSlug(orgSlug),
+            },
+          },
           body: { enabled, capCents },
         },
       );
@@ -388,7 +411,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       "/api/0/stripe/subscriptions/{organization_id_or_slug}/",
       {
         params: {
-          path: { organization_id_or_slug: orgSlug },
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
         },
       },
     );

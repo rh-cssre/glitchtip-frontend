@@ -1,4 +1,5 @@
-import { computed, Injectable, resource, signal } from "@angular/core";
+import { computed, Injectable, resource, signal, inject } from "@angular/core";
+import { OrganizationsService } from "../../api/organizations.service";
 import { client, handleError } from "src/app/shared/api/api";
 import {
   getPaginationHeaders,
@@ -8,6 +9,7 @@ import { keepPreviousValue } from "src/app/shared/signal.utils";
 
 @Injectable()
 export class MonitorChecksService {
+  private organizationsService = inject(OrganizationsService);
   #params = signal<
     | {
         orgSlug: string;
@@ -28,7 +30,9 @@ export class MonitorChecksService {
         {
           params: {
             path: {
-              organization_id_or_slug: params.params.orgSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.params.orgSlug,
+              ),
               monitor_id: params.params.id,
             },
             query: {

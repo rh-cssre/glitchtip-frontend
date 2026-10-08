@@ -181,7 +181,9 @@ export class MonitorFormComponent implements OnInit {
       options: {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             project_slug: params.projectSlug,
           },
         },

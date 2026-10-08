@@ -1,4 +1,5 @@
 import { Injectable, computed, inject, signal } from "@angular/core";
+import { OrganizationsService } from "../../api/organizations.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
@@ -38,6 +39,7 @@ const initialState: ProjectSettingsState = {
   providedIn: "root",
 })
 export class ProjectSettingsService extends StatefulService<ProjectSettingsState> {
+  private organizationsService = inject(OrganizationsService);
   private snackBar = inject(MatSnackBar);
 
   private params = signal({ orgSlug: "", teamSlug: "" });
@@ -62,7 +64,8 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -89,7 +92,8 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -111,7 +115,8 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       .GET("/api/0/organizations/{organization_id_or_slug}/projects/", {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
           },
           query: {
             query: `team:${teamSlug}`,
@@ -131,7 +136,8 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
           },
           query: {
             query: `!team:${teamSlug}`,

@@ -1,4 +1,5 @@
-import { computed, effect, Injectable, signal } from "@angular/core";
+import { computed, effect, Injectable, signal, inject } from "@angular/core";
+import { OrganizationsService } from "../api/organizations.service";
 import { apiResource } from "../shared/api/api-resource-factory";
 
 export interface LogsParams {
@@ -14,6 +15,7 @@ export interface LogsParams {
 
 @Injectable()
 export class LogsService {
+  private organizationsService = inject(OrganizationsService);
   params = signal<LogsParams | undefined>(undefined);
 
   // Track accumulated logs for "load more"
@@ -26,7 +28,9 @@ export class LogsService {
     options: {
       params: {
         path: {
-          organization_id_or_slug: params.orgSlug,
+          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+            params.orgSlug,
+          ),
         },
         query: {
           cursor: params.cursor,
@@ -49,7 +53,8 @@ export class LogsService {
     options: {
       params: {
         path: {
-          organization_id_or_slug: orgSlug,
+          organization_id_or_slug:
+            this.organizationsService.orgIdOrSlug(orgSlug),
         },
         query: {
           resource_type: "service",

@@ -69,8 +69,9 @@ export class MembersService extends StatefulService<MembersState> {
       {
         params: {
           path: {
-            organization_id_or_slug:
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
               this.organizationsService.activeOrganizationSlug(),
+            ),
           },
         },
         body,
@@ -91,8 +92,9 @@ export class MembersService extends StatefulService<MembersState> {
       {
         params: {
           path: {
-            organization_id_or_slug:
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
               this.organizationsService.activeOrganizationSlug(),
+            ),
             member_id: parseInt(member.id),
           },
         },

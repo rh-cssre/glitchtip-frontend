@@ -1,9 +1,11 @@
-import { computed, Injectable, resource, signal } from "@angular/core";
+import { computed, Injectable, resource, signal, inject } from "@angular/core";
+import { OrganizationsService } from "../../api/organizations.service";
 import { client, handleError } from "src/app/shared/api/api";
 import { getPaginationHeaders } from "src/app/shared/pagination.utils";
 
 @Injectable()
 export class SettingsProjectsService {
+  private organizationsService = inject(OrganizationsService);
   orgSlug = signal<string>("");
 
   private projectsResource = resource({
@@ -17,7 +19,9 @@ export class SettingsProjectsService {
         {
           params: {
             path: {
-              organization_id_or_slug: params.orgSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.orgSlug,
+              ),
             },
           },
         },

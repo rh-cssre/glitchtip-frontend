@@ -51,7 +51,9 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug: params.organizationSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.organizationSlug,
+              ),
               monitor_id: params.monitorId,
             },
           },
@@ -74,7 +76,9 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug: params.organizationSlug,
+              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+                params.organizationSlug,
+              ),
               project_slug: params.projectSlug,
             },
           },
@@ -123,7 +127,12 @@ export class MonitorService extends StatefulService<MonitorState> {
       this.setCreateMonitorStart();
       client
         .POST("/api/0/organizations/{organization_id_or_slug}/monitors/", {
-          params: { path: { organization_id_or_slug: orgSlug } },
+          params: {
+            path: {
+              organization_id_or_slug:
+                this.organizationsService.orgIdOrSlug(orgSlug),
+            },
+          },
           body: monitor as any,
         })
         .then((result) => {
@@ -161,15 +170,19 @@ export class MonitorService extends StatefulService<MonitorState> {
     }
     this.setEditMonitorStart();
     client
-      .PUT("/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/", {
-        params: {
-          path: {
-            organization_id_or_slug: organizationSlug,
-            monitor_id: monitorId,
+      .PUT(
+        "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/",
+        {
+          params: {
+            path: {
+              organization_id_or_slug:
+                this.organizationsService.orgIdOrSlug(organizationSlug),
+              monitor_id: monitorId,
+            },
           },
+          body: data as any,
         },
-        body: data as any,
-      })
+      )
       .then((result) => {
         if (result.data) {
           const updatedMonitor = result.data;
@@ -203,7 +216,8 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug: organizationSlug,
+              organization_id_or_slug:
+                this.organizationsService.orgIdOrSlug(organizationSlug),
               monitor_id: monitorId,
             },
           },

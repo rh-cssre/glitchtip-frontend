@@ -1,10 +1,12 @@
-import { Injectable, computed, signal } from "@angular/core";
+import { Injectable, computed, signal, inject } from "@angular/core";
+import { OrganizationsService } from "../../api/organizations.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { keepPreviousValue } from "src/app/shared/signal.utils";
 import { getPaginator } from "src/app/shared/pagination.utils";
 
 @Injectable()
 export class ReleaseDetailService {
+  private organizationsService = inject(OrganizationsService);
   params = signal<{ orgSlug: string; version: string } | undefined>(undefined);
   queryParams = signal<{ cursor: string | undefined } | undefined>(undefined);
   releaseFilesParams = computed(() => {
@@ -24,7 +26,9 @@ export class ReleaseDetailService {
     options: {
       params: {
         path: {
-          organization_id_or_slug: params.orgSlug,
+          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+            params.orgSlug,
+          ),
           version: params.version,
         },
       },
@@ -37,7 +41,9 @@ export class ReleaseDetailService {
       options: {
         params: {
           path: {
-            organization_id_or_slug: params.orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              params.orgSlug,
+            ),
             version: params.version,
           },
           query: {

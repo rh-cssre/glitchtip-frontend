@@ -1,4 +1,5 @@
-import { computed, Injectable, signal } from "@angular/core";
+import { computed, Injectable, signal, inject } from "@angular/core";
+import { OrganizationsService } from "../../../api/organizations.service";
 import { client, handleError } from "src/app/shared/api/api";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
@@ -23,13 +24,16 @@ const initialState: State = {
 
 @Injectable()
 export class ProjectDetailService extends StatefulService<State> {
+  private organizationsService = inject(OrganizationsService);
   #params = signal({ orgSlug: "", projectSlug: "" });
   #projectKeysResource = apiResource(this.#params, (params) => ({
     url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/keys/",
     options: {
       params: {
         path: {
-          organization_id_or_slug: params.orgSlug,
+          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+            params.orgSlug,
+          ),
           project_slug: params.projectSlug,
         },
         query: {
@@ -43,7 +47,9 @@ export class ProjectDetailService extends StatefulService<State> {
     options: {
       params: {
         path: {
-          organization_id_or_slug: params.orgSlug,
+          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+            params.orgSlug,
+          ),
           project_slug: params.projectSlug,
         },
       },
@@ -77,7 +83,9 @@ export class ProjectDetailService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              this.#params().orgSlug,
+            ),
             project_slug: this.#params().projectSlug,
           },
         },
@@ -107,7 +115,9 @@ export class ProjectDetailService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              this.#params().orgSlug,
+            ),
             project_slug: this.#params().projectSlug,
           },
         },
@@ -133,7 +143,9 @@ export class ProjectDetailService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
+              this.#params().orgSlug,
+            ),
             project_slug: this.#params().projectSlug,
           },
         },

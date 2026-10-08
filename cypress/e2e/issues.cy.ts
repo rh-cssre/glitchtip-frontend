@@ -27,7 +27,15 @@ describe("Issues Page", () => {
         "/api/0/organizations/*/issues/?query=is%3Aunresolved",
       ).as("initialIssuesRequest");
       cy.visit(`/${seededOrg.slug}/issues`);
-      cy.wait("@initialIssuesRequest");
+      cy.request("/api/0/organizations/").then((res) => {
+        const org = res.body.find(
+          (o: { slug: string }) => o.slug === seededOrg.slug,
+        );
+        // API paths take the org id, not the slug in the page URL
+        cy.wait("@initialIssuesRequest")
+          .its("request.url")
+          .should("contain", `/api/0/organizations/${org.id}/issues/`);
+      });
 
       cy.get("[data-cy=selectAll]").click();
       cy.contains("Select all 55 issues that match this query");

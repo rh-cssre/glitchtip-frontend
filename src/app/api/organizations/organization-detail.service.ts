@@ -58,13 +58,17 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
   readonly initialLoad = computed(() => this.state().initialLoad);
 
   private membersOrgSlug = signal<string>("");
-  organizationMembersResource = apiResource(
-    this.membersOrgSlug,
-    (orgSlug) => ({
-      url: "/api/0/organizations/{organization_id_or_slug}/members/",
-      options: { params: { path: { organization_id_or_slug: orgSlug } } },
-    }),
-  );
+  organizationMembersResource = apiResource(this.membersOrgSlug, (orgSlug) => ({
+    url: "/api/0/organizations/{organization_id_or_slug}/members/",
+    options: {
+      params: {
+        path: {
+          organization_id_or_slug:
+            this.organizationsService.orgIdOrSlug(orgSlug),
+        },
+      },
+    },
+  }));
   readonly organizationMembers = computed(
     () => this.organizationMembersResource.value() ?? [],
   );
@@ -123,7 +127,12 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     const { data, error, response } = await client.PUT(
       "/api/0/organizations/{organization_id_or_slug}/",
       {
-        params: { path: { organization_id_or_slug: orgSlug } },
+        params: {
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
+        },
         body,
       },
     );
@@ -152,7 +161,12 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     const { error, response } = await client.DELETE(
       "/api/0/organizations/{organization_id_or_slug}/",
       {
-        params: { path: { organization_id_or_slug: slug } },
+        params: {
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(slug),
+          },
+        },
       },
     );
 
@@ -276,7 +290,12 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     return await client.POST(
       "/api/0/organizations/{organization_id_or_slug}/members/",
       {
-        params: { path: { organization_id_or_slug: orgSlug } },
+        params: {
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
+        },
         body: data,
       },
     );
@@ -288,7 +307,8 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
           },
         },
       },
@@ -302,7 +322,12 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     const result = await client.POST(
       "/api/0/organizations/{organization_id_or_slug}/teams/",
       {
-        params: { path: { organization_id_or_slug: orgSlug } },
+        params: {
+          path: {
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
+          },
+        },
         body: { slug: teamSlug },
       },
     );
@@ -319,7 +344,8 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
             member_id: parseInt(member.id),
             team_slug: teamSlug,
           },
@@ -342,7 +368,8 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
             member_id: memberId,
             team_slug: teamSlug,
           },
@@ -363,7 +390,8 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
             member_id: "me",
             team_slug: teamSlug,
           },
@@ -388,7 +416,8 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug: orgSlug,
+            organization_id_or_slug:
+              this.organizationsService.orgIdOrSlug(orgSlug),
             member_id: "me",
             team_slug: teamSlug,
           },
