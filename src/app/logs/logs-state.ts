@@ -1,4 +1,4 @@
-import { computed, effect, Injectable, signal, inject } from "@angular/core";
+import { computed, effect, inject, Injectable, signal } from "@angular/core";
 import { OrganizationsService } from "../api/organizations.service";
 import { apiResource } from "../shared/api/api-resource-factory";
 

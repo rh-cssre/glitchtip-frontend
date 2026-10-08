@@ -90,8 +90,9 @@ export class OrganizationsService {
   /**
    * The value for an API path's {organization_id_or_slug}: the org's id, which
    * saves the backend a slug lookup. Falls back to the slug, which the backend
-   * also accepts, for an org the org list doesn't have (yet). Untracked, so a
-   * request keyed on it doesn't refetch once the org list loads.
+   * also accepts, for an org the org list doesn't have (yet). Reads the list
+   * untracked, so a call from a resource's params or a computed doesn't refetch
+   * once the list loads. Loaders and plain methods don't track signals anyway.
    */
   orgIdOrSlug(slug: string): string {
     return untracked(this.#orgIdsBySlug).get(slug) ?? slug;

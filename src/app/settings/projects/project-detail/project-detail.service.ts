@@ -1,5 +1,5 @@
-import { computed, Injectable, signal, inject } from "@angular/core";
-import { OrganizationsService } from "../../../api/organizations.service";
+import { computed, inject, Injectable, signal } from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { client, handleError } from "src/app/shared/api/api";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";

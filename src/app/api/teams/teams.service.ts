@@ -1,9 +1,9 @@
 import { Injectable, computed, inject, signal } from "@angular/core";
-import { OrganizationsService } from "../../api/organizations.service";
 import { TeamErrors, TeamLoading } from "./teams.interfaces";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "../organizations.service";
 import { client, handleError } from "../../shared/api/api";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";

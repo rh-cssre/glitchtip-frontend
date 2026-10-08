@@ -1,6 +1,6 @@
 import { computed, Injectable, inject } from "@angular/core";
-import { OrganizationsService } from "../../../api/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client } from "src/app/shared/api/api";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";

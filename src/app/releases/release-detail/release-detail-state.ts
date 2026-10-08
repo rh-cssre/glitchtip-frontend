@@ -1,5 +1,5 @@
-import { Injectable, computed, signal, inject } from "@angular/core";
-import { OrganizationsService } from "../../api/organizations.service";
+import { Injectable, computed, inject, signal } from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { keepPreviousValue } from "src/app/shared/signal.utils";
 import { getPaginator } from "src/app/shared/pagination.utils";

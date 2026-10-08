@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, resource, signal } from "@angular/core";
-import { OrganizationsService } from "../../api/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { client } from "src/app/shared/api/api";
 
 @Injectable()

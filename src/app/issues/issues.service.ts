@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, resource, signal } from "@angular/core";
-import { OrganizationsService } from "../api/organizations.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
+import { OrganizationsService } from "../api/organizations.service";
 import { client } from "../shared/api/api";
 import { StatefulService } from "../shared/stateful-service/signal-state.service";
 import { getPaginationHeaders, getPaginator } from "../shared/pagination.utils";

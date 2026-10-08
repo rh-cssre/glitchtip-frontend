@@ -1,5 +1,5 @@
-import { computed, Injectable, resource, signal, inject } from "@angular/core";
-import { OrganizationsService } from "../../api/organizations.service";
+import { computed, inject, Injectable, resource, signal } from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { client, handleError } from "src/app/shared/api/api";
 import {
   getPaginationHeaders,
