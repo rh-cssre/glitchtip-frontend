@@ -121,9 +121,9 @@ export class PaymentService extends StatefulService<PaymentState> {
     priceId: string,
   ) {
     const { data, error, response } = await client.POST(
-      "/api/0/stripe/organizations/{organization_slug}/create-stripe-subscription-checkout/",
+      "/api/0/stripe/organizations/{organization_id_or_slug}/create-stripe-subscription-checkout/",
       {
-        params: { path: { organization_slug: orgSlug } },
+        params: { path: { organization_id_or_slug: orgSlug } },
         body: { price: priceId },
       },
     );

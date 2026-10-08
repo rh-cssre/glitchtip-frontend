@@ -70,10 +70,10 @@ export class IssuesService extends StatefulService<IssuesState> {
           ? params.params.sort
           : undefined;
       const { error, data, response } = await client.GET(
-        "/api/0/organizations/{organization_slug}/issues/",
+        "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
-            path: { organization_slug: params.params.orgSlug },
+            path: { organization_id_or_slug: params.params.orgSlug },
             query: {
               cursor: params.params.cursor,
               query: params.params.query,
@@ -139,11 +139,11 @@ export class IssuesService extends StatefulService<IssuesState> {
     };
 
     return {
-      url: "/api/0/organizations/{organization_slug}/issues-stats/",
+      url: "/api/0/organizations/{organization_id_or_slug}/issues-stats/",
       options: {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            organization_id_or_slug: params.orgSlug,
           },
           query: queryParams,
         },
@@ -304,11 +304,11 @@ export class IssuesService extends StatefulService<IssuesState> {
       await this.mergeIssues(orgSlug, issues);
     } else {
       const { data, error } = await client.PUT(
-        "/api/0/organizations/{organization_slug}/issues/",
+        "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
             path: {
-              organization_slug: orgSlug,
+              organization_id_or_slug: orgSlug,
             },
             query: {
               id: issues.map((issue) => parseInt(issue)),
@@ -320,7 +320,11 @@ export class IssuesService extends StatefulService<IssuesState> {
         },
       );
       if (data?.status) {
-        this.setUpdateStatusByIssueIdComplete(issues, data?.status);
+        // The backend normalizes "muted" and "resolvedInNextRelease" on input
+        this.setUpdateStatusByIssueIdComplete(
+          issues,
+          data.status as IssueStatus,
+        );
       }
       if (error) {
         this.snackbar.open($localize`Error, unable to update issue`);
@@ -329,10 +333,10 @@ export class IssuesService extends StatefulService<IssuesState> {
   }
 
   async mergeIssues(orgSlug: string, issues: string[]) {
-    await client.PUT("/api/0/organizations/{organization_slug}/issues/", {
+    await client.PUT("/api/0/organizations/{organization_id_or_slug}/issues/", {
       params: {
         path: {
-          organization_slug: orgSlug,
+          organization_id_or_slug: orgSlug,
         },
         query: {
           id: issues.map((issue) => parseInt(issue)),
@@ -356,11 +360,11 @@ export class IssuesService extends StatefulService<IssuesState> {
       return;
     }
     const { data, error } = await client.PUT(
-      "/api/0/organizations/{organization_slug}/issues/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
           },
           query: {
             project: projectIds?.map((id) => parseInt(id)),
@@ -387,11 +391,11 @@ export class IssuesService extends StatefulService<IssuesState> {
     const issues = this.selectedIssues();
     const shouldResetCursor = issues.length >= (this.issues()?.length ?? 0);
     const { error } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/issues/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
           },
           query: {
             id: issues.map((issue) => parseInt(issue)),
@@ -415,11 +419,11 @@ export class IssuesService extends StatefulService<IssuesState> {
     environment?: string | undefined,
   ) {
     const { error } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/issues/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
           },
           query: {
             project: projectIds?.map((id) => parseInt(id)),

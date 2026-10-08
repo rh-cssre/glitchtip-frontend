@@ -20,11 +20,11 @@ export class ReleaseDetailService {
     };
   });
   #releaseResource = apiResource(this.params, (params) => ({
-    url: "/api/0/organizations/{organization_slug}/releases/{version}/",
+    url: "/api/0/organizations/{organization_id_or_slug}/releases/{version}/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          organization_id_or_slug: params.orgSlug,
           version: params.version,
         },
       },
@@ -33,11 +33,11 @@ export class ReleaseDetailService {
   #releaseFilesResource = apiResource.paginated(
     this.releaseFilesParams,
     (params) => ({
-      url: "/api/0/organizations/{organization_slug}/releases/{version}/files/",
+      url: "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/",
       options: {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            organization_id_or_slug: params.orgSlug,
             version: params.version,
           },
           query: {

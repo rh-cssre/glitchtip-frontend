@@ -15,12 +15,12 @@ export class MergedService {
         return undefined;
       }
       const { data, error } = await client.GET(
-        "/api/0/organizations/{organization_slug}/issues/{issue_id}/hashes/",
+        "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/",
         {
           params: {
             path: {
               issue_id: params.issueID,
-              organization_slug: params.orgSlug,
+              organization_id_or_slug: params.orgSlug,
             },
           },
         },
@@ -62,10 +62,10 @@ export class MergedService {
       return;
     }
     const { response, error } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/issues/{issue_id}/hashes/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/",
       {
         params: {
-          path: { organization_slug: orgSlug, issue_id: issueID },
+          path: { organization_id_or_slug: orgSlug, issue_id: issueID },
           query: { id: hashIDs },
         },
       },

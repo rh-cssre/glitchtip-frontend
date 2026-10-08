@@ -59,10 +59,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     this.settingsService.billingEnabled() ? this.selectedSlug() : "",
   );
   subscriptionResource = apiResource(this.organizationSlug, (orgSlug) => ({
-    url: "/api/0/stripe/subscriptions/{organization_slug}/",
+    url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/",
     options: {
       params: {
-        path: { organization_slug: orgSlug },
+        path: { organization_id_or_slug: orgSlug },
       },
     },
   }));
@@ -114,10 +114,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   eventsCountCurrentPeriodResource = apiResource(
     this.detailSlug,
     (orgSlug) => ({
-      url: "/api/0/stripe/subscriptions/{organization_slug}/events_count/period/",
+      url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/period/",
       options: {
         params: {
-          path: { organization_slug: orgSlug },
+          path: { organization_id_or_slug: orgSlug },
           query: { periods_ago: 0 },
         },
       },
@@ -134,10 +134,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   eventsCountPreviousPeriodResource = apiResource(
     this.detailSlug,
     (orgSlug) => ({
-      url: "/api/0/stripe/subscriptions/{organization_slug}/events_count/period/",
+      url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/period/",
       options: {
         params: {
-          path: { organization_slug: orgSlug },
+          path: { organization_id_or_slug: orgSlug },
           query: { periods_ago: 1 },
         },
       },
@@ -150,10 +150,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   previousPeriodLoading = this.eventsCountPreviousPeriodResource.isLoading;
 
   dailyEventsResource = apiResource(this.detailSlug, (orgSlug) => ({
-    url: "/api/0/stripe/subscriptions/{organization_slug}/events_count/daily/",
+    url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/daily/",
     options: {
       params: {
-        path: { organization_slug: orgSlug },
+        path: { organization_id_or_slug: orgSlug },
       },
     },
   }));
@@ -165,10 +165,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   // The snackbar shows app-wide, so this is keyed on the org rather than
   // detailSlug: one call per billing-enabled org, and the key stays a signal.
   overageStatusResource = apiResource(this.organizationSlug, (orgSlug) => ({
-    url: "/api/0/stripe/subscriptions/{organization_slug}/overage/",
+    url: "/api/0/stripe/subscriptions/{organization_id_or_slug}/overage/",
     options: {
       params: {
-        path: { organization_slug: orgSlug },
+        path: { organization_id_or_slug: orgSlug },
       },
     },
   }));
@@ -293,10 +293,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     this.setBillingPortalLoadingStart();
     const orgSlug = this.organizationSlug();
     const { data, error } = await client.POST(
-      "/api/0/stripe/organizations/{organization_slug}/create-billing-portal/",
+      "/api/0/stripe/organizations/{organization_id_or_slug}/create-billing-portal/",
       {
         params: {
-          path: { organization_slug: orgSlug },
+          path: { organization_id_or_slug: orgSlug },
         },
       },
     );
@@ -324,9 +324,9 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     // with no way back.
     try {
       const { data, error, response } = await client.POST(
-        "/api/0/stripe/organizations/{organization_slug}/overage/",
+        "/api/0/stripe/organizations/{organization_id_or_slug}/overage/",
         {
-          params: { path: { organization_slug: orgSlug } },
+          params: { path: { organization_id_or_slug: orgSlug } },
           body: { enabled, capCents },
         },
       );
@@ -385,10 +385,10 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   private async getSubscriptionData(orgSlug: string) {
     const { data, error } = await client.GET(
-      "/api/0/stripe/subscriptions/{organization_slug}/",
+      "/api/0/stripe/subscriptions/{organization_id_or_slug}/",
       {
         params: {
-          path: { organization_slug: orgSlug },
+          path: { organization_id_or_slug: orgSlug },
         },
       },
     );

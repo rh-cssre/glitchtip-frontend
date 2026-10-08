@@ -65,11 +65,11 @@ export class MembersService extends StatefulService<MembersState> {
       reinvite: true,
     };
     const { data } = await client.POST(
-      "/api/0/organizations/{organization_slug}/members/",
+      "/api/0/organizations/{organization_id_or_slug}/members/",
       {
         params: {
           path: {
-            organization_slug:
+            organization_id_or_slug:
               this.organizationsService.activeOrganizationSlug(),
           },
         },
@@ -87,11 +87,11 @@ export class MembersService extends StatefulService<MembersState> {
   async removeMember(member: Member, isRemovingSelf: boolean = false) {
     const orgSlug = this.organizationsService.activeOrganizationSlug();
     const { error, response } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/members/{member_id}/",
+      "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
       {
         params: {
           path: {
-            organization_slug:
+            organization_id_or_slug:
               this.organizationsService.activeOrganizationSlug(),
             member_id: parseInt(member.id),
           },

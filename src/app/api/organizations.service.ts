@@ -32,10 +32,10 @@ export class OrganizationsService {
   activeOrganizationResource = apiResource(
     this.activeOrganizationSlug,
     (slug) => ({
-      url: "/api/0/organizations/{organization_slug}/",
+      url: "/api/0/organizations/{organization_id_or_slug}/",
       options: {
         params: {
-          path: { organization_slug: slug },
+          path: { organization_id_or_slug: slug },
         },
       },
     }),

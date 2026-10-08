@@ -21,6 +21,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/settings/{organization_slug}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Organization Login Settings
+         * @description Sign-in options for one organization's own login page, including social
+         *     apps hidden from the instance-wide login page. Responds
+         *     200 with an empty list for unknown slugs so anonymous requests cannot
+         *     enumerate which organizations exist.
+         */
+        get: operations["glitchtip_api_api_get_organization_login_settings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/instance-license/": {
         parameters: {
             query?: never;
@@ -153,7 +176,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/alerts/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/": {
         parameters: {
             query?: never;
             header?: never;
@@ -171,7 +194,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -189,7 +212,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/test/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/test/": {
         parameters: {
             query?: never;
             header?: never;
@@ -206,7 +229,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/files/difs/assemble/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/files/difs/assemble/": {
         parameters: {
             query?: never;
             header?: never;
@@ -223,7 +246,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/reprocessing/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/reprocessing/": {
         parameters: {
             query?: never;
             header?: never;
@@ -243,7 +266,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/files/dsyms/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/files/dsyms/": {
         parameters: {
             query?: never;
             header?: never;
@@ -261,7 +284,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/environments/": {
+    "/api/0/organizations/{organization_id_or_slug}/environments/": {
         parameters: {
             query?: never;
             header?: never;
@@ -278,7 +301,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/environments/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/environments/": {
         parameters: {
             query?: never;
             header?: never;
@@ -295,7 +318,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/environments/{name}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/environments/{name}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -312,7 +335,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/chunk-upload/": {
+    "/api/0/organizations/{organization_id_or_slug}/chunk-upload/": {
         parameters: {
             query?: never;
             header?: never;
@@ -327,7 +350,7 @@ export interface paths {
         put?: never;
         /**
          * Chunk Upload
-         * @description Upload one more more gzipped files to save
+         * @description Upload one or more gzipped files to save
          */
         post: operations["apps_files_api_chunk_upload"];
         delete?: never;
@@ -371,6 +394,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/comments/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Organization Comments */
+        get: operations["apps_issue_events_api_comments_list_organization_comments"];
+        put?: never;
+        /** Add Organization Comment */
+        post: operations["apps_issue_events_api_comments_add_organization_comment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/issues/{issue_id}/comments/{comment_id}/": {
         parameters: {
             query?: never;
@@ -389,6 +430,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/comments/{comment_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Organization Comment */
+        put: operations["apps_issue_events_api_comments_update_organization_comment"];
+        post?: never;
+        /** Delete Organization Comment */
+        delete: operations["apps_issue_events_api_comments_delete_organization_comment"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/issues/{issue_id}/events/": {
         parameters: {
             query?: never;
@@ -398,6 +457,23 @@ export interface paths {
         };
         /** List Issue Event */
         get: operations["apps_issue_events_api_events_list_issue_event"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Organization Issue Event */
+        get: operations["apps_issue_events_api_events_list_organization_issue_event"];
         put?: never;
         post?: never;
         delete?: never;
@@ -423,6 +499,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/latest/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Organization Latest Issue Event */
+        get: operations["apps_issue_events_api_events_get_organization_latest_issue_event"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/issues/{issue_id}/events/{event_id}/": {
         parameters: {
             query?: never;
@@ -440,7 +533,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/events/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Organization Issue Event */
+        get: operations["apps_issue_events_api_events_get_organization_issue_event"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/events/": {
         parameters: {
             query?: never;
             header?: never;
@@ -457,7 +567,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/events/{event_id}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/events/{event_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -474,7 +584,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/issues/{issue_id}/events/{event_id}/json/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/events/{event_id}/json/": {
         parameters: {
             query?: never;
             header?: never;
@@ -510,6 +620,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Organization Issue */
+        get: operations["apps_issue_events_api_issues_get_organization_issue"];
+        /** Update Organization Issue */
+        put: operations["apps_issue_events_api_issues_update_organization_issue"];
+        post?: never;
+        /** Delete Organization Issue */
+        delete: operations["apps_issue_events_api_issues_delete_organization_issue"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/0/issues/{issue_id}/commits/": {
         parameters: {
             query?: never;
@@ -530,16 +659,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/issues/{issue_id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/commits/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        /** Update Organization Issue */
-        put: operations["apps_issue_events_api_issues_update_organization_issue"];
+        /** List Organization Issue Commits */
+        get: operations["apps_issue_events_api_issues_list_organization_issue_commits"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -547,7 +676,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/issues/": {
+    "/api/0/organizations/{organization_id_or_slug}/shortids/{short_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Issue By Short Id
+         * @description Resolve a short ID such as ``PROJECT-1A`` to its issue
+         */
+        get: operations["apps_issue_events_api_issues_get_issue_by_short_id"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/organizations/{organization_id_or_slug}/issues/": {
         parameters: {
             query?: never;
             header?: never;
@@ -566,7 +715,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/issues/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/issues/": {
         parameters: {
             query?: never;
             header?: never;
@@ -575,7 +724,13 @@ export interface paths {
         };
         /** List Project Issues */
         get: operations["apps_issue_events_api_issues_list_project_issues"];
-        put?: never;
+        /**
+         * Update Project Issues
+         * @description Bulk update a project's issues, selected by repeated ``id`` parameters.
+         *     Without ``id`` only a status change is allowed; it applies to the issues
+         *     with the ``status`` given in the query string, or to unresolved issues.
+         */
+        put: operations["apps_issue_events_api_issues_update_project_issues"];
         post?: never;
         delete?: never;
         options?: never;
@@ -600,7 +755,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/issues-stats/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Organization Issue Tags */
+        get: operations["apps_issue_events_api_issues_list_organization_issue_tags"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/organizations/{organization_id_or_slug}/issues-stats/": {
         parameters: {
             query?: never;
             header?: never;
@@ -640,7 +812,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/issues/{issue_id}/hashes/": {
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/user-reports/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Organization User Reports */
+        get: operations["apps_issue_events_api_user_reports_list_organization_user_reports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/hashes/": {
         parameters: {
             query?: never;
             header?: never;
@@ -658,7 +847,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/logs/": {
+    "/api/0/organizations/{organization_id_or_slug}/logs/": {
         parameters: {
             query?: never;
             header?: never;
@@ -693,7 +882,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/logs/{log_id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/logs/{log_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -713,7 +902,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/logs/stats/": {
+    "/api/0/organizations/{organization_id_or_slug}/logs/stats/": {
         parameters: {
             query?: never;
             header?: never;
@@ -737,7 +926,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/logs/resources/": {
+    "/api/0/organizations/{organization_id_or_slug}/logs/resources/": {
         parameters: {
             query?: never;
             header?: never;
@@ -777,7 +966,7 @@ export interface paths {
          * Create Organization
          * @description Create new organization
          *     The first organization on a server is always allowed to be created.
-         *     Afterwards, ENABLE_OPEN_USER_REGISTRATION is checked.
+         *     Afterwards, ENABLE_ORGANIZATION_CREATION is checked.
          *     Superusers are always allowed to create organizations.
          */
         post: operations["apps_organizations_ext_api_create_organization"];
@@ -787,7 +976,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/": {
+    "/api/0/organizations/{organization_id_or_slug}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -812,7 +1001,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/members/": {
+    "/api/0/organizations/{organization_id_or_slug}/members/": {
         parameters: {
             query?: never;
             header?: never;
@@ -830,7 +1019,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/teams/{organization_slug}/{team_slug}/members/": {
+    "/api/0/teams/{organization_id_or_slug}/{team_slug}/members/": {
         parameters: {
             query?: never;
             header?: never;
@@ -847,7 +1036,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/members/{member_id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -872,7 +1061,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/members/{member_id}/set_owner/": {
+    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/set_owner/": {
         parameters: {
             query?: never;
             header?: never;
@@ -918,7 +1107,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/transaction-groups/": {
+    "/api/0/organizations/{organization_id_or_slug}/social-apps/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Organization Social Apps */
+        get: operations["apps_organizations_ext_social_app_api_list_organization_social_apps"];
+        put?: never;
+        /** Create Organization Social App */
+        post: operations["apps_organizations_ext_social_app_api_create_organization_social_app"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/organizations/{organization_id_or_slug}/social-apps/{social_app_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Organization Social App */
+        put: operations["apps_organizations_ext_social_app_api_update_organization_social_app"];
+        post?: never;
+        /** Delete Organization Social App */
+        delete: operations["apps_organizations_ext_social_app_api_delete_organization_social_app"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/0/organizations/{organization_id_or_slug}/transaction-groups/": {
         parameters: {
             query?: never;
             header?: never;
@@ -935,7 +1160,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/transaction-groups/{id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/transaction-groups/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -952,7 +1177,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/transaction-groups/{id}/spans/": {
+    "/api/0/organizations/{organization_id_or_slug}/transaction-groups/{id}/spans/": {
         parameters: {
             query?: never;
             header?: never;
@@ -969,7 +1194,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/span-groups/": {
+    "/api/0/organizations/{organization_id_or_slug}/span-groups/": {
         parameters: {
             query?: never;
             header?: never;
@@ -986,7 +1211,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/n-plus-one/": {
+    "/api/0/organizations/{organization_id_or_slug}/n-plus-one/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1003,7 +1228,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/transaction-groups/{id}/trend/": {
+    "/api/0/organizations/{organization_id_or_slug}/transaction-groups/{id}/trend/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1040,7 +1265,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1059,7 +1284,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/teams/{organization_slug}/{team_slug}/projects/": {
+    "/api/0/teams/{organization_id_or_slug}/{team_slug}/projects/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1083,7 +1308,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/projects/": {
+    "/api/0/organizations/{organization_id_or_slug}/projects/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1105,7 +1330,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/keys/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/keys/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1129,7 +1354,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/keys/{key_id}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/keys/{key_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1171,7 +1396,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/stats_v2/": {
+    "/api/0/organizations/{organization_id_or_slug}/stats_v2/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1214,7 +1439,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/subscriptions/{organization_slug}/": {
+    "/api/0/stripe/subscriptions/{organization_id_or_slug}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1231,7 +1456,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/organizations/{organization_slug}/create-stripe-subscription-checkout/": {
+    "/api/0/stripe/organizations/{organization_id_or_slug}/create-stripe-subscription-checkout/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1252,7 +1477,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/organizations/{organization_slug}/create-billing-portal/": {
+    "/api/0/stripe/organizations/{organization_id_or_slug}/create-billing-portal/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1289,7 +1514,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/subscriptions/{organization_slug}/events_count/period/": {
+    "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/period/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1306,7 +1531,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/subscriptions/{organization_slug}/events_count/daily/": {
+    "/api/0/stripe/subscriptions/{organization_id_or_slug}/events_count/daily/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1323,7 +1548,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/subscriptions/{organization_slug}/overage/": {
+    "/api/0/stripe/subscriptions/{organization_id_or_slug}/overage/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1340,7 +1565,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/stripe/organizations/{organization_slug}/overage/": {
+    "/api/0/stripe/organizations/{organization_id_or_slug}/overage/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1353,9 +1578,15 @@ export interface paths {
          * Configure Overage
          * @description Enable/disable metered overage billing and set the spend cap (owner-only).
          *
-         *     Enabling attaches the metered overage price as a second subscription item;
-         *     disabling removes it. Either way a throttle re-check is enqueued so the new
-         *     headroom (or block) takes effect promptly.
+         *     Enabling attaches the metered overage price as a second subscription item,
+         *     whose own Stripe billing period becomes the organization's usage window
+         *     from then on (see ``billing_window``). Disabling only clears the flag: the
+         *     item stays attached and dormant, so a re-enable within the same cycle
+         *     can't re-bill reported usage and toggling never moves the window. Dormant
+         *     means nothing further is reported, not that the period bills zero: the
+         *     figure already filed with Stripe this period is still invoiced, and the
+         *     status response says so in ``reported_cost_cents``. Either way a throttle
+         *     re-check is enqueued so the new headroom (or block) takes effect promptly.
          */
         post: operations["apps_stripe_api_configure_overage"];
         delete?: never;
@@ -1364,7 +1595,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/repos/": {
+    "/api/0/organizations/{organization_id_or_slug}/repos/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1382,7 +1613,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/artifactbundle/assemble/": {
+    "/api/0/organizations/{organization_id_or_slug}/artifactbundle/assemble/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1402,7 +1633,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/teams/{organization_slug}/{team_slug}/": {
+    "/api/0/teams/{organization_id_or_slug}/{team_slug}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1421,7 +1652,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/teams/": {
+    "/api/0/organizations/{organization_id_or_slug}/teams/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1439,7 +1670,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_slug}/": {
+    "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1457,7 +1688,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/teams/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/teams/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1474,7 +1705,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/teams/{team_slug}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1519,14 +1750,20 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/monitors/": {
+    "/api/0/organizations/{organization_id_or_slug}/monitors/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** List Monitors */
+        /**
+         * List Monitors
+         * @description List an organization's uptime monitors, newest first by default.
+         *
+         *     ``sort`` accepts created, name, project and status; prefix with ``-`` to
+         *     reverse. Ascending status is down first.
+         */
         get: operations["apps_uptime_api_list_monitors"];
         put?: never;
         /** Create Monitor */
@@ -1537,7 +1774,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1556,7 +1793,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/checks/": {
+    "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/checks/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1578,7 +1815,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/status-pages/": {
+    "/api/0/organizations/{organization_id_or_slug}/status-pages/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1790,7 +2027,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1808,7 +2045,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/releases/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/releases/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1826,7 +2063,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/{version}/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1845,7 +2082,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/{version}/files/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1862,7 +2099,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/{version}/files/{file_id}/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1880,7 +2117,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/releases/{version}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1899,7 +2136,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/files/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/releases/{version}/files/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1916,7 +2153,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/projects/{organization_slug}/{project_slug}/releases/{version}/files/{file_id}/": {
+    "/api/0/projects/{organization_id_or_slug}/{project_slug}/releases/{version}/files/{file_id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1934,7 +2171,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/{version}/deploys/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/deploys/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1952,7 +2189,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/{version}/commits/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/commits/": {
         parameters: {
             query?: never;
             header?: never;
@@ -1970,7 +2207,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/0/organizations/{organization_slug}/releases/{version}/assemble/": {
+    "/api/0/organizations/{organization_id_or_slug}/releases/{version}/assemble/": {
         parameters: {
             query?: never;
             header?: never;
@@ -2050,8 +2287,8 @@ export interface components {
         SocialAppSchema: {
             /** Scopes */
             scopes: string[];
-            /** Authorize Url */
-            authorize_url: string | null;
+            /** Brand */
+            brand: string;
             /** Name */
             name: string;
             /**
@@ -2061,6 +2298,11 @@ export interface components {
             client_id: string;
             /** Provider */
             provider: string;
+        };
+        /** LoginSettingsOut */
+        LoginSettingsOut: {
+            /** Socialapps */
+            socialApps: components["schemas"]["SocialAppSchema"][];
         };
         /** InstanceLicenseOut */
         InstanceLicenseOut: {
@@ -2196,8 +2438,6 @@ export interface components {
         EventIngestOut: {
             /** Event Id */
             event_id: string;
-            /** Task Id */
-            task_id?: string | null;
         };
         AppContext: {
             /**
@@ -2273,7 +2513,7 @@ export interface components {
         /** DebugMeta */
         DebugMeta: {
             /** Images */
-            images: ((components["schemas"]["SourceMapImage"] | components["schemas"]["JvmDebugImage"] | components["schemas"]["NativeDebugImage"]) | components["schemas"]["OtherDebugImage"])[];
+            images: ((components["schemas"]["SourceMapImage"] | components["schemas"]["JvmDebugImage"] | components["schemas"]["NativeDebugImage"] | components["schemas"]["ProguardDebugImage"]) | components["schemas"]["OtherDebugImage"])[];
         };
         DeviceContext: {
             /**
@@ -2632,6 +2872,19 @@ export interface components {
             /** Type */
             type: string;
         };
+        /**
+         * ProguardDebugImage
+         * @description The ProGuard/R8 mapping an Android build was obfuscated with.
+         */
+        ProguardDebugImage: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "proguard";
+            /** Uuid */
+            uuid?: string | null;
+        };
         /** ReplayContext */
         ReplayContext: {
             /**
@@ -2685,6 +2938,8 @@ export interface components {
             registers?: {
                 [key: string]: string;
             } | null;
+            /** Instruction Addr Adjustment */
+            instruction_addr_adjustment?: string | null;
         };
         /** StackTraceFrame */
         StackTraceFrame: {
@@ -2908,7 +3163,7 @@ export interface components {
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            recipientType: "discord" | "feishu" | "googlechat" | "ntfy" | "teams" | "webhook";
+            recipientType: "discord" | "feishu" | "googlechat" | "ntfy" | "slack" | "teams" | "webhook";
             /**
              * Url
              * Format: uri
@@ -3563,7 +3818,8 @@ export interface components {
         };
         /** UpdateIssueSchema */
         UpdateIssueSchema: {
-            status?: components["schemas"]["EventStatusEnum"] | null;
+            /** Status */
+            status?: components["schemas"]["EventStatusEnum"] | ("muted" | "resolvedInNextRelease") | null;
             statusDetails?: components["schemas"]["StatusDetailsSchema"] | null;
             /** Merge */
             merge?: number | null;
@@ -3588,21 +3844,6 @@ export interface components {
             authorName?: string | null;
             /** Authoremail */
             authorEmail?: string | null;
-        };
-        /** IssueFilters */
-        IssueFilters: {
-            /** Id */
-            id?: number[] | null;
-            /** Start */
-            start?: string | null;
-            /** End */
-            end?: string | null;
-            /** Project */
-            project?: number[] | null;
-            /** Environment */
-            environment?: string[] | null;
-            /** Query */
-            query?: string | null;
         };
         /** IssueSchema */
         IssueSchema: {
@@ -3670,6 +3911,33 @@ export interface components {
             title: string;
             /** Culprit */
             culprit?: string | null;
+        };
+        /** ShortIdLookupSchema */
+        ShortIdLookupSchema: {
+            /** Organizationslug */
+            organizationSlug: string;
+            /** Projectslug */
+            projectSlug: string;
+            /** Groupid */
+            groupId: string;
+            group: components["schemas"]["IssueSchema"];
+            /** Shortid */
+            shortId: string;
+        };
+        /** IssueFilters */
+        IssueFilters: {
+            /** Id */
+            id?: number[] | null;
+            /** Start */
+            start?: string | null;
+            /** End */
+            end?: string | null;
+            /** Project */
+            project?: number[] | null;
+            /** Environment */
+            environment?: string[] | null;
+            /** Query */
+            query?: string | null;
         };
         /** IssueTagSchema */
         IssueTagSchema: {
@@ -3977,13 +4245,13 @@ export interface components {
             slug: string;
             /**
              * Is Accepting Events
-             * @description Used for throttling at org level
+             * @description When false, every incoming event for this organization is rejected with a 429. Set by hand only: quota enforcement uses event_throttle_rate instead, so this stays off until someone turns it back on.
              * @default true
              */
             isAcceptingEvents: boolean;
             /**
              * Event Throttle Rate
-             * @description Probability (in percent) on how many events are throttled. Used for throttling at project level
+             * @description Percentage of this organization's incoming events to drop. Set automatically by the quota check, which overwrites anything entered here; 100 rejects everything, as clearing is_accepting_events does.
              * @default 0
              */
             eventThrottleRate: number;
@@ -4039,13 +4307,13 @@ export interface components {
             slug: string;
             /**
              * Is Accepting Events
-             * @description Used for throttling at org level
+             * @description When false, every incoming event for this organization is rejected with a 429. Set by hand only: quota enforcement uses event_throttle_rate instead, so this stays off until someone turns it back on.
              * @default true
              */
             isAcceptingEvents: boolean;
             /**
              * Event Throttle Rate
-             * @description Probability (in percent) on how many events are throttled. Used for throttling at project level
+             * @description Percentage of this organization's incoming events to drop. Set automatically by the quota check, which overwrites anything entered here; 100 rejects everything, as clearing is_accepting_events does.
              * @default 0
              */
             eventThrottleRate: number;
@@ -4193,6 +4461,40 @@ export interface components {
             /** Isowner */
             isOwner: boolean;
         };
+        /**
+         * OrganizationUserInviteSchema
+         * @description Response for the invite (member create) endpoint.
+         *
+         *     Surfaces the acceptance link so the frontend can offer a copy-link invite
+         *     flow. This is the only delivery path when email is disabled, and a harmless
+         *     convenience when email works. The link carries the same time-limited token
+         *     the invite email uses, so possessing it is what grants acceptance.
+         */
+        OrganizationUserInviteSchema: {
+            /** Id */
+            id: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "member" | "admin" | "manager" | "owner";
+            /** Rolename */
+            roleName: string;
+            /**
+             * Datecreated
+             * Format: date-time
+             */
+            dateCreated: string;
+            /** Email */
+            email: string;
+            user?: components["schemas"]["UserSchema"] | null;
+            /** Pending */
+            pending: boolean;
+            /** Isowner */
+            isOwner: boolean;
+            /** Invitelink */
+            inviteLink?: string | null;
+        };
         /** OrganizationUserIn */
         OrganizationUserIn: {
             /**
@@ -4302,6 +4604,73 @@ export interface components {
         AcceptInviteIn: {
             /** Acceptinvite */
             acceptInvite: boolean;
+        };
+        /** OrganizationSocialAppSchema */
+        OrganizationSocialAppSchema: {
+            /** Serverurl */
+            serverUrl: string | null;
+            /** Brand */
+            brand: string;
+            /** Callbackurl */
+            callbackUrl: string | null;
+            /** Loginurl */
+            loginUrl: string;
+            /** ID */
+            id?: number | null;
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+            /** provider ID */
+            providerID?: string | null;
+            /**
+             * Client Id
+             * @description App ID, or consumer key
+             */
+            clientID: string;
+        };
+        /**
+         * OrganizationSocialAppIn
+         * @description Create an organization-managed social app.
+         *
+         *     Every choice runs on the OpenID Connect machinery — each app gets its own
+         *     provider_id-scoped callback URL, which is what makes several apps of the
+         *     same brand (one per organization) coexist. Non-OIDC providers share one
+         *     callback URL per provider and cannot be disambiguated per organization.
+         */
+        OrganizationSocialAppIn: {
+            /** Name */
+            name: string;
+            /** Serverurl */
+            serverUrl?: string | null;
+            /** Clientid */
+            clientID: string;
+            /**
+             * Provider
+             * @default openid_connect
+             * @enum {string}
+             */
+            provider: "openid_connect" | "google";
+            /** Clientsecret */
+            clientSecret: string;
+        };
+        /**
+         * OrganizationSocialAppUpdateIn
+         * @description Update an organization-managed social app.
+         *
+         *     provider is absent deliberately: it fixes the callback URL, which is
+         *     already registered at the identity provider, so it cannot change after
+         *     creation.
+         */
+        OrganizationSocialAppUpdateIn: {
+            /** Name */
+            name: string;
+            /** Serverurl */
+            serverUrl?: string | null;
+            /** Clientid */
+            clientID: string;
+            /** Clientsecret */
+            clientSecret?: string | null;
         };
         /** TransactionGroupFilters */
         TransactionGroupFilters: {
@@ -4742,12 +5111,12 @@ export interface components {
             prices: components["schemas"]["StripeNestedPriceSchema"][];
             /** Marketingfeatures */
             marketingFeatures: string[];
+            /** Events */
+            events: number;
             /** Name */
             name: string;
             /** Description */
             description: string;
-            /** Events */
-            events: number;
         };
         /**
          * CollectionMethod
@@ -4758,12 +5127,12 @@ export interface components {
         StripeProductSchema: {
             /** Stripeid */
             stripeID: string;
+            /** Events */
+            events: number;
             /** Name */
             name: string;
             /** Description */
             description: string;
-            /** Events */
-            events: number;
             /** Default Price */
             default_price_id?: string | null;
         };
@@ -4871,7 +5240,10 @@ export interface components {
             /** Data */
             data: components["schemas"]["DailyEventCountEntry"][];
         };
-        /** OverageStatusSchema */
+        /**
+         * OverageStatusSchema
+         * @description Current overage state for an org, for rendering the choice at the limit.
+         */
         OverageStatusSchema: {
             /** Enabled */
             enabled: boolean;
@@ -4880,7 +5252,7 @@ export interface components {
             /** Configured */
             configured: boolean;
             /** Active */
-            active?: boolean;
+            active: boolean;
             /** Capcents */
             capCents: number;
             /** Maxcapcents */
@@ -4895,6 +5267,8 @@ export interface components {
             overageUnits: number;
             /** Overagecostcents */
             overageCostCents: number;
+            /** Reportedcostcents */
+            reportedCostCents: number;
             /** Throttlerate */
             throttleRate: number;
         };
@@ -4988,14 +5362,13 @@ export interface components {
         };
         /** MonitorCheckSchema */
         MonitorCheckSchema: {
+            /**
+             * Startcheck
+             * Format: date-time
+             */
+            startCheck: string;
             /** Is Up */
             isUp: boolean;
-            /**
-             * Start Check
-             * Format: date-time
-             * @description Time when the start of this check was performed
-             */
-            startCheck?: string;
             /**
              * Reason
              * @default 0
@@ -5056,6 +5429,12 @@ export interface components {
              * @description Blank implies default value of 20
              */
             timeout?: number | null;
+            /**
+             * Confirmation Threshold
+             * @description Number of consecutive failed checks before the monitor is considered down and a notification is sent. 1 alerts on the first failure.
+             * @default 1
+             */
+            confirmationThreshold: number;
         };
         /**
          * MonitorType
@@ -5068,8 +5447,15 @@ export interface components {
             expectedBody: string;
             /** Expectedstatus */
             expectedStatus: number | null;
+            /** Interval */
+            interval: number;
             /** Timeout */
             timeout: number | null;
+            /**
+             * Confirmationthreshold
+             * @default 1
+             */
+            confirmationThreshold: number;
             /** Project */
             project?: string | null;
             /** Environmentid */
@@ -5083,25 +5469,19 @@ export interface components {
             name: string;
             /** Url */
             url?: string | null;
-            /**
-             * Interval
-             * @default 60
-             */
-            interval: number;
         };
         /**
          * MonitorCheckResponseTimeSchema
          * @description Monitor check with response time. Used in Monitors detail api and monitor checks list
          */
         MonitorCheckResponseTimeSchema: {
+            /**
+             * Startcheck
+             * Format: date-time
+             */
+            startCheck: string;
             /** Is Up */
             isUp: boolean;
-            /**
-             * Start Check
-             * Format: date-time
-             * @description Time when the start of this check was performed
-             */
-            startCheck?: string;
             /**
              * Reason
              * @default 0
@@ -5167,6 +5547,12 @@ export interface components {
              * @description Blank implies default value of 20
              */
             timeout?: number | null;
+            /**
+             * Confirmation Threshold
+             * @description Number of consecutive failed checks before the monitor is considered down and a notification is sent. 1 alerts on the first failure.
+             * @default 1
+             */
+            confirmationThreshold: number;
         };
         /** StatusPageSchema */
         StatusPageSchema: {
@@ -5549,6 +5935,28 @@ export interface operations {
             };
         };
     };
+    glitchtip_api_api_get_organization_login_settings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginSettingsOut"];
+                };
+            };
+        };
+    };
     glitchtip_api_api_get_instance_license: {
         parameters: {
             query?: never;
@@ -5738,7 +6146,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -5761,7 +6169,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -5788,7 +6196,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 alert_id: number;
             };
@@ -5816,7 +6224,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 alert_id: number;
             };
@@ -5840,7 +6248,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 alert_id: number;
             };
@@ -5864,7 +6272,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -5889,7 +6297,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -5915,7 +6323,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -5938,7 +6346,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -5975,7 +6383,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6003,7 +6411,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -6026,7 +6434,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 name: string;
             };
@@ -6054,7 +6462,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6074,7 +6482,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6171,6 +6579,61 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_comments_list_organization_comments: {
+        parameters: {
+            query?: {
+                /** @description Number of results to return per page. */
+                limit?: number | null;
+                /** @description The pagination cursor value. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path: {
+                issue_id: number;
+                organization_id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentSchema"][];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_comments_add_organization_comment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PostCommentSchema"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentSchema"];
+                };
+            };
+        };
+    };
     apps_issue_events_api_comments_update_comment: {
         parameters: {
             query?: never;
@@ -6219,6 +6682,56 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_comments_update_organization_comment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+                comment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PostCommentSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentSchema"];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_comments_delete_organization_comment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+                comment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     apps_issue_events_api_events_list_issue_event: {
         parameters: {
             query?: {
@@ -6246,11 +6759,62 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_events_list_organization_issue_event: {
+        parameters: {
+            query?: {
+                /** @description Number of results to return per page. */
+                limit?: number | null;
+                /** @description The pagination cursor value. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path: {
+                issue_id: number;
+                organization_id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueEventSchema"][];
+                };
+            };
+        };
+    };
     apps_issue_events_api_events_get_latest_issue_event: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueEventDetailSchema"];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_events_get_organization_latest_issue_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
                 issue_id: number;
             };
             cookie?: never;
@@ -6291,6 +6855,30 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_events_get_organization_issue_event: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueEventDetailSchema"];
+                };
+            };
+        };
+    };
     apps_issue_events_api_events_list_project_issue_event: {
         parameters: {
             query?: {
@@ -6301,7 +6889,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -6324,7 +6912,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 event_id: string;
             };
@@ -6348,7 +6936,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 issue_id: number;
                 event_id: string;
             };
@@ -6435,6 +7023,77 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_issues_get_organization_issue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueDetailSchema"];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_issues_update_organization_issue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateIssueSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueDetailSchema"];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_issues_delete_organization_issue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     apps_issue_events_api_issues_list_issue_commits: {
         parameters: {
             query?: never;
@@ -6457,21 +7116,17 @@ export interface operations {
             };
         };
     };
-    apps_issue_events_api_issues_update_organization_issue: {
+    apps_issue_events_api_issues_list_organization_issue_commits: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 issue_id: number;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateIssueSchema"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {
@@ -6479,7 +7134,30 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["IssueDetailSchema"];
+                    "application/json": components["schemas"]["CommitSchema"][];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_issues_get_issue_by_short_id: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                short_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShortIdLookupSchema"];
                 };
             };
         };
@@ -6494,6 +7172,7 @@ export interface operations {
                 environment?: string[] | null;
                 query?: string | null;
                 sort?: "last_seen" | "first_seen" | "count" | "priority" | "-last_seen" | "-first_seen" | "-count" | "-priority";
+                shortIdLookup?: string | null;
                 /** @description Number of results to return per page. */
                 limit?: number | null;
                 /** @description The pagination cursor value. */
@@ -6501,7 +7180,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6530,7 +7209,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6563,7 +7242,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6590,6 +7269,7 @@ export interface operations {
                 environment?: string[] | null;
                 query?: string | null;
                 sort?: "last_seen" | "first_seen" | "count" | "priority" | "-last_seen" | "-first_seen" | "-count" | "-priority";
+                shortIdLookup?: string | null;
                 /** @description Number of results to return per page. */
                 limit?: number | null;
                 /** @description The pagination cursor value. */
@@ -6597,7 +7277,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -6611,6 +7291,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IssueSchema"][];
+                };
+            };
+        };
+    };
+    apps_issue_events_api_issues_update_project_issues: {
+        parameters: {
+            query?: {
+                id?: number[] | null;
+                start?: string | null;
+                end?: string | null;
+                project?: number[] | null;
+                environment?: string[] | null;
+                query?: string | null;
+                status?: string | null;
+            };
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                project_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateIssueSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateIssueSchema"];
                 };
             };
         };
@@ -6639,6 +7354,31 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_issues_list_organization_issue_tags: {
+        parameters: {
+            query?: {
+                key?: string | null;
+            };
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueTagSchema"][];
+                };
+            };
+        };
+    };
     apps_issue_events_api_issues_issue_stats: {
         parameters: {
             query: {
@@ -6647,7 +7387,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6691,6 +7431,34 @@ export interface operations {
             };
         };
     };
+    apps_issue_events_api_user_reports_list_organization_user_reports: {
+        parameters: {
+            query?: {
+                /** @description Number of results to return per page. */
+                limit?: number | null;
+                /** @description The pagination cursor value. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                issue_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserReportSchema"][];
+                };
+            };
+        };
+    };
     apps_issue_events_api_hashes_list_issue_hashes: {
         parameters: {
             query?: {
@@ -6701,7 +7469,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 issue_id: number;
             };
             cookie?: never;
@@ -6726,7 +7494,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 issue_id: number;
             };
             cookie?: never;
@@ -6770,7 +7538,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6792,7 +7560,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 log_id: string;
             };
             cookie?: never;
@@ -6828,7 +7596,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6852,7 +7620,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6926,7 +7694,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6948,7 +7716,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6974,7 +7742,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -6999,7 +7767,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7021,7 +7789,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7037,7 +7805,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OrganizationUserSchema"];
+                    "application/json": components["schemas"]["OrganizationUserInviteSchema"];
                 };
             };
         };
@@ -7052,7 +7820,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 team_slug: string;
             };
             cookie?: never;
@@ -7075,7 +7843,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 member_id: number;
             };
             cookie?: never;
@@ -7098,7 +7866,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 member_id: number;
             };
             cookie?: never;
@@ -7125,7 +7893,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 member_id: number;
             };
             cookie?: never;
@@ -7146,7 +7914,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 member_id: number;
             };
             cookie?: never;
@@ -7214,6 +7982,102 @@ export interface operations {
             };
         };
     };
+    apps_organizations_ext_social_app_api_list_organization_social_apps: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrganizationSocialAppSchema"][];
+                };
+            };
+        };
+    };
+    apps_organizations_ext_social_app_api_create_organization_social_app: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrganizationSocialAppIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrganizationSocialAppSchema"];
+                };
+            };
+        };
+    };
+    apps_organizations_ext_social_app_api_update_organization_social_app: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                social_app_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrganizationSocialAppUpdateIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrganizationSocialAppSchema"];
+                };
+            };
+        };
+    };
+    apps_organizations_ext_social_app_api_delete_organization_social_app: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organization_id_or_slug: string;
+                social_app_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     apps_performance_api_list_transaction_groups: {
         parameters: {
             query?: {
@@ -7229,7 +8093,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7251,7 +8115,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 id: number;
             };
             cookie?: never;
@@ -7277,7 +8141,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 id: number;
             };
             cookie?: never;
@@ -7307,7 +8171,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7336,7 +8200,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7361,7 +8225,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 id: number;
             };
             cookie?: never;
@@ -7409,7 +8273,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -7432,7 +8296,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -7459,7 +8323,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -7485,7 +8349,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 team_slug: string;
             };
             cookie?: never;
@@ -7508,7 +8372,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 team_slug: string;
             };
             cookie?: never;
@@ -7541,7 +8405,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7569,7 +8433,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -7592,7 +8456,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -7619,7 +8483,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 key_id: string;
             };
@@ -7643,7 +8507,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 key_id: string;
             };
@@ -7671,7 +8535,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 key_id: string;
             };
@@ -7746,7 +8610,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7786,7 +8650,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7808,7 +8672,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7834,7 +8698,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7882,7 +8746,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7904,7 +8768,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7926,7 +8790,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7948,7 +8812,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -7979,7 +8843,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8001,7 +8865,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8027,7 +8891,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8051,7 +8915,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 team_slug: string;
             };
             cookie?: never;
@@ -8074,7 +8938,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 team_slug: string;
             };
             cookie?: never;
@@ -8101,7 +8965,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 team_slug: string;
             };
             cookie?: never;
@@ -8127,7 +8991,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8149,7 +9013,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8175,7 +9039,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 member_id: "me" | number;
                 team_slug: string;
             };
@@ -8199,7 +9063,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 member_id: "me" | number;
                 team_slug: string;
             };
@@ -8228,7 +9092,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -8251,7 +9115,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 team_slug: string;
             };
@@ -8275,7 +9139,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 team_slug: string;
             };
@@ -8328,7 +9192,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8350,7 +9214,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8376,7 +9240,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 monitor_id: number;
             };
             cookie?: never;
@@ -8399,7 +9263,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 monitor_id: number;
             };
             cookie?: never;
@@ -8426,7 +9290,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 monitor_id: number;
             };
             cookie?: never;
@@ -8453,7 +9317,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 monitor_id: number;
             };
             cookie?: never;
@@ -8481,7 +9345,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8503,7 +9367,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8925,7 +9789,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8947,7 +9811,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
             };
             cookie?: never;
         };
@@ -8978,7 +9842,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -9001,7 +9865,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
             };
             cookie?: never;
@@ -9028,7 +9892,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9051,7 +9915,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9078,7 +9942,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9104,7 +9968,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9129,7 +9993,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
                 file_id: number;
             };
@@ -9153,7 +10017,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
                 file_id: number;
             };
@@ -9175,7 +10039,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 version: string;
             };
@@ -9199,7 +10063,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 version: string;
             };
@@ -9227,7 +10091,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 version: string;
             };
@@ -9254,7 +10118,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 version: string;
             };
@@ -9278,7 +10142,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 version: string;
                 file_id: number;
@@ -9303,7 +10167,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 project_slug: string;
                 version: string;
                 file_id: number;
@@ -9326,7 +10190,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9349,7 +10213,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9376,7 +10240,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9399,7 +10263,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;
@@ -9426,7 +10290,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                organization_slug: string;
+                organization_id_or_slug: string;
                 version: string;
             };
             cookie?: never;

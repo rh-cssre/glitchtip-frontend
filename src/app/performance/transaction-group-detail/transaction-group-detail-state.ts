@@ -11,11 +11,11 @@ export class TransactionGroupDetailService {
         return undefined;
       }
       const { data } = await client.GET(
-        "/api/0/organizations/{organization_slug}/transaction-groups/{id}/",
+        "/api/0/organizations/{organization_id_or_slug}/transaction-groups/{id}/",
         {
           params: {
             path: {
-              organization_slug: params.params.orgSlug,
+              organization_id_or_slug: params.params.orgSlug,
               id: params.params.id,
             },
           },
@@ -32,11 +32,11 @@ export class TransactionGroupDetailService {
         return undefined;
       }
       const { data } = await client.GET(
-        "/api/0/organizations/{organization_slug}/transaction-groups/{id}/spans/",
+        "/api/0/organizations/{organization_id_or_slug}/transaction-groups/{id}/spans/",
         {
           params: {
             path: {
-              organization_slug: params.params.orgSlug,
+              organization_id_or_slug: params.params.orgSlug,
               id: params.params.id,
             },
           },

@@ -9,11 +9,11 @@ export class ReleasesService {
     undefined,
   );
   #releasesResource = apiResource.paginated(this.params, (params) => ({
-    url: "/api/0/organizations/{organization_slug}/releases/",
+    url: "/api/0/organizations/{organization_id_or_slug}/releases/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          organization_id_or_slug: params.orgSlug,
         },
         query: {
           cursor: params.cursor,

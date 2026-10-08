@@ -25,11 +25,11 @@ const initialState: State = {
 export class ProjectDetailService extends StatefulService<State> {
   #params = signal({ orgSlug: "", projectSlug: "" });
   #projectKeysResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/projects/{organization_slug}/{project_slug}/keys/",
+    url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/keys/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          organization_id_or_slug: params.orgSlug,
           project_slug: params.projectSlug,
         },
         query: {
@@ -39,11 +39,11 @@ export class ProjectDetailService extends StatefulService<State> {
     },
   }));
   #projectResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/projects/{organization_slug}/{project_slug}/",
+    url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          organization_id_or_slug: params.orgSlug,
           project_slug: params.projectSlug,
         },
       },
@@ -73,11 +73,11 @@ export class ProjectDetailService extends StatefulService<State> {
   async updateProjectName(projectName: string) {
     this.setState({ updateNameLoading: true });
     const { data, error, response } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.#params().orgSlug,
             project_slug: this.#params().projectSlug,
           },
         },
@@ -103,11 +103,11 @@ export class ProjectDetailService extends StatefulService<State> {
   async updateProjectPlatform(projectPlatform: string, projectName: string) {
     this.setState({ updatePlatformLoading: true });
     const { data, error } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.#params().orgSlug,
             project_slug: this.#params().projectSlug,
           },
         },
@@ -129,11 +129,11 @@ export class ProjectDetailService extends StatefulService<State> {
   async deleteProject(): Promise<boolean> {
     this.setState({ deleteLoading: true });
     const { error, response } = await client.DELETE(
-      "/api/0/projects/{organization_slug}/{project_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            organization_id_or_slug: this.#params().orgSlug,
             project_slug: this.#params().projectSlug,
           },
         },

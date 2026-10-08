@@ -13,11 +13,11 @@ export class SettingsProjectsService {
         return undefined;
       }
       const { data, error, response } = await client.GET(
-        "/api/0/organizations/{organization_slug}/projects/",
+        "/api/0/organizations/{organization_id_or_slug}/projects/",
         {
           params: {
             path: {
-              organization_slug: params.orgSlug,
+              organization_id_or_slug: params.orgSlug,
             },
           },
         },

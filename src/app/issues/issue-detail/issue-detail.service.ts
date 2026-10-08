@@ -192,11 +192,11 @@ export class IssueDetailService extends StatefulService<IssueDetailState> {
         body.statusDetails = statusDetails;
       }
       const { data, error } = await client.PUT(
-        "/api/0/organizations/{organization_slug}/issues/{issue_id}/",
+        "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
         {
           params: {
             path: {
-              organization_slug: this.organization.activeOrganizationSlug(),
+              organization_id_or_slug: this.organization.activeOrganizationSlug(),
               issue_id: parseInt(this.issueID()),
             },
           },

@@ -58,11 +58,11 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
   ) {
     this.setAddProjectToTeamLoading(true);
     const { data, error } = await client.POST(
-      "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -85,11 +85,11 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
   ) {
     this.setRemoveProjectFromTeamLoading(projectSlug);
     const { data, error } = await client.DELETE(
-      "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -108,10 +108,10 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
 
   retrieveProjectsOnTeam(orgSlug: string, teamSlug: string) {
     client
-      .GET("/api/0/organizations/{organization_slug}/projects/", {
+      .GET("/api/0/organizations/{organization_id_or_slug}/projects/", {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
           },
           query: {
             query: `team:${teamSlug}`,
@@ -127,11 +127,11 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
 
   async retrieveProjectsNotOnTeam(orgSlug: string, teamSlug: string) {
     const { data } = await client.GET(
-      "/api/0/organizations/{organization_slug}/projects/",
+      "/api/0/organizations/{organization_id_or_slug}/projects/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            organization_id_or_slug: orgSlug,
           },
           query: {
             query: `!team:${teamSlug}`,

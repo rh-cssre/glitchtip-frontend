@@ -29,6 +29,7 @@ const status = (overrides: Partial<OverageStatus> = {}): OverageStatus => ({
   usage: 400000,
   overageUnits: 0,
   overageCostCents: 0,
+  reportedCostCents: 0,
   throttleRate: 0,
   ...overrides,
 });

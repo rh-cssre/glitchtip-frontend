@@ -22,11 +22,11 @@ export class LogsService {
   #initialHitCount = signal<string | undefined>(undefined);
 
   #logsResource = apiResource.paginated(this.params, (params) => ({
-    url: "/api/0/organizations/{organization_slug}/logs/",
+    url: "/api/0/organizations/{organization_id_or_slug}/logs/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          organization_id_or_slug: params.orgSlug,
         },
         query: {
           cursor: params.cursor,
@@ -45,11 +45,11 @@ export class LogsService {
   // Services list for filter dropdown
   #orgSlug = computed(() => this.params()?.orgSlug);
   #servicesResource = apiResource(this.#orgSlug, (orgSlug) => ({
-    url: "/api/0/organizations/{organization_slug}/logs/resources/",
+    url: "/api/0/organizations/{organization_id_or_slug}/logs/resources/",
     options: {
       params: {
         path: {
-          organization_slug: orgSlug,
+          organization_id_or_slug: orgSlug,
         },
         query: {
           resource_type: "service",

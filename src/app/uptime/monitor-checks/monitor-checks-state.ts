@@ -24,11 +24,11 @@ export class MonitorChecksService {
         return undefined;
       }
       const { data, error, response } = await client.GET(
-        "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/checks/",
+        "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/checks/",
         {
           params: {
             path: {
-              organization_slug: params.params.orgSlug,
+              organization_id_or_slug: params.params.orgSlug,
               monitor_id: params.params.id,
             },
             query: {
