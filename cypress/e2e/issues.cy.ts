@@ -45,7 +45,6 @@ describe("Issues Page", () => {
           (o: { slug: string }) => o.slug === seededOrg.slug,
         );
         cy.get("[data-cy='bulkMarkResolved']").click();
-        // API paths take the org id, not the slug in the page URL
         cy.wait("@issuesUpdateRequest")
           .its("request.url")
           .should("contain", `/api/0/organizations/${org.id}/issues/`);
