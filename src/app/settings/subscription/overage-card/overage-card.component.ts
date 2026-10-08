@@ -88,6 +88,10 @@ export class OverageCardComponent {
   readonly reportedOwedDollars = computed(
     () => this.service.reportedCostOwedCents() / 100,
   );
+  // Compared in cents, the unit both figures are served in.
+  readonly owedAboveCap = computed(
+    () => this.service.reportedCostOwedCents() > this.capCents(),
+  );
   readonly capDollarsCurrent = computed(
     () => (this.status()?.capCents ?? 0) / 100,
   );

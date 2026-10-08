@@ -140,7 +140,7 @@ describe("OverageCardComponent money disclosures", () => {
     ).not.toContain("overage");
   });
 
-  it("names the amount still billed after overage is switched off", () => {
+  it("names the amount still billed after on-demand is switched off", () => {
     const text = render({
       enabled: false,
       active: false,
@@ -148,35 +148,80 @@ describe("OverageCardComponent money disclosures", () => {
       reportedCostCents: 102,
       throttleRate: 10,
     });
-    expect(text).toContain("$1.02 of overage already used this cycle");
-    expect(text).toContain("will still be billed");
+    expect(text).toContain(
+      "$1.02 of on-demand usage already billed this cycle stays on your invoice",
+    );
   });
 
-  it("names the amount when the plan can no longer be billed", () => {
+  // The plan copy used to say it "cannot be billed" right above the amount
+  // that still is.
+  it("names the amount when the plan no longer supports on-demand", () => {
     const text = render({
       eligible: false,
       active: false,
       overageCostCents: 0,
       reportedCostCents: 102,
+      throttleRate: 10,
     });
-    expect(text).toContain("$1.02 of overage already used this cycle");
-    expect(text).not.toContain("Switching overage off");
+    expect(text).toContain("$1.02 of on-demand usage already billed");
+    expect(text).toContain("no new on-demand usage is billed");
+    expect(text).not.toContain("cannot be billed");
   });
 
-  it("says nothing is owed when overage is off and nothing was reported", () => {
+  // Switched off after a downgrade: the card stays for the amount, but it
+  // must not pitch a toggle the server would refuse.
+  it("offers no way to turn it on when the plan does not support it", () => {
+    const text = render({
+      enabled: false,
+      eligible: false,
+      active: false,
+      overageCostCents: 0,
+      reportedCostCents: 102,
+    });
+    expect(text).toContain("On-demand billing is off");
+    expect(text).toContain("$1.02 of on-demand usage already billed");
+    expect(text).not.toContain("Keep collecting events");
+    const toggle = (fixture.nativeElement as HTMLElement).querySelector(
+      "mat-slide-toggle button",
+    ) as HTMLButtonElement;
+    expect(toggle.disabled).toBe(true);
+  });
+
+  it("says nothing is owed when on-demand is off and nothing was reported", () => {
     const text = render({
       enabled: false,
       active: false,
       overageCostCents: 0,
       reportedCostCents: 0,
     });
-    expect(text).not.toContain("will still be billed");
+    expect(text).not.toContain("stays on your invoice");
   });
 
   it("does not repeat the charge while the estimate is showing it", () => {
     expect(render({ reportedCostCents: 102 })).not.toContain(
-      "will still be billed",
+      "stays on your invoice",
     );
+  });
+
+  // Turning it back on with a cap below what is already billed: the dialog
+  // must not promise "up to the cap".
+  it("flags a re-enable whose cap is below what is already billed", () => {
+    render({
+      enabled: false,
+      active: false,
+      capCents: 100,
+      overageCostCents: 0,
+      reportedCostCents: 102,
+    });
+    expect(fixture.componentInstance.owedAboveCap()).toBe(true);
+    render({
+      enabled: false,
+      active: false,
+      capCents: 7500,
+      overageCostCents: 0,
+      reportedCostCents: 102,
+    });
+    expect(fixture.componentInstance.owedAboveCap()).toBe(false);
   });
 
   // The claim the cap-lowering path breaks: usage already served stays

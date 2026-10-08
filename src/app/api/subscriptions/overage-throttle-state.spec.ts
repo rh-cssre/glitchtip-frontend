@@ -7,6 +7,7 @@ import {
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
+  overageCardVisible,
   reportedCostOwedCents,
 } from "./overage-throttle-state";
 
@@ -326,5 +327,44 @@ describe("reportedCostOwedCents", () => {
 
   it("is zero against a server that does not serve the field", () => {
     expect(reportedCostOwedCents(status({ enabled: false }))).toBe(0);
+  });
+});
+
+describe("overageCardVisible", () => {
+  it("is hidden before the status loads", () => {
+    expect(overageCardVisible(null)).toBe(false);
+  });
+
+  it("shows for a paid org that can turn it on", () => {
+    expect(overageCardVisible(status({ enabled: false }))).toBe(true);
+  });
+
+  it("shows while it is on, even on a plan that no longer supports it", () => {
+    expect(overageCardVisible(status({ eligible: false, active: false }))).toBe(
+      true,
+    );
+  });
+
+  it("is hidden when it is off, unavailable and nothing is owed", () => {
+    expect(
+      overageCardVisible(
+        status({ enabled: false, eligible: false, reportedCostCents: 0 }),
+      ),
+    ).toBe(false);
+  });
+
+  // The regression: switching it off after a downgrade hid the only place
+  // the amount still billed is shown.
+  it("shows while a reported amount is still owed", () => {
+    expect(
+      overageCardVisible(
+        status({ enabled: false, eligible: false, reportedCostCents: 102 }),
+      ),
+    ).toBe(true);
+    expect(
+      overageCardVisible(
+        status({ enabled: false, configured: false, reportedCostCents: 102 }),
+      ),
+    ).toBe(true);
   });
 });

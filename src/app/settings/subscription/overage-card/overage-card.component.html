@@ -13,9 +13,21 @@
             </p>
           } @else if (inactiveCause() === "plan") {
             <p class="overage-tagline body-text" i18n>
-              On-demand billing is switched on, but your current plan cannot be
-              billed for it.
+              On-demand billing is switched on, but your current plan does not
+              support it, so no new on-demand usage is billed.
             </p>
+          } @else if (!enabled() && !capAdjustable()) {
+            <!-- Only shown while a reported amount is still owed: the toggle
+                 cannot turn on from here, so the usual pitch would mislead. -->
+            @if (!status.eligible) {
+              <p class="overage-tagline body-text" i18n>
+                On-demand billing is off. Your current plan does not support it.
+              </p>
+            } @else {
+              <p class="overage-tagline body-text" i18n>
+                On-demand billing is off and is not available right now.
+              </p>
+            }
           } @else {
             <!-- The cap bounds overage still to come, not what the cycle has
                  already run up: lowering it mid-cycle leaves served usage
@@ -33,7 +45,9 @@
           }
           <mat-slide-toggle
             [checked]="enabled()"
-            [disabled]="loading() || !canManage()"
+            [disabled]="
+              loading() || !canManage() || (!enabled() && !capAdjustable())
+            "
             (change)="onToggle($event)"
             aria-label="Toggle on-demand billing"
             i18n-aria-label
@@ -51,7 +65,7 @@
         @case ("stalled-plan") {
           <mat-divider />
           <p class="overage-alert overage-alert--warn" i18n>
-            Your current plan cannot be billed for on-demand usage, so it is not
+            Your current plan does not support on-demand billing, so it is not
             adding any headroom and about {{ throttleRate() }}% of new events
             are being dropped. Raising the spend cap will not change that.
           </p>
@@ -119,8 +133,9 @@
       @if (reportedOwedDollars() > 0) {
         <mat-divider />
         <p class="overage-alert" i18n>
-          {{ reportedOwedDollars() | currency }} of overage already used this
-          cycle will still be billed. No further overage is being charged.
+          {{ reportedOwedDollars() | currency }} of on-demand usage already
+          billed this cycle stays on your invoice. No further on-demand usage is
+          being charged.
         </p>
       }
 
@@ -238,7 +253,7 @@
             } @else {
               <!-- The price is live, so it is this org's plan that fails. -->
               <span class="overage-sub" i18n
-                >Your current plan cannot be billed for on-demand usage, so the
+                >Your current plan does not support on-demand billing, so the
                 spend cap cannot be changed.</span
               >
             }
@@ -256,12 +271,26 @@
 <ng-template #migrationDialog>
   <h2 mat-dialog-title i18n>Turn on on-demand billing?</h2>
   <mat-dialog-content class="mat-typography">
-    <p class="body-text" i18n>
-      You're only charged for events above your plan limit, up to a
-      <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
-      change anytime. Once the cap is reached, no further on-demand usage is
-      charged.
-    </p>
+    @if (owedAboveCap()) {
+      <!-- Re-enabling in the same cycle floors the cap at what was already
+           reported, so "up to the cap" would understate the bill. -->
+      <p class="body-text" i18n>
+        You're charged for events above your plan limit, up to a monthly cap you
+        can change anytime. This cycle already has
+        <strong>{{ reportedOwedDollars() | currency }}</strong> of on-demand
+        usage billed, more than your
+        <strong>{{ capInputDollars() | currency }} cap</strong>. That amount
+        stays on your invoice, and until you raise the cap or the cycle resets,
+        nothing more is charged and events past your plan limit stay throttled.
+      </p>
+    } @else {
+      <p class="body-text" i18n>
+        You're only charged for events above your plan limit, up to a
+        <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
+        change anytime. Once the cap is reached, no further on-demand usage is
+        charged.
+      </p>
+    }
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-button mat-dialog-close i18n>Cancel</button>
