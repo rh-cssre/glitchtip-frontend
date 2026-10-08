@@ -140,7 +140,7 @@ describe("OverageCardComponent money disclosures", () => {
     ).not.toContain("overage");
   });
 
-  it("names the amount still billed after on-demand is switched off", () => {
+  it("names the amount already counted after on-demand is switched off", () => {
     const text = render({
       enabled: false,
       active: false,
@@ -149,7 +149,7 @@ describe("OverageCardComponent money disclosures", () => {
       throttleRate: 10,
     });
     expect(text).toContain(
-      "$1.02 of on-demand usage already billed this cycle stays on your invoice",
+      "$1.02 of on-demand usage has already been counted towards your bill this cycle and will still be on your invoice",
     );
   });
 
@@ -163,8 +163,8 @@ describe("OverageCardComponent money disclosures", () => {
       reportedCostCents: 102,
       throttleRate: 10,
     });
-    expect(text).toContain("$1.02 of on-demand usage already billed");
-    expect(text).toContain("no new on-demand usage is billed");
+    expect(text).toContain("$1.02 of on-demand usage has already been counted");
+    expect(text).toContain("no new on-demand usage is charged");
     expect(text).not.toContain("cannot be billed");
   });
 
@@ -179,7 +179,7 @@ describe("OverageCardComponent money disclosures", () => {
       reportedCostCents: 102,
     });
     expect(text).toContain("On-demand billing is off");
-    expect(text).toContain("$1.02 of on-demand usage already billed");
+    expect(text).toContain("$1.02 of on-demand usage has already been counted");
     expect(text).not.toContain("Keep collecting events");
     const toggle = (fixture.nativeElement as HTMLElement).querySelector(
       "mat-slide-toggle button",
@@ -194,18 +194,18 @@ describe("OverageCardComponent money disclosures", () => {
       overageCostCents: 0,
       reportedCostCents: 0,
     });
-    expect(text).not.toContain("stays on your invoice");
+    expect(text).not.toContain("of on-demand usage has already been counted");
   });
 
   it("does not repeat the charge while the estimate is showing it", () => {
     expect(render({ reportedCostCents: 102 })).not.toContain(
-      "stays on your invoice",
+      "of on-demand usage has already been counted",
     );
   });
 
-  // Turning it back on with a cap below what is already billed: the dialog
+  // Turning it back on with a cap below what is already counted: the dialog
   // must not promise "up to the cap".
-  it("flags a re-enable whose cap is below what is already billed", () => {
+  it("flags a re-enable whose cap is below what is already counted", () => {
     render({
       enabled: false,
       active: false,

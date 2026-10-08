@@ -14,7 +14,7 @@
           } @else if (inactiveCause() === "plan") {
             <p class="overage-tagline body-text" i18n>
               On-demand billing is switched on, but your current plan does not
-              support it, so no new on-demand usage is billed.
+              support it, so no new on-demand usage is charged.
             </p>
           } @else if (!enabled() && !capAdjustable()) {
             <!-- Only shown while a reported amount is still owed: the toggle
@@ -133,9 +133,9 @@
       @if (reportedOwedDollars() > 0) {
         <mat-divider />
         <p class="overage-alert" i18n>
-          {{ reportedOwedDollars() | currency }} of on-demand usage already
-          billed this cycle stays on your invoice. No further on-demand usage is
-          being charged.
+          {{ reportedOwedDollars() | currency }} of on-demand usage has already
+          been counted towards your bill this cycle and will still be on your
+          invoice. No further on-demand usage is being charged.
         </p>
       }
 
@@ -276,12 +276,13 @@
            reported, so "up to the cap" would understate the bill. -->
       <p class="body-text" i18n>
         You're charged for events above your plan limit, up to a monthly cap you
-        can change anytime. This cycle already has
+        can change anytime.
         <strong>{{ reportedOwedDollars() | currency }}</strong> of on-demand
-        usage billed, more than your
-        <strong>{{ capInputDollars() | currency }} cap</strong>. That amount
-        stays on your invoice, and until you raise the cap or the cycle resets,
-        nothing more is charged and events past your plan limit stay throttled.
+        usage has already been counted towards your bill this cycle, more than
+        your <strong>{{ capInputDollars() | currency }} cap</strong>. That
+        amount will still be on your invoice, and until you raise the cap or the
+        cycle resets, nothing more is charged and events past your plan limit
+        stay throttled.
       </p>
     } @else {
       <p class="body-text" i18n>
