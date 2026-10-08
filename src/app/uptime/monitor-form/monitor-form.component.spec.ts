@@ -73,6 +73,7 @@ describe("MonitorFormComponent environment scoping", () => {
           useValue: {
             activeOrganizationSlug: signal("org"),
             activeOrganizationProjects: signal(ORG_PROJECTS),
+            orgIdOrSlug: (slug: string) => slug,
           },
         },
         {

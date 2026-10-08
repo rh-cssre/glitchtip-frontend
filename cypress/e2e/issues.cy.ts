@@ -26,16 +26,9 @@ describe("Issues Page", () => {
         "GET",
         "/api/0/organizations/*/issues/?query=is%3Aunresolved",
       ).as("initialIssuesRequest");
+      cy.intercept("GET", /\/api\/0\/organizations\/(\?|$)/).as("orgList");
       cy.visit(`/${seededOrg.slug}/issues`);
-      cy.request("/api/0/organizations/").then((res) => {
-        const org = res.body.find(
-          (o: { slug: string }) => o.slug === seededOrg.slug,
-        );
-        // API paths take the org id, not the slug in the page URL
-        cy.wait("@initialIssuesRequest")
-          .its("request.url")
-          .should("contain", `/api/0/organizations/${org.id}/issues/`);
-      });
+      cy.wait("@initialIssuesRequest");
 
       cy.get("[data-cy=selectAll]").click();
       cy.contains("Select all 55 issues that match this query");
@@ -45,8 +38,18 @@ describe("Issues Page", () => {
       cy.intercept("PUT", "/api/0/organizations/*/issues/").as(
         "issuesUpdateRequest",
       );
-      cy.get("[data-cy='bulkMarkResolved']").click();
-      cy.wait("@issuesUpdateRequest");
+      // A request made before the org list loads falls back to the slug, so
+      // only one made after it is sure to carry the id.
+      cy.wait("@orgList").then(({ response }) => {
+        const org = response!.body.find(
+          (o: { slug: string }) => o.slug === seededOrg.slug,
+        );
+        cy.get("[data-cy='bulkMarkResolved']").click();
+        // API paths take the org id, not the slug in the page URL
+        cy.wait("@issuesUpdateRequest")
+          .its("request.url")
+          .should("contain", `/api/0/organizations/${org.id}/issues/`);
+      });
       cy.log(
         "To ensure this made a successful network call, we search for resolved events.",
       );
