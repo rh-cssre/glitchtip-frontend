@@ -15,16 +15,30 @@
     @case ("cap") {
       <!-- This and "no-overage" need a plan on-demand billing can attach to,
            so the org is paid and changes plan through us, never upgrades. -->
-      <span i18n>
-        to raise your spend cap or change your plan and keep collecting
-        events.</span
-      >
+      @if (canManage()) {
+        <span i18n>
+          to raise your spend cap or change your plan and keep collecting
+          events.</span
+        >
+      } @else {
+        <span i18n>
+          for details, or ask an organization owner to raise the spend cap and
+          keep collecting events.</span
+        >
+      }
     }
     @case ("no-overage") {
-      <span i18n>
-        to turn on on-demand billing or change your plan and keep collecting
-        events.</span
-      >
+      @if (canManage()) {
+        <span i18n>
+          to turn on on-demand billing or change your plan and keep collecting
+          events.</span
+        >
+      } @else {
+        <span i18n>
+          for details, or ask an organization owner to turn on on-demand billing
+          and keep collecting events.</span
+        >
+      }
     }
     @case ("stalled-plan") {
       @if (paid()) {

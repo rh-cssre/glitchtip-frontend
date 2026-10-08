@@ -10,6 +10,7 @@ import {
   MatSnackBarRef,
 } from "@angular/material/snack-bar";
 import { OverLimitSnackbar } from "./over-limit-snackbar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
 import type { OverageThrottleState } from "src/app/api/subscriptions/overage-throttle-state";
 
@@ -21,10 +22,16 @@ describe("OverLimitSnackbar remedy", () => {
   const throttleState = signal<OverageThrottleState>("unknown");
   // undefined: still loading; null: no subscription; number: its price.
   const price = signal<number | null | undefined>(undefined);
+  const isOwner = signal(true);
 
-  function render(state: OverageThrottleState, effectivePrice?: number | null) {
+  function render(
+    state: OverageThrottleState,
+    effectivePrice?: number | null,
+    owner = true,
+  ) {
     throttleState.set(state);
     price.set(effectivePrice);
+    isOwner.set(owner);
     const fixture = TestBed.createComponent(OverLimitSnackbar);
     fixture.detectChanges();
     return (fixture.nativeElement as HTMLElement).textContent ?? "";
@@ -40,6 +47,10 @@ describe("OverLimitSnackbar remedy", () => {
           useValue: { activeOrgSlug: "org", throttleRate: 20 },
         },
         { provide: MatSnackBarRef, useValue: { dismiss: () => undefined } },
+        {
+          provide: OrganizationsService,
+          useValue: { accessOrgAdmin: isOwner },
+        },
         {
           provide: SubscriptionService,
           useValue: {
@@ -65,6 +76,19 @@ describe("OverLimitSnackbar remedy", () => {
     const text = render("no-overage", 15);
     expect(text).toContain("turn on on-demand billing or change your plan");
     expect(text).not.toContain("upgrade");
+  });
+
+  it("sends a non-owner to an owner instead of to the cap or the toggle", () => {
+    const atCap = render("cap", 15, false);
+    expect(atCap).toContain("ask an organization owner to raise the spend cap");
+    expect(atCap).not.toContain("raise your spend cap");
+    expect(atCap).not.toContain("change your plan");
+
+    const noOverage = render("no-overage", 15, false);
+    expect(noOverage).toContain(
+      "ask an organization owner to turn on on-demand billing",
+    );
+    expect(noOverage).not.toContain("change your plan");
   });
 
   it("tells a paid org to change plan when nothing else helps", () => {
