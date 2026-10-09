@@ -13,6 +13,7 @@ import {
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
+  reportedCostOwedCents as overageReportedCostOwedCents,
 } from "./overage-throttle-state";
 import { showSubscriptionRefreshTimeout } from "./subscription-refresh-state";
 
@@ -230,6 +231,9 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   capReached = computed(() => overageCapReached(this.overageStatus()));
   capBelowBilled = computed(() => overageCapBelowBilled(this.overageStatus()));
+  reportedCostOwedCents = computed(() =>
+    overageReportedCostOwedCents(this.overageStatus()),
+  );
 
   // Forecast cap hit this cycle, in units (clients have no tier rates for $).
   private predictedOverageUnits = computed(() => {

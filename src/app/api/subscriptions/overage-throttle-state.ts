@@ -110,3 +110,25 @@ export function capBelowBilled(status: OverageStatus | null): boolean {
   if (!status || !status.enabled || !status.capCents) return false;
   return status.overageCostCents > status.capCents;
 }
+
+/**
+ * Cents already reported to Stripe this cycle and still invoiced, in the
+ * states where the card shows no estimate. An older server omits the field.
+ */
+export function reportedCostOwedCents(status: OverageStatus | null): number {
+  if (!status) return 0;
+  if (status.enabled && !isOverageInactive(status)) return 0;
+  return status.reportedCostCents ?? 0;
+}
+
+/**
+ * Whether the subscription page shows the on-demand card: paid, provisioned
+ * orgs; unbillable ones that still have it on, so they can switch it off; and
+ * any org that still owes a reported amount, which only the card discloses.
+ */
+export function overageCardVisible(status: OverageStatus | null): boolean {
+  if (!status) return false;
+  return (
+    capAdjustable(status) || status.enabled || reportedCostOwedCents(status) > 0
+  );
+}
