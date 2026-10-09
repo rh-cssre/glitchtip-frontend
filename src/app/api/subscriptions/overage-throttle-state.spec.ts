@@ -228,6 +228,21 @@ describe("isOverageInactive", () => {
   });
 });
 
+describe("displayedThrottleRate", () => {
+  // The regression: the banner read the organization payload, which can be
+  // ten minutes old, so a throttle the status already reported showed no
+  // banner at all.
+  it("takes the rate from the status the diagnosis comes from", () => {
+    expect(displayedThrottleRate(status({ throttleRate: 50 }), 0)).toBe(50);
+    expect(displayedThrottleRate(status({ throttleRate: 0 }), 50)).toBe(0);
+  });
+
+  it("falls back to the organization payload without a status", () => {
+    expect(displayedThrottleRate(null, 50)).toBe(50);
+    expect(displayedThrottleRate(null, undefined)).toBe(null);
+  });
+});
+
 describe("overageInactiveCause", () => {
   it("is null before the status loads", () => {
     expect(overageInactiveCause(null)).toBe(null);
@@ -250,20 +265,5 @@ describe("overageInactiveCause", () => {
     expect(overageInactiveCause(status({ active: false, throttleRate: 50 }))).toBe(
       "broken",
     );
-  });
-});
-
-describe("displayedThrottleRate", () => {
-  // The regression: the banner read the organization payload, which can be
-  // ten minutes old, so a throttle the status already reported showed no
-  // banner at all.
-  it("takes the rate from the status the diagnosis comes from", () => {
-    expect(displayedThrottleRate(status({ throttleRate: 50 }), 0)).toBe(50);
-    expect(displayedThrottleRate(status({ throttleRate: 0 }), 50)).toBe(0);
-  });
-
-  it("falls back to the organization payload without a status", () => {
-    expect(displayedThrottleRate(null, 50)).toBe(50);
-    expect(displayedThrottleRate(null, undefined)).toBe(null);
   });
 });
