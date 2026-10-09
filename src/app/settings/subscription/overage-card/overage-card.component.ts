@@ -72,6 +72,7 @@ export class OverageCardComponent {
   readonly overageInactive = this.service.overageInactive;
   readonly inactiveCause = this.service.inactiveCause;
   readonly capAdjustable = this.service.canConfigureOverage;
+  readonly capBelowBilled = this.service.capBelowBilled;
   // The half of capAdjustable that is server-wide rather than this org's plan.
   readonly overageConfigured = this.service.overageConfigured;
   readonly loading = this.service.overageConfigLoading;
@@ -83,6 +84,13 @@ export class OverageCardComponent {
   // Estimate from event counts, not the actual Stripe charge.
   readonly costDollars = computed(
     () => (this.status()?.overageCostCents ?? 0) / 100,
+  );
+  readonly reportedOwedDollars = computed(
+    () => this.service.reportedCostOwedCents() / 100,
+  );
+  // Compared in cents, the unit both figures are served in.
+  readonly owedAboveCap = computed(
+    () => this.service.reportedCostOwedCents() > this.capCents(),
   );
   readonly capDollarsCurrent = computed(
     () => (this.status()?.capCents ?? 0) / 100,

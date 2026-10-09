@@ -2,10 +2,14 @@ import { describe, it, expect } from "vitest";
 import type { components } from "../api-schema";
 import {
   capAdjustable,
+  capBelowBilled,
   capReached,
+  displayedThrottleRate,
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
+  overageCardVisible,
+  reportedCostOwedCents,
 } from "./overage-throttle-state";
 
 /**
@@ -228,6 +232,21 @@ describe("isOverageInactive", () => {
   });
 });
 
+describe("displayedThrottleRate", () => {
+  // The regression: the banner read the organization payload, which can be
+  // ten minutes old, so a throttle the status already reported showed no
+  // banner at all.
+  it("takes the rate from the status the diagnosis comes from", () => {
+    expect(displayedThrottleRate(status({ throttleRate: 50 }), 0)).toBe(50);
+    expect(displayedThrottleRate(status({ throttleRate: 0 }), 50)).toBe(0);
+  });
+
+  it("falls back to the organization payload without a status", () => {
+    expect(displayedThrottleRate(null, 50)).toBe(50);
+    expect(displayedThrottleRate(null, undefined)).toBe(null);
+  });
+});
+
 describe("overageInactiveCause", () => {
   it("is null before the status loads", () => {
     expect(overageInactiveCause(null)).toBe(null);
@@ -238,17 +257,131 @@ describe("overageInactiveCause", () => {
   });
 
   it("blames the plan when it cannot be billed", () => {
-    expect(overageInactiveCause(status({ active: false, eligible: false }))).toBe(
-      "plan",
-    );
+    expect(
+      overageInactiveCause(status({ active: false, eligible: false })),
+    ).toBe("plan");
   });
 
   // The regression: a resubscribe leaves overage on with no metered item, and
   // the tagline blamed the plan until the first throttle sweep had run.
   it("blames us on a billable plan, throttled or not", () => {
     expect(overageInactiveCause(status({ active: false }))).toBe("broken");
-    expect(overageInactiveCause(status({ active: false, throttleRate: 50 }))).toBe(
-      "broken",
+    expect(
+      overageInactiveCause(status({ active: false, throttleRate: 50 })),
+    ).toBe("broken");
+  });
+});
+
+describe("capBelowBilled", () => {
+  it("is false before the status loads", () => {
+    expect(capBelowBilled(null)).toBe(false);
+  });
+
+  it("is false while the cap still covers what has been billed", () => {
+    expect(capBelowBilled(status({ overageCostCents: 102 }))).toBe(false);
+  });
+
+  it("is false with no cap set", () => {
+    expect(capBelowBilled(status({ capCents: 0, overageCostCents: 102 }))).toBe(
+      false,
     );
+  });
+
+  // The regression: usage keeps arriving while throttling ramps in, so a
+  // reached cap always has usage past it. That usage is free, and the cap was
+  // never lowered.
+  it("is false at a reached cap with usage past it", () => {
+    expect(
+      capBelowBilled(status({ overageUnits: 300000, overageCostCents: 5000 })),
+    ).toBe(false);
+  });
+
+  it("is true once the cap is lowered below what has been billed", () => {
+    expect(
+      capBelowBilled(status({ capCents: 100, overageCostCents: 102 })),
+    ).toBe(true);
+  });
+
+  // Overage off is the other disclosure's job; this one explains a cap bar
+  // that is only drawn while overage is live.
+  it("is false when overage is switched off", () => {
+    expect(
+      capBelowBilled(
+        status({ enabled: false, capCents: 100, overageCostCents: 102 }),
+      ),
+    ).toBe(false);
+  });
+});
+
+describe("reportedCostOwedCents", () => {
+  it("is zero before the status loads", () => {
+    expect(reportedCostOwedCents(null)).toBe(0);
+  });
+
+  it("is zero while overage is live", () => {
+    expect(reportedCostOwedCents(status({ reportedCostCents: 102 }))).toBe(0);
+  });
+
+  it("is what was reported once overage is switched off", () => {
+    expect(
+      reportedCostOwedCents(status({ enabled: false, reportedCostCents: 102 })),
+    ).toBe(102);
+  });
+
+  it("is what was reported when the plan can no longer be billed", () => {
+    expect(
+      reportedCostOwedCents(
+        status({ eligible: false, active: false, reportedCostCents: 102 }),
+      ),
+    ).toBe(102);
+  });
+
+  it("is zero when overage is off and nothing was reported", () => {
+    expect(
+      reportedCostOwedCents(status({ enabled: false, reportedCostCents: 0 })),
+    ).toBe(0);
+  });
+
+  it("is zero against a server that does not serve the field", () => {
+    expect(reportedCostOwedCents(status({ enabled: false }))).toBe(0);
+  });
+});
+
+describe("overageCardVisible", () => {
+  it("is hidden before the status loads", () => {
+    expect(overageCardVisible(null)).toBe(false);
+  });
+
+  it("shows for a paid org that can turn it on", () => {
+    expect(overageCardVisible(status({ enabled: false }))).toBe(true);
+  });
+
+  it("shows while it is on, even on a plan that no longer supports it", () => {
+    expect(overageCardVisible(status({ eligible: false, active: false }))).toBe(
+      true,
+    );
+  });
+
+  it("is hidden when it is off, unavailable and nothing is owed", () => {
+    expect(
+      overageCardVisible(
+        status({ enabled: false, eligible: false, reportedCostCents: 0 }),
+      ),
+    ).toBe(false);
+  });
+
+  // The regression: switching it off after a downgrade hid the only place
+  // the amount still billed is shown.
+  it("shows while a reported amount is still owed", () => {
+    expect(
+      overageCardVisible(
+        status({ enabled: false, eligible: false, reportedCostCents: 102 }),
+      ),
+    ).toBe(true);
+    expect(
+      overageCardVisible(
+        status({ enabled: false, configured: false, reportedCostCents: 102 }),
+      ),
+    ).toBe(true);
   });
 });

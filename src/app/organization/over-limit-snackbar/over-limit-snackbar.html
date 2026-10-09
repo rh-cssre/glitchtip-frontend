@@ -13,21 +13,50 @@
   </a>
   @switch (throttleState()) {
     @case ("cap") {
-      <span i18n>
-        to upgrade or raise your spend cap and keep collecting events.</span
-      >
+      <!-- This and "no-overage" need a plan on-demand billing can attach to,
+           so the org is paid and changes plan through us, never upgrades. -->
+      @if (canManage()) {
+        <span i18n>
+          to raise your spend cap or change your plan and keep collecting
+          events.</span
+        >
+      } @else {
+        <span i18n>
+          for details, or ask an organization owner to raise the spend cap or
+          change your plan and keep collecting events.</span
+        >
+      }
     }
     @case ("no-overage") {
-      <span i18n>
-        to upgrade or turn on on-demand billing and keep collecting
-        events.</span
-      >
+      @if (canManage()) {
+        <span i18n>
+          to turn on on-demand billing or change your plan and keep collecting
+          events.</span
+        >
+      } @else {
+        <span i18n>
+          for details, or ask an organization owner to turn on on-demand billing
+          or change your plan and keep collecting events.</span
+        >
+      }
     }
     @case ("stalled-plan") {
-      <span i18n>
-        to upgrade. Your current plan cannot be billed for on-demand usage, so
-        raising your spend cap will not change this.
-      </span>
+      @if (paid()) {
+        <span i18n>
+          to change your plan. Your current plan cannot be billed for on-demand
+          usage, so raising your spend cap will not change this.
+        </span>
+      } @else if (paid() === false) {
+        <span i18n>
+          to upgrade. Your current plan cannot be billed for on-demand usage, so
+          raising your spend cap will not change this.
+        </span>
+      } @else {
+        <span i18n>
+          for details. Your current plan cannot be billed for on-demand usage,
+          so raising your spend cap will not change this.
+        </span>
+      }
     }
     @case ("stalled-broken") {
       <span i18n>
@@ -36,17 +65,22 @@
       </span>
     }
     @case ("throttled") {
-      <!-- Overage is live and the cap is not the cause, which usually means
-           the throttle rate has not caught up with a cap or plan change yet.
-           Naming a remedy here would sell an upgrade the customer may have
-           already fixed, so say the same thing the overage card says. -->
+      <!-- Overage is live and the cap is not the cause: the server is
+           catching up with a cap or plan change and clears the rate on its
+           own. Naming a remedy here would sell an upgrade the customer may
+           have already fixed, so say the same thing the overage card says. -->
       <span i18n>
-        for details. If you just changed your cap or plan, this clears once the
-        change takes effect.
+        for details. A recent plan or cap change is taking effect.
       </span>
     }
     @default {
-      <span i18n> to upgrade and keep collecting events.</span>
+      @if (paid()) {
+        <span i18n> to change your plan and keep collecting events.</span>
+      } @else if (paid() === false) {
+        <span i18n> to upgrade and keep collecting events.</span>
+      } @else {
+        <span i18n> for details.</span>
+      }
     }
   }
 </span>

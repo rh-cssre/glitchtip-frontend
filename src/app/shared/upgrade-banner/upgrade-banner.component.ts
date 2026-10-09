@@ -8,6 +8,7 @@ import {
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import type { OverageThrottleState } from "src/app/api/subscriptions/overage-throttle-state";
 
 @Component({
   selector: "gt-upgrade-banner",
@@ -26,17 +27,38 @@ export class UpgradeBannerComponent {
   readonly freeEventLimit = input<number | null>(null);
   readonly upgradeLoading = input(false);
   /**
+   * The org already pays for a plan. Checkout creates a subscription, so it
+   * is the free org's path only, and the billing portal cannot change the
+   * plan of a subscription that has ever carried the metered on-demand item,
+   * which this page cannot see. Until plan changes move in-app, a paid org is
+   * offered a conversation: no named upgrade, no pricing dialog.
+   */
+  readonly paid = input(false);
+  /**
    * Whether the plan list has arrived. Without it `nextPlanEvents === null`
    * cannot tell "still loading" from "nothing bigger exists", and a mid-size
    * org would flash the largest-plan copy on every page load.
    */
   readonly plansLoaded = input(false);
   /**
-   * Whether raising the overage spend cap is the live remedy, i.e. overage is
-   * already on. Decides which of the two controls the largest-plan copy points
-   * at; the overage card that owns both sits directly below this banner.
+   * The shared throttle diagnosis, from the same state machine the overage
+   * card and snackbar branch on. The banner's copy names a remedy, so it has
+   * to come from the state that knows which remedy is real; reading the raw
+   * rate had this banner selling upgrades while the card below said to wait.
    */
-  readonly overageEnabled = input(false);
+  readonly throttleState = input<OverageThrottleState>("unknown");
+  /**
+   * The throttle diagnosis could not be fetched, as distinct from not having
+   * arrived yet. The rate comes from the organization payload, so a throttled
+   * org stays visible on the plain pitch instead of going quiet about events
+   * we know are being dropped.
+   */
+  readonly throttleStateUnavailable = input(false);
+  /**
+   * The cap and the on-demand toggle are owner-only, so "cap" and
+   * "no-overage" point everyone else at an owner, as the snackbar does.
+   */
+  readonly canManage = input(true);
   /** Where a customer with nothing left to upgrade to should write. */
   readonly contactEmail = input<string | null>(null);
 
@@ -80,6 +102,57 @@ export class UpgradeBannerComponent {
     const rate = this.eventThrottleRate();
     return rate !== null && rate > 0;
   });
+  /**
+   * Throttled with a remedy this banner can honestly name. "throttled" is
+   * excluded because it is a lag the server clears on its own; the card below
+   * says so, and any remedy sold here would contradict it. "unknown" and
+   * "none" are excluded because the status either has not arrived or already
+   * reads clear, and copy chosen without it can name the wrong remedy.
+   */
+  readonly actionableThrottle = computed(() => {
+    const state = this.throttleState();
+    return (
+      state === "cap" ||
+      state === "no-overage" ||
+      state === "unavailable" ||
+      state === "stalled-plan" ||
+      state === "stalled-broken"
+    );
+  });
+  /**
+   * A throttled org whose diagnosis offers nothing to sell or explain here
+   * gets no banner at all rather than a hedge: the overage card directly
+   * below owns the transient "taking effect" notice. A diagnosis that failed
+   * to load is the exception, since the card hides itself on the same failure
+   * and silence would be the only thing a throttled org saw.
+   */
+  readonly visible = computed(() => {
+    if (this.variant() === "get-started") return true;
+    if (this.isSuspended()) return true;
+    if (this.isThrottling())
+      return this.actionableThrottle() || this.throttleStateUnavailable();
+    return true;
+  });
+  /**
+   * States with no self-serve plan change, so the action is a conversation:
+   * nothing bigger to sell, a paused org, an on-demand stall only we can fix,
+   * or a paid org (see `paid`).
+   */
+  readonly contactInstead = computed(
+    () =>
+      this.paid() ||
+      this.isSuspended() ||
+      this.isLargestPlan() ||
+      this.throttleState() === "stalled-broken",
+  );
+  /** The free org's named upgrade, which goes through Checkout. */
+  readonly showUpgrade = computed(
+    () =>
+      !this.paid() &&
+      this.hasNextPlan() &&
+      !this.isSuspended() &&
+      this.throttleState() !== "stalled-broken",
+  );
 
   onUpgrade() {
     this.upgradeClick.emit();

@@ -38,11 +38,11 @@
     @if (fromStripe()) {
       <span class="body-text-strong">Redirected from Stripe</span>
     }
-    @if (subscriptionLoading() || subscriptionRefreshTimeout()) {
+    @if (pageLoading() || subscriptionRefreshTimeout()) {
       <mat-card>
         <mat-card-header></mat-card-header>
         <mat-card-content>
-          @if (subscriptionLoading()) {
+          @if (pageLoading()) {
             <div class="spinner-container">
               <mat-spinner diameter="36"></mat-spinner>
             </div>
@@ -63,23 +63,24 @@
         @if (
           subscription.effectivePrice === 0 ||
           (subscription.status !== "canceled" &&
-            (activeOrganization()?.eventThrottleRate ||
+            (eventThrottleRate() ||
               activeOrganization()?.isAcceptingEvents === false))
         ) {
           <gt-upgrade-banner
             [usagePercent]="
               thisMonthPercent() >= 80 ? thisMonthPercent() : null
             "
-            [eventThrottleRate]="
-              activeOrganization()?.eventThrottleRate ?? null
-            "
+            [eventThrottleRate]="eventThrottleRate()"
             [isAcceptingEvents]="
               activeOrganization()?.isAcceptingEvents ?? null
             "
             [nextPlanEvents]="nextProduct()?.events ?? null"
             [plansLoaded]="plansLoaded()"
-            [overageEnabled]="overageEnabled()"
+            [throttleState]="throttleState()"
+            [throttleStateUnavailable]="throttleStateUnavailable()"
             [contactEmail]="billingEmail"
+            [paid]="subscription.effectivePrice > 0"
+            [canManage]="canManageOverage()"
             [upgradeLoading]="upgradeLoading()"
             (upgradeClick)="upgradeToNextPlan()"
             (comparePlansClick)="openBuiltInPricing()"

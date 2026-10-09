@@ -29,6 +29,7 @@ import { environment } from "../../../environments/environment";
 import { PaymentComponent } from "./payment/payment.component";
 import { PaymentService } from "./payment/payment.service";
 import { OverageCardComponent } from "./overage-card/overage-card.component";
+import { overageCardVisible } from "src/app/api/subscriptions/overage-throttle-state";
 import { SelfHostedSubscriptionComponent } from "./self-hosted-subscription/self-hosted-subscription.component";
 import { SubscriptionChartsComponent } from "./subscription-charts/subscription-charts.component";
 
@@ -81,12 +82,14 @@ export class SubscriptionComponent extends StatefulComponent<
 
   readonly fromStripe = this.service.fromStripe;
   readonly subscription = this.service.subscription;
-  readonly subscriptionLoading = this.service.subscriptionLoading;
+  readonly pageLoading = computed(
+    () =>
+      this.service.subscriptionLoading() || this.service.throttleStatePending(),
+  );
   readonly subscriptionRefreshTimeout = this.service.subscriptionRefreshTimeout;
   readonly totalEventsAllowed = this.service.totalEventsAllowed;
-  // Paid, provisioned orgs, plus unbillable ones so they can switch it off.
-  readonly showOverageCard = computed(
-    () => this.service.canConfigureOverage() || this.service.overageEnabled(),
+  readonly showOverageCard = computed(() =>
+    overageCardVisible(this.service.overageStatus()),
   );
   readonly activeOrganization = this.orgService.activeOrganization;
   readonly activeOrganizationSlug = this.orgService.activeOrganizationSlug;
@@ -124,8 +127,13 @@ export class SubscriptionComponent extends StatefulComponent<
   });
   thisMonthPercent = this.service.thisMonthPercent;
   billingEmail = environment.billingEmail;
-  // Which overage control the largest-plan banner copy should point at.
-  readonly overageEnabled = this.service.overageEnabled;
+  // The shared throttle diagnosis; the banner picks its copy (and whether to
+  // render at all) from the same state the overage card and snackbar use.
+  readonly throttleState = this.service.throttleState;
+  readonly throttleStateUnavailable = this.service.overageStatusUnavailable;
+  readonly eventThrottleRate = this.service.eventThrottleRate;
+  // The cap and the on-demand toggle are owner-only, as on the card below.
+  readonly canManageOverage = this.orgService.accessOrgAdmin;
 
   nextProduct = computed(() => {
     const subscription = this.subscription();
@@ -163,6 +171,18 @@ export class SubscriptionComponent extends StatefulComponent<
     // Gate detail-page resources to this component's lifetime; org-reactive while active.
     service.setDetailActive(true);
     destroyRef.onDestroy(() => service.setDetailActive(false));
+
+    // The throttle rate changes on a sweep every few hours, so recheck when
+    // the tab comes back rather than on a timer.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        service.overageStatusResource.reload();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    destroyRef.onDestroy(() =>
+      document.removeEventListener("visibilitychange", onVisible),
+    );
 
     // Fire hosted-only fetches once settings confirm billing is enabled.
     effect(() => {
