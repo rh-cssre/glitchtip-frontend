@@ -70,6 +70,19 @@ export function capReached(status: OverageStatus | null): boolean {
 }
 
 /**
+ * The drop rate to show beside the throttle diagnosis. Read from the same
+ * response as the diagnosis so the two agree: the organization payload only
+ * refreshes every 10 minutes and can miss a throttle that started since. Falls
+ * back to it while the status is loading or has failed.
+ */
+export function displayedThrottleRate(
+  status: OverageStatus | null,
+  orgRate: number | undefined,
+): number | null {
+  return status ? status.throttleRate : (orgRate ?? null);
+}
+
+/**
  * Only `active` says overage is not working. `throttleRate` is written by a
  * background sweep while usage and the cap are computed per request, so
  * inferring it from usage below the cap reads across a lagging value.

@@ -4,6 +4,7 @@ import {
   capAdjustable,
   capBelowBilled,
   capReached,
+  displayedThrottleRate,
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
@@ -227,6 +228,21 @@ describe("isOverageInactive", () => {
   // keeps `active` true and the org keeps accruing cost.
   it("is false when only the overage price is gone", () => {
     expect(isOverageInactive(status({ configured: false }))).toBe(false);
+  });
+});
+
+describe("displayedThrottleRate", () => {
+  // The regression: the banner read the organization payload, which can be
+  // ten minutes old, so a throttle the status already reported showed no
+  // banner at all.
+  it("takes the rate from the status the diagnosis comes from", () => {
+    expect(displayedThrottleRate(status({ throttleRate: 50 }), 0)).toBe(50);
+    expect(displayedThrottleRate(status({ throttleRate: 0 }), 50)).toBe(0);
+  });
+
+  it("falls back to the organization payload without a status", () => {
+    expect(displayedThrottleRate(null, 50)).toBe(50);
+    expect(displayedThrottleRate(null, undefined)).toBe(null);
   });
 });
 

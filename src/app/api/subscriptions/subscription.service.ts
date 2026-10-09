@@ -10,6 +10,7 @@ import {
   capAdjustable,
   capBelowBilled as overageCapBelowBilled,
   capReached as overageCapReached,
+  displayedThrottleRate,
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
@@ -38,6 +39,11 @@ const initialState: SubscriptionState = {
   overageConfigError: "",
 };
 
+// How long after a cap change to refetch overage status a second time. The
+// server clears the throttle rate in an enqueued task, so this only needs to
+// outlast typical task-queue latency, not a sweep interval.
+const THROTTLE_SETTLE_REFETCH_MS = 5_000;
+
 @Injectable({
   providedIn: "root",
 })
@@ -45,6 +51,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   private settingsService = inject(SettingsService);
   private organizationsService = inject(OrganizationsService);
   private router = inject(Router);
+  private throttleSettleTimer: ReturnType<typeof setTimeout> | undefined;
 
   stripePublicKey = this.settingsService.stripePublicKey;
 
@@ -178,6 +185,12 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
     if (this.overageStatusResource.error()) return null;
     return this.overageStatusResource.value() ?? null;
   });
+  // Narrower than an "unknown" throttle state, which also covers the initial
+  // load. Surfaces only the failed fetch, where the organization payload can
+  // still report a throttle rate we would otherwise say nothing about.
+  overageStatusUnavailable = computed(
+    () => !!this.overageStatusResource.error(),
+  );
 
   predictedEndOfMonth = computed(() => {
     const subscription = this.subscription();
@@ -221,6 +234,21 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   overageInactive = computed(() => isOverageInactive(this.overageStatus()));
   inactiveCause = computed(() => overageInactiveCause(this.overageStatus()));
   throttleState = computed(() => overageThrottleState(this.overageStatus()));
+  // The page banner's rate, from the same response as throttleState.
+  eventThrottleRate = computed(() =>
+    displayedThrottleRate(
+      this.overageStatus(),
+      this.organizationsService.activeOrganization()?.eventThrottleRate,
+    ),
+  );
+  // The banner's copy depends on this, so a throttled org's page waits for it.
+  // Reloads keep the previous value, so the post-save refetch won't trip it.
+  throttleStatePending = computed(
+    () =>
+      !!this.organizationsService.activeOrganization()?.eventThrottleRate &&
+      this.throttleState() === "unknown" &&
+      !this.overageStatusUnavailable(),
+  );
 
   // Progress by units, not cost (floored capUnits keep cost just under the cap).
   capProgressPercent = computed(() => {
@@ -356,6 +384,15 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
       // `set` would also park the resource, so nothing would correct it later.
       this.overageStatusResource.reload();
       this.subscriptionResource.reload();
+      // The immediate reload above races that task and usually loses, showing
+      // the "taking effect" notice. One delayed refetch picks up the cleared
+      // rate so the notice dismisses itself; no polling, the state cannot
+      // outlive the task. Replaces, not stacks, on rapid saves.
+      clearTimeout(this.throttleSettleTimer);
+      this.throttleSettleTimer = setTimeout(
+        () => this.overageStatusResource.reload(),
+        THROTTLE_SETTLE_REFETCH_MS,
+      );
       return data;
     } catch {
       this.setState({ overageConfigError: UNHANDLED_ERROR });
