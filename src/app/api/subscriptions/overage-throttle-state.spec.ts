@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import type { components } from "../api-schema";
 import {
   capAdjustable,
+  capBelowBilled,
   capReached,
   isOverageInactive,
   overageInactiveCause,
@@ -237,17 +238,58 @@ describe("overageInactiveCause", () => {
   });
 
   it("blames the plan when it cannot be billed", () => {
-    expect(overageInactiveCause(status({ active: false, eligible: false }))).toBe(
-      "plan",
-    );
+    expect(
+      overageInactiveCause(status({ active: false, eligible: false })),
+    ).toBe("plan");
   });
 
   // The regression: a resubscribe leaves overage on with no metered item, and
   // the tagline blamed the plan until the first throttle sweep had run.
   it("blames us on a billable plan, throttled or not", () => {
     expect(overageInactiveCause(status({ active: false }))).toBe("broken");
-    expect(overageInactiveCause(status({ active: false, throttleRate: 50 }))).toBe(
-      "broken",
+    expect(
+      overageInactiveCause(status({ active: false, throttleRate: 50 })),
+    ).toBe("broken");
+  });
+});
+
+describe("capBelowBilled", () => {
+  it("is false before the status loads", () => {
+    expect(capBelowBilled(null)).toBe(false);
+  });
+
+  it("is false while the cap still covers what has been billed", () => {
+    expect(capBelowBilled(status({ overageCostCents: 102 }))).toBe(false);
+  });
+
+  it("is false with no cap set", () => {
+    expect(capBelowBilled(status({ capCents: 0, overageCostCents: 102 }))).toBe(
+      false,
     );
+  });
+
+  // The regression: usage keeps arriving while throttling ramps in, so a
+  // reached cap always has usage past it. That usage is free, and the cap was
+  // never lowered.
+  it("is false at a reached cap with usage past it", () => {
+    expect(
+      capBelowBilled(status({ overageUnits: 300000, overageCostCents: 5000 })),
+    ).toBe(false);
+  });
+
+  it("is true once the cap is lowered below what has been billed", () => {
+    expect(
+      capBelowBilled(status({ capCents: 100, overageCostCents: 102 })),
+    ).toBe(true);
+  });
+
+  // Overage off is the other disclosure's job; this one explains a cap bar
+  // that is only drawn while overage is live.
+  it("is false when overage is switched off", () => {
+    expect(
+      capBelowBilled(
+        status({ enabled: false, capCents: 100, overageCostCents: 102 }),
+      ),
+    ).toBe(false);
   });
 });

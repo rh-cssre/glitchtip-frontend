@@ -17,10 +17,13 @@
               billed for it.
             </p>
           } @else {
+            <!-- The cap bounds overage still to come, not what the cycle has
+                 already run up: lowering it mid-cycle leaves served usage
+                 billable, so the copy promises nothing about the total. -->
             <p class="overage-tagline body-text" i18n>
               Keep collecting events past your plan limit and pay only for the
               overflow, up to a monthly cap you set. At the cap, throttling
-              resumes, so your bill never goes over the cap.
+              resumes, so no further on-demand usage is charged.
             </p>
           }
         </div>
@@ -138,6 +141,17 @@
             [value]="capProgressPercent()"
             [color]="capReached() ? 'warn' : 'primary'"
           />
+          @if (capBelowBilled()) {
+            <!-- The server floors the cap at what it has already reported to
+                 Stripe, so a cap set below that stops growth without retracting
+                 the charge; without this line the clamped bar reads as a bug. -->
+            <p class="overage-alert" i18n>
+              Your cap is below the usage already counted towards your bill this
+              cycle. Lowering the cap stops new on-demand charges, but usage
+              already counted will still be on your invoice. The estimate above
+              is your on-demand charge for this cycle.
+            </p>
+          }
         }
 
         <mat-divider />
@@ -237,7 +251,8 @@
     <p class="body-text" i18n>
       You're only charged for events above your plan limit, up to a
       <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
-      change anytime. Your bill never goes over the cap.
+      change anytime. Once the cap is reached, no further on-demand usage is
+      charged.
     </p>
   </mat-dialog-content>
   <mat-dialog-actions>

@@ -95,3 +95,18 @@ export function overageThrottleState(
   // than in "stalled-plan".
   return capReached(status) && capAdjustable(status) ? "cap" : "throttled";
 }
+
+/**
+ * The cap has been lowered below what this cycle has already counted towards
+ * the bill. The server floors the cap at what it has already reported to
+ * Stripe, so lowering it stops further growth but never retracts the charge:
+ * the estimate stays above the cap and that is what the invoice says.
+ *
+ * Compared in cents, not units: `overageUnits` is raw usage, which runs past
+ * `capUnits` at any reached cap while throttling ramps in, and that usage is
+ * not billed.
+ */
+export function capBelowBilled(status: OverageStatus | null): boolean {
+  if (!status || !status.enabled || !status.capCents) return false;
+  return status.overageCostCents > status.capCents;
+}
