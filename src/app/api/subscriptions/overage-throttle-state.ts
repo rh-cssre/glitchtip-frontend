@@ -95,3 +95,16 @@ export function overageThrottleState(
   // than in "stalled-plan".
   return capReached(status) && capAdjustable(status) ? "cap" : "throttled";
 }
+
+/**
+ * The drop rate to show beside the throttle diagnosis. Read from the same
+ * response as the diagnosis so the two agree: the organization payload only
+ * refreshes every 10 minutes and can miss a throttle that started since. Falls
+ * back to it while the status is loading or has failed.
+ */
+export function displayedThrottleRate(
+  status: OverageStatus | null,
+  orgRate: number | undefined,
+): number | null {
+  return status ? status.throttleRate : (orgRate ?? null);
+}

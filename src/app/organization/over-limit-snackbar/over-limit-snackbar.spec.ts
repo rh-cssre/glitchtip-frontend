@@ -80,15 +80,15 @@ describe("OverLimitSnackbar remedy", () => {
 
   it("sends a non-owner to an owner instead of to the cap or the toggle", () => {
     const atCap = render("cap", 15, false);
-    expect(atCap).toContain("ask an organization owner to raise the spend cap");
+    expect(atCap).toContain(
+      "ask an organization owner to raise the spend cap or change your plan",
+    );
     expect(atCap).not.toContain("raise your spend cap");
-    expect(atCap).not.toContain("change your plan");
 
     const noOverage = render("no-overage", 15, false);
     expect(noOverage).toContain(
-      "ask an organization owner to turn on on-demand billing",
+      "ask an organization owner to turn on on-demand billing or change your plan",
     );
-    expect(noOverage).not.toContain("change your plan");
   });
 
   it("tells a paid org to change plan when nothing else helps", () => {

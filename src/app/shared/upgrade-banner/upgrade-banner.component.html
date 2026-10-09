@@ -41,16 +41,32 @@
             @case ("cap") {
               <!-- The cap is the one self-serve remedy; a larger plan is a
                    conversation. -->
-              <p class="banner-usage" i18n>
-                You've reached your spend cap, and about
-                <strong>{{ eventThrottleRate() }}%</strong> of your incoming
-                events are being dropped. Raise your cap below to keep
-                collecting events, or get in touch and we'll help you find a
-                fit.
-              </p>
+              @if (!canManage()) {
+                <p class="banner-usage" i18n>
+                  You've reached your spend cap, and about
+                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                  events are being dropped. Ask an organization owner to raise
+                  the spend cap or change your plan to keep collecting events.
+                </p>
+              } @else {
+                <p class="banner-usage" i18n>
+                  You've reached your spend cap, and about
+                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                  events are being dropped. Raise your cap below to keep
+                  collecting events, or get in touch and we'll help you find a
+                  fit.
+                </p>
+              }
             }
             @case ("no-overage") {
-              @if (isLargestPlan()) {
+              @if (!canManage()) {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Ask an organization owner
+                  to turn on on-demand billing or change your plan to keep
+                  collecting events.
+                </p>
+              } @else if (isLargestPlan()) {
                 <p class="banner-usage" i18n>
                   You're at your event limit on our largest plan, and about
                   <strong>{{ eventThrottleRate() }}%</strong> of your incoming

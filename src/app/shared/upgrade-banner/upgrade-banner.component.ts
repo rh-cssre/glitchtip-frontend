@@ -54,6 +54,11 @@ export class UpgradeBannerComponent {
    * we know are being dropped.
    */
   readonly throttleStateUnavailable = input(false);
+  /**
+   * The cap and the on-demand toggle are owner-only, so "cap" and
+   * "no-overage" point everyone else at an owner, as the snackbar does.
+   */
+  readonly canManage = input(true);
   /** Where a customer with nothing left to upgrade to should write. */
   readonly contactEmail = input<string | null>(null);
 

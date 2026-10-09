@@ -177,4 +177,29 @@ describe("UpgradeBannerComponent for a paid org", () => {
     expect(text).toContain("get in touch");
     expect(buttons()).toEqual(["Contact us"]);
   });
+
+  // The cap and the toggle are owner-only, so a member is sent to an owner
+  // instead of to a control the card below shows read-only.
+  it("sends a member at the cap to an owner", () => {
+    const text = render("cap", { canManage: false });
+    expect(text).toContain(
+      "Ask an organization owner to raise the spend cap or change your plan",
+    );
+    expect(text).not.toContain("Raise your cap below");
+  });
+
+  it("sends a member with on-demand off to an owner", () => {
+    const text = render("no-overage", { canManage: false });
+    expect(text).toContain(
+      "Ask an organization owner to turn on on-demand billing or change your plan",
+    );
+    expect(text).not.toContain("Turn on on-demand billing below");
+  });
+
+  it("gives a member the same copy as an owner when no owner control helps", () => {
+    const text = render("unavailable", { canManage: false });
+    expect(text).toContain(
+      "Get in touch to change your plan and restore full coverage",
+    );
+  });
 });

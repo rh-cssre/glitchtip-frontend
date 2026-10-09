@@ -9,6 +9,7 @@ import { apiResource } from "src/app/shared/api/api-resource-factory";
 import {
   capAdjustable,
   capReached as overageCapReached,
+  displayedThrottleRate,
   isOverageInactive,
   overageInactiveCause,
   overageThrottleState,
@@ -231,6 +232,13 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
   overageInactive = computed(() => isOverageInactive(this.overageStatus()));
   inactiveCause = computed(() => overageInactiveCause(this.overageStatus()));
   throttleState = computed(() => overageThrottleState(this.overageStatus()));
+  // The page banner's rate, from the same response as throttleState.
+  eventThrottleRate = computed(() =>
+    displayedThrottleRate(
+      this.overageStatus(),
+      this.organizationsService.activeOrganization()?.eventThrottleRate,
+    ),
+  );
   // The banner's copy depends on this, so a throttled org's page waits for it.
   // Reloads keep the previous value, so the post-save refetch won't trip it.
   throttleStatePending = computed(
