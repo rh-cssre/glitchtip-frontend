@@ -1,20 +1,24 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 class="section-header-text">General Settings</h1>
+  </ng-container>
+</gt-top-app-bar>
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1">General Settings</h1>
-  </header>
-  <ng-container *ngIf="activeOrganizationDetail$ | async as activeOrg">
+  @if (activeOrganizationDetail(); as activeOrg) {
     <mat-card>
-      <mat-card-title>General</mat-card-title>
+      <mat-card-header>
+        <mat-card-title>General</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="updateOrganization()">
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name" [value]="activeOrg.name" />
-            <mat-error *ngIf="updateError">{{ updateError }}</mat-error>
           </mat-form-field>
           <gt-loading-button
             [disabled]="name?.value === activeOrg.name"
+            [loading]="loading().updateOrganization"
             mat-flat-button
             color="primary"
             buttonText="Update Name"
@@ -22,10 +26,15 @@
           >
           </gt-loading-button>
         </form>
+        @if (errors().updateOrganization) {
+          <mat-error>{{ errors().updateOrganization }}</mat-error>
+        }
       </mat-card-content>
     </mat-card>
     <mat-card>
-      <mat-card-title>Delete Organization</mat-card-title>
+      <mat-card-header>
+        <mat-card-title>Delete Organization</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content class="remove-content">
         <div>
@@ -33,17 +42,24 @@
             By deleting this organization, you will lose all data including
             projects and their associated events.
           </p>
-          <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
+          @if (errors().deleteOrganization) {
+            <mat-error>{{ errors().deleteOrganization }}</mat-error>
+          }
         </div>
         <gt-loading-button
+          buttonStyle="stroked"
+          color="warn"
           data-test
           buttonText="Delete Organization"
-          [loading]="deleteLoading"
-          (click)="removeOrganization(activeOrg.slug, activeOrg.name)"
+          buttonStyle="stroked"
+          color="warn"
+          [loading]="loading().deleteOrganization"
+          [disabled]="!accessOrgAdmin()"
+          (buttonClick)="removeOrganization(activeOrg.slug, activeOrg.name)"
           id="delete-org"
         >
         </gt-loading-button>
       </mat-card-content>
     </mat-card>
-  </ng-container>
+  }
 </section>

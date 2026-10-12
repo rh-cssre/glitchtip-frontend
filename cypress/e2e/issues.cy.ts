@@ -1,154 +1,148 @@
-import { seedBackend, requestLogin, getDSN } from "./utils.cy";
-import * as jsErrors from "../fixtures/events";
-import { organization, environments } from "../fixtures/variables";
+import { seedBackend, requestLogin } from "./utils.cy";
+import { seededOrg, seededProject3, seededTeam } from "../fixtures/variables";
 
-function seedIssues(dsn: string) {
-  const url = getDSN(dsn);
-  cy.request("POST", url, jsErrors.jsRangeError);
-  cy.request("POST", url, jsErrors.jsReferenceError);
-  jsErrors.generateErrors(url, 10);
-  cy.request("POST", url, jsErrors.jsSyntaxError);
-  cy.request("POST", url, jsErrors.jsUriError);
+function createProject(body: { name: string; platform?: string }) {
+  return cy.getCookie("csrftoken").then((cookie) =>
+    cy.request({
+      method: "POST",
+      url: `/api/0/teams/${seededOrg.slug}/${seededTeam.name}/projects/`,
+      headers: { "X-CSRFToken": cookie!.value },
+      body,
+    }),
+  );
 }
 
 describe("Issues Page", () => {
   beforeEach(() => {
-    seedBackend(true);
+    seedBackend(true, true);
     requestLogin();
-    cy.visit(`/${organization.slug}/issues`);
-    // Need the DSN to do this from the frontend
-    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
-    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
-    cy.get("[data-test-dsn]").invoke("val").as("dsn");
   });
 
-  // // TODO: Break up these assertions into smaller tests.
-  // it("should show issues, recognize environments", function () {
-  //   seedIssues(this.dsn);
-  //   cy.visit(`/${organization.slug}/issues`);
+  it(
+    "should make 55 issues and resolve issues beyond the first page",
+    { defaultCommandTimeout: 6000, requestTimeout: 10000 },
+    function () {
+      cy.intercept(
+        "GET",
+        "/api/0/organizations/*/issues/?query=is%3Aunresolved",
+      ).as("initialIssuesRequest");
+      cy.visit(`/${seededOrg.slug}/issues`);
+      cy.wait("@initialIssuesRequest");
 
-  //   const issuesSeeded = 5;
-  //   cy.get("table tbody")
-  //     .find("tr")
-  //     .should("have.length", issuesSeeded)
-  //     .log(`Should be showing all ${issuesSeeded} issues`);
+      cy.get("[data-cy=selectAll]").click();
+      cy.contains("Select all 55 issues that match this query");
+      cy.get("[data-cy=bulkUpdateProject]").click();
+      cy.contains("All 55 issues are currently selected");
 
-  //   // Test sorts
-  //   cy.get("table tbody")
-  //     .find("tr")
-  //     .first()
-  //     .contains("URIError")
-  //     .log("Should show 'Last Seen' issue by default");
+      cy.intercept("PUT", "/api/0/organizations/*/issues/").as(
+        "issuesUpdateRequest",
+      );
+      cy.get("[data-cy='bulkMarkResolved']").click();
+      cy.wait("@issuesUpdateRequest");
+      cy.log(
+        "To ensure this made a successful network call, we search for resolved events.",
+      );
+      cy.intercept(
+        "GET",
+        "/api/0/organizations/*/issues/?query=is%3Aresolved",
+      ).as("resolvedIssuesRequest");
+      cy.get('[data-cy="list-search-field"]').clear().type("is:resolved");
+      cy.get('[data-cy="list-search-form"]').submit();
+      cy.wait("@resolvedIssuesRequest");
 
-  //   cy.get('mat-select[formControlName="sort"]').click();
-  //   cy.get(".cdk-overlay-pane mat-option").contains("First Seen").click();
-  //   cy.get("table tbody tr")
-  //     .first()
-  //     .contains("RangeError")
-  //     .log("Should now be sorted by 'First Seen'");
-
-  //   cy.get('mat-select[formControlName="sort"]').click();
-  //   cy.get(".cdk-overlay-pane mat-option").contains("Most Frequent").click();
-  //   cy.get("table tbody")
-  //     .find("tr")
-  //     .first()
-  //     .contains("<unknown>")
-  //     .log("Should now be sorted by 'Most Frequent'");
-
-  //   cy.get('mat-select[formControlName="sort"]').click();
-  //   cy.get(".cdk-overlay-pane mat-option").contains("Least Frequent").click();
-  //   cy.get("table tbody")
-  //     .find("tr")
-  //     .last()
-  //     .contains("<unknown>")
-  //     .log("Should now be sorted by 'Least Frequent'");
-
-  //   // Test environments
-  //   cy.get('mat-select[formControlName="environment"]').click({ force: true });
-  //   cy.get(".cdk-overlay-pane mat-option")
-  //     .contains(environments.production)
-  //     .log(
-  //       "Envrionments dropdown should contain environments from generated issues"
-  //     );
-  //   cy.get(".cdk-overlay-pane mat-option").contains(environments.staging);
-
-  //   cy.get(".cdk-overlay-pane mat-option")
-  //     .contains(environments.development)
-  //     .click()
-  //     .log("Test environment filtering by clicking the dropdown");
-  //   cy.get("table tbody tr")
-  //     .should("have.length", 1)
-  //     .should("not.contain", "SyntaxError")
-  //     .should("contain", "ReferenceError")
-  //     .log("Environments should properly filter issue list");
-
-  //   const environmentUrl = `${organization.slug}/issues?environment=${environments.production}`;
-  //   cy.visit(environmentUrl).log(
-  //     "Test enviornment filtering by visiting a URL with environment queryParam"
-  //   );
-  //   // There was a problem with an observable where the param would get stripped on page load
-  //   cy.url()
-  //     .should("eq", `${Cypress.config().baseUrl}/${environmentUrl}`)
-  //     .log("URL should stay the same after loading");
-  //   cy.get("table tbody tr")
-  //     .should("have.length", 1)
-  //     .log("Environments should properly filter issue list");
-  //   cy.get(".environment-form .mat-select-value-text")
-  //     .should("contain", environments.production)
-  //     .log(`should show ${environments.production} in the dropdown`);
-
-  //   cy.get(".title-cell")
-  //     .find("a")
-  //     .contains("RangeError")
-  //     .click()
-  //     .log("Should click into production error's issue detail page");
-  //   cy.get(".tags .pseudo-chip-list")
-  //     .contains(environments.production)
-  //     .click()
-  //     .log(
-  //       "should have the environment tag",
-  //       "on click, should go back to the issue page with the environment queryParam set"
-  //     );
-  //   cy.url().should("eq", `${Cypress.config().baseUrl}/${environmentUrl}`);
-
-  //   // uncomment this to see a developed issue with events showing multiple user agent strings
-  //   // cy.visit(`${organization.slug}/issues`);
-  //   // cy.get(".title-cell").find("a").contains("<unknown>").click();
-  // });
-
-  it("should make 55 issues and select issues beyond the first page", function () {
-    jsErrors.generateIssues(getDSN(this.dsn), 55);
-    cy.visit(`/${organization.slug}/issues`);
-
-    cy.get("#selectAll").click();
-    cy.contains("Select all 55 issues that match this query").should(
-      "not.exist"
-    );
-    cy.log(
-      "you won't get the select all option here because a single project isn't selected"
-    );
-
-    cy.get("#selectAll").click({ force: true });
-    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
-    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
-    cy.get("#selectAll").click({ force: true });
-    cy.contains("Select all 55 issues that match this query");
-    cy.get("#bulkUpdateProject").click();
-    cy.contains("All 55 issues are currently selected");
-    cy.get("#bulkMarkResolved").click();
-    cy.log(
-      "the ui will change, but to ensure this made a successful network call, we reload the page"
-    );
-    cy.reload();
-    cy.contains("No events match your filters");
-    cy.visit(
-      "http://localhost:4200/business-company-inc/issues?&query=is:resolved"
-    );
-    cy.get("gt-project-filter-bar mat-expansion-panel-header").click();
-    cy.get("gt-project-filter-bar").contains("PitchFlip").click();
-    cy.log(
-      "now we are testing that the issues we resolved for a specific project are indeed resolved"
-    );
-    cy.get("table tbody").contains("What I'm really trying to say is:");
-  });
+      cy.get('[data-cy="list-title"]').contains("Issues (55)");
+    },
+  );
 });
+
+describe(
+  "Issue Zero States - new projects",
+  { defaultCommandTimeout: 6000, requestTimeout: 10000 },
+  () => {
+    before(() => {
+      seedBackend(true, true);
+      requestLogin();
+    });
+
+    it("shows correct zero state for each project configuration", () => {
+      cy.intercept("GET", "/api/0/organizations/*/issues/?*").as("issues");
+
+      // Create all projects upfront so we only seed and log in once
+      createProject({ name: "test-python", platform: "python" })
+        .then((res) => res.body.id)
+        .as("pythonId");
+      createProject({ name: "test-other", platform: "other" })
+        .then((res) => res.body.id)
+        .as("otherId");
+      createProject({ name: "test-noplatform" })
+        .then((res) => res.body.id)
+        .as("noplatformId");
+      // A fresh org with no projects, to test that specific zero state
+      cy.getCookie("csrftoken").then((cookie) =>
+        cy.request({
+          method: "POST",
+          url: "/api/0/organizations/",
+          headers: { "X-CSRFToken": cookie!.value },
+          body: { name: "zero-states-empty-org" },
+        }),
+      )
+        .then((res) => res.body.slug)
+        .as("emptyOrgSlug");
+
+      // Platform with SDK docs: shows platform-specific markdown with DSN substituted
+      cy.get("@pythonId").then((id) => {
+        cy.request(`/api/0/projects/${seededOrg.slug}/test-python/keys/`).then(
+          (keysRes) => {
+            const dsn = keysRes.body[0].dsn.public;
+            cy.visit(`/${seededOrg.slug}/issues?project=${id}`);
+            cy.wait("@issues");
+            cy.get("[data-cy=sdk-docs]").should("contain", dsn);
+          },
+        );
+      });
+      // "Other" platform: no specific docs, shows generic notice
+      cy.get("@otherId").then((id) => {
+        cy.visit(`/${seededOrg.slug}/issues?project=${id}`);
+        cy.wait("@issues");
+        cy.get("[data-cy=platform-other-notice]");
+      });
+      // No platform set: prompt to configure one in settings
+      cy.get("@noplatformId").then((id) => {
+        cy.visit(`/${seededOrg.slug}/issues?project=${id}`);
+        cy.wait("@issues");
+        cy.get("[data-cy=platform-settings-link]");
+      });
+      // Org with no projects at all
+      cy.get("@emptyOrgSlug").then((slug) => {
+        cy.visit(`/${slug}/issues`);
+        cy.wait("@issues");
+        cy.get("[data-cy=no-projects]");
+      });
+    });
+
+  },
+);
+
+describe(
+  "Issue Zero States - existing events",
+  { defaultCommandTimeout: 6000, requestTimeout: 10000 },
+  () => {
+    beforeEach(() => {
+      seedBackend(true, true);
+      requestLogin();
+      cy.intercept("GET", "/api/0/organizations/*/issues/?*").as("issues");
+    });
+
+    it("shows no-match message for a project that has had events", () => {
+      cy.request(
+        `/api/0/projects/${seededOrg.slug}/${seededProject3.slug}/`,
+      ).then((res) => {
+        cy.visit(
+          `/${seededOrg.slug}/issues?project=${res.body.id}&query=is%3Aresolved`,
+        );
+        cy.wait("@issues");
+        cy.get("[data-cy=no-results]");
+      });
+    });
+  },
+);

@@ -1,0 +1,78 @@
+@use "src/assets/styles/_variables.scss" as vars;
+
+.daily-chart-card {
+  margin-top: 16px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 0.85em;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+
+  &--performance {
+    background-color: var(--mat-sys-primary);
+  }
+
+  &--issues {
+    background-color: var(--issues-color);
+  }
+
+  &--uptime {
+    background-color: var(--uptime-color);
+  }
+
+  &--logs {
+    background-color: var(--logs-color);
+  }
+
+  &--projected {
+    background-color: var(--mat-sys-surface-container-high);
+  }
+}
+
+.chart-container {
+  width: 100%;
+  height: 200px;
+}
+
+.chart-no-data {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.chart-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.tooltip {
+  font: var(--mat-sys-label-medium);
+  padding: 4px;
+}
