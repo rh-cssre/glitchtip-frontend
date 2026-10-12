@@ -1,4 +1,5 @@
 // tslint:disable:max-line-length
+import { HttpErrorResponse } from "@angular/common/http";
 
 /**
  * generateClassName comes from
@@ -68,14 +69,14 @@ export const iconDictionary: { [key: string]: string } = {
   debian: osPath("DEB"),
 
   /** Frameworks */
-  php: localPath("php", "jpg"),
+  php: localPath("php"),
   mono: localPath("mono"),
   netcore: localPath("dotnetcore"),
   netframework: localPath("dotnetframework"),
   electron: localPath("electron"),
   nvidia: localPath("nvidia"),
   amd: localPath("amd"),
-  arm: localPath("arm", "jpg"),
+  arm: localPath("arm"),
   cpython: localPath("python", "svg"),
   ruby: localPath("ruby"),
   python: localPath("python", "svg"),
@@ -156,14 +157,82 @@ export function timedeltaToMS(value: string) {
   return Math.round(milliseconds);
 }
 
+/** Deprecated */
 export function normalizeProjectParams(
-  projects: string | string[] | undefined
+  projects: string | string[] | undefined | null,
 ) {
   if (Array.isArray(projects)) {
-    return projects;
+    return projects.map((id) => parseInt(id, 10));
   }
   if (typeof projects === "string") {
-    return [projects];
+    return [parseInt(projects, 10)];
   }
   return [];
+}
+
+/** Normalizes a parameter to an array of strings */
+export function stringArrAttribute(
+  param: string | string[] | undefined,
+): string[] {
+  if (Array.isArray(param)) {
+    return param;
+  }
+  if (typeof param === "string") {
+    return [param];
+  }
+  return [];
+}
+
+/** Normalize parameter to a string | undefined (removing array) */
+export function stringAttribute(
+  param: string | string[] | undefined,
+): string | undefined {
+  if (Array.isArray(param)) {
+    if (param.length) {
+      return param[0];
+    }
+    return undefined;
+  }
+  return param;
+}
+
+export function parseErrorMessage(err: HttpErrorResponse): string[] {
+  if (err.error && typeof err.error === "object") {
+    const errorValues: string[][] = Object.values<string[]>(err.error);
+    return errorValues.reduce((a, v) => a.concat(v), []);
+  } else {
+    return [err.message];
+  }
+}
+
+export function setTheme(preferredTheme?: string | null) {
+  if (preferredTheme === "light") {
+    document.documentElement.style.setProperty("color-scheme", "light");
+    localStorage.setItem("theme", "light");
+  } else if (preferredTheme === "dark") {
+    document.documentElement.style.setProperty("color-scheme", "dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.documentElement.style.setProperty("color-scheme", "light dark");
+    localStorage.removeItem("theme");
+  }
+}
+
+function getCookie(name: string) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+export function getCSRFToken() {
+  return getCookie("csrftoken");
 }
