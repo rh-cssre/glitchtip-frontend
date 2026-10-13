@@ -3,16 +3,16 @@ import { SettingsService } from "../api/settings.service";
 import { UserService } from "../api/user/user.service";
 import { OrganizationsService } from "../api/organizations.service";
 import { SubscriptionService } from "../api/subscriptions/subscription.service";
-
-const CHATWOOT_BASE_URL = "https://app.chatwoot.com";
-// Chatwoot keeps the visitor's conversation in this cookie once they have chatted.
-const CHATWOOT_COOKIE = "cw_conversation";
-const LOAD_TIMEOUT_MS = 8000;
+import {
+  hasOpenedSupportChat,
+  loadChatwoot,
+  onChatwootReady,
+  openChatwoot,
+} from "./chatwoot/chatwoot-loader";
 
 /**
- * Loads the Chatwoot support chat only when it is wanted: when the user opens
- * it, or on later visits by someone who already has a conversation. Visitors
- * who never chat load no third-party script and send nothing to Chatwoot.
+ * The Chatwoot support chat, loaded only when the user opens it (or on later
+ * visits once they have). See chatwoot-loader.ts.
  */
 @Injectable({
   providedIn: "root",
@@ -23,21 +23,45 @@ export class SupportChatService {
   private organizationsService = inject(OrganizationsService);
   private subscriptionService = inject(SubscriptionService);
 
-  private loadPromise: Promise<boolean> | null = null;
   private ready = signal(false);
+  // The identity last sent, so unchanged values aren't re-sent to Chatwoot.
+  private sentIdentity: string | null = null;
+  private websiteToken = this.settingsService.chatwootWebsiteToken;
 
-  readonly available = computed(
-    () => !!this.settingsService.chatwootWebsiteToken(),
-  );
+  readonly available = computed(() => !!this.websiteToken());
   readonly opening = signal(false);
 
+  // What Chatwoot is told about the signed-in user and their current org.
+  private identity = computed(() => {
+    const user = this.userService.user();
+    if (!user?.chatwootIdentifierHash) return null;
+    const orgSlug = this.organizationsService.selectedOrganizationSlug();
+    const subscription = this.subscriptionService.subscription();
+    return {
+      id: user.id,
+      user: { email: user.email, identifier_hash: user.chatwootIdentifierHash },
+      attributes: orgSlug
+        ? {
+            organizationSlug: orgSlug,
+            plan: subscription ? subscription.product.name : "free",
+            planStatus: subscription?.status ?? "free",
+          }
+        : null,
+    };
+  });
+
   constructor() {
+    // Identify before the chat opens, then keep it current on org switches.
+    onChatwootReady(() => {
+      this.identify();
+      this.ready.set(true);
+    });
     effect(() => {
-      if (this.available() && document.cookie.includes(CHATWOOT_COOKIE)) {
-        this.load();
+      const token = this.websiteToken();
+      if (token && hasOpenedSupportChat() && !navigator.webdriver) {
+        loadChatwoot(token);
       }
     });
-    // Keep the contact's identity current once the widget is loaded.
     effect(() => {
       if (this.ready()) this.identify();
     });
@@ -45,61 +69,29 @@ export class SupportChatService {
 
   /** Load the widget if needed and open it. Resolves false if it can't load. */
   async open(): Promise<boolean> {
+    const token = this.websiteToken();
+    if (!token) return false;
     this.opening.set(true);
-    const loaded = await this.load();
+    const opened = await openChatwoot(token);
     this.opening.set(false);
-    if (loaded) window.$chatwoot?.toggle("open");
-    return loaded;
-  }
-
-  private load(): Promise<boolean> {
-    const websiteToken = this.settingsService.chatwootWebsiteToken();
-    if (!websiteToken) return Promise.resolve(false);
-    this.loadPromise ??= new Promise<boolean>((resolve) => {
-      const timeout = setTimeout(() => finish(false), LOAD_TIMEOUT_MS);
-      const finish = (loaded: boolean) => {
-        clearTimeout(timeout);
-        window.removeEventListener("chatwoot:ready", onReady);
-        if (loaded) {
-          this.identify();
-          this.ready.set(true);
-        } else {
-          // Allow a later retry, e.g. after an ad blocker is disabled.
-          this.loadPromise = null;
-        }
-        resolve(loaded);
-      };
-      // The SDK only accepts commands once its iframe has loaded.
-      const onReady = () => finish(true);
-      window.addEventListener("chatwoot:ready", onReady);
-
-      const script = document.createElement("script");
-      script.src = `${CHATWOOT_BASE_URL}/packs/js/sdk.js`;
-      script.async = true;
-      script.onload = () =>
-        window.chatwootSDK?.run({ websiteToken, baseUrl: CHATWOOT_BASE_URL });
-      script.onerror = () => finish(false);
-      document.body.appendChild(script);
-    });
-    return this.loadPromise;
+    return opened;
   }
 
   private identify() {
-    const user = this.userService.user();
-    const orgSlug = this.organizationsService.activeOrganizationSlug();
-    const subscription = this.subscriptionService.subscription();
-    if (!user?.chatwootIdentifierHash || !window.$chatwoot) return;
-
-    window.$chatwoot.setUser(user.id, {
-      email: user.email,
-      identifier_hash: user.chatwootIdentifierHash,
-    });
-    if (orgSlug) {
-      window.$chatwoot.setCustomAttributes({
-        organizationSlug: orgSlug,
-        plan: subscription ? subscription.product.name : "free",
-        planStatus: subscription?.status ?? "free",
-      });
+    const identity = this.identity();
+    if (!window.$chatwoot) return;
+    if (!identity) {
+      // Signed out without a reload: drop the previous user's identity.
+      if (this.sentIdentity) window.$chatwoot.reset();
+      this.sentIdentity = null;
+      return;
     }
+    const key = JSON.stringify(identity);
+    if (key === this.sentIdentity) return;
+    window.$chatwoot.setUser(identity.id, identity.user);
+    if (identity.attributes) {
+      window.$chatwoot.setCustomAttributes(identity.attributes);
+    }
+    this.sentIdentity = key;
   }
 }

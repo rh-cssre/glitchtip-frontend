@@ -57,7 +57,7 @@ export class SubscriptionService extends StatefulService<SubscriptionState> {
 
   // The explicitly-selected org (route / switcher), not the activeOrganizationSlug
   // fallback which defaults to organizations()[0]. These resources are read
-  // app-wide (e.g. the Chatwoot identity in SupportChatService), so keying on the fallback
+  // app-wide (e.g. the over-limit snackbar), so keying on the fallback
   // briefly fetches the first org's data before the route resolves — the "loads
   // both orgs' subscriptions" / wrong-org fetch.
   private selectedSlug = computed(

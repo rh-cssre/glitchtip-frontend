@@ -37,7 +37,7 @@
     <button
       mat-menu-item
       type="button"
-      [disabled]="supportChat.opening()"
+      [attr.aria-busy]="supportChat.opening()"
       (click)="openChat($event)"
     >
       @if (supportChat.opening()) {

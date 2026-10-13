@@ -5,6 +5,7 @@ import {
 } from "@github/webauthn-json/browser-ponyfill";
 import { AuthenticationService } from "./api/allauth/authentication.service";
 import { components } from "./api/allauth-schema";
+import { resetSupportChat } from "./shared/chatwoot/chatwoot-loader";
 
 type AuthFlow = components["schemas"]["Flow"];
 const initialIsAuthenticated = localStorage.getItem("isAuthenticated");
@@ -119,6 +120,8 @@ export class AuthService {
   }
 
   async logout() {
+    // Don't leave this user's support chat for the next person on this browser.
+    resetSupportChat();
     const { error } = await this.authenticationService.logout();
     if (error) {
       this.isAuthenticated.set(false);

@@ -39,7 +39,8 @@
                 type="button"
                 color="primary"
                 (click)="handleChatwoot()"
-                [disabled]="contactForm.invalid || supportChat.opening()"
+                [disabled]="contactForm.invalid"
+                [attr.aria-busy]="supportChat.opening()"
               >
                 {{ supportChat.opening() ? "Connecting…" : "Talk to us" }}
               </button>
@@ -53,6 +54,11 @@
                 Send an email
               </button>
             </div>
+            @if (chatFailed()) {
+              <p class="marketing-caption" role="status">
+                Chat couldn't load. Please send us an email instead.
+              </p>
+            }
           </form>
 
           <p class="support-direct__meta marketing-caption">

@@ -3,6 +3,7 @@ import {
   PLATFORM_ID,
   inject,
   ChangeDetectionStrategy,
+  signal,
 } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import {
@@ -81,6 +82,7 @@ export class SupportComponent {
   private links = inject(LinksService);
   private seo = inject(SeoService);
   protected supportChat = inject(SupportChatService);
+  protected chatFailed = signal(false);
 
   protected readonly channels = SUPPORT_CHANNELS;
   protected readonly loginLink = this.links.loginLink;
@@ -130,14 +132,13 @@ export class SupportComponent {
   }
 
   async handleChatwoot() {
-    if (this.contactForm.invalid) return;
+    if (this.contactForm.invalid || this.supportChat.opening()) return;
     const { licenseKey } = this.contactForm.value;
     // The chat script loads on first click. If it can't (ad blocker, outage),
-    // fall back to email so the click still reaches us.
-    if (!(await this.supportChat.open())) {
-      this.composeSupportEmail();
-      return;
-    }
+    // point to email rather than opening a mail client long after the click.
+    const opened = await this.supportChat.open();
+    this.chatFailed.set(!opened);
+    if (!opened) return;
     window.$chatwoot?.setConversationCustomAttributes({
       license: licenseKey,
     });
