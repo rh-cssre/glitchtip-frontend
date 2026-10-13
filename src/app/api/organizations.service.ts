@@ -47,7 +47,7 @@ export class OrganizationsService {
   #orgIdsBySlug = computed(
     () => new Map(this.organizations().map((org) => [org.slug, org.id])),
   );
-  organizationsCount = computed(() => this.organizations.length);
+  organizationsCount = computed(() => this.organizations().length);
   activeOrganization = computed(() => {
     if (this.activeOrganizationResource.error()) return undefined;
     return this.activeOrganizationResource.value();
