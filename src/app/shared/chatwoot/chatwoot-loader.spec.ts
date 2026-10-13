@@ -98,6 +98,17 @@ describe("chatwoot-loader", () => {
     expect(loader.hasOpenedSupportChat()).toBe(true);
   });
 
+  it("remembers a chat opened from the bubble after a slow load", async () => {
+    const slow = loader.openChatwoot("token");
+    await vi.advanceTimersByTimeAsync(loader.CHATWOOT_LOAD_TIMEOUT_MS);
+    await expect(slow).resolves.toBe(false);
+
+    // The widget arrives late and shows its bubble; the visitor clicks it.
+    finishLoading();
+    window.dispatchEvent(new Event("chatwoot:opened"));
+    expect(loader.hasOpenedSupportChat()).toBe(true);
+  });
+
   it("starts a fresh session on the first open in this browser", async () => {
     document.cookie = "cw_conversation=stale";
     const opened = loader.openChatwoot("token");

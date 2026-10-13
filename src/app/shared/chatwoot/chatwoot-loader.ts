@@ -88,6 +88,9 @@ export function loadChatwoot(websiteToken: string): Promise<boolean> {
       // The SDK dispatches this once its iframe has loaded; only then does it
       // accept commands.
       window.addEventListener("chatwoot:ready", markReady, { once: true });
+      // However the chat gets opened, including from the bubble after a
+      // load that outlasted the timeout, resume it on later visits.
+      window.addEventListener("chatwoot:opened", rememberOpened);
       script = document.createElement("script");
       script.src = SDK_SRC;
       script.async = true;
