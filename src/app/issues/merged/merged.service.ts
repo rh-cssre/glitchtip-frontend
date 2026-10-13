@@ -22,9 +22,7 @@ export class MergedService {
           params: {
             path: {
               issue_id: params.issueID,
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.orgSlug,
-              ),
+              ...this.organizationsService.orgPath(params.orgSlug),
             },
           },
         },
@@ -70,8 +68,7 @@ export class MergedService {
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             issue_id: issueID,
           },
           query: { id: hashIDs },

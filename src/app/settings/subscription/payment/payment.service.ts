@@ -126,10 +126,7 @@ export class PaymentService extends StatefulService<PaymentState> {
       "/api/0/stripe/organizations/{organization_id_or_slug}/create-stripe-subscription-checkout/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
         },
         body: { price: priceId },
       },

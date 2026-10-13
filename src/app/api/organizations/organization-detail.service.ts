@@ -62,10 +62,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     url: "/api/0/organizations/{organization_id_or_slug}/members/",
     options: {
       params: {
-        path: {
-          organization_id_or_slug:
-            this.organizationsService.orgIdOrSlug(orgSlug),
-        },
+        path: this.organizationsService.orgPath(orgSlug),
       },
     },
   }));
@@ -128,10 +125,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       "/api/0/organizations/{organization_id_or_slug}/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
         },
         body,
       },
@@ -162,10 +156,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       "/api/0/organizations/{organization_id_or_slug}/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(slug),
-          },
+          path: this.organizationsService.orgPath(slug),
         },
       },
     );
@@ -291,10 +282,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       "/api/0/organizations/{organization_id_or_slug}/members/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
         },
         body: data,
       },
@@ -306,10 +294,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       "/api/0/organizations/{organization_id_or_slug}/teams/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
         },
       },
     );
@@ -323,10 +308,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       "/api/0/organizations/{organization_id_or_slug}/teams/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
         },
         body: { slug: teamSlug },
       },
@@ -344,8 +326,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: parseInt(member.id),
             team_slug: teamSlug,
           },
@@ -368,8 +349,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: memberId,
             team_slug: teamSlug,
           },
@@ -390,8 +370,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: "me",
             team_slug: teamSlug,
           },
@@ -416,8 +395,7 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: "me",
             team_slug: teamSlug,
           },

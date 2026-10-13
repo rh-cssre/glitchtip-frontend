@@ -70,9 +70,7 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
         {
           params: {
             path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.orgSlug,
-              ),
+              ...this.organizationsService.orgPath(params.orgSlug),
               project_slug: params.projectSlug,
             },
             query: {
@@ -106,9 +104,7 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             name: environment.name,
           },

@@ -64,8 +64,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -92,8 +91,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -114,10 +112,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
     client
       .GET("/api/0/organizations/{organization_id_or_slug}/projects/", {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             query: `team:${teamSlug}`,
           },
@@ -135,10 +130,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
       "/api/0/organizations/{organization_id_or_slug}/projects/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             query: `!team:${teamSlug}`,
           },

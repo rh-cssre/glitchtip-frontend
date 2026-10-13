@@ -31,9 +31,7 @@ export class ProjectDetailService extends StatefulService<State> {
     options: {
       params: {
         path: {
-          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-            params.orgSlug,
-          ),
+          ...this.organizationsService.orgPath(params.orgSlug),
           project_slug: params.projectSlug,
         },
         query: {
@@ -47,9 +45,7 @@ export class ProjectDetailService extends StatefulService<State> {
     options: {
       params: {
         path: {
-          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-            params.orgSlug,
-          ),
+          ...this.organizationsService.orgPath(params.orgSlug),
           project_slug: params.projectSlug,
         },
       },
@@ -83,9 +79,7 @@ export class ProjectDetailService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              this.#params().orgSlug,
-            ),
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
           },
         },
@@ -115,9 +109,7 @@ export class ProjectDetailService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              this.#params().orgSlug,
-            ),
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
           },
         },
@@ -143,9 +135,7 @@ export class ProjectDetailService extends StatefulService<State> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              this.#params().orgSlug,
-            ),
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
           },
         },

@@ -85,9 +85,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     options: {
       params: {
         path: {
-          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-            params.orgSlug,
-          ),
+          ...this.organizationsService.orgPath(params.orgSlug),
           project_slug: params.projectSlug,
         },
         query: {
@@ -240,9 +238,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
           },
         },
@@ -268,9 +264,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              this.#params().orgSlug,
-            ),
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
             alert_id: id,
           },
@@ -297,9 +291,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             alert_id: alertId,
           },
@@ -341,9 +333,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              this.#params().orgSlug,
-            ),
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
             alert_id: id,
           },
@@ -402,8 +392,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         {
           params: {
             path: {
-              organization_id_or_slug:
-                this.organizationsService.orgIdOrSlug(orgSlug),
+              ...this.organizationsService.orgPath(orgSlug),
               project_slug: projectSlug,
               alert_id: activeAlert.id,
             },
@@ -464,9 +453,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             alert_id: alert.id,
           },
@@ -507,9 +494,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             alert_id: alert.id,
           },

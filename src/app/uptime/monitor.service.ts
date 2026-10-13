@@ -51,9 +51,7 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.organizationSlug,
-              ),
+              ...this.organizationsService.orgPath(params.organizationSlug),
               monitor_id: params.monitorId,
             },
           },
@@ -76,9 +74,7 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.organizationSlug,
-              ),
+              ...this.organizationsService.orgPath(params.organizationSlug),
               project_slug: params.projectSlug,
             },
           },
@@ -128,10 +124,7 @@ export class MonitorService extends StatefulService<MonitorState> {
       client
         .POST("/api/0/organizations/{organization_id_or_slug}/monitors/", {
           params: {
-            path: {
-              organization_id_or_slug:
-                this.organizationsService.orgIdOrSlug(orgSlug),
-            },
+            path: this.organizationsService.orgPath(orgSlug),
           },
           body: monitor as any,
         })
@@ -175,8 +168,7 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug:
-                this.organizationsService.orgIdOrSlug(organizationSlug),
+              ...this.organizationsService.orgPath(organizationSlug),
               monitor_id: monitorId,
             },
           },
@@ -216,8 +208,7 @@ export class MonitorService extends StatefulService<MonitorState> {
         {
           params: {
             path: {
-              organization_id_or_slug:
-                this.organizationsService.orgIdOrSlug(organizationSlug),
+              ...this.organizationsService.orgPath(organizationSlug),
               monitor_id: monitorId,
             },
           },

@@ -30,9 +30,7 @@ export class MonitorChecksService {
         {
           params: {
             path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.params.orgSlug,
-              ),
+              ...this.organizationsService.orgPath(params.params.orgSlug),
               monitor_id: params.params.id,
             },
             query: {

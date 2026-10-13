@@ -27,11 +27,7 @@ export class LogsService {
     url: "/api/0/organizations/{organization_id_or_slug}/logs/",
     options: {
       params: {
-        path: {
-          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-            params.orgSlug,
-          ),
-        },
+        path: this.organizationsService.orgPath(params.orgSlug),
         query: {
           cursor: params.cursor,
           level: params.level,
@@ -52,10 +48,7 @@ export class LogsService {
     url: "/api/0/organizations/{organization_id_or_slug}/logs/resources/",
     options: {
       params: {
-        path: {
-          organization_id_or_slug:
-            this.organizationsService.orgIdOrSlug(orgSlug),
-        },
+        path: this.organizationsService.orgPath(orgSlug),
         query: {
           resource_type: "service",
         },

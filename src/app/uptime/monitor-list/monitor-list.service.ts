@@ -54,11 +54,7 @@ export class MonitorListService {
         "/api/0/organizations/{organization_id_or_slug}/monitors/",
         {
           params: {
-            path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.organizationSlug,
-              ),
-            },
+            path: this.organizationsService.orgPath(params.organizationSlug),
             query: { cursor: params.cursor, sort: params.sort },
           },
         },

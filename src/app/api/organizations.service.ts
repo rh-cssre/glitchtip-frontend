@@ -35,7 +35,7 @@ export class OrganizationsService {
       url: "/api/0/organizations/{organization_id_or_slug}/",
       options: {
         params: {
-          path: { organization_id_or_slug: this.orgIdOrSlug(slug) },
+          path: this.orgPath(slug),
         },
       },
     }),
@@ -96,6 +96,14 @@ export class OrganizationsService {
    */
   orgIdOrSlug(slug: string): string {
     return untracked(this.#orgIdsBySlug).get(slug) ?? slug;
+  }
+
+  /**
+   * Path params for an org-scoped endpoint. Spread it when the path has more
+   * params: `path: { ...orgPath(slug), project_slug }`.
+   */
+  orgPath(slug: string): { organization_id_or_slug: string } {
+    return { organization_id_or_slug: this.orgIdOrSlug(slug) };
   }
 
   setActiveOrganizationSlug(slug: string | null) {

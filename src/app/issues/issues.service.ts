@@ -75,11 +75,7 @@ export class IssuesService extends StatefulService<IssuesState> {
         "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
-            path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.params.orgSlug,
-              ),
-            },
+            path: this.organizationsService.orgPath(params.params.orgSlug),
             query: {
               cursor: params.params.cursor,
               query: params.params.query,
@@ -148,11 +144,7 @@ export class IssuesService extends StatefulService<IssuesState> {
       url: "/api/0/organizations/{organization_id_or_slug}/issues-stats/",
       options: {
         params: {
-          path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
-          },
+          path: this.organizationsService.orgPath(params.orgSlug),
           query: queryParams,
         },
       },
@@ -315,10 +307,7 @@ export class IssuesService extends StatefulService<IssuesState> {
         "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
-            path: {
-              organization_id_or_slug:
-                this.organizationsService.orgIdOrSlug(orgSlug),
-            },
+            path: this.organizationsService.orgPath(orgSlug),
             query: {
               id: issues.map((issue) => parseInt(issue)),
             },
@@ -344,10 +333,7 @@ export class IssuesService extends StatefulService<IssuesState> {
   async mergeIssues(orgSlug: string, issues: string[]) {
     await client.PUT("/api/0/organizations/{organization_id_or_slug}/issues/", {
       params: {
-        path: {
-          organization_id_or_slug:
-            this.organizationsService.orgIdOrSlug(orgSlug),
-        },
+        path: this.organizationsService.orgPath(orgSlug),
         query: {
           id: issues.map((issue) => parseInt(issue)),
         },
@@ -373,10 +359,7 @@ export class IssuesService extends StatefulService<IssuesState> {
       "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             project: projectIds?.map((id) => parseInt(id)),
             query,
@@ -405,10 +388,7 @@ export class IssuesService extends StatefulService<IssuesState> {
       "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             id: issues.map((issue) => parseInt(issue)),
           },
@@ -434,10 +414,7 @@ export class IssuesService extends StatefulService<IssuesState> {
       "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
-          path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             project: projectIds?.map((id) => parseInt(id)),
             query,

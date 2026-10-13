@@ -17,9 +17,7 @@ export class TransactionGroupDetailService {
         {
           params: {
             path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.params.orgSlug,
-              ),
+              ...this.organizationsService.orgPath(params.params.orgSlug),
               id: params.params.id,
             },
           },
@@ -40,9 +38,7 @@ export class TransactionGroupDetailService {
         {
           params: {
             path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.params.orgSlug,
-              ),
+              ...this.organizationsService.orgPath(params.params.orgSlug),
               id: params.params.id,
             },
           },

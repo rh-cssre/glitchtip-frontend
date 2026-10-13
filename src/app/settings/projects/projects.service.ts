@@ -18,11 +18,7 @@ export class SettingsProjectsService {
         "/api/0/organizations/{organization_id_or_slug}/projects/",
         {
           params: {
-            path: {
-              organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-                params.orgSlug,
-              ),
-            },
+            path: this.organizationsService.orgPath(params.orgSlug),
           },
         },
       );

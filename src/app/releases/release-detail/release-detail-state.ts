@@ -26,9 +26,7 @@ export class ReleaseDetailService {
     options: {
       params: {
         path: {
-          organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-            params.orgSlug,
-          ),
+          ...this.organizationsService.orgPath(params.orgSlug),
           version: params.version,
         },
       },
@@ -41,9 +39,7 @@ export class ReleaseDetailService {
       options: {
         params: {
           path: {
-            organization_id_or_slug: this.organizationsService.orgIdOrSlug(
-              params.orgSlug,
-            ),
+            ...this.organizationsService.orgPath(params.orgSlug),
             version: params.version,
           },
           query: {

@@ -39,9 +39,7 @@ export class TeamsService extends StatefulService<TeamsState> {
     url: "/api/0/organizations/{organization_id_or_slug}/teams/",
     options: {
       params: {
-        path: {
-          organization_id_or_slug: this.organizationsService.orgIdOrSlug(slug),
-        },
+        path: this.organizationsService.orgPath(slug),
       },
     },
   }));
@@ -53,8 +51,7 @@ export class TeamsService extends StatefulService<TeamsState> {
     options: {
       params: {
         path: {
-          organization_id_or_slug:
-            this.organizationsService.orgIdOrSlug(orgSlug),
+          ...this.organizationsService.orgPath(orgSlug),
           team_slug: teamSlug,
         },
       },
@@ -70,8 +67,7 @@ export class TeamsService extends StatefulService<TeamsState> {
       options: {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             team_slug: teamSlug,
           },
         },
@@ -114,8 +110,7 @@ export class TeamsService extends StatefulService<TeamsState> {
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             team_slug: teamSlug,
           },
         },
@@ -152,8 +147,7 @@ export class TeamsService extends StatefulService<TeamsState> {
       {
         params: {
           path: {
-            organization_id_or_slug:
-              this.organizationsService.orgIdOrSlug(orgSlug),
+            ...this.organizationsService.orgPath(orgSlug),
             team_slug: teamSlug,
           },
         },
