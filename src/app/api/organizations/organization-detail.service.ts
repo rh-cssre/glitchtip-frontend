@@ -58,13 +58,14 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
   readonly initialLoad = computed(() => this.state().initialLoad);
 
   private membersOrgSlug = signal<string>("");
-  organizationMembersResource = apiResource(
-    this.membersOrgSlug,
-    (orgSlug) => ({
-      url: "/api/0/organizations/{organization_slug}/members/",
-      options: { params: { path: { organization_slug: orgSlug } } },
-    }),
-  );
+  organizationMembersResource = apiResource(this.membersOrgSlug, (orgSlug) => ({
+    url: "/api/0/organizations/{organization_id_or_slug}/members/",
+    options: {
+      params: {
+        path: this.organizationsService.orgPath(orgSlug),
+      },
+    },
+  }));
   readonly organizationMembers = computed(
     () => this.organizationMembersResource.value() ?? [],
   );
@@ -121,9 +122,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     const body = { name: orgName };
     const orgSlug = this.organizationsService.activeOrganizationSlug();
     const { data, error, response } = await client.PUT(
-      "/api/0/organizations/{organization_slug}/",
+      "/api/0/organizations/{organization_id_or_slug}/",
       {
-        params: { path: { organization_slug: orgSlug } },
+        params: {
+          path: this.organizationsService.orgPath(orgSlug),
+        },
         body,
       },
     );
@@ -150,9 +153,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
   async deleteOrganization(slug: string, name: string) {
     this.setDeleteOrganizationStart();
     const { error, response } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/",
+      "/api/0/organizations/{organization_id_or_slug}/",
       {
-        params: { path: { organization_slug: slug } },
+        params: {
+          path: this.organizationsService.orgPath(slug),
+        },
       },
     );
 
@@ -274,9 +279,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
       reinvite: true,
     };
     return await client.POST(
-      "/api/0/organizations/{organization_slug}/members/",
+      "/api/0/organizations/{organization_id_or_slug}/members/",
       {
-        params: { path: { organization_slug: orgSlug } },
+        params: {
+          path: this.organizationsService.orgPath(orgSlug),
+        },
         body: data,
       },
     );
@@ -284,12 +291,10 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
 
   async retrieveOrganizationTeams(orgSlug: string) {
     const { data } = await client.GET(
-      "/api/0/organizations/{organization_slug}/teams/",
+      "/api/0/organizations/{organization_id_or_slug}/teams/",
       {
         params: {
-          path: {
-            organization_slug: orgSlug,
-          },
+          path: this.organizationsService.orgPath(orgSlug),
         },
       },
     );
@@ -300,9 +305,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
 
   async createTeam(teamSlug: string, orgSlug: string) {
     const result = await client.POST(
-      "/api/0/organizations/{organization_slug}/teams/",
+      "/api/0/organizations/{organization_id_or_slug}/teams/",
       {
-        params: { path: { organization_slug: orgSlug } },
+        params: {
+          path: this.organizationsService.orgPath(orgSlug),
+        },
         body: { slug: teamSlug },
       },
     );
@@ -315,11 +322,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
 
   async addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
     const { data } = await client.POST(
-      "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_slug}/",
+      "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: parseInt(member.id),
             team_slug: teamSlug,
           },
@@ -338,11 +345,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
   async removeTeamMember(memberId: number, teamSlug: string) {
     const orgSlug = this.organizationsService.activeOrganizationSlug();
     const { data } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_slug}/",
+      "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: memberId,
             team_slug: teamSlug,
           },
@@ -359,11 +366,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     const orgSlug = this.organizationsService.activeOrganizationSlug();
     this.setLeaveTeamLoading(teamSlug);
     const { data, error, response } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_slug}/",
+      "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: "me",
             team_slug: teamSlug,
           },
@@ -384,11 +391,11 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     const orgSlug = this.organizationsService.activeOrganizationSlug();
     this.setJoinTeamLoading(teamSlug);
     const { data, error, response } = await client.POST(
-      "/api/0/organizations/{organization_slug}/members/{member_id}/teams/{team_slug}/",
+      "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             member_id: "me",
             team_slug: teamSlug,
           },

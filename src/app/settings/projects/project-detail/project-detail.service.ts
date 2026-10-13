@@ -1,4 +1,5 @@
-import { computed, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { client, handleError } from "src/app/shared/api/api";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
@@ -23,13 +24,14 @@ const initialState: State = {
 
 @Injectable()
 export class ProjectDetailService extends StatefulService<State> {
+  private organizationsService = inject(OrganizationsService);
   #params = signal({ orgSlug: "", projectSlug: "" });
   #projectKeysResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/projects/{organization_slug}/{project_slug}/keys/",
+    url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/keys/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          ...this.organizationsService.orgPath(params.orgSlug),
           project_slug: params.projectSlug,
         },
         query: {
@@ -39,11 +41,11 @@ export class ProjectDetailService extends StatefulService<State> {
     },
   }));
   #projectResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/projects/{organization_slug}/{project_slug}/",
+    url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          ...this.organizationsService.orgPath(params.orgSlug),
           project_slug: params.projectSlug,
         },
       },
@@ -73,11 +75,11 @@ export class ProjectDetailService extends StatefulService<State> {
   async updateProjectName(projectName: string) {
     this.setState({ updateNameLoading: true });
     const { data, error, response } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
           },
         },
@@ -103,11 +105,11 @@ export class ProjectDetailService extends StatefulService<State> {
   async updateProjectPlatform(projectPlatform: string, projectName: string) {
     this.setState({ updatePlatformLoading: true });
     const { data, error } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
           },
         },
@@ -129,11 +131,11 @@ export class ProjectDetailService extends StatefulService<State> {
   async deleteProject(): Promise<boolean> {
     this.setState({ deleteLoading: true });
     const { error, response } = await client.DELETE(
-      "/api/0/projects/{organization_slug}/{project_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
           },
         },

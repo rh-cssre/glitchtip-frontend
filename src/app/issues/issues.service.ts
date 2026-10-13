@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, resource, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
+import { OrganizationsService } from "../api/organizations.service";
 import { client } from "../shared/api/api";
 import { StatefulService } from "../shared/stateful-service/signal-state.service";
 import { getPaginationHeaders, getPaginator } from "../shared/pagination.utils";
@@ -52,6 +53,7 @@ function isAllowedSortKey(key: string): key is AllowedSortKey {
 
 @Injectable()
 export class IssuesService extends StatefulService<IssuesState> {
+  private organizationsService = inject(OrganizationsService);
   private snackbar = inject(MatSnackBar);
   private router = inject(Router);
   protected route = inject(ActivatedRoute);
@@ -70,10 +72,10 @@ export class IssuesService extends StatefulService<IssuesState> {
           ? params.params.sort
           : undefined;
       const { error, data, response } = await client.GET(
-        "/api/0/organizations/{organization_slug}/issues/",
+        "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
-            path: { organization_slug: params.params.orgSlug },
+            path: this.organizationsService.orgPath(params.params.orgSlug),
             query: {
               cursor: params.params.cursor,
               query: params.params.query,
@@ -139,12 +141,10 @@ export class IssuesService extends StatefulService<IssuesState> {
     };
 
     return {
-      url: "/api/0/organizations/{organization_slug}/issues-stats/",
+      url: "/api/0/organizations/{organization_id_or_slug}/issues-stats/",
       options: {
         params: {
-          path: {
-            organization_slug: params.orgSlug,
-          },
+          path: this.organizationsService.orgPath(params.orgSlug),
           query: queryParams,
         },
       },
@@ -304,12 +304,10 @@ export class IssuesService extends StatefulService<IssuesState> {
       await this.mergeIssues(orgSlug, issues);
     } else {
       const { data, error } = await client.PUT(
-        "/api/0/organizations/{organization_slug}/issues/",
+        "/api/0/organizations/{organization_id_or_slug}/issues/",
         {
           params: {
-            path: {
-              organization_slug: orgSlug,
-            },
+            path: this.organizationsService.orgPath(orgSlug),
             query: {
               id: issues.map((issue) => parseInt(issue)),
             },
@@ -320,7 +318,11 @@ export class IssuesService extends StatefulService<IssuesState> {
         },
       );
       if (data?.status) {
-        this.setUpdateStatusByIssueIdComplete(issues, data?.status);
+        // The backend normalizes "muted" and "resolvedInNextRelease" on input
+        this.setUpdateStatusByIssueIdComplete(
+          issues,
+          data.status as IssueStatus,
+        );
       }
       if (error) {
         this.snackbar.open($localize`Error, unable to update issue`);
@@ -329,11 +331,9 @@ export class IssuesService extends StatefulService<IssuesState> {
   }
 
   async mergeIssues(orgSlug: string, issues: string[]) {
-    await client.PUT("/api/0/organizations/{organization_slug}/issues/", {
+    await client.PUT("/api/0/organizations/{organization_id_or_slug}/issues/", {
       params: {
-        path: {
-          organization_slug: orgSlug,
-        },
+        path: this.organizationsService.orgPath(orgSlug),
         query: {
           id: issues.map((issue) => parseInt(issue)),
         },
@@ -356,12 +356,10 @@ export class IssuesService extends StatefulService<IssuesState> {
       return;
     }
     const { data, error } = await client.PUT(
-      "/api/0/organizations/{organization_slug}/issues/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
-          path: {
-            organization_slug: orgSlug,
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             project: projectIds?.map((id) => parseInt(id)),
             query,
@@ -387,12 +385,10 @@ export class IssuesService extends StatefulService<IssuesState> {
     const issues = this.selectedIssues();
     const shouldResetCursor = issues.length >= (this.issues()?.length ?? 0);
     const { error } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/issues/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
-          path: {
-            organization_slug: orgSlug,
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             id: issues.map((issue) => parseInt(issue)),
           },
@@ -415,12 +411,10 @@ export class IssuesService extends StatefulService<IssuesState> {
     environment?: string | undefined,
   ) {
     const { error } = await client.DELETE(
-      "/api/0/organizations/{organization_slug}/issues/",
+      "/api/0/organizations/{organization_id_or_slug}/issues/",
       {
         params: {
-          path: {
-            organization_slug: orgSlug,
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             project: projectIds?.map((id) => parseInt(id)),
             query,

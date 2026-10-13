@@ -12,10 +12,10 @@ export class EnvironmentsService {
   #orgEnvironmentsResource = apiResource.fetchAll(
     this.#orgService.activeOrganizationSlug,
     (slug) => ({
-      url: "/api/0/organizations/{organization_slug}/environments/",
+      url: "/api/0/organizations/{organization_id_or_slug}/environments/",
       options: {
         params: {
-          path: { organization_slug: slug },
+          path: this.#orgService.orgPath(slug),
         },
       },
     }),
@@ -31,11 +31,11 @@ export class EnvironmentsService {
   #projectEnvironmentsResource = apiResource.fetchAll(
     this.#projectEnvironmentsParams,
     (params) => ({
-      url: `/api/0/projects/{organization_slug}/{project_slug}/environments/`,
+      url: `/api/0/projects/{organization_id_or_slug}/{project_slug}/environments/`,
       options: {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.#orgService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
           },
         },

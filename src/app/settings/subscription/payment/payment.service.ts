@@ -1,5 +1,6 @@
 import { computed, Injectable, inject } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client } from "src/app/shared/api/api";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
@@ -35,6 +36,7 @@ const initialState: PaymentState = {
   providedIn: "root",
 })
 export class PaymentService extends StatefulService<PaymentState> {
+  private organizationsService = inject(OrganizationsService);
   private snackBar = inject(MatSnackBar);
   private subscriptionService = inject(SubscriptionService);
 
@@ -121,9 +123,11 @@ export class PaymentService extends StatefulService<PaymentState> {
     priceId: string,
   ) {
     const { data, error, response } = await client.POST(
-      "/api/0/stripe/organizations/{organization_slug}/create-stripe-subscription-checkout/",
+      "/api/0/stripe/organizations/{organization_id_or_slug}/create-stripe-subscription-checkout/",
       {
-        params: { path: { organization_slug: orgSlug } },
+        params: {
+          path: this.organizationsService.orgPath(orgSlug),
+        },
         body: { price: priceId },
       },
     );

@@ -47,11 +47,11 @@ export class MonitorService extends StatefulService<MonitorState> {
         return undefined;
       }
       const { data } = await client.GET(
-        "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/",
+        "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/",
         {
           params: {
             path: {
-              organization_slug: params.organizationSlug,
+              ...this.organizationsService.orgPath(params.organizationSlug),
               monitor_id: params.monitorId,
             },
           },
@@ -70,11 +70,11 @@ export class MonitorService extends StatefulService<MonitorState> {
         return undefined;
       }
       const { data } = await client.GET(
-        "/api/0/projects/{organization_slug}/{project_slug}/alerts/",
+        "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
         {
           params: {
             path: {
-              organization_slug: params.organizationSlug,
+              ...this.organizationsService.orgPath(params.organizationSlug),
               project_slug: params.projectSlug,
             },
           },
@@ -122,8 +122,10 @@ export class MonitorService extends StatefulService<MonitorState> {
     if (orgSlug) {
       this.setCreateMonitorStart();
       client
-        .POST("/api/0/organizations/{organization_slug}/monitors/", {
-          params: { path: { organization_slug: orgSlug } },
+        .POST("/api/0/organizations/{organization_id_or_slug}/monitors/", {
+          params: {
+            path: this.organizationsService.orgPath(orgSlug),
+          },
           body: monitor as any,
         })
         .then((result) => {
@@ -161,15 +163,18 @@ export class MonitorService extends StatefulService<MonitorState> {
     }
     this.setEditMonitorStart();
     client
-      .PUT("/api/0/organizations/{organization_slug}/monitors/{monitor_id}/", {
-        params: {
-          path: {
-            organization_slug: organizationSlug,
-            monitor_id: monitorId,
+      .PUT(
+        "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/",
+        {
+          params: {
+            path: {
+              ...this.organizationsService.orgPath(organizationSlug),
+              monitor_id: monitorId,
+            },
           },
+          body: data as any,
         },
-        body: data as any,
-      })
+      )
       .then((result) => {
         if (result.data) {
           const updatedMonitor = result.data;
@@ -199,11 +204,11 @@ export class MonitorService extends StatefulService<MonitorState> {
     this.setDeleteMonitorStart();
     client
       .DELETE(
-        "/api/0/organizations/{organization_slug}/monitors/{monitor_id}/",
+        "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/",
         {
           params: {
             path: {
-              organization_slug: organizationSlug,
+              ...this.organizationsService.orgPath(organizationSlug),
               monitor_id: monitorId,
             },
           },

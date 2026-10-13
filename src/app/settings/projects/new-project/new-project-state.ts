@@ -28,11 +28,11 @@ export class NewProjectService extends StatefulService<State> {
 
   async createProject(project: ProjectNew, teamSlug: string, orgSlug: string) {
     const { data, response, error } = await client.POST(
-      "/api/0/teams/{organization_slug}/{team_slug}/projects/",
+      "/api/0/teams/{organization_id_or_slug}/{team_slug}/projects/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.orgService.orgPath(orgSlug),
             team_slug: teamSlug,
           },
         },

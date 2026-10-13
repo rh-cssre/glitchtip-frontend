@@ -24,6 +24,7 @@ describe("Create New Project", () => {
   });
 
   it("create new project with new team but no platform", () => {
+    cy.intercept("GET", /\/api\/0\/organizations\/(\?|$)/).as("orgList");
     cy.visit(`/${seededOrg.slug}/settings/projects/new`);
     cy.contains("Create a New Project");
     cy.get("#create-team-from-projects").click();
@@ -33,19 +34,27 @@ describe("Create New Project", () => {
     cy.get("input[formcontrolname=slug]").type(secondSeededTeam.slug);
     cy.get("#create-team-submit").click();
     cy.contains(new RegExp("^" + secondSeededTeam.slug + "$", "g"));
-    cy.intercept("POST", `api/0/teams/${seededOrg.slug}/*/projects/`).as(
+    cy.intercept("POST", `api/0/teams/*/*/projects/`).as(
       "createProjectRequest",
     );
     cy.get("input[formcontrolname=name]").type(newProject.name);
-    cy.get("[data-cy=create-project-form]").submit();
-    cy.wait("@createProjectRequest").then(({ response }) =>
-      cy
-        .url()
-        .should(
+    // A request made before the org list loads falls back to the slug, so
+    // only one made after it is sure to carry the id.
+    cy.wait("@orgList").then(({ response: orgList }) => {
+      const org = orgList!.body.find(
+        (o: { slug: string }) => o.slug === seededOrg.slug,
+      );
+      cy.get("[data-cy=create-project-form]").submit();
+      cy.wait("@createProjectRequest").then(({ request, response }) => {
+        expect(request.url).to.contain(
+          `/api/0/teams/${org.id}/${secondSeededTeam.slug}/projects/`,
+        );
+        cy.url().should(
           "contain",
           `/${seededOrg.slug}/issues?project=${response?.body.id}`,
-        ),
-    );
+        );
+      });
+    });
   });
 
   it("create new project with platform and existing team", () => {

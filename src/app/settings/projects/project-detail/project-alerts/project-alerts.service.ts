@@ -1,5 +1,6 @@
 import { Injectable, computed, effect, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { components } from "src/app/api/api-schema";
 import {
@@ -75,15 +76,16 @@ const initialState: ProjectAlertState = {
 
 @Injectable()
 export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
+  private organizationsService = inject(OrganizationsService);
   private snackBar = inject(MatSnackBar);
 
   #params = signal({ orgSlug: "", projectSlug: "" });
   #projectAlertsResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/projects/{organization_slug}/{project_slug}/alerts/",
+    url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
     options: {
       params: {
         path: {
-          organization_slug: params.orgSlug,
+          ...this.organizationsService.orgPath(params.orgSlug),
           project_slug: params.projectSlug,
         },
         query: {
@@ -232,11 +234,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     };
     const params = this.#params();
     const { data, error } = await client.POST(
-      "/api/0/projects/{organization_slug}/{project_slug}/alerts/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
       {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
           },
         },
@@ -258,11 +260,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   async deleteProjectAlert(id: number) {
     this.setDeleteAlertLoading(id);
     const { error, response } = await client.DELETE(
-      "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
             alert_id: id,
           },
@@ -285,11 +287,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     this.setState({ testAlertLoading: recipientId });
     const params = this.#params();
     const { data, error } = await client.POST(
-      "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/test/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/test/",
       {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             alert_id: alertId,
           },
@@ -327,11 +329,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
   ) {
     this.setUpdatePropertiesLoading(id);
     const { data, error, response } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
       {
         params: {
           path: {
-            organization_slug: this.#params().orgSlug,
+            ...this.organizationsService.orgPath(this.#params().orgSlug),
             project_slug: this.#params().projectSlug,
             alert_id: id,
           },
@@ -386,11 +388,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
         alertRecipients: recipientsWithoutId as any,
       };
       const { data, error } = await client.PUT(
-        "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/",
+        "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
         {
           params: {
             path: {
-              organization_slug: orgSlug,
+              ...this.organizationsService.orgPath(orgSlug),
               project_slug: projectSlug,
               alert_id: activeAlert.id,
             },
@@ -447,11 +449,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     };
     const params = this.#params();
     const { data, error } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
       {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             alert_id: alert.id,
           },
@@ -488,11 +490,11 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       return;
     }
     const { data, error } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/alerts/{alert_id}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
       {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             alert_id: alert.id,
           },

@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, signal } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client } from "src/app/shared/api/api";
 import { components } from "src/app/api/api-schema";
@@ -38,6 +39,7 @@ const initialState: ProjectSettingsState = {
   providedIn: "root",
 })
 export class ProjectSettingsService extends StatefulService<ProjectSettingsState> {
+  private organizationsService = inject(OrganizationsService);
   private snackBar = inject(MatSnackBar);
 
   private params = signal({ orgSlug: "", teamSlug: "" });
@@ -58,11 +60,11 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
   ) {
     this.setAddProjectToTeamLoading(true);
     const { data, error } = await client.POST(
-      "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -85,11 +87,11 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
   ) {
     this.setRemoveProjectFromTeamLoading(projectSlug);
     const { data, error } = await client.DELETE(
-      "/api/0/projects/{organization_slug}/{project_slug}/teams/{team_slug}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/teams/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             project_slug: projectSlug,
             team_slug: teamSlug,
           },
@@ -108,11 +110,9 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
 
   retrieveProjectsOnTeam(orgSlug: string, teamSlug: string) {
     client
-      .GET("/api/0/organizations/{organization_slug}/projects/", {
+      .GET("/api/0/organizations/{organization_id_or_slug}/projects/", {
         params: {
-          path: {
-            organization_slug: orgSlug,
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             query: `team:${teamSlug}`,
           },
@@ -127,12 +127,10 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
 
   async retrieveProjectsNotOnTeam(orgSlug: string, teamSlug: string) {
     const { data } = await client.GET(
-      "/api/0/organizations/{organization_slug}/projects/",
+      "/api/0/organizations/{organization_id_or_slug}/projects/",
       {
         params: {
-          path: {
-            organization_slug: orgSlug,
-          },
+          path: this.organizationsService.orgPath(orgSlug),
           query: {
             query: `!team:${teamSlug}`,
           },

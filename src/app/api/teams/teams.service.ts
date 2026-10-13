@@ -3,6 +3,7 @@ import { TeamErrors, TeamLoading } from "./teams.interfaces";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { OrganizationsService } from "../organizations.service";
 import { client, handleError } from "../../shared/api/api";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
@@ -28,22 +29,32 @@ interface TeamKey {
   providedIn: "root",
 })
 export class TeamsService extends StatefulService<TeamsState> {
+  private organizationsService = inject(OrganizationsService);
   private userService = inject(UserService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
   private teamsOrgSlug = signal<string>("");
   teamsResource = apiResource(this.teamsOrgSlug, (slug) => ({
-    url: "/api/0/organizations/{organization_slug}/teams/",
-    options: { params: { path: { organization_slug: slug } } },
+    url: "/api/0/organizations/{organization_id_or_slug}/teams/",
+    options: {
+      params: {
+        path: this.organizationsService.orgPath(slug),
+      },
+    },
   }));
   readonly teams = computed(() => this.teamsResource.value() ?? null);
 
   private teamKey = signal<TeamKey | null>(null);
   teamResource = apiResource(this.teamKey, ({ orgSlug, teamSlug }) => ({
-    url: "/api/0/teams/{organization_slug}/{team_slug}/",
+    url: "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
     options: {
-      params: { path: { organization_slug: orgSlug, team_slug: teamSlug } },
+      params: {
+        path: {
+          ...this.organizationsService.orgPath(orgSlug),
+          team_slug: teamSlug,
+        },
+      },
     },
   }));
   readonly team = computed(() => this.teamResource.value() ?? null);
@@ -52,9 +63,14 @@ export class TeamsService extends StatefulService<TeamsState> {
   teamMembersResource = apiResource(
     this.teamMembersKey,
     ({ orgSlug, teamSlug }) => ({
-      url: "/api/0/teams/{organization_slug}/{team_slug}/members/",
+      url: "/api/0/teams/{organization_id_or_slug}/{team_slug}/members/",
       options: {
-        params: { path: { organization_slug: orgSlug, team_slug: teamSlug } },
+        params: {
+          path: {
+            ...this.organizationsService.orgPath(orgSlug),
+            team_slug: teamSlug,
+          },
+        },
       },
     }),
   );
@@ -90,11 +106,11 @@ export class TeamsService extends StatefulService<TeamsState> {
   async updateTeamSlug(orgSlug: string, teamSlug: string, newTeamSlug: string) {
     this.setUpdateTeamSlugLoading(true);
     const { data, error, response } = await client.PUT(
-      "/api/0/teams/{organization_slug}/{team_slug}/",
+      "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
       {
         params: {
           path: {
-            organization_slug: orgSlug,
+            ...this.organizationsService.orgPath(orgSlug),
             team_slug: teamSlug,
           },
         },
@@ -127,9 +143,14 @@ export class TeamsService extends StatefulService<TeamsState> {
   async deleteTeam(orgSlug: string, teamSlug: string) {
     this.setDeleteTeamLoading(true);
     const result = await client.DELETE(
-      "/api/0/teams/{organization_slug}/{team_slug}/",
+      "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
       {
-        params: { path: { organization_slug: orgSlug, team_slug: teamSlug } },
+        params: {
+          path: {
+            ...this.organizationsService.orgPath(orgSlug),
+            team_slug: teamSlug,
+          },
+        },
       },
     );
     this.setDeleteTeamLoading(false);

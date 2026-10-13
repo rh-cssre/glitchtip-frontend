@@ -21,10 +21,10 @@ export class PerformanceService {
 
   params = signal<DataParams | undefined>(undefined);
   #transactionGroupsResource = apiResource.paginated(this.params, (params) => ({
-    url: "/api/0/organizations/{organization_slug}/transaction-groups/",
+    url: "/api/0/organizations/{organization_id_or_slug}/transaction-groups/",
     options: {
       params: {
-        path: { organization_slug: params.orgSlug },
+        path: this.organizationsService.orgPath(params.orgSlug),
         query: {
           cursor: params.cursor,
           query: params.query,

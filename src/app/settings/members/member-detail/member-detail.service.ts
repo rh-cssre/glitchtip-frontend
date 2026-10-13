@@ -70,11 +70,11 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
       };
 
       const { data, error, response } = await client.PUT(
-        "/api/0/organizations/{organization_slug}/members/{member_id}/",
+        "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
         {
           params: {
             path: {
-              organization_slug: orgSlug,
+              ...this.organizationsService.orgPath(orgSlug),
               member_id: parseInt(memberDetail.id),
             },
           },
@@ -103,11 +103,11 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
 
     if (orgSlug && member) {
       const { data, error, response } = await client.POST(
-        "/api/0/organizations/{organization_slug}/members/{member_id}/set_owner/",
+        "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/set_owner/",
         {
           params: {
             path: {
-              organization_slug: orgSlug,
+              ...this.organizationsService.orgPath(orgSlug),
               member_id: parseInt(member.id),
             },
           },
@@ -129,10 +129,13 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
 
   async retrieveMemberDetail(orgSlug: string, memberId: number) {
     const { data } = await client.GET(
-      "/api/0/organizations/{organization_slug}/members/{member_id}/",
+      "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
       {
         params: {
-          path: { organization_slug: orgSlug, member_id: memberId },
+          path: {
+            ...this.organizationsService.orgPath(orgSlug),
+            member_id: memberId,
+          },
         },
       },
     );

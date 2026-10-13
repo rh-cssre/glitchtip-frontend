@@ -1,4 +1,5 @@
-import { Injectable, computed, resource, signal } from "@angular/core";
+import { Injectable, computed, inject, resource, signal } from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { ProjectEnvironment } from "src/app/api/organizations/organizations.interface";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client } from "src/app/shared/api/api";
@@ -13,6 +14,7 @@ const initialState: ProjectsState = {
 
 @Injectable()
 export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
+  private organizationsService = inject(OrganizationsService);
   #params = signal({ orgSlug: "", projectSlug: "" });
 
   readonly initialLoad = computed(() => this.environmentsResource.hasValue());
@@ -64,11 +66,11 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
         return undefined;
       }
       const { data } = await client.GET(
-        "/api/0/projects/{organization_slug}/{project_slug}/environments/",
+        "/api/0/projects/{organization_id_or_slug}/{project_slug}/environments/",
         {
           params: {
             path: {
-              organization_slug: params.orgSlug,
+              ...this.organizationsService.orgPath(params.orgSlug),
               project_slug: params.projectSlug,
             },
             query: {
@@ -98,11 +100,11 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
     this.setState({ toggleHiddenLoading: environment.id });
 
     const { data } = await client.PUT(
-      "/api/0/projects/{organization_slug}/{project_slug}/environments/{name}/",
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/environments/{name}/",
       {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
             name: environment.name,
           },

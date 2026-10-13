@@ -1,4 +1,5 @@
-import { computed, effect, Injectable, signal } from "@angular/core";
+import { computed, effect, inject, Injectable, signal } from "@angular/core";
+import { OrganizationsService } from "../api/organizations.service";
 import { apiResource } from "../shared/api/api-resource-factory";
 
 export interface LogsParams {
@@ -14,6 +15,7 @@ export interface LogsParams {
 
 @Injectable()
 export class LogsService {
+  private organizationsService = inject(OrganizationsService);
   params = signal<LogsParams | undefined>(undefined);
 
   // Track accumulated logs for "load more"
@@ -22,12 +24,10 @@ export class LogsService {
   #initialHitCount = signal<string | undefined>(undefined);
 
   #logsResource = apiResource.paginated(this.params, (params) => ({
-    url: "/api/0/organizations/{organization_slug}/logs/",
+    url: "/api/0/organizations/{organization_id_or_slug}/logs/",
     options: {
       params: {
-        path: {
-          organization_slug: params.orgSlug,
-        },
+        path: this.organizationsService.orgPath(params.orgSlug),
         query: {
           cursor: params.cursor,
           level: params.level,
@@ -45,12 +45,10 @@ export class LogsService {
   // Services list for filter dropdown
   #orgSlug = computed(() => this.params()?.orgSlug);
   #servicesResource = apiResource(this.#orgSlug, (orgSlug) => ({
-    url: "/api/0/organizations/{organization_slug}/logs/resources/",
+    url: "/api/0/organizations/{organization_id_or_slug}/logs/resources/",
     options: {
       params: {
-        path: {
-          organization_slug: orgSlug,
-        },
+        path: this.organizationsService.orgPath(orgSlug),
         query: {
           resource_type: "service",
         },

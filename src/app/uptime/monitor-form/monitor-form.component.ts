@@ -177,11 +177,11 @@ export class MonitorFormComponent implements OnInit {
       return orgSlug && projectSlug ? { orgSlug, projectSlug } : undefined;
     }),
     (params) => ({
-      url: "/api/0/projects/{organization_slug}/{project_slug}/environments/",
+      url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/environments/",
       options: {
         params: {
           path: {
-            organization_slug: params.orgSlug,
+            ...this.organizationsService.orgPath(params.orgSlug),
             project_slug: params.projectSlug,
           },
         },

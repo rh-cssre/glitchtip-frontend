@@ -51,10 +51,10 @@ export class MonitorListService {
     // The resource calls this function every time the `request` value changes.
     loader: async ({ params }) => {
       const { error, data, response } = await client.GET(
-        "/api/0/organizations/{organization_slug}/monitors/",
+        "/api/0/organizations/{organization_id_or_slug}/monitors/",
         {
           params: {
-            path: { organization_slug: params.organizationSlug },
+            path: this.organizationsService.orgPath(params.organizationSlug),
             query: { cursor: params.cursor, sort: params.sort },
           },
         },

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal, untracked } from "@angular/core";
 import { client } from "../shared/api/api";
 import { AuthService } from "../auth.service";
 import { apiResource } from "../shared/api/api-resource-factory";
@@ -32,10 +32,10 @@ export class OrganizationsService {
   activeOrganizationResource = apiResource(
     this.activeOrganizationSlug,
     (slug) => ({
-      url: "/api/0/organizations/{organization_slug}/",
+      url: "/api/0/organizations/{organization_id_or_slug}/",
       options: {
         params: {
-          path: { organization_slug: slug },
+          path: this.orgPath(slug),
         },
       },
     }),
@@ -44,7 +44,10 @@ export class OrganizationsService {
     if (this.organizationsResource.error()) return [];
     return this.organizationsResource.value() || [];
   });
-  organizationsCount = computed(() => this.organizations.length);
+  #orgIdsBySlug = computed(
+    () => new Map(this.organizations().map((org) => [org.slug, org.id])),
+  );
+  organizationsCount = computed(() => this.organizations().length);
   activeOrganization = computed(() => {
     if (this.activeOrganizationResource.error()) return undefined;
     return this.activeOrganizationResource.value();
@@ -82,6 +85,30 @@ export class OrganizationsService {
 
   constructor() {
     setTimeout(() => this.refresh(), 30000);
+  }
+
+  /**
+   * The value for an API path's {organization_id_or_slug}: the org's id, which
+   * saves the backend a slug lookup. Falls back to the slug, which the backend
+   * also accepts, for an org the org list doesn't have (yet). Reads the list
+   * untracked, so a call from a resource's params or a computed doesn't refetch
+   * once the list loads. Loaders and plain methods don't track signals anyway.
+   */
+  orgIdOrSlug(slug: string): string {
+    return untracked(this.#orgIdsBySlug).get(slug) ?? slug;
+  }
+
+  /**
+   * Path params for an org-scoped endpoint. Spread it when the path has more
+   * params: `path: { ...orgPath(slug), project_slug }`.
+   *
+   * Specs that stub this service with `useValue` must include `orgPath` once
+   * the code under test makes an org-scoped request; without it the request
+   * throws a TypeError from inside the resource.
+   * `(slug) => ({ organization_id_or_slug: slug })` is enough.
+   */
+  orgPath(slug: string): { organization_id_or_slug: string } {
+    return { organization_id_or_slug: this.orgIdOrSlug(slug) };
   }
 
   setActiveOrganizationSlug(slug: string | null) {

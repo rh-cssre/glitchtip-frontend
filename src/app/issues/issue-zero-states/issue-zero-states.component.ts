@@ -54,11 +54,11 @@ export class IssueZeroStatesComponent implements OnInit {
         return undefined;
       }
       const { data } = await client.GET(
-        "/api/0/projects/{organization_slug}/{project_slug}/keys/",
+        "/api/0/projects/{organization_id_or_slug}/{project_slug}/keys/",
         {
           params: {
             path: {
-              organization_slug: params.organizationSlug,
+              ...this.organizationsService.orgPath(params.organizationSlug),
               project_slug: params.projectSlug,
             },
           },
