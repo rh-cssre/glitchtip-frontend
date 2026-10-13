@@ -1,46 +1,105 @@
 # GlitchTip Terms of Service
 
-Last Updated July 22, 2026
+Last Updated October 13, 2026
 
 ## The Gist
 
 We (the folks at <a href="https://burkesoftware.com" target="blank">Burke Software and Consulting</a>) are on a mission to make the web a better place though open source software. We hope you love our open source error tracker as much as we love creating it.
 These Terms of Service (“Terms”) describe our commitments to you, and your rights and responsibilities when using our services. Please read them carefully and reach out to us if you have any questions.
 
+In these Terms, “we”, “us”, and “Provider” mean Burke Software and Consulting LLC, DBA GlitchTip. “You” and “Customer” mean the person or organization that creates an account on or uses the hosted GlitchTip service at glitchtip.com, app.glitchtip.com, or eu.glitchtip.com (the “Services”). If you accept these Terms on behalf of an organization, you confirm that you are authorized to bind it.
+
+These Terms cover the hosted Services only. The open source GlitchTip software is licensed separately under its own license, and nothing in these Terms limits your rights under that license, including to run, modify, or offer GlitchTip yourself.
+
 ## Terms of Service
 
-Please read these Terms carefully before accessing or using our Services. By accessing or using any part of our Services, you agree to be bound by all of the Terms and all other operating rules, policies, and procedures that we may publish via the Services from time to time (collectively, the “Agreement”). You also agree that we may automatically change, update, or add on to our Services, and this Agreement will apply to any changes.
+Please read these Terms carefully before accessing or using our Services. By accessing or using any part of our Services, you agree to be bound by these Terms, our [Data Processing Agreement](/legal/data-processing-agreement) where it applies, and any other operating rules or policies that we publish via the Services (collectively, the “Agreement”).
 
 ## Specific Service Terms
 
-Glitchtip.com enables you to track errors, performance and uptime on your web applications. Glitchtip.com’s basic subscription is free and allows a limited number of events to be recorded each month. We also offer [paid subscriptions](/pricing) that allow for more events to be recorded.
+Glitchtip.com enables you to track errors, performance, logs, and uptime on your applications. We offer a free plan and [paid subscriptions](/pricing). Plan features, event limits, and prices are described on our [pricing page](/pricing) and may change as described in these Terms.
+
+### Free plan
+
+The free plan is provided as is, without any service level, uptime, or support commitment. We may change or discontinue free plan features or limits at any time.
+
+## Your Data
+
+“Customer Data” means the error events, logs, transactions, and other content that you or your applications send to the Services. As between you and us, you own Customer Data. You grant us the rights needed to host, process, transmit, and display Customer Data solely to provide, secure, and support the Services for you. We do not sell Customer Data or use it to train AI models.
+
+For Customer Data that contains personal data, you are the controller (or processor on behalf of your own customer) and we are your processor, as described in the Data Processing agreement below. For your account and billing information, we are the controller, as described in our [Privacy Policy](/legal/privacy).
+
+You are responsible for configuring your applications and SDKs so that you send us only the data you need and are permitted to send, including scrubbing sensitive fields before they leave your systems.
+
+## Acceptable Use
+
+You agree not to use the Services to:
+
+- break any law, or send data you do not have the right to send;
+- send special categories of personal data (as defined in Article 9 of the GDPR, such as health, biometric, or genetic data) or data about criminal convictions, except incidentally and in small amounts despite reasonable scrubbing;
+- send protected health information (“PHI”) as defined under HIPAA, unless you and we have both signed a Business Associate Agreement (“BAA”) that is in effect. We do not enter into a BAA by accepting these Terms, and we only offer BAAs as described on our [HIPAA page](/hipaa);
+- send payment card numbers, government identification numbers, passwords, or similar credentials on purpose; or
+- probe, attack, overload, or disrupt the Services or other customers, or get around usage limits or access controls.
 
 ## Data Processing
 
-If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — and that personal data is subject to the EU General Data Protection Regulation (GDPR), the UK GDPR, or an equivalent law, our [Data Processing Agreement](/legal/data-processing-agreement) applies and forms part of this Agreement. It applies automatically; no signature or separate request is needed. Customers on a paid plan who need a countersigned copy for their records can request one by emailing support@glitchtip.com.
+If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on a paid plan who need a separately signed data processing agreement can request one by emailing support@glitchtip.com; if signed, it replaces the published DPA for that customer.
 
 ## Fees and Charges
 
-By using a Paid Service, you agree to pay the specified fees. Depending on the Paid Service, there may be one-time fees, recurring fees, or revenue-based fees. For recurring fees, we’ll bill or charge you in the automatically-renewing interval (such as monthly, annually, or biennially) you select, on a pre-pay basis until you cancel, which you can do at any time by contacting the relevant support team.
+By using a Paid Service, you agree to pay the specified fees. Depending on the Paid Service, there may be one-time fees, recurring fees, or usage-based fees. For recurring fees, we’ll bill or charge you in the automatically-renewing interval you select, on a pre-pay basis until you cancel. Except as required by law or stated in the DPA, fees are non-refundable.
+
+We may change prices for future billing periods by giving you notice as described in “Changes to these Terms”.
 
 ## Termination and Cancellation
 
-You can stop using our Services at any time, or, if you use a Paid Service, you can cancel at any time, subject to the Fees and Charges section of these Terms by emailing support@glitchtip.com.
+You can stop using our Services at any time. If you use a Paid Service, you can cancel at any time from your organization’s subscription settings (“Manage Subscription”); cancellation takes effect immediately and your organization moves to the free plan.
+
+We may suspend or terminate your access to the Services if you materially breach these Terms (including the Acceptable Use section), if you fail to pay fees when due, if required by law, or if your use poses a security risk to the Services or other customers. Where reasonable, we will notify you first and give you a chance to fix the problem.
+
+### Your data after cancellation
+
+Event data is automatically deleted at the end of its retention period (90 days by default). When you delete an organization or your user account, we delete the associated data from the live Services. Deleted data may remain in encrypted backups for up to 35 days until those backups expire. Cancelling a paid subscription does not delete your organization; it continues on the free plan. To remove its data, delete the organization in Organization Settings.
 
 ## Feedback
 
 We love hearing from you and are always looking to improve our Services. When you share comments, ideas, or feedback with us, you agree that we’re free to use them without any restriction or compensation to you.
 
+## Disclaimer of Warranties
+
+THE SERVICES ARE PROVIDED “AS IS” AND “AS AVAILABLE”. TO THE FULLEST EXTENT PERMITTED BY LAW, WE DISCLAIM ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, OR THAT DATA WILL NOT BE LOST. Our commitments in the DPA (including its security measures) still apply.
+
+## Limitation of Liability
+
+TO THE FULLEST EXTENT PERMITTED BY LAW:
+
+1. NEITHER PARTY WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, REVENUE, GOODWILL, OR DATA, ARISING OUT OF OR RELATED TO THE AGREEMENT, EVEN IF ADVISED OF THEIR POSSIBILITY.
+2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT.
+
+These limits do not apply to your payment obligations, your indemnification obligations, or liability that cannot be limited under applicable law.
+
 ## Indemnification
 
-You agree to indemnify and hold harmless Burke Software and Consulting LLC, its contractors, and its licensors, and their respective directors, officers, employees, and agents from and against any and all losses, liabilities, demands, damages, costs, claims, and expenses, including attorneys’ fees, arising out of or related to your use of our Services, including but not limited to your violation of the Agreement or any agreement with a provider of third-party services used in connection with the Services, Content that you post, and any ecommerce activities conducted through your or another user’s website.
+You agree to indemnify and hold harmless Burke Software and Consulting LLC and its contractors, officers, and agents from third-party claims, and related losses, damages, and reasonable attorneys’ fees, arising out of (a) Customer Data, including your collection and transmission of it to the Services, or (b) your breach of the Acceptable Use section of these Terms.
+
+## Changes to these Terms
+
+We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account at least 30 days before the change takes effect. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services and cancel before it takes effect; continued use after that date means you accept the updated Terms.
+
+## Governing Law and Venue
+
+These Terms are governed by the laws of the State of New York, USA, without regard to its conflict of laws rules. The state and federal courts located in New York County, New York, have exclusive jurisdiction over any dispute arising out of or related to the Agreement, and both parties consent to that jurisdiction. Where the DPA or the Standard Contractual Clauses incorporated in it specify a different governing law or forum, those provisions control for the matters they cover.
 
 ## US Economic Sanctions
 
 You may not use the Services if such use is inconsistent with U.S. sanctions law or if you are on any list maintained by a U.S. government authority relating to designated, restricted or prohibited persons.
 
+## General
+
+If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA or order you and we have signed, are the entire agreement between us about the Services.
+
 <hr />
 
 Burke Software and Consulting LLC is incorporated in the state of New York in the United States of America.
 
-These Terms of Service are available under a Creative Commons Sharealike license. Attribution to Automattic Inc.
+Portions of these Terms of Service are adapted from terms published under a Creative Commons Sharealike license. Attribution to Automattic Inc.

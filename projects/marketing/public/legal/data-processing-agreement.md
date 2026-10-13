@@ -2,7 +2,7 @@
 
 _This Data Processing Agreement (“DPA”) forms part of GlitchTip’s [Terms of Service](/legal/tos) and applies automatically in the circumstances described in the Data Processing section of those Terms. No signature or separate acceptance is required._
 
-Version 1.0 — Last Updated July 22, 2026
+Version 1.1 — Last Updated October 13, 2026
 
 This DPA has 2 parts: (1) the Key Terms on this page and (2) the Common Paper DPA Standard Terms Version 1.1 posted at <a href="https://commonpaper.com/standards/data-processing-agreement/1.1" target="_blank" rel="noopener noreferrer">commonpaper.com/standards/data-processing-agreement/1.1</a> (“DPA Standard Terms”), which is incorporated by reference. If there is any inconsistency between the parts of the DPA, the Key Terms on this page will control over the DPA Standard Terms. The Key Terms below have the meanings given on this page. However, if this page omits or does not define a Key Term, the default meaning will be “none” or “not applicable” and the correlating clause, sentence, or section does not apply to this DPA. All other capitalized words have the meanings given in the DPA Standard Terms or the Agreement.
 
@@ -24,7 +24,7 @@ support@glitchtip.com
 
 ### Security Policy
 
-The technical and organizational security measures described in Annex II below, together with the controls published at [Hosted GlitchTip: Architecture & Security Compliance](/documentation/hosted-architecture).
+The technical and organizational security measures described in Annex II below. The controls published at [Hosted GlitchTip: Architecture & Security Compliance](/documentation/hosted-architecture) provide additional detail; if they conflict with Annex II, Annex II controls.
 
 ### Notices
 
@@ -32,11 +32,9 @@ Provider: david@burkesoftware.com
 
 Customer: the email address registered to Customer’s GlitchTip account.
 
-## Changes to the Agreement
-
 ### DPA Liability Cap
 
-The Provider’s total cumulative liability arising out of the related DPA Covered Claims will not be more than the greater of $3,000.00 or 1 times the fees payable by Customer to Provider in the 12 month period immediately before the claim.
+As provided in Section 8.1 of the DPA Standard Terms, each party’s liability arising out of or related to this DPA is subject to the Limitation of Liability section of the Agreement. Provider’s liability under this DPA counts toward, and is not in addition to, the single liability cap stated there.
 
 ### Service Provider Relationship
 
@@ -56,7 +54,7 @@ UK Transfers: England and Wales
 
 Name: the Customer, as identified by the account registered for the Services
 
-Address: USA
+Address: the address provided in Customer’s account or billing details
 
 Activities relevant to transfer: See Annex I(B)
 
@@ -97,7 +95,7 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 ### Special Category Data
 
-Is special category data (as defined in Article 9 of the GDPR) Processed? Not intentionally. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Where Customer has executed a Business Associate Agreement with Provider, protected health information may be Processed subject to that agreement.
+Is special category data (as defined in Article 9 of the GDPR) Processed? Not intentionally. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Customer agrees not to send special category data except as permitted by the Acceptable Use section of the Agreement. Protected health information may be Processed only where Customer and Provider have both signed a Business Associate Agreement that is in effect, and then subject to that agreement.
 
 ### Frequency of Transfer
 
@@ -107,7 +105,7 @@ Continuous
 
 - Receiving data, including collection, accessing, retrieval, recording, and data entry
 - Holding data, including storage, organization, and structuring
-- Using data, including analysis, consultation, testing, automated decision making, and profiling
+- Using data, including analysis, consultation, and testing
 - Protecting data, including restricting, encrypting, and security testing
 - Erasing data, including destruction and deletion
 
@@ -135,7 +133,7 @@ All data in transit is encrypted using TLS 1.2 or higher (HTTPS).
 
 **Protecting Customer Personal Data during storage (at rest):**
 
-Data at rest is stored on DigitalOcean Block Storage with native encryption. Core databases run on managed Kubernetes (DOKS) PostgreSQL clusters via CloudNativePG, isolated within a private VPC and restricted to a trusted-source allowlist; they are not reachable from the public internet.
+Data at rest is stored on encrypted DigitalOcean storage. On the US instance, the core database runs as a CloudNativePG PostgreSQL cluster in DigitalOcean Managed Kubernetes (DOKS), isolated within a private VPC and not reachable from the public internet. On the EU instance, the application runs on DigitalOcean App Platform and the core database on DigitalOcean Managed PostgreSQL, which requires TLS-encrypted, authenticated connections and accepts connections only from the GlitchTip application (trusted sources).
 
 **Physical security where Customer Personal Data is processed:**
 
@@ -147,9 +145,11 @@ Infrastructure is defined as code using OpenTofu, version-controlled, audited, a
 
 **Ensuring limited data retention:**
 
-Captured event data and associated Telemetry Data are retained for 90 days by default and are then automatically deleted.
+Captured event data and associated Telemetry Data are retained for 90 days by default and are then automatically deleted. When Customer deletes an organization or user account, the associated data is deleted from the live Service. Database backups are encrypted and expire automatically; deleted data is removed from backups within 35 days. Deleted data is not restored from backups except to recover from an incident. Copies of event payloads in object storage are deleted when their organization is deleted, and otherwise expire after 90 days.
 
 ## Other Changes to Standard Terms
+
+Modification to Standard Terms Section 2.6 (Subprocessors). Provider will give the 10 business days’ advance notice of any intended change to the Approved Subprocessors by email to Customer’s Notices address and by recording the change at the Approved Subprocessors page. If Customer objects within the objection period and the parties cannot resolve the objection in good faith, Customer may terminate the Agreement by written notice before the change takes effect, and Provider will refund any prepaid fees covering the period after termination. This is Customer’s sole remedy for an objection to a new Subprocessor.
 
 Modification to Standard Terms Section 5.2 (Security Reports) and the defined term “Report.” Provider is a small organization that performs internal security self-assessments and does not undergo audits by independent third-party auditors. Accordingly, the references in Section 5.2 to audits by independent third-party auditors and to a “Report” do not apply to Provider. In their place, upon Customer’s written request to the Provider Security Contact (no more than once per calendar year), Provider will provide a summary of its then-current internal security documentation and self-assessment records sufficient for Customer to verify Provider’s compliance with the technical and organizational security measures described in Annex II. This modification does not affect Customer’s rights under Section 5.1 (Audit Rights) or Section 5.3 (Security Due Diligence).
 
@@ -159,7 +159,7 @@ Provider and Customer have not changed the Standard Terms, except for the detail
 
 If a PDF or other rendering of this DPA differs from this page, this page controls.
 
-Customers on a paid plan whose procurement process requires a signed artifact can request a copy of this DPA executed by Burke Software by emailing support@glitchtip.com. It restates these published terms without modification and does not alter the DPA already in effect. The terms are provided as published and are not negotiable.
+Customers on a paid plan whose procurement process requires a signed document can request a separately signed data processing agreement by emailing support@glitchtip.com. If Customer and Provider sign a separate data processing agreement, that signed agreement replaces this DPA for that Customer from its effective date, and this DPA continues to apply to any period before it. The published terms are not negotiable.
 
 <hr />
 

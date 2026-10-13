@@ -13,11 +13,14 @@ Burke Software functions as a data processor. We do not sell or share user data 
 - DNS & CDN: Cloudflare (DNS for both regions; reverse proxy/WAF on the EU instance only - see EU Hosting & Data Sovereignty below)
 - Transactional Email: Mailgun (Data residency matches the server region: US or EU)
 - Analytics: Plausible (Privacy-focused, GDPR compliant, no cookies) runs solely on this marketing website https://glitchtip.com and not on our GlitchTip hosted servers (ex: https://app.glitchtip.com)
+- Customer Support: Chatwoot (hosted customer-support platform) - receives emails sent to support@glitchtip.com for both regions, and runs the in-app support chat on the US instance. For signed-in chat users it receives the user's ID, email, current organization, and plan. Support conversations are deleted 60 days after their last activity. Chatwoot stores data in the United States.
 - Payments: Stripe (PCI-DSS Service Provider Level 1) - a global payment processor. Stripe receives only the billing details needed to process a subscription (e.g. name and billing contact); error events, logs, and PHI are never transmitted to Stripe.
 
 This list has not changed since GlitchTip was founded. If we add or replace a sub-processor, we will notify account holders by email at least 10 business days in advance and record the change below. Customers then have 30 days after notice to object, as provided in our [Data Processing Agreement](/legal/data-processing-agreement).
 
-**Sub-processor changes:** none to date.
+**Sub-processor changes:**
+
+- **October 13, 2026** — Chatwoot added to this list. It has been used for customer support since GlitchTip launched but was previously omitted from this list in error.
 
 ![](/assets/glitchtip-saas.png)
 
@@ -26,7 +29,6 @@ This list has not changed since GlitchTip was founded. If we add or replace a su
 Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) and applies automatically — if we process personal data on your behalf and you act as the data controller, it is already in effect. There is nothing to sign or request. It covers the personal data we process on your behalf under the GDPR, UK GDPR, and CCPA, and documents our role as a processor, the sub-processors listed above, the technical and organizational security measures described on this page, and — for data leaving the EEA or UK — the EU Standard Contractual Clauses (Module 2, Controller-to-Processor) and the UK International Data Transfer Addendum.
 
 - **Read the agreement**: [Data Processing Agreement](/legal/data-processing-agreement)
-- **PDF version**: [Data Processing Agreement (PDF)](/legal/data-processing-agreement.pdf)
 
 The terms are provided as published and are not negotiable. Paying customers who require a signed, countersigned copy for their records can request one at [support@glitchtip.com](mailto:support@glitchtip.com).
 
