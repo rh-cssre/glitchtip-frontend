@@ -56,7 +56,9 @@
             </div>
             @if (chatFailed()) {
               <p class="marketing-caption" role="status">
-                Chat couldn't load. Please send us an email instead.
+                Chat couldn't load. Email us at
+                <a [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>
+                instead.
               </p>
             }
           </form>

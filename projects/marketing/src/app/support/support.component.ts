@@ -83,6 +83,7 @@ export class SupportComponent {
   private seo = inject(SeoService);
   protected supportChat = inject(SupportChatService);
   protected chatFailed = signal(false);
+  protected readonly supportEmail = SUPPORT_EMAIL;
 
   protected readonly channels = SUPPORT_CHANNELS;
   protected readonly loginLink = this.links.loginLink;
