@@ -88,7 +88,6 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 - Name
 - Contact information such as email, phone number, or address
-- Financial information such as bank account numbers
 - User activity and analysis such as device information or IP address
 - Location information
 - Telemetry Data: application error logs, stack traces, HTTP request parameters, device metadata, operating system and browser versions, IP addresses, and unstructured text strings automatically or manually captured by the Customer’s error reporting configuration.
@@ -149,7 +148,7 @@ Captured event data and associated Telemetry Data are retained for 90 days by de
 
 ## Other Changes to Standard Terms
 
-Modification to Standard Terms Section 2.6 (Subprocessors). Provider will give the 10 business days’ advance notice of any intended change to the Approved Subprocessors by email to Customer’s Notices address and by recording the change at the Approved Subprocessors page. If Customer objects within the objection period and the parties cannot resolve the objection in good faith, Customer may terminate the Agreement by written notice before the change takes effect, and Provider will refund any prepaid fees covering the period after termination. This is Customer’s sole remedy for an objection to a new Subprocessor.
+Modification to Standard Terms Section 2.6 (Subprocessors). Provider will give the 10 business days’ advance notice of any intended change to the Approved Subprocessors by email to Customer’s Notices address and by recording the change at the Approved Subprocessors page. If Customer objects within the objection period and the parties cannot resolve the objection in good faith, Customer may terminate the Agreement by written notice within that objection period, and Provider will refund any prepaid fees covering the period after termination. This is Customer’s sole remedy for an objection to a new Subprocessor.
 
 Modification to Standard Terms Section 5.2 (Security Reports) and the defined term “Report.” Provider is a small organization that performs internal security self-assessments and does not undergo audits by independent third-party auditors. Accordingly, the references in Section 5.2 to audits by independent third-party auditors and to a “Report” do not apply to Provider. In their place, upon Customer’s written request to the Provider Security Contact (no more than once per calendar year), Provider will provide a summary of its then-current internal security documentation and self-assessment records sufficient for Customer to verify Provider’s compliance with the technical and organizational security measures described in Annex II. This modification does not affect Customer’s rights under Section 5.1 (Audit Rights) or Section 5.3 (Security Due Diligence).
 

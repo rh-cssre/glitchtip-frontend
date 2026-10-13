@@ -4,7 +4,7 @@ Last Updated October 13, 2026
 
 ## The Gist
 
-We (the folks at <a href="https://burkesoftware.com" target="blank">Burke Software and Consulting</a>) are on a mission to make the web a better place though open source software. We hope you love our open source error tracker as much as we love creating it.
+We (the folks at <a href="https://burkesoftware.com" target="blank">Burke Software and Consulting</a>) are on a mission to make the web a better place through open source software. We hope you love our open source error tracker as much as we love creating it.
 These Terms of Service (“Terms”) describe our commitments to you, and your rights and responsibilities when using our services. Please read them carefully and reach out to us if you have any questions.
 
 In these Terms, “we”, “us”, and “Provider” mean Burke Software and Consulting LLC, DBA GlitchTip. “You” and “Customer” mean the person or organization that creates an account on or uses the hosted GlitchTip service at glitchtip.com, app.glitchtip.com, or eu.glitchtip.com (the “Services”). If you accept these Terms on behalf of an organization, you confirm that you are authorized to bind it.
@@ -80,7 +80,7 @@ These limits do not apply to your payment obligations, your indemnification obli
 
 ## Indemnification
 
-You agree to indemnify and hold harmless Burke Software and Consulting LLC and its contractors, officers, and agents from third-party claims, and related losses, damages, and reasonable attorneys’ fees, arising out of (a) Customer Data, including your collection and transmission of it to the Services, or (b) your breach of the Acceptable Use section of these Terms.
+You agree to indemnify and hold harmless Burke Software and Consulting LLC and its contractors, officers, and agents from third-party claims, and related losses, damages, and reasonable attorneys’ fees, arising out of (a) a claim that Customer Data, or your collection and transmission of it to the Services, violates the law or a third party’s rights, or (b) your breach of the Acceptable Use section of these Terms. This does not cover claims to the extent they are caused by our own breach of the Agreement.
 
 ## Changes to these Terms
 
