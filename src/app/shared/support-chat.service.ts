@@ -37,16 +37,25 @@ export class SupportChatService {
     if (!user?.chatwootIdentifierHash) return null;
     const orgSlug = this.organizationsService.selectedOrganizationSlug();
     const subscription = this.subscriptionService.subscription();
+    // subscription() is null while an org's plan loads and when the fetch
+    // fails, so a paying org would be reported as free. While it loads, keep
+    // the last known org and plan; if it fails, say the plan is unknown rather
+    // than leave the previous org's plan on the contact.
+    const status = this.subscriptionService.subscriptionResource.status();
+    const plan =
+      status === "error"
+        ? { plan: "unknown", planStatus: "unknown" }
+        : {
+            plan: subscription ? subscription.product.name : "free",
+            planStatus: subscription?.status ?? "free",
+          };
     return {
       id: user.id,
       user: { email: user.email, identifier_hash: user.chatwootIdentifierHash },
-      attributes: orgSlug
-        ? {
-            organizationSlug: orgSlug,
-            plan: subscription ? subscription.product.name : "free",
-            planStatus: subscription?.status ?? "free",
-          }
-        : null,
+      attributes:
+        orgSlug && status !== "loading"
+          ? { organizationSlug: orgSlug, ...plan }
+          : null,
     };
   });
 

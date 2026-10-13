@@ -16,6 +16,11 @@ describe("SupportChatService", () => {
     chatwootIdentifierHash: string | null;
   } | null>(null);
   const orgSlug = signal<string | null>("acme");
+  const subscription = signal<{
+    product: { name: string };
+    status: string;
+  } | null>(null);
+  const subscriptionStatus = signal("resolved");
   const chatwoot = {
     hasLoaded: true,
     toggle: vi.fn(),
@@ -64,7 +69,10 @@ describe("SupportChatService", () => {
         },
         {
           provide: SubscriptionService,
-          useValue: { subscription: signal(null) },
+          useValue: {
+            subscription,
+            subscriptionResource: { status: subscriptionStatus },
+          },
         },
       ],
     });
@@ -89,6 +97,8 @@ describe("SupportChatService", () => {
       chatwootIdentifierHash: "hash",
     });
     orgSlug.set("acme");
+    subscription.set(null);
+    subscriptionStatus.set("resolved");
   });
 
   afterEach(() => {
@@ -144,6 +154,43 @@ describe("SupportChatService", () => {
     expect(chatwoot.setCustomAttributes).toHaveBeenLastCalledWith(
       expect.objectContaining({ organizationSlug: "globex" }),
     );
+    expect(chatwoot.setCustomAttributes).toHaveBeenCalledTimes(2);
+  });
+
+  it("doesn't report a plan it hasn't loaded", async () => {
+    subscription.set({ product: { name: "Business" }, status: "active" });
+    await openChat();
+    expect(chatwoot.setCustomAttributes).toHaveBeenLastCalledWith({
+      organizationSlug: "acme",
+      plan: "Business",
+      planStatus: "active",
+    });
+    chatwoot.setCustomAttributes.mockClear();
+
+    // Switching org drops the old subscription while the new one loads.
+    orgSlug.set("globex");
+    subscription.set(null);
+    subscriptionStatus.set("loading");
+    TestBed.tick();
+    expect(chatwoot.setCustomAttributes).not.toHaveBeenCalled();
+
+    // A failed fetch is no evidence of a free plan, nor of the last org's.
+    subscriptionStatus.set("error");
+    TestBed.tick();
+    expect(chatwoot.setCustomAttributes).toHaveBeenLastCalledWith({
+      organizationSlug: "globex",
+      plan: "unknown",
+      planStatus: "unknown",
+    });
+
+    subscription.set({ product: { name: "Small" }, status: "active" });
+    subscriptionStatus.set("resolved");
+    TestBed.tick();
+    expect(chatwoot.setCustomAttributes).toHaveBeenLastCalledWith({
+      organizationSlug: "globex",
+      plan: "Small",
+      planStatus: "active",
+    });
     expect(chatwoot.setCustomAttributes).toHaveBeenCalledTimes(2);
   });
 
