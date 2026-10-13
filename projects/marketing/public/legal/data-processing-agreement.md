@@ -28,7 +28,7 @@ The technical and organizational security measures described in Annex II below. 
 
 ### Notices
 
-Provider: david@burkesoftware.com
+Provider: support@glitchtip.com
 
 Customer: the email address registered to Customer’s GlitchTip account.
 

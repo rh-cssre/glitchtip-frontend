@@ -41,6 +41,8 @@ You agree not to use the Services to:
 - send payment card numbers, government identification numbers, passwords, or similar credentials on purpose; or
 - probe, attack, overload, or disrupt the Services or other customers, or get around usage limits or access controls.
 
+We do not review the contents of Customer Data. If data this section prohibits reaches the Services, you are responsible for deleting it, for example by deleting the affected issues, projects, or organization. Customers on a paid plan can ask us for help.
+
 ## Data Processing
 
 If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on a paid plan who need a separately signed data processing agreement can request one by emailing support@glitchtip.com; if signed, it replaces the published DPA for that customer.
@@ -53,7 +55,7 @@ We may change prices for future billing periods by giving you notice as describe
 
 ## Termination and Cancellation
 
-You can stop using our Services at any time. If you use a Paid Service, you can cancel at any time from your organization’s subscription settings (“Manage Subscription”); cancellation takes effect immediately and your organization moves to the free plan.
+You can stop using our Services at any time. If you use a Paid Service, you can cancel at any time from your organization’s subscription settings (“Manage Subscription”); your subscription ends either immediately or at the end of the current billing period, as shown when you cancel, and your organization then moves to the free plan.
 
 We may suspend or terminate your access to the Services if you materially breach these Terms (including the Acceptable Use section), if you fail to pay fees when due, if required by law, or if your use poses a security risk to the Services or other customers. Where reasonable, we will notify you first and give you a chance to fix the problem.
 
