@@ -106,8 +106,22 @@ export function loadChatwoot(websiteToken: string): Promise<boolean> {
   return pending;
 }
 
+function clearChatwootCookies() {
+  for (const cookie of document.cookie.split(";")) {
+    const name = cookie.split("=")[0].trim();
+    if (name.startsWith("cw_")) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    }
+  }
+}
+
 /** Load the SDK if needed and open the chat. Resolves false if it can't load. */
 export async function openChatwoot(websiteToken: string): Promise<boolean> {
+  if (!script && !ready && !hasOpenedSupportChat()) {
+    // First chat in this browser: start a fresh session rather than reuse a
+    // Chatwoot cookie we didn't ask for (left by older pages, or planted).
+    clearChatwootCookies();
+  }
   const loaded = await loadChatwoot(websiteToken);
   if (loaded) {
     rememberOpened();
@@ -125,10 +139,5 @@ export function resetSupportChat() {
   }
   window.$chatwoot?.reset();
   // The SDK is usually not loaded at logout, so clear its cookies directly.
-  for (const cookie of document.cookie.split(";")) {
-    const name = cookie.split("=")[0].trim();
-    if (name.startsWith("cw_")) {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-    }
-  }
+  clearChatwootCookies();
 }

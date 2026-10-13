@@ -98,6 +98,21 @@ describe("chatwoot-loader", () => {
     expect(loader.hasOpenedSupportChat()).toBe(true);
   });
 
+  it("starts a fresh session on the first open in this browser", async () => {
+    document.cookie = "cw_conversation=stale";
+    const opened = loader.openChatwoot("token");
+    expect(document.cookie).not.toContain("cw_conversation");
+    finishLoading();
+    await opened;
+
+    // Once opened, the session is kept on later visits.
+    vi.resetModules();
+    loader = await import("./chatwoot-loader");
+    document.cookie = "cw_conversation=ours";
+    loader.openChatwoot("token");
+    expect(document.cookie).toContain("cw_conversation=ours");
+  });
+
   it("ignores Chatwoot's own cookie when deciding to resume", () => {
     document.cookie = "cw_conversation=abc";
     expect(loader.hasOpenedSupportChat()).toBe(false);
