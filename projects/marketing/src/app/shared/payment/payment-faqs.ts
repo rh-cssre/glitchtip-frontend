@@ -17,7 +17,7 @@ export const hostedFaqs: Faq[] = [
   {
     question: "What happens when I exceed my event limit?",
     answer:
-      "You're in control. By default we throttle: once your limit is full we start dropping about 10% of events, then more as usage climbs, blocking fully at twice your limit. We email your organization's billing contact when throttling starts. You can upgrade your plan at any time, or turn on on-demand billing to keep collecting events past your limit, paying only for what goes over, up to a monthly spend cap you set.",
+      "You're in control. By default we throttle: once your limit is full we start dropping about 10% of events, then more as usage climbs, blocking fully at twice your limit. We email your organization's billing contact when throttling starts. You can move to a bigger plan, or turn on on-demand billing to keep collecting events past your limit, paying only for what goes over, up to a monthly spend cap you set.",
   },
   {
     question: "How does on-demand billing work?",
@@ -27,7 +27,7 @@ export const hostedFaqs: Faq[] = [
   {
     question: "Can I change plans at any time?",
     answer:
-      "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+      "Yes. On the Free plan, you can upgrade to a paid plan yourself at any time. If you're already on a paid plan, contact us at <a href=\"mailto:support@glitchtip.com\">support@glitchtip.com</a> and we'll change it for you.",
   },
   {
     question: "Do you offer annual billing?",
