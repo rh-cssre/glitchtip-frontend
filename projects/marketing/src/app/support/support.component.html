@@ -34,17 +34,15 @@
             </mat-form-field>
 
             <div class="cta-row">
-              @if (chatwootReady()) {
-                <button
-                  mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="handleChatwoot()"
-                  [disabled]="contactForm.invalid"
-                >
-                  Talk to us
-                </button>
-              }
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                (click)="handleChatwoot()"
+                [disabled]="contactForm.invalid || supportChat.opening()"
+              >
+                {{ supportChat.opening() ? "Connecting…" : "Talk to us" }}
+              </button>
 
               <button
                 mat-stroked-button

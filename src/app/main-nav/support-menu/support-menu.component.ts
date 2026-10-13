@@ -8,19 +8,27 @@ import {
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenu, MatMenuModule } from "@angular/material/menu";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { SettingsService } from "src/app/api/settings.service";
 import { client } from "src/app/shared/api/api";
+import { SupportChatService } from "src/app/shared/support-chat.service";
 
 @Component({
   selector: "gt-support-menu",
   templateUrl: "./support-menu.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatDividerModule, MatIconModule, MatMenuModule],
+  imports: [
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export class SupportMenuComponent {
   @ViewChild("supportMenu") menu!: MatMenu;
 
   private settings = inject(SettingsService);
+  protected supportChat = inject(SupportChatService);
 
   protected paidForGlitchTip = this.settings.paidForGlitchTip;
   protected billingEnabled = this.settings.billingEnabled;
@@ -29,6 +37,14 @@ export class SupportMenuComponent {
   protected readonly fallbackSupportUrl = "https://glitchtip.com/support";
 
   // Resolved on menu open so the link is a plain anchor (avoids popup-blocked window.open).
+  // Keep the menu open while the chat loads, so the click shows progress.
+  async openChat(event: Event) {
+    event.stopPropagation();
+    const opened = await this.supportChat.open();
+    this.menu.closed.emit();
+    if (!opened) window.location.href = "mailto:support@glitchtip.com";
+  }
+
   async loadSupportLink() {
     if (this.supportUrl()) return;
     const { data } = await client.GET("/api/0/instance-license/support-link/");

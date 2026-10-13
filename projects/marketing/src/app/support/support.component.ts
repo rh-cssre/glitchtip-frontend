@@ -3,8 +3,6 @@ import {
   PLATFORM_ID,
   inject,
   ChangeDetectionStrategy,
-  signal,
-  DestroyRef,
 } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import {
@@ -23,6 +21,7 @@ import { SectionHeaderComponent } from "../shared/section-header/section-header.
 import { RevealDirective } from "../shared/reveal.directive";
 import { LinksService } from "../links.service";
 import { SeoService } from "../shared/seo.service";
+import { SupportChatService } from "../shared/support-chat.service";
 
 const SUPPORT_EMAIL = "support@glitchtip.com";
 const LICENSE_KEY_PATTERN = /^sub_[A-Za-z0-9]+$/;
@@ -79,17 +78,13 @@ const SUPPORT_CHANNELS: SupportChannel[] = [
 export class SupportComponent {
   private platformId = inject(PLATFORM_ID);
   private route = inject(ActivatedRoute);
-  private destroyRef = inject(DestroyRef);
   private links = inject(LinksService);
   private seo = inject(SeoService);
+  protected supportChat = inject(SupportChatService);
 
   protected readonly channels = SUPPORT_CHANNELS;
   protected readonly loginLink = this.links.loginLink;
   protected readonly registerLink = this.links.registerLink;
-
-  // Chatwoot loads from a third-party script that can silently fail (ad
-  // blockers, CSP, outage). Only show "Talk to us" once the SDK is ready.
-  protected chatwootReady = signal(false);
 
   // The license key is optional: anyone can reach the team, and a key just adds
   // priority for active support-plan holders. Only the shape is validated.
@@ -123,16 +118,6 @@ export class SupportComponent {
       if (sub && LICENSE_KEY_PATTERN.test(sub)) {
         this.contactForm.controls.licenseKey.setValue(sub);
       }
-      // Already initialized, or wait for the SDK's "chatwoot:ready" event.
-      if (window.$chatwoot) {
-        this.chatwootReady.set(true);
-      } else {
-        const onReady = () => this.chatwootReady.set(true);
-        window.addEventListener("chatwoot:ready", onReady, { once: true });
-        this.destroyRef.onDestroy(() =>
-          window.removeEventListener("chatwoot:ready", onReady),
-        );
-      }
     }
   }
 
@@ -144,13 +129,16 @@ export class SupportComponent {
     window.location.href = mailto;
   }
 
-  handleChatwoot() {
+  async handleChatwoot() {
     if (this.contactForm.invalid) return;
     const { licenseKey } = this.contactForm.value;
-    // Guard in case the SDK vanished between render and click.
-    if (!window.$chatwoot) return;
-    window.$chatwoot.toggle("open");
-    window.$chatwoot.setConversationCustomAttributes({
+    // The chat script loads on first click. If it can't (ad blocker, outage),
+    // fall back to email so the click still reaches us.
+    if (!(await this.supportChat.open())) {
+      this.composeSupportEmail();
+      return;
+    }
+    window.$chatwoot?.setConversationCustomAttributes({
       license: licenseKey,
     });
   }

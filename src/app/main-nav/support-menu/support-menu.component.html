@@ -32,6 +32,22 @@
       <span i18n>Sponsor on Liberapay</span>
     </a>
   }
+  @if (supportChat.available()) {
+    <mat-divider />
+    <button
+      mat-menu-item
+      type="button"
+      [disabled]="supportChat.opening()"
+      (click)="openChat($event)"
+    >
+      @if (supportChat.opening()) {
+        <mat-icon><mat-spinner diameter="20" /></mat-icon>
+      } @else {
+        <mat-icon>chat</mat-icon>
+      }
+      <span i18n>Chat with support</span>
+    </button>
+  }
   @if (paidForGlitchTip() === true && billingEnabled() === false) {
     <mat-divider />
     <a
