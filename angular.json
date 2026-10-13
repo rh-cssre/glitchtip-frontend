@@ -180,7 +180,7 @@
             "outputPath": "dist/marketing",
             "index": "projects/marketing/src/index.html",
             "browser": "projects/marketing/src/main.ts",
-            "polyfills": ["zone.js", "@angular/localize/init"],
+            "polyfills": ["@angular/localize/init"],
             "tsConfig": "projects/marketing/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -265,7 +265,7 @@
             "outputPath": "dist/component-preview",
             "index": "projects/component-preview/src/index.html",
             "browser": "projects/component-preview/src/main.ts",
-            "polyfills": ["zone.js", "@angular/localize/init"],
+            "polyfills": ["@angular/localize/init"],
             "tsConfig": "projects/component-preview/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
