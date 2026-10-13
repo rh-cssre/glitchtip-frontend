@@ -101,6 +101,11 @@ export class OrganizationsService {
   /**
    * Path params for an org-scoped endpoint. Spread it when the path has more
    * params: `path: { ...orgPath(slug), project_slug }`.
+   *
+   * Specs that stub this service with `useValue` must include `orgPath` once
+   * the code under test makes an org-scoped request; without it the request
+   * throws a TypeError from inside the resource.
+   * `(slug) => ({ organization_id_or_slug: slug })` is enough.
    */
   orgPath(slug: string): { organization_id_or_slug: string } {
     return { organization_id_or_slug: this.orgIdOrSlug(slug) };
