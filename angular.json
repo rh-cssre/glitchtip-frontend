@@ -227,7 +227,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "externalDependencies": ["marked-katex-extension"]
             }
           },
           "defaultConfiguration": "production"
