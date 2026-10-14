@@ -45,7 +45,7 @@ We do not review the contents of Customer Data. If data this section prohibits r
 
 ## Data Processing
 
-If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on a paid plan who need a signed data processing agreement, which may include negotiated terms, can request one by emailing support@glitchtip.com; if signed, it replaces the published DPA for that customer.
+If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on any plan can request a signed copy of the DPA, and customers on a Large plan can request a data processing agreement with negotiated terms, by emailing support@glitchtip.com. A signed, negotiated agreement replaces the published DPA for that customer.
 
 ## Fees and Charges
 
@@ -76,7 +76,7 @@ THE SERVICES ARE PROVIDED “AS IS” AND “AS AVAILABLE”. TO THE FULLEST EXT
 TO THE FULLEST EXTENT PERMITTED BY LAW:
 
 1. NEITHER PARTY WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, REVENUE, GOODWILL, OR DATA, ARISING OUT OF OR RELATED TO THE AGREEMENT, EVEN IF ADVISED OF THEIR POSSIBILITY.
-2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT, UNLESS A SEPARATELY SIGNED DATA PROCESSING AGREEMENT STATES OTHERWISE.
+2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT, UNLESS A SIGNED, NEGOTIATED DATA PROCESSING AGREEMENT STATES OTHERWISE.
 
 These limits do not apply to your payment obligations, your indemnification obligations, the liabilities excluded by Section 8.3 of the DPA Standard Terms (liability to individuals for their data protection rights, and violations of the Standard Contractual Clauses or UK Addendum), or liability that cannot be limited under applicable law.
 
