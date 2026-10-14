@@ -144,7 +144,7 @@ Infrastructure is defined as code using OpenTofu, version-controlled, audited, a
 
 **Ensuring limited data retention:**
 
-Captured event data and associated Telemetry Data are retained for 90 days by default and are then automatically deleted. When Customer deletes an organization or user account, the associated data is deleted from the live Service. Database backups are encrypted and expire automatically; deleted data is removed from backups within 35 days. Deleted data is not restored from backups except to recover from an incident. Copies of event payloads in object storage are deleted when their organization is deleted, and otherwise expire after 90 days.
+Captured event data and associated Telemetry Data are retained for 90 days by default and are then automatically deleted. An issue’s summary (its title, grouping details, and any user feedback attached to it) is retained until 97 days after the issue was last seen, and release records are retained for 365 days. When Customer deletes an organization or user account, the associated data is deleted from the live Service. Database backups are encrypted and expire automatically; deleted data is removed from backups within 35 days. Deleted data is not restored from backups except to recover from an incident. Copies of event payloads in object storage are deleted when their organization is deleted, and otherwise expire after 90 days.
 
 ## Other Changes to Standard Terms
 
@@ -158,7 +158,7 @@ Provider and Customer have not changed the Standard Terms, except for the detail
 
 If a PDF or other rendering of this DPA differs from this page, this page controls.
 
-Customers on a paid plan whose procurement process requires a signed document can request a separately signed data processing agreement by emailing support@glitchtip.com. If Customer and Provider sign a separate data processing agreement, that signed agreement replaces this DPA for that Customer from its effective date, and this DPA continues to apply to any period before it. The published terms are not negotiable.
+Customers on a paid plan who need a signed data processing agreement can request one by emailing support@glitchtip.com. Its terms may be negotiated with Provider. If Customer and Provider sign a separate data processing agreement, that signed agreement replaces this DPA for that Customer from its effective date, and this DPA continues to apply to any period before it. This published DPA is not negotiable.
 
 <hr />
 

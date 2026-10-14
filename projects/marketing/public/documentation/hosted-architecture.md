@@ -30,7 +30,7 @@ Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) a
 
 - **Read the agreement**: [Data Processing Agreement](/legal/data-processing-agreement)
 
-The terms are provided as published and are not negotiable. Paying customers who require a signed, countersigned copy for their records can request one at [support@glitchtip.com](mailto:support@glitchtip.com).
+The published terms are not negotiable. Customers with a "Large" plan who need a signed data processing agreement, including one with negotiated terms, can request one at [support@glitchtip.com](mailto:support@glitchtip.com); if signed, it replaces the published DPA for that customer.
 
 ## 🇪🇺 EU Hosting & Data Sovereignty
 
@@ -53,8 +53,8 @@ Both instances offer identical plans and features. To get started with EU hostin
 - Network Isolation: The US database cluster is isolated within a Private VPC (Virtual Private Cloud) and is not accessible via the public internet. The EU database accepts connections only from the GlitchTip application (a "Trusted Sources" allowlist) and requires TLS.
 - Encryption:
   - In Transit: All data transmission requires TLS 1.2+ (HTTPS).
-  - At Rest: DigitalOcean Volumes Block Storage provides encryption at rest.
-- Secrets Management: Application credentials and keys are managed via Kubernetes Secrets and are never committed to version control.
+  - At Rest: Data is stored on encrypted DigitalOcean storage: Volumes Block Storage on the US instance, and DigitalOcean Managed PostgreSQL storage on the EU instance.
+- Secrets Management: Application credentials and keys are managed via Kubernetes Secrets on the US instance and App Platform encrypted environment variables on the EU instance, and are never committed to version control.
 
 ### Access Controls
 
@@ -77,10 +77,10 @@ Both instances offer identical plans and features. To get started with EU hostin
 
 ## Disaster Recovery & Availability
 
-Hosted GlitchTip relies on DigitalOcean’s Managed Kubernetes (DOKS) for high availability. The US (HIPAA-eligible) instance runs a self-healing CloudNativePG PostgreSQL cluster in-cluster; the EU instance uses DigitalOcean’s Managed PostgreSQL.
+The US (HIPAA-eligible) instance runs on DigitalOcean’s Managed Kubernetes (DOKS) with a self-healing CloudNativePG PostgreSQL cluster in-cluster. The EU instance runs on DigitalOcean App Platform with DigitalOcean’s Managed PostgreSQL.
 
-- Redundancy: Individual services (Kubernetes Pods) and Database Clusters are configured to self-heal.
-- Failover: In the event of a service interruption, GlitchTip SDKs drop events they can't deliver rather than blocking your application, so service interruptions on GlitchTip will not disrupt your application's core functionality.
+- Redundancy: Application services (Kubernetes Pods on the US instance, App Platform components on the EU instance) and databases are configured to self-heal.
+- Failover: GlitchTip works with Sentry SDKs, which send events in the background, so service interruptions on GlitchTip will not disrupt your application's core functionality.
 - Backups: On the US instance, CloudNativePG (Barman Cloud) continuously archives PostgreSQL write-ahead logs and periodic base backups to a separate, encrypted DigitalOcean Spaces bucket, enabling point-in-time recovery (PITR) with a Recovery Point Objective (RPO) of minutes. The EU instance uses DigitalOcean Managed Database automated daily backups.
 - Infrastructure status: our hosting provider's status is published at [DigitalOcean Status](https://status.digitalocean.com/).
 
@@ -103,7 +103,7 @@ Roles are divided into a Technical Lead (investigation/remediation) and a Compli
 
 Upon verification of an incident, the Technical Lead will:
 
-- Isolate affected Kubernetes Pods or services.
+- Isolate affected services (Kubernetes Pods on the US instance, App Platform components on the EU instance).
 - Rotate relevant API keys and secrets.
 - Preserve system logs for forensic analysis.
 
