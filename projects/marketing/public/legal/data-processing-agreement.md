@@ -34,7 +34,7 @@ Customer: the email address registered to Customer’s GlitchTip account.
 
 ### DPA Liability Cap
 
-As provided in Section 8.1 of the DPA Standard Terms, each party’s liability arising out of or related to this DPA is subject to the Limitation of Liability section of the Agreement. Provider’s liability under this DPA counts toward, and is not in addition to, the single liability cap stated there.
+As provided in Section 8.1 of the DPA Standard Terms, each party’s liability arising out of or related to this DPA is subject to the Limitation of Liability section of the Agreement. Except as provided in Section 8.3 of the DPA Standard Terms, Provider’s liability under this DPA counts toward, and is not in addition to, the single liability cap stated there.
 
 ### Service Provider Relationship
 
@@ -94,7 +94,7 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 ### Special Category Data
 
-Is special category data (as defined in Article 9 of the GDPR) Processed? Not intentionally. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Customer agrees not to send special category data except as permitted by the Acceptable Use section of the Agreement. Protected health information may be Processed only where Customer and Provider have both signed a Business Associate Agreement that is in effect, and then subject to that agreement.
+Is special category data (as defined in Article 9 of the GDPR) Processed? Only incidentally, or as protected health information under a Business Associate Agreement as described below. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Customer agrees not to send special category data except as permitted by the Acceptable Use section of the Agreement. Protected health information may be Processed only where Customer and Provider have both signed a Business Associate Agreement that is in effect, and then subject to that agreement.
 
 ### Frequency of Transfer
 

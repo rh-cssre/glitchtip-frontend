@@ -36,7 +36,7 @@ You are responsible for configuring your applications and SDKs so that you send 
 You agree not to use the Services to:
 
 - break any law, or send data you do not have the right to send;
-- send special categories of personal data (as defined in Article 9 of the GDPR, such as health, biometric, or genetic data) or data about criminal convictions, except incidentally and in small amounts despite reasonable scrubbing;
+- send special categories of personal data (as defined in Article 9 of the GDPR, such as health, biometric, or genetic data) or data about criminal convictions, except incidentally and in small amounts despite reasonable scrubbing, or as PHI permitted by the next item;
 - send protected health information (“PHI”) as defined under HIPAA, unless you and we have both signed a Business Associate Agreement (“BAA”) that is in effect. We do not enter into a BAA by accepting these Terms, and we only offer BAAs as described on our [HIPAA page](/hipaa);
 - send payment card numbers, government identification numbers, passwords, or similar credentials on purpose; or
 - probe, attack, overload, or disrupt the Services or other customers, or get around usage limits or access controls.
@@ -78,7 +78,7 @@ TO THE FULLEST EXTENT PERMITTED BY LAW:
 1. NEITHER PARTY WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, REVENUE, GOODWILL, OR DATA, ARISING OUT OF OR RELATED TO THE AGREEMENT, EVEN IF ADVISED OF THEIR POSSIBILITY.
 2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT.
 
-These limits do not apply to your payment obligations, your indemnification obligations, or liability that cannot be limited under applicable law.
+These limits do not apply to your payment obligations, your indemnification obligations, the liabilities excluded by Section 8.3 of the DPA Standard Terms (liability to individuals for their data protection rights, and violations of the Standard Contractual Clauses or UK Addendum), or liability that cannot be limited under applicable law.
 
 ## Indemnification
 
