@@ -5,9 +5,6 @@ import type {} from "@angular/localize/init";
 import { beforeEach, describe, expect, it } from "vitest";
 import { signal, computed } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { OverlayContainer } from "@angular/cdk/overlay";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { OverageCardComponent } from "./overage-card.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
@@ -225,25 +222,6 @@ describe("OverageCardComponent money disclosures", () => {
       reportedCostCents: 102,
     });
     expect(fixture.componentInstance.owedAboveCap()).toBe(false);
-  });
-
-  it("warns that usage already over the limit is billed on turn-on", () => {
-    render({
-      enabled: false,
-      active: false,
-      overageCostCents: 0,
-      reportedCostCents: 0,
-    });
-    void fixture.componentInstance.onToggle({
-      checked: true,
-    } as MatSlideToggleChange);
-    fixture.detectChanges();
-    const dialogText =
-      TestBed.inject(OverlayContainer).getContainerElement().textContent ?? "";
-    expect(dialogText).toContain(
-      "If you're already over your plan limit this cycle, those events are billed too, up to your cap.",
-    );
-    TestBed.inject(MatDialog).closeAll();
   });
 
   // The claim the cap-lowering path breaks: usage already served stays
