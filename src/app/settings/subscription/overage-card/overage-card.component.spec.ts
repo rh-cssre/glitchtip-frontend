@@ -227,8 +227,6 @@ describe("OverageCardComponent money disclosures", () => {
     expect(fixture.componentInstance.owedAboveCap()).toBe(false);
   });
 
-  // Turning it on mid-cycle bills events already past the plan limit, so the
-  // confirm dialog has to say so before the first charge.
   it("warns that usage already over the limit is billed on turn-on", () => {
     render({
       enabled: false,
