@@ -10,6 +10,7 @@ import { LinksService } from "./links.service";
 import { MatToolbar } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
+import { SupportChatService } from "./shared/support-chat.service";
 
 @Component({
   selector: "mkt-root",
@@ -27,6 +28,7 @@ import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
 export class AppComponent implements OnInit {
   private links = inject(LinksService);
   private matIconRegistry = inject(MatIconRegistry);
+  private supportChat = inject(SupportChatService);
 
   title = "glitchtip-marketing";
   registerLink = this.links.registerLink;
@@ -43,5 +45,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.matIconRegistry.setDefaultFontSetClass("material-symbols-filled");
+    this.supportChat.resumeExistingConversation();
   }
 }

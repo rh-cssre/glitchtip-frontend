@@ -34,17 +34,16 @@
             </mat-form-field>
 
             <div class="cta-row">
-              @if (chatwootReady()) {
-                <button
-                  mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="handleChatwoot()"
-                  [disabled]="contactForm.invalid"
-                >
-                  Talk to us
-                </button>
-              }
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                (click)="handleChatwoot()"
+                [disabled]="contactForm.invalid"
+                [attr.aria-busy]="supportChat.opening()"
+              >
+                {{ supportChat.opening() ? "Connecting…" : "Talk to us" }}
+              </button>
 
               <button
                 mat-stroked-button
@@ -55,6 +54,13 @@
                 Send an email
               </button>
             </div>
+            @if (chatFailed()) {
+              <p class="marketing-caption" role="status">
+                Chat couldn't load. Email us at
+                <a [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>
+                instead.
+              </p>
+            }
           </form>
 
           <p class="support-direct__meta marketing-caption">
