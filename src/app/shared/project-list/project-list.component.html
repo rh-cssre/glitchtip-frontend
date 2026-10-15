@@ -29,24 +29,26 @@
           <h2 class="section-header-text">
             {{ activeOrgOnly ? "Projects" : organization.name }}
           </h2>
-          <a
-            mat-stroked-button
-            [routerLink]="[
-              '/',
-              organization.slug,
-              'settings',
-              'projects',
-              'new',
-            ]"
-            [disabled]="!accessProjectWrite()"
-            class="new-project-button"
-            i18n
-            >Create new project in {{ organization.name }}
-          </a>
+          @if (!activeOrgOnly || canWriteProject()) {
+            <a
+              mat-stroked-button
+              [routerLink]="[
+                '/',
+                organization.slug,
+                'settings',
+                'projects',
+                'new',
+              ]"
+              class="new-project-button"
+              i18n
+              >Create new project in {{ organization.name }}
+            </a>
+          }
         </header>
         @if (organization.projects.length === 0) {
           <gt-empty-projects
             [activeOrgOnly]="activeOrgOnly"
+            [canCreateProject]="!activeOrgOnly || canWriteProject()"
           ></gt-empty-projects>
         }
         <div>

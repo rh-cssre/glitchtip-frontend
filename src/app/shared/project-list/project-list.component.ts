@@ -47,7 +47,8 @@ export class ProjectListComponent implements OnInit {
       ),
     })),
   );
-  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  // Scopes come from one selected org, so only the single-org view is gated.
+  canWriteProject = this.organizationsService.canWriteProject;
 
   ngOnInit() {
     this.projectsService.retrieveProjects();

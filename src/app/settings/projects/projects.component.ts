@@ -36,7 +36,7 @@ export class ProjectsComponent {
   projects = this.service.projects;
   errors = this.service.errors;
   hasError = this.service.hasError;
-  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  canWriteProject = this.organizationsService.canWriteProject;
 
   constructor() {
     effect(() => {
