@@ -77,12 +77,16 @@ export class TeamsService extends StatefulService<TeamsState> {
   readonly teamMembers = computed(() => this.teamMembersResource.value() ?? []);
   readonly loading = computed(() => this.state().loading);
   readonly errors = computed(() => this.state().errors);
-  readonly userTeamRole = computed(() => {
+  /**
+   * Add/remove others on the team whose members are loaded. Mirrors the
+   * backend: Admin+ (team:write) if you're on the team, Manager+ (org:write)
+   * if you aren't, which is also the answer while the roster loads.
+   */
+  readonly canModifyTeam = computed(() => {
     const userEmail = this.userService.activeUserEmail();
-    const activeTeamMember = this.teamMembers().find(
-      (teamMember) => teamMember.email === userEmail,
-    );
-    return activeTeamMember?.role;
+    return this.teamMembers().some((member) => member.email === userEmail)
+      ? this.organizationsService.canWriteTeam()
+      : this.organizationsService.canWriteOrg();
   });
 
   constructor() {

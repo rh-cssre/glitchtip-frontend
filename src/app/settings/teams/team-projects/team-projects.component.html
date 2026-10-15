@@ -6,7 +6,7 @@
         <mat-error>{{ errors().addProjectToTeam }}</mat-error>
       }
       <div>
-        @if (userTeamRole() !== "member") {
+        @if (canWriteOrg()) {
           <mat-form-field appearance="outline">
             <mat-label i18n>Add Project</mat-label>
             <mat-select
@@ -42,13 +42,15 @@
                 [queryParams]="{ project: project.id }"
                 >{{ project.name }}</a
               >
-              <gt-loading-button
-                buttonText="Remove"
-                buttonStyle="stroked"
-                [loading]="project.slug === loading().removeProjectFromTeam"
-                (buttonClick)="removeProject(project.slug!)"
-                id="remove-team-member"
-              ></gt-loading-button>
+              @if (canWriteOrg()) {
+                <gt-loading-button
+                  buttonText="Remove"
+                  buttonStyle="stroked"
+                  [loading]="project.slug === loading().removeProjectFromTeam"
+                  (buttonClick)="removeProject(project.slug!)"
+                  id="remove-team-member"
+                ></gt-loading-button>
+              }
             </li>
           }
         </ul>

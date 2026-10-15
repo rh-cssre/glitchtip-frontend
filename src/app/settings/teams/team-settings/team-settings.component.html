@@ -1,4 +1,4 @@
-@if (team(); as team) {
+@if (canWriteTeam() && team(); as team) {
   <mat-card>
     <mat-card-header>
       <mat-card-title i18n>Settings</mat-card-title>
@@ -31,26 +31,32 @@
     </mat-card-content>
   </mat-card>
 }
-<mat-card>
-  <mat-card-header>
-    <mat-card-title i18n>Delete Team</mat-card-title>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content class="remove-content">
-    <div>
-      <p i18n
-        >By deleting your team, you will lose all associated data. This cannot
-        be undone.</p
+@if (canAdminTeam()) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title i18n>Delete Team</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="remove-content">
+      <div>
+        <p i18n
+          >By deleting your team, you will lose all associated data. This cannot
+          be undone.</p
+        >
+        <mat-error></mat-error>
+      </div>
+      <gt-loading-button
+        buttonText="Delete Team"
+        buttonStyle="stroked"
+        color="warn"
+        [loading]="loading().deleteTeam"
+        (buttonClick)="deleteTeam()"
       >
-      <mat-error></mat-error>
-    </div>
-    <gt-loading-button
-      buttonText="Delete Team"
-      buttonStyle="stroked"
-      color="warn"
-      [loading]="loading().deleteTeam"
-      (buttonClick)="deleteTeam()"
-    >
-    </gt-loading-button>
-  </mat-card-content>
-</mat-card>
+      </gt-loading-button>
+    </mat-card-content>
+  </mat-card>
+} @else if (!canWriteTeam()) {
+  <p class="body-text" i18n
+    >Changing team settings requires the Admin role or above.</p
+  >
+}
