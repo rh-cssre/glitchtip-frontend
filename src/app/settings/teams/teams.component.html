@@ -67,8 +67,17 @@
             >
           } @else if (canJoinTeam()) {
             <p i18n>You aren't part of any teams. Join a team below.</p>
+          } @else if (canWriteTeam()) {
+            <p i18n
+              >You aren't part of any teams. Press the "Create Team" button in
+              the upper right, or ask an organization Manager or Owner to add
+              you to one.</p
+            >
           } @else {
-            <p i18n>You aren't part of any teams.</p>
+            <p i18n
+              >You aren't part of any teams. Ask an organization Manager or
+              Owner to add you to one.</p
+            >
           }
         } @else {
           <p i18n
@@ -80,6 +89,8 @@
               >To create a new team, press the "Create Team" button in the upper
               right.</p
             >
+          } @else {
+            <p i18n>Ask an organization Manager or Owner to create one.</p>
           }
         }
       }
