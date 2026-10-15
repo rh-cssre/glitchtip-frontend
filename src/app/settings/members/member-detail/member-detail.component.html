@@ -39,26 +39,28 @@
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          @if (updateMemberError(); as error) {
-            <mat-error>{{ error }}</mat-error>
-          }
-          <div class="role-form-elements">
-            <mat-radio-group formControlName="role">
-              <mat-radio-button value="member">Member</mat-radio-button>
-              <mat-radio-button value="admin">Admin</mat-radio-button>
-              <mat-radio-button value="manager">Manager</mat-radio-button>
-              <mat-radio-button value="owner">Owner</mat-radio-button>
-            </mat-radio-group>
-            <div class="role-button-container">
-              <gt-loading-button
-                [disabled]="member.role === formRole.value"
-                [loading]="updateMemberLoading() === true"
-                buttonText="Update Member"
-              ></gt-loading-button>
+        @if (canWriteMember()) {
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            @if (updateMemberError(); as error) {
+              <mat-error>{{ error }}</mat-error>
+            }
+            <div class="role-form-elements">
+              <mat-radio-group formControlName="role">
+                <mat-radio-button value="member">Member</mat-radio-button>
+                <mat-radio-button value="admin">Admin</mat-radio-button>
+                <mat-radio-button value="manager">Manager</mat-radio-button>
+                <mat-radio-button value="owner">Owner</mat-radio-button>
+              </mat-radio-group>
+              <div class="role-button-container">
+                <gt-loading-button
+                  [disabled]="member.role === formRole.value"
+                  [loading]="updateMemberLoading() === true"
+                  buttonText="Update Member"
+                ></gt-loading-button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        }
         <div class="role-description">
           @if (formRole.value === "member") {
             <span i18n
@@ -101,7 +103,7 @@
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
-        @if (!member.isOwner) {
+        @if (!member.isOwner && canAdminOrg()) {
           @if (transferOrgOwnershipError(); as error) {
             <mat-error>{{ error }}</mat-error>
           }
@@ -117,6 +119,8 @@
           >
             Change Password
           </gt-loading-button>
+        } @else if (!member.isOwner) {
+          <p i18n>Only organization owners can transfer account ownership.</p>
         } @else {
           <p i18n>
             This member is the organization account owner and has access to the

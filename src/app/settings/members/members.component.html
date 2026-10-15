@@ -3,13 +3,11 @@
     <h1 class="section-header-text">Organization Members</h1>
   </ng-container>
   <ng-container slot="right">
-    <a
-      mat-flat-button
-      color="primary"
-      [routerLink]="['new']"
-      [disabled]="!accessMemberWrite()"
-      >Invite Member</a
-    >
+    @if (canWriteMember()) {
+      <a mat-flat-button color="primary" [routerLink]="['new']"
+        >Invite Member</a
+      >
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -46,7 +44,7 @@
             <div class="reinvite-and-role">
               @if (member.pending) {
                 <div class="reinvite">
-                  @if (!member.loadingResendInvite) {
+                  @if (!member.loadingResendInvite && canWriteMember()) {
                     <gt-loading-button
                       class="resend-invite"
                       [loading]="member.loadingResendInvite"
@@ -65,15 +63,17 @@
               }
               <div class="role">{{ member.roleName }}</div>
             </div>
-            <gt-loading-button
-              class="remove-button"
-              matTooltip="Account ownership must be transferred."
-              [matTooltipDisabled]="!member.isOwner"
-              [disabled]="member.isOwner"
-              (buttonClick)="removeMember(member)"
-              [buttonText]="member.isMe ? 'Leave' : 'Remove'"
-              buttonStyle="stroked"
-            ></gt-loading-button>
+            @if (member.isMe || canAdminMember()) {
+              <gt-loading-button
+                class="remove-button"
+                matTooltip="Account ownership must be transferred."
+                [matTooltipDisabled]="!member.isOwner"
+                [disabled]="member.isOwner"
+                (buttonClick)="removeMember(member)"
+                [buttonText]="member.isMe ? 'Leave' : 'Remove'"
+                buttonStyle="stroked"
+              ></gt-loading-button>
+            }
           </div>
         }
       </div>
