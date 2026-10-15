@@ -2,10 +2,7 @@ import { computed, inject, Injectable, signal, untracked } from "@angular/core";
 import { client } from "../shared/api/api";
 import { AuthService } from "../auth.service";
 import { apiResource } from "../shared/api/api-resource-factory";
-import type { components } from "./api-schema";
-
-type Scope =
-  components["schemas"]["OrganizationDetailSchema"]["access"][number];
+import { scopesFor, type Scope } from "./organizations/org-access";
 
 @Injectable({
   providedIn: "root",
@@ -77,12 +74,9 @@ export class OrganizationsService {
    * Scopes for the org being viewed, or none while activeOrganization still
    * holds the first-org fallback, so every gate fails closed.
    */
-  access = computed<ReadonlySet<Scope>>(() => {
-    const org = this.activeOrganization();
-    return new Set(
-      org && org.slug === this.selectedOrganizationSlug() ? org.access : [],
-    );
-  });
+  access = computed(() =>
+    scopesFor(this.activeOrganization(), this.selectedOrganizationSlug()),
+  );
   #hasScope = (...required: Scope[]) =>
     computed(() => required.some((scope) => this.access().has(scope)));
   canWriteProject = this.#hasScope("project:write", "project:admin");
