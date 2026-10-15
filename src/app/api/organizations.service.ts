@@ -94,15 +94,6 @@ export class OrganizationsService {
   canAdminOrg = this.#hasScope("org:admin");
   canWriteMember = this.#hasScope("member:write", "member:admin");
   canAdminMember = this.#hasScope("member:admin");
-  accessProjectWrite = computed(() => this.access().has("project:write"));
-  accessTeamWrite = computed(
-    () => this.access().has("project:write") || this.access().has("org:write"),
-  );
-  accessMemberWrite = computed(
-    () =>
-      this.access().has("member:admin") || this.access().has("member:write"),
-  );
-  accessOrgAdmin = computed(() => this.access().has("org:admin"));
 
   constructor() {
     setTimeout(() => this.refresh(), 30000);
