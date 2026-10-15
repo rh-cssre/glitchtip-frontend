@@ -20,109 +20,112 @@
         ></mat-card
       >
     }
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title i18n>Update Project</mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        @if (updateNameError()) {
-          <mat-error class="server-error">{{ updateNameError() }}</mat-error>
-        }
-        <form
-          [formGroup]="nameForm"
-          (ngSubmit)="updateName()"
-          class="project-form"
-        >
-          <mat-form-field appearance="outline">
-            <mat-label i18n>Name</mat-label>
-            <input matInput formControlName="name" [value]="project.name" />
-            <mat-error>
-              @if (name?.errors?.required) {
-                <span data-cy="project-name-error-required"
-                  >Enter a project name</span
-                >
-              }
-              @if (name?.errors?.maxlength) {
-                <span data-cy="project-name-error-length"
-                  >Name must be 64 characters or less</span
-                >
-              }
-            </mat-error>
-          </mat-form-field>
-          <gt-loading-button
-            [disabled]="name?.value === project.name"
-            buttonText="Update Name"
-            id="update-project-name"
+    @if (canWriteProject()) {
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title i18n>Update Project</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          @if (updateNameError()) {
+            <mat-error class="server-error">{{ updateNameError() }}</mat-error>
+          }
+          <form
+            [formGroup]="nameForm"
+            (ngSubmit)="updateName()"
+            class="project-form"
           >
-          </gt-loading-button>
-        </form>
-        @if (updatePlatformError()) {
-          <mat-error class="server-error">
-            {{ updatePlatformError() }}
-          </mat-error>
-        }
-        <form
-          [formGroup]="platformForm"
-          (ngSubmit)="updatePlatform(project.name)"
-          class="platform-form"
-        >
-          <mat-form-field class="platform-form-field" appearance="outline">
-            <mat-label>Platform</mat-label>
-            <input
-              data-cy="platform-input"
-              type="text"
-              matInput
-              formControlName="platform"
-              [matAutocomplete]="auto"
-            />
-            <button
-              class="input-icon-button"
-              [class.invalid]="platformCtrl.invalid"
-              [disabled]="platformCtrl.value === ''"
-              mat-icon-button
-              matSuffix
-              type="button"
-              (click)="clearFilter()"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              [displayWith]="getPlatformName.bind(this)"
-            >
-              @for (platform of filteredPlatforms(); track platform.id) {
-                <mat-option data-cy="platform-option" [value]="platform.id">
-                  {{ platform.name }}
-                </mat-option>
-              }
-            </mat-autocomplete>
-            @if (platformCtrl.errors?.invalidAutocompleteString) {
-              <mat-error i18n>Select a valid platform</mat-error>
-            }
-          </mat-form-field>
-          <div class="docs-and-submit-container">
-            @if (platformCtrl && platformCtrl.value !== "") {
-              <a
-                href="https://glitchtip.com/sdkdocs/{{ platformCtrl.value }}"
-                target="_blank"
-                i18n
-              >
-                Platform Documentation
-              </a>
-            }
+            <mat-form-field appearance="outline">
+              <mat-label i18n>Name</mat-label>
+              <input matInput formControlName="name" [value]="project.name" />
+              <mat-error>
+                @if (name?.errors?.required) {
+                  <span data-cy="project-name-error-required"
+                    >Enter a project name</span
+                  >
+                }
+                @if (name?.errors?.maxlength) {
+                  <span data-cy="project-name-error-length"
+                    >Name must be 64 characters or less</span
+                  >
+                }
+              </mat-error>
+            </mat-form-field>
             <gt-loading-button
-              [disabled]="
-                platformCtrl.value === project.platform || platformCtrl.invalid
-              "
-              buttonText="Update Platform"
-              id="update-project-platform"
+              [disabled]="name?.value === project.name"
+              buttonText="Update Name"
+              id="update-project-name"
             >
             </gt-loading-button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
+          </form>
+          @if (updatePlatformError()) {
+            <mat-error class="server-error">
+              {{ updatePlatformError() }}
+            </mat-error>
+          }
+          <form
+            [formGroup]="platformForm"
+            (ngSubmit)="updatePlatform(project.name)"
+            class="platform-form"
+          >
+            <mat-form-field class="platform-form-field" appearance="outline">
+              <mat-label>Platform</mat-label>
+              <input
+                data-cy="platform-input"
+                type="text"
+                matInput
+                formControlName="platform"
+                [matAutocomplete]="auto"
+              />
+              <button
+                class="input-icon-button"
+                [class.invalid]="platformCtrl.invalid"
+                [disabled]="platformCtrl.value === ''"
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="clearFilter()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="getPlatformName.bind(this)"
+              >
+                @for (platform of filteredPlatforms(); track platform.id) {
+                  <mat-option data-cy="platform-option" [value]="platform.id">
+                    {{ platform.name }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+              @if (platformCtrl.errors?.invalidAutocompleteString) {
+                <mat-error i18n>Select a valid platform</mat-error>
+              }
+            </mat-form-field>
+            <div class="docs-and-submit-container">
+              @if (platformCtrl && platformCtrl.value !== "") {
+                <a
+                  href="https://glitchtip.com/sdkdocs/{{ platformCtrl.value }}"
+                  target="_blank"
+                  i18n
+                >
+                  Platform Documentation
+                </a>
+              }
+              <gt-loading-button
+                [disabled]="
+                  platformCtrl.value === project.platform ||
+                  platformCtrl.invalid
+                "
+                buttonText="Update Platform"
+                id="update-project-platform"
+              >
+              </gt-loading-button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    }
     @for (projectKey of projectKeys() || []; track projectKey) {
       <mat-card>
         <mat-card-header class="vertical-card-header">
@@ -173,29 +176,30 @@
         </div>
       </mat-card-content>
     </mat-card>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title i18n>Delete Project</mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content class="remove-content">
-        <div>
-          <p i18n
-            >By deleting your project, you will lose all associated data. This
-            cannot be undone.</p
+    @if (canAdminProject()) {
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title i18n>Delete Project</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="remove-content">
+          <div>
+            <p i18n
+              >By deleting your project, you will lose all associated data. This
+              cannot be undone.</p
+            >
+          </div>
+          <gt-loading-button
+            buttonText="Delete Project"
+            buttonStyle="stroked"
+            color="warn"
+            [loading]="deleteLoading()"
+            (buttonClick)="deleteProject()"
+            id="delete-project"
           >
-        </div>
-        <gt-loading-button
-          buttonText="Delete Project"
-          buttonStyle="stroked"
-          color="warn"
-          [loading]="deleteLoading()"
-          (buttonClick)="deleteProject()"
-          [disabled]="!accessProjectWrite()"
-          id="delete-project"
-        >
-        </gt-loading-button>
-      </mat-card-content>
-    </mat-card>
+          </gt-loading-button>
+        </mat-card-content>
+      </mat-card>
+    }
   </section>
 }

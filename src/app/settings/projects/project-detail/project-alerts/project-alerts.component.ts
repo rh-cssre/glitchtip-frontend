@@ -81,7 +81,8 @@ export class ProjectAlertsComponent implements OnInit {
   recipientDialogOpen = this.#service.recipientDialogOpen;
   newAlertLoading = this.#service.newAlertLoading;
   newAlertError = this.#service.newAlertError;
-  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  canWriteProject = this.organizationsService.canWriteProject;
+  canAdminProject = this.organizationsService.canAdminProject;
   resolveRecipientIcon = resolveRecipientIcon;
   availableEnvironments = this.#environmentsService.visibleEnvironments;
 

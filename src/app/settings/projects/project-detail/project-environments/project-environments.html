@@ -24,12 +24,14 @@
                     <span class="body-text">
                       {{ environment.name }}
                     </span>
-                    <gt-loading-button
-                      (buttonClick)="toggleHidden(environment)"
-                      [loading]="environment.id === toggleHiddenloading()"
-                      [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
-                      buttonStyle="stroked"
-                    ></gt-loading-button>
+                    @if (canWriteProject()) {
+                      <gt-loading-button
+                        (buttonClick)="toggleHidden(environment)"
+                        [loading]="environment.id === toggleHiddenloading()"
+                        [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
+                        buttonStyle="stroked"
+                      ></gt-loading-button>
+                    }
                   </div>
                 </mat-list-item>
               }
