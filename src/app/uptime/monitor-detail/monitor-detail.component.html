@@ -8,21 +8,23 @@
   </ng-container>
 
   <ng-container slot="right">
-    <div class="top-bar-actions">
-      <button
-        id="monitor-settings"
-        mat-stroked-button
-        [disabled]="false"
-        color="primary"
-        [routerLink]="['./update']"
-        i18n
-      >
-        Settings
-      </button>
-      <button mat-icon-button class="medium-icon-button" (click)="delete()">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
+    @if (canWriteProject()) {
+      <div class="top-bar-actions">
+        <button
+          id="monitor-settings"
+          mat-stroked-button
+          [disabled]="false"
+          color="primary"
+          [routerLink]="['./update']"
+          i18n
+        >
+          Settings
+        </button>
+        <button mat-icon-button class="medium-icon-button" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    }
   </ng-container>
 </gt-top-app-bar>
 
@@ -99,15 +101,20 @@
                   This monitor is associated with the
                   <b>{{ monitor.projectName }}</b> project. This project has no
                   uptime alerts configured, so no notifications will be sent for
-                  monitor events. Visit the
-                  <a
-                    [routerLink]="[
-                      '../../settings/projects/',
-                      associatedProjectSlug,
-                    ]"
-                    >project settings</a
-                  >
-                  page to configure alerts.
+                  monitor events.
+                  @if (canWriteProject()) {
+                    Visit the
+                    <a
+                      [routerLink]="[
+                        '../../settings/projects/',
+                        associatedProjectSlug,
+                      ]"
+                      >project settings</a
+                    >
+                    page to configure alerts.
+                  } @else {
+                    Ask an organization Admin or above to set them up.
+                  }
                 </p>
               }
             } @else {
@@ -124,7 +131,8 @@
                     ]"
                     >project settings</a
                   >
-                  page to change your alerts.
+                  page to {{ canWriteProject() ? "change" : "see" }} your
+                  alerts.
                 </p>
               }
             }
@@ -132,9 +140,12 @@
         } @else {
           <p>
             There is no project associated with this monitor, so no
-            notifications will be sent for monitor events. Visit the
-            <a [routerLink]="['./update']">monitor settings</a> page to
-            associate this monitor with a project.
+            notifications will be sent for monitor events.
+            @if (canWriteProject()) {
+              Visit the
+              <a [routerLink]="['./update']">monitor settings</a> page to
+              associate this monitor with a project.
+            }
           </p>
         }
       </mat-card-content>
