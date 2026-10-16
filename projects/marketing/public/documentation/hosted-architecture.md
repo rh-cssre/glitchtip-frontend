@@ -26,7 +26,7 @@ If we add or replace a sub-processor, we will notify account holders by email at
 
 ## Data Processing Agreement (DPA)
 
-Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) and applies automatically — if we process personal data on your behalf and you act as the data controller, it is already in effect. There is nothing to sign or request. It covers the personal data we process on your behalf under the GDPR, UK GDPR, and CCPA, and documents our role as a processor, the sub-processors listed above, the technical and organizational security measures described on this page, and — for data leaving the EEA or UK — the EU Standard Contractual Clauses (Module 2, Controller-to-Processor) and the UK International Data Transfer Addendum.
+Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) and applies automatically — if we process personal data on your behalf and you act as the data controller, it is already in effect. You don't need to sign anything for it to apply. It covers the personal data we process on your behalf under the GDPR, UK GDPR, and CCPA, and documents our role as a processor, the sub-processors listed above, the technical and organizational security measures described on this page, and — for data leaving the EEA or UK — the EU Standard Contractual Clauses (Module 2, Controller-to-Processor) and the UK International Data Transfer Addendum.
 
 - **Read the agreement**: [Data Processing Agreement](/legal/data-processing-agreement)
 
