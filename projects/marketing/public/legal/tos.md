@@ -45,7 +45,7 @@ We do not review the contents of Customer Data. If data this section prohibits r
 
 ## Data Processing
 
-If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on any plan can request a signed copy of the DPA, and customers on a Large plan can request a data processing agreement with negotiated terms, by emailing support@glitchtip.com. A signed, negotiated agreement replaces the published DPA for that customer.
+If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on a paid plan can request a signed copy of the DPA, and customers on a Large plan can request a data processing agreement with negotiated terms, by emailing support@glitchtip.com. A signed, negotiated agreement replaces the published DPA for that customer.
 
 ## Fees and Charges
 

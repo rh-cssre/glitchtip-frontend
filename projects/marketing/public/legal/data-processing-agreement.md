@@ -158,7 +158,7 @@ Provider and Customer have not changed the Standard Terms, except for the detail
 
 If a PDF or other rendering of this DPA differs from this page, this page controls.
 
-Customers on any plan who need a signed document can request a signed copy of this DPA by emailing support@glitchtip.com; it restates this DPA without changes. Customers on a Large plan can also request a data processing agreement with negotiated terms. If Customer and Provider sign a negotiated data processing agreement, it replaces this DPA for that Customer from its effective date, and this DPA continues to apply to any period before it. This published DPA is not negotiable.
+Customers on a paid plan who need a signed document can request a signed copy of this DPA by emailing support@glitchtip.com; it restates this DPA without changes. Customers on a Large plan can also request a data processing agreement with negotiated terms. If Customer and Provider sign a negotiated data processing agreement, it replaces this DPA for that Customer from its effective date, and this DPA continues to apply to any period before it. This published DPA is not negotiable.
 
 <hr />
 

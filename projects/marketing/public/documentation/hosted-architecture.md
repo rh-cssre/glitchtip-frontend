@@ -30,7 +30,7 @@ Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) a
 
 - **Read the agreement**: [Data Processing Agreement](/legal/data-processing-agreement)
 
-The published terms are not negotiable. Customers on any plan can request a signed copy at [support@glitchtip.com](mailto:support@glitchtip.com). Customers on a Large plan can request a data processing agreement with negotiated terms, which replaces the published DPA for that customer once signed.
+The published terms are not negotiable. Customers on a paid plan can request a signed copy at [support@glitchtip.com](mailto:support@glitchtip.com). Customers on a Large plan can request a data processing agreement with negotiated terms, which replaces the published DPA for that customer once signed.
 
 ## 🇪🇺 EU Hosting & Data Sovereignty
 
