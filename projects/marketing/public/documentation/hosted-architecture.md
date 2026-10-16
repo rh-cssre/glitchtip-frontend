@@ -26,11 +26,11 @@ If we add or replace a sub-processor, we will notify account holders by email at
 
 ## Data Processing Agreement (DPA)
 
-Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) and applies automatically — if we process personal data on your behalf and you act as the data controller, it is already in effect. You don't need to sign anything for it to apply. It covers the personal data we process on your behalf under the GDPR, UK GDPR, and CCPA, and documents our role as a processor, the sub-processors listed above, the technical and organizational security measures described on this page, and — for data leaving the EEA or UK — the EU Standard Contractual Clauses (Module 2, Controller-to-Processor) and the UK International Data Transfer Addendum.
+Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) and applies automatically — if we process personal data on your behalf and you act as the data controller, it is already in effect. You don't need to sign anything for it to apply. It covers the personal data we process on your behalf under the GDPR, UK GDPR, and CCPA, and documents our role as a processor, the sub-processors listed above, its technical and organizational security measures, and — for data leaving the EEA or UK — the EU Standard Contractual Clauses (Module 2, Controller-to-Processor) and the UK International Data Transfer Addendum.
 
 - **Read the agreement**: [Data Processing Agreement](/legal/data-processing-agreement)
 
-The published terms are not negotiable. Customers on a paid plan can request a signed copy at [support@glitchtip.com](mailto:support@glitchtip.com). Customers on a Large plan can request a data processing agreement with negotiated terms, which replaces the published DPA for that customer once signed.
+The published terms are not negotiable. This page describes our setup in more detail than the DPA and changes as the service evolves; the security measures in the DPA's Annex II are the binding ones.
 
 ## 🇪🇺 EU Hosting & Data Sovereignty
 
@@ -80,7 +80,6 @@ Both instances offer identical plans and features. To get started with EU hostin
 The US (HIPAA-eligible) instance runs on DigitalOcean’s Managed Kubernetes (DOKS) with a self-healing CloudNativePG PostgreSQL cluster in-cluster. The EU instance runs on DigitalOcean App Platform with DigitalOcean’s Managed PostgreSQL.
 
 - Redundancy: Application services (Kubernetes Pods on the US instance, App Platform components on the EU instance) and databases are configured to self-heal.
-- Failover: GlitchTip works with Sentry SDKs, which send events in the background, so service interruptions on GlitchTip will not disrupt your application's core functionality.
 - Backups: On the US instance, CloudNativePG (Barman Cloud) continuously archives PostgreSQL write-ahead logs and periodic base backups to a separate, encrypted DigitalOcean Spaces bucket, enabling point-in-time recovery (PITR) with a Recovery Point Objective (RPO) of minutes. The EU instance uses DigitalOcean Managed Database automated daily backups.
 - Infrastructure status: our hosting provider's status is published at [DigitalOcean Status](https://status.digitalocean.com/).
 

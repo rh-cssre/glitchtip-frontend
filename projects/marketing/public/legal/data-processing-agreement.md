@@ -24,7 +24,7 @@ support@glitchtip.com
 
 ### Security Policy
 
-The technical and organizational security measures described in Annex II below. The controls published at [Hosted GlitchTip: Architecture & Security Compliance](/documentation/hosted-architecture) provide additional detail; if they conflict with Annex II, Annex II controls.
+The technical and organizational security measures described in Annex II below. The [Architecture & Security](/documentation/hosted-architecture) page gives more background, but it is informational and is not part of the Security Policy.
 
 ### Notices
 
@@ -94,7 +94,7 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 ### Special Category Data
 
-Is special category data (as defined in Article 9 of the GDPR) Processed? Only incidentally, or as protected health information under a Business Associate Agreement as described below. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Customer agrees not to send special category data except as permitted by the Acceptable Use section of the Agreement. Protected health information may be Processed only where Customer and Provider have both signed a Business Associate Agreement that is in effect, and then subject to that agreement.
+Is special category data (as defined in Article 9 of the GDPR) Processed? Not intentionally. Customer determines what data its error reporting configuration transmits and is responsible for excluding special category data. Because payloads include unstructured content, such data may be transmitted incidentally. Customer agrees not to send special category data except as permitted by the Acceptable Use section of the Agreement. Protected health information may be Processed only where Customer and Provider have both signed a Business Associate Agreement that is in effect, and then subject to that agreement.
 
 ### Frequency of Transfer
 
@@ -120,11 +120,11 @@ The supervisory authority will be the supervisory authority of the data exporter
 
 ## Annex II Technical and Organizational Security Measures
 
-The measures below, together with the controls published at [Hosted GlitchTip: Architecture & Security Compliance](/documentation/hosted-architecture), are the Security Policy.
+The measures below are the Security Policy.
 
 **User identification and authorization process and protection:**
 
-Production environment access is restricted to Principal Engineers at Burke Software and requires Single Sign-On (SSO) backed by hardware-based multi-factor authentication (FIDO2/YubiKey). Environment variables and API keys are stored as Kubernetes Secrets and are never committed to source control.
+Production access is limited to authorized Provider personnel and requires single sign-on with hardware-backed multi-factor authentication. Application secrets are kept out of source control.
 
 **Protecting Customer Personal Data during transmission (in transit):**
 
@@ -132,7 +132,7 @@ All data in transit is encrypted using TLS 1.2 or higher (HTTPS).
 
 **Protecting Customer Personal Data during storage (at rest):**
 
-Data at rest is stored on encrypted DigitalOcean storage. On the US instance, the core database runs as a CloudNativePG PostgreSQL cluster in DigitalOcean Managed Kubernetes (DOKS), isolated within a private VPC and not reachable from the public internet. On the EU instance, the application runs on DigitalOcean App Platform and the core database on DigitalOcean Managed PostgreSQL, which requires TLS-encrypted, authenticated connections and accepts connections only from the GlitchTip application (trusted sources).
+Customer Personal Data is stored on encrypted DigitalOcean storage. Production databases accept connections only from the GlitchTip application.
 
 **Physical security where Customer Personal Data is processed:**
 
@@ -140,11 +140,11 @@ Physical security and environmental controls are provided by DigitalOcean at its
 
 **Internal IT and IT security governance and management:**
 
-Infrastructure is defined as code using OpenTofu, version-controlled, audited, and deployed via GitLab CI/CD. Developer workstations use full-disk encryption (LUKS), automatic inactivity locks, and host firewalls, and receive monthly security patching.
+Infrastructure is managed as version-controlled code and deployed through CI/CD.
 
 **Ensuring limited data retention:**
 
-Captured event data and associated Telemetry Data are retained for 90 days by default and are then automatically deleted. An issue’s summary (its title, grouping details, and any user feedback attached to it) is retained until 97 days after the issue was last seen, and release records are retained for 365 days. When Customer deletes an organization or user account, the associated data is deleted from the live Service. Database backups are encrypted and expire automatically; deleted data is removed from backups within 35 days. Deleted data is not restored from backups except to recover from an incident. Copies of event payloads in object storage are deleted when their organization is deleted, and otherwise expire after 90 days.
+Event data is deleted automatically, after 90 days by default, or when Customer deletes it. Deleted data expires from backups within 35 days.
 
 ## Other Changes to Standard Terms
 
@@ -155,10 +155,6 @@ Modification to Standard Terms Section 5.2 (Security Reports) and the defined te
 ## Acceptance
 
 Provider and Customer have not changed the Standard Terms, except for the details on this page. Customer accepts this DPA by accepting the Agreement, and this DPA takes effect on the later of (a) the date Customer accepted the Agreement and (b) the Last Updated date of this page. It continues for as long as Provider Processes Customer Personal Data.
-
-If a PDF or other rendering of this DPA differs from this page, this page controls.
-
-Customers on a paid plan who need a signed document can request a signed copy of this DPA by emailing support@glitchtip.com; it restates this DPA without changes. Customers on a Large plan can also request a data processing agreement with negotiated terms. If Customer and Provider sign a negotiated data processing agreement, it replaces this DPA for that Customer from its effective date, and this DPA continues to apply to any period before it. This published DPA is not negotiable.
 
 <hr />
 

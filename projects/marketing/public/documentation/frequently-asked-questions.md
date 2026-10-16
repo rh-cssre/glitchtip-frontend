@@ -17,7 +17,7 @@ We are transparent about our data practices, and you can find detailed informati
 **Here's what else we do to protect your data:**
 * **Data Control:** Hosted GlitchTip users have full control over their data and can delete it all when they delete their organization and user. Some records, such as billing records at Stripe and short-lived backups, are kept longer; see our [Privacy Policy](https://glitchtip.com/legal/privacy) for details.
 * **No AI Training:** We do not use your data to train AI models.
-* **Data Processing Agreement (DPA):** Our [DPA](https://glitchtip.com/legal/data-processing-agreement) forms part of our [Terms of Service](https://glitchtip.com/legal/tos) and applies automatically. You don't need to sign anything for it to apply.
+* **Data Processing Agreement (DPA):** Our [DPA](https://glitchtip.com/legal/data-processing-agreement) forms part of our [Terms of Service](https://glitchtip.com/legal/tos) and applies automatically. You don't need to sign anything for it to apply. Paid customers who need a signed copy can contact support@glitchtip.com, and we consider requests case by case.
 We self-certify our compliance and continually review our processes to ensure we meet GDPR requirements.
 
 

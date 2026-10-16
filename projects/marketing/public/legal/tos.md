@@ -41,11 +41,11 @@ You agree not to use the Services to:
 - send payment card numbers, government identification numbers, passwords, or similar credentials on purpose; or
 - probe, attack, overload, or disrupt the Services or other customers, or get around usage limits or access controls.
 
-We do not review the contents of Customer Data. If data this section prohibits reaches the Services, you are responsible for deleting it, for example by deleting the affected issues, projects, or organization. Customers on a paid plan can ask us for help.
+We do not review the contents of Customer Data. If data this section prohibits reaches the Services, you are responsible for deleting it, for example by deleting the affected issues, projects, or organization.
 
 ## Data Processing
 
-If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed. Customers on a paid plan can request a signed copy of the DPA, and customers on a Large plan can request a data processing agreement with negotiated terms, by emailing support@glitchtip.com. A signed, negotiated agreement replaces the published DPA for that customer.
+If, in providing the Services, we process personal data on your behalf — whether you act as a data controller and we act as a data processor, or you act as a data processor and we act as a subprocessor — our [Data Processing Agreement](/legal/data-processing-agreement) (“DPA”) applies and forms part of this Agreement. This applies to free and paid plans alike. It applies automatically; no signature or separate request is needed.
 
 ## Fees and Charges
 
@@ -76,9 +76,9 @@ THE SERVICES ARE PROVIDED “AS IS” AND “AS AVAILABLE”. TO THE FULLEST EXT
 TO THE FULLEST EXTENT PERMITTED BY LAW:
 
 1. NEITHER PARTY WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, REVENUE, GOODWILL, OR DATA, ARISING OUT OF OR RELATED TO THE AGREEMENT, EVEN IF ADVISED OF THEIR POSSIBILITY.
-2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT, UNLESS A SIGNED, NEGOTIATED DATA PROCESSING AGREEMENT STATES OTHERWISE.
+2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT.
 
-These limits do not apply to your payment obligations, your indemnification obligations, the liabilities excluded by Section 8.3 of the DPA Standard Terms (liability to individuals for their data protection rights, and violations of the Standard Contractual Clauses or UK Addendum), or liability that cannot be limited under applicable law.
+These limits do not apply to your payment obligations, your indemnification obligations, or liability that cannot be limited under applicable law or the DPA.
 
 ## Indemnification
 
@@ -86,7 +86,7 @@ You agree to indemnify and hold harmless Burke Software and Consulting LLC and i
 
 ## Changes to these Terms
 
-We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account at least 30 days before the change takes effect. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services and cancel before it takes effect; continued use after that date means you accept the updated Terms.
+We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account before the change takes effect. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services and cancel before it takes effect; continued use after that date means you accept the updated Terms.
 
 ## Governing Law and Venue
 
@@ -98,7 +98,7 @@ You may not use the Services if such use is inconsistent with U.S. sanctions law
 
 ## General
 
-If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA or order you and we have signed, are the entire agreement between us about the Services.
+If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA, data processing agreement, or order you and we have signed, are the entire agreement between us about the Services.
 
 <hr />
 

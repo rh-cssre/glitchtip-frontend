@@ -73,7 +73,7 @@ Where personal data is transferred out of the EEA, UK, or Switzerland to a count
 ## How long we keep it
 
 - **Account data**: until you delete your account.
-- **Error events, logs, and other monitoring data in your organizations**: automatically deleted after 90 days by default. An issue's summary (its title and grouping details, and any user feedback attached to it) is kept until 97 days after the issue was last seen, so an issue that keeps recurring is kept while it recurs. Release records are kept for 365 days. All of this belongs to the organization, not to you personally (see above).
+- **Error events, logs, and other monitoring data in your organizations**: this belongs to the organization, not to you personally (see above). How long it is kept is described in our [Data Processing Agreement](/legal/data-processing-agreement).
 - **Our own service logs and error reports** (which can include IP addresses and request details): 90 days.
 - **Email**: our email provider keeps copies of messages and delivery logs for a few days.
 - **Support conversations**: deleted 60 days after the conversation’s last activity, along with contact details that are no longer attached to any conversation.
