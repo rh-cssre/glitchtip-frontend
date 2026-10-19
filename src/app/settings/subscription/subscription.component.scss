@@ -1,8 +1,66 @@
-@import "variables";
+@use "variables" as vars;
+
+.manage-subscription-button {
+  position: relative;
+}
+
+.manage-subscription-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.manage-subscription-text-short {
+  @media screen and (min-width: vars.$small) {
+    display: none;
+  }
+}
+
+.manage-subscription-text-long {
+  @media screen and (max-width: vars.$small - 1) {
+    display: none;
+  }
+}
 
 mat-card {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.body-text {
+  margin-bottom: 0;
+}
+
+.plan-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+
+  mat-divider {
+    display: none;
+  }
+
+  .body-text {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  @media screen and (min-width: vars.$small) {
+    .body-text {
+      font-size: inherit;
+    }
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+
+    mat-divider {
+      display: block;
+      height: 24px;
+    }
+  }
 }
 
 mat-error {
@@ -10,66 +68,12 @@ mat-error {
   display: block;
 }
 
-.visualization {
-  position: relative;
-  margin: -10px 0 20px;
-  font-size: 0.9em;
-  font-weight: 500;
-
-  .error {
-    color: $amaranth;
-  }
-
-  .uptime {
-    color: #8a2387;
-  }
-
-  .performance {
-    color: #f27121;
-  }
+.get-started-banner {
+  margin-bottom: 24px;
 }
 
-.display-bar {
-  background-color: #f4c6cd;
-  width: 100%;
-  height: 8px;
-  margin-top: 4px;
-  margin-bottom: 4px;
+.spinner-container {
   display: flex;
-  justify-content: flex-start;
-
-  .error-event {
-    background-color: $amaranth;
-  }
-
-  .transaction-event {
-    background-color: #f27121;
-  }
-
-  .uptime-event {
-    background-color: #8a2387;
-  }
-
-  .file-size-percent {
-    background-color: black;
-  }
-}
-
-.total-events {
-  text-align: right;
-  margin-top: 10px;
-}
-
-.event-count {
-  display: inline-block;
-  position: relative;
-  transform: translateX(-50%);
-
-  &--left {
-    transform: translateX(0);
-  }
-
-  &--right {
-    transform: translateX(-100%);
-  }
+  justify-content: center;
+  width: 100%;
 }

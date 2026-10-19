@@ -1,30 +1,31 @@
-<p
-  *ngIf="projectFormOptionsGroup?.errors?.selectionRequired"
-  class="error alert-form-error"
->
-  Please select events or uptime monitor triggers for your alert.
-</p>
+@if (projectFormOptionsGroup.errors?.selectionRequired) {
+  <p class="error alert-form-error">
+    Select at least one condition: event frequency or uptime.
+  </p>
+}
 
-<form
-  class="flex-common"
-  (ngSubmit)="onSubmit()"
-  [formGroup]="projectAlertForm"
->
-  <div>
+<form (ngSubmit)="onSubmit()" [formGroup]="projectAlertForm">
+  <p class="alert-form__group-label body-text-strong" i18n>
+    Alert when any of these:
+  </p>
+
+  <div class="trigger trigger__line">
     <mat-checkbox
       data-cy="error-check"
       [checked]="projectFormErrorAlert.value"
       (change)="toggleErrorAlerts()"
     >
-      <span>
-        If&nbsp;an&nbsp;<span
+      <span class="body-text" i18n>
+        If an
+        <span
           class="tooltip"
           matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
           >event</span
-        >&nbsp;happens</span
+        >
+        happens</span
       >
     </mat-checkbox>
-    <mat-form-field floatLabel="always">
+    <mat-form-field floatLabel="always" appearance="outline">
       <mat-label>Quantity</mat-label>
       <input
         matInput
@@ -36,25 +37,19 @@
         (click)="toggleFromInput()"
         formControlName="quantity"
         placeholder="#"
-        [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
+        [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
       />
-      <mat-error *ngIf="projectFormQuantity?.errors">
-        <span *ngIf="projectFormQuantity?.errors?.min"
-          >The quantity needs to be greater than or equal to 0.</span
-        >
-        <span *ngIf="projectFormQuantity?.errors?.invalidNumber"
-          >Enter a number.
-        </span>
-        <span *ngIf="projectFormQuantity?.errors?.required"
-          >This field is required.</span
-        >
-      </mat-error>
+      @if (projectFormQuantity.errors) {
+        <mat-error>
+          <span>Enter an integer greater than 0.</span>
+        </mat-error>
+      }
     </mat-form-field>
-    <span
-      >time<span *ngIf="projectFormQuantity?.value !== 1">s</span>&nbsp;in</span
+    <span i18n
+      >{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }} in</span
     >
-    <mat-form-field floatLabel="always">
-      <mat-label>Timespan</mat-label>
+    <mat-form-field floatLabel="always" appearance="outline">
+      <mat-label i18n>Timespan</mat-label>
       <input
         matInput
         min="0"
@@ -62,44 +57,77 @@
         type="number"
         autocomplete="off"
         (click)="toggleFromInput()"
-        formControlName="timespan_minutes"
+        formControlName="timespanMinutes"
         placeholder="#"
-        [errorStateMatcher]="newAlert ? newFormMatcher : matcher"
+        [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
       />
-      <mat-error *ngIf="projectFormTimespan?.errors">
-        <span *ngIf="projectFormTimespan?.errors?.min"
-          >The timespan needs to be greater than or equal to 0.</span
-        >
-        <span *ngIf="projectFormTimespan?.errors?.invalidNumber"
-          >Enter a number.
-        </span>
-        <span *ngIf="projectFormTimespan?.errors?.required"
-          >This field is required.</span
-        >
-      </mat-error>
+      @if (projectFormTimespan.errors) {
+        <mat-error>
+          <span i18n>Enter an integer greater than 0.</span>
+        </mat-error>
+      }
     </mat-form-field>
-    <span
-      >minute<span *ngIf="projectFormTimespan?.value !== 1">s</span
-      >,&nbsp;send&nbsp;an&nbsp;email.</span
+    <span i18n
+      >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send an
+      alert.</span
     >
-
-    <div class="uptime-option" formGroupName="optionsGroup">
-      <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-        >If an uptime monitor is triggered.</mat-checkbox
-      >
-    </div>
   </div>
+
+  <div class="trigger uptime-option" formGroupName="optionsGroup">
+    <mat-checkbox data-cy="uptime-check" formControlName="uptime"
+      ><span class="body-text" i18n
+        >If an
+        <span
+          class="tooltip"
+          matTooltip="An uptime monitor checks a URL on a schedule and triggers when the site stops responding."
+          >uptime monitor</span
+        >
+        detects downtime.</span
+      ></mat-checkbox
+    >
+  </div>
+
+  @if (environmentOptions().length > 0) {
+    <div class="environment-scope">
+      <mat-form-field
+        appearance="outline"
+        floatLabel="always"
+        subscriptSizing="dynamic"
+      >
+        <mat-label i18n>Limit to environments (optional)</mat-label>
+        <mat-select
+          data-cy="environments"
+          formControlName="environments"
+          multiple
+          placeholder="All environments"
+          i18n-placeholder
+        >
+          @for (environment of environmentOptions(); track environment) {
+            <mat-option [value]="environment">{{ environment }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint i18n
+          >Only events and uptime monitors in these environments trigger this
+          alert.</mat-hint
+        >
+      </mat-form-field>
+    </div>
+  }
+
   <div class="update" data-cy="update-container">
-    <gt-loading-button
-      *ngIf="!newAlert"
-      buttonText="Update"
-      [disabled]="
-        projectFormTimespan.value === timespan &&
-        projectFormQuantity.value === quantity &&
-        projectFormUptime.value === uptime
-      "
-      buttonStyle="stroked"
-      [loading]="loading === true"
-    ></gt-loading-button>
+    @if (!newAlert()) {
+      <gt-loading-button
+        data-cy="update-button"
+        buttonText="Update"
+        [disabled]="
+          projectFormTimespan.value === timespan() &&
+          projectFormQuantity.value === quantity() &&
+          projectFormUptime.value === uptime() &&
+          environmentsUnchanged()
+        "
+        buttonStyle="stroked"
+        [loading]="loading() === true"
+      ></gt-loading-button>
+    }
   </div>
 </form>
