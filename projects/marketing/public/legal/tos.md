@@ -27,7 +27,7 @@ The free plan is provided as is, without any service level, uptime, or support c
 
 “Customer Data” means the error events, logs, transactions, and other content that you or your applications send to the Services. As between you and us, you own Customer Data. You grant us the rights needed to host, process, transmit, and display Customer Data solely to provide, secure, and support the Services for you. We do not sell Customer Data or use it to train AI models.
 
-For Customer Data that contains personal data, you are the controller (or processor on behalf of your own customer) and we are your processor, as described in the Data Processing agreement below. For your account and billing information, we are the controller, as described in our [Privacy Policy](/legal/privacy).
+For Customer Data that contains personal data, you are the controller (or processor on behalf of your own customer) and we are your processor (or subprocessor), as described in our [Data Processing Agreement](/legal/data-processing-agreement). For your account and billing information, we are the controller, as described in our [Privacy Policy](/legal/privacy).
 
 You are responsible for configuring your applications and SDKs so that you send us only the data you need and are permitted to send, including scrubbing sensitive fields before they leave your systems.
 

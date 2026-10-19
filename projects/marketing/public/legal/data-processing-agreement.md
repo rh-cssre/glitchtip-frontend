@@ -58,7 +58,7 @@ Address: the address provided in Customer’s account or billing details
 
 Activities relevant to transfer: See Annex I(B)
 
-Role: Controller
+Role: Controller or Processor
 
 ### Data Importer
 
@@ -70,7 +70,7 @@ Address: New York, New York USA
 
 Activities relevant to transfer: See Annex I(B)
 
-Role: Processor
+Role: Processor or Subprocessor
 
 ## Annex I(B) Description of Transfer and Processing Activities
 
@@ -148,7 +148,7 @@ Event data is deleted automatically, after 90 days by default, or when Customer 
 
 ## Other Changes to Standard Terms
 
-Modification to Standard Terms Section 2.6 (Subprocessors). Provider will give the 10 business days’ advance notice of any intended change to the Approved Subprocessors by email to Customer’s Notices address and by recording the change at the Approved Subprocessors page. If Customer objects within the objection period and the parties cannot resolve the objection in good faith, Customer may terminate the Agreement by written notice within that objection period, and Provider will refund any prepaid fees covering the period after termination. This is Customer’s sole remedy for an objection to a new Subprocessor.
+Modification to Standard Terms Section 2.6 (Subprocessors). Provider will give at least 10 business days’ advance notice of any intended change to the Approved Subprocessors by email to Customer’s Notices address and by recording the change at the Approved Subprocessors page. If Customer objects within the objection period and the parties cannot resolve the objection in good faith, Customer may terminate the Agreement by written notice within that objection period, and Provider will refund any prepaid fees covering the period after termination. This is Customer’s sole remedy for an objection to a new Subprocessor.
 
 Modification to Standard Terms Section 5.2 (Security Reports) and the defined term “Report.” Provider is a small organization that performs internal security self-assessments and does not undergo audits by independent third-party auditors. Accordingly, the references in Section 5.2 to audits by independent third-party auditors and to a “Report” do not apply to Provider. In their place, upon Customer’s written request to the Provider Security Contact (no more than once per calendar year), Provider will provide a summary of its then-current internal security documentation and self-assessment records sufficient for Customer to verify Provider’s compliance with the technical and organizational security measures described in Annex II. This modification does not affect Customer’s rights under Section 5.1 (Audit Rights) or Section 5.3 (Security Due Diligence).
 
