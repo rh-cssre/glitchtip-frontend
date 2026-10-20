@@ -4,10 +4,10 @@ Last Updated October 20, 2026
 
 ## The Gist
 
-We (the folks at <a href="https://burkesoftware.com" target="blank">Burke Software and Consulting</a>) are on a mission to make the web a better place through open source software. We hope you love our open source error tracker as much as we love creating it.
+We (the folks at <a href="https://burkesoftware.com" target="_blank" rel="noopener noreferrer">Burke Software and Consulting</a>) are on a mission to make the web a better place through open source software. We hope you love our open source error tracker as much as we love creating it.
 These Terms of Service (“Terms”) describe our commitments to you, and your rights and responsibilities when using our services. Please read them carefully and reach out to us if you have any questions.
 
-In these Terms, “we”, “us”, and “Provider” mean Burke Software and Consulting LLC, DBA GlitchTip. “You” and “Customer” mean the person or organization that creates an account on or uses the hosted GlitchTip service at glitchtip.com, app.glitchtip.com, or eu.glitchtip.com (the “Services”). If you accept these Terms on behalf of an organization, you confirm that you are authorized to bind it.
+In these Terms, “we”, “us”, and “Provider” mean Burke Software and Consulting LLC, DBA GlitchTip. “You” and “Customer” mean the person or organization that creates or uses an account on the hosted GlitchTip service at app.glitchtip.com or eu.glitchtip.com. The “Services” are that hosted service and the glitchtip.com website. If you accept these Terms on behalf of an organization, you confirm that you are authorized to bind it.
 
 These Terms cover the hosted Services only. The open source GlitchTip software is licensed separately under its own license, and nothing in these Terms limits your rights under that license, including to run, modify, or offer GlitchTip yourself.
 
@@ -78,7 +78,7 @@ TO THE FULLEST EXTENT PERMITTED BY LAW:
 1. NEITHER PARTY WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, REVENUE, GOODWILL, OR DATA, ARISING OUT OF OR RELATED TO THE AGREEMENT, EVEN IF ADVISED OF THEIR POSSIBILITY.
 2. OUR TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THE AGREEMENT, INCLUDING THE DPA, WILL NOT BE MORE THAN THE GREATER OF US $3,000 OR THE FEES YOU PAID OR OWED US IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM. THIS IS A SINGLE, SHARED CAP FOR ALL CLAIMS, NOT A SEPARATE CAP PER DOCUMENT.
 
-These limits do not apply to your payment obligations, your indemnification obligations, or liability that cannot be limited under applicable law or the DPA.
+These limits do not apply to your payment obligations, your indemnification obligations, or liability that cannot be limited under applicable law or Section 8.3 of the DPA Standard Terms.
 
 ## Indemnification
 
