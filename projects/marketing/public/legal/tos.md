@@ -98,7 +98,7 @@ You may not use the Services if such use is inconsistent with U.S. sanctions law
 
 ## General
 
-If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA, data processing agreement, or order you and we have signed, are the entire agreement between us about the Services.
+If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA, data processing agreement, or order you and we have signed, are the entire agreement between us about the Services. If a signed agreement conflicts with these Terms or the published DPA, the signed agreement controls for that customer.
 
 <hr />
 
