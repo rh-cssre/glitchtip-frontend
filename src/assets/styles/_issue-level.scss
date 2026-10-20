@@ -1,0 +1,18 @@
+// Paints the level color on ::after; the host sets the bar geometry.
+@mixin accent {
+  @each $level in sample, debug, info, warning, error {
+    &.level--#{$level}::after {
+      background-color: var(--gt-level-#{$level});
+    }
+  }
+
+  &.level--fatal::after {
+    background-image: repeating-linear-gradient(
+      -60deg,
+      var(--gt-level-fatal),
+      var(--gt-level-fatal) 5px,
+      var(--mat-sys-surface) 5px,
+      var(--mat-sys-surface) 10px
+    );
+  }
+}

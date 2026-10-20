@@ -1,4 +1,5 @@
 @use "variables" as vars;
+@use "issue-level";
 
 .issue-404 {
   h1 {
@@ -130,20 +131,5 @@ table.mat-table {
     border-radius: 4px; 
   }
 
-  &.level--sample::after   { background-color: var(--mat-sys-outline); }
-  &.level--debug::after    { background-color: var(--mat-sys-outline-variant); }
-  &.level--info::after     { background-color: var(--info-color); }
-  &.level--warning::after  { background-color: var(--warning-color); }
-  &.level--error::after    { background-color: var(--mat-sys-error); }
-
-
-  &.level--fatal::after {
-    background: repeating-linear-gradient(
-      -60deg,
-      var(--mat-sys-error),
-      var(--mat-sys-error) 5px,
-      var(--mat-sys-surface) 5px,
-      var(--mat-sys-surface) 10px
-    );
-  }
+  @include issue-level.accent;
 }
