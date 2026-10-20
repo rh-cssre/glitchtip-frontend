@@ -82,7 +82,7 @@ The Service is: GlitchTip, a hosted error tracking and application monitoring pl
 
 - Customer’s end users or customers
 - Customer’s employees
-- Contractors and other authorized users of the Customer who log into and manage the GlitchTip platform.
+- Contractors and other authorized users of the Customer who log into and manage the GlitchTip platform, to the extent their personal data appears in data the Customer sends to the Service. Their account and sign-in data is covered by our [Privacy Policy](/legal/privacy) instead.
 
 ### Categories of Personal Data
 
