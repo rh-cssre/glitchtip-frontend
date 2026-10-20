@@ -1,6 +1,6 @@
 import {
   ApplicationConfig,
-  provideZoneChangeDetection,
+  provideZonelessChangeDetection,
   SecurityContext,
 } from "@angular/core";
 import {
@@ -32,7 +32,7 @@ const inMemoryScrollingFeature: InMemoryScrollingFeature =
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     provideRouter(routes, inMemoryScrollingFeature),
     provideAnimationsAsync(),
     provideHttpClient(withFetch()),
