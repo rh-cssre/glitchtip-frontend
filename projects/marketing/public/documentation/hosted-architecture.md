@@ -30,7 +30,7 @@ Our Data Processing Agreement forms part of our [Terms of Service](/legal/tos) a
 
 - **Read the agreement**: [Data Processing Agreement](/legal/data-processing-agreement)
 
-The published terms are not negotiable. This page describes our setup in more detail than the DPA and changes as the service evolves; the security measures in the DPA's Annex II are the binding ones.
+The published terms are our standard terms for every plan. This page describes our setup in more detail than the DPA and changes as the service evolves; the security measures in the DPA's Annex II are the binding ones.
 
 ## 🇪🇺 EU Hosting & Data Sovereignty
 
