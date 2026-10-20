@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Last Updated October 13, 2026
+Last Updated October 20, 2026
 
 GlitchTip is open source software that anyone can run. This policy covers only two things operated by **Burke Software and Consulting LLC**:
 

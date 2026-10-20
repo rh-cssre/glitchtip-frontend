@@ -20,7 +20,7 @@ If we add or replace a sub-processor, we will notify account holders by email at
 
 **Sub-processor changes:**
 
-- **October 13, 2026** — Chatwoot added to this list. It has been used for customer support since GlitchTip launched but was previously omitted from this list in error.
+- **October 20, 2026** — Chatwoot added to this list. It has been used for customer support since GlitchTip launched but was previously omitted from this list in error.
 
 ![](/assets/glitchtip-saas.png)
 

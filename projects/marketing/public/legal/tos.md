@@ -1,6 +1,6 @@
 # GlitchTip Terms of Service
 
-Last Updated October 13, 2026
+Last Updated October 20, 2026
 
 ## The Gist
 

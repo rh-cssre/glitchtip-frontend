@@ -2,7 +2,7 @@
 
 _This Data Processing Agreement (“DPA”) forms part of GlitchTip’s [Terms of Service](/legal/tos) and applies automatically in the circumstances described in the Data Processing section of those Terms. No signature or separate acceptance is required._
 
-Version 1.1 — Last Updated October 13, 2026
+Version 1.1 — Last Updated October 20, 2026
 
 This DPA has 2 parts: (1) the Key Terms on this page and (2) the Common Paper DPA Standard Terms Version 1.1 posted at <a href="https://commonpaper.com/standards/data-processing-agreement/1.1" target="_blank" rel="noopener noreferrer">commonpaper.com/standards/data-processing-agreement/1.1</a> (“DPA Standard Terms”), which is incorporated by reference. If there is any inconsistency between the parts of the DPA, the Key Terms on this page will control over the DPA Standard Terms. The Key Terms below have the meanings given on this page. However, if this page omits or does not define a Key Term, the default meaning will be “none” or “not applicable” and the correlating clause, sentence, or section does not apply to this DPA. All other capitalized words have the meanings given in the DPA Standard Terms or the Agreement.
 
