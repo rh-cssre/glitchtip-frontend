@@ -49,7 +49,7 @@ If, in providing the Services, we process personal data on your behalf — wheth
 
 ## Fees and Charges
 
-By using a Paid Service, you agree to pay the specified fees. Depending on the Paid Service, there may be one-time fees, recurring fees, or usage-based fees. For recurring fees, we’ll bill or charge you in the automatically-renewing interval you select, on a pre-pay basis until you cancel. Except as required by law or stated in the DPA, fees are non-refundable.
+By using a Paid Service (any paid plan, and any usage-based charges such as on-demand events), you agree to pay the specified fees. Depending on the Paid Service, there may be one-time fees, recurring fees, or usage-based fees. For recurring fees, we’ll bill or charge you in the automatically-renewing interval you select, on a pre-pay basis until you cancel. Except as required by law or stated in the DPA, fees are non-refundable.
 
 We may change prices for future billing periods by giving you notice as described in “Changes to these Terms”.
 
@@ -98,7 +98,7 @@ You may not use the Services if such use is inconsistent with U.S. sanctions law
 
 ## General
 
-If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA, data processing agreement, or order you and we have signed, are the entire agreement between us about the Services. If a signed agreement conflicts with these Terms or the published DPA, the signed agreement controls for that customer.
+If any part of these Terms is found unenforceable, the rest remains in effect. Our failure to enforce a provision is not a waiver. You may not assign the Agreement without our consent, except to a successor of your business; we may assign it to a successor of ours. Neither party is liable for delays caused by events beyond its reasonable control. These Terms, together with the DPA and any BAA, data processing agreement, or order you and we have signed, are the entire agreement between us about the Services. If a signed agreement conflicts with these Terms or the published DPA, the signed agreement controls for that customer. Sections that by their nature should survive termination do survive it, including Your Data, Fees and Charges (for amounts owed), Your data after cancellation, Disclaimer of Warranties, Limitation of Liability, Indemnification, Governing Law and Venue, and General.
 
 <hr />
 
