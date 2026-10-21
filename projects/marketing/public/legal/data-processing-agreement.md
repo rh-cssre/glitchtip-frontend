@@ -4,7 +4,7 @@ _This Data Processing Agreement (“DPA”) forms part of GlitchTip’s [Terms o
 
 Version 1.1 — Last Updated October 20, 2026
 
-_Effective November 21, 2026 for existing accounts. New accounts accept this version when they sign up._
+_Effective for existing accounts on November 21, 2026, or 30 days after we email you about this version, if later. New accounts accept this version when they sign up._
 
 This DPA has 2 parts: (1) the Key Terms on this page and (2) the Common Paper DPA Standard Terms Version 1.1 posted at <a href="https://commonpaper.com/standards/data-processing-agreement/1.1" target="_blank" rel="noopener noreferrer">commonpaper.com/standards/data-processing-agreement/1.1</a> (“DPA Standard Terms”), which is incorporated by reference. If there is any inconsistency between the parts of the DPA, the Key Terms on this page will control over the DPA Standard Terms. The Key Terms below have the meanings given on this page. However, if this page omits or does not define a Key Term, the default meaning will be “none” or “not applicable” and the correlating clause, sentence, or section does not apply to this DPA. All other capitalized words have the meanings given in the DPA Standard Terms or the Agreement.
 
@@ -156,7 +156,7 @@ Modification to Standard Terms Section 5.2 (Security Reports) and the defined te
 
 ## Acceptance
 
-Provider and Customer have not changed the Standard Terms, except for the details on this page. Customer accepts this DPA by accepting the Agreement, and this DPA takes effect on the date Customer accepted the Agreement, except that for Customers who accepted the Agreement before this version was posted, it takes effect on November 21, 2026. It continues for as long as Provider Processes Customer Personal Data.
+Provider and Customer have not changed the Standard Terms, except for the details on this page. Customer accepts this DPA by accepting the Agreement, and this DPA takes effect on the date Customer accepted the Agreement, except that for Customers who accepted the Agreement before this version was posted, it takes effect on the later of November 21, 2026 and 30 days after Provider emails Customer’s Notices address about this version. It continues for as long as Provider Processes Customer Personal Data.
 
 <hr />
 

@@ -2,7 +2,7 @@
 
 Last Updated October 20, 2026
 
-_Effective November 21, 2026 for existing accounts. New accounts accept this version when they sign up._
+_Effective for existing accounts on November 21, 2026, or 30 days after we email you about this version, if later. New accounts accept this version when they sign up._
 
 ## The Gist
 
@@ -88,7 +88,7 @@ You agree to indemnify and hold harmless Burke Software and Consulting LLC and i
 
 ## Changes to these Terms
 
-We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account before the change takes effect. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services and cancel before it takes effect; continued use after that date means you accept the updated Terms.
+We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account, and the change takes effect for your account on the date we give, or 30 days after that email, if later. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services and cancel before it takes effect; continued use after that date means you accept the updated Terms.
 
 ## Governing Law and Venue
 
