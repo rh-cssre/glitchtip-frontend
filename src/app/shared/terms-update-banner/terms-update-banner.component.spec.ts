@@ -56,8 +56,8 @@ describe("TermsUpdateBannerComponent", () => {
     expect(text(render("2026-10-21T12:00:00Z"))).toBe("");
   });
 
-  it("stays hidden from the effective date on", () => {
-    expect(text(render("2026-11-21T00:00:00Z"))).toBe("");
+  it("keeps showing after November 21", () => {
+    expect(text(render("2026-12-01T12:00:00Z"))).toContain("if later");
   });
 
   it("hides on dismiss and stays dismissed", () => {
