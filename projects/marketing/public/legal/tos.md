@@ -9,7 +9,7 @@ _Effective for existing accounts on November 21, 2026, or 30 days after we email
 We (the folks at <a href="https://burkesoftware.com" target="_blank" rel="noopener noreferrer">Burke Software and Consulting</a>) are on a mission to make the web a better place through open source software. We hope you love our open source error tracker as much as we love creating it.
 These Terms of Service (“Terms”) describe our commitments to you, and your rights and responsibilities when using our services. Please read them carefully and reach out to us if you have any questions.
 
-In these Terms, “we”, “us”, and “Provider” mean Burke Software and Consulting LLC, DBA GlitchTip. “You” and “Customer” mean the person or organization that creates or uses an account on the hosted GlitchTip service at app.glitchtip.com or eu.glitchtip.com. The “Services” are that hosted service and the glitchtip.com website. If you accept these Terms on behalf of an organization, you confirm that you are authorized to bind it.
+In these Terms, “we”, “us”, and “Provider” mean Burke Software and Consulting LLC, DBA GlitchTip. “You” and “Customer” mean the person or organization that creates an account or organization on the hosted GlitchTip service at app.glitchtip.com or eu.glitchtip.com, or on whose behalf it is created. If you join another Customer’s organization, you use it as that Customer’s authorized user: you must follow these Terms, and that Customer is responsible for your use of its organization. The “Services” are that hosted service and the glitchtip.com website. If you accept these Terms on behalf of an organization, you confirm that you are authorized to bind it.
 
 These Terms cover the hosted Services only. The open source GlitchTip software is licensed separately under its own license, and nothing in these Terms limits your rights under that license, including to run, modify, or offer GlitchTip yourself.
 
@@ -43,7 +43,7 @@ You agree not to use the Services to:
 - send payment card numbers, government identification numbers, passwords, or similar credentials on purpose; or
 - probe, attack, overload, or disrupt the Services or other customers, or get around usage limits or access controls.
 
-We do not review the contents of Customer Data. If data this section prohibits reaches the Services, you are responsible for deleting it, for example by deleting the affected issues, projects, or organization.
+We do not monitor Customer Data for prohibited content. If data this section prohibits reaches the Services, you are responsible for deleting it, for example by deleting the affected issues, projects, or organization.
 
 ## Data Processing
 
