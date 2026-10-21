@@ -92,10 +92,13 @@
           <ng-container matColumnDef="status">
             <td mat-cell *matCellDef="let monitor">
               @if (monitor.isUp) {
-                <span>Up</span>
+                <span i18n="Uptime check reports up">Up</span>
               }
               @if (monitor.isUp === false) {
-                <span>Down</span>
+                <span i18n="Uptime check reports down">Down</span>
+              }
+              @if (monitor.isUp === null) {
+                <span i18n>No data</span>
               }
               @if (monitor.lastChange) {
                 {{ monitor.lastChange | timeFor }}

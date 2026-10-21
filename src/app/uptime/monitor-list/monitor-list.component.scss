@@ -98,14 +98,14 @@ table {
 
 .status-color {
   &--true {
-    border-left: 3px solid var(--success-color);
+    border-left: 3px solid var(--gt-monitor-up);
   }
 
   &--false {
-    border-left: 3px solid var(--mat-sys-error);
+    border-left: 3px solid var(--gt-monitor-down);
   }
 
   &-- {
-    border-left: 3px solid var(--mat-sys-surface-variant);
+    border-left: 3px solid var(--gt-monitor-none);
   }
 }

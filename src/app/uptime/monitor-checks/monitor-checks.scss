@@ -51,10 +51,10 @@ table {
   }
 
   &--true:after {
-    background-color: var(--success-color);
+    background-color: var(--gt-monitor-up);
   }
 
   &--false:after {
-    background-color: var(--mat-sys-error);
+    background-color: var(--gt-monitor-down);
   }
 }
