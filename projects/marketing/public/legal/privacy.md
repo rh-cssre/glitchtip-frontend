@@ -2,6 +2,8 @@
 
 Last Updated October 20, 2026
 
+_Effective November 21, 2026 for existing accounts. New accounts accept this version when they sign up._
+
 GlitchTip is open source software that anyone can run. This policy covers only two things operated by **Burke Software and Consulting LLC**:
 
 1. **Hosted GlitchTip**: the hosted service at app.glitchtip.com and eu.glitchtip.com, including its support channels.

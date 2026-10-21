@@ -2,6 +2,8 @@
 
 Last Updated October 20, 2026
 
+_Effective November 21, 2026 for existing accounts. New accounts accept this version when they sign up._
+
 ## The Gist
 
 We (the folks at <a href="https://burkesoftware.com" target="_blank" rel="noopener noreferrer">Burke Software and Consulting</a>) are on a mission to make the web a better place through open source software. We hope you love our open source error tracker as much as we love creating it.
