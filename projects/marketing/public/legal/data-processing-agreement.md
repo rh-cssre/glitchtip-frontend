@@ -32,7 +32,7 @@ The technical and organizational security measures described in Annex II below. 
 
 Provider: support@glitchtip.com
 
-Customer: the email address registered to Customer’s GlitchTip account.
+Customer: the email addresses of the owners of Customer’s GlitchTip organization, or, for an account without an organization, the email address registered to that account.
 
 ### DPA Liability Cap
 

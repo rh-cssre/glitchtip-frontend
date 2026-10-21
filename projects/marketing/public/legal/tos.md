@@ -88,7 +88,7 @@ You agree to indemnify and hold harmless Burke Software and Consulting LLC and i
 
 ## Changes to these Terms
 
-We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account, and the change takes effect for your account on the date we give, or 30 days after that email, if later. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services and cancel before it takes effect; continued use after that date means you accept the updated Terms.
+We may update these Terms or the DPA from time to time. For material changes, we will email the address registered to your account, and the change takes effect for your account on the date we give, or 30 days after that email, if later. Other changes take effect when posted. If you do not agree to a change, you may stop using the Services, cancel any paid subscription, and delete your organization or account before it takes effect; continued use after that date means you accept the updated Terms.
 
 ## Governing Law and Venue
 
