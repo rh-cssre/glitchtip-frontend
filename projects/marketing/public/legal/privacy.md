@@ -2,7 +2,7 @@
 
 Last Updated October 20, 2026
 
-_Effective for existing accounts on November 21, 2026, or 30 days after we email you about this version, if later. New accounts accept this version when they sign up._
+_Effective November 21, 2026 for existing accounts. New accounts accept this version when they sign up._
 
 GlitchTip is open source software that anyone can run. This policy covers only two things operated by **Burke Software and Consulting LLC**:
 
@@ -110,7 +110,7 @@ GlitchTip is a tool for software developers and is not directed to children unde
 
 ## Changes to this policy
 
-We may update this policy. If we make material changes, we will update the date above and email registered users, and the change takes effect for each user on the date we give, or 30 days after we emailed them, if later.
+We may update this policy. If we make material changes, we will update the date above and email registered users before the change takes effect.
 
 <hr />
 
