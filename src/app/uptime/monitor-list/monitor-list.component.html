@@ -91,26 +91,31 @@
           </ng-container>
           <ng-container matColumnDef="status">
             <td mat-cell *matCellDef="let monitor">
-              <div class="monitor-status monitor-status--{{ monitor.isUp }}">
-                <span class="monitor-status__dot" aria-hidden="true"></span>
-                <div>
-                  <div class="monitor-status__label">
-                    @if (monitor.isUp) {
-                      <span i18n="Uptime check reports up">Up</span>
-                    }
-                    @if (monitor.isUp === false) {
-                      <span i18n="Uptime check reports down">Down</span>
-                    }
-                    @if (monitor.isUp === null) {
-                      <span i18n>No data</span>
-                    }
+              <div class="monitor-status">
+                @if (monitor.isUp) {
+                  <gt-status-pill
+                    i18n-label="Uptime check reports up"
+                    label="Up"
+                    color="var(--gt-monitor-up)"
+                  />
+                } @else if (monitor.isUp === false) {
+                  <gt-status-pill
+                    i18n-label="Uptime check reports down"
+                    label="Down"
+                    color="var(--gt-monitor-down)"
+                  />
+                } @else {
+                  <gt-status-pill
+                    i18n-label
+                    label="No data"
+                    color="var(--gt-monitor-none)"
+                  />
+                }
+                @if (monitor.lastChange && monitor.isUp !== null) {
+                  <div class="caption-text">
+                    {{ monitor.lastChange | timeFor }}
                   </div>
-                  @if (monitor.lastChange && monitor.isUp !== null) {
-                    <div class="monitor-status__since caption-text">
-                      {{ monitor.lastChange | timeFor }}
-                    </div>
-                  }
-                </div>
+                }
               </div>
             </td>
           </ng-container>
