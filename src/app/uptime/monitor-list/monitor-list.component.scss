@@ -109,3 +109,35 @@ table {
     border-left: 3px solid var(--gt-monitor-none);
   }
 }
+
+.monitor-status {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  white-space: nowrap;
+
+  &__dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--gt-monitor-none);
+  }
+
+  &--true &__dot {
+    background-color: var(--gt-monitor-up);
+  }
+
+  &--false &__dot {
+    background-color: var(--gt-monitor-down);
+  }
+
+  &__label {
+    font: var(--mat-sys-body-medium);
+    font-weight: 500;
+  }
+
+  &__since {
+    color: var(--mat-sys-on-surface-variant);
+  }
+}

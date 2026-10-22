@@ -49,7 +49,7 @@ html {
   // Monitor status roles
   --gt-monitor-up: var(--success-color);
   --gt-monitor-down: var(--mat-sys-error);
-  --gt-monitor-none: var(--mat-sys-surface-variant);
+  --gt-monitor-none: var(--mat-sys-outline);
 
   // Log severity palette: AA-compliant per mode (darker on light, bright on dark)
   --log-error-color: light-dark(#c62828, #ef4444);

@@ -79,7 +79,7 @@ export const COLOR_TOKENS: TokenGroup[] = [
   },
   {
     group: "Monitor status",
-    note: "Uptime monitor and check accents, aliasing the success, error and surface-variant roles.",
+    note: "Uptime monitor and check accents, aliasing the success, error and outline roles.",
     tokens: [
       { name: "--gt-monitor-up", label: "Up" },
       { name: "--gt-monitor-down", label: "Down" },
