@@ -15,7 +15,8 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("seeded-monitor").click();
     cy.wait(1000);
-    cy.contains(`Uptime details for ${seededMonitorName}`);
+    cy.get("h1").should("contain", seededMonitorName);
+    cy.contains("[mat-tab-link]", "Alerts").click();
     cy.contains("This project has no uptime alerts configured");
     cy.get("#monitor-settings").click();
     cy.get("#monitor-name")
@@ -74,7 +75,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .click();
     cy.get("[data-cy=interval]").clear().type("605");
     cy.get("[data-cy=monitor-submit]").click();
-    cy.contains("Uptime details for second-monitor");
+    cy.get("h1").should("contain", "second-monitor");
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("second-monitor");
   });
