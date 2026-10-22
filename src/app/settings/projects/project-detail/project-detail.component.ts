@@ -8,6 +8,7 @@ import {
   input,
   signal,
 } from "@angular/core";
+import { DatePipe } from "@angular/common";
 import { toSignal } from "@angular/core/rxjs-interop";
 import {
   AbstractControl,
@@ -35,7 +36,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { ProjectDetailService } from "./project-detail.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations.service";
@@ -72,6 +73,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: "./project-detail.component.html",
   styleUrls: ["./project-detail.component.scss"],
   imports: [
+    DatePipe,
     MatInputModule,
     MatAutocompleteModule,
     MatCardModule,
@@ -85,7 +87,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     ProjectAlertsComponent,
     MatButtonModule,
     RouterLink,
-    DetailHeaderComponent,
+    PageHeaderComponent,
     BackLinkComponent,
     TopAppBar,
   ],

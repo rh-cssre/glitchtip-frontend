@@ -4,7 +4,17 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <gt-detail-header [title]="'#' + teamSlug()!" />
+  <gt-page-header icon="groups" [title]="'#' + teamSlug()">
+    @if (team(); as team) {
+      <span slot="meta">
+        <span
+          ><b>{{ team.memberCount }}</b>
+          {{ team.memberCount === 1 ? "member" : "members" }}</span
+        >
+        <span i18n>Created {{ team.dateCreated | date: "mediumDate" }}</span>
+      </span>
+    }
+  </gt-page-header>
   <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
     @for (link of navLinks; track link) {
       <a
@@ -14,6 +24,9 @@
         [active]="rla.isActive"
         #rla="routerLinkActive"
         >{{ link.label }}
+        @if (tabCounts()[link.path] !== undefined) {
+          <span class="tab-count">{{ tabCounts()[link.path] }}</span>
+        }
       </a>
     }
   </nav>

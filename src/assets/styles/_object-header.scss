@@ -1,0 +1,59 @@
+@use "variables" as vars;
+
+@mixin icon-tile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+@mixin title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+// Facts separated by "·". The separator that starts a wrapped line is clipped.
+@mixin meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-1, 4px) 0;
+  margin: var(--gt-space-1, 4px) 0 0 -16px;
+  clip-path: inset(0 0 0 16px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+
+  ::ng-deep [slot="meta"] {
+    display: contents;
+  }
+
+  ::ng-deep [slot="meta"] > * {
+    position: relative;
+    margin-left: 16px;
+  }
+
+  ::ng-deep [slot="meta"] > :not(:first-child)::before {
+    content: "·";
+    position: absolute;
+    left: -11px;
+    opacity: 0.6;
+  }
+
+  ::ng-deep .chip {
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-family: vars.$font-mono;
+    font-size: 12px;
+    color: var(--mat-sys-on-surface);
+    background-color: var(--mat-sys-surface-container-highest);
+  }
+
+  ::ng-deep b {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+  }
+}

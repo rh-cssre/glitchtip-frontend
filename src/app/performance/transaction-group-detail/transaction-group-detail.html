@@ -30,36 +30,26 @@
 </section>
 } @if (transactionGroup(); as group) {
 <section class="l-body l-body--full-width">
-  <div class="page-header">
-    <gt-detail-header
-      [title]="[group.transaction, null]"
-    />
-    <mat-card class="stats-card">
-      <mat-card-content class="stats-row">
-        <div class="stat-item">
-          <span class="caption-text">Avg Duration</span>
-          <span class="body-text-strong">{{ group.avgDuration! | humanizeDuration }}</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="caption-text">Transaction Count</span>
-          <span class="body-text-strong">{{ group.count }}</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="caption-text">Operation</span>
-          <span class="body-text-strong">{{ group.op }}</span>
-        </div>
-        @if (group.method) {
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <span class="caption-text">Method</span>
-            <span class="body-text-strong">{{ group.method }}</span>
-          </div>
-        }
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <gt-page-header [title]="group.transaction">
+    <span slot="meta">
+      <span><span class="chip">{{ group.op }}</span></span>
+      @if (group.method) {
+        <span><span class="chip">{{ group.method }}</span></span>
+      }
+      <span
+        ><b>{{ group.count | number }}</b>
+        {{ group.count === 1 ? "transaction" : "transactions" }}</span
+      >
+      <span>avg <b>{{ group.avgDuration! | humanizeDuration }}</b></span>
+      @if (group.p95 !== null && group.p95 !== undefined) {
+        <span>p95 <b>{{ group.p95 | humanizeDuration }}</b></span>
+      }
+      <span
+        ><b>{{ group.errorCount | number }}</b>
+        {{ group.errorCount === 1 ? "error" : "errors" }}</span
+      >
+    </span>
+  </gt-page-header>
 
   <mat-card>
     <mat-card-content>

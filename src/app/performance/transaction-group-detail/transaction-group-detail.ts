@@ -8,13 +8,13 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { PercentPipe } from "@angular/common";
+import { DecimalPipe, PercentPipe } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule, Sort } from "@angular/material/sort";
 
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
 import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
 import { OrganizationsService } from "src/app/api/organizations.service";
@@ -28,6 +28,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
   templateUrl: "./transaction-group-detail.html",
   styleUrls: ["./transaction-group-detail.scss"],
   imports: [
+    DecimalPipe,
     MatCardModule,
     MatTableModule,
     MatSortModule,
@@ -37,7 +38,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
     TopAppBar,
     BackLinkComponent,
     HumanizeDurationPipe,
-    DetailHeaderComponent,
+    PageHeaderComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [TransactionGroupDetailService],

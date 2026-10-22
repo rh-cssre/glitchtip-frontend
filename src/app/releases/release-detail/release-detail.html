@@ -5,8 +5,27 @@
 </gt-top-app-bar>
 
 <section class="l-body l-body--full-width mat-elevation-z0">
-  @if (releaseTitle(); as title) {
-    <gt-detail-header [title]="title" />
+  @if (release(); as release) {
+    <gt-page-header [title]="release.version">
+      <span slot="meta">
+        @for (project of release.projects; track project.slug) {
+          <span
+            ><span class="chip">{{ project.slug }}</span></span
+          >
+        }
+        @if (paginator()?.count; as count) {
+          <span
+            ><b>{{ count }}</b> {{ +count === 1 ? "file" : "files" }}</span
+          >
+        }
+        <span i18n
+          >Released
+          {{
+            release.dateReleased ?? release.dateCreated | date: "mediumDate"
+          }}</span
+        >
+      </span>
+    </gt-page-header>
   }
   <div class="table-container">
     <gt-loading-overlay [loading]="loading()" label="Loading release files">

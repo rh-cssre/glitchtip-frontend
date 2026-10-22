@@ -487,3 +487,12 @@ gt-pagination-buttons {
     line-height: 38px !important;
   }
 }
+
+.tab-count {
+  margin-left: var(--gt-space-2, 8px);
+  padding: 1px 7px;
+  border-radius: 999px;
+  font: var(--mat-sys-label-small);
+  background-color: var(--mat-sys-surface-container-highest);
+  color: var(--mat-sys-on-surface-variant);
+}

@@ -65,6 +65,16 @@ Conventions for every component:
 - Selector prefix `gt-`.
 - Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
 
+### Page headers
+
+Every record detail page opens with `gt-page-header`: the record's name, then one meta line of facts.
+
+- Settings pages (project, team, member) show an icon tile for the object type. Data pages (issue, monitor, transaction, release) do not.
+- The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
+- When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.
+- The back link and page actions live in the top app bar, never in the header.
+- The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api").
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.

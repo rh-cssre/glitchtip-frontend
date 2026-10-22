@@ -8,7 +8,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatCardModule } from "@angular/material/card";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
 /**
@@ -21,7 +21,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   imports: [
     TopAppBar,
     BackLinkComponent,
-    DetailHeaderComponent,
+    PageHeaderComponent,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
@@ -96,7 +96,12 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         </ng-container>
       </gt-top-app-bar>
       <section class="dp-body">
-        <gt-detail-header [title]="['Uptime details for GlitchTip Health', null]" />
+        <gt-page-header title="GlitchTip Health">
+          <span slot="meta">
+            <span><span class="chip">https://glitchtip.com/</span></span>
+            <span>every <b>60s</b></span>
+          </span>
+        </gt-page-header>
         <mat-card appearance="outlined">
           <mat-card-content>
             Monitor content: response times, check history, status.
@@ -124,32 +129,29 @@ export class DetailPagePreview {
   readonly dos = [
     "Put gt-back-link in the app bar's left slot and name the destination",
     "Put page actions in the app bar's right slot",
-    "Render gt-detail-header first inside the l-body content column",
+    "Render gt-page-header first inside the l-body content column (see Page header)",
   ];
   readonly donts = [
     "Hand-roll a back arrow instead of gt-back-link",
   ];
   readonly composition = {
-    contains: ["Top app bar", "Back link", "Buttons & actions"],
+    contains: ["Top app bar", "Back link", "Page header", "Buttons & actions"],
   };
   readonly anatomy = `<gt-top-app-bar>
   <gt-back-link slot="left" />
   <... slot="right" actions />
 </gt-top-app-bar>
 <section class="l-body">
-  <gt-detail-header [title]="..." />
+  <gt-page-header [title]="..." />
   <... content />
 </section>`;
   readonly api: ApiRow[] = [
     { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label; navigates to the parent route (..)" },
     { name: "gt-back-link backLinkParams", type: "object", default: "{}", description: "Query params preserved on the way back" },
-    { name: "gt-detail-header title", type: "string | [string, string | null]", default: `""`, description: "Record title, optionally with a muted suffix" },
-    { name: "gt-detail-header subtitle", type: "string | null", default: "", description: "Secondary line under the title" },
-    { name: "gt-detail-header ng-content", type: "content projection", default: "", description: "Optional action row inside the header" },
   ];
   readonly importCode = `import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";`;
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";`;
   readonly code = `<gt-top-app-bar>
   <ng-container slot="left">
     <gt-back-link backLinkText="View all uptime monitors" />
@@ -162,7 +164,9 @@ import { DetailHeaderComponent } from "src/app/shared/detail/header/header.compo
 </gt-top-app-bar>
 
 <section class="l-body">
-  <gt-detail-header [title]="['Uptime details for ' + monitor.name, null]" />
+  <gt-page-header [title]="monitor.name">
+    <span slot="meta">...</span>
+  </gt-page-header>
   ...
 </section>`;
 }

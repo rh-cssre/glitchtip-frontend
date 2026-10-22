@@ -1,0 +1,18 @@
+<header class="page-header">
+  @if (icon()) {
+    <div class="page-header__icon" aria-hidden="true">
+      <mat-icon>{{ icon() }}</mat-icon>
+    </div>
+  }
+  <div class="page-header__text">
+    <h1
+      class="page-header__title section-header-text"
+      [class.page-header__title--mono]="titleMono()"
+    >
+      {{ title() }}
+    </h1>
+    <div class="page-header__meta">
+      <ng-content select="[slot=meta]" />
+    </div>
+  </div>
+</header>

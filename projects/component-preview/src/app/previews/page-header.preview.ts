@@ -1,0 +1,126 @@
+import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { MatTabsModule } from "@angular/material/tabs";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
+
+@Component({
+  selector: "preview-page-header",
+  imports: [PageHeaderComponent, MatTabsModule, PreviewDocComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      .ph-surface {
+        padding: var(--gt-space-4) var(--gt-space-5) var(--gt-space-2);
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-radius: 8px;
+        background: var(--mat-sys-surface);
+      }
+      .ph-surface + .ph-surface {
+        margin-top: var(--gt-space-4);
+      }
+    `,
+  ],
+  template: `
+    <preview-doc
+      title="Page header"
+      status="stable"
+      description="The title row of every detail page: the record's name, then one meta line of facts. Settings pages add an icon tile for the object type; records with facets add tabs directly below."
+      [whenToUse]="whenToUse"
+      [dos]="dos"
+      [donts]="donts"
+      [content]="content"
+      a11y="The title is the page's single h1. The icon tile is decorative and hidden from screen readers; the meta line is plain text read in order."
+      [api]="api"
+      [importCode]="importCode"
+      [code]="code"
+    >
+      <div class="preview-section">
+        <div class="preview-section__title">Settings page, with tabs</div>
+        <div class="ph-surface">
+          <gt-page-header icon="groups" title="#payments">
+            <span slot="meta">
+              <span><b>5</b> members</span>
+              <span>Created Oct 22, 2026</span>
+            </span>
+          </gt-page-header>
+          <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="panel">
+            <a mat-tab-link [active]="true"
+              >Members <span class="tab-count">5</span></a
+            >
+            <a mat-tab-link>Projects <span class="tab-count">2</span></a>
+            <a mat-tab-link>Settings</a>
+          </nav>
+          <mat-tab-nav-panel #panel />
+        </div>
+      </div>
+
+      <div class="preview-section">
+        <div class="preview-section__title">Data page</div>
+        <div class="ph-surface">
+          <gt-page-header title="POST /api/checkout">
+            <span slot="meta">
+              <span><span class="chip">http.server</span></span>
+              <span><b>40</b> transactions</span>
+              <span>avg <b>991ms</b></span>
+              <span>p95 <b>1.6 s</b></span>
+              <span><b>0</b> errors</span>
+            </span>
+          </gt-page-header>
+        </div>
+      </div>
+    </preview-doc>
+  `,
+})
+export class PageHeaderPreview {
+  readonly whenToUse = [
+    "The first element inside .l-body on every record detail page",
+  ];
+  readonly dos = [
+    "Give settings pages (project, team, member) an icon tile; leave it off data pages (issue, monitor, transaction, release)",
+    "Write the meta as short facts: numbers in <b>, identifiers in a .chip",
+    "Put tabs directly below when the record has facets, with counts in .tab-count",
+    "Keep the back link and page actions in the top app bar",
+  ];
+  readonly donts = [
+    "Add a divider under the header; the tab bar is the only line",
+    "Put buttons in the header",
+    "Repeat the page type in the title (Settings for project)",
+  ];
+  readonly content = [
+    "Title: the record's own name, never a sentence about it",
+    "Meta: facts in order of importance, separated automatically",
+  ];
+  readonly api: ApiRow[] = [
+    {
+      name: "title",
+      type: "string",
+      default: "",
+      description: "The record's name (required)",
+    },
+    {
+      name: "titleMono",
+      type: "boolean",
+      default: "false",
+      description: "Set when the title is an identifier, such as an email",
+    },
+    {
+      name: "icon",
+      type: "string | null",
+      default: "null",
+      description: "Object icon for settings pages; omit on data pages",
+    },
+    {
+      name: '[slot="meta"]',
+      type: "projected",
+      default: "",
+      description: "One element whose children are the meta facts",
+    },
+  ];
+  readonly importCode = `import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";`;
+  readonly code = `<gt-page-header icon="groups" [title]="'#' + team.slug">
+  <span slot="meta">
+    <span><b>{{ team.memberCount }}</b> members</span>
+    <span>Created {{ team.dateCreated | date: "mediumDate" }}</span>
+  </span>
+</gt-page-header>`;
+}
