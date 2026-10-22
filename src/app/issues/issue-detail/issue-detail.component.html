@@ -55,13 +55,44 @@
     </ng-container>
   </gt-top-app-bar>
   <section class="l-body l-body--full-width">
-    <div class="issue-header-wrapper">
-      <div class="status-indicator" [class]="'level--' + issue.level">
-        <mat-icon>{{ statusIcon() }}</mat-icon>
-      </div>
-
-      <gt-detail-header [title]="issueTitle()!" [subtitle]="issueSubtitle()" />
-    </div>
+    <gt-page-header
+      [title]="issueTitle()[0]"
+      [subtitle]="issueSubtitle()"
+      [status]="status().label"
+      [statusColor]="status().color"
+    >
+      <span slot="meta">
+        <span class="no-sep">
+          <span class="level-tag level--{{ issue.level }}">{{
+            issue.level | titlecase
+          }}</span>
+        </span>
+        <span
+          ><span class="chip">{{ issue.shortId }}</span></span
+        >
+        @if (issueTitle()[1]; as culprit) {
+          <span
+            ><span class="chip">{{ culprit }}</span></span
+          >
+        }
+        <span
+          ><b>{{ +issue.count | number }}</b>
+          {{ +issue.count === 1 ? "event" : "events" }}</span
+        >
+        <span [title]="issue.firstSeen | date: 'long'"
+          >First seen {{ issue.firstSeen | daysAgo }}</span
+        >
+        <span [title]="issue.lastSeen | date: 'long'"
+          >Last seen {{ issue.lastSeen | daysAgo }}</span
+        >
+        @if (resolvedInRelease(); as release) {
+          <span
+            ><ng-container i18n>Resolved in</ng-container>
+            <span class="chip">{{ release }}</span></span
+          >
+        }
+      </span>
+    </gt-page-header>
 
     <div class="row">
       <mat-card class="event-detail-card left">
@@ -89,21 +120,11 @@
               [active]="reports.isActive"
               #reports="routerLinkActive"
             >
+              <ng-container i18n>User Reports</ng-container>
               @if (issue.userReportCount > 0) {
-                <span
-                  [matBadge]="
-                    issue.userReportCount < 100
-                      ? issue.userReportCount.toString()
-                      : '99+'
-                  "
-                  matBadgeOverlap="false"
-                  class="report-badge"
-                  i18n
-                  >User Reports</span
-                >
-              }
-              @if (issue.userReportCount === 0) {
-                User Reports
+                <span class="tab-count">{{
+                  issue.userReportCount | number
+                }}</span>
               }
             </a>
             <a
@@ -113,18 +134,9 @@
               [active]="comments.isActive"
               #comments="routerLinkActive"
             >
+              <ng-container i18n>Comments</ng-container>
               @if (issue.numComments > 0) {
-                <span
-                  [matBadge]="
-                    issue.numComments < 100 ? issue.numComments : '99+'
-                  "
-                  matBadgeOverlap="false"
-                  class="report-badge"
-                  i18n
-                  >Comments
-                </span>
-              } @else {
-                <span i18n>Comments</span>
+                <span class="tab-count">{{ issue.numComments | number }}</span>
               }
             </a>
             <a
@@ -145,46 +157,6 @@
         </mat-card-content>
       </mat-card>
       <aside class="right">
-        <mat-card appearance="outlined">
-          <mat-card-content>
-            <dl>
-              <div>
-                <dt class="caption-text">Issue #</dt>
-                <dd class="body-text">{{ issue?.shortId }}</dd>
-              </div>
-              <div>
-                <dt class="caption-text">Events</dt>
-                <dd class="body-text">{{ issue?.count }}</dd>
-              </div>
-              <div>
-                <dt class="caption-text">Level</dt>
-                <dd class="body-text">{{ issue.level | titlecase }}</dd>
-              </div>
-              @if (resolvedInRelease(); as release) {
-                <div>
-                  <dt class="caption-text" i18n>Resolved in</dt>
-                  <dd class="body-text">{{ release }}</dd>
-                </div>
-              }
-              <div>
-                <dt class="caption-text">First Seen</dt>
-                <dd class="body-text">{{ issue.firstSeen | daysAgo }}</dd>
-                <dd class="caption-text">
-                  {{
-                    $safeNavigationMigration(issue?.firstSeen) | date: "long"
-                  }}
-                </dd>
-              </div>
-              <div>
-                <dt class="caption-text">Last Seen</dt>
-                <dd class="body-text">{{ issue.lastSeen | daysAgo }}</dd>
-                <dd class="caption-text">
-                  {{ $safeNavigationMigration(issue?.lastSeen) | date: "long" }}
-                </dd>
-              </div>
-            </dl>
-          </mat-card-content>
-        </mat-card>
         <gt-issue-detail-tags [issueID]="issueID()"></gt-issue-detail-tags>
       </aside>
     </div>

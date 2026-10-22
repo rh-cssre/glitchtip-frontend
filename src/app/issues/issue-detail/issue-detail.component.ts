@@ -10,19 +10,18 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
-import { MatBadgeModule } from "@angular/material/badge";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatCardModule } from "@angular/material/card";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { IssueDetailService } from "./issue-detail.service";
 import { DaysAgoPipe } from "../../shared/days-ago.pipe";
 import { IssueDetailTagsComponent } from "./issue-detail-tags/issue-detail-tags.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { DatePipe, TitleCasePipe } from "@angular/common";
+import { DatePipe, DecimalPipe, TitleCasePipe } from "@angular/common";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { IssueStatusUpdateDropdownComponent } from "src/app/shared/issue-status-update-dropdown/issue-status-update-dropdown";
@@ -30,13 +29,11 @@ import { IssueStatus } from "../interfaces";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 
-const STATUS_CONFIG = {
-  resolved: { label: "Resolved", icon: "done" },
-  unresolved: { label: "Unresolved", icon: "priority_high" },
-  ignored: { label: "Ignored", icon: "notifications_off" },
-} as const;
-
-type IssueStatusType = keyof typeof STATUS_CONFIG;
+const ISSUE_STATUS: Record<IssueStatus, { label: string; color: string }> = {
+  unresolved: { label: $localize`Unresolved`, color: "var(--info-color)" },
+  resolved: { label: $localize`Resolved`, color: "var(--success-color)" },
+  ignored: { label: $localize`Ignored`, color: "var(--mat-sys-outline)" },
+};
 
 @Component({
   selector: "gt-issue-detail",
@@ -47,14 +44,14 @@ type IssueStatusType = keyof typeof STATUS_CONFIG;
     MatCardModule,
     RouterModule,
     MatTabsModule,
-    MatBadgeModule,
     MatIconModule,
     MatButtonModule,
     IssueDetailTagsComponent,
     TitleCasePipe,
     DatePipe,
+    DecimalPipe,
     DaysAgoPipe,
-    DetailHeaderComponent,
+    PageHeaderComponent,
     BackLinkComponent,
     TopAppBar,
     IssueStatusUpdateDropdownComponent,
@@ -118,13 +115,7 @@ export class IssueDetailComponent implements OnInit {
     }
   });
 
-  statusIcon = computed(() => {
-    const issue = this.issue();
-    if (!issue) return "error";
-
-    const config = STATUS_CONFIG[issue.status as IssueStatusType];
-    return config?.icon ?? "error";
-  });
+  status = computed(() => ISSUE_STATUS[this.issue()?.status ?? "unresolved"]);
 
   resolvedInRelease = computed(() => {
     const issue = this.issue();

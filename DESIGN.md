@@ -70,6 +70,7 @@ Conventions for every component:
 Every record detail page opens with `gt-page-header`: the record's name, then one meta line of facts.
 
 - Settings pages for a named object (organization, project, team, member) show an icon tile, using the same icon as that object's item in the nav. Data pages (issue, monitor, transaction, release) and profile pages do not.
+- A title that needs a second line of its own (an error's message under its type) uses `subtitle`. Facts never go there.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
 - A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
 - When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.

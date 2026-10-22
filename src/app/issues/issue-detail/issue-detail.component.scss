@@ -80,6 +80,10 @@ mat-grid-list {
     @media screen and (max-width: vars.$medium - 1) {
       width: 100%;
       margin-bottom: 30px;
+
+      &:not(:has(mat-card)) {
+        display: none;
+      }
     }
   }
 }
@@ -88,62 +92,50 @@ table.mat-table {
   background: none;
 }
 
-.report-badge > span {
-  text-overflow: initial;
-}
-
-.issue-header-wrapper {
-  display: flex;
-
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
 .top-bar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.status-indicator {
-  display: flex;
+.level-tag {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  position: relative; 
+  gap: 6px;
+  padding: 1px 8px 1px 6px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 6px;
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface);
 
-  mat-icon {
-    color: var(--mat-sys-outline);
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-    margin: 8px;
-  }
-
-
-  &::after {
+  &::before {
     content: "";
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    right: 0;
     width: 4px;
-    border-radius: 4px; 
+    height: 12px;
+    border-radius: 2px;
+    background-color: var(--level-color);
   }
 
-  &.level--sample::after   { background-color: var(--mat-sys-outline); }
-  &.level--debug::after    { background-color: var(--mat-sys-outline-variant); }
-  &.level--info::after     { background-color: var(--info-color); }
-  &.level--warning::after  { background-color: var(--warning-color); }
-  &.level--error::after    { background-color: var(--mat-sys-error); }
+  &.level--sample {
+    --level-color: var(--mat-sys-outline);
+  }
+  &.level--debug {
+    --level-color: var(--mat-sys-outline-variant);
+  }
+  &.level--info {
+    --level-color: var(--info-color);
+  }
+  &.level--warning {
+    --level-color: var(--warning-color);
+  }
+  &.level--error {
+    --level-color: var(--mat-sys-error);
+  }
 
-
-  &.level--fatal::after {
+  &.level--fatal::before {
     background: repeating-linear-gradient(
-      -60deg,
-      var(--mat-sys-error),
-      var(--mat-sys-error) 5px,
-      var(--mat-sys-surface) 5px,
-      var(--mat-sys-surface) 10px
+      var(--mat-sys-error) 0 2px,
+      transparent 2px 4px
     );
   }
 }

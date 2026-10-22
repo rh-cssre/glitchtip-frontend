@@ -72,6 +72,24 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       </div>
 
       <div class="preview-section">
+        <div class="preview-section__title">Data page with a subtitle</div>
+        <div class="ph-surface">
+          <gt-page-header
+            title="TypeError"
+            subtitle="Cannot read properties of undefined (reading 'id')"
+            status="Unresolved"
+            statusColor="var(--info-color)"
+          >
+            <span slot="meta">
+              <span><span class="chip">STOREFRONT-1F</span></span>
+              <span><b>1,204</b> events</span>
+              <span>Last seen 2 minutes ago</span>
+            </span>
+          </gt-page-header>
+        </div>
+      </div>
+
+      <div class="preview-section">
         <div class="preview-section__title">Data page</div>
         <div class="ph-surface">
           <gt-page-header title="POST /api/checkout">
@@ -97,6 +115,7 @@ export class PageHeaderPreview {
     "Use the same icon as the object's item in the nav",
     "Write the meta as short facts: numbers in <b>, identifiers in a .chip",
     "Show a record's state with status, rendered as the Status pill, first in the meta line",
+    "Use subtitle for a second line that belongs to the title, such as an error's message",
     "Add class no-sep to a fact that continues the pill, such as for 2 hours",
     "Put tabs directly below when the record has facets, with counts in .tab-count",
     "Keep the back link and page actions in the top app bar",
@@ -104,6 +123,7 @@ export class PageHeaderPreview {
   readonly donts = [
     "Add a divider under the header; the tab bar is the only line",
     "Put buttons in the header",
+    "Use subtitle for facts; those go in the meta line",
     "Repeat the page type in the title (Settings for project)",
   ];
   readonly content = [
@@ -122,6 +142,12 @@ export class PageHeaderPreview {
       type: "boolean",
       default: "false",
       description: "Set when the title is an identifier, such as an email",
+    },
+    {
+      name: "subtitle",
+      type: "string | null",
+      default: "null",
+      description: "One muted line under the title, clamped to two lines",
     },
     {
       name: "icon",
