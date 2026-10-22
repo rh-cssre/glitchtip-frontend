@@ -12,9 +12,11 @@ type MonitorCheck = components["schemas"]["MonitorCheckSchema"];
   styleUrls: ["./monitor-chart.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DatePipe, MatTooltipModule],
+  host: { "[class.stretch]": "stretch()" },
 })
 export class MonitorChartComponent {
   readonly data = input<MonitorCheck[]>([]);
+  readonly stretch = input(false);
 
   constructor() {}
 

@@ -18,29 +18,17 @@ mat-card {
   }
 }
 
-.interval {
-  margin: 5px 0;
-}
-
-.reduced-padding {
-  padding-top: 4px !important;
-}
-
 mat-progress-spinner {
   margin-left: auto;
   margin-right: auto;
-}
-
-.url-display {
-  a {
-    display: inline-block;
-    text-overflow: wrap;
-    overflow-wrap: break-word;
-  }
 }
 
 .top-bar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.check-bars {
+  margin-bottom: var(--gt-space-4, 16px);
 }

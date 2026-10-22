@@ -26,3 +26,17 @@ div {
     opacity: 0.6;
   }
 }
+
+:host(.stretch) {
+  display: block;
+
+  div {
+    flex-wrap: nowrap;
+
+    div {
+      flex: 1 1 0;
+      min-width: 4px;
+      margin-right: 4px;
+    }
+  }
+}

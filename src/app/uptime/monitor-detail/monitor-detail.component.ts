@@ -21,7 +21,8 @@ import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component"
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { MatTabsModule } from "@angular/material/tabs";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { DecimalPipe, I18nPluralPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -54,7 +55,8 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     MatDividerModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    DetailHeaderComponent,
+    PageHeaderComponent,
+    MatTabsModule,
     TopAppBar,
     BackLinkComponent,
   ],
@@ -73,6 +75,38 @@ export class MonitorDetailComponent
   cursor = input<string | undefined>();
 
   monitor = this.service.activeMonitor;
+  tab = signal<"overview" | "checks" | "alerts">("overview");
+
+  statusLabel = computed(() => {
+    const isUp = this.monitor()?.isUp;
+    if (isUp === true) return $localize`Up`;
+    if (isUp === false) return $localize`Down`;
+    return $localize`No data`;
+  });
+  statusColor = computed(() => {
+    const isUp = this.monitor()?.isUp;
+    if (isUp === true) return "var(--gt-monitor-up, var(--success-color))";
+    if (isUp === false) return "var(--gt-monitor-down, var(--mat-sys-error))";
+    return "var(--gt-monitor-none, var(--mat-sys-outline))";
+  });
+  intervalLabel = computed(() => {
+    const seconds = this.monitor()?.interval ?? 0;
+    if (seconds < 120) return `${seconds}s`;
+    if (seconds < 7200) return `${Math.round(seconds / 60)} min`;
+    return `${Math.round(seconds / 3600)} h`;
+  });
+  uptimePercent = computed(() => {
+    const checks = this.monitor()?.checks ?? [];
+    if (!checks.length) return null;
+    return (checks.filter((c) => c.isUp).length / checks.length) * 100;
+  });
+  avgResponseMs = computed(() => {
+    const times = (this.monitor()?.checks ?? [])
+      .map((c) => (c as { responseTime?: number | null }).responseTime)
+      .filter((t): t is number => typeof t === "number");
+    if (!times.length) return null;
+    return times.reduce((sum, t) => sum + t, 0) / times.length;
+  });
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertCountLoading = this.service.alertCountLoading;
   associatedProjectSlug = this.service.associatedProjectSlug;
@@ -130,6 +164,7 @@ export class MonitorDetailComponent
 
   ngOnInit() {
     this.service.retrieveMonitorDetails(this.monitorID());
+    if (this.cursor() || !this.isChange()) this.tab.set("checks");
   }
 
   delete() {
