@@ -71,6 +71,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - Settings pages (project, team, member) show an icon tile for the object type. Data pages (issue, monitor, transaction, release) do not.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
+- A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
 - When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.
 - The back link and page actions live in the top app bar, never in the header.
 - The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api").

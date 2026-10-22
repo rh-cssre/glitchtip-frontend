@@ -12,6 +12,13 @@
       {{ title() }}
     </h1>
     <div class="page-header__meta">
+      @if (status(); as status) {
+        <gt-status-pill
+          class="page-header__pill"
+          [label]="status"
+          [color]="statusColor()"
+        />
+      }
       <ng-content select="[slot=meta]" />
     </div>
   </div>

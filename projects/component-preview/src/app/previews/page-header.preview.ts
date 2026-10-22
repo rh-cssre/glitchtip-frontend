@@ -55,6 +55,23 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       </div>
 
       <div class="preview-section">
+        <div class="preview-section__title">Data page with state</div>
+        <div class="ph-surface">
+          <gt-page-header
+            title="Storefront homepage"
+            status="Up"
+            statusColor="var(--success-color)"
+          >
+            <span slot="meta">
+              <span class="no-sep">for 2 hours</span>
+              <span><span class="chip">https://example.com/</span></span>
+              <span>every 60s</span>
+            </span>
+          </gt-page-header>
+        </div>
+      </div>
+
+      <div class="preview-section">
         <div class="preview-section__title">Data page</div>
         <div class="ph-surface">
           <gt-page-header title="POST /api/checkout">
@@ -78,6 +95,8 @@ export class PageHeaderPreview {
   readonly dos = [
     "Give settings pages (project, team, member) an icon tile; leave it off data pages (issue, monitor, transaction, release)",
     "Write the meta as short facts: numbers in <b>, identifiers in a .chip",
+    "Show a record's state with status, rendered as the Status pill, first in the meta line",
+    "Add class no-sep to a fact that continues the pill, such as for 2 hours",
     "Put tabs directly below when the record has facets, with counts in .tab-count",
     "Keep the back link and page actions in the top app bar",
   ];
@@ -108,6 +127,18 @@ export class PageHeaderPreview {
       type: "string | null",
       default: "null",
       description: "Object icon for settings pages; omit on data pages",
+    },
+    {
+      name: "status",
+      type: "string | null",
+      default: "null",
+      description: "State label, shown as a Status pill",
+    },
+    {
+      name: "statusColor",
+      type: "string",
+      default: '"var(--mat-sys-outline)"',
+      description: "Color for the pill; use a role token",
     },
     {
       name: '[slot="meta"]',

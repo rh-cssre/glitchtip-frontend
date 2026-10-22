@@ -36,6 +36,10 @@
     margin-left: 16px;
   }
 
+  ::ng-deep [slot="meta"] > .no-sep {
+    margin-left: 8px;
+  }
+
   ::ng-deep [slot="meta"] > :not(:first-child)::before {
     content: "·";
     position: absolute;
