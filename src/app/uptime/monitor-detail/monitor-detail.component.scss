@@ -1,5 +1,9 @@
+.monitor-panel {
+  display: block;
+  padding-top: var(--gt-space-4, 16px);
+}
+
 mat-card {
-  margin-top: 20px;
   margin-bottom: 20px;
 
   mat-card-content {

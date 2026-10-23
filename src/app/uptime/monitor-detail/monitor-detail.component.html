@@ -86,7 +86,7 @@
         }
       </a>
     </nav>
-    <mat-tab-nav-panel #monitorPanel>
+    <mat-tab-nav-panel #monitorPanel class="monitor-panel">
       @switch (tab()) {
         @case ("overview") {
           @if (monitor.monitorType !== "Heartbeat") {
