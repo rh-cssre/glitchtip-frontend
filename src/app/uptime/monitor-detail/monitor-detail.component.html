@@ -114,7 +114,7 @@
           ) {
             <mat-card id="heartbeat-endpoint" class="heartbeat-card">
               <mat-card-header>
-                <mat-card-title>Heartbeat URL endpoint</mat-card-title>
+                <mat-card-title i18n>Heartbeat URL</mat-card-title>
               </mat-card-header>
               <mat-divider></mat-divider>
               <mat-card-content>
@@ -146,12 +146,12 @@
             <gt-empty-state
               icon="share_eta"
               i18n-title
-              title="No project linked"
+              title="No associated project"
               i18n-message
-              message="Link a project to send alerts for this monitor."
+              message="Associate a project with this monitor to get alerts."
             >
               <a mat-stroked-button [routerLink]="['./update']" i18n
-                >Monitor settings</a
+                >Edit monitor</a
               >
             </gt-empty-state>
           } @else if (alertCountLoading()) {
@@ -175,6 +175,7 @@
                     '../../settings/projects/',
                     associatedProjectSlug,
                   ]"
+                  [queryParams]="{ tab: 'alerts' }"
                   i18n
                   >Project settings</a
                 >
@@ -190,6 +191,7 @@
                     '../../settings/projects/',
                     associatedProjectSlug,
                   ]"
+                  [queryParams]="{ tab: 'alerts' }"
                   >project settings</a
                 >
                 page to change your alerts.
