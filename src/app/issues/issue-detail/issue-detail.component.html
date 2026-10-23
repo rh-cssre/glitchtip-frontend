@@ -75,14 +75,14 @@
             ><span class="chip">{{ culprit }}</span></span
           >
         }
-        <span
-          ><b>{{ +issue.count | number }}</b>
-          {{ +issue.count === 1 ? "event" : "events" }}</span
-        >
-        <span [title]="issue.firstSeen | date: 'long'"
+        <span i18n>{+issue.count, plural,
+          =1 {<b>1</b> event}
+          other {<b>{{ +issue.count | number }}</b> events}
+        }</span>
+        <span [title]="issue.firstSeen | date: 'long'" i18n
           >First seen {{ issue.firstSeen | daysAgo }}</span
         >
-        <span [title]="issue.lastSeen | date: 'long'"
+        <span [title]="issue.lastSeen | date: 'long'" i18n
           >Last seen {{ issue.lastSeen | daysAgo }}</span
         >
         @if (resolvedInRelease(); as release) {
