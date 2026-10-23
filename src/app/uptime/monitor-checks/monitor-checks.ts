@@ -16,6 +16,7 @@ import { reasonTextConversions } from "../uptime.utils";
 import { MonitorChecksService } from "./monitor-checks-state";
 import { components } from "src/app/api/api-schema";
 import { DatePipe } from "@angular/common";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 type MonitorDetail = components["schemas"]["MonitorDetailSchema"];
 
 @Component({
@@ -31,6 +32,7 @@ type MonitorDetail = components["schemas"]["MonitorDetailSchema"];
     RouterModule,
     PaginationButtons,
     LoadingOverlayComponent,
+    EmptyStateComponent,
   ],
   providers: [MonitorChecksService],
 })

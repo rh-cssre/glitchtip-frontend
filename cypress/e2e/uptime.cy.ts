@@ -17,7 +17,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.wait(1000);
     cy.get("h1").should("contain", seededMonitorName);
     cy.contains("[mat-tab-link]", "Alerts").click();
-    cy.contains("This project has no uptime alerts configured");
+    cy.contains("No uptime alerts");
     cy.get("#monitor-settings").click();
     cy.get("#monitor-name")
       .should("have.value", seededMonitorName)
