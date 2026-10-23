@@ -93,7 +93,8 @@ export class PageHeaderPreview {
     "The first element inside .l-body on every record detail page",
   ];
   readonly dos = [
-    "Give settings pages (project, team, member) an icon tile; leave it off data pages (issue, monitor, transaction, release)",
+    "Give settings pages for a named object (organization, project, team, member) an icon tile; leave it off data pages and profile pages",
+    "Use the same icon as the object's item in the nav",
     "Write the meta as short facts: numbers in <b>, identifiers in a .chip",
     "Show a record's state with status, rendered as the Status pill, first in the meta line",
     "Add class no-sep to a fact that continues the pill, such as for 2 hours",
