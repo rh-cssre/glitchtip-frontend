@@ -11,6 +11,7 @@ import { TopAppBarPreview } from "./previews/top-app-bar.preview";
 import { DetailPagePreview } from "./previews/detail-page.preview";
 import { PageHeaderPreview } from "./previews/page-header.preview";
 import { StatusPillPreview } from "./previews/status-pill.preview";
+import { SettingsSectionPreview } from "./previews/settings-section.preview";
 import { PermissionGatingPreview } from "./previews/permission-gating.preview";
 import { BrandTypographyPreview } from "./previews/brand-typography.preview";
 import { BrandColorsPreview } from "./previews/brand-colors.preview";
@@ -222,6 +223,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Status pill",
     group: "Components",
     component: StatusPillPreview,
+    status: "stable",
+  },
+  {
+    id: "settings-section",
+    label: "Settings section",
+    group: "Components",
+    component: SettingsSectionPreview,
     status: "stable",
   },
   {

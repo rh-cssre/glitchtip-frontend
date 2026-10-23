@@ -19,7 +19,8 @@ import {
   FormGroupDirective,
   ReactiveFormsModule,
 } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { map } from "rxjs";
 import {
   FlatPlatform,
   flattenedPlatforms,
@@ -34,8 +35,7 @@ import { CopyInputComponent } from "../../../shared/copy-input/copy-input.compon
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { MatTabsModule } from "@angular/material/tabs";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { ProjectDetailService } from "./project-detail.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -45,6 +45,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -76,8 +78,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     DatePipe,
     MatInputModule,
     MatAutocompleteModule,
-    MatCardModule,
-    MatDividerModule,
+    MatTabsModule,
     MatFormFieldModule,
     MatIconModule,
     ReactiveFormsModule,
@@ -90,6 +91,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     PageHeaderComponent,
     BackLinkComponent,
     TopAppBar,
+    SettingsSectionComponent,
   ],
   providers: [
     ProjectDetailService,
@@ -119,6 +121,33 @@ export class ProjectDetailComponent implements OnInit {
   updatePlatformError = this.#service.updatePlatformError;
   accessProjectWrite = this.#orgService.accessProjectWrite;
 
+  readonly tabs = [
+    { id: "general", label: $localize`General` },
+    { id: "dsn", label: $localize`DSN` },
+    { id: "environments", label: $localize`Environments` },
+    { id: "alerts", label: $localize`Alerts` },
+  ];
+  readonly tab = toSignal(
+    inject(ActivatedRoute).queryParamMap.pipe(
+      map((params) => {
+        const tab = params.get("tab");
+        return this.tabs.some((t) => t.id === tab) ? tab : "general";
+      }),
+    ),
+    { initialValue: "general" },
+  );
+  readonly noPlatformLabel = $localize`No platform set`;
+  readonly securityEndpointLabel = $localize`Security endpoint`;
+
+  keySuffix(
+    key: { label?: string | null; name?: string | null },
+    index: number,
+    count: number,
+  ) {
+    if (count < 2) return "";
+    return ": " + (key.label || key.name || $localize`Key ${index + 1}`);
+  }
+
   nameForm = new FormGroup({
     name: new FormControl("", [Validators.required, Validators.maxLength(64)]),
   });
@@ -146,6 +175,14 @@ export class ProjectDetailComponent implements OnInit {
   platformCtrlInvalid = isCustomErrorState(this.platformCtrl);
 
   constructor() {
+    effect(() => {
+      const error = this.updateNameError();
+      if (error) mapFormErrors({ name: [error] }, this.nameForm);
+    });
+    effect(() => {
+      const error = this.updatePlatformError();
+      if (error) mapFormErrors({ platform: [error] }, this.platformForm);
+    });
     effect(() => {
       const project = this.activeProject();
       if (project) {

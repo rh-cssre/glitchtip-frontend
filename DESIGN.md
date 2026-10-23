@@ -76,6 +76,16 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - The back link and page actions live in the top app bar, never in the header.
 - The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api").
 
+### Settings sections
+
+Every setting on a settings page is a `gt-settings-section`: a title, one line of help, then the control and its actions.
+
+- Sections stack in one column. Space separates them; no cards, no dividers.
+- A single control uses `inline`, with its action beside it. The section title is the field's only visible label, linked with `aria-labelledby`.
+- Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
+- A destructive action is the last section, with an outlined warn button and a confirm dialog. No red box.
+- Someone who cannot edit a setting sees its value as plain text, without the control.
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.

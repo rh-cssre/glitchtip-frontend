@@ -111,7 +111,7 @@ export class FormsPreview {
     "Anywhere the backend can reject a field with a message",
   ];
   readonly dos = [
-    'Use appearance="outline" and a mat-label on every field',
+    'Use appearance="outline" and a visible label on every field. When a field is the only control in a settings section, the section title is its label (aria-labelledby)',
     "Cover each failure case with its own @if inside one mat-error",
     "Map backend field errors with mapFormErrors so they render like client errors",
     "Put gt-form-error at the top of the form for non-field errors",

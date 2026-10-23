@@ -51,7 +51,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Permission gating"
       status="stable"
-      description="How write and delete controls are gated, by reason. Role or permission gates hide the control entirely with @if on the relevant access signal. Transient state (pristine form, request in flight, missing prerequisite) disables it, with the reason visible. Never [disabled] for permission."
+      description="How write and delete controls are gated, by reason. Role or permission gates hide the control entirely with @if on the relevant access signal. Transient state (request in flight, missing prerequisite) disables it, with the reason visible. Never [disabled] for permission."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -112,7 +112,7 @@ export class PermissionGatingPreview {
     "Gate with @if on the org-level access signal (accessProjectWrite, accessTeamWrite, ...)",
     "Use accessTeamWrite even inside teams; team writes are org-scoped",
     "Hide the whole card if hiding a lone action would leave it empty",
-    "Use [disabled] only for transient state, with the reason evident (spinner, pristine form)",
+    "Use [disabled] only for transient state, with the reason evident (spinner, missing prerequisite)",
   ];
   readonly donts = [
     "Disable a control the user will never be allowed to use",

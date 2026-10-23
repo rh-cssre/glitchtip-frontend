@@ -22,6 +22,7 @@ import { MatInputModule } from "@angular/material/input";
 export class CopyInputComponent {
   readonly value = input("");
   readonly placeholder = input("");
+  readonly labelledBy = input<string | null>(null);
   copied = signal(false);
 
   /**

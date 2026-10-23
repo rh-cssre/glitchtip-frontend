@@ -1,6 +1,19 @@
-<mat-form-field class="full-width" appearance="outline">
-  <mat-label>{{ placeholder() }}</mat-label>
-  <input class="background" readonly matInput [value]="value()" data-test-dsn />
+<mat-form-field
+  class="full-width"
+  appearance="outline"
+  subscriptSizing="dynamic"
+>
+  @if (!labelledBy()) {
+    <mat-label>{{ placeholder() }}</mat-label>
+  }
+  <input
+    class="background"
+    readonly
+    matInput
+    [value]="value()"
+    [attr.aria-labelledby]="labelledBy()"
+    data-test-dsn
+  />
   <button
     mat-icon-button
     class="input-icon-button"

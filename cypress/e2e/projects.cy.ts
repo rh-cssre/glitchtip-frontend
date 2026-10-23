@@ -115,7 +115,9 @@ describe("Add and edit alerts", () => {
   beforeEach(() => {
     seedBackend(true);
     requestLogin();
-    cy.visit(`/${seededOrg.slug}/settings/projects/${seededProject1.slug}`);
+    cy.visit(
+      `/${seededOrg.slug}/settings/projects/${seededProject1.slug}?tab=alerts`,
+    );
   });
 
   it("should add a project alert, remove email recipient, add email recipient back", () => {
