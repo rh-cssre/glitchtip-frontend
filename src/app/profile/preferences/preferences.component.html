@@ -7,11 +7,11 @@
     @if (userDetails()) {
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-form-field class="full-width first-field" appearance="outline">
-          <mat-label>Name</mat-label>
+          <mat-label i18n>Name</mat-label>
           <input matInput formControlName="name" maxlength="255" />
         </mat-form-field>
         <mat-form-field class="timezone full-width" appearance="outline">
-          <mat-label>Time Zone</mat-label>
+          <mat-label i18n>Time Zone</mat-label>
           <input
             type="text"
             matInput
@@ -40,23 +40,23 @@
               <span i18n>Select a valid time zone</span>
             }
           </mat-error>
-          <mat-hint>Your system time zone is {{ currentTimeZone }}</mat-hint>
+          <mat-hint i18n>Your system time zone is {{ currentTimeZone }}</mat-hint>
         </mat-form-field>
         <div class="theme-field">
           <label class="theme-label" i18n>Theme</label>
-          <mat-button-toggle-group formControlName="theme" aria-label="Theme">
-            <mat-button-toggle value="system" title="System">
+          <mat-button-toggle-group i18n-aria-label formControlName="theme" aria-label="Theme">
+            <mat-button-toggle i18n-title value="system" title="System">
               <mat-icon>brightness_medium</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle value="light" title="Light">
+            <mat-button-toggle i18n-title value="light" title="Light">
               <mat-icon>light_mode</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle value="dark" title="Dark">
+            <mat-button-toggle i18n-title value="dark" title="Dark">
               <mat-icon>dark_mode</mat-icon>
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-        <gt-loading-button buttonText="Update Preferences"></gt-loading-button>
+        <gt-loading-button i18n-buttonText buttonText="Update Preferences"></gt-loading-button>
       </form>
     }
   </mat-card-content>

@@ -40,12 +40,10 @@
                   #{{ yourTeam.slug }}
                 </a>
                 <div>
-                  {{
-                    yourTeam.memberCount | i18nPlural: memberCountPluralMapping
-                  }}
+                  <ng-container i18n>{yourTeam.memberCount, plural, =1 {1 Member} other {{{ yourTeam.memberCount }} Members}}</ng-container>
                 </div>
               </div>
-              <gt-loading-button
+              <gt-loading-button i18n-buttonText
                 buttonText="Leave Team"
                 buttonStyle="stroked"
                 [loading]="loading().removeTeamMember === yourTeam.slug"
@@ -91,12 +89,10 @@
                   #{{ otherTeam.slug }}
                 </a>
                 <div>
-                  {{
-                    otherTeam.memberCount | i18nPlural: memberCountPluralMapping
-                  }}
+                  <ng-container i18n>{otherTeam.memberCount, plural, =1 {1 Member} other {{{ otherTeam.memberCount }} Members}}</ng-container>
                 </div>
               </div>
-              <gt-loading-button
+              <gt-loading-button i18n-buttonText
                 buttonText="Join Team"
                 buttonStyle="stroked"
                 [loading]="loading().addTeamMember === otherTeam.slug"

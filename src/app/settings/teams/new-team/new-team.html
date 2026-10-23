@@ -11,7 +11,7 @@
       }
     </mat-error>
     <mat-form-field appearance="outline">
-      <mat-label>Slug</mat-label>
+      <mat-label i18n>Slug</mat-label>
       <input matInput gtSlugify formControlName="slug" />
       @if (slug?.errors?.required) {
         <mat-error>
@@ -28,7 +28,7 @@
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <gt-loading-button
+    <gt-loading-button i18n-buttonText
       id="create-team-submit"
       buttonText="Create Team"
       [loading]="loading()"
