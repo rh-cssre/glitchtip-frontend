@@ -57,19 +57,21 @@
         </ul>
       } @else {
         @if (otherTeams()?.length) {
-          <p i18n
-            >You aren't part of any teams. Join a team below or press the
-            "Create Team" button in the upper right.</p
-          >
+          <gt-empty-state
+            icon="groups"
+            i18n-title
+            title="No teams joined"
+            i18n-message
+            message="Join a team below, or create a new one."
+          />
         } @else {
-          <p i18n
-            >You don't have any teams set up. Teams determine which users have
-            access to projects in your organization.</p
-          >
-          <p i18n
-            >To create a new team, press the "Create Team" button in the upper
-            right.</p
-          >
+          <gt-empty-state
+            icon="groups"
+            i18n-title
+            title="No teams"
+            i18n-message
+            message="Create a team to control who can access each project."
+          />
         }
       }
     </mat-card-content>

@@ -28,7 +28,13 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       @if (projectsOnTeam().length === 0) {
-        <p class="center-text" i18n>This team doesn't have any projects</p>
+        <gt-empty-state
+          icon="folder"
+          i18n-title
+          title="No team projects"
+          i18n-message
+          message="Add a project to give this team's members access to it."
+        />
       } @else {
         <ul>
           @if (errors().removeProjectFromTeam) {

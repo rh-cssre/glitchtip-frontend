@@ -24,7 +24,13 @@
   <mat-divider></mat-divider>
   <mat-card-content>
     @if (teamMembers().length === 0) {
-      <p class="center-text" i18n>This team doesn't have any members</p>
+      <gt-empty-state
+        icon="people"
+        i18n-title
+        title="No team members"
+        i18n-message
+        message="Add organization members to this team to give them its projects."
+      />
     } @else {
       <ul data-test-list class="member-list">
         @if (removeMemberError) {

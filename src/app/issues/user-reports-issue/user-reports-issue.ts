@@ -13,6 +13,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { UserReportsService } from "./user-reports-state";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-user-reports-issue",
@@ -27,6 +28,7 @@ import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-
     RouterLink,
     MatIconModule,
     LoadingOverlayComponent,
+    EmptyStateComponent,
   ],
   providers: [UserReportsService],
 })

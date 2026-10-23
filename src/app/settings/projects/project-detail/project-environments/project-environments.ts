@@ -10,6 +10,7 @@ import { LoadingButtonComponent } from "../../../../shared/loading-button/loadin
 import { MatListModule } from "@angular/material/list";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-project-environments",
@@ -21,6 +22,7 @@ import { MatCardModule } from "@angular/material/card";
     MatDividerModule,
     MatListModule,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
   providers: [ProjectEnvironmentsService],
 })

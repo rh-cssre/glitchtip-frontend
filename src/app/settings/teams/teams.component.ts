@@ -19,6 +19,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { I18nPluralPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-teams",
@@ -34,6 +35,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
     MatFormFieldModule,
     LoadingButtonComponent,
     TopAppBar,
+    EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

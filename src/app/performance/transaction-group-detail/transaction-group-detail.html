@@ -66,11 +66,13 @@
       <h2 class="section-header-text span-breakdown-title">Span breakdown</h2>
       @if (sortedSpans(); as spans) {
         @if (spans.length === 0) {
-          <div class="span-breakdown-empty">
-            <mat-icon class="span-breakdown-empty__icon">bar_chart_4_bars</mat-icon>
-            <p class="body-text">No span data available yet</p>
-            <p class="caption-text span-breakdown-empty__hint">Span data will appear here once child spans are recorded for this transaction group.</p>
-          </div>
+          <gt-empty-state
+            icon="avg_pace"
+            i18n-title
+            title="No span data"
+            i18n-message
+            message="Spans appear here once child spans are recorded for this transaction group."
+          />
         } @else {
           <!-- By operation -->
           <p class="section-label">By operation</p>

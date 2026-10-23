@@ -15,6 +15,7 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-team-projects",
@@ -30,6 +31,7 @@ import { MatCardModule } from "@angular/material/card";
     MatDividerModule,
     RouterLink,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
 })
 export class TeamProjectsComponent implements OnInit {
