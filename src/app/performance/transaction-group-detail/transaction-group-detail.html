@@ -36,17 +36,19 @@
       @if (group.method) {
         <span><span class="chip">{{ group.method }}</span></span>
       }
-      <span
-        ><b>{{ group.count | number }}</b>
-        {{ group.count === 1 ? "transaction" : "transactions" }}</span
+      <span i18n
+        >{group.count, plural, =1 {<b>1</b> transaction} other {<b>{{
+          group.count | number
+        }}</b> transactions}}</span
       >
-      <span>avg <b>{{ group.avgDuration! | humanizeDuration }}</b></span>
+      <span i18n>avg <b>{{ group.avgDuration! | humanizeDuration }}</b></span>
       @if (group.p95 !== null && group.p95 !== undefined) {
-        <span>p95 <b>{{ group.p95 | humanizeDuration }}</b></span>
+        <span i18n>p95 <b>{{ group.p95 | humanizeDuration }}</b></span>
       }
-      <span
-        ><b>{{ group.errorCount | number }}</b>
-        {{ group.errorCount === 1 ? "error" : "errors" }}</span
+      <span i18n
+        >{group.errorCount, plural, =1 {<b>1</b> error} other {<b>{{
+          group.errorCount | number
+        }}</b> errors}}</span
       >
     </span>
   </gt-page-header>

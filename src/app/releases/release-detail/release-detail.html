@@ -14,16 +14,20 @@
           >
         }
         @if (paginator()?.count; as count) {
-          <span
-            ><b>{{ count }}</b> {{ +count === 1 ? "file" : "files" }}</span
+          <span i18n>{+count, plural,
+            =1 {<b>1</b> file}
+            other {<b>{{ count }}</b> files}
+          }</span>
+        }
+        @if (release.dateReleased) {
+          <span i18n
+            >Released {{ release.dateReleased | date: "mediumDate" }}</span
+          >
+        } @else {
+          <span i18n
+            >Created {{ release.dateCreated | date: "mediumDate" }}</span
           >
         }
-        <span i18n
-          >Released
-          {{
-            release.dateReleased ?? release.dateCreated | date: "mediumDate"
-          }}</span
-        >
       </span>
     </gt-page-header>
   }
