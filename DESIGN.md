@@ -65,6 +65,20 @@ Conventions for every component:
 - Selector prefix `gt-`.
 - Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
 
+### Surfaces
+
+- Page structure (headers, settings sections, forms, empty states) sits directly on the page surface, separated by space.
+- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
+- A card with a title bar is not used for a page section; the section's title sits above its container.
+
+### Lists
+
+A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end.
+
+- One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
+- Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
+- Rows with several columns to compare or sort are a table instead.
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.
