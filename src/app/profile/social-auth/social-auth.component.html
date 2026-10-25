@@ -2,11 +2,11 @@
   @if (user(); as user) {
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Social Auth Accounts</mat-card-title>
+        <mat-card-title i18n>Social Auth Accounts</mat-card-title>
         @if (socialApps().length) {
           @if (socialApps(); as socialApps) {
             <mat-form-field appearance="outline">
-              <mat-label>Add Account</mat-label>
+              <mat-label i18n>Add Account</mat-label>
               <mat-select
                 (selectionChange)="addAccount()"
                 [formControl]="account"

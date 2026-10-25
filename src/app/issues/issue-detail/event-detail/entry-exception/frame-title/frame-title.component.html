@@ -31,7 +31,7 @@
         >
       }
       @if (frame.function && !mangled) {
-        in
+        <ng-container i18n>in</ng-container>
       }
     }
     <!-- TODO: Add rawFunction conditions-->
@@ -41,13 +41,13 @@
       {{ frame.function }}
     }
     @if (frame.lineNo && frame.lineNo > 0) {
-      at line {{ frame.lineNo }}
+      <ng-container i18n>at line {{ frame.lineNo }}</ng-container>
       @if (frame.colNo && frame.colNo > 0) {
         :{{ frame.colNo }}
       }
     }
     @if (frame.package) {
-      within {{ cleanPackagePath(frame.package, frame.platform) }}
+      <ng-container i18n>within {{ cleanPackagePath(frame.package, frame.platform) }}</ng-container>
     }
     <!--origAbsPath not in frame docs
     code: https://gitlab.com/glitchtip/sentry-open-source/sentry/-/blob/master/src/sentry/static/sentry/app/components/events/interfaces/frame.jsx#L245

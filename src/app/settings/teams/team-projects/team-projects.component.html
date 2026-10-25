@@ -48,6 +48,7 @@
           @if (canEditProjects()) {
             <gt-loading-button
               slot="actions"
+              i18n-buttonText
               buttonText="Remove"
               buttonStyle="stroked"
               [loading]="project.slug === loading().removeProjectFromTeam"

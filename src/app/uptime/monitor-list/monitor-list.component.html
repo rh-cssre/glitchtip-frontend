@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-list-title
+    <gt-list-title i18n-title
       title="Uptime Monitors"
       [searchHits]="$safeNavigationMigration(paginator()?.count)"
     ></gt-list-title>
@@ -28,7 +28,7 @@
   />
   @if (monitors(); as monitors) {
     <div class="table-container">
-      <gt-loading-overlay [loading]="loading()" label="Loading monitors">
+      <gt-loading-overlay i18n-label [loading]="loading()" label="Loading monitors">
         <table mat-table [dataSource]="monitors" class="mat-elevation-z2">
           <ng-container matColumnDef="pagination">
             <th
@@ -92,10 +92,10 @@
           <ng-container matColumnDef="status">
             <td mat-cell *matCellDef="let monitor">
               @if (monitor.isUp) {
-                <span>Up</span>
+                <span i18n>Up</span>
               }
               @if (monitor.isUp === false) {
-                <span>Down</span>
+                <span i18n>Down</span>
               }
               @if (monitor.lastChange) {
                 {{ monitor.lastChange | timeFor }}

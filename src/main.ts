@@ -1,6 +1,7 @@
 import {
   ErrorHandler,
   inject,
+  LOCALE_ID,
   provideZonelessChangeDetection,
   Provider,
 } from "@angular/core";
@@ -32,7 +33,9 @@ import {
   withRouterConfig,
 } from "@angular/router";
 import { CustomPreloadingStrategy } from "./app/preloadingStrategy";
-import { APP_BASE_HREF } from "@angular/common";
+import { APP_BASE_HREF, registerLocaleData } from "@angular/common";
+import localeFr from "@angular/common/locales/fr";
+import localeNb from "@angular/common/locales/nb";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 
 let snackBarDuration = 4000;
@@ -54,6 +57,13 @@ window.document.documentElement.lang = locale;
 
 if (locale in localeMappings) {
   locale = localeMappings[locale];
+}
+
+// Dates, numbers and currencies follow the UI language; English uses the
+// built-in en-US data.
+const localeData: { [key: string]: unknown[] } = { fr: localeFr, nb: localeNb };
+if (locale in localeData) {
+  registerLocaleData(localeData[locale], locale);
 }
 
 export function baseHrefInterceptor(
@@ -83,6 +93,7 @@ const bootstrap = () =>
     providers: [
       ...extraProviders,
       provideZonelessChangeDetection(),
+      { provide: LOCALE_ID, useValue: locale === "en" ? "en-US" : locale },
       provideAnimationsAsync(), // ng-charts uses this, should be removed
       provideRouter(
         routes,

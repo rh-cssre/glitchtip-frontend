@@ -32,13 +32,21 @@
       @for (yourTeam of yourTeams(); track yourTeam.id) {
         <gt-list-row>
           <a [routerLink]="[yourTeam.slug, 'members']">#{{ yourTeam.slug }}</a>
-          <span slot="meta"
-            >{{ yourTeam.memberCount | i18nPlural: memberPlural }} ·
-            {{ projectCount(yourTeam.id) | i18nPlural: projectPlural }}</span
+          <span slot="meta" i18n
+            >{yourTeam.memberCount, plural,
+              =1 {1 member}
+              other {{{ yourTeam.memberCount }} members}
+            }
+            ·
+            {projectCount(yourTeam.id), plural,
+              =1 {1 project}
+              other {{{ projectCount(yourTeam.id) }} projects}
+            }</span
           >
           @if (canLeave()) {
             <gt-loading-button
               slot="actions"
+              i18n-buttonText
               buttonText="Leave Team"
               buttonStyle="stroked"
               [loading]="loading().removeTeamMember === yourTeam.slug"
@@ -73,13 +81,21 @@
           <a [routerLink]="[otherTeam.slug, 'members']"
             >#{{ otherTeam.slug }}</a
           >
-          <span slot="meta"
-            >{{ otherTeam.memberCount | i18nPlural: memberPlural }} ·
-            {{ projectCount(otherTeam.id) | i18nPlural: projectPlural }}</span
+          <span slot="meta" i18n
+            >{otherTeam.memberCount, plural,
+              =1 {1 member}
+              other {{{ otherTeam.memberCount }} members}
+            }
+            ·
+            {projectCount(otherTeam.id), plural,
+              =1 {1 project}
+              other {{{ projectCount(otherTeam.id) }} projects}
+            }</span
           >
           @if (canJoin()) {
             <gt-loading-button
               slot="actions"
+              i18n-buttonText
               buttonText="Join Team"
               buttonStyle="stroked"
               [loading]="loading().addTeamMember === otherTeam.slug"

@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link backLinkText="Back to Projects" />
+    <gt-back-link i18n-backLinkText backLinkText="Back to Projects" />
   </ng-container>
 </gt-top-app-bar>
 
@@ -64,12 +64,12 @@
                   />
                   <mat-error>
                     @if (name?.errors?.required) {
-                      <span data-cy="project-name-error-required"
+                      <span i18n data-cy="project-name-error-required"
                         >Enter a project name</span
                       >
                     }
                     @if (name?.errors?.maxlength) {
-                      <span data-cy="project-name-error-length"
+                      <span i18n data-cy="project-name-error-length"
                         >Name must be 64 characters or less</span
                       >
                     }

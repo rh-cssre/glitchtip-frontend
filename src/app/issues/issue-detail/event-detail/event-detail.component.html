@@ -1,7 +1,7 @@
 @if (initialLoadComplete() && event() === null) {
   <section class="mat-typography">
-    <h2>Event not found</h2>
-    <p class="body-text">
+    <h2 i18n>Event not found</h2>
+    <p i18n class="body-text">
       This may be because the URL is pointing to an event that doesn't exist or
       was deleted.
     </p>
@@ -12,7 +12,7 @@
   <section class="mat-typography">
     <section class="header">
       <div>
-        <h2>Event</h2>
+        <h2 i18n>Event</h2>
         <p>
           <a>{{ event?.id }}</a>
         </p>
@@ -22,7 +22,7 @@
               $safeNavigationMigration(event?.dateCreated) | date: "long"
             }}</span>
           }
-          <a
+          <ng-container i18n><a
             target="_blank"
             [href]="
               '/organizations/' +
@@ -35,7 +35,7 @@
             "
             >raw JSON</a
           >
-          <span class="action-separator" aria-hidden="true">·</span>
+          <span class="action-separator" aria-hidden="true">·</span></ng-container>
           <button
             type="button"
             class="link-button"
@@ -53,14 +53,14 @@
           [routerLink]="previousEventUrl() || ''"
           [disabled]="previousEvent() === false"
         >
-          <mat-icon>keyboard_arrow_left</mat-icon> Older
+          <mat-icon>keyboard_arrow_left</mat-icon> <ng-container i18n>Older</ng-container>
         </button>
         <button
           mat-button
           [routerLink]="nextEventUrl() || ''"
           [disabled]="nextEvent() === false"
         >
-          Newer <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
+          <ng-container i18n>Newer</ng-container> <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
         </button>
       </nav>
     </section>
@@ -71,7 +71,7 @@
     <mat-divider></mat-divider>
     @if (event?.tags && event.tags.length > 0) {
       <section class="tags">
-        <h2>Tags</h2>
+        <h2 i18n>Tags</h2>
         <ul class="pseudo-chip-list">
           @for (tag of event.tags; track tag.key) {
             <li class="pseudo-chip">
@@ -139,7 +139,7 @@
     @if (event.context) {
       <section>
         <mat-divider></mat-divider>
-        <h3>Additional Data</h3>
+        <h3 i18n>Additional Data</h3>
         <dl>
           @for (context of event.context | keyvalue; track context) {
             <gt-entry-data [key]="context.key" [value]="context.value">

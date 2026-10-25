@@ -39,15 +39,15 @@ export class TeamDetailsComponent {
   navLinks = [
     {
       path: "members",
-      label: "Members",
+      label: $localize`Members`,
     },
     {
       path: "projects",
-      label: "Projects",
+      label: $localize`Projects`,
     },
     {
       path: "settings",
-      label: "Settings",
+      label: $localize`Settings`,
     },
   ];
 

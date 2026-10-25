@@ -16,7 +16,6 @@ import { LoadingButtonComponent } from "../../shared/loading-button/loading-butt
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { I18nPluralPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
@@ -27,7 +26,6 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   templateUrl: "./teams.component.html",
   styleUrls: ["./teams.component.scss"],
   imports: [
-    I18nPluralPipe,
     MatButtonModule,
     MatDialogModule,
     RouterLink,
@@ -76,16 +74,6 @@ export class TeamsComponent {
   canLeave = computed(
     () => this.canJoin() || this.organizationsService.accessTeamAdmin(),
   );
-
-  memberPlural: { [k: string]: string } = {
-    "=1": "1 member",
-    other: "# members",
-  };
-
-  projectPlural: { [k: string]: string } = {
-    "=1": "1 project",
-    other: "# projects",
-  };
 
   constructor() {
     effect(() => {
