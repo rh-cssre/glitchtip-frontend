@@ -59,6 +59,22 @@ interface ResolvedType {
         color: var(--mat-sys-on-surface-variant);
         margin-top: var(--gt-space-2);
       }
+      .ft-measure {
+        margin: 0;
+        padding: var(--gt-space-2) 0;
+        border-right: 2px dashed var(--mat-sys-outline-variant);
+        font: var(--mat-sys-body-medium);
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .ft-measure--wide {
+        max-width: var(--gt-measure);
+      }
+      .ft-measure--narrow {
+        max-width: var(--gt-measure-narrow);
+        margin: 0 auto;
+        text-align: center;
+        border-left: 2px dashed var(--mat-sys-outline-variant);
+      }
     `,
   ],
   template: `
@@ -107,6 +123,82 @@ interface ResolvedType {
           </div>
         }
       </section>
+    </div>
+
+    <div class="preview-section">
+      <div class="preview-section__title">Running text</div>
+      <p class="preview-section__note">
+        Sentences (page intros, section help, empty-state messages) are capped
+        at a reading width and use the in-sentence link style. Widths are in
+        characters so they follow the user's font size.
+      </p>
+
+      <div class="ft-row">
+        <div class="ft-meta">
+          <span class="ft-token">.page-intro</span>
+          <span class="ft-label"
+            >One muted line of orientation under a page title</span
+          >
+        </div>
+        <p class="page-intro">
+          Members of a team get email alerts for the team's projects. Access to
+          projects comes from <a href="#">organization membership</a>.
+        </p>
+      </div>
+
+      <div class="ft-row">
+        <div class="ft-meta">
+          <span class="ft-token">--gt-measure</span>
+          <span class="ft-label">70ch: left-aligned text</span>
+        </div>
+        <p class="ft-measure ft-measure--wide">
+          Lines stop at about seventy characters, the edge marked here, so the
+          eye can find the start of the next line. Section help and page intros
+          use this width.
+        </p>
+      </div>
+
+      <div class="ft-row">
+        <div class="ft-meta">
+          <span class="ft-token">--gt-measure-narrow</span>
+          <span class="ft-label">44ch: short centered text</span>
+        </div>
+        <p class="ft-measure ft-measure--narrow">
+          Centered text reads worse over long lines, so empty-state messages use
+          the narrow width.
+        </p>
+      </div>
+
+      <div class="ft-row">
+        <div class="ft-meta">
+          <span class="ft-token">.gt-prose a</span>
+          <span class="ft-label">A link inside a sentence</span>
+        </div>
+        <p class="ft-sample gt-prose">
+          Links in running text are <a href="#">underlined in the text color</a>
+          at normal weight. Standalone links, like a list row's name, keep the
+          bold style.
+        </p>
+      </div>
+
+      <ul class="preview-section__note">
+        <li
+          >Do: add <code>gt-prose</code> to any element that holds sentences
+          with links.</li
+        >
+        <li
+          >Do: cap running text with <code>--gt-measure</code>; use the narrow
+          width only for centered text.</li
+        >
+        <li
+          >Don't: color links with the primary color; in GlitchTip's theme it
+          reads as a warning.</li
+        >
+        <li
+          >Don't: cap form fields with these tokens; field width is a layout
+          choice, not a reading width.</li
+        >
+      </ul>
     </div>
   `,
 })
