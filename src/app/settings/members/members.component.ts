@@ -65,17 +65,28 @@ export class MembersComponent {
   }
 
   removeMember(member: any) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: member.isMe
-          ? $localize`Leave organization`
-          : $localize`Remove member`,
-        message: member.isMe
-          ? $localize`Are you sure you'd like to leave this organization?`
-          : $localize`Are you sure you want to remove ${member.email} from this organization?`,
-        confirmText: member.isMe ? $localize`Leave` : $localize`Remove`,
-      },
-    });
+    const orgName = this.activeOrganizationDetail()?.name ?? "";
+    let data;
+    if (member.isMe) {
+      data = {
+        title: $localize`Leave ${orgName}?`,
+        message: $localize`You'll lose access to its projects and stop getting its alerts.`,
+        confirmText: $localize`Leave`,
+      };
+    } else if (member.pending) {
+      data = {
+        title: $localize`Remove invite?`,
+        message: $localize`The invite to ${member.email} will stop working.`,
+        confirmText: $localize`Remove`,
+      };
+    } else {
+      data = {
+        title: $localize`Remove member?`,
+        message: $localize`${member.email} will lose access to ${orgName} and its projects.`,
+        confirmText: $localize`Remove`,
+      };
+    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, { data });
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {

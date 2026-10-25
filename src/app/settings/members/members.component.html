@@ -28,7 +28,7 @@
           >
         }
         <span slot="meta">{{ member.roleName }}</span>
-        @if (member.pending) {
+        @if (member.pending && accessMemberWrite()) {
           <ng-container slot="actions">
             <button
               mat-icon-button
@@ -55,7 +55,7 @@
               >
             </mat-menu>
           </ng-container>
-        } @else {
+        } @else if (!member.pending && (member.isMe || accessMemberWrite())) {
           <gt-loading-button
             slot="actions"
             matTooltip="Account ownership must be transferred."
