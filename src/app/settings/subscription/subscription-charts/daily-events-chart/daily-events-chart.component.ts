@@ -5,7 +5,9 @@ import {
   OnDestroy,
   ViewChild,
   computed,
+  inject,
   input,
+  LOCALE_ID,
   signal,
 } from "@angular/core";
 import { DecimalPipe } from "@angular/common";
@@ -23,6 +25,14 @@ type DailyEventEntry = components["schemas"]["DailyEventCountEntry"];
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DailyEventsChartComponent implements OnDestroy {
+  private readonly locale = inject(LOCALE_ID);
+  private readonly series = {
+    performance: $localize`Performance`,
+    issues: $localize`Issues`,
+    uptime: $localize`Uptime`,
+    logs: $localize`Logs`,
+    projected: $localize`Projected`,
+  };
   private resizeObserver?: ResizeObserver;
   private _containerRef?: ElementRef<HTMLDivElement>;
 
@@ -33,11 +43,11 @@ export class DailyEventsChartComponent implements OnDestroy {
   view = signal<[number, number]>([600, 200]);
 
   customColors = [
-    { name: "Performance", value: "var(--mat-sys-primary)" },
-    { name: "Issues", value: "var(--issues-color)" },
-    { name: "Uptime", value: "var(--uptime-color)" },
-    { name: "Logs", value: "var(--logs-color)" },
-    { name: "Projected", value: "var(--mat-sys-surface-container-high)" },
+    { name: this.series.performance, value: "var(--mat-sys-primary)" },
+    { name: this.series.issues, value: "var(--issues-color)" },
+    { name: this.series.uptime, value: "var(--uptime-color)" },
+    { name: this.series.logs, value: "var(--logs-color)" },
+    { name: this.series.projected, value: "var(--mat-sys-surface-container-high)" },
   ];
 
   chartData = computed(() => {
@@ -51,10 +61,10 @@ export class DailyEventsChartComponent implements OnDestroy {
       series.push({
         name: entry.date,
         series: [
-          { name: "Performance", value: entry.transactionEventCount },
-          { name: "Issues", value: entry.eventCount },
-          { name: "Uptime", value: entry.uptimeCheckEventCount },
-          { name: "Logs", value: entry.logEventCount },
+          { name: this.series.performance, value: entry.transactionEventCount },
+          { name: this.series.issues, value: entry.eventCount },
+          { name: this.series.uptime, value: entry.uptimeCheckEventCount },
+          { name: this.series.logs, value: entry.logEventCount },
         ],
       });
     }
@@ -88,7 +98,7 @@ export class DailyEventsChartComponent implements OnDestroy {
         series.push({
           name: dateStr,
           series: [
-            { name: "Projected", value: dailyProjected },
+            { name: this.series.projected, value: dailyProjected },
           ],
         });
       }
@@ -102,7 +112,7 @@ export class DailyEventsChartComponent implements OnDestroy {
     const day = d.getDate();
     // Show label on 1st, and every 3rd day
     if (day === 1 || day % 3 === 0) {
-      return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(d);
+      return new Intl.DateTimeFormat(this.locale, { month: "short", day: "numeric" }).format(d);
     }
     return "";
   };

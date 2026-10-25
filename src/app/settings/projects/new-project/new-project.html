@@ -1,6 +1,6 @@
 <section class="l-body">
   <header class="page-header">
-    <h1 class="section-header-text">Create a New Project</h1>
+    <h1 i18n class="section-header-text">Create a New Project</h1>
   </header>
   <mat-card>
     <mat-card-content>
@@ -17,16 +17,16 @@
             formControlName="platform"
           ></gt-platform-picker>
           <mat-form-field class="project-name" appearance="outline">
-            <mat-label>Name</mat-label>
+            <mat-label i18n>Name</mat-label>
             <input matInput formControlName="name" />
             <mat-error>
               @if (name?.errors?.required) {
-                <span data-cy="project-name-error-required"
+                <span i18n data-cy="project-name-error-required"
                   >Enter a project name</span
                 >
               }
               @if (name?.errors?.maxlength) {
-                <span data-cy="project-name-error-length"
+                <span i18n data-cy="project-name-error-length"
                   >Name must be 64 characters or less</span
                 >
               }
@@ -38,7 +38,7 @@
                 <mat-select
                   (click)="teams.length ? undefined : openCreateTeamDialog()"
                   [placeholder]="
-                    teams.length ? 'Assign a team' : 'Create a team'
+                    teams.length ? assignTeamText : createTeamText
                   "
                   formControlName="team"
                 >
@@ -50,16 +50,16 @@
                 </mat-select>
                 <mat-error>
                   @if (name?.errors?.required) {
-                    <span>Add a team to this project</span>
+                    <span i18n>Add a team to this project</span>
                   }
                 </mat-error>
-                <mat-hint>
+                <mat-hint i18n>
                   Teams are for managing issue notifications and workflow.
                 </mat-hint>
               </mat-form-field>
             }
 
-            <button
+            <button i18n-aria-label i18n-matTooltip
               mat-icon-button
               class="icon-button-shift"
               aria-label="Add a team"
@@ -73,7 +73,7 @@
             </button>
           </div>
         </div>
-        <gt-loading-button
+        <gt-loading-button i18n-buttonText
           data-cy="create-project-submit"
           [loading]="loading()"
           buttonText="Create Project"

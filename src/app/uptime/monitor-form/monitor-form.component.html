@@ -17,10 +17,10 @@
             required
           />
           @if (formName.errors?.required) {
-            <mat-error> Enter a monitor name </mat-error>
+            <mat-error i18n> Enter a monitor name </mat-error>
           }
           @if (formName.errors?.maxlength) {
-            <mat-error>
+            <mat-error i18n>
               Name may not be more than
               {{ formName.errors?.maxlength.requiredLength }} characters
             </mat-error>
@@ -42,7 +42,7 @@
             }
           </mat-select>
           @if (formMonitorType.errors?.required) {
-            <mat-error> Choose a monitor type </mat-error>
+            <mat-error i18n> Choose a monitor type </mat-error>
           }
         </mat-form-field>
         <div class="help-text caption-text">
@@ -137,7 +137,7 @@
           <mat-label i18n>Associated Project</mat-label>
           <mat-select formControlName="project">
             @if (orgProjects(); as orgProjects) {
-              <mat-option value="">None</mat-option>
+              <mat-option i18n value="">None</mat-option>
               @for (orgProject of orgProjects; track orgProject) {
                 <mat-option [value]="orgProject.id">
                   {{ orgProject.name }}
@@ -183,7 +183,7 @@
         <div class="short-field-container">
           <mat-form-field appearance="outline">
             <mat-label i18n>Expected Status</mat-label>
-            <input
+            <input i18n-placeholder
               matInput
               min="0"
               max="1000"
@@ -214,7 +214,7 @@
         <div class="short-field-container">
           <mat-form-field appearance="outline">
             <mat-label i18n>Expected Response Body</mat-label>
-            <input
+            <input i18n-placeholder
               matInput
               autocomplete="off"
               formControlName="expectedBody"
@@ -256,19 +256,19 @@
           @if (intervalPerMonth(); as intervalPerMonth) {
             <div class="help-text caption-text">
               @if (intervalPerMonth <= totalEventsAllowed) {
-                This will use approximately
+                <ng-container i18n>This will use approximately
                 {{ intervalPerMonth | number: "1.0-0" }}
                 <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
                 per month out of the
                 {{ totalEventsAllowed | number: "1.0-0" }} events your
-                organization's subscription allows for.
+                organization's subscription allows for.</ng-container>
               } @else {
-                This will use approximately
+                <ng-container i18n>This will use approximately
                 {{ intervalPerMonth | number: "1.0-0" }}
                 <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
                 per month, exceeding the
                 {{ totalEventsAllowed | number: "1.0-0" }} events your
-                organization's subscription allows for.
+                organization's subscription allows for.</ng-container>
               }
             </div>
           }
@@ -305,7 +305,7 @@
       <gt-loading-button
         class="submit"
         [loading]="loading() === true"
-        [buttonText]="monitorSettings() ? 'Update Monitor' : 'Create Monitor'"
+        [buttonText]="monitorSettings() ? updateMonitorText : createMonitorText"
         data-cy="monitor-submit"
       >
       </gt-loading-button>

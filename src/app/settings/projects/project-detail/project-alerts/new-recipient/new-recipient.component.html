@@ -1,7 +1,5 @@
 <div class="dialog-wrapper">
-  <h1 mat-dialog-title>{{
-    data.editRecipient ? "Edit Alert Recipient" : "Add Alert Recipient"
-  }}</h1>
+  <h1 mat-dialog-title>@if (data.editRecipient) {<ng-container i18n>Edit Alert Recipient</ng-container>} @else {<ng-container i18n>Add Alert Recipient</ng-container>}</h1>
   <form
     [formGroup]="recipientForm"
     (ngSubmit)="onSubmit()"
@@ -13,7 +11,7 @@
         appearance="outline"
         data-cy="recipient-type"
       >
-        <mat-label>Recipient Type</mat-label>
+        <mat-label i18n>Recipient Type</mat-label>
         <mat-select id="recipient-type" [formControl]="recipientType">
           @for (
             recipient of selectOptions(recipientOptions, data.emailSelected);
@@ -32,7 +30,7 @@
           )
         ) {
           <mat-form-field class="webhook" appearance="outline">
-            <mat-label>Webhook URL</mat-label>
+            <mat-label i18n>Webhook URL</mat-label>
             <svg matPrefix>
               <use
                 [attr.xlink:href]="'#' + resolveIcon(recipientType.value)"
@@ -65,7 +63,7 @@
             @if (url.errors) {
               <mat-error>
                 @if (url.errors.required || url.errors.pattern) {
-                  <span
+                  <span i18n
                     >Enter a valid URL with protocol (ex.
                     https://example.com)</span
                   >
@@ -79,7 +77,7 @@
             settings under "Bots". Copy the bot's email and API key below.
           </p>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Zulip Server URL</mat-label>
+            <mat-label i18n>Zulip Server URL</mat-label>
             <input
               matInput
               type="url"
@@ -90,13 +88,13 @@
             @if (url.errors) {
               <mat-error>
                 @if (url.errors.required || url.errors.pattern) {
-                  <span>Enter a valid Zulip server URL</span>
+                  <span i18n>Enter a valid Zulip server URL</span>
                 }
               </mat-error>
             }
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Bot Email</mat-label>
+            <mat-label i18n>Bot Email</mat-label>
             <input
               matInput
               type="email"
@@ -105,12 +103,12 @@
             />
             <mat-hint i18n>Found in the bot's settings under "Bots"</mat-hint>
             @if (botEmail.errors?.required) {
-              <mat-error>Bot email is required</mat-error>
+              <mat-error i18n>Bot email is required</mat-error>
             }
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>API Key</mat-label>
-            <input
+            <mat-label i18n>API Key</mat-label>
+            <input i18n-placeholder
               matInput
               type="password"
               formControlName="apiKey"
@@ -120,20 +118,20 @@
               >The bot's API key, shown when the bot is created</mat-hint
             >
             @if (apiKey.errors?.required) {
-              <mat-error>API key is required</mat-error>
+              <mat-error i18n>API key is required</mat-error>
             }
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Channel</mat-label>
+            <mat-label i18n>Channel</mat-label>
             <input matInput formControlName="channel" placeholder="general" />
             <mat-hint i18n>The channel to post alerts to</mat-hint>
             @if (channel.errors?.required) {
-              <mat-error>Channel is required</mat-error>
+              <mat-error i18n>Channel is required</mat-error>
             }
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Topic</mat-label>
-            <input
+            <mat-label i18n>Topic</mat-label>
+            <input i18n-placeholder
               matInput
               formControlName="topic"
               placeholder="GlitchTip Alerts"
@@ -141,12 +139,12 @@
             <mat-hint i18n>Messages in a channel are grouped by topic</mat-hint>
           </mat-form-field>
         } @else if (recipientType.value === "email") {
-          <p class="email">
+          <p i18n class="email">
             An email will be sent to the members of this project.<br />
             Select "Add Recipient" to continue.
           </p>
         } @else {
-          <p class="default">Select an alert type to get started.</p>
+          <p i18n class="default">Select an alert type to get started.</p>
         }
       </div>
     </mat-dialog-content>
@@ -154,11 +152,11 @@
       <gt-loading-button
         type="submit"
         [buttonText]="
-          data.editRecipient ? 'Save Changes' : 'Add Recipient'
+          data.editRecipient ? saveChangesText : addRecipientText
         "
       >
       </gt-loading-button>
-      <button type="button" mat-button mat-dialog-close> Cancel </button>
+      <button i18n type="button" mat-button mat-dialog-close> Cancel </button>
     </mat-dialog-actions>
   </form>
 </div>

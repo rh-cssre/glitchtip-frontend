@@ -2,13 +2,13 @@
   <mat-card>
     <mat-card-header class="flex-space-between">
       <mat-card-title i18n>Create New Token</mat-card-title>
-      <a
+      <a i18n-aria-label
         mat-stroked-button
         [routerLink]="['/profile', 'auth-tokens']"
         aria-label="Back to auth tokens"
       >
         <mat-icon>keyboard_arrow_left</mat-icon>
-        Auth Tokens
+        <ng-container i18n>Auth Tokens</ng-container>
       </a>
     </mat-card-header>
     <mat-divider></mat-divider>
@@ -19,26 +19,26 @@
         }
       </mat-error>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <h2>Label</h2>
-        <p>Give your token a name, so you can easily identify it.</p>
+        <h2 i18n>Label</h2>
+        <p i18n>Give your token a name, so you can easily identify it.</p>
         <mat-form-field appearance="outline">
-          <mat-label>Label</mat-label>
+          <mat-label i18n>Label</mat-label>
           <input matInput type="text" formControlName="label" />
           <mat-error>
             @if (label.errors?.required) {
-              <span>Create a label for your auth token</span>
+              <span i18n>Create a label for your auth token</span>
             }
             @if (label.errors?.maxlength) {
-              <span>Label must be 255 characters or less</span>
+              <span i18n>Label must be 255 characters or less</span>
             }
             @if (label.errors?.serverError) {
               <span>{{ label.errors?.serverError }}</span>
             }
           </mat-error>
         </mat-form-field>
-        <h2>Scopes</h2>
-        <p>Set the kind of access you want this token to have to your app.</p>
-        <mat-checkbox
+        <h2 i18n>Scopes</h2>
+        <p i18n>Set the kind of access you want this token to have to your app.</p>
+        <mat-checkbox i18n
           class="select-all"
           #selectAllCheckbox
           (change)="bulkModifyScopes()"
@@ -57,13 +57,13 @@
 
         <mat-error class="checkbox-error">
           @if (scopes.errors?.selectOne) {
-            <span>Select at least one scope</span>
+            <span i18n>Select at least one scope</span>
           }
           @if (scopes.errors?.serverError) {
               <span>{{ scopes.errors?.serverError }}</span>
             }
         </mat-error>
-        <gt-loading-button
+        <gt-loading-button i18n-buttonText
           [loading]="createLoading() === true"
           buttonText="Create Token"
         ></gt-loading-button>

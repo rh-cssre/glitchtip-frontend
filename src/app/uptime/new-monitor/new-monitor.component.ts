@@ -24,6 +24,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   ],
 })
 export class NewMonitorComponent {
+  createMonitorTitle = $localize`Create a New Uptime Monitor`;
   private monitorService = inject(MonitorService);
 
   error = this.monitorService.error;

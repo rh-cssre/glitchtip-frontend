@@ -88,6 +88,8 @@ const portUrlValidators = [
   ],
 })
 export class MonitorFormComponent implements OnInit {
+  updateMonitorText = $localize`Update Monitor`;
+  createMonitorText = $localize`Create Monitor`;
   private organizationsService = inject(OrganizationsService);
   private environmentsService = inject(EnvironmentsService);
   private subscriptionService = inject(SubscriptionService);

@@ -34,7 +34,7 @@
         <form [formGroup]="backupCodeForm">
           <gt-form-error></gt-form-error>
           <mat-form-field appearance="outline">
-            <mat-label>Backup code</mat-label>
+            <mat-label i18n>Backup code</mat-label>
             <input matInput formControlName="backupCode" />
             @if (backupCode?.invalid) {
               <mat-error>
