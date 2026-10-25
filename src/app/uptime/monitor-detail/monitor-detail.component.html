@@ -2,7 +2,7 @@
   <ng-container slot="left">
     <gt-back-link
       [backLinkText]="
-        isMobile() ? 'Uptime Monitors' : 'View all uptime monitors'
+        isMobile() ? uptimeMonitorsText : viewAllMonitorsText
       "
     />
   </ng-container>
@@ -28,7 +28,7 @@
 
 <section class="l-body">
   @if (monitor(); as monitor) {
-    <gt-detail-header [title]="['Uptime details for ' + monitor.name, null]" />
+    <gt-detail-header [title]="[uptimeDetailsFor(monitor.name), null]" />
     <mat-card appearance="outlined">
       <mat-card-header>
         <mat-card-title>
@@ -95,7 +95,7 @@
           } @else {
             @if (uptimeAlertCount() === 0) {
               @if (associatedProjectSlug(); as associatedProjectSlug) {
-                <p>
+                <p i18n>
                   This monitor is associated with the
                   <b>{{ monitor.projectName }}</b> project. This project has no
                   uptime alerts configured, so no notifications will be sent for
@@ -112,10 +112,10 @@
               }
             } @else {
               @if (associatedProjectSlug(); as associatedProjectSlug) {
-                <p>
+                <p i18n>
                   This monitor is associated with the
                   <b>{{ monitor.projectName }}</b> project. There
-                  {{ uptimeAlertCount() | i18nPlural: alertCountPluralMapping }}
+                  {uptimeAlertCount(), plural, =1 {is 1 uptime alert} other {are {{ uptimeAlertCount() }} uptime alerts}}
                   set up for this project. Visit the
                   <a
                     [routerLink]="[
@@ -130,7 +130,7 @@
             }
           }
         } @else {
-          <p>
+          <p i18n>
             There is no project associated with this monitor, so no
             notifications will be sent for monitor events. Visit the
             <a [routerLink]="['./update']">monitor settings</a> page to
@@ -151,17 +151,17 @@
     @if (monitor.monitorType === "Heartbeat" && monitor.heartbeatEndpoint) {
       <mat-card id="heartbeat-endpoint" class="heartbeat-card">
         <mat-card-header>
-          <mat-card-title>Heartbeat URL endpoint</mat-card-title>
+          <mat-card-title i18n>Heartbeat URL endpoint</mat-card-title>
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content>
-          <p>
+          <p i18n>
             Configure your project to send a POST request with no content to the
             following URL at your specified interval. If GlitchTip does not
             receive this request within the interval, your site status will be
             marked as down.
           </p>
-          <gt-copy-input
+          <gt-copy-input i18n-placeholder
             [value]="monitor.heartbeatEndpoint"
             placeholder="Endpoint URL"
           ></gt-copy-input>

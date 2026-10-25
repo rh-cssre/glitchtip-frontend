@@ -49,6 +49,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   providers: [NewProjectService],
 })
 export class NewProject {
+  assignTeamText = $localize`Assign a team`;
+  createTeamText = $localize`Create a team`;
   private teamsService = inject(TeamsService);
   private service = inject(NewProjectService);
   private router = inject(Router);

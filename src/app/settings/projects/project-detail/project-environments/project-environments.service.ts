@@ -26,13 +26,13 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
     const environments = this.environments();
     if (environments === undefined || environments.length === 0) return null;
     const visible = {
-      heading: "Visible",
+      heading: $localize`Visible`,
       environments: environments.filter(
         (environment) => environment.isHidden === false,
       ),
     };
     const hidden = {
-      heading: "Hidden",
+      heading: $localize`Hidden`,
       environments: environments.filter(
         (environment) => environment.isHidden === true,
       ),
