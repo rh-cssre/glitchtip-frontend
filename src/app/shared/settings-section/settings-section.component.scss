@@ -13,6 +13,7 @@
 }
 
 .settings-section__description {
+  max-width: var(--gt-measure, 70ch);
   margin-top: var(--gt-space-1, 4px);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);

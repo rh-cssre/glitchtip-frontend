@@ -9,7 +9,7 @@ let nextId = 0;
   template: `
     <div class="settings-section__text">
       <h2 class="settings-section__title" [id]="titleId">{{ title() }}</h2>
-      <div class="settings-section__description">
+      <div class="settings-section__description gt-prose">
         <ng-content select="[slot=description]" />
       </div>
     </div>
