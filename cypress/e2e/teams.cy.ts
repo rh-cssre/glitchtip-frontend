@@ -42,7 +42,7 @@ describe("List Team Members", () => {
       .get("mat-option")
       .contains(seededUser1.email)
       .click();
-    cy.get("[data-test-list] li").first().contains(seededUser1.email);
+    cy.get("[data-test-list] gt-list-row").first().contains(seededUser1.email);
   });
 
   it("should remove a team member", () => {
@@ -53,7 +53,8 @@ describe("List Team Members", () => {
       .get("mat-option")
       .contains(seededUser1.email)
       .click();
-    cy.get("#remove-team-member").click();
-    cy.contains("This team doesn't have any members");
+    cy.get("[data-cy=remove-team-member]").click();
+    cy.get("[data-cy='dialog-confirm']").click();
+    cy.contains("No team members");
   });
 });

@@ -82,6 +82,14 @@ export class OrganizationsService {
       this.access().includes("member:write"),
   );
   accessOrgAdmin = computed(() => this.access().includes("org:admin"));
+  // Managers and owners can change any team's members and projects.
+  accessOrgWrite = computed(() => this.access().includes("org:write"));
+  // Admins and up can change members of teams they belong to.
+  accessTeamAdmin = computed(() => this.access().includes("team:admin"));
+  // Lets anyone join or leave a team themselves.
+  openMembership = computed(
+    () => this.activeOrganization()?.openMembership ?? false,
+  );
 
   constructor() {
     setTimeout(() => this.refresh(), 30000);

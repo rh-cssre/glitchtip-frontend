@@ -15,98 +15,79 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title i18n>Your Teams</mat-card-title>
-      <p class="description body-text" i18n
-        >Teams are for managing issue notifications and workflow. View
-        permissions are handled through
-        <a routerLink="../members"> organization membership.</a>
-      </p>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      @if (yourTeams()?.length) {
-        <ul>
-          @if (errors(); as error) {
-            <mat-error class="center-text">{{
-              error.removeTeamMember
-            }}</mat-error>
+  <p class="page-intro" i18n
+    >Members of a team get email alerts for the team's projects. Access to
+    projects comes from
+    <a routerLink="../members">organization membership</a>.</p
+  >
+  @if (errors(); as error) {
+    @if (error.removeTeamMember || error.addTeamMember) {
+      <mat-error class="list-error">{{
+        error.removeTeamMember || error.addTeamMember
+      }}</mat-error>
+    }
+  }
+  @if (yourTeams()?.length) {
+    <gt-list i18n-label label="Your Teams">
+      @for (yourTeam of yourTeams(); track yourTeam.id) {
+        <gt-list-row>
+          <a [routerLink]="[yourTeam.slug, 'members']">#{{ yourTeam.slug }}</a>
+          <span slot="meta"
+            >{{ yourTeam.memberCount | i18nPlural: memberPlural }} ·
+            {{ projectCount(yourTeam.id) | i18nPlural: projectPlural }}</span
+          >
+          @if (canLeave()) {
+            <gt-loading-button
+              slot="actions"
+              buttonText="Leave Team"
+              buttonStyle="stroked"
+              [loading]="loading().removeTeamMember === yourTeam.slug"
+              (buttonClick)="leaveTeam(yourTeam.slug)"
+            />
           }
-          @for (yourTeam of yourTeams(); track yourTeam) {
-            <li class="team-list-item">
-              <div class="team-list-item-text">
-                <a [routerLink]="[yourTeam.slug, 'members']">
-                  #{{ yourTeam.slug }}
-                </a>
-                <div>
-                  {{
-                    yourTeam.memberCount | i18nPlural: memberCountPluralMapping
-                  }}
-                </div>
-              </div>
-              <gt-loading-button
-                buttonText="Leave Team"
-                buttonStyle="stroked"
-                [loading]="loading().removeTeamMember === yourTeam.slug"
-                (buttonClick)="leaveTeam(yourTeam.slug)"
-                id="leave-team"
-              ></gt-loading-button>
-            </li>
-          }
-        </ul>
-      } @else {
-        @if (otherTeams()?.length) {
-          <p i18n
-            >You aren't part of any teams. Join a team below or press the
-            "Create Team" button in the upper right.</p
-          >
-        } @else {
-          <p i18n
-            >You don't have any teams set up. Teams determine which users have
-            access to projects in your organization.</p
-          >
-          <p i18n
-            >To create a new team, press the "Create Team" button in the upper
-            right.</p
-          >
-        }
+        </gt-list-row>
       }
-    </mat-card-content>
-  </mat-card>
+    </gt-list>
+  } @else if (otherTeams()?.length) {
+    <gt-empty-state
+      icon="groups"
+      i18n-title
+      title="No teams joined"
+      i18n-message
+      message="Join a team below, or create a new one."
+    />
+  } @else {
+    <gt-empty-state
+      icon="groups"
+      i18n-title
+      title="No teams"
+      i18n-message
+      message="Create a team to choose who gets alerts for each project."
+    />
+  }
 
   @if (otherTeams()?.length) {
-    <mat-card>
-      <mat-card-title i18n>Other Teams</mat-card-title>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        <ul>
-          @if (errors(); as error) {
-            <mat-error class="center-text">{{ error.addTeamMember }}</mat-error>
+    <gt-list i18n-label label="Other Teams">
+      @for (otherTeam of otherTeams(); track otherTeam.id) {
+        <gt-list-row>
+          <a [routerLink]="[otherTeam.slug, 'members']"
+            >#{{ otherTeam.slug }}</a
+          >
+          <span slot="meta"
+            >{{ otherTeam.memberCount | i18nPlural: memberPlural }} ·
+            {{ projectCount(otherTeam.id) | i18nPlural: projectPlural }}</span
+          >
+          @if (canJoin()) {
+            <gt-loading-button
+              slot="actions"
+              buttonText="Join Team"
+              buttonStyle="stroked"
+              [loading]="loading().addTeamMember === otherTeam.slug"
+              (buttonClick)="joinTeam(otherTeam.slug)"
+            />
           }
-          @for (otherTeam of otherTeams(); track otherTeam) {
-            <li class="team-list-item">
-              <div class="team-list-item-text">
-                <a [routerLink]="[otherTeam.slug, 'members']">
-                  #{{ otherTeam.slug }}
-                </a>
-                <div>
-                  {{
-                    otherTeam.memberCount | i18nPlural: memberCountPluralMapping
-                  }}
-                </div>
-              </div>
-              <gt-loading-button
-                buttonText="Join Team"
-                buttonStyle="stroked"
-                [loading]="loading().addTeamMember === otherTeam.slug"
-                (buttonClick)="joinTeam(otherTeam.slug)"
-                id="leave-team"
-              ></gt-loading-button>
-            </li>
-          }
-        </ul>
-      </mat-card-content>
-    </mat-card>
+        </gt-list-row>
+      }
+    </gt-list>
   }
 </section>

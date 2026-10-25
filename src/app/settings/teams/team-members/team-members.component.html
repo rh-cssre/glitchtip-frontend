@@ -1,53 +1,61 @@
-<mat-card>
-  <mat-card-header class="card-header">
-    <mat-card-title i18n>Members</mat-card-title>
-    @if (userTeamRole() !== "member") {
-      <mat-form-field appearance="outline" data-cy="team-member-select">
-        <mat-label i18n>Add Member</mat-label>
-        <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
-          @if (filteredAddTeamMembers().length) {
-            @for (orgMember of filteredAddTeamMembers(); track orgMember) {
-              <mat-option [value]="orgMember">
-                {{ orgMember.email }}
-              </mat-option>
-            }
-          } @else {
-            <mat-option disabled i18n>No members</mat-option>
-          }
-        </mat-select>
-        @if (addMemberError) {
-          <mat-error>{{ addMemberError }}</mat-error>
+@if (canEditMembers()) {
+  <mat-form-field
+    class="add-field"
+    appearance="outline"
+    subscriptSizing="dynamic"
+    data-cy="team-member-select"
+  >
+    <mat-label i18n>Add Member</mat-label>
+    <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
+      @if (filteredAddTeamMembers().length) {
+        @for (orgMember of filteredAddTeamMembers(); track orgMember) {
+          <mat-option [value]="orgMember">
+            {{ orgMember.email }}
+          </mat-option>
         }
-      </mat-form-field>
+      } @else {
+        <mat-option disabled i18n>No members</mat-option>
+      }
+    </mat-select>
+    @if (addMemberError) {
+      <mat-error>{{ addMemberError }}</mat-error>
     }
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    @if (teamMembers().length === 0) {
-      <p class="center-text" i18n>This team doesn't have any members</p>
-    } @else {
-      <ul data-test-list class="member-list">
-        @if (removeMemberError) {
-          <mat-error class="center-text">{{ removeMemberError }}</mat-error>
+  </mat-form-field>
+}
+@if (removeMemberError) {
+  <mat-error class="list-error">{{ removeMemberError }}</mat-error>
+}
+@if (teamMembers().length === 0) {
+  <gt-empty-state
+    icon="people"
+    i18n-title
+    title="No team members"
+    i18n-message
+    message="Add organization members to this team so they get alerts for its projects."
+  />
+} @else {
+  <gt-list data-test-list>
+    @for (teamMember of teamMembers(); track teamMember.id) {
+      <gt-list-row>
+        <a
+          [routerLink]="['../', 'members', teamMember.id]"
+          [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
+          >{{ teamMember.email }}</a
+        >
+        <span slot="meta">{{ teamMember.roleName }}</span>
+        @if (canRemove(teamMember.email)) {
+          <gt-loading-button
+            slot="actions"
+            [buttonText]="isMe(teamMember.email) ? 'Leave' : 'Remove'"
+            buttonStyle="stroked"
+            [loading]="selectedTeamMember?.toString() === teamMember.id"
+            (buttonClick)="
+              confirmRemoveTeamMember(teamMember.id, teamMember.email)
+            "
+            data-cy="remove-team-member"
+          />
         }
-        @for (teamMember of teamMembers(); track teamMember) {
-          <li class="member-list-item">
-            <a
-              mat-line
-              [routerLink]="['../', 'members', teamMember.id]"
-              [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
-              >{{ teamMember.email }}</a
-            >
-            <gt-loading-button
-              buttonText="Remove"
-              buttonStyle="stroked"
-              [loading]="selectedTeamMember?.toString() === teamMember.id"
-              (buttonClick)="removeTeamMember(teamMember.id, teamMember.email)"
-              id="remove-team-member"
-            ></gt-loading-button>
-          </li>
-        }
-      </ul>
+      </gt-list-row>
     }
-  </mat-card-content>
-</mat-card>
+  </gt-list>
+}

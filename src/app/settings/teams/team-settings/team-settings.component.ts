@@ -15,10 +15,12 @@ import { TeamsService } from "src/app/api/teams/teams.service";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { slugRegex } from "src/app/shared/validators";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
 
 @Component({
   selector: "gt-team-settings",
@@ -26,24 +28,33 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
   styleUrls: ["./team-settings.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
     LoadingButtonComponent,
+    SettingsSectionComponent,
   ],
 })
 export class TeamSettingsComponent {
   private teamsService = inject(TeamsService);
   private dialog = inject(MatDialog);
+  private organizationsService = inject(OrganizationsService);
 
   team = this.teamsService.team;
   loading = this.teamsService.loading;
   errors = this.teamsService.errors;
+  accessTeamWrite = this.organizationsService.accessTeamWrite;
+  accessTeamAdmin = this.organizationsService.accessTeamAdmin;
   form = new FormGroup({
-    slug: new FormControl("", [Validators.required]),
+    slug: new FormControl("", [
+      Validators.required,
+      Validators.pattern(slugRegex),
+    ]),
   });
+
+  get slug() {
+    return this.form.get("slug");
+  }
   orgSlug = input.required<string>({ alias: "org-slug" });
   teamSlug = input.required<string>({ alias: "team-slug" });
 
@@ -53,9 +64,16 @@ export class TeamSettingsComponent {
       this.teamsService.setTeamKey(this.orgSlug(), teamSlug);
       this.form.patchValue({ slug: teamSlug });
     });
+    effect(() => {
+      const error = this.errors().updateName;
+      if (error) mapFormErrors({ slug: [error] }, this.form);
+    });
   }
 
   onSubmit() {
+    if (this.form.invalid) {
+      return;
+    }
     const newSlug = this.form.value.slug;
     this.teamsService.updateTeamSlug(this.orgSlug(), this.teamSlug(), newSlug!);
   }

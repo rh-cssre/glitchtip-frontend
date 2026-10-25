@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  computed,
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
@@ -10,14 +11,18 @@ import { map } from "rxjs/operators";
 import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
 import { Member } from "src/app/api/organizations/organizations.interface";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { UserService } from "src/app/api/user/user.service";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
-import { MatDividerModule } from "@angular/material/divider";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatCardModule } from "@angular/material/card";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-team-members",
@@ -25,14 +30,15 @@ import { MatCardModule } from "@angular/material/card";
   styleUrls: ["./team-members.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
     ReactiveFormsModule,
     MatOptionModule,
-    MatDividerModule,
     RouterLink,
     LoadingButtonComponent,
+    ListComponent,
+    ListRowComponent,
+    EmptyStateComponent,
   ],
 })
 export class TeamMembersComponent implements OnInit {
@@ -41,10 +47,19 @@ export class TeamMembersComponent implements OnInit {
   route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
   private userService = inject(UserService);
+  private dialog = inject(MatDialog);
+  private orgs = inject(OrganizationsService);
 
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
   userTeamRole = this.teamsService.userTeamRole;
+  // Mirrors the backend: managers and owners edit any team, admins only teams
+  // they are on, and anyone may leave a team under open membership.
+  canEditMembers = computed(
+    () =>
+      this.orgs.accessOrgWrite() ||
+      (this.orgs.accessTeamAdmin() && this.userTeamRole() !== undefined),
+  );
 
   member = new FormControl();
   orgSlug = "";
@@ -88,6 +103,38 @@ export class TeamMembersComponent implements OnInit {
         $localize`${member.email} has been added to #${team.slug}`,
       );
     }
+  }
+
+  isMe(email: string) {
+    return email === this.userService.activeUserEmail();
+  }
+
+  canRemove(email: string) {
+    return (
+      this.canEditMembers() || (this.isMe(email) && this.orgs.openMembership())
+    );
+  }
+
+  confirmRemoveTeamMember(memberId: string, memberEmail: string) {
+    const data = this.isMe(memberEmail)
+      ? {
+          title: $localize`Leave #${this.teamSlug}?`,
+          message: $localize`You'll stop getting email alerts for this team's projects.`,
+          confirmText: $localize`Leave`,
+        }
+      : {
+          title: $localize`Remove from #${this.teamSlug}?`,
+          message: $localize`${memberEmail} will stop getting email alerts for this team's projects.`,
+          confirmText: $localize`Remove`,
+        };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.removeTeamMember(memberId, memberEmail);
+        }
+      });
   }
 
   async removeTeamMember(memberId: string, memberEmail: string) {

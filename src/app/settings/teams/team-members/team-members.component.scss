@@ -1,28 +1,19 @@
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.add-field {
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: var(--gt-space-4, 16px);
 }
 
-mat-card {
-  margin: 24px 8px 8px 8px;
+.list-error {
+  display: block;
+  margin-bottom: var(--gt-space-3, 12px);
 }
 
-.center-text {
-  text-align: center;
-}
+gt-list-row a {
+  color: inherit;
+  text-decoration: none;
 
-mat-card-content {
-  margin-top: 16px;
-
-  .member-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-
-    &:nth-last-child(n + 2) {
-      border-bottom: 1px solid var(--mat-sys-outline-variant);
-    }
+  &:hover {
+    text-decoration: underline;
   }
 }

@@ -7,10 +7,6 @@
   <gt-page-header icon="groups" [title]="'#' + teamSlug()">
     @if (team(); as team) {
       <span slot="meta">
-        <span i18n>{team.memberCount, plural,
-          =1 {<b>1</b> member}
-          other {<b>{{ team.memberCount }}</b> members}
-        }</span>
         <span i18n>Created {{ team.dateCreated | date: "mediumDate" }}</span>
       </span>
     }
