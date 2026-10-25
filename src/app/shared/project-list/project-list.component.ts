@@ -30,6 +30,10 @@ import { DatePipe } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectListComponent implements OnInit {
+  organizationText = $localize`organization`;
+  dateCreatedText = $localize`date created`;
+  issuesText = $localize`Issues`;
+  settingsText = $localize`Settings`;
   private organizationsService = inject(OrganizationsService);
   private projectsService = inject(ProjectsService);
 

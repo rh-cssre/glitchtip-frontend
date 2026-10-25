@@ -7,7 +7,6 @@ import {
   computed,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { I18nPluralPipe } from "@angular/common";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatSelectChange } from "@angular/material/select";
@@ -33,7 +32,6 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   templateUrl: "./transaction-groups.html",
   styleUrls: ["./transaction-groups.scss"],
   imports: [
-    I18nPluralPipe,
     MatTableModule,
     MatCardModule,
     DataFilterBarComponent,
@@ -80,16 +78,12 @@ export class TransactionGroups implements OnInit {
   });
 
   sorts = [
-    { param: "-avg_duration", display: "Slowest" },
-    { param: "avg_duration", display: "Fastest" },
-    { param: "-count", display: "Most Frequent" },
-    { param: "count", display: "Least Frequent" },
+    { param: "-avg_duration", display: $localize`Slowest` },
+    { param: "avg_duration", display: $localize`Fastest` },
+    { param: "-count", display: $localize`Most Frequent` },
+    { param: "count", display: $localize`Least Frequent` },
   ];
   tooltipDisabled = false;
-  transactionCountPluralMapping: { [k: string]: string } = {
-    "=1": "1 Transaction",
-    other: "# Transactions",
-  };
 
   environmentNames = this.#environmentsService.environmentNames;
   transactionGroupsDisplay = this.service.transactionGroupsDisplay;
