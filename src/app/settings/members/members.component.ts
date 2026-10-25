@@ -11,8 +11,10 @@ import { MembersService } from "src/app/settings/members/members.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatIconModule } from "@angular/material/icon";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { components } from "src/app/api/api-schema";
@@ -30,12 +32,14 @@ type Member = components["schemas"]["OrganizationUserSchema"];
   imports: [
     MatButtonModule,
     RouterLink,
-    MatCardModule,
-    MatDividerModule,
+    MatMenuModule,
+    MatIconModule,
     MatChipsModule,
     LoadingButtonComponent,
     MatTooltipModule,
     TopAppBar,
+    ListComponent,
+    ListRowComponent,
   ],
   providers: [MembersService],
 })

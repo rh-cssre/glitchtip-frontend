@@ -13,70 +13,60 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{ activeOrganizationDetail()?.name }}
-      </mat-card-title>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <div class="list">
-        @for (member of members(); track member) {
-          <div class="list--item">
-            <div class="email-and-badge">
-              <a class="email" mat-line [routerLink]="[member.id]"
-                >{{ member.email }}
-              </a>
-              @if (member.isOwner) {
-                <mat-chip
-                  class="caption-text"
-                  color="primary"
-                  highlighted="true"
-                >
-                  Account Owner
-                </mat-chip>
-              }
-              @if (member.pending) {
-                <mat-chip class="caption-text" color="primary">
-                  Invite Pending
-                </mat-chip>
-              }
-            </div>
-            <div class="reinvite-and-role">
-              @if (member.pending) {
-                <div class="reinvite">
-                  @if (!member.loadingResendInvite) {
-                    <gt-loading-button
-                      class="resend-invite"
-                      [loading]="member.loadingResendInvite"
-                      [buttonText]="
-                        member.sentResendInvite
-                          ? 'Invite Resent'
-                          : 'Resend Invite'
-                      "
-                      [disabled]="member.sentResendInvite"
-                      (buttonClick)="resendInvite(member)"
-                      buttonStyle="stroked"
-                    >
-                    </gt-loading-button>
-                  }
-                </div>
-              }
-              <div class="role">{{ member.roleName }}</div>
-            </div>
-            <gt-loading-button
-              class="remove-button"
-              matTooltip="Account ownership must be transferred."
-              [matTooltipDisabled]="!member.isOwner"
-              [disabled]="member.isOwner"
-              (buttonClick)="removeMember(member)"
-              [buttonText]="member.isMe ? 'Leave' : 'Remove'"
-              buttonStyle="stroked"
-            ></gt-loading-button>
-          </div>
+  <gt-list>
+    @for (member of members(); track member) {
+      <gt-list-row>
+        <a [routerLink]="[member.id]">{{ member.email }}</a>
+        @if (member.isOwner) {
+          <mat-chip class="caption-text" color="primary" highlighted="true" i18n
+            >Account owner</mat-chip
+          >
         }
-      </div>
-    </mat-card-content>
-  </mat-card>
+        @if (member.pending) {
+          <mat-chip class="caption-text" color="primary" i18n
+            >Invite pending</mat-chip
+          >
+        }
+        <span slot="meta">{{ member.roleName }}</span>
+        @if (member.pending) {
+          <ng-container slot="actions">
+            <button
+              mat-icon-button
+              class="medium-icon-button"
+              [matMenuTriggerFor]="memberMenu"
+              [attr.aria-label]="'Actions for ' + member.email"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #memberMenu="matMenu" xPosition="before">
+              <button
+                mat-menu-item
+                [disabled]="member.sentResendInvite"
+                (click)="resendInvite(member)"
+              >
+                @if (member.sentResendInvite) {
+                  <ng-container i18n>Invite resent</ng-container>
+                } @else {
+                  <ng-container i18n>Resend invite</ng-container>
+                }
+              </button>
+              <button mat-menu-item (click)="removeMember(member)" i18n
+                >Remove</button
+              >
+            </mat-menu>
+          </ng-container>
+        } @else {
+          <gt-loading-button
+            slot="actions"
+            matTooltip="Account ownership must be transferred."
+            [matTooltipDisabled]="!member.isOwner"
+            [disabled]="member.isOwner"
+            (buttonClick)="removeMember(member)"
+            [buttonText]="member.isMe ? 'Leave' : 'Remove'"
+            buttonStyle="stroked"
+          />
+        }
+      </gt-list-row>
+    }
+  </gt-list>
 </section>

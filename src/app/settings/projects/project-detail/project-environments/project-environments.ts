@@ -7,7 +7,8 @@ import {
 } from "@angular/core";
 import { ProjectEnvironmentsService } from "./project-environments.service";
 import { LoadingButtonComponent } from "../../../../shared/loading-button/loading-button.component";
-import { MatListModule } from "@angular/material/list";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 
@@ -19,7 +20,8 @@ import { MatCardModule } from "@angular/material/card";
   imports: [
     MatCardModule,
     MatDividerModule,
-    MatListModule,
+    ListComponent,
+    ListRowComponent,
     LoadingButtonComponent,
   ],
   providers: [ProjectEnvironmentsService],
