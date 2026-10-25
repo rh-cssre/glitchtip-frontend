@@ -2,17 +2,17 @@
   @for (datapoint of data(); track datapoint.startCheck) {
     @if (datapoint) {
       @if (datapoint.isUp) {
-        <div
+        <div i18n-matTooltip
           class="up-check"
           matTooltip="Up at {{ datapoint.startCheck | date: 'short' }}"
           matTooltipPosition="above"
         ></div>
       }
       @if (datapoint.isUp === false) {
-        <div
+        <div i18n-matTooltip
           class="down-check"
           matTooltip="{{
-            datapoint.reason ? convertReasonText(datapoint.reason) : 'Down'
+            datapoint.reason ? convertReasonText(datapoint.reason) : downText
           }} at {{ datapoint.startCheck | date: 'short' }}"
           matTooltipPosition="above"
         ></div>

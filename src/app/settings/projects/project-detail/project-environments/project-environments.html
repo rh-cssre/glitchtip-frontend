@@ -23,7 +23,7 @@
                 slot="actions"
                 (buttonClick)="toggleHidden(environment)"
                 [loading]="environment.id === toggleHiddenloading()"
-                [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
+                [buttonText]="environment.isHidden ? showText : hideText"
                 buttonStyle="stroked"
               />
             }

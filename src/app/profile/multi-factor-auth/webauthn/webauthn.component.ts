@@ -38,6 +38,7 @@ import { checkForOverflow } from "src/app/shared/shared.utils";
   ],
 })
 export class WebAuthnComponent {
+  deleteKeyLabel = (name: string) => $localize`Delete ${name}:name:`;
   private service = inject(MultiFactorAuthService);
   private snackBar = inject(MatSnackBar);
   protected emailsService = inject(EmailsService);

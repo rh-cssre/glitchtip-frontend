@@ -50,6 +50,9 @@ export { iconXrefMapping, resolveRecipientIcon } from "./alert-labels";
   providers: [ProjectAlertsService, ProjectEnvironmentsService],
 })
 export class ProjectAlertsComponent implements OnInit {
+  deleteAlertForLabel = (url: string | null | undefined) => $localize`Delete Alert For ${url ?? ""}:url:`;
+  deleteAlertLabel = (n: number) => $localize`Delete Alert ${n}:number:`;
+  removeAlertText = (n: number) => $localize`Remove Alert ${n}:number:`;
   #service = inject(ProjectAlertsService);
   #environmentsService = inject(ProjectEnvironmentsService);
   #router = inject(Router);

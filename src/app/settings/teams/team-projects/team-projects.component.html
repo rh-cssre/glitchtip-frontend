@@ -42,7 +42,7 @@
                 [queryParams]="{ project: project.id }"
                 >{{ project.name }}</a
               >
-              <gt-loading-button
+              <gt-loading-button i18n-buttonText
                 buttonText="Remove"
                 buttonStyle="stroked"
                 [loading]="project.slug === loading().removeProjectFromTeam"

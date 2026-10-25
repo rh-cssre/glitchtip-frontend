@@ -38,7 +38,7 @@
               [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
               >{{ teamMember.email }}</a
             >
-            <gt-loading-button
+            <gt-loading-button i18n-buttonText
               buttonText="Remove"
               buttonStyle="stroked"
               [loading]="selectedTeamMember?.toString() === teamMember.id"
