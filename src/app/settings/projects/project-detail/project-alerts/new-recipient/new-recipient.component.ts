@@ -41,6 +41,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
   ],
 })
 export class NewRecipientComponent implements OnInit {
+  saveChangesText = $localize`Save Changes`;
+  addRecipientText = $localize`Add Recipient`;
   dialogRef = inject<MatDialogRef<NewRecipientComponent>>(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
 

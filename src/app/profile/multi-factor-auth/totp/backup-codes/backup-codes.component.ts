@@ -64,7 +64,7 @@ export class BackupCodesComponent {
     if (codes) {
       navigator.clipboard.writeText(codes.join("\n"));
       this.service.setCopiedCodes();
-      this.snackBar.open("Backup codes copied to clipboard.");
+      this.snackBar.open($localize`Backup codes copied to clipboard.`);
     }
   }
 

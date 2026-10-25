@@ -15,6 +15,7 @@ type MonitorCheck = components["schemas"]["MonitorCheckSchema"];
   host: { "[class.stretch]": "stretch()" },
 })
 export class MonitorChartComponent {
+  downText = $localize`Down`;
   readonly data = input<MonitorCheck[]>([]);
   readonly stretch = input(false);
 

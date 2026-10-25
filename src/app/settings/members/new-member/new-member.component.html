@@ -1,7 +1,7 @@
 <section class="l-body">
   <mat-card>
     <mat-card-header>
-      <mat-card-title> Add Member to Organization </mat-card-title>
+      <mat-card-title i18n> Add Member to Organization </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
@@ -10,41 +10,41 @@
           <mat-error class="server-error">{{ error }}</mat-error>
         }
         <div>
-          <h2>Email(s)</h2>
+          <h2 i18n>Email(s)</h2>
           <p class="email-paragraph">
-            Invite a member to join this organization via their email address.
+            <ng-container i18n>Invite a member to join this organization via their email address.</ng-container>
             @if (enableUserRegistration()) {
-              <span
+              <span i18n
                 >If they do not already have an account, they will first be
                 asked to create one.</span
               >
             } @else {
-              Only existing GlitchTip users may be invited.
+              <ng-container i18n>Only existing GlitchTip users may be invited.</ng-container>
             }
-            Multiple emails delimited by commas.
+            <ng-container i18n>Multiple emails delimited by commas.</ng-container>
           </p>
           <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label i18n>Email</mat-label>
             <input matInput type="email" formControlName="email" />
             @if (form.get("email")?.errors) {
               <mat-error>
                 @if (form.get("email")?.errors?.invalidEmails) {
-                  <span> Enter a valid email</span>
+                  <span i18n> Enter a valid email</span>
                 }
                 @if (form.get("email")?.errors?.required) {
-                  <span>Enter at least one email</span>
+                  <span i18n>Enter at least one email</span>
                 }
               </mat-error>
             }
           </mat-form-field>
         </div>
         <div>
-          <h2>Role</h2>
+          <h2 i18n>Role</h2>
           <mat-radio-group formControlName="role">
-            <mat-radio-button value="member">Member</mat-radio-button>
-            <mat-radio-button value="admin">Admin</mat-radio-button>
-            <mat-radio-button value="manager">Manager</mat-radio-button>
-            <mat-radio-button value="owner">Owner</mat-radio-button>
+            <mat-radio-button i18n value="member">Member</mat-radio-button>
+            <mat-radio-button i18n value="admin">Admin</mat-radio-button>
+            <mat-radio-button i18n value="manager">Manager</mat-radio-button>
+            <mat-radio-button i18n value="owner">Owner</mat-radio-button>
           </mat-radio-group>
           <div class="role-description">
             @if (formRole.value === "member") {
@@ -77,9 +77,9 @@
           </div>
         </div>
         <div>
-          <h2>Team</h2>
+          <h2 i18n>Team</h2>
           <mat-form-field appearance="outline">
-            <mat-label>Add Team</mat-label>
+            <mat-label i18n>Add Team</mat-label>
             <mat-select multiple formControlName="teams" disableOptionCentering>
               @if (organizationTeams().length) {
                 @for (team of organizationTeams(); track team.id) {
@@ -88,12 +88,12 @@
                   </mat-option>
                 }
               } @else {
-                <mat-option disabled>No Teams</mat-option>
+                <mat-option i18n disabled>No Teams</mat-option>
               }
             </mat-select>
           </mat-form-field>
         </div>
-        <gt-loading-button
+        <gt-loading-button i18n-buttonText
           buttonText="Add Member(s)"
           [loading]="loading().addOrganizationMembers"
         ></gt-loading-button>

@@ -34,7 +34,7 @@
         [matTooltip]="
           isMember()
             ? ''
-            : 'To view issues for this project, add yourself to the corresponding team.'
+            : notMemberTooltip
         "
         matTooltipPosition="right"
         [routerLink]="isMember() ? cardLink() : undefined"

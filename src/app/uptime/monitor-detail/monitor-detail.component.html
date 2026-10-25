@@ -1,9 +1,7 @@
 <gt-top-app-bar>
   <ng-container slot="left">
     <gt-back-link
-      [backLinkText]="
-        isMobile() ? 'Uptime Monitors' : 'View all uptime monitors'
-      "
+      [backLinkText]="isMobile() ? uptimeMonitorsText : viewAllMonitorsText"
     />
   </ng-container>
 
@@ -125,13 +123,14 @@
               </mat-card-header>
               <mat-divider></mat-divider>
               <mat-card-content>
-                <p>
+                <p i18n>
                   Configure your project to send a POST request with no content
                   to the following URL at your specified interval. If GlitchTip
                   does not receive this request within the interval, your site
                   status will be marked as down.
                 </p>
                 <gt-copy-input
+                  i18n-placeholder
                   [value]="monitor.heartbeatEndpoint"
                   placeholder="Endpoint URL"
                 ></gt-copy-input>
@@ -190,10 +189,13 @@
                 >
               </gt-empty-state>
             } @else {
-              <p class="body-text">
+              <p class="body-text" i18n>
                 This monitor is associated with the
                 <b>{{ monitor.projectName }}</b> project. There
-                {{ uptimeAlertCount() | i18nPlural: alertCountPluralMapping }}
+                {uptimeAlertCount(), plural,
+                  =1 {is 1 uptime alert}
+                  other {are {{ uptimeAlertCount() }} uptime alerts}
+                }
                 set up for this project. Visit the
                 <a
                   [routerLink]="[

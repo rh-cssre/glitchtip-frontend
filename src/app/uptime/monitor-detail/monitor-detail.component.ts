@@ -25,7 +25,7 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
-import { DecimalPipe, I18nPluralPipe } from "@angular/common";
+import { DecimalPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
@@ -48,7 +48,6 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     MonitorChecks,
     CopyInputComponent,
     MonitorResponseChart,
-    I18nPluralPipe,
     TimeForPipe,
     DecimalPipe,
     MatButtonModule,
@@ -68,6 +67,8 @@ export class MonitorDetailComponent
   extends StatefulComponent<MonitorState, MonitorService>
   implements OnInit
 {
+  uptimeMonitorsText = $localize`Uptime Monitors`;
+  viewAllMonitorsText = $localize`View all uptime monitors`;
   protected service: MonitorService;
   private breakpointObserver = inject(BreakpointObserver);
   private dialog = inject(MatDialog);
@@ -146,10 +147,6 @@ export class MonitorDetailComponent
     };
   });
 
-  alertCountPluralMapping: { [k: string]: string } = {
-    "=1": "is 1 uptime alert",
-    other: "are # uptime alerts",
-  };
 
   constructor() {
     const service = inject(MonitorService);

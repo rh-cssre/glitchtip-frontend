@@ -1,5 +1,5 @@
 <div class="table-container">
-  <gt-loading-overlay [loading]="loading()" label="Loading monitor checks">
+  <gt-loading-overlay i18n-label [loading]="loading()" label="Loading monitor checks">
     <table mat-table [dataSource]="monitorChecks()" class="mat-elevation-z2">
       <ng-container matColumnDef="actions">
         <th
@@ -13,8 +13,8 @@
               [value]="isChange()"
               (change)="toggleIsChange()"
             >
-              <mat-button-toggle [value]="false">All checks</mat-button-toggle>
-              <mat-button-toggle [value]="true">Incidents</mat-button-toggle>
+              <mat-button-toggle i18n [value]="false">All checks</mat-button-toggle>
+              <mat-button-toggle i18n [value]="true">Incidents</mat-button-toggle>
             </mat-button-toggle-group>
             <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
             <gt-pagination-buttons
@@ -69,7 +69,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="startCheck">
-        <th mat-header-cell *matHeaderCellDef>Time</th>
+        <th i18n mat-header-cell *matHeaderCellDef>Time</th>
         <td mat-cell *matCellDef="let monitorCheck" class="mat-body-1">
           <span>{{ monitorCheck.startCheck | date: "short" }}</span>
         </td>
