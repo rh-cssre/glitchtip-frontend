@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link backLinkText="Back to Projects" />
+    <gt-back-link i18n-backLinkText backLinkText="Back to Projects" />
   </ng-container>
 </gt-top-app-bar>
 
@@ -50,18 +50,18 @@
             <input matInput formControlName="name" [value]="project.name" />
             <mat-error>
               @if (name?.errors?.required) {
-                <span data-cy="project-name-error-required"
+                <span i18n data-cy="project-name-error-required"
                   >Enter a project name</span
                 >
               }
               @if (name?.errors?.maxlength) {
-                <span data-cy="project-name-error-length"
+                <span i18n data-cy="project-name-error-length"
                   >Name must be 64 characters or less</span
                 >
               }
             </mat-error>
           </mat-form-field>
-          <gt-loading-button
+          <gt-loading-button i18n-buttonText
             [disabled]="name?.value === project.name"
             buttonText="Update Name"
             id="update-project-name"
@@ -79,7 +79,7 @@
           class="platform-form"
         >
           <mat-form-field class="platform-form-field" appearance="outline">
-            <mat-label>Platform</mat-label>
+            <mat-label i18n>Platform</mat-label>
             <input
               data-cy="platform-input"
               type="text"
@@ -122,7 +122,7 @@
                 Platform Documentation
               </a>
             }
-            <gt-loading-button
+            <gt-loading-button i18n-buttonText
               [disabled]="
                 platformCtrl.value === project.platform || platformCtrl.invalid
               "
@@ -150,7 +150,7 @@
             [value]="projectKey.dsn.public"
             placeholder="DSN"
           ></gt-copy-input>
-          <gt-copy-input
+          <gt-copy-input i18n-placeholder
             [value]="projectKey.dsn.security"
             placeholder="Security Endpoint"
           ></gt-copy-input>
@@ -196,7 +196,7 @@
             cannot be undone.</p
           >
         </div>
-        <gt-loading-button
+        <gt-loading-button i18n-buttonText
           buttonText="Delete Project"
           buttonStyle="stroked"
           color="warn"

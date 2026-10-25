@@ -20,7 +20,7 @@
     <div class="input-group-header body-text-strong" i18n>Time range:</div>
     <div class="time-pickers">
       <mat-form-field appearance="outline">
-        <mat-label>Start time</mat-label>
+        <mat-label i18n>Start time</mat-label>
         <input
           matInput
           formControlName="startTime"
@@ -29,14 +29,14 @@
         <mat-timepicker-toggle matIconSuffix [for]="startTimepicker" />
         <mat-timepicker #startTimepicker />
         @if (this.startTimeCtrl.errors?.["matTimepickerParse"]) {
-          <mat-error>Pick a valid time</mat-error>
+          <mat-error i18n>Pick a valid time</mat-error>
         }
         @if (this.startTimeCtrl.errors?.["required"]) {
-          <mat-error>Pick a time</mat-error>
+          <mat-error i18n>Pick a time</mat-error>
         }
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>End time</mat-label>
+        <mat-label i18n>End time</mat-label>
         <input
           matInput
           [formControl]="endTimeCtrl"
@@ -45,10 +45,10 @@
         <mat-timepicker-toggle matIconSuffix [for]="endTimepicker" />
         <mat-timepicker #endTimepicker />
         @if (this.endTimeCtrl.errors?.["matTimepickerParse"]) {
-          <mat-error>Pick a valid time</mat-error>
+          <mat-error i18n>Pick a valid time</mat-error>
         }
         @if (this.startTimeCtrl.errors?.["required"]) {
-          <mat-error>Pick a time</mat-error>
+          <mat-error i18n>Pick a time</mat-error>
         }
       </mat-form-field>
     </div>

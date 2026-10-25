@@ -21,11 +21,11 @@ export const DEFAULT_MONITOR_SORT: MonitorSort = "-created";
 // toMonitorSort validates against it. Each option carries its own direction,
 // so "Sort by" is the single control.
 export const monitorSorts: { param: MonitorSort; display: string }[] = [
-  { param: "status", display: "Down First" },
-  { param: "-created", display: "Newest" },
-  { param: "created", display: "Oldest" },
-  { param: "name", display: "Name (A-Z)" },
-  { param: "project", display: "Project (A-Z)" },
+  { param: "status", display: $localize`Down First` },
+  { param: "-created", display: $localize`Newest` },
+  { param: "created", display: $localize`Oldest` },
+  { param: "name", display: $localize`Name (A-Z)` },
+  { param: "project", display: $localize`Project (A-Z)` },
 ];
 
 // The sort arrives off the URL, so anything the menu does not offer -- a stale

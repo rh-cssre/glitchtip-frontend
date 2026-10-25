@@ -9,15 +9,15 @@
     <mat-divider></mat-divider>
     <mat-card-content>
       <dl>
-        <dt class="body-text-strong">Server timezone</dt>
+        <dt i18n class="body-text-strong">Server timezone</dt>
         <dd>{{ serverTimeZone() }}</dd>
-        <dt class="body-text-strong">Organization creation</dt>
-        <dd>{{ enableUserRegistration() ? "Enabled" : "Disabled" }}</dd>
-        <dt class="body-text-strong">User registration</dt>
-        <dd>{{ enableUserRegistration() ? "Enabled" : "Disabled" }}</dd>
-        <dt class="body-text-strong">GlitchTip version</dt>
+        <dt i18n class="body-text-strong">Organization creation</dt>
+        <dd>@if (enableUserRegistration()) {<ng-container i18n>Enabled</ng-container>} @else {<ng-container i18n>Disabled</ng-container>}</dd>
+        <dt i18n class="body-text-strong">User registration</dt>
+        <dd>@if (enableUserRegistration()) {<ng-container i18n>Enabled</ng-container>} @else {<ng-container i18n>Disabled</ng-container>}</dd>
+        <dt i18n class="body-text-strong">GlitchTip version</dt>
         <dd>{{ version() }}</dd>
-        <dt class="body-text-strong">GlitchTip instance name</dt>
+        <dt i18n class="body-text-strong">GlitchTip instance name</dt>
         <dd>
           <markdown class="system-info-instance-name">
             {{ instanceName() }}
@@ -32,7 +32,7 @@
       <mat-card-title i18n>Documentation</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-hint
+      <mat-hint i18n
         >See
         <a href="https://glitchtip.com/documentation/install" target="_blank"
           >GlitchTip installation and configuration docs</a

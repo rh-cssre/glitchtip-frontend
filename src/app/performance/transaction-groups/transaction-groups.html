@@ -1,4 +1,4 @@
-<gt-list-app-bar
+<gt-list-app-bar i18n-listTitle
   listTitle="Transaction groups"
   [searchHits]="$safeNavigationMigration(paginator()?.count)"
   [queriedProjects]="projects()"
@@ -20,18 +20,18 @@
   }
   @if (transactionGroupsDisplay(); as transactionGroups) {
     <div class="table-container">
-      <gt-loading-overlay
+      <gt-loading-overlay i18n-label
         [loading]="loading()"
         label="Loading transaction groups"
       >
         @if (errors()?.length) {
           <div class="table-empty-states">
             @if (errors()?.length === 1) {
-              <h3 class="body-text-strong">
+              <h3 i18n class="body-text-strong">
                 There was an error processing your request
               </h3>
             } @else {
-              <h3 class="body-text-strong">
+              <h3 i18n class="body-text-strong">
                 There were errors while processing your request
               </h3>
             }
@@ -63,7 +63,7 @@
             </th>
           </ng-container>
           <ng-container matColumnDef="name-and-project">
-            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <th i18n mat-header-cell *matHeaderCellDef>Title</th>
             <td mat-cell *matCellDef="let group">
               <div class="name-and-project">
                 <div
@@ -101,17 +101,14 @@
                     @if (appliedProjectCount() !== 1) {
                       &mdash;
                     }
-                    {{
-                      group.transactionCount
-                        | i18nPlural: transactionCountPluralMapping
-                    }}
+                    @if (group.transactionCount !== null && group.transactionCount !== undefined) {<ng-container i18n>{group.transactionCount, plural, =1 {1 Transaction} other {{{ group.transactionCount }} Transactions}}</ng-container>}
                   </span>
                 </div>
               </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="avgDuration">
-            <th mat-header-cell *matHeaderCellDef>Average Duration</th>
+            <th i18n mat-header-cell *matHeaderCellDef>Average Duration</th>
             <td
               mat-cell
               *matCellDef="let group"

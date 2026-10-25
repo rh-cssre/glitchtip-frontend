@@ -82,11 +82,11 @@ const desktop = [
   "dart-flutter",
 ];
 const categoryList = [
-  { id: "popular", name: "Popular", platforms: popular },
-  { id: "browser", name: "Browser", platforms: frontend },
-  { id: "server", name: "Server", platforms: backend },
-  { id: "mobile", name: "Mobile", platforms: mobile },
-  { id: "desktop", name: "Desktop", platforms: desktop },
+  { id: "popular", name: $localize`Popular`, platforms: popular },
+  { id: "browser", name: $localize`Browser`, platforms: frontend },
+  { id: "server", name: $localize`Server`, platforms: backend },
+  { id: "mobile", name: $localize`Mobile`, platforms: mobile },
+  { id: "desktop", name: $localize`Desktop`, platforms: desktop },
 ];
 export const sourceMaps = [...frontend, "react-native", "cordova", "electron"];
 export default categoryList;

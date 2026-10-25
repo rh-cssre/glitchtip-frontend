@@ -97,9 +97,9 @@ export class UserService extends StatefulService<UserState> {
       .then((result) => {
         if (result.data) {
           this.userResource.set(result.data);
-          this.snackBar.open("Preferences have been updated");
+          this.snackBar.open($localize`Preferences have been updated`);
         } else {
-          this.snackBar.open("Error attempting to update preferences");
+          this.snackBar.open($localize`Error attempting to update preferences`);
         }
       });
   }
