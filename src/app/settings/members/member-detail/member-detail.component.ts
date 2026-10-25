@@ -12,14 +12,14 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { MatListModule } from "@angular/material/list";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatChipsModule } from "@angular/material/chips";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
+import { MatDialog } from "@angular/material/dialog";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { MemberDetailService } from "src/app/settings/members/member-detail/member-detail.service";
 import { MemberRole } from "src/app/api/organizations/organizations.interface";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
@@ -33,29 +33,27 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
-    MatButtonModule,
     RouterLink,
-    MatIconModule,
-    MatCardModule,
-    MatDividerModule,
-    MatChipsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatRadioModule,
     TopAppBar,
     BackLinkComponent,
     LoadingButtonComponent,
-    MatListModule,
+    ListComponent,
+    ListRowComponent,
     PageHeaderComponent,
+    SettingsSectionComponent,
   ],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   private memberDetailService = inject(MemberDetailService);
+  private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
 
   member = this.memberDetailService.member;
   memberTeams = this.memberDetailService.memberTeams;
-  availableRoles = this.memberDetailService.availableRoles;
   updateMemberError = this.memberDetailService.updateMemberRoleError;
   updateMemberLoading = this.memberDetailService.updateMemberRoleLoading;
   transferOrgOwnershipError =
@@ -72,15 +70,54 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   });
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
 
-  selectedRoleScopes = computed(() => {
-    const availableRoles = this.availableRoles();
-    if (availableRoles) {
-      return availableRoles
-        .find((roleDetails) => roleDetails.id === this.formRole.value)
-        ?.scopes.join(", ");
-    }
-    return;
+  /** Same values the selected role is saved as, lowest access first. */
+  readonly roles: MemberRole[] = ["member", "admin", "manager", "owner"];
+
+  /** Changing roles needs member:write (managers and owners). */
+  canEditRole = this.organizationsService.accessMemberWrite;
+  /**
+   * The backend allows a transfer only for owners (member:admin plus being the
+   * account owner or having the owner role), so org:admin is the signal.
+   */
+  canTransfer = computed(() => {
+    const member = this.member();
+    return (
+      this.organizationsService.accessOrgAdmin() &&
+      !!member &&
+      !member.isOwner &&
+      !member.pending
+    );
   });
+
+  roleName(role: MemberRole | null | undefined) {
+    switch (role) {
+      case "owner":
+        return $localize`Owner`;
+      case "manager":
+        return $localize`Manager`;
+      case "admin":
+        return $localize`Admin`;
+      case "member":
+        return $localize`Member`;
+      default:
+        return null;
+    }
+  }
+
+  roleDescription(role: MemberRole | null | undefined) {
+    switch (role) {
+      case "owner":
+        return $localize`Owners have full access to the organization, its data and its settings.`;
+      case "manager":
+        return $localize`Managers can also add and remove members, and manage every team.`;
+      case "admin":
+        return $localize`Admins can also create teams and projects, and manage the teams they are on.`;
+      case "member":
+        return $localize`Members can see and act on issues and events, and see most other data in the organization.`;
+      default:
+        return "";
+    }
+  }
 
   constructor() {
     effect(() => {
@@ -120,7 +157,18 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  transferOrgOwnership() {
-    this.memberDetailService.transferOrgOwnership();
+  transferOrgOwnership(email: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Transfer ownership to ${email}:email:?`,
+          message: $localize`They will hold the organization's subscription. Nobody's role changes.`,
+          confirmText: $localize`Transfer`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) this.memberDetailService.transferOrgOwnership();
+      });
   }
 }

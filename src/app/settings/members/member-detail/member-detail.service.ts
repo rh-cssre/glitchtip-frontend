@@ -1,9 +1,6 @@
 import { Injectable, computed, inject } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import {
-  MemberRole,
-  MemberRoleDetail,
-} from "../../../api/organizations/organizations.interface";
+import { MemberRole } from "../../../api/organizations/organizations.interface";
 import { OrganizationsService } from "../../../api/organizations.service";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client, handleError } from "src/app/shared/api/api";
@@ -15,7 +12,6 @@ type MemberDetail = components["schemas"]["OrganizationUserDetailSchema"];
 interface MemberDetailState {
   member: Member | null;
   memberTeams: string[] | null;
-  availableRoles: MemberRoleDetail[] | null;
   updateMemberRoleError: string;
   updateMemberRoleLoading: boolean;
   transferOrgOwnershipError: string;
@@ -25,7 +21,6 @@ interface MemberDetailState {
 const initialState: MemberDetailState = {
   member: null,
   memberTeams: null,
-  availableRoles: null,
   updateMemberRoleError: "",
   updateMemberRoleLoading: false,
   transferOrgOwnershipError: "",
@@ -39,7 +34,6 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
 
   readonly member = computed(() => this.state().member);
   readonly memberTeams = computed(() => this.state().memberTeams);
-  readonly availableRoles = computed(() => this.state().availableRoles);
   readonly updateMemberRoleError = computed(
     () => this.state().updateMemberRoleError,
   );
@@ -178,7 +172,6 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
     this.setState({
       member,
       memberTeams: member.teams,
-      availableRoles: (member as any).roles,
     });
   }
 }
