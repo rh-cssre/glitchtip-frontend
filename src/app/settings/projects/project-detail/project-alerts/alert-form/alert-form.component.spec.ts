@@ -42,7 +42,6 @@ describe("AlertFormComponent environments", () => {
     expect(component.projectFormUptime.value).toBe(true);
     expect(component.projectFormEnvironments.value).toEqual([]);
     expect(component.environmentOptions()).toEqual([]);
-    expect(component.environmentsUnchanged()).toBe(true);
   });
 
   it("offers the project's environments as options", () => {
@@ -74,17 +73,6 @@ describe("AlertFormComponent environments", () => {
     component.projectFormEnvironments.setValue(["staging"]);
     component.onSubmit();
     expect(emitted).toEqual(["staging"]);
-  });
-
-  it("reports environments as unchanged regardless of selection order", () => {
-    setInputs(["production", "staging"], ["production", "staging"]);
-    expect(component.environmentsUnchanged()).toBe(true);
-
-    component.projectFormEnvironments.setValue(["staging", "production"]);
-    expect(component.environmentsUnchanged()).toBe(true);
-
-    component.projectFormEnvironments.setValue(["staging"]);
-    expect(component.environmentsUnchanged()).toBe(false);
   });
 
   it("renders the environments select wired to the form control", () => {

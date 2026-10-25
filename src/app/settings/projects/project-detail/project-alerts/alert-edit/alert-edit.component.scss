@@ -1,0 +1,103 @@
+@use "variables" as vars;
+
+:host {
+  display: block;
+  padding-bottom: var(--gt-space-7, 48px);
+}
+
+.back {
+  margin: 0 0 var(--gt-space-2, 8px) calc(-1 * var(--gt-space-3, 12px));
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gt-space-3, 12px);
+  margin: 0 0 var(--gt-space-5, 24px);
+}
+
+.title {
+  margin: 0;
+  font: var(--mat-sys-title-large);
+  font-weight: 600;
+}
+
+// Hairlines keep the steps apart without boxing them in.
+gt-settings-section {
+  margin: 0;
+  padding: var(--gt-space-5, 24px) 0;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+gt-list {
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.recipient {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  min-width: 0;
+  font-weight: 400;
+}
+
+.recipient__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  // Sprite icons without their own color follow the text, so they show in
+  // dark mode.
+  fill: currentColor;
+}
+
+.recipient__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.note {
+  margin: 0;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Summary and actions close the form. Same hairline and column as the section
+// dividers; being sticky is what sets it apart. Sticky so Save and the summary stay in view while a long form scrolls; the
+// background matches mat-sidenav-content so sections slide under it cleanly.
+.footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: var(--gt-space-4, 16px) 0;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-low);
+
+  // On phones a pinned footer eats too much of the screen; it scrolls instead.
+  @media (max-width: vars.$small - 1) {
+    position: static;
+  }
+}
+
+.summary {
+  max-width: var(--gt-measure, 70ch);
+  margin: 0 0 var(--gt-space-3, 12px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface);
+}
+
+.error {
+  display: block;
+  margin-bottom: var(--gt-space-3, 12px);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+}

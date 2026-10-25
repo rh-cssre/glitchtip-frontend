@@ -1,32 +1,30 @@
-@if (projectFormOptionsGroup.errors?.selectionRequired) {
-  <p class="error alert-form-error">
+@if (
+  projectAlertForm.touched && projectFormOptionsGroup.errors?.selectionRequired
+) {
+  <p class="error alert-form-error" i18n>
     Select at least one condition: event frequency or uptime.
   </p>
 }
 
 <form (ngSubmit)="onSubmit()" [formGroup]="projectAlertForm">
-  <p class="alert-form__group-label body-text-strong" i18n>
-    Alert when any of these:
-  </p>
-
   <div class="trigger trigger__line">
     <mat-checkbox
       data-cy="error-check"
       [checked]="projectFormErrorAlert.value"
       (change)="toggleErrorAlerts()"
     >
-      <span class="body-text" i18n>
-        If an
+      <span i18n
+        >An
         <span
+          i18n-matTooltip
           class="tooltip"
-          matTooltip="An event is every occurrence of the same error (aka: issue) in your application."
-          >event</span
+          matTooltip="An issue groups every occurrence of the same error. Each occurrence is an event."
+          >issue</span
         >
-        happens</span
+        gets</span
       >
     </mat-checkbox>
-    <mat-form-field floatLabel="always" appearance="outline">
-      <mat-label>Quantity</mat-label>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input
         matInput
         data-cy="quantity"
@@ -34,71 +32,79 @@
         max="10000"
         type="number"
         autocomplete="off"
-        (click)="toggleFromInput()"
+        i18n-aria-label
+        aria-label="Number of events"
         formControlName="quantity"
         placeholder="#"
         [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
       />
-      @if (projectFormQuantity.errors) {
-        <mat-error>
-          <span>Enter an integer greater than 0.</span>
-        </mat-error>
-      }
     </mat-form-field>
     <span i18n
-      >{{ projectFormQuantity.value | i18nPlural: timesI18nMapping }} in</span
+      >{projectFormQuantity.value, plural, =1 {event} other {events}} in</span
     >
-    <mat-form-field floatLabel="always" appearance="outline">
-      <mat-label i18n>Timespan</mat-label>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input
         matInput
         min="0"
         max="10000"
         type="number"
         autocomplete="off"
-        (click)="toggleFromInput()"
+        i18n-aria-label
+        aria-label="Number of minutes"
         formControlName="timespanMinutes"
         placeholder="#"
         [errorStateMatcher]="newAlert() ? newFormMatcher : matcher"
       />
-      @if (projectFormTimespan.errors) {
-        <mat-error>
-          <span i18n>Enter an integer greater than 0.</span>
-        </mat-error>
-      }
     </mat-form-field>
-    <span i18n
-      >{{ projectFormTimespan.value | i18nPlural: minutesI18nMapping }}, send an
-      alert.</span
-    >
+    <span i18n>{projectFormTimespan.value, plural,
+      =1 {minute}
+      other {minutes}
+    }</span>
   </div>
+  @if (projectFormErrorAlert.value) {
+    <p class="trigger__hint" i18n>You're notified once per issue.</p>
+  }
+  @if (
+    projectAlertForm.touched &&
+    (projectFormQuantity.invalid || projectFormTimespan.invalid)
+  ) {
+    <!-- One message for the sentence; the fields only turn red. -->
+    <p class="error" i18n>Enter whole numbers above 0.</p>
+  }
 
   <div class="trigger uptime-option" formGroupName="optionsGroup">
     <mat-checkbox data-cy="uptime-check" formControlName="uptime"
-      ><span class="body-text" i18n
-        >If an
+      ><span i18n
+        >One of this project's
         <span
+          i18n-matTooltip
           class="tooltip"
           matTooltip="An uptime monitor checks a URL on a schedule and triggers when the site stops responding."
-          >uptime monitor</span
+          >uptime monitors</span
         >
-        detects downtime.</span
+        goes down</span
       ></mat-checkbox
     >
   </div>
 
   @if (environmentOptions().length > 0) {
+    <!-- A subheading of When: the filter narrows both conditions, so it must
+         not read as a third one. -->
     <div class="environment-scope">
-      <mat-form-field
-        appearance="outline"
-        floatLabel="always"
-        subscriptSizing="dynamic"
+      <h3 class="environment-scope__title" id="alert-environments" i18n
+        >Environments</h3
       >
-        <mat-label i18n>Limit to environments (optional)</mat-label>
+      <p class="environment-scope__description" i18n
+        >Only events and uptime monitors in these environments trigger this
+        alert. Monitors with no environment only trigger alerts set to all
+        environments.</p
+      >
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-select
           data-cy="environments"
           formControlName="environments"
           multiple
+          aria-labelledby="alert-environments"
           placeholder="All environments"
           i18n-placeholder
         >
@@ -106,28 +112,7 @@
             <mat-option [value]="environment">{{ environment }}</mat-option>
           }
         </mat-select>
-        <mat-hint i18n
-          >Only events and uptime monitors in these environments trigger this
-          alert.</mat-hint
-        >
       </mat-form-field>
     </div>
   }
-
-  <div class="update" data-cy="update-container">
-    @if (!newAlert()) {
-      <gt-loading-button
-        data-cy="update-button"
-        buttonText="Update"
-        [disabled]="
-          projectFormTimespan.value === timespan() &&
-          projectFormQuantity.value === quantity() &&
-          projectFormUptime.value === uptime() &&
-          environmentsUnchanged()
-        "
-        buttonStyle="stroked"
-        [loading]="loading() === true"
-      ></gt-loading-button>
-    }
-  </div>
 </form>
