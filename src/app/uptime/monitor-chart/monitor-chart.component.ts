@@ -14,6 +14,7 @@ type MonitorCheck = components["schemas"]["MonitorCheckSchema"];
   imports: [DatePipe, MatTooltipModule],
 })
 export class MonitorChartComponent {
+  downText = $localize`Down`;
   readonly data = input<MonitorCheck[]>([]);
 
   constructor() {}

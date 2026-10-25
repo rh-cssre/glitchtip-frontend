@@ -11,7 +11,7 @@ import {
   signal,
   ViewChild,
 } from "@angular/core";
-import { DatePipe, I18nPluralPipe } from "@angular/common";
+import { DatePipe } from "@angular/common";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -61,7 +61,6 @@ import { SearchHelpConfig } from "../../list-elements/data-filter-bar/data-filte
     DatePipe,
     DaysAgoPipe,
     DaysOldPipe,
-    I18nPluralPipe,
     ListAppBar,
     IssueChart,
     MatButtonToggleModule,
@@ -145,17 +144,13 @@ export class IssuesPage implements OnInit, OnDestroy {
     this.organizationsService.activeOrganizationProjects;
   activeOrganization = this.organizationsService.activeOrganization;
   // errors = this.service.errors;
-  eventCountPluralMapping: { [k: string]: string } = {
-    "=1": "1 event",
-    other: "# events",
-  };
   sorts = [
-    { param: "-last_seen", display: "Last Seen" },
-    { param: "first_seen", display: "First Seen" },
-    { param: "-count", display: "Most Frequent" },
-    { param: "count", display: "Least Frequent" },
-    { param: "-priority", display: "Highest Priority" },
-    { param: "priority", display: "Lowest Priority" },
+    { param: "-last_seen", display: $localize`Last Seen` },
+    { param: "first_seen", display: $localize`First Seen` },
+    { param: "-count", display: $localize`Most Frequent` },
+    { param: "count", display: $localize`Least Frequent` },
+    { param: "-priority", display: $localize`Highest Priority` },
+    { param: "priority", display: $localize`Lowest Priority` },
   ];
 
   readonly searchHelp: SearchHelpConfig = {

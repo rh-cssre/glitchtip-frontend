@@ -247,7 +247,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     );
     if (data) {
       this.setCreateAlert(data);
-      this.snackBar.open(`Success! Your new alert has been added.`);
+      this.snackBar.open($localize`Success! Your new alert has been added.`);
       this.#projectAlertsResource.update((alerts) =>
         alerts ? [...alerts, data] : [data],
       );
@@ -273,7 +273,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     );
     if (response.status === 204) {
       this.setDeleteProjectAlert(id);
-      this.snackBar.open(`Success: Your alert has been deleted`);
+      this.snackBar.open($localize`Success: Your alert has been deleted`);
       this.#projectAlertsResource.update((alerts) =>
         alerts ? alerts.filter((a) => a.id !== id) : [],
       );
@@ -306,16 +306,16 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       const results = data as { recipientType: string; status: string; message?: string | null }[];
       const result = results[0];
       if (!result) {
-        this.snackBar.open(`No test was sent`);
+        this.snackBar.open($localize`No test was sent`);
       } else if (result.status === "error") {
-        this.snackBar.open(`Test failed: ${result.message}`);
+        this.snackBar.open($localize`Test failed: ${result.message}:message:`);
       } else if (result.status === "sent") {
-        this.snackBar.open(`Test notification sent successfully`);
+        this.snackBar.open($localize`Test notification sent successfully`);
       } else if (result.status === "skipped") {
-        this.snackBar.open(`Email recipients are tested via the alert itself`);
+        this.snackBar.open($localize`Email recipients are tested via the alert itself`);
       }
     } else if (error) {
-      this.snackBar.open(`Failed to send test notification`);
+      this.snackBar.open($localize`Failed to send test notification`);
     }
   }
 
@@ -350,7 +350,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     );
     if (data) {
       this.setUpdateAlertProperties(data);
-      this.snackBar.open(`Success: Your alert has been updated`);
+      this.snackBar.open($localize`Success: Your alert has been updated`);
     } else if (error) {
       const errors = handleError(error, response);
       this.setUpdatePropertiesError(errors, id);
@@ -402,7 +402,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
       );
       if (data?.id) {
         this.setUpdateAlertRecipients(data.alertRecipients, data.id);
-        this.snackBar.open(`Success: Your alert has been updated`);
+        this.snackBar.open($localize`Success: Your alert has been updated`);
         // Reload wipes unrelated edits, could improve this
         this.#projectAlertsResource.reload();
       }
@@ -463,7 +463,7 @@ export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
     );
     if (data?.id) {
       this.setUpdateAlertRecipients(data.alertRecipients, data.id);
-      this.snackBar.open(`Success: Your recipient has been updated`);
+      this.snackBar.open($localize`Success: Your recipient has been updated`);
       this.#projectAlertsResource.reload();
     }
     if (error) {

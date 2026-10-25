@@ -31,12 +31,12 @@
             <div class="content-wrapper">
               <h3 class="label">{{ authToken.label }}</h3>
               <div class="loading-wrapper">
-                <gt-copy-input
+                <gt-copy-input i18n-placeholder
                   class="token"
                   placeholder="Token"
                   [value]="authToken.token!"
                 ></gt-copy-input>
-                <gt-loading-button
+                <gt-loading-button i18n-buttonText
                   (buttonClick)="deleteAuthToken(authToken.id!)"
                   [loading]="authToken.isLoading"
                   buttonText="Delete"
@@ -45,7 +45,7 @@
                 </gt-loading-button>
               </div>
               <p class="scopes">
-                <span class="body-text-strong">Scopes</span>
+                <span i18n class="body-text-strong">Scopes</span>
                 <span class="scopes__list-wrapper">
                   @for (
                     scope of authToken.scopes;

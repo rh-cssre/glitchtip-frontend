@@ -2,16 +2,16 @@
   <section class="mat-typography">
     <mat-divider></mat-divider>
     <div class="csp__header">
-      <h3>CSP Report</h3>
+      <h3 i18n>CSP Report</h3>
       <mat-button-toggle-group #group="matButtonToggleGroup">
-        <mat-button-toggle
+        <mat-button-toggle i18n i18n-aria-label
           [checked]="true"
           value="report-csp"
           aria-label="full csp report data"
         >
           Report
         </mat-button-toggle>
-        <mat-button-toggle value="raw-csp" aria-label="raw csp report data">
+        <mat-button-toggle i18n i18n-aria-label value="raw-csp" aria-label="raw csp report data">
           Raw
         </mat-button-toggle>
       </mat-button-toggle-group>

@@ -1,4 +1,4 @@
-<gt-list-app-bar
+<gt-list-app-bar i18n-listTitle
   listTitle="Logs"
   [searchHits]="hitCount()"
   [queriedProjects]="projects()"
@@ -17,12 +17,12 @@
     >
       <mat-form-field appearance="outline" class="search-field">
         <mat-label i18n>Search logs</mat-label>
-        <input
+        <input i18n-placeholder
           matInput
           formControlName="query"
           placeholder="Search message body..."
         />
-        <button
+        <button i18n-aria-label
           mat-icon-button
           matSuffix
           type="submit"
@@ -53,7 +53,7 @@
         [formControl]="serviceForm.controls.service"
         (selectionChange)="onServiceChange($event)"
       >
-        <mat-option value="">All services</mat-option>
+        <mat-option i18n value="">All services</mat-option>
         @for (opt of serviceOptions(); track opt.value) {
           <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
         }
@@ -70,7 +70,7 @@
 
   <!-- Log output (terminal style) -->
   <div class="log-container">
-    <gt-loading-overlay [loading]="isLoading()" label="Loading logs" fullHeight>
+    <gt-loading-overlay i18n-label [loading]="isLoading()" label="Loading logs" fullHeight>
       <div class="log-output">
         @if (errors()?.length) {
           <div class="log-empty">
@@ -137,7 +137,7 @@
           class="load-more-btn"
         >
           @if (isLoadingMore()) {
-            <span>Loading...</span>
+            <span i18n>Loading...</span>
           } @else {
             <div class="load-more-icon-text">
               <mat-icon matButtonIcon>expand_more</mat-icon>

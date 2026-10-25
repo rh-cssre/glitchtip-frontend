@@ -80,12 +80,12 @@ export class Logs {
   });
 
   levelOptions = [
-    { value: "trace", label: "Trace" },
-    { value: "debug", label: "Debug" },
-    { value: "info", label: "Info" },
-    { value: "warn", label: "Warn" },
-    { value: "error", label: "Error" },
-    { value: "fatal", label: "Fatal" },
+    { value: "trace", label: $localize`Trace` },
+    { value: "debug", label: $localize`Debug` },
+    { value: "info", label: $localize`Info` },
+    { value: "warn", label: $localize`Warn` },
+    { value: "error", label: $localize`Error` },
+    { value: "fatal", label: $localize`Fatal` },
   ];
 
   serviceOptions = computed(() =>

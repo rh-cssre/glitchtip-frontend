@@ -36,7 +36,7 @@
   </gt-top-app-bar>
   <section class="l-body">
     @if (fromStripe()) {
-      <span class="body-text-strong">Redirected from Stripe</span>
+      <span i18n class="body-text-strong">Redirected from Stripe</span>
     }
     @if (pageLoading() || subscriptionRefreshTimeout()) {
       <mat-card>
@@ -48,7 +48,7 @@
             </div>
           }
           @if (subscriptionRefreshTimeout()) {
-            <div>
+            <div i18n>
               GlitchTip was unable to find a subscription for your account. If
               you just signed up for a subscription on our payment platform,
               please contact us at

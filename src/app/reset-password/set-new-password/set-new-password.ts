@@ -74,7 +74,7 @@ export class SetNewPassword {
         this.form.value.password!,
       );
       if (data) {
-        this.snackBar.open("Your password has been changed.");
+        this.snackBar.open($localize`Your password has been changed.`);
         this.router.navigate(["/login"]);
       }
     }
