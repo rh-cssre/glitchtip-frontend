@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link backLinkText="Back to members" />
+    <gt-back-link i18n-backLinkText backLinkText="Back to members" />
   </ng-container>
 </gt-top-app-bar>
 @if (member(); as member) {
@@ -8,7 +8,7 @@
     <gt-detail-header [title]="member.email" />
     <mat-card>
       <mat-card-header>
-        <mat-card-title il8n>Basics</mat-card-title>
+        <mat-card-title i18n il8n>Basics</mat-card-title>
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content class="basics-content">
@@ -18,7 +18,7 @@
         </div>
         <div class="column">
           <div class="body-text-strong" i18n>Role</div>
-          <div>{{ member.roleName }}</div>
+          <div>@switch (member.role) { @case ("owner") {<ng-container i18n>Owner</ng-container>} @case ("manager") {<ng-container i18n>Manager</ng-container>} @case ("admin") {<ng-container i18n>Admin</ng-container>} @case ("member") {<ng-container i18n>Member</ng-container>} @default {{{ member.roleName }}} }</div>
         </div>
         <div class="column">
           <div class="body-text-strong" i18n>Added</div>
@@ -45,13 +45,13 @@
           }
           <div class="role-form-elements">
             <mat-radio-group formControlName="role">
-              <mat-radio-button value="member">Member</mat-radio-button>
-              <mat-radio-button value="admin">Admin</mat-radio-button>
-              <mat-radio-button value="manager">Manager</mat-radio-button>
-              <mat-radio-button value="owner">Owner</mat-radio-button>
+              <mat-radio-button i18n value="member">Member</mat-radio-button>
+              <mat-radio-button i18n value="admin">Admin</mat-radio-button>
+              <mat-radio-button i18n value="manager">Manager</mat-radio-button>
+              <mat-radio-button i18n value="owner">Owner</mat-radio-button>
             </mat-radio-group>
             <div class="role-button-container">
-              <gt-loading-button
+              <gt-loading-button i18n-buttonText
                 [disabled]="member.role === formRole.value"
                 [loading]="updateMemberLoading() === true"
                 buttonText="Update Member"
@@ -110,7 +110,7 @@
             subscription settings. If you are the current account owner or have
             an owner role, you may transfer ownership to this member.
           </p>
-          <gt-loading-button
+          <gt-loading-button i18n i18n-buttonText
             buttonText="Transfer Ownership"
             [loading]="transferOrgOwnershipLoading() === true"
             (buttonClick)="transferOrgOwnership()"

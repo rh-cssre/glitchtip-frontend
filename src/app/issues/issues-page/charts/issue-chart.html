@@ -25,8 +25,7 @@
         <div> {{ model.name | date: 'M/d/yy, h:mm a'}}</div>
         }
         <div
-          >{{ model.value | i18nPlural: {'=0': 'events', '=1': '# event',
-          'other': '# events'} }}
+          ><ng-container i18n>{model.value, plural, =0 {events} =1 {1 event} other {{{ model.value }} events}}</ng-container>
         </div>
       </div>
     </ng-template>

@@ -157,7 +157,7 @@ export class TeamsService extends StatefulService<TeamsState> {
     if (result.error) {
       // this.setDeleteTeamError(result.response);
     } else {
-      this.snackBar.open(`You have successfully deleted #${teamSlug}`);
+      this.snackBar.open($localize`You have successfully deleted #${teamSlug}:teamSlug:`);
       this.router.navigate([orgSlug, "settings", "teams"]);
     }
     return result;

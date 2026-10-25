@@ -44,6 +44,9 @@ type Member = components["schemas"]["OrganizationUserSchema"];
   providers: [MembersService],
 })
 export class MembersComponent {
+  leaveText = $localize`Leave`;
+  removeText = $localize`Remove`;
+  actionsForLabel = (email: string) => $localize`Actions for ${email}:email:`;
   private organizationsService = inject(OrganizationsService);
   private organizationDetailService = inject(OrganizationDetailService);
   private membersService = inject(MembersService);

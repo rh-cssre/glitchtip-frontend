@@ -13,7 +13,7 @@
   </mat-card>
 }
 
-<gt-loading-overlay [loading]="loading()" label="Loading user reports">
+<gt-loading-overlay i18n-label [loading]="loading()" label="Loading user reports">
   <div class="reports">
     @for (report of reports(); track report) {
       <div class="report">

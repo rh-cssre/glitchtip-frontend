@@ -1,7 +1,7 @@
 <section>
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Environments</mat-card-title>
+      <mat-card-title i18n>Environments</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
@@ -24,7 +24,7 @@
                     slot="actions"
                     (buttonClick)="toggleHidden(environment)"
                     [loading]="environment.id === toggleHiddenloading()"
-                    [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
+                    [buttonText]="environment.isHidden ? showText : hideText"
                     buttonStyle="stroked"
                   />
                 </gt-list-row>
@@ -32,7 +32,7 @@
             </gt-list>
           }
         } @else {
-          <p class="body-text">
+          <p i18n class="body-text">
             If you initialize an open-source Sentry SDK with an environment, it
             will tag events with that environment and GlitchTip will keep a
             record of them. The environments persist even if the event that
