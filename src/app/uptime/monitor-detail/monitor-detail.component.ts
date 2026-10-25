@@ -32,6 +32,7 @@ import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
   return value === undefined ? true : booleanAttribute(value);
@@ -70,6 +71,7 @@ export class MonitorDetailComponent
   protected service: MonitorService;
   private breakpointObserver = inject(BreakpointObserver);
   private dialog = inject(MatDialog);
+  accessProjectWrite = inject(OrganizationsService).accessProjectWrite;
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -172,8 +174,8 @@ export class MonitorDetailComponent
   delete() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete monitor?`,
-        message: $localize`Are you sure you want to delete this monitor? You will permanently lose all associated uptime data.`,
+        title: $localize`Delete ${this.monitor()?.name ?? ""}?`,
+        message: $localize`Its check history is deleted too. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });

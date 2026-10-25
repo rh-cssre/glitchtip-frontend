@@ -8,21 +8,28 @@
   </ng-container>
 
   <ng-container slot="right">
-    <div class="top-bar-actions">
-      <button
-        id="monitor-settings"
-        mat-stroked-button
-        [disabled]="false"
-        color="primary"
-        [routerLink]="['./update']"
-        i18n
-      >
-        Settings
-      </button>
-      <button mat-icon-button class="medium-icon-button" (click)="delete()">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
+    @if (accessProjectWrite()) {
+      <div class="top-bar-actions">
+        <button
+          id="monitor-settings"
+          mat-stroked-button
+          color="primary"
+          [routerLink]="['./update']"
+          i18n
+        >
+          Settings
+        </button>
+        <button
+          mat-icon-button
+          class="medium-icon-button"
+          aria-label="Delete monitor"
+          i18n-aria-label
+          (click)="delete()"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    }
   </ng-container>
 </gt-top-app-bar>
 
@@ -150,9 +157,11 @@
               i18n-message
               message="Associate a project with this monitor to get alerts."
             >
-              <a mat-stroked-button [routerLink]="['./update']" i18n
-                >Edit monitor</a
-              >
+              @if (accessProjectWrite()) {
+                <a mat-stroked-button [routerLink]="['./update']" i18n
+                  >Edit monitor</a
+                >
+              }
             </gt-empty-state>
           } @else if (alertCountLoading()) {
             <mat-progress-spinner
