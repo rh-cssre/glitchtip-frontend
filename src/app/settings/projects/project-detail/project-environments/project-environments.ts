@@ -27,6 +27,8 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   providers: [ProjectEnvironmentsService],
 })
 export class ProjectEnvironments implements OnInit {
+  showText = $localize`Show`;
+  hideText = $localize`Hide`;
   private service = inject(ProjectEnvironmentsService);
   orgSlug = input.required<string>();
   projectSlug = input.required<string>();

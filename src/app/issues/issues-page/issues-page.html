@@ -1,4 +1,4 @@
-<gt-list-app-bar
+<gt-list-app-bar i18n-listTitle
   listTitle="Issues"
   [searchHits]="$safeNavigationMigration(paginator()?.count)"
   [queriedProjects]="projects()"
@@ -25,7 +25,7 @@
     />
   }
   <div class="table-container">
-    <gt-loading-overlay [loading]="loading()" label="Loading issues">
+    <gt-loading-overlay i18n-label [loading]="loading()" label="Loading issues">
       @if (issues(); as issues) {
         <table
           mat-table
@@ -168,7 +168,7 @@
             </th>
           </ng-container>
           <ng-container matColumnDef="title">
-            <th
+            <th i18n
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
@@ -199,7 +199,7 @@
                 }}</a>
               </div>
               <div class="small-screen-event-count caption-text">
-                {{ element.count | i18nPlural: eventCountPluralMapping }}
+                <ng-container i18n>{element.count, plural, =1 {1 event} other {{{ element.count }} events}}</ng-container>
               </div>
               <div>
                 @if (appliedProjectCount() !== 1) {
@@ -216,13 +216,13 @@
                     {{ element.firstSeen | daysOld }}</time
                   >
                   @if (element.firstSeen !== element.lastSeen) {
-                    , seen
+                    <ng-container i18n>, seen
                     <time
                       [dateTime]="element.lastSeen"
                       [title]="element.lastSeen | date: 'medium'"
                     >
                       {{ element.lastSeen | daysAgo }}
-                    </time>
+                    </time></ng-container>
                   }
                 </span>
                 @if (element.type && element.type === "csp") {
@@ -230,7 +230,7 @@
                     @if (appliedProjectCount() !== 1 && element.type) {
                       <span> &mdash; </span>
                     }
-                    {{ element.type }} report</span
+                    <ng-container i18n>{{ element.type }} report</ng-container></span
                   >
                 }
               </div>
@@ -245,7 +245,7 @@
             >
               @if (showBulkSelectProject() === true) {
                 @if (allResultsSelected() === false) {
-                  <span class="bulk-project-select__text"
+                  <span i18n class="bulk-project-select__text"
                     >{{ numberOfSelectedIssues() }} issues on this page
                     selected.</span
                   >
@@ -255,15 +255,15 @@
                     (click)="selectAllResults()"
                   >
                     @if (paginator()?.hits; as hits) {
-                      Select all {{ hits }} issues that match this query
+                      <ng-container i18n>Select all {{ hits }} issues that match this query</ng-container>
                     }
                   </button>
                 } @else {
-                  <span class="bulk-project-select__text"
+                  <span i18n class="bulk-project-select__text"
                     >All {{ paginator()?.hits }} issues are currently
                     selected.</span
                   >
-                  <button mat-stroked-button (click)="clearSelectAllResults()">
+                  <button i18n mat-stroked-button (click)="clearSelectAllResults()">
                     Undo
                   </button>
                 }
@@ -271,7 +271,7 @@
             </th>
           </ng-container>
           <ng-container matColumnDef="events">
-            <th
+            <th i18n
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
@@ -292,7 +292,7 @@
           <ng-container matColumnDef="trend">
             <th mat-header-cell *matHeaderCellDef>
               <div class="stats-cell-content">
-                <div class="stats-header-label">Trend</div>
+                <div i18n class="stats-header-label">Trend</div>
               </div>
             </th>
             <td

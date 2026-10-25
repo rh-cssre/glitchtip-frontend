@@ -17,7 +17,6 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { I18nPluralPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
@@ -26,7 +25,6 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   templateUrl: "./teams.component.html",
   styleUrls: ["./teams.component.scss"],
   imports: [
-    I18nPluralPipe,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
@@ -57,10 +55,6 @@ export class TeamsComponent {
   loading = this.organizationDetailService.loading;
   accessTeamWrite = this.organizationsService.accessTeamWrite;
 
-  memberCountPluralMapping: { [k: string]: string } = {
-    "=1": "1 Member",
-    other: "# Members",
-  };
 
   constructor() {
     effect(() => {

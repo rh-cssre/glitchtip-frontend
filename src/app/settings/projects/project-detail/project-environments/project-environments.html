@@ -1,7 +1,7 @@
 <section>
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Environments</mat-card-title>
+      <mat-card-title i18n>Environments</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
@@ -27,7 +27,7 @@
                     <gt-loading-button
                       (buttonClick)="toggleHidden(environment)"
                       [loading]="environment.id === toggleHiddenloading()"
-                      [buttonText]="environment.isHidden ? 'Show' : 'Hide'"
+                      [buttonText]="environment.isHidden ? showText : hideText"
                       buttonStyle="stroked"
                     ></gt-loading-button>
                   </div>
