@@ -17,7 +17,7 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <gt-form-error [errors]="formErrors()"></gt-form-error>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label i18n>Email</mat-label>
             <input matInput autofocus type="email" formControlName="email" />
             @if (email?.errors) {
               <mat-error>
@@ -34,7 +34,7 @@
             }
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Password</mat-label>
+            <mat-label i18n>Password</mat-label>
             <input matInput type="password" formControlName="password" />
             @if (password?.errors) {
               <mat-error>

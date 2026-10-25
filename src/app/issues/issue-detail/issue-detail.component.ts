@@ -58,6 +58,8 @@ const ISSUE_STATUS: Record<IssueStatus, { label: string; color: string }> = {
   ],
 })
 export class IssueDetailComponent implements OnInit {
+  issuesText = $localize`Issues`;
+  allIssuesFor = (project: string) => $localize`All issues for ${project}:project:`;
   private issueService = inject(IssueDetailService);
   private organizationsService = inject(OrganizationsService);
   private route = inject(ActivatedRoute);

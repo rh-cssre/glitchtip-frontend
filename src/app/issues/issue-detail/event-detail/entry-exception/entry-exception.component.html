@@ -3,16 +3,16 @@
     <section class="exception">
       <div class="header-wrapper">
         <div class="text-wrapper">
-          <h3>Exception</h3>
+          <h3 i18n>Exception</h3>
           @if (group.value === "full-data") {
             <div class="spacer">
               <button mat-button (click)="getFlippedFrames()">
-                (most recent call
+                <ng-container i18n>(most recent call</ng-container>
                 @if (isReversed()) {
-                  <span>first</span>
+                  <span i18n>first</span>
                 }
                 @if (isReversed() === false) {
-                  <span>last</span>
+                  <span i18n>last</span>
                 }
                 )
               </button>
@@ -20,14 +20,14 @@
           }
         </div>
         <mat-button-toggle-group #group="matButtonToggleGroup">
-          <mat-button-toggle
+          <mat-button-toggle i18n i18n-aria-label
             [checked]="true"
             value="full-data"
             aria-label="full data"
           >
             Full
           </mat-button-toggle>
-          <mat-button-toggle value="raw" aria-label="raw data">
+          <mat-button-toggle i18n i18n-aria-label value="raw" aria-label="raw data">
             Raw
           </mat-button-toggle>
         </mat-button-toggle-group>

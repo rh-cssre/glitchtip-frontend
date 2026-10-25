@@ -1,13 +1,13 @@
 <div class="heading">
   <div class="text-info">
-    <label for="project-picker" class="body-text">Platform</label>
-    <p class="caption-text">
+    <label i18n for="project-picker" class="body-text">Platform</label>
+    <p i18n class="caption-text">
       The primary platform for this project. Used for documentation.
     </p>
   </div>
   <mat-form-field appearance="outline">
-    <mat-label>Filter platforms</mat-label>
-    <input
+    <mat-label i18n>Filter platforms</mat-label>
+    <input i18n-aria-label
       #filterInput
       type="text"
       aria-label="Filter platforms"
@@ -43,11 +43,11 @@
       </ul>
     </mat-tab>
   }
-  <mat-tab label="All">
+  <mat-tab i18n-label label="All">
     <ul>
       @if (filteredPlatforms()?.length === 0) {
         <li>
-          <button
+          <button i18n
             mat-stroked-button
             type="button"
             (click)="writeValue('other', true)"

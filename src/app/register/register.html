@@ -10,14 +10,14 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <gt-form-error [errors]="formErrors()"></gt-form-error>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label i18n>Email</mat-label>
             <input matInput autofocus type="email" formControlName="email" />
             <mat-error>
               @if (email?.errors?.required) {
-                <span>Your email is required to sign up</span>
+                <span i18n>Your email is required to sign up</span>
               }
               @if (email?.errors?.email) {
-                <span>Enter a valid email address</span>
+                <span i18n>Enter a valid email address</span>
               }
               @if (email?.errors?.serverError) {
                 <span>{{ email?.errors?.serverError }}</span>
@@ -29,10 +29,10 @@
             <input matInput type="password" formControlName="password" />
             <mat-error>
               @if (password?.errors?.minlength) {
-                <span>Your password should be at least 8 characters long</span>
+                <span i18n>Your password should be at least 8 characters long</span>
               }
               @if (password?.errors?.required) {
-                <span>A password is required to sign up</span>
+                <span i18n>A password is required to sign up</span>
               }
               @if (password?.errors?.serverError) {
                 <span>{{ password?.errors?.serverError }}</span>
@@ -41,7 +41,7 @@
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
             <mat-label i18n>Confirm password</mat-label>
-            <input
+            <input i18n-placeholder
               matInput
               type="password"
               placeholder="Confirm Password"
@@ -51,10 +51,10 @@
 
             <mat-error>
               @if (password2?.errors?.required) {
-                <span>A password is required to sign up</span>
+                <span i18n>A password is required to sign up</span>
               }
               @if (password2?.errors?.notEqual) {
-                <span>Your passwords don't match</span>
+                <span i18n>Your passwords don't match</span>
               }
               @if (password2?.errors?.serverError) {
                 <span>{{ password2?.errors?.serverError }}</span>
@@ -75,7 +75,7 @@
       @if (enableSocialAppsUserRegistration()) {
         @if (socialApps(); as socialApps) {
           @if (socialApps.length && enableUserRegistration()) {
-            <div class="or">
+            <div i18n class="or">
               <span class="body-text-strong">or</span>
             </div>
           }

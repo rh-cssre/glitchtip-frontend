@@ -10,7 +10,7 @@
           data-cy="list-search-form"
         >
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Search</mat-label>
+            <mat-label i18n>Search</mat-label>
             <input
               matInput
               type="search"
@@ -97,12 +97,12 @@
       @if (environmentForm) {
         <form [formGroup]="environmentForm" class="environment-form">
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Environment</mat-label>
+            <mat-label i18n>Environment</mat-label>
             <mat-select
               (selectionChange)="filterByEnvironment.emit($event)"
               formControlName="environment"
             >
-              <mat-option [value]="null">All Environments</mat-option>
+              <mat-option i18n [value]="null">All Environments</mat-option>
               @for (
                 environment of organizationEnvironments();
                 track environment
@@ -138,7 +138,7 @@
       }
       <form [formGroup]="sortForm" class="sort-form">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>Sort by</mat-label>
+          <mat-label i18n>Sort by</mat-label>
           <mat-select
             (selectionChange)="sortByChanged.emit($event)"
             formControlName="sort"

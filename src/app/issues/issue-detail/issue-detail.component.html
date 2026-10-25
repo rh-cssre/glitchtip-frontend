@@ -30,7 +30,7 @@
     <ng-container slot="left">
       <gt-back-link
         [backLinkText]="
-          isMobile() ? 'Issues' : 'All issues for ' + issue.project.name
+          isMobile() ? issuesText : allIssuesFor(issue.project.name)
         "
         [backLinkParams]="generateBackLink(issue.project.id)"
       />

@@ -19,7 +19,7 @@
         class="selected-project-count"
         >{{ selectedProjectDisplay.firstProjectName }}</span
       >
-      } @else { All projects }
+      } @else { <ng-container i18n>All projects</ng-container> }
     </mat-select-trigger>
     <mat-option class="project-multiselect__search-field">
       <ngx-mat-select-search

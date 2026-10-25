@@ -34,6 +34,8 @@ import { MatCardModule } from "@angular/material/card";
   providers: [NotificationsService],
 })
 export class Notifications implements OnInit {
+  onText = $localize`On`;
+  offText = $localize`Off`;
   private notificationsService = inject(NotificationsService);
 
   subscribeByDefault = this.notificationsService.subscribeByDefault;

@@ -12,7 +12,7 @@
       }
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
-          <mat-label>Slug</mat-label>
+          <mat-label i18n>Slug</mat-label>
           <input matInput formControlName="slug" [value]="team.slug" />
           <mat-error>
             @if (this.form.get("slug")?.errors?.required) {
@@ -20,7 +20,7 @@
             }
           </mat-error>
         </mat-form-field>
-        <gt-loading-button
+        <gt-loading-button i18n-buttonText
           [disabled]="this.form.get('slug')?.value === team.slug"
           [loading]="loading().updateName"
           buttonText="Update Name"
@@ -44,7 +44,7 @@
       >
       <mat-error></mat-error>
     </div>
-    <gt-loading-button
+    <gt-loading-button i18n-buttonText
       buttonText="Delete Team"
       buttonStyle="stroked"
       color="warn"
