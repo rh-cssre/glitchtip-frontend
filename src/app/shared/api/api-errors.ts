@@ -65,9 +65,11 @@ export function handleError(
       }
       break;
     case 402:
+    case 403:
     case 502:
-      // The server writes owner-facing text for these (a card decline, a failed
-      // Stripe call); passing it through beats a generic message.
+      // The server writes user-facing text for these (a card decline, the scope
+      // a role lacks, a failed Stripe call); passing it through beats a generic
+      // message.
       if (error && typeof error === "object" && "detail" in error) {
         return { detail: [{ msg: error.detail }] };
       }

@@ -17,6 +17,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
@@ -36,11 +37,14 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 })
 export class TeamSettingsComponent {
   private teamsService = inject(TeamsService);
+  private organizationsService = inject(OrganizationsService);
   private dialog = inject(MatDialog);
 
   team = this.teamsService.team;
   loading = this.teamsService.loading;
   errors = this.teamsService.errors;
+  canWriteTeam = this.organizationsService.canWriteTeam;
+  canAdminTeam = this.organizationsService.canAdminTeam;
   form = new FormGroup({
     slug: new FormControl("", [Validators.required]),
   });
