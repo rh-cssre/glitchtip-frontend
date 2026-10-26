@@ -18,7 +18,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
 import { checkForOverflow, stringAttribute } from "src/app/shared/shared.utils";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
-import { OrganizationsService } from "src/app/api/organizations.service";
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import {
   DEFAULT_MONITOR_SORT,
@@ -33,6 +32,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-monitor-list",
