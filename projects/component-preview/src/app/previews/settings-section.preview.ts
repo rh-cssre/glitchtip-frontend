@@ -106,7 +106,7 @@ export class SettingsSectionPreview {
   ];
   readonly dos = [
     "Stack sections in one column; a hairline between them separates them",
-    "Join a list and the field that adds to it with .gt-settings-continued on the second",
+    "Put the field that adds to a list above the list, joined with .gt-settings-continued on the list",
     "Use inline for a single control with its action beside it",
     "Put the action below, left-aligned, when a section has several controls or none",
     "Save a choice that previews itself, such as the theme, on change with no button",
