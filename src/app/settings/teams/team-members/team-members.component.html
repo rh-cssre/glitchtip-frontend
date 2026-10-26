@@ -1,30 +1,4 @@
-@if (canModifyTeam()) {
-  <mat-form-field
-    class="add-field"
-    appearance="outline"
-    subscriptSizing="dynamic"
-    data-cy="team-member-select"
-  >
-    <mat-label i18n>Add Member</mat-label>
-    <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
-      @if (filteredAddTeamMembers().length) {
-        @for (orgMember of filteredAddTeamMembers(); track orgMember) {
-          <mat-option [value]="orgMember">
-            {{ orgMember.email }}
-          </mat-option>
-        }
-      } @else {
-        <mat-option disabled i18n>No members</mat-option>
-      }
-    </mat-select>
-    @if (addMemberError) {
-      <mat-error>{{ addMemberError }}</mat-error>
-    }
-  </mat-form-field>
-}
-@if (removeMemberError) {
-  <mat-error class="list-error">{{ removeMemberError }}</mat-error>
-}
+<gt-form-error [errors]="removeMemberError" />
 @if (teamMembers().length === 0) {
   <gt-empty-state
     icon="people"
@@ -41,11 +15,13 @@
           [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
           >{{ teamMember.email }}</a
         >
-        <span slot="meta">{{ teamMember.roleName }}</span>
+        <span slot="meta">{{
+          roleName(teamMember.role) ?? teamMember.roleName
+        }}</span>
         @if (canModifyTeam()) {
           <gt-loading-button
             slot="actions"
-            [buttonText]="isMe(teamMember.email) ? 'Leave' : 'Remove'"
+            [buttonText]="isMe(teamMember.email) ? leaveText : removeText"
             buttonStyle="stroked"
             [loading]="selectedTeamMember?.toString() === teamMember.id"
             (buttonClick)="
@@ -57,4 +33,38 @@
       </gt-list-row>
     }
   </gt-list>
+}
+@if (canModifyTeam()) {
+  <gt-settings-section
+    #addSection
+    class="gt-settings-continued"
+    i18n-title
+    title="Add member"
+    [inline]="true"
+  >
+    <mat-form-field
+      appearance="outline"
+      subscriptSizing="dynamic"
+      data-cy="team-member-select"
+    >
+      <mat-select
+        (selectionChange)="addTeamMember()"
+        [formControl]="member"
+        [aria-labelledby]="addSection.titleId"
+      >
+        @if (filteredAddTeamMembers().length) {
+          @for (orgMember of filteredAddTeamMembers(); track orgMember) {
+            <mat-option [value]="orgMember">
+              {{ orgMember.email }}
+            </mat-option>
+          }
+        } @else {
+          <mat-option disabled i18n>No members</mat-option>
+        }
+      </mat-select>
+      @if (addMemberError) {
+        <mat-error>{{ addMemberError }}</mat-error>
+      }
+    </mat-form-field>
+  </gt-settings-section>
 }

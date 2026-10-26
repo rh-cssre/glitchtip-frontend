@@ -22,11 +22,13 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { roleName } from "src/app/settings/members/member-roles";
 
 @Component({
   selector: "gt-team-members",
   templateUrl: "./team-members.component.html",
-  styleUrls: ["./team-members.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormFieldModule,
@@ -38,6 +40,8 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
     ListComponent,
     ListRowComponent,
     EmptyStateComponent,
+    FormErrorComponent,
+    SettingsSectionComponent,
   ],
 })
 export class TeamMembersComponent implements OnInit {
@@ -51,6 +55,9 @@ export class TeamMembersComponent implements OnInit {
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
   canModifyTeam = this.teamsService.canModifyTeam;
+  roleName = roleName;
+  leaveText = $localize`Leave`;
+  removeText = $localize`Remove`;
   noMembersMessage = computed(() =>
     this.canModifyTeam()
       ? $localize`Add organization members to this team so they get alerts for its projects.`
@@ -104,7 +111,6 @@ export class TeamMembersComponent implements OnInit {
   isMe(email: string) {
     return email === this.userService.activeUserEmail();
   }
-
 
   confirmRemoveTeamMember(memberId: string, memberEmail: string) {
     const data = this.isMe(memberEmail)

@@ -19,11 +19,12 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 
 @Component({
   selector: "gt-team-projects",
   templateUrl: "./team-projects.component.html",
-  styleUrls: ["./team-projects.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFormFieldModule,
@@ -35,6 +36,8 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
     ListComponent,
     ListRowComponent,
     EmptyStateComponent,
+    FormErrorComponent,
+    SettingsSectionComponent,
   ],
 })
 export class TeamProjectsComponent implements OnInit {

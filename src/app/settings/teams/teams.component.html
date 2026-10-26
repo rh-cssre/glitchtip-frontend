@@ -21,13 +21,9 @@
     projects comes from
     <a routerLink="../members">organization membership</a>.</p
   >
-  @if (errors(); as error) {
-    @if (error.removeTeamMember || error.addTeamMember) {
-      <mat-error class="list-error">{{
-        error.removeTeamMember || error.addTeamMember
-      }}</mat-error>
-    }
-  }
+  <gt-form-error
+    [errors]="errors().removeTeamMember || errors().addTeamMember"
+  />
   @if (yourTeams()?.length) {
     <gt-list i18n-label label="Your Teams">
       @for (yourTeam of yourTeams(); track yourTeam.id) {

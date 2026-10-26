@@ -64,25 +64,31 @@ export class TeamSettingsComponent {
       this.teamsService.setTeamKey(this.orgSlug(), teamSlug);
       this.form.patchValue({ slug: teamSlug });
     });
-    effect(() => {
-      const error = this.errors().updateName;
-      if (error) mapFormErrors({ slug: [error] }, this.form);
-    });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
-    const newSlug = this.form.value.slug;
-    this.teamsService.updateTeamSlug(this.orgSlug(), this.teamSlug(), newSlug!);
+    const newSlug = this.form.value.slug!;
+    await this.teamsService.updateTeamSlug(
+      this.orgSlug(),
+      this.teamSlug(),
+      newSlug,
+    );
+    // The service keeps the last error after a later success.
+    const error = this.errors().updateName;
+    if (error && this.team()?.slug !== newSlug) {
+      mapFormErrors({ slug: [error] }, this.form);
+    }
   }
 
   deleteTeam() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete team?`,
-        message: $localize`Are you sure you want to delete this team?`,
+        title: $localize`Delete #${this.teamSlug()}:team:?`,
+        message: $localize`Its projects and members stay in the organization. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });

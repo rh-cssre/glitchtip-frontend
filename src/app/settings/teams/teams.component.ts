@@ -13,28 +13,27 @@ import { NewTeamComponent } from "./new-team/new-team";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-teams",
   templateUrl: "./teams.component.html",
-  styleUrls: ["./teams.component.scss"],
   imports: [
     MatButtonModule,
     MatDialogModule,
     RouterLink,
-    MatFormFieldModule,
     LoadingButtonComponent,
     TopAppBar,
     ListComponent,
     ListRowComponent,
     EmptyStateComponent,
+    FormErrorComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
