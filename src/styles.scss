@@ -270,6 +270,12 @@ mat-sidenav-container {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
+// A continuation sits right under what it continues.
+gt-settings-section.gt-settings-continued,
+.gt-settings-continued gt-settings-section {
+  padding-top: 0;
+}
+
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).
 // Wider than a regular menu because rows contain chip groups and short prose.
 .mat-mdc-menu-panel.search-help-menu {
