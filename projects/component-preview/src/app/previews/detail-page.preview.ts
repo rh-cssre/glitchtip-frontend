@@ -148,6 +148,9 @@ export class DetailPagePreview {
   readonly api: ApiRow[] = [
     { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label; navigates to the parent route (..)" },
     { name: "gt-back-link backLinkParams", type: "object", default: "{}", description: "Query params preserved on the way back" },
+    { name: "gt-detail-header title", type: "string | [string, string | null]", default: `""`, description: "Legacy: use gt-page-header for new pages. Record title, optionally with a muted suffix" },
+    { name: "gt-detail-header subtitle", type: "string | null", default: "", description: "Secondary line under the title" },
+    { name: "gt-detail-header ng-content", type: "content projection", default: "", description: "Optional action row inside the header" },
   ];
   readonly importCode = `import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";

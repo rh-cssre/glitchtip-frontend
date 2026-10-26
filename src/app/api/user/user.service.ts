@@ -86,22 +86,20 @@ export class UserService extends StatefulService<UserState> {
     return false;
   }
 
-  updateUser(name: string, options: UserOptions) {
-    client
-      .PUT("/api/0/users/{user_id}/", {
-        params: {
-          path: mePath,
-        },
-        body: { name, options },
-      })
-      .then((result) => {
-        if (result.data) {
-          this.userResource.set(result.data);
-          this.snackBar.open($localize`Preferences have been updated`);
-        } else {
-          this.snackBar.open($localize`Error attempting to update preferences`);
-        }
-      });
+  async updateUser(name: string, options: UserOptions): Promise<boolean> {
+    const result = await client.PUT("/api/0/users/{user_id}/", {
+      params: {
+        path: mePath,
+      },
+      body: { name, options },
+    });
+    if (result.data) {
+      this.userResource.set(result.data);
+      this.snackBar.open($localize`Preferences have been updated`);
+      return true;
+    }
+    this.snackBar.open($localize`Error attempting to update preferences`);
+    return false;
   }
 
   clearUserUIState() {

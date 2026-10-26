@@ -16,6 +16,7 @@
         i18n-buttonText
         buttonText="Save name"
         buttonStyle="stroked"
+        [loading]="saving() === 'name'"
       />
     </gt-settings-section>
   </form>
@@ -69,6 +70,7 @@
         i18n-buttonText
         buttonText="Save time zone"
         buttonStyle="stroked"
+        [loading]="saving() === 'timeZone'"
       />
     </gt-settings-section>
   </form>
