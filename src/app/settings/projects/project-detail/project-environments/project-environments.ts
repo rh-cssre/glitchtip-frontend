@@ -12,6 +12,7 @@ import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatCardModule } from "@angular/material/card";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-project-environments",
@@ -24,6 +25,7 @@ import { MatCardModule } from "@angular/material/card";
     ListComponent,
     ListRowComponent,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
   providers: [ProjectEnvironmentsService],
 })

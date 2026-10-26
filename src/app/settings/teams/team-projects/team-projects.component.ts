@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  computed,
   inject,
   input,
   ChangeDetectionStrategy,
@@ -50,6 +51,11 @@ export class TeamProjectsComponent implements OnInit {
   errors = this.projectsService.errors;
   project = new FormControl();
   // Adding and removing go through project endpoints that require org:write.
+  noProjectsMessage = computed(() =>
+    this.canEditProjects()
+      ? $localize`Add a project so this team's members get its alerts.`
+      : $localize`Ask an organization manager or owner to add projects to this team.`,
+  );
 
   ngOnInit(): void {
     this.projectsService.setParams(this.orgSlug(), this.teamSlug());

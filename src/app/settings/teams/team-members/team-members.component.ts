@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  computed,
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
@@ -50,6 +51,11 @@ export class TeamMembersComponent implements OnInit {
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
   canModifyTeam = this.teamsService.canModifyTeam;
+  noMembersMessage = computed(() =>
+    this.canModifyTeam()
+      ? $localize`Add organization members to this team so they get alerts for its projects.`
+      : $localize`Ask an organization manager or owner to add members to this team.`,
+  );
 
   member = new FormControl();
   orgSlug = "";

@@ -20,6 +20,7 @@ import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
 
@@ -36,6 +37,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
     MatIconModule,
     PercentPipe,
     TopAppBar,
+    EmptyStateComponent,
     BackLinkComponent,
     HumanizeDurationPipe,
     PageHeaderComponent,

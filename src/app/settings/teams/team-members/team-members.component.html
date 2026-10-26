@@ -30,8 +30,7 @@
     icon="people"
     i18n-title
     title="No team members"
-    i18n-message
-    message="Add organization members to this team so they get alerts for its projects."
+    [message]="noMembersMessage()"
   />
 } @else {
   <gt-list data-test-list>
