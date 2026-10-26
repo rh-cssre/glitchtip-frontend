@@ -21,6 +21,7 @@ import { components } from "src/app/api/api-schema";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { roleName } from "src/app/settings/members/member-roles";
 
 type Member = components["schemas"]["OrganizationUserSchema"];
 
@@ -57,6 +58,7 @@ export class MembersComponent {
   members = this.membersService.members;
   canWriteMember = this.organizationsService.canWriteMember;
   canAdminMember = this.organizationsService.canAdminMember;
+  roleName = roleName;
 
   constructor() {
     effect(() => {
@@ -85,7 +87,7 @@ export class MembersComponent {
       };
     } else {
       data = {
-        title: $localize`Remove member?`,
+        title: $localize`Remove ${member.email}:email:?`,
         message: $localize`${member.email} will lose access to ${orgName} and its projects.`,
         confirmText: $localize`Remove`,
       };

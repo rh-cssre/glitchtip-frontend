@@ -39,7 +39,11 @@ export default [
         component: MultiFactorAuthComponent,
         data: { title: $localize`MFA` },
       },
-      { path: "wizard/:hash", component: Wizard },
+      {
+        path: "wizard/:hash",
+        component: Wizard,
+        data: { title: $localize`Setup wizard` },
+      },
     ],
   },
   {

@@ -73,6 +73,7 @@ export class PreferencesComponent implements OnInit {
     ),
   });
   filteredOptions = signal<string[]>([]);
+  saving = signal<"name" | "timeZone" | null>(null);
   userDetails = this.service.user;
   serverTimeZone = this.settings.serverTimeZone;
 
@@ -105,7 +106,7 @@ export class PreferencesComponent implements OnInit {
         }
         // No event: only a click on the toggle should save the theme.
         this.form.controls.theme.setValue(
-          user.options!.preferredTheme || "light",
+          user.options!.preferredTheme || "system",
           { emitEvent: false },
         );
         // Ensure effect only runs once after user details are loaded
@@ -139,7 +140,7 @@ export class PreferencesComponent implements OnInit {
    * Saves one setting. The other two go back as they are saved, not as they
    * sit in the form, so an unsaved edit in another section is not sent.
    */
-  save(field: "name" | "timeZone" | "theme") {
+  async save(field: "name" | "timeZone" | "theme") {
     const control = this.form.controls[field];
     control.markAsTouched();
     const user = this.userDetails();
@@ -159,6 +160,19 @@ export class PreferencesComponent implements OnInit {
       ...(timezone !== undefined && timezone !== null && { timezone }),
       ...(preferredTheme && { preferredTheme }),
     };
-    this.service.updateUser(name, options);
+    if (field === "theme") {
+      if (!(await this.service.updateUser(name, options))) {
+        control.setValue(user.options?.preferredTheme || "system", {
+          emitEvent: false,
+        });
+      }
+      return;
+    }
+    this.saving.set(field);
+    try {
+      await this.service.updateUser(name, options);
+    } finally {
+      this.saving.set(null);
+    }
   }
 }

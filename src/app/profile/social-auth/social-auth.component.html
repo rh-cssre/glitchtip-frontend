@@ -32,15 +32,15 @@
                   "
                 />
               } @else {
-                <span slot="actions" class="note" i18n
-                  >Set a password to disconnect</span
-                >
+                <p slot="meta" class="gt-note" i18n>
+                  Set a password to disconnect
+                </p>
               }
             </gt-list-row>
           }
         </gt-list>
       } @else {
-        <p class="note" i18n>No connected accounts.</p>
+        <p class="gt-note" i18n>No connected accounts.</p>
       }
       @if (socialApps(); as socialApps) {
         @if (socialApps.length) {
