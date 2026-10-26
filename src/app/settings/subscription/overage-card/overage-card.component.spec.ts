@@ -101,7 +101,7 @@ describe("OverageCardComponent money disclosures", () => {
         },
         {
           provide: OrganizationsService,
-          useValue: { accessOrgAdmin: signal(true) },
+          useValue: { canAdminOrg: signal(true) },
         },
       ],
     }).compileComponents();

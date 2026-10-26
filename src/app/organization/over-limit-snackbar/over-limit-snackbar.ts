@@ -49,7 +49,7 @@ export class OverLimitSnackbar {
   /** Which remedy to offer; `unknown` until overage status loads. */
   readonly throttleState = this.subscriptionService.throttleState;
   /** Cap and toggle are owner-only; point other members at an owner. */
-  readonly canManage = this.orgService.accessOrgAdmin;
+  readonly canManage = this.orgService.canAdminOrg;
   /**
    * Only a free org can change plan itself; a paid one gets in touch, as the
    * upgrade banner says. `null` until the subscription loads, so a paid org is

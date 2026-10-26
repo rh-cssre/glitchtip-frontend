@@ -32,6 +32,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-monitor-list",
@@ -61,6 +62,7 @@ export class MonitorListComponent {
   protected router = inject(Router);
   protected breakPointObserver = inject(BreakpointObserver);
   service = inject(MonitorListService);
+  private organizationsService = inject(OrganizationsService);
   cursor = input(undefined, { transform: stringAttribute });
   sort = input(undefined, { transform: stringAttribute });
 
@@ -70,6 +72,7 @@ export class MonitorListComponent {
   loading = this.service.loading;
   initialLoadComplete = this.service.initialLoadComplete;
   errors = this.service.errors;
+  canWriteProject = this.organizationsService.canWriteProject;
   hasError = this.service.hasError;
   allColumns: string[] = ["name", "checkChart", "status"];
   smallScreenColumns: string[] = ["name", "status"];

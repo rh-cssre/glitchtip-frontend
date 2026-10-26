@@ -60,7 +60,9 @@ export class ProjectAlertsComponent implements OnInit {
   projectAlerts = this.#service.projectAlerts;
   initialLoad = this.#service.initialLoad;
   initialLoadError = this.#service.initialLoadError;
-  accessProjectWrite = inject(OrganizationsService).accessProjectWrite;
+  #orgs = inject(OrganizationsService);
+  canWriteProject = this.#orgs.canWriteProject;
+  canAdminProject = this.#orgs.canAdminProject;
   availableEnvironments = this.#environmentsService.visibleEnvironments;
   alertName = alertName;
   alertSummary = alertSummary;
@@ -71,7 +73,7 @@ export class ProjectAlertsComponent implements OnInit {
   /** The alert being edited, from the URL; only for people who can edit. */
   editing = computed(() => {
     const param = this.#queryParams()?.get("alert");
-    if (!param || !this.accessProjectWrite()) return null;
+    if (!param || !this.canWriteProject()) return null;
     if (param === "new") return { alert: null };
     const alert = this.projectAlerts()?.find((a) => String(a.id) === param);
     return alert ? { alert } : null;

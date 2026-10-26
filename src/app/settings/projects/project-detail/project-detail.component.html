@@ -50,12 +50,12 @@
               #nameSection
               i18n-title
               title="Name"
-              [inline]="accessProjectWrite()"
+              [inline]="canWriteProject()"
             >
               <span slot="description" i18n
                 >Shown in issue lists, alerts and the project switcher.</span
               >
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                   <input
                     matInput
@@ -81,7 +81,7 @@
               } @else {
                 <span class="body-text">{{ project.name }}</span>
               }
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <gt-loading-button
                   slot="actions"
                   i18n-buttonText
@@ -102,7 +102,7 @@
               #platformSection
               i18n-title
               title="Platform"
-              [inline]="accessProjectWrite()"
+              [inline]="canWriteProject()"
             >
               <span slot="description" i18n
                 >Picks the setup guide and icon for this project.
@@ -116,7 +116,7 @@
                   >
                 }
               </span>
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                   <input
                     data-cy="platform-input"
@@ -167,7 +167,7 @@
                     : noPlatformLabel
                 }}</span>
               }
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <gt-loading-button
                   slot="actions"
                   i18n-buttonText
@@ -193,7 +193,7 @@
             >
           </gt-settings-section>
 
-          @if (accessProjectWrite()) {
+          @if (canAdminProject()) {
             <gt-settings-section i18n-title title="Delete project">
               <span slot="description" i18n
                 >Deletes {{ project.name }} and all of its issues, events and
