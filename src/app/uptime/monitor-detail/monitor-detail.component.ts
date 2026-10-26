@@ -24,6 +24,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { DecimalPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -33,15 +34,13 @@ import { toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import {
   alertName,
   alertSummary,
-  recipientLabel,
-  resolveRecipientIcon,
 } from "src/app/settings/projects/project-detail/project-alerts/alert-labels";
+import { AlertRecipientsComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-recipients/alert-recipients.component";
 import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
@@ -69,11 +68,12 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     PageHeaderComponent,
     EmptyStateComponent,
     MatTabsModule,
+    MatFormFieldModule,
     TopAppBar,
     BackLinkComponent,
     ListComponent,
     ListRowComponent,
-    MatTooltipModule,
+    AlertRecipientsComponent,
   ],
 })
 export class MonitorDetailComponent
@@ -144,9 +144,8 @@ export class MonitorDetailComponent
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertName = alertName;
   alertSummary = alertSummary;
-  recipientLabel = recipientLabel;
-  resolveRecipientIcon = resolveRecipientIcon;
   alertCountLoading = this.service.alertCountLoading;
+  alertsError = this.service.alertsError;
   associatedProjectSlug = this.service.associatedProjectSlug;
   canWriteProject = this.organizationsService.canWriteProject;
   noProjectMessage = computed(() =>

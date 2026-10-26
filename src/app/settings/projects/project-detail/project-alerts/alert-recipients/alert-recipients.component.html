@@ -1,0 +1,20 @@
+@for (recipient of recipients(); track recipient.id) {
+  @if (recipient.recipientType === "email") {
+    <mat-icon
+      class="recipient-icon"
+      [matTooltip]="recipientLabel(recipient, teams())"
+      >email</mat-icon
+    >
+  } @else {
+    <svg
+      class="recipient-icon"
+      [matTooltip]="recipientLabel(recipient, teams())"
+    >
+      <use
+        [attr.xlink:href]="'#' + resolveRecipientIcon(recipient.recipientType)"
+      ></use>
+    </svg>
+  }
+} @empty {
+  <span i18n>No recipients</span>
+}

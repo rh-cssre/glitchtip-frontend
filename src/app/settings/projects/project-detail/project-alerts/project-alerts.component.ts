@@ -12,19 +12,14 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { ProjectEnvironmentsService } from "../project-environments/project-environments.service";
 import { AlertEditComponent } from "./alert-edit/alert-edit.component";
-import {
-  alertName,
-  alertSummary,
-  recipientLabel,
-  resolveRecipientIcon,
-} from "./alert-labels";
+import { alertName, alertSummary } from "./alert-labels";
+import { AlertRecipientsComponent } from "./alert-recipients/alert-recipients.component";
 import { ProjectAlertsService } from "./project-alerts.service";
 
 /** The Alerts tab: a list of alerts, or one alert's edit view (?alert=id|new). */
@@ -38,11 +33,11 @@ import { ProjectAlertsService } from "./project-alerts.service";
     MatFormFieldModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatTooltipModule,
     EmptyStateComponent,
     ListComponent,
     ListRowComponent,
     AlertEditComponent,
+    AlertRecipientsComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ProjectAlertsService, ProjectEnvironmentsService],
@@ -65,8 +60,6 @@ export class ProjectAlertsComponent implements OnInit {
   alertName = alertName;
   alertSummary = alertSummary;
   projectTeams = this.#service.projectTeams;
-  recipientLabel = recipientLabel;
-  resolveRecipientIcon = resolveRecipientIcon;
 
   /** The alert being edited, from the URL; only for people who can edit. */
   editing = computed(() => {

@@ -173,6 +173,11 @@
                 >
               }
             </gt-empty-state>
+          } @else if (alertsError()) {
+            <mat-error class="load-error" i18n
+              >The alerts could not be loaded. Reload the page to try
+              again.</mat-error
+            >
           } @else if (alertCountLoading()) {
             <mat-progress-spinner
               [diameter]="20"
@@ -203,35 +208,11 @@
                 @for (alert of monitorAlerts(); track alert.id) {
                   <gt-list-row>
                     <span>{{ alertName(alert) }}</span>
-                    <span class="alert-summary">{{ alertSummary(alert) }}</span>
-                    <span slot="meta" class="recipient-icons">
-                      @for (
-                        recipient of alert.alertRecipients;
-                        track recipient.id
-                      ) {
-                        @if (recipient.recipientType === "email") {
-                          <mat-icon
-                            class="recipient-icon"
-                            [matTooltip]="recipientLabel(recipient)"
-                            >email</mat-icon
-                          >
-                        } @else {
-                          <svg
-                            class="recipient-icon"
-                            [matTooltip]="recipientLabel(recipient)"
-                          >
-                            <use
-                              [attr.xlink:href]="
-                                '#' +
-                                resolveRecipientIcon(recipient.recipientType)
-                              "
-                            ></use>
-                          </svg>
-                        }
-                      } @empty {
-                        <span i18n>No recipients</span>
-                      }
-                    </span>
+                    <span slot="description">{{ alertSummary(alert) }}</span>
+                    <gt-alert-recipients
+                      slot="meta"
+                      [recipients]="alert.alertRecipients"
+                    />
                     @if (canWriteProject()) {
                       <a
                         slot="actions"

@@ -39,30 +39,11 @@
             <span>{{ alertName(alert) }}</span>
           }
           <span slot="description">{{ alertSummary(alert) }}</span>
-          <span slot="meta" class="recipient-icons">
-            @for (recipient of alert.alertRecipients; track recipient.id) {
-              @if (recipient.recipientType === "email") {
-                <mat-icon
-                  class="recipient-icon"
-                  [matTooltip]="recipientLabel(recipient, projectTeams())"
-                  >email</mat-icon
-                >
-              } @else {
-                <svg
-                  class="recipient-icon"
-                  [matTooltip]="recipientLabel(recipient, projectTeams())"
-                >
-                  <use
-                    [attr.xlink:href]="
-                      '#' + resolveRecipientIcon(recipient.recipientType)
-                    "
-                  ></use>
-                </svg>
-              }
-            } @empty {
-              <span i18n>No recipients</span>
-            }
-          </span>
+          <gt-alert-recipients
+            slot="meta"
+            [recipients]="alert.alertRecipients"
+            [teams]="projectTeams()"
+          />
           @if (canWriteProject()) {
             <a
               slot="actions"

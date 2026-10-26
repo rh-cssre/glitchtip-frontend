@@ -37,28 +37,10 @@ mat-progress-spinner {
   margin-bottom: var(--gt-space-4, 16px);
 }
 
-// Alerts tab: same rows as the project Alerts tab.
 .create-alert {
   margin-bottom: var(--gt-space-4, 16px);
 }
 
-.alert-summary {
-  flex-basis: 100%;
-  font-weight: 400;
-  color: var(--mat-sys-on-surface-variant);
-}
-
-.recipient-icons {
-  display: flex;
-  align-items: center;
-  gap: var(--gt-space-2, 8px);
-}
-
-.recipient-icon {
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
-  // Sprite icons without their own color follow the text, so they show in
-  // dark mode.
-  fill: currentColor;
+.load-error {
+  display: block;
 }
