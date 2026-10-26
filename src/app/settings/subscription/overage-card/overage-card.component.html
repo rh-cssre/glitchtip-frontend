@@ -252,14 +252,11 @@
               <span class="overage-sub" i18n>Monthly spend cap</span>
             </div>
             @if (capAdjustable()) {
-              <button
-                mat-stroked-button
-                [disabled]="!canManage()"
-                (click)="startEditCap()"
-                i18n
-              >
-                Adjust cap
-              </button>
+              @if (canManage()) {
+                <button mat-stroked-button (click)="startEditCap()" i18n>
+                  Adjust cap
+                </button>
+              }
             } @else if (!overageConfigured()) {
               <!-- The cap POST applies two tests, so name the one that fired.
                    No live overage price stops every org on the server. -->

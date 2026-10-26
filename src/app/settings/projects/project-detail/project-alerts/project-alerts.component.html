@@ -2,6 +2,7 @@
   <gt-alert-edit
     [alert]="editing.alert"
     [availableEnvironments]="availableEnvironments()"
+    [canDelete]="canAdminProject()"
     (done)="closeEdit()"
   />
 } @else if (initialLoad() === false) {
@@ -12,7 +13,7 @@
   @if (initialLoadError(); as error) {
     <mat-error class="load-error">{{ error }}</mat-error>
   }
-  @if (accessProjectWrite()) {
+  @if (canWriteProject()) {
     <button
       mat-stroked-button
       class="create-alert"
@@ -27,7 +28,7 @@
     <gt-list>
       @for (alert of projectAlerts(); track alert.id) {
         <gt-list-row>
-          @if (accessProjectWrite()) {
+          @if (canWriteProject()) {
             <a
               [routerLink]="[]"
               [queryParams]="{ alert: alert.id }"
@@ -62,7 +63,7 @@
               <span i18n>No recipients</span>
             }
           </span>
-          @if (accessProjectWrite()) {
+          @if (canWriteProject()) {
             <a
               slot="actions"
               mat-stroked-button

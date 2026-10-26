@@ -84,7 +84,7 @@ export class MonitorDetailComponent
   protected service: MonitorService;
   private breakpointObserver = inject(BreakpointObserver);
   private dialog = inject(MatDialog);
-  accessProjectWrite = inject(OrganizationsService).accessProjectWrite;
+  private organizationsService = inject(OrganizationsService);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -132,6 +132,7 @@ export class MonitorDetailComponent
   resolveRecipientIcon = resolveRecipientIcon;
   alertCountLoading = this.service.alertCountLoading;
   associatedProjectSlug = this.service.associatedProjectSlug;
+  canWriteProject = this.organizationsService.canWriteProject;
 
   isMobile = signal(false);
   private smallBreakpointSignal = toSignal(

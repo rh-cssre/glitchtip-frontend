@@ -7,7 +7,7 @@
   </ng-container>
 
   <ng-container slot="right">
-    @if (accessProjectWrite()) {
+    @if (canWriteProject()) {
       <a
         id="add-monitor"
         class="add-monitor-button"
@@ -124,13 +124,23 @@
                   <div class="body-text-strong">{{ error.msg || error }}</div>
                 }
               } @else if (!loading()) {
-                <gt-empty-state
-                  icon="share_eta"
-                  i18n-title
-                  title="No uptime monitors"
-                  i18n-message
-                  message="Add a monitor to get alerted when a site or service goes down."
-                />
+                @if (canWriteProject()) {
+                  <gt-empty-state
+                    icon="share_eta"
+                    i18n-title
+                    title="No uptime monitors"
+                    i18n-message
+                    message="Add a monitor to get alerted when a site or service goes down."
+                  />
+                } @else {
+                  <gt-empty-state
+                    icon="share_eta"
+                    i18n-title
+                    title="No uptime monitors"
+                    i18n-message
+                    message="Ask an organization Admin or above to add one."
+                  />
+                }
               }
             </td>
           </tr>

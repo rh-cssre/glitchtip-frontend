@@ -18,7 +18,7 @@
         ) {
           <gt-list-row>
             {{ environment.name }}
-            @if (accessProjectWrite()) {
+            @if (canWriteProject()) {
               <gt-loading-button
                 slot="actions"
                 (buttonClick)="toggleHidden(environment)"

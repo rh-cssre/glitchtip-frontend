@@ -6,7 +6,7 @@
   </ng-container>
 
   <ng-container slot="right">
-    @if (accessProjectWrite()) {
+    @if (canWriteProject()) {
       <div class="top-bar-actions">
         <button
           id="monitor-settings"
@@ -156,7 +156,7 @@
               i18n-message
               message="Associate a project with this monitor to get alerts."
             >
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <a mat-stroked-button [routerLink]="['./update']" i18n
                   >Edit monitor</a
                 >
@@ -174,7 +174,7 @@
                 >Alerts from <b>{{ monitor.projectName }}</b> that fire when
                 this monitor goes down.</p
               >
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <a
                   mat-stroked-button
                   class="create-alert"
@@ -221,7 +221,7 @@
                         <span i18n>No recipients</span>
                       }
                     </span>
-                    @if (accessProjectWrite()) {
+                    @if (canWriteProject()) {
                       <a
                         slot="actions"
                         mat-stroked-button
@@ -245,7 +245,7 @@
                 i18n-message
                 message="None of this project's alerts fire when this monitor goes down."
               >
-                @if (accessProjectWrite()) {
+                @if (canWriteProject()) {
                   <a
                     mat-stroked-button
                     [routerLink]="[

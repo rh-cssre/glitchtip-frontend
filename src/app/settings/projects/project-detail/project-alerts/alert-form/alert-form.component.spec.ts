@@ -20,6 +20,7 @@ describe("AlertFormComponent environments", () => {
   });
 
   function setInputs(environments: string[], available: string[]) {
+    fixture.componentRef.setInput("canWrite", true);
     fixture.componentRef.setInput("timespan", 10);
     fixture.componentRef.setInput("quantity", 2);
     fixture.componentRef.setInput("environments", environments);
@@ -94,6 +95,16 @@ describe("AlertFormComponent environments", () => {
     expect(
       fixture.debugElement.query(By.css('[data-cy="environments"]')),
     ).toBeTruthy();
+  });
+
+  it("renders a read-only summary instead of the form without write access", () => {
+    setInputs(["production"], ["production", "staging"]);
+    fixture.componentRef.setInput("canWrite", false);
+    fixture.detectChanges();
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector("form")).toBeNull();
+    expect(el.textContent).toContain("If an event happens 2 times in 10");
+    expect(el.textContent).toContain("Only in these environments: production");
   });
 
   it("hides the environments field when the project has none", () => {

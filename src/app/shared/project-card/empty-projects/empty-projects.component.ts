@@ -11,4 +11,5 @@ import { ProjectCardComponent } from "../project-card.component";
 })
 export class EmptyProjectsComponent {
   readonly activeOrgOnly = input(false);
+  readonly canCreateProject = input(true);
 }
