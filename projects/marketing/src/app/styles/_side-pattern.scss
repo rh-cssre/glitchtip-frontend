@@ -36,6 +36,11 @@
     // Band width = the free margin beside the content column, capped so it
     // stays a side accent on very wide screens.
     width: min(330px, max(0px, calc((100vw - #{$content-width}) / 2 * 0.82)));
+    opacity: clamp(
+      0,
+      calc(((100vw - #{$content-width}) / 2 - 60px) / 140px),
+      1
+    );
     z-index: -1;
     pointer-events: none;
     // Opaque page-bg fill hides the dotted page background inside the band; the
