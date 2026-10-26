@@ -32,11 +32,6 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
       form {
         max-width: 420px;
       }
-      .demo-actions {
-        display: flex;
-        gap: var(--gt-space-3);
-        align-items: center;
-      }
     `,
   ],
   template: `
@@ -83,9 +78,10 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
             <mat-label>Display Name</mat-label>
             <input matInput type="text" formControlName="name" />
           </mat-form-field>
-          <div class="demo-actions">
+          <div class="gt-form-actions">
             <gt-loading-button
               buttonText="Save"
+              buttonStyle="stroked"
               [loading]="saving()"
               (buttonClick)="onSubmit()"
             />
@@ -153,7 +149,9 @@ import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-bu
       @if (email?.errors?.serverError) { <span>{{ email?.errors?.serverError }}</span> }
     </mat-error>
   </mat-form-field>
-  <gt-loading-button buttonText="Save" [loading]="saving()" />
+  <div class="gt-form-actions">
+    <gt-loading-button buttonText="Save" buttonStyle="stroked" [loading]="saving()" />
+  </div>
 </form>`;
 
   onSubmit(): void {

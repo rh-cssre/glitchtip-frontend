@@ -121,6 +121,7 @@ a:hover {
 // Used across auth components
 .auth-link {
   @extend %inline-link;
+  font-weight: bold;
 }
 
 // Global rule because link is rendered in markdown
@@ -299,6 +300,21 @@ mat-sidenav-container {
 gt-settings-section.gt-settings-continued,
 .gt-settings-continued gt-settings-section {
   padding-top: 0;
+}
+
+.gt-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  padding-top: var(--gt-space-5, 24px);
+}
+
+// Empty sub-list inside a section; main collections use gt-empty-state.
+.gt-note {
+  margin: 0;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).

@@ -92,7 +92,7 @@ export class AlertFormComponent implements OnInit {
   readonly #destroyRef = inject(DestroyRef);
 
   intervalValidators = [
-    Validators.min(0),
+    Validators.min(1),
     Validators.pattern(intRegex),
     Validators.required,
   ];

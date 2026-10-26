@@ -101,7 +101,7 @@ describe("Edit and Delete a project", () => {
 
   it("should remove the project and redirect to projects page", () => {
     cy.get("#delete-project").click();
-    cy.contains("Are you sure you want to delete this project?");
+    cy.contains("All of its issues, events and settings will be deleted.");
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Your project has been successfully deleted");
     cy.url().should(

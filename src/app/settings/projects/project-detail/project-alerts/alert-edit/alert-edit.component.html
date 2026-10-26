@@ -1,7 +1,13 @@
-<button mat-button class="back" (click)="done.emit()">
+<a
+  mat-button
+  class="back"
+  [routerLink]="[]"
+  [queryParams]="{ alert: null }"
+  queryParamsHandling="merge"
+>
   <mat-icon>keyboard_arrow_left</mat-icon>
   <ng-container i18n>All alerts</ng-container>
-</button>
+</a>
 <div class="header">
   <h2 class="title">{{ title() }}</h2>
   @if (alert()?.id && canDelete()) {
@@ -112,7 +118,7 @@
       }
     </gt-list>
   } @else {
-    <p class="note" i18n
+    <p class="gt-note" i18n
       >This alert isn't being sent anywhere. Add a recipient to get started.</p
     >
   }
@@ -124,10 +130,8 @@
 
 <div class="footer">
   <p class="summary" data-cy="alert-summary">{{ summary() }}</p>
-  @if (error(); as error) {
-    <mat-error class="error">{{ error }}</mat-error>
-  }
-  <div class="actions">
+  <gt-form-error [errors]="error()" />
+  <div class="gt-form-actions">
     <gt-loading-button
       i18n-buttonText
       buttonText="Save alert"

@@ -55,7 +55,7 @@ import { MatIconModule } from "@angular/material/icon";
     }
     .empty-state__message {
       margin: 0;
-      max-width: var(--gt-measure-narrow, 44ch);
+      max-width: var(--gt-measure-narrow);
       font: var(--mat-sys-body-medium);
     }
     .empty-state__action {
