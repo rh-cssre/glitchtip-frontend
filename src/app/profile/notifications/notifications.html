@@ -5,11 +5,12 @@
     it.</span
   >
   <mat-button-toggle-group
+    #defaultGroup="matButtonToggleGroup"
     hideSingleSelectionIndicator
     [value]="subscribeByDefault()"
-    [disabled]="subscribeByDefaultLoading() === true"
+    [disabled]="!subscribeByDefaultLoaded() || subscribeByDefaultLoading()"
     [attr.aria-labelledby]="defaultSection.titleId"
-    (change)="toggleDefaultNotifications($event.value)"
+    (change)="toggleDefaultNotifications(defaultGroup, $event.value)"
   >
     <mat-button-toggle [value]="true" i18n>On</mat-button-toggle>
     <mat-button-toggle [value]="false" i18n>Off</mat-button-toggle>
@@ -43,12 +44,23 @@
             }}</mat-error>
           }
           <mat-button-toggle-group
+            #projectGroup="matButtonToggleGroup"
             slot="actions"
             hideSingleSelectionIndicator
             [value]="isOn(project.alertStatus)"
-            [disabled]="projectAlertLoading() === project.id"
+            [disabled]="
+              !subscribeByDefaultLoaded() ||
+              projectAlertLoading() === project.id
+            "
             [attr.aria-label]="notificationsForLabel(project.name)"
-            (change)="setProject(project.id, $event.value)"
+            (change)="
+              setProject(
+                projectGroup,
+                project.id,
+                project.alertStatus,
+                $event.value
+              )
+            "
           >
             <mat-button-toggle [value]="true" i18n>On</mat-button-toggle>
             <mat-button-toggle [value]="false" i18n>Off</mat-button-toggle>
@@ -57,6 +69,6 @@
       }
     </gt-list>
   } @empty {
-    <p class="note" i18n>You aren't on any projects yet.</p>
+    <p class="gt-note" i18n>You aren't on any projects yet.</p>
   }
 </gt-settings-section>

@@ -2,17 +2,6 @@
   display: block;
 }
 
-gt-list {
-  display: block;
-  margin-bottom: var(--gt-space-4, 16px);
-}
-
 .row-error {
   flex-basis: 100%;
-}
-
-.note {
-  margin: 0;
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-surface-variant);
 }

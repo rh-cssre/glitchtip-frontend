@@ -39,6 +39,9 @@ export class NotificationsService extends StatefulService<NotificationsState> {
   readonly subscribeByDefault = computed(
     () => this.#notificationsResource.value()?.subscribeByDefault || false,
   );
+  readonly subscribeByDefaultLoaded = computed(
+    () => this.#notificationsResource.value() !== undefined,
+  );
   readonly subscribeByDefaultLoading = computed(
     () => this.state().subscribeByDefaultLoading,
   );
@@ -85,7 +88,10 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     this.projectsService.retrieveProjects();
   }
 
-  async alertsUpdate(projectId: number, status: NotificationStatus) {
+  async alertsUpdate(
+    projectId: number,
+    status: NotificationStatus,
+  ): Promise<boolean> {
     const body: ProjectAlerts = {
       [projectId]: status,
     };
@@ -103,15 +109,18 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     );
     this.#alertsList.reload();
     this.setProjectAlertLoading(null);
-    if (response.status !== 204) {
-      const errors = handleError(error, response);
-      if (errors.detail.length) {
-        this.setProjectAlertError(errors.detail[0].msg, projectId);
-      }
+    if (response.status === 204) {
+      this.setState({ ...this.state(), projectAlertError: null });
+      return true;
     }
+    const errors = handleError(error, response);
+    if (errors.detail.length) {
+      this.setProjectAlertError(errors.detail[0].msg, projectId);
+    }
+    return false;
   }
 
-  async notificationsUpdate(subscribe: boolean) {
+  async notificationsUpdate(subscribe: boolean): Promise<boolean> {
     const body = { subscribeByDefault: subscribe };
     this.setSubscribeByDefaultLoading(true);
     const { data, error, response } = await client.PUT(
@@ -129,12 +138,14 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     if (data) {
       // The default is read from this resource, so update it, not state.
       this.#notificationsResource.set(data);
-    } else {
-      const errors = handleError(error, response);
-      if (errors.detail.length) {
-        this.setSubscribeByDefaultError(errors.detail[0].msg);
-      }
+      this.setSubscribeByDefaultError("");
+      return true;
     }
+    const errors = handleError(error, response);
+    if (errors.detail.length) {
+      this.setSubscribeByDefaultError(errors.detail[0].msg);
+    }
+    return false;
   }
 
   private setSubscribeByDefaultError(error: string) {
