@@ -1,4 +1,4 @@
-import { inject } from "@angular/core";
+import { computed, inject } from "@angular/core";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { filter, map, of, take, timeout } from "rxjs";
 import {
@@ -37,8 +37,8 @@ export const loggedInGuard: CanActivateFn = (
 };
 
 // Sends people without project:write back a level instead of to a form the
-// backend would reject. Waits for the organization in the URL to load, since
-// its access list is empty until then.
+// backend would reject. Waits until the organization in the URL is both
+// selected and loaded, since the scope gates fail closed until then.
 export const projectWriteGuard: CanActivateFn = (
   next: ActivatedRouteSnapshot,
 ) => {
@@ -47,10 +47,15 @@ export const projectWriteGuard: CanActivateFn = (
     .map((route) => route.paramMap.get("org-slug"))
     .find(Boolean);
   const back = createUrlTreeFromSnapshot(next, [".."]);
-  return toObservable(orgs.activeOrganization).pipe(
-    filter((org) => !!org && org.slug === orgSlug),
+  const ready = computed(
+    () =>
+      orgs.selectedOrganizationSlug() === orgSlug &&
+      orgs.activeOrganization()?.slug === orgSlug,
+  );
+  return toObservable(ready).pipe(
+    filter(Boolean),
     take(1),
-    map(() => orgs.accessProjectWrite() || back),
+    map(() => orgs.canWriteProject() || back),
     timeout({ first: 10000, with: () => of(back) }),
   );
 };

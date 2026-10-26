@@ -6,7 +6,7 @@
   </ng-container>
 
   <ng-container slot="right">
-    @if (accessProjectWrite()) {
+    @if (canWriteProject()) {
       <div class="top-bar-actions">
         <button
           id="monitor-settings"
@@ -156,7 +156,7 @@
               i18n-message
               message="Associate a project with this monitor to get alerts."
             >
-              @if (accessProjectWrite()) {
+              @if (canWriteProject()) {
                 <a mat-stroked-button [routerLink]="['./update']" i18n
                   >Edit monitor</a
                 >
@@ -169,7 +169,7 @@
               mode="indeterminate"
             ></mat-progress-spinner>
           } @else if (associatedProjectSlug(); as associatedProjectSlug) {
-            @if (uptimeAlertCount() === 0) {
+            @if (uptimeAlertCount() === 0 && canWriteProject()) {
               <gt-empty-state
                 icon="share_eta"
                 i18n-title
@@ -188,6 +188,14 @@
                   >Project settings</a
                 >
               </gt-empty-state>
+            } @else if (uptimeAlertCount() === 0) {
+              <gt-empty-state
+                icon="share_eta"
+                i18n-title
+                title="No uptime alerts"
+                i18n-message
+                message="Ask an organization admin or above to set them up."
+              />
             } @else {
               <p class="body-text" i18n>
                 This monitor is associated with the
@@ -205,7 +213,13 @@
                   [queryParams]="{ tab: 'alerts' }"
                   >project settings</a
                 >
-                page to change your alerts.
+                page to
+                @if (canWriteProject()) {
+                  change
+                } @else {
+                  see
+                }
+                your alerts.
               </p>
             }
           }

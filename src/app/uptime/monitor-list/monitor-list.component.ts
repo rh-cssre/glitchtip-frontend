@@ -62,7 +62,7 @@ export class MonitorListComponent {
   protected router = inject(Router);
   protected breakPointObserver = inject(BreakpointObserver);
   service = inject(MonitorListService);
-  accessProjectWrite = inject(OrganizationsService).accessProjectWrite;
+  private organizationsService = inject(OrganizationsService);
   cursor = input(undefined, { transform: stringAttribute });
   sort = input(undefined, { transform: stringAttribute });
 
@@ -72,6 +72,7 @@ export class MonitorListComponent {
   loading = this.service.loading;
   initialLoadComplete = this.service.initialLoadComplete;
   errors = this.service.errors;
+  canWriteProject = this.organizationsService.canWriteProject;
   hasError = this.service.hasError;
   allColumns: string[] = ["name", "checkChart", "status"];
   smallScreenColumns: string[] = ["name", "status"];
