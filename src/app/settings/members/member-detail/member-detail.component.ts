@@ -26,6 +26,7 @@ import { LoadingButtonComponent } from "../../../shared/loading-button/loading-b
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   templateUrl: "./member-detail.component.html",
@@ -52,6 +53,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 export class MemberDetailComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   private memberDetailService = inject(MemberDetailService);
+  private organizationsService = inject(OrganizationsService);
 
   member = this.memberDetailService.member;
   memberTeams = this.memberDetailService.memberTeams;
@@ -71,6 +73,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     role: new FormControl<MemberRole | null>(null),
   });
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
+  canWriteMember = this.organizationsService.canWriteMember;
+  canAdminOrg = this.organizationsService.canAdminOrg;
 
   selectedRoleScopes = computed(() => {
     const availableRoles = this.availableRoles();
