@@ -10,12 +10,12 @@
         #nameSection
         i18n-title
         title="Name"
-        [inline]="accessOrgWrite()"
+        [inline]="canWriteOrg()"
       >
         <span slot="description" i18n
           >Shown in the organization switcher and in alert emails.</span
         >
-        @if (accessOrgWrite()) {
+        @if (canWriteOrg()) {
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input
               matInput
@@ -26,7 +26,7 @@
         } @else {
           <span class="body-text">{{ activeOrg.name }}</span>
         }
-        @if (accessOrgWrite()) {
+        @if (canWriteOrg()) {
           <gt-loading-button
             slot="actions"
             i18n-buttonText
@@ -42,7 +42,7 @@
       }
     </form>
 
-    @if (accessOrgAdmin()) {
+    @if (canAdminOrg()) {
       <gt-settings-section i18n-title title="Delete organization">
         <span slot="description" i18n
           >Deletes its projects, teams and events. This cannot be undone.</span

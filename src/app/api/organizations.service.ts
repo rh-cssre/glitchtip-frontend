@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal, untracked } from "@angular/core";
 import { client } from "../shared/api/api";
 import { AuthService } from "../auth.service";
 import { apiResource } from "../shared/api/api-resource-factory";
+import { scopesFor, type Scope } from "./organizations/org-access";
 
 @Injectable({
   providedIn: "root",
@@ -69,27 +70,24 @@ export class OrganizationsService {
   initialLoad = computed(
     () => this.organizationsLoaded() && this.activeOrganizationLoaded(),
   );
-  access = computed(() => this.activeOrganization()?.access || []);
-  accessProjectWrite = computed(() => this.access().includes("project:write"));
-  accessTeamWrite = computed(
-    () =>
-      this.access().includes("project:write") ||
-      this.access().includes("org:write"),
+  /**
+   * Scopes for the org being viewed, or none while activeOrganization still
+   * holds the first-org fallback, so every gate fails closed.
+   */
+  access = computed(() =>
+    scopesFor(this.activeOrganization(), this.selectedOrganizationSlug()),
   );
-  accessMemberWrite = computed(
-    () =>
-      this.access().includes("member:admin") ||
-      this.access().includes("member:write"),
-  );
-  accessOrgAdmin = computed(() => this.access().includes("org:admin"));
-  // Managers and owners can change any team's members and projects.
-  accessOrgWrite = computed(() => this.access().includes("org:write"));
-  // Admins and up can change members of teams they belong to.
-  accessTeamAdmin = computed(() => this.access().includes("team:admin"));
-  // Lets anyone join or leave a team themselves.
-  openMembership = computed(
-    () => this.activeOrganization()?.openMembership ?? false,
-  );
+  #hasScope = (...required: Scope[]) =>
+    computed(() => required.some((scope) => this.access().has(scope)));
+  canWriteProject = this.#hasScope("project:write", "project:admin");
+  canAdminProject = this.#hasScope("project:admin");
+  canWriteTeam = this.#hasScope("team:write", "team:admin");
+  canAdminTeam = this.#hasScope("team:admin");
+  canWriteOrg = this.#hasScope("org:write", "org:admin");
+  /** org:admin is granted only to the Owner role. */
+  canAdminOrg = this.#hasScope("org:admin");
+  canWriteMember = this.#hasScope("member:write", "member:admin");
+  canAdminMember = this.#hasScope("member:admin");
 
   constructor() {
     setTimeout(() => this.refresh(), 30000);

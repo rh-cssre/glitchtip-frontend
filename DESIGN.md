@@ -80,9 +80,10 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 Every setting on a settings page is a `gt-settings-section`: a title, one line of help, then the control and its actions.
 
-- Sections stack in one column. Space separates them; no cards, no dividers.
-- A single control uses `inline`, with its action beside it. The section title is the field's only visible label, linked with `aria-labelledby`.
+- Sections stack in one column with a hairline (`outline-variant`) between them, none above the first or below the last. No cards.
+- A single control uses `inline`, with its action beside it. The section title is the field's only visible label, linked with `aria-labelledby`. Several controls, or none, put the action below, left-aligned. A list and a field to add to it are two sections, joined: the second takes `.gt-settings-continued`, so no line splits them.
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
+- A choice that shows its effect at once (the theme) saves on change, with no Save.
 - A destructive action is the last section, with an outlined warn button and a confirm dialog. No red box.
 - Someone who cannot edit a setting sees its value as plain text, without the control.
 
