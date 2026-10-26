@@ -42,31 +42,43 @@
       } @else {
         <p class="gt-note" i18n>No connected accounts.</p>
       }
-      @if (socialApps(); as socialApps) {
-        @if (socialApps.length) {
-          <mat-form-field
-            appearance="outline"
-            subscriptSizing="dynamic"
-            class="connect"
-          >
-            <mat-label i18n>Connect an account</mat-label>
-            <mat-select
-              (selectionChange)="addAccount()"
-              [formControl]="account"
-            >
-              @for (socialApp of socialApps; track socialApp) {
-                <mat-option [value]="socialApp">
-                  <gt-auth-svg
-                    source="dropdown"
-                    [provider]="socialApp.provider"
-                    [text]="socialApp.name"
-                  ></gt-auth-svg>
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        }
-      }
+    </gt-settings-section>
+  }
+  @if (socialApps().length) {
+    <gt-settings-section
+      #connectSection
+      class="gt-settings-continued"
+      i18n-title
+      title="Connect an account"
+      [inline]="true"
+    >
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-select
+          [formControl]="account"
+          i18n-placeholder
+          placeholder="Choose a provider"
+          [aria-labelledby]="connectSection.titleId"
+        >
+          @for (socialApp of socialApps(); track socialApp) {
+            <mat-option [value]="socialApp.provider">
+              <gt-auth-svg
+                source="dropdown"
+                [provider]="socialApp.provider"
+                [text]="socialApp.name"
+              ></gt-auth-svg>
+            </mat-option>
+          }
+        </mat-select>
+        <mat-error i18n>Choose a provider to connect.</mat-error>
+      </mat-form-field>
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Connect"
+        buttonStyle="stroked"
+        (buttonClick)="addAccount()"
+        data-cy="connect-account"
+      />
     </gt-settings-section>
   }
 }
