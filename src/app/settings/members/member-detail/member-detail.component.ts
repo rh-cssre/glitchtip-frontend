@@ -22,6 +22,7 @@ import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { MemberDetailService } from "src/app/settings/members/member-detail/member-detail.service";
 import { MemberRole } from "src/app/api/organizations/organizations.interface";
+import { MEMBER_ROLES, roleDescription, roleName } from "../member-roles";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
@@ -29,7 +30,6 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 
 @Component({
   templateUrl: "./member-detail.component.html",
-  styleUrls: ["./member-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
@@ -70,8 +70,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   });
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
 
-  /** Same values the selected role is saved as, lowest access first. */
-  readonly roles: MemberRole[] = ["member", "admin", "manager", "owner"];
+  readonly roles = MEMBER_ROLES;
 
   /** Changing roles needs member:write (managers and owners). */
   canEditRole = this.organizationsService.canWriteMember;
@@ -89,35 +88,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     );
   });
 
-  roleName(role: MemberRole | null | undefined) {
-    switch (role) {
-      case "owner":
-        return $localize`Owner`;
-      case "manager":
-        return $localize`Manager`;
-      case "admin":
-        return $localize`Admin`;
-      case "member":
-        return $localize`Member`;
-      default:
-        return null;
-    }
-  }
-
-  roleDescription(role: MemberRole | null | undefined) {
-    switch (role) {
-      case "owner":
-        return $localize`Owners have full access to the organization, its data and its settings.`;
-      case "manager":
-        return $localize`Managers can also add and remove members, and manage every team.`;
-      case "admin":
-        return $localize`Admins can also create teams and projects, and manage the teams they are on.`;
-      case "member":
-        return $localize`Members can see and act on issues and events, and see most other data in the organization.`;
-      default:
-        return "";
-    }
-  }
+  roleName = roleName;
+  roleDescription = roleDescription;
 
   constructor() {
     effect(() => {
