@@ -95,6 +95,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   ],
 })
 export class ProjectDetailComponent implements OnInit {
+  settingsFor = (project: string) => $localize`Settings for ${project}:project:`;
   #service = inject(ProjectDetailService);
   #orgService = inject(OrganizationsService);
   #snackBar = inject(MatSnackBar);
@@ -115,7 +116,8 @@ export class ProjectDetailComponent implements OnInit {
   updateNameError = this.#service.updateNameError;
   updatePlatformLoading = this.#service.updatePlatformLoading;
   updatePlatformError = this.#service.updatePlatformError;
-  accessProjectWrite = this.#orgService.accessProjectWrite;
+  canWriteProject = this.#orgService.canWriteProject;
+  canAdminProject = this.#orgService.canAdminProject;
 
   nameForm = new FormGroup({
     name: new FormControl("", [Validators.required, Validators.maxLength(64)]),

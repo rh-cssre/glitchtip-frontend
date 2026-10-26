@@ -30,6 +30,10 @@ import { DatePipe } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectListComponent implements OnInit {
+  organizationText = $localize`organization`;
+  dateCreatedText = $localize`date created`;
+  issuesText = $localize`Issues`;
+  settingsText = $localize`Settings`;
   private organizationsService = inject(OrganizationsService);
   private projectsService = inject(ProjectsService);
 
@@ -47,7 +51,8 @@ export class ProjectListComponent implements OnInit {
       ),
     })),
   );
-  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  // Scopes come from one selected org, so only the single-org view is gated.
+  canWriteProject = this.organizationsService.canWriteProject;
 
   ngOnInit() {
     this.projectsService.retrieveProjects();

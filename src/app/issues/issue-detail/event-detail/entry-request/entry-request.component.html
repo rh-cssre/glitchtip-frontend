@@ -20,17 +20,17 @@
         <div>
           <mat-divider></mat-divider>
           <div class="title-bar">
-            <h3>Body</h3>
-            <mat-button-toggle-group
+            <h3 i18n>Body</h3>
+            <mat-button-toggle-group i18n-aria-label
               #group="matButtonToggleGroup"
               [value]="viewMode()"
               (change)="viewMode.set(group.value)"
               aria-label="Request Body View"
             >
-              <mat-button-toggle value="structured"
+              <mat-button-toggle i18n value="structured"
                 >Structured</mat-button-toggle
               >
-              <mat-button-toggle value="raw">Raw</mat-button-toggle>
+              <mat-button-toggle i18n value="raw">Raw</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
           @if (viewMode() === "structured") {
@@ -45,7 +45,7 @@
           } @else {
             <div class="json-container">
               @if (rawBody()) {
-                <button
+                <button i18n-aria-label i18n-matTooltip
                   mat-icon-button
                   class="copy-button"
                   [class.copied]="copied()"
@@ -66,7 +66,7 @@
       }
       @if (request?.query) {
         <section>
-          <h3>Query String</h3>
+          <h3 i18n>Query String</h3>
           <dl>
             @for (query of request?.query; track query) {
               <gt-entry-data
@@ -79,7 +79,7 @@
       }
       @if (request?.headers) {
         <section>
-          <h3>Headers</h3>
+          <h3 i18n>Headers</h3>
           <dl>
             @for (header of request?.headers; track header) {
               <gt-entry-data
@@ -93,7 +93,7 @@
       @if (request?.env) {
         <section>
           <mat-divider></mat-divider>
-          <h3>Environment</h3>
+          <h3 i18n>Environment</h3>
           <dl>
             @for (env of request.env | keyvalue; track env) {
               <gt-entry-data

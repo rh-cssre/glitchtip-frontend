@@ -28,6 +28,10 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   providers: [SettingsProjectsService],
 })
 export class ProjectsComponent {
+  organizationText = $localize`organization`;
+  dateCreatedText = $localize`date created`;
+  issuesText = $localize`Issues`;
+  settingsText = $localize`Settings`;
   private service = inject(SettingsProjectsService);
   private organizationsService = inject(OrganizationsService);
 
@@ -36,7 +40,7 @@ export class ProjectsComponent {
   projects = this.service.projects;
   errors = this.service.errors;
   hasError = this.service.hasError;
-  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  canWriteProject = this.organizationsService.canWriteProject;
 
   constructor() {
     effect(() => {

@@ -3,15 +3,16 @@
     <h1 class="section-header-text" i18n>Teams</h1>
   </ng-container>
   <ng-container slot="right">
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="openCreateTeamDialog()"
-      [disabled]="!accessTeamWrite()"
-      id="new-team"
-      i18n
-      >Create Team</button
-    >
+    @if (canWriteTeam()) {
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="openCreateTeamDialog()"
+        id="new-team"
+        i18n
+        >Create Team</button
+      >
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -40,36 +41,55 @@
                   #{{ yourTeam.slug }}
                 </a>
                 <div>
-                  {{
-                    yourTeam.memberCount | i18nPlural: memberCountPluralMapping
-                  }}
+                  <ng-container i18n>{yourTeam.memberCount, plural, =1 {1 Member} other {{{ yourTeam.memberCount }} Members}}</ng-container>
                 </div>
               </div>
-              <gt-loading-button
-                buttonText="Leave Team"
-                buttonStyle="stroked"
-                [loading]="loading().removeTeamMember === yourTeam.slug"
-                (buttonClick)="leaveTeam(yourTeam.slug)"
-                id="leave-team"
-              ></gt-loading-button>
+              @if (canLeaveTeam()) {
+                <gt-loading-button i18n-buttonText
+                  buttonText="Leave Team"
+                  buttonStyle="stroked"
+                  [loading]="loading().removeTeamMember === yourTeam.slug"
+                  (buttonClick)="leaveTeam(yourTeam.slug)"
+                  id="leave-team"
+                ></gt-loading-button>
+              }
             </li>
           }
         </ul>
       } @else {
         @if (otherTeams()?.length) {
-          <p i18n
-            >You aren't part of any teams. Join a team below or press the
-            "Create Team" button in the upper right.</p
-          >
+          @if (canWriteTeam() && canJoinTeam()) {
+            <p i18n
+              >You aren't part of any teams. Join a team below or press the
+              "Create Team" button in the upper right.</p
+            >
+          } @else if (canJoinTeam()) {
+            <p i18n>You aren't part of any teams. Join a team below.</p>
+          } @else if (canWriteTeam()) {
+            <p i18n
+              >You aren't part of any teams. Press the "Create Team" button in
+              the upper right, or ask an organization Manager or Owner to add
+              you to one.</p
+            >
+          } @else {
+            <p i18n
+              >You aren't part of any teams. Ask an organization Manager or
+              Owner to add you to one.</p
+            >
+          }
         } @else {
           <p i18n
             >You don't have any teams set up. Teams determine which users have
             access to projects in your organization.</p
           >
-          <p i18n
-            >To create a new team, press the "Create Team" button in the upper
-            right.</p
-          >
+          @if (canWriteTeam()) {
+            <p i18n
+              >To create a new team, press the "Create Team" button in the upper
+              right.</p
+            >
+          } @else {
+            <p i18n>Ask an organization Manager or Owner to create one.</p>
+          }
         }
       }
     </mat-card-content>
@@ -91,18 +111,18 @@
                   #{{ otherTeam.slug }}
                 </a>
                 <div>
-                  {{
-                    otherTeam.memberCount | i18nPlural: memberCountPluralMapping
-                  }}
+                  <ng-container i18n>{otherTeam.memberCount, plural, =1 {1 Member} other {{{ otherTeam.memberCount }} Members}}</ng-container>
                 </div>
               </div>
-              <gt-loading-button
-                buttonText="Join Team"
-                buttonStyle="stroked"
-                [loading]="loading().addTeamMember === otherTeam.slug"
-                (buttonClick)="joinTeam(otherTeam.slug)"
-                id="leave-team"
-              ></gt-loading-button>
+              @if (canJoinTeam()) {
+                <gt-loading-button i18n-buttonText
+                  buttonText="Join Team"
+                  buttonStyle="stroked"
+                  [loading]="loading().addTeamMember === otherTeam.slug"
+                  (buttonClick)="joinTeam(otherTeam.slug)"
+                  id="leave-team"
+                ></gt-loading-button>
+              }
             </li>
           }
         </ul>

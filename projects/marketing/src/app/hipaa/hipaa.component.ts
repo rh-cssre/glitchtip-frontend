@@ -23,10 +23,20 @@ import { PageShellComponent } from "../shared/page-shell/page-shell.component";
 export class HipaaComponent {
   subProcessorColumns = ["Sub-Processor", "Purpose"];
   subProcessorRows = [
-    ["DigitalOcean (NYC1)", "Infrastructure & hosting"],
-    ["Mailgun", "Transactional email (alerts)"],
-    ["Stripe", "Payment processing (billing data only)"],
-    ["Cloudflare", "DNS only on the US instance (app.glitchtip.com)"],
+    ["DigitalOcean (NYC1)", "Infrastructure & hosting (BAA in place)"],
+    [
+      "Mailgun",
+      "Transactional email, not covered by a BAA. Alert emails include issue titles, so keep PHI out of error messages or turn off email alerts for those projects",
+    ],
+    ["Stripe", "Payment processing (billing data only, no PHI)"],
+    [
+      "Cloudflare",
+      "DNS only on the US instance (app.glitchtip.com), no access to request contents",
+    ],
+    [
+      "Chatwoot",
+      "Support email and chat, not covered by a BAA. Never include PHI in support messages",
+    ],
   ];
 
   faqs = [
@@ -49,7 +59,12 @@ export class HipaaComponent {
     {
       question: "What is GlitchTip's breach notification timeline?",
       answer:
-        "Burke Software will notify affected customers without undue delay and no later than 72 hours after discovery of a confirmed breach, in alignment with GDPR and HIPAA requirements.",
+        "Burke Software will notify affected customers without undue delay and no later than 72 hours after becoming aware of a breach, in alignment with GDPR and HIPAA requirements.",
+    },
+    {
+      question: "Can I send PHI to GlitchTip support?",
+      answer:
+        "No. Support email and chat are not covered by a BAA. Describe the problem without PHI, for example by linking to the issue in your GlitchTip account.",
     },
   ];
 }
