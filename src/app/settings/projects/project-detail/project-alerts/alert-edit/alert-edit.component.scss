@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--gt-space-3, 12px);
-  // Sections draw their own line underneath; the header needs one too.
+  // The shared rule draws lines between sections; the header needs its own.
   padding-bottom: var(--gt-space-5, 24px);
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
@@ -24,12 +24,6 @@
   margin: 0;
   font: var(--mat-sys-title-large);
   font-weight: 600;
-}
-
-// The sticky footer draws the line under the last section itself, since it
-// needs one while content scrolls beneath it.
-gt-settings-section:last-of-type {
-  border-bottom: none;
 }
 
 gt-list {

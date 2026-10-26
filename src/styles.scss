@@ -282,6 +282,19 @@ mat-sidenav-container {
   margin-right: 8px;
 }
 
+// Settings sections: a hairline between consecutive sections, never above the
+// first or below the last. A section often sits inside its own form or a child
+// component, so the line goes on whichever sibling holds the section, as long
+// as an earlier sibling holds one too. A section that continues the one before
+// it (a list, then the field that adds to it) opts out with
+// .gt-settings-continued.
+:is(gt-settings-section, :has(gt-settings-section))
+  ~ :is(gt-settings-section, :has(gt-settings-section)):not(
+    .gt-settings-continued
+  ) {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).
 // Wider than a regular menu because rows contain chip groups and short prose.
 .mat-mdc-menu-panel.search-help-menu {
