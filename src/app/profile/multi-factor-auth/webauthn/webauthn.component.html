@@ -27,9 +27,8 @@
         </gt-list-row>
       }
     </gt-list>
-  }
-  @if (error) {
-    <gt-form-error [errors]="[error]"></gt-form-error>
+  } @else {
+    <p class="gt-note" i18n>No security keys yet.</p>
   }
   <!-- Single-root block, so the slotted node projects. -->
   @if (stage() === 1) {

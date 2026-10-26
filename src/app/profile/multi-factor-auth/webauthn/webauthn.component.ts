@@ -18,7 +18,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
-import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
@@ -32,7 +31,6 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
   styleUrls: ["./webauthn.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    FormErrorComponent,
     LoadingButtonComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -54,7 +52,6 @@ export class WebAuthnComponent {
 
   stage = this.service.webAuthnState;
   hasTOTP = this.service.TOTPAuthenticator;
-  error: string | null = null;
   authenticators = this.service.webAuthnAuthenticators;
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
