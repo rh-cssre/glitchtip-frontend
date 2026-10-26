@@ -11,7 +11,6 @@ import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { client, handleError } from "src/app/shared/api/api";
 
 interface NotificationsState {
-  projectViewExpanded: boolean;
   subscribeByDefault: boolean;
   subscribeByDefaultLoading: boolean;
   subscribeByDefaultError: string;
@@ -20,7 +19,6 @@ interface NotificationsState {
 }
 
 const initialState: NotificationsState = {
-  projectViewExpanded: false,
   subscribeByDefault: true,
   subscribeByDefaultLoading: false,
   subscribeByDefaultError: "",
@@ -42,9 +40,6 @@ export class NotificationsService extends StatefulService<NotificationsState> {
   }));
   readonly subscribeByDefault = computed(
     () => this.#notificationsResource.value()?.subscribeByDefault || false,
-  );
-  readonly projectViewExpanded = computed(
-    () => this.state().projectViewExpanded,
   );
   readonly subscribeByDefaultLoading = computed(
     () => this.state().subscribeByDefaultLoading,
@@ -143,22 +138,10 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     }
   }
 
-  toggleProjectView() {
-    this.setToggleProjectView();
-  }
-
   private setSubscribeByDefault(subscribe: boolean) {
     this.setState({
       ...this.state(),
       subscribeByDefault: subscribe,
-    });
-  }
-
-  private setToggleProjectView() {
-    const projectViewExpanded = this.state().projectViewExpanded;
-    this.setState({
-      ...this.state(),
-      projectViewExpanded: !projectViewExpanded,
     });
   }
 
