@@ -29,7 +29,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Settings section"
       status="stable"
-      description="One setting on a settings page: a title, one line of help, then the control and its action. Sections stack in a single column, separated by space, with no cards or dividers."
+      description="One setting on a settings page: a title, one line of help, then the control and its action. Sections stack in a single column with a hairline between them, with no cards."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -105,14 +105,18 @@ export class SettingsSectionPreview {
     "Each setting on a project, team, organization or profile settings page",
   ];
   readonly dos = [
-    "Stack sections in one column and let the space between them separate them",
+    "Stack sections in one column; a hairline between them separates them",
+    "Join a list and the field that adds to it with .gt-settings-continued on the second",
     "Use inline for a single control with its action beside it",
+    "Put the action below, left-aligned, when a section has several controls or none",
+    "Save a choice that previews itself, such as the theme, on change with no button",
     "Give each section its own outlined Save that names what it saves: Save name",
     "Put a destructive action in the last section, as an outlined warn button that opens a confirm dialog",
     "Show the value as plain text when the person cannot edit it",
   ];
   readonly donts = [
-    "Wrap sections in cards or draw dividers between them",
+    "Wrap sections in cards",
+    "Put a list and the field that adds to it in one section; make them two, joined",
     "Repeat the title as the label of a section's only field",
     "Use a filled Save; settings pages have no primary action",
     "Box the danger section in red; the warn button and the dialog carry the warning",

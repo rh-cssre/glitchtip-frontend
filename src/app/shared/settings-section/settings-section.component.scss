@@ -1,8 +1,11 @@
+// The hairline between sections is a global rule in styles.scss: it has to
+// see siblings and the forms or components that wrap a section.
 :host {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gt-space-3, 12px);
-  margin: 0 0 var(--gt-space-6, 32px);
+  margin: 0;
+  padding: var(--gt-space-5, 24px) 0;
 }
 
 .settings-section__title {
