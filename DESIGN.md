@@ -67,9 +67,10 @@ Conventions for every component:
 
 ### Surfaces
 
-- Page structure (headers, settings sections, forms, empty states) sits directly on the page surface, separated by space.
+- Page structure (headers, settings sections, forms, empty states) sits directly on the page surface, separated by space or a hairline.
 - A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
 - A card with a title bar is not used for a page section; the section's title sits above its container.
+- A form saved with a button stays flat; the button beside its field shows what it saves. A border only groups things that have no button to do it: rows of records, and rows of settings that save on change.
 
 ### Lists
 
