@@ -1,8 +1,13 @@
+// A hairline under each section groups it without a box. It sits below, not
+// above, because pages wrap sections in their own forms, so "every section
+// but the first" can't be selected; the last line just closes the page.
 :host {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gt-space-3, 12px);
-  margin: 0 0 var(--gt-space-6, 32px);
+  margin: 0;
+  padding: var(--gt-space-5, 24px) 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
 .settings-section__title {
