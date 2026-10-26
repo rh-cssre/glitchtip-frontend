@@ -20,14 +20,13 @@ import {
 } from "@angular/forms";
 import { DecimalPipe, NgTemplateOutlet } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { MatCardModule } from "@angular/material/card";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatDividerModule } from "@angular/material/divider";
 import { MatInputModule } from "@angular/material/input";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
-import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { MonitorInput, MonitorType } from "../uptime.interfaces";
 import { intRegex, urlRegex } from "src/app/shared/validators";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
@@ -77,19 +76,18 @@ const portUrlValidators = [
     ReactiveFormsModule,
     RouterModule,
     LoadingButtonComponent,
+    SettingsSectionComponent,
+    FormErrorComponent,
     MatButtonModule,
-    MatCardModule,
     MatDialogModule,
     MatOptionModule,
-    MatIconModule,
     MatSelectModule,
-    MatDividerModule,
     MatInputModule,
   ],
 })
 export class MonitorFormComponent implements OnInit {
-  updateMonitorText = $localize`Update Monitor`;
-  createMonitorText = $localize`Create Monitor`;
+  updateMonitorText = $localize`Save monitor`;
+  createMonitorText = $localize`Create monitor`;
   private organizationsService = inject(OrganizationsService);
   private environmentsService = inject(EnvironmentsService);
   private subscriptionService = inject(SubscriptionService);
@@ -106,6 +104,11 @@ export class MonitorFormComponent implements OnInit {
   totalEventsAllowed = this.subscriptionService.totalEventsAllowed;
 
   intervalPerMonth = signal<number | null>(null);
+  eventsEstimate = computed(() => {
+    const allowed = this.totalEventsAllowed();
+    const perMonth = this.intervalPerMonth();
+    return allowed && perMonth ? { allowed, perMonth } : null;
+  });
 
   typeChoices: MonitorType[] = ["Ping", "GET", "POST", "Heartbeat", "TCP Port"];
 

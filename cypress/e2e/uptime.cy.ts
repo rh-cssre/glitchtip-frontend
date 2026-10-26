@@ -22,7 +22,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .should("have.value", seededMonitorName)
       .clear()
       .type("new name");
-    cy.get("button").contains("Update Monitor").click();
+    cy.get("button").contains("Save monitor").click();
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("new name");
   });
