@@ -108,7 +108,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 
 ### Lists
 
-A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end.
+A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end. An optional description line sits under the name.
 
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
