@@ -8,6 +8,7 @@ import { StatusPillComponent } from "../../status-pill/status-pill.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./page-header.component.html",
   styleUrl: "./page-header.component.scss",
+  host: { "[attr.title]": "null" },
 })
 export class PageHeaderComponent {
   readonly title = input.required<string>();
