@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { TeamsService } from "src/app/api/teams/teams.service";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { ProjectSettingsService } from "../../projects/project-settings.service";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatDividerModule } from "@angular/material/divider";
@@ -34,16 +34,17 @@ import { MatCardModule } from "@angular/material/card";
 })
 export class TeamProjectsComponent implements OnInit {
   private projectsService = inject(ProjectSettingsService);
-  private teamsService = inject(TeamsService);
+  private organizationsService = inject(OrganizationsService);
   teamSlug = input.required<string>({ alias: "team-slug" });
   orgSlug = input.required<string>({ alias: "org-slug" });
 
-  userTeamRole = this.teamsService.userTeamRole;
   projectsOnTeam = this.projectsService.projectsOnTeam;
   projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
   loading = this.projectsService.addRemoveLoading;
   errors = this.projectsService.errors;
   project = new FormControl();
+  // Adding and removing go through project endpoints that require org:write.
+  canWriteOrg = this.organizationsService.canWriteOrg;
 
   ngOnInit(): void {
     this.projectsService.setParams(this.orgSlug(), this.teamSlug());

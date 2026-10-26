@@ -2,14 +2,12 @@
   <ng-container slot="left">
     <h1 i18n class="section-header-text">Organization Members</h1>
   </ng-container>
-  <ng-container i18n slot="right">
-    <a
-      mat-flat-button
-      color="primary"
-      [routerLink]="['new']"
-      [disabled]="!accessMemberWrite()"
-      >Invite Member</a
-    >
+  <ng-container slot="right">
+    @if (canWriteMember()) {
+      <a i18n mat-flat-button color="primary" [routerLink]="['new']"
+        >Invite Member</a
+      >
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -46,7 +44,7 @@
             }
           }
         </span>
-        @if (member.pending && accessMemberWrite()) {
+        @if (member.pending && canWriteMember()) {
           <ng-container slot="actions">
             <button
               mat-icon-button
@@ -68,12 +66,14 @@
                   <ng-container i18n>Resend invite</ng-container>
                 }
               </button>
-              <button mat-menu-item (click)="removeMember(member)" i18n
-                >Remove</button
-              >
+              @if (canAdminMember()) {
+                <button mat-menu-item (click)="removeMember(member)" i18n
+                  >Remove</button
+                >
+              }
             </mat-menu>
           </ng-container>
-        } @else if (!member.pending && (member.isMe || accessMemberWrite())) {
+        } @else if (!member.pending && (member.isMe || canAdminMember())) {
           <gt-loading-button
             slot="actions"
             i18n-matTooltip

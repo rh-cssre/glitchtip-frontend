@@ -20,13 +20,15 @@
               ) {
                 <gt-list-row>
                   {{ environment.name }}
-                  <gt-loading-button
-                    slot="actions"
-                    (buttonClick)="toggleHidden(environment)"
-                    [loading]="environment.id === toggleHiddenloading()"
-                    [buttonText]="environment.isHidden ? showText : hideText"
-                    buttonStyle="stroked"
-                  />
+                  @if (canWriteProject()) {
+                    <gt-loading-button
+                      slot="actions"
+                      (buttonClick)="toggleHidden(environment)"
+                      [loading]="environment.id === toggleHiddenloading()"
+                      [buttonText]="environment.isHidden ? showText : hideText"
+                      buttonStyle="stroked"
+                    />
+                  }
                 </gt-list-row>
               }
             </gt-list>
