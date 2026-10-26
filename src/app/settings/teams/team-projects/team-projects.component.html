@@ -32,8 +32,7 @@
           icon="folder"
           i18n-title
           title="No team projects"
-          i18n-message
-          message="Add a project so this team's members get its alerts."
+          [message]="noProjectsMessage()"
         />
       } @else {
         <ul>
