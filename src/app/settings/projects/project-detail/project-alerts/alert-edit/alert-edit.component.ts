@@ -10,6 +10,7 @@ import {
   viewChild,
 } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -19,6 +20,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { components } from "src/app/api/api-schema";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
@@ -52,6 +54,7 @@ type Recipient = AlertRecipient | NewAlertRecipient;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    RouterLink,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
@@ -59,6 +62,7 @@ type Recipient = AlertRecipient | NewAlertRecipient;
     MatMenuModule,
     MatTooltipModule,
     AlertFormComponent,
+    FormErrorComponent,
     ListComponent,
     ListRowComponent,
     LoadingButtonComponent,

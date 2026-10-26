@@ -27,8 +27,6 @@ import {
 } from "./alert-labels";
 import { ProjectAlertsService } from "./project-alerts.service";
 
-export { iconXrefMapping, resolveRecipientIcon } from "./alert-labels";
-
 /** The Alerts tab: a list of alerts, or one alert's edit view (?alert=id|new). */
 @Component({
   selector: "gt-project-alerts",

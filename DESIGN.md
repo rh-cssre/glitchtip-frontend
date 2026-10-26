@@ -114,6 +114,11 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
 - Rows with several columns to compare or sort are a table instead.
 
+### Sub-views in a tab
+
+- A view opened by a query param inside a tab (an alert's edit form) starts with a text back link to the tab's list. The page's top app bar belongs to the parent record.
+- A long edit form ends in a sticky footer with its summary and Save. Delete sits in the view's header, away from Save.
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.

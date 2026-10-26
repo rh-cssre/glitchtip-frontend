@@ -37,27 +37,27 @@ export interface AlertConditions {
 
 /** One sentence saying when an alert fires, or null when nothing is picked. */
 function triggerSentence(alert: AlertConditions) {
-  const conditions: string[] = [];
   const quantity = alert.quantity;
   const timespan = alert.timespanMinutes;
-  if (quantity && timespan) {
-    const events =
-      quantity === 1 ? $localize`1 event` : $localize`${quantity} events`;
-    const minutes =
-      timespan === 1 ? $localize`1 minute` : $localize`${timespan} minutes`;
-    conditions.push($localize`an issue gets ${events} in ${minutes}`);
+  const uptime = !!alert.uptime;
+  if (!(quantity && timespan)) {
+    return uptime ? $localize`Alerts when an uptime monitor goes down.` : null;
   }
-  if (alert.uptime) {
-    conditions.push($localize`an uptime monitor goes down`);
-  }
-  if (!conditions.length) return null;
-  return $localize`Alerts when ${conditions.join($localize` or `)}.`;
+  const events =
+    quantity === 1 ? $localize`1 event` : $localize`${quantity} events`;
+  const minutes =
+    timespan === 1 ? $localize`1 minute` : $localize`${timespan} minutes`;
+  return uptime
+    ? $localize`Alerts when an issue gets ${events}:events: in ${minutes}:minutes: or an uptime monitor goes down.`
+    : $localize`Alerts when an issue gets ${events}:events: in ${minutes}:minutes:.`;
 }
 
 function environmentSentence(alert: AlertConditions) {
-  return alert.environments?.length
-    ? " " + $localize`Only in ${alert.environments.join(", ")}.`
-    : "";
+  if (!alert.environments?.length) return "";
+  const envs = new Intl.ListFormat(document.documentElement.lang || undefined, {
+    type: "disjunction",
+  }).format(alert.environments);
+  return " " + $localize`Only in ${envs}:environments:.`;
 }
 
 /** One sentence saying when an alert fires, for lists and read-only views. */

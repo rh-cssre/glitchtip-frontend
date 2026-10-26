@@ -26,12 +26,6 @@
   font-weight: 600;
 }
 
-gt-list {
-  display: block;
-  width: 100%;
-  margin-bottom: 0;
-}
-
 .recipient {
   display: flex;
   align-items: center;
@@ -56,15 +50,8 @@ gt-list {
   text-overflow: ellipsis;
 }
 
-.note {
-  margin: 0;
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-surface-variant);
-}
-
-// Summary and actions close the form. Same hairline and column as the section
-// dividers; being sticky is what sets it apart. Sticky so Save and the summary stay in view while a long form scrolls; the
-// background matches mat-sidenav-content so sections slide under it cleanly.
+// Sticky so Save and the summary stay in view on a long form. The background
+// matches mat-sidenav-content so sections slide under it cleanly.
 .footer {
   position: sticky;
   bottom: 0;
@@ -86,13 +73,6 @@ gt-list {
   color: var(--mat-sys-on-surface);
 }
 
-.error {
-  display: block;
-  margin-bottom: var(--gt-space-3, 12px);
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: var(--gt-space-2, 8px);
+.gt-form-actions {
+  padding-top: 0;
 }

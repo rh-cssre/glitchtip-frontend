@@ -14,6 +14,10 @@ export type NewAlertRecipient = Omit<AlertRecipient, "id" | "url"> & {
   topic?: string;
 };
 
+function withScheme(url: string | null | undefined) {
+  return url && !url.startsWith("http") ? "https://" + url : (url ?? "");
+}
+
 /** A saved recipient carries Zulip settings in config; the API takes them flat. */
 export function toRecipientInput(
   recipient: AlertRecipient | NewAlertRecipient,
@@ -21,12 +25,19 @@ export function toRecipientInput(
   if ("botEmail" in recipient || recipient.recipientType !== "zulip") {
     const { recipientType, url, botEmail, apiKey, channel, topic } =
       recipient as NewAlertRecipient;
-    return { recipientType, url: url ?? "", botEmail, apiKey, channel, topic };
+    return {
+      recipientType,
+      url: withScheme(url),
+      botEmail,
+      apiKey,
+      channel,
+      topic,
+    };
   }
   const config = (recipient.config ?? {}) as Record<string, string>;
   return {
     recipientType: recipient.recipientType,
-    url: recipient.url ?? "",
+    url: withScheme(recipient.url),
     botEmail: config["bot_email"],
     apiKey: config["api_key"],
     channel: config["channel"],
@@ -145,7 +156,7 @@ export class ProjectAlertsService {
       { params: { path: { ...this.#path(), alert_id: id } } },
     );
     if (response.status === 204) {
-      this.snackBar.open($localize`Success: Your alert has been deleted`);
+      this.snackBar.open($localize`Alert deleted`);
       this.#projectAlertsResource.reload();
       return true;
     }

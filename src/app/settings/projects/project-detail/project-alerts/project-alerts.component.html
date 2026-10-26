@@ -38,7 +38,7 @@
           } @else {
             <span>{{ alertName(alert) }}</span>
           }
-          <span class="alert-summary">{{ alertSummary(alert) }}</span>
+          <span slot="description">{{ alertSummary(alert) }}</span>
           <span slot="meta" class="recipient-icons">
             @for (recipient of alert.alertRecipients; track recipient.id) {
               @if (recipient.recipientType === "email") {
@@ -77,13 +77,23 @@
         </gt-list-row>
       }
     </gt-list>
-  } @else {
-    <gt-empty-state
-      icon="notifications"
-      i18n-title
-      title="No alerts"
-      i18n-message
-      message="Create an alert to get notified when this project has new issues."
-    />
+  } @else if (!initialLoadError()) {
+    @if (canWriteProject()) {
+      <gt-empty-state
+        icon="notifications"
+        i18n-title
+        title="No alerts"
+        i18n-message
+        message="Create an alert to get notified when this project has new issues."
+      />
+    } @else {
+      <gt-empty-state
+        icon="notifications"
+        i18n-title
+        title="No alerts"
+        i18n-message
+        message="This project has no alerts yet."
+      />
+    }
   }
 }
