@@ -1,14 +1,33 @@
-The celery integration adds support for the [Celery Task Queue System](http://www.celeryproject.org/).
+Install the sentry Python SDK:
 
-Add `CeleryIntegration()` to your `integrations` list:
+```bash
+pip install sentry-sdk
+```
+
+Initialize the SDK in your Celery worker configuration (e.g., `celery.py` or the module that creates the Celery app):
 
 ```python
 import sentry_sdk
-from sentry_sdk.integrations.celery import CeleryIntegration
 
-sentry_sdk.init("your DSN here", integrations=[CeleryIntegration()])
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,  # 1% of transactions — adjust to your needs
+    auto_session_tracking=False,  # GlitchTip does not support sessions
+    # enable_logs=True,  # Opt-in: send logs to GlitchTip (uses disk space)
+)
 ```
 
-Additionally, the Python SDK will set the transaction on the event to the task name, and it will improve the grouping for global Celery errors such as timeouts.
+The SDK auto-detects Celery and captures task failures, retries, and soft time limit exceptions. Each task execution is captured as a transaction when tracing is enabled.
 
-The integration will automatically report errors from all celery jobs.
+Verify your setup with a failing task:
+
+```python
+@app.task
+def trigger_error():
+    division_by_zero = 1 / 0
+```
+
+## Tips
+
+- Initialize the SDK in both your web process and your worker process to capture errors from both.
+- Celery tasks can generate high transaction volume. Keep `traces_sample_rate` low to save disk space.

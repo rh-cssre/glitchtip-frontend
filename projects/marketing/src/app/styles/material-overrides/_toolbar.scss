@@ -1,0 +1,7 @@
+@use "@angular/material" as mat;
+
+@include mat.toolbar-overrides(
+  (
+    container-background-color: var(--mat-sys-surface-container-highest),
+  )
+);

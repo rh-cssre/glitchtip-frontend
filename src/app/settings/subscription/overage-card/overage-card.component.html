@@ -1,0 +1,320 @@
+@if (status(); as status) {
+  <mat-card appearance="outlined" class="overage-card">
+    <mat-card-content>
+      <div class="overage-top">
+        <div class="overage-top-text">
+          <span class="body-text-strong" i18n>On-demand billing</span>
+          <!-- The cause, not throttleState: nothing is throttled yet the moment
+               a resubscribe leaves overage on with no metered item. -->
+          @if (inactiveCause() === "broken") {
+            <p class="overage-tagline body-text" i18n>
+              On-demand billing is switched on, but it is not running. You are
+              not being charged for it. Please contact support.
+            </p>
+          } @else if (inactiveCause() === "plan") {
+            <p class="overage-tagline body-text" i18n>
+              On-demand billing is switched on, but your current plan does not
+              support it, so no new on-demand usage is charged.
+            </p>
+          } @else if (!enabled() && !capAdjustable()) {
+            <!-- Only shown while a reported amount is still owed: the toggle
+                 cannot turn on from here, so the usual pitch would mislead. -->
+            @if (!status.eligible) {
+              <p class="overage-tagline body-text" i18n>
+                On-demand billing is off. Your current plan does not support it.
+              </p>
+            } @else {
+              <p class="overage-tagline body-text" i18n>
+                On-demand billing is off and is not available right now.
+              </p>
+            }
+          } @else {
+            <!-- The cap bounds overage still to come, not what the cycle has
+                 already run up: lowering it mid-cycle leaves served usage
+                 billable, so the copy promises nothing about the total. -->
+            <p class="overage-tagline body-text" i18n>
+              Keep collecting events past your plan limit and pay only for the
+              overflow, up to a monthly cap you set. At the cap, throttling
+              resumes, so no further on-demand usage is charged.
+            </p>
+          }
+        </div>
+        <div class="overage-top-control">
+          @if (loading()) {
+            <mat-spinner diameter="20" />
+          }
+          <mat-slide-toggle
+            [checked]="enabled()"
+            [disabled]="
+              loading() || !canManage() || (!enabled() && !capAdjustable())
+            "
+            (change)="onToggle($event)"
+            aria-label="Toggle on-demand billing"
+            i18n-aria-label
+          />
+        </div>
+      </div>
+
+      @if (!canManage()) {
+        <p class="overage-sub overage-owner-note" i18n>
+          Only organization owners can change on-demand billing.
+        </p>
+      }
+
+      @switch (throttleState()) {
+        @case ("stalled-plan") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            Your current plan does not support on-demand billing, so it is not
+            adding any headroom and about {{ throttleRate() }}% of new events
+            are being dropped. Raising the spend cap will not change that.
+          </p>
+        }
+        @case ("stalled-broken") {
+          <mat-divider />
+          <p class="overage-alert overage-alert--warn" i18n>
+            On-demand billing is switched on but is not running, so about
+            {{ throttleRate() }}% of new events are being dropped. You are not
+            being charged for it, and raising the spend cap will not help.
+            Please contact support.
+          </p>
+        }
+        @case ("cap") {
+          <mat-divider />
+          @if (canManage()) {
+            <p class="overage-alert overage-alert--warn" i18n>
+              Spend cap reached, so about {{ throttleRate() }}% of new events
+              are being dropped. Raise the cap to keep collecting events.
+            </p>
+          } @else {
+            <p class="overage-alert overage-alert--warn" i18n>
+              Spend cap reached, so about {{ throttleRate() }}% of new events
+              are being dropped. Ask an organization owner to raise the cap to
+              keep collecting events.
+            </p>
+          }
+        }
+        @case ("throttled") {
+          <mat-divider />
+          <!-- A task the server enqueues on every cap or plan change clears
+               this, so it is transient. No deadline is named: an org that goes
+               quiet right after entering the state waits for the periodic
+               sweep instead. -->
+          <p class="overage-alert" i18n>
+            About {{ throttleRate() }}% of new events are being dropped while a
+            recent change takes effect.
+          </p>
+        }
+        @case ("no-overage") {
+          <mat-divider />
+          @if (canManage()) {
+            <p class="overage-alert overage-alert--warn" i18n>
+              About {{ throttleRate() }}% of new events are being dropped. Turn
+              on on-demand billing to keep collecting events.
+            </p>
+          } @else {
+            <p class="overage-alert overage-alert--warn" i18n>
+              About {{ throttleRate() }}% of new events are being dropped. Ask
+              an organization owner to turn on on-demand billing to keep
+              collecting events.
+            </p>
+          }
+        }
+        @default {
+          <!-- Not throttled yet, so these are forecasts rather than causes. An
+               inactive overage meters nothing, and the tagline above already
+               explains the stall, so skip them entirely. Both name the cap as
+               the thing to act on, so both need it to be changeable. -->
+          @if (capAdjustable() && !overageInactive() && capReached()) {
+            <mat-divider />
+            @if (canManage()) {
+              <p class="overage-alert overage-alert--warn" i18n>
+                Spend cap reached. New events will be dropped until you raise
+                the cap.
+              </p>
+            } @else {
+              <p class="overage-alert overage-alert--warn" i18n>
+                Spend cap reached. New events will be dropped until an
+                organization owner raises the cap.
+              </p>
+            }
+          } @else if (capAdjustable() && !overageInactive() && willReachCap()) {
+            <mat-divider />
+            <p class="overage-alert" i18n>
+              On track to reach your cap before the cycle ends.
+            </p>
+          }
+        }
+      }
+
+      @if (reportedOwedDollars() > 0) {
+        <mat-divider />
+        <p class="overage-alert" i18n>
+          {{ reportedOwedDollars() | currency }} of on-demand usage has already
+          been counted towards your bill this cycle and will still be on your
+          invoice. No further on-demand usage is being charged.
+        </p>
+      }
+
+      @if (enabled()) {
+        <!-- Unbillable overage meters nothing, so no estimate or cap bar. -->
+        @if (!overageInactive()) {
+          <mat-divider />
+          <div class="overage-row">
+            <div class="overage-row-main">
+              <span class="overage-amount"
+                >≈ {{ costDollars() | currency }}
+                <span class="overage-est-note" i18n
+                  >this cycle (estimate)</span
+                ></span
+              >
+              @if (resetDate(); as reset) {
+                <span class="overage-sub" i18n>Resets {{ reset | date }}</span>
+              }
+            </div>
+            <span class="overage-percent"
+              >{{ capProgressPercent() }}% <span i18n>of cap</span></span
+            >
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="capProgressPercent()"
+            [color]="capReached() ? 'warn' : 'primary'"
+          />
+          @if (capBelowBilled()) {
+            <!-- The server floors the cap at what it has already reported to
+                 Stripe, so a cap set below that stops growth without retracting
+                 the charge; without this line the clamped bar reads as a bug. -->
+            <p class="overage-alert" i18n>
+              Your cap is below the usage already counted towards your bill this
+              cycle. Lowering the cap stops new on-demand charges, but usage
+              already counted will still be on your invoice. The estimate above
+              is your on-demand charge for this cycle.
+            </p>
+          }
+        }
+
+        <mat-divider />
+        <div class="overage-row">
+          @if (overageInactive()) {
+            <div class="overage-row-main">
+              <span class="overage-amount">{{
+                capDollarsCurrent() | currency
+              }}</span>
+              <span class="overage-sub" i18n
+                >Monthly spend cap (not in effect)</span
+              >
+            </div>
+          } @else if (editingCap()) {
+            <mat-form-field appearance="outline" class="cap-field">
+              <mat-label i18n>Monthly spend cap</mat-label>
+              <span matTextPrefix>$&nbsp;</span>
+              <input
+                matInput
+                type="number"
+                step="1"
+                [min]="minCapDollars"
+                [max]="maxCapDollars()"
+                [value]="capInputDollars()"
+                (input)="onCapInput($any($event.target).value)"
+              />
+              @if (!capValid()) {
+                <mat-error i18n
+                  >Enter a cap between {{ minCapDollars | currency }} and
+                  {{ maxCapDollars() | currency }}.</mat-error
+                >
+              }
+            </mat-form-field>
+            <div class="overage-actions">
+              <button
+                mat-flat-button
+                color="primary"
+                [disabled]="loading() || !capValid()"
+                (click)="saveCap()"
+                i18n
+              >
+                Save
+              </button>
+              <button
+                mat-button
+                [disabled]="loading()"
+                (click)="cancelEditCap()"
+                i18n
+              >
+                Cancel
+              </button>
+            </div>
+          } @else {
+            <div class="overage-row-main">
+              <span class="overage-amount">{{
+                capDollarsCurrent() | currency
+              }}</span>
+              <span class="overage-sub" i18n>Monthly spend cap</span>
+            </div>
+            @if (capAdjustable()) {
+              <button
+                mat-stroked-button
+                [disabled]="!canManage()"
+                (click)="startEditCap()"
+                i18n
+              >
+                Adjust cap
+              </button>
+            } @else if (!overageConfigured()) {
+              <!-- The cap POST applies two tests, so name the one that fired.
+                   No live overage price stops every org on the server. -->
+              <span class="overage-sub" i18n
+                >On-demand billing is not available on this server right now, so
+                the spend cap cannot be changed.</span
+              >
+            } @else {
+              <!-- The price is live, so it is this org's plan that fails. -->
+              <span class="overage-sub" i18n
+                >Your current plan does not support on-demand billing, so the
+                spend cap cannot be changed.</span
+              >
+            }
+          }
+        </div>
+      }
+
+      @if (error()) {
+        <mat-error class="overage-error">{{ error() }}</mat-error>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+
+<ng-template #migrationDialog>
+  <h2 mat-dialog-title i18n>Turn on on-demand billing?</h2>
+  <mat-dialog-content class="mat-typography">
+    @if (owedAboveCap()) {
+      <!-- Re-enabling in the same cycle floors the cap at what was already
+           reported, so "up to the cap" would understate the bill. -->
+      <p class="body-text" i18n>
+        You're charged for events above your plan limit, up to a monthly cap you
+        can change anytime.
+        <strong>{{ reportedOwedDollars() | currency }}</strong> of on-demand
+        usage has already been counted towards your bill this cycle, more than
+        your <strong>{{ capInputDollars() | currency }} cap</strong>. That
+        amount will still be on your invoice, and until you raise the cap or the
+        cycle resets, nothing more is charged and events past your plan limit
+        stay throttled.
+      </p>
+    } @else {
+      <p class="body-text" i18n>
+        You're only charged for events above your plan limit, up to a
+        <strong>{{ capInputDollars() | currency }} monthly cap</strong> you can
+        change anytime. If you're already over your plan limit this cycle,
+        those events are billed too, up to your cap. Once the cap is reached,
+        no further on-demand usage is charged.
+      </p>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close i18n>Cancel</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="true" i18n>
+      Turn on on-demand billing
+    </button>
+  </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,41 @@
+@use "variables" as vars;
+
+.section-header-text-light {
+  padding-right: 20px;
+  overflow-wrap: break-word;
+}
+
+header {
+  .header-group {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: (vars.$tablet - 1)) {
+      flex-direction: column;
+    }
+  }
+
+  gt-issue-detail-title {
+    margin-right: 20px;
+  }
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.body-text-strong {
+  margin: 0;
+}
+
+.button-row {
+  display: flex;
+  align-items: flex-start;
+
+  ::ng-deep button {
+    margin-right: 8px;
+  }
+}

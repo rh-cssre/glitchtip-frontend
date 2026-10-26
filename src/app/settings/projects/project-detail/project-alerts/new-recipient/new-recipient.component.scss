@@ -1,23 +1,21 @@
-@import "variables";
+@use "variables" as vars;
 
 .dialog-wrapper {
   width: 500px;
 
-  @media screen and (max-width: $tablet - 1) {
+  @media screen and (max-width: vars.$tablet - 1) {
     width: 100%;
   }
 
   h1 {
-    margin-left: -24px;
-    margin-right: -24px;
     padding-left: 24px;
     padding-right: 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
   }
 }
 
 .error {
-  color: #f44336;
+  color: var(--mat-sys-error);
   text-align: center;
 
   span {
@@ -26,9 +24,13 @@
   }
 }
 
-.switch {
-  margin-top: 32px;
-  margin-bottom: 32px;
+.recipientDetails {
+  margin-top: 8px;
+  margin-bottom: 0;
+
+  mat-form-field:not(:last-of-type) {
+    margin-bottom: 16px;
+  }
 
   .webhook {
     width: 100%;
@@ -36,8 +38,9 @@
     svg {
       width: 24px;
       height: 24px;
+      overflow: hidden;
       vertical-align: -5px;
-      margin-right: 8px;
+      margin: 0 8px;
     }
   }
 
@@ -50,6 +53,22 @@
   }
 }
 
+.type {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.zulip-help {
+  margin-top: 0px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 mat-dialog-actions {
+  gap: 16px;
   justify-content: flex-end;
 }

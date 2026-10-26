@@ -1,0 +1,52 @@
+<mkt-page-shell>
+  <div class="blog-index">
+    <header class="blog-index__head">
+      <h1 class="fancy marketing-heading">GlitchTip Blog</h1>
+      <p class="marketing-body blog-index__lede">
+        Release notes, engineering deep-dives, and how we build GlitchTip in the
+        open.
+      </p>
+    </header>
+
+    @if (featured(); as post) {
+      <a class="mkt-card blog-feature" [routerLink]="[post.route]" mktReveal>
+        <span class="marketing-eyebrow blog-feature__eyebrow">Latest</span>
+        <h2 class="mkt-card__title blog-feature__title">{{ post.title }}</h2>
+        @if (post.date) {
+          <time class="blog-feature__date" [dateTime]="post.date">{{
+            post.date | date: "longDate"
+          }}</time>
+        }
+        @if (post.description) {
+          <p class="blog-feature__desc marketing-body">{{ post.description }}</p>
+        }
+        <span class="blog-feature__cta">Read post &#8594;</span>
+      </a>
+    }
+
+    @for (group of groupedByYear(); track group.year) {
+      <section class="blog-year" mktReveal>
+        @if (group.year) {
+          <h2 class="blog-year__label">{{ group.year }}</h2>
+        }
+        <ul class="blog-list">
+          @for (post of group.posts; track post.route) {
+            <li class="blog-list__item">
+              <a class="mkt-row blog-list__link" [routerLink]="[post.route]">
+                <h3 class="mkt-row__title blog-list__title">{{ post.title }}</h3>
+                @if (post.date) {
+                  <time class="blog-list__date" [dateTime]="post.date">{{
+                    post.date | date: "longDate"
+                  }}</time>
+                }
+                @if (post.description) {
+                  <p class="blog-list__desc">{{ post.description }}</p>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+</mkt-page-shell>

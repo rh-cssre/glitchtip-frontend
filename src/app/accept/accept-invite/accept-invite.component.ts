@@ -1,56 +1,44 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { AuthService } from "src/app/api/auth/auth.service";
-import { AcceptInviteService } from "src/app/api/accept/accept-invite.service";
-import { ActivatedRoute } from "@angular/router";
-import { map, tap } from "rxjs/operators";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+  input,
+  computed,
+} from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { AuthService } from "src/app/auth.service";
+import { AcceptInviteService } from "./accept-invite.service";
 
 @Component({
   selector: "gt-accept-invite",
   templateUrl: "./accept-invite.component.html",
   styleUrls: ["./accept-invite.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatCardModule, MatButtonModule, RouterLink],
 })
 export class AcceptInviteComponent implements OnInit {
-  isLoggedIn$ = this.authService.isLoggedIn;
-  params$ = this.activatedRoute.params.pipe(
-    map((params) => ({
-      memberId: params.memberId,
-      token: params.token,
-    }))
-  );
-  nextUrl$ = this.params$.pipe(
-    map(({ memberId, token }) => `/accept/${memberId}/${token}`)
-  );
-  acceptInfo$ = this.acceptService.acceptInfo$;
-  alreadyInOrg$ = this.acceptService.alreadyInOrg$;
+  #authService = inject(AuthService);
+  #acceptService = inject(AcceptInviteService);
+  memberId = input.required<number>();
+  token = input<string>("");
+  nextUrl = computed(() => `/accept/${this.memberId()}/${this.token()}`);
 
-  constructor(
-    private authService: AuthService,
-    private acceptService: AcceptInviteService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  isLoggedIn = this.#authService.isAuthenticated;
+  acceptInfo = this.#acceptService.acceptInfo;
+  alreadyInOrg = this.#acceptService.alreadyInOrg;
 
   ngOnInit(): void {
-    this.params$
-      .pipe(
-        tap(({ memberId, token }) => {
-          this.acceptService.getAcceptInviteDetails(memberId, token);
-        })
-      )
-      .subscribe();
+    this.#acceptService.setParams(this.memberId(), this.token());
   }
 
   onSubmit() {
-    this.params$
-      .pipe(
-        tap(({ memberId, token }) => {
-          this.acceptService.acceptInvite(memberId, token);
-        })
-      )
-      .subscribe();
+    this.#acceptService.acceptInvite(this.memberId(), this.token());
   }
 
   logout() {
-    this.authService.logout();
+    this.#authService.logout();
   }
 }

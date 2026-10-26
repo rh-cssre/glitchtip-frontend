@@ -1,0 +1,12 @@
+@use "@angular/material" as mat;
+@use "variables" as vars;
+
+@include mat.button-overrides(
+  (
+    filled-container-shape: vars.$shape-radius,
+    outlined-container-shape: vars.$shape-radius,
+    protected-container-shape: vars.$shape-radius,
+    text-container-shape: vars.$shape-radius,
+    filled-horizontal-padding: 12px,
+  )
+);

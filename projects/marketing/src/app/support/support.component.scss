@@ -1,0 +1,118 @@
+@use "../styles/side-pattern" as *;
+
+:host {
+  @include side-pattern-host;
+}
+
+.support {
+  @include side-pattern(var(--mkt-container-content));
+}
+
+.support__head {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+// Self-serve + community channel cards (mirrors the docs-index card treatment).
+// Capped card width + centred group, so a small number sits in the middle.
+.support-channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 300px));
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+  text-align: left;
+}
+
+// Surface + hover come from the global .mkt-card class.
+.support-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 22px 24px;
+  text-decoration: none;
+
+  .support-card__icon {
+    margin-bottom: 6px;
+    color: var(--mat-sys-primary);
+  }
+
+  .support-card__title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+  }
+
+  .support-card__ext {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .support-card__desc {
+    margin: 0;
+    font-size: 14px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+// Direct-support paths, segmented by how the user runs GlitchTip.
+.support-direct {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 28px;
+  text-align: left;
+  // Stretch so both cards are the same height when side by side.
+  align-items: stretch;
+}
+
+// Surface (fill + hairline + corner) comes from the global .mkt-surface class.
+.support-direct__col {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(20px, 3vw, 28px);
+
+  h3 {
+    margin: 0 0 8px;
+  }
+
+  > .marketing-body {
+    margin: 0 0 16px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  // Pin each card's action + footnote to the bottom so the primary buttons line
+  // up across the two cards (the self-hosted card's form is taller). The meta
+  // that follows sits under the button in both, so their heights match up.
+  .contact-form,
+  > .cta-row {
+    margin-top: auto;
+  }
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0;
+}
+
+
+.support-direct__meta {
+  // Reserve equal space for both cards' footnotes so the buttons above them
+  // line up even though the copy differs in length.
+  min-height: 2.8em;
+  margin: 16px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+
+  a {
+    color: var(--mat-sys-primary);
+    font-weight: 500;
+  }
+}

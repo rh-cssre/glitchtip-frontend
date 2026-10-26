@@ -1,0 +1,81 @@
+@use "../../../../../src/assets/styles/variables" as vars;
+
+// Companion for the :host of pages using side-pattern: clip horizontal
+// overflow so the fixed side bands never produce a scrollbar.
+@mixin side-pattern-host {
+  display: block;
+  overflow-x: clip;
+}
+
+// Just the fixed decorative edge bands, keyed to the centred content column so
+// they never reach behind it. Use directly on a page (e.g. the home host) that
+// caps its own content; for a single content wrapper use side-pattern() below.
+@mixin side-pattern-bands($content-width) {
+  // Organic inner edge: a shallow base fade unioned with varied radial blobs at
+  // different depths and heights, instead of a straight line.
+  $band-fade:
+    linear-gradient(to right, #000 0%, #000 16%, transparent 98%),
+    radial-gradient(70% 22% at 26% 6%, #000 0, transparent 70%),
+    radial-gradient(92% 28% at 39% 17%, #000 0, transparent 70%),
+    radial-gradient(58% 20% at 20% 28%, #000 0, transparent 70%),
+    radial-gradient(86% 26% at 41% 39%, #000 0, transparent 70%),
+    radial-gradient(66% 22% at 27% 50%, #000 0, transparent 70%),
+    radial-gradient(94% 28% at 45% 61%, #000 0, transparent 70%),
+    radial-gradient(60% 20% at 22% 72%, #000 0, transparent 70%),
+    radial-gradient(84% 26% at 38% 83%, #000 0, transparent 70%),
+    radial-gradient(70% 22% at 28% 94%, #000 0, transparent 70%);
+
+  $bg: var(--bg, var(--mat-sys-surface-container-highest));
+
+  &::before,
+  &::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    // Band width = the free margin beside the content column, capped so it
+    // stays a side accent on very wide screens.
+    width: min(330px, max(0px, calc((100vw - #{$content-width}) / 2 * 0.82)));
+    z-index: -1;
+    pointer-events: none;
+    // Opaque page-bg fill hides the dotted page background inside the band; the
+    // translucent wash keeps the pattern subtle while the fill stays opaque.
+    background-color: $bg;
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, #{$bg} 42%, transparent),
+        color-mix(in srgb, #{$bg} 42%, transparent)
+      ),
+      url("/assets/patterns/side-pattern.webp");
+    background-repeat: no-repeat, repeat;
+    background-size:
+      100% 100%,
+      360px auto;
+    -webkit-mask-image: $band-fade;
+    mask-image: $band-fade;
+
+    // The band width is already ~0 on small screens; skip the image fetch too.
+    @media screen and (max-width: vars.$small) {
+      display: none;
+    }
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+    // Mirror so the right band fades inward.
+    transform: scaleX(-1);
+  }
+}
+
+// Content wrapper that both caps its column at $content-width and carries the
+// decorative edge bands (support, blog).
+@mixin side-pattern($content-width) {
+  position: relative;
+  max-width: $content-width;
+  margin-inline: auto;
+  @include side-pattern-bands($content-width);
+}

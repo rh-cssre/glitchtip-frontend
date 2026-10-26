@@ -1,0 +1,120 @@
+@use "../../../../../src/assets/styles/variables" as vars;
+
+// Self-hosted Material Symbols font (minimal subset: arrow_forward, avg_pace, breaking_news, check, check_circle, close, code, content_copy, dns, email, expand_more, forum, info, medical_information, menu, open_in_new, passport, public, receipt_long, rss_feed, share_eta, shield, text_snippet)
+// To add more icons, update the icon list, download from:
+// https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_forward,avg_pace,breaking_news,check,check_circle,close,code,content_copy,dns,email,expand_more,forum,info,medical_information,menu,open_in_new,passport,public,receipt_long,rss_feed,share_eta,shield,text_snippet
+// and copy the woff2 to public/assets/fonts/
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  src: url("/assets/fonts/material-symbols.woff2") format("woff2");
+}
+
+.material-symbols-filled {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  font-feature-settings: "liga";
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 300,
+    "GRAD" 200,
+    "opsz" 24;
+}
+
+// Marketing type scale. Same IBM Plex family + Material tokens as the product,
+// sized up for marketing surfaces. One weight per tier (display/headline/
+// subheading 700, titles 600, body 400, strong 500). Keep this scale mirrored
+// in projects/component-preview/src/styles.scss (Brand > Typography renders it).
+
+// DISPLAY — heroes only. Fluid so the headline fills the hero at any width
+// without a per-page font-size override.
+.marketing-display {
+  font: var(--mat-sys-headline-large);
+  font-size: clamp(2.4rem, 1.1rem + 5vw, 3.75rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.marketing-heading {
+  font: var(--mat-sys-headline-large);
+  font-size: 45px;
+  line-height: 50px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.marketing-subheading {
+  font: var(--mat-sys-headline-medium);
+  font-size: 34px;
+  line-height: 37px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marketing-small-heading {
+  font: var(--mat-sys-headline-small);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+// Card / list-row heading. font-family pins the brand type so it holds outside
+// the body cascade (e.g. the style guide).
+.marketing-title {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.marketing-title-sm {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.marketing-body {
+  font: var(--mat-sys-body-large);
+  line-height: 1.6;
+  letter-spacing: normal;
+}
+
+.marketing-body-strong {
+  font: var(--mat-sys-body-large);
+  letter-spacing: normal;
+  font-weight: 500;
+}
+
+.marketing-caption {
+  font: var(--mat-sys-body-small);
+  letter-spacing: normal;
+}
+
+// EYEBROW — the small uppercase kicker above a section title (mkt-section-header
+// and every hand-rolled equivalent should use this one token).
+.marketing-eyebrow {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mat-sys-primary);
+}

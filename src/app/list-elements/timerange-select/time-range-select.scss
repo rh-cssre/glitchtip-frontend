@@ -1,0 +1,32 @@
+@use "variables" as vars;
+
+.custom-range-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-range-select-formfield {
+  width: 200px;
+
+  &.wide {
+    // TODO: Find a cleaner way to manage the variable sizes here
+    @media screen and (min-width: vars.$small) {
+      width: 325px;
+      @media screen and (max-width: vars.$large - 199) {
+        width: 200px;
+      }
+      @media screen and (max-width: vars.$tablet - 1) {
+        max-width: 250px;
+      }
+      @media screen and (max-width: vars.$small - 1) {
+        width: 100%;
+      }
+    }
+  }
+
+  @media screen and (max-width: vars.$small - 1) {
+    width: 100%;
+  }
+}

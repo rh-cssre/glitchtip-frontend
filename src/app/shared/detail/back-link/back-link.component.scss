@@ -1,0 +1,13 @@
+@use "variables" as vars;
+
+.back-link-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 250px;
+
+  @media screen and (min-width: vars.$large) {
+    max-width: 400px;
+  }
+}

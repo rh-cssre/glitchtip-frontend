@@ -1,69 +1,52 @@
-Install `sentry-sdk` into your Django project:
+Install the sentry Python SDK:
 
 ```bash
-$ pip install --upgrade sentry-sdk
+pip install sentry-sdk
 ```
 
-To configure the SDK, initialize it with the Django integration in your `settings.py` file:
+Add the following to your Django `settings.py`:
 
 ```python
 import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
-    dsn="your DSN here",
-    integrations=[DjangoIntegration()],
-    auto_session_tracking=False,
-    traces_sample_rate=0
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,  # 1% of transactions — adjust to your needs
+    auto_session_tracking=False,  # GlitchTip does not support sessions
+    # enable_logs=True,  # Opt-in: send logs to GlitchTip (uses disk space)
 )
 ```
 
-You can verify your SDK installation by creating a route that triggers an error:
+The SDK auto-detects Django and enables the integration automatically. This captures unhandled exceptions in views, middleware errors, and SQL query breadcrumbs.
 
-```py
+Verify your setup by adding a test view:
+
+```python
 from django.urls import path
 
 def trigger_error(request):
     division_by_zero = 1 / 0
 
 urlpatterns = [
-    path('glitchtip-debug/', trigger_error),
-    # ...
+    path("glitchtip-debug/", trigger_error),
 ]
 ```
 
-Visiting this route will trigger an error that will be captured by GlitchTip.
+## Tips
 
-## Configuration
+- Set `traces_sample_rate` to a low value in production. Django transactions cover each HTTP request — even 1% gives you useful [performance data](/documentation/performance) without excessive storage.
+- The SDK automatically adds breadcrumbs for database queries, template rendering, and middleware.
+- Use `release` and `environment` options to track which deployments introduce errors.
 
-Here is a more robust configuration example:
-
-```python
-sentry_sdk.init(
-    dsn="your DSN here",
-    integrations=[DjangoIntegration()],
-    auto_session_tracking=False,
-    traces_sample_rate=0.01,
-    release="1.0.0",
-    environment="production",
-)
-```
-
-- dsn - Where to send event data too, found in GlitchTip in project settings.
-- integrations - Platform integrations such as DjangoIntegration and CeleryIntegration.
-- auto_session_tracking - Not supported, set to False.
-- traces_sample_rate - Percent of requests that are sent to GlitchTip as a performance monitoring transaction. 0.01 meaning 1%. We recommend setting to a low value to save costs/disk space.
-- release - Set release name such as "1.0". Defaults to environment variable `SENTRY_RELEASE`.
-- environment - Set the running environment name, such as "production". Defaults to environment variable `SENTRY_ENVIRONMENT`.
-- send_default_pii - Set to True to send additional PII event data. Defaults to False.
-- debug - Set to True to view more information about the SDK when something goes wrong. Defaults to False.
-
-## Content Security Policy Reporting with Django-CSP
+## Content Security Policy Reporting
 
 Using Content Security Policy (CSP)? Send reports to GlitchTip. Set your website's CSP `report-uri` directive to the GlitchTip Security Endpoint.
 
-If using Django-CSP, in settings.py set:
+Django 6.0+ includes built-in CSP support. In `settings.py` set:
 
 ```python
-CSP_REPORT_URI = ["your Security Endpoint here"]
+SECURE_CSP = {
+    # ...
+    "report-uri": ["your Security Endpoint here"],
+}
 ```

@@ -1,107 +1,225 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  input,
+} from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
 import { MatDialog } from "@angular/material/dialog";
-import { combineLatest, Subscription } from "rxjs";
-import { map, filter } from "rxjs/operators";
-import { EventInfoComponent } from "src/app/shared/event-info/event-info.component";
-import { SubscriptionsService } from "src/app/api/subscriptions/subscriptions.service";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { RouterLink } from "@angular/router";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { SettingsService } from "src/app/api/settings.service";
+import {
+  SubscriptionService,
+  SubscriptionState,
+} from "src/app/api/subscriptions/subscription.service";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { UpgradeBannerComponent } from "src/app/shared/upgrade-banner/upgrade-banner.component";
 import { environment } from "../../../environments/environment";
-import { StripeService } from "./stripe.service";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-
-interface Percentages {
-  total: number;
-  errorEvents: number;
-  transactionEvents: number;
-  uptimeEvents: number;
-  fileSize: number;
-}
+import { PaymentComponent } from "./payment/payment.component";
+import { PaymentService } from "./payment/payment.service";
+import { OverageCardComponent } from "./overage-card/overage-card.component";
+import { overageCardVisible } from "src/app/api/subscriptions/overage-throttle-state";
+import { SelfHostedSubscriptionComponent } from "./self-hosted-subscription/self-hosted-subscription.component";
+import { SubscriptionChartsComponent } from "./subscription-charts/subscription-charts.component";
 
 @Component({
+  selector: "gt-subscription",
   templateUrl: "./subscription.component.html",
   styleUrls: ["./subscription.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    TopAppBar,
+    MatCardModule,
+    RouterLink,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    DatePipe,
+    MatDividerModule,
+    MatIconModule,
+    SubscriptionChartsComponent,
+    UpgradeBannerComponent,
+    PaymentComponent,
+    SelfHostedSubscriptionComponent,
+    OverageCardComponent,
+  ],
 })
-export class SubscriptionComponent implements OnDestroy {
-  subscription$ = this.service.subscription$;
-  eventsCountWithTotal$ = this.service.eventsCountWithTotal$;
-  activeOrganizationSlug$ = this.orgService.activeOrganizationSlug$;
-  promptForProject$ = combineLatest([
-    this.orgService.activeOrganizationLoaded$,
-    this.orgService.projectsCount$,
-    this.service.subscription$,
-  ]).pipe(
-    map(([status, count, subscription]) => {
-      if (subscription) {
-        return status &&
-          count === 0 &&
-          subscription.status !== null &&
-          subscription.status !== "canceled"
-          ? true
-          : false;
-      } else {
-        return false;
-      }
-    })
+export class SubscriptionComponent extends StatefulComponent<
+  SubscriptionState,
+  SubscriptionService
+> {
+  private orgService = inject(OrganizationsService);
+  private settingsService = inject(SettingsService);
+  private paymentService = inject(PaymentService);
+  private dialog = inject(MatDialog);
+
+  /**
+   * `null` until settings load, then `true` for hosted (billing enabled) /
+   * `false` for self-hosted. The template renders nothing while `null` so
+   * neither mode flashes during the initial settings fetch.
+   */
+  isHosted = computed(() => {
+    if (!this.settingsService.initialLoad()) return null;
+    return this.settingsService.billingEnabled() === true;
+  });
+
+  orgSlug = input.required<string>({ alias: "org-slug" });
+  sessionId = input<string>("", { alias: "session_id" });
+  billingPortalRedirect = input<string>("", {
+    alias: "billing_portal_redirect",
+  });
+
+  readonly fromStripe = this.service.fromStripe;
+  readonly subscription = this.service.subscription;
+  readonly pageLoading = computed(
+    () =>
+      this.service.subscriptionLoading() || this.service.throttleStatePending(),
   );
-  routerSubscription: Subscription;
+  readonly subscriptionRefreshTimeout = this.service.subscriptionRefreshTimeout;
+  readonly totalEventsAllowed = this.service.totalEventsAllowed;
+  readonly showOverageCard = computed(() =>
+    overageCardVisible(this.service.overageStatus()),
+  );
+  readonly activeOrganization = this.orgService.activeOrganization;
+  readonly activeOrganizationSlug = this.orgService.activeOrganizationSlug;
+  readonly billingPortalLoading = this.service.billingPortalLoading;
+  readonly billingPortalLoadingError = this.service.billingPortalLoadingError;
+  readonly upgradeLoading = computed(
+    () => this.paymentService.subscriptionCreationLoadingId() !== null,
+  );
+  daysRemaining = computed(() => {
+    const subscription = this.service.subscription();
+    const endDate = subscription?.subscriptionCycleEnd ?? subscription?.currentPeriodEnd;
+    if (!endDate) return null;
+    const end = new Date(endDate);
+    const now = new Date();
+    const diff = Math.ceil(
+      (end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+    );
+    return Math.max(0, diff);
+  });
+
+  promptForProject = computed(() => {
+    const status = this.orgService.activeOrganizationLoaded();
+    const count = this.orgService.projectsCount();
+    const subscription = this.service.subscription();
+    if (subscription) {
+      return status &&
+        count === 0 &&
+        subscription.status !== null &&
+        subscription.status !== "canceled"
+        ? true
+        : false;
+    } else {
+      return false;
+    }
+  });
+  thisMonthPercent = this.service.thisMonthPercent;
   billingEmail = environment.billingEmail;
-  error$ = this.stripe.error$;
-  totalEventsAllowed$ = this.subscription$.pipe(
-    map((subscription) =>
-      subscription && subscription.plan?.product.metadata
-        ? parseInt(subscription.plan.product.metadata.events, 10)
-        : null
-    )
-  );
-  eventsPercent$ = combineLatest([
-    this.totalEventsAllowed$,
-    this.eventsCountWithTotal$,
-  ]).pipe(
-    filter(([eventsAllowed, events]) => !!eventsAllowed && !!events),
-    map(([eventsAllowed, events]) => {
-      return <Percentages>{
-        total: (events?.total! / eventsAllowed!) * 100,
-        errorEvents: (events?.eventCount! / eventsAllowed!) * 100,
-        transactionEvents:
-          (events?.transactionEventCount! / eventsAllowed!) * 100,
-        uptimeEvents: (events?.uptimeCheckEventCount! / eventsAllowed!) * 100,
-        fileSize: (events?.fileSizeMB! / eventsAllowed!) * 100,
-      };
-    })
+  // The shared throttle diagnosis; the banner picks its copy (and whether to
+  // render at all) from the same state the overage card and snackbar use.
+  readonly throttleState = this.service.throttleState;
+  readonly throttleStateUnavailable = this.service.overageStatusUnavailable;
+  readonly eventThrottleRate = this.service.eventThrottleRate;
+  // The cap and the on-demand toggle are owner-only, as on the card below.
+  readonly canManageOverage = this.orgService.accessOrgAdmin;
+
+  nextProduct = computed(() => {
+    const subscription = this.subscription();
+    const products = this.paymentService.products();
+    if (!subscription || !products.length) return null;
+
+    const currentEvents = subscription.product.events ?? 0;
+    const upgrades = products
+      .filter((p) => p.events > currentEvents)
+      .sort((a, b) => a.events - b.events);
+
+    return upgrades[0] ?? null;
+  });
+
+  // Separates "no bigger plan exists" from "the plan list has not arrived",
+  // which nextProduct() returns null for alike.
+  readonly plansLoaded = computed(
+    () => this.paymentService.products().length > 0,
   );
 
-  constructor(
-    private service: SubscriptionsService,
-    private route: ActivatedRoute,
-    public dialog: MatDialog,
-    private stripe: StripeService,
-    private orgService: OrganizationsService
-  ) {
-    this.routerSubscription = this.route.params
-      .pipe(
-        map((params) => params["org-slug"] as string),
-        filter((slug) => !!slug)
-      )
-      .subscribe((slug) => {
-        this.service.retrieveSubscription(slug).toPromise();
-        this.service.retrieveSubscriptionCount(slug).toPromise();
-      });
-  }
+  readonly freeEventLimit = computed(() => {
+    const products = this.paymentService.products();
+    const free = products.find((p) => p.defaultPrice?.price === 0);
+    return free?.events ?? null;
+  });
 
-  openEventInfoDialog() {
-    this.dialog.open(EventInfoComponent, {
-      maxWidth: "300px",
+  constructor() {
+    const service = inject(SubscriptionService);
+    const destroyRef = inject(DestroyRef);
+
+    super(service);
+
+    this.service = service;
+
+    // Gate detail-page resources to this component's lifetime; org-reactive while active.
+    service.setDetailActive(true);
+    destroyRef.onDestroy(() => service.setDetailActive(false));
+
+    // The throttle rate changes on a sweep every few hours, so recheck when
+    // the tab comes back rather than on a timer.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        service.overageStatusResource.reload();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    destroyRef.onDestroy(() =>
+      document.removeEventListener("visibilitychange", onVisible),
+    );
+
+    // Fire hosted-only fetches once settings confirm billing is enabled.
+    effect(() => {
+      if (this.isHosted() !== true) return;
+      this.paymentService.productsResource.reload();
+      if (this.sessionId()) {
+        this.service.refreshUntilSubscriptionOrTimeout();
+      }
+      if (this.billingPortalRedirect()) {
+        this.orgService.repeatRefreshOrgDetail();
+      }
     });
   }
 
   manageSubscription() {
-    this.stripe.redirectToBillingPortal();
+    this.service.redirectToBillingPortal();
   }
 
-  ngOnDestroy() {
-    this.routerSubscription.unsubscribe();
-    this.service.clearState();
-    this.stripe.clearState();
+  upgradeToNextPlan() {
+    const product = this.nextProduct();
+    const org = this.orgService.activeOrganization();
+    const subscription = this.subscription();
+    if (!product || !org) return;
+    const currentInterval = subscription?.price?.interval;
+    const price =
+      (product.defaultPrice.interval === currentInterval &&
+        product.defaultPrice) ||
+      product.prices.find((p) => p.interval === currentInterval);
+    if (!price) return;
+    this.paymentService.dispatchSubscriptionCreation(org, price);
+  }
+
+  openBuiltInPricing() {
+    this.dialog.open(PaymentComponent, {
+      width: "90vw",
+      maxWidth: "1200px",
+      maxHeight: "90vh",
+    });
   }
 }

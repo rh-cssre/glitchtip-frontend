@@ -1,0 +1,9 @@
+<dt class="marketing-body-strong">
+  {{ question() }}
+</dt>
+
+@if (answer) {
+  <dd class="marketing-body">{{ answer }}</dd>
+} @else {
+  <dd class="marketing-body"><ng-content></ng-content></dd>
+}

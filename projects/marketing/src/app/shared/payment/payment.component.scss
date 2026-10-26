@@ -1,0 +1,160 @@
+@import "variables";
+
+.plans {
+  margin: 20px 2px;
+}
+
+.tab-label {
+  opacity: 1;
+}
+
+.tab-label-header {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+.mat-tab-label-content {
+  flex-direction: column;
+}
+
+.spaced-card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 16px;
+}
+
+.product-subtitle {
+  margin-top: 0;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.9em;
+}
+
+.includes-from {
+  margin: 0 0 8px;
+  font-size: 0.9em;
+}
+
+.value-props {
+  flex: 1;
+  margin-bottom: 15px;
+
+  li {
+    margin: 2px 0;
+    line-height: 1.2;
+  }
+
+  .check-icon {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .tooltip-icon {
+    float: none;
+    font-size: 0.9em;
+    width: 0.9em;
+    height: 0.9em;
+    margin: 0 0 0 4px;
+    vertical-align: middle;
+    cursor: help;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.price-cta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+h2.marketing-small-heading {
+  margin: 0px 0 20px;
+}
+
+mat-card {
+  border-color: var(--mat-sys-outline-variant);
+
+  .mat-mdc-card-header {
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 48px;
+  }
+
+  // Reserve two lines so wrapping plan names stay aligned with single-line ones.
+  .mat-mdc-card-title {
+    min-height: 2.4em;
+    line-height: 1.2;
+  }
+}
+
+.billing-toggle {
+  transform: scale(0.8);
+  transform-origin: right center;
+  flex-shrink: 0;
+}
+
+.savings {
+  margin: 4px 0 0;
+  font-size: 0.8em;
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+}
+
+.spend-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 32px 0 8px;
+  padding: 28px;
+}
+
+.spend-control-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+// Scoped overrides: the pricing page renders this inside `.markdown-container`,
+// which forces h2 to 34px and adds a 6px border to every img. Beat that here.
+.spend-control .spend-control-heading {
+  margin: 0 0 8px;
+  // Medium tier (Material title); explicit so it wins over the markdown h2 size.
+  font: var(--mat-sys-title-large);
+  font-weight: 600;
+}
+
+.spend-control-body {
+  margin: 0 0 20px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.spend-control-cta {
+  white-space: nowrap;
+}
+
+// Layout only; the border opt-out lives in the reusable `.no-frame` modifier.
+.spend-control .spend-control-visual {
+  flex-shrink: 0;
+  width: 280px;
+  max-width: 45%;
+  height: auto;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .spend-control {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  // SVG stays crisp, so stretch it full width (and centered) on mobile.
+  .spend-control .spend-control-visual {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 8px;
+  }
+}
+
+mat-divider {
+  margin: 48px 0;
+}

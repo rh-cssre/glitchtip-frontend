@@ -1,0 +1,10 @@
+<mat-toolbar (click)="buttonClicked.emit()" color="primary">
+  <button matIconButton class="sidenav-toggle">
+    <mat-icon>menu</mat-icon>
+  </button>
+  @if (activeOrg) {
+    <div class="active-org">
+      <span>{{ activeOrg.name }}</span>
+    </div>
+  }
+</mat-toolbar>

@@ -1,0 +1,130 @@
+@use "../styles/side-pattern" as *;
+
+:host {
+  @include side-pattern-host;
+}
+
+.blog-index {
+  @include side-pattern(var(--mkt-container-reading));
+}
+
+.blog-index__head {
+  margin-bottom: 40px;
+}
+
+.blog-index__lede {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Featured latest post: the one bordered surface card on the page, echoing the
+// docs-index card treatment.
+// Surface + hover come from the global .mkt-card class.
+.blog-feature {
+  display: block;
+  padding: clamp(22px, 3vw, 32px);
+  text-decoration: none;
+
+  .blog-feature__eyebrow {
+    // Type/color come from the global .marketing-eyebrow token on the element.
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .blog-feature__title {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--mat-sys-on-surface);
+    // Keep an over-long (or unbreakable) title from blowing out the card:
+    // break anywhere and clamp to a few lines with an ellipsis.
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .blog-feature__date {
+    display: block;
+    margin-top: 8px;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .blog-feature__desc {
+    margin: 14px 0 0;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .blog-feature__cta {
+    display: inline-block;
+    margin-top: 18px;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
+  }
+}
+
+// Year-grouped archive of the remaining posts.
+.blog-year {
+  margin-top: 56px;
+}
+
+.blog-year__label {
+  margin: 0 0 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.blog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-list__item {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+// Title hover comes from the global .mkt-row class.
+.blog-list__link {
+  display: block;
+  padding: 20px 0;
+  text-decoration: none;
+}
+
+.blog-list__title {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--mat-sys-on-surface);
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blog-list__date {
+  display: block;
+  margin-top: 5px;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.blog-list__desc {
+  margin: 8px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}

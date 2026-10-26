@@ -1,0 +1,113 @@
+@if (bare()) {
+  <!-- Bare mode for the example-width iframe: the preview only, no shell. -->
+  <div class="preview-bare" [class]="themeClass()">
+    @if (selected(); as entry) {
+      <ng-container *ngComponentOutlet="entry.component" />
+    }
+  </div>
+} @else {
+<div
+  class="preview-layout"
+  [class]="themeClass()"
+  [class.preview-layout--nav-open]="navOpen()"
+>
+  <mat-toolbar class="preview-toolbar" color="primary">
+    <button
+      mat-icon-button
+      class="preview-toolbar__menu"
+      aria-label="Toggle navigation"
+      (click)="navOpen.set(!navOpen())"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="preview-toolbar__title">GlitchTip Component Preview</span>
+    <nav class="preview-toolbar__sections" aria-label="Section">
+      <button
+        class="preview-toolbar__section-tab"
+        [class.preview-toolbar__section-tab--active]="section() === 'product'"
+        (click)="setSection('product')"
+      >
+        Product
+      </button>
+      <button
+        class="preview-toolbar__section-tab"
+        [class.preview-toolbar__section-tab--active]="section() === 'brand'"
+        (click)="setSection('brand')"
+      >
+        Brand
+      </button>
+    </nav>
+    <span style="flex: 1 1 auto"></span>
+    <mat-button-toggle-group
+      [value]="theme()"
+      (change)="setTheme($event.value)"
+      aria-label="Color scheme"
+      hideSingleSelectionIndicator
+    >
+      <mat-button-toggle value="light" aria-label="Light">
+        <mat-icon>light_mode</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="system" aria-label="System">
+        <mat-icon>brightness_medium</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="dark" aria-label="Dark">
+        <mat-icon>dark_mode</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </mat-toolbar>
+
+  <nav class="preview-nav">
+    <input
+      class="preview-nav__filter"
+      type="search"
+      placeholder="Filter pages"
+      aria-label="Filter pages"
+      [value]="navQuery()"
+      (input)="navQuery.set($any($event.target).value)"
+    />
+    <mat-nav-list>
+      @for (group of filteredGroups(); track group.group; let first = $first) {
+        @if (!first) {
+          <mat-divider class="preview-nav__divider" />
+        }
+        <button
+          class="preview-nav__group-label"
+          (click)="toggleGroup(group.group)"
+          [attr.aria-expanded]="!isGroupCollapsed(group.group)"
+        >
+          {{ group.group }}
+          <mat-icon
+            class="preview-nav__group-chevron"
+            [class.preview-nav__group-chevron--collapsed]="
+              isGroupCollapsed(group.group)
+            "
+          >
+            expand_more
+          </mat-icon>
+        </button>
+        @if (!isGroupCollapsed(group.group) || navQuery()) {
+          @for (entry of group.entries; track entry.id) {
+            <!-- Lifecycle status is shown only on the page's chip; a nav tag
+                 overflows the narrow sidebar. -->
+            <a
+              mat-list-item
+              [activated]="entry.id === selectedId()"
+              (click)="select(entry.id)"
+            >
+              {{ entry.label }}
+            </a>
+          }
+        }
+      }
+    </mat-nav-list>
+  </nav>
+
+  <main class="preview-canvas">
+    @if (selected(); as entry) {
+      <ng-container *ngComponentOutlet="entry.component" />
+    } @else {
+      <p>No previews registered.</p>
+    }
+  </main>
+</div>
+}

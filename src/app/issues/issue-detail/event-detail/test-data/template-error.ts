@@ -58,8 +58,7 @@ export const templateError: EventDetail = {
                     get_response:
                       "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f61885db580>>",
                     request: "<WSGIRequest: GET '/template-error/'>",
-                    exc:
-                      "NoReverseMatch(\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\")",
+                    exc: "NoReverseMatch(\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\")",
                   },
                   symbol: null,
                   module: "django.core.handlers.exception",
@@ -103,8 +102,7 @@ export const templateError: EventDetail = {
                     callback_args: [],
                     middleware_method:
                       "<function CsrfViewMiddleware.process_view at 0x7f6187781c10>",
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f61885db580>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f61885db580>",
                     request: "<WSGIRequest: GET '/template-error/'>",
                     callback: "<function TemplateErrorView at 0x7f618810a040>",
                     wrapped_callback:
@@ -157,8 +155,7 @@ export const templateError: EventDetail = {
                     callback_args: [],
                     middleware_method:
                       "<function CsrfViewMiddleware.process_view at 0x7f6187781c10>",
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f61885db580>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f61885db580>",
                     request: "<WSGIRequest: GET '/template-error/'>",
                     callback: "<function TemplateErrorView at 0x7f618810a040>",
                     wrapped_callback:
@@ -209,8 +206,7 @@ export const templateError: EventDetail = {
                   function: "render",
                   colNo: null,
                   vars: {
-                    self:
-                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
+                    self: '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                     retval:
                       '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                   },
@@ -248,11 +244,9 @@ export const templateError: EventDetail = {
                   function: "rendered_content",
                   colNo: null,
                   vars: {
-                    self:
-                      '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
+                    self: '<TemplateResponse status_code=200, "text/html; charset=utf-8">',
                     context: {
-                      view:
-                        "<errors.views.TemplateErrorView object at 0x7f6187682730>",
+                      view: "<errors.views.TemplateErrorView object at 0x7f6187682730>",
                     },
                     template:
                       "<django.template.backends.django.Template object at 0x7f61876e10a0>",
@@ -303,8 +297,7 @@ export const templateError: EventDetail = {
                   function: "render",
                   colNo: null,
                   vars: {
-                    self:
-                      "<django.template.backends.django.Template object at 0x7f61876e10a0>",
+                    self: "<django.template.backends.django.Template object at 0x7f61876e10a0>",
                     request: "<WSGIRequest: GET '/template-error/'>",
                     context:
                       "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
@@ -343,8 +336,7 @@ export const templateError: EventDetail = {
                   function: "render",
                   colNo: null,
                   vars: {
-                    self:
-                      "<django.template.base.Template object at 0x7f618769f460>",
+                    self: "<django.template.base.Template object at 0x7f618769f460>",
                     context:
                       "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
@@ -388,8 +380,7 @@ export const templateError: EventDetail = {
                   function: "_render",
                   colNo: null,
                   vars: {
-                    self:
-                      "<django.template.base.Template object at 0x7f618769f460>",
+                    self: "<django.template.base.Template object at 0x7f618769f460>",
                     context:
                       "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
@@ -430,8 +421,7 @@ export const templateError: EventDetail = {
                   function: "render",
                   colNo: null,
                   vars: {
-                    node:
-                      "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
+                    node: "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
                     bit: "'<a href=\"'",
                     bits: ["'<a href=\"'"],
                     self: [
@@ -499,8 +489,7 @@ export const templateError: EventDetail = {
                   function: "render_annotated",
                   colNo: null,
                   vars: {
-                    self:
-                      "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
+                    self: "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
                     context:
                       "[{'True': True, 'False': False, 'None': None}, {}, {}, {'view': <errors.views.TemplateErrorView object at 0x7f6187682730>}]",
                   },
@@ -552,8 +541,7 @@ export const templateError: EventDetail = {
                   vars: {
                     reverse: "<function reverse at 0x7f61887ad4c0>",
                     url: "''",
-                    self:
-                      "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
+                    self: "<django.template.defaulttags.URLNode object at 0x7f618769fc10>",
                     args: [],
                     current_app: "''",
                     view_name: "'nope'",
@@ -657,16 +645,14 @@ export const templateError: EventDetail = {
                   vars: {
                     lookup_view: "'nope'",
                     m: "None",
-                    self:
-                      "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
+                    self: "<URLResolver 'django_error_factory.urls' (None:None) '^/'>",
                     args: [],
                     _prefix: "'/'",
                     lookup_view_s: "'nope'",
                     n: "None",
                     possibilities: [],
                     patterns: [],
-                    msg:
-                      "\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\"",
+                    msg: "\"Reverse for 'nope' not found. 'nope' is not a valid view function or pattern name.\"",
                   },
                   symbol: null,
                   module: "django.urls.resolvers",

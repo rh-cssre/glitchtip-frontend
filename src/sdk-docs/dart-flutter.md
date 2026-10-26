@@ -1,12 +1,10 @@
-Flutter supports web, mobile, and desktop apps. GlitchTip can monitor errors on all platforms.
-
-Install sentry_flutter
+Install the sentry Flutter SDK:
 
 ```bash
 flutter pub add sentry_flutter
 ```
 
-Edit `lib/main.dart` and add SentryFlutter.init
+Initialize the SDK in `lib/main.dart`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -15,37 +13,41 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 void main() {
   SentryFlutter.init(
     (options) => options
-      ..dsn='Your DSN here' // if hard coding GlitchTip DSN
-      ..tracesSampleRate=0.01  // Performance trace 1% of events
-      ..enableAutoSessionTracking=false,
-    appRunner: () => runApp(MyApp())
+      ..dsn = 'YOUR_DSN'
+      ..tracesSampleRate = 0.01 // 1% of transactions
+      ..enableAutoSessionTracking = false, // GlitchTip does not support sessions
+    appRunner: () => runApp(MyApp()),
   );
 }
-
 ```
 
-Set the following environment variables
-
-- SENTRY_DSN - Your DSN here. Example: "https://0000@your-url/1"
-- SENTRY_RELEASE - Example: "1.0"
-- SENTRY_ENVIRONMENT - Example: "production"
-
-For example with dart-define:
-
-```bash
-flutter run --dart-define=SENTRY_DSN='Your DSN here'
-```
-
-## Example exception
+Verify your setup:
 
 ```dart
-import 'package:sentry/sentry.dart';
-
-...
-
 try {
-  throw new Exception('an exception');
+  throw Exception('Test GlitchTip error!');
 } catch (exception, stackTrace) {
   Sentry.captureException(exception, stackTrace: stackTrace);
 }
 ```
+
+## Configuration
+
+You can also set DSN and other options via environment variables with `--dart-define`:
+
+```bash
+flutter run --dart-define=SENTRY_DSN='YOUR_DSN'
+```
+
+## Debug Symbols
+
+Upload Dart symbol maps for readable stack traces using the [GlitchTip CLI](/documentation/cli):
+
+```bash
+glitchtip-cli dart-symbol-map upload ./build/app.android-arm64.symbols ./build/app.android-arm64 --org my-org --project my-project
+```
+
+## Tips
+
+- Flutter supports web, mobile, and desktop. The SDK captures errors on all platforms.
+- Set `tracesSampleRate` to a low value in production to save disk space.

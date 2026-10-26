@@ -1,63 +1,39 @@
-### Configure your Gradle file
-
-In your top-level build.gradle file, make sure that Maven Central is added as a repository:
-
-```groovy
-repositories {
-    mavenCentral()
-}
-```
-
-In your `app/build.gradle` file, make sure that you're targeting Java 1.8 (8) compatibility:
-
-```groovy
-android {
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-}
-```
-
-Then, add `sentry-android` into your dependencies:
+Add the sentry Android SDK to your `app/build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'io.sentry:sentry-android:4.2.0'
+    implementation 'io.sentry:sentry-android:8.+'
 }
 ```
 
-For other dependency managers, see the [central Maven repository](https://search.maven.org/artifact/io.sentry/sentry-android/4.2.0/jar).
-
-### Configure your Android manifest
-
-Add this `<meta-data>` tag inside the `<application>` element of your AndroidManifest.xml file:
+Add the DSN to your `AndroidManifest.xml` inside the `<application>` element:
 
 ```xml
 <application>
-  <meta-data android:name="io.sentry.dsn" android:value="your DSN here" />
+    <meta-data android:name="io.sentry.dsn" android:value="YOUR_DSN" />
+    <meta-data android:name="io.sentry.traces.sample-rate" android:value="0.01" />
 </application>
 ```
 
-### Send us an error!
+The SDK initializes automatically via a content provider — no code changes needed for basic setup.
 
-Open up `MainActivity.java`, and throw an exception:
+Verify your setup in an Activity:
 
-```java
-import android.os.Bundle;
+```kotlin
+import io.sentry.Sentry
 
-import androidx.appcompat.app.AppCompatActivity;
-import java.lang.Exception;
-import io.sentry.Sentry;
-
-public class MainActivity extends AppCompatActivity {
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    try {
-      throw new Exception("Hello, GlitchTip!");
-    } catch (Exception exception) {
-      Sentry.captureException(exception);
-    }
-  }
-}
+Sentry.captureException(Exception("Test GlitchTip error!"))
 ```
+
+## Debug Symbols
+
+Upload debug symbols for readable native crash stack traces using the [GlitchTip CLI](/documentation/cli):
+
+```bash
+glitchtip-cli debug-files upload ./app/build --org my-org --project my-project
+```
+
+## Tips
+
+- Set `io.sentry.traces.sample-rate` to a low value. Mobile apps can generate many transactions.
+- Use `io.sentry.release` and `io.sentry.environment` meta-data tags to track versions.
