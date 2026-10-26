@@ -4,7 +4,7 @@
 </button>
 <div class="header">
   <h2 class="title">{{ title() }}</h2>
-  @if (alert()?.id) {
+  @if (alert()?.id && canDelete()) {
     <!-- Up here, away from Save, so the two never sit side by side. -->
     <gt-loading-button
       i18n-buttonText

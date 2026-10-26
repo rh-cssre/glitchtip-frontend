@@ -74,6 +74,8 @@ export class AlertEditComponent implements OnInit {
     null,
   );
   readonly availableEnvironments = input<string[] | undefined>([]);
+  /** Deleting an alert needs project:admin, a step above editing it. */
+  readonly canDelete = input(false);
   readonly done = output<void>();
 
   readonly conditions = viewChild.required(AlertFormComponent);
