@@ -8,21 +8,7 @@
   <mat-icon>keyboard_arrow_left</mat-icon>
   <ng-container i18n>All alerts</ng-container>
 </a>
-<div class="header">
-  <h2 class="title">{{ title() }}</h2>
-  @if (alert()?.id && canDelete()) {
-    <!-- Up here, away from Save, so the two never sit side by side. -->
-    <gt-loading-button
-      i18n-buttonText
-      buttonText="Delete alert"
-      buttonStyle="stroked"
-      color="warn"
-      [loading]="deleting()"
-      (buttonClick)="remove()"
-      data-cy="delete-alert"
-    />
-  }
-</div>
+<h2 class="title">{{ title() }}</h2>
 
 <gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
   <span slot="description" i18n
@@ -128,18 +114,36 @@
   </button>
 </gt-settings-section>
 
-<div class="footer">
-  <p class="summary" data-cy="alert-summary">{{ summary() }}</p>
-  <gt-form-error [errors]="error()" />
-  <div class="gt-form-actions">
-    <gt-loading-button
-      i18n-buttonText
-      buttonText="Save alert"
-      buttonStyle="stroked"
-      [loading]="saving()"
-      (buttonClick)="save()"
-      data-cy="save-alert"
-    />
-    <button mat-button (click)="done.emit()" i18n>Cancel</button>
-  </div>
+<p class="summary" data-cy="alert-summary">{{ summary() }}</p>
+<!-- Next to Save, not at the top: the top is out of view on a long form. -->
+<gt-form-error [errors]="error()" />
+<div class="gt-form-actions">
+  <gt-loading-button
+    i18n-buttonText
+    buttonText="Save alert"
+    buttonStyle="stroked"
+    [loading]="saving()"
+    (buttonClick)="save()"
+    data-cy="save-alert"
+  />
+  <button mat-button (click)="done.emit()" i18n>Cancel</button>
 </div>
+
+@if (alert()?.id && canDelete()) {
+  <gt-settings-section i18n-title title="Delete alert">
+    <span slot="description" i18n
+      >Deletes {{ title() }} and stops its notifications. This cannot be
+      undone.</span
+    >
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Delete alert"
+      buttonStyle="stroked"
+      color="warn"
+      [loading]="deleting()"
+      (buttonClick)="remove()"
+      data-cy="delete-alert"
+    />
+  </gt-settings-section>
+}
