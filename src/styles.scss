@@ -121,6 +121,7 @@ a:hover {
 // Used across auth components
 .auth-link {
   @extend %inline-link;
+  font-weight: bold;
 }
 
 // Global rule because link is rendered in markdown
