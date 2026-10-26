@@ -1,4 +1,47 @@
-<gt-settings-section i18n-title title="Email addresses">
+<!-- Its own inline section, so the field and Add line up with every other
+     single-field setting; the list below joins it, so no line between them. -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" id="add-email-form">
+  <gt-form-error [errors]="addEmailError()" />
+  <gt-settings-section
+    #addSection
+    i18n-title
+    title="Add email address"
+    [inline]="true"
+  >
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <input
+        matInput
+        type="email"
+        formControlName="email_address"
+        [attr.aria-labelledby]="addSection.titleId"
+      />
+      <mat-error>
+        @if (email_address?.errors?.required || email_address?.errors?.email) {
+          <span i18n>Enter a valid email address.</span>
+        }
+        @if (email_address?.errors?.matchesExistingValidator) {
+          <span i18n>This email address is already on the list.</span>
+        }
+        @if (email_address?.errors?.serverError) {
+          <span>{{ email_address?.errors?.serverError }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Add email"
+      buttonStyle="stroked"
+      [loading]="!!loadingStates().add"
+    />
+  </gt-settings-section>
+</form>
+
+<gt-settings-section
+  class="gt-settings-continued"
+  i18n-title
+  title="Email addresses"
+>
   <span slot="description" i18n
     >Account email and alerts go to your primary address.</span
   >
@@ -66,47 +109,3 @@
     </gt-list>
   }
 </gt-settings-section>
-
-<!-- Its own inline section, so the field and Add line up with every other
-     single-field setting; joined to the list, so no line between them. -->
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  id="add-email-form"
-  class="gt-settings-continued"
->
-  <gt-form-error [errors]="addEmailError()" />
-  <gt-settings-section
-    #addSection
-    i18n-title
-    title="Add email address"
-    [inline]="true"
-  >
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <input
-        matInput
-        type="email"
-        formControlName="email_address"
-        [attr.aria-labelledby]="addSection.titleId"
-      />
-      <mat-error>
-        @if (email_address?.errors?.required || email_address?.errors?.email) {
-          <span i18n>Enter a valid email address.</span>
-        }
-        @if (email_address?.errors?.matchesExistingValidator) {
-          <span i18n>This email address is already on the list.</span>
-        }
-        @if (email_address?.errors?.serverError) {
-          <span>{{ email_address?.errors?.serverError }}</span>
-        }
-      </mat-error>
-    </mat-form-field>
-    <gt-loading-button
-      slot="actions"
-      i18n-buttonText
-      buttonText="Add email"
-      buttonStyle="stroked"
-      [loading]="!!loadingStates().add"
-    />
-  </gt-settings-section>
-</form>
