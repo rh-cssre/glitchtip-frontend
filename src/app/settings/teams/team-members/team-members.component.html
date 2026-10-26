@@ -1,4 +1,4 @@
-@if (canEditMembers()) {
+@if (canModifyTeam()) {
   <mat-form-field
     class="add-field"
     appearance="outline"
@@ -43,7 +43,7 @@
           >{{ teamMember.email }}</a
         >
         <span slot="meta">{{ teamMember.roleName }}</span>
-        @if (canRemove(teamMember.email)) {
+        @if (canModifyTeam()) {
           <gt-loading-button
             slot="actions"
             [buttonText]="isMe(teamMember.email) ? 'Leave' : 'Remove'"

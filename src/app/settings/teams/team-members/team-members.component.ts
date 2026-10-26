@@ -11,7 +11,6 @@ import { OrganizationDetailService } from "src/app/api/organizations/organizatio
 import { Member } from "src/app/api/organizations/organizations.interface";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
-import { OrganizationsService } from "src/app/api/organizations.service";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { UserService } from "src/app/api/user/user.service";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
@@ -47,11 +46,10 @@ export class TeamMembersComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private userService = inject(UserService);
   private dialog = inject(MatDialog);
-  private orgs = inject(OrganizationsService);
 
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
-  canEditMembers = this.teamsService.canModifyTeam;
+  canModifyTeam = this.teamsService.canModifyTeam;
 
   member = new FormControl();
   orgSlug = "";
@@ -101,12 +99,6 @@ export class TeamMembersComponent implements OnInit {
     return email === this.userService.activeUserEmail();
   }
 
-  canRemove(email: string) {
-    return (
-      this.canEditMembers() ||
-      (this.isMe(email) && !!this.orgs.activeOrganization()?.openMembership)
-    );
-  }
 
   confirmRemoveTeamMember(memberId: string, memberEmail: string) {
     const data = this.isMe(memberEmail)
