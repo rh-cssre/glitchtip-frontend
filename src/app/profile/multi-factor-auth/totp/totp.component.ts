@@ -20,8 +20,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.component";
@@ -35,8 +34,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
   styleUrls: ["./totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
+    SettingsSectionComponent,
     MatButtonModule,
     MatStepperModule,
     MatDialogModule,
@@ -57,7 +55,9 @@ export class TOTPComponent implements OnDestroy {
   totp = this.service.totp;
   step = this.service.setupTOTPStage;
   // Setup stage 2/3/4 maps to stepper step 0/1/2.
-  stepperIndex = computed(() => Math.max(0, this.step() - 2));
+  // Capped at the last step: the stage moves past it for a moment after the
+  // app is enabled, before the page switches to the enabled view.
+  stepperIndex = computed(() => Math.min(2, Math.max(0, this.step() - 2)));
   formErrors = this.service.formErrors;
   codeForm = new FormGroup({
     code: new FormControl("", [
@@ -104,9 +104,9 @@ export class TOTPComponent implements OnDestroy {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: $localize`Disable TOTP`,
-          message: $localize`Two-factor authentication will be turned off for your account.`,
-          confirmText: $localize`Disable`,
+          title: $localize`Turn off the authenticator app?`,
+          message: $localize`Signing in will no longer ask for a code from it.`,
+          confirmText: $localize`Turn off`,
         },
       })
       .afterClosed()

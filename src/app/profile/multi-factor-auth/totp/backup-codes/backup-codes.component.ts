@@ -17,6 +17,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
 import { FormErrorComponent } from "../../../../shared/forms/form-error/form-error.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 
 @Component({
   selector: "gt-backup-codes",
@@ -24,6 +25,7 @@ import { FormErrorComponent } from "../../../../shared/forms/form-error/form-err
   styleUrls: ["./backup-codes.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SettingsSectionComponent,
     MatButtonModule,
     ReactiveFormsModule,
     FormErrorComponent,

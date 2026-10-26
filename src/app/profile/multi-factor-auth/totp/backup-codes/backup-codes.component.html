@@ -1,27 +1,33 @@
 @if (TOTPAuthenticator()) {
-  <div>
-    <p class="mat-h2"><strong i18n>Backup codes</strong></p>
-    <p class="mat-h4" i18n>
-      Lost your codes? Generate a new set. This invalidates the old one, so save
-      the new codes somewhere safe.
-    </p>
+  <gt-settings-section i18n-title title="Backup codes">
+    <span slot="description" i18n
+      >Each code signs you in once if you lose your phone. A new set replaces
+      the old one, so save it somewhere safe.</span
+    >
+    @if (regenCodes()) {
+      <div class="button-group">
+        <button mat-stroked-button (click)="downloadCodes()" i18n
+          >Download</button
+        >
+        <button mat-stroked-button (click)="copyCodes()" i18n>Copy</button>
+      </div>
+    }
     <button
+      slot="actions"
       mat-stroked-button
       (click)="startRegenCodes()"
       [disabled]="regenCodes()"
       i18n
-      >Regenerate codes</button
+      >Generate new codes</button
     >
-  </div>
-}
-@if (regenCodes() || TOTPAuthenticator() === undefined) {
+  </gt-settings-section>
+} @else if (TOTPAuthenticator() === undefined) {
+  <!-- The save-your-codes step of the authenticator setup. -->
   <div>
-    @if (TOTPAuthenticator() === undefined) {
-      <p i18n>
-        Save these codes somewhere safe. Each one lets you sign in once if you
-        lose your phone.
-      </p>
-    }
+    <p i18n>
+      Save these codes somewhere safe. Each one lets you sign in once if you
+      lose your phone.
+    </p>
     <div class="button-group">
       <button mat-stroked-button (click)="downloadCodes()" i18n
         >Download</button
@@ -53,8 +59,7 @@
             }
           </mat-form-field>
           <button
-            mat-flat-button
-            color="primary"
+            mat-stroked-button
             (click)="verifyBackupCode()"
             [disabled]="!copiedCodes()"
             i18n
