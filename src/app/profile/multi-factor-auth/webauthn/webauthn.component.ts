@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  LOCALE_ID,
+  inject,
+} from "@angular/core";
+import { formatDate } from "@angular/common";
 import {
   FormControl,
   FormGroup,
@@ -43,6 +49,7 @@ export class WebAuthnComponent {
   private service = inject(MultiFactorAuthService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
+  private locale = inject(LOCALE_ID);
   protected emailsService = inject(EmailsService);
 
   stage = this.service.webAuthnState;
@@ -82,7 +89,8 @@ export class WebAuthnComponent {
 
   lastUsedLabel(lastUsed?: number) {
     if (!lastUsed) return $localize`Not used yet`;
-    const date = new Date(lastUsed * 1000).toLocaleDateString();
+    // Same format as other dates in settings ("Oct 25, 2026").
+    const date = formatDate(lastUsed * 1000, "mediumDate", this.locale);
     return $localize`Last used ${date}:date:`;
   }
 }
