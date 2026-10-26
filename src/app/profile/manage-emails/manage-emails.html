@@ -68,8 +68,13 @@
 </gt-settings-section>
 
 <!-- Its own inline section, so the field and Add line up with every other
-     single-field setting. -->
-<form [formGroup]="form" (ngSubmit)="onSubmit()" id="add-email-form">
+     single-field setting; joined to the list, so no line between them. -->
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  id="add-email-form"
+  class="gt-settings-continued"
+>
   <gt-settings-section
     #addSection
     i18n-title
