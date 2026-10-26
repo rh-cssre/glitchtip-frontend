@@ -3,15 +3,16 @@
     <h1 class="section-header-text" i18n>Teams</h1>
   </ng-container>
   <ng-container slot="right">
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="openCreateTeamDialog()"
-      [disabled]="!accessTeamWrite()"
-      id="new-team"
-      i18n
-      >Create Team</button
-    >
+    @if (canWriteTeam()) {
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="openCreateTeamDialog()"
+        id="new-team"
+        i18n
+        >Create Team</button
+      >
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -43,13 +44,15 @@
                   <ng-container i18n>{yourTeam.memberCount, plural, =1 {1 Member} other {{{ yourTeam.memberCount }} Members}}</ng-container>
                 </div>
               </div>
-              <gt-loading-button i18n-buttonText
-                buttonText="Leave Team"
-                buttonStyle="stroked"
-                [loading]="loading().removeTeamMember === yourTeam.slug"
-                (buttonClick)="leaveTeam(yourTeam.slug)"
-                id="leave-team"
-              ></gt-loading-button>
+              @if (canLeaveTeam()) {
+                <gt-loading-button i18n-buttonText
+                  buttonText="Leave Team"
+                  buttonStyle="stroked"
+                  [loading]="loading().removeTeamMember === yourTeam.slug"
+                  (buttonClick)="leaveTeam(yourTeam.slug)"
+                  id="leave-team"
+                ></gt-loading-button>
+              }
             </li>
           }
         </ul>
@@ -59,16 +62,14 @@
             icon="groups"
             i18n-title
             title="No teams joined"
-            i18n-message
-            message="Join a team below, or create a new one."
+            [message]="noTeamsJoinedMessage()"
           />
         } @else {
           <gt-empty-state
             icon="groups"
             i18n-title
             title="No teams"
-            i18n-message
-            message="Create a team to choose who gets alerts for each project."
+            [message]="noTeamsMessage()"
           />
         }
       }
@@ -94,13 +95,15 @@
                   <ng-container i18n>{otherTeam.memberCount, plural, =1 {1 Member} other {{{ otherTeam.memberCount }} Members}}</ng-container>
                 </div>
               </div>
-              <gt-loading-button i18n-buttonText
-                buttonText="Join Team"
-                buttonStyle="stroked"
-                [loading]="loading().addTeamMember === otherTeam.slug"
-                (buttonClick)="joinTeam(otherTeam.slug)"
-                id="leave-team"
-              ></gt-loading-button>
+              @if (canJoinTeam()) {
+                <gt-loading-button i18n-buttonText
+                  buttonText="Join Team"
+                  buttonStyle="stroked"
+                  [loading]="loading().addTeamMember === otherTeam.slug"
+                  (buttonClick)="joinTeam(otherTeam.slug)"
+                  id="leave-team"
+                ></gt-loading-button>
+              }
             </li>
           }
         </ul>

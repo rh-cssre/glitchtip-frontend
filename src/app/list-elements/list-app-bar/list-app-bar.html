@@ -1,11 +1,12 @@
 <ng-template #filters>
   @if (queriedProjects(); as queriedProjects) {
     <div class="project-multiselect-container">
-      @if (displayAddProject() && activeOrgHasNoProjects()) {
+      @if (
+        displayAddProject() && activeOrgHasNoProjects() && canWriteProject()
+      ) {
         <a
           mat-flat-button
           color="primary"
-          [disabled]="!accessProjectWrite()"
           class="add-project-button"
           [routerLink]="['/', activeOrgSlug(), 'settings', 'projects', 'new']"
         >
@@ -51,11 +52,12 @@
     </div>
     @if (activeOrgLoaded()) {
       <div class="right-section">
-        @if (displayAddProject() && activeOrgHasNoProjects()) {
+        @if (
+          displayAddProject() && activeOrgHasNoProjects() && canWriteProject()
+        ) {
           <a
             mat-flat-button
             color="primary"
-            [disabled]="!accessProjectWrite()"
             class="add-project-button"
             [routerLink]="['/', activeOrgSlug(), 'settings', 'projects', 'new']"
           >
