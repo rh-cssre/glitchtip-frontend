@@ -63,7 +63,7 @@ Conventions for every component:
 
 - Standalone, `ChangeDetectionStrategy.OnPush`, signal inputs and outputs.
 - Selector prefix `gt-`.
-- Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
+- Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `AGENTS.md`).
 
 ### Page headers
 
@@ -87,7 +87,11 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
 - A destructive action is the last section, with an outlined warn button and a confirm dialog. No red box.
-- Someone who cannot edit a setting sees its value as plain text, without the control.
+- Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
+- Sections, or the block-level forms that hold them, must be direct siblings with nothing else between them. The hairline sits on that sibling, so an inline host or a `display: contents` wrapper loses it.
+- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the top of the form.
+- An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
+- A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. The form starts with `gt-form-error`, has one section per field, and ends with `.gt-form-actions`: an outlined Create and a text Cancel.
 
 ## Accessibility
 
