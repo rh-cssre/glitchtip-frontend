@@ -44,7 +44,7 @@ export class TeamMembersComponent implements OnInit {
 
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
-  userTeamRole = this.teamsService.userTeamRole;
+  canModifyTeam = this.teamsService.canModifyTeam;
 
   member = new FormControl();
   orgSlug = "";
