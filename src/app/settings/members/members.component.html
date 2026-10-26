@@ -25,25 +25,7 @@
             >Invite pending</mat-chip
           >
         }
-        <span slot="meta">
-          @switch (member.role) {
-            @case ("owner") {
-              <ng-container i18n>Owner</ng-container>
-            }
-            @case ("manager") {
-              <ng-container i18n>Manager</ng-container>
-            }
-            @case ("admin") {
-              <ng-container i18n>Admin</ng-container>
-            }
-            @case ("member") {
-              <ng-container i18n>Member</ng-container>
-            }
-            @default {
-              {{ member.roleName }}
-            }
-          }
-        </span>
+        <span slot="meta">{{ roleName(member.role) ?? member.roleName }}</span>
         @if (member.pending && canWriteMember()) {
           <ng-container slot="actions">
             <button
@@ -57,7 +39,9 @@
             <mat-menu #memberMenu="matMenu" xPosition="before">
               <button
                 mat-menu-item
-                [disabled]="member.sentResendInvite"
+                [disabled]="
+                  member.sentResendInvite || member.loadingResendInvite
+                "
                 (click)="resendInvite(member)"
               >
                 @if (member.sentResendInvite) {
