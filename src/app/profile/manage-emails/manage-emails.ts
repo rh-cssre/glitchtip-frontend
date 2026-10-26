@@ -16,11 +16,14 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatDialog } from "@angular/material/dialog";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
 
 @Component({
@@ -29,11 +32,12 @@ import { EmailsService } from "src/app/api/emails/emails.service";
   styleUrls: ["./manage-emails.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
-    MatDividerModule,
     MatChipsModule,
     LoadingButtonComponent,
-    MatProgressSpinnerModule,
+    MatMenuModule,
+    ListComponent,
+    ListRowComponent,
+    SettingsSectionComponent,
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
@@ -43,6 +47,7 @@ import { EmailsService } from "src/app/api/emails/emails.service";
 })
 export class ManageEmails {
   #service = inject(EmailsService);
+  #dialog = inject(MatDialog);
 
   emailAddresses = this.#service.emailAddressesSorted;
   loadingStates = this.#service.loadingStates;
@@ -79,7 +84,32 @@ export class ManageEmails {
     ]),
   });
 
-  deleteEmail = (email: string) => this.#service.removeEmailAddress(email);
+  actionsForLabel = (email: string) => $localize`Actions for ${email}:email:`;
+
+  /** True while a request for this address is in flight. */
+  isBusy(email: string) {
+    const states = this.loadingStates();
+    return (
+      states.delete === email ||
+      states.makePrimary === email ||
+      states.resendConfirmation === email
+    );
+  }
+
+  deleteEmail(email: string) {
+    this.#dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Remove ${email}:email:?`,
+          message: $localize`It is removed from your account.`,
+          confirmText: $localize`Remove`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) this.#service.removeEmailAddress(email);
+      });
+  }
   makePrimary = (email: string) => this.#service.makeEmailPrimary(email);
   resendConfirmation = (email: string) =>
     this.#service.resendConfirmation(email);

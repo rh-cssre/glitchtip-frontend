@@ -23,9 +23,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -42,8 +41,6 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   styleUrls: ["./preferences.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
-    MatDividerModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -53,6 +50,7 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
     MatIconModule,
     MatOptionModule,
     LoadingButtonComponent,
+    SettingsSectionComponent,
   ],
 })
 export class PreferencesComponent implements OnInit {
@@ -105,11 +103,11 @@ export class PreferencesComponent implements OnInit {
           }
           this.form.controls.timeZone.setValue(user.options.timezone);
         }
-        if (user.options!.preferredTheme) {
-          this.form.controls.theme.setValue(user.options.preferredTheme);
-        } else {
-          this.form.controls.theme.setValue("light");
-        }
+        // No event: only a click on the toggle should save the theme.
+        this.form.controls.theme.setValue(
+          user.options!.preferredTheme || "light",
+          { emitEvent: false },
+        );
         // Ensure effect only runs once after user details are loaded
         userDetailsInit.destroy();
       }
@@ -122,6 +120,7 @@ export class PreferencesComponent implements OnInit {
     this.form.controls["timeZone"].valueChanges.subscribe((value) => {
       this.filteredOptions.set(this._filter(value || ""));
     });
+    this.form.controls.theme.valueChanges.subscribe(() => this.save("theme"));
   }
 
   private _filter(value: string): string[] {
@@ -136,20 +135,30 @@ export class PreferencesComponent implements OnInit {
     this.formTimeZone.setValue("");
   }
 
-  onSubmit() {
-    if (this.form.valid) {
-      const name = this.form.value.name!;
-      let timeZone = this.form.value.timeZone;
-      const preferredTheme = this.form.value.theme;
+  /**
+   * Saves one setting. The other two go back as they are saved, not as they
+   * sit in the form, so an unsaved edit in another section is not sent.
+   */
+  save(field: "name" | "timeZone" | "theme") {
+    const control = this.form.controls[field];
+    control.markAsTouched();
+    const user = this.userDetails();
+    if (control.invalid || !user) return;
 
-      if (timeZone === this.defaultTimeZone) {
-        timeZone = "";
-      }
-      const options = {
-        ...(timeZone !== null && { timezone: timeZone }),
-        ...(preferredTheme !== null && { preferredTheme }),
-      };
-      this.service.updateUser(name, options);
+    let name = user.name ?? "";
+    let timezone = user.options?.timezone;
+    let preferredTheme = user.options?.preferredTheme;
+    if (field === "name") name = control.value ?? "";
+    if (field === "timeZone") {
+      timezone =
+        control.value === this.defaultTimeZone ? "" : (control.value ?? "");
     }
+    if (field === "theme") preferredTheme = control.value ?? undefined;
+
+    const options = {
+      ...(timezone !== undefined && timezone !== null && { timezone }),
+      ...(preferredTheme && { preferredTheme }),
+    };
+    this.service.updateUser(name, options);
   }
 }

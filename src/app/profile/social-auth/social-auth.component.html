@@ -1,77 +1,72 @@
-@if (socialApps().length || user().identities.length) {
-  @if (user(); as user) {
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title i18n>Social Auth Accounts</mat-card-title>
-        @if (socialApps().length) {
-          @if (socialApps(); as socialApps) {
-            <mat-form-field appearance="outline">
-              <mat-label i18n>Add Account</mat-label>
-              <mat-select
-                (selectionChange)="addAccount()"
-                [formControl]="account"
-              >
-                @for (socialApp of socialApps; track socialApp) {
-                  <mat-option [value]="socialApp">
-                    <gt-auth-svg
-                      source="dropdown"
-                      [provider]="socialApp.provider"
-                      [text]="socialApp.name"
-                    ></gt-auth-svg>
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          }
-        }
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        @if (user.identities!.length === 0) {
-          <gt-empty-state
-            icon="account_circle"
-            i18n-title
-            title="No connected accounts"
-            i18n-message
-            message="Connect a social login to sign in with it."
-          />
-        } @else {
-          <div class="socialaccount-list-wrapper">
-            @for (
-              socialAccount of user.identities;
-              track socialAccount;
-              let lastItem = $last
-            ) {
-              <div class="socialaccount-wrapper">
-                <button
-                  mat-stroked-button
-                  (click)="
+@if (user(); as user) {
+  @if (socialApps().length || user.identities.length) {
+    <gt-settings-section i18n-title title="Connected accounts">
+      <span slot="description" i18n
+        >Sign in with one of these accounts instead of your password.</span
+      >
+      @if (user.identities.length) {
+        <gt-list>
+          @for (socialAccount of user.identities; track socialAccount.id) {
+            <gt-list-row>
+              <gt-auth-svg
+                source="dropdown"
+                [provider]="socialAccount.provider"
+                [text]="socialAccount.name ?? socialAccount.provider"
+              />
+              <span slot="meta">{{ socialAccount.email }}</span>
+              <!-- Single-root branches, so the slotted node projects. -->
+              @if (canDisconnect()) {
+                <gt-loading-button
+                  slot="actions"
+                  i18n-buttonText
+                  buttonText="Disconnect"
+                  buttonStyle="stroked"
+                  [loading]="disconnectLoadingId() === socialAccount.id"
+                  (buttonClick)="
                     disconnect(
                       socialAccount.id!,
                       socialAccount.provider,
-                      socialAccount.uid
+                      socialAccount.uid,
+                      socialAccount.name ?? socialAccount.provider
                     )
                   "
-                  [disabled]="disconnectLoadingId() === socialAccount.id"
+                />
+              } @else {
+                <span slot="actions" class="note" i18n
+                  >Set a password to disconnect</span
                 >
-                  <gt-auth-svg
-                    [loading]="disconnectLoadingId() === socialAccount.id"
-                    source="disconnect"
-                    text="Disconnect {{ socialAccount.name }}"
-                    [provider]="socialAccount.provider"
-                  ></gt-auth-svg>
-                </button>
-                <div class="email">
-                  {{ socialAccount.email }}
-                </div>
-              </div>
-              @if (!lastItem) {
-                <mat-divider></mat-divider>
               }
-            }
-          </div>
+            </gt-list-row>
+          }
+        </gt-list>
+      } @else {
+        <p class="note" i18n>No connected accounts.</p>
+      }
+      @if (socialApps(); as socialApps) {
+        @if (socialApps.length) {
+          <mat-form-field
+            appearance="outline"
+            subscriptSizing="dynamic"
+            class="connect"
+          >
+            <mat-label i18n>Connect an account</mat-label>
+            <mat-select
+              (selectionChange)="addAccount()"
+              [formControl]="account"
+            >
+              @for (socialApp of socialApps; track socialApp) {
+                <mat-option [value]="socialApp">
+                  <gt-auth-svg
+                    source="dropdown"
+                    [provider]="socialApp.provider"
+                    [text]="socialApp.name"
+                  ></gt-auth-svg>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         }
-      </mat-card-content>
-    </mat-card>
+      }
+    </gt-settings-section>
   }
 }
