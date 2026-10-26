@@ -11,6 +11,7 @@ import { MatButtonModule } from "@angular/material/button";
   styleUrls: ["./back-link.component.scss"]
 })
 export class BackLinkComponent {
+  readonly link = input<string | readonly unknown[]>([".."]);
   readonly backLinkParams = input<{
     [key: string]: string | number;
   }>({});

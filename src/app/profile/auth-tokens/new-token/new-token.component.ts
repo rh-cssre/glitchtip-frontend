@@ -19,12 +19,13 @@ import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { TOKEN_SCOPES, TOKEN_SCOPE_GROUPS } from "../token-scopes";
 
 @Component({
@@ -33,10 +34,11 @@ import { TOKEN_SCOPES, TOKEN_SCOPE_GROUPS } from "../token-scopes";
   styleUrls: ["./new-token.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
+    PageHeaderComponent,
+    FormErrorComponent,
     SettingsSectionComponent,
     MatButtonModule,
     RouterLink,
-    MatIconModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -60,8 +62,14 @@ export class NewTokenComponent
   scopeOptions = TOKEN_SCOPES;
   scopeGroups = TOKEN_SCOPE_GROUPS;
   scopeLevels = ["read", "write", "admin", "releases"];
+  private levelNames: Record<string, string> = {
+    read: $localize`:Auth token scope level:read`,
+    write: $localize`:Auth token scope level:write`,
+    admin: $localize`:Auth token scope level:admin`,
+    releases: $localize`:Auth token scope level:releases`,
+  };
   scopeLabel = (resource: string, level: string) =>
-    $localize`${resource}:resource:, ${level}:level:`;
+    $localize`${resource}:resource:, ${this.levelNames[level] ?? level}:level:`;
 
   /** The scope's position in the form, or null when the resource lacks it. */
   scopeIndex(group: (typeof TOKEN_SCOPE_GROUPS)[number], level: string) {

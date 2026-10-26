@@ -112,6 +112,7 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
+- A copy button attached to a value is part of that value, not a row action.
 - Rows with several columns to compare or sort are a table instead.
 
 ## Accessibility

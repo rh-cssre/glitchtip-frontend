@@ -1,12 +1,6 @@
-<a mat-button class="back" [routerLink]="['/profile', 'auth-tokens']">
-  <mat-icon>keyboard_arrow_left</mat-icon>
-  <ng-container i18n>All tokens</ng-container>
-</a>
-
+<gt-page-header i18n-title title="New token" />
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  @if (createErrorForm()) {
-    <mat-error class="server-error">{{ createErrorForm() }}</mat-error>
-  }
+  <gt-form-error [errors]="createErrorForm()" />
   <gt-settings-section #labelSection i18n-title title="Label">
     <span slot="description" i18n
       >A name to tell this token apart, like the tool that uses it.</span
@@ -87,7 +81,7 @@
     </mat-error>
   </gt-settings-section>
 
-  <div class="actions">
+  <div class="gt-form-actions">
     <gt-loading-button
       i18n-buttonText
       buttonText="Create token"

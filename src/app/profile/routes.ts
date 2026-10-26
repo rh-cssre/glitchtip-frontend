@@ -27,7 +27,12 @@ export default [
       {
         path: "auth-tokens/new",
         component: NewTokenComponent,
-        data: { title: $localize`Auth Tokens` },
+        data: {
+          backLink: {
+            link: ["/profile", "auth-tokens"],
+            text: $localize`All tokens`,
+          },
+        },
       },
       {
         path: "notifications",

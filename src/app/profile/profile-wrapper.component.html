@@ -1,6 +1,8 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    @if (title()) {
+    @if (backLink(); as backLink) {
+      <gt-back-link [link]="backLink.link" [backLinkText]="backLink.text" />
+    } @else if (title()) {
       <h1 class="section-header-text">{{ title() }}</h1>
     }
   </ng-container>

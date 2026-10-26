@@ -4,27 +4,15 @@
   display: block;
 }
 
-// Same back link as the alert edit view.
-.back {
-  margin: 0 0 var(--gt-space-2, 8px) calc(-1 * var(--gt-space-3, 12px));
-}
-
-.server-error {
-  display: block;
-  font: var(--mat-sys-body-medium);
-  margin-bottom: var(--gt-space-3, 12px);
-}
-
 // An error outside a form field gets no font from Material.
 .checkbox-error {
   display: block;
+  margin-top: var(--gt-space-2, 8px);
+  font: var(--mat-sys-body-small);
 
   &:empty {
     display: none;
   }
-
-  margin-top: var(--gt-space-2, 8px);
-  font: var(--mat-sys-body-small);
 }
 
 .select-all {
@@ -62,11 +50,4 @@
   code {
     font-family: vars.$font-mono;
   }
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: var(--gt-space-2, 8px);
-  padding-top: var(--gt-space-5, 24px);
 }
