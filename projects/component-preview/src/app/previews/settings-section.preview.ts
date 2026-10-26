@@ -29,7 +29,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Settings section"
       status="stable"
-      description="One setting on a settings page: a title, one line of help, then the control and its action. Sections stack in a single column, each closed by a hairline, with no cards."
+      description="One setting on a settings page: a title, one line of help, then the control and its action. Sections stack in a single column with a hairline between them, with no cards."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -105,7 +105,8 @@ export class SettingsSectionPreview {
     "Each setting on a project, team, organization or profile settings page",
   ];
   readonly dos = [
-    "Stack sections in one column; the hairline under each one separates them",
+    "Stack sections in one column; a hairline between them separates them",
+    "Join a list and the field that adds to it with .gt-settings-continued on the second",
     "Use inline for a single control with its action beside it",
     "Put the action below, left-aligned, when a section has several controls or none",
     "Save a choice that previews itself, such as the theme, on change with no button",
@@ -115,7 +116,7 @@ export class SettingsSectionPreview {
   ];
   readonly donts = [
     "Wrap sections in cards",
-    "Put a list and the field that adds to it in one section; make them two",
+    "Put a list and the field that adds to it in one section; make them two, joined",
     "Repeat the title as the label of a section's only field",
     "Use a filled Save; settings pages have no primary action",
     "Box the danger section in red; the warn button and the dialog carry the warning",
