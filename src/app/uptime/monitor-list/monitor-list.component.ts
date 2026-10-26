@@ -18,6 +18,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
 import { checkForOverflow, stringAttribute } from "src/app/shared/shared.utils";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import {
   DEFAULT_MONITOR_SORT,
@@ -61,6 +62,7 @@ export class MonitorListComponent {
   protected router = inject(Router);
   protected breakPointObserver = inject(BreakpointObserver);
   service = inject(MonitorListService);
+  accessProjectWrite = inject(OrganizationsService).accessProjectWrite;
   cursor = input(undefined, { transform: stringAttribute });
   sort = input(undefined, { transform: stringAttribute });
 

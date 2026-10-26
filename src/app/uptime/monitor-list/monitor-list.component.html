@@ -7,17 +7,19 @@
   </ng-container>
 
   <ng-container slot="right">
-    <a
-      id="add-monitor"
-      class="add-monitor-button"
-      mat-flat-button
-      color="primary"
-      [routerLink]="['new']"
-    >
-      <mat-icon>add</mat-icon>
-      <span class="add-monitor-text-long" i18n>Add monitor</span>
-      <span class="add-monitor-text-short" i18n>Add</span>
-    </a>
+    @if (accessProjectWrite()) {
+      <a
+        id="add-monitor"
+        class="add-monitor-button"
+        mat-flat-button
+        color="primary"
+        [routerLink]="['new']"
+      >
+        <mat-icon>add</mat-icon>
+        <span class="add-monitor-text-long" i18n>Add monitor</span>
+        <span class="add-monitor-text-short" i18n>Add</span>
+      </a>
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
