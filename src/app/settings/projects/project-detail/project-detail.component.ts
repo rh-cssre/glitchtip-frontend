@@ -137,6 +137,7 @@ export class ProjectDetailComponent implements OnInit {
     ),
     { initialValue: "general" },
   );
+  readonly dsnTitle = $localize`DSN`;
   readonly noPlatformLabel = $localize`No platform set`;
   readonly securityEndpointLabel = $localize`Security endpoint`;
 
@@ -177,14 +178,6 @@ export class ProjectDetailComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      const error = this.updateNameError();
-      if (error) mapFormErrors({ name: [error] }, this.nameForm);
-    });
-    effect(() => {
-      const error = this.updatePlatformError();
-      if (error) mapFormErrors({ platform: [error] }, this.platformForm);
-    });
-    effect(() => {
       const project = this.activeProject();
       if (project) {
         this.nameForm.patchValue({
@@ -223,10 +216,11 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   deleteProject() {
+    const name = this.activeProject()?.name;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete project?`,
-        message: $localize`Are you sure you want to delete this project?`,
+        title: $localize`Delete ${name}:name:?`,
+        message: $localize`All of its issues, events and settings will be deleted.`,
         confirmText: $localize`Delete`,
       },
     });
@@ -256,12 +250,15 @@ export class ProjectDetailComponent implements OnInit {
         this.#snackBar.open(
           $localize`The name of your project has been updated to ${resp.name}`,
         );
+      } else if (this.updateNameError()) {
+        mapFormErrors({ name: [this.updateNameError()] }, this.nameForm);
       }
     }
   }
 
   async updatePlatform(projectName: string) {
     if (this.platformCtrl.invalid) {
+      this.platformCtrl.markAsTouched();
       return;
     }
     const resp = await this.#service.updateProjectPlatform(
@@ -269,10 +266,14 @@ export class ProjectDetailComponent implements OnInit {
       projectName,
     );
     if (resp) {
+      const platform = this.getPlatformName(resp.platform!);
       this.#snackBar.open(
-        `Your project platform has been updated to ${this.getPlatformName(
-          resp.platform!,
-        )}.`,
+        $localize`Your project platform has been updated to ${platform}:platform:.`,
+      );
+    } else if (this.updatePlatformError()) {
+      mapFormErrors(
+        { platform: [this.updatePlatformError()] },
+        this.platformForm,
       );
     }
   }

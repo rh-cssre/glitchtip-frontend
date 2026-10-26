@@ -348,8 +348,29 @@ a {
   mat-expansion-panel {
     --mat-expansion-container-elevation-shadow: none;
     --mat-expansion-header-collapsed-state-height: 56px;
+    --mat-expansion-header-hover-state-layer-color: transparent;
 
     border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+    &:first-of-type {
+      border-top: 1px solid var(--mat-sys-outline-variant);
+    }
+  }
+
+  .mat-expansion-panel-header {
+    padding-inline: 0 8px;
+
+    &:hover .mat-expansion-panel-header-title {
+      color: var(--mat-sys-primary);
+    }
+  }
+
+  .mat-expansion-panel-header-title {
+    transition: color 0.15s ease;
+  }
+
+  .mat-expansion-panel-body {
+    padding-inline: 0;
   }
 }
 
