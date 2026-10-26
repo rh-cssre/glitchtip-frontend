@@ -5,7 +5,12 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { role: "listitem" },
   template: `
-    <div class="list-row__main"><ng-content /></div>
+    <div class="list-row__main">
+      <ng-content />
+      <div class="list-row__description">
+        <ng-content select="[slot=description]" />
+      </div>
+    </div>
     <div class="list-row__meta"><ng-content select="[slot=meta]" /></div>
     <div class="list-row__actions"><ng-content select="[slot=actions]" /></div>
   `,
@@ -34,6 +39,25 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
       min-width: 0;
       font-weight: 600;
       color: var(--mat-sys-on-surface);
+
+      ::ng-deep a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .list-row__description {
+      flex-basis: 100%;
+      font-weight: 400;
+      color: var(--mat-sys-on-surface-variant);
+
+      &:empty {
+        display: none;
+      }
     }
 
     .list-row__meta {
