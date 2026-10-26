@@ -19,13 +19,13 @@ import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { TOKEN_SCOPES, TOKEN_SCOPE_GROUPS } from "../token-scopes";
 
 @Component({
   selector: "gt-new-token",
@@ -33,11 +33,10 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
   styleUrls: ["./new-token.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
+    SettingsSectionComponent,
     MatButtonModule,
     RouterLink,
     MatIconModule,
-    MatDividerModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -58,24 +57,16 @@ export class NewTokenComponent
   createErrorForm = this.service.createErrorForm;
 
   form: FormGroup;
-  scopeOptions: string[] = [
-    "project:read",
-    "project:write",
-    "project:admin",
-    "project:releases",
-    "team:read",
-    "team:write",
-    "team:admin",
-    "event:read",
-    "event:write",
-    "event:admin",
-    "org:read",
-    "org:write",
-    "org:admin",
-    "member:read",
-    "member:write",
-    "member:admin",
-  ];
+  scopeOptions = TOKEN_SCOPES;
+  scopeGroups = TOKEN_SCOPE_GROUPS;
+  scopeLevels = ["read", "write", "admin", "releases"];
+  scopeLabel = (resource: string, level: string) =>
+    $localize`${resource}:resource:, ${level}:level:`;
+
+  /** The scope's position in the form, or null when the resource lacks it. */
+  scopeIndex(group: (typeof TOKEN_SCOPE_GROUPS)[number], level: string) {
+    return group.scopes.find((scope) => scope.level === level)?.index ?? null;
+  }
 
   get scopes() {
     return this.form.controls.scopes as FormArray;

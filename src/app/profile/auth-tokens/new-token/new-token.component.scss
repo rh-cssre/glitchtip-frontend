@@ -1,49 +1,72 @@
-mat-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 12px;
+@use "variables" as vars;
 
-  &::ng-deep .mat-card-header-text {
-    margin-left: 0;
-  }
+:host {
+  display: block;
+}
 
-  mat-card-title {
-    margin-bottom: 0;
-    margin-right: 8px;
-  }
+// Same back link as the alert edit view.
+.back {
+  margin: 0 0 var(--gt-space-2, 8px) calc(-1 * var(--gt-space-3, 12px));
 }
 
 .server-error {
-  padding-top: 16px;
-  text-align: center;
+  display: block;
+  font: var(--mat-sys-body-medium);
+  margin-bottom: var(--gt-space-3, 12px);
 }
 
-mat-form-field {
-  width: 100%;
+// An error outside a form field gets no font from Material.
+.checkbox-error {
+  display: block;
+
+  &:empty {
+    display: none;
+  }
+
+  margin-top: var(--gt-space-2, 8px);
+  font: var(--mat-sys-body-small);
 }
 
 .select-all {
-  margin-bottom: 8px;
+  display: block;
+  margin-bottom: var(--gt-space-2, 8px);
 }
 
-ul {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax((150px), 1fr));
-  grid-gap: 8px 16px;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 0;
+// Resources down the side, levels across the top.
+.scope-table {
+  border-collapse: collapse;
 
-  li {
-    list-style-type: none;
+  th,
+  td {
+    padding: var(--gt-space-1, 4px) var(--gt-space-3, 12px)
+      var(--gt-space-1, 4px) 0;
+    text-align: left;
+  }
+
+  // Level headers sit over their checkboxes.
+  thead th,
+  td {
+    text-align: center;
+  }
+
+  thead th {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  tbody th {
+    font: var(--mat-sys-body-medium);
+    font-weight: 600;
+  }
+
+  code {
+    font-family: vars.$font-mono;
   }
 }
 
-.checkbox-error {
-  font-size: 75%;
-}
-
-gt-loading-button {
-  margin-top: 40px;
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  padding-top: var(--gt-space-5, 24px);
 }
