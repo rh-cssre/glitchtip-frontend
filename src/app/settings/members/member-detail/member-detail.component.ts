@@ -74,7 +74,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   readonly roles: MemberRole[] = ["member", "admin", "manager", "owner"];
 
   /** Changing roles needs member:write (managers and owners). */
-  canEditRole = this.organizationsService.accessMemberWrite;
+  canEditRole = this.organizationsService.canWriteMember;
   /**
    * The backend allows a transfer only for owners (member:admin plus being the
    * account owner or having the owner role), so org:admin is the signal.
@@ -82,7 +82,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   canTransfer = computed(() => {
     const member = this.member();
     return (
-      this.organizationsService.accessOrgAdmin() &&
+      this.organizationsService.canAdminOrg() &&
       !!member &&
       !member.isOwner &&
       !member.pending
