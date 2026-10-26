@@ -1,0 +1,241 @@
+@use "../../../src/assets/styles/variables" as vars;
+
+$narrow-desktop: vars.$medium;
+
+.mat-toolbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--mat-sys-surface-container-highest);
+  z-index: 10;
+  font-size: 16px;
+  min-height: 64px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  .toolbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(95%, 100% - var(--mkt-gutter));
+    max-width: var(--mkt-container-wide);
+    margin: 0 auto;
+    padding: 8px 24px;
+  }
+
+  .logo-link {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    width: 140px;
+
+    @media screen and (max-width: vars.$tablet) {
+      width: 100px;
+    }
+  }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @media screen and (max-width: $narrow-desktop) {
+      position: static;
+      transform: none;
+      margin-left: auto;
+      margin-right: 15px;
+    }
+  }
+
+  .nav-divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--mat-sys-outline-variant);
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+
+  .nav-center,
+  .nav-divider {
+    @media screen and (max-width: vars.$tablet) {
+      display: none;
+    }
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    @media screen and (max-width: vars.$tablet) {
+      display: none;
+    }
+  }
+
+  a:not([mat-flat-button]) {
+    color: var(--mat-sys-on-surface);
+    text-decoration: none;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    margin-left: auto;
+
+    @media screen and (max-width: vars.$tablet) {
+      display: inline-flex;
+    }
+  }
+}
+
+.mobile-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+}
+
+.mobile-menu-card {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  z-index: 11;
+  background-color: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+  padding: 8px 0;
+  box-shadow: var(--mat-sys-shadow-3);
+
+  > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    color: var(--mat-sys-on-surface);
+    text-decoration: none;
+    font: var(--mat-sys-body-large);
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--mat-sys-surface-container-high);
+    }
+
+    mat-icon {
+      color: var(--mat-sys-on-surface-variant);
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .mobile-menu-actions {
+    display: flex;
+    gap: 12px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+    margin-top: 8px;
+  }
+}
+
+footer {
+  width: 100%;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  margin-top: auto;
+  padding: 40px 0;
+  background-color: var(--mat-sys-surface-container-highest);
+  font: var(--mat-sys-body-large);
+  color: var(--mat-sys-on-surface-variant);
+
+  a {
+    color: var(--mat-sys-on-surface-variant);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--mat-sys-on-surface);
+    }
+  }
+
+  .footer-content {
+    width: min(95%, 100% - var(--mkt-gutter));
+    max-width: var(--mkt-container-wide);
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    @media screen and (max-width: vars.$small) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .colophon {
+    flex: 1;
+  }
+
+  .legal {
+    display: flex;
+    gap: 16px;
+
+    @media screen and (max-width: vars.$small) {
+      justify-content: center;
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    @media screen and (max-width: vars.$small) {
+      justify-content: center;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.u-visible-mobile {
+  display: none;
+
+  @media screen and (max-width: $narrow-desktop) {
+    display: inline;
+  }
+}
+
+.u-hidden-mobile {
+  display: inline;
+
+  @media screen and (max-width: $narrow-desktop) {
+    display: none;
+  }
+}

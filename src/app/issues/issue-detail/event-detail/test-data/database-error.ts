@@ -107,8 +107,7 @@ export const databaseError: EventDetail = {
                     callback_args: [],
                     middleware_method:
                       "<function CsrfViewMiddleware.process_view at 0x7f9c5023b8b0>",
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
                     request: "<WSGIRequest: GET '/database-error/'>",
                     callback: "<function DatabaseErrorView at 0x7f9c50bc1e50>",
                     wrapped_callback:
@@ -169,8 +168,7 @@ export const databaseError: EventDetail = {
                     callback_args: [],
                     middleware_method:
                       "<function CsrfViewMiddleware.process_view at 0x7f9c5023b8b0>",
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f9c5109b580>",
                     request: "<WSGIRequest: GET '/database-error/'>",
                     callback: "<function DatabaseErrorView at 0x7f9c50bc1e50>",
                     wrapped_callback:
@@ -224,8 +222,7 @@ export const databaseError: EventDetail = {
                   colNo: null,
                   vars: {
                     initkwargs: {},
-                    self:
-                      "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
+                    self: "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
                     args: [],
                     request: "<WSGIRequest: GET '/database-error/'>",
                     kwargs: {},
@@ -271,8 +268,7 @@ export const databaseError: EventDetail = {
                   function: "dispatch",
                   colNo: null,
                   vars: {
-                    self:
-                      "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
+                    self: "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
                     handler:
                       "<bound method DatabaseErrorView.get of <errors.views.DatabaseErrorView object at 0x7f9c50143fd0>>",
                     request: "<WSGIRequest: GET '/database-error/'>",
@@ -328,8 +324,7 @@ export const databaseError: EventDetail = {
                   function: "get",
                   colNo: null,
                   vars: {
-                    self:
-                      "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
+                    self: "<errors.views.DatabaseErrorView object at 0x7f9c50143fd0>",
                     args: [],
                     request: "<WSGIRequest: GET '/database-error/'>",
                     kwargs: {},
@@ -415,8 +410,7 @@ export const databaseError: EventDetail = {
                     num: "0",
                     limit: "21",
                     kwargs: { id: "'9999999'" },
-                    self:
-                      "<QuerySet from django.db.models.query at 0x7f9c50143c10>",
+                    self: "<QuerySet from django.db.models.query at 0x7f9c50143c10>",
                   },
                   symbol: null,
                   module: "django.db.models.query",

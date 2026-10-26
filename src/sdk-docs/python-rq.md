@@ -1,18 +1,30 @@
-The RQ integration adds support for the [RQ Job Queue System](https://python-rq.org/).
+Install the sentry Python SDK:
 
-Create a file called `mysettings.py` with the following content:
+```bash
+pip install sentry-sdk
+```
+
+Initialize the SDK in your worker configuration:
 
 ```python
+# mysettings.py
 import sentry_sdk
-from sentry_sdk.integrations.rq import RqIntegration
 
-sentry_sdk.init("your DSN here", integrations=[RqIntegration()])
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 ```
 
-Start your worker with:
+Start your RQ worker:
 
-```shell
-rq worker \
-    -c mysettings \  # module name of mysettings.py
-    --sentry-dsn=""  # only necessary for RQ < 1.0
+```bash
+rq worker -c mysettings
 ```
+
+The SDK auto-detects RQ (Redis Queue) and captures failed job exceptions.
+
+## Tips
+
+- Initialize the SDK in both your web process (where jobs are enqueued) and your worker process to capture errors from both sides.

@@ -1,13 +1,19 @@
 <div class="project-card-wrapper">
   <mat-card class="empty-state-card">
-    <h3 i18n>This organization has no projects.</h3>
-    <p i18n
-      >To add a project to this organization, press the "Create New
-      Project"&nbsp;button.</p
-    >
+    <mat-card-header>
+      <mat-card-title>
+        <h6 i18n>This organization has no projects.</h6>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p i18n
+        >To add a project to this organization, press the "Create New
+        Project"&nbsp;button.</p
+      >
+    </mat-card-content>
   </mat-card>
   <gt-project-card
-    [class.project-card]="activeOrgOnly === false"
+    [class.project-card]="activeOrgOnly() === false"
     role="image"
     [sampleCard]="true"
     [cardLink]="['']"
@@ -15,22 +21,22 @@
     title="Test thing"
     [descriptionList]="[
       { key: 'organization', value: 'test org' },
-      { key: 'date created', value: 'May 08, 2020' }
+      { key: 'date created', value: 'May 08, 2020' },
     ]"
     [primaryButton]="{
       text: 'Issues',
       icon: 'warning',
       link: [''],
-      query: { foo: 'bar' }
+      query: { foo: 'bar' },
     }"
     [secondaryButton]="{
       text: 'Settings',
       icon: 'settings',
-      link: ['']
+      link: [''],
     }"
   ></gt-project-card>
   <gt-project-card
-    [class.project-card]="activeOrgOnly === false"
+    [class.project-card]="activeOrgOnly() === false"
     role="image"
     [sampleCard]="true"
     [cardLink]="['']"
@@ -38,18 +44,18 @@
     title="Test thing"
     [descriptionList]="[
       { key: 'organization', value: 'test org' },
-      { key: 'date created', value: 'May 08, 2020' }
+      { key: 'date created', value: 'May 08, 2020' },
     ]"
     [primaryButton]="{
       text: 'Issues',
       icon: 'warning',
       link: [''],
-      query: { foo: 'bar' }
+      query: { foo: 'bar' },
     }"
     [secondaryButton]="{
       text: 'Settings',
       icon: 'settings',
-      link: ['']
+      link: [''],
     }"
   ></gt-project-card>
 </div>

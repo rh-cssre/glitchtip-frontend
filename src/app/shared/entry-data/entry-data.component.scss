@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables" as vars;
 
 $left-column-width: 30%;
 
@@ -16,7 +16,7 @@ dt {
   padding-right: 16px;
   padding-top: 7px;
 
-  @media screen and (max-width: $small - 1) {
+  @media screen and (max-width: vars.$small - 1) {
     float: none;
     width: 100%;
     padding-right: 0;
@@ -31,11 +31,16 @@ dd {
   min-height: 36px;
   word-wrap: break-word;
   padding: 8px;
-  font-family: $font-mono;
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 100);
+  font-family: vars.$font-mono;
+  background-color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 100);
+  background-color: color-mix(
+    in srgb,
+    var(--mat-expansion-container-background-color) 92%,
+    gray
+  );
   border-radius: 3px;
 
-  @media screen and (max-width: $small - 1) {
+  @media screen and (max-width: vars.$small - 1) {
     float: none;
     width: 100%;
     margin-left: 0;

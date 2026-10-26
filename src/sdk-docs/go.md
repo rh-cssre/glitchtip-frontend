@@ -1,38 +1,42 @@
-Install the sentry-go SDK using [`go get`](https://golang.org/cmd/go/#hdr-Module_aware_go_get):
+Install the sentry Go SDK:
 
 ```bash
-$ go get github.com/getsentry/sentry-go
+go get github.com/getsentry/sentry-go
 ```
 
-Import and initialize the SDK early in your application's setup:
+Initialize the SDK early in your application:
 
 ```go
-import "github.com/getsentry/sentry-go"
+package main
 
-func main() {
-	sentry.Init(sentry.ClientOptions{
-		Dsn: "your DSN here",
-	})
-}
-```
-
-Verify the SDK is sending errors to GlitchTip from your Go application by capturing an error:
-
-```go
 import (
-	"errors"
-	"time"
-	"github.com/getsentry/sentry-go"
+    "log"
+    "time"
+    "github.com/getsentry/sentry-go"
 )
 
 func main() {
-	sentry.Init(sentry.ClientOptions{
-		Dsn: "your DSN here",
-	})
+    err := sentry.Init(sentry.ClientOptions{
+        Dsn: "YOUR_DSN",
+        TracesSampleRate: 0.01, // 1% of transactions
+    })
+    if err != nil {
+        log.Fatalf("sentry.Init: %s", err)
+    }
+    defer sentry.Flush(2 * time.Second)
 
-	sentry.CaptureException(errors.New("my error"))
-	// Since sentry emits events in the background we need to make sure
-	// they are sent before we shut down
-	sentry.Flush(time.Second * 5)
+    // Your application code here
 }
 ```
+
+Verify your setup:
+
+```go
+sentry.CaptureMessage("Test GlitchTip error")
+```
+
+## Tips
+
+- Always call `sentry.Flush()` before your application exits to ensure events are sent.
+- Set `TracesSampleRate` to a low value in production to save disk space.
+- Use `sentry.CaptureException()` to manually report errors.

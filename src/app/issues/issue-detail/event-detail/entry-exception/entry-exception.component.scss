@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables" as vars;
 
 .exception {
   margin-bottom: 16px;
@@ -10,14 +10,14 @@
     align-items: center;
     margin-bottom: 8px;
 
-    @media screen and (max-width: $small - 1) {
+    @media screen and (max-width: vars.$small - 1) {
       flex-direction: column;
     }
   }
   .text-wrapper {
     display: flex;
     align-items: center;
-    
+
     h3 {
       margin-bottom: 0px;
     }
@@ -25,6 +25,12 @@
 
   .spacer {
     margin-left: 8px;
+    display: flex;
+    justify-content: center;
+  }
+
+  button {
+    margin-top: 18px;
   }
 
   .subtitle {
@@ -51,7 +57,7 @@
     }
   }
 
-  mat-chip-list {
+  mat-chip-set {
     display: block;
     margin-bottom: 24px;
   }
@@ -67,7 +73,7 @@
   mat-expansion-panel-header {
     padding-top: 8px;
     padding-bottom: 8px;
-    border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 300);
+    border: 1px solid mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300);
 
     gt-frame-title {
       padding-right: 16px;
@@ -75,10 +81,11 @@
   }
 
   .disabled-panel {
-    color: mat.get-color-from-palette(mat.$gray-palette, 900);
+    color: var(--mat-expansion-container-text-color);
   }
+}
 
-  .highlighted {
-    background: mat.get-color-from-palette(mat.$gray-palette, 100);
-  }
+// TODO: Adjust color for focus interactions
+.highlighted {
+  background-color: var(--mat-sys-surface-container);
 }

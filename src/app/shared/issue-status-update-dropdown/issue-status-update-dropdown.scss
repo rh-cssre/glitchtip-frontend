@@ -1,0 +1,9 @@
+.invisible {
+  visibility: hidden;
+}
+
+// Fixed width so the trigger doesn't resize as the status label changes.
+.status-trigger {
+  min-width: 140px;
+  justify-content: center;
+}

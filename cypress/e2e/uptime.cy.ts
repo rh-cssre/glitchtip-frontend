@@ -1,5 +1,9 @@
 import { seedBackend, requestLogin } from "./utils.cy";
-import { organization } from "../fixtures/variables";
+import {
+  seededOrg,
+  seededProject1,
+  seededMonitorName,
+} from "../fixtures/variables";
 
 describe("List, add, update and delete uptime Monitors", () => {
   beforeEach(() => {
@@ -8,63 +12,70 @@ describe("List, add, update and delete uptime Monitors", () => {
   });
 
   it("Should list a single monitor, see alert info for that monitor, then update that monitor and see updated monitor on list", () => {
-    cy.visit(`/${organization.slug}/uptime-monitors/`);
-    cy.contains("cytestmonitor").click();
+    cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
+    cy.contains("seeded-monitor").click();
     cy.wait(1000);
-    cy.contains("Uptime details for cytestmonitor");
+    cy.contains(`Uptime details for ${seededMonitorName}`);
     cy.contains("This project has no uptime alerts configured");
     cy.get("#monitor-settings").click();
     cy.get("#monitor-name")
-      .should("have.value", "cytestmonitor")
+      .should("have.value", seededMonitorName)
       .clear()
       .type("new name");
     cy.get("button").contains("Update Monitor").click();
-    cy.visit(`/${organization.slug}/uptime-monitors/`);
+    cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("new name");
   });
 
   it("should delete a monitor and not see that monitor on list", () => {
-    cy.visit(`/${organization.slug}/uptime-monitors/`);
-    cy.contains("cytestmonitor").click();
+    cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
+    cy.contains(seededMonitorName).click();
     cy.get("#monitor-settings").click();
-    cy.on("window:confirm", (text) => {
-      expect(text).to.contains("Are you sure you want to remove this monitor?");
-    });
-    cy.get("#delete-monitor").contains("Delete Monitor").click();
-    cy.contains("cytestmonitor").should("not.exist");
+    cy.get("#delete-monitor").click();
+    cy.contains("Are you sure you want to delete this monitor?");
+    cy.get("[data-cy='dialog-confirm']").click();
+    cy.contains("Monitor has been deleted.");
+    cy.visit(`/${seededOrg.slug}/uptime-monitors`);
+    cy.contains(seededMonitorName).should("not.exist");
   });
 
   it("Should not be able to add monitor with invalid values", () => {
-    cy.visit(`/${organization.slug}/uptime-monitors/new`);
-    cy.get("#monitor-url").type("invalid url");
-    cy.get("#interval").clear().type("86400");
-    cy.get("#monitor-submit").click();
-    cy.get("#expected-status").clear();
+    cy.visit(`/${seededOrg.slug}/uptime-monitors/new`);
+    cy.get("[data-cy=monitor-type]")
+      .click()
+      .get("mat-option")
+      .contains("GET")
+      .click();
+    cy.get("[data-cy=site-url]").type("invalid url");
+    cy.get("[data-cy=interval]").clear().type("86400");
+    cy.get("[data-cy=monitor-submit]").click();
+    cy.get("[data-cy=expected-status]").clear();
     cy.contains("Enter a monitor name");
     cy.contains("Enter a valid URL");
     cy.contains("Enter a status code number");
-    cy.contains("The number needs to be less than 86400 (24 hours).");
+    cy.contains("Must be less than 32768.");
   });
 
   it("Should add a single monitor and see that monitor on list", () => {
-    cy.visit(`/${organization.slug}/uptime-monitors/`);
+    cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.get("#add-monitor").click();
-    cy.get("#monitor-name").type("secondmonitor");
-    cy.get("#monitor-url").type("www.twitter.com");
-    cy.get("#associated-project")
+    cy.get("#monitor-name").type("second-monitor");
+    cy.get("[data-cy=site-url]").type("www.twitter.com");
+    cy.get("[data-cy=associated-project]")
       .click()
+      .get("mat-select")
       .get("mat-option")
-      .contains("NicheScrip")
+      .contains(seededProject1.name)
       .click();
-    cy.get("#monitor-type")
+    cy.get("[data-cy=monitor-type]")
       .click()
       .get("mat-option")
       .contains("Heartbeat")
       .click();
-    cy.get("#interval").clear().type("605");
-    cy.get("#monitor-submit").click();
-    cy.contains("Uptime details for secondmonitor");
-    cy.visit(`/${organization.slug}/uptime-monitors/`);
-    cy.contains("secondmonitor");
+    cy.get("[data-cy=interval]").clear().type("605");
+    cy.get("[data-cy=monitor-submit]").click();
+    cy.contains("Uptime details for second-monitor");
+    cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
+    cy.contains("second-monitor");
   });
 });

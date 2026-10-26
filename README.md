@@ -77,6 +77,15 @@ We use Cypress to run end to end tests. Be aware the tests will seed the backend
 
 To test out locally, run `npm run i18n-create-json`. Ensure that `navigator.language` returns the desired code.
 
+# Marketing Site
+
+The marketing site https://glitchtip.com uses Angular Universal and prioritizes simplicity and minimum requirements. As such, it does not use a static site generator. Code is shared with the frontend.
+
+1. Build the static routes `npm run build-static`. You may check them at `projects/marketing/routes.txt`. Angular Universal will perform SSR for these routes and any known Angular router routes (ones without variables). This script is at `buildStaticSite.ts`.
+2. Build the site with SSR: `npm run build-marketing`
+
+For development, run `ng serve --project marketing` but note this will not perform SSR. To test SSR, run the above build command and use `http-server` to view the resulting html and js bundle.
+
 # Contributing
 
 Open an issue and say hello! If you use Sentry as a reference, make sure only to refer to open source Sentry which we forked [here](https://gitlab.com/glitchtip/sentry-open-source). Never copy code nor ideas from Sentry on GitHub as that would violate their proprietary license.

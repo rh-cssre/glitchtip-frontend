@@ -1,9 +1,12 @@
-export interface Team {
-  dateCreated: string;
+export interface RelatedTeam {
   id: number;
+  slug: string;
+}
+
+export interface Team extends RelatedTeam {
+  dateCreated: string;
   isMember: boolean;
   memberCount: number;
-  slug: string;
 }
 
 export interface TeamErrors {

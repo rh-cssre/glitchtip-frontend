@@ -6,4 +6,6 @@ export type Json =
   | Json[]
   | { [key: string]: Json };
 
-export type JsonArrayOrObject = Json[] | { [key: string]: Json };
+export type JsonObject = { [key: string]: Json };
+
+export type JsonArrayOrObject = Json[] | JsonObject;

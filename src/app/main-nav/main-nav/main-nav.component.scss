@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables";
 
 // This make the app cover the whole screen at all times
 mat-sidenav-container {
@@ -10,120 +10,149 @@ mat-sidenav-container {
   right: 0;
 }
 
+mat-nav-list {
+  padding: 10px;
+
+  button[mat-list-item] {
+    border: none;
+    text-align: inherit;
+  }
+
+  .nav-section-divider {
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-color: var(--mat-sys-outline-variant);
+  }
+
+  // TODO: Find a more reliable way to change icon color
+  .mdc-list-item--disabled {
+    mat-icon {
+      opacity: 0.25;
+    }
+  }
+}
+
+.active-section {
+  background-color: var(--mat-sys-primary);
+
+  .mdc-list-item__primary-text,
+  span[matListItemTitle],
+  mat-icon {
+    color: var(--mat-sys-on-primary);
+  }
+
+  .arrow-icon {
+    color: var(--mat-sys-on-primary);
+  }
+}
+
+.active-menu-item {
+  background-color: var(--mat-sys-surface-container-highest);
+}
+
 mat-sidenav {
-  width: 240px;
+  width: variables.$side-nav-width;
+
+  mat-icon[matListItemIcon] {
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+
+  &.collapsed {
+    width: 72px;
+
+    .org-create-button-container,
+    .org-dropdown-container,
+    .version {
+      display: none;
+    }
+
+    .nav-text {
+      display: none;
+    }
+
+    mat-nav-list {
+      padding: 16px;
+    }
+
+    mat-list-item {
+      justify-content: center;
+      padding: 0;
+    }
+
+    [matListItemMeta] {
+      display: none;
+    }
+
+    .logo-toolbar {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+
+      .collapsed-logo {
+        width: 24px;
+        margin-bottom: 20px;
+        cursor: pointer;
+      }
+
+      .collapse-toggle {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .logo-toolbar {
-  background-color: transparent;
+  height: fit-content;
+  padding-top: 16px;
+  justify-content: space-between;
 
   .main-logo {
     width: 115px;
     cursor: pointer;
   }
-}
 
-.sub-items {
-  display: none !important;
-
-  @media (max-width: $tablet - 1) {
-    display: block !important;
-    margin-left: 24px;
-    max-width: calc(100% - 24px);
-    color: mat.get-color-from-palette(mat.$gray-palette, 600);
-  }
-}
-
-mat-sidenav-content {
-  mat-toolbar {
-    display: none;
-    cursor: pointer; // The whole toolbar is clickable
-
-    @media (max-width: $tablet - 1) {
-      display: flex;
-      padding-left: 0;
-    }
-
-    .sidenav-toggle {
-      height: 100%;
-      transform: translateY(-1px);
+  .collapse-toggle {
+    margin-right: 8px;
+    @media screen and (max-width: variables.$small) {
+      display: none;
     }
   }
-  
-  .active-org {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+}
+
+.org-create-button-container,
+.org-dropdown-container {
+  width: 100%;
+  padding: 25px 15px 0 15px;
+}
+
+.org-create-button {
+  height: 48px;
+}
+
+.version {
+  text-align: center;
+
+  a {
+    color: mat.m2-get-color-from-palette(mat.$m2-gray-palette, 700);
+    font-weight: 300;
+    font-size: small;
+    text-decoration: none;
   }
 }
 
-.overflow {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-height: 40px;
-  line-height: 1.11111;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.down-caret {
-  transform: scale(1, 0.5);
-  margin-left: 8px;
-}
-
-.org-details-divider {
-  margin: 10px 0;
-}
-
-.org-dropdown-list-item ::ng-deep .mat-list-item-content {
-  justify-content: space-between;
-}
-
-.mat-nav-list > button.mat-menu-item,
-.no-org-create {
-  font-weight: 500;
-}
-
-.mat-list-item-disabled {
-  background-color: white;
-  color: mat.get-color-from-palette(mat.$gray-palette, 500) !important;
-}
-
-.subdued {
-  color: mat.get-color-from-palette(mat.$gray-palette, 700);
-  font-weight: 300;
-}
-
-.nagware {
-  margin: 10px;
-  font-size: 0.8em;
-
-  h3 {
-    font-size: 0.8em;
-    margin-bottom: 0.5em;
+mat-list-item,
+button[mat-list-item] {
+  .arrow-icon {
+    transition:
+      transform 200ms ease-in-out,
+      color 200ms ease-in-out;
   }
 
-  button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    appearance: none;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    margin: 0;
-    padding: 5px;
-  }
-
-  ul {
-    padding-left: 15px;
-  }
-
-  li {
-    padding-left: 0;
-  }
-
-  mat-icon {
-    font-size: 20px;
+  &[aria-expanded="true"] .arrow-icon {
+    transform: rotate(180deg);
   }
 }

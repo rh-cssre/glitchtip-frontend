@@ -1,23 +1,32 @@
-The Falcon integration adds support for the [Falcon Web Framework](https://falconframework.org/).
-The integration has been confirmed to work with Falcon 1.4 and 2.0.
+Install the sentry Python SDK:
 
-1. Install `sentry-sdk` from PyPI with the `falcon` extra:
+```bash
+pip install sentry-sdk
+```
 
-   ```bash
-   $ pip install --upgrade sentry-sdk[falcon]
-   ```
+Initialize the SDK before creating your Falcon app:
 
-2. To configure the SDK, initialize it with the integration before your app has been initialized:
+```python
+import sentry_sdk
+import falcon
 
-   ```python
-   import falcon
-   import sentry_sdk
-   from sentry_sdk.integrations.falcon import FalconIntegration
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-   sentry_sdk.init(
-       dsn="your DSN here",
-       integrations=[FalconIntegration()]
-   )
+app = falcon.App()
+```
 
-   api = falcon.API()
-   ```
+The SDK auto-detects Falcon and captures unhandled exceptions and request data.
+
+Verify your setup:
+
+```python
+class ErrorResource:
+    def on_get(self, req, resp):
+        division_by_zero = 1 / 0
+
+app.add_route("/error", ErrorResource())
+```

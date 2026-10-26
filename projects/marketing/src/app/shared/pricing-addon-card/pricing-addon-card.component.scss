@@ -1,0 +1,39 @@
+.addon-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px 24px;
+  margin-top: 16px;
+  gap: 16px;
+}
+
+.addon-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--mat-sys-primary);
+}
+
+.addon-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+
+.addon-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.addon-button {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 599px) {
+  .addon-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}

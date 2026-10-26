@@ -1,13 +1,49 @@
-import { enableProdMode } from "@angular/core";
+import {
+  ErrorHandler,
+  inject,
+  LOCALE_ID,
+  provideZonelessChangeDetection,
+  Provider,
+} from "@angular/core";
 import { loadTranslations } from "@angular/localize";
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 
-import { AppModule } from "./app/app.module";
-import { environment } from "./environments/environment";
+import { AppComponent } from "./app/app.component";
+import { provideMicroSentry } from "@micro-sentry/angular";
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from "@angular/material/snack-bar";
+import { MAT_CARD_CONFIG } from "@angular/material/card";
+import { routes, TemplatePageTitleStrategy } from "./app/app.routes";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { LessAnnoyingErrorStateMatcher } from "./app/shared/less-annoying-error-state-matcher";
+import { ErrorStateMatcher } from "@angular/material/core";
+import { CustomMicroSentryErrorHandler } from "./app/custom-microsentry-error-handler";
+import {
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+  provideHttpClient,
+  withInterceptors,
+  withXhr,
+} from "@angular/common/http";
+import {
+  provideRouter,
+  TitleStrategy,
+  withComponentInputBinding,
+  withInMemoryScrolling,
+  withPreloading,
+  withRouterConfig,
+} from "@angular/router";
+import { CustomPreloadingStrategy } from "./app/preloadingStrategy";
+import { APP_BASE_HREF, registerLocaleData } from "@angular/common";
+import localeFr from "@angular/common/locales/fr";
+import localeNb from "@angular/common/locales/nb";
+import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 
-if (environment.production) {
-  enableProdMode();
+let snackBarDuration = 4000;
+if (window.Cypress) {
+  // Speed up cypress tests
+  snackBarDuration = 100;
 }
+const serverErrorsRegex = new RegExp(`403 Forbidden|404 OK`, "mi");
 
 // First locale is default, add additional after it
 const availableLocales = ["en", "fr", "nb"];
@@ -23,10 +59,77 @@ if (locale in localeMappings) {
   locale = localeMappings[locale];
 }
 
+// Dates, numbers and currencies follow the UI language; English uses the
+// built-in en-US data.
+const localeData: { [key: string]: unknown[] } = { fr: localeFr, nb: localeNb };
+if (locale in localeData) {
+  registerLocaleData(localeData[locale], locale);
+}
+
+export function baseHrefInterceptor(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+) {
+  const baseHref = inject(APP_BASE_HREF);
+  const apiReq = req.clone({ url: `${baseHref.replace(/\/$/, "")}${req.url}` });
+  return next(apiReq);
+}
+
+const extraInterceptors: HttpInterceptorFn[] = [];
+const extraProviders: Provider[] = [];
+
+const baseElement = document.querySelector("base");
+if (baseElement) {
+  const baseHref = baseElement.href;
+  // Only add base href support when it's not "/"
+  if (baseHref !== "/") {
+    extraProviders.push({ provide: APP_BASE_HREF, useValue: baseHref });
+    extraInterceptors.push(baseHrefInterceptor);
+  }
+}
+
+const bootstrap = () =>
+  bootstrapApplication(AppComponent, {
+    providers: [
+      ...extraProviders,
+      provideZonelessChangeDetection(),
+      { provide: LOCALE_ID, useValue: locale === "en" ? "en-US" : locale },
+      provideAnimationsAsync(), // ng-charts uses this, should be removed
+      provideRouter(
+        routes,
+        withComponentInputBinding(),
+        withPreloading(CustomPreloadingStrategy),
+        withInMemoryScrolling({
+          scrollPositionRestoration: "enabled",
+        }),
+        withRouterConfig({
+          onSameUrlNavigation: "reload",
+          paramsInheritanceStrategy: "always",
+        }),
+      ),
+      provideHttpClient(withXhr(), withInterceptors([...extraInterceptors])),
+      provideMicroSentry({
+        ignoreErrors: [serverErrorsRegex],
+      }),
+      {
+        provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+        useValue: { duration: snackBarDuration },
+      },
+      {
+        provide: MAT_CARD_CONFIG,
+        useValue: { appearance: "outlined" },
+      },
+      { provide: ErrorHandler, useClass: CustomMicroSentryErrorHandler },
+      { provide: TitleStrategy, useClass: TemplatePageTitleStrategy },
+      {
+        provide: ErrorStateMatcher,
+        useClass: LessAnnoyingErrorStateMatcher,
+      },
+    ],
+  }).catch((err) => console.error(err));
+
 if (locale === availableLocales[0]) {
-  platformBrowserDynamic()
-    .bootstrapModule(AppModule)
-    .catch((err) => console.error(err));
+  bootstrap();
 } else {
   // fetch resources for runtime translations. this could also point to an API endpoint
   fetch(`static/assets/i18n/messages.${locale}.json`)
@@ -40,8 +143,6 @@ if (locale === availableLocales[0]) {
     .then((result) => {
       loadTranslations(result);
 
-      platformBrowserDynamic()
-        .bootstrapModule(AppModule)
-        .catch((err) => console.error(err));
+      bootstrap();
     });
 }

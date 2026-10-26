@@ -1,32 +1,63 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  UntypedFormGroup,
-  UntypedFormArray,
-  UntypedFormControl,
+  Component,
+  OnInit,
+  ViewChild,
+  effect,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import {
+  FormGroup,
+  FormControl,
   Validators,
-  UntypedFormBuilder,
+  ReactiveFormsModule,
+  FormArray,
+  FormBuilder,
 } from "@angular/forms";
-import { MatCheckbox } from "@angular/material/checkbox";
+import { MatCheckbox, MatCheckboxModule } from "@angular/material/checkbox";
 import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
-import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatIconModule } from "@angular/material/icon";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
 
 @Component({
   selector: "gt-new-token",
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    RouterLink,
+    MatIconModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatCheckboxModule,
+    LoadingButtonComponent,
+  ],
 })
 export class NewTokenComponent
-  extends StatefulBaseComponent<AuthTokensState, AuthTokensService>
+  extends StatefulComponent<AuthTokensState, AuthTokensService>
   implements OnInit
 {
+  protected service: AuthTokensService;
+  private fb = inject(FormBuilder);
+
   @ViewChild("selectAllCheckbox") selectAllCheckbox?: MatCheckbox;
 
-  createLoading$ = this.service.createLoading$;
-  createError$ = this.service.createError$;
-  createErrorLabel$ = this.service.createErrorLabel$;
-  createErrorScopes$ = this.service.createErrorScopes$;
+  createLoading = this.service.createLoading;
+  createErrorForm = this.service.createErrorForm;
 
-  form: UntypedFormGroup;
+  form: FormGroup;
   scopeOptions: string[] = [
     "project:read",
     "project:write",
@@ -47,34 +78,38 @@ export class NewTokenComponent
   ];
 
   get scopes() {
-    return this.form.controls.scopes as UntypedFormArray;
+    return this.form.controls.scopes as FormArray;
   }
 
   get label() {
-    return this.form.controls.label as UntypedFormControl;
+    return this.form.controls.label as FormControl;
   }
 
-  constructor(
-    protected service: AuthTokensService,
-    private fb: UntypedFormBuilder
-  ) {
+  constructor() {
+    const service = inject(AuthTokensService);
+
     super(service);
+    this.service = service;
+
     this.form = this.fb.group({
-      label: new UntypedFormControl("", [Validators.required]),
-      scopes: new UntypedFormArray([]),
+      label: new FormControl("", [
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+      scopes: new FormArray([]),
     });
 
     /* Set scopeOptions to scopes FormArray **/
-    this.scopeOptions.forEach(() =>
-      this.scopes.push(new UntypedFormControl(false))
-    );
+    this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
+
+    effect(() => mapFormErrors(service.createErrorFields(), this.form));
   }
 
   ngOnInit(): void {
     this.scopes.valueChanges.subscribe((values: boolean[]) => {
       if (this.selectAllCheckbox) {
         this.selectAllCheckbox.checked = values.every(
-          (value) => value === true
+          (value) => value === true,
         );
         this.selectAllCheckbox.indeterminate =
           !this.selectAllCheckbox.checked &&
@@ -91,30 +126,10 @@ export class NewTokenComponent
     }
   }
 
-  getLabelFieldError() {
-    this.createErrorLabel$.subscribe((error) => {
-      if (error) {
-        return this.label.setErrors({
-          serverErrorLabel: error,
-        });
-      }
-    });
-  }
-
-  getScopesFieldError() {
-    this.createErrorScopes$.subscribe((error) => {
-      if (error) {
-        return this.scopes.setErrors({
-          serverErrorScopes: error,
-        });
-      }
-    });
-  }
-
   validateScopes() {
     /* Check to see if at least one scope is selected before submitting **/
     const valueSelected = this.scopes.value.find(
-      (value: boolean) => value === true
+      (value: boolean) => value === true,
     );
     if (!valueSelected) {
       this.scopes.setErrors({
@@ -123,22 +138,14 @@ export class NewTokenComponent
     }
   }
 
-  validateForm() {
-    this.validateScopes();
-    this.getLabelFieldError();
-    this.getScopesFieldError();
-  }
-
   onSubmit() {
-    this.service.resetCreateErrors();
-
-    this.validateForm();
+    this.validateScopes();
 
     if (this.form.valid) {
       const label = this.label.value;
       const selectedScopes = this.form.value.scopes
         .map((checked: boolean, index: number) =>
-          checked ? this.scopeOptions[index] : null
+          checked ? this.scopeOptions[index] : null,
         )
         .filter((selected: string) => selected !== null);
       this.service.createAuthToken(label, selectedScopes);

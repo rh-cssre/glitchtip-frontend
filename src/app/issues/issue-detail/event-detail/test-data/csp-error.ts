@@ -66,7 +66,10 @@ export const cspError: EventDetail = {
   entries: [
     {
       type: "message",
-      data: { formatted: "Blocked 'connect' from 'adtracker.com'" },
+      data: {
+        message: "",
+        formatted: "Blocked 'connect' from 'adtracker.com'",
+      },
     },
     {
       type: "csp",
