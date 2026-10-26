@@ -5,7 +5,7 @@ let nextId = 0;
 @Component({
   selector: "gt-settings-section",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { "[class.inline]": "inline()" },
+  host: { "[class.inline]": "inline()", "[attr.title]": "null" },
   template: `
     <div class="settings-section__text">
       <h2 class="settings-section__title" [id]="titleId">{{ title() }}</h2>

@@ -29,17 +29,14 @@
   @include object-header.meta;
 
   .page-header__pill {
-    margin-left: 16px;
+    margin-left: var(--gt-space-4, 16px);
   }
 
   .page-header__pill
     + ::ng-deep
     [slot="meta"]
     > :first-child:not(.no-sep)::before {
-    content: "·";
-    position: absolute;
-    left: -11px;
-    opacity: 0.6;
+    @include object-header.separator;
   }
 
   &:not(:has(*)) {

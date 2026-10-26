@@ -63,7 +63,7 @@ Conventions for every component:
 
 - Standalone, `ChangeDetectionStrategy.OnPush`, signal inputs and outputs.
 - Selector prefix `gt-`.
-- Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
+- Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `AGENTS.md`).
 
 ### Page headers
 
@@ -72,7 +72,9 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Settings pages for a named object (organization, project, team, member) show an icon tile, using the same icon as that object's item in the nav. Data pages (issue, monitor, transaction, release) and profile pages do not.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
 - A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
+- A fact that continues the pill ("for 2 hours") gets class `no-sep`, so no separator is drawn before it.
 - When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.
+- Tabs drawn by one component use a `?tab=` query param. Tabs that are separate routed components use child routes.
 - The back link and page actions live in the top app bar, never in the header.
 - The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api").
 
@@ -85,7 +87,11 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
 - A destructive action is the last section, with an outlined warn button and a confirm dialog. No red box.
-- Someone who cannot edit a setting sees its value as plain text, without the control.
+- Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
+- Sections, or the block-level forms that hold them, must be direct siblings with nothing else between them. The hairline sits on that sibling, so an inline host or a `display: contents` wrapper loses it.
+- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the top of the form.
+- An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
+- A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. The form starts with `gt-form-error`, has one section per field, and ends with `.gt-form-actions`: an outlined Create and a text Cancel.
 
 ## Accessibility
 

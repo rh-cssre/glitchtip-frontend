@@ -3,6 +3,7 @@ import {
   input,
   ChangeDetectionStrategy,
   computed,
+  effect,
   inject,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
@@ -13,8 +14,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
-import { apiResource } from "src/app/shared/api/api-resource-factory";
-import { OrganizationsService } from "src/app/api/organizations.service";
+import { TeamsService } from "src/app/api/teams/teams.service";
+import { ProjectSettingsService } from "src/app/settings/projects/project-settings.service";
 
 @Component({
   templateUrl: "./team-details.component.html",
@@ -51,33 +52,26 @@ export class TeamDetailsComponent {
     },
   ];
 
-  private organizationsService = inject(OrganizationsService);
-  #params = computed(() => ({ org: this.orgSlug(), team: this.teamSlug() }));
-  #teamResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
-    options: {
-      params: {
-        path: {
-          ...this.organizationsService.orgPath(params.org),
-          team_slug: params.team,
-        },
-      },
-    },
-  }));
-  #projectsResource = apiResource(this.#params, (params) => ({
-    url: "/api/0/teams/{organization_id_or_slug}/{team_slug}/projects/",
-    options: {
-      params: {
-        path: {
-          ...this.organizationsService.orgPath(params.org),
-          team_slug: params.team,
-        },
-      },
-    },
-  }));
-  team = computed(() => this.#teamResource.value());
+  private teamsService = inject(TeamsService);
+  private projectSettingsService = inject(ProjectSettingsService);
+  team = this.teamsService.team;
+  memberCount = computed(() =>
+    this.teamsService.teamMembersResource.hasValue()
+      ? this.teamsService.teamMembers().length
+      : this.team()?.memberCount,
+  );
   tabCounts = computed<Record<string, number | undefined>>(() => ({
-    members: this.team()?.memberCount,
-    projects: this.#projectsResource.value()?.length,
+    members: this.memberCount(),
+    projects: this.projectSettingsService.projectsOnTeam().length,
   }));
+
+  constructor() {
+    effect(() => {
+      const orgSlug = this.orgSlug();
+      const teamSlug = this.teamSlug();
+      this.teamsService.setTeamKey(orgSlug, teamSlug);
+      this.teamsService.setTeamMembersKey(orgSlug, teamSlug);
+      this.projectSettingsService.retrieveProjectsOnTeam(orgSlug, teamSlug);
+    });
+  }
 }
