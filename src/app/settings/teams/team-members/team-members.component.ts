@@ -9,12 +9,12 @@ import { TeamsService } from "src/app/api/teams/teams.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map } from "rxjs/operators";
 import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
-import { Member } from "src/app/api/organizations/organizations.interface";
+import { components } from "src/app/api/api-schema";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { UserService } from "src/app/api/user/user.service";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
@@ -25,6 +25,8 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { roleName } from "src/app/settings/members/member-roles";
+
+type Member = components["schemas"]["OrganizationUserSchema"];
 
 @Component({
   selector: "gt-team-members",
@@ -64,7 +66,7 @@ export class TeamMembersComponent implements OnInit {
       : $localize`Ask an organization manager or owner to add members to this team.`,
   );
 
-  member = new FormControl();
+  member = new FormControl<Member | null>(null, Validators.required);
   orgSlug = "";
   teamSlug = "";
   addMemberError = "";
@@ -93,15 +95,20 @@ export class TeamMembersComponent implements OnInit {
   }
 
   async addTeamMember() {
+    const member = this.member.value;
+    if (!member) {
+      this.member.markAsTouched();
+      return;
+    }
     this.loading = true;
     const team = await this.organizationsService.addTeamMember(
-      this.member.value,
+      member,
       this.orgSlug,
       this.teamSlug,
     );
     this.loading = false;
     if (team) {
-      const member: Member = this.member.value;
+      this.member.reset();
       this.snackBar.open(
         $localize`${member.email} has been added to #${team.slug}`,
       );

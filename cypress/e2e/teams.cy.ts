@@ -42,6 +42,7 @@ describe("List Team Members", () => {
       .get("mat-option")
       .contains(seededUser1.email)
       .click();
+    cy.get("[data-cy=add-team-member] button").click();
     cy.get("[data-test-list] gt-list-row").first().contains(seededUser1.email);
   });
 
@@ -53,6 +54,7 @@ describe("List Team Members", () => {
       .get("mat-option")
       .contains(seededUser1.email)
       .click();
+    cy.get("[data-cy=add-team-member] button").click();
     cy.get("[data-cy=remove-team-member]").click();
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("No team members");

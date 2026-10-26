@@ -48,8 +48,9 @@
       data-cy="team-member-select"
     >
       <mat-select
-        (selectionChange)="addTeamMember()"
         [formControl]="member"
+        i18n-placeholder
+        placeholder="Choose a member"
         [aria-labelledby]="addSection.titleId"
       >
         @if (filteredAddTeamMembers().length) {
@@ -62,9 +63,23 @@
           <mat-option disabled i18n>No members</mat-option>
         }
       </mat-select>
-      @if (addMemberError) {
-        <mat-error>{{ addMemberError }}</mat-error>
-      }
+      <mat-error>
+        @if (member.errors?.required) {
+          <span i18n>Choose a member to add.</span>
+        }
+        @if (addMemberError) {
+          <span>{{ addMemberError }}</span>
+        }
+      </mat-error>
     </mat-form-field>
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Add"
+      buttonStyle="stroked"
+      [loading]="loading"
+      (buttonClick)="addTeamMember()"
+      data-cy="add-team-member"
+    />
   </gt-settings-section>
 }

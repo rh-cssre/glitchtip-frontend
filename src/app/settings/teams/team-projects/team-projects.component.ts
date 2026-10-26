@@ -7,7 +7,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ProjectSettingsService } from "../../projects/project-settings.service";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { MatDialog } from "@angular/material/dialog";
@@ -52,7 +52,7 @@ export class TeamProjectsComponent implements OnInit {
   projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
   loading = this.projectsService.addRemoveLoading;
   errors = this.projectsService.errors;
-  project = new FormControl();
+  project = new FormControl<string | null>(null, Validators.required);
   // Adding and removing go through project endpoints that require org:write.
   noProjectsMessage = computed(() =>
     this.canEditProjects()
@@ -72,13 +72,20 @@ export class TeamProjectsComponent implements OnInit {
     );
   }
 
-  addProject() {
+  async addProject() {
     const projectSlug = this.project.value;
-    this.projectsService.addProjectToTeam(
+    if (!projectSlug) {
+      this.project.markAsTouched();
+      return;
+    }
+    await this.projectsService.addProjectToTeam(
       this.orgSlug(),
       this.teamSlug(),
       projectSlug,
     );
+    if (!this.projectsNotOnTeam().some((p) => p.slug === projectSlug)) {
+      this.project.reset();
+    }
   }
 
   removeProject(projectSlug: string, projectName: string) {

@@ -44,8 +44,9 @@
       <gt-form-error [errors]="errors().addProjectToTeam" />
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-select
-          (selectionChange)="addProject()"
           [formControl]="project"
+          i18n-placeholder
+          placeholder="Choose a project"
           [aria-labelledby]="addSection.titleId"
         >
           @for (project of projectsNotOnTeam(); track project) {
@@ -56,7 +57,17 @@
             <mat-option disabled i18n>No projects</mat-option>
           }
         </mat-select>
+        <mat-error i18n>Choose a project to add.</mat-error>
       </mat-form-field>
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Add"
+        buttonStyle="stroked"
+        [loading]="loading().addProjectToTeam"
+        (buttonClick)="addProject()"
+        data-cy="add-team-project"
+      />
     </gt-settings-section>
   }
 }
