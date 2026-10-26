@@ -1,4 +1,55 @@
-<gt-settings-section i18n-title title="Security keys">
+<!-- The add step sits above the list it adds to; the list joins it, so no
+     line between them. -->
+@if (stage() === 2) {
+  <form [formGroup]="form" (ngSubmit)="registerWebAuthn()">
+    <gt-settings-section
+      #nameSection
+      i18n-title
+      title="Name this key"
+      [inline]="true"
+    >
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input
+          matInput
+          formControlName="name"
+          [attr.aria-labelledby]="nameSection.titleId"
+        />
+        @if (name?.invalid) {
+          <mat-error>
+            @if (name?.errors?.required) {
+              <span i18n>Required</span>
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+      <button slot="actions" mat-stroked-button i18n>Register key</button>
+    </gt-settings-section>
+  </form>
+} @else {
+  <gt-settings-section i18n-title title="Add security key" [inline]="true">
+    <span
+      slot="actions"
+      i18n-matTooltip
+      matTooltip="Verify your email to continue"
+      [matTooltipDisabled]="emailsService.isVerified() !== false"
+    >
+      <gt-loading-button
+        i18n-buttonText
+        buttonText="Add security key"
+        buttonStyle="stroked"
+        [loading]="false"
+        (buttonClick)="activateWebAuthn()"
+        [disabled]="!hasTOTP() || emailsService.isVerified() === false"
+      />
+    </span>
+  </gt-settings-section>
+}
+
+<gt-settings-section
+  class="gt-settings-continued"
+  i18n-title
+  title="Security keys"
+>
   @if (hasTOTP()) {
     <span slot="description" i18n
       >Use a hardware key as your second step. Plug it in and follow your
@@ -30,54 +81,4 @@
   } @else {
     <p class="gt-note" i18n>No security keys yet.</p>
   }
-  <!-- Single-root block, so the slotted node projects. -->
-  @if (stage() === 1) {
-    <span
-      slot="actions"
-      i18n-matTooltip
-      matTooltip="Verify your email to continue"
-      [matTooltipDisabled]="emailsService.isVerified() !== false"
-    >
-      <gt-loading-button
-        i18n-buttonText
-        buttonText="Add security key"
-        buttonStyle="stroked"
-        [loading]="false"
-        (buttonClick)="activateWebAuthn()"
-        [disabled]="!hasTOTP() || emailsService.isVerified() === false"
-      />
-    </span>
-  }
 </gt-settings-section>
-
-@if (stage() === 2) {
-  <!-- Naming the new key continues the section above. -->
-  <form
-    [formGroup]="form"
-    (ngSubmit)="registerWebAuthn()"
-    class="gt-settings-continued"
-  >
-    <gt-settings-section
-      #nameSection
-      i18n-title
-      title="Name this key"
-      [inline]="true"
-    >
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <input
-          matInput
-          formControlName="name"
-          [attr.aria-labelledby]="nameSection.titleId"
-        />
-        @if (name?.invalid) {
-          <mat-error>
-            @if (name?.errors?.required) {
-              <span i18n>Required</span>
-            }
-          </mat-error>
-        }
-      </mat-form-field>
-      <button slot="actions" mat-stroked-button i18n>Register key</button>
-    </gt-settings-section>
-  </form>
-}
