@@ -5,61 +5,62 @@
 </gt-top-app-bar>
 <section class="l-body">
   @if (activeOrganizationDetail(); as activeOrg) {
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title i18n>General</mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="updateOrganization()">
-          <mat-form-field appearance="outline">
-            <mat-label i18n>Name</mat-label>
-            <input matInput formControlName="name" [value]="activeOrg.name" />
+    <form [formGroup]="form" (ngSubmit)="updateOrganization()">
+      <gt-settings-section
+        #nameSection
+        i18n-title
+        title="Name"
+        [inline]="accessOrgWrite()"
+      >
+        <span slot="description" i18n
+          >Shown in the organization switcher and in alert emails.</span
+        >
+        @if (accessOrgWrite()) {
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input
+              matInput
+              formControlName="name"
+              [attr.aria-labelledby]="nameSection.titleId"
+            />
           </mat-form-field>
-          <gt-loading-button i18n-buttonText
-            [disabled]="name?.value === activeOrg.name"
-            [loading]="loading().updateOrganization"
-            mat-flat-button
-            color="primary"
-            buttonText="Update Name"
-            id="update-org"
-          >
-          </gt-loading-button>
-        </form>
-        @if (errors().updateOrganization) {
-          <mat-error>{{ errors().updateOrganization }}</mat-error>
+        } @else {
+          <span class="body-text">{{ activeOrg.name }}</span>
         }
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title i18n>Delete Organization</mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content class="remove-content">
-        <div>
-          <p i18n>
-            By deleting this organization, you will lose all data including
-            projects and their associated events.
-          </p>
-          @if (errors().deleteOrganization) {
-            <mat-error>{{ errors().deleteOrganization }}</mat-error>
-          }
-        </div>
-        <gt-loading-button i18n-buttonText
-          buttonStyle="stroked"
-          color="warn"
-          data-test
-          buttonText="Delete Organization"
+        @if (accessOrgWrite()) {
+          <gt-loading-button
+            slot="actions"
+            i18n-buttonText
+            buttonText="Save name"
+            buttonStyle="stroked"
+            [loading]="loading().updateOrganization"
+            id="update-org"
+          />
+        }
+      </gt-settings-section>
+      @if (errors().updateOrganization) {
+        <mat-error>{{ errors().updateOrganization }}</mat-error>
+      }
+    </form>
+
+    @if (accessOrgAdmin()) {
+      <gt-settings-section i18n-title title="Delete organization">
+        <span slot="description" i18n
+          >Deletes its projects, teams and events. This cannot be undone.</span
+        >
+        @if (errors().deleteOrganization) {
+          <mat-error>{{ errors().deleteOrganization }}</mat-error>
+        }
+        <gt-loading-button
+          slot="actions"
+          i18n-buttonText
+          buttonText="Delete organization"
           buttonStyle="stroked"
           color="warn"
           [loading]="loading().deleteOrganization"
-          [disabled]="!accessOrgAdmin()"
           (buttonClick)="removeOrganization(activeOrg.slug, activeOrg.name)"
           id="delete-org"
-        >
-        </gt-loading-button>
-      </mat-card-content>
-    </mat-card>
+        />
+      </gt-settings-section>
+    }
   }
 </section>

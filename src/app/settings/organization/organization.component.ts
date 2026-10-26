@@ -12,26 +12,23 @@ import { LoadingButtonComponent } from "../../shared/loading-button/loading-butt
 import { MatDialog } from "@angular/material/dialog";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 
 @Component({
   selector: "gt-organization",
   templateUrl: "./organization.component.html",
-  styleUrls: ["./organization.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
-    MatDividerModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     LoadingButtonComponent,
     TopAppBar,
+    SettingsSectionComponent,
   ],
 })
 export class OrganizationComponent implements OnDestroy, OnInit {
@@ -47,7 +44,9 @@ export class OrganizationComponent implements OnDestroy, OnInit {
   form = new FormGroup({
     name: new FormControl(""),
   });
-  accessOrgAdmin = () => this.organizationsService.accessOrgAdmin();
+  /** Renaming needs org:write (managers, owners); deleting needs org:admin. */
+  accessOrgWrite = this.organizationsService.accessOrgWrite;
+  accessOrgAdmin = this.organizationsService.accessOrgAdmin;
 
   ngOnInit() {
     // Ignore first load, on subsequent inits refresh org data
@@ -81,9 +80,9 @@ export class OrganizationComponent implements OnDestroy, OnInit {
   removeOrganization(slug: string, name: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Remove organization?`,
-        message: $localize`Are you sure you want to remove ${name}? You will permanently lose all projects and teams associated with it.`,
-        confirmText: $localize`Remove`,
+        title: $localize`Delete ${name}:name:?`,
+        message: $localize`Its projects, teams and events are deleted too. This cannot be undone.`,
+        confirmText: $localize`Delete`,
       },
     });
 
