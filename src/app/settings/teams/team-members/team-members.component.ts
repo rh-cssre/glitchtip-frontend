@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  computed,
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
@@ -52,14 +51,7 @@ export class TeamMembersComponent implements OnInit {
 
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
-  userTeamRole = this.teamsService.userTeamRole;
-  // Mirrors the backend: managers and owners edit any team, admins only teams
-  // they are on, and anyone may leave a team under open membership.
-  canEditMembers = computed(
-    () =>
-      this.orgs.accessOrgWrite() ||
-      (this.orgs.accessTeamAdmin() && this.userTeamRole() !== undefined),
-  );
+  canEditMembers = this.teamsService.canModifyTeam;
 
   member = new FormControl();
   orgSlug = "";
@@ -111,7 +103,8 @@ export class TeamMembersComponent implements OnInit {
 
   canRemove(email: string) {
     return (
-      this.canEditMembers() || (this.isMe(email) && this.orgs.openMembership())
+      this.canEditMembers() ||
+      (this.isMe(email) && !!this.orgs.activeOrganization()?.openMembership)
     );
   }
 

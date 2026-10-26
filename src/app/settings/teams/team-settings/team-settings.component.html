@@ -4,12 +4,12 @@
       #slugSection
       i18n-title
       title="Slug"
-      [inline]="accessTeamWrite()"
+      [inline]="canWriteTeam()"
     >
       <span slot="description" i18n
         >Used in links and lists as #{{ team.slug }}.</span
       >
-      @if (accessTeamWrite()) {
+      @if (canWriteTeam()) {
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input
             matInput
@@ -33,7 +33,7 @@
       } @else {
         <span class="body-text">#{{ team.slug }}</span>
       }
-      @if (accessTeamWrite()) {
+      @if (canWriteTeam()) {
         <gt-loading-button
           slot="actions"
           i18n-buttonText
@@ -46,7 +46,7 @@
     </gt-settings-section>
   </form>
 
-  @if (accessTeamAdmin()) {
+  @if (canAdminTeam()) {
     <gt-settings-section i18n-title title="Delete team">
       <span slot="description" i18n
         >Deletes #{{ team.slug }}. Its projects and members stay in the

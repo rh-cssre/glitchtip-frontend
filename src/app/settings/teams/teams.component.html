@@ -3,15 +3,16 @@
     <h1 class="section-header-text" i18n>Teams</h1>
   </ng-container>
   <ng-container slot="right">
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="openCreateTeamDialog()"
-      [disabled]="!accessTeamWrite()"
-      id="new-team"
-      i18n
-      >Create Team</button
-    >
+    @if (canWriteTeam()) {
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="openCreateTeamDialog()"
+        id="new-team"
+        i18n
+        >Create Team</button
+      >
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -43,7 +44,7 @@
               other {{{ projectCount(yourTeam.id) }} projects}
             }</span
           >
-          @if (canLeave()) {
+          @if (canLeaveTeam()) {
             <gt-loading-button
               slot="actions"
               i18n-buttonText
@@ -61,16 +62,14 @@
       icon="groups"
       i18n-title
       title="No teams joined"
-      i18n-message
-      message="Join a team below, or create a new one."
+      [message]="noTeamsJoinedMessage()"
     />
   } @else {
     <gt-empty-state
       icon="groups"
       i18n-title
       title="No teams"
-      i18n-message
-      message="Create a team to choose who gets alerts for each project."
+      [message]="noTeamsMessage()"
     />
   }
 
@@ -92,7 +91,7 @@
               other {{{ projectCount(otherTeam.id) }} projects}
             }</span
           >
-          @if (canJoin()) {
+          @if (canJoinTeam()) {
             <gt-loading-button
               slot="actions"
               i18n-buttonText

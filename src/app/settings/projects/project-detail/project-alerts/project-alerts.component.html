@@ -1,15 +1,17 @@
 <mat-card>
   <mat-card-header class="flex-common">
     <mat-card-title i18n>Project Alerts</mat-card-title>
-    <button
-      mat-flat-button
-      id="create-new-alert"
-      color="primary"
-      (click)="openNewAlert()"
-      [disabled]="newAlertOpen() === true || !accessProjectWrite()"
-      i18n
-      >Create New Alert</button
-    >
+    @if (canWriteProject()) {
+      <button
+        mat-flat-button
+        id="create-new-alert"
+        color="primary"
+        (click)="openNewAlert()"
+        [disabled]="newAlertOpen() === true"
+        i18n
+        >Create New Alert</button
+      >
+    }
   </mat-card-header>
   <mat-divider></mat-divider>
 
@@ -29,6 +31,7 @@
           <gt-alert-form
             #newAlert
             [newAlert]="true"
+            [canWrite]="canWriteProject()"
             [availableEnvironments]="availableEnvironments()"
             (alertSubmit)="newAlertProperties($event)"
           ></gt-alert-form>
@@ -170,15 +173,16 @@
               } @else {
                 <h3 i18n>Alert {{ i + 1 }}</h3>
               }
-              <gt-loading-button
-                [buttonText]="removeAlertText(i + 1)"
-                buttonStyle="stroked"
-                color="warn"
-                (buttonClick)="removeAlert(alert.id!)"
-                [disabled]="!accessProjectWrite()"
-                [loading]="removeAlertLoading() === alert.id"
-              >
-              </gt-loading-button>
+              @if (canAdminProject()) {
+                <gt-loading-button
+                  [buttonText]="removeAlertText(i + 1)"
+                  buttonStyle="stroked"
+                  color="warn"
+                  (buttonClick)="removeAlert(alert.id!)"
+                  [loading]="removeAlertLoading() === alert.id"
+                >
+                </gt-loading-button>
+              }
             </div>
             @if (updatePropertiesError()?.id === alert.id) {
               <p class="error alert-form-error">
@@ -192,6 +196,7 @@
               [quantity]="alert.quantity!"
               [uptime]="alert.uptime"
               [errorAlert]="alert.errorAlert"
+              [canWrite]="canWriteProject()"
               [environments]="alert.environments"
               [availableEnvironments]="availableEnvironments()"
               (alertSubmit)="updateProperties($event, alert)"
@@ -203,9 +208,16 @@
               </p>
             }
             @if (alert.alertRecipients.length === 0) {
-              <p i18n class="no-recipients">
-                This alert isn't being sent anywhere. Select "Add An Alert
-                Recipient" below to get started.
+              <p class="no-recipients">
+                <ng-container i18n
+                  >This alert isn't being sent anywhere.</ng-container
+                >
+                @if (canWriteProject()) {
+                  <ng-container i18n
+                    >Select "Add An Alert Recipient" below to get
+                    started.</ng-container
+                  >
+                }
               </p>
             }
             <ul>
@@ -273,60 +285,66 @@
                         </span>
                       </div>
                     }
-                    <div class="recipient-actions">
-                      @if (deleteRecipientLoading() === recipient.id) {
-                        <mat-progress-spinner
-                          [diameter]="20"
-                          color="primary"
-                          mode="indeterminate"
-                        ></mat-progress-spinner>
-                      } @else {
-                        @if (recipient.recipientType !== "email") {
-                          <button i18n-matTooltip
-                            class="recipient-action small-icon-button"
-                            mat-icon-button
-                            i18n-aria-label aria-label="Test recipient"
-                            matTooltip="Send test notification"
-                            [disabled]="testAlertLoading() === recipient.id"
-                            (click)="testRecipient(alert.id!, recipient.id!)"
-                          >
-                            @if (testAlertLoading() === recipient.id) {
-                              <mat-spinner diameter="16" />
-                            } @else {
-                              <mat-icon>send</mat-icon>
-                            }
-                          </button>
+                    @if (canWriteProject()) {
+                      <div class="recipient-actions">
+                        @if (deleteRecipientLoading() === recipient.id) {
+                          <mat-progress-spinner
+                            [diameter]="20"
+                            color="primary"
+                            mode="indeterminate"
+                          ></mat-progress-spinner>
+                        } @else {
+                          @if (recipient.recipientType !== "email") {
+                            <button i18n-matTooltip
+                              class="recipient-action small-icon-button"
+                              mat-icon-button
+                              i18n-aria-label aria-label="Test recipient"
+                              matTooltip="Send test notification"
+                              [disabled]="testAlertLoading() === recipient.id"
+                              (click)="testRecipient(alert.id!, recipient.id!)"
+                            >
+                              @if (testAlertLoading() === recipient.id) {
+                                <mat-spinner diameter="16" />
+                              } @else {
+                                <mat-icon>send</mat-icon>
+                              }
+                            </button>
+                            <button
+                              class="recipient-action small-icon-button"
+                              mat-icon-button
+                              i18n-aria-label aria-label="Edit recipient"
+                              (click)="
+                                openEditRecipientDialog(recipient, alert)
+                              "
+                            >
+                              <mat-icon>edit</mat-icon>
+                            </button>
+                          }
                           <button
                             class="recipient-action small-icon-button"
+                            id="delete-recipient"
                             mat-icon-button
-                            i18n-aria-label aria-label="Edit recipient"
-                            (click)="openEditRecipientDialog(recipient, alert)"
+                            [attr.aria-label]="deleteAlertLabel(i + 0)"
+                            (click)="removeAlertRecipient(recipient, alert)"
                           >
-                            <mat-icon>edit</mat-icon>
+                            <mat-icon>delete</mat-icon>
                           </button>
                         }
-                        <button
-                          class="recipient-action small-icon-button"
-                          id="delete-recipient"
-                          mat-icon-button
-                          [attr.aria-label]="deleteAlertLabel(i + 0)"
-                          (click)="removeAlertRecipient(recipient, alert)"
-                        >
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                      }
-                    </div>
+                      </div>
+                    }
                   </div>
                 </li>
               }
             </ul>
-            <button
-              mat-stroked-button
-              (click)="openUpdateRecipientDialog(alert)"
-            >
-              <mat-icon>add</mat-icon>
-              <ng-container i18n>Add An Alert Recipient</ng-container>
-            </button>
+            @if (canWriteProject()) {
+              <button
+                mat-stroked-button
+                (click)="openUpdateRecipientDialog(alert)"
+              >
+                <mat-icon>add</mat-icon>
+                <ng-container i18n>Add An Alert Recipient</ng-container>
+              </button>
+            }
           </div>
         }
       }

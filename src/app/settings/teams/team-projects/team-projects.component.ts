@@ -43,12 +43,13 @@ export class TeamProjectsComponent implements OnInit {
   orgSlug = input.required<string>({ alias: "org-slug" });
 
   // Only managers and owners can change a team's projects.
-  canEditProjects = inject(OrganizationsService).accessOrgWrite;
+  canEditProjects = inject(OrganizationsService).canWriteOrg;
   projectsOnTeam = this.projectsService.projectsOnTeam;
   projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
   loading = this.projectsService.addRemoveLoading;
   errors = this.projectsService.errors;
   project = new FormControl();
+  // Adding and removing go through project endpoints that require org:write.
 
   ngOnInit(): void {
     this.projectsService.setParams(this.orgSlug(), this.teamSlug());

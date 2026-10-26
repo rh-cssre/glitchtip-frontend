@@ -63,17 +63,38 @@ export class TeamsComponent {
   });
   errors = this.organizationDetailService.errors;
   loading = this.organizationDetailService.loading;
-  accessTeamWrite = this.organizationsService.accessTeamWrite;
-  // Mirrors the backend: anyone may join or leave under open membership,
-  // managers and owners always, admins only leave teams they are on.
-  canJoin = computed(
-    () =>
-      this.organizationsService.openMembership() ||
-      this.organizationsService.accessOrgWrite(),
+  canWriteTeam = this.organizationsService.canWriteTeam;
+  // Mirrors the backend: open membership lets anyone join or leave; otherwise
+  // joining needs Manager+ (org:write) and leaving needs Admin+ (team:write).
+  #openMembership = computed(
+    () => this.activeOrganization()?.openMembership ?? false,
   );
-  canLeave = computed(
-    () => this.canJoin() || this.organizationsService.accessTeamAdmin(),
+  canJoinTeam = computed(
+    () => this.#openMembership() || this.organizationsService.canWriteOrg(),
   );
+  canLeaveTeam = computed(
+    () => this.#openMembership() || this.organizationsService.canWriteTeam(),
+  );
+
+  /** Every role gets a next step it can take. */
+  noTeamsJoinedMessage = computed(() => {
+    if (this.canWriteTeam() && this.canJoinTeam()) {
+      return $localize`Join a team below, or create a new one.`;
+    }
+    if (this.canJoinTeam()) {
+      return $localize`Join a team below.`;
+    }
+    if (this.canWriteTeam()) {
+      return $localize`Create a team, or ask an organization manager or owner to add you to one.`;
+    }
+    return $localize`Ask an organization manager or owner to add you to one.`;
+  });
+  noTeamsMessage = computed(() =>
+    this.canWriteTeam()
+      ? $localize`Create a team to choose who gets alerts for each project.`
+      : $localize`Ask an organization manager or owner to create one.`,
+  );
+
 
   constructor() {
     effect(() => {

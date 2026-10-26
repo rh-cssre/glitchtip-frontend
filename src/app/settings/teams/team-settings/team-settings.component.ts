@@ -37,14 +37,14 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
 })
 export class TeamSettingsComponent {
   private teamsService = inject(TeamsService);
-  private dialog = inject(MatDialog);
   private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
 
   team = this.teamsService.team;
   loading = this.teamsService.loading;
   errors = this.teamsService.errors;
-  accessTeamWrite = this.organizationsService.accessTeamWrite;
-  accessTeamAdmin = this.organizationsService.accessTeamAdmin;
+  canWriteTeam = this.organizationsService.canWriteTeam;
+  canAdminTeam = this.organizationsService.canAdminTeam;
   form = new FormGroup({
     slug: new FormControl("", [
       Validators.required,
