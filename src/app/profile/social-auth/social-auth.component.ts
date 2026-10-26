@@ -5,7 +5,7 @@ import {
   computed,
   inject,
 } from "@angular/core";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -52,7 +52,7 @@ export class SocialAuthComponent
   socialApps = this.service.socialApps;
   user = this.service.user;
   disconnectLoadingId = this.service.loadingId;
-  account = new FormControl();
+  account = new FormControl<string | null>(null, Validators.required);
   /** The last sign-in method can't go; a password has to exist first. */
   canDisconnect = computed(() => {
     const user = this.user();
@@ -72,8 +72,13 @@ export class SocialAuthComponent
   }
 
   addAccount() {
+    const provider = this.account.value;
+    if (!provider) {
+      this.account.markAsTouched();
+      return;
+    }
     this.authenticationService.providerRedirect(
-      this.account.value.provider,
+      provider,
       window.location.href,
       "connect",
     );
