@@ -79,7 +79,7 @@ export class OverageCardComponent {
   readonly error = this.service.overageConfigError;
   // org:admin is granted only to the Owner role, matching the backend's
   // owner-only POST. Non-owners get a read-only view.
-  readonly canManage = this.orgService.accessOrgAdmin;
+  readonly canManage = this.orgService.canAdminOrg;
 
   // Estimate from event counts, not the actual Stripe charge.
   readonly costDollars = computed(

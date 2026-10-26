@@ -7,17 +7,19 @@
   </ng-container>
 
   <ng-container slot="right">
-    <a
-      id="add-monitor"
-      class="add-monitor-button"
-      mat-flat-button
-      color="primary"
-      [routerLink]="['new']"
-    >
-      <mat-icon>add</mat-icon>
-      <span class="add-monitor-text-long" i18n>Add monitor</span>
-      <span class="add-monitor-text-short" i18n>Add</span>
-    </a>
+    @if (canWriteProject()) {
+      <a
+        id="add-monitor"
+        class="add-monitor-button"
+        mat-flat-button
+        color="primary"
+        [routerLink]="['new']"
+      >
+        <mat-icon>add</mat-icon>
+        <span class="add-monitor-text-long" i18n>Add monitor</span>
+        <span class="add-monitor-text-short" i18n>Add</span>
+      </a>
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body l-body--full-width l-body--flex mat-elevation-z0">
@@ -139,13 +141,23 @@
                   <div class="body-text-strong">{{ error.msg || error }}</div>
                 }
               } @else if (!loading()) {
-                <gt-empty-state
-                  icon="share_eta"
-                  i18n-title
-                  title="No uptime monitors"
-                  i18n-message
-                  message="Add a monitor to get alerted when a site or service goes down."
-                />
+                @if (canWriteProject()) {
+                  <gt-empty-state
+                    icon="share_eta"
+                    i18n-title
+                    title="No uptime monitors"
+                    i18n-message
+                    message="Add a monitor to get alerted when a site or service goes down."
+                  />
+                } @else {
+                  <gt-empty-state
+                    icon="share_eta"
+                    i18n-title
+                    title="No uptime monitors"
+                    i18n-message
+                    message="Ask an organization Admin or above to add one."
+                  />
+                }
               }
             </td>
           </tr>

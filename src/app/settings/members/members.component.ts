@@ -52,7 +52,8 @@ export class MembersComponent {
   orgSlug = input.required<string>({ alias: "org-slug" });
   activeOrganizationDetail = this.organizationsService.activeOrganization;
   members = this.membersService.members;
-  accessMemberWrite = this.organizationsService.accessMemberWrite;
+  canWriteMember = this.organizationsService.canWriteMember;
+  canAdminMember = this.organizationsService.canAdminMember;
 
   constructor() {
     effect(() => {
