@@ -49,7 +49,7 @@ describe("OverLimitSnackbar remedy", () => {
         { provide: MatSnackBarRef, useValue: { dismiss: () => undefined } },
         {
           provide: OrganizationsService,
-          useValue: { accessOrgAdmin: isOwner },
+          useValue: { canAdminOrg: isOwner },
         },
         {
           provide: SubscriptionService,

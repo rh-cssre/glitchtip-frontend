@@ -82,6 +82,8 @@ export class AlertFormComponent implements OnInit {
     environments: string[];
   }>();
   readonly newAlert = input<boolean | undefined>(false);
+  /** Read-only summary when false; fails closed, so every caller passes it. */
+  readonly canWrite = input(false);
 
 
 
