@@ -5,6 +5,7 @@
     it.</span
   >
   <mat-button-toggle-group
+    hideSingleSelectionIndicator
     [value]="subscribeByDefault()"
     [disabled]="subscribeByDefaultLoading() === true"
     [attr.aria-labelledby]="defaultSection.titleId"
@@ -19,7 +20,9 @@
 </gt-settings-section>
 
 <gt-settings-section i18n-title title="By project">
-  <span slot="description" i18n>Default follows the setting above.</span>
+  <span slot="description" i18n
+    >Projects follow the setting above unless you set them here.</span
+  >
   @for (projects of groupedProjects() | keyvalue; track projects.key) {
     <gt-list [label]="projects.value[0].organization.name">
       @for (project of projects.value; track project.id) {
@@ -41,16 +44,14 @@
           }
           <mat-button-toggle-group
             slot="actions"
-            [value]="project.alertStatus"
+            hideSingleSelectionIndicator
+            [value]="isOn(project.alertStatus)"
             [disabled]="projectAlertLoading() === project.id"
             [attr.aria-label]="notificationsForLabel(project.name)"
-            (change)="updateUserAlertSettings(project.id, $event.value)"
+            (change)="setProject(project.id, $event.value)"
           >
-            <mat-button-toggle [value]="1" i18n>On</mat-button-toggle>
-            <mat-button-toggle [value]="0" i18n>Off</mat-button-toggle>
-            <mat-button-toggle [value]="-1">{{
-              subscribeByDefault() ? defaultOnText : defaultOffText
-            }}</mat-button-toggle>
+            <mat-button-toggle [value]="true" i18n>On</mat-button-toggle>
+            <mat-button-toggle [value]="false" i18n>Off</mat-button-toggle>
           </mat-button-toggle-group>
         </gt-list-row>
       }

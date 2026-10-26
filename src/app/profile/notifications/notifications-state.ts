@@ -11,7 +11,6 @@ import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { client, handleError } from "src/app/shared/api/api";
 
 interface NotificationsState {
-  subscribeByDefault: boolean;
   subscribeByDefaultLoading: boolean;
   subscribeByDefaultError: string;
   projectAlertLoading: number | null;
@@ -19,7 +18,6 @@ interface NotificationsState {
 }
 
 const initialState: NotificationsState = {
-  subscribeByDefault: true,
   subscribeByDefaultLoading: false,
   subscribeByDefaultError: "",
   projectAlertLoading: null,
@@ -129,20 +127,14 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     );
     this.setSubscribeByDefaultLoading(false);
     if (data) {
-      this.setSubscribeByDefault(data.subscribeByDefault);
+      // The default is read from this resource, so update it, not state.
+      this.#notificationsResource.set(data);
     } else {
       const errors = handleError(error, response);
       if (errors.detail.length) {
         this.setSubscribeByDefaultError(errors.detail[0].msg);
       }
     }
-  }
-
-  private setSubscribeByDefault(subscribe: boolean) {
-    this.setState({
-      ...this.state(),
-      subscribeByDefault: subscribe,
-    });
   }
 
   private setSubscribeByDefaultError(error: string) {

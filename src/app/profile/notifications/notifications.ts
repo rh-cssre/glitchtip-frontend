@@ -30,8 +30,6 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
   providers: [NotificationsService],
 })
 export class Notifications implements OnInit {
-  defaultOnText = $localize`Default (On)`;
-  defaultOffText = $localize`Default (Off)`;
   notificationsForLabel = (project: string) =>
     $localize`Alerts for ${project}:project:`;
   private notificationsService = inject(NotificationsService);
@@ -50,6 +48,21 @@ export class Notifications implements OnInit {
 
   toggleDefaultNotifications(subscribe: boolean) {
     this.notificationsService.notificationsUpdate(subscribe);
+  }
+
+  /** What the project actually gets: its own setting, or the default. */
+  isOn(status: NotificationStatus) {
+    return status === -1 ? this.subscribeByDefault() : status === 1;
+  }
+
+  /**
+   * Matching the default saves "follow the default" (-1), so the project
+   * keeps following it; anything else saves an explicit On or Off.
+   */
+  setProject(projectId: number, on: boolean) {
+    const status: NotificationStatus =
+      on === this.subscribeByDefault() ? -1 : on ? 1 : 0;
+    this.updateUserAlertSettings(projectId, status);
   }
 
   updateUserAlertSettings(projectId: number, status: NotificationStatus) {
