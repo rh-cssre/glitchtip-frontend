@@ -21,7 +21,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="List"
       status="stable"
-      description="A collection of records, one per row: the name, an optional muted fact, and its actions at the end. The rows sit in a bordered container, like a table."
+      description="A collection of records, one per row: the name, an optional muted fact, and its actions at the end. An optional description line sits under the name. The rows sit in a bordered container, like a table."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -114,6 +114,12 @@ export class ListPreview {
       type: "projected",
       default: "",
       description: "The record's name, plus any tags",
+    },
+    {
+      name: '[slot="description"]',
+      type: "projected",
+      default: "",
+      description: "An optional muted line under the name",
     },
     {
       name: '[slot="meta"]',

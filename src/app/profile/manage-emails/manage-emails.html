@@ -75,6 +75,7 @@
   id="add-email-form"
   class="gt-settings-continued"
 >
+  <gt-form-error [errors]="addEmailError()" />
   <gt-settings-section
     #addSection
     i18n-title
@@ -100,9 +101,6 @@
         }
       </mat-error>
     </mat-form-field>
-    @if (addEmailError() !== "") {
-      <mat-error class="server-error">{{ addEmailError() }}</mat-error>
-    }
     <gt-loading-button
       slot="actions"
       i18n-buttonText

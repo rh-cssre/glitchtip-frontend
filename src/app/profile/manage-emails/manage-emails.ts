@@ -25,6 +25,7 @@ import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-manage-emails",
@@ -33,6 +34,7 @@ import { EmailsService } from "src/app/api/emails/emails.service";
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatChipsModule,
+    FormErrorComponent,
     LoadingButtonComponent,
     MatMenuModule,
     ListComponent,
