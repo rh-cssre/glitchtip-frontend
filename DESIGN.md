@@ -98,6 +98,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the top of the form.
 - An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. The form starts with `gt-form-error`, has one section per field, and ends with `.gt-form-actions`: an outlined Create and a text Cancel.
+- An edit form that saves everything at once (an alert) ends the same way, with an outlined Save in place of Create. Its `gt-form-error` sits just above the actions, since the top is out of view by then. Delete follows as the last section.
 
 ### Surfaces
 
@@ -117,7 +118,6 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 ### Sub-views in a tab
 
 - A view opened by a query param inside a tab (an alert's edit form) starts with a text back link to the tab's list. The page's top app bar belongs to the parent record.
-- A long edit form ends in a sticky footer with its summary and Save. Delete sits in the view's header, away from Save.
 
 ## Accessibility
 

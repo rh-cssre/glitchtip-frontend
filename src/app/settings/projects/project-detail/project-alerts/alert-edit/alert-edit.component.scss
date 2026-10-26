@@ -1,5 +1,3 @@
-@use "variables" as vars;
-
 :host {
   display: block;
   padding-bottom: var(--gt-space-7, 48px);
@@ -9,19 +7,11 @@
   margin: 0 0 var(--gt-space-2, 8px) calc(-1 * var(--gt-space-3, 12px));
 }
 
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gt-space-3, 12px);
-  // The shared rule draws lines between sections; the header needs its own.
-  padding-bottom: var(--gt-space-5, 24px);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
-}
-
+// The first section draws no line above it, so the title brings its own.
 .title {
   margin: 0;
+  padding-bottom: var(--gt-space-5, 24px);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
   font: var(--mat-sys-title-large);
   font-weight: 600;
 }
@@ -50,29 +40,21 @@
   text-overflow: ellipsis;
 }
 
-// Sticky so Save and the summary stay in view on a long form. The background
-// matches mat-sidenav-content so sections slide under it cleanly.
-.footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
-  padding: var(--gt-space-4, 16px) 0;
-  border-top: 1px solid var(--mat-sys-outline-variant);
-  background: var(--mat-sys-surface-container-low);
-
-  // On phones a pinned footer eats too much of the screen; it scrolls instead.
-  @media (max-width: vars.$small - 1) {
-    position: static;
-  }
-}
-
 .summary {
   max-width: var(--gt-measure, 70ch);
   margin: 0 0 var(--gt-space-3, 12px);
+  padding-top: var(--gt-space-5, 24px);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface);
 }
 
+gt-form-error:not(:empty) {
+  display: block;
+  margin-bottom: var(--gt-space-3, 12px);
+}
+
+// Matches a section's bottom padding, so the line above Delete is centered.
 .gt-form-actions {
   padding-top: 0;
+  padding-bottom: var(--gt-space-5, 24px);
 }
