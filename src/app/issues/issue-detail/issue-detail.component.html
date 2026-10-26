@@ -47,6 +47,8 @@
         <button
           mat-icon-button
           class="medium-icon-button"
+          aria-label="Delete issue"
+          i18n-aria-label
           (click)="deleteIssue()"
         >
           <mat-icon>delete</mat-icon>
@@ -86,9 +88,8 @@
           >Last seen {{ issue.lastSeen | daysAgo }}</span
         >
         @if (resolvedInRelease(); as release) {
-          <span
-            ><ng-container i18n>Resolved in</ng-container>
-            <span class="chip">{{ release }}</span></span
+          <span i18n
+            >Resolved in <span class="chip">{{ release }}</span></span
           >
         }
       </span>
