@@ -15,7 +15,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--gt-space-3, 12px);
-  margin: 0 0 var(--gt-space-5, 24px);
+  // Sections draw their own line underneath; the header needs one too.
+  padding-bottom: var(--gt-space-5, 24px);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
 .title {
@@ -24,11 +26,10 @@
   font-weight: 600;
 }
 
-// Hairlines keep the steps apart without boxing them in.
-gt-settings-section {
-  margin: 0;
-  padding: var(--gt-space-5, 24px) 0;
-  border-top: 1px solid var(--mat-sys-outline-variant);
+// The sticky footer draws the line under the last section itself, since it
+// needs one while content scrolls beneath it.
+gt-settings-section:last-of-type {
+  border-bottom: none;
 }
 
 gt-list {
