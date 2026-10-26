@@ -51,7 +51,18 @@ export class TeamsComponent {
   );
   errors = this.organizationDetailService.errors;
   loading = this.organizationDetailService.loading;
-  accessTeamWrite = this.organizationsService.accessTeamWrite;
+  canWriteTeam = this.organizationsService.canWriteTeam;
+  // Mirrors the backend: open membership lets anyone join or leave; otherwise
+  // joining needs Manager+ (org:write) and leaving needs Admin+ (team:write).
+  #openMembership = computed(
+    () => this.activeOrganization()?.openMembership ?? false,
+  );
+  canJoinTeam = computed(
+    () => this.#openMembership() || this.organizationsService.canWriteOrg(),
+  );
+  canLeaveTeam = computed(
+    () => this.#openMembership() || this.organizationsService.canWriteTeam(),
+  );
 
 
   constructor() {
