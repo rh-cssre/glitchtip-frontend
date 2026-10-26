@@ -33,6 +33,15 @@ import { toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import {
+  alertName,
+  alertSummary,
+  recipientLabel,
+  resolveRecipientIcon,
+} from "src/app/settings/projects/project-detail/project-alerts/alert-labels";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
   return value === undefined ? true : booleanAttribute(value);
@@ -61,6 +70,9 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     MatTabsModule,
     TopAppBar,
     BackLinkComponent,
+    ListComponent,
+    ListRowComponent,
+    MatTooltipModule,
   ],
 })
 export class MonitorDetailComponent
@@ -112,7 +124,12 @@ export class MonitorDetailComponent
     if (!times.length) return null;
     return times.reduce((sum, t) => sum + t, 0) / times.length;
   });
+  monitorAlerts = this.service.monitorAlerts;
   uptimeAlertCount = this.service.uptimeAlertCount;
+  alertName = alertName;
+  alertSummary = alertSummary;
+  recipientLabel = recipientLabel;
+  resolveRecipientIcon = resolveRecipientIcon;
   alertCountLoading = this.service.alertCountLoading;
   associatedProjectSlug = this.service.associatedProjectSlug;
 
@@ -146,7 +163,6 @@ export class MonitorDetailComponent
       xScaleMin,
     };
   });
-
 
   constructor() {
     const service = inject(MonitorService);

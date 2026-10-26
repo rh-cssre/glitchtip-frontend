@@ -43,6 +43,7 @@ export class EnvironmentsService {
     }),
   );
   orgEnvironments = computed(() => this.#orgEnvironmentsResource.value() || []);
+  orgHasValue = computed(() => this.#orgEnvironmentsResource.hasValue());
   projectEnvironments = computed(
     () => this.#projectEnvironmentsResource.value() || [],
   );

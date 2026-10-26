@@ -8,6 +8,8 @@ import { OrganizationsService } from "../api/organizations.service";
 import { StatefulService } from "../shared/stateful-service/signal-state.service";
 import { client } from "../shared/api/api";
 import { components } from "../api/api-schema";
+import { EnvironmentsService } from "../api/environments.service";
+import { alertsForMonitor } from "./monitor-detail/monitor-alerts";
 
 type MonitorCheckSchema = components["schemas"]["MonitorCheckSchema"];
 interface MonitorCheck extends MonitorCheckSchema {
@@ -33,6 +35,7 @@ const initialState: MonitorState = {
 })
 export class MonitorService extends StatefulService<MonitorState> {
   private organizationsService = inject(OrganizationsService);
+  private environmentsService = inject(EnvironmentsService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
 
@@ -88,11 +91,32 @@ export class MonitorService extends StatefulService<MonitorState> {
   createLoading = computed(() => this.state().createLoading);
   deleteLoading = computed(() => this.state().deleteLoading);
   error = computed(() => this.state().error);
-  uptimeAlertCount = computed(
-    () => this.monitorUptimeAlertsResource.value()?.length || 0,
-  );
-  alertCountLoading = computed(() =>
-    this.monitorUptimeAlertsResource.isLoading(),
+  /**
+   * The monitor's environment name, which alerts filter on. Undefined until
+   * the organization's environments load, so the alert list does not briefly
+   * show alerts for the wrong environment.
+   */
+  monitorEnvironment = computed(() => {
+    const id = this.activeMonitor()?.environmentID;
+    if (id === null || id === undefined) return null;
+    if (!this.environmentsService.orgHasValue()) return undefined;
+    const match = this.environmentsService
+      .orgEnvironments()
+      .find((environment) => Number(environment.id) === Number(id));
+    return match?.name ?? null;
+  });
+  /** Project alerts that notify when this monitor goes down. */
+  monitorAlerts = computed(() => {
+    const alerts = this.monitorUptimeAlertsResource.value();
+    const environment = this.monitorEnvironment();
+    if (!alerts || environment === undefined) return [];
+    return alertsForMonitor(alerts, environment);
+  });
+  uptimeAlertCount = computed(() => this.monitorAlerts().length);
+  alertCountLoading = computed(
+    () =>
+      this.monitorUptimeAlertsResource.isLoading() ||
+      this.monitorEnvironment() === undefined,
   );
   activeMonitor = computed(() => this.monitorResource.value());
 
