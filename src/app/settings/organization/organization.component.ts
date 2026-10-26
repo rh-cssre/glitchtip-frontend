@@ -17,6 +17,8 @@ import { toObservable } from "@angular/core/rxjs-interop";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
 
 @Component({
   selector: "gt-organization",
@@ -29,6 +31,7 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
     LoadingButtonComponent,
     TopAppBar,
     SettingsSectionComponent,
+    FormErrorComponent,
   ],
 })
 export class OrganizationComponent implements OnDestroy, OnInit {
@@ -68,12 +71,13 @@ export class OrganizationComponent implements OnDestroy, OnInit {
     });
   }
 
-  get name() {
-    return this.form.get("name");
-  }
-
-  updateOrganization() {
-    this.organizationDetailService.updateOrganization(this.form.value.name!);
+  async updateOrganization() {
+    await this.organizationDetailService.updateOrganization(
+      this.form.value.name!,
+    );
+    if (this.errors().updateOrganization) {
+      mapFormErrors({ name: [this.errors().updateOrganization] }, this.form);
+    }
   }
 
   removeOrganization(slug: string, name: string) {

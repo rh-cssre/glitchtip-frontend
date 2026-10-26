@@ -22,6 +22,9 @@
               formControlName="name"
               [attr.aria-labelledby]="nameSection.titleId"
             />
+            @if (form.controls.name.errors?.serverError; as serverError) {
+              <mat-error>{{ serverError }}</mat-error>
+            }
           </mat-form-field>
         } @else {
           <span class="body-text">{{ activeOrg.name }}</span>
@@ -37,18 +40,16 @@
           />
         }
       </gt-settings-section>
-      @if (errors().updateOrganization) {
-        <mat-error>{{ errors().updateOrganization }}</mat-error>
-      }
     </form>
 
     @if (canAdminOrg()) {
       <gt-settings-section i18n-title title="Delete organization">
         <span slot="description" i18n
-          >Deletes its projects, teams and events. This cannot be undone.</span
+          >Deletes this organization's projects, teams and events. This cannot be
+          undone.</span
         >
         @if (errors().deleteOrganization) {
-          <mat-error>{{ errors().deleteOrganization }}</mat-error>
+          <gt-form-error [errors]="errors().deleteOrganization" />
         }
         <gt-loading-button
           slot="actions"
