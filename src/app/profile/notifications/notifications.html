@@ -1,14 +1,14 @@
 <section class="l-body">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Notifications</mat-card-title>
+      <mat-card-title i18n>Notifications</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div class="default-settings">
         <div class="default-alerts">
-          <p class="body-text-strong">Send me project alerts</p>
-          <p class="body-text">
+          <p i18n class="body-text-strong">Send me project alerts</p>
+          <p i18n class="body-text">
             This is the default setting for project alerts. You can change the
             setting per project below.
           </p>
@@ -18,18 +18,18 @@
             @if ((subscribeByDefaultLoading()) === true) {
               <mat-spinner diameter="24"></mat-spinner>
             }
-            <mat-button-toggle-group
+            <mat-button-toggle-group i18n-aria-label
               name="defaultNotifications"
               aria-label="Default Notifications"
             >
-              <mat-button-toggle
+              <mat-button-toggle i18n
                 value="onDefault"
                 (change)="toggleDefaultNotifications(true)"
                 [class.underline]="(subscribeByDefault()) === true"
                 [checked]="(subscribeByDefault()) === true"
                 >On</mat-button-toggle
               >
-              <mat-button-toggle
+              <mat-button-toggle i18n
                 value="offDefault"
                 (change)="toggleDefaultNotifications(false)"
                 [class.underline]="(subscribeByDefault()) === false"
@@ -49,7 +49,7 @@
           class="expand-button"
           (click)="toggleProjectView()"
         >
-          <span>Edit By Project</span><mat-icon>keyboard_arrow_down</mat-icon>
+          <span i18n>Edit By Project</span><mat-icon>keyboard_arrow_down</mat-icon>
         </button>
       }
 
@@ -82,19 +82,19 @@
                       <mat-button-toggle-group
                         aria-label="`Notifications for ${project}`"
                       >
-                        <mat-button-toggle
+                        <mat-button-toggle i18n
                           (change)="updateUserAlertSettings(project.id, 1)"
                           [class.underline]="project.alertStatus === 1"
                           [checked]="project.alertStatus === 1"
                           >On</mat-button-toggle
                         >
-                        <mat-button-toggle
+                        <mat-button-toggle i18n
                           (change)="updateUserAlertSettings(project.id, 0)"
                           [class.underline]="project.alertStatus === 0"
                           [checked]="project.alertStatus === 0"
                           >Off</mat-button-toggle
                         >
-                        <mat-button-toggle
+                        <mat-button-toggle i18n
                           (change)="updateUserAlertSettings(project.id, -1)"
                           [class.underline]="project.alertStatus === -1"
                           [checked]="project.alertStatus === -1"
@@ -102,8 +102,8 @@
                           <span
                             >({{
                               (subscribeByDefault()) === true
-                                ? "On"
-                                : "Off"
+                                ? onText
+                                : offText
                             }})</span
                           ></mat-button-toggle
                         >
@@ -128,7 +128,7 @@
           class="expand-button"
           (click)="toggleProjectView()"
         >
-          <span>Hide Projects</span><mat-icon>keyboard_arrow_up</mat-icon>
+          <span i18n>Hide Projects</span><mat-icon>keyboard_arrow_up</mat-icon>
         </button>
       }
     </mat-card-content>

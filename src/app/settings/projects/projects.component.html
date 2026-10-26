@@ -3,14 +3,11 @@
     <h1 class="section-header-text" i18n>Projects</h1>
   </ng-container>
   <ng-container slot="right">
-    <a
-      mat-flat-button
-      [routerLink]="['new']"
-      color="primary"
-      i18n
-      [disabled]="!accessProjectWrite()"
-      >Create New Project</a
-    >
+    @if (canWriteProject()) {
+      <a mat-flat-button [routerLink]="['new']" color="primary" i18n
+        >Create New Project</a
+      >
+    }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -20,7 +17,10 @@
         <p>{{ error.msg || error }}</p>
       }
     } @else if (projects()?.length === 0) {
-      <gt-empty-projects [activeOrgOnly]="true"></gt-empty-projects>
+      <gt-empty-projects
+        [activeOrgOnly]="true"
+        [canCreateProject]="canWriteProject()"
+      ></gt-empty-projects>
     }
   </div>
   <div class="project-card-wrapper">
@@ -29,14 +29,14 @@
         [cardLink]="project.slug!"
         [title]="project.name"
         [descriptionList]="[
-          { key: 'organization', value: activeOrganization()?.name || '' },
-          { key: 'date created', value: (project.dateCreated | date)! },
+          { key: organizationText, value: activeOrganization()?.name || '' },
+          { key: dateCreatedText, value: (project.dateCreated | date)! },
         ]"
         [isMember]="project.isMember"
         [secondaryButton]="{
           link: project.slug!,
           icon: 'settings',
-          text: 'Settings',
+          text: settingsText,
         }"
       ></gt-project-card>
     }

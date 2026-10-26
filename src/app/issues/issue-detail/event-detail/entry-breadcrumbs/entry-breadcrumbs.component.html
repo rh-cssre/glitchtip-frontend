@@ -2,10 +2,10 @@
   <section class="mat-typography">
     <mat-divider></mat-divider>
     <div class="breadcrumbs-header">
-      <h3>Breadcrumbs</h3>
+      <h3 i18n>Breadcrumbs</h3>
       @if (availableCategories().length > 1) {
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>Filter by category</mat-label>
+          <mat-label i18n>Filter by category</mat-label>
           <mat-select
             multiple
             [ngModel]="selectedCategories()"
@@ -31,8 +31,8 @@
           color="primary"
           (click)="expandBreadcrumbs()"
         >
-          <mat-icon>more_horiz</mat-icon> Show All
-          {{ breadcrumbs?.values?.length }} Breadcrumbs
+          <mat-icon>more_horiz</mat-icon> <ng-container i18n>Show All
+          {{ breadcrumbs?.values?.length }} Breadcrumbs</ng-container>
         </button>
       }
       <ul>

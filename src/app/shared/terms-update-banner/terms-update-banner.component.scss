@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+.terms-update-banner {
+  --mat-card-container-color: var(--mat-sys-surface-container-highest);
+  margin: 16px 16px 0;
+}
+
+.banner-content {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.banner-text {
+  margin: 0;
+  flex: 1 1 320px;
+  color: var(--mat-sys-on-surface-variant);
+}

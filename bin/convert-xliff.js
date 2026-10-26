@@ -62,7 +62,11 @@ async function convertFile(sourcePath, destPath) {
       if (file.hasOwnProperty(id)) {
         const rawTarget = file[id].target;
         if (rawTarget !== undefined && rawTarget !== null) {
-          translations[id] = flattenTranslation(rawTarget);
+          const translation = flattenTranslation(rawTarget);
+          // ICU messages carry their placeholders as plain {NAME} text
+          translations[id] = translation.trimStart().startsWith("{VAR_")
+            ? translation.replace(/\{\$([A-Z0-9_]+)\}/g, "{$1}")
+            : translation;
         }
       }
     }

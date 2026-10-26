@@ -23,13 +23,14 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
-import { DecimalPipe, I18nPluralPipe } from "@angular/common";
+import { DecimalPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
   return value === undefined ? true : booleanAttribute(value);
@@ -45,7 +46,6 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     MonitorChecks,
     CopyInputComponent,
     MonitorResponseChart,
-    I18nPluralPipe,
     TimeForPipe,
     DecimalPipe,
     MatButtonModule,
@@ -63,9 +63,13 @@ export class MonitorDetailComponent
   extends StatefulComponent<MonitorState, MonitorService>
   implements OnInit
 {
+  uptimeMonitorsText = $localize`Uptime Monitors`;
+  viewAllMonitorsText = $localize`View all uptime monitors`;
+  uptimeDetailsFor = (monitor: string) => $localize`Uptime details for ${monitor}:monitor:`;
   protected service: MonitorService;
   private breakpointObserver = inject(BreakpointObserver);
   private dialog = inject(MatDialog);
+  private organizationsService = inject(OrganizationsService);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -76,6 +80,7 @@ export class MonitorDetailComponent
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertCountLoading = this.service.alertCountLoading;
   associatedProjectSlug = this.service.associatedProjectSlug;
+  canWriteProject = this.organizationsService.canWriteProject;
 
   isMobile = signal(false);
   private smallBreakpointSignal = toSignal(
@@ -108,10 +113,6 @@ export class MonitorDetailComponent
     };
   });
 
-  alertCountPluralMapping: { [k: string]: string } = {
-    "=1": "is 1 uptime alert",
-    other: "are # uptime alerts",
-  };
 
   constructor() {
     const service = inject(MonitorService);

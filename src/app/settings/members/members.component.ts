@@ -40,6 +40,10 @@ type Member = components["schemas"]["OrganizationUserSchema"];
   providers: [MembersService],
 })
 export class MembersComponent {
+  inviteResentText = $localize`Invite Resent`;
+  resendInviteText = $localize`Resend Invite`;
+  leaveText = $localize`Leave`;
+  removeText = $localize`Remove`;
   private organizationsService = inject(OrganizationsService);
   private organizationDetailService = inject(OrganizationDetailService);
   private membersService = inject(MembersService);
@@ -48,7 +52,8 @@ export class MembersComponent {
   orgSlug = input.required<string>({ alias: "org-slug" });
   activeOrganizationDetail = this.organizationsService.activeOrganization;
   members = this.membersService.members;
-  accessMemberWrite = this.organizationsService.accessMemberWrite;
+  canWriteMember = this.organizationsService.canWriteMember;
+  canAdminMember = this.organizationsService.canAdminMember;
 
   constructor() {
     effect(() => {

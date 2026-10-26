@@ -58,6 +58,9 @@ export function resolveRecipientIcon(type: RecipientType): string {
   providers: [ProjectAlertsService, ProjectEnvironmentsService],
 })
 export class ProjectAlertsComponent implements OnInit {
+  deleteAlertForLabel = (url: string | null | undefined) => $localize`Delete Alert For ${url ?? ""}:url:`;
+  deleteAlertLabel = (n: number) => $localize`Delete Alert ${n}:number:`;
+  removeAlertText = (n: number) => $localize`Remove Alert ${n}:number:`;
   #service = inject(ProjectAlertsService);
   #environmentsService = inject(ProjectEnvironmentsService);
   organizationsService = inject(OrganizationsService);
@@ -81,7 +84,8 @@ export class ProjectAlertsComponent implements OnInit {
   recipientDialogOpen = this.#service.recipientDialogOpen;
   newAlertLoading = this.#service.newAlertLoading;
   newAlertError = this.#service.newAlertError;
-  accessProjectWrite = this.organizationsService.accessProjectWrite;
+  canWriteProject = this.organizationsService.canWriteProject;
+  canAdminProject = this.organizationsService.canAdminProject;
   resolveRecipientIcon = resolveRecipientIcon;
   availableEnvironments = this.#environmentsService.visibleEnvironments;
 

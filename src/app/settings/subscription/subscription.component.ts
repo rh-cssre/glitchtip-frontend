@@ -133,7 +133,7 @@ export class SubscriptionComponent extends StatefulComponent<
   readonly throttleStateUnavailable = this.service.overageStatusUnavailable;
   readonly eventThrottleRate = this.service.eventThrottleRate;
   // The cap and the on-demand toggle are owner-only, as on the card below.
-  readonly canManageOverage = this.orgService.accessOrgAdmin;
+  readonly canManageOverage = this.orgService.canAdminOrg;
 
   nextProduct = computed(() => {
     const subscription = this.subscription();
