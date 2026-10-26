@@ -61,6 +61,12 @@ describe("handleError", () => {
     ).toBe("Your card was declined.");
   });
 
+  it("passes through a 403 permission denial", () => {
+    const detail =
+      "Permission denied. This endpoint requires one of ['org:admin']; your role in this organization (Manager) holds none of them.";
+    expect(handleError({ detail }, res(403)).detail[0].msg).toBe(detail);
+  });
+
   it("passes through a 502 upstream failure", () => {
     expect(
       handleError({ detail: "Could not enable overage billing." }, res(502))
