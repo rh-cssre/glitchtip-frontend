@@ -10,7 +10,7 @@ import {
   effect,
 } from "@angular/core";
 import { MonitorState, MonitorService } from "../monitor.service";
-import { RouterModule } from "@angular/router";
+import { ActivatedRoute, RouterModule } from "@angular/router";
 import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatDividerModule } from "@angular/material/divider";
@@ -33,6 +33,7 @@ import { toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
   return value === undefined ? true : booleanAttribute(value);
@@ -80,7 +81,20 @@ export class MonitorDetailComponent
   cursor = input<string | undefined>();
 
   monitor = this.service.activeMonitor;
-  tab = signal<"overview" | "checks" | "alerts">("overview");
+  readonly tab = toSignal(
+    inject(ActivatedRoute).queryParamMap.pipe(
+      map((params): "overview" | "checks" | "alerts" => {
+        const tab = params.get("tab");
+        if (tab === "overview" || tab === "checks" || tab === "alerts") {
+          return tab;
+        }
+        return params.has("cursor") || params.has("isChange")
+          ? "checks"
+          : "overview";
+      }),
+    ),
+    { initialValue: "overview" },
+  );
 
   statusLabel = computed(() => {
     const isUp = this.monitor()?.isUp;
@@ -96,9 +110,11 @@ export class MonitorDetailComponent
   });
   intervalLabel = computed(() => {
     const seconds = this.monitor()?.interval ?? 0;
-    if (seconds < 120) return `${seconds}s`;
-    if (seconds < 7200) return `${Math.round(seconds / 60)} min`;
-    return `${Math.round(seconds / 3600)} h`;
+    if (seconds < 120) return $localize`every ${seconds}:count:s`;
+    if (seconds < 7200) {
+      return $localize`every ${Math.round(seconds / 60)}:count: min`;
+    }
+    return $localize`every ${Math.round(seconds / 3600)}:count: h`;
   });
   uptimePercent = computed(() => {
     const checks = this.monitor()?.checks ?? [];
@@ -107,7 +123,7 @@ export class MonitorDetailComponent
   });
   avgResponseMs = computed(() => {
     const times = (this.monitor()?.checks ?? [])
-      .map((c) => (c as { responseTime?: number | null }).responseTime)
+      .map((c) => c.responseTime)
       .filter((t): t is number => typeof t === "number");
     if (!times.length) return null;
     return times.reduce((sum, t) => sum + t, 0) / times.length;
@@ -116,6 +132,11 @@ export class MonitorDetailComponent
   alertCountLoading = this.service.alertCountLoading;
   associatedProjectSlug = this.service.associatedProjectSlug;
   canWriteProject = this.organizationsService.canWriteProject;
+  noProjectMessage = computed(() =>
+    this.canWriteProject()
+      ? $localize`Associate a project with this monitor to get alerts.`
+      : $localize`This monitor has no associated project, so it sends no alerts.`,
+  );
 
   isMobile = signal(false);
   private smallBreakpointSignal = toSignal(
@@ -166,7 +187,6 @@ export class MonitorDetailComponent
 
   ngOnInit() {
     this.service.retrieveMonitorDetails(this.monitorID());
-    if (this.cursor() || !this.isChange()) this.tab.set("checks");
   }
 
   delete() {

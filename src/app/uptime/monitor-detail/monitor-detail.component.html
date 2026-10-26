@@ -49,11 +49,14 @@
             }}</a></span
           >
         }
-        <span i18n>every {{ intervalLabel() }}</span>
+        <span>{{ intervalLabel() }}</span>
         @if (uptimePercent() !== null) {
           <span i18n
-            ><b>{{ uptimePercent()! | number: "1.0-1" }}%</b> up over the last
-            {{ monitor.checks.length }} checks</span
+            ><b>{{ uptimePercent()! | number: "1.0-1" }}%</b> up over
+            {monitor.checks.length, plural,
+              =1 {the last check}
+              other {the last {{ monitor.checks.length }} checks}
+            }</span
           >
         }
         @if (avgResponseMs() !== null) {
@@ -73,18 +76,27 @@
       <a
         mat-tab-link
         [active]="tab() === 'overview'"
-        (click)="tab.set('overview')"
+        [routerLink]="[]"
+        [queryParams]="{ tab: 'overview' }"
+        queryParamsHandling="merge"
         i18n
         >Overview</a
       >
       <a
         mat-tab-link
         [active]="tab() === 'checks'"
-        (click)="tab.set('checks')"
+        [routerLink]="[]"
+        [queryParams]="{ tab: 'checks' }"
+        queryParamsHandling="merge"
         i18n
         >Checks</a
       >
-      <a mat-tab-link [active]="tab() === 'alerts'" (click)="tab.set('alerts')"
+      <a
+        mat-tab-link
+        [active]="tab() === 'alerts'"
+        [routerLink]="[]"
+        [queryParams]="{ tab: 'alerts' }"
+        queryParamsHandling="merge"
         ><span i18n>Alerts</span>
         @if (uptimeAlertCount() > 0) {
           <span class="tab-count">{{ uptimeAlertCount() }}</span>
@@ -153,8 +165,7 @@
               icon="share_eta"
               i18n-title
               title="No associated project"
-              i18n-message
-              message="Associate a project with this monitor to get alerts."
+              [message]="noProjectMessage()"
             >
               @if (canWriteProject()) {
                 <a mat-stroked-button [routerLink]="['./update']" i18n
