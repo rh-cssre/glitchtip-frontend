@@ -31,9 +31,9 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { MatDialog } from "@angular/material/dialog";
 
 const STATUS_CONFIG = {
-  resolved: { label: "Resolved", icon: "done" },
-  unresolved: { label: "Unresolved", icon: "priority_high" },
-  ignored: { label: "Ignored", icon: "notifications_off" },
+  resolved: { label: $localize`Resolved`, icon: "done" },
+  unresolved: { label: $localize`Unresolved`, icon: "priority_high" },
+  ignored: { label: $localize`Ignored`, icon: "notifications_off" },
 } as const;
 
 type IssueStatusType = keyof typeof STATUS_CONFIG;
@@ -61,6 +61,8 @@ type IssueStatusType = keyof typeof STATUS_CONFIG;
   ],
 })
 export class IssueDetailComponent implements OnInit {
+  issuesText = $localize`Issues`;
+  allIssuesFor = (project: string) => $localize`All issues for ${project}:project:`;
   private issueService = inject(IssueDetailService);
   private organizationsService = inject(OrganizationsService);
   private route = inject(ActivatedRoute);

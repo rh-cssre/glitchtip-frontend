@@ -1,23 +1,23 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <h1 class="section-header-text">General Settings</h1>
+    <h1 i18n class="section-header-text">General Settings</h1>
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
   @if (activeOrganizationDetail(); as activeOrg) {
     <mat-card>
       <mat-card-header>
-        <mat-card-title>General</mat-card-title>
+        <mat-card-title i18n>General</mat-card-title>
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
         @if (canWriteOrg()) {
           <form [formGroup]="form" (ngSubmit)="updateOrganization()">
             <mat-form-field appearance="outline">
-              <mat-label>Name</mat-label>
+              <mat-label i18n>Name</mat-label>
               <input matInput formControlName="name" [value]="activeOrg.name" />
             </mat-form-field>
-            <gt-loading-button
+            <gt-loading-button i18n-buttonText
               [disabled]="name?.value === activeOrg.name"
               [loading]="loading().updateOrganization"
               mat-flat-button
@@ -41,12 +41,12 @@
     @if (canAdminOrg()) {
       <mat-card>
         <mat-card-header>
-          <mat-card-title>Delete Organization</mat-card-title>
+          <mat-card-title i18n>Delete Organization</mat-card-title>
         </mat-card-header>
         <mat-divider></mat-divider>
         <mat-card-content class="remove-content">
           <div>
-            <p>
+            <p i18n>
               By deleting this organization, you will lose all data including
               projects and their associated events.
             </p>
@@ -54,7 +54,7 @@
               <mat-error>{{ errors().deleteOrganization }}</mat-error>
             }
           </div>
-          <gt-loading-button
+          <gt-loading-button i18n-buttonText
             buttonStyle="stroked"
             color="warn"
             data-test

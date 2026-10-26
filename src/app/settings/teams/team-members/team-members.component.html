@@ -39,7 +39,7 @@
               >{{ teamMember.email }}</a
             >
             @if (canModifyTeam()) {
-              <gt-loading-button
+              <gt-loading-button i18n-buttonText
                 buttonText="Remove"
                 buttonStyle="stroked"
                 [loading]="selectedTeamMember?.toString() === teamMember.id"

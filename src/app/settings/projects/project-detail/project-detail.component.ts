@@ -95,6 +95,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   ],
 })
 export class ProjectDetailComponent implements OnInit {
+  settingsFor = (project: string) => $localize`Settings for ${project}:project:`;
   #service = inject(ProjectDetailService);
   #orgService = inject(OrganizationsService);
   #snackBar = inject(MatSnackBar);

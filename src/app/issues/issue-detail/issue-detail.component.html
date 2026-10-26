@@ -30,7 +30,7 @@
     <ng-container slot="left">
       <gt-back-link
         [backLinkText]="
-          isMobile() ? 'Issues' : 'All issues for ' + issue.project.name
+          isMobile() ? issuesText : allIssuesFor(issue.project.name)
         "
         [backLinkParams]="generateBackLink(issue.project.id)"
       />
@@ -103,7 +103,7 @@
                 >
               }
               @if (issue.userReportCount === 0) {
-                User Reports
+                <ng-container i18n>User Reports</ng-container>
               }
             </a>
             <a
@@ -149,15 +149,15 @@
           <mat-card-content>
             <dl>
               <div>
-                <dt class="caption-text">Issue #</dt>
+                <dt i18n class="caption-text">Issue #</dt>
                 <dd class="body-text">{{ issue?.shortId }}</dd>
               </div>
               <div>
-                <dt class="caption-text">Events</dt>
+                <dt i18n class="caption-text">Events</dt>
                 <dd class="body-text">{{ issue?.count }}</dd>
               </div>
               <div>
-                <dt class="caption-text">Level</dt>
+                <dt i18n class="caption-text">Level</dt>
                 <dd class="body-text">{{ issue.level | titlecase }}</dd>
               </div>
               @if (resolvedInRelease(); as release) {
@@ -167,7 +167,7 @@
                 </div>
               }
               <div>
-                <dt class="caption-text">First Seen</dt>
+                <dt i18n class="caption-text">First Seen</dt>
                 <dd class="body-text">{{ issue.firstSeen | daysAgo }}</dd>
                 <dd class="caption-text">
                   {{
@@ -176,7 +176,7 @@
                 </dd>
               </div>
               <div>
-                <dt class="caption-text">Last Seen</dt>
+                <dt i18n class="caption-text">Last Seen</dt>
                 <dd class="body-text">{{ issue.lastSeen | daysAgo }}</dd>
                 <dd class="caption-text">
                   {{ $safeNavigationMigration(issue?.lastSeen) | date: "long" }}

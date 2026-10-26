@@ -29,14 +29,14 @@
         [cardLink]="project.slug!"
         [title]="project.name"
         [descriptionList]="[
-          { key: 'organization', value: activeOrganization()?.name || '' },
-          { key: 'date created', value: (project.dateCreated | date)! },
+          { key: organizationText, value: activeOrganization()?.name || '' },
+          { key: dateCreatedText, value: (project.dateCreated | date)! },
         ]"
         [isMember]="project.isMember"
         [secondaryButton]="{
           link: project.slug!,
           icon: 'settings',
-          text: 'Settings',
+          text: settingsText,
         }"
       ></gt-project-card>
     }

@@ -27,7 +27,7 @@
       <section class="org-projects-section">
         <header class="projects-section-header">
           <h2 class="section-header-text">
-            {{ activeOrgOnly ? "Projects" : organization.name }}
+            @if (activeOrgOnly) {<ng-container i18n>Projects</ng-container>} @else {{{ organization.name }}}
           </h2>
           @if (!activeOrgOnly || canWriteProject()) {
             <a
@@ -59,18 +59,18 @@
                 [cardLinkQueryParams]="{ project: project.id }"
                 [title]="project.name"
                 [descriptionList]="[
-                  { key: 'organization', value: project.organization.name },
-                  { key: 'date created', value: (project.dateCreated | date)! },
+                  { key: organizationText, value: project.organization.name },
+                  { key: dateCreatedText, value: (project.dateCreated | date)! },
                 ]"
                 [isMember]="project.isMember"
                 [primaryButton]="{
-                  text: 'Issues',
+                  text: issuesText,
                   icon: 'warning',
                   query: { project: project.id },
                   link: [project.organization.slug, 'issues'],
                 }"
                 [secondaryButton]="{
-                  text: 'Settings',
+                  text: settingsText,
                   icon: 'settings',
                   link: [
                     '/',

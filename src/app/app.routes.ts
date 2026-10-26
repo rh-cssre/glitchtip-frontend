@@ -9,25 +9,25 @@ export const routes: Routes = [
     path: "login/finalize",
     loadComponent: () =>
       import("./login/finalize-login").then((m) => m.FinalizeLogin),
-    title: "Finalize Login",
+    title: () => $localize`Finalize Login`,
   },
   {
     path: "login",
     pathMatch: "full",
     loadComponent: () => import("./login/login").then((m) => m.LoginComponent),
     canActivate: [alreadyLoggedInGuard],
-    title: "Log In",
+    title: () => $localize`Log In`,
   },
   {
     path: "register",
     loadChildren: () => import("./register/routes"),
     canActivate: [alreadyLoggedInGuard],
-    title: "Register",
+    title: () => $localize`Register`,
   },
   {
     path: "reset-password",
     loadChildren: () => import("./reset-password/routes"),
-    title: "Reset Password",
+    title: () => $localize`Reset Password`,
   },
   {
     path: "accept/:memberId/:token",
@@ -65,12 +65,12 @@ export const routes: Routes = [
       {
         path: "organizations/new",
         loadChildren: () => import("./new-organization/routes"),
-        title: "Create New Organization",
+        title: () => $localize`Create New Organization`,
       },
       {
         path: "profile",
         loadChildren: () => import("./profile/routes"),
-        title: "Profile",
+        title: () => $localize`Profile`,
         data: {
           preload: true,
         },
@@ -78,7 +78,7 @@ export const routes: Routes = [
       {
         path: "system-info",
         loadChildren: () => import("./system-info/routes"),
-        title: "System info",
+        title: () => $localize`System info`,
         data: {
           preload: true,
         },
@@ -90,7 +90,7 @@ export const routes: Routes = [
           {
             path: "issues",
             loadChildren: () => import("./issues/routes"),
-            title: "Issues",
+            title: () => $localize`Issues`,
             data: {
               preload: true,
             },
@@ -98,27 +98,27 @@ export const routes: Routes = [
           {
             path: "logs",
             loadChildren: () => import("./logs/routes"),
-            title: "Logs",
+            title: () => $localize`Logs`,
           },
           {
             path: "uptime-monitors",
             loadChildren: () => import("./uptime/routes"),
-            title: "Uptime Monitors",
+            title: () => $localize`Uptime Monitors`,
           },
           {
             path: "projects",
             loadChildren: () => import("./projects/routes"),
-            title: "Projects",
+            title: () => $localize`Projects`,
           },
           {
             path: "releases",
             loadChildren: () => import("./releases/routes"),
-            title: "Releases",
+            title: () => $localize`Releases`,
           },
           {
             path: "settings",
             loadChildren: () => import("./settings/routes"),
-            title: "Settings",
+            title: () => $localize`Settings`,
             data: {
               preload: true,
             },
@@ -126,7 +126,7 @@ export const routes: Routes = [
           {
             path: "performance",
             loadChildren: () => import("./performance/routes"),
-            title: "Performance",
+            title: () => $localize`Performance`,
           },
           {
             path: ":project-slug",

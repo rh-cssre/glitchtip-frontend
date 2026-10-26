@@ -32,6 +32,7 @@ import { UpperCasePipe } from "@angular/common";
   host: { "[class.sample-card]": "sampleCard()" },
 })
 export class ProjectCardComponent {
+  notMemberTooltip = $localize`To view issues for this project, add yourself to the corresponding team.`;
   readonly cardLink = input<string | unknown[]>();
   readonly cardLinkQueryParams = input<{
     [k: string]: unknown;
