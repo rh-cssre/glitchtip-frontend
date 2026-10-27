@@ -94,9 +94,12 @@ export class AlertEditComponent implements OnInit {
   readonly draftConditions = signal<AlertConditions>({});
   readonly teams = this.#service.projectTeams;
 
-  readonly title = computed(() => {
+  readonly title = computed(() =>
+    this.alert() ? $localize`Edit alert` : $localize`New alert`,
+  );
+  readonly displayName = computed(() => {
     const alert = this.alert();
-    return alert ? alertName(alert) : $localize`New alert`;
+    return alert ? alertName(alert) : "";
   });
   readonly hasEmail = computed(() =>
     this.recipients().some((r) => r.recipientType === "email"),
@@ -205,7 +208,7 @@ export class AlertEditComponent implements OnInit {
     this.#dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: $localize`Delete ${this.title()}:name:?`,
+          title: $localize`Delete ${this.displayName()}:name:?`,
           message: $localize`Its recipients will stop getting these notifications. This cannot be undone.`,
           confirmText: $localize`Delete`,
         },
