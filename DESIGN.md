@@ -125,6 +125,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 
 A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end. An optional description line sits under the name.
 
+- A row that opens its record makes the name the link. No separate Edit or View button repeats it.
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
 - Rows with several columns to compare or sort are a table instead.
@@ -134,7 +135,7 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 
 ### Sub-views in a tab
 
-- A view opened by a query param inside a tab (an alert's edit form) starts with a text back link to the tab's list. The page's top app bar belongs to the parent record.
+- A view opened by a query param inside a tab (an alert's edit form) starts with a `gt-back-link` named after the tab ("Alerts"), the same component the top app bar uses. The page's top app bar belongs to the parent record.
 
 ## Accessibility
 

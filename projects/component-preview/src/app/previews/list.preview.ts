@@ -84,8 +84,10 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         </div>
         <gt-list>
           <gt-list-row>
-            Error spike
-            <button slot="actions" mat-stroked-button>Edit</button>
+            <a href="#" (click)="$event.preventDefault()">Error spike</a>
+            <span slot="description"
+              >Alerts when an issue gets 10 events in 1 minute.</span
+            >
           </gt-list-row>
         </gt-list>
       </div>
@@ -112,6 +114,7 @@ export class ListPreview {
     "Use a table instead when rows have several columns to compare or sort",
   ];
   readonly dos = [
+    "Make the name the link when a row opens its record",
     "Give a row with one action a visible outlined button",
     "Put two or more actions in a menu at the end of the row",
     "Keep row actions neutral; the confirm dialog carries the warning for a destructive one",
@@ -122,6 +125,7 @@ export class ListPreview {
   ];
   readonly donts = [
     "Use a menu for a single action; it adds a step for nothing",
+    "Add an Edit button that repeats the name's link",
     "Color row buttons warn; a column of red buttons stops meaning anything",
     "Wrap the list in a card with a title bar",
     "Explain a disabled action only in a tooltip",
