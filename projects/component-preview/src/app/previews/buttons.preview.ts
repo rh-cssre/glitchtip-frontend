@@ -117,7 +117,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             >
               <mat-icon>settings</mat-icon>
             </button>
-            <span class="btn-item__use">Medium (36) for toolbars</span>
+            <span class="btn-item__use">Medium (36), not in the top app bar</span>
           </div>
         </div>
       </div>
