@@ -112,8 +112,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   `,
 })
 export class TopAppBarPreview {
-  // Same mechanism the product's detail pages use (see monitor-detail):
-  // content swaps below the $small breakpoint. In the Mobile example width
+  // Content swaps below the $small breakpoint. In the Mobile example width
   // this fires for real because the example renders in a true viewport.
   private readonly breakpoints = inject(BreakpointObserver);
   readonly isMobile = toSignal(

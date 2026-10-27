@@ -6,21 +6,16 @@ import {
   computed,
   input,
   booleanAttribute,
-  signal,
-  effect,
 } from "@angular/core";
 import { MonitorState, MonitorService } from "../monitor.service";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
 import { MonitorChecks } from "../monitor-checks/monitor-checks";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MonitorResponseChart } from "../monitor-response-chart/monitor-response-chart";
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -29,10 +24,7 @@ import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.
 import { DecimalPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { MatDialog } from "@angular/material/dialog";
-import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
@@ -59,10 +51,7 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     DecimalPipe,
     MatButtonModule,
     MonitorChartComponent,
-    MatCardModule,
-    MatDividerModule,
     MatProgressSpinnerModule,
-    MatIconModule,
     PageHeaderComponent,
     EmptyStateComponent,
     MatTabsModule,
@@ -80,10 +69,7 @@ export class MonitorDetailComponent
   implements OnInit
 {
   uptimeMonitorsText = $localize`Uptime Monitors`;
-  viewAllMonitorsText = $localize`View all uptime monitors`;
   protected service: MonitorService;
-  private breakpointObserver = inject(BreakpointObserver);
-  private dialog = inject(MatDialog);
   private organizationsService = inject(OrganizationsService);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
@@ -145,16 +131,17 @@ export class MonitorDetailComponent
   alertCountLoading = this.service.alertCountLoading;
   alertsError = this.service.alertsError;
   associatedProjectSlug = this.service.associatedProjectSlug;
+  // Hide the count until the project's alerts load, so it never flashes 0.
+  alertCountKnown = computed(
+    () =>
+      !this.alertCountLoading() &&
+      (!this.monitor()?.projectName || !!this.associatedProjectSlug()),
+  );
   canWriteProject = this.organizationsService.canWriteProject;
   noProjectMessage = computed(() =>
     this.canWriteProject()
       ? $localize`Associate a project with this monitor to get alerts.`
       : $localize`This monitor has no associated project, so it sends no alerts.`,
-  );
-
-  isMobile = signal(false);
-  private smallBreakpointSignal = toSignal(
-    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]),
   );
 
   activeMonitorRecentChecksSeries =
@@ -187,34 +174,9 @@ export class MonitorDetailComponent
     const service = inject(MonitorService);
     super(service);
     this.service = service;
-
-    effect(() => {
-      const breakpointResult = this.smallBreakpointSignal();
-      if (breakpointResult?.matches) {
-        this.isMobile.set(true);
-      } else {
-        this.isMobile.set(false);
-      }
-    });
   }
 
   ngOnInit() {
     this.service.retrieveMonitorDetails(this.monitorID());
-  }
-
-  delete() {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: $localize`Delete ${this.monitor()?.name ?? ""}?`,
-        message: $localize`Its check history is deleted too. This cannot be undone.`,
-        confirmText: $localize`Delete`,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((confirmed) => {
-      if (confirmed) {
-        this.service.deleteMonitor();
-      }
-    });
   }
 }
