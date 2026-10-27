@@ -11,7 +11,6 @@ import { Clipboard } from "@angular/cdk/clipboard";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDialog } from "@angular/material/dialog";
-import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
@@ -28,7 +27,6 @@ import { scopesLabel } from "./token-scopes";
   imports: [
     MatButtonModule,
     MatIconModule,
-    RouterLink,
     LoadingButtonComponent,
     EmptyStateComponent,
     ListComponent,
@@ -77,7 +75,7 @@ export class AuthTokensComponent
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: $localize`Delete ${label}:label:?`,
-        message: $localize`Anything using this token loses access to the API.`,
+        message: $localize`Anything using this token loses access to the API. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });

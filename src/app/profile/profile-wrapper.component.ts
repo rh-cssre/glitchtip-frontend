@@ -9,22 +9,35 @@ import {
   ActivatedRoute,
   NavigationEnd,
   Router,
+  RouterLink,
   RouterOutlet,
 } from "@angular/router";
 import { filter, map, startWith } from "rxjs/operators";
+import { MatButtonModule } from "@angular/material/button";
 import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "../shared/detail/back-link/back-link.component";
+
+interface BarLink {
+  link: readonly unknown[];
+  text: string;
+}
 
 @Component({
   selector: "gt-profile",
   templateUrl: "./profile-wrapper.component.html",
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [RouterOutlet, TopAppBar, BackLinkComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    MatButtonModule,
+    TopAppBar,
+    BackLinkComponent,
+  ],
 })
 export class ProfilWrapperComponent {
   private route = inject(ActivatedRoute);
 
-  /** The open page's route data: its title, or a back link for sub-pages. */
+  /** The open page's route data: title or back link, and optional action. */
   private childData = toSignal(
     inject(Router).events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -34,9 +47,7 @@ export class ProfilWrapperComponent {
   );
   title = computed(() => this.childData()?.["title"] as string | undefined);
   backLink = computed(
-    () =>
-      this.childData()?.["backLink"] as
-        | { link: readonly unknown[]; text: string }
-        | undefined,
+    () => this.childData()?.["backLink"] as BarLink | undefined,
   );
+  action = computed(() => this.childData()?.["action"] as BarLink | undefined);
 }

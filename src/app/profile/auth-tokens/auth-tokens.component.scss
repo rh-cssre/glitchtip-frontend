@@ -1,15 +1,5 @@
 @use "variables" as vars;
 
-.create-token {
-  margin-bottom: var(--gt-space-4, 16px);
-}
-
-.token-scopes {
-  flex-basis: 100%;
-  font-weight: 400;
-  color: var(--mat-sys-on-surface-variant);
-}
-
 .token-value {
   display: inline-flex;
   align-items: center;

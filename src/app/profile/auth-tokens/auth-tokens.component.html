@@ -3,20 +3,12 @@
     >Tokens let scripts and tools use the GlitchTip API, with only the scopes
     you give them.</p
   >
-  <a
-    mat-stroked-button
-    class="create-token"
-    [routerLink]="['/profile', 'auth-tokens', 'new']"
-  >
-    <mat-icon>add</mat-icon>
-    <ng-container i18n>Create token</ng-container>
-  </a>
   @if (authTokens()?.length) {
     <gt-list>
       @for (authToken of authTokens(); track authToken.id) {
         <gt-list-row>
           <span>{{ authToken.label }}</span>
-          <span class="token-scopes">{{ scopesLabel(authToken.scopes) }}</span>
+          <span slot="description">{{ scopesLabel(authToken.scopes) }}</span>
           <!-- The value stays hidden; copy still gets the whole token. -->
           <span slot="meta" class="token-value">
             <code>…{{ authToken.token?.slice(-4) }}</code>

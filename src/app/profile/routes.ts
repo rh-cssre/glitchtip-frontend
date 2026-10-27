@@ -13,6 +13,7 @@ export default [
     path: "",
     component: ProfilWrapperComponent,
     // Each page's title shows in the top bar; same strings as the nav items.
+    // An optional action is the page's one filled button in the bar.
     children: [
       {
         path: "",
@@ -22,7 +23,13 @@ export default [
       {
         path: "auth-tokens",
         component: AuthTokensComponent,
-        data: { title: $localize`Auth Tokens` },
+        data: {
+          title: $localize`Auth Tokens`,
+          action: {
+            link: ["/profile", "auth-tokens", "new"],
+            text: $localize`New token`,
+          },
+        },
       },
       {
         path: "auth-tokens/new",
@@ -30,7 +37,7 @@ export default [
         data: {
           backLink: {
             link: ["/profile", "auth-tokens"],
-            text: $localize`All tokens`,
+            text: $localize`Auth Tokens`,
           },
         },
       },

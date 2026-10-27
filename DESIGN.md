@@ -90,7 +90,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - The bar is 48px tall. `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets it; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all".
-- List pages put one filled "New X" in the right slot.
+- List pages put one filled "New X" in the right slot. Profile pages set it as an `action` (link and text) in their route data; the profile wrapper renders it.
 - Record pages have no filled button in the bar: at most two outlined or neutral controls, the rest in a "More actions" menu. A record with an edit page links to it with an outlined "Edit X".
 - Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one puts Delete in the bar's "More actions" menu. Never a standalone delete icon button.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
