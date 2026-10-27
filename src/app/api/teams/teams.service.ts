@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from "@angular/core";
+import { Injectable, computed, inject, signal, untracked } from "@angular/core";
 import { TeamErrors, TeamLoading } from "./teams.interfaces";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
@@ -98,12 +98,15 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   setTeamKey(orgSlug: string, teamSlug: string) {
-    const current = this.teamKey();
-    if (current?.orgSlug !== orgSlug || current?.teamSlug !== teamSlug) {
-      // A failed delete belongs to the team it was tried on.
-      this.setDeleteTeamError("");
-    }
-    this.teamKey.set(orgSlug && teamSlug ? { orgSlug, teamSlug } : null);
+    // Callers run this from effects; untracked keeps them from depending on what it writes.
+    untracked(() => {
+      const current = this.teamKey();
+      if (current?.orgSlug !== orgSlug || current?.teamSlug !== teamSlug) {
+        // A failed delete belongs to the team it was tried on.
+        this.setDeleteTeamError("");
+      }
+      this.teamKey.set(orgSlug && teamSlug ? { orgSlug, teamSlug } : null);
+    });
   }
 
   setTeamMembersKey(orgSlug: string, teamSlug: string) {
