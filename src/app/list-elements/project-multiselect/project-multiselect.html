@@ -1,13 +1,18 @@
-<mat-form-field
-  appearance="outline"
-  subscriptSizing="dynamic"
-  class="project-multiselect-formfield gt-field-compact"
+<span
+  class="gt-select-ghost"
+  [class.gt-select-ghost--open]="isOpen()"
+  (click)="$event.target === $event.currentTarget && select.open()"
 >
   <mat-select
+    #select
     [formControl]="projectsForm"
     i18n-placeholder
     placeholder="All projects"
+    i18n-aria-label
+    aria-label="Projects"
+    panelWidth="280px"
     multiple
+    (openedChange)="isOpen.set($event)"
     (closed)="onSubmit()"
   >
     <mat-select-trigger>
@@ -40,4 +45,4 @@
     <mat-option [value]="project.id"> {{ project.name }} </mat-option>
     }
   </mat-select>
-</mat-form-field>
+</span>
