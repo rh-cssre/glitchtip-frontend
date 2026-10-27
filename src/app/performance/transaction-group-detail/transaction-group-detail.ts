@@ -15,6 +15,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatSortModule, Sort } from "@angular/material/sort";
 
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
 import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
 import { OrganizationsService } from "src/app/api/organizations.service";
@@ -39,6 +40,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
     BackLinkComponent,
     HumanizeDurationPipe,
     PageHeaderComponent,
+    PanelComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [TransactionGroupDetailService],
