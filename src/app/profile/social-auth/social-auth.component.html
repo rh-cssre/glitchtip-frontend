@@ -41,9 +41,6 @@
       i18n-title
       title="Connected accounts"
     >
-      <span slot="description" i18n
-        >Sign in with one of these accounts instead of your password.</span
-      >
       @if (user.identities.length) {
         <gt-list>
           @for (socialAccount of user.identities; track socialAccount.id) {
