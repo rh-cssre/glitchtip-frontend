@@ -6,10 +6,6 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
 import { MonitorService, MonitorState } from "../monitor.service";
@@ -19,6 +15,10 @@ import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.com
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-monitor-update",
@@ -26,14 +26,13 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatIconModule,
     MonitorFormComponent,
     PageHeaderComponent,
     BackLinkComponent,
     TopAppBar,
+    SettingsSectionComponent,
+    LoadingButtonComponent,
+    FormErrorComponent,
   ],
 })
 export class MonitorUpdateComponent
@@ -49,6 +48,8 @@ export class MonitorUpdateComponent
   loading = this.service.editLoading;
   error = this.service.error;
   deleteLoading = this.service.deleteLoading;
+  deleteError = this.service.deleteError;
+  canWriteProject = inject(OrganizationsService).canWriteProject;
 
   constructor() {
     const service = inject(MonitorService);
@@ -67,8 +68,8 @@ export class MonitorUpdateComponent
   delete() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete monitor?`,
-        message: $localize`Are you sure you want to delete this monitor? You will permanently lose all associated uptime data.`,
+        title: $localize`Delete ${this.monitor()?.name ?? ""}:name:?`,
+        message: $localize`Its check history is deleted too. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });

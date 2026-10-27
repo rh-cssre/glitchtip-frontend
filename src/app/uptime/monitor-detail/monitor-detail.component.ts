@@ -29,6 +29,7 @@ import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.com
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 
@@ -69,6 +70,7 @@ export class MonitorDetailComponent
   protected service: MonitorService;
   private breakpointObserver = inject(BreakpointObserver);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
   private organizationsService = inject(OrganizationsService);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
@@ -144,7 +146,9 @@ export class MonitorDetailComponent
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.service.deleteMonitor();
+        this.service.deleteMonitor().then((deleted) => {
+          if (!deleted) this.snackBar.open(this.service.deleteError());
+        });
       }
     });
   }

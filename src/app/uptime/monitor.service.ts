@@ -18,6 +18,7 @@ export interface MonitorState {
   editLoading: boolean;
   createLoading: boolean;
   deleteLoading: boolean;
+  deleteError: string;
   error: ServerError | null;
 }
 
@@ -25,6 +26,7 @@ const initialState: MonitorState = {
   editLoading: false,
   createLoading: false,
   deleteLoading: false,
+  deleteError: "",
   error: null,
 };
 
@@ -87,6 +89,7 @@ export class MonitorService extends StatefulService<MonitorState> {
   editLoading = computed(() => this.state().editLoading);
   createLoading = computed(() => this.state().createLoading);
   deleteLoading = computed(() => this.state().deleteLoading);
+  deleteError = computed(() => this.state().deleteError);
   error = computed(() => this.state().error);
   uptimeAlertCount = computed(
     () => this.monitorUptimeAlertsResource.value()?.length || 0,
@@ -195,37 +198,32 @@ export class MonitorService extends StatefulService<MonitorState> {
     this.monitorId.set(monitorId);
   }
 
-  deleteMonitor() {
+  async deleteMonitor(): Promise<boolean> {
     const monitorId = this.activeMonitor()?.id;
     const organizationSlug = this.activeOrganizationSlug();
     if (!monitorId) {
-      return;
+      return false;
     }
     this.setDeleteMonitorStart();
-    client
-      .DELETE(
-        "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/",
-        {
-          params: {
-            path: {
-              ...this.organizationsService.orgPath(organizationSlug),
-              monitor_id: monitorId,
-            },
+    const result = await client.DELETE(
+      "/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id}/",
+      {
+        params: {
+          path: {
+            ...this.organizationsService.orgPath(organizationSlug),
+            monitor_id: monitorId,
           },
         },
-      )
-      .then((result) => {
-        if (result.response.ok) {
-          this.setDeleteMonitorEnd();
-          this.snackBar.open($localize`Monitor has been deleted.`);
-          this.router.navigate([organizationSlug, "uptime-monitors"]);
-        } else {
-          this.setDeleteMonitorError();
-          this.snackBar.open(
-            `There was an error deleting this issue. Please try again.`,
-          );
-        }
-      });
+      },
+    );
+    if (!result.response.ok) {
+      this.setDeleteMonitorError();
+      return false;
+    }
+    this.setDeleteMonitorEnd();
+    this.snackBar.open($localize`Monitor has been deleted.`);
+    this.router.navigate([organizationSlug, "uptime-monitors"]);
+    return true;
   }
 
   private formatData(check: MonitorCheck) {
@@ -297,6 +295,7 @@ export class MonitorService extends StatefulService<MonitorState> {
   private setDeleteMonitorStart() {
     this.setState({
       deleteLoading: true,
+      deleteError: "",
     });
   }
 
@@ -307,6 +306,7 @@ export class MonitorService extends StatefulService<MonitorState> {
   private setDeleteMonitorError() {
     this.setState({
       deleteLoading: false,
+      deleteError: $localize`There was an error deleting this monitor. Please try again.`,
     });
   }
 
