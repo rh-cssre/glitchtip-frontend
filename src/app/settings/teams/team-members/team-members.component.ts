@@ -3,6 +3,7 @@ import {
   OnInit,
   computed,
   inject,
+  signal,
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
@@ -70,7 +71,8 @@ export class TeamMembersComponent implements OnInit {
   orgSlug = "";
   teamSlug = "";
   removeMemberError = "";
-  loading = false;
+  addMemberError = signal("");
+  loading = signal(false);
   selectedTeamMember: number | null = null;
 
   ngOnInit() {
@@ -99,13 +101,15 @@ export class TeamMembersComponent implements OnInit {
       this.member.markAsTouched();
       return;
     }
-    this.loading = true;
-    const team = await this.organizationsService.addTeamMember(
+    this.loading.set(true);
+    this.addMemberError.set("");
+    const { team, error } = await this.organizationsService.addTeamMember(
       member,
       this.orgSlug,
       this.teamSlug,
     );
-    this.loading = false;
+    this.loading.set(false);
+    this.addMemberError.set(error ?? "");
     if (team) {
       this.member.reset();
       this.snackBar.open(

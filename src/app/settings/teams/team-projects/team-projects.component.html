@@ -1,8 +1,5 @@
 @if (orgSlug(); as orgSlug) {
   @if (canEditProjects()) {
-    @if (errors().addProjectToTeam) {
-      <gt-form-error [errors]="errors().addProjectToTeam" />
-    }
     <gt-settings-section
       #addSection
       i18n-title
@@ -26,6 +23,9 @@
         </mat-select>
         <mat-error i18n>Choose a project to add.</mat-error>
       </mat-form-field>
+      @if (errors().addProjectToTeam) {
+        <gt-form-error slot="error" [errors]="errors().addProjectToTeam" />
+      }
       <gt-loading-button
         slot="actions"
         i18n-buttonText

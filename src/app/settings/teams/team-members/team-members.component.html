@@ -28,12 +28,15 @@
       </mat-select>
       <mat-error i18n>Choose a member to add.</mat-error>
     </mat-form-field>
+    @if (addMemberError()) {
+      <gt-form-error slot="error" [errors]="addMemberError()" />
+    }
     <gt-loading-button
       slot="actions"
       i18n-buttonText
       buttonText="Add member"
       buttonStyle="stroked"
-      [loading]="loading"
+      [loading]="loading()"
       (buttonClick)="addTeamMember()"
       data-cy="add-team-member"
     />
