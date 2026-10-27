@@ -48,6 +48,16 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
           text-decoration: underline;
         }
       }
+
+      // Fixed attribute such as Owner or Primary; states use gt-status-pill.
+      ::ng-deep .list-row__tag {
+        padding: 0 var(--gt-space-2, 8px);
+        border-radius: var(--mat-sys-corner-small);
+        font: var(--mat-sys-label-medium);
+        color: var(--mat-sys-on-surface-variant);
+        background-color: var(--mat-sys-surface-container-high);
+        white-space: nowrap;
+      }
     }
 
     .list-row__description {
