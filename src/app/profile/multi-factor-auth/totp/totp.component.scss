@@ -3,9 +3,13 @@
 }
 
 // Buttons inside the setup steps; the section's own action lines up by itself.
-.totp-stepper button {
+.totp-stepper :is(button, gt-loading-button) {
   margin-top: var(--gt-space-2, 8px);
   margin-right: var(--gt-space-2, 8px);
+}
+
+.totp-stepper gt-loading-button {
+  display: inline-block;
 }
 
 // The stepper sits on the page, not on a card.

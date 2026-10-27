@@ -12,14 +12,15 @@
         <button mat-stroked-button (click)="copyCodes()" i18n>Copy</button>
       </div>
     }
-    <button
+    <gt-loading-button
       slot="actions"
-      mat-stroked-button
-      (click)="startRegenCodes()"
-      [disabled]="regenCodes()"
-      i18n
-      >Generate new codes</button
-    >
+      i18n-buttonText
+      buttonText="Generate new codes"
+      buttonStyle="stroked"
+      [loading]="pendingAction() === 'regenCodes'"
+      [disabled]="loading() || regenCodes()"
+      (buttonClick)="startRegenCodes()"
+    />
   </gt-settings-section>
 } @else if (TOTPAuthenticator() === undefined) {
   <!-- The save-your-codes step of the authenticator setup. -->
@@ -58,13 +59,14 @@
               </mat-error>
             }
           </mat-form-field>
-          <button
-            mat-stroked-button
-            (click)="verifyBackupCode()"
-            [disabled]="!copiedCodes()"
-            i18n
-            >Next</button
-          >
+          <gt-loading-button
+            i18n-buttonText
+            buttonText="Next"
+            buttonStyle="stroked"
+            [loading]="pendingAction() === 'verifyCode'"
+            [disabled]="loading() || !copiedCodes()"
+            (buttonClick)="verifyBackupCode()"
+          />
         </form>
       </ng-container>
     }

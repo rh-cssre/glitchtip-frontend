@@ -17,6 +17,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 })
 export class LoadingButtonComponent {
   readonly buttonText = input<string>();
+  /** Accessible name when the text alone is ambiguous (row actions). */
+  readonly ariaLabel = input<string>();
   readonly loading = input<boolean>();
   readonly disabled = input<boolean>();
   /** For fullWidth to work, you may need to set width: 100% to app-loading-button */

@@ -1,5 +1,5 @@
-<!-- The add step sits above the list it adds to; the list joins it, so no
-     line between them. -->
+<!-- Naming a new key is an add field, so it sits above the list and the list
+     joins it with no line between them. -->
 @if (stage() === 2) {
   <form [formGroup]="form" (ngSubmit)="registerWebAuthn()">
     <gt-settings-section
@@ -22,43 +22,38 @@
           </mat-error>
         }
       </mat-form-field>
-      <button slot="actions" mat-stroked-button i18n>Register key</button>
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Register key"
+        buttonStyle="stroked"
+        [loading]="pendingAction() === 'registerKey'"
+        [disabled]="loading()"
+      />
     </gt-settings-section>
   </form>
-} @else {
-  <gt-settings-section i18n-title title="Add security key" [inline]="true">
-    <span
-      slot="actions"
-      i18n-matTooltip
-      matTooltip="Verify your email to continue"
-      [matTooltipDisabled]="emailsService.isVerified() !== false"
-    >
-      <gt-loading-button
-        i18n-buttonText
-        buttonText="Add security key"
-        buttonStyle="stroked"
-        [loading]="false"
-        (buttonClick)="activateWebAuthn()"
-        [disabled]="!hasTOTP() || emailsService.isVerified() === false"
-      />
-    </span>
-  </gt-settings-section>
 }
 
 <gt-settings-section
-  class="gt-settings-continued"
+  [class.gt-settings-continued]="stage() === 2"
   i18n-title
   title="Security keys"
 >
-  @if (hasTOTP()) {
-    <span slot="description" i18n
-      >Use a hardware key as your second step. Plug it in and follow your
-      browser's prompt.</span
-    >
-  } @else {
+  <!-- The description states what blocks adding a key. -->
+  @if (!hasTOTP()) {
     <span slot="description" i18n
       >Set up the authenticator app first. Not every browser supports security
       keys, so the app keeps you able to sign in.</span
+    >
+  } @else if (emailsService.isVerified() === false) {
+    <span slot="description" i18n
+      >Verify your email address before setting up two-factor
+      authentication.</span
+    >
+  } @else {
+    <span slot="description" i18n
+      >Use a hardware key as your second step. Plug it in and follow your
+      browser's prompt.</span
     >
   }
   @if (authenticators().length) {
@@ -67,18 +62,35 @@
         <gt-list-row>
           <span>{{ key.name }}</span>
           <span slot="meta">{{ lastUsedLabel(key.last_used_at) }}</span>
-          <button
+          <gt-loading-button
             slot="actions"
-            mat-stroked-button
-            [attr.aria-label]="deleteKeyLabel(key.name)"
-            (click)="deleteWebAuthn(key.id, key.name)"
-            i18n
-            >Remove</button
-          >
+            i18n-buttonText
+            buttonText="Remove"
+            buttonStyle="stroked"
+            [ariaLabel]="deleteKeyLabel(key.name)"
+            [loading]="
+              pendingAction() === 'removeKey' && removingId() === key.id
+            "
+            [disabled]="loading()"
+            (buttonClick)="deleteWebAuthn(key.id, key.name)"
+          />
         </gt-list-row>
       }
     </gt-list>
   } @else {
     <p class="gt-note" i18n>No security keys yet.</p>
+  }
+  @if (stage() !== 2) {
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Add security key"
+      buttonStyle="stroked"
+      [loading]="pendingAction() === 'addKey'"
+      [disabled]="
+        loading() || !hasTOTP() || emailsService.isVerified() === false
+      "
+      (buttonClick)="activateWebAuthn()"
+    />
   }
 </gt-settings-section>

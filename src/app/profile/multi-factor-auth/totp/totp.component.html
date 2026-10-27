@@ -93,21 +93,30 @@
               </mat-error>
             }
           </mat-form-field>
-          <button id="submit" mat-stroked-button i18n>Enable</button>
+          <gt-loading-button
+            id="submit"
+            i18n-buttonText
+            buttonText="Enable"
+            buttonStyle="stroked"
+            [loading]="pendingAction() === 'enableTOTP'"
+            [disabled]="loading()"
+          />
         </form>
       </mat-step>
     </mat-stepper>
   }
   <!-- One level of @if, so the slotted button projects. -->
   @if (TOTPAuthenticator()) {
-    <button
+    <gt-loading-button
       slot="actions"
-      mat-stroked-button
+      i18n-buttonText
+      buttonText="Turn off"
+      buttonStyle="stroked"
       color="warn"
-      (click)="deactivateTOTP()"
-      i18n
-      >Turn off</button
-    >
+      [loading]="pendingAction() === 'turnOffTOTP'"
+      [disabled]="loading()"
+      (buttonClick)="deactivateTOTP()"
+    />
   } @else if (emailsService.isVerified() !== false && step() === 1) {
     <button slot="actions" mat-stroked-button (click)="incrementStep()" i18n
       >Set up</button

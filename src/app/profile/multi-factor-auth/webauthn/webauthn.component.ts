@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   LOCALE_ID,
   inject,
+  signal,
 } from "@angular/core";
 import { formatDate } from "@angular/common";
 import {
@@ -11,8 +12,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialog } from "@angular/material/dialog";
@@ -35,8 +34,6 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatTooltipModule,
     ListComponent,
     ListRowComponent,
     SettingsSectionComponent,
@@ -53,6 +50,9 @@ export class WebAuthnComponent {
   stage = this.service.webAuthnState;
   hasTOTP = this.service.TOTPAuthenticator;
   authenticators = this.service.webAuthnAuthenticators;
+  loading = this.service.loading;
+  pendingAction = this.service.pendingAction;
+  removingId = signal<number | null>(null);
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
   });
@@ -80,7 +80,10 @@ export class WebAuthnComponent {
       })
       .afterClosed()
       .subscribe((confirmed) => {
-        if (confirmed) this.service.deleteWebAuthn(id);
+        if (confirmed) {
+          this.removingId.set(id);
+          this.service.deleteWebAuthn(id);
+        }
       });
   }
 

@@ -29,6 +29,7 @@ import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.
 import { BackupCodesComponent } from "./backup-codes/backup-codes.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 
 @Component({
   selector: "gt-totp",
@@ -45,6 +46,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
     FormErrorComponent,
     MatFormFieldModule,
     MatInputModule,
+    LoadingButtonComponent,
   ],
 })
 export class TOTPComponent implements OnDestroy {
@@ -63,6 +65,8 @@ export class TOTPComponent implements OnDestroy {
   // app is enabled, before the page switches to the enabled view.
   stepperIndex = computed(() => Math.min(2, Math.max(0, this.step() - 2)));
   formErrors = this.service.formErrors;
+  loading = this.service.loading;
+  pendingAction = this.service.pendingAction;
   codeForm = new FormGroup({
     code: new FormControl("", [
       Validators.required,
