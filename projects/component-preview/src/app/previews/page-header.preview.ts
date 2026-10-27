@@ -118,6 +118,7 @@ export class PageHeaderPreview {
     "Use subtitle for a second line that belongs to the title, such as an error's message",
     "Add class no-sep to a fact that continues the pill, such as for 2 hours",
     "Put tabs directly below when the record has facets, with counts in .tab-count",
+    "Show a tab count once it is known, including 0; leave ?tab= off the default tab",
     "Keep the back link and page actions in the top app bar",
   ];
   readonly donts = [
@@ -136,12 +137,6 @@ export class PageHeaderPreview {
       type: "string",
       default: "",
       description: "The record's name (required)",
-    },
-    {
-      name: "titleMono",
-      type: "boolean",
-      default: "false",
-      description: "Set when the title is an identifier, such as an email",
     },
     {
       name: "subtitle",

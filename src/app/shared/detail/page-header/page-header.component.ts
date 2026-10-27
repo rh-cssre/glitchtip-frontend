@@ -12,7 +12,6 @@ import { StatusPillComponent } from "../../status-pill/status-pill.component";
 })
 export class PageHeaderComponent {
   readonly title = input.required<string>();
-  readonly titleMono = input(false);
   readonly subtitle = input<string | null>(null);
   readonly icon = input<string | null>(null);
   readonly status = input<string | null>(null);

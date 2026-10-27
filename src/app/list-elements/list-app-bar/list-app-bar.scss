@@ -80,12 +80,6 @@
 }
 
 @media screen and (max-width: vars.$small - 1) {
-  // Slightly inconsistent with top-app-bar because
-  // vertical space is at a premium
-  .list-app-bar-primary-content {
-    height: 60px;
-  }
-
   .project-multiselect-container {
     padding: 0 15px;
     margin: 10px 0;
