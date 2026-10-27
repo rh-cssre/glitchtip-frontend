@@ -1,11 +1,11 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="Back to members" />
+    <gt-back-link i18n-backLinkText backLinkText="Members" />
   </ng-container>
 </gt-top-app-bar>
 @if (member(); as member) {
   <section class="l-body">
-    <gt-page-header icon="people" [title]="member.email" [titleMono]="true">
+    <gt-page-header icon="people" [title]="member.email">
       <span slot="meta">
         <b>{{ member.roleName }}</b>
         <span i18n>Joined {{ member.dateCreated | date: "mediumDate" }}</span>
