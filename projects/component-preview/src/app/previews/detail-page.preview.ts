@@ -110,6 +110,7 @@ export class DetailPagePreview {
   ];
   readonly donts = [
     "Hand-roll a back arrow instead of gt-back-link",
+    "Add a margin to gt-back-link to line up its chevron; it already sits on the container edge",
     "Put a filled button or a standalone delete icon in the bar",
   ];
   readonly composition = {
