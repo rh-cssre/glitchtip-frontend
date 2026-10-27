@@ -95,6 +95,9 @@
           <ng-container i18n>Dark</ng-container>
         </mat-button-toggle>
       </mat-button-toggle-group>
+      @if (themeError(); as error) {
+        <gt-form-error [errors]="error" />
+      }
     </gt-settings-section>
   </div>
 }

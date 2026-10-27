@@ -6,13 +6,6 @@
       <h1 class="section-header-text">{{ title() }}</h1>
     }
   </ng-container>
-  @if (user(); as user) {
-    <ng-container slot="right">
-      <p class="body-text">
-        {{ user.email }}
-      </p>
-    </ng-container>
-  }
 </gt-top-app-bar>
 <section class="l-body">
   <router-outlet></router-outlet>

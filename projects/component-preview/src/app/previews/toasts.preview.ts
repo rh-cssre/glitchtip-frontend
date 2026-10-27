@@ -116,6 +116,7 @@ export class ToastsPreview {
   ];
   readonly donts = [
     "Use a toast for an error the user must fix; use inline or a banner",
+    "Report a failed delete in a toast; show gt-form-error in its delete section",
     "Put standing account state in a toast; that is a banner",
     "Stack several toasts at once",
   ];

@@ -12,7 +12,6 @@ import {
   RouterOutlet,
 } from "@angular/router";
 import { filter, map, startWith } from "rxjs/operators";
-import { UserService } from "../api/user/user.service";
 import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "../shared/detail/back-link/back-link.component";
 
@@ -23,10 +22,8 @@ import { BackLinkComponent } from "../shared/detail/back-link/back-link.componen
   imports: [RouterOutlet, TopAppBar, BackLinkComponent],
 })
 export class ProfilWrapperComponent {
-  private userService = inject(UserService);
   private route = inject(ActivatedRoute);
 
-  user = this.userService.user;
   /** The open page's route data: its title, or a back link for sub-pages. */
   private childData = toSignal(
     inject(Router).events.pipe(

@@ -30,22 +30,17 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         height: var(--gt-space-6);
         background-color: var(--mat-sys-surface-container-low);
       }
-      .top-bar-actions {
-        display: flex;
-        align-items: center;
-        gap: var(--gt-space-2);
-      }
     `,
   ],
   template: `
     <preview-doc
       title="Top app bar"
       status="stable"
-      description="The page-level header bar used by every list and detail view (34 uses, the second most used component in the app). The left slot holds the page title or the back link. The right slot holds the page actions: one primary, plus at most one secondary or destructive action, with any extras in an overflow menu."
+      description="The page-level header bar used by every list and detail view. It is 48px tall, set once by $top-app-bar-height. The left slot holds the page title or the back link; the right slot holds the page actions and nothing else."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
-      a11y="The bar is layout only; keep a real heading in the left slot on list pages so the page has an h1, and keep right-slot actions in DOM order so tab order reads left to right."
+      a11y="The bar is layout only; keep a real heading in the left slot on list pages so the page has an h1, give icon-only buttons and the More actions trigger an aria-label, and keep right-slot actions in DOM order so tab order reads left to right."
       [anatomy]="anatomy"
       [composition]="composition"
       [api]="api"
@@ -54,58 +49,63 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       [flushExample]="true"
       [widthToggle]="true"
     >
-      <!-- List page variant: title left, action right. On mobile the action
-           becomes an icon so the title keeps its room. -->
+      <!-- List page: title left, one filled New action right. On mobile the
+           action becomes an icon so the title keeps its room. -->
       <gt-top-app-bar>
         <ng-container slot="left">
           <h1 class="tab-demo-heading">Uptime Monitors</h1>
         </ng-container>
         <ng-container slot="right">
           @if (isMobile()) {
-            <button mat-icon-button aria-label="New Monitor">
+            <button mat-icon-button aria-label="New monitor">
               <mat-icon>add</mat-icon>
             </button>
           } @else {
-            <button mat-flat-button color="primary">New Monitor</button>
+            <button mat-flat-button>New monitor</button>
           }
         </ng-container>
       </gt-top-app-bar>
 
       <div class="tab-demo-gap"></div>
 
-      <!-- Detail page variant: back link left, actions right. When actions
-           do not fit, they collapse to icons plus an overflow menu (the
-           gt-list-app-bar pattern). -->
+      <!-- Record with an edit page: back link names the parent list, one
+           outlined neutral Edit action. Delete lives on the edit page. -->
       <gt-top-app-bar>
         <ng-container slot="left">
-          <gt-back-link
-            [backLinkText]="
-              isMobile() ? 'Uptime Monitors' : 'View all uptime monitors'
-            "
-          />
+          <gt-back-link backLinkText="Uptime Monitors" />
         </ng-container>
         <ng-container slot="right">
-          <div class="top-bar-actions">
-            @if (isMobile()) {
-              <button mat-icon-button aria-label="Settings">
-                <mat-icon>settings</mat-icon>
-              </button>
-              <button mat-icon-button [matMenuTriggerFor]="more" aria-label="More">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #more="matMenu">
-                <button mat-menu-item>
-                  <mat-icon>delete</mat-icon>
-                  <span>Delete</span>
-                </button>
-              </mat-menu>
-            } @else {
-              <button mat-flat-button color="primary">Settings</button>
-              <button mat-icon-button class="medium-icon-button" aria-label="Delete">
-                <mat-icon>delete</mat-icon>
-              </button>
-            }
-          </div>
+          @if (isMobile()) {
+            <button mat-icon-button aria-label="Edit monitor">
+              <mat-icon>edit</mat-icon>
+            </button>
+          } @else {
+            <button mat-stroked-button>Edit monitor</button>
+          }
+        </ng-container>
+      </gt-top-app-bar>
+
+      <div class="tab-demo-gap"></div>
+
+      <!-- Record without an edit page: Delete goes in the More actions menu. -->
+      <gt-top-app-bar>
+        <ng-container slot="left">
+          <gt-back-link backLinkText="Issues" />
+        </ng-container>
+        <ng-container slot="right">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="more"
+            aria-label="More actions"
+          >
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+          <mat-menu #more="matMenu">
+            <button mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Delete issue</span>
+            </button>
+          </mat-menu>
         </ng-container>
       </gt-top-app-bar>
     </preview-doc>
@@ -128,17 +128,19 @@ export class TopAppBarPreview {
     "Anywhere a page title or back link needs actions aligned right",
   ];
   readonly dos = [
-    "List pages: page heading in the left slot",
-    "Detail pages: gt-back-link in the left slot",
-    "One primary action in the right slot, plus at most one secondary or destructive action",
-    "Style a destructive action per Buttons & actions: outlined warn plus a confirm dialog, not a plain red icon",
-    "More than two actions: keep the primary and move the rest into a more_vert menu",
-    "On mobile, collapse text actions to icon buttons and overflow the rest into a more_vert menu (toggle the example to Mobile)",
-    "Shorten the back-link text on mobile via isMobile()",
+    "List pages: page heading in the left slot and one filled New X in the right slot",
+    "Record pages: gt-back-link in the left slot, named with the parent page's nav label",
+    "Record pages: at most two outlined or neutral controls, the rest in a More actions menu",
+    "Link a record to its edit page with an outlined Edit X",
+    "Put Delete on the record's settings or edit page; without one, put it in the More actions menu",
+    "On mobile, collapse text actions to icon buttons (toggle the example to Mobile)",
   ];
   readonly donts = [
+    "Put a filled button in a record page's bar",
+    "Add a standalone delete icon button",
+    "Write Back to or View all in the back link, or swap its label on mobile",
+    "Override the bar height per page; change $top-app-bar-height or use a density mixin",
     "Nest a second bar inside a page section",
-    "Use it as a heading inside the page body",
     "Put non-actions, like a user's email, in the action slot",
     "Let text buttons overflow or wrap the title on narrow screens",
   ];
@@ -159,12 +161,10 @@ export class TopAppBarPreview {
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";`;
   readonly code = `<gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link backLinkText="View all uptime monitors" />
+    <gt-back-link i18n-backLinkText backLinkText="Uptime Monitors" />
   </ng-container>
   <ng-container slot="right">
-    <button mat-flat-button color="primary" [routerLink]="['./update']">
-      Settings
-    </button>
+    <a mat-stroked-button [routerLink]="['./update']" i18n>Edit monitor</a>
   </ng-container>
 </gt-top-app-bar>`;
 }
