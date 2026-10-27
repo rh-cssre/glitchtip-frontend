@@ -88,8 +88,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
           </gt-settings-section>
           <gt-settings-section title="Delete project">
             <span slot="description"
-              >Deletes storefront-web and all of its issues, events and
-              settings. This cannot be undone.</span
+              >Deletes <strong>storefront-web</strong> and all of its issues,
+              events and settings. This cannot be undone.</span
             >
             <button slot="actions" mat-stroked-button color="warn">
               Delete project
@@ -113,6 +113,7 @@ export class SettingsSectionPreview {
     "Give each section its own outlined Save that names what it saves: Save name",
     "Put a destructive action in the last section, as an outlined warn button that opens a confirm dialog",
     "Show a failed delete with gt-form-error inside its delete section, not a toast",
+    "Name the object in bold in a delete section's description",
     "Show the value as plain text when the person cannot edit it",
   ];
   readonly donts = [
