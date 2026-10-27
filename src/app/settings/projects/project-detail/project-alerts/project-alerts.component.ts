@@ -9,19 +9,19 @@ import {
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { ProjectEnvironmentsService } from "../project-environments/project-environments.service";
 import { AlertEditComponent } from "./alert-edit/alert-edit.component";
+import { AlertSummaryComponent } from "./alert-summary/alert-summary.component";
 import {
   alertName,
-  alertSummary,
   recipientLabel,
   resolveRecipientIcon,
 } from "./alert-labels";
@@ -35,14 +35,15 @@ import { ProjectAlertsService } from "./project-alerts.service";
   imports: [
     RouterLink,
     MatButtonModule,
-    MatFormFieldModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
     EmptyStateComponent,
+    FormErrorComponent,
     ListComponent,
     ListRowComponent,
     AlertEditComponent,
+    AlertSummaryComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ProjectAlertsService, ProjectEnvironmentsService],
@@ -63,7 +64,6 @@ export class ProjectAlertsComponent implements OnInit {
   canAdminProject = this.#orgs.canAdminProject;
   availableEnvironments = this.#environmentsService.visibleEnvironments;
   alertName = alertName;
-  alertSummary = alertSummary;
   projectTeams = this.#service.projectTeams;
   recipientLabel = recipientLabel;
   resolveRecipientIcon = resolveRecipientIcon;

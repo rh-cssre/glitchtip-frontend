@@ -1,9 +1,10 @@
 @if (
   projectAlertForm.touched && projectFormOptionsGroup.errors?.selectionRequired
 ) {
-  <p class="error alert-form-error" i18n>
-    Select at least one condition: event frequency or uptime.
-  </p>
+  <gt-form-error
+    i18n-errors
+    errors="Select at least one condition: event frequency or uptime."
+  />
 }
 
 <form (ngSubmit)="onSubmit()" [formGroup]="projectAlertForm">
@@ -69,7 +70,11 @@
     (projectFormQuantity.invalid || projectFormTimespan.invalid)
   ) {
     <!-- One message for the sentence; the fields only turn red. -->
-    <p class="error" i18n>Enter whole numbers above 0.</p>
+    <gt-form-error
+      class="trigger__error"
+      i18n-errors
+      errors="Enter whole numbers above 0."
+    />
   }
 
   <div class="trigger uptime-option" formGroupName="optionsGroup">
@@ -91,10 +96,8 @@
     <!-- A subheading of When: the filter narrows both conditions, so it must
          not read as a third one. -->
     <div class="environment-scope">
-      <h3 class="environment-scope__title" id="alert-environments" i18n
-        >Environments</h3
-      >
-      <p class="environment-scope__description" i18n
+      <h3 class="gt-subheading" id="alert-environments" i18n>Environments</h3>
+      <p class="gt-subheading__description" i18n
         >Only events and uptime monitors in these environments trigger this
         alert. Monitors with no environment only trigger alerts set to all
         environments.</p

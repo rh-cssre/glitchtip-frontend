@@ -10,7 +10,6 @@ import {
   viewChild,
 } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -19,6 +18,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { components } from "src/app/api/api-schema";
+import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { ListComponent } from "src/app/shared/list/list.component";
@@ -29,10 +29,10 @@ import { AlertFormComponent } from "../alert-form/alert-form.component";
 import {
   AlertConditions,
   alertName,
-  draftSummary,
   recipientLabel,
   resolveRecipientIcon,
 } from "../alert-labels";
+import { AlertSummaryComponent } from "../alert-summary/alert-summary.component";
 import { NewRecipientComponent } from "../new-recipient/new-recipient.component";
 import {
   NewAlertRecipient,
@@ -54,7 +54,6 @@ type Recipient = AlertRecipient | NewAlertRecipient;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
-    RouterLink,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
@@ -62,6 +61,8 @@ type Recipient = AlertRecipient | NewAlertRecipient;
     MatMenuModule,
     MatTooltipModule,
     AlertFormComponent,
+    AlertSummaryComponent,
+    BackLinkComponent,
     FormErrorComponent,
     ListComponent,
     ListRowComponent,
@@ -88,6 +89,7 @@ export class AlertEditComponent implements OnInit {
   readonly saving = signal(false);
   readonly deleting = signal(false);
   readonly error = signal<string | null>(null);
+  readonly deleteError = signal<string | null>(null);
   /** Seeded from the alert on init, then kept in step by the form. */
   readonly draftConditions = signal<AlertConditions>({});
   readonly teams = this.#service.projectTeams;
@@ -98,9 +100,6 @@ export class AlertEditComponent implements OnInit {
   });
   readonly hasEmail = computed(() =>
     this.recipients().some((r) => r.recipientType === "email"),
-  );
-  readonly summary = computed(() =>
-    draftSummary(this.draftConditions(), this.recipients().length),
   );
   readonly icon = resolveRecipientIcon;
 
@@ -206,8 +205,8 @@ export class AlertEditComponent implements OnInit {
     this.#dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: $localize`Delete ${this.title()}?`,
-          message: $localize`Its recipients will stop getting these notifications.`,
+          title: $localize`Delete ${this.title()}:name:?`,
+          message: $localize`Its recipients will stop getting these notifications. This cannot be undone.`,
           confirmText: $localize`Delete`,
         },
       })
@@ -215,9 +214,14 @@ export class AlertEditComponent implements OnInit {
       .subscribe(async (confirmed) => {
         if (!confirmed) return;
         this.deleting.set(true);
-        const deleted = await this.#service.deleteProjectAlert(alert.id!);
+        this.deleteError.set(null);
+        const error = await this.#service.deleteProjectAlert(alert.id!);
         this.deleting.set(false);
-        if (deleted) this.done.emit();
+        if (error) {
+          this.deleteError.set(error);
+        } else {
+          this.done.emit();
+        }
       });
   }
 }

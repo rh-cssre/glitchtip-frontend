@@ -130,7 +130,7 @@ describe("Add and edit alerts", () => {
     );
     cy.get("[data-cy=save-alert]").click();
     cy.contains("Alert created");
-    cy.contains("gt-list-row", "Checkout errors").contains("Edit").click();
+    cy.contains("gt-list-row a", "Checkout errors").click();
     cy.get("[data-cy=quantity]").should("have.value", "2");
 
     cy.get("#delete-recipient").click();
@@ -159,7 +159,7 @@ describe("Add and edit alerts", () => {
     cy.get("[data-cy=save-alert]").click();
     cy.contains("Alert created");
 
-    cy.contains("gt-list-row", "Uptime alert").contains("Edit").click();
+    cy.contains("gt-list-row a", "Uptime alert").click();
     cy.get("[data-cy=error-check]").find("input").should("not.be.checked");
     cy.get("[data-cy=uptime-check]").find("input").should("be.checked");
 
@@ -167,9 +167,7 @@ describe("Add and edit alerts", () => {
     cy.get("[data-cy=save-alert]").click();
     cy.contains("Alert saved");
 
-    cy.contains("gt-list-row", "Event and uptime alert")
-      .contains("Edit")
-      .click();
+    cy.contains("gt-list-row a", "Event and uptime alert").click();
     cy.get("[data-cy=error-check]").find("input").should("be.checked");
     cy.get("[data-cy=uptime-check]").find("input").should("be.checked");
   });

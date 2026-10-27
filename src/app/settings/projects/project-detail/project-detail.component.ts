@@ -74,7 +74,6 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   selector: "gt-project-detail",
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./project-detail.component.html",
-  styleUrls: ["./project-detail.component.scss"],
   imports: [
     DatePipe,
     MatInputModule,

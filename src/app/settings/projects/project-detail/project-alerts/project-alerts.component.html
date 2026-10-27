@@ -10,19 +10,18 @@
     <mat-progress-spinner [diameter]="40" mode="indeterminate" />
   </div>
 } @else {
-  @if (initialLoadError(); as error) {
-    <mat-error class="load-error">{{ error }}</mat-error>
-  }
+  <gt-form-error [errors]="initialLoadError()?.message" />
   @if (canWriteProject()) {
-    <button
-      mat-stroked-button
-      class="create-alert"
-      id="create-new-alert"
-      (click)="openEdit('new')"
-    >
-      <mat-icon>add</mat-icon>
-      <ng-container i18n>Create alert</ng-container>
-    </button>
+    <div class="gt-list-actions">
+      <button
+        mat-stroked-button
+        id="create-new-alert"
+        (click)="openEdit('new')"
+      >
+        <mat-icon>add</mat-icon>
+        <ng-container i18n>New alert</ng-container>
+      </button>
+    </div>
   }
   @if (projectAlerts()?.length) {
     <gt-list>
@@ -38,7 +37,7 @@
           } @else {
             <span>{{ alertName(alert) }}</span>
           }
-          <span slot="description">{{ alertSummary(alert) }}</span>
+          <gt-alert-summary slot="description" [alert]="alert" />
           <span slot="meta" class="recipient-icons">
             @for (recipient of alert.alertRecipients; track recipient.id) {
               @if (recipient.recipientType === "email") {
@@ -63,17 +62,6 @@
               <span i18n>No recipients</span>
             }
           </span>
-          @if (canWriteProject()) {
-            <a
-              slot="actions"
-              mat-stroked-button
-              [routerLink]="[]"
-              [queryParams]="{ alert: alert.id }"
-              queryParamsHandling="merge"
-              i18n
-              >Edit</a
-            >
-          }
         </gt-list-row>
       }
     </gt-list>

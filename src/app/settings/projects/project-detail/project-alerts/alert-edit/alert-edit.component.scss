@@ -4,6 +4,7 @@
 }
 
 .back {
+  display: block;
   margin: 0 0 var(--gt-space-2, 8px) calc(-1 * var(--gt-space-3, 12px));
 }
 
@@ -46,11 +47,6 @@
   padding-top: var(--gt-space-5, 24px);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface);
-}
-
-gt-form-error:not(:empty) {
-  display: block;
-  margin-bottom: var(--gt-space-3, 12px);
 }
 
 // Matches a section's bottom padding, so the line above Delete is centered.

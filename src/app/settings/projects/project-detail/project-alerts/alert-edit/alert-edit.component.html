@@ -1,13 +1,11 @@
-<a
-  mat-button
+<gt-back-link
   class="back"
-  [routerLink]="[]"
-  [queryParams]="{ alert: null }"
-  queryParamsHandling="merge"
->
-  <mat-icon>keyboard_arrow_left</mat-icon>
-  <ng-container i18n>All alerts</ng-container>
-</a>
+  i18n-backLinkText
+  backLinkText="Alerts"
+  [link]="[]"
+  [backLinkParams]="{ alert: null }"
+  paramsHandling="merge"
+/>
 <h2 class="title">{{ title() }}</h2>
 
 <gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
@@ -114,18 +112,32 @@
   </button>
 </gt-settings-section>
 
-<p class="summary" data-cy="alert-summary">{{ summary() }}</p>
-<!-- Next to Save, not at the top: the top is out of view on a long form. -->
+<p class="summary" data-cy="alert-summary">
+  <gt-alert-summary
+    [alert]="draftConditions()"
+    [recipients]="recipients().length"
+  />
+</p>
 <gt-form-error [errors]="error()" />
 <div class="gt-form-actions">
-  <gt-loading-button
-    i18n-buttonText
-    buttonText="Save alert"
-    buttonStyle="stroked"
-    [loading]="saving()"
-    (buttonClick)="save()"
-    data-cy="save-alert"
-  />
+  @if (alert()?.id) {
+    <gt-loading-button
+      i18n-buttonText
+      buttonText="Save alert"
+      buttonStyle="stroked"
+      [loading]="saving()"
+      (buttonClick)="save()"
+      data-cy="save-alert"
+    />
+  } @else {
+    <gt-loading-button
+      i18n-buttonText
+      buttonText="Create alert"
+      [loading]="saving()"
+      (buttonClick)="save()"
+      data-cy="save-alert"
+    />
+  }
   <button mat-button (click)="done.emit()" i18n>Cancel</button>
 </div>
 
@@ -135,6 +147,9 @@
       >Deletes {{ title() }} and stops its notifications. This cannot be
       undone.</span
     >
+    @if (deleteError()) {
+      <gt-form-error [errors]="deleteError()" />
+    }
     <gt-loading-button
       slot="actions"
       i18n-buttonText

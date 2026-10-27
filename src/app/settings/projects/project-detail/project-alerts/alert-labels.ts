@@ -35,51 +35,6 @@ export interface AlertConditions {
   environments?: string[] | null;
 }
 
-/** One sentence saying when an alert fires, or null when nothing is picked. */
-function triggerSentence(alert: AlertConditions) {
-  const quantity = alert.quantity;
-  const timespan = alert.timespanMinutes;
-  const uptime = !!alert.uptime;
-  if (!(quantity && timespan)) {
-    return uptime ? $localize`Alerts when an uptime monitor goes down.` : null;
-  }
-  const events =
-    quantity === 1 ? $localize`1 event` : $localize`${quantity} events`;
-  const minutes =
-    timespan === 1 ? $localize`1 minute` : $localize`${timespan} minutes`;
-  return uptime
-    ? $localize`Alerts when an issue gets ${events}:events: in ${minutes}:minutes: or an uptime monitor goes down.`
-    : $localize`Alerts when an issue gets ${events}:events: in ${minutes}:minutes:.`;
-}
-
-function environmentSentence(alert: AlertConditions) {
-  if (!alert.environments?.length) return "";
-  const envs = new Intl.ListFormat(document.documentElement.lang || undefined, {
-    type: "disjunction",
-  }).format(alert.environments);
-  return " " + $localize`Only in ${envs}:environments:.`;
-}
-
-/** One sentence saying when an alert fires, for lists and read-only views. */
-export function alertSummary(alert: AlertConditions) {
-  return (
-    (triggerSentence(alert) ?? $localize`Never alerts: no trigger is set.`) +
-    environmentSentence(alert)
-  );
-}
-
-/** What a draft alert will do, shown above Save so mistakes show up early. */
-export function draftSummary(alert: AlertConditions, recipients: number) {
-  const when = triggerSentence(alert);
-  if (!when) return $localize`Pick at least one trigger above.`;
-  const to = !recipients
-    ? $localize`Nobody is notified until you add a recipient.`
-    : recipients === 1
-      ? $localize`Notifies 1 recipient.`
-      : $localize`Notifies ${recipients} recipients.`;
-  return when + environmentSentence(alert) + " " + to;
-}
-
 /**
  * Teams decide who gets email alerts. Pass the project's team slugs when they
  * are known; undefined falls back to a generic label.

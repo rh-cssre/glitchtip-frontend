@@ -1,7 +1,8 @@
 <a
   mat-button
-  [routerLink]="['..']"
+  [routerLink]="link()"
   [queryParams]="backLinkParams()"
+  [queryParamsHandling]="paramsHandling()"
 >
   <mat-icon>keyboard_arrow_left</mat-icon>
   <span class="back-link-text">{{ backLinkText() }}</span>

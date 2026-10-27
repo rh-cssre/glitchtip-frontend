@@ -21,6 +21,7 @@ import {
 } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ErrorStateMatcher } from "@angular/material/core";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { intRegex } from "src/app/shared/validators";
 import { MatInputModule } from "@angular/material/input";
@@ -61,6 +62,7 @@ export const selectionRequiredValidator: ValidatorFn = (
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    FormErrorComponent,
   ],
 })
 export class AlertFormComponent implements OnInit {
