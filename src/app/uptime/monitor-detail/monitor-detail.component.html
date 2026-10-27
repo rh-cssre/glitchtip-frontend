@@ -197,11 +197,8 @@
                     } @else {
                       <span>{{ alertName(alert) }}</span>
                     }
+                    <gt-alert-recipients [recipients]="alert.alertRecipients" />
                     <gt-alert-summary slot="description" [alert]="alert" />
-                    <gt-alert-recipients
-                      slot="meta"
-                      [recipients]="alert.alertRecipients"
-                    />
                   </gt-list-row>
                 }
               </gt-list>

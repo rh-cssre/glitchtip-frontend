@@ -2,4 +2,8 @@
   display: flex;
   align-items: center;
   gap: var(--gt-space-2, 8px);
+  // Sits on the row's name line, pushed to the right edge.
+  margin-left: auto;
+  font-weight: 400;
+  color: var(--mat-sys-on-surface-variant);
 }
