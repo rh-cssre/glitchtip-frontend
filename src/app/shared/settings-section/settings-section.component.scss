@@ -61,8 +61,9 @@
   }
 }
 
+// Baseline, so a hint or error under the field does not push the action down
 :host(.inline) .settings-section__content {
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
 }
