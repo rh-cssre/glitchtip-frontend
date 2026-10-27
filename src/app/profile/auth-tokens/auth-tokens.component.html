@@ -9,17 +9,20 @@
         <gt-list-row>
           <span>{{ authToken.label }}</span>
           <span slot="description">{{ scopesLabel(authToken.scopes) }}</span>
-          <!-- The value stays hidden; copy still gets the whole token. -->
-          <span slot="meta" class="token-value">
-            <code>…{{ authToken.token?.slice(-4) }}</code>
-            <button
-              mat-icon-button
-              class="medium-icon-button"
-              [attr.aria-label]="copyLabel(authToken.label)"
-              (click)="copyToken(authToken.token!)"
-            >
-              <mat-icon>content_copy</mat-icon>
-            </button>
+          <!-- The value stays hidden; copy still gets the whole token.
+               Suffix and copy button are one fact, so they share one span. -->
+          <span slot="meta">
+            <span class="token-value">
+              <code>…{{ authToken.token?.slice(-4) }}</code>
+              <button
+                mat-icon-button
+                class="medium-icon-button"
+                [attr.aria-label]="copyLabel(authToken.label)"
+                (click)="copyToken(authToken.token!)"
+              >
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </span>
           </span>
           <gt-loading-button
             slot="actions"
