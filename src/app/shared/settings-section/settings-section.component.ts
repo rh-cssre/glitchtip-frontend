@@ -17,6 +17,9 @@ let nextId = 0;
       <div class="settings-section__body">
         <ng-content />
       </div>
+      <div class="settings-section__error">
+        <ng-content select="[slot=error]" />
+      </div>
       <div class="settings-section__actions">
         <ng-content select="[slot=actions]" />
       </div>

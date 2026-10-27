@@ -50,6 +50,14 @@
   }
 }
 
+.settings-section__error {
+  width: 100%;
+
+  &:empty {
+    display: none;
+  }
+}
+
 .settings-section__actions {
   display: flex;
   flex-wrap: wrap;
@@ -65,4 +73,9 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+}
+
+// The error takes its own line above the field and its action.
+:host(.inline) .settings-section__error {
+  order: -1;
 }

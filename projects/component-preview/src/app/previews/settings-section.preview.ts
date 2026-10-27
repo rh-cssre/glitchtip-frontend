@@ -113,6 +113,7 @@ export class SettingsSectionPreview {
     "Give each section its own outlined Save that names what it saves: Save name",
     "Put a destructive action in the last section, as an outlined warn button that opens a confirm dialog",
     "Show a failed delete with gt-form-error inside its delete section, not a toast",
+    "Put a section's server error in its error slot, just above the action",
     "Name the object in bold in a delete section's description",
     "Show the value as plain text when the person cannot edit it",
   ];
@@ -151,6 +152,13 @@ export class SettingsSectionPreview {
       type: "projected",
       default: "",
       description: "One line of help; may contain a link",
+    },
+    {
+      name: '[slot="error"]',
+      type: "projected",
+      default: "",
+      description:
+        "A gt-form-error just above the actions; inline, a line above the field",
     },
     {
       name: '[slot="actions"]',
