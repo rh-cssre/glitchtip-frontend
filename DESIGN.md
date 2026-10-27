@@ -88,13 +88,19 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 ### Top app bar
 
-- The bar is 48px tall. `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets it; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
+- The top app bar is 48px. Every control in it is 32px: compact buttons and compact filter fields (`.gt-field-compact`). Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
+- The bar draws only its bottom border. Groups of controls are separated by gap spacing, not vertical dividers.
+- `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all". The component pulls itself left by the button's leading inset (12px), so its chevron sits on the container edge wherever it is placed; don't add a local margin to compensate.
 - List pages put one filled "New X" in the right slot. Profile pages set it as an `action` (link and text) in their route data; the profile wrapper renders it.
 - Record pages have no filled button in the bar: at most two outlined or neutral controls, the rest in a "More actions" menu. A record with an edit page links to it with an outlined "Edit X".
 - Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one puts Delete in the bar's "More actions" menu. Never a standalone delete icon button.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
+
+### Forms
+
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
 
 ### Settings sections
 

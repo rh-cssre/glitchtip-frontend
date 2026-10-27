@@ -1,7 +1,8 @@
 <mat-form-field
   appearance="outline"
   subscriptSizing="dynamic"
-  [class]="{'time-range-select-formfield': true, 'wide': extendSelectSize()}"
+  class="time-range-select-formfield gt-field-compact"
+  [class.wide]="extendSelectSize()"
 >
   <mat-select
     [formControl]="presetRangeForm"
