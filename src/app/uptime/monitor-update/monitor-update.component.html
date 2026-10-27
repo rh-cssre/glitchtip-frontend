@@ -7,7 +7,7 @@
 </gt-top-app-bar>
 <section class="l-body">
   @if (monitor(); as monitor) {
-    <gt-page-header [title]="monitor.name" />
+    <gt-page-header i18n-title title="Edit monitor" />
     <gt-monitor-form
       [monitorSettings]="monitor"
       [loading]="loading() === true"
