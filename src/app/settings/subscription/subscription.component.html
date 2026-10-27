@@ -1,7 +1,7 @@
 @if (isHosted() === true) {
   <gt-top-app-bar>
     <ng-container slot="left">
-      <h1 class="section-header-text" i18n>Subscription</h1>
+      <h1 class="gt-bar-title" i18n>Subscription</h1>
     </ng-container>
     <ng-container slot="right">
       @if (subscription() && subscription()!.status !== "canceled") {

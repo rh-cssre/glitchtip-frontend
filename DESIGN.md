@@ -29,7 +29,7 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 ### Typography
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
-- **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
+- **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive. `.gt-bar-title` (top app bar titles) is one size at every width.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
 
 Rule: prefer a semantic class where one exists; otherwise apply the matching type token.
@@ -89,12 +89,16 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - The top app bar is 48px. Every control in it is 32px: compact buttons and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
 - Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (8% on hover, 12% on focus and while open), with no focus ring and no primary colour. The owning component toggles `gt-select-ghost--open` from the select's `openedChange` output and calls the select's `open()` on wrapper clicks, so the padding opens it too. Give each one an `aria-label` and a fixed width; long names truncate.
+- A list, settings or profile bar is titled with an `h1.gt-bar-title`: the title-large type token at weight 600, the same on every bar. A count goes after the name in a `.gt-bar-title-count` span, in regular weight and `--mat-sys-on-surface-variant`.
 - The bar draws only its bottom border. Groups of controls are separated by gap spacing, not vertical dividers.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all". The component pulls itself left by the button's leading inset (12px), so its chevron sits on the container edge wherever it is placed; don't add a local margin to compensate.
 - List pages put one filled "New X" in the right slot.
-- Record pages have no filled button in the bar: at most two outlined or neutral controls, the rest in a "More actions" menu. A record with an edit page links to it with an outlined "Edit X".
-- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one puts Delete in the bar's "More actions" menu. Never a standalone delete icon button.
+- Record pages have no filled button in the bar. A record with an edit page links to it with an outlined "Edit X".
+- One extra action in a record bar is a neutral 32px icon button with a tooltip and an `aria-label` that names it ("Delete issue"). Two or more extra actions go in a "More actions" menu. Bar icon buttons take their size from the bar; don't add `.medium-icon-button`, which forces 36px.
+- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button). A record without one deletes from the bar. Either way, the confirm names the object.
+- A record's status control in the bar ("Unresolved") is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`: blue for unresolved, green for resolved. Never a filled primary button.
+- Primary red marks at most one main create or confirm action per page.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
 
