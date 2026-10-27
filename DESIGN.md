@@ -65,6 +65,11 @@ Conventions for every component:
 - Selector prefix `gt-`.
 - Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
 
+### Panels
+
+- Pages are card-less: settings sections, forms and lists sit on the page with no container.
+- Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
+
 ### Page headers
 
 Every record detail page opens with `gt-page-header`: the record's name, then one meta line of facts.
