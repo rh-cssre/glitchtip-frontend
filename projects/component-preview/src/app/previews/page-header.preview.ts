@@ -126,6 +126,7 @@ export class PageHeaderPreview {
     "Put buttons in the header",
     "Use subtitle for facts; those go in the meta line",
     "Repeat the page type in the title (Settings for project)",
+    "Repeat the title in the meta, such as a slug chip under the name (Acme Shop, acme-shop)",
   ];
   readonly content = [
     "Title: the record's own name, never a sentence about it",

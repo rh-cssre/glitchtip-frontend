@@ -151,6 +151,7 @@ export const TYPE_TOKENS: TokenDef[] = [
  */
 export const CUSTOM_TYPE_CLASSES: { className: string; usage: string }[] = [
   { className: "section-header-text", usage: "Page titles" },
+  { className: "gt-bar-title", usage: "Top app bar titles" },
   { className: "section-header-text-light", usage: "Issue titles (lighter weight)" },
   { className: "body-text", usage: "Longer text blocks" },
   { className: "body-text-strong", usage: "Emphasized body text" },
