@@ -6,11 +6,19 @@
 <section class="l-body">
   @if (activeOrganizationDetail(); as activeOrg) {
     <gt-page-header icon="settings" [title]="activeOrg.name">
-      <span slot="meta">
-        <span
-          ><span class="chip">{{ activeOrg.slug }}</span></span
-        >
-      </span>
+      <!-- Counts come with the org detail; no extra request -->
+      @if (activeOrg.projects && activeOrg.teams) {
+        <span slot="meta">
+          <span i18n>{activeOrg.projects.length, plural,
+            =1 {<b>1</b> project}
+            other {<b>{{ activeOrg.projects.length // i18n(ph="count") }}</b> projects}
+          }</span>
+          <span i18n>{activeOrg.teams.length, plural,
+            =1 {<b>1</b> team}
+            other {<b>{{ activeOrg.teams.length // i18n(ph="count") }}</b> teams}
+          }</span>
+        </span>
+      }
     </gt-page-header>
     <form [formGroup]="form" (ngSubmit)="updateOrganization()">
       <gt-settings-section
@@ -29,6 +37,9 @@
               formControlName="name"
               [attr.aria-labelledby]="nameSection.titleId"
             />
+            <mat-hint i18n
+              >Used in URLs: {{ activeOrg.slug // i18n(ph="slug") }}</mat-hint
+            >
             @if (form.controls.name.errors?.serverError; as serverError) {
               <mat-error>{{ serverError }}</mat-error>
             }
@@ -52,8 +63,8 @@
     @if (canAdminOrg()) {
       <gt-settings-section i18n-title title="Delete organization">
         <span slot="description" i18n
-          >Deletes this organization's projects, teams and events. This cannot be
-          undone.</span
+          >Deletes <strong>{{ activeOrg.name // i18n(ph="name") }}</strong> and all
+          of its projects, teams and events. This cannot be undone.</span
         >
         @if (errors().deleteOrganization) {
           <gt-form-error [errors]="errors().deleteOrganization" />
