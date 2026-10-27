@@ -104,12 +104,13 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 ### Forms
 
-- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Filters in the top app bar are ghost selects, not fields (see Top app bar).
 
 ### Settings sections
 
-Every setting on a settings page is a `gt-settings-section`: a title, one line of help, then the control and its actions.
+Every setting on a settings page is a `gt-settings-section`: a title, an optional line of help, then the control and its actions.
 
+- A section description must say something the title and control do not (a consequence, a limit, non-obvious behaviour). Otherwise omit it.
 - Sections stack in one column with a hairline (`outline-variant`) between them, none above the first or below the last. No cards.
 - The first section in its container sits flush with what is above it. Content starts 16px under a tab bar, from one global `mat-tab-nav-panel` rule; pages do not pad their own panel.
 - A single control uses `inline`, with its action beside it. The section title is the field's only visible label, linked with `aria-labelledby`. Several controls, or none, put the action below, left-aligned. A list and the field that adds to it are two sections, joined: the add field comes first, then the list, which takes `.gt-settings-continued` so no line splits them.
@@ -123,6 +124,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error`, just above the `.gt-form-actions` row, on create and edit forms alike.
 - An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. It has one section per field, then `gt-form-error`, then `.gt-form-actions`: a filled "Create X" and a text Cancel.
+- Create forms are titled New X, edit forms Edit X; the back link names where you return to.
 - An edit form takes the create form's shape: fields in sections, then `gt-form-error`, then "Save X" and a text Cancel in `.gt-form-actions`, then "Delete X" as the last section. A section that follows `.gt-form-actions` starts 24px below the buttons, from one global rule, so they never sit on its hairline.
 
 ## Accessibility
