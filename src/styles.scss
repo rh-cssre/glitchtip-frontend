@@ -269,10 +269,23 @@ mat-sidenav-container {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
-// A continuation sits right under what it continues.
+// A continuation sits right under what it continues. The first section in
+// its container sits flush too, unless it opens a form or component that
+// follows another section, where the hairline above needs the padding.
 gt-settings-section.gt-settings-continued,
-.gt-settings-continued gt-settings-section {
+.gt-settings-continued gt-settings-section,
+gt-settings-section:first-child:not(
+    :is(gt-settings-section, :has(gt-settings-section)) ~ * > *,
+    :is(gt-settings-section, :has(gt-settings-section)) ~ * > * > *
+  ) {
   padding-top: 0;
+}
+
+// Content starts 16px under a tab bar. A panel inside a card already has the
+// card's padding.
+mat-tab-nav-panel:not(mat-card-content > *) {
+  display: block;
+  padding-top: var(--gt-space-4, 16px);
 }
 
 .gt-form-actions {
