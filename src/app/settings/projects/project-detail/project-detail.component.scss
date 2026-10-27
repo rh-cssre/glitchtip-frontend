@@ -2,12 +2,3 @@
   margin: 0 0 var(--gt-space-4, 16px);
   color: var(--mat-sys-on-surface-variant);
 }
-
-mat-tab-nav-panel {
-  display: block;
-  padding-top: var(--gt-space-4, 16px);
-}
-
-gt-loading-button ::ng-deep button {
-  width: 140px;
-}

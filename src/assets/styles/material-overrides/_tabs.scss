@@ -1,3 +1,11 @@
 @use "@angular/material" as mat;
+@use "variables" as vars;
 
-@include mat.tabs-density(-1)
+@include mat.tabs-density(-1);
+
+// Tighter tab padding on phones so detail-page tabs fit without paginating.
+@media screen and (max-width: vars.$small - 1) {
+  .mat-mdc-tab-link.mdc-tab {
+    padding-inline: var(--gt-space-3, 12px);
+  }
+}

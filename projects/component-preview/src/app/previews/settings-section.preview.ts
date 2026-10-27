@@ -17,11 +17,14 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
-      .ss-surface {
-        padding: var(--gt-space-5) var(--gt-space-5) 0;
-        border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 8px;
-        background: var(--mat-sys-surface);
+      .ss-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font: var(--mat-sys-body-medium);
+      }
+      .ss-list li + li {
+        margin-top: var(--gt-space-2, 8px);
       }
     `,
   ],
@@ -40,10 +43,12 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       [code]="code"
     >
       <div class="preview-section">
-        <div class="preview-section__title">
-          Inline: one control with its action
-        </div>
-        <div class="ss-surface">
+        <div class="preview-section__title">A settings page</div>
+        <p class="preview-section__note">
+          Inline name, an add field joined to its list, a read-only value, then
+          the destructive action last.
+        </p>
+        <div>
           <gt-settings-section #name title="Name" [inline]="true">
             <span slot="description"
               >Shown in issue lists, alerts and the project switcher.</span
@@ -57,35 +62,30 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             </mat-form-field>
             <button slot="actions" mat-stroked-button>Save name</button>
           </gt-settings-section>
-        </div>
-      </div>
-
-      <div class="preview-section">
-        <div class="preview-section__title">
-          Stacked: several fields, action below
-        </div>
-        <div class="ss-surface">
-          <gt-settings-section title="Change password">
+          <gt-settings-section #addEnv title="Add environment" [inline]="true">
             <span slot="description"
-              >Use at least eight characters. You stay signed in on this
-              device.</span
+              >Events tagged with this environment show under it.</span
             >
-            <mat-form-field appearance="outline">
-              <mat-label>Current password</mat-label>
-              <input matInput type="password" />
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input matInput [attr.aria-labelledby]="addEnv.titleId" />
             </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>New password</mat-label>
-              <input matInput type="password" />
-            </mat-form-field>
-            <button slot="actions" mat-stroked-button>Change password</button>
+            <button slot="actions" mat-stroked-button>Add environment</button>
           </gt-settings-section>
-        </div>
-      </div>
-
-      <div class="preview-section">
-        <div class="preview-section__title">A destructive action</div>
-        <div class="ss-surface">
+          <gt-settings-section
+            class="gt-settings-continued"
+            title="Environments"
+          >
+            <ul class="ss-list">
+              <li>production</li>
+              <li>staging</li>
+            </ul>
+          </gt-settings-section>
+          <gt-settings-section title="Platform">
+            <span slot="description"
+              >Picks the setup guide and icon for this project.</span
+            >
+            <span class="body-text">JavaScript</span>
+          </gt-settings-section>
           <gt-settings-section title="Delete project">
             <span slot="description"
               >Deletes storefront-web and all of its issues, events and
@@ -112,6 +112,7 @@ export class SettingsSectionPreview {
     "Save a choice that previews itself, such as the theme, on change with no button",
     "Give each section its own outlined Save that names what it saves: Save name",
     "Put a destructive action in the last section, as an outlined warn button that opens a confirm dialog",
+    "Show a failed delete with gt-form-error inside its delete section, not a toast",
     "Show the value as plain text when the person cannot edit it",
   ];
   readonly donts = [
