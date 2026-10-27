@@ -33,7 +33,8 @@
   <gt-page-header [title]="group.transaction">
     <span slot="meta">
       <span><span class="chip">{{ group.op }}</span></span>
-      @if (group.method) {
+      <!-- Skip a method the name already starts with (POST /api/checkout) -->
+      @if (group.method && !group.transaction.startsWith(group.method + " ")) {
         <span><span class="chip">{{ group.method }}</span></span>
       }
       <span i18n
