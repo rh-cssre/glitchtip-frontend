@@ -4,7 +4,6 @@ import { map } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { MatMenuModule } from "@angular/material/menu";
 import { MatCardModule } from "@angular/material/card";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
@@ -24,7 +23,6 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     PageHeaderComponent,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule,
     MatCardModule,
     PreviewDocComponent,
   ],
@@ -38,11 +36,6 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       }
       .dp-body mat-card {
         margin-top: var(--gt-space-4);
-      }
-      .top-bar-actions {
-        display: flex;
-        align-items: center;
-        gap: var(--gt-space-2);
       }
     `,
   ],
@@ -65,34 +58,16 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     >
       <gt-top-app-bar>
         <ng-container slot="left">
-          <gt-back-link
-            [backLinkText]="
-              isMobile() ? 'Uptime Monitors' : 'View all uptime monitors'
-            "
-          />
+          <gt-back-link backLinkText="Uptime Monitors" />
         </ng-container>
         <ng-container slot="right">
-          <div class="top-bar-actions">
-            @if (isMobile()) {
-              <button mat-icon-button aria-label="Settings">
-                <mat-icon>settings</mat-icon>
-              </button>
-              <button mat-icon-button [matMenuTriggerFor]="more" aria-label="More">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #more="matMenu">
-                <button mat-menu-item>
-                  <mat-icon>delete</mat-icon>
-                  <span>Delete</span>
-                </button>
-              </mat-menu>
-            } @else {
-              <button mat-flat-button color="primary">Settings</button>
-              <button mat-icon-button class="medium-icon-button" aria-label="Delete">
-                <mat-icon>delete</mat-icon>
-              </button>
-            }
-          </div>
+          @if (isMobile()) {
+            <button mat-icon-button aria-label="Edit monitor">
+              <mat-icon>edit</mat-icon>
+            </button>
+          } @else {
+            <button mat-stroked-button>Edit monitor</button>
+          }
         </ng-container>
       </gt-top-app-bar>
       <section class="dp-body">
@@ -127,12 +102,16 @@ export class DetailPagePreview {
     "Forms that create a record within a list context (new monitor)",
   ];
   readonly dos = [
-    "Put gt-back-link in the app bar's left slot and name the destination",
-    "Put page actions in the app bar's right slot",
+    "Put gt-back-link in the app bar's left slot, named with the parent page's nav label",
+    "Put page actions in the app bar's right slot: outlined or neutral only, at most two",
+    "Link to the record's edit page with an outlined Edit X, and put Delete in that page's last section",
+    "Without an edit page, put Delete in a More actions menu (see Top app bar)",
     "Render gt-page-header first inside the l-body content column (see Page header)",
   ];
   readonly donts = [
     "Hand-roll a back arrow instead of gt-back-link",
+    "Add a margin to gt-back-link to line up its chevron; it already sits on the container edge",
+    "Put a filled button or a standalone delete icon in the bar",
   ];
   readonly composition = {
     contains: ["Top app bar", "Back link", "Page header", "Buttons & actions"],
@@ -157,12 +136,10 @@ import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.com
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";`;
   readonly code = `<gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link backLinkText="View all uptime monitors" />
+    <gt-back-link i18n-backLinkText backLinkText="Uptime Monitors" />
   </ng-container>
   <ng-container slot="right">
-    <button mat-flat-button color="primary" [routerLink]="['./update']">
-      Settings
-    </button>
+    <a mat-stroked-button [routerLink]="['./update']" i18n>Edit monitor</a>
   </ng-container>
 </gt-top-app-bar>
 
