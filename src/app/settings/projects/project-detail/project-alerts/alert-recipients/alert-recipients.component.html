@@ -1,20 +1,11 @@
 @for (recipient of recipients(); track recipient.id) {
-  @if (recipient.recipientType === "email") {
-    <mat-icon
-      class="recipient-icon"
-      [matTooltip]="recipientLabel(recipient, teams())"
-      >email</mat-icon
-    >
-  } @else {
-    <svg
-      class="recipient-icon"
-      [matTooltip]="recipientLabel(recipient, teams())"
-    >
-      <use
-        [attr.xlink:href]="'#' + resolveRecipientIcon(recipient.recipientType)"
-      ></use>
-    </svg>
-  }
+  @let label = recipientLabel(recipient, teams());
+  <gt-recipient-icon
+    role="img"
+    [type]="recipient.recipientType"
+    [attr.aria-label]="label"
+    [matTooltip]="label"
+  />
 } @empty {
   <span i18n>No recipients</span>
 }

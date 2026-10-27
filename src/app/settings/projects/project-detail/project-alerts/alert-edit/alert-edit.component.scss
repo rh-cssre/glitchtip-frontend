@@ -25,16 +25,6 @@
   font-weight: 400;
 }
 
-.recipient__icon {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
-  // Sprite icons without their own color follow the text, so they show in
-  // dark mode.
-  fill: currentColor;
-}
-
 .recipient__label {
   overflow: hidden;
   white-space: nowrap;

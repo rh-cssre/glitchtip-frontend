@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
-import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { components } from "src/app/api/api-schema";
-import { recipientLabel, resolveRecipientIcon } from "../alert-labels";
+import { recipientLabel } from "../alert-labels";
+import { RecipientIconComponent } from "../recipient-icon/recipient-icon.component";
 
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
 
@@ -11,7 +11,7 @@ type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
   selector: "gt-alert-recipients",
   templateUrl: "./alert-recipients.component.html",
   styleUrls: ["./alert-recipients.component.scss"],
-  imports: [MatIconModule, MatTooltipModule],
+  imports: [MatTooltipModule, RecipientIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertRecipientsComponent {
@@ -20,5 +20,4 @@ export class AlertRecipientsComponent {
   teams = input<string[]>();
 
   recipientLabel = recipientLabel;
-  resolveRecipientIcon = resolveRecipientIcon;
 }
