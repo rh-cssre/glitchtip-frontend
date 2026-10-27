@@ -523,8 +523,8 @@ gt-pagination-buttons {
 
 .tab-count {
   margin-left: var(--gt-space-2, 8px);
-  padding: 1px 7px;
-  border-radius: 999px;
+  padding: 1px var(--gt-space-2, 8px);
+  border-radius: var(--mat-sys-corner-full);
   font: var(--mat-sys-label-small);
   background-color: var(--mat-sys-surface-container-highest);
   color: var(--mat-sys-on-surface-variant);
