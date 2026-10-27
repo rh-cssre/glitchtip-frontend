@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
+import { MatBadgeModule } from "@angular/material/badge";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatCardModule } from "@angular/material/card";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
@@ -42,6 +43,7 @@ const ISSUE_STATUS: Record<IssueStatus, { label: string; color: string }> = {
     MatCardModule,
     RouterModule,
     MatTabsModule,
+    MatBadgeModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,

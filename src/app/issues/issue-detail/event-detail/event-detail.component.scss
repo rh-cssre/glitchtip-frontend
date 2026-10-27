@@ -64,69 +64,64 @@ gt-entry-request {
   display: block;
 }
 
-.pseudo-chip-list {
+// Tag pills: border only, no shadow.
+.tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gt-space-2, 8px);
   margin: 4px 0 20px;
   padding: 0;
-  overflow: hidden;
-
-  a {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-  }
+  list-style: none;
 }
 
-.pseudo-chip {
-  margin-top: 6px;
-  margin-right: 8px;
-  padding: 2px 12px;
-  border-radius: 16px;
-  float: left;
-  list-style: none;
-  transition: 0.3s;
-  border: 1px solid var(--mat-sys-outline);
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  box-shadow: var(--mat-sys-shadow-1);
+.tag-pill {
   display: flex;
   align-items: center;
+  max-width: 100%;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-full);
+  background-color: var(--mat-sys-surface);
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface);
 
   &:hover {
-    background-color: var(--mat-sys-surface-container-highest);
-    box-shadow: var(--mat-sys-shadow-2);
+    border-color: var(--mat-sys-outline);
+    background-color: var(--mat-sys-surface-container);
   }
 }
 
-.pseudo-chip-link {
+.tag-pill__link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gt-space-2, 8px);
+  min-width: 0;
+  padding: 2px var(--gt-space-3, 12px);
+  color: inherit;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.tag-pill__key {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.tag-pill__value {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.pseudo-chip-key {
-  font-size: 0.8em;
-  padding-right: 10px;
-  opacity: 0.8;
-}
+.tag-pill__external {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--gt-space-2, 8px) 0 var(--gt-space-1, 4px);
+  border-left: 1px solid var(--mat-sys-outline-variant);
+  color: var(--mat-sys-on-surface-variant);
 
-.pseudo-chip-value {
-  vertical-align: -0.07em;
-}
-
-.pseudo-chip-external-link {
-  display: flex !important;
-  max-height: 1em;
-  max-width: 1em;
-}
-
-.pseudo-chip-external-link mat-icon {
-  font-size: 1em;
-}
-
-.pseudo-chip-divider {
-  content: '';
-  display: inline-block;
-  width: 1px;
-  height: 1.2em;
-  background-color: var(--mat-sys-outline);
-  margin: 0 8px;
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
 }

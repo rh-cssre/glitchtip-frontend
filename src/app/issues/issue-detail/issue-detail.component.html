@@ -92,6 +92,11 @@
         <span [title]="issue.lastSeen | date: 'long'" i18n
           >Last seen {{ issue.lastSeen | daysAgo }}</span
         >
+        @if (issue.firstRelease?.shortVersion; as release) {
+          <span i18n
+            >First release <span class="chip">{{ release }}</span></span
+          >
+        }
         @if (resolvedInRelease(); as release) {
           <span i18n
             >Resolved in <span class="chip">{{ release }}</span></span
@@ -100,56 +105,130 @@
       </span>
     </gt-page-header>
 
-    <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
-      <a
-        mat-tab-link
-        [routerLink]="['./']"
-        routerLinkActive
-        [active]="details.isActive"
-        [routerLinkActiveOptions]="{ exact: true }"
-        #details="routerLinkActive"
-        i18n
-        >Event Details</a
-      >
-      <a
-        mat-tab-link
-        [routerLink]="['user-reports']"
-        routerLinkActive
-        [active]="reports.isActive"
-        #reports="routerLinkActive"
-      >
-        <ng-container i18n>User Reports</ng-container>
-        <span class="tab-count">{{ issue.userReportCount | number }}</span>
-      </a>
-      <a
-        mat-tab-link
-        [routerLink]="['comments']"
-        routerLinkActive
-        [active]="comments.isActive"
-        #comments="routerLinkActive"
-      >
-        <ng-container i18n>Comments</ng-container>
-        <span class="tab-count">{{ issue.numComments | number }}</span>
-      </a>
-      <a
-        mat-tab-link
-        [routerLink]="['merged']"
-        routerLinkActive
-        [active]="merged.isActive"
-        #merged="routerLinkActive"
-        i18n
-        >Merged</a
-      >
-    </nav>
-    <mat-tab-nav-panel #tabPanel class="issue-tab-panel">
-      <div class="row">
-        <div class="left">
-          <router-outlet></router-outlet>
+    <div class="row">
+      <mat-card class="event-detail-card left">
+        <div class="tab-nav-container">
+          <nav
+            mat-tab-nav-bar
+            class="tabbed-nav"
+            mat-stretch-tabs="false"
+            [tabPanel]="tabPanel"
+          >
+            <a
+              mat-tab-link
+              [routerLink]="['./']"
+              routerLinkActive
+              [active]="details.isActive"
+              [routerLinkActiveOptions]="{ exact: true }"
+              #details="routerLinkActive"
+              i18n
+              >Event Details</a
+            >
+            <a
+              mat-tab-link
+              [routerLink]="['user-reports']"
+              routerLinkActive
+              [active]="reports.isActive"
+              #reports="routerLinkActive"
+            >
+              @if (issue.userReportCount > 0) {
+                <span
+                  [matBadge]="
+                    issue.userReportCount < 100
+                      ? issue.userReportCount.toString()
+                      : '99+'
+                  "
+                  matBadgeOverlap="false"
+                  class="report-badge"
+                  i18n
+                  >User Reports</span
+                >
+              }
+              @if (issue.userReportCount === 0) {
+                <ng-container i18n>User Reports</ng-container>
+              }
+            </a>
+            <a
+              mat-tab-link
+              [routerLink]="['comments']"
+              routerLinkActive
+              [active]="comments.isActive"
+              #comments="routerLinkActive"
+            >
+              @if (issue.numComments > 0) {
+                <span
+                  [matBadge]="
+                    issue.numComments < 100 ? issue.numComments : '99+'
+                  "
+                  matBadgeOverlap="false"
+                  class="report-badge"
+                  i18n
+                  >Comments
+                </span>
+              } @else {
+                <span i18n>Comments</span>
+              }
+            </a>
+            <a
+              mat-tab-link
+              [routerLink]="['merged']"
+              routerLinkActive
+              [active]="merged.isActive"
+              #merged="routerLinkActive"
+              i18n
+              >Merged</a
+            >
+          </nav>
         </div>
-        <aside class="right">
-          <gt-issue-detail-tags [issueID]="issueID()"></gt-issue-detail-tags>
-        </aside>
-      </div>
-    </mat-tab-nav-panel>
+        <mat-card-content>
+          <mat-tab-nav-panel #tabPanel>
+            <router-outlet></router-outlet>
+          </mat-tab-nav-panel>
+        </mat-card-content>
+      </mat-card>
+      <aside class="right">
+        <mat-card appearance="outlined">
+          <mat-card-content>
+            <dl>
+              <div>
+                <dt i18n class="caption-text">Issue #</dt>
+                <dd class="body-text">{{ issue?.shortId }}</dd>
+              </div>
+              <div>
+                <dt i18n class="caption-text">Events</dt>
+                <dd class="body-text">{{ issue?.count }}</dd>
+              </div>
+              <div>
+                <dt i18n class="caption-text">Level</dt>
+                <dd class="body-text">{{ issue.level | titlecase }}</dd>
+              </div>
+              @if (resolvedInRelease(); as release) {
+                <div>
+                  <dt class="caption-text" i18n>Resolved in</dt>
+                  <dd class="body-text">{{ release }}</dd>
+                </div>
+              }
+              <div>
+                <dt i18n class="caption-text">First Seen</dt>
+                <dd class="body-text">{{ issue.firstSeen | daysAgo }}</dd>
+                <dd class="caption-text">
+                  {{
+                    $safeNavigationMigration(issue?.firstSeen) | date: "long"
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt i18n class="caption-text">Last Seen</dt>
+                <dd class="body-text">{{ issue.lastSeen | daysAgo }}</dd>
+                <dd class="caption-text">
+                  {{ $safeNavigationMigration(issue?.lastSeen) | date: "long" }}
+                </dd>
+              </div>
+            </dl>
+          </mat-card-content>
+        </mat-card>
+        <gt-issue-detail-tags [issueID]="issueID()"></gt-issue-detail-tags>
+      </aside>
+    </div>
   </section>
 }
