@@ -65,7 +65,7 @@ export class MonitorUpdateComponent
   delete() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete ${this.monitor()?.name ?? ""}?`,
+        title: $localize`Delete ${this.monitor()?.name ?? ""}:name:?`,
         message: $localize`Its check history is deleted too. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
