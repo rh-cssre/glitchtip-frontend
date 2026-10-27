@@ -1,5 +1,19 @@
 @use "variables" as vars;
 
+// Pull the button left by its leading inset (padding plus icon offset, 12px
+// in M3) so the chevron lines up with the container edge. The hover and
+// focus states still extend into the container's padding.
+:host {
+  display: inline-flex;
+  margin-inline-start: calc(
+    -1 *
+      (
+        var(--mat-button-text-with-icon-horizontal-padding, 16px) +
+          var(--mat-button-text-icon-offset, -4px)
+      )
+  );
+}
+
 .back-link-text {
   white-space: nowrap;
   overflow: hidden;
