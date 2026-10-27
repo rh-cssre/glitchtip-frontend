@@ -21,11 +21,11 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { slugRegex } from "src/app/shared/validators";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-team-settings",
   templateUrl: "./team-settings.component.html",
-  styleUrls: ["./team-settings.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatFormFieldModule,
@@ -33,6 +33,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
     MatInputModule,
     LoadingButtonComponent,
     SettingsSectionComponent,
+    FormErrorComponent,
   ],
 })
 export class TeamSettingsComponent {

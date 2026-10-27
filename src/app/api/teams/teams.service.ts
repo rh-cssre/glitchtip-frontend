@@ -98,6 +98,11 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   setTeamKey(orgSlug: string, teamSlug: string) {
+    const current = this.teamKey();
+    if (current?.orgSlug !== orgSlug || current?.teamSlug !== teamSlug) {
+      // A failed delete belongs to the team it was tried on.
+      this.setDeleteTeamError("");
+    }
     this.teamKey.set(orgSlug && teamSlug ? { orgSlug, teamSlug } : null);
   }
 
@@ -145,6 +150,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   async deleteTeam(orgSlug: string, teamSlug: string) {
+    this.setDeleteTeamError("");
     this.setDeleteTeamLoading(true);
     const result = await client.DELETE(
       "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
@@ -158,11 +164,15 @@ export class TeamsService extends StatefulService<TeamsState> {
       },
     );
     this.setDeleteTeamLoading(false);
-    if (result.error) {
-      // this.setDeleteTeamError(result.response);
-    } else {
+    if (result.response.ok) {
       this.snackBar.open($localize`You have successfully deleted #${teamSlug}:teamSlug:`);
       this.router.navigate([orgSlug, "settings", "teams"]);
+    } else {
+      // The schema lists no error body, so the error is typed never.
+      const { error } = result as { error?: unknown };
+      this.setDeleteTeamError(
+        handleError(error, result.response).detail[0]?.msg ?? "",
+      );
     }
     return result;
   }
@@ -175,6 +185,11 @@ export class TeamsService extends StatefulService<TeamsState> {
         deleteTeam: loading,
       },
     });
+  }
+
+  private setDeleteTeamError(error: string) {
+    const state = this.state();
+    this.setState({ errors: { ...state.errors, deleteTeam: error } });
   }
 
   addTeam(team: Team) {

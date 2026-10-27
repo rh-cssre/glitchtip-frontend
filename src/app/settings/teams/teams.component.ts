@@ -118,7 +118,7 @@ export class TeamsComponent {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: $localize`Leave #${team}?`,
+          title: $localize`Leave #${team}:team:?`,
           message: $localize`You'll stop getting email alerts for this team's projects.`,
           confirmText: $localize`Leave`,
         },

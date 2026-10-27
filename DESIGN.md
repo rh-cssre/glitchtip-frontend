@@ -109,7 +109,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - A failed delete shows `gt-form-error` inside its delete section, not a toast.
 - Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
 - Sections, or the block-level forms that hold them, must be direct siblings with nothing else between them. The hairline sits on that sibling, so an inline host or a `display: contents` wrapper loses it.
-- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error`, just above the `.gt-form-actions` row, on create and edit forms alike.
+- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error`, just above the `.gt-form-actions` row, on create and edit forms alike. An inline add section has no actions row, so its error sits just above the section.
 - An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. It has one section per field, then `gt-form-error`, then `.gt-form-actions`: a filled "Create X" and a text Cancel.
 - An edit form takes the create form's shape: fields in sections, then `gt-form-error`, then "Save X" and a text Cancel in `.gt-form-actions`, then "Delete X" as the last section.

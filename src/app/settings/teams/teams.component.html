@@ -29,17 +29,20 @@
       @for (yourTeam of yourTeams(); track yourTeam.id) {
         <gt-list-row>
           <a [routerLink]="[yourTeam.slug, 'members']">#{{ yourTeam.slug }}</a>
-          <span slot="meta" i18n
-            >{yourTeam.memberCount, plural,
-              =1 {1 member}
-              other {{{ yourTeam.memberCount }} members}
-            }
-            ·
-            {projectCount(yourTeam.id), plural,
-              =1 {1 project}
-              other {{{ projectCount(yourTeam.id) }} projects}
-            }</span
-          >
+          <span slot="meta">
+            <span i18n
+              >{yourTeam.memberCount, plural,
+                =1 {1 member}
+                other {{{ yourTeam.memberCount }} members}
+              }</span
+            >
+            <span i18n
+              >{projectCount(yourTeam.id), plural,
+                =1 {1 project}
+                other {{{ projectCount(yourTeam.id) }} projects}
+              }</span
+            >
+          </span>
           @if (canLeaveTeam()) {
             <gt-loading-button
               slot="actions"
@@ -76,17 +79,20 @@
           <a [routerLink]="[otherTeam.slug, 'members']"
             >#{{ otherTeam.slug }}</a
           >
-          <span slot="meta" i18n
-            >{otherTeam.memberCount, plural,
-              =1 {1 member}
-              other {{{ otherTeam.memberCount }} members}
-            }
-            ·
-            {projectCount(otherTeam.id), plural,
-              =1 {1 project}
-              other {{{ projectCount(otherTeam.id) }} projects}
-            }</span
-          >
+          <span slot="meta">
+            <span i18n
+              >{otherTeam.memberCount, plural,
+                =1 {1 member}
+                other {{{ otherTeam.memberCount }} members}
+              }</span
+            >
+            <span i18n
+              >{projectCount(otherTeam.id), plural,
+                =1 {1 project}
+                other {{{ projectCount(otherTeam.id) }} projects}
+              }</span
+            >
+          </span>
           @if (canJoinTeam()) {
             <gt-loading-button
               slot="actions"

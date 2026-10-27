@@ -19,7 +19,6 @@ import { ProjectSettingsService } from "src/app/settings/projects/project-settin
 
 @Component({
   templateUrl: "./team-details.component.html",
-  styleUrls: ["./team-details.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatButtonModule,

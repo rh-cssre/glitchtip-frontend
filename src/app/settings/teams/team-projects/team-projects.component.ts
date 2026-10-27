@@ -92,7 +92,7 @@ export class TeamProjectsComponent implements OnInit {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: $localize`Remove ${projectName} from #${this.teamSlug()}?`,
+          title: $localize`Remove ${projectName}:project: from #${this.teamSlug()}:team:?`,
           message: $localize`This team's members will stop getting its email alerts.`,
           confirmText: $localize`Remove`,
         },

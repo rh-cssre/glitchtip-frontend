@@ -69,7 +69,6 @@ export class TeamMembersComponent implements OnInit {
   member = new FormControl<Member | null>(null, Validators.required);
   orgSlug = "";
   teamSlug = "";
-  addMemberError = "";
   removeMemberError = "";
   loading = false;
   selectedTeamMember: number | null = null;
@@ -122,13 +121,13 @@ export class TeamMembersComponent implements OnInit {
   confirmRemoveTeamMember(memberId: string, memberEmail: string) {
     const data = this.isMe(memberEmail)
       ? {
-          title: $localize`Leave #${this.teamSlug}?`,
+          title: $localize`Leave #${this.teamSlug}:team:?`,
           message: $localize`You'll stop getting email alerts for this team's projects.`,
           confirmText: $localize`Leave`,
         }
       : {
-          title: $localize`Remove from #${this.teamSlug}?`,
-          message: $localize`${memberEmail} will stop getting email alerts for this team's projects.`,
+          title: $localize`Remove ${memberEmail}:email: from #${this.teamSlug}:team:?`,
+          message: $localize`They'll stop getting email alerts for this team's projects.`,
           confirmText: $localize`Remove`,
         };
     this.dialog

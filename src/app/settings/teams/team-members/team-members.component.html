@@ -26,19 +26,12 @@
           <mat-option disabled i18n>No members</mat-option>
         }
       </mat-select>
-      <mat-error>
-        @if (member.errors?.required) {
-          <span i18n>Choose a member to add.</span>
-        }
-        @if (addMemberError) {
-          <span>{{ addMemberError }}</span>
-        }
-      </mat-error>
+      <mat-error i18n>Choose a member to add.</mat-error>
     </mat-form-field>
     <gt-loading-button
       slot="actions"
       i18n-buttonText
-      buttonText="Add"
+      buttonText="Add member"
       buttonStyle="stroked"
       [loading]="loading"
       (buttonClick)="addTeamMember()"

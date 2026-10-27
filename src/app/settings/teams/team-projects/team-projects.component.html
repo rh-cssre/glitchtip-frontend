@@ -1,12 +1,14 @@
 @if (orgSlug(); as orgSlug) {
   @if (canEditProjects()) {
+    @if (errors().addProjectToTeam) {
+      <gt-form-error [errors]="errors().addProjectToTeam" />
+    }
     <gt-settings-section
       #addSection
       i18n-title
       title="Add project"
       [inline]="true"
     >
-      <gt-form-error [errors]="errors().addProjectToTeam" />
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-select
           [formControl]="project"
@@ -27,7 +29,7 @@
       <gt-loading-button
         slot="actions"
         i18n-buttonText
-        buttonText="Add"
+        buttonText="Add project"
         buttonStyle="stroked"
         [loading]="loading().addProjectToTeam"
         (buttonClick)="addProject()"

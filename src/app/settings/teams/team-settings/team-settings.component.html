@@ -52,6 +52,9 @@
         >Deletes #{{ team.slug }}. Its projects and members stay in the
         organization. This cannot be undone.</span
       >
+      @if (errors().deleteTeam) {
+        <gt-form-error [errors]="errors().deleteTeam" />
+      }
       <gt-loading-button
         slot="actions"
         i18n-buttonText
