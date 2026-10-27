@@ -7,26 +7,18 @@
   align-items: center;
 }
 
-.time-range-select-formfield {
-  width: 200px;
+.gt-select-ghost {
+  width: 160px;
 
+  // Custom ranges show two dates.
   &.wide {
-    // TODO: Find a cleaner way to manage the variable sizes here
-    @media screen and (min-width: vars.$small) {
-      width: 325px;
-      @media screen and (max-width: vars.$large - 199) {
-        width: 200px;
-      }
-      @media screen and (max-width: vars.$tablet - 1) {
-        max-width: 250px;
-      }
-      @media screen and (max-width: vars.$small - 1) {
-        width: 100%;
-      }
-    }
+    width: 280px;
   }
 
   @media screen and (max-width: vars.$small - 1) {
-    width: 100%;
+    &,
+    &.wide {
+      width: 100%;
+    }
   }
 }

@@ -73,6 +73,11 @@ Conventions for every component:
 - Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `AGENTS.md`).
 - A blocked action shows its reason as visible text. It may be disabled beside that text, or hidden; never a tooltip-only reason.
 
+### Panels
+
+- Pages are card-less: settings sections, forms and lists sit on the page with no container.
+- Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
+
 ### Page headers
 
 Every record detail page opens with `gt-page-header`: the record's name, then one meta line of facts.
@@ -89,7 +94,8 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 ### Top app bar
 
-- The top app bar is 48px. Every control in it is 32px: compact buttons and compact filter fields (`.gt-field-compact`). Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
+- The top app bar is 48px. Every control in it is 32px: compact buttons and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
+- Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (8% on hover, 12% on focus and while open), with no focus ring and no primary colour. The owning component toggles `gt-select-ghost--open` from the select's `openedChange` output and calls the select's `open()` on wrapper clicks, so the padding opens it too. Give each one an `aria-label` and a fixed width; long names truncate.
 - The bar draws only its bottom border. Groups of controls are separated by gap spacing, not vertical dividers.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all". The component pulls itself left by the button's leading inset (12px), so its chevron sits on the container edge wherever it is placed; don't add a local margin to compensate.
@@ -101,7 +107,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 ### Forms
 
-- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
 
 ### Settings sections
 
