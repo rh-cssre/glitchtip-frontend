@@ -6,12 +6,11 @@ import {
   inject,
   input,
   computed,
+  signal,
 } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatOptionSelectionChange } from "@angular/material/core";
-import { MatInputModule } from "@angular/material/input";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSelectModule, MatSelectChange } from "@angular/material/select";
 import {
@@ -27,8 +26,6 @@ const NO_FILTER_TEXT = $localize`All times`;
   selector: "gt-time-range-select",
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatSelectModule
 ],
   templateUrl: "./time-range-select.html",
@@ -49,6 +46,7 @@ export class TimeRangeSelect {
   queriedTimeRangeStart = input<string | undefined>();
   queriedTimeRangeEnd = input<string | undefined>();
   presetRangeForm = new FormControl<string | null>("");
+  isOpen = signal(false);
   queriedPresetTimeRange = computed(() => {
     const presetValues = this.timeRangePresets.map((preset) => preset.value);
     const start = this.queriedTimeRangeStart();
