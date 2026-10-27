@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { UserService } from "src/app/api/user/user.service";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { ManageEmails } from "../manage-emails/manage-emails";
 import { SocialAuthComponent } from "../social-auth/social-auth.component";
@@ -26,7 +26,7 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
     ChangePasswordComponent,
     SocialAuthComponent,
     ManageEmails,
-    MatFormFieldModule,
+    FormErrorComponent,
     LoadingButtonComponent,
     SettingsSectionComponent,
   ],

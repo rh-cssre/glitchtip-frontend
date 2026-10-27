@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="Back to Projects" />
+    <gt-back-link i18n-backLinkText backLinkText="Projects" />
   </ng-container>
 </gt-top-app-bar>
 
@@ -35,8 +35,8 @@
           queryParamsHandling="merge"
           replaceUrl
           >{{ t.label }}
-          @if (t.id === "dsn" && projectKeys()?.length; as count) {
-            <span class="tab-count">{{ count }}</span>
+          @if (t.id === "dsn" && projectKeys(); as keys) {
+            <span class="tab-count">{{ keys.length }}</span>
           }
         </a>
       }
@@ -199,6 +199,9 @@
                 >Deletes {{ project.name }} and all of its issues, events and
                 settings. This cannot be undone.</span
               >
+              @if (deleteError()) {
+                <gt-form-error [errors]="deleteError()" />
+              }
               <gt-loading-button
                 slot="actions"
                 i18n-buttonText

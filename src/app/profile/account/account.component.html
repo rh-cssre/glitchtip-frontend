@@ -10,7 +10,7 @@
     their account.</span
   >
   @if (userDeleteError(); as error) {
-    <mat-error>{{ error }}</mat-error>
+    <gt-form-error [errors]="error" />
   }
   <gt-loading-button
     slot="actions"
