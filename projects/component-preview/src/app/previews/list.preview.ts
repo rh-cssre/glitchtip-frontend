@@ -35,8 +35,12 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <gt-list>
           <gt-list-row>
             maya.chen&#64;acme.com
+            <span class="list-row__tag">Account owner</span>
+            <span slot="description"
+              >Account ownership must be transferred.</span
+            >
             <span slot="meta">Owner</span>
-            <button slot="actions" mat-stroked-button>Remove</button>
+            <button slot="actions" mat-stroked-button disabled>Remove</button>
           </gt-list-row>
           <gt-list-row>
             sam.ortiz&#64;acme.com
@@ -71,6 +75,22 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       </div>
 
       <div class="preview-section">
+        <div class="preview-section__title">Inside a record's tab</div>
+        <div class="gt-list-actions">
+          <button mat-stroked-button>
+            <mat-icon>add</mat-icon>
+            New alert
+          </button>
+        </div>
+        <gt-list>
+          <gt-list-row>
+            Error spike
+            <button slot="actions" mat-stroked-button>Edit</button>
+          </gt-list-row>
+        </gt-list>
+      </div>
+
+      <div class="preview-section">
         <div class="preview-section__title">With a group label</div>
         <gt-list label="Visible">
           <gt-list-row>
@@ -96,11 +116,16 @@ export class ListPreview {
     "Put two or more actions in a menu at the end of the row",
     "Keep row actions neutral; the confirm dialog carries the warning for a destructive one",
     "Keep action labels short (Remove, Hide) so the action column lines up",
+    "Mark a fixed attribute (Owner, Primary) with .list-row__tag after the name",
+    "Say why a blocked action is blocked in the description line",
+    "Put a tab's create action above its list in .gt-list-actions",
   ];
   readonly donts = [
     "Use a menu for a single action; it adds a step for nothing",
     "Color row buttons warn; a column of red buttons stops meaning anything",
     "Wrap the list in a card with a title bar",
+    "Explain a disabled action only in a tooltip",
+    "Use an interactive chip for a label that does nothing when clicked",
   ];
   readonly api: ApiRow[] = [
     {
@@ -114,6 +139,12 @@ export class ListPreview {
       type: "projected",
       default: "",
       description: "The record's name, plus any tags",
+    },
+    {
+      name: ".list-row__tag",
+      type: "class",
+      default: "",
+      description: "Neutral, non-interactive tag for a fixed attribute",
     },
     {
       name: '[slot="description"]',
