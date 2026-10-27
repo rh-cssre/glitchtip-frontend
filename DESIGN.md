@@ -123,11 +123,12 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 
 ### Lists
 
-A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end. An optional description line sits under the name.
+A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, optional muted facts, then the actions at the end. An optional description line sits under the name.
 
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
 - Rows with several columns to compare or sort are a table instead.
+- Several meta facts each get their own span inside `[slot="meta"]`; the row draws the separators, as `gt-page-header` does. Never type a separator into a translated string.
 - A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
 - When a row's action is blocked, say why in the row's description line; never only in a tooltip.
 - A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon, in a `.gt-list-actions` container.
