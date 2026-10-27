@@ -15,13 +15,11 @@
     @for (member of members(); track member) {
       <gt-list-row>
         <a [routerLink]="[member.id]">{{ member.email }}</a>
+        @if (member.pending) {
+          <gt-status-pill [label]="invitePendingText" />
+        }
         @if (member.isOwner) {
           <span class="list-row__tag" i18n>Account owner</span>
-        }
-        @if (member.pending) {
-          <mat-chip class="caption-text" color="primary" i18n
-            >Invite pending</mat-chip
-          >
         }
         @if (
           member.isOwner &&

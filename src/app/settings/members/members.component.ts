@@ -9,7 +9,7 @@ import { RouterLink } from "@angular/router";
 import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
 import { MembersService } from "src/app/settings/members/members.service";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
-import { MatChipsModule } from "@angular/material/chips";
+import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
 import { ListComponent } from "src/app/shared/list/list.component";
@@ -34,7 +34,7 @@ type Member = components["schemas"]["OrganizationUserSchema"];
     RouterLink,
     MatMenuModule,
     MatIconModule,
-    MatChipsModule,
+    StatusPillComponent,
     LoadingButtonComponent,
     TopAppBar,
     ListComponent,
@@ -45,6 +45,7 @@ type Member = components["schemas"]["OrganizationUserSchema"];
 export class MembersComponent {
   leaveText = $localize`Leave`;
   removeText = $localize`Remove`;
+  invitePendingText = $localize`Invite pending`;
   actionsForLabel = (email: string) => $localize`Actions for ${email}:email:`;
   private organizationsService = inject(OrganizationsService);
   private organizationDetailService = inject(OrganizationDetailService);

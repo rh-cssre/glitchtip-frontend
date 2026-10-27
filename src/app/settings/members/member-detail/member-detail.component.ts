@@ -13,7 +13,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
 import { MatRadioModule } from "@angular/material/radio";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialog } from "@angular/material/dialog";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
@@ -27,6 +26,7 @@ import { LoadingButtonComponent } from "../../../shared/loading-button/loading-b
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   templateUrl: "./member-detail.component.html",
@@ -35,7 +35,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
     DatePipe,
     RouterLink,
     ReactiveFormsModule,
-    MatFormFieldModule,
+    FormErrorComponent,
     MatRadioModule,
     TopAppBar,
     BackLinkComponent,
@@ -71,6 +71,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
 
   readonly roles = MEMBER_ROLES;
+  readonly invitePendingText = $localize`Invite pending`;
 
   /** Changing roles needs member:write (managers and owners). */
   canEditRole = this.organizationsService.canWriteMember;

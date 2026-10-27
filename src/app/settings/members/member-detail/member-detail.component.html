@@ -5,14 +5,15 @@
 </gt-top-app-bar>
 @if (member(); as member) {
   <section class="l-body">
-    <gt-page-header icon="people" [title]="member.email">
+    <gt-page-header
+      icon="people"
+      [title]="member.email"
+      [status]="member.pending ? invitePendingText : null"
+    >
       <span slot="meta">
         <span>{{ roleName(member.role) ?? member.roleName }}</span>
         @if (member.isOwner) {
           <span i18n>Account owner</span>
-        }
-        @if (member.pending) {
-          <span i18n>Invite pending</span>
         }
         <span i18n>Joined {{ member.dateCreated | date: "mediumDate" }}</span>
       </span>
@@ -36,7 +37,7 @@
             }
           </mat-radio-group>
           @if (updateMemberError(); as error) {
-            <mat-error>{{ error }}</mat-error>
+            <gt-form-error [errors]="error" />
           }
         } @else {
           <span class="body-text">{{
@@ -86,7 +87,7 @@
           makes them the account owner. Nobody's role changes.</span
         >
         @if (transferOrgOwnershipError(); as error) {
-          <mat-error>{{ error }}</mat-error>
+          <gt-form-error [errors]="error" />
         }
         <gt-loading-button
           slot="actions"
