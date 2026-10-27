@@ -58,7 +58,6 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
           mapFormErrors, plus a form-level message through gt-form-error.
         </p>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <gt-form-error [errors]="formErrors()" />
           <mat-form-field class="full-width" appearance="outline">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" />
@@ -75,12 +74,13 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
             </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Display Name</mat-label>
+            <mat-label>Display name</mat-label>
             <input matInput type="text" formControlName="name" />
           </mat-form-field>
+          <gt-form-error [errors]="formErrors()" />
           <div class="gt-form-actions">
             <gt-loading-button
-              buttonText="Save"
+              buttonText="Save profile"
               buttonStyle="stroked"
               [loading]="saving()"
               (buttonClick)="onSubmit()"
@@ -110,15 +110,19 @@ export class FormsPreview {
     'Use appearance="outline" and a visible label on every field. When a field is the only control in a settings section, the section title is its label (aria-labelledby)',
     "Cover each failure case with its own @if inside one mat-error",
     "Map backend field errors with mapFormErrors so they render like client errors",
-    "Put gt-form-error at the top of the form for non-field errors",
-    "Disable submit only for transient state (in flight), with the spinner as the reason",
+    "Put gt-form-error just above the actions row for errors that belong to no field",
+    "Submit a create form with a filled button that names the object: Create project. A settings section saves with an outlined Save name",
+    "Lay out an edit form like a create form: fields in sections, then Save and Cancel in .gt-form-actions, then Delete as the last section",
+    "Disable submit only while its request is in flight, with the spinner as the reason",
+    "Show why an action is blocked as visible text, with the control disabled beside it or hidden",
   ];
   readonly donts = [
     "Surface validation failures in a snackbar",
     "Gate submit by permission (see Permission gating: hide, never disable)",
+    "Give a blocked action's reason only in a tooltip",
   ];
   readonly content = [
-    "Label every field with a noun: Email, Display Name",
+    "Label every field with a noun, in sentence case: Email, Display name",
     "Write the error as an instruction: Enter a valid email address, not Invalid",
     "Say what to do, not just what is wrong",
     "Keep server messages in the same voice as the client ones",
@@ -132,15 +136,13 @@ export class FormsPreview {
     contains: ["Buttons & actions", "Loading button"],
   };
   readonly api: ApiRow[] = [
-    { name: "gt-form-error errors", type: "string[]", default: "", description: "Non-field error messages rendered as mat-error lines" },
-    { name: "gt-form-error error", type: "any", default: "", description: "Deprecated. Do not use; pass errors instead" },
+    { name: "gt-form-error errors", type: "string | string[] | null", default: "", description: "Non-field error messages rendered as mat-error lines; renders nothing when empty" },
     { name: "mapFormErrors(fieldErrors, form)", type: "utility", default: "", description: "Sets serverError on each named control from a backend field-error map" },
   ];
   readonly importCode = `import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";`;
   readonly code = `<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <gt-form-error [errors]="formErrors()" />
   <mat-form-field class="full-width" appearance="outline">
     <mat-label>Email</mat-label>
     <input matInput type="email" formControlName="email" />
@@ -149,8 +151,9 @@ import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-bu
       @if (email?.errors?.serverError) { <span>{{ email?.errors?.serverError }}</span> }
     </mat-error>
   </mat-form-field>
+  <gt-form-error [errors]="formErrors()" />
   <div class="gt-form-actions">
-    <gt-loading-button buttonText="Save" buttonStyle="stroked" [loading]="saving()" />
+    <gt-loading-button buttonText="Save profile" buttonStyle="stroked" [loading]="saving()" />
   </div>
 </form>`;
 
@@ -168,6 +171,6 @@ import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-bu
       this.form,
     );
     this.form.controls.email.markAsTouched();
-    this.formErrors.set(["Please correct the errors below and try again."]);
+    this.formErrors.set(["Fix the errors above and try again."]);
   }
 }
