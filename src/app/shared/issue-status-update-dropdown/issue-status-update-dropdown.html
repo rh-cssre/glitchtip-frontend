@@ -1,9 +1,7 @@
-<button
-  mat-flat-button
-  color="primary"
-  class="status-trigger"
-  [matMenuTriggerFor]="menu"
->
+<button mat-stroked-button class="status-trigger" [matMenuTriggerFor]="menu">
+  @if (statusColor(); as color) {
+    <span class="status-dot" [style.background-color]="color"></span>
+  }
   {{ buttonLabel() }}
   <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
 </button>

@@ -32,6 +32,8 @@ export class IssueStatusUpdateDropdownComponent {
   ];
 
   selectedValue = input<string>();
+  /** Color of the status dot, matching gt-status-pill. No dot when unset. */
+  statusColor = input<string>();
 
   /** Trigger label reflects the current status (falls back to "Mark As"). */
   buttonLabel = computed(

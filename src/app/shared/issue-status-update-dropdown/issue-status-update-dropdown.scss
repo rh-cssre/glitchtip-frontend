@@ -1,3 +1,20 @@
+@use "@angular/material" as mat;
+
+// Outlined neutral: on-surface label and state layer, not primary.
+:host {
+  @include mat.button-overrides(
+    (
+      outlined-label-text-color: var(--mat-sys-on-surface),
+      outlined-state-layer-color: var(--mat-sys-on-surface),
+      outlined-ripple-color: color-mix(
+          in srgb,
+          var(--mat-sys-on-surface) 12%,
+          transparent
+        ),
+    )
+  );
+}
+
 .invisible {
   visibility: hidden;
 }
@@ -6,4 +23,14 @@
 .status-trigger {
   min-width: 140px;
   justify-content: center;
+}
+
+// Same dot as gt-status-pill.
+.status-dot {
+  display: inline-block;
+  vertical-align: middle;
+  width: 7px;
+  height: 7px;
+  margin-right: var(--gt-space-2, 8px);
+  border-radius: 50%;
 }
