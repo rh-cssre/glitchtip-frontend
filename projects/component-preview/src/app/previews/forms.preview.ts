@@ -113,9 +113,9 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
         <div class="preview-section__title">Default and compact</div>
         <p class="preview-section__note">
           Every field gets the house look from the theme: 14px text, a 4px
-          radius and the standard outline. Add .gt-field-compact only to filters
-          in the top app bar and list toolbars, so they sit at 32px next to
-          compact buttons.
+          radius and a mid-tone outline that keeps 3:1 contrast. Add
+          .gt-field-compact only to filters in the top app bar and list
+          toolbars, so they sit at 32px next to compact buttons.
         </p>
         <div class="preview-row size-demo">
           <figure>
