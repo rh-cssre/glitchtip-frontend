@@ -2,9 +2,11 @@
 @use "variables" as vars;
 
 // House look for every field: 14px text and label, our radius.
-// The resting outline stays `outline`: `outline-variant` is under 3:1 on our
-// surfaces in both themes. Height comes from the theme density; hover, focus,
-// error and disabled stay Material's.
+// The resting outline is a mid-tone between `outline` and `outline-variant`:
+// softer than `outline`, still at least 3:1 in both themes. 85% keeps 3:1 on
+// the darkest background a field sits on (the side nav org switcher).
+// Height comes from the theme density; hover, focus, error and disabled stay
+// Material's.
 @include mat.form-field-overrides(
   (
     container-text-size: var(--mat-sys-body-medium-size),
@@ -13,6 +15,11 @@
     outlined-label-text-size: var(--mat-sys-body-medium-size),
     outlined-label-text-tracking: var(--mat-sys-body-medium-tracking),
     outlined-container-shape: vars.$shape-radius,
+    outlined-outline-color: color-mix(
+        in srgb,
+        var(--mat-sys-outline) 85%,
+        var(--mat-sys-outline-variant)
+      ),
   )
 );
 @include mat.select-overrides(
@@ -22,14 +29,3 @@
     trigger-text-tracking: var(--mat-sys-body-medium-tracking),
   )
 );
-
-// Compact filter field for bars and toolbar filters (32px).
-.gt-field-compact {
-  @include mat.form-field-overrides(
-    (
-      container-height: 32px,
-      // The select arrow box is 24px tall: 4 + 24 + 4 = 32.
-      container-vertical-padding: 4px,
-    )
-  );
-}
