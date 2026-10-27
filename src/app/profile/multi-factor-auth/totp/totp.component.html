@@ -1,15 +1,10 @@
 <gt-settings-section i18n-title title="Authenticator app">
-  @if (TOTPAuthenticator()) {
-    <span slot="description" i18n
-      >An authenticator app protects your account: signing in asks for a code
-      from it.</span
-    >
-  } @else if (emailsService.isVerified() === false) {
+  @if (!TOTPAuthenticator() && emailsService.isVerified() === false) {
     <span slot="description" i18n
       >Verify your email address before setting up two-factor
       authentication.</span
     >
-  } @else {
+  } @else if (!TOTPAuthenticator()) {
     <span slot="description" i18n
       >Add a second step at sign-in: a code from an app on your phone.</span
     >
