@@ -2,6 +2,8 @@
   display: block;
 }
 
-.row-error {
+// The row gap spaces it; drop gt-form-error's own bottom margin.
+gt-form-error.row-error {
   flex-basis: 100%;
+  margin-bottom: 0;
 }

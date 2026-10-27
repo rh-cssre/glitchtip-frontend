@@ -15,9 +15,7 @@
     <mat-button-toggle [value]="true" i18n>On</mat-button-toggle>
     <mat-button-toggle [value]="false" i18n>Off</mat-button-toggle>
   </mat-button-toggle-group>
-  @if (subscribeByDefaultError(); as error) {
-    <mat-error>{{ error }}</mat-error>
-  }
+  <gt-form-error [errors]="subscribeByDefaultError()" />
 </gt-settings-section>
 
 <gt-settings-section i18n-title title="By project">
@@ -39,9 +37,10 @@
             >{{ project.name }}</a
           >
           @if (projectAlertsError()?.id === project.id) {
-            <mat-error class="row-error">{{
-              projectAlertsError()?.error
-            }}</mat-error>
+            <gt-form-error
+              class="row-error"
+              [errors]="projectAlertsError()?.error"
+            />
           }
           <mat-button-toggle-group
             #projectGroup="matButtonToggleGroup"

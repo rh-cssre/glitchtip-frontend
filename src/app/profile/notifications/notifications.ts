@@ -7,7 +7,6 @@ import {
 import { NotificationsService } from "./notifications-state";
 import { NotificationStatus } from "./notifications.interface";
 import { RouterLink } from "@angular/router";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import {
   MatButtonToggleGroup,
   MatButtonToggleModule,
@@ -16,6 +15,7 @@ import { KeyValuePipe } from "@angular/common";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   templateUrl: "./notifications.html",
@@ -23,12 +23,12 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatButtonToggleModule,
-    MatFormFieldModule,
     RouterLink,
     KeyValuePipe,
     ListComponent,
     ListRowComponent,
     SettingsSectionComponent,
+    FormErrorComponent,
   ],
   providers: [NotificationsService],
 })
