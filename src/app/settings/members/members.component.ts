@@ -8,7 +8,6 @@ import {
 import { RouterLink } from "@angular/router";
 import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
 import { MembersService } from "src/app/settings/members/members.service";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatMenuModule } from "@angular/material/menu";
@@ -37,7 +36,6 @@ type Member = components["schemas"]["OrganizationUserSchema"];
     MatIconModule,
     MatChipsModule,
     LoadingButtonComponent,
-    MatTooltipModule,
     TopAppBar,
     ListComponent,
     ListRowComponent,
@@ -75,20 +73,20 @@ export class MembersComponent {
     let data;
     if (member.isMe) {
       data = {
-        title: $localize`Leave ${orgName}?`,
+        title: $localize`Leave ${orgName}:org:?`,
         message: $localize`You'll lose access to its projects and stop getting its alerts.`,
         confirmText: $localize`Leave`,
       };
     } else if (member.pending) {
       data = {
         title: $localize`Remove invite?`,
-        message: $localize`The invite to ${member.email} will stop working.`,
+        message: $localize`The invite to ${member.email}:email: will stop working.`,
         confirmText: $localize`Remove`,
       };
     } else {
       data = {
         title: $localize`Remove ${member.email}:email:?`,
-        message: $localize`${member.email} will lose access to ${orgName} and its projects.`,
+        message: $localize`${member.email}:email: will lose access to ${orgName}:org: and its projects.`,
         confirmText: $localize`Remove`,
       };
     }

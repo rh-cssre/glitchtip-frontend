@@ -16,13 +16,20 @@
       <gt-list-row>
         <a [routerLink]="[member.id]">{{ member.email }}</a>
         @if (member.isOwner) {
-          <mat-chip class="caption-text" color="primary" highlighted="true" i18n
-            >Account owner</mat-chip
-          >
+          <span class="list-row__tag" i18n>Account owner</span>
         }
         @if (member.pending) {
           <mat-chip class="caption-text" color="primary" i18n
             >Invite pending</mat-chip
+          >
+        }
+        @if (
+          member.isOwner &&
+          !member.pending &&
+          (member.isMe || canAdminMember())
+        ) {
+          <span slot="description" i18n
+            >Account ownership must be transferred.</span
           >
         }
         <span slot="meta">{{ roleName(member.role) ?? member.roleName }}</span>
@@ -60,9 +67,6 @@
         } @else if (!member.pending && (member.isMe || canAdminMember())) {
           <gt-loading-button
             slot="actions"
-            i18n-matTooltip
-            matTooltip="Account ownership must be transferred."
-            [matTooltipDisabled]="!member.isOwner"
             [disabled]="member.isOwner"
             (buttonClick)="removeMember(member)"
             [buttonText]="member.isMe ? leaveText : removeText"
