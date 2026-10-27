@@ -18,8 +18,8 @@
     @if (canWriteProject()) {
       <gt-settings-section i18n-title title="Delete monitor">
         <span slot="description" i18n
-          >Deletes {{ monitor.name }} and its check history. This cannot be
-          undone.</span
+          >Deletes <strong>{{ monitor.name }}</strong> and its check history.
+          This cannot be undone.</span
         >
         @if (deleteError()) {
           <gt-form-error [errors]="deleteError()" />
