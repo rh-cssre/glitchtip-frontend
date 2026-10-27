@@ -6,9 +6,6 @@
       title="Slug"
       [inline]="canWriteTeam()"
     >
-      <span slot="description" i18n
-        >Used in links and lists as #{{ team.slug }}.</span
-      >
       @if (canWriteTeam()) {
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input
