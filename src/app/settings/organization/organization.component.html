@@ -1,10 +1,17 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <h1 i18n class="section-header-text">General Settings</h1>
+    <span i18n class="section-header-text">General settings</span>
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
   @if (activeOrganizationDetail(); as activeOrg) {
+    <gt-page-header icon="settings" [title]="activeOrg.name">
+      <span slot="meta">
+        <span
+          ><span class="chip">{{ activeOrg.slug }}</span></span
+        >
+      </span>
+    </gt-page-header>
     <form [formGroup]="form" (ngSubmit)="updateOrganization()">
       <gt-settings-section
         #nameSection

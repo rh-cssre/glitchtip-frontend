@@ -18,6 +18,7 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 
 @Component({
@@ -32,6 +33,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
     TopAppBar,
     SettingsSectionComponent,
     FormErrorComponent,
+    PageHeaderComponent,
   ],
 })
 export class OrganizationComponent implements OnDestroy, OnInit {
