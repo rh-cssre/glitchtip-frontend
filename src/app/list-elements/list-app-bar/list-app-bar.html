@@ -15,19 +15,24 @@
         </a>
       } @else {
         <gt-project-multiselect [queriedProjects]="queriedProjects" />
-        <button
-          matIconButton
-          [disabled]="!singleQueriedProjectSlug()"
-          [routerLink]="[
-            '/',
-            activeOrgSlug(),
-            'settings',
-            'projects',
-            singleQueriedProjectSlug(),
-          ]"
-        >
-          <mat-icon>settings</mat-icon>
-        </button>
+        @if (singleQueriedProjectSlug(); as projectSlug) {
+          <a
+            matIconButton
+            i18n-aria-label
+            aria-label="Project settings"
+            i18n-matTooltip
+            matTooltip="Project settings"
+            [routerLink]="[
+              '/',
+              activeOrgSlug(),
+              'settings',
+              'projects',
+              projectSlug,
+            ]"
+          >
+            <mat-icon>settings</mat-icon>
+          </a>
+        }
       }
     </div>
   }

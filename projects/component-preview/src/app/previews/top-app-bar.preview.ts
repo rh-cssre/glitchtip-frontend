@@ -5,6 +5,8 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
@@ -17,6 +19,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatFormFieldModule,
+    MatSelectModule,
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +29,14 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       .tab-demo-heading {
         font: var(--mat-sys-title-large);
         margin: 0;
+      }
+      .tab-demo-filters {
+        display: flex;
+        align-items: center;
+        gap: var(--gt-space-1);
+      }
+      .tab-demo-filter {
+        width: 200px;
       }
       .tab-demo-gap {
         height: var(--gt-space-6);
@@ -36,7 +48,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Top app bar"
       status="stable"
-      description="The page-level header bar used by every list and detail view. It is 48px tall, set once by $top-app-bar-height. The left slot holds the page title or the back link; the right slot holds the page actions and nothing else."
+      description="The page-level header bar used by every list and detail view. It is 48px tall, set once by $top-app-bar-height, and every control in it is 32px: compact buttons and compact filter fields (.gt-field-compact). The left slot holds the page title or the back link; the right slot holds the page actions and nothing else."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -63,6 +75,34 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
           } @else {
             <button mat-flat-button>New monitor</button>
           }
+        </ng-container>
+      </gt-top-app-bar>
+
+      <div class="tab-demo-gap"></div>
+
+      <!-- List bar with filters: a compact field and a 32px icon button.
+           The settings gear only shows when one project is selected. -->
+      <gt-top-app-bar>
+        <ng-container slot="left">
+          <h1 class="tab-demo-heading">Issues</h1>
+        </ng-container>
+        <ng-container slot="right">
+          <div class="tab-demo-filters">
+            <mat-form-field
+              appearance="outline"
+              subscriptSizing="dynamic"
+              class="tab-demo-filter gt-field-compact"
+            >
+              <mat-select value="24h" aria-label="Time range">
+                <mat-option value="24h">Last 24 hours</mat-option>
+                <mat-option value="7d">Last 7 days</mat-option>
+                <mat-option value="30d">Last 30 days</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button aria-label="Project settings">
+              <mat-icon>settings</mat-icon>
+            </button>
+          </div>
         </ng-container>
       </gt-top-app-bar>
 
@@ -133,6 +173,7 @@ export class TopAppBarPreview {
     "Record pages: at most two outlined or neutral controls, the rest in a More actions menu",
     "Link a record to its edit page with an outlined Edit X",
     "Put Delete on the record's settings or edit page; without one, put it in the More actions menu",
+    "Give filter fields in the bar class gt-field-compact so they match the 32px buttons",
     "On mobile, collapse text actions to icon buttons (toggle the example to Mobile)",
   ];
   readonly donts = [
@@ -140,6 +181,7 @@ export class TopAppBarPreview {
     "Add a standalone delete icon button",
     "Write Back to or View all in the back link, or swap its label on mobile",
     "Override the bar height per page; change $top-app-bar-height or use a density mixin",
+    "Restyle bar controls with ::ng-deep or internal .mat-mdc-* classes; use the overrides mixins in material-overrides/",
     "Nest a second bar inside a page section",
     "Put non-actions, like a user's email, in the action slot",
     "Let text buttons overflow or wrap the title on narrow screens",
@@ -155,7 +197,7 @@ export class TopAppBarPreview {
 </gt-top-app-bar>`;
   readonly api: ApiRow[] = [
     { name: "slot=left", type: "content projection", default: "", description: "Page title (list pages) or back link (detail pages)" },
-    { name: "slot=right", type: "content projection", default: "", description: "Action buttons area, divided from the content" },
+    { name: "slot=right", type: "content projection", default: "", description: "Actions and filters, spaced from the left slot by a gap" },
   ];
   readonly importCode = `import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";`;
