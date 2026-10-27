@@ -32,7 +32,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Settings section"
       status="stable"
-      description="One setting on a settings page: a title, one line of help, then the control and its action. Sections stack in a single column with a hairline between them, with no cards."
+      description="One setting on a settings page: a title, an optional line of help, then the control and its action. Sections stack in a single column with a hairline between them, with no cards."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -46,13 +46,11 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <div class="preview-section__title">A settings page</div>
         <p class="preview-section__note">
           Inline name, an add field joined to its list, a read-only value, then
-          the destructive action last.
+          the destructive action last. Only the sections whose description adds
+          something have one.
         </p>
         <div>
           <gt-settings-section #name title="Name" [inline]="true">
-            <span slot="description"
-              >Shown in issue lists, alerts and the project switcher.</span
-            >
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
@@ -63,9 +61,6 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             <button slot="actions" mat-stroked-button>Save name</button>
           </gt-settings-section>
           <gt-settings-section #addEnv title="Add environment" [inline]="true">
-            <span slot="description"
-              >Events tagged with this environment show under it.</span
-            >
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input matInput [attr.aria-labelledby]="addEnv.titleId" />
             </mat-form-field>
@@ -115,17 +110,19 @@ export class SettingsSectionPreview {
     "Show a failed delete with gt-form-error inside its delete section, not a toast",
     "Name the object in bold in a delete section's description",
     "Show the value as plain text when the person cannot edit it",
+    "Give a section a description only when it says something the title and control do not: a consequence, a limit, non-obvious behaviour",
   ];
   readonly donts = [
     "Wrap sections in cards",
     "Put a list and the field that adds to it in one section; make them two, joined",
     "Repeat the title as the label of a section's only field",
+    "Write a description that restates the title or the control; omit it instead",
     "Use a filled Save; settings pages have no primary action",
     "Box the danger section in red; the warn button and the dialog carry the warning",
   ];
   readonly content = [
     "Title: the setting's name, in sentence case: Name, Delete project",
-    "Description: one line on what the setting does",
+    "Description: optional, one line on a consequence, a limit or non-obvious behaviour",
   ];
   readonly api: ApiRow[] = [
     {
@@ -150,7 +147,8 @@ export class SettingsSectionPreview {
       name: '[slot="description"]',
       type: "projected",
       default: "",
-      description: "One line of help; may contain a link",
+      description:
+        "Optional. One line the title and control do not already say; may contain a link",
     },
     {
       name: '[slot="actions"]',
@@ -162,7 +160,6 @@ export class SettingsSectionPreview {
   readonly importCode = `import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";`;
   readonly code = `<form [formGroup]="nameForm" (ngSubmit)="updateName()">
   <gt-settings-section #name title="Name" [inline]="true">
-    <span slot="description">Shown in issue lists and alerts.</span>
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input matInput formControlName="name" [attr.aria-labelledby]="name.titleId" />
     </mat-form-field>

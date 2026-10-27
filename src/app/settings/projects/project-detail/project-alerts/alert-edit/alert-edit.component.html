@@ -9,9 +9,6 @@
 <h2 class="title">{{ title() }}</h2>
 
 <gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
-  <span slot="description" i18n
-    >Shown in the alert list and in notifications.</span
-  >
   <mat-form-field appearance="outline" subscriptSizing="dynamic">
     <input
       matInput
@@ -134,8 +131,8 @@
 @if (alert()?.id && canDelete()) {
   <gt-settings-section i18n-title title="Delete alert">
     <span slot="description" i18n
-      >Deletes {{ title() }} and stops its notifications. This cannot be
-      undone.</span
+      >Deletes <strong>{{ displayName() }}</strong> and stops its notifications.
+      This cannot be undone.</span
     >
     @if (deleteError()) {
       <gt-form-error [errors]="deleteError()" />

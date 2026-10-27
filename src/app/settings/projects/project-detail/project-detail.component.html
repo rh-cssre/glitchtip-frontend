@@ -52,9 +52,6 @@
               title="Name"
               [inline]="canWriteProject()"
             >
-              <span slot="description" i18n
-                >Shown in issue lists, alerts and the project switcher.</span
-              >
               @if (canWriteProject()) {
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                   <input
@@ -181,9 +178,6 @@
           </form>
 
           <gt-settings-section i18n-title title="Your notifications">
-            <span slot="description" i18n
-              >Manage which emails you get from GlitchTip.</span
-            >
             <a
               slot="actions"
               mat-stroked-button

@@ -103,15 +103,15 @@ export class DetailPagePreview {
   ];
   readonly dos = [
     "Put gt-back-link in the app bar's left slot, named with the parent page's nav label",
-    "Put page actions in the app bar's right slot: outlined or neutral only, at most two",
+    "Put page actions in the app bar's right slot: outlined or neutral only. One extra action is a neutral icon button; two or more go in a More actions menu",
     "Link to the record's edit page with an outlined Edit X, and put Delete in that page's last section",
-    "Without an edit page, put Delete in a More actions menu (see Top app bar)",
+    "Without an edit page, put Delete in the bar (see Top app bar)",
     "Render gt-page-header first inside the l-body content column (see Page header)",
   ];
   readonly donts = [
     "Hand-roll a back arrow instead of gt-back-link",
     "Add a margin to gt-back-link to line up its chevron; it already sits on the container edge",
-    "Put a filled button or a standalone delete icon in the bar",
+    "Put a filled button in the bar",
   ];
   readonly composition = {
     contains: ["Top app bar", "Back link", "Page header", "Buttons & actions"],
