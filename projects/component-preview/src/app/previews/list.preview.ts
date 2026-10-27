@@ -4,6 +4,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
 @Component({
@@ -14,6 +15,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    StatusPillComponent,
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +57,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <gt-list>
           <gt-list-row>
             new.hire&#64;acme.com
+            <gt-status-pill label="Invite pending" />
             <span slot="meta">Member</span>
             <ng-container slot="actions">
               <button
@@ -116,6 +119,7 @@ export class ListPreview {
     "Put two or more actions in a menu at the end of the row",
     "Keep row actions neutral; the confirm dialog carries the warning for a destructive one",
     "Keep action labels short (Remove, Hide) so the action column lines up",
+    "Show a row's state (Invite pending) with gt-status-pill after the name",
     "Mark a fixed attribute (Owner, Primary) with .list-row__tag after the name",
     "Say why a blocked action is blocked in the description line",
     "Put a tab's create action above its list in .gt-list-actions",
@@ -138,7 +142,7 @@ export class ListPreview {
       name: "gt-list-row content",
       type: "projected",
       default: "",
-      description: "The record's name, plus any tags",
+      description: "The record's name, plus any status pill or tags",
     },
     {
       name: ".list-row__tag",
