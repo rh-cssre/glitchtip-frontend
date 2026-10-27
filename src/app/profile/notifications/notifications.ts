@@ -35,6 +35,8 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
 export class Notifications implements OnInit {
   notificationsForLabel = (project: string) =>
     $localize`Alerts for ${project}:project:`;
+  onText = $localize`On`;
+  offText = $localize`Off`;
   private notificationsService = inject(NotificationsService);
 
   subscribeByDefault = this.notificationsService.subscribeByDefault;
@@ -60,25 +62,15 @@ export class Notifications implements OnInit {
     }
   }
 
-  /** What the project actually gets: its own setting, or the default. */
-  isOn(status: NotificationStatus) {
-    return status === -1 ? this.subscribeByDefault() : status === 1;
-  }
-
-  /**
-   * Matching the default saves "follow the default" (-1), so the project
-   * keeps following it; anything else saves an explicit On or Off.
-   */
+  /** Saves -1 (follow the default), 1 (on) or 0 (off). */
   async setProject(
     group: MatButtonToggleGroup,
     projectId: number,
     savedStatus: NotificationStatus,
-    on: boolean,
+    status: NotificationStatus,
   ) {
-    const status: NotificationStatus =
-      on === this.subscribeByDefault() ? -1 : on ? 1 : 0;
     if (!(await this.notificationsService.alertsUpdate(projectId, status))) {
-      group.value = this.isOn(savedStatus);
+      group.value = savedStatus;
     }
   }
 }

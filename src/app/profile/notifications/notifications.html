@@ -1,9 +1,5 @@
 <!-- Both choices save on click, like the theme: no Save buttons. -->
 <gt-settings-section #defaultSection i18n-title title="Project alerts">
-  <span slot="description" i18n
-    >The default for every project you're on. Each project below can change
-    it.</span
-  >
   <mat-button-toggle-group
     #defaultGroup="matButtonToggleGroup"
     hideSingleSelectionIndicator
@@ -19,9 +15,6 @@
 </gt-settings-section>
 
 <gt-settings-section i18n-title title="By project">
-  <span slot="description" i18n
-    >Projects follow the setting above unless you set them here.</span
-  >
   @for (projects of groupedProjects() | keyvalue; track projects.key) {
     <gt-list [label]="projects.value[0].organization.name">
       @for (project of projects.value; track project.id) {
@@ -46,7 +39,7 @@
             #projectGroup="matButtonToggleGroup"
             slot="actions"
             hideSingleSelectionIndicator
-            [value]="isOn(project.alertStatus)"
+            [value]="project.alertStatus"
             [disabled]="
               !subscribeByDefaultLoaded() ||
               projectAlertLoading() === project.id
@@ -61,8 +54,16 @@
               )
             "
           >
-            <mat-button-toggle [value]="true" i18n>On</mat-button-toggle>
-            <mat-button-toggle [value]="false" i18n>Off</mat-button-toggle>
+            <mat-button-toggle [value]="-1" i18n
+              >Default
+              <span
+                >({{
+                  (subscribeByDefault()) === true ? onText : offText
+                }})</span
+              ></mat-button-toggle
+            >
+            <mat-button-toggle [value]="1" i18n>On</mat-button-toggle>
+            <mat-button-toggle [value]="0" i18n>Off</mat-button-toggle>
           </mat-button-toggle-group>
         </gt-list-row>
       }
