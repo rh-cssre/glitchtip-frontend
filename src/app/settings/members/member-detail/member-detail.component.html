@@ -83,8 +83,8 @@
     @if (canTransfer()) {
       <gt-settings-section i18n-title title="Account ownership">
         <span slot="description" i18n
-          >The account owner holds the organization's subscription. Transferring
-          makes them the account owner. Nobody's role changes.</span
+          >The account owner holds the organization's subscription. Nobody's
+          role changes.</span
         >
         @if (transferOrgOwnershipError(); as error) {
           <gt-form-error [errors]="error" />
