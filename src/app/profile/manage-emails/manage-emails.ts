@@ -19,12 +19,12 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatDialog } from "@angular/material/dialog";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
-import { MatChipsModule } from "@angular/material/chips";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
+import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
@@ -33,7 +33,7 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
   styleUrls: ["./manage-emails.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatChipsModule,
+    StatusPillComponent,
     FormErrorComponent,
     LoadingButtonComponent,
     MatMenuModule,

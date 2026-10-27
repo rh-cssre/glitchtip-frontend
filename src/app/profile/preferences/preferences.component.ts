@@ -25,6 +25,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -51,6 +52,7 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
     MatOptionModule,
     LoadingButtonComponent,
     SettingsSectionComponent,
+    FormErrorComponent,
   ],
 })
 export class PreferencesComponent implements OnInit {
@@ -73,7 +75,8 @@ export class PreferencesComponent implements OnInit {
     ),
   });
   filteredOptions = signal<string[]>([]);
-  saving = signal<"name" | "timeZone" | null>(null);
+  saving = signal<"name" | "timeZone" | "theme" | null>(null);
+  themeError = signal<string | null>(null);
   userDetails = this.service.user;
   serverTimeZone = this.settings.serverTimeZone;
 
@@ -160,15 +163,29 @@ export class PreferencesComponent implements OnInit {
       ...(timezone !== undefined && timezone !== null && { timezone }),
       ...(preferredTheme && { preferredTheme }),
     };
+    this.saving.set(field);
     if (field === "theme") {
-      if (!(await this.service.updateUser(name, options))) {
-        control.setValue(user.options?.preferredTheme || "system", {
-          emitEvent: false,
+      // Save-on-change: lock the toggle, stay quiet on success, roll back on failure.
+      this.themeError.set(null);
+      control.disable({ emitEvent: false });
+      try {
+        const saved = await this.service.updateUser(name, options, {
+          silent: true,
         });
+        if (!saved) {
+          control.setValue(user.options?.preferredTheme || "system", {
+            emitEvent: false,
+          });
+          this.themeError.set(
+            $localize`Error attempting to update preferences`,
+          );
+        }
+      } finally {
+        control.enable({ emitEvent: false });
+        this.saving.set(null);
       }
       return;
     }
-    this.saving.set(field);
     try {
       await this.service.updateUser(name, options);
     } finally {

@@ -51,12 +51,10 @@
         <gt-list-row data-cy="email-row">
           <span>{{ email.email }}</span>
           @if (email.isPrimary) {
-            <mat-chip class="caption-text" highlighted="true" i18n
-              >Primary</mat-chip
-            >
+            <span class="list-row__tag" i18n>Primary</span>
           }
           @if (!email.isVerified) {
-            <mat-chip class="caption-text" i18n>Unverified</mat-chip>
+            <gt-status-pill i18n-label label="Unverified" />
           }
           <!-- One level of @if: a slotted node only projects from a
                single-root block. One action is a button; two go in a menu. -->

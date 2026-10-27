@@ -86,7 +86,12 @@ export class UserService extends StatefulService<UserState> {
     return false;
   }
 
-  async updateUser(name: string, options: UserOptions): Promise<boolean> {
+  /** `silent` skips the toasts, for callers that show the result inline. */
+  async updateUser(
+    name: string,
+    options: UserOptions,
+    { silent = false } = {},
+  ): Promise<boolean> {
     const result = await client.PUT("/api/0/users/{user_id}/", {
       params: {
         path: mePath,
@@ -95,10 +100,14 @@ export class UserService extends StatefulService<UserState> {
     });
     if (result.data) {
       this.userResource.set(result.data);
-      this.snackBar.open($localize`Preferences have been updated`);
+      if (!silent) {
+        this.snackBar.open($localize`Preferences have been updated`);
+      }
       return true;
     }
-    this.snackBar.open($localize`Error attempting to update preferences`);
+    if (!silent) {
+      this.snackBar.open($localize`Error attempting to update preferences`);
+    }
     return false;
   }
 
