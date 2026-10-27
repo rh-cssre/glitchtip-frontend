@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="Back to Projects" />
+    <gt-back-link i18n-backLinkText backLinkText="Projects" />
   </ng-container>
 </gt-top-app-bar>
 
@@ -18,13 +18,6 @@
         <span i18n>Created {{ project.dateCreated | date: "mediumDate" }}</span>
       </span>
     </gt-page-header>
-    @if (project.isMember === false) {
-      <p class="project-note body-text" i18n>
-        You can manage {{ project.name }} as an admin of
-        {{ project.organization.name }}. To see its issues, join one of its
-        teams.
-      </p>
-    }
     <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="settingsPanel">
       @for (t of tabs; track t.id) {
         <a
@@ -35,8 +28,8 @@
           queryParamsHandling="merge"
           replaceUrl
           >{{ t.label }}
-          @if (t.id === "dsn" && projectKeys()?.length; as count) {
-            <span class="tab-count">{{ count }}</span>
+          @if (t.id === "dsn" && projectKeys(); as keys) {
+            <span class="tab-count">{{ keys.length }}</span>
           }
         </a>
       }
@@ -45,6 +38,13 @@
     <mat-tab-nav-panel #settingsPanel>
       @switch (tab()) {
         @case ("general") {
+          @if (project.isMember === false) {
+            <p class="page-intro" i18n>
+              You can manage {{ project.name }} as an admin of
+              {{ project.organization.name }}. To see its issues, join one of
+              its teams.
+            </p>
+          }
           <form [formGroup]="nameForm" (ngSubmit)="updateName()">
             <gt-settings-section
               #nameSection
@@ -199,6 +199,9 @@
                 >Deletes {{ project.name }} and all of its issues, events and
                 settings. This cannot be undone.</span
               >
+              @if (deleteError()) {
+                <gt-form-error [errors]="deleteError()" />
+              }
               <gt-loading-button
                 slot="actions"
                 i18n-buttonText

@@ -149,8 +149,8 @@ export class ProjectAlertsService {
     );
   }
 
-  /** Returns true once the alert is gone. */
-  async deleteProjectAlert(id: number) {
+  /** Returns null once the alert is gone, or the error to show. */
+  async deleteProjectAlert(id: number): Promise<string | null> {
     const { error, response } = await client.DELETE(
       "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
       { params: { path: { ...this.#path(), alert_id: id } } },
@@ -158,15 +158,12 @@ export class ProjectAlertsService {
     if (response.status === 204) {
       this.snackBar.open($localize`Alert deleted`);
       this.#projectAlertsResource.reload();
-      return true;
+      return null;
     }
-    if (error) {
-      this.snackBar.open(
-        handleError(error, response).detail[0]?.msg ??
-          $localize`The alert couldn't be deleted. Try again.`,
-      );
-    }
-    return false;
+    return (
+      (error && handleError(error, response).detail[0]?.msg) ||
+      $localize`The alert couldn't be deleted. Try again.`
+    );
   }
 
   async testRecipient(alertId: number, recipientId: number) {

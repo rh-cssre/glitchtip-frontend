@@ -47,6 +47,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -73,7 +74,6 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   selector: "gt-project-detail",
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./project-detail.component.html",
-  styleUrls: ["./project-detail.component.scss"],
   imports: [
     DatePipe,
     MatInputModule,
@@ -92,6 +92,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     BackLinkComponent,
     TopAppBar,
     SettingsSectionComponent,
+    FormErrorComponent,
   ],
   providers: [
     ProjectDetailService,
@@ -220,7 +221,7 @@ export class ProjectDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: $localize`Delete ${name}:name:?`,
-        message: $localize`All of its issues, events and settings will be deleted.`,
+        message: $localize`All of its issues, events and settings will be deleted. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });
@@ -234,8 +235,6 @@ export class ProjectDetailComponent implements OnInit {
             $localize`Your project has been successfully deleted`,
           );
           this.#router.navigate([this.orgSlug(), "settings", "projects"]);
-        } else {
-          this.#snackBar.open(this.deleteError());
         }
       }
     });

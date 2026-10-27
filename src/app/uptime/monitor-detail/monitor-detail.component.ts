@@ -36,11 +36,9 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
-import {
-  alertName,
-  alertSummary,
-} from "src/app/settings/projects/project-detail/project-alerts/alert-labels";
+import { alertName } from "src/app/settings/projects/project-detail/project-alerts/alert-labels";
 import { AlertRecipientsComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-recipients/alert-recipients.component";
+import { AlertSummaryComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-summary/alert-summary.component";
 import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
@@ -74,6 +72,7 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     ListComponent,
     ListRowComponent,
     AlertRecipientsComponent,
+    AlertSummaryComponent,
   ],
 })
 export class MonitorDetailComponent
@@ -143,7 +142,6 @@ export class MonitorDetailComponent
   monitorAlerts = this.service.monitorAlerts;
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertName = alertName;
-  alertSummary = alertSummary;
   alertCountLoading = this.service.alertCountLoading;
   alertsError = this.service.alertsError;
   associatedProjectSlug = this.service.associatedProjectSlug;

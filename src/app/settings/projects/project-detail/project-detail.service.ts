@@ -129,7 +129,7 @@ export class ProjectDetailService extends StatefulService<State> {
   }
 
   async deleteProject(): Promise<boolean> {
-    this.setState({ deleteLoading: true });
+    this.setState({ deleteLoading: true, deleteError: "" });
     const { error, response } = await client.DELETE(
       "/api/0/projects/{organization_id_or_slug}/{project_slug}/",
       {

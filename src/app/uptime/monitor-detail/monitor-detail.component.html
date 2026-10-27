@@ -208,7 +208,7 @@
                 @for (alert of monitorAlerts(); track alert.id) {
                   <gt-list-row>
                     <span>{{ alertName(alert) }}</span>
-                    <span slot="description">{{ alertSummary(alert) }}</span>
+                    <gt-alert-summary slot="description" [alert]="alert" />
                     <gt-alert-recipients
                       slot="meta"
                       [recipients]="alert.alertRecipients"

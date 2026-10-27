@@ -9,17 +9,18 @@ import {
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { ProjectEnvironmentsService } from "../project-environments/project-environments.service";
 import { AlertEditComponent } from "./alert-edit/alert-edit.component";
-import { alertName, alertSummary } from "./alert-labels";
+import { alertName } from "./alert-labels";
 import { AlertRecipientsComponent } from "./alert-recipients/alert-recipients.component";
+import { AlertSummaryComponent } from "./alert-summary/alert-summary.component";
 import { ProjectAlertsService } from "./project-alerts.service";
 
 /** The Alerts tab: a list of alerts, or one alert's edit view (?alert=id|new). */
@@ -30,14 +31,15 @@ import { ProjectAlertsService } from "./project-alerts.service";
   imports: [
     RouterLink,
     MatButtonModule,
-    MatFormFieldModule,
     MatIconModule,
     MatProgressSpinnerModule,
     EmptyStateComponent,
+    FormErrorComponent,
     ListComponent,
     ListRowComponent,
     AlertEditComponent,
     AlertRecipientsComponent,
+    AlertSummaryComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ProjectAlertsService, ProjectEnvironmentsService],
@@ -58,7 +60,6 @@ export class ProjectAlertsComponent implements OnInit {
   canAdminProject = this.#orgs.canAdminProject;
   availableEnvironments = this.#environmentsService.visibleEnvironments;
   alertName = alertName;
-  alertSummary = alertSummary;
   projectTeams = this.#service.projectTeams;
 
   /** The alert being edited, from the URL; only for people who can edit. */

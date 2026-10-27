@@ -78,26 +78,7 @@ form {
   }
 }
 
-.environment-scope__title {
-  margin: 0;
-  font: var(--mat-sys-title-small);
-  font-weight: 600;
-  color: var(--mat-sys-on-surface);
-}
-
-.environment-scope__description {
-  max-width: var(--gt-measure, 70ch);
-  margin: var(--gt-space-1, 4px) 0 var(--gt-space-3, 12px);
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-surface-variant);
-}
-
-.error {
+// Tighter than a form-level error: it belongs to the line above.
+:host .trigger__error {
   margin: var(--gt-space-2, 8px) 0 0;
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-error);
-}
-
-.alert-form-error {
-  margin: 0 0 var(--gt-space-3, 12px);
 }

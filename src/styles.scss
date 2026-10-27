@@ -246,6 +246,33 @@ mat-sidenav-container {
   display: none;
 }
 
+// In-page subheading, such as a gt-list label.
+.gt-subheading {
+  margin: 0 0 var(--gt-space-2, 8px);
+  font: var(--mat-sys-title-small);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.gt-subheading:has(+ .gt-subheading__description) {
+  margin-bottom: var(--gt-space-1, 4px);
+}
+
+.gt-subheading__description {
+  max-width: var(--gt-measure, 70ch);
+  margin: 0 0 var(--gt-space-3, 12px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Create action above a list inside a record's tab.
+.gt-list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gt-space-2, 8px);
+  margin-bottom: var(--gt-space-4, 16px);
+}
+
 .full-width {
   width: 100%;
 }
@@ -295,10 +322,23 @@ mat-sidenav-container {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
-// A continuation sits right under what it continues.
+// A continuation sits right under what it continues. The first section in
+// its container sits flush too, unless it opens a form or component that
+// follows another section, where the hairline above needs the padding.
 gt-settings-section.gt-settings-continued,
-.gt-settings-continued gt-settings-section {
+.gt-settings-continued gt-settings-section,
+gt-settings-section:first-child:not(
+    :is(gt-settings-section, :has(gt-settings-section)) ~ * > *,
+    :is(gt-settings-section, :has(gt-settings-section)) ~ * > * > *
+  ) {
   padding-top: 0;
+}
+
+// Content starts 16px under a tab bar. A panel inside a card already has the
+// card's padding.
+mat-tab-nav-panel:not(mat-card-content > *) {
+  display: block;
+  padding-top: var(--gt-space-4, 16px);
 }
 
 .gt-form-actions {
@@ -549,8 +589,8 @@ gt-pagination-buttons {
 
 .tab-count {
   margin-left: var(--gt-space-2, 8px);
-  padding: 1px 7px;
-  border-radius: 999px;
+  padding: 1px var(--gt-space-2, 8px);
+  border-radius: var(--mat-sys-corner-full);
   font: var(--mat-sys-label-small);
   background-color: var(--mat-sys-surface-container-highest);
   color: var(--mat-sys-on-surface-variant);
