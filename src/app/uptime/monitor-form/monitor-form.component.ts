@@ -18,7 +18,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from "@angular/forms";
-import { DecimalPipe, NgTemplateOutlet } from "@angular/common";
+import { DecimalPipe } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatInputModule } from "@angular/material/input";
@@ -68,11 +68,9 @@ const portUrlValidators = [
 @Component({
   selector: "gt-monitor-form",
   templateUrl: "./monitor-form.component.html",
-  styleUrls: ["./monitor-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DecimalPipe,
-    NgTemplateOutlet,
     ReactiveFormsModule,
     RouterModule,
     LoadingButtonComponent,
