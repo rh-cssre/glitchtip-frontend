@@ -107,6 +107,7 @@ export class PageHeaderPreview {
     "Add a divider under the header; the tab bar is the only line",
     "Put buttons in the header",
     "Repeat the page type in the title (Settings for project)",
+    "Repeat the title in the meta, such as a slug chip under the name (Acme Shop, acme-shop)",
   ];
   readonly content = [
     "Title: the record's own name, never a sentence about it",

@@ -196,8 +196,8 @@
           @if (canAdminProject()) {
             <gt-settings-section i18n-title title="Delete project">
               <span slot="description" i18n
-                >Deletes {{ project.name }} and all of its issues, events and
-                settings. This cannot be undone.</span
+                >Deletes <strong>{{ project.name }}</strong> and all of its issues,
+                events and settings. This cannot be undone.</span
               >
               @if (deleteError()) {
                 <gt-form-error [errors]="deleteError()" />
