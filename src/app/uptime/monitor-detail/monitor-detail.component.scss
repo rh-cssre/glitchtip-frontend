@@ -19,19 +19,14 @@
   margin: 0 0 var(--gt-space-3, 12px);
 }
 
-mat-progress-spinner {
-  margin-left: auto;
-  margin-right: auto;
+.initial-loading {
+  padding: 120px 0;
+
+  mat-progress-spinner {
+    margin: 0 auto;
+  }
 }
 
 .check-bars {
   margin-bottom: var(--gt-space-4, 16px);
-}
-
-.create-alert {
-  margin-bottom: var(--gt-space-4, 16px);
-}
-
-.load-error {
-  display: block;
 }

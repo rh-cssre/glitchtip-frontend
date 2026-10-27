@@ -16,10 +16,11 @@ import { MonitorResponseChart } from "../monitor-response-chart/monitor-response
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { MatTabsModule } from "@angular/material/tabs";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { DecimalPipe } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -50,12 +51,13 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     TimeForPipe,
     DecimalPipe,
     MatButtonModule,
+    MatIconModule,
     MonitorChartComponent,
     MatProgressSpinnerModule,
     PageHeaderComponent,
     EmptyStateComponent,
     MatTabsModule,
-    MatFormFieldModule,
+    FormErrorComponent,
     TopAppBar,
     BackLinkComponent,
     ListComponent,
