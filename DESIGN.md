@@ -54,7 +54,7 @@ Rule: use these in new code instead of ad-hoc pixel values. Migrating existing u
 
 ### Radius and elevation
 
-Corner radius is `$shape-radius` (4px). Elevation uses Material 3 `--mat-sys-level*` shadows.
+Corner radius is `$shape-radius` (4px). Tags (`.chip`) use `--mat-sys-corner-extra-small`; counts (`.tab-count`) and status pills use `--mat-sys-corner-full`. Elevation uses Material 3 `--mat-sys-level*` shadows.
 
 ## Components
 
@@ -75,9 +75,19 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
 - A fact that continues the pill ("for 2 hours") gets class `no-sep`, so no separator is drawn before it.
 - When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.
-- Tabs drawn by one component use a `?tab=` query param. Tabs that are separate routed components use child routes.
+- Tabs drawn by one component use a `?tab=` query param. Tabs that are separate routed components use child routes. The default tab has no `?tab=`, and tab clicks replace history. Counts show once known, including 0.
 - The back link and page actions live in the top app bar, never in the header.
-- The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api").
+- The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api"). Titles have one style; an identifier title (an email, a version) is not set in mono.
+
+### Top app bar
+
+- The bar is 48px tall. `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets it; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
+- The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all".
+- List pages put one filled "New X" in the right slot.
+- Record pages have no filled button in the bar: at most two outlined or neutral controls, the rest in a "More actions" menu. A record with an edit page links to it with an outlined "Edit X".
+- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one puts Delete in the bar's "More actions" menu. Never a standalone delete icon button.
+- Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
+- The right slot holds actions only, never facts such as the user's email.
 
 ## Accessibility
 
