@@ -15,6 +15,7 @@ import { MatInputModule } from "@angular/material/input";
   styles: `
     :host {
       display: block;
+      font: var(--mat-sys-body-small);
     }
     :host:not(:empty) {
       margin-bottom: var(--gt-space-3, 12px);

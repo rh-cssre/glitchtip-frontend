@@ -55,6 +55,7 @@ export class CopyInputPreview {
   readonly api: ApiRow[] = [
     { name: "value", type: "string", default: `""`, description: "The value shown and copied" },
     { name: "placeholder", type: "string", default: `""`, description: "Placeholder / field label" },
+    { name: "labelledBy", type: "string | null", default: "null", description: "Id of a visible label, such as a settings section's titleId, for aria-labelledby" },
   ];
   readonly importCode = `import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";`;
   readonly code = `<gt-copy-input

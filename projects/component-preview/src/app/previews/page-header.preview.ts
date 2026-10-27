@@ -12,7 +12,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       .ph-surface {
         padding: var(--gt-space-4) var(--gt-space-5) var(--gt-space-2);
         border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 8px;
+        border-radius: var(--mat-sys-corner-extra-small);
         background: var(--mat-sys-surface);
       }
       .ph-surface + .ph-surface {
@@ -99,6 +99,7 @@ export class PageHeaderPreview {
     "Show a record's state with status, rendered as the Status pill, first in the meta line",
     "Add class no-sep to a fact that continues the pill, such as for 2 hours",
     "Put tabs directly below when the record has facets, with counts in .tab-count",
+    "Show a tab count once it is known, including 0; leave ?tab= off the default tab",
     "Keep the back link and page actions in the top app bar",
   ];
   readonly donts = [
@@ -116,12 +117,6 @@ export class PageHeaderPreview {
       type: "string",
       default: "",
       description: "The record's name (required)",
-    },
-    {
-      name: "titleMono",
-      type: "boolean",
-      default: "false",
-      description: "Set when the title is an identifier, such as an email",
     },
     {
       name: "icon",
