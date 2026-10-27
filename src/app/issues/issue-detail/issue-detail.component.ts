@@ -6,20 +6,18 @@ import {
   computed,
   input,
   effect,
-  signal,
 } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatCardModule } from "@angular/material/card";
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { toSignal } from "@angular/core/rxjs-interop";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { IssueDetailService } from "./issue-detail.service";
 import { DaysAgoPipe } from "../../shared/days-ago.pipe";
 import { IssueDetailTagsComponent } from "./issue-detail-tags/issue-detail-tags.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { DatePipe, DecimalPipe, TitleCasePipe } from "@angular/common";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
@@ -46,6 +44,7 @@ const ISSUE_STATUS: Record<IssueStatus, { label: string; color: string }> = {
     MatTabsModule,
     MatIconModule,
     MatButtonModule,
+    MatMenuModule,
     IssueDetailTagsComponent,
     TitleCasePipe,
     DatePipe,
@@ -58,12 +57,9 @@ const ISSUE_STATUS: Record<IssueStatus, { label: string; color: string }> = {
   ],
 })
 export class IssueDetailComponent implements OnInit {
-  issuesText = $localize`Issues`;
-  allIssuesFor = (project: string) => $localize`All issues for ${project}:project:`;
   private issueService = inject(IssueDetailService);
   private organizationsService = inject(OrganizationsService);
   private route = inject(ActivatedRoute);
-  protected breakPointObserver = inject(BreakpointObserver);
   private dialog = inject(MatDialog);
 
   issue = this.issueService.issue;
@@ -137,23 +133,9 @@ export class IssueDetailComponent implements OnInit {
     other: "# Participants",
   };
 
-  isMobile = signal(false);
-  smallBreakpointSignal = toSignal(
-    this.breakPointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]),
-  );
-
   constructor() {
     effect(() => {
       this.issueService.issueID.set(this.issueID());
-    });
-
-    effect(() => {
-      const breakpointResult = this.smallBreakpointSignal();
-      if (breakpointResult?.matches) {
-        this.isMobile.set(true);
-      } else {
-        this.isMobile.set(false);
-      }
     });
   }
 

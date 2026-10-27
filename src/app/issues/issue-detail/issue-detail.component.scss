@@ -30,21 +30,10 @@ dl {
   }
 }
 
-.event-detail-card {
-  margin-right: 16px;
-
-  .tab-nav-container {
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--mat-sys-outline-variant);
-  }
-
-  @media screen and (max-width: vars.$medium - 1) {
-    margin-right: 0;
-  }
-
-  > .tabbed-nav {
-    margin: -16px -16px 16px;
-  }
+// Matches the global tab panel padding; remove once that rule lands here.
+.issue-tab-panel {
+  display: block;
+  padding-top: var(--gt-space-4, 16px);
 }
 
 mat-grid-list {
@@ -59,6 +48,7 @@ mat-grid-list {
 .row {
   display: flex;
   align-items: flex-start;
+  gap: var(--gt-space-4, 16px);
   margin-bottom: 30px;
 
   @media screen and (max-width: vars.$medium - 1) {
@@ -67,6 +57,7 @@ mat-grid-list {
 
   .left {
     flex: 75%;
+    min-width: 0;
     overflow: hidden;
 
     @media screen and (max-width: vars.$medium - 1) {
@@ -79,9 +70,8 @@ mat-grid-list {
 
     @media screen and (max-width: vars.$medium - 1) {
       width: 100%;
-      margin-bottom: 30px;
 
-      &:not(:has(mat-card)) {
+      &:not(:has(.issue-tags)) {
         display: none;
       }
     }

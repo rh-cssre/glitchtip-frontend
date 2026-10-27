@@ -29,9 +29,8 @@
   <gt-top-app-bar>
     <ng-container slot="left">
       <gt-back-link
-        [backLinkText]="
-          isMobile() ? issuesText : allIssuesFor(issue.project.name)
-        "
+        i18n-backLinkText
+        backLinkText="Issues"
         [backLinkParams]="generateBackLink(issue.project.id)"
       />
     </ng-container>
@@ -47,12 +46,18 @@
         <button
           mat-icon-button
           class="medium-icon-button"
-          aria-label="Delete issue"
+          aria-label="More actions"
           i18n-aria-label
-          (click)="deleteIssue()"
+          [matMenuTriggerFor]="moreActions"
         >
-          <mat-icon>delete</mat-icon>
+          <mat-icon>more_horiz</mat-icon>
         </button>
+        <mat-menu #moreActions="matMenu" xPosition="before">
+          <button mat-menu-item (click)="deleteIssue()">
+            <mat-icon>delete</mat-icon>
+            <span i18n>Delete issue</span>
+          </button>
+        </mat-menu>
       </div>
     </ng-container>
   </gt-top-app-bar>
@@ -95,71 +100,56 @@
       </span>
     </gt-page-header>
 
-    <div class="row">
-      <mat-card class="event-detail-card left">
-        <div class="tab-nav-container">
-          <nav
-            mat-tab-nav-bar
-            class="tabbed-nav"
-            mat-stretch-tabs="false"
-            [tabPanel]="tabPanel"
-          >
-            <a
-              mat-tab-link
-              [routerLink]="['./']"
-              routerLinkActive
-              [active]="details.isActive"
-              [routerLinkActiveOptions]="{ exact: true }"
-              #details="routerLinkActive"
-              i18n
-              >Event Details</a
-            >
-            <a
-              mat-tab-link
-              [routerLink]="['user-reports']"
-              routerLinkActive
-              [active]="reports.isActive"
-              #reports="routerLinkActive"
-            >
-              <ng-container i18n>User Reports</ng-container>
-              @if (issue.userReportCount > 0) {
-                <span class="tab-count">{{
-                  issue.userReportCount | number
-                }}</span>
-              }
-            </a>
-            <a
-              mat-tab-link
-              [routerLink]="['comments']"
-              routerLinkActive
-              [active]="comments.isActive"
-              #comments="routerLinkActive"
-            >
-              <ng-container i18n>Comments</ng-container>
-              @if (issue.numComments > 0) {
-                <span class="tab-count">{{ issue.numComments | number }}</span>
-              }
-            </a>
-            <a
-              mat-tab-link
-              [routerLink]="['merged']"
-              routerLinkActive
-              [active]="merged.isActive"
-              #merged="routerLinkActive"
-              i18n
-              >Merged</a
-            >
-          </nav>
+    <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
+      <a
+        mat-tab-link
+        [routerLink]="['./']"
+        routerLinkActive
+        [active]="details.isActive"
+        [routerLinkActiveOptions]="{ exact: true }"
+        #details="routerLinkActive"
+        i18n
+        >Event Details</a
+      >
+      <a
+        mat-tab-link
+        [routerLink]="['user-reports']"
+        routerLinkActive
+        [active]="reports.isActive"
+        #reports="routerLinkActive"
+      >
+        <ng-container i18n>User Reports</ng-container>
+        <span class="tab-count">{{ issue.userReportCount | number }}</span>
+      </a>
+      <a
+        mat-tab-link
+        [routerLink]="['comments']"
+        routerLinkActive
+        [active]="comments.isActive"
+        #comments="routerLinkActive"
+      >
+        <ng-container i18n>Comments</ng-container>
+        <span class="tab-count">{{ issue.numComments | number }}</span>
+      </a>
+      <a
+        mat-tab-link
+        [routerLink]="['merged']"
+        routerLinkActive
+        [active]="merged.isActive"
+        #merged="routerLinkActive"
+        i18n
+        >Merged</a
+      >
+    </nav>
+    <mat-tab-nav-panel #tabPanel class="issue-tab-panel">
+      <div class="row">
+        <div class="left">
+          <router-outlet></router-outlet>
         </div>
-        <mat-card-content>
-          <mat-tab-nav-panel #tabPanel>
-            <router-outlet></router-outlet>
-          </mat-tab-nav-panel>
-        </mat-card-content>
-      </mat-card>
-      <aside class="right">
-        <gt-issue-detail-tags [issueID]="issueID()"></gt-issue-detail-tags>
-      </aside>
-    </div>
+        <aside class="right">
+          <gt-issue-detail-tags [issueID]="issueID()"></gt-issue-detail-tags>
+        </aside>
+      </div>
+    </mat-tab-nav-panel>
   </section>
 }

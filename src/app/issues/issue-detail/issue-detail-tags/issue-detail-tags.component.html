@@ -1,40 +1,38 @@
 @if (tags()?.length) {
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <h3 i18n class="body-text-strong">Tags</h3>
-      @for (tag of tags(); track tag.key) {
-        <p class="top-value caption-text">
-          <span class="key">{{ tag.key }}</span>
-          <span>
-            {{ tag.topValues[0].value }}: {{ tag.topValues[0].percentRounded }}%
-          </span>
-        </p>
-        <div>
-          <div class="bars">
-            @for (topValue of tag.topValues; track topValue.name) {
-              <span
-                class="bar"
-                [ngStyle]="{
-                  'width.%': topValue.percentRounded,
-                }"
-                matTooltip="
-            {{ topValue.value }} - {{ topValue.percentRounded }}%
-          "
-                matTooltipPosition="left"
-              ></span>
-            }
-            <span i18n-matTooltip
+  <section class="issue-tags">
+    <h2 i18n class="issue-tags__title">Tags</h2>
+    @for (tag of tags(); track tag.key) {
+      <p class="top-value caption-text">
+        <span class="key">{{ tag.key }}</span>
+        <span>
+          {{ tag.topValues[0].value }}: {{ tag.topValues[0].percentRounded }}%
+        </span>
+      </p>
+      <div>
+        <div class="bars">
+          @for (topValue of tag.topValues; track topValue.name) {
+            <span
               class="bar"
               [ngStyle]="{
-                'width.%': tag.other,
+                'width.%': topValue.percentRounded,
               }"
               matTooltip="
-          Other - {{ tag.other }}%
+          {{ topValue.value }} - {{ topValue.percentRounded }}%
         "
               matTooltipPosition="left"
-            ></span> </div
-        ></div>
-      }
-    </mat-card-content>
-  </mat-card>
+            ></span>
+          }
+          <span i18n-matTooltip
+            class="bar"
+            [ngStyle]="{
+              'width.%': tag.other,
+            }"
+            matTooltip="
+        Other - {{ tag.other }}%
+      "
+            matTooltipPosition="left"
+          ></span> </div
+      ></div>
+    }
+  </section>
 }

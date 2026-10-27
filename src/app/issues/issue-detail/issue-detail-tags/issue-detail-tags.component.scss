@@ -1,5 +1,8 @@
-mat-card {
-  padding-bottom: 32px;
+.issue-tags__title {
+  margin: 0 0 var(--gt-space-2, 8px);
+  font: var(--mat-sys-title-small);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
 }
 
 .key {
