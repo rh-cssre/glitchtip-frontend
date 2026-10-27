@@ -29,7 +29,7 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 ### Typography
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
-- **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
+- **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive. `.gt-bar-title` (top app bar titles) is one size at every width.
 - **In-page subheading:** `.gt-subheading` (title-small, 600, on-surface, in `src/styles.scss`) for a heading inside a page section, such as a `gt-list` label. `.gt-subheading__description` is the muted line under it.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
 
@@ -96,23 +96,28 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - The top app bar is 48px. Every control in it is 32px: compact buttons and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
 - Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (8% on hover, 12% on focus and while open), with no focus ring and no primary colour. The owning component toggles `gt-select-ghost--open` from the select's `openedChange` output and calls the select's `open()` on wrapper clicks, so the padding opens it too. Give each one an `aria-label` and a fixed width; long names truncate.
+- A list, settings or profile bar is titled with an `h1.gt-bar-title`: the title-large type token at weight 600, the same on every bar. A count goes after the name in a `.gt-bar-title-count` span, in regular weight and `--mat-sys-on-surface-variant`.
 - The bar draws only its bottom border. Groups of controls are separated by gap spacing, not vertical dividers.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all". The component pulls itself left by the button's leading inset (12px), so its chevron sits on the container edge wherever it is placed; don't add a local margin to compensate.
 - List pages put one filled "New X" in the right slot. Profile pages set it as an `action` (link and text) in their route data; the profile wrapper renders it.
-- Record pages have no filled button in the bar: at most two outlined or neutral controls, the rest in a "More actions" menu. A record with an edit page links to it with an outlined "Edit X".
-- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one puts Delete in the bar's "More actions" menu. Never a standalone delete icon button.
+- Record pages have no filled button in the bar. A record with an edit page links to it with an outlined "Edit X".
+- One extra action in a record bar is a neutral 32px icon button with a tooltip and an `aria-label` that names it ("Delete issue"). Two or more extra actions go in a "More actions" menu. Bar icon buttons take their size from the bar; don't add `.medium-icon-button`, which forces 36px.
+- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button). A record without one deletes from the bar. Either way, the confirm names the object.
+- A record's status control in the bar ("Unresolved") is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`: blue for unresolved, green for resolved. Never a filled primary button.
+- Primary red marks at most one main create or confirm action per page.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
 
 ### Forms
 
-- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Filters in the top app bar are ghost selects, not fields (see Top app bar).
 
 ### Settings sections
 
-Every setting on a settings page is a `gt-settings-section`: a title, one line of help, then the control and its actions.
+Every setting on a settings page is a `gt-settings-section`: a title, an optional line of help, then the control and its actions.
 
+- A section description must say something the title and control do not (a consequence, a limit, non-obvious behaviour). Otherwise omit it.
 - Sections stack in one column with a hairline (`outline-variant`) between them, none above the first or below the last. No cards.
 - The first section in its container sits flush with what is above it. Content starts 16px under a tab bar, from one global `mat-tab-nav-panel` rule; pages do not pad their own panel.
 - A single control uses `inline`, with its action beside it. The section title is the field's only visible label, linked with `aria-labelledby`. Several controls, or none, put the action below, left-aligned. A list and the field that adds to it are two sections, joined: the add field comes first, then the list, which takes `.gt-settings-continued` so no line splits them.
@@ -127,6 +132,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error`, just above the `.gt-form-actions` row, on create and edit forms alike.
 - An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. It has one section per field, then `gt-form-error`, then `.gt-form-actions`: a filled "Create X" and a text Cancel.
+- Create forms are titled New X, edit forms Edit X; the back link names where you return to.
 - An edit form takes the create form's shape: fields in sections, then `gt-form-error`, then "Save X" and a text Cancel in `.gt-form-actions`, then "Delete X" as the last section. A section that follows `.gt-form-actions` starts 24px below the buttons, from one global rule, so they never sit on its hairline.
 
 ### Surfaces

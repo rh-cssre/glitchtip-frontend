@@ -3,7 +3,7 @@
     @if (backLink(); as backLink) {
       <gt-back-link [link]="backLink.link" [backLinkText]="backLink.text" />
     } @else if (title()) {
-      <h1 class="section-header-text">{{ title() }}</h1>
+      <h1 class="gt-bar-title">{{ title() }}</h1>
     }
   </ng-container>
   @if (action(); as action) {

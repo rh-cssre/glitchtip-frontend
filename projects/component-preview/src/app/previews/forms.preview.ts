@@ -7,7 +7,6 @@ import {
 } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
-import { MatSelectModule } from "@angular/material/select";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
@@ -23,7 +22,6 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule,
     FormErrorComponent,
     LoadingButtonComponent,
     PreviewDocComponent,
@@ -34,19 +32,10 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
       form {
         max-width: 420px;
       }
-      .size-demo {
-        align-items: flex-start;
-      }
-      .size-demo figure {
-        margin: 0;
+      .field-demo {
         width: 200px;
       }
-      .size-demo figcaption {
-        font: var(--mat-sys-label-medium);
-        color: var(--mat-sys-on-surface-variant);
-        margin-bottom: var(--gt-space-2);
-      }
-      .size-demo mat-form-field {
+      .field-demo mat-form-field {
         width: 100%;
       }
     `,
@@ -110,34 +99,17 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
       </div>
 
       <div class="preview-section">
-        <div class="preview-section__title">Default and compact</div>
+        <div class="preview-section__title">Default field</div>
         <p class="preview-section__note">
           Every field gets the house look from the theme: 14px text, a 4px
-          radius and a mid-tone outline that keeps 3:1 contrast. Add
-          .gt-field-compact only to filters in the top app bar and list
-          toolbars, so they sit at 32px next to compact buttons.
+          radius and a mid-tone outline that keeps 3:1 contrast. Filters in
+          the top app bar are ghost selects, not fields (see Top app bar).
         </p>
-        <div class="preview-row size-demo">
-          <figure>
-            <figcaption>Default (forms)</figcaption>
-            <mat-form-field appearance="outline">
-              <mat-label>Project name</mat-label>
-              <input matInput value="checkout-api" />
-            </mat-form-field>
-          </figure>
-          <figure>
-            <figcaption>Compact (bar filters)</figcaption>
-            <mat-form-field
-              appearance="outline"
-              subscriptSizing="dynamic"
-              class="gt-field-compact"
-            >
-              <mat-select value="24h" aria-label="Time range">
-                <mat-option value="24h">Last 24 hours</mat-option>
-                <mat-option value="7d">Last 7 days</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </figure>
+        <div class="field-demo">
+          <mat-form-field appearance="outline">
+            <mat-label>Project name</mat-label>
+            <input matInput value="checkout-api" />
+          </mat-form-field>
         </div>
       </div>
     </preview-doc>
@@ -164,13 +136,13 @@ export class FormsPreview {
     "Lay out an edit form like a create form: fields in sections, then Save and Cancel in .gt-form-actions, then Delete as the last section",
     "Disable submit only while its request is in flight, with the spinner as the reason",
     "Show why an action is blocked as visible text, with the control disabled beside it or hidden",
-    "Give a filter field in a bar or list toolbar class gt-field-compact",
+    "Make a filter in the top app bar a ghost select (see Top app bar), not a form field",
   ];
   readonly donts = [
     "Surface validation failures in a snackbar",
     "Gate submit by permission (see Permission gating: hide, never disable)",
     "Give a blocked action's reason only in a tooltip",
-    "Use gt-field-compact on form fields, or restyle a field with ::ng-deep or .mat-mdc-* classes",
+    "Restyle a field with ::ng-deep or .mat-mdc-* classes",
   ];
   readonly content = [
     "Label every field with a noun, in sentence case: Email, Display name",
