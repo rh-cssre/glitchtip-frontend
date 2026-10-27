@@ -112,6 +112,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, one line o
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
 - A destructive action is the last section, with an outlined warn button and a confirm dialog that names the object and says it cannot be undone. No red box.
+- A delete section's description names the object in bold: "Deletes **checkout-api** and all of its issues, events and settings. This cannot be undone." The `<strong>` stays inside the i18n message.
 - A failed delete shows `gt-form-error` inside its delete section, not a toast.
 - Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
 - Sections, or the block-level forms that hold them, must be direct siblings with nothing else between them. The hairline sits on that sibling, so an inline host or a `display: contents` wrapper loses it.
