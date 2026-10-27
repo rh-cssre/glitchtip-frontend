@@ -94,6 +94,23 @@
   }
 }
 
+// The h1 in a top app bar or list app bar. A count after it goes in
+// .gt-bar-title-count.
+.gt-bar-title {
+  margin: 0;
+  overflow: hidden;
+  font: var(--mat-sys-title-large);
+  font-weight: 600;
+  letter-spacing: var(--mat-sys-title-large-tracking);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gt-bar-title-count {
+  font-weight: 400;
+  color: var(--mat-sys-on-surface-variant);
+}
+
 .section-header-text-light {
   font: var(--mat-sys-headline-small);
   letter-spacing: var(--mat-sys-headline-small-tracking);
