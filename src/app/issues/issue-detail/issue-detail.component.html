@@ -38,6 +38,7 @@
       <div class="top-bar-actions">
         <gt-issue-status-update-dropdown
           [selectedValue]="issue.status"
+          [statusColor]="status().color"
           [showResolveInNextRelease]="true"
           [resolvedInRelease]="!!resolvedInRelease()"
           (optionSelected)="updateIssueStatus($event)"
@@ -45,19 +46,14 @@
         />
         <button
           mat-icon-button
-          class="medium-icon-button"
-          aria-label="More actions"
+          matTooltip="Delete issue"
+          i18n-matTooltip
+          aria-label="Delete issue"
           i18n-aria-label
-          [matMenuTriggerFor]="moreActions"
+          (click)="deleteIssue()"
         >
-          <mat-icon>more_horiz</mat-icon>
+          <mat-icon>delete</mat-icon>
         </button>
-        <mat-menu #moreActions="matMenu" xPosition="before">
-          <button mat-menu-item (click)="deleteIssue()">
-            <mat-icon>delete</mat-icon>
-            <span i18n>Delete issue</span>
-          </button>
-        </mat-menu>
       </div>
     </ng-container>
   </gt-top-app-bar>

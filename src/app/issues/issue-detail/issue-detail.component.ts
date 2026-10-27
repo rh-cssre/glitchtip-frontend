@@ -18,7 +18,7 @@ import { DaysAgoPipe } from "../../shared/days-ago.pipe";
 import { IssueDetailTagsComponent } from "./issue-detail-tags/issue-detail-tags.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { MatMenuModule } from "@angular/material/menu";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { DatePipe, DecimalPipe, TitleCasePipe } from "@angular/common";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
@@ -46,7 +46,7 @@ const ISSUE_STATUS: Record<IssueStatus, { label: string; color: string }> = {
     MatBadgeModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule,
+    MatTooltipModule,
     IssueDetailTagsComponent,
     TitleCasePipe,
     DatePipe,
