@@ -7,7 +7,6 @@ import {
   RouterOutlet,
 } from "@angular/router";
 import { filter, map, startWith } from "rxjs/operators";
-import { UserService } from "../api/user/user.service";
 import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
 
 @Component({
@@ -17,10 +16,8 @@ import { TopAppBar } from "../shared/top-app-bar/top-app-bar";
   imports: [RouterOutlet, TopAppBar],
 })
 export class ProfilWrapperComponent {
-  private userService = inject(UserService);
   private route = inject(ActivatedRoute);
 
-  user = this.userService.user;
   /** The open page's own title, from its route data. */
   title = toSignal(
     inject(Router).events.pipe(
