@@ -77,7 +77,7 @@ export class ConfirmDialogPreview {
     "Stack a second dialog on top of it",
   ];
   readonly content = [
-    "Title asks the question: Delete project?",
+    "Title asks the question and names the object: Delete frontend?",
     "Message names what happens: the project and all its events are deleted",
     "Say when the action cannot be undone",
     "Confirm button repeats the verb: Delete, not Yes or OK",
@@ -101,8 +101,8 @@ export class ConfirmDialogPreview {
   readonly importCode = `import { ConfirmDialogComponent, ConfirmDialogData } from "src/app/shared/confirm-dialog/confirm-dialog.component";`;
   readonly code = `const ref = this.dialog.open(ConfirmDialogComponent, {
   data: {
-    title: "Delete project?",
-    message: "frontend and all of its events will be permanently deleted.",
+    title: "Delete frontend?",
+    message: "All of its issues, events and settings will be deleted. This cannot be undone.",
     confirmText: "Delete",
   },
 });
@@ -112,9 +112,9 @@ ref.afterClosed().subscribe((confirmed) => {
 
   openDialog(): void {
     const data: DemoConfirmData = {
-      title: "Delete project?",
+      title: "Delete frontend?",
       message:
-        "frontend and all of its events will be permanently deleted. This cannot be undone.",
+        "All of its issues, events and settings will be deleted. This cannot be undone.",
       confirmText: "Delete",
     };
     this.dialog
