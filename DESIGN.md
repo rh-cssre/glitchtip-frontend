@@ -98,7 +98,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 ### Forms
 
-- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
 
 ### Settings sections
 
