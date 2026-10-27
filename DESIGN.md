@@ -91,6 +91,10 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
 
+### Forms
+
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. Use `.gt-field-compact` (32px) only for filters in the top app bar and list toolbars, never in forms.
+
 ### Settings sections
 
 Every setting on a settings page is a `gt-settings-section`: a title, one line of help, then the control and its actions.
