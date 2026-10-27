@@ -97,11 +97,13 @@
           @if (monitor.monitorType !== "Heartbeat") {
             @if (activeMonitorRecentChecksSeries(); as data) {
               @if (responseChartScale(); as scale) {
-                <gt-monitor-response-chart
-                  class="response-chart"
-                  [data]="data"
-                  [scale]="scale"
-                />
+                <gt-panel i18n-title title="Response time">
+                  <gt-monitor-response-chart
+                    class="response-chart"
+                    [data]="data"
+                    [scale]="scale"
+                  />
+                </gt-panel>
               }
             }
           }
