@@ -83,10 +83,6 @@ html {
   }
 }
 
-mat-card-content {
-  font-family: vars.$font-sans-serif;
-}
-
 a {
   color: var(--mat-sys-on-background);
   text-decoration: none;
@@ -157,6 +153,14 @@ markdown ol {
 body {
   background-color: var(--mat-sys-background);
   color: var(--mat-sys-on-background);
+  font-family: vars.$font-sans-serif;
+}
+
+// The chart library draws axis and legend labels as bare SVG text, which
+// defaults to serif and black. Put them on the app font and a muted role.
+.ng-charts text {
+  font-family: vars.$font-sans-serif;
+  fill: var(--mat-sys-on-surface-variant);
 }
 
 .flex-common {
@@ -510,13 +514,6 @@ gt-issue-chart {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .ng-charts {
-    text {
-      fill: var(--mat-sys-on-background) !important;
-    }
-  }
-}
 // Overrides for ngx-mat-select-search
 .project-multiselect__search-field.mdc-list-item--disabled {
   mat-checkbox {
