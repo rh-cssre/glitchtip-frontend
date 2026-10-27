@@ -30,6 +30,7 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
 - **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
+- **In-page subheading:** `.gt-subheading` (title-small, 600, on-surface, in `src/styles.scss`) for a heading inside a page section, such as a `gt-list` label. `.gt-subheading__description` is the muted line under it.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
 
 Rule: prefer a semantic class where one exists; otherwise apply the matching type token.
@@ -127,6 +128,9 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
 - Rows with several columns to compare or sort are a table instead.
+- A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
+- When a row's action is blocked, say why in the row's description line; never only in a tooltip.
+- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon, in a `.gt-list-actions` container.
 
 ## Accessibility
 
