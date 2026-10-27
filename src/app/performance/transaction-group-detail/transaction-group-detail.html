@@ -53,19 +53,18 @@
     </span>
   </gt-page-header>
 
-  <mat-card>
-    <mat-card-content>
-      <h2 i18n class="section-header-text span-breakdown-title">Span breakdown</h2>
-      @if (sortedSpans(); as spans) {
-        @if (spans.length === 0) {
-          <gt-empty-state
-            icon="avg_pace"
-            i18n-title
-            title="No span data"
-            i18n-message
-            message="Spans appear here once child spans are recorded for this transaction group."
-          />
-        } @else {
+  <gt-panel i18n-title title="Span breakdown" flush>
+    @if (sortedSpans(); as spans) {
+      @if (spans.length === 0) {
+        <gt-empty-state
+          icon="avg_pace"
+          i18n-title
+          title="No span data"
+          i18n-message
+          message="Spans appear here once child spans are recorded for this transaction group."
+        />
+      } @else {
+        <div class="span-breakdown-intro">
           <!-- By operation -->
           <p i18n class="section-label">By operation</p>
           <div class="op-summary">
@@ -90,66 +89,66 @@
 
           <!-- By span -->
           <p i18n class="section-label">By span</p>
-          <div class="table-scroll-container">
-            <div class="table-scroll-wrapper">
-              <table
-            mat-table
-            matSort
-            matSortActive="totalTime"
-            matSortDirection="desc"
-            matSortDisableClear
-            (matSortChange)="onSortChange($event)"
-            [dataSource]="filteredSpans() ?? []"
-            class="span-breakdown-table"
-          >
-            <ng-container matColumnDef="op">
-              <th i18n mat-header-cell *matHeaderCellDef>Operation</th>
-              <td mat-cell *matCellDef="let row" class="op-cell">{{ row.op }}</td>
-            </ng-container>
-            <ng-container matColumnDef="description">
-              <th i18n mat-header-cell *matHeaderCellDef>Description</th>
-              <td mat-cell *matCellDef="let row" class="span-description">
-                {{ row.description || "(none)" }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="count">
-              <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Count</th>
-              <td mat-cell *matCellDef="let row" class="num">{{ row.count }}</td>
-            </ng-container>
-            <ng-container matColumnDef="avgDuration">
-              <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Avg</th>
-              <td mat-cell *matCellDef="let row" class="num">
-                {{ row.avgDuration | humanizeDuration }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="p95Duration">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">p95</th>
-              <td mat-cell *matCellDef="let row" class="num">
-                {{ row.p95Duration | humanizeDuration }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="totalTime">
-              <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Total time</th>
-              <td mat-cell *matCellDef="let row" class="num">
-                {{ row.totalTime | humanizeDuration }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="pctTime">
-              <th i18n mat-header-cell *matHeaderCellDef class="num">% Time</th>
-              <td mat-cell *matCellDef="let row" class="num">
-                {{ pctOfTotal(row.totalTime) | percent:'1.1-1' }}
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="spanColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: spanColumns"></tr>
-              </table>
-            </div>
+        </div>
+        <div class="table-scroll-container">
+          <div class="table-scroll-wrapper">
+            <table
+              mat-table
+              matSort
+              matSortActive="totalTime"
+              matSortDirection="desc"
+              matSortDisableClear
+              (matSortChange)="onSortChange($event)"
+              [dataSource]="filteredSpans() ?? []"
+              class="span-breakdown-table"
+            >
+              <ng-container matColumnDef="op">
+                <th i18n mat-header-cell *matHeaderCellDef>Operation</th>
+                <td mat-cell *matCellDef="let row" class="op-cell">{{ row.op }}</td>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <th i18n mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let row" class="span-description">
+                  {{ row.description || "(none)" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="count">
+                <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Count</th>
+                <td mat-cell *matCellDef="let row" class="num">{{ row.count }}</td>
+              </ng-container>
+              <ng-container matColumnDef="avgDuration">
+                <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Avg</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ row.avgDuration | humanizeDuration }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="p95Duration">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">p95</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ row.p95Duration | humanizeDuration }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="totalTime">
+                <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Total time</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ row.totalTime | humanizeDuration }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="pctTime">
+                <th i18n mat-header-cell *matHeaderCellDef class="num">% Time</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ pctOfTotal(row.totalTime) | percent:'1.1-1' }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="spanColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: spanColumns"></tr>
+            </table>
           </div>
-        }
-      } @else if (spansLoading()) {
-        <p i18n class="body-text span-breakdown-empty">Loading…</p>
+        </div>
       }
-    </mat-card-content>
-  </mat-card>
+    } @else if (spansLoading()) {
+      <p i18n class="body-text span-breakdown-empty">Loading…</p>
+    }
+  </gt-panel>
 </section>
 }

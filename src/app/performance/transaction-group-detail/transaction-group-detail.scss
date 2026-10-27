@@ -4,8 +4,9 @@
   text-align: left;
 }
 
-.span-breakdown-title {
-  margin: 0 0 20px;
+// The table runs edge to edge; the summary above it keeps the panel padding.
+.span-breakdown-intro {
+  padding: var(--gt-space-4, 16px) var(--gt-space-4, 16px) 0;
 }
 
 .section-label {
@@ -100,7 +101,7 @@
     background: linear-gradient(
       to right,
       transparent,
-      var(--mat-sys-surface-container-high)
+      var(--mat-sys-surface)
     );
     display: none;
 
