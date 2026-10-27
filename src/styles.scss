@@ -353,6 +353,18 @@ mat-tab-nav-panel:not(mat-card-content > *) {
   padding-top: var(--gt-space-5, 24px);
 }
 
+// A section after the actions row (an edit form's Delete) starts 24px below
+// the buttons, so they never sit on its hairline. The row may end a form or a
+// form component that the section follows.
+:is(
+    .gt-form-actions,
+    :has(> .gt-form-actions:last-child),
+    :has(> :last-child > .gt-form-actions:last-child)
+  )
+  + :is(gt-settings-section, :has(gt-settings-section)) {
+  margin-top: var(--gt-space-5, 24px);
+}
+
 // Empty sub-list inside a section; main collections use gt-empty-state.
 .gt-note {
   margin: 0;
