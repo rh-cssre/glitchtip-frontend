@@ -27,9 +27,6 @@
         title="Name"
         [inline]="canWriteOrg()"
       >
-        <span slot="description" i18n
-          >Shown in the organization switcher and in alert emails.</span
-        >
         @if (canWriteOrg()) {
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input
