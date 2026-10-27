@@ -1,0 +1,18 @@
+<div class="gt-panel__header">
+  @if (title()) {
+    <div
+      class="gt-panel__title"
+      role="heading"
+      [attr.aria-level]="headingLevel()"
+      [id]="titleId"
+    >
+      {{ title() }}
+    </div>
+  }
+  <div class="gt-panel__actions">
+    <ng-content select="[slot=actions]" />
+  </div>
+</div>
+<div class="gt-panel__body" [class.gt-panel__body--flush]="flush()">
+  <ng-content />
+</div>

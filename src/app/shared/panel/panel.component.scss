@@ -1,0 +1,70 @@
+@use "@angular/material" as mat;
+@use "variables" as vars;
+
+:host {
+  display: block;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: vars.$shape-radius;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  overflow: hidden;
+}
+
+.gt-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-3, 12px);
+  min-height: var(--gt-space-7, 48px);
+  box-sizing: border-box;
+  padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  // No title and nothing projected into the actions slot: no header at all.
+  &:not(:has(.gt-panel__title, .gt-panel__actions > *)) {
+    display: none;
+  }
+}
+
+.gt-panel__title {
+  flex: 1;
+  min-width: 0;
+  font: var(--mat-sys-title-small);
+  letter-spacing: var(--mat-sys-title-small-tracking);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+// Header controls are 32px, like the top app bar.
+.gt-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  margin-left: auto;
+
+  @include mat.button-overrides(
+    (
+      filled-container-height: 32px,
+      outlined-container-height: 32px,
+      protected-container-height: 32px,
+      text-container-height: 32px,
+      tonal-container-height: 32px,
+    )
+  );
+  @include mat.icon-button-overrides(
+    (
+      state-layer-size: 32px,
+    )
+  );
+
+  &:empty {
+    display: none;
+  }
+}
+
+.gt-panel__body {
+  padding: var(--gt-space-4, 16px);
+
+  &--flush {
+    padding: 0;
+  }
+}
