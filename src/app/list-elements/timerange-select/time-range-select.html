@@ -1,13 +1,18 @@
-<mat-form-field
-  appearance="outline"
-  subscriptSizing="dynamic"
-  class="time-range-select-formfield gt-field-compact"
+<span
+  class="gt-select-ghost"
+  [class.gt-select-ghost--open]="isOpen()"
   [class.wide]="extendSelectSize()"
+  (click)="$event.target === $event.currentTarget && select.open()"
 >
   <mat-select
+    #select
     [formControl]="presetRangeForm"
     i18n-placeholder
     placeholder="Time range"
+    i18n-aria-label
+    aria-label="Time range"
+    panelWidth="220px"
+    (openedChange)="isOpen.set($event)"
     (selectionChange)="onPresetSelect($event)"
     hideSingleSelectionIndicator
   >
@@ -22,4 +27,4 @@
       >Custom range</mat-option
     >
   </mat-select>
-</mat-form-field>
+</span>
