@@ -1,8 +1,8 @@
 @if (title) {
-  <h1 class="section-header-text" data-cy="list-title">
+  <h1 class="gt-bar-title" data-cy="list-title">
     {{ title }}
     @if (searchHits) {
-      ({{ searchHits }})
+      <span class="gt-bar-title-count">({{ searchHits }})</span>
     }
   </h1>
 }

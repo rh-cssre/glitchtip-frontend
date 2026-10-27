@@ -27,7 +27,6 @@ type Member = components["schemas"]["OrganizationUserSchema"];
 @Component({
   selector: "gt-members",
   templateUrl: "./members.component.html",
-  styleUrls: ["./members.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatButtonModule,
