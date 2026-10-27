@@ -4,17 +4,6 @@
   display: block;
 }
 
-// An error outside a form field gets no font from Material.
-.checkbox-error {
-  display: block;
-  margin-top: var(--gt-space-2, 8px);
-  font: var(--mat-sys-body-small);
-
-  &:empty {
-    display: none;
-  }
-}
-
 .select-all {
   display: block;
   margin-bottom: var(--gt-space-2, 8px);

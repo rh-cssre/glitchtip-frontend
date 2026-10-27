@@ -1,6 +1,5 @@
 <gt-page-header i18n-title title="New token" />
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <gt-form-error [errors]="createErrorForm()" />
   <gt-settings-section #labelSection i18n-title title="Label">
     <span slot="description" i18n
       >A name to tell this token apart, like the tool that uses it.</span
@@ -71,21 +70,14 @@
         }
       </tbody>
     </table>
-    <mat-error class="checkbox-error">
-      @if (scopes.errors?.selectOne) {
-        <span i18n>Select at least one scope</span>
-      }
-      @if (scopes.errors?.serverError) {
-        <span>{{ scopes.errors?.serverError }}</span>
-      }
-    </mat-error>
+    <gt-form-error [errors]="scopesErrors" />
   </gt-settings-section>
 
+  <gt-form-error [errors]="createErrorForm()" />
   <div class="gt-form-actions">
     <gt-loading-button
       i18n-buttonText
       buttonText="Create token"
-      buttonStyle="stroked"
       [loading]="createLoading() === true"
     />
     <a mat-button [routerLink]="['/profile', 'auth-tokens']" i18n>Cancel</a>

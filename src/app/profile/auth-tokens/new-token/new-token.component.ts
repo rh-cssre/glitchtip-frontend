@@ -80,6 +80,14 @@ export class NewTokenComponent
     return this.form.controls.scopes as FormArray;
   }
 
+  get scopesErrors() {
+    const errors = this.scopes.errors;
+    return [
+      errors?.selectOne ? $localize`Select at least one scope` : null,
+      errors?.serverError as string | undefined,
+    ].filter((error): error is string => !!error);
+  }
+
   get label() {
     return this.form.controls.label as FormControl;
   }
