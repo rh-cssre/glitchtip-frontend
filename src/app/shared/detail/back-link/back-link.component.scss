@@ -1,8 +1,6 @@
 @use "variables" as vars;
 
-// Pull the button left by its leading inset (padding plus icon offset, 12px
-// in M3) so the chevron lines up with the container edge. The hover and
-// focus states still extend into the container's padding.
+// Pull left by the button's inset so the chevron sits on the container edge.
 :host {
   display: inline-flex;
   margin-inline-start: calc(

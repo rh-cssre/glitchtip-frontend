@@ -94,11 +94,8 @@
   }
 }
 
-// The title in a top app bar or list app bar, the back link's size. A count
-// after it is a .tab-count badge.
+// The title in a top app bar or list app bar, the back link's size.
 .gt-bar-title {
-  display: flex;
-  align-items: center;
   margin: 0;
   min-width: 0;
   overflow: hidden;
@@ -107,6 +104,21 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--mat-sys-on-surface);
+
+  // With a count, __text ellipsizes so the count keeps its size.
+  &:has(> .tab-count) {
+    display: flex;
+    align-items: center;
+  }
+
+  > .tab-count {
+    flex-shrink: 0;
+  }
+}
+
+.gt-bar-title__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .section-header-text-light {

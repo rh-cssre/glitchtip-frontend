@@ -12,13 +12,11 @@ import { MatInputModule } from "@angular/material/input";
   imports: [MatInputModule],
   templateUrl: "./form-error.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // No margins: the slot or container it sits in spaces it.
   styles: `
     :host {
       display: block;
       font: var(--mat-sys-body-small);
-    }
-    :host:not(:empty) {
-      margin-bottom: var(--gt-space-3, 12px);
     }
   `,
 })

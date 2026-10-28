@@ -4,3 +4,8 @@ nav {
   border-bottom: 1px solid
     mat.m2-get-color-from-palette(mat.$m2-gray-palette, 300);
 }
+
+// The tab cards still bring their own 24px top margin.
+mat-tab-nav-panel {
+  padding-top: 0;
+}
