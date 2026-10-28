@@ -1,13 +1,6 @@
-<!-- Its own inline section, so the field and Add line up with every other
-     single-field setting; the list below joins it, so no line between them. -->
 <form [formGroup]="form" (ngSubmit)="onSubmit()" id="add-email-form">
   <gt-form-error [errors]="addEmailError()" />
-  <gt-settings-section
-    #addSection
-    i18n-title
-    title="Add email address"
-    [inline]="true"
-  >
+  <gt-settings-section #addSection i18n-title title="Add email address" panel>
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input
         matInput
@@ -38,15 +31,16 @@
 </form>
 
 <gt-settings-section
-  class="gt-settings-continued"
   i18n-title
   title="Email addresses"
+  panel
+  [flush]="emailAddresses().length > 0"
 >
   <span slot="description" i18n
     >Account email and alerts go to your primary address.</span
   >
   @if (emailAddresses().length) {
-    <gt-list>
+    <gt-list flush>
       @for (email of emailAddresses(); track email.email) {
         <gt-list-row data-cy="email-row">
           <span>{{ email.email }}</span>
