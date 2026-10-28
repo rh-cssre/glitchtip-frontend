@@ -23,6 +23,7 @@ export class UserReportsService {
             path: {
               issue_id: parseInt(params.issueID),
             },
+            query: { cursor: params.cursor || undefined },
           },
         },
       );
