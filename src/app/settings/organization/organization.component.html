@@ -5,7 +5,7 @@
 </gt-top-app-bar>
 <section class="l-body">
   @if (activeOrganizationDetail(); as activeOrg) {
-    <gt-page-header icon="settings" [title]="activeOrg.name">
+    <gt-page-header icon="settings" [title]="activeOrg.name" compact>
       <!-- Counts come with the org detail; no extra request -->
       @if (activeOrg.projects && activeOrg.teams) {
         <span slot="meta">
@@ -25,7 +25,7 @@
         #nameSection
         i18n-title
         title="Name"
-        [inline]="canWriteOrg()"
+        panel
       >
         @if (canWriteOrg()) {
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -55,7 +55,12 @@
     </form>
 
     @if (canAdminOrg()) {
-      <gt-settings-section i18n-title title="Delete organization">
+      <gt-settings-section
+        i18n-title
+        title="Delete organization"
+        panel
+        tone="danger"
+      >
         <span slot="description" i18n
           >Deletes <strong>{{ activeOrg.name // i18n(ph="name") }}</strong> and all
           of its projects, teams and events. This cannot be undone.</span
