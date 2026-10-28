@@ -23,6 +23,8 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-webauthn",
@@ -37,6 +39,8 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
     ListComponent,
     ListRowComponent,
     SettingsSectionComponent,
+    EmptyStateComponent,
+    FormErrorComponent,
   ],
 })
 export class WebAuthnComponent {
@@ -50,6 +54,7 @@ export class WebAuthnComponent {
   stage = this.service.webAuthnState;
   hasTOTP = this.service.TOTPAuthenticator;
   authenticators = this.service.webAuthnAuthenticators;
+  error = this.service.webAuthnError;
   loading = this.service.loading;
   pendingAction = this.service.pendingAction;
   removingId = signal<number | null>(null);

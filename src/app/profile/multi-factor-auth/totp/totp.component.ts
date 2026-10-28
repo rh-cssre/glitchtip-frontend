@@ -76,9 +76,6 @@ export class TOTPComponent implements OnDestroy {
   });
 
   constructor() {
-    const service = this.service;
-
-    effect(() => mapFormErrors(service.fieldErrors(), this.codeForm));
     effect(() => {
       const totp = this.totp();
       if (totp) {
@@ -107,12 +104,11 @@ export class TOTPComponent implements OnDestroy {
     );
   }
 
-  enableTOTP() {
-    if (this.codeForm.valid) {
-      const code = this.code;
-      if (code?.value) {
-        this.service.activateTOTP(code.value);
-      }
+  async enableTOTP() {
+    const code = this.code?.value;
+    if (this.codeForm.valid && code) {
+      await this.service.activateTOTP(code);
+      mapFormErrors(this.service.fieldErrors(), this.codeForm);
     }
   }
 

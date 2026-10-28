@@ -1,4 +1,3 @@
-<!-- Naming a new key is its own save unit, a panel above the list panel. -->
 @if (stage() === 2) {
   <form [formGroup]="form" (ngSubmit)="registerWebAuthn()">
     <gt-settings-section #nameSection i18n-title title="Name this key" panel>
@@ -34,7 +33,6 @@
   panel
   [flush]="authenticators().length > 0"
 >
-  <!-- The description states what blocks adding a key. -->
   @if (!hasTOTP()) {
     <span slot="description" i18n
       >Set up the authenticator app first. Not every browser supports security
@@ -68,8 +66,15 @@
       }
     </gt-list>
   } @else {
-    <p class="gt-note" i18n>No security keys yet.</p>
+    <gt-empty-state
+      icon="security"
+      i18n-title
+      title="No security keys"
+      i18n-message
+      message="Set up a hardware device as a second factor to sign in."
+    />
   }
+  <gt-form-error slot="error" [errors]="error()" />
   @if (stage() !== 2) {
     <gt-loading-button
       slot="header-actions"

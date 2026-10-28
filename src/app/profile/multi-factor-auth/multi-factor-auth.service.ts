@@ -43,6 +43,7 @@ export interface MFAState extends APIState {
     totpUrl: string;
   } | null;
   webAuthnStage: number;
+  webAuthnError: string | null;
   credential: RegistrationPublicKeyCredential | null;
 }
 
@@ -57,6 +58,7 @@ const initialState: MFAState = {
   copiedCodes: false,
   totp: null,
   webAuthnStage: 1,
+  webAuthnError: null,
   credential: null,
 };
 
@@ -104,6 +106,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   codes = computed(() => this.state().recoveryCodes);
   regenCodes = computed(() => this.state().regenCodes);
   webAuthnState = computed(() => this.state().webAuthnStage);
+  webAuthnError = computed(() => this.state().webAuthnError);
 
   constructor() {
     super(initialState);
@@ -167,7 +170,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async activateTOTP(code: string) {
-    this.setState({ loading: true, pendingAction: "enableTOTP" });
+    this.setState({ loading: true, pendingAction: "enableTOTP", errors: [] });
     const { data, error, response } = await client.POST(
       "/_allauth/browser/v1/account/authenticators/totp",
       {
@@ -219,7 +222,12 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async getWebauthn() {
-    this.setState({ loading: true, pendingAction: "addKey", errors: [] });
+    this.setState({
+      loading: true,
+      pendingAction: "addKey",
+      errors: [],
+      webAuthnError: null,
+    });
     const { data, error } = await client.GET(
       "/_allauth/browser/v1/account/authenticators/webauthn",
     );
@@ -237,7 +245,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
       console.warn(error);
       this.setState({
         loading: false,
-        error: $localize`Device activation was unsuccessful.`,
+        webAuthnError: $localize`Device activation was unsuccessful.`,
         webAuthnStage: 1,
       });
     }

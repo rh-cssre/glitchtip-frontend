@@ -63,7 +63,6 @@
           }
         </div>
         <form [formGroup]="codeForm" (ngSubmit)="enableTOTP()">
-          <gt-form-error [errors]="formErrors()"></gt-form-error>
           <mat-form-field appearance="outline">
             <mat-label i18n>6-digit code</mat-label>
             <input
@@ -107,7 +106,6 @@
       i18n-buttonText
       buttonText="Turn off"
       buttonStyle="stroked"
-      color="warn"
       [loading]="pendingAction() === 'turnOffTOTP'"
       [disabled]="loading()"
       (buttonClick)="deactivateTOTP()"
@@ -117,6 +115,7 @@
       >Set up</button
     >
   }
+  <gt-form-error slot="error" [errors]="formErrors()" />
 </gt-settings-section>
 @if (TOTPAuthenticator()) {
   <gt-backup-codes />
