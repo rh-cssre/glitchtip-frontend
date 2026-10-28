@@ -494,10 +494,13 @@ gt-pagination-buttons {
 }
 
 .tab-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
   margin-left: var(--gt-space-2, 8px);
-  padding: 1px var(--gt-space-2, 8px);
+  padding: 0 var(--gt-space-2, 8px);
   border-radius: var(--mat-sys-corner-full);
-  font: var(--mat-sys-label-small);
+  font: var(--mat-sys-label-medium);
   background-color: var(--mat-sys-surface-container-highest);
   color: var(--mat-sys-on-surface-variant);
 }
