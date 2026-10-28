@@ -1,4 +1,5 @@
 @use "@angular/material" as mat;
+@use "controls";
 
 // Neutral outlined button; remove once !832 makes outlined buttons neutral.
 :host {
@@ -6,11 +7,7 @@
     (
       outlined-label-text-color: var(--mat-sys-on-surface),
       outlined-state-layer-color: var(--mat-sys-on-surface),
-      outlined-ripple-color: color-mix(
-          in srgb,
-          var(--mat-sys-on-surface) 12%,
-          transparent
-        ),
+      outlined-ripple-color: controls.state-layer-color(pressed),
     )
   );
 }
