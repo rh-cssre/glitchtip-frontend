@@ -6,6 +6,7 @@
 @if (member(); as member) {
   <section class="l-body">
     <gt-page-header
+      compact
       icon="people"
       [title]="member.email"
       [status]="member.pending ? invitePendingText : null"
@@ -20,7 +21,7 @@
     </gt-page-header>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <gt-settings-section #roleSection i18n-title title="Role">
+      <gt-settings-section #roleSection i18n-title title="Role" panel>
         <span slot="description">{{
           roleDescription(canEditRole() ? formRole.value : member.role)
         }}</span>
@@ -57,16 +58,22 @@
       </gt-settings-section>
     </form>
 
-    <gt-settings-section i18n-title title="Teams">
+    <gt-settings-section
+      i18n-title
+      title="Teams"
+      panel
+      [flush]="!!memberTeams()?.length"
+    >
       <span slot="description" i18n
         >Members of a team get email alerts for the team's projects.</span
       >
       @if (memberTeams(); as memberTeams) {
         @if (memberTeams.length) {
-          <gt-list>
+          <gt-list flush>
             @for (team of memberTeams; track team) {
               <gt-list-row>
                 <a
+                  gtListRowLink
                   [routerLink]="['teams', team, 'members']"
                   [relativeTo]="route.parent?.parent"
                   >#{{ team }}</a
@@ -81,7 +88,7 @@
     </gt-settings-section>
 
     @if (canTransfer()) {
-      <gt-settings-section i18n-title title="Account ownership">
+      <gt-settings-section i18n-title title="Account ownership" panel>
         <span slot="description" i18n
           >The account owner holds the organization's subscription. Nobody's
           role changes.</span

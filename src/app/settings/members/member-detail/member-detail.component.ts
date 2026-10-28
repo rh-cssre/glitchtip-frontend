@@ -18,6 +18,7 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { MemberDetailService } from "src/app/settings/members/member-detail/member-detail.service";
 import { MemberRole } from "src/app/api/organizations/organizations.interface";
@@ -42,6 +43,7 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
     LoadingButtonComponent,
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
     PageHeaderComponent,
     SettingsSectionComponent,
   ],
