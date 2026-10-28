@@ -26,6 +26,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { TOKEN_SCOPES, TOKEN_SCOPE_GROUPS } from "../token-scopes";
 
 @Component({
@@ -37,6 +38,7 @@ import { TOKEN_SCOPES, TOKEN_SCOPE_GROUPS } from "../token-scopes";
     PageHeaderComponent,
     FormErrorComponent,
     SettingsSectionComponent,
+    PanelComponent,
     MatButtonModule,
     RouterLink,
     MatFormFieldModule,

@@ -1,82 +1,85 @@
 <gt-page-header i18n-title title="New token" />
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <gt-settings-section #labelSection i18n-title title="Label">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <input
-        matInput
-        type="text"
-        formControlName="label"
-        [attr.aria-labelledby]="labelSection.titleId"
-      />
-      <mat-error>
-        @if (label.errors?.required) {
-          <span i18n>Create a label for your auth token</span>
-        }
-        @if (label.errors?.maxlength) {
-          <span i18n>Label must be 255 characters or less</span>
-        }
-        @if (label.errors?.serverError) {
-          <span>{{ label.errors?.serverError }}</span>
-        }
-      </mat-error>
-    </mat-form-field>
-  </gt-settings-section>
-
-  <gt-settings-section i18n-title title="Scopes">
-    <span slot="description" i18n
-      >What this token can do. Give it only what the tool needs.</span
-    >
-    <mat-checkbox
-      class="select-all"
-      #selectAllCheckbox
-      (change)="bulkModifyScopes()"
-      i18n
-      >Full access</mat-checkbox
-    >
-    <!-- A real table, so each checkbox is announced with its resource and
-         level ("Projects, write"). -->
-    <table class="scope-table" formArrayName="scopes">
-      <thead>
-        <tr>
-          <th scope="col"
-            ><span class="cdk-visually-hidden" i18n>Resource</span></th
-          >
-          @for (level of scopeLevels; track level) {
-            <th scope="col"
-              ><code>{{ level }}</code></th
-            >
+  <gt-panel class="gt-form-panel">
+    <gt-settings-section #labelSection i18n-title title="Label">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input
+          matInput
+          type="text"
+          formControlName="label"
+          [attr.aria-labelledby]="labelSection.titleId"
+        />
+        <mat-error>
+          @if (label.errors?.required) {
+            <span i18n>Create a label for your auth token</span>
           }
-        </tr>
-      </thead>
-      <tbody>
-        @for (group of scopeGroups; track group.prefix) {
+          @if (label.errors?.maxlength) {
+            <span i18n>Label must be 255 characters or less</span>
+          }
+          @if (label.errors?.serverError) {
+            <span>{{ label.errors?.serverError }}</span>
+          }
+        </mat-error>
+      </mat-form-field>
+    </gt-settings-section>
+
+    <gt-settings-section i18n-title title="Scopes">
+      <span slot="description" i18n
+        >What this token can do. Give it only what the tool needs.</span
+      >
+      <mat-checkbox
+        class="select-all"
+        #selectAllCheckbox
+        (change)="bulkModifyScopes()"
+        i18n
+        >Full access</mat-checkbox
+      >
+      <!-- A real table, so each checkbox is announced with its resource and
+        level ("Projects, write"). -->
+      <table class="scope-table" formArrayName="scopes">
+        <thead>
           <tr>
-            <th scope="row">{{ group.resource }}</th>
+            <th scope="col"
+              ><span class="cdk-visually-hidden" i18n>Resource</span></th
+            >
             @for (level of scopeLevels; track level) {
-              <td>
-                @let index = scopeIndex(group, level);
-                @if (index !== null) {
-                  <mat-checkbox
-                    [formControlName]="index"
-                    [aria-label]="scopeLabel(group.resource, level)"
-                  />
-                }
-              </td>
+              <th scope="col"
+                ><code>{{ level }}</code></th
+              >
             }
           </tr>
-        }
-      </tbody>
-    </table>
-    <gt-form-error [errors]="scopesErrors" />
-  </gt-settings-section>
+        </thead>
+        <tbody>
+          @for (group of scopeGroups; track group.prefix) {
+            <tr>
+              <th scope="row">{{ group.resource }}</th>
+              @for (level of scopeLevels; track level) {
+                <td>
+                  @let index = scopeIndex(group, level);
+                  @if (index !== null) {
+                    <mat-checkbox
+                      [formControlName]="index"
+                      [aria-label]="scopeLabel(group.resource, level)"
+                    />
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      <gt-form-error [errors]="scopesErrors" />
+    </gt-settings-section>
 
-  <gt-form-error [errors]="createErrorForm()" />
-  <div class="gt-form-actions">
+    <gt-form-error [errors]="createErrorForm()" />
+    <a slot="footer" mat-button [routerLink]="['/profile', 'auth-tokens']" i18n
+      >Cancel</a
+    >
     <gt-loading-button
+      slot="footer"
       i18n-buttonText
       buttonText="Create token"
       [loading]="createLoading() === true"
     />
-    <a mat-button [routerLink]="['/profile', 'auth-tokens']" i18n>Cancel</a>
-  </div>
+  </gt-panel>
 </form>
