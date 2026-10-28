@@ -49,6 +49,7 @@ import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
 import { EmptyStatePreview } from "./previews/empty-state.preview";
 import { GhostSelectPreview } from "./previews/ghost-select.preview";
 import { SplitButtonPreview } from "./previews/split-button.preview";
+import { TagChipPreview } from "./previews/tag-chip.preview";
 import { CodePreview } from "./previews/code.preview";
 
 /**
@@ -247,6 +248,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Split button",
     group: "Components",
     component: SplitButtonPreview,
+    status: "stable",
+  },
+  {
+    id: "tag-chip",
+    label: "Tag chip",
+    group: "Components",
+    component: TagChipPreview,
     status: "stable",
   },
   {

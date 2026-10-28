@@ -6,6 +6,8 @@
 @use "./assets/styles/variables" as vars;
 @use "./assets/styles/font-files";
 @use "./assets/styles/resets";
+@use "./assets/styles/panel-rows";
+@use "./assets/styles/tag-chip";
 @use "./assets/styles/code";
 @use "./scss/auth-forms";
 

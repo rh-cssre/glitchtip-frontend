@@ -111,6 +111,10 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
 
+### Tag chips
+
+- Tags always render as tag chips (`.gt-tag-chip` in `.gt-tag-chips`): key muted, value bold, in a hairline pill with no shadow. A share ("93%", "2 of 15") sits inside the chip, muted, after a middle dot. `.gt-tag-chip--compact` (24px, label-medium) is the size for a summary line.
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.
