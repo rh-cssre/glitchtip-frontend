@@ -4,7 +4,8 @@
   display: flex;
   align-items: center;
   gap: var(--gt-space-4, 16px);
-  margin-bottom: var(--gt-space-5, 24px);
+  // A record band sets the gap to 0: its tiers do the spacing.
+  margin-bottom: var(--gt-page-header-gap, var(--gt-space-5, 24px));
 }
 
 .gt-page-header__icon {
