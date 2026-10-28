@@ -1,0 +1,11 @@
+@for (recipient of recipients(); track recipient.id) {
+  @let label = recipientLabel(recipient, teams());
+  <gt-recipient-icon
+    role="img"
+    [type]="recipient.recipientType"
+    [attr.aria-label]="label"
+    [matTooltip]="label"
+  />
+} @empty {
+  <span i18n>No recipients</span>
+}

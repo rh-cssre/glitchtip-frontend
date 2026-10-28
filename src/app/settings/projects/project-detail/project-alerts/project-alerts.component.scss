@@ -1,18 +1,3 @@
-.recipient-icons {
-  display: flex;
-  align-items: center;
-  gap: var(--gt-space-2, 8px);
-}
-
-.recipient-icon {
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
-  // Sprite icons without their own color follow the text, so they show in
-  // dark mode.
-  fill: currentColor;
-}
-
 .initial-loading {
   padding: 120px 0;
 
