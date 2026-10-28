@@ -8,7 +8,9 @@ import {
 
 let nextId = 0;
 
-/** Container for charts and data blocks. Settings, forms and lists stay card-less. */
+export type PanelTone = "default" | "danger";
+
+/** Container for charts, data blocks and settings save units. */
 @Component({
   selector: "gt-panel",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +20,7 @@ let nextId = 0;
     "[attr.title]": "null",
     "[attr.role]": "title() ? 'region' : null",
     "[attr.aria-labelledby]": "title() ? titleId : null",
+    "[class.gt-panel--danger]": "tone() === 'danger'",
   },
 })
 export class PanelComponent {
@@ -25,6 +28,8 @@ export class PanelComponent {
   readonly headingLevel = input(2, { transform: numberAttribute });
   /** Body runs edge to edge, for content that draws its own rows. */
   readonly flush = input(false, { transform: booleanAttribute });
+  /** Danger tints the border, for a destructive save unit like Delete. */
+  readonly tone = input<PanelTone>("default");
 
   readonly titleId = `gt-panel-title-${nextId++}`;
 }

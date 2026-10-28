@@ -60,7 +60,7 @@ describe("Issues Page", () => {
       cy.get('[data-cy="list-search-form"]').submit();
       cy.wait("@resolvedIssuesRequest");
 
-      cy.get('[data-cy="list-title"]').contains("Issues (55)");
+      cy.get('[data-cy="list-title"] .tab-count').should("have.text", "55");
     },
   );
 });
