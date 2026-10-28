@@ -35,9 +35,15 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       [code]="code"
     >
       <div class="preview-section">
-        <div class="preview-section__title">Settings page, with tabs</div>
+        <div class="preview-section__title"
+          >Settings page, compact, with tabs</div
+        >
+        <p class="preview-section__note">
+          Settings pages for a named object use compact: one line, a 32px tile,
+          the facts after the title. They drop under it on a narrow screen.
+        </p>
         <div class="ph-surface">
-          <gt-page-header icon="groups" title="#payments">
+          <gt-page-header icon="groups" title="#payments" compact>
             <span slot="meta">
               <span><b>5</b> members</span>
               <span>Created Oct 22, 2026</span>
@@ -94,6 +100,7 @@ export class PageHeaderPreview {
   ];
   readonly dos = [
     "Give settings pages for a named object (organization, project, team, member) an icon tile; leave it off data pages and profile pages",
+    "Use compact on those settings pages, so the header is one line; data pages keep the full header",
     "Use the same icon as the object's item in the nav",
     "Write the meta as short facts: numbers in <b>, identifiers in a .chip",
     "Show a record's state with status, rendered as the Status pill, first in the meta line",
@@ -139,6 +146,13 @@ export class PageHeaderPreview {
       description: "Color for the pill; use a role token",
     },
     {
+      name: "compact",
+      type: "boolean",
+      default: "false",
+      description:
+        "One line: 32px tile, title-large title, meta inline after it",
+    },
+    {
       name: '[slot="meta"]',
       type: "projected",
       default: "",
@@ -146,7 +160,7 @@ export class PageHeaderPreview {
     },
   ];
   readonly importCode = `import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";`;
-  readonly code = `<gt-page-header icon="groups" [title]="'#' + team.slug">
+  readonly code = `<gt-page-header icon="groups" [title]="'#' + team.slug" compact>
   <span slot="meta">
     <span><b>{{ team.memberCount }}</b> members</span>
     <span>Created {{ team.dateCreated | date: "mediumDate" }}</span>

@@ -14,7 +14,10 @@
   );
 }
 
+// Same size as the bar title, so bar text does not change between pages.
 .back-link-text {
+  font: var(--mat-sys-title-medium);
+  letter-spacing: var(--mat-sys-title-medium-tracking);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
