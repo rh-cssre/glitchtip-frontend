@@ -40,11 +40,13 @@
       @switch (tab()) {
         @case ("general") {
           @if (project.isMember === false) {
-            <p class="page-intro" i18n>
-              You can manage {{ project.name }} as an admin of
-              {{ project.organization.name }}. To see its issues, join one of
-              its teams.
-            </p>
+            <gt-panel class="project-note">
+              <p i18n>
+                You can manage {{ project.name }} as an admin of
+                {{ project.organization.name }}. To see its issues, join one of
+                its teams.
+              </p>
+            </gt-panel>
           }
           <form [formGroup]="nameForm" (ngSubmit)="updateName()">
             <gt-settings-section
@@ -200,7 +202,7 @@
                 issues, events and settings. This cannot be undone.</span
               >
               @if (deleteError()) {
-                <gt-form-error [errors]="deleteError()" />
+                <gt-form-error slot="error" [errors]="deleteError()" />
               }
               <gt-loading-button
                 slot="actions"

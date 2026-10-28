@@ -10,6 +10,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
 /**
@@ -24,6 +26,8 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
     MatButtonModule,
     FormErrorComponent,
     LoadingButtonComponent,
+    PanelComponent,
+    SettingsSectionComponent,
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +53,7 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
       [dos]="dos"
       [donts]="donts"
       [content]="content"
-      a11y="mat-form-field ties the label, input and error together for screen readers. Submit stays enabled until the request is in flight; validation errors are announced on the field, not in a toast."
+      a11y="mat-form-field ties the input and its error together for screen readers, and the section title labels a lone field through aria-labelledby. Submit stays enabled until the request is in flight; validation errors are announced on the field, not in a toast."
       [keyboard]="keyboard"
       [composition]="composition"
       [api]="api"
@@ -64,37 +68,50 @@ import { ApiRow, KeyRow, PreviewDocComponent } from "../docs/preview-doc.compone
           mapFormErrors, plus a form-level message through gt-form-error.
         </p>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" />
-            <mat-error>
-              @if (form.controls.email.errors?.["required"]) {
-                <span>An email is required</span>
-              }
-              @if (form.controls.email.errors?.["email"]) {
-                <span>Enter a valid email address</span>
-              }
-              @if (form.controls.email.errors?.["serverError"]) {
-                <span>{{ form.controls.email.errors?.["serverError"] }}</span>
-              }
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Display name</mat-label>
-            <input matInput type="text" formControlName="name" />
-          </mat-form-field>
-          <gt-form-error [errors]="formErrors()" />
-          <div class="gt-form-actions">
+          <gt-panel class="gt-form-panel">
+            <gt-settings-section #email title="Email">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input
+                  matInput
+                  type="email"
+                  formControlName="email"
+                  [attr.aria-labelledby]="email.titleId"
+                />
+                <mat-error>
+                  @if (form.controls.email.errors?.["required"]) {
+                    <span>An email is required</span>
+                  }
+                  @if (form.controls.email.errors?.["email"]) {
+                    <span>Enter a valid email address</span>
+                  }
+                  @if (form.controls.email.errors?.["serverError"]) {
+                    <span>{{ form.controls.email.errors?.["serverError"] }}</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </gt-settings-section>
+            <gt-settings-section #displayName title="Display name">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="name"
+                  [attr.aria-labelledby]="displayName.titleId"
+                />
+              </mat-form-field>
+            </gt-settings-section>
+            <gt-form-error [errors]="formErrors()" />
+            <button slot="footer" mat-button type="button" (click)="simulateServerError()">
+              Simulate server error
+            </button>
             <gt-loading-button
+              slot="footer"
               buttonText="Save profile"
               buttonStyle="stroked"
               [loading]="saving()"
               (buttonClick)="onSubmit()"
             />
-            <button mat-stroked-button type="button" (click)="simulateServerError()">
-              Simulate server error
-            </button>
-          </div>
+          </gt-panel>
         </form>
       </div>
 
@@ -131,9 +148,9 @@ export class FormsPreview {
     'Use appearance="outline" and a visible label on every field. When a field is the only control in a settings section, the section title is its label (aria-labelledby)',
     "Cover each failure case with its own @if inside one mat-error",
     "Map backend field errors with mapFormErrors so they render like client errors",
-    "Put gt-form-error just above the actions row for errors that belong to no field",
+    "Put gt-form-error at the bottom of the form panel's body for errors that belong to no field",
     "Submit a create form with a filled button that names the object: Create project. A settings section saves with an outlined Save name",
-    "Lay out an edit form like a create form: fields in sections, then Save and Cancel in .gt-form-actions, then Delete as the last section",
+    "Make a form with one submit one gt-panel class=\"gt-form-panel\": a section per field, then gt-form-error, with Cancel and the submit in its footer. An edit form's Delete is a danger panel below it",
     "Disable submit only while its request is in flight, with the spinner as the reason",
     "Show why an action is blocked as visible text, with the control disabled beside it or hidden",
     "Make a filter in the top app bar a ghost select (see Top app bar), not a form field",
@@ -156,7 +173,7 @@ export class FormsPreview {
   ];
   readonly composition = {
     within: ["Detail page"],
-    contains: ["Buttons & actions", "Loading button"],
+    contains: ["Panel", "Settings section", "Buttons & actions", "Loading button"],
   };
   readonly api: ApiRow[] = [
     { name: "gt-form-error errors", type: "string | string[] | null", default: "", description: "Non-field error messages rendered as mat-error lines; renders nothing when empty" },
@@ -166,18 +183,20 @@ export class FormsPreview {
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";`;
   readonly code = `<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <mat-form-field class="full-width" appearance="outline">
-    <mat-label>Email</mat-label>
-    <input matInput type="email" formControlName="email" />
-    <mat-error>
-      @if (email?.errors?.required) { <span>An email is required</span> }
-      @if (email?.errors?.serverError) { <span>{{ email?.errors?.serverError }}</span> }
-    </mat-error>
-  </mat-form-field>
-  <gt-form-error [errors]="formErrors()" />
-  <div class="gt-form-actions">
-    <gt-loading-button buttonText="Save profile" buttonStyle="stroked" [loading]="saving()" />
-  </div>
+  <gt-panel class="gt-form-panel">
+    <gt-settings-section #email title="Email">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input matInput type="email" formControlName="email" [attr.aria-labelledby]="email.titleId" />
+        <mat-error>
+          @if (email?.errors?.required) { <span>An email is required</span> }
+          @if (email?.errors?.serverError) { <span>{{ email?.errors?.serverError }}</span> }
+        </mat-error>
+      </mat-form-field>
+    </gt-settings-section>
+    <gt-form-error [errors]="formErrors()" />
+    <a slot="footer" mat-button routerLink="..">Cancel</a>
+    <gt-loading-button slot="footer" buttonText="Save profile" buttonStyle="stroked" [loading]="saving()" />
+  </gt-panel>
 </form>`;
 
   onSubmit(): void {

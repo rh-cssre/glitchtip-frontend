@@ -51,6 +51,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { ProjectAlertsService } from "./project-alerts/project-alerts.service";
 import { ProjectEnvironmentsService } from "./project-environments/project-environments.service";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -77,6 +78,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   selector: "gt-project-detail",
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./project-detail.component.html",
+  styleUrls: ["./project-detail.component.scss"],
   imports: [
     DatePipe,
     MatInputModule,
@@ -96,6 +98,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     TopAppBar,
     SettingsSectionComponent,
     FormErrorComponent,
+    PanelComponent,
   ],
   // The tab services live here, so the tab counts and the tabs share one load.
   providers: [
