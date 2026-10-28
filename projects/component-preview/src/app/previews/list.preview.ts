@@ -4,6 +4,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
@@ -12,6 +13,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   imports: [
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
@@ -27,7 +29,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
-      a11y="gt-list is a list and each gt-list-row a list item. A row's menu button names whose actions it opens: Actions for maya@acme.com."
+      a11y="gt-list is a list and each gt-list-row a list item. A row's menu button names whose actions it opens: Actions for maya@acme.com. A navigable row has one tab stop, its name link; the chevron is hidden from screen readers."
       [api]="api"
       [importCode]="importCode"
       [code]="code"
@@ -78,7 +80,9 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       </div>
 
       <div class="preview-section">
-        <div class="preview-section__title">Inside a record's tab</div>
+        <div class="preview-section__title">
+          Inside a record's tab, rows that open their record
+        </div>
         <div class="gt-list-actions">
           <button mat-stroked-button>
             <mat-icon>add</mat-icon>
@@ -87,8 +91,20 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         </div>
         <gt-list>
           <gt-list-row>
-            Error spike
-            <button slot="actions" mat-stroked-button>Edit</button>
+            <a gtListRowLink href="#" (click)="$event.preventDefault()"
+              >Error spike</a
+            >
+            <span slot="description"
+              >Alerts when an issue gets 10 events in 1 minute.</span
+            >
+          </gt-list-row>
+          <gt-list-row>
+            <a gtListRowLink href="#" (click)="$event.preventDefault()"
+              >Checkout down</a
+            >
+            <span slot="description"
+              >Alerts when an uptime monitor goes down.</span
+            >
           </gt-list-row>
         </gt-list>
       </div>
@@ -115,6 +131,7 @@ export class ListPreview {
     "Use a table instead when rows have several columns to compare or sort",
   ];
   readonly dos = [
+    "Make the name the link when a row opens its record, with gtListRowLink: the whole row becomes the target and a chevron marks it",
     "Give a row with one action a visible outlined button",
     "Put two or more actions in a menu at the end of the row",
     "Keep row actions neutral; the confirm dialog carries the warning for a destructive one",
@@ -126,6 +143,7 @@ export class ListPreview {
   ];
   readonly donts = [
     "Use a menu for a single action; it adds a step for nothing",
+    "Add an Edit button that repeats the name's link",
     "Color row buttons warn; a column of red buttons stops meaning anything",
     "Wrap the list in a card with a title bar",
     "Explain a disabled action only in a tooltip",
@@ -139,6 +157,13 @@ export class ListPreview {
       description: "Optional group label above the rows",
     },
     {
+      name: "gt-list flush",
+      type: "boolean",
+      default: "false",
+      description:
+        "Drops the outer border, for rows that sit edge to edge in a flush panel",
+    },
+    {
       name: "gt-list-row content",
       type: "projected",
       default: "",
@@ -149,6 +174,13 @@ export class ListPreview {
       type: "class",
       default: "",
       description: "Neutral, non-interactive tag for a fixed attribute",
+    },
+    {
+      name: "a[gtListRowLink]",
+      type: "component",
+      default: "",
+      description:
+        "Put it on the name link of a row that opens its record. The link covers the row, hover draws the state layer and underlines the name, focus rings the row, and the row adds a trailing chevron",
     },
     {
       name: '[slot="description"]',
