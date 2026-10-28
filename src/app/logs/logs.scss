@@ -1,3 +1,5 @@
+@use "variables" as vars;
+
 // Log stream styled with Material Design 3 tokens
 
 .filter-bar {
@@ -33,7 +35,7 @@
   flex-direction: column;
   flex: 1;
   min-height: 400px;
-  border-radius: var(--mat-sys-corner-small);
+  border-radius: vars.$shape-radius;
   border: 1px solid var(--mat-sys-outline-variant);
   margin-bottom: var(--gt-space-4, 16px);
   overflow: hidden;
