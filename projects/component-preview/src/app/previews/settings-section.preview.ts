@@ -134,12 +134,6 @@ export class SettingsSectionPreview {
         "Hides a title that repeats the tab; screen readers still get it",
     },
     {
-      name: "inline",
-      type: "boolean",
-      default: "false",
-      description: "Plain mode only: puts the actions beside a single control",
-    },
-    {
       name: "titleId",
       type: "string",
       default: "generated",

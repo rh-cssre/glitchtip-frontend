@@ -14,7 +14,6 @@ let nextId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet, PanelComponent],
   host: {
-    "[class.inline]": "inline()",
     "[class.gt-settings-panel]": "panel()",
     "[attr.title]": "null",
   },
@@ -89,7 +88,6 @@ let nextId = 0;
 })
 export class SettingsSectionComponent {
   readonly title = input.required<string>();
-  readonly inline = input(false);
   /** One bordered panel per save unit, actions in its footer. */
   readonly panel = input(false, { transform: booleanAttribute });
   /** Panel only: danger tints the border, for Delete sections. */

@@ -69,12 +69,6 @@
   }
 }
 
-:host(.inline) .settings-section__content {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 // Panels stack 16px apart; the margins collapse across wrapping forms.
 :host(.gt-settings-panel) {
   display: block;
