@@ -9,13 +9,10 @@
       compact
       icon="people"
       [title]="member.email"
-      [status]="member.pending ? invitePendingText : null"
+      [status]="headerStatus()"
     >
       <span slot="meta">
         <span>{{ roleName(member.role) ?? member.roleName }}</span>
-        @if (member.isOwner) {
-          <span i18n>Account owner</span>
-        }
         <span i18n>Joined {{ member.dateCreated | date: "mediumDate" }}</span>
       </span>
     </gt-page-header>

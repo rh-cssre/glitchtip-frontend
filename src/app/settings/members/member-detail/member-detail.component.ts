@@ -76,6 +76,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
   readonly roles = MEMBER_ROLES;
   readonly invitePendingText = $localize`Invite pending`;
+  /** An owner is never pending, so one status slot holds either. */
+  readonly headerStatus = computed(() => {
+    const member = this.member();
+    if (member?.pending) return this.invitePendingText;
+    return member?.isOwner ? $localize`Account owner` : null;
+  });
 
   /** Changing roles needs member:write (managers and owners). */
   canEditRole = this.organizationsService.canWriteMember;
