@@ -8,10 +8,10 @@ $mono: vars.$font-mono, monospace;
 :root {
   --gt-code-bg: var(--mat-sys-surface-container-high);
   --gt-code-text: var(--mat-sys-on-surface);
-  // Dark on-surface-variant sits close to on-surface; the mix keeps it muted.
+  // on-surface-variant equals on-surface in dark, so dark mutes it further.
   --gt-code-muted: light-dark(
     var(--mat-sys-on-surface-variant),
-    color-mix(in srgb, var(--mat-sys-on-surface-variant) 80%, var(--gt-code-bg))
+    color-mix(in srgb, var(--mat-sys-on-surface-variant) 65%, var(--gt-code-bg))
   );
   --gt-code-keyword: var(--log-debug-color);
   --gt-code-string: color-mix(
