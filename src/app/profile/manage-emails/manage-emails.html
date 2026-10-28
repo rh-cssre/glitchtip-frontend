@@ -1,5 +1,4 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" id="add-email-form">
-  <gt-form-error [errors]="addEmailError()" />
   <gt-settings-section #addSection i18n-title title="Add email address" panel>
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input
@@ -20,6 +19,9 @@
         }
       </mat-error>
     </mat-form-field>
+    @if (addEmailError()) {
+      <gt-form-error slot="error" [errors]="addEmailError()" />
+    }
     <gt-loading-button
       slot="actions"
       i18n-buttonText
@@ -71,7 +73,11 @@
                 [disabled]="isBusy(email.email)"
                 [attr.aria-label]="actionsForLabel(email.email)"
               >
-                <mat-icon>more_vert</mat-icon>
+                @if (isBusy(email.email)) {
+                  <mat-spinner diameter="18" />
+                } @else {
+                  <mat-icon>more_vert</mat-icon>
+                }
               </button>
               <mat-menu #emailMenu="matMenu" xPosition="before">
                 @if (email.isVerified) {
