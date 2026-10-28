@@ -59,9 +59,9 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
               title="No uptime monitors"
               message="Add a monitor to get alerted when a site or service goes down."
             >
-              <button mat-flat-button color="primary">
+              <button mat-stroked-button>
                 <mat-icon>add</mat-icon>
-                Add monitor
+                New monitor
               </button>
             </gt-empty-state>
           </div>
@@ -93,6 +93,7 @@ export class EmptyStatePreview {
     "Keep the title a short, specific noun phrase: No uptime monitors",
     "Give one line of plain-language guidance in the message",
     "Project a single action, and only when there is a clear next step",
+    "Project an action only when no create control exists outside the empty state",
     "Reuse the feature's own icon so the state matches its nav item",
   ];
   readonly donts = [
@@ -133,7 +134,7 @@ export class EmptyStatePreview {
       name: "(content)",
       type: "projected",
       default: "",
-      description: "An optional single action button",
+      description: "An optional single action, an outlined mat-stroked-button",
     },
   ];
   readonly importCode = `import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";`;
@@ -143,9 +144,9 @@ export class EmptyStatePreview {
   title="No uptime monitors"
   message="Add a monitor to get alerted when a site or service goes down."
 >
-  <button mat-flat-button color="primary">
+  <button mat-stroked-button>
     <mat-icon>add</mat-icon>
-    Add monitor
+    New monitor
   </button>
 </gt-empty-state>
 

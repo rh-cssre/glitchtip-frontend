@@ -18,6 +18,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-comments",
@@ -31,6 +32,7 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
     MatIconModule,
     MarkdownComponent,
     DatePipe,
+    EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [CommentsService, provideMarkdown()],
