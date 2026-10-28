@@ -1,20 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  contentChild,
-} from "@angular/core";
-import { MatIconModule } from "@angular/material/icon";
-import { ListRowLinkComponent } from "./list-row-link.component";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 /** One record in a gt-list. A row whose name is an `<a gtListRowLink>` opens its record. */
 @Component({
   selector: "gt-list-row",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIconModule],
   host: {
     role: "listitem",
-    "[class.list-row--navigable]": "navigable()",
   },
   template: `
     <div class="list-row__body">
@@ -29,12 +20,6 @@ import { ListRowLinkComponent } from "./list-row-link.component";
         <ng-content select="[slot=actions]" />
       </div>
     </div>
-    @if (navigable()) {
-      <!-- chevron_right is not in the icon font subset. -->
-      <mat-icon class="list-row__chevron" aria-hidden="true"
-        >keyboard_arrow_right</mat-icon
-      >
-    }
   `,
   styles: `
     // Positioned, so a row link's hit area can cover the row.
@@ -49,10 +34,6 @@ import { ListRowLinkComponent } from "./list-row-link.component";
       font: var(--mat-sys-body-medium);
     }
 
-    :host(.list-row--navigable) {
-      padding-right: var(--gt-space-3, 12px);
-    }
-
     .list-row__body {
       display: flex;
       flex: 1;
@@ -60,14 +41,6 @@ import { ListRowLinkComponent } from "./list-row-link.component";
       align-items: center;
       gap: var(--gt-space-1, 4px) var(--gt-space-4, 16px);
       min-width: 0;
-    }
-
-    .list-row__chevron {
-      flex: none;
-      width: 20px;
-      height: 20px;
-      font-size: 20px;
-      color: var(--mat-sys-on-surface-variant);
     }
 
     :host:not(:first-child) {
@@ -121,7 +94,4 @@ import { ListRowLinkComponent } from "./list-row-link.component";
     }
   `,
 })
-export class ListRowComponent {
-  private readonly link = contentChild(ListRowLinkComponent);
-  readonly navigable = computed(() => !!this.link());
-}
+export class ListRowComponent {}
