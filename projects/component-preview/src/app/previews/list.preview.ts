@@ -145,7 +145,7 @@ export class ListPreview {
     "Use a table instead when rows have several columns to compare or sort",
   ];
   readonly dos = [
-    "Make the name the link when a row opens its record, with gtListRowLink: the whole row becomes the target and a chevron marks it",
+    "Make the name the link when a row opens its record, with gtListRowLink: the whole row becomes the target",
     "Give a row with one action a visible outlined button",
     "Put two or more actions in a menu at the end of the row",
     "Keep row actions neutral; the confirm dialog carries the warning for a destructive one",
@@ -195,7 +195,7 @@ export class ListPreview {
       type: "component",
       default: "",
       description:
-        "Put it on the name link of a row that opens its record. The link covers the row, hover draws the state layer and underlines the name, focus rings the row, and the row adds a trailing chevron",
+        "Put it on the name link of a row that opens its record. The link covers the row, hover draws the state layer and underlines the name, and focus rings the row",
     },
     {
       name: '[slot="description"]',

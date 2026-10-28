@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 /**
  * The name link of a row that opens its record (`<a gtListRowLink [routerLink]>`).
- * Its hit area covers the row; gt-list-row adds the chevron.
+ * Its hit area covers the row.
  */
 @Component({
   // An attribute on the native <a>, so it stays a real link.
