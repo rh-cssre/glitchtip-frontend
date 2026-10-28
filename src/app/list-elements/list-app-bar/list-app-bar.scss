@@ -1,23 +1,9 @@
-@use "@angular/material" as mat;
+@use "controls";
 @use "variables" as vars;
 
 // Keep layout aligned with gt-top-app-bar, on which this is based.
-// Every control in the bar is 32px.
 :host {
-  @include mat.button-overrides(
-    (
-      filled-container-height: 32px,
-      outlined-container-height: 32px,
-      protected-container-height: 32px,
-      text-container-height: 32px,
-      tonal-container-height: 32px,
-    )
-  );
-  @include mat.icon-button-overrides(
-    (
-      state-layer-size: 32px,
-    )
-  );
+  @include controls.compact-buttons;
 }
 
 .list-app-bar-primary-content {
