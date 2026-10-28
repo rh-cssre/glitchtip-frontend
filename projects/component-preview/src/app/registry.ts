@@ -12,6 +12,7 @@ import { DetailPagePreview } from "./previews/detail-page.preview";
 import { PageHeaderPreview } from "./previews/page-header.preview";
 import { StatusPillPreview } from "./previews/status-pill.preview";
 import { PanelPreview } from "./previews/panel.preview";
+import { PanelRowsPreview } from "./previews/panel-rows.preview";
 import { PermissionGatingPreview } from "./previews/permission-gating.preview";
 import { BrandTypographyPreview } from "./previews/brand-typography.preview";
 import { BrandColorsPreview } from "./previews/brand-colors.preview";
@@ -234,6 +235,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Panel",
     group: "Components",
     component: PanelPreview,
+    status: "stable",
+  },
+  {
+    id: "panel-rows",
+    label: "Panel rows",
+    group: "Components",
+    component: PanelRowsPreview,
     status: "stable",
   },
   {
