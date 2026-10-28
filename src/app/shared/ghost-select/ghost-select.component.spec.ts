@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TestBed } from "@angular/core/testing";
+import { TestbedHarnessEnvironment } from "@angular/cdk/testing/testbed";
+import { MatSelectHarness } from "@angular/material/select/testing";
 import { GhostSelectComponent } from "./ghost-select.component";
 
 const OPTIONS = [
@@ -50,10 +52,13 @@ describe("GhostSelectComponent", () => {
     expect((await short({ shortLabel: "App" }))?.textContent).toBe("App");
   });
 
-  it("applies a fixed width", async () => {
-    const el = (await render({ width: 140 })).nativeElement as HTMLElement;
-    expect(
-      (el.querySelector(".gt-select-ghost") as HTMLElement).style.width,
-    ).toBe("140px");
+  it("writes the picked option back to the value model", async () => {
+    const fixture = await render();
+    const select = await TestbedHarnessEnvironment.loader(fixture).getHarness(
+      MatSelectHarness.with({ selector: '[aria-label="Frames"]' }),
+    );
+    await select.open();
+    await select.clickOptions({ text: "Raw" });
+    expect(fixture.componentInstance.value()).toBe("raw");
   });
 });
