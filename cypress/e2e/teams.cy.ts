@@ -54,6 +54,6 @@ describe("List Team Members", () => {
       .contains(seededUser1.email)
       .click();
     cy.get("#remove-team-member").click();
-    cy.contains("This team doesn't have any members");
+    cy.contains("No team members");
   });
 });

@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  computed,
   inject,
   input,
   ChangeDetectionStrategy,
@@ -15,6 +16,7 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-team-projects",
@@ -30,6 +32,7 @@ import { MatCardModule } from "@angular/material/card";
     MatDividerModule,
     RouterLink,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
 })
 export class TeamProjectsComponent implements OnInit {
@@ -45,6 +48,11 @@ export class TeamProjectsComponent implements OnInit {
   project = new FormControl();
   // Adding and removing go through project endpoints that require org:write.
   canWriteOrg = this.organizationsService.canWriteOrg;
+  noProjectsMessage = computed(() =>
+    this.canWriteOrg()
+      ? $localize`Add a project so this team's members get its alerts.`
+      : $localize`Ask an organization manager or owner to add projects to this team.`,
+  );
 
   ngOnInit(): void {
     this.projectsService.setParams(this.orgSlug(), this.teamSlug());

@@ -10,7 +10,7 @@
         (click)="openCreateTeamDialog()"
         id="new-team"
         i18n
-        >Create Team</button
+        >New team</button
       >
     }
   </ng-container>
@@ -58,38 +58,19 @@
         </ul>
       } @else {
         @if (otherTeams()?.length) {
-          @if (canWriteTeam() && canJoinTeam()) {
-            <p i18n
-              >You aren't part of any teams. Join a team below or press the
-              "Create Team" button in the upper right.</p
-            >
-          } @else if (canJoinTeam()) {
-            <p i18n>You aren't part of any teams. Join a team below.</p>
-          } @else if (canWriteTeam()) {
-            <p i18n
-              >You aren't part of any teams. Press the "Create Team" button in
-              the upper right, or ask an organization Manager or Owner to add
-              you to one.</p
-            >
-          } @else {
-            <p i18n
-              >You aren't part of any teams. Ask an organization Manager or
-              Owner to add you to one.</p
-            >
-          }
+          <gt-empty-state
+            icon="groups"
+            i18n-title
+            title="No teams joined"
+            [message]="noTeamsJoinedMessage()"
+          />
         } @else {
-          <p i18n
-            >You don't have any teams set up. Teams determine which users have
-            access to projects in your organization.</p
-          >
-          @if (canWriteTeam()) {
-            <p i18n
-              >To create a new team, press the "Create Team" button in the upper
-              right.</p
-            >
-          } @else {
-            <p i18n>Ask an organization Manager or Owner to create one.</p>
-          }
+          <gt-empty-state
+            icon="groups"
+            i18n-title
+            title="No teams"
+            [message]="noTeamsMessage()"
+          />
         }
       }
     </mat-card-content>
