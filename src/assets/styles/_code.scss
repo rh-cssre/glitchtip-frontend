@@ -1,7 +1,7 @@
 @use "variables" as vars;
 
 // Code blocks and the Prism token theme. Token colours come from the log
-// palette (tertiary is the brand red) and keep 4.5:1 on code and crash line.
+// palette and keep 4.5:1 on the code background and the crash line.
 
 $mono: vars.$font-mono, monospace;
 

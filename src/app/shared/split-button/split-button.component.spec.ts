@@ -37,6 +37,16 @@ describe("SplitButtonComponent", () => {
     expect(host.getAttribute("aria-label")).toBe("Copy for AI");
   });
 
+  it("keeps the icon and the label in one named main button", () => {
+    const { host } = render();
+    const main = host.querySelector(".gt-split__main")!;
+    expect(main.getAttribute("aria-label")).toBe("Copy for AI");
+    expect(main.querySelector("mat-icon")?.textContent).toBe("content_copy");
+    expect(main.querySelector(".gt-split__label")?.textContent).toBe(
+      "Copy for AI",
+    );
+  });
+
   it("emits action from the main part", () => {
     const { fixture, host } = render();
     (host.querySelector(".gt-split__main") as HTMLButtonElement).click();

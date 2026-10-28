@@ -50,6 +50,14 @@ describe("PanelComponent", () => {
     ).toBeNull();
   });
 
+  it("keeps the subtitle out of the heading and the region name", () => {
+    const el = render({ title: "Breadcrumbs", subtitle: "28" });
+    const heading = el.querySelector('[role="heading"]')!;
+    expect(heading.textContent).toBe("Breadcrumbs");
+    expect(heading.querySelector(".gt-panel__subtitle")).toBeNull();
+    expect(el.getAttribute("aria-labelledby")).toBe(heading.id);
+  });
+
   it("marks hideSubtitleNarrow on the host", () => {
     expect(render({ hideSubtitleNarrow: true }).classList).toContain(
       "gt-panel--hide-subtitle-narrow",

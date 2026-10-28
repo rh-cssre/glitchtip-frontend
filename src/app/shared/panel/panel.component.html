@@ -1,12 +1,13 @@
 <div class="gt-panel__header">
   @if (title()) {
-    <div
-      class="gt-panel__title"
-      role="heading"
-      [attr.aria-level]="headingLevel()"
-      [id]="titleId"
-    >
-      <span class="gt-panel__title-text">{{ title() }}</span>
+    <div class="gt-panel__title">
+      <span
+        class="gt-panel__title-text"
+        role="heading"
+        [attr.aria-level]="headingLevel()"
+        [id]="titleId"
+        >{{ title() }}</span
+      >
       @if (subtitle()) {
         <span class="gt-panel__subtitle" [title]="subtitle()">{{
           subtitle()

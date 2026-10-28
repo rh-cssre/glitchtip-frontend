@@ -1,18 +1,22 @@
 import { Component, ChangeDetectionStrategy, signal } from "@angular/core";
 import { MatMenuModule } from "@angular/material/menu";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { SplitButtonComponent } from "src/app/shared/split-button/split-button.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
 @Component({
   selector: "preview-split-button",
-  imports: [SplitButtonComponent, MatMenuModule, PreviewDocComponent],
+  imports: [
+    SplitButtonComponent,
+    MatMenuModule,
+    PanelComponent,
+    PreviewDocComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
-      .sb-row {
-        display: flex;
-        align-items: center;
-        gap: var(--gt-space-3, 12px);
+      .sb-text {
+        margin: 0;
         font: var(--mat-sys-body-medium);
         color: var(--mat-sys-on-surface-variant);
       }
@@ -22,27 +26,28 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Split button"
       status="stable"
-      description="One outlined 32px shape with a main action and a caret that opens related actions, split by a full-height hairline. Under 600px the main part keeps only its icon."
+      description="One outlined 32px shape with a main action and a caret that opens related actions, split by a full-height hairline. In a bar or panel under 600px the main part keeps only its icon."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
-      a11y="The host is a group named by the label. The caret is a menu button named by menuLabel, so it announces its popup and expanded state. When only the icon shows, the label is its accessible name and tooltip."
+      a11y="The host is a group named by the label. The caret is a menu button named by menuLabel, so it announces its popup and expanded state. The main part is named and tooltipped by the label, so it stays named when only the icon shows."
       [api]="api"
       [importCode]="importCode"
       [code]="code"
     >
       <div class="preview-section">
-        <div class="preview-section__title">Copy with more options</div>
-        <div class="sb-row">
+        <div class="preview-section__title">In a panel header</div>
+        <gt-panel title="Event">
           <gt-split-button
+            slot="actions"
             icon="content_copy"
             label="Copy for AI"
             menuLabel="More copy options"
             [menu]="menu"
             (action)="last.set('Copy for AI')"
           />
-          <span>{{ last() }}</span>
-        </div>
+          <p class="sb-text">Last action: {{ last() || "none" }}</p>
+        </gt-panel>
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="last.set('Copy event link')">
             Copy event link
@@ -64,7 +69,7 @@ export class SplitButtonPreview {
   readonly dos = [
     "Make the main part the most common variant",
     "Name the caret for what its menu holds",
-    "Give the main part an icon so it still reads on mobile",
+    "Pick an icon that reads alone in a narrow bar",
   ];
   readonly donts = [
     "Use it for a single action; use an outlined button",
@@ -80,9 +85,8 @@ export class SplitButtonPreview {
     {
       name: "icon",
       type: "string",
-      default: '""',
       description:
-        "Material symbol before the label; the only content under 600px",
+        "Material symbol before the label; shown alone in a narrow bar (required)",
     },
     {
       name: "menuLabel",

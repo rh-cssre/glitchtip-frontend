@@ -1,0 +1,49 @@
+// Mixins for rows in flush panels; no CSS output, so components can @use it.
+
+// A whole row is one target with a grey state layer.
+@mixin row-button {
+  appearance: none;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  font: var(--mat-sys-body-medium);
+  letter-spacing: var(--mat-sys-body-medium-tracking);
+  color: inherit;
+  text-align: start;
+  background: none;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: color-mix(
+      in srgb,
+      var(--mat-sys-on-surface) 4%,
+      transparent
+    );
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-on-surface);
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+@mixin inset-hairline($inset) {
+  background-image: linear-gradient(
+    var(--mat-sys-outline-variant),
+    var(--mat-sys-outline-variant)
+  );
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: calc(100% - #{$inset}) 1px;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

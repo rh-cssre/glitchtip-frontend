@@ -4,9 +4,9 @@ import {
   computed,
   input,
   model,
-  signal,
 } from "@angular/core";
 import { MatSelectModule } from "@angular/material/select";
+import { SelectGhostDirective } from "../select-ghost.directive";
 
 export interface GhostSelectOption {
   value: string;
@@ -16,29 +16,22 @@ export interface GhostSelectOption {
 /** A 32px ghost select (.gt-select-ghost) for a view switch in a bar or panel header. */
 @Component({
   selector: "gt-ghost-select",
-  imports: [MatSelectModule],
+  imports: [MatSelectModule, SelectGhostDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <span
-      class="gt-select-ghost"
-      [class.gt-select-ghost--open]="open()"
-      [style.width.px]="width()"
-      (click)="$event.target === $event.currentTarget && select.open()"
-    >
+    <span gtSelectGhost [style.width.px]="width()">
       <mat-select
-        #select
         [value]="value()"
-        [aria-label]="label()"
+        [aria-label]="ariaLabel()"
         [panelWidth]="null"
         hideSingleSelectionIndicator
         (valueChange)="value.set($event)"
-        (openedChange)="open.set($event)"
       >
         <mat-select-trigger>
           <span class="gt-select-ghost__value">
-            <span class="gt-ghost-select__long">{{ current() }}</span>
+            <span class="gt-select-ghost__long">{{ current() }}</span>
             @if (shortLabel()) {
-              <span class="gt-ghost-select__short">{{ shortLabel() }}</span>
+              <span class="gt-select-ghost__short">{{ shortLabel() }}</span>
             }
           </span>
         </mat-select-trigger>
@@ -49,21 +42,23 @@ export interface GhostSelectOption {
     </span>
   `,
   styles: `
+    @use "controls";
+
     :host {
       display: inline-flex;
       flex: none;
     }
 
-    .gt-ghost-select__short {
+    .gt-select-ghost__short {
       display: none;
     }
 
-    @container (max-width: 599px) {
-      .gt-ghost-select__long:has(+ .gt-ghost-select__short) {
+    @include controls.narrow-bar {
+      .gt-select-ghost__long:has(+ .gt-select-ghost__short) {
         display: none;
       }
 
-      .gt-ghost-select__short {
+      .gt-select-ghost__short {
         display: inline;
       }
     }
@@ -72,13 +67,12 @@ export interface GhostSelectOption {
 export class GhostSelectComponent {
   readonly options = input.required<GhostSelectOption[]>();
   readonly value = model.required<string>();
-  /** Accessible name; the trigger shows the selected label. */
-  readonly label = input.required<string>();
+  /** The trigger shows only the value, so the select needs its own name. */
+  readonly ariaLabel = input.required<string>();
   readonly width = input<number | null>(null);
-  /** Trigger text under a 600px container, such as "Raw" for "Raw trace". */
+  /** Trigger text in a bar under 600px, such as "Raw" for "Raw trace". */
   readonly shortLabel = input("");
-  readonly open = signal(false);
-  readonly current = computed(
+  protected readonly current = computed(
     () => this.options().find((o) => o.value === this.value())?.label ?? "",
   );
 }
