@@ -18,9 +18,11 @@
       [selectedIndex]="stepperIndex()"
     >
       <mat-step>
-        <ng-template matStepLabel i18n
-          >Install an authenticator app</ng-template
-        >
+        <ng-template matStepLabel>
+          <span #firstStepTitle tabindex="-1" i18n
+            >Install an authenticator app</span
+          >
+        </ng-template>
         <p i18n>
           Use
           <a

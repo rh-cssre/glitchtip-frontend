@@ -7,8 +7,7 @@ import {
   inject,
   effect,
   computed,
-  afterNextRender,
-  Injector,
+  viewChild,
 } from "@angular/core";
 import {
   FormControl,
@@ -53,10 +52,9 @@ export class TOTPComponent implements OnDestroy {
   private service = inject(MultiFactorAuthService);
   private dialog = inject(MatDialog);
   protected emailsService = inject(EmailsService);
-  private host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private injector = inject(Injector);
 
   @ViewChild("canvas", { static: false }) canvas: ElementRef | undefined;
+  private firstStepTitle = viewChild<ElementRef<HTMLElement>>("firstStepTitle");
   TOTPAuthenticator = this.service.TOTPAuthenticator;
   totp = this.service.totp;
   step = this.service.setupTOTPStage;
@@ -82,6 +80,9 @@ export class TOTPComponent implements OnDestroy {
         this.generateQRCode(totp.totpUrl);
       }
     });
+    // Set up's button goes away as the stepper appears. Later steps need
+    // nothing: the stepper focuses the new step's header itself.
+    effect(() => this.firstStepTitle()?.nativeElement.focus());
   }
 
   get code() {
@@ -94,14 +95,6 @@ export class TOTPComponent implements OnDestroy {
 
   incrementStep() {
     this.service.incrementTOTPStage();
-    // The clicked button goes away, so keep focus on the step it opened.
-    afterNextRender(
-      () =>
-        this.host.nativeElement
-          .querySelector<HTMLElement>(".mat-step-header[aria-current=step]")
-          ?.focus(),
-      { injector: this.injector },
-    );
   }
 
   async enableTOTP() {
