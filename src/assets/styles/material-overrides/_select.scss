@@ -59,7 +59,6 @@
   margin-inline-end: var(--gt-space-2, 8px);
   color: var(--mat-sys-on-surface-variant);
   font: var(--mat-sys-label-large);
-  cursor: pointer;
 }
 
 // Wraps the trigger text for room before the arrow (mat-select has no token for it).
@@ -67,5 +66,10 @@
   margin-inline-end: var(--gt-space-2, 8px);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-label-large);
-  cursor: pointer;
+}
+
+// Text bits pass clicks through to the wrapper, which opens the select.
+.gt-select-ghost__label,
+.gt-select-ghost__value {
+  pointer-events: none;
 }
