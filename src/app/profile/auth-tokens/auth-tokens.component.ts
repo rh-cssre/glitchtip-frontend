@@ -17,7 +17,6 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
-import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { scopesLabel } from "./token-scopes";
 
@@ -33,7 +32,6 @@ import { scopesLabel } from "./token-scopes";
     EmptyStateComponent,
     ListComponent,
     ListRowComponent,
-    PanelComponent,
     SettingsSectionComponent,
   ],
 })
@@ -47,6 +45,7 @@ export class AuthTokensComponent
   private snackBar = inject(MatSnackBar);
   scopesLabel = scopesLabel;
   copyLabel = (label: string) => $localize`Copy ${label}:label: token`;
+  deleteLabel = (label: string) => $localize`Delete ${label}:label:`;
 
   authTokens = computed(() =>
     this.service.apiTokens()?.map((token) => {

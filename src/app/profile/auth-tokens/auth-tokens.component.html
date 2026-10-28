@@ -1,11 +1,17 @@
 @if (initialLoad() === true) {
-  @if (authTokens()?.length) {
-    <!-- A visible title would only repeat the bar title. -->
-    <gt-settings-section i18n-title title="Tokens" hideTitle panel flush>
-      <span slot="description" i18n
-        >Tokens let scripts and tools use the GlitchTip API, with only the
-        scopes you give them.</span
-      >
+  <!-- A visible title would only repeat the bar title. -->
+  <gt-settings-section
+    i18n-title
+    title="Tokens"
+    hideTitle
+    panel
+    [flush]="!!authTokens()?.length"
+  >
+    <span slot="description" i18n
+      >Tokens let scripts and tools use the GlitchTip API, with only the scopes
+      you give them.</span
+    >
+    @if (authTokens()?.length) {
       <gt-list flush>
         @for (authToken of authTokens(); track authToken.id) {
           <gt-list-row>
@@ -31,15 +37,14 @@
               i18n-buttonText
               buttonText="Delete"
               buttonStyle="stroked"
+              [ariaLabel]="deleteLabel(authToken.label)"
               [loading]="authToken.isLoading"
               (buttonClick)="deleteAuthToken(authToken.id!, authToken.label)"
             />
           </gt-list-row>
         }
       </gt-list>
-    </gt-settings-section>
-  } @else {
-    <gt-panel>
+    } @else {
       <gt-empty-state
         icon="vpn_key"
         i18n-title
@@ -47,6 +52,6 @@
         i18n-message
         message="Create a token to use the GlitchTip API."
       />
-    </gt-panel>
-  }
+    }
+  </gt-settings-section>
 }
