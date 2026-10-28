@@ -91,25 +91,6 @@ mat-icon.gt-icon-sm {
   color: var(--mat-sys-on-surface-variant);
 }
 
-// Level is a dot plus a word, for Warning and Error only.
-.gt-dot {
-  display: inline-block;
-  flex: none;
-  width: 7px;
-  height: 7px;
-  margin-inline-end: 6px;
-  border-radius: 50%;
-
-  &--warning {
-    background-color: var(--gt-level-warning);
-  }
-
-  &--error,
-  &--fatal {
-    background-color: var(--gt-level-error);
-  }
-}
-
 .gt-raw {
   margin: 0;
   padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
