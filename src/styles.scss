@@ -262,6 +262,11 @@ mat-sidenav-container {
   margin-right: 8px;
 }
 
+// A lone field fills its settings section's column.
+.settings-section__body mat-form-field {
+  width: 100%;
+}
+
 // Settings sections: a hairline between consecutive sections, never above the
 // first or below the last. A section often sits inside its own form or a child
 // component, so the line goes on whichever sibling holds the section, as long

@@ -1,8 +1,7 @@
 @use "@angular/cdk";
-@use "@angular/material" as mat;
+@use "controls";
 
-// The hairline between sections is a global rule in styles.scss: it has to
-// see siblings and the forms or components that wrap a section.
+// Hairlines between the field sections of a form panel are in styles.scss.
 :host {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -51,10 +50,6 @@
 
   &:empty {
     display: none;
-  }
-
-  ::ng-deep mat-form-field {
-    width: 100%;
   }
 }
 
@@ -107,22 +102,13 @@
   min-width: 0;
 }
 
-// 32px, like gt-panel header actions.
 .settings-section__head-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gt-space-2, 8px);
 
-  @include mat.button-overrides(
-    (
-      filled-container-height: 32px,
-      outlined-container-height: 32px,
-      protected-container-height: 32px,
-      text-container-height: 32px,
-      tonal-container-height: 32px,
-    )
-  );
+  @include controls.compact-buttons;
 
   &:empty {
     display: none;
