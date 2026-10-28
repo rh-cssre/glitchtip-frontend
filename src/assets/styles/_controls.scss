@@ -23,6 +23,7 @@
 $narrow-bar: 599px;
 $narrow-panel: 479px;
 $wide-panel: 719px;
+$narrow-band: 899px;
 
 // Short control labels when the bar they sit in (top app bar, panel) is narrow.
 @mixin narrow-bar {
@@ -48,6 +49,20 @@ $wide-panel: 719px;
 // Panel content with room for side-by-side columns.
 @mixin wide-panel {
   @container gt-panel (min-width: #{$wide-panel + 1px}) {
+    @content;
+  }
+}
+
+// Record band without room for its corner figures.
+@mixin narrow-band {
+  @container record-band (max-width: #{$narrow-band}) {
+    @content;
+  }
+}
+
+// Record band with room for them.
+@mixin wide-band {
+  @container record-band (min-width: #{$narrow-band + 1px}) {
     @content;
   }
 }
