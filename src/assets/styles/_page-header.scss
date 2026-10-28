@@ -2,22 +2,22 @@
 @use "variables" as vars;
 
 // Projected gt-page-header facts come from the page's template, so they are global.
-.page-header__meta {
+.gt-page-header__meta {
   [slot="meta"] {
     display: contents;
   }
 
   [slot="meta"] > * {
     position: relative;
-    margin-left: 16px;
+    margin-left: object-header.$sep-gap;
   }
 
   [slot="meta"] > .no-sep {
-    margin-left: 8px;
+    margin-left: calc(#{object-header.$sep-gap} / 2);
   }
 
   [slot="meta"] > :not(:first-child)::before,
-  .page-header__pill + [slot="meta"] > :first-child:not(.no-sep)::before {
+  .gt-page-header__pill + [slot="meta"] > :first-child:not(.no-sep)::before {
     @include object-header.separator;
   }
 
