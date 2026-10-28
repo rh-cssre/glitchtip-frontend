@@ -10,7 +10,7 @@ import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "../organizations.service";
-import { client, handleError } from "../../shared/api/api";
+import { apiErrorMessage, client, handleError } from "../../shared/api/api";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { components } from "../api-schema";
@@ -202,7 +202,11 @@ export class TeamsService extends StatefulService<TeamsState> {
       // The schema lists no error body, so the error is typed never.
       const { error } = result as { error?: unknown };
       this.deleteTeamError.set(
-        handleError(error, result.response).detail[0]?.msg ?? "",
+        apiErrorMessage(
+          error,
+          result.response,
+          $localize`Could not delete the team.`,
+        ),
       );
     }
     return result;
