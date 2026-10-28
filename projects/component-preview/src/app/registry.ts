@@ -49,6 +49,7 @@ import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
 import { EmptyStatePreview } from "./previews/empty-state.preview";
 import { GhostSelectPreview } from "./previews/ghost-select.preview";
 import { SplitButtonPreview } from "./previews/split-button.preview";
+import { CodePreview } from "./previews/code.preview";
 
 /**
  * Component lifecycle status, following the practice of published design
@@ -246,6 +247,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Split button",
     group: "Components",
     component: SplitButtonPreview,
+    status: "stable",
+  },
+  {
+    id: "code",
+    label: "Code",
+    group: "Components",
+    component: CodePreview,
     status: "stable",
   },
   {

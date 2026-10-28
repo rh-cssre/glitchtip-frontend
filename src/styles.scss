@@ -6,6 +6,7 @@
 @use "./assets/styles/variables" as vars;
 @use "./assets/styles/font-files";
 @use "./assets/styles/resets";
+@use "./assets/styles/code";
 @use "./scss/auth-forms";
 
 html {
@@ -55,26 +56,13 @@ html {
   --log-service-color: light-dark(#047857, #10b981);
 }
 
-.light {
-  @include meta.load-css("prismjs/themes/prism.css");
-}
-
-.dark {
-  @include meta.load-css("prismjs/themes/prism-tomorrow.css");
-}
-
+// Colours come from _code.scss; gtPrism blocks still use these two plugins.
 .light,
 .dark {
   @include meta.load-css("prismjs/plugins/line-numbers/prism-line-numbers.css");
   @include meta.load-css(
     "prismjs/plugins/line-highlight/prism-line-highlight.css"
   );
-
-  pre[class*="language-"] {
-    border-radius: vars.$shape-radius;
-    border: none;
-    box-shadow: none;
-  }
 }
 
 a {

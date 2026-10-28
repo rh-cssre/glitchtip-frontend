@@ -28,6 +28,8 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 
 Colour only for meaning: error, warning, success and status (level pills, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
 
+- **Code:** code blocks use the Prism token theme in `src/assets/styles/_code.scss` (`--gt-code-*`) on the strip tint. Token colours come from the per-mode log palette (tertiary is the brand red here) and keep 4.5:1 on the code surface and the crash line in both modes. The crash line is an error tint with a 2px error bar. Markdown code blocks get the same theme.
+
 ### Typography
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
