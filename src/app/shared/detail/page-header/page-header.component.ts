@@ -15,7 +15,7 @@ import { StatusPillComponent } from "../../status-pill/status-pill.component";
   styleUrl: "./page-header.component.scss",
   host: {
     "[attr.title]": "null",
-    "[class.page-header--compact]": "compact()",
+    "[class.gt-page-header--compact]": "compact()",
   },
 })
 export class PageHeaderComponent {

@@ -1,26 +1,26 @@
 @use "object-header";
 
-.page-header {
+.gt-page-header {
   display: flex;
   align-items: center;
   gap: var(--gt-space-4, 16px);
   margin-bottom: var(--gt-space-5, 24px);
 }
 
-.page-header__icon {
+.gt-page-header__icon {
   @include object-header.icon-tile;
 }
 
-.page-header__text {
+.gt-page-header__text {
   flex: 1;
   min-width: 0;
 }
 
-.page-header__title {
+.gt-page-header__title {
   @include object-header.title;
 }
 
-.page-header__subtitle {
+.gt-page-header__subtitle {
   display: -webkit-box;
   margin: var(--gt-space-1, 4px) 0 0;
   overflow: hidden;
@@ -31,11 +31,11 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-.page-header__meta {
+.gt-page-header__meta {
   @include object-header.meta;
 
-  .page-header__pill {
-    margin-left: var(--gt-space-4, 16px);
+  .gt-page-header__pill {
+    margin-left: object-header.$sep-gap;
   }
 
   &:not(:has(*)) {
@@ -44,13 +44,13 @@
 }
 
 // Settings pages: one line, with the facts wrapping under the title.
-:host(.page-header--compact) {
-  .page-header {
+:host(.gt-page-header--compact) {
+  .gt-page-header {
     gap: var(--gt-space-3, 12px);
     margin-bottom: var(--gt-space-4, 16px);
   }
 
-  .page-header__icon {
+  .gt-page-header__icon {
     width: 32px;
     height: 32px;
     border-radius: var(--mat-sys-corner-small);
@@ -62,20 +62,20 @@
     }
   }
 
-  .page-header__text {
+  .gt-page-header__text {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 2px var(--gt-space-3, 12px);
   }
 
-  .page-header__title {
+  .gt-page-header__title {
     font: var(--mat-sys-title-large);
     font-weight: 500;
     letter-spacing: var(--mat-sys-title-large-tracking);
   }
 
-  .page-header__meta {
+  .gt-page-header__meta {
     margin-top: 0;
   }
 }

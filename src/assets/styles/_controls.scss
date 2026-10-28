@@ -1,3 +1,4 @@
+@use "sass:list";
 @use "@angular/material" as mat;
 
 // 32px buttons and icon buttons for dense bars and panel headers.
@@ -18,9 +19,61 @@
   );
 }
 
+// Container widths where content changes layout; the last width of the narrow range.
+$narrow-bar: 599px;
+$narrow-panel: 479px;
+$wide-panel: 719px;
+
 // Short control labels when the bar they sit in (top app bar, panel) is narrow.
 @mixin narrow-bar {
-  @container gt-bar (max-width: 599px) {
+  @container gt-bar (max-width: #{$narrow-bar}) {
     @content;
   }
+}
+
+// Panel content at phone width.
+@mixin narrow-panel {
+  @container gt-panel (max-width: #{$narrow-panel}) {
+    @content;
+  }
+}
+
+// Panel content that has no room for side-by-side columns.
+@mixin below-wide-panel {
+  @container gt-panel (max-width: #{$wide-panel}) {
+    @content;
+  }
+}
+
+// Panel content with room for side-by-side columns.
+@mixin wide-panel {
+  @container gt-panel (min-width: #{$wide-panel + 1px}) {
+    @content;
+  }
+}
+
+// M3 state layer colour; the value form is for Material tokens such as ripple colours.
+@function state-layer-color($state: hover) {
+  @if not list.index((hover, focus, pressed), $state) {
+    @error "state-layer: unknown state #{$state}";
+  }
+  @return color-mix(
+    in srgb,
+    var(--mat-sys-on-surface)
+      calc(var(--mat-sys-#{$state}-state-layer-opacity) * 100%),
+    transparent
+  );
+}
+
+// M3 state layer on our own interactive surfaces; opacity comes from the theme.
+@mixin state-layer($state: hover) {
+  background-color: state-layer-color($state);
+}
+
+// Square mat-icon size; put it on a class the component owns.
+@mixin icon-size($size) {
+  width: $size;
+  height: $size;
+  font-size: $size;
+  line-height: $size;
 }
