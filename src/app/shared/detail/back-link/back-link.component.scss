@@ -1,14 +1,16 @@
+@use "@angular/material" as mat;
 @use "variables" as vars;
 
-// Pull left by the button's inset so the chevron sits on the container edge.
+// The chevron takes the leading padding, so it sits on the container edge.
+$inset: var(--gt-space-4, 16px);
+
 :host {
   display: inline-flex;
-  margin-inline-start: calc(
-    -1 *
-      (
-        var(--mat-button-text-with-icon-horizontal-padding, 16px) +
-          var(--mat-button-text-icon-offset, -4px)
-      )
+  @include mat.button-overrides(
+    (
+      text-with-icon-horizontal-padding: $inset,
+      text-icon-offset: calc(-1 * #{$inset}),
+    )
   );
 }
 

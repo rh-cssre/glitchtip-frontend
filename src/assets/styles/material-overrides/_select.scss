@@ -1,4 +1,5 @@
 @use "@angular/material" as mat;
+@use "controls";
 @use "variables" as vars;
 
 // Ghost select for bar filters: a mat-select with no form field, in our own
@@ -33,20 +34,12 @@
   }
 
   &:hover {
-    background-color: color-mix(
-      in srgb,
-      var(--mat-sys-on-surface) 8%,
-      transparent
-    );
+    @include controls.state-layer(hover);
   }
 
   &:has(mat-select:focus-visible),
   &.gt-select-ghost--open {
-    background-color: color-mix(
-      in srgb,
-      var(--mat-sys-on-surface) 12%,
-      transparent
-    );
+    @include controls.state-layer(focus);
   }
 
   // Forced colors drop the state layer; outline like Material text buttons.
