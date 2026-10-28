@@ -4,6 +4,7 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 import { components } from "src/app/api/api-schema";
 import { client, handleError } from "src/app/shared/api/api";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
+import { ProjectSlugs, sameProjectSlugs } from "../project-slugs";
 
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
 export type NewAlertRecipient = Omit<AlertRecipient, "id" | "url"> & {
@@ -50,7 +51,7 @@ export class ProjectAlertsService {
   private organizationsService = inject(OrganizationsService);
   private snackBar = inject(MatSnackBar);
 
-  #params = signal({ orgSlug: "", projectSlug: "" });
+  #params = signal<ProjectSlugs | null>(null, { equal: sameProjectSlugs });
   #projectAlertsResource = apiResource(this.#params, (params) => ({
     url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
     options: {
@@ -67,15 +68,16 @@ export class ProjectAlertsService {
   }));
   readonly initialLoad = computed(
     () =>
-      this.#projectAlertsResource.status() !== "loading" ||
+      this.#projectAlertsResource.hasValue() ||
       !!this.#projectAlertsResource.error(),
   );
   readonly initialLoadError = computed(() =>
     this.#projectAlertsResource.error(),
   );
   readonly projectAlerts = computed(() => {
-    const alerts = this.#projectAlertsResource.value();
-    return alerts?.map((alert) => {
+    // value() throws while the resource is in its error state.
+    if (!this.#projectAlertsResource.hasValue()) return undefined;
+    return this.#projectAlertsResource.value()?.map((alert) => {
       return {
         ...alert,
         errorAlert: !alert.timespanMinutes && !alert.quantity ? false : true,
@@ -88,7 +90,7 @@ export class ProjectAlertsService {
    * Undefined until the organization (which lists them) has loaded.
    */
   readonly projectTeams = computed(() => {
-    const slug = this.#params().projectSlug;
+    const slug = this.#params()?.projectSlug;
     const project = this.organizationsService
       .activeOrganization()
       ?.projects.find((p) => p.slug === slug);
@@ -96,15 +98,11 @@ export class ProjectAlertsService {
   });
 
   setParams(orgSlug: string, projectSlug: string) {
-    // The project page and its tab both set these; same values, no refetch.
-    const current = this.#params();
-    if (current.orgSlug === orgSlug && current.projectSlug === projectSlug)
-      return;
     this.#params.set({ orgSlug, projectSlug });
   }
 
   #path() {
-    const params = this.#params();
+    const params = this.#params()!;
     return {
       ...this.organizationsService.orgPath(params.orgSlug),
       project_slug: params.projectSlug,

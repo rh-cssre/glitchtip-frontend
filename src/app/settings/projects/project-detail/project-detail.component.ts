@@ -120,16 +120,10 @@ export class ProjectDetailComponent implements OnInit {
   projectKeys = this.#service.projectKeys;
   #alertsService = inject(ProjectAlertsService);
   #environmentsService = inject(ProjectEnvironmentsService);
-  /** Tab counts, shown once known (including 0). DSN holds one thing: none. */
-  readonly tabCounts = computed<Record<string, number | null>>(() => ({
-    environments: this.#environmentsService.initialLoad()
-      ? (this.#environmentsService.environments()?.length ?? 0)
-      : null,
-    alerts:
-      this.#alertsService.initialLoad() &&
-      !this.#alertsService.initialLoadError()
-        ? (this.#alertsService.projectAlerts()?.length ?? 0)
-        : null,
+  /** Undefined until loaded, and on a load error. DSN holds one thing: none. */
+  readonly tabCounts = computed<Record<string, number | undefined>>(() => ({
+    environments: this.#environmentsService.environments()?.length,
+    alerts: this.#alertsService.projectAlerts()?.length,
   }));
   activeProject = this.#service.project;
 

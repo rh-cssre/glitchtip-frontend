@@ -1,10 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   computed,
   inject,
-  input,
 } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -29,13 +27,11 @@ import { AlertListComponent } from "./alert-list/alert-list.component";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectAlertsComponent implements OnInit {
+export class ProjectAlertsComponent {
   #service = inject(ProjectAlertsService);
   #environmentsService = inject(ProjectEnvironmentsService);
   #router = inject(Router);
   #queryParams = toSignal(inject(ActivatedRoute).queryParamMap);
-  orgSlug = input.required<string>();
-  projectSlug = input.required<string>();
 
   projectAlerts = this.#service.projectAlerts;
   initialLoad = this.#service.initialLoad;
@@ -59,11 +55,6 @@ export class ProjectAlertsComponent implements OnInit {
     const alert = this.projectAlerts()?.find((a) => String(a.id) === param);
     return alert ? { alert } : null;
   });
-
-  ngOnInit(): void {
-    this.#service.setParams(this.orgSlug(), this.projectSlug());
-    this.#environmentsService.setParams(this.orgSlug(), this.projectSlug());
-  }
 
   closeEdit() {
     this.#router.navigate([], {
