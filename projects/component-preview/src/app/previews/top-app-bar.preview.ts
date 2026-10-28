@@ -1,9 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-} from "@angular/core";
+import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
@@ -13,6 +8,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
@@ -20,6 +16,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   selector: "preview-top-app-bar",
   imports: [
     TopAppBar,
+    SelectGhostDirective,
     BackLinkComponent,
     MatButtonModule,
     MatIconModule,
@@ -102,18 +99,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         </ng-container>
         <ng-container slot="right">
           <div class="tab-demo-filters">
-            <span
-              class="gt-select-ghost tab-demo-projects"
-              [class.gt-select-ghost--open]="projectsOpen()"
-              (click)="$event.target === $event.currentTarget && projectsSelect.open()"
-            >
-              <mat-select
-                #projectsSelect
-                value="web"
-                aria-label="Projects"
-                panelWidth="240px"
-                (openedChange)="projectsOpen.set($event)"
-              >
+            <span gtSelectGhost class="tab-demo-projects">
+              <mat-select value="web" aria-label="Projects" panelWidth="240px">
                 <mat-option value="web">acme-web</mat-option>
                 <mat-option value="api">acme-api</mat-option>
               </mat-select>
@@ -121,18 +108,12 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             <button mat-icon-button aria-label="Project settings">
               <mat-icon>settings</mat-icon>
             </button>
-            <span
-              class="gt-select-ghost tab-demo-range"
-              [class.gt-select-ghost--open]="rangeOpen()"
-              (click)="$event.target === $event.currentTarget && rangeSelect.open()"
-            >
+            <span gtSelectGhost class="tab-demo-range">
               <mat-select
-                #rangeSelect
                 value="24h"
                 aria-label="Time range"
                 panelWidth="200px"
                 hideSingleSelectionIndicator
-                (openedChange)="rangeOpen.set($event)"
               >
                 <mat-option value="24h">Last 24 hours</mat-option>
                 <mat-option value="7d">Last 7 days</mat-option>
@@ -226,9 +207,6 @@ export class TopAppBarPreview {
       .pipe(map((state) => state.matches)),
     { initialValue: false },
   );
-  // Ghost selects show the open state layer while their panel is open.
-  readonly projectsOpen = signal(false);
-  readonly rangeOpen = signal(false);
 
   readonly whenToUse = [
     "The header row of every list page and detail page",
@@ -242,8 +220,7 @@ export class TopAppBarPreview {
     "Show a record's status as an outlined neutral dropdown with the gt-status-pill dot",
     "Link a record to its edit page with an outlined Edit X",
     "Put Delete on the record's settings or edit page; without one, delete from the bar with the same confirm",
-    "Make bar filters ghost selects: a mat-select in a .gt-select-ghost span, with an aria-label and a fixed width",
-    "Toggle gt-select-ghost--open from the select's openedChange output, and call its open() on wrapper clicks",
+    "Make bar filters ghost selects: a mat-select in a gtSelectGhost span, with an aria-label and a fixed width",
     "On mobile, collapse text actions to icon buttons (toggle the example to Mobile)",
   ];
   readonly donts = [
@@ -272,6 +249,7 @@ export class TopAppBarPreview {
     { name: "slot=right", type: "content projection", default: "", description: "Actions and filters, spaced from the left slot by a gap" },
   ];
   readonly importCode = `import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";`;
   readonly code = `<gt-top-app-bar>
   <ng-container slot="left">
