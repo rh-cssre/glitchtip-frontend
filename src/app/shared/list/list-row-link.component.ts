@@ -21,7 +21,8 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
     :host(:hover)::after {
       background-color: color-mix(
         in srgb,
-        var(--mat-sys-on-surface) 8%,
+        var(--mat-sys-on-surface)
+          calc(var(--mat-sys-hover-state-layer-opacity) * 100%),
         transparent
       );
     }
