@@ -24,6 +24,7 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { AlertFormComponent } from "../alert-form/alert-form.component";
 import { AlertConditions, alertName, recipientLabel } from "../alert-labels";
@@ -63,6 +64,7 @@ type Recipient = AlertRecipient | NewAlertRecipient;
     ListComponent,
     ListRowComponent,
     LoadingButtonComponent,
+    PanelComponent,
     RecipientIconComponent,
     SettingsSectionComponent,
   ],

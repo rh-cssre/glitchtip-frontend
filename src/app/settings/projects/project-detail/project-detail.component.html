@@ -6,7 +6,7 @@
 
 @if (activeProject(); as project) {
   <section class="l-body">
-    <gt-page-header icon="folder" [title]="project.name">
+    <gt-page-header icon="folder" [title]="project.name" compact>
       <span slot="meta">
         @if (project.platform) {
           <span
@@ -28,8 +28,9 @@
           queryParamsHandling="merge"
           replaceUrl
           >{{ t.label }}
-          @if (t.id === "dsn" && projectKeys(); as keys) {
-            <span class="tab-count">{{ keys.length }}</span>
+          @let count = tabCounts()[t.id];
+          @if (count !== null && count !== undefined) {
+            <span class="tab-count">{{ count }}</span>
           }
         </a>
       }
@@ -50,7 +51,7 @@
               #nameSection
               i18n-title
               title="Name"
-              [inline]="canWriteProject()"
+              panel
             >
               @if (canWriteProject()) {
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -99,7 +100,7 @@
               #platformSection
               i18n-title
               title="Platform"
-              [inline]="canWriteProject()"
+              panel
             >
               <span slot="description" i18n
                 >Picks the setup guide and icon for this project.
@@ -177,7 +178,7 @@
             </gt-settings-section>
           </form>
 
-          <gt-settings-section i18n-title title="Your notifications">
+          <gt-settings-section i18n-title title="Your notifications" panel>
             <a
               slot="actions"
               mat-stroked-button
@@ -188,10 +189,15 @@
           </gt-settings-section>
 
           @if (canAdminProject()) {
-            <gt-settings-section i18n-title title="Delete project">
+            <gt-settings-section
+              i18n-title
+              title="Delete project"
+              panel
+              tone="danger"
+            >
               <span slot="description" i18n
-                >Deletes <strong>{{ project.name }}</strong> and all of its issues,
-                events and settings. This cannot be undone.</span
+                >Deletes <strong>{{ project.name }}</strong> and all of its
+                issues, events and settings. This cannot be undone.</span
               >
               @if (deleteError()) {
                 <gt-form-error [errors]="deleteError()" />
@@ -218,7 +224,8 @@
             <gt-settings-section
               #dsnSection
               [title]="dsnTitle + keySuffix(projectKey, i, count)"
-              [inline]="true"
+              panel
+              [hideTitle]="count === 1"
             >
               <span slot="description" i18n
                 >Your project's Data Source Name. Paste it into your SDK
@@ -232,7 +239,7 @@
             <gt-settings-section
               #securitySection
               [title]="securityEndpointLabel + keySuffix(projectKey, i, count)"
-              [inline]="true"
+              panel
             >
               <span slot="description" i18n
                 >Receives browser Content Security Policy violation

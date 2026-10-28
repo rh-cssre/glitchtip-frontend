@@ -1,3 +1,6 @@
+@use "@angular/cdk";
+@use "@angular/material" as mat;
+
 // The hairline between sections is a global rule in styles.scss: it has to
 // see siblings and the forms or components that wrap a section.
 :host {
@@ -41,6 +44,11 @@
   width: 100%;
   max-width: 560px;
 
+  // Lists and empty states span the body so they centre; the cap is for fields.
+  &:has(gt-empty-state, gt-list) {
+    max-width: none;
+  }
+
   &:empty {
     display: none;
   }
@@ -65,4 +73,67 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+}
+
+// Panels stack 16px apart; the margins collapse across wrapping forms.
+:host(.gt-settings-panel) {
+  display: block;
+  padding: 0;
+  margin-bottom: var(--gt-space-4, 16px);
+}
+
+.settings-section__panel-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gt-space-3, 12px);
+}
+
+// Header actions wrap under the text on a narrow screen.
+.settings-section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gt-space-3, 12px);
+}
+
+.settings-section__head > .settings-section__text {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+// 32px, like gt-panel header actions.
+.settings-section__head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+
+  @include mat.button-overrides(
+    (
+      filled-container-height: 32px,
+      outlined-container-height: 32px,
+      protected-container-height: 32px,
+      text-container-height: 32px,
+      tonal-container-height: 32px,
+    )
+  );
+
+  &:empty {
+    display: none;
+  }
+}
+
+// CDK loads this class only with some components, so the hidden title brings it.
+@include cdk.a11y-visually-hidden();
+
+.settings-section__title.cdk-visually-hidden + .settings-section__description {
+  margin-top: 0;
+}
+
+.settings-section__panel-body--padded {
+  padding: var(--gt-space-4, 16px);
+}
+
+.settings-section__flush-body {
+  border-top: 1px solid var(--mat-sys-outline-variant);
 }

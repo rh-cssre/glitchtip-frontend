@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   ViewChild,
+  computed,
   effect,
   inject,
   input,
@@ -48,6 +49,8 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { ProjectAlertsService } from "./project-alerts/project-alerts.service";
+import { ProjectEnvironmentsService } from "./project-environments/project-environments.service";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -94,8 +97,11 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     SettingsSectionComponent,
     FormErrorComponent,
   ],
+  // The tab services live here, so the tab counts and the tabs share one load.
   providers: [
     ProjectDetailService,
+    ProjectAlertsService,
+    ProjectEnvironmentsService,
     { provide: ErrorStateMatcher, useClass: CustomErrorStateMatcher },
   ],
 })
@@ -109,6 +115,19 @@ export class ProjectDetailComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
 
   projectKeys = this.#service.projectKeys;
+  #alertsService = inject(ProjectAlertsService);
+  #environmentsService = inject(ProjectEnvironmentsService);
+  /** Tab counts, shown once known (including 0). DSN holds one thing: none. */
+  readonly tabCounts = computed<Record<string, number | null>>(() => ({
+    environments: this.#environmentsService.initialLoad()
+      ? (this.#environmentsService.environments()?.length ?? 0)
+      : null,
+    alerts:
+      this.#alertsService.initialLoad() &&
+      !this.#alertsService.initialLoadError()
+        ? (this.#alertsService.projectAlerts()?.length ?? 0)
+        : null,
+  }));
   activeProject = this.#service.project;
 
   orgSlug = input.required<string>({ alias: "org-slug" });
@@ -178,6 +197,10 @@ export class ProjectDetailComponent implements OnInit {
   platformCtrlInvalid = isCustomErrorState(this.platformCtrl);
 
   constructor() {
+    effect(() => {
+      this.#alertsService.setParams(this.orgSlug(), this.projectSlug());
+      this.#environmentsService.setParams(this.orgSlug(), this.projectSlug());
+    });
     effect(() => {
       const project = this.activeProject();
       if (project) {

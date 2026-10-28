@@ -88,6 +88,10 @@ export class ProjectEnvironmentsService extends StatefulService<ProjectsState> {
   }
 
   setParams(orgSlug: string, projectSlug: string) {
+    // The project page and its tab both set these; same values, no refetch.
+    const current = this.#params();
+    if (current.orgSlug === orgSlug && current.projectSlug === projectSlug)
+      return;
     this.#params.set({ orgSlug, projectSlug });
   }
 

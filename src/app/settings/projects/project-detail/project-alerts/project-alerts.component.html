@@ -11,57 +11,15 @@
   </div>
 } @else {
   <gt-form-error [errors]="initialLoadError()?.message" />
-  @if (canWriteProject()) {
-    <div class="gt-list-actions">
-      <button
-        mat-stroked-button
-        id="create-new-alert"
-        (click)="openEdit('new')"
-      >
-        <mat-icon>add</mat-icon>
-        <ng-container i18n>New alert</ng-container>
-      </button>
-    </div>
-  }
-  @if (projectAlerts()?.length) {
-    <gt-list>
-      @for (alert of projectAlerts(); track alert.id) {
-        <gt-list-row>
-          @if (canWriteProject()) {
-            <a
-              [routerLink]="[]"
-              [queryParams]="{ alert: alert.id }"
-              queryParamsHandling="merge"
-              >{{ alertName(alert) }}</a
-            >
-          } @else {
-            <span>{{ alertName(alert) }}</span>
-          }
-          <gt-alert-recipients
-            [recipients]="alert.alertRecipients"
-            [teams]="projectTeams()"
-          />
-          <gt-alert-summary slot="description" [alert]="alert" />
-        </gt-list-row>
-      }
-    </gt-list>
-  } @else if (!initialLoadError()) {
-    @if (canWriteProject()) {
-      <gt-empty-state
-        icon="notifications"
-        i18n-title
-        title="No alerts"
-        i18n-message
-        message="Create an alert to get notified when this project has new issues."
-      />
-    } @else {
-      <gt-empty-state
-        icon="notifications"
-        i18n-title
-        title="No alerts"
-        i18n-message
-        message="This project has no alerts yet."
-      />
-    }
+  @if (!initialLoadError()) {
+    <gt-alert-list
+      [alerts]="projectAlerts() ?? []"
+      [teams]="projectTeams()"
+      [canWrite]="canWriteProject()"
+      paramsHandling="merge"
+      i18n-emptyTitle
+      emptyTitle="No alerts"
+      [emptyMessage]="emptyMessage()"
+    />
   }
 }

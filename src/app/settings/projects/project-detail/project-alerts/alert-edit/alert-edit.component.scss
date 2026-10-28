@@ -9,11 +9,8 @@
   margin-bottom: var(--gt-space-2, 8px);
 }
 
-// The first section draws no line above it, so the title brings its own.
 .title {
-  margin: 0;
-  padding-bottom: var(--gt-space-5, 24px);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  margin: 0 0 var(--gt-space-4, 16px);
   font: var(--mat-sys-title-large);
   font-weight: 600;
 }
@@ -32,16 +29,16 @@
   text-overflow: ellipsis;
 }
 
+// Full-width hairline like a section's; the text keeps the reading measure.
 .summary {
-  max-width: var(--gt-measure, 70ch);
-  margin: 0 0 var(--gt-space-3, 12px);
-  padding-top: var(--gt-space-5, 24px);
+  margin: var(--gt-space-4, 16px) 0 0;
+  padding-top: var(--gt-space-4, 16px);
+  border-top: 1px solid var(--mat-sys-outline-variant);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface);
-}
 
-// Matches a section's bottom padding, so the line above Delete is centered.
-.gt-form-actions {
-  padding-top: 0;
-  padding-bottom: var(--gt-space-5, 24px);
+  gt-alert-summary {
+    display: block;
+    max-width: var(--gt-measure, 70ch);
+  }
 }

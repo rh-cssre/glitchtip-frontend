@@ -2,42 +2,50 @@
   <div class="loading"></div>
 } @else {
   @if (sortedEnvironments(); as sortedEnvironments) {
-    <p class="page-intro" i18n
-      >Hidden environments aren't offered when you set up alerts or uptime
-      monitors. An environment stays listed after its events are deleted, so
-      hide the ones you no longer use.</p
-    >
     @for (
       sortedEnvironment of sortedEnvironments;
-      track sortedEnvironment.heading
+      track sortedEnvironment.heading;
+      let first = $first
     ) {
-      <gt-list [label]="sortedEnvironment.heading">
-        @for (
-          environment of sortedEnvironment.environments;
-          track environment.id
-        ) {
-          <gt-list-row>
-            {{ environment.name }}
-            @if (canWriteProject()) {
-              <gt-loading-button
-                slot="actions"
-                (buttonClick)="toggleHidden(environment)"
-                [loading]="environment.id === toggleHiddenloading()"
-                [buttonText]="environment.isHidden ? showText : hideText"
-                buttonStyle="stroked"
-              />
-            }
-          </gt-list-row>
+      <!-- The first group carries the tab's one line of help. -->
+      <gt-settings-section [title]="sortedEnvironment.heading" panel flush>
+        @if (first) {
+          <span slot="description" i18n
+            >Hidden environments aren't offered when you set up alerts or uptime
+            monitors. An environment stays listed after its events are deleted,
+            so hide the ones you no longer use.</span
+          >
         }
-      </gt-list>
+        <gt-list flush>
+          @for (
+            environment of sortedEnvironment.environments;
+            track environment.id
+          ) {
+            <gt-list-row>
+              {{ environment.name }}
+              @if (canWriteProject()) {
+                <gt-loading-button
+                  slot="actions"
+                  (buttonClick)="toggleHidden(environment)"
+                  [loading]="environment.id === toggleHiddenloading()"
+                  [buttonText]="environment.isHidden ? showText : hideText"
+                  buttonStyle="stroked"
+                />
+              }
+            </gt-list-row>
+          }
+        </gt-list>
+      </gt-settings-section>
     }
   } @else {
-    <gt-empty-state
-      icon="folder"
-      i18n-title
-      title="No environments"
-      i18n-message
-      message="Environments appear here once your SDK sends events with one set."
-    />
+    <gt-panel>
+      <gt-empty-state
+        icon="folder"
+        i18n-title
+        title="No environments"
+        i18n-message
+        message="Environments appear here once your SDK sends events with one set."
+      />
+    </gt-panel>
   }
 }

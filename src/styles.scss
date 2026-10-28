@@ -269,14 +269,6 @@ mat-sidenav-container {
   color: var(--mat-sys-on-surface-variant);
 }
 
-// Create action above a list inside a record's tab.
-.gt-list-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gt-space-2, 8px);
-  margin-bottom: var(--gt-space-4, 16px);
-}
-
 .full-width {
   width: 100%;
 }
@@ -319,9 +311,12 @@ mat-sidenav-container {
 // component, so the line goes on whichever sibling holds the section, as long
 // as an earlier sibling holds one too. A section that continues the one before
 // it (an add field, then its list) opts out with .gt-settings-continued.
+// Panel sections draw their own border, so they skip the hairline.
 :is(gt-settings-section, :has(gt-settings-section))
   ~ :is(gt-settings-section, :has(gt-settings-section)):not(
-    .gt-settings-continued
+    .gt-settings-continued,
+    .gt-settings-panel,
+    :has(.gt-settings-panel)
   ) {
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
@@ -343,6 +338,24 @@ gt-settings-section:first-child:not(
 mat-tab-nav-panel:not(mat-card-content > *) {
   display: block;
   padding-top: var(--gt-space-4, 16px);
+}
+
+// A create or edit form with one submit is one panel: field sections sit 16px
+// each side of their hairlines, Cancel and the submit go in the footer.
+gt-panel.gt-form-panel {
+  margin-bottom: var(--gt-space-4, 16px);
+
+  gt-settings-section {
+    padding-block: var(--gt-space-4, 16px);
+  }
+
+  gt-settings-section:first-child {
+    padding-top: 0;
+  }
+
+  gt-settings-section:not(:has(~ gt-settings-section)) {
+    padding-bottom: 0;
+  }
 }
 
 .gt-form-actions {
@@ -597,10 +610,13 @@ gt-pagination-buttons {
 }
 
 .tab-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
   margin-left: var(--gt-space-2, 8px);
-  padding: 1px var(--gt-space-2, 8px);
+  padding: 0 var(--gt-space-2, 8px);
   border-radius: var(--mat-sys-corner-full);
-  font: var(--mat-sys-label-small);
+  font: var(--mat-sys-label-medium);
   background-color: var(--mat-sys-surface-container-highest);
   color: var(--mat-sys-on-surface-variant);
 }

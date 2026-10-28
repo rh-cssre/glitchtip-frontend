@@ -5,6 +5,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   templateUrl: "./list-title.component.html",
+  styleUrl: "./list-title.component.scss",
 })
 export class ListTitleComponent {
   @Input() searchHits?: string;
