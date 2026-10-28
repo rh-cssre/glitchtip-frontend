@@ -14,6 +14,8 @@ import {
 import { KeyValuePipe } from "@angular/common";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
@@ -27,6 +29,8 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
     KeyValuePipe,
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
+    EmptyStateComponent,
     SettingsSectionComponent,
     FormErrorComponent,
   ],

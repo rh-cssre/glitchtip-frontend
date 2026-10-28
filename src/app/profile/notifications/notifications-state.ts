@@ -55,7 +55,8 @@ export class NotificationsService extends StatefulService<NotificationsState> {
   userAlertSettings = computed(() => {
     const projectAlerts = this.#alertsList.value();
     const projects = this.projectsService.projects();
-    if (projectAlerts && projects) {
+    // projects() is [] until it loads; waiting avoids flashing the empty state.
+    if (projectAlerts && this.projectsService.initialLoadComplete()) {
       const projectsWithAlerts = projects.map((project) => {
         const matchingId = Object.keys(projectAlerts).find(
           (element) => element === project.id,
@@ -77,7 +78,7 @@ export class NotificationsService extends StatefulService<NotificationsState> {
         return r;
       }, {});
     }
-    return [];
+    return;
   });
 
   constructor() {
