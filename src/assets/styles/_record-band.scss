@@ -1,0 +1,47 @@
+@use "controls";
+@use "@angular/material" as mat;
+
+// Content projected into gt-record-band comes from the page's template, so it is global.
+// Label over value on one left edge, so each label clearly owns its figure.
+.gt-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.gt-stat__label {
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-stat__value {
+  font: var(--mat-sys-title-large);
+  font-variant-numeric: tabular-nums;
+  color: var(--mat-sys-on-surface);
+}
+
+// A smaller, muted unit ("1.92 s", "130 ms"), so the number reads first.
+.gt-stat__unit {
+  margin-inline-start: calc(var(--gt-space-1, 4px) / 2);
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// A meta fact that is also a corner figure shows only when the corner is hidden.
+@include controls.wide-band {
+  .gt-band-narrow-only {
+    display: none;
+  }
+}
+
+.l-body:has(> gt-record-band:first-child) {
+  margin-top: 0;
+}
+
+// The band's bottom edge is the tab bar's line.
+gt-record-band nav[mat-tab-nav-bar] {
+  @include mat.tabs-overrides(
+    (
+      divider-height: 0,
+    )
+  );
+}
