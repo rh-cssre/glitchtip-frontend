@@ -37,13 +37,13 @@
               }}</mat-radio-button>
             }
           </mat-radio-group>
-          @if (updateMemberError(); as error) {
-            <gt-form-error [errors]="error" />
-          }
         } @else {
           <span class="body-text">{{
             roleName(member.role) ?? member.roleName
           }}</span>
+        }
+        @if (updateMemberError(); as error) {
+          <gt-form-error slot="error" [errors]="error" />
         }
         <!-- Its own @if: a slotted node only projects from a single-root block. -->
         @if (canEditRole()) {
@@ -75,14 +75,20 @@
                 <a
                   gtListRowLink
                   [routerLink]="['teams', team, 'members']"
-                  [relativeTo]="route.parent?.parent"
+                  [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
                   >#{{ team }}</a
                 >
               </gt-list-row>
             }
           </gt-list>
         } @else {
-          <p class="gt-note" i18n>Not on any teams.</p>
+          <gt-empty-state
+            icon="group"
+            i18n-title
+            title="No teams"
+            i18n-message
+            message="This user isn't on any teams."
+          />
         }
       }
     </gt-settings-section>
@@ -94,7 +100,7 @@
           role changes.</span
         >
         @if (transferOrgOwnershipError(); as error) {
-          <gt-form-error [errors]="error" />
+          <gt-form-error slot="error" [errors]="error" />
         }
         <gt-loading-button
           slot="actions"

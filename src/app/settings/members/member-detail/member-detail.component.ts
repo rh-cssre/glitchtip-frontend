@@ -16,6 +16,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatDialog } from "@angular/material/dialog";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
@@ -40,6 +41,7 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
     MatRadioModule,
     TopAppBar,
     BackLinkComponent,
+    EmptyStateComponent,
     LoadingButtonComponent,
     ListComponent,
     ListRowComponent,
