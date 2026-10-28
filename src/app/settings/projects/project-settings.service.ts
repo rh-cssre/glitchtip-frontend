@@ -20,7 +20,8 @@ interface ProjectError {
 }
 
 interface ProjectSettingsState {
-  projectsOnTeam: ProjectSchema[];
+  /** Null until the team's projects load. */
+  projectsOnTeam: ProjectSchema[] | null;
   projectsNotOnTeam: ProjectSchema[];
   projectKeys: ProjectKey[] | null;
   loading: ProjectLoading;
@@ -28,7 +29,7 @@ interface ProjectSettingsState {
 }
 
 const initialState: ProjectSettingsState = {
-  projectsOnTeam: [],
+  projectsOnTeam: null,
   projectsNotOnTeam: [],
   projectKeys: null,
   loading: { addProjectToTeam: false, removeProjectFromTeam: "" },
@@ -44,7 +45,10 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
 
   private params = signal({ orgSlug: "", teamSlug: "" });
   activeProjectSlug = signal("");
-  readonly projectsOnTeam = computed(() => this.state().projectsOnTeam);
+  readonly projectsOnTeam = computed(() => this.state().projectsOnTeam ?? []);
+  readonly projectsOnTeamCount = computed(
+    () => this.state().projectsOnTeam?.length,
+  );
   readonly projectsNotOnTeam = computed(() => this.state().projectsNotOnTeam);
   readonly addRemoveLoading = computed(() => this.state().loading);
   readonly errors = computed(() => this.state().errors);
@@ -109,6 +113,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
   }
 
   retrieveProjectsOnTeam(orgSlug: string, teamSlug: string) {
+    this.setProjectsPerTeam(null);
     client
       .GET("/api/0/organizations/{organization_id_or_slug}/projects/", {
         params: {
@@ -194,7 +199,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
     });
   }
 
-  private setProjectsPerTeam(projectsOnTeam: ProjectSchema[]) {
+  private setProjectsPerTeam(projectsOnTeam: ProjectSchema[] | null) {
     this.setState({
       projectsOnTeam,
     });
@@ -207,7 +212,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
   }
 
   private setRemoveProjectFromTeam(project: ProjectSchema) {
-    const filteredTeams = this.state().projectsOnTeam.filter(
+    const filteredTeams = this.projectsOnTeam().filter(
       (currentProject) => currentProject.slug !== project.slug,
     );
     const notOnTeam = this.state().projectsNotOnTeam?.concat([project]);
@@ -225,7 +230,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
     const notOnTeam = this.state().projectsNotOnTeam.filter(
       (currentProject) => currentProject.slug !== project.slug,
     );
-    const onTeam = this.state().projectsOnTeam?.concat([project]);
+    const onTeam = this.projectsOnTeam().concat([project]);
     this.setState({
       projectsOnTeam: onTeam,
       projectsNotOnTeam: notOnTeam,
