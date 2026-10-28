@@ -10,6 +10,7 @@ import { ButtonsPreview } from "./previews/buttons.preview";
 import { TopAppBarPreview } from "./previews/top-app-bar.preview";
 import { DetailPagePreview } from "./previews/detail-page.preview";
 import { PageHeaderPreview } from "./previews/page-header.preview";
+import { RecordBandPreview } from "./previews/record-band.preview";
 import { StatusPillPreview } from "./previews/status-pill.preview";
 import { SettingsSectionPreview } from "./previews/settings-section.preview";
 import { PanelPreview } from "./previews/panel.preview";
@@ -218,6 +219,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Page header",
     group: "Components",
     component: PageHeaderPreview,
+    status: "stable",
+  },
+  {
+    id: "record-band",
+    label: "Record band",
+    group: "Components",
+    component: RecordBandPreview,
     status: "stable",
   },
   {
