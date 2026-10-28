@@ -8,6 +8,8 @@
     >
       {{ title() }}
     </div>
+  } @else {
+    <div class="gt-panel__lead"><ng-content select="[slot=lead]" /></div>
   }
   <div class="gt-panel__actions">
     <ng-content select="[slot=actions]" />
@@ -15,4 +17,12 @@
 </div>
 <div class="gt-panel__body" [class.gt-panel__body--flush]="flush()">
   <ng-content />
+</div>
+<div class="gt-panel__footer">
+  <div class="gt-panel__hint">
+    <ng-content select="[slot=footer-hint]" />
+  </div>
+  <div class="gt-panel__footer-actions">
+    <ng-content select="[slot=footer]" />
+  </div>
 </div>
