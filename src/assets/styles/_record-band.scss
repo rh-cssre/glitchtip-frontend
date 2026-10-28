@@ -2,10 +2,11 @@
 @use "@angular/material" as mat;
 
 // Content projected into gt-record-band comes from the page's template, so it is global.
-// Label over value on one left edge, so each label clearly owns its figure.
+// Figures hug the band's right edge; the gap between figures keeps each label with its number.
 .gt-stat {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
 
 .gt-stat__label {
@@ -15,6 +16,7 @@
 
 .gt-stat__value {
   font: var(--mat-sys-title-large);
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: var(--mat-sys-on-surface);
 }
