@@ -1,3 +1,6 @@
+// Space between "·"-separated facts; every separator offset derives from it.
+$sep-gap: var(--gt-space-4, 16px);
+
 @mixin icon-tile {
   flex: none;
   display: grid;
@@ -17,7 +20,9 @@
 @mixin separator {
   content: "·";
   position: absolute;
-  left: -11px;
+  left: calc(-1 * #{$sep-gap});
+  width: $sep-gap;
+  text-align: center;
   opacity: 0.6;
 }
 
@@ -27,8 +32,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gt-space-1, 4px) 0;
-  margin: var(--gt-space-1, 4px) 0 0 -16px;
-  clip-path: inset(0 0 0 16px);
+  margin: var(--gt-space-1, 4px) 0 0 calc(-1 * #{$sep-gap});
+  clip-path: inset(0 0 0 $sep-gap);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
 }
