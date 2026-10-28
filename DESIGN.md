@@ -70,7 +70,7 @@ Conventions for every component:
 
 ### Panels
 
-- Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
+- Settings and forms use one panel per save unit (see Settings sections). Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
 - A panel title that repeats the tab or page it sits in is left out. If the header still has actions, a muted fact leads it in `slot="lead"` (a list's count: "2 alerts", ICU plural with a named placeholder), so an action never sits in an empty strip. If there are no actions either, there is no header.
 - Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
@@ -118,21 +118,22 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 Every setting on a settings page is a `gt-settings-section`: a title, an optional line of help, then the control and its actions.
 
 - A section description must say something the title and control do not (a consequence, a limit, non-obvious behaviour). Otherwise omit it.
-- Sections stack in one column with a hairline (`outline-variant`) between them, none above the first or below the last. No cards.
+- One panel per save unit: a section with its own Save, Add or Connect is a `panel` section, its action on the right of the tinted footer. A section that saves on change (toggles, a theme choice) is a panel with no footer. Panels stack 16px apart; fields keep the 560px column.
+- A list (members, projects, environments, emails, keys, tokens, alerts) is its own panel, `flush` while it has rows, with a `flush` `gt-list` inside so only the panel draws a border. The field that adds to it is a separate panel above it, with Add in the footer. A "New X" entry button goes in the list panel's header actions (`slot="header-actions"` on a section, `slot="actions"` on a plain `gt-panel`).
 - The first section in its container sits flush with what is above it. Content starts 16px under a tab bar, from one global `mat-tab-nav-panel` rule; pages do not pad their own panel.
-- A single control uses `inline`, with its action beside it. The section title is the field's only visible label, linked with `aria-labelledby`. Several controls, or none, put the action below, left-aligned. A list and the field that adds to it are two sections, joined: the add field comes first, then the list, which takes `.gt-settings-continued` so no line splits them.
+- The section title is a lone field's only visible label, linked with `aria-labelledby`. A title hidden because it repeats the tab uses `hideTitle`, so the label still reaches screen readers.
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
-- A destructive action is the last section, with an outlined warn button and a confirm dialog that names the object and says it cannot be undone. No red box.
+- A destructive action is the last section, a `tone="danger"` panel with an outlined warn button in its footer and a confirm dialog that names the object and says it cannot be undone.
 - A delete section's description names the object in bold: "Deletes **checkout-api** and all of its issues, events and settings. This cannot be undone." The `<strong>` stays inside the i18n message.
 - A failed delete shows `gt-form-error` inside its delete section, not a toast.
 - Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
 - Sections, or the block-level forms that hold them, must be direct siblings with nothing else between them. The hairline sits on that sibling, so an inline host or a `display: contents` wrapper loses it.
-- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error`, just above the `.gt-form-actions` row, on create and edit forms alike.
+- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the bottom of the form panel's body, on create and edit forms alike.
 - An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
-- A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. It has one section per field, then `gt-form-error`, then `.gt-form-actions`: a filled "Create X" and a text Cancel.
 - Create forms are titled New X, edit forms Edit X; the back link names where you return to.
-- An edit form takes the create form's shape: fields in sections, then `gt-form-error`, then "Save X" and a text Cancel in `.gt-form-actions`, then "Delete X" as the last section. A section that follows `.gt-form-actions` starts 24px below the buttons, from one global rule, so they never sit on its hairline.
+- A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
+- An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
 
 ## Accessibility
 
