@@ -16,7 +16,7 @@
         i18n-buttonText
         buttonText="Save name"
         buttonStyle="stroked"
-        [loading]="saving() === 'name'"
+        [loading]="saving().name"
       />
     </gt-settings-section>
   </form>
@@ -69,7 +69,7 @@
         i18n-buttonText
         buttonText="Save time zone"
         buttonStyle="stroked"
-        [loading]="saving() === 'timeZone'"
+        [loading]="saving().timeZone"
       />
     </gt-settings-section>
   </form>
@@ -95,7 +95,7 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
       @if (themeError(); as error) {
-        <gt-form-error [errors]="error" />
+        <gt-form-error slot="error" [errors]="error" />
       }
     </gt-settings-section>
   </div>
