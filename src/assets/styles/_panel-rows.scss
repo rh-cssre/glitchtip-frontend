@@ -52,14 +52,6 @@ $label-w-narrow: 88px;
   }
 }
 
-// "2 of 15" after a value.
-.gt-share {
-  margin-inline-start: var(--gt-space-2, 8px);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  color: var(--mat-sys-on-surface-variant);
-}
-
 // 20px glyphs; the element selector outranks Material's .mat-icon size.
 mat-icon.gt-chev,
 mat-icon.gt-icon-sm {
@@ -124,10 +116,6 @@ mat-icon.gt-icon-sm {
   border-top: $hairline;
   font: var(--mat-sys-body-small);
   box-sizing: border-box;
-
-  &--split {
-    justify-content: space-between;
-  }
 
   > .gt-muted {
     padding-inline-start: var(--gt-space-3, 12px);
