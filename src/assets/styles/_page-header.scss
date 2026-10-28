@@ -1,0 +1,37 @@
+@use "object-header";
+@use "variables" as vars;
+
+// Projected gt-page-header facts come from the page's template, so they are global.
+.page-header__meta {
+  [slot="meta"] {
+    display: contents;
+  }
+
+  [slot="meta"] > * {
+    position: relative;
+    margin-left: 16px;
+  }
+
+  [slot="meta"] > .no-sep {
+    margin-left: 8px;
+  }
+
+  [slot="meta"] > :not(:first-child)::before,
+  .page-header__pill + [slot="meta"] > :first-child:not(.no-sep)::before {
+    @include object-header.separator;
+  }
+
+  .chip {
+    padding: 1px var(--gt-space-2, 8px);
+    border-radius: var(--mat-sys-corner-extra-small);
+    font: var(--mat-sys-label-small);
+    font-family: vars.$font-mono;
+    color: var(--mat-sys-on-surface);
+    background-color: var(--mat-sys-surface-container-highest);
+  }
+
+  b {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+  }
+}
