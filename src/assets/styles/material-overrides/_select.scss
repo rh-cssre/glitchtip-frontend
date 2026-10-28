@@ -60,3 +60,20 @@
     }
   }
 }
+
+// Muted label before the value ("Categories  All") when the value alone is unclear.
+.gt-select-ghost__label {
+  flex: none;
+  margin-inline-end: var(--gt-space-2, 8px);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+  cursor: pointer;
+}
+
+// Wraps the trigger text for room before the arrow (mat-select has no token for it).
+.gt-select-ghost__value {
+  margin-inline-end: var(--gt-space-2, 8px);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-label-large);
+  cursor: pointer;
+}
