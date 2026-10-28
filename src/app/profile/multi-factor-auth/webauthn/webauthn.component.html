@@ -1,13 +1,7 @@
-<!-- Naming a new key is an add field, so it sits above the list and the list
-     joins it with no line between them. -->
+<!-- Naming a new key is its own save unit, a panel above the list panel. -->
 @if (stage() === 2) {
   <form [formGroup]="form" (ngSubmit)="registerWebAuthn()">
-    <gt-settings-section
-      #nameSection
-      i18n-title
-      title="Name this key"
-      [inline]="true"
-    >
+    <gt-settings-section #nameSection i18n-title title="Name this key" panel>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <input
           matInput
@@ -35,9 +29,10 @@
 }
 
 <gt-settings-section
-  [class.gt-settings-continued]="stage() === 2"
   i18n-title
   title="Security keys"
+  panel
+  [flush]="authenticators().length > 0"
 >
   <!-- The description states what blocks adding a key. -->
   @if (!hasTOTP()) {
@@ -52,7 +47,7 @@
     >
   }
   @if (authenticators().length) {
-    <gt-list>
+    <gt-list flush>
       @for (key of authenticators(); track key.id) {
         <gt-list-row>
           <span>{{ key.name }}</span>
@@ -77,7 +72,7 @@
   }
   @if (stage() !== 2) {
     <gt-loading-button
-      slot="actions"
+      slot="header-actions"
       i18n-buttonText
       buttonText="Add security key"
       buttonStyle="stroked"
