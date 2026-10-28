@@ -10,8 +10,6 @@ import {
 import { DatePipe } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { MatTabsModule } from "@angular/material/tabs";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -22,9 +20,7 @@ import { ProjectSettingsService } from "src/app/settings/projects/project-settin
   templateUrl: "./team-details.component.html",
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatButtonModule,
     RouterLink,
-    MatIconModule,
     MatTabsModule,
     RouterLinkActive,
     RouterOutlet,
@@ -55,9 +51,9 @@ export class TeamDetailsComponent {
   private teamsService = inject(TeamsService);
   private projectSettingsService = inject(ProjectSettingsService);
   team = this.teamsService.team;
-  memberCount = this.teamsService.teamMemberCount;
+  /** Tab counts, shown once known (including 0). */
   tabCounts = computed<Record<string, number | undefined>>(() => ({
-    members: this.memberCount(),
+    members: this.teamsService.teamMemberCount(),
     projects: this.projectSettingsService.projectsOnTeamCount(),
   }));
 

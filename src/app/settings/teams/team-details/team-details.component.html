@@ -20,8 +20,9 @@
         [active]="rla.isActive"
         #rla="routerLinkActive"
         >{{ link.label }}
-        @if (tabCounts()[link.path] !== undefined) {
-          <span class="tab-count">{{ tabCounts()[link.path] }}</span>
+        @let count = tabCounts()[link.path];
+        @if (count !== null && count !== undefined) {
+          <span class="tab-count">{{ count }}</span>
         }
       </a>
     }
