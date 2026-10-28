@@ -49,6 +49,7 @@ import { ToastsPreview } from "./previews/toasts.preview";
 import { DialogsPreview } from "./previews/dialogs.preview";
 import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
 import { EmptyStatePreview } from "./previews/empty-state.preview";
+import { ListPreview } from "./previews/list.preview";
 
 /**
  * Component lifecycle status, following the practice of published design
@@ -239,6 +240,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Settings section",
     group: "Components",
     component: SettingsSectionPreview,
+    status: "stable",
+  },
+  {
+    id: "list",
+    label: "List",
+    group: "Components",
+    component: ListPreview,
     status: "stable",
   },
   {

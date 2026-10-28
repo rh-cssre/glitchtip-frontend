@@ -7,6 +7,7 @@
 @use "./assets/styles/font-files";
 @use "./assets/styles/page-header";
 @use "./assets/styles/resets";
+@use "./assets/styles/list-row";
 @use "./assets/styles/record-band";
 @use "./scss/auth-forms";
 @use "./assets/styles/settings-section";
@@ -226,6 +227,25 @@ mat-sidenav-container {
 
 .u-hidden {
   display: none;
+}
+
+// In-page subheading, such as a gt-list label.
+.gt-subheading {
+  margin: 0 0 var(--gt-space-2, 8px);
+  font: var(--mat-sys-title-small);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.gt-subheading:has(+ .gt-subheading__description) {
+  margin-bottom: var(--gt-space-1, 4px);
+}
+
+.gt-subheading__description {
+  max-width: var(--gt-measure, 70ch);
+  margin: 0 0 var(--gt-space-3, 12px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .full-width {
