@@ -9,6 +9,7 @@
 @use "./assets/styles/resets";
 @use "./assets/styles/list-row";
 @use "./scss/auth-forms";
+@use "./assets/styles/settings-section";
 
 html {
   color-scheme: light dark;
@@ -308,40 +309,10 @@ mat-sidenav-container {
   margin-right: 8px;
 }
 
-// A lone field fills its settings section's column.
-.settings-section__body mat-form-field {
-  width: 100%;
-}
-
 // Content starts 16px under a tab bar; a tab panel inside a card has its padding.
 mat-tab-nav-panel:not(mat-card-content > *) {
   display: block;
   padding-top: var(--gt-space-4, 16px);
-}
-
-// A form with one submit is one panel, with hairlines between its field sections.
-gt-panel.gt-form-panel {
-  margin-bottom: var(--gt-space-4, 16px);
-
-  gt-settings-section {
-    padding-block: var(--gt-space-4, 16px);
-  }
-
-  gt-settings-section:first-of-type {
-    padding-top: 0;
-  }
-
-  gt-settings-section:last-of-type {
-    padding-bottom: 0;
-  }
-
-  gt-settings-section ~ gt-settings-section {
-    border-top: 1px solid var(--mat-sys-outline-variant);
-  }
-
-  gt-settings-section ~ gt-form-error:not(:empty) {
-    margin-top: var(--gt-space-4, 16px);
-  }
 }
 
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).
