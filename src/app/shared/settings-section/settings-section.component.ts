@@ -14,7 +14,6 @@ let nextId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet, PanelComponent],
   host: {
-    "[class.inline]": "inline()",
     "[class.gt-settings-panel]": "panel()",
     "[attr.title]": "null",
   },
@@ -58,14 +57,17 @@ let nextId = 0;
             <div class="settings-section__body">
               <ng-container [ngTemplateOutlet]="body" />
             </div>
+            <div class="settings-section__error">
+              <ng-container [ngTemplateOutlet]="error" />
+            </div>
           }
-          <div class="settings-section__error">
-            <ng-container [ngTemplateOutlet]="error" />
-          </div>
         </div>
         @if (flush()) {
           <div class="settings-section__flush-body">
             <ng-container [ngTemplateOutlet]="body" />
+          </div>
+          <div class="settings-section__error settings-section__error--padded">
+            <ng-container [ngTemplateOutlet]="error" />
           </div>
         }
         <ng-container ngProjectAs="[slot=footer]"
@@ -96,7 +98,6 @@ let nextId = 0;
 })
 export class SettingsSectionComponent {
   readonly title = input.required<string>();
-  readonly inline = input(false);
   /** One bordered panel per save unit, actions in its footer. */
   readonly panel = input(false, { transform: booleanAttribute });
   /** Panel only: danger tints the border, for Delete sections. */

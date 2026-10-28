@@ -1,12 +1,6 @@
 @if (team(); as team) {
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <gt-settings-section
-      #slugSection
-      i18n-title
-      title="Slug"
-      panel
-      [inline]="canWriteTeam()"
-    >
+    <gt-settings-section #slugSection i18n-title title="Slug" panel>
       @if (canWriteTeam()) {
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <input

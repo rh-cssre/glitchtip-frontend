@@ -106,8 +106,7 @@ export class SettingsSectionPreview {
     "Make a list its own flush panel with a flush gt-list, and put the field that adds to it in a panel above",
     "Put a list's New X entry button in the section's header-actions slot",
     "Put a destructive action last, as a danger panel with an outlined warn button and a confirm dialog",
-    "Show a failed delete with gt-form-error inside its delete section, not a toast",
-    "Put a section's server error in its error slot, at the bottom of the body",
+    "Show a section's server error, such as a failed delete, with gt-form-error in its error slot, not a toast",
     "Name the object in bold in a delete section's description",
     "Show the value as plain text when the person cannot edit it",
     "Use hideTitle when the title only repeats the tab it sits in",
@@ -158,12 +157,6 @@ export class SettingsSectionPreview {
         "Hides a title that repeats the tab; screen readers still get it",
     },
     {
-      name: "inline",
-      type: "boolean",
-      default: "false",
-      description: "Plain mode only: puts the actions beside a single control",
-    },
-    {
       name: "titleId",
       type: "string",
       default: "generated",
@@ -181,7 +174,7 @@ export class SettingsSectionPreview {
       type: "projected",
       default: "",
       description:
-        "A gt-form-error just above the actions; inline, a line above the field",
+        "A gt-form-error at the bottom of the body, above the actions",
     },
     {
       name: '[slot="actions"]',

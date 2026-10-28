@@ -1,5 +1,3 @@
-@use "variables" as vars;
-
 @mixin icon-tile {
   flex: none;
   display: grid;
@@ -33,35 +31,4 @@
   clip-path: inset(0 0 0 16px);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
-
-  ::ng-deep [slot="meta"] {
-    display: contents;
-  }
-
-  ::ng-deep [slot="meta"] > * {
-    position: relative;
-    margin-left: 16px;
-  }
-
-  ::ng-deep [slot="meta"] > .no-sep {
-    margin-left: 8px;
-  }
-
-  ::ng-deep [slot="meta"] > :not(:first-child)::before {
-    @include separator;
-  }
-
-  ::ng-deep .chip {
-    padding: 1px var(--gt-space-2, 8px);
-    border-radius: var(--mat-sys-corner-extra-small);
-    font: var(--mat-sys-label-small);
-    font-family: vars.$font-mono;
-    color: var(--mat-sys-on-surface);
-    background-color: var(--mat-sys-surface-container-highest);
-  }
-
-  ::ng-deep b {
-    font-weight: 600;
-    color: var(--mat-sys-on-surface);
-  }
 }

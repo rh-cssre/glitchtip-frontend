@@ -66,10 +66,6 @@ export class TeamProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectsService.setParams(this.orgSlug(), this.teamSlug());
-    this.projectsService.retrieveProjectsOnTeam(
-      this.orgSlug(),
-      this.teamSlug(),
-    );
     this.projectsService.retrieveProjectsNotOnTeam(
       this.orgSlug(),
       this.teamSlug(),

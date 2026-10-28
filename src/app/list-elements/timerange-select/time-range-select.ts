@@ -6,7 +6,6 @@ import {
   inject,
   input,
   computed,
-  signal,
 } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -18,16 +17,14 @@ import {
   CustomTimeRangeOutput,
 } from "./custom-timerange-form/custom-time-range-form";
 import { DateRange } from "@angular/material/datepicker";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 
 const NO_FILTER_TEXT = $localize`All times`;
 
 @Component({
   standalone: true,
   selector: "gt-time-range-select",
-  imports: [
-    ReactiveFormsModule,
-    MatSelectModule
-],
+  imports: [ReactiveFormsModule, MatSelectModule, SelectGhostDirective],
   templateUrl: "./time-range-select.html",
   styleUrl: "./time-range-select.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,7 +43,6 @@ export class TimeRangeSelect {
   queriedTimeRangeStart = input<string | undefined>();
   queriedTimeRangeEnd = input<string | undefined>();
   presetRangeForm = new FormControl<string | null>("");
-  isOpen = signal(false);
   queriedPresetTimeRange = computed(() => {
     const presetValues = this.timeRangePresets.map((preset) => preset.value);
     const start = this.queriedTimeRangeStart();

@@ -5,6 +5,7 @@ import {
   computed,
   effect,
   inject,
+  untracked,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
@@ -54,23 +55,21 @@ export class TeamDetailsComponent {
   private teamsService = inject(TeamsService);
   private projectSettingsService = inject(ProjectSettingsService);
   team = this.teamsService.team;
-  memberCount = computed(() =>
-    this.teamsService.teamMembersResource.hasValue()
-      ? this.teamsService.teamMembers().length
-      : this.team()?.memberCount,
-  );
+  memberCount = this.teamsService.teamMemberCount;
   tabCounts = computed<Record<string, number | undefined>>(() => ({
     members: this.memberCount(),
-    projects: this.projectSettingsService.projectsOnTeam().length,
+    projects: this.projectSettingsService.projectsOnTeamCount(),
   }));
 
   constructor() {
+    // Loads the team and its projects for every tab; Members loads its roster.
     effect(() => {
       const orgSlug = this.orgSlug();
       const teamSlug = this.teamSlug();
-      this.teamsService.setTeamKey(orgSlug, teamSlug);
-      this.teamsService.setTeamMembersKey(orgSlug, teamSlug);
-      this.projectSettingsService.retrieveProjectsOnTeam(orgSlug, teamSlug);
+      untracked(() => {
+        this.teamsService.setTeamKey(orgSlug, teamSlug);
+        this.projectSettingsService.retrieveProjectsOnTeam(orgSlug, teamSlug);
+      });
     });
   }
 }

@@ -61,9 +61,7 @@ export class TeamSettingsComponent {
 
   constructor() {
     effect(() => {
-      const teamSlug = this.teamSlug();
-      this.teamsService.setTeamKey(this.orgSlug(), teamSlug);
-      this.form.patchValue({ slug: teamSlug });
+      this.form.patchValue({ slug: this.teamSlug() });
     });
   }
 

@@ -1,18 +1,11 @@
-<span
-  class="gt-select-ghost"
-  [class.gt-select-ghost--open]="isOpen()"
-  [class.wide]="extendSelectSize()"
-  (click)="$event.target === $event.currentTarget && select.open()"
->
+<span gtSelectGhost [class.wide]="extendSelectSize()">
   <mat-select
-    #select
     [formControl]="presetRangeForm"
     i18n-placeholder
     placeholder="Time range"
     i18n-aria-label
     aria-label="Time range"
     panelWidth="220px"
-    (openedChange)="isOpen.set($event)"
     (selectionChange)="onPresetSelect($event)"
     hideSingleSelectionIndicator
   >
