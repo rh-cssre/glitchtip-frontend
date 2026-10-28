@@ -153,7 +153,8 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 
 A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end. An optional description line sits under the name.
 
-- A row that opens its record makes the name the link. No separate Edit or View button repeats it.
+- A row that opens its record makes the name the link, written `<a gtListRowLink>`. That makes the row navigable: the link's hit area covers the whole row, hovering the row draws the on-surface 8% state layer and underlines the name, keyboard focus rings the row, and a trailing 20px chevron (`keyboard_arrow_right`, on-surface-variant) marks it. The link stays the only tab stop; row actions sit above the hit area and keep their own clicks, and meta and icons stay to the left of the chevron. No separate Edit or View button repeats the link.
+- A navigable row's meta is text. A control in the row (a copy button, a menu) goes in the actions slot, which sits above the hit area.
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
 - Rows with several columns to compare or sort are a table instead.

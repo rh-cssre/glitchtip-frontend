@@ -1,10 +1,16 @@
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  input,
+} from "@angular/core";
 
 let nextId = 0;
 
 @Component({
   selector: "gt-list",
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { "[class.list--flush]": "flush()" },
   template: `
     @if (label(); as label) {
       <h3 class="gt-subheading" [id]="labelId">{{ label }}</h3>
@@ -27,13 +33,27 @@ let nextId = 0;
       margin-bottom: 0;
     }
 
+    // Clips a navigable row's hover layer to the rounded corners.
     .list__rows {
       border: 1px solid var(--mat-sys-outline-variant);
       border-radius: var(--mat-sys-corner-extra-small);
+      overflow: hidden;
+    }
+
+    // Inside a flush panel the panel draws the outer border.
+    :host(.list--flush) {
+      margin-bottom: 0;
+    }
+
+    :host(.list--flush) .list__rows {
+      border: 0;
+      border-radius: 0;
     }
   `,
 })
 export class ListComponent {
   readonly label = input<string | null>(null);
+  /** No outer border, for rows that sit edge to edge in a flush panel. */
+  readonly flush = input(false, { transform: booleanAttribute });
   readonly labelId = `gt-list-label-${nextId++}`;
 }
