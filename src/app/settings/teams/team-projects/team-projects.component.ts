@@ -53,6 +53,7 @@ export class TeamProjectsComponent implements OnInit {
   // Only managers and owners can change a team's projects.
   canEditProjects = inject(OrganizationsService).canWriteOrg;
   projectsOnTeam = this.projectsService.projectsOnTeam;
+  projectsOnTeamCount = this.projectsService.projectsOnTeamCount;
   projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
   loading = this.projectsService.addRemoveLoading;
   errors = this.projectsService.errors;

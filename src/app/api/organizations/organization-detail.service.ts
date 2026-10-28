@@ -337,9 +337,10 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     };
   }
 
+  /** Resolves to the team, or to a readable error when removing fails. */
   async removeTeamMember(memberId: number, teamSlug: string) {
     const orgSlug = this.organizationsService.activeOrganizationSlug();
-    const { data } = await client.DELETE(
+    const { data, error, response } = await client.DELETE(
       "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
@@ -353,8 +354,15 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     );
     if (data) {
       this.teamsService.removeMember(memberId);
+      return { team: data };
     }
-    return data;
+    return {
+      error: apiErrorMessage(
+        error,
+        response,
+        $localize`Could not remove the member.`,
+      ),
+    };
   }
 
   async leaveTeam(teamSlug: string) {

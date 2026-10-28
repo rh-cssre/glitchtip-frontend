@@ -32,8 +32,7 @@
       />
     </gt-settings-section>
   }
-  <gt-form-error [errors]="errors().removeProjectFromTeam" />
-  @if (projectsOnTeam().length === 0) {
+  @if (projectsOnTeamCount() === 0) {
     <gt-panel>
       <gt-empty-state
         icon="folder"
@@ -42,7 +41,7 @@
         [message]="noProjectsMessage()"
       />
     </gt-panel>
-  } @else {
+  } @else if (projectsOnTeamCount()) {
     <gt-panel flush>
       <gt-list flush>
         @for (project of projectsOnTeam(); track project.id) {
@@ -69,6 +68,12 @@
           </gt-list-row>
         }
       </gt-list>
+      @if (errors().removeProjectFromTeam) {
+        <gt-form-error
+          slot="footer-hint"
+          [errors]="errors().removeProjectFromTeam"
+        />
+      }
     </gt-panel>
   }
 }

@@ -37,44 +37,48 @@
     />
   </gt-settings-section>
 }
-<gt-form-error [errors]="removeMemberError" />
-@if (teamMembers().length === 0) {
-  <gt-panel>
-    <gt-empty-state
-      icon="people"
-      i18n-title
-      title="No team members"
-      [message]="noMembersMessage()"
-    />
-  </gt-panel>
-} @else {
-  <gt-panel flush>
-    <gt-list data-test-list flush>
-      @for (teamMember of teamMembers(); track teamMember.id) {
-        <gt-list-row>
-          <a
-            gtListRowLink
-            [routerLink]="['../', 'members', teamMember.id]"
-            [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
-            >{{ teamMember.email }}</a
-          >
-          <span slot="meta">{{
-            roleName(teamMember.role) ?? teamMember.roleName
-          }}</span>
-          @if (canModifyTeam()) {
-            <gt-loading-button
-              slot="actions"
-              [buttonText]="isMe(teamMember.email) ? leaveText : removeText"
-              buttonStyle="stroked"
-              [loading]="selectedTeamMember?.toString() === teamMember.id"
-              (buttonClick)="
-                confirmRemoveTeamMember(teamMember.id, teamMember.email)
-              "
-              data-cy="remove-team-member"
-            />
-          }
-        </gt-list-row>
+@if (membersLoaded()) {
+  @if (teamMembers().length === 0) {
+    <gt-panel>
+      <gt-empty-state
+        icon="people"
+        i18n-title
+        title="No team members"
+        [message]="noMembersMessage()"
+      />
+    </gt-panel>
+  } @else {
+    <gt-panel flush>
+      <gt-list data-test-list flush>
+        @for (teamMember of teamMembers(); track teamMember.id) {
+          <gt-list-row>
+            <a
+              gtListRowLink
+              [routerLink]="['../', 'members', teamMember.id]"
+              [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
+              >{{ teamMember.email }}</a
+            >
+            <span slot="meta">{{
+              roleName(teamMember.role) ?? teamMember.roleName
+            }}</span>
+            @if (canModifyTeam()) {
+              <gt-loading-button
+                slot="actions"
+                [buttonText]="isMe(teamMember.email) ? leaveText : removeText"
+                buttonStyle="stroked"
+                [loading]="selectedTeamMember?.toString() === teamMember.id"
+                (buttonClick)="
+                  confirmRemoveTeamMember(teamMember.id, teamMember.email)
+                "
+                data-cy="remove-team-member"
+              />
+            }
+          </gt-list-row>
+        }
+      </gt-list>
+      @if (removeMemberError()) {
+        <gt-form-error slot="footer-hint" [errors]="removeMemberError()" />
       }
-    </gt-list>
-  </gt-panel>
+    </gt-panel>
+  }
 }

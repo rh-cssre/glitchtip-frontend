@@ -60,6 +60,9 @@ export class TeamMembersComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   teamMembers = this.teamsService.teamMembers;
+  membersLoaded = computed(() =>
+    this.teamsService.teamMembersResource.hasValue(),
+  );
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
   canModifyTeam = this.teamsService.canModifyTeam;
   roleName = roleName;
@@ -74,7 +77,7 @@ export class TeamMembersComponent implements OnInit {
   member = new FormControl<Member | null>(null, Validators.required);
   orgSlug = "";
   teamSlug = "";
-  removeMemberError = "";
+  removeMemberError = signal("");
   addMemberError = signal("");
   loading = signal(false);
   selectedTeamMember: number | null = null;
@@ -150,11 +153,13 @@ export class TeamMembersComponent implements OnInit {
 
   async removeTeamMember(memberId: string, memberEmail: string) {
     this.selectedTeamMember = parseInt(memberId);
-    const team = await this.organizationsService.removeTeamMember(
+    this.removeMemberError.set("");
+    const { team, error } = await this.organizationsService.removeTeamMember(
       parseInt(memberId),
       this.teamSlug,
     );
     this.selectedTeamMember = null;
+    this.removeMemberError.set(error ?? "");
     if (team) {
       this.snackBar.open(
         $localize`${memberEmail} has been removed from #${team.slug}`,
