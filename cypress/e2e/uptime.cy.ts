@@ -48,9 +48,9 @@ describe("List, add, update and delete uptime Monitors", () => {
       .contains("GET")
       .click();
     cy.get("[data-cy=site-url]").type("invalid url");
-    cy.get("[data-cy=interval]").clear().type("86400");
+    cy.get("[data-cy=interval] input").clear().type("86400");
     cy.get("[data-cy=monitor-submit]").click();
-    cy.get("[data-cy=expected-status]").clear();
+    cy.get("[data-cy=expected-status] input").clear();
     cy.contains("Enter a monitor name");
     cy.contains("Enter a valid URL");
     cy.contains("Enter a status code number");
@@ -73,7 +73,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .get("mat-option")
       .contains("Heartbeat")
       .click();
-    cy.get("[data-cy=interval]").clear().type("605");
+    cy.get("[data-cy=interval] input").clear().type("605");
     cy.get("[data-cy=monitor-submit]").click();
     cy.get("h1").should("contain", "second-monitor");
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
