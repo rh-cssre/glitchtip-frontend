@@ -128,9 +128,9 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - A delete section's description names the object in bold: "Deletes **checkout-api** and all of its issues, events and settings. This cannot be undone." The `<strong>` stays inside the i18n message.
 - A failed delete shows `gt-form-error` inside its delete section, not a toast.
 - Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
-- Sections, or the block-level forms that hold them, must be direct siblings with nothing else between them. The hairline sits on that sibling, so an inline host or a `display: contents` wrapper loses it.
+- In a `gt-form-panel`, field sections are direct children of the panel so the hairlines between them show.
 - Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the bottom of the form panel's body, on create and edit forms alike. A settings section's own error goes in its `error` slot, at the bottom of its body above the footer.
-- An empty sub-list inside a section is one line of `.gt-note`. A page's or tab's main collection uses `gt-empty-state`.
+- An empty list uses `gt-empty-state`.
 - Create forms are titled New X, edit forms Edit X; the back link names where you return to.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
 - An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
