@@ -217,14 +217,10 @@
           }
         }
         @case ("dsn") {
-          @for (
-            projectKey of projectKeys() || [];
-            track projectKey.id;
-            let i = $index, count = $count
-          ) {
+          @for (panel of keyPanels(); track panel.key.id; let count = $count) {
             <gt-settings-section
               #dsnSection
-              [title]="dsnTitle + keySuffix(projectKey, i, count)"
+              [title]="panel.dsnTitle"
               panel
               [hideTitle]="count === 1"
             >
@@ -233,13 +229,13 @@
                 setup.</span
               >
               <gt-copy-input
-                [value]="projectKey.dsn.public"
+                [value]="panel.key.dsn.public"
                 [labelledBy]="dsnSection.titleId"
               />
             </gt-settings-section>
             <gt-settings-section
               #securitySection
-              [title]="securityEndpointLabel + keySuffix(projectKey, i, count)"
+              [title]="panel.securityTitle"
               panel
             >
               <span slot="description" i18n
@@ -247,7 +243,7 @@
                 reports.</span
               >
               <gt-copy-input
-                [value]="projectKey.dsn.security"
+                [value]="panel.key.dsn.security"
                 [labelledBy]="securitySection.titleId"
               />
             </gt-settings-section>
