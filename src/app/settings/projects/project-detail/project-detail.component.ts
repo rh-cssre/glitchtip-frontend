@@ -48,6 +48,7 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -94,6 +95,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     TopAppBar,
     SettingsSectionComponent,
     FormErrorComponent,
+    PanelComponent,
   ],
   providers: [
     ProjectDetailService,

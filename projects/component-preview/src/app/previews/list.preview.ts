@@ -19,11 +19,16 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: `
+    .preview-list-create {
+      margin-bottom: var(--gt-space-4, 16px);
+    }
+  `,
   template: `
     <preview-doc
       title="List"
       status="stable"
-      description="A collection of records, one per row: the name, an optional muted fact, and its actions at the end. An optional description line sits under the name. The rows sit in a bordered container, like a table."
+      description="A collection of records, one per row: the name, optional muted facts, and its actions at the end. An optional description line sits under the name. The rows sit in a bordered container, like a table."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -77,15 +82,27 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       </div>
 
       <div class="preview-section">
+        <div class="preview-section__title">Several facts</div>
+        <gt-list>
+          <gt-list-row>
+            #backend
+            <span slot="meta">
+              <span>4 members</span>
+              <span>2 projects</span>
+            </span>
+            <button slot="actions" mat-stroked-button>Leave</button>
+          </gt-list-row>
+        </gt-list>
+      </div>
+
+      <div class="preview-section">
         <div class="preview-section__title">
           Inside a record's tab, rows that open their record
         </div>
-        <div class="gt-list-actions">
-          <button mat-stroked-button>
-            <mat-icon>add</mat-icon>
-            New alert
-          </button>
-        </div>
+        <button mat-stroked-button class="preview-list-create">
+          <mat-icon>add</mat-icon>
+          New alert
+        </button>
         <gt-list>
           <gt-list-row>
             <a gtListRowLink href="#" (click)="$event.preventDefault()"
@@ -135,7 +152,8 @@ export class ListPreview {
     "Keep action labels short (Remove, Hide) so the action column lines up",
     "Mark a fixed attribute (Owner, Primary) with .list-row__tag after the name",
     "Say why a blocked action is blocked in the description line",
-    "Put a tab's create action above its list in .gt-list-actions",
+    "Give each meta fact its own span and let the row draw the separators",
+    "Put a tab's create action above its list as an outlined button with the add icon",
   ];
   readonly donts = [
     "Use a menu for a single action; it adds a step for nothing",
@@ -143,6 +161,7 @@ export class ListPreview {
     "Color row buttons warn; a column of red buttons stops meaning anything",
     "Wrap the list in a card with a title bar",
     "Explain a disabled action only in a tooltip",
+    'Type a separator such as "·" into a translated string',
     "Use an interactive chip for a label that does nothing when clicked",
   ];
   readonly api: ApiRow[] = [
@@ -188,7 +207,8 @@ export class ListPreview {
       name: '[slot="meta"]',
       type: "projected",
       default: "",
-      description: "One muted fact, such as a role",
+      description:
+        "One or more muted facts. Give each fact its own span; the component adds the separators",
     },
     {
       name: '[slot="actions"]',
