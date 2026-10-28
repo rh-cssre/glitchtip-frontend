@@ -1,3 +1,15 @@
+@use "@angular/material" as mat;
+@use "variables" as vars;
+
+// Keys, tokens and URLs are read character by character.
+:host {
+  @include mat.form-field-overrides(
+    (
+      container-text-font: vars.$font-mono,
+    )
+  );
+}
+
 .dsn-copied {
   color: var(--mat-sys-primary);
 }

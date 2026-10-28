@@ -11,6 +11,7 @@ vi.hoisted(() => {
 
 import {
   ApiError,
+  apiErrorMessage,
   getNinjaErrorResponse,
   handleError,
   isNinjaErrorResponse,
@@ -137,5 +138,26 @@ describe("getNinjaErrorResponse", () => {
   it("returns undefined for anything else", () => {
     expect(getNinjaErrorResponse(new Error("boom"))).toBeUndefined();
     expect(getNinjaErrorResponse(undefined)).toBeUndefined();
+  });
+});
+
+describe("apiErrorMessage", () => {
+  const fallback = "Could not add the project.";
+
+  it("shows the server's detail", () => {
+    expect(
+      apiErrorMessage({ detail: "Project not found" }, res(403), fallback),
+    ).toBe("Project not found");
+  });
+
+  it("falls back when the body has no detail", () => {
+    expect(apiErrorMessage({}, res(400), fallback)).toBe(fallback);
+    expect(apiErrorMessage(undefined, res(400), fallback)).toBe(fallback);
+  });
+
+  it("falls back instead of a generic message", () => {
+    expect(apiErrorMessage({ detail: "nope" }, res(418), fallback)).toBe(
+      fallback,
+    );
   });
 });
