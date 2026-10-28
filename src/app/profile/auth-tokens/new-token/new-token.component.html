@@ -42,9 +42,9 @@
             <th scope="col"
               ><span class="cdk-visually-hidden" i18n>Resource</span></th
             >
-            @for (level of scopeLevels; track level) {
+            @for (level of scopeLevels; track level.key) {
               <th scope="col"
-                ><code>{{ level }}</code></th
+                ><code>{{ level.name }}</code></th
               >
             }
           </tr>
@@ -53,13 +53,12 @@
           @for (group of scopeGroups; track group.prefix) {
             <tr>
               <th scope="row">{{ group.resource }}</th>
-              @for (level of scopeLevels; track level) {
+              @for (cell of group.cells; track $index) {
                 <td>
-                  @let index = scopeIndex(group, level);
-                  @if (index !== null) {
+                  @if (cell) {
                     <mat-checkbox
-                      [formControlName]="index"
-                      [aria-label]="scopeLabel(group.resource, level)"
+                      [formControlName]="cell.index"
+                      [aria-label]="cell.label"
                     />
                   }
                 </td>
@@ -68,7 +67,7 @@
           }
         </tbody>
       </table>
-      <gt-form-error [errors]="scopesErrors" />
+      <gt-form-error slot="error" [errors]="scopesErrors()" />
     </gt-settings-section>
 
     <gt-form-error [errors]="createErrorForm()" />

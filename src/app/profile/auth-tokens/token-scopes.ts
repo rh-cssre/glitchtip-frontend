@@ -18,20 +18,33 @@ export const TOKEN_SCOPES = [
   "member:admin",
 ];
 
-/** The scopes as a grid: one row per resource, one column per level. */
+/** The columns of the scope grid. */
+export const TOKEN_SCOPE_LEVELS = [
+  { key: "read", name: $localize`read` },
+  { key: "write", name: $localize`write` },
+  { key: "admin", name: $localize`admin` },
+  { key: "releases", name: $localize`releases` },
+];
+
+/**
+ * The scopes as a grid: one row per resource, one cell per level holding the
+ * scope's form index, or null when the resource lacks that level.
+ */
 export const TOKEN_SCOPE_GROUPS = [
   { resource: $localize`Projects`, prefix: "project" },
   { resource: $localize`Teams`, prefix: "team" },
   { resource: $localize`Events`, prefix: "event" },
   { resource: $localize`Organization`, prefix: "org" },
   { resource: $localize`Members`, prefix: "member" },
-].map((group) => ({
-  ...group,
-  scopes: TOKEN_SCOPES.flatMap((scope, index) =>
-    scope.startsWith(group.prefix + ":")
-      ? [{ index, level: scope.split(":")[1] }]
-      : [],
-  ),
+].map(({ resource, prefix }) => ({
+  resource,
+  prefix,
+  cells: TOKEN_SCOPE_LEVELS.map(({ key, name }) => {
+    const index = TOKEN_SCOPES.indexOf(`${prefix}:${key}`);
+    return index === -1
+      ? null
+      : { index, label: $localize`${resource}:resource:, ${name}:level:` };
+  }),
 }));
 
 /** "Full access", or the token's scopes as a short list. */

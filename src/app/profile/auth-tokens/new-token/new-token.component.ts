@@ -1,11 +1,13 @@
 import {
   Component,
   OnInit,
+  Signal,
   ViewChild,
-  effect,
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 import {
   FormGroup,
   FormControl,
@@ -27,7 +29,11 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
-import { TOKEN_SCOPES, TOKEN_SCOPE_GROUPS } from "../token-scopes";
+import {
+  TOKEN_SCOPES,
+  TOKEN_SCOPE_GROUPS,
+  TOKEN_SCOPE_LEVELS,
+} from "../token-scopes";
 
 @Component({
   selector: "gt-new-token",
@@ -63,31 +69,12 @@ export class NewTokenComponent
   form: FormGroup;
   scopeOptions = TOKEN_SCOPES;
   scopeGroups = TOKEN_SCOPE_GROUPS;
-  scopeLevels = ["read", "write", "admin", "releases"];
-  private levelNames: Record<string, string> = {
-    read: $localize`:Auth token scope level:read`,
-    write: $localize`:Auth token scope level:write`,
-    admin: $localize`:Auth token scope level:admin`,
-    releases: $localize`:Auth token scope level:releases`,
-  };
-  scopeLabel = (resource: string, level: string) =>
-    $localize`${resource}:resource:, ${this.levelNames[level] ?? level}:level:`;
-
-  /** The scope's position in the form, or null when the resource lacks it. */
-  scopeIndex(group: (typeof TOKEN_SCOPE_GROUPS)[number], level: string) {
-    return group.scopes.find((scope) => scope.level === level)?.index ?? null;
-  }
+  scopeLevels = TOKEN_SCOPE_LEVELS;
+  /** Rebuilt when the scopes' status changes, not on every check. */
+  scopesErrors: Signal<string[]>;
 
   get scopes() {
     return this.form.controls.scopes as FormArray;
-  }
-
-  get scopesErrors() {
-    const errors = this.scopes.errors;
-    return [
-      errors?.selectOne ? $localize`Select at least one scope` : null,
-      errors?.serverError as string | undefined,
-    ].filter((error): error is string => !!error);
   }
 
   get label() {
@@ -111,7 +98,18 @@ export class NewTokenComponent
     /* Set scopeOptions to scopes FormArray **/
     this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
 
-    effect(() => mapFormErrors(service.createErrorFields(), this.form));
+    this.scopesErrors = toSignal(
+      this.scopes.statusChanges.pipe(
+        map(() => {
+          const errors = this.scopes.errors;
+          return [
+            errors?.selectOne ? $localize`Select at least one scope` : null,
+            errors?.serverError as string | undefined,
+          ].filter((error): error is string => !!error);
+        }),
+      ),
+      { initialValue: [] },
+    );
   }
 
   ngOnInit(): void {
@@ -136,6 +134,8 @@ export class NewTokenComponent
   }
 
   validateScopes() {
+    // Drops a stale server error, which would otherwise block resubmitting.
+    this.scopes.updateValueAndValidity();
     /* Check to see if at least one scope is selected before submitting **/
     const valueSelected = this.scopes.value.find(
       (value: boolean) => value === true,
@@ -147,7 +147,7 @@ export class NewTokenComponent
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.validateScopes();
 
     if (this.form.valid) {
@@ -157,7 +157,8 @@ export class NewTokenComponent
           checked ? this.scopeOptions[index] : null,
         )
         .filter((selected: string) => selected !== null);
-      this.service.createAuthToken(label, selectedScopes);
+      await this.service.createAuthToken(label, selectedScopes);
+      mapFormErrors(this.service.createErrorFields(), this.form);
     }
   }
 }
