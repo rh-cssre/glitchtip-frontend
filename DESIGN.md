@@ -137,7 +137,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
 - In a `gt-form-panel`, field sections are direct children of the panel so the hairlines between them show.
 - Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the bottom of the form panel's body, on create and edit forms alike. A settings section's own error goes in its `error` slot, at the bottom of its body above the footer.
-- A radio group in a section stacks its options in a `.gt-radio-column`, lined up with the section text.
+- A radio group in a section lines up with the section text. Short single-word choices (roles) sit in a `.gt-radio-row` that wraps; longer labels stack in a `.gt-radio-column`. What the chosen option means goes under the group in a `.gt-field-hint`.
 - An empty list uses `gt-empty-state`.
 - Create forms are titled New X, edit forms Edit X; the back link names where you return to.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.

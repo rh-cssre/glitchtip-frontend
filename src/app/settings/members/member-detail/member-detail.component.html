@@ -22,14 +22,12 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <gt-settings-section #roleSection i18n-title title="Role" panel>
-        <span slot="description">{{
-          roleDescription(canEditRole() ? formRole.value : member.role)
-        }}</span>
         @if (canEditRole()) {
           <mat-radio-group
             formControlName="role"
-            class="gt-radio-column"
+            class="gt-radio-row"
             [attr.aria-labelledby]="roleSection.titleId"
+            aria-describedby="role-description"
           >
             @for (role of roles; track role) {
               <mat-radio-button [value]="role">{{
@@ -42,6 +40,9 @@
             roleName(member.role) ?? member.roleName
           }}</span>
         }
+        <p id="role-description" class="gt-field-hint" aria-live="polite">
+          {{ roleDescription(canEditRole() ? formRole.value : member.role) }}
+        </p>
         @if (updateMemberError(); as error) {
           <gt-form-error slot="error" [errors]="error" />
         }
