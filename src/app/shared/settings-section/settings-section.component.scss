@@ -23,7 +23,8 @@
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
 
-  &:empty {
+  // Projected gt-form-error hosts stay in the DOM with no messages.
+  &:not(:has(> :not(:empty))) {
     display: none;
   }
 }
