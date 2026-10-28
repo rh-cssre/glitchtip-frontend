@@ -25,7 +25,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="List"
       status="stable"
-      description="A collection of records, one per row: the name, an optional muted fact, and its actions at the end. An optional description line sits under the name. The rows sit in a bordered container, like a table."
+      description="A collection of records, one per row: the name, optional muted facts, and its actions at the end. An optional description line sits under the name. The rows sit in a bordered container, like a table."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -74,6 +74,20 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
                 <button mat-menu-item>Remove</button>
               </mat-menu>
             </ng-container>
+          </gt-list-row>
+        </gt-list>
+      </div>
+
+      <div class="preview-section">
+        <div class="preview-section__title">Several facts</div>
+        <gt-list>
+          <gt-list-row>
+            #backend
+            <span slot="meta">
+              <span>4 members</span>
+              <span>2 projects</span>
+            </span>
+            <button slot="actions" mat-stroked-button>Leave</button>
           </gt-list-row>
         </gt-list>
       </div>
@@ -138,6 +152,7 @@ export class ListPreview {
     "Keep action labels short (Remove, Hide) so the action column lines up",
     "Mark a fixed attribute (Owner, Primary) with .list-row__tag after the name",
     "Say why a blocked action is blocked in the description line",
+    "Give each meta fact its own span and let the row draw the separators",
     "Put a tab's create action in the list panel's header, led by the count in slot=\"lead\"",
   ];
   readonly donts = [
@@ -146,6 +161,7 @@ export class ListPreview {
     "Color row buttons warn; a column of red buttons stops meaning anything",
     "Wrap the list in a card with a title bar",
     "Explain a disabled action only in a tooltip",
+    'Type a separator such as "·" into a translated string',
     "Use an interactive chip for a label that does nothing when clicked",
   ];
   readonly api: ApiRow[] = [
@@ -191,7 +207,8 @@ export class ListPreview {
       name: '[slot="meta"]',
       type: "projected",
       default: "",
-      description: "One muted fact, such as a role",
+      description:
+        "One or more muted facts. Give each fact its own span; the component adds the separators",
     },
     {
       name: '[slot="actions"]',
