@@ -1,5 +1,5 @@
 <!-- Both choices save on click, like the theme: no Save buttons. -->
-<gt-settings-section #defaultSection i18n-title title="Project alerts">
+<gt-settings-section #defaultSection i18n-title title="Project alerts" panel>
   <mat-button-toggle-group
     #defaultGroup="matButtonToggleGroup"
     hideSingleSelectionIndicator
@@ -14,9 +14,13 @@
   <gt-form-error [errors]="subscribeByDefaultError()" />
 </gt-settings-section>
 
-<gt-settings-section i18n-title title="By project">
-  @for (projects of groupedProjects() | keyvalue; track projects.key) {
-    <gt-list [label]="projects.value[0].organization.name">
+@for (projects of groupedProjects() | keyvalue; track projects.key) {
+  <gt-settings-section
+    [title]="projects.value[0].organization.name"
+    panel
+    flush
+  >
+    <gt-list flush>
       @for (project of projects.value; track project.id) {
         <gt-list-row>
           <a
@@ -68,7 +72,9 @@
         </gt-list-row>
       }
     </gt-list>
-  } @empty {
+  </gt-settings-section>
+} @empty {
+  <gt-settings-section i18n-title title="By project" panel>
     <p class="gt-note" i18n>You aren't on any projects yet.</p>
-  }
-</gt-settings-section>
+  </gt-settings-section>
+}
