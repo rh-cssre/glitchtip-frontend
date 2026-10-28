@@ -19,3 +19,25 @@ gt-list-row .list-row__tag {
   background-color: var(--mat-sys-surface-container-high);
   white-space: nowrap;
 }
+
+// Each meta fact is its own span, so translators never see the separators.
+gt-list-row [slot="meta"] {
+  display: inline-flex;
+}
+
+gt-list-row [slot="meta"] > * {
+  position: relative;
+  white-space: nowrap;
+}
+
+// Same spacing and dot as gt-page-header meta.
+gt-list-row [slot="meta"] > :not(:first-child) {
+  margin-left: var(--gt-space-4, 16px);
+
+  &::before {
+    content: "·";
+    position: absolute;
+    left: -11px;
+    opacity: 0.6;
+  }
+}
