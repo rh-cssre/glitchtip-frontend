@@ -27,10 +27,12 @@ All tokens are CSS custom properties. Read them live; never hardcode a raw value
 
 Rule: use a semantic role, not a raw hex. Text on a colored surface uses that surface's `on-` token so contrast holds in both schemes.
 
+Colour only for meaning: error, warning, success and status (level pills, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
+
 ### Typography
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
-- **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive. `.gt-bar-title` (top app bar titles) is one size at every width.
+- **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
 
 Rule: prefer a semantic class where one exists; otherwise apply the matching type token.
@@ -68,37 +70,42 @@ Conventions for every component:
 
 ### Panels
 
-- Pages are card-less: settings sections, forms and lists sit on the page with no container.
+- Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
+- A panel title that repeats the tab or page it sits in is left out. If the header still has actions, a muted fact leads it in `slot="lead"` (a list's count: "2 alerts", ICU plural with a named placeholder), so an action never sits in an empty strip. If there are no actions either, there is no header.
 - Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
+- A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
+- A tab's content sits in panels. An empty state sits centred in an outline panel; an empty panel has no header.
 
 ### Page headers
 
 Every record detail page opens with `gt-page-header`: the record's name, then one meta line of facts.
 
 - Settings pages for a named object (organization, project, team, member) show an icon tile, using the same icon as that object's item in the nav. Data pages (issue, monitor, transaction, release) and profile pages do not.
+- Those settings pages use `compact`: one line with a 32px tile, the title in title-large and the meta facts inline after it, wrapping under the title on a narrow screen. Data pages keep the full header.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
 - No meta fact repeats the title: no slug chip under the name it comes from, no project chip under a version that already names it. If nothing is left, leave out the meta row.
 - A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
 - A fact that continues the pill ("for 2 hours") gets class `no-sep`, so no separator is drawn before it.
 - When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.
+- Tab counts only on tabs whose content is a growing list where the number informs (alerts, members, projects, environments); a tab holding a single thing (the project DSN/key) has no count.
 - Tabs drawn by one component use a `?tab=` query param. Tabs that are separate routed components use child routes. The default tab has no `?tab=`, and tab clicks replace history. Counts show once known, including 0.
 - The back link and page actions live in the top app bar, never in the header.
 - The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api"). Titles have one style; an identifier title (an email, a version) is not set in mono.
 
 ### Top app bar
 
-- The top app bar is 48px. Every control in it is 32px: compact buttons and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
+- The top app bar is 52px. Every control in it is 32px: compact buttons and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
 - Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (8% on hover, 12% on focus and while open), with no focus ring and no primary colour. The owning component toggles `gt-select-ghost--open` from the select's `openedChange` output and calls the select's `open()` on wrapper clicks, so the padding opens it too. Give each one an `aria-label` and a fixed width; long names truncate.
-- A list, settings or profile bar is titled with an `h1.gt-bar-title`: the title-large type token at weight 600, the same on every bar. A count goes after the name in a `.gt-bar-title-count` span, in regular weight and `--mat-sys-on-surface-variant`.
+- Bar text is one size on every page: the bar title (`.gt-bar-title`) and the back link both use title-medium (16px), so moving from a list to a record only adds the chevron. Big titles live in the page body (`gt-page-header`). A count after the bar title is a `.tab-count` badge, the same one tabs use, centred on the text. No bare `h1` styling in a bar.
 - The bar draws only its bottom border. Groups of controls are separated by gap spacing, not vertical dividers.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all". The component pulls itself left by the button's leading inset (12px), so its chevron sits on the container edge wherever it is placed; don't add a local margin to compensate.
 - List pages put one filled "New X" in the right slot.
-- Record pages have no filled button in the bar. A record with an edit page links to it with an outlined "Edit X".
-- One extra action in a record bar is a neutral 32px icon button with a tooltip and an `aria-label` that names it ("Delete issue"). Two or more extra actions go in a "More actions" menu. Bar icon buttons take their size from the bar; don't add `.medium-icon-button`, which forces 36px.
-- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button). A record without one deletes from the bar. Either way, the confirm names the object.
-- A record's status control in the bar ("Unresolved") is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`: blue for unresolved, green for resolved. Never a filled primary button.
-- Primary red marks at most one main create or confirm action per page.
+- Record pages have no filled button in the bar. Primary is for at most one main create or confirm action per page. A record with an edit page links to it with an outlined "Edit X".
+- A record's status control in the bar is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`, never a filled primary button.
+- Outline tells you what a control does: an action (it changes the record, like status, Edit, Delete, or it does something with the record, like Copy for AI) is an outlined button; a control that only changes what you see (filters, time range, App frames/Raw, frame order, categories) is a ghost select with no outline.
+- One extra action in a record bar is a neutral 32px icon button with a tooltip and an `aria-label` ("Delete issue"). Two or more extra actions go in a "More actions" menu.
+- Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one deletes from the bar, as its icon button or a "More actions" item, with the same confirm.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
 
