@@ -1,4 +1,4 @@
-@if (hashes().length > 1) {
+@if (hashes().length) {
   <gt-panel flush>
     <span slot="actions" class="merged__count" i18n
       >{{ selectedCount() }} of {{ hashes().length }} selected</span
@@ -40,7 +40,7 @@
       at least one hash on this issue.</span
     >
   </gt-panel>
-} @else if (!loading()) {
+} @else if (!loading() && !failed()) {
   <gt-panel>
     <gt-empty-state
       icon="breaking_news"

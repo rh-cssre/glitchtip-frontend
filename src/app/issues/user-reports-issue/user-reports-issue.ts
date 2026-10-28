@@ -9,6 +9,7 @@ import { DatePipe } from "@angular/common";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { UserReportsService } from "./user-reports-state";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
@@ -27,6 +28,7 @@ import { DaysAgoPipe } from "src/app/shared/days-ago.pipe";
     MatButtonModule,
     RouterLink,
     MatIconModule,
+    MatTooltipModule,
     LoadingOverlayComponent,
     EmptyStateComponent,
     PanelComponent,

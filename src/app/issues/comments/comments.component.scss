@@ -1,4 +1,4 @@
-@use "@angular/material" as mat;
+@use "controls";
 
 :host {
   display: block;
@@ -52,12 +52,7 @@
   display: flex;
   gap: var(--gt-space-1, 4px);
   margin-left: auto;
-  @include mat.icon-button-overrides(
-    (
-      icon-size: 20px,
-      state-layer-size: 32px,
-    )
-  );
+  @include controls.compact-buttons;
 }
 
 .comment__body {

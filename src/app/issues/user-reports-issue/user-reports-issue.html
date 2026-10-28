@@ -14,9 +14,13 @@
           <gt-list-row>
             <span>{{ report.name }}</span>
             <span class="report__email">{{ report.email }}</span>
-            <span slot="meta" [title]="report.dateCreated | date: 'medium'">{{
-              report.dateCreated | daysAgo
-            }}</span>
+            <span
+              slot="meta"
+              class="gt-has-tip"
+              tabindex="0"
+              [matTooltip]="report.dateCreated | date: 'medium'"
+              >{{ report.dateCreated | daysAgo }}</span
+            >
             <p slot="description" class="report__text">{{ report.comments }}</p>
           </gt-list-row>
         }

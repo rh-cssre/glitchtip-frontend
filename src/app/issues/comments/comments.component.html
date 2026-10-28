@@ -35,8 +35,9 @@
               <div class="comment__head">
                 <span class="comment__author">{{ comment.user?.email }}</span>
                 <span
-                  class="comment__time"
-                  [title]="comment.dateCreated | date: 'medium'"
+                  class="comment__time gt-has-tip"
+                  tabindex="0"
+                  [matTooltip]="comment.dateCreated | date: 'medium'"
                   >{{ comment.dateCreated | daysAgo }}</span
                 >
                 @if (user(); as user) {

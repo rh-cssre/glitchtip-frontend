@@ -34,6 +34,7 @@ export class MergedComponent implements OnInit {
   service = inject(MergedService);
   hashes = this.service.hashes;
   loading = this.service.loading;
+  failed = this.service.failed;
   selectedCount = computed(() => this.service.selectedHashes().length);
 
   allowUnmerge = computed(() => {
