@@ -14,6 +14,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { components } from "src/app/api/api-schema";
@@ -38,6 +39,7 @@ type Member = components["schemas"]["OrganizationUserSchema"];
     TopAppBar,
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
   ],
   providers: [MembersService],
 })
