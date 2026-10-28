@@ -11,6 +11,8 @@ import { LoadingButtonComponent } from "../../../../shared/loading-button/loadin
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 @Component({
   selector: "gt-project-environments",
@@ -18,10 +20,12 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   styleUrls: ["./project-environments.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SettingsSectionComponent,
     ListComponent,
     ListRowComponent,
     LoadingButtonComponent,
     EmptyStateComponent,
+    PanelComponent,
   ],
   providers: [ProjectEnvironmentsService],
 })
