@@ -1,9 +1,5 @@
 @use "variables" as vars;
 
-.transaction-group-404 h1 {
-  text-align: left;
-}
-
 // The table runs edge to edge; the summary above it keeps the panel padding.
 .span-breakdown-intro {
   padding: var(--gt-space-4, 16px) var(--gt-space-4, 16px) 0;

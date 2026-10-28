@@ -6,26 +6,20 @@
 @if ((initialLoadComplete()) && (transactionGroup()) === null) {
 <section class="l-body l-body--full-width">
   @if (organization(); as organization) {
-  <mat-card class="auth-form transaction-group-404">
-    <mat-card-content>
-      <h1 i18n class="mat-headline-4">Transaction group not found</h1>
-      <p i18n class="mat-body-1">
-        This may be because the URL is pointing to a transaction group that
-        doesn't exist or was deleted.
-      </p>
-      <p i18n class="mat-body-1">
-        It's also possible that this transaction group was reported to a project
-        that you are not able to access.
-      </p>
-      <a i18n
-        mat-stroked-button
-        class="transaction-groups-link"
-        [routerLink]="['..']"
+  <gt-panel>
+    <gt-empty-state
+      icon="search"
+      [headingLevel]="1"
+      i18n-title
+      title="Transaction group not found"
+      i18n-message
+      message="It may have been deleted, or it belongs to a project you cannot access."
+    >
+      <a mat-button [routerLink]="['..']" i18n
+        >View all transaction groups in {{ organization.name }}</a
       >
-        View all transaction groups in {{ organization.name }}
-      </a>
-    </mat-card-content>
-  </mat-card>
+    </gt-empty-state>
+  </gt-panel>
   }
 </section>
 } @if (transactionGroup(); as group) {

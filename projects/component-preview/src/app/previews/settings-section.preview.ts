@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
@@ -12,27 +13,15 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonToggleModule,
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      .ss-list {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        font: var(--mat-sys-body-medium);
-      }
-      .ss-list li + li {
-        margin-top: var(--gt-space-2, 8px);
-      }
-    `,
-  ],
   template: `
     <preview-doc
       title="Settings section"
       status="stable"
-      description="One setting on a settings page: a title, an optional line of help, then the control and its action. Sections stack in a single column with a hairline between them, with no cards."
+      description="One setting on a settings page: a title, an optional line of help, then the control and its action. With panel it is one bordered save unit, its action on the right of a tinted footer; panels stack 16px apart."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -45,12 +34,11 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       <div class="preview-section">
         <div class="preview-section__title">A settings page</div>
         <p class="preview-section__note">
-          Inline name, an add field joined to its list, a read-only value, then
-          the destructive action last. Only the sections whose description adds
-          something have one.
+          One panel per save unit: a Save in the footer, a choice that saves on
+          change with no footer, then the danger panel last.
         </p>
         <div>
-          <gt-settings-section #name title="Name" [inline]="true">
+          <gt-settings-section #name title="Name" panel>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input
                 matInput
@@ -60,28 +48,18 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             </mat-form-field>
             <button slot="actions" mat-stroked-button>Save name</button>
           </gt-settings-section>
-          <gt-settings-section #addEnv title="Add environment" [inline]="true">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput [attr.aria-labelledby]="addEnv.titleId" />
-            </mat-form-field>
-            <button slot="actions" mat-stroked-button>Add environment</button>
-          </gt-settings-section>
-          <gt-settings-section
-            class="gt-settings-continued"
-            title="Environments"
-          >
-            <ul class="ss-list">
-              <li>production</li>
-              <li>staging</li>
-            </ul>
-          </gt-settings-section>
-          <gt-settings-section title="Platform">
-            <span slot="description"
-              >Picks the setup guide and icon for this project.</span
+          <gt-settings-section #theme title="Theme" panel>
+            <mat-button-toggle-group
+              value="system"
+              hideSingleSelectionIndicator
+              [attr.aria-labelledby]="theme.titleId"
             >
-            <span class="body-text">JavaScript</span>
+              <mat-button-toggle value="light">Light</mat-button-toggle>
+              <mat-button-toggle value="dark">Dark</mat-button-toggle>
+              <mat-button-toggle value="system">System</mat-button-toggle>
+            </mat-button-toggle-group>
           </gt-settings-section>
-          <gt-settings-section title="Delete project">
+          <gt-settings-section title="Delete project" panel tone="danger">
             <span slot="description"
               >Deletes <strong>storefront-web</strong> and all of its issues,
               events and settings. This cannot be undone.</span
@@ -100,30 +78,28 @@ export class SettingsSectionPreview {
     "Each setting on a project, team, organization or profile settings page",
   ];
   readonly dos = [
-    "Stack sections in one column; a hairline between them separates them",
-    "Put the field that adds to a list above the list, joined with .gt-settings-continued on the list",
-    "Use inline for a single control with its action beside it",
-    "Put the action below, left-aligned, when a section has several controls or none",
-    "Save a choice that previews itself, such as the theme, on change with no button",
-    "Give each section its own outlined Save that names what it saves: Save name",
-    "Put a destructive action in the last section, as an outlined warn button that opens a confirm dialog",
+    "Give each save unit its own panel, with its outlined Save in the footer: Save name",
+    "Leave the footer out when the section saves on change, such as the theme",
+    "Make a list its own flush panel with a flush gt-list, and put the field that adds to it in a panel above",
+    "Put a list's New X entry button in the section's header-actions slot",
+    "Put a destructive action last, as a danger panel with an outlined warn button and a confirm dialog",
     "Show a failed delete with gt-form-error inside its delete section, not a toast",
     "Put a section's server error in its error slot, just above the action",
     "Name the object in bold in a delete section's description",
     "Show the value as plain text when the person cannot edit it",
-    "Give a section a description only when it says something the title and control do not: a consequence, a limit, non-obvious behaviour",
+    "Use hideTitle when the title only repeats the tab it sits in",
   ];
   readonly donts = [
-    "Wrap sections in cards",
-    "Put a list and the field that adds to it in one section; make them two, joined",
+    "Put two save units in one panel, or one save unit across two",
+    "Draw a gt-list border inside a panel border; use flush on both",
     "Repeat the title as the label of a section's only field",
-    "Write a description that restates the title or the control; omit it instead",
     "Use a filled Save; settings pages have no primary action",
-    "Box the danger section in red; the warn button and the dialog carry the warning",
+    "Add a description that only restates the title or the control",
+    "Leave an empty footer; a section without actions has none",
   ];
   readonly content = [
     "Title: the setting's name, in sentence case: Name, Delete project",
-    "Description: optional, one line on a consequence, a limit or non-obvious behaviour",
+    "Description: only what the title and control do not say (a consequence, a limit, non-obvious behaviour); otherwise omit it",
   ];
   readonly api: ApiRow[] = [
     {
@@ -133,10 +109,36 @@ export class SettingsSectionPreview {
       description: "The setting's name (required)",
     },
     {
+      name: "panel",
+      type: "boolean",
+      default: "false",
+      description: "Renders the section as one gt-panel, actions in the footer",
+    },
+    {
+      name: "tone",
+      type: '"default" | "danger"',
+      default: '"default"',
+      description: "Danger tints the panel border, for Delete sections",
+    },
+    {
+      name: "flush",
+      type: "boolean",
+      default: "false",
+      description:
+        "Panel body runs edge to edge under a hairline, for a flush gt-list",
+    },
+    {
+      name: "hideTitle",
+      type: "boolean",
+      default: "false",
+      description:
+        "Hides a title that repeats the tab; screen readers still get it",
+    },
+    {
       name: "inline",
       type: "boolean",
       default: "false",
-      description: "Puts the actions beside a single control",
+      description: "Plain mode only: puts the actions beside a single control",
     },
     {
       name: "titleId",
@@ -162,12 +164,18 @@ export class SettingsSectionPreview {
       name: '[slot="actions"]',
       type: "projected",
       default: "",
-      description: "The section's buttons",
+      description: "The section's buttons; in panel mode, the footer",
+    },
+    {
+      name: '[slot="header-actions"]',
+      type: "projected",
+      default: "",
+      description: "Panel only: a list's entry button, right of the title",
     },
   ];
   readonly importCode = `import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";`;
   readonly code = `<form [formGroup]="nameForm" (ngSubmit)="updateName()">
-  <gt-settings-section #name title="Name" [inline]="true">
+  <gt-settings-section #name title="Name" panel>
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input matInput formControlName="name" [attr.aria-labelledby]="name.titleId" />
     </mat-form-field>

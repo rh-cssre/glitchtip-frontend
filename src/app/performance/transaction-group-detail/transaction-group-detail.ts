@@ -9,19 +9,19 @@ import {
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { DecimalPipe, PercentPipe } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { MatCardModule } from "@angular/material/card";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule, Sort } from "@angular/material/sort";
 
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
 import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
-import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
 
@@ -31,17 +31,17 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
   styleUrls: ["./transaction-group-detail.scss"],
   imports: [
     DecimalPipe,
-    MatCardModule,
     MatTableModule,
     MatSortModule,
     RouterLink,
+    MatButtonModule,
     MatIconModule,
     PercentPipe,
     TopAppBar,
-    EmptyStateComponent,
     BackLinkComponent,
     HumanizeDurationPipe,
     PageHeaderComponent,
+    EmptyStateComponent,
     PanelComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
