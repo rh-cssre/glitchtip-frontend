@@ -37,12 +37,44 @@
 }
 
 .gt-panel__title {
+  display: flex;
   flex: 1;
+  align-items: baseline;
   min-width: 0;
   font: var(--mat-sys-title-small);
   letter-spacing: var(--mat-sys-title-small-tracking);
   font-weight: 600;
   color: var(--mat-sys-on-surface);
+}
+
+// The title does not shrink, so the subtitle truncates first.
+.gt-panel__title-text {
+  flex: none;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gt-panel__subtitle {
+  min-width: 0;
+  overflow: hidden;
+  font: var(--mat-sys-body-medium);
+  letter-spacing: var(--mat-sys-body-medium-tracking);
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &::before {
+    content: "\00B7";
+    margin-inline: var(--gt-space-2, 8px);
+  }
+}
+
+@container gt-panel (max-width: 479px) {
+  :host(.gt-panel--hide-subtitle-narrow) .gt-panel__subtitle {
+    display: none;
+  }
 }
 
 // Leads a titleless header so its actions never sit in an empty strip.

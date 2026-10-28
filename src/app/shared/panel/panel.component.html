@@ -6,7 +6,12 @@
       [attr.aria-level]="headingLevel()"
       [id]="titleId"
     >
-      {{ title() }}
+      <span class="gt-panel__title-text">{{ title() }}</span>
+      @if (subtitle()) {
+        <span class="gt-panel__subtitle" [title]="subtitle()">{{
+          subtitle()
+        }}</span>
+      }
     </div>
   } @else {
     <div class="gt-panel__lead"><ng-content select="[slot=lead]" /></div>
