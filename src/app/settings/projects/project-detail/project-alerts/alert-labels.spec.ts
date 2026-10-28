@@ -78,4 +78,33 @@ describe("toRecipientInput", () => {
       topic: "GlitchTip Alerts",
     });
   });
+
+  it("sends an unsaved Zulip recipient's flat settings as they are", () => {
+    const draft = {
+      recipientType: "zulip",
+      url: "https://chat.example.com",
+      botEmail: "bot@x.test",
+      apiKey: "k",
+      channel: "ops",
+      topic: "Deploys",
+    };
+    expect(toRecipientInput(draft)).toEqual(draft);
+  });
+
+  it("drops a saved recipient's id and config", () => {
+    expect(
+      toRecipientInput({
+        id: 2,
+        recipientType: "discord",
+        url: "https://discord.test/hook",
+        config: {},
+      }),
+    ).toEqual({ recipientType: "discord", url: "https://discord.test/hook" });
+  });
+
+  it("rejects a recipient type the API does not accept", () => {
+    expect(() =>
+      toRecipientInput({ recipientType: "pager", url: "" }),
+    ).toThrow();
+  });
 });

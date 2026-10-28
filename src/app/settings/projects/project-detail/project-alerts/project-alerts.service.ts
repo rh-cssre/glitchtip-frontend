@@ -7,43 +7,61 @@ import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { ProjectSlugs, sameProjectSlugs } from "../project-slugs";
 
 type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
-export type NewAlertRecipient = Omit<AlertRecipient, "id" | "url"> & {
+type RecipientInput = NonNullable<
+  components["schemas"]["ProjectAlertIn"]["alertRecipients"]
+>[number];
+type WebhookType =
+  components["schemas"]["WebhookAlertRecipientIn"]["recipientType"];
+type ZulipFields = Partial<
+  Pick<
+    components["schemas"]["ZulipAlertRecipientIn"],
+    "botEmail" | "apiKey" | "channel" | "topic"
+  >
+>;
+/** Saved or not: unsaved recipients hold their Zulip settings flat. */
+type RecipientDraft = AlertRecipient & ZulipFields;
+/** A recipient added in the editor and not saved yet. */
+export type NewAlertRecipient = Omit<RecipientDraft, "id" | "url"> & {
   url: string;
-  botEmail?: string;
-  apiKey?: string;
-  channel?: string;
-  topic?: string;
 };
+
+// A Record so a webhook type added to the schema fails to compile until listed.
+const webhookTypes: Record<WebhookType, true> = {
+  discord: true,
+  feishu: true,
+  googlechat: true,
+  ntfy: true,
+  slack: true,
+  teams: true,
+  webhook: true,
+};
+
+function isWebhookType(type: string): type is WebhookType {
+  return Object.hasOwn(webhookTypes, type);
+}
 
 function withScheme(url: string | null | undefined) {
   return url && !url.startsWith("http") ? "https://" + url : (url ?? "");
 }
 
 /** A saved recipient carries Zulip settings in config; the API takes them flat. */
-export function toRecipientInput(
-  recipient: AlertRecipient | NewAlertRecipient,
-): NewAlertRecipient {
-  if ("botEmail" in recipient || recipient.recipientType !== "zulip") {
-    const { recipientType, url, botEmail, apiKey, channel, topic } =
-      recipient as NewAlertRecipient;
+export function toRecipientInput(recipient: RecipientDraft): RecipientInput {
+  const { recipientType } = recipient;
+  const url = withScheme(recipient.url);
+  if (recipientType === "email") return { recipientType, url };
+  if (recipientType === "zulip") {
+    const config = (recipient.config ?? {}) as Record<string, string>;
     return {
       recipientType,
-      url: withScheme(url),
-      botEmail,
-      apiKey,
-      channel,
-      topic,
+      url,
+      botEmail: recipient.botEmail ?? config["bot_email"],
+      apiKey: recipient.apiKey ?? config["api_key"],
+      channel: recipient.channel ?? config["channel"],
+      topic: recipient.topic ?? (config["topic"] || "GlitchTip Alerts"),
     };
   }
-  const config = (recipient.config ?? {}) as Record<string, string>;
-  return {
-    recipientType: recipient.recipientType,
-    url: withScheme(recipient.url),
-    botEmail: config["bot_email"],
-    apiKey: config["api_key"],
-    channel: config["channel"],
-    topic: config["topic"] || "GlitchTip Alerts",
-  };
+  if (isWebhookType(recipientType)) return { recipientType, url };
+  throw new Error(`Unknown alert recipient type: ${recipientType}`);
 }
 
 @Injectable()
@@ -127,7 +145,7 @@ export class ProjectAlertsService {
     const path = this.#path();
     const body = {
       ...alert,
-      alertRecipients: alert.alertRecipients.map(toRecipientInput) as any,
+      alertRecipients: alert.alertRecipients.map(toRecipientInput),
     };
     const { data, error, response } = id
       ? await client.PUT(

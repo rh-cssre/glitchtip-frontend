@@ -50,7 +50,7 @@ export function recipientLabel(recipient: RecipientLike, teams?: string[]) {
   }
   if (recipient.recipientType === "zulip") {
     const channel = recipient.channel || recipient.config?.["channel"];
-    return $localize`Zulip: ${channel || recipient.url}`;
+    return $localize`Zulip: ${channel || recipient.url}:destination:`;
   }
   return recipient.url ?? "";
 }
