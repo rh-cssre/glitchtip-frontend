@@ -2,7 +2,7 @@ import { Injectable, computed, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { components } from "src/app/api/api-schema";
-import { client, handleError } from "src/app/shared/api/api";
+import { apiErrorMessage, client } from "src/app/shared/api/api";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { ProjectSlugs, sameProjectSlugs } from "../project-slugs";
 
@@ -163,9 +163,10 @@ export class ProjectAlertsService {
       this.#projectAlertsResource.reload();
       return null;
     }
-    return (
-      handleError(error, response).detail[0]?.msg ??
-      $localize`The alert couldn't be saved. Try again.`
+    return apiErrorMessage(
+      error,
+      response,
+      $localize`The alert couldn't be saved. Try again.`,
     );
   }
 
@@ -180,9 +181,10 @@ export class ProjectAlertsService {
       this.#projectAlertsResource.reload();
       return null;
     }
-    return (
-      (error && handleError(error, response).detail[0]?.msg) ||
-      $localize`The alert couldn't be deleted. Try again.`
+    return apiErrorMessage(
+      error,
+      response,
+      $localize`The alert couldn't be deleted. Try again.`,
     );
   }
 
