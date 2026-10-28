@@ -18,13 +18,6 @@
         <span i18n>Created {{ project.dateCreated | date: "mediumDate" }}</span>
       </span>
     </gt-page-header>
-    @if (project.isMember === false) {
-      <p class="project-note body-text" i18n>
-        You can manage {{ project.name }} as an admin of
-        {{ project.organization.name }}. To see its issues, join one of its
-        teams.
-      </p>
-    }
     <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="settingsPanel">
       @for (t of tabs; track t.id) {
         <a
@@ -34,17 +27,23 @@
           [queryParams]="{ tab: t.id === 'general' ? null : t.id }"
           queryParamsHandling="merge"
           replaceUrl
-          >{{ t.label }}
-          @if (t.id === "dsn" && projectKeys(); as keys) {
-            <span class="tab-count">{{ keys.length }}</span>
-          }
-        </a>
+          >{{ t.label }}</a
+        >
       }
     </nav>
 
     <mat-tab-nav-panel #settingsPanel>
       @switch (tab()) {
         @case ("general") {
+          @if (project.isMember === false) {
+            <gt-panel class="project-note">
+              <p i18n>
+                You can manage {{ project.name }} as an admin of
+                {{ project.organization.name }}. To see its issues, join one of
+                its teams.
+              </p>
+            </gt-panel>
+          }
           <form [formGroup]="nameForm" (ngSubmit)="updateName()">
             <gt-settings-section
               #nameSection
