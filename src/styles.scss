@@ -5,6 +5,7 @@
 @use "./assets/styles/material-overrides";
 @use "./assets/styles/variables" as vars;
 @use "./assets/styles/font-files";
+@use "./assets/styles/page-header";
 @use "./assets/styles/resets";
 @use "./scss/auth-forms";
 
@@ -314,42 +315,18 @@ mat-sidenav-container {
   margin-right: 8px;
 }
 
-// Settings sections: a hairline between consecutive sections, never above the
-// first or below the last. A section often sits inside its own form or a child
-// component, so the line goes on whichever sibling holds the section, as long
-// as an earlier sibling holds one too. A section that continues the one before
-// it (an add field, then its list) opts out with .gt-settings-continued.
-// Panel sections draw their own border, so they skip the hairline.
-:is(gt-settings-section, :has(gt-settings-section))
-  ~ :is(gt-settings-section, :has(gt-settings-section)):not(
-    .gt-settings-continued,
-    .gt-settings-panel,
-    :has(.gt-settings-panel)
-  ) {
-  border-top: 1px solid var(--mat-sys-outline-variant);
+// A lone field fills its settings section's column.
+.settings-section__body mat-form-field {
+  width: 100%;
 }
 
-// A continuation sits right under what it continues. The first section in
-// its container sits flush too, unless it opens a form or component that
-// follows another section, where the hairline above needs the padding.
-gt-settings-section.gt-settings-continued,
-.gt-settings-continued gt-settings-section,
-gt-settings-section:first-child:not(
-    :is(gt-settings-section, :has(gt-settings-section)) ~ * > *,
-    :is(gt-settings-section, :has(gt-settings-section)) ~ * > * > *
-  ) {
-  padding-top: 0;
-}
-
-// Content starts 16px under a tab bar. A panel inside a card already has the
-// card's padding.
+// Content starts 16px under a tab bar; a tab panel inside a card has its padding.
 mat-tab-nav-panel:not(mat-card-content > *) {
   display: block;
   padding-top: var(--gt-space-4, 16px);
 }
 
-// A create or edit form with one submit is one panel: field sections sit 16px
-// each side of their hairlines, Cancel and the submit go in the footer.
+// A form with one submit is one panel, with hairlines between its field sections.
 gt-panel.gt-form-panel {
   margin-bottom: var(--gt-space-4, 16px);
 
@@ -357,40 +334,21 @@ gt-panel.gt-form-panel {
     padding-block: var(--gt-space-4, 16px);
   }
 
-  gt-settings-section:first-child {
+  gt-settings-section:first-of-type {
     padding-top: 0;
   }
 
-  gt-settings-section:not(:has(~ gt-settings-section)) {
+  gt-settings-section:last-of-type {
     padding-bottom: 0;
   }
-}
 
-.gt-form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gt-space-2, 8px);
-  padding-top: var(--gt-space-5, 24px);
-}
+  gt-settings-section ~ gt-settings-section {
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
 
-// A section after the actions row (an edit form's Delete) starts 24px below
-// the buttons, so they never sit on its hairline. The row may end a form or a
-// form component that the section follows.
-:is(
-    .gt-form-actions,
-    :has(> .gt-form-actions:last-child),
-    :has(> :last-child > .gt-form-actions:last-child)
-  )
-  + :is(gt-settings-section, :has(gt-settings-section)) {
-  margin-top: var(--gt-space-5, 24px);
-}
-
-// Empty sub-list inside a section; main collections use gt-empty-state.
-.gt-note {
-  margin: 0;
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-surface-variant);
+  gt-settings-section ~ gt-form-error:not(:empty) {
+    margin-top: var(--gt-space-4, 16px);
+  }
 }
 
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).

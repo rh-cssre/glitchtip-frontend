@@ -14,7 +14,6 @@ let nextId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgTemplateOutlet, PanelComponent],
   host: {
-    "[class.inline]": "inline()",
     "[class.gt-settings-panel]": "panel()",
     "[attr.title]": "null",
   },
@@ -25,6 +24,7 @@ let nextId = 0;
       ><ng-content select="[slot=description]"
     /></ng-template>
     <ng-template #body><ng-content /></ng-template>
+    <ng-template #error><ng-content select="[slot=error]" /></ng-template>
     <ng-template #actions><ng-content select="[slot=actions]" /></ng-template>
     <ng-template #headerActions
       ><ng-content select="[slot=header-actions]"
@@ -57,11 +57,17 @@ let nextId = 0;
             <div class="settings-section__body">
               <ng-container [ngTemplateOutlet]="body" />
             </div>
+            <div class="settings-section__error">
+              <ng-container [ngTemplateOutlet]="error" />
+            </div>
           }
         </div>
         @if (flush()) {
           <div class="settings-section__flush-body">
             <ng-container [ngTemplateOutlet]="body" />
+          </div>
+          <div class="settings-section__error settings-section__error--padded">
+            <ng-container [ngTemplateOutlet]="error" />
           </div>
         }
         <ng-container ngProjectAs="[slot=footer]"
@@ -79,6 +85,9 @@ let nextId = 0;
         <div class="settings-section__body">
           <ng-container [ngTemplateOutlet]="body" />
         </div>
+        <div class="settings-section__error">
+          <ng-container [ngTemplateOutlet]="error" />
+        </div>
         <div class="settings-section__actions">
           <ng-container [ngTemplateOutlet]="actions" />
         </div>
@@ -89,7 +98,6 @@ let nextId = 0;
 })
 export class SettingsSectionComponent {
   readonly title = input.required<string>();
-  readonly inline = input(false);
   /** One bordered panel per save unit, actions in its footer. */
   readonly panel = input(false, { transform: booleanAttribute });
   /** Panel only: danger tints the border, for Delete sections. */
