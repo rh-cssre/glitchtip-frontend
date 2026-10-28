@@ -348,9 +348,9 @@ gt-panel.gt-form-panel {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // Radio buttons carry their own touch-target padding; pull the column back
-  // so the circles line up with the section text.
-  margin-left: -10px;
+  // Material pads the 20px radio icon out to its state layer; pull that back
+  // so the circles line up with the section text at any density.
+  margin-inline-start: calc((20px - var(--mat-radio-state-layer-size)) / 2);
 }
 
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).
