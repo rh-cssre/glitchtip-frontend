@@ -1,3 +1,4 @@
+@use "controls";
 @use "variables" as vars;
 @use "row-mixins" as rows;
 
@@ -52,12 +53,9 @@ $label-w-narrow: 88px;
   }
 }
 
-// 20px glyphs; the element selector outranks Material's .mat-icon size.
-mat-icon.gt-chev,
-mat-icon.gt-icon-sm {
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
+// Material's .mat-icon size loads after global styles, so this one rule pairs with it.
+.mat-icon:is(.gt-chev, .gt-icon-sm) {
+  @include controls.icon-size(20px);
 }
 
 .gt-chev {
@@ -254,7 +252,7 @@ button.gt-kv__row {
   padding-block: var(--gt-space-1, 4px);
 }
 
-@container (max-width: 479px) {
+@include controls.narrow-panel {
   .gt-property-list,
   .gt-property-list--facts,
   .gt-kv__row {

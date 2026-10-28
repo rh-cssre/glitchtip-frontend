@@ -71,7 +71,7 @@
   }
 }
 
-@container gt-panel (max-width: 479px) {
+@include controls.narrow-panel {
   :host(.gt-panel--hide-subtitle-narrow) .gt-panel__subtitle {
     display: none;
   }
