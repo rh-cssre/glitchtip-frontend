@@ -1,0 +1,31 @@
+// Content projected into gt-settings-section comes from the page's template, so it is global.
+
+// A lone field fills its settings section's column.
+.settings-section__body mat-form-field {
+  width: 100%;
+}
+
+// A form with one submit is one panel, with hairlines between its field sections.
+gt-panel.gt-form-panel {
+  margin-bottom: var(--gt-space-4, 16px);
+
+  gt-settings-section {
+    padding-block: var(--gt-space-4, 16px);
+  }
+
+  gt-settings-section:first-of-type {
+    padding-top: 0;
+  }
+
+  gt-settings-section:last-of-type {
+    padding-bottom: 0;
+  }
+
+  gt-settings-section ~ gt-settings-section {
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  gt-settings-section ~ gt-form-error:not(:empty) {
+    margin-top: var(--gt-space-4, 16px);
+  }
+}
