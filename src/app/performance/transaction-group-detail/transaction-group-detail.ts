@@ -16,6 +16,7 @@ import { MatSortModule, Sort } from "@angular/material/sort";
 
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
 import {
   HumanizeDurationPipe,
@@ -25,7 +26,6 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
-import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 
 type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
 
