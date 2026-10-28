@@ -33,9 +33,11 @@ let nextId = 0;
       margin-bottom: 0;
     }
 
+    // Clips a navigable row's hover layer to the rounded corners.
     .list__rows {
       border: 1px solid var(--mat-sys-outline-variant);
       border-radius: var(--mat-sys-corner-extra-small);
+      overflow: hidden;
     }
 
     // Inside a flush panel the panel draws the outer border.
