@@ -24,6 +24,7 @@ let nextId = 0;
       ><ng-content select="[slot=description]"
     /></ng-template>
     <ng-template #body><ng-content /></ng-template>
+    <ng-template #error><ng-content select="[slot=error]" /></ng-template>
     <ng-template #actions><ng-content select="[slot=actions]" /></ng-template>
     <ng-template #headerActions
       ><ng-content select="[slot=header-actions]"
@@ -56,11 +57,17 @@ let nextId = 0;
             <div class="settings-section__body">
               <ng-container [ngTemplateOutlet]="body" />
             </div>
+            <div class="settings-section__error">
+              <ng-container [ngTemplateOutlet]="error" />
+            </div>
           }
         </div>
         @if (flush()) {
           <div class="settings-section__flush-body">
             <ng-container [ngTemplateOutlet]="body" />
+          </div>
+          <div class="settings-section__error settings-section__error--padded">
+            <ng-container [ngTemplateOutlet]="error" />
           </div>
         }
         <ng-container ngProjectAs="[slot=footer]"
@@ -77,6 +84,9 @@ let nextId = 0;
       <div class="settings-section__content">
         <div class="settings-section__body">
           <ng-container [ngTemplateOutlet]="body" />
+        </div>
+        <div class="settings-section__error">
+          <ng-container [ngTemplateOutlet]="error" />
         </div>
         <div class="settings-section__actions">
           <ng-container [ngTemplateOutlet]="actions" />

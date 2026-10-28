@@ -58,6 +58,18 @@
   }
 }
 
+.settings-section__error {
+  width: 100%;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.settings-section__error--padded {
+  padding: var(--gt-space-4, 16px);
+}
+
 .settings-section__actions {
   display: flex;
   flex-wrap: wrap;
