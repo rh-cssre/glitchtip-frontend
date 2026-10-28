@@ -59,6 +59,11 @@
                   i18n-buttonText
                   buttonText="Disconnect"
                   buttonStyle="stroked"
+                  [ariaLabel]="
+                    disconnectLabel(
+                      socialAccount.name ?? socialAccount.provider
+                    )
+                  "
                   [loading]="disconnectLoadingId() === socialAccount.id"
                   (buttonClick)="
                     disconnect(
@@ -70,15 +75,21 @@
                   "
                 />
               } @else {
-                <p slot="meta" class="gt-note" i18n>
-                  Set a password to disconnect
-                </p>
+                <span slot="description" i18n
+                  >Set a password to disconnect</span
+                >
               }
             </gt-list-row>
           }
         </gt-list>
       } @else {
-        <p class="gt-note" i18n>No connected accounts.</p>
+        <gt-empty-state
+          icon="account_circle"
+          i18n-title
+          title="No connected accounts"
+          i18n-message
+          message="Connect a social login to sign in with it."
+        />
       }
     </gt-settings-section>
   }
