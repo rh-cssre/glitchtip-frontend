@@ -19,6 +19,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
@@ -51,6 +52,7 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     MatProgressSpinnerModule,
     PageHeaderComponent,
     PanelComponent,
+    RecordBandComponent,
     EmptyStateComponent,
     MatTabsModule,
     FormErrorComponent,
