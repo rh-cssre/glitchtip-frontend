@@ -1,6 +1,6 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <h1 i18n class="gt-bar-title">General settings</h1>
+    <span i18n class="gt-bar-title">General settings</span>
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
@@ -34,9 +34,6 @@
               formControlName="name"
               [attr.aria-labelledby]="nameSection.titleId"
             />
-            <mat-hint i18n
-              >Used in URLs: {{ activeOrg.slug // i18n(ph="slug") }}</mat-hint
-            >
             @if (form.controls.name.errors?.serverError; as serverError) {
               <mat-error>{{ serverError }}</mat-error>
             }
