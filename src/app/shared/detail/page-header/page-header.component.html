@@ -5,12 +5,16 @@
     </div>
   }
   <div class="gt-page-header__text">
-    <h1 class="gt-page-header__title section-header-text">
-      {{ title() }}
-    </h1>
-    @if (subtitle(); as subtitle) {
-      <p class="gt-page-header__subtitle" [title]="subtitle">{{ subtitle }}</p>
-    }
+    <div class="gt-page-header__heading">
+      <h1 class="gt-page-header__title section-header-text">
+        {{ title() }}
+      </h1>
+      @if (subtitle(); as subtitle) {
+        <p class="gt-page-header__subtitle" [title]="subtitle">{{
+          subtitle
+        }}</p>
+      }
+    </div>
     <div class="gt-page-header__meta">
       @if (status(); as status) {
         <gt-status-pill
