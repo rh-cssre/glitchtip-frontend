@@ -51,6 +51,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { ProjectAlertsService } from "./project-alerts/project-alerts.service";
 import { ProjectEnvironmentsService } from "./project-environments/project-environments.service";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 function autocompleteStringValidator(
   validOptions: Array<FlatPlatform>,
@@ -77,6 +78,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
   selector: "gt-project-detail",
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./project-detail.component.html",
+  styleUrls: ["./project-detail.component.scss"],
   imports: [
     DatePipe,
     MatInputModule,
@@ -96,6 +98,7 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     TopAppBar,
     SettingsSectionComponent,
     FormErrorComponent,
+    PanelComponent,
   ],
   // The tab services live here, so the tab counts and the tabs share one load.
   providers: [
@@ -117,16 +120,10 @@ export class ProjectDetailComponent implements OnInit {
   projectKeys = this.#service.projectKeys;
   #alertsService = inject(ProjectAlertsService);
   #environmentsService = inject(ProjectEnvironmentsService);
-  /** Tab counts, shown once known (including 0). DSN holds one thing: none. */
-  readonly tabCounts = computed<Record<string, number | null>>(() => ({
-    environments: this.#environmentsService.initialLoad()
-      ? (this.#environmentsService.environments()?.length ?? 0)
-      : null,
-    alerts:
-      this.#alertsService.initialLoad() &&
-      !this.#alertsService.initialLoadError()
-        ? (this.#alertsService.projectAlerts()?.length ?? 0)
-        : null,
+  /** Undefined until loaded, and on a load error. DSN holds one thing: none. */
+  readonly tabCounts = computed<Record<string, number | undefined>>(() => ({
+    environments: this.#environmentsService.environments()?.length,
+    alerts: this.#alertsService.projectAlerts()?.length,
   }));
   activeProject = this.#service.project;
 

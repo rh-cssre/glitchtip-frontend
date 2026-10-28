@@ -1,0 +1,10 @@
+// Panels stack 16px apart.
+.project-note {
+  margin-bottom: var(--gt-space-4, 16px);
+
+  p {
+    margin: 0;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
+  }
+}

@@ -93,6 +93,8 @@ export class AlertEditComponent implements OnInit {
   readonly draftConditions = signal<AlertConditions>({});
   readonly teams = this.#service.projectTeams;
 
+  readonly saveText = $localize`Save alert`;
+  readonly createText = $localize`Create alert`;
   readonly title = computed(() =>
     this.alert() ? $localize`Edit alert` : $localize`New alert`,
   );
@@ -139,26 +141,23 @@ export class AlertEditComponent implements OnInit {
       });
   }
 
-  editRecipient(index: number) {
+  editRecipient(recipient: Recipient) {
     this.#dialog
       .open(NewRecipientComponent, {
-        data: {
-          emailSelected: this.hasEmail(),
-          editRecipient: this.recipients()[index],
-        },
+        data: { emailSelected: this.hasEmail(), editRecipient: recipient },
       })
       .afterClosed()
       .subscribe((result?: NewAlertRecipient) => {
         if (result) {
           this.recipients.update((list) =>
-            list.map((recipient, i) => (i === index ? result : recipient)),
+            list.map((r) => (r === recipient ? result : r)),
           );
         }
       });
   }
 
-  removeRecipient(index: number) {
-    this.recipients.update((list) => list.filter((_, i) => i !== index));
+  removeRecipient(recipient: Recipient) {
+    this.recipients.update((list) => list.filter((r) => r !== recipient));
   }
 
   /** Only recipients already saved on a saved alert can be tested. */

@@ -9,7 +9,7 @@
 <h2 class="title">{{ title() }}</h2>
 
 <gt-panel class="gt-form-panel">
-  <gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
+  <gt-settings-section #nameSection i18n-title title="Name">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <input
         matInput
@@ -40,9 +40,15 @@
   </gt-settings-section>
 
   <gt-settings-section i18n-title title="Send to">
+    @if (!recipients().length) {
+      <span slot="description" i18n
+        >This alert isn't being sent anywhere. Add a recipient to get
+        started.</span
+      >
+    }
     @if (recipients().length) {
       <gt-list>
-        @for (recipient of recipients(); track $index; let i = $index) {
+        @for (recipient of recipients(); track recipient) {
           <gt-list-row>
             <span class="recipient">
               <gt-recipient-icon [type]="recipient.recipientType" />
@@ -59,7 +65,7 @@
                 slot="actions"
                 mat-stroked-button
                 id="delete-recipient"
-                (click)="removeRecipient(i)"
+                (click)="removeRecipient(recipient)"
                 i18n
                 >Remove</button
               >
@@ -82,10 +88,13 @@
                       >Send test</button
                     >
                   }
-                  <button mat-menu-item (click)="editRecipient(i)" i18n
+                  <button mat-menu-item (click)="editRecipient(recipient)" i18n
                     >Edit</button
                   >
-                  <button mat-menu-item (click)="removeRecipient(i)" i18n
+                  <button
+                    mat-menu-item
+                    (click)="removeRecipient(recipient)"
+                    i18n
                     >Remove</button
                   >
                 </mat-menu>
@@ -94,11 +103,6 @@
           </gt-list-row>
         }
       </gt-list>
-    } @else {
-      <p class="gt-note" i18n
-        >This alert isn't being sent anywhere. Add a recipient to get
-        started.</p
-      >
     }
     <button slot="actions" mat-stroked-button (click)="addRecipient()">
       <mat-icon>add</mat-icon>
@@ -114,26 +118,14 @@
   </p>
   <gt-form-error [errors]="error()" />
   <button slot="footer" mat-button (click)="done.emit()" i18n>Cancel</button>
-  @if (alert()?.id) {
-    <gt-loading-button
-      slot="footer"
-      i18n-buttonText
-      buttonText="Save alert"
-      buttonStyle="stroked"
-      [loading]="saving()"
-      (buttonClick)="save()"
-      data-cy="save-alert"
-    />
-  } @else {
-    <gt-loading-button
-      slot="footer"
-      i18n-buttonText
-      buttonText="Create alert"
-      [loading]="saving()"
-      (buttonClick)="save()"
-      data-cy="save-alert"
-    />
-  }
+  <gt-loading-button
+    slot="footer"
+    [buttonStyle]="alert()?.id ? 'stroked' : 'flat'"
+    [buttonText]="alert()?.id ? saveText : createText"
+    [loading]="saving()"
+    (buttonClick)="save()"
+    data-cy="save-alert"
+  />
 </gt-panel>
 
 @if (alert()?.id && canDelete()) {
@@ -143,7 +135,7 @@
       This cannot be undone.</span
     >
     @if (deleteError()) {
-      <gt-form-error [errors]="deleteError()" />
+      <gt-form-error slot="error" [errors]="deleteError()" />
     }
     <gt-loading-button
       slot="actions"

@@ -1,4 +1,6 @@
-@if (initialLoad() === false) {
+@if (loadError(); as error) {
+  <gt-form-error [errors]="error.message" />
+} @else if (initialLoad() === false) {
   <div class="loading"></div>
 } @else {
   @if (sortedEnvironments(); as sortedEnvironments) {

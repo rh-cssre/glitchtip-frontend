@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from "@angular/core";
 import { NgTemplateOutlet } from "@angular/common";
 import { RouterLink, QueryParamsHandling } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
@@ -38,7 +43,7 @@ type ListedAlert = components["schemas"]["ProjectAlertSchema"];
         mat-stroked-button
         id="create-new-alert"
         [routerLink]="link()"
-        [queryParams]="params('new')"
+        [queryParams]="newParams()"
         [queryParamsHandling]="paramsHandling()"
       >
         <mat-icon>add</mat-icon>
@@ -70,24 +75,24 @@ type ListedAlert = components["schemas"]["ProjectAlertSchema"];
           </ng-container>
         }
         <gt-list flush>
-          @for (alert of alerts(); track alert.id) {
+          @for (row of rows(); track row.alert.id) {
             <gt-list-row>
               @if (canWrite()) {
                 <a
                   gtListRowLink
                   [routerLink]="link()"
-                  [queryParams]="params(alert.id)"
+                  [queryParams]="row.params"
                   [queryParamsHandling]="paramsHandling()"
-                  >{{ alertName(alert) }}</a
+                  >{{ row.name }}</a
                 >
               } @else {
-                <span>{{ alertName(alert) }}</span>
+                <span>{{ row.name }}</span>
               }
               <gt-alert-recipients
-                [recipients]="alert.alertRecipients"
+                [recipients]="row.alert.alertRecipients"
                 [teams]="teams()"
               />
-              <gt-alert-summary slot="description" [alert]="alert" />
+              <gt-alert-summary slot="description" [alert]="row.alert" />
             </gt-list-row>
           }
         </gt-list>
@@ -115,15 +120,18 @@ export class AlertListComponent {
   readonly link = input<unknown[]>([]);
   /** Query params kept on every link, such as the project tab. */
   readonly linkParams = input<Record<string, unknown>>({});
-  readonly paramsHandling = input<QueryParamsHandling>("");
+  readonly paramsHandling = input<QueryParamsHandling | null>(null);
   readonly emptyTitle = input.required<string>();
   readonly emptyMessage = input("");
   /** For another page's project's alerts: "2 alerts from checkout-api". */
   readonly projectName = input<string | null>(null);
 
-  alertName = alertName;
-
-  params(alert: number | null | undefined | "new") {
-    return { ...this.linkParams(), alert };
-  }
+  readonly newParams = computed(() => ({ ...this.linkParams(), alert: "new" }));
+  readonly rows = computed(() =>
+    this.alerts().map((alert) => ({
+      alert,
+      name: alertName(alert),
+      params: { ...this.linkParams(), alert: alert.id },
+    })),
+  );
 }

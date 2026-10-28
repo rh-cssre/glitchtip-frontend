@@ -28,9 +28,8 @@
           queryParamsHandling="merge"
           replaceUrl
           >{{ t.label }}
-          @let count = tabCounts()[t.id];
-          @if (count !== null && count !== undefined) {
-            <span class="tab-count">{{ count }}</span>
+          @if (tabCounts()[t.id] !== undefined) {
+            <span class="tab-count">{{ tabCounts()[t.id] }}</span>
           }
         </a>
       }
@@ -40,11 +39,13 @@
       @switch (tab()) {
         @case ("general") {
           @if (project.isMember === false) {
-            <p class="page-intro" i18n>
-              You can manage {{ project.name }} as an admin of
-              {{ project.organization.name }}. To see its issues, join one of
-              its teams.
-            </p>
+            <gt-panel class="project-note">
+              <p i18n>
+                You can manage {{ project.name }} as an admin of
+                {{ project.organization.name }}. To see its issues, join one of
+                its teams.
+              </p>
+            </gt-panel>
           }
           <form [formGroup]="nameForm" (ngSubmit)="updateName()">
             <gt-settings-section
@@ -200,7 +201,7 @@
                 issues, events and settings. This cannot be undone.</span
               >
               @if (deleteError()) {
-                <gt-form-error [errors]="deleteError()" />
+                <gt-form-error slot="error" [errors]="deleteError()" />
               }
               <gt-loading-button
                 slot="actions"
@@ -253,16 +254,10 @@
           }
         }
         @case ("environments") {
-          <gt-project-environments
-            [orgSlug]="orgSlug()"
-            [projectSlug]="projectSlug()"
-          />
+          <gt-project-environments />
         }
         @case ("alerts") {
-          <gt-project-alerts
-            [orgSlug]="orgSlug()"
-            [projectSlug]="projectSlug()"
-          />
+          <gt-project-alerts />
         }
       }
     </mat-tab-nav-panel>
