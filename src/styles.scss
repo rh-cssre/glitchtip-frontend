@@ -8,6 +8,7 @@
 @use "./assets/styles/page-header";
 @use "./assets/styles/resets";
 @use "./assets/styles/list-row";
+@use "./assets/styles/record-band";
 @use "./assets/styles/panel-rows";
 @use "./assets/styles/tag-chip";
 @use "./assets/styles/code";
@@ -187,10 +188,12 @@ mat-sidenav-container {
   text-decoration: underline;
 }
 
+// --gt-page-inset is the body's side padding; full-bleed bars read it.
 .l-body {
+  --gt-page-inset: 24px;
   max-width: 1100px;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: var(--gt-page-inset);
+  padding-right: var(--gt-page-inset);
   margin-top: 15px;
   margin-bottom: 16px;
   margin-left: auto;
@@ -215,8 +218,7 @@ mat-sidenav-container {
   }
 
   @media screen and (max-width: vars.$small - 1) {
-    padding-left: 15px;
-    padding-right: 15px;
+    --gt-page-inset: 15px;
   }
 }
 

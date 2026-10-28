@@ -4,7 +4,8 @@
   display: flex;
   align-items: center;
   gap: var(--gt-space-4, 16px);
-  margin-bottom: var(--gt-space-5, 24px);
+  // A record band sets the gap to 0: its tiers do the spacing.
+  margin-bottom: var(--gt-page-header-gap, var(--gt-space-5, 24px));
 }
 
 .gt-page-header__icon {
@@ -29,6 +30,18 @@
   -webkit-line-clamp: 2;
   font: var(--mat-sys-body-large);
   color: var(--mat-sys-on-surface-variant);
+}
+
+// Title and subtitle flow as one run of text, so a short message shares the title's line.
+:host(.gt-page-header--inline-subtitle) {
+  .gt-page-header__title,
+  .gt-page-header__subtitle {
+    display: inline;
+  }
+
+  .gt-page-header__subtitle {
+    margin: 0 0 0 var(--gt-space-3, 12px);
+  }
 }
 
 .gt-page-header__meta {
