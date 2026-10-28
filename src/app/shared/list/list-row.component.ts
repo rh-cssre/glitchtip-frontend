@@ -1,31 +1,75 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChild,
+} from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
+import { ListRowLinkComponent } from "./list-row-link.component";
 
+/** One record in a gt-list. A row whose name is an `<a gtListRowLink>` opens its record. */
 @Component({
   selector: "gt-list-row",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { role: "listitem" },
+  imports: [MatIconModule],
+  host: {
+    role: "listitem",
+    "[class.list-row--navigable]": "navigable()",
+  },
   template: `
-    <div class="list-row__main">
-      <ng-content />
-      <div class="list-row__description">
-        <ng-content select="[slot=description]" />
+    <div class="list-row__body">
+      <div class="list-row__main">
+        <ng-content />
+        <div class="list-row__description">
+          <ng-content select="[slot=description]" />
+        </div>
+      </div>
+      <div class="list-row__meta"><ng-content select="[slot=meta]" /></div>
+      <div class="list-row__actions">
+        <ng-content select="[slot=actions]" />
       </div>
     </div>
-    <div class="list-row__meta"><ng-content select="[slot=meta]" /></div>
-    <div class="list-row__actions"><ng-content select="[slot=actions]" /></div>
+    @if (navigable()) {
+      <!-- chevron_right is not in the icon font subset. -->
+      <mat-icon class="list-row__chevron" aria-hidden="true"
+        >keyboard_arrow_right</mat-icon
+      >
+    }
   `,
   styles: `
     @use "object-header";
 
+    // Positioned, so a row link's hit area can cover the row.
     :host {
+      position: relative;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: var(--gt-space-1, 4px) var(--gt-space-4, 16px);
+      gap: var(--gt-space-3, 12px);
       min-height: 52px;
       padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
       box-sizing: border-box;
       font: var(--mat-sys-body-medium);
+    }
+
+    :host(.list-row--navigable) {
+      padding-right: var(--gt-space-3, 12px);
+    }
+
+    .list-row__body {
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--gt-space-1, 4px) var(--gt-space-4, 16px);
+      min-width: 0;
+    }
+
+    .list-row__chevron {
+      flex: none;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      color: var(--mat-sys-on-surface-variant);
     }
 
     :host:not(:first-child) {
@@ -46,7 +90,8 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
         color: inherit;
         text-decoration: none;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
           text-decoration: underline;
         }
       }
@@ -108,6 +153,9 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
       gap: var(--gt-space-2, 8px);
       min-width: 104px;
       margin-left: auto;
+      // Above a row link's hit area, so the buttons keep their own clicks.
+      position: relative;
+      z-index: 1;
 
       &:empty {
         display: none;
@@ -119,4 +167,7 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
     }
   `,
 })
-export class ListRowComponent {}
+export class ListRowComponent {
+  private readonly link = contentChild(ListRowLinkComponent);
+  readonly navigable = computed(() => !!this.link());
+}
