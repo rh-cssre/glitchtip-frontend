@@ -32,8 +32,7 @@
   }
 }
 
-// One line for settings pages; the facts drop under the title when it runs out
-// of room.
+// Settings pages: one line, with the facts wrapping under the title.
 :host(.page-header--compact) {
   .page-header {
     gap: var(--gt-space-3, 12px);
