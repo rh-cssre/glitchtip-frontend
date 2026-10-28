@@ -65,9 +65,7 @@ form {
   margin-top: var(--gt-space-3, 12px);
 }
 
-// Environment scope narrows both conditions, so it sits below them as a
-// subheading of When rather than a section of its own. The select needs more
-// room than the number inputs above.
+// A subheading of When, not a third condition: it narrows both.
 .environment-scope {
   width: 100%;
   margin-top: var(--gt-space-5, 24px);
