@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { QueryParamsHandling, RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
@@ -13,7 +13,9 @@ import { MatButtonModule } from "@angular/material/button";
 export class BackLinkComponent {
   readonly link = input<string | readonly unknown[]>([".."]);
   readonly backLinkParams = input<{
-    [key: string]: string | number;
+    [key: string]: string | number | null;
   }>({});
+  /** "merge" keeps the other query params, for a sub-view inside a tab. */
+  readonly paramsHandling = input<QueryParamsHandling | null>(null);
   readonly backLinkText = input("");
 }
