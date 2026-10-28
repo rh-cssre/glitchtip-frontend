@@ -33,6 +33,7 @@ Colour only for meaning: error, warning, success and status (level pills, status
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
 - **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
+- **In-page subheading:** `.gt-subheading` (title-small, 600, on-surface, in `src/styles.scss`) for a heading inside a page section, such as a `gt-list` label. `.gt-subheading__description` is the muted line under it.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
 
 Rule: prefer a semantic class where one exists; otherwise apply the matching type token.
@@ -109,6 +110,26 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one deletes from the bar, as its icon button or a "More actions" item, with the same confirm.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
+
+### Surfaces
+
+- Page structure (headers, settings sections, forms, empty states) sits directly on the page surface, separated by space or a hairline.
+- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
+- A card with a title bar is not used for a page section; the section's title sits above its container.
+- A form saved with a button stays flat; the button beside its field shows what it saves. A border only groups things that have no button to do it: rows of records, and rows of settings that save on change.
+
+### Lists
+
+A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, an optional muted fact, then the actions at the end. An optional description line sits under the name.
+
+- A row that opens its record makes the name the link, written `<a gtListRowLink>`. That makes the row navigable: the link's hit area covers the whole row, hovering the row draws the on-surface 8% state layer and underlines the name, keyboard focus rings the row, and a trailing 20px chevron (`keyboard_arrow_right`, on-surface-variant) marks it. The link stays the only tab stop; row actions sit above the hit area and keep their own clicks, and meta and icons stay to the left of the chevron. No separate Edit or View button repeats the link.
+- A navigable row's meta is text. A control in the row (a copy button, a menu) goes in the actions slot, which sits above the hit area.
+- One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
+- Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
+- Rows with several columns to compare or sort are a table instead.
+- A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
+- When a row's action is blocked, say why in the row's description line; never only in a tooltip.
+- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon, in a `.gt-list-actions` container.
 
 ## Accessibility
 
