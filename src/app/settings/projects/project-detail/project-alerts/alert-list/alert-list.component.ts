@@ -50,13 +50,13 @@ type ListedAlert = components["schemas"]["ProjectAlertSchema"];
       <gt-panel flush>
         <span slot="lead">
           @if (projectName(); as projectName) {
-            <ng-container i18n>{alerts().length, plural,
-              =1 {1 alert from {{ projectName // i18n(ph="project") }}}
-              other {
-                {{ alerts().length // i18n(ph="count") }} alerts from {{
-                projectName // i18n(ph="project") }}
+            <ng-container i18n
+              >{alerts().length, plural,
+                =1 {1 alert}
+                other {{{ alerts().length // i18n(ph="count") }} alerts}
               }
-            }</ng-container>
+              from {{ projectName // i18n(ph="project") }}</ng-container
+            >
           } @else {
             <ng-container i18n>{alerts().length, plural,
               =1 {1 alert}
