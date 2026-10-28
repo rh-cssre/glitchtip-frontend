@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   ViewChild,
+  computed,
   effect,
   inject,
   input,
@@ -141,18 +142,28 @@ export class ProjectDetailComponent implements OnInit {
     ),
     { initialValue: "general" },
   );
-  readonly dsnTitle = $localize`DSN`;
   readonly noPlatformLabel = $localize`No platform set`;
-  readonly securityEndpointLabel = $localize`Security endpoint`;
 
-  keySuffix(
-    key: { label?: string | null; name?: string | null },
-    index: number,
-    count: number,
-  ) {
-    if (count < 2) return "";
-    return ": " + (key.label || key.name || $localize`Key ${index + 1}`);
-  }
+  // Titles name the key only when there is more than one.
+  readonly keyPanels = computed(() => {
+    const keys = this.projectKeys() ?? [];
+    return keys.map((key, index) => {
+      if (keys.length < 2) {
+        return {
+          key,
+          dsnTitle: $localize`DSN`,
+          securityTitle: $localize`Security endpoint`,
+        };
+      }
+      const keyName =
+        key.label || key.name || $localize`Key ${index + 1}:keyNumber:`;
+      return {
+        key,
+        dsnTitle: $localize`DSN: ${keyName}:keyName:`,
+        securityTitle: $localize`Security endpoint: ${keyName}:keyName:`,
+      };
+    });
+  });
 
   nameForm = new FormGroup({
     name: new FormControl("", [Validators.required, Validators.maxLength(64)]),

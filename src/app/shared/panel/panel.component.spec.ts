@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { Component } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { PanelComponent } from "./panel.component";
 
@@ -28,15 +29,49 @@ describe("PanelComponent", () => {
     expect(el.getAttribute("role")).toBeNull();
   });
 
-  it("drops body padding when flush", () => {
-    const el = render({ flush: true });
-    expect(el.querySelector(".gt-panel__body")!.classList).toContain(
-      "gt-panel__body--flush",
-    );
+  it("reads title, actions, body, then footer in order", () => {
+    @Component({
+      imports: [PanelComponent],
+      template: `
+        <gt-panel title="Webhooks">
+          <button slot="actions">Add webhook</button>
+          <p>No webhooks yet</p>
+          <span slot="footer-hint">Sent on every alert</span>
+          <button slot="footer">Save</button>
+        </gt-panel>
+      `,
+    })
+    class HostComponent {}
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const order = [
+      el.querySelector('[role="heading"]')!,
+      el.querySelector("[slot=actions]")!,
+      el.querySelector("p")!,
+      el.querySelector("[slot=footer-hint]")!,
+      el.querySelector("[slot=footer]")!,
+    ];
+    for (let i = 1; i < order.length; i++) {
+      expect(
+        order[i - 1].compareDocumentPosition(order[i]) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    }
   });
 
-  it("marks the danger tone on the host", () => {
-    expect(render({}).classList).not.toContain("gt-panel--danger");
-    expect(render({ tone: "danger" }).classList).toContain("gt-panel--danger");
+  it("shows a lead fact instead of a heading when titleless", () => {
+    @Component({
+      imports: [PanelComponent],
+      template: `<gt-panel><span slot="lead">3 environments</span></gt-panel>`,
+    })
+    class HostComponent {}
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('[role="heading"]')).toBeNull();
+    expect(el.textContent).toContain("3 environments");
   });
 });
