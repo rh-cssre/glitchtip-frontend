@@ -1,321 +1,321 @@
 <form [formGroup]="monitorForm" (ngSubmit)="submit()">
-  <gt-settings-section #nameSection i18n-title title="Name">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <input
-        id="monitor-name"
-        matInput
-        formControlName="name"
-        maxlength="200"
-        required
-        [attr.aria-labelledby]="nameSection.titleId"
-      />
-      @if (formName.errors?.required) {
-        <mat-error i18n> Enter a monitor name </mat-error>
-      }
-      @if (formName.errors?.maxlength) {
-        <mat-error i18n>
-          Name may not be more than
-          {{ formName.errors?.maxlength.requiredLength }} characters
-        </mat-error>
-      }
-    </mat-form-field>
-  </gt-settings-section>
-
-  <gt-settings-section #typeSection i18n-title title="Monitor type">
-    <span slot="description">
-      @if (formMonitorType.value === "Ping") {
-        <span i18n>
-          GlitchTip will "ping" the specified URL using an HTTP HEAD request
-          with no payload.
-        </span>
-      }
-      @if (formMonitorType.value === "POST") {
-        <span i18n>
-          GlitchTip will send an HTTP POST request to the specified URL. If
-          the expected response is not received, the site will be marked as
-          Down.
-        </span>
-      }
-      @if (formMonitorType.value === "GET") {
-        <span i18n>
-          GlitchTip will send an HTTP GET request to the specified URL. If
-          the expected response is not received, the site will be marked as
-          Down.
-        </span>
-      }
-      @if (formMonitorType.value === "Heartbeat") {
-        <span i18n
-          >GlitchTip will await requests from your site to ensure it is
-          active. If it doesn't receive the request, the site will be marked
-          as Down.</span
-        >
-      }
-      @if (formMonitorType.value === "TCP Port") {
-        <span i18n
-          >GlitchTip will check to make sure the port at the specified URL
-          is accessible.</span
-        >
-      }
-    </span>
-    <mat-form-field
-      appearance="outline"
-      subscriptSizing="dynamic"
-      data-cy="monitor-type"
-    >
-      <mat-select
-        formControlName="monitorType"
-        required
-        (selectionChange)="updateRequiredFields()"
-        [aria-labelledby]="typeSection.titleId"
-      >
-        @for (type of typeChoices; track type) {
-          <mat-option [value]="type">
-            {{ type }}
-          </mat-option>
+  <gt-panel class="gt-form-panel">
+    <gt-settings-section #nameSection i18n-title title="Name">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input
+          id="monitor-name"
+          matInput
+          formControlName="name"
+          maxlength="200"
+          required
+          [attr.aria-labelledby]="nameSection.titleId"
+        />
+        @if (formName.errors?.required) {
+          <mat-error i18n> Enter a monitor name </mat-error>
         }
-      </mat-select>
-      @if (formMonitorType.errors?.required) {
-        <mat-error i18n> Choose a monitor type </mat-error>
-      }
-    </mat-form-field>
-  </gt-settings-section>
+        @if (formName.errors?.maxlength) {
+          <mat-error i18n>
+            Name may not be more than
+            {{ formName.errors?.maxlength.requiredLength }} characters
+          </mat-error>
+        }
+      </mat-form-field>
+    </gt-settings-section>
 
-  @if (formMonitorType.value !== "Heartbeat") {
-    <gt-settings-section #urlSection i18n-title title="Site URL">
+    <gt-settings-section #typeSection i18n-title title="Monitor type">
       <span slot="description">
-        @if (formMonitorType.value === "TCP Port") {
-          <span i18n>Enter a host name and port (ex. example.com:80)</span>
-        } @else {
+        @if (formMonitorType.value === "Ping") {
+          <span i18n>
+            GlitchTip will "ping" the specified URL using an HTTP HEAD request
+            with no payload.
+          </span>
+        }
+        @if (formMonitorType.value === "POST") {
+          <span i18n>
+            GlitchTip will send an HTTP POST request to the specified URL. If
+            the expected response is not received, the site will be marked as
+            Down.
+          </span>
+        }
+        @if (formMonitorType.value === "GET") {
+          <span i18n>
+            GlitchTip will send an HTTP GET request to the specified URL. If the
+            expected response is not received, the site will be marked as Down.
+          </span>
+        }
+        @if (formMonitorType.value === "Heartbeat") {
           <span i18n
-            >Enter a valid URL with protocol (ex. https://example.com)</span
+            >GlitchTip will await requests from your site to ensure it is
+            active. If it doesn't receive the request, the site will be marked
+            as Down.</span
+          >
+        }
+        @if (formMonitorType.value === "TCP Port") {
+          <span i18n
+            >GlitchTip will check to make sure the port at the specified URL is
+            accessible.</span
           >
         }
       </span>
       <mat-form-field
         appearance="outline"
         subscriptSizing="dynamic"
-        data-cy="site-url"
+        data-cy="monitor-type"
       >
-        <input
-          matInput
-          formControlName="url"
+        <mat-select
+          formControlName="monitorType"
           required
-          [attr.aria-labelledby]="urlSection.titleId"
-        />
-        @if (formUrl.errors) {
-          <mat-error>
-            @if (formUrl.errors.maxlength) {
-              <span i18n
-                >URL may not be more than
-                {{ formUrl.errors.maxlength.requiredLength }} characters</span
-              >
-            } @else if (formMonitorType.value === "TCP Port") {
-              <span i18n>Enter a host name and port</span>
-            } @else {
-              <span i18n>Enter a valid URL</span>
-            }
-          </mat-error>
-        }
-      </mat-form-field>
-    </gt-settings-section>
-  }
-
-  <gt-settings-section #projectSection i18n-title title="Associated project">
-    <span slot="description" i18n
-      >Uptime email notifications are sent to the team assigned to the
-      associated project.</span
-    >
-    <mat-form-field
-      appearance="outline"
-      subscriptSizing="dynamic"
-      data-cy="associated-project"
-    >
-      <mat-select
-        formControlName="project"
-        [aria-labelledby]="projectSection.titleId"
-      >
-        @if (orgProjects(); as orgProjects) {
-          <mat-option i18n value="">None</mat-option>
-          @for (orgProject of orgProjects; track orgProject) {
-            <mat-option [value]="orgProject.id">
-              {{ orgProject.name }}
+          (selectionChange)="updateRequiredFields()"
+          [aria-labelledby]="typeSection.titleId"
+        >
+          @for (type of typeChoices; track type) {
+            <mat-option [value]="type">
+              {{ type }}
             </mat-option>
           }
+        </mat-select>
+        @if (formMonitorType.errors?.required) {
+          <mat-error i18n> Choose a monitor type </mat-error>
         }
-      </mat-select>
-    </mat-form-field>
-  </gt-settings-section>
+      </mat-form-field>
+    </gt-settings-section>
 
-  <gt-settings-section #environmentSection i18n-title title="Environment">
-    @if (environmentDisabled()) {
-      <span slot="description" i18n
-        >Select an associated project to scope this monitor to one of its
-        environments.</span
-      >
-    } @else {
-      <span slot="description" i18n
-        >Alerts limited to environments will only fire for monitors in one of
-        those environments.</span
-      >
+    @if (formMonitorType.value !== "Heartbeat") {
+      <gt-settings-section #urlSection i18n-title title="Site URL">
+        <span slot="description">
+          @if (formMonitorType.value === "TCP Port") {
+            <span i18n>Enter a host name and port (ex. example.com:80)</span>
+          } @else {
+            <span i18n
+              >Enter a valid URL with protocol (ex. https://example.com)</span
+            >
+          }
+        </span>
+        <mat-form-field
+          appearance="outline"
+          subscriptSizing="dynamic"
+          data-cy="site-url"
+        >
+          <input
+            matInput
+            formControlName="url"
+            required
+            [attr.aria-labelledby]="urlSection.titleId"
+          />
+          @if (formUrl.errors) {
+            <mat-error>
+              @if (formUrl.errors.maxlength) {
+                <span i18n
+                  >URL may not be more than
+                  {{ formUrl.errors.maxlength.requiredLength }} characters</span
+                >
+              } @else if (formMonitorType.value === "TCP Port") {
+                <span i18n>Enter a host name and port</span>
+              } @else {
+                <span i18n>Enter a valid URL</span>
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+      </gt-settings-section>
     }
-    <mat-form-field
-      appearance="outline"
-      subscriptSizing="dynamic"
-      data-cy="monitor-environment"
-    >
-      <mat-select
-        formControlName="environmentID"
-        [aria-labelledby]="environmentSection.titleId"
-      >
-        <mat-option [value]="null" i18n>No environment</mat-option>
-        @for (environment of environmentOptions(); track environment.id) {
-          <mat-option [value]="environment.id">
-            {{ environment.name }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </gt-settings-section>
 
-  @if (formMonitorType.value === "GET" || formMonitorType.value === "POST") {
-    <gt-settings-section #statusSection i18n-title title="Expected status">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <gt-settings-section #projectSection i18n-title title="Associated project">
+      <span slot="description" i18n
+        >Uptime email notifications are sent to the team assigned to the
+        associated project.</span
+      >
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        data-cy="associated-project"
+      >
+        <mat-select
+          formControlName="project"
+          [aria-labelledby]="projectSection.titleId"
+        >
+          @if (orgProjects(); as orgProjects) {
+            <mat-option i18n value="">None</mat-option>
+            @for (orgProject of orgProjects; track orgProject) {
+              <mat-option [value]="orgProject.id">
+                {{ orgProject.name }}
+              </mat-option>
+            }
+          }
+        </mat-select>
+      </mat-form-field>
+    </gt-settings-section>
+
+    <gt-settings-section #environmentSection i18n-title title="Environment">
+      @if (environmentDisabled()) {
+        <span slot="description" i18n
+          >Select an associated project to scope this monitor to one of its
+          environments.</span
+        >
+      } @else {
+        <span slot="description" i18n
+          >Alerts limited to environments will only fire for monitors in one of
+          those environments.</span
+        >
+      }
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        data-cy="monitor-environment"
+      >
+        <mat-select
+          formControlName="environmentID"
+          [aria-labelledby]="environmentSection.titleId"
+        >
+          <mat-option [value]="null" i18n>No environment</mat-option>
+          @for (environment of environmentOptions(); track environment.id) {
+            <mat-option [value]="environment.id">
+              {{ environment.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </gt-settings-section>
+
+    @if (formMonitorType.value === "GET" || formMonitorType.value === "POST") {
+      <gt-settings-section #statusSection i18n-title title="Expected status">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input
+            i18n-placeholder
+            matInput
+            min="0"
+            max="1000"
+            type="number"
+            autocomplete="off"
+            formControlName="expectedStatus"
+            placeholder="Status code"
+            data-cy="expected-status"
+            required
+            [attr.aria-labelledby]="statusSection.titleId"
+          />
+          @if (formExpectedStatus.errors?.min) {
+            <mat-error i18n>
+              The quantity needs to be greater than or equal to 100.
+            </mat-error>
+          }
+          @if (
+            formExpectedStatus.errors?.pattern ||
+            formExpectedStatus.errors?.required
+          ) {
+            <mat-error i18n>Enter a status code number </mat-error>
+          }
+        </mat-form-field>
+      </gt-settings-section>
+
+      <gt-settings-section
+        #bodySection
+        i18n-title
+        title="Expected response body"
+      >
+        <span slot="description" i18n
+          >If string isn't found in response body, the monitor will report as
+          down</span
+        >
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input
+            i18n-placeholder
+            matInput
+            autocomplete="off"
+            formControlName="expectedBody"
+            placeholder="Expected body"
+            data-cy="expected-body"
+            [attr.aria-labelledby]="bodySection.titleId"
+          />
+        </mat-form-field>
+      </gt-settings-section>
+    }
+
+    <gt-settings-section #intervalSection i18n-title title="Interval (seconds)">
+      @if (eventsEstimate(); as estimate) {
+        <span slot="description">
+          @if (estimate.perMonth <= estimate.allowed) {
+            <ng-container i18n
+              >This will use approximately
+              {{ estimate.perMonth | number: "1.0-0" }}
+              <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+              per month out of the
+              {{ estimate.allowed | number: "1.0-0" }} events your
+              organization's subscription allows for.</ng-container
+            >
+          } @else {
+            <ng-container i18n
+              >This will use approximately
+              {{ estimate.perMonth | number: "1.0-0" }}
+              <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
+              per month, exceeding the
+              {{ estimate.allowed | number: "1.0-0" }} events your
+              organization's subscription allows for.</ng-container
+            >
+          }
+        </span>
+      }
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        data-cy="interval"
+      >
         <input
-          i18n-placeholder
           matInput
           min="0"
-          max="1000"
           type="number"
           autocomplete="off"
-          formControlName="expectedStatus"
-          placeholder="Status code"
-          data-cy="expected-status"
+          formControlName="interval"
+          placeholder="60"
           required
-          [attr.aria-labelledby]="statusSection.titleId"
+          [attr.aria-labelledby]="intervalSection.titleId"
         />
-        @if (formExpectedStatus.errors?.min) {
-          <mat-error i18n>
-            The quantity needs to be greater than or equal to 100.
-          </mat-error>
+        @if (formInterval.errors?.min) {
+          <mat-error i18n>Must be 60 or higher.</mat-error>
         }
-        @if (
-          formExpectedStatus.errors?.pattern ||
-          formExpectedStatus.errors?.required
-        ) {
-          <mat-error i18n>Enter a status code number </mat-error>
+        @if (formInterval.errors?.max) {
+          <mat-error i18n>Must be less than 32768.</mat-error>
+        }
+        @if (formInterval.errors?.pattern || formInterval.errors?.required) {
+          <mat-error i18n>Enter an integer.</mat-error>
         }
       </mat-form-field>
     </gt-settings-section>
 
-    <gt-settings-section
-      #bodySection
-      i18n-title
-      title="Expected response body"
-    >
-      <span slot="description" i18n
-        >If string isn't found in response body, the monitor will report as
-        down</span
-      >
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <input
-          i18n-placeholder
-          matInput
-          autocomplete="off"
-          formControlName="expectedBody"
-          placeholder="Expected body"
-          data-cy="expected-body"
-          [attr.aria-labelledby]="bodySection.titleId"
-        />
-      </mat-form-field>
-    </gt-settings-section>
-  }
-
-  <gt-settings-section #intervalSection i18n-title title="Interval (seconds)">
-    @if (eventsEstimate(); as estimate) {
-      <span slot="description">
-        @if (estimate.perMonth <= estimate.allowed) {
-          <ng-container i18n
-            >This will use approximately
-            {{ estimate.perMonth | number: "1.0-0" }}
-            <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
-            per month out of the
-            {{ estimate.allowed | number: "1.0-0" }} events your
-            organization's subscription allows for.</ng-container
-          >
-        } @else {
-          <ng-container i18n
-            >This will use approximately
-            {{ estimate.perMonth | number: "1.0-0" }}
-            <a [routerLink]="[]" (click)="openEventInfoDialog()">events</a>
-            per month, exceeding the
-            {{ estimate.allowed | number: "1.0-0" }} events your
-            organization's subscription allows for.</ng-container
-          >
-        }
-      </span>
+    @if (formMonitorType.value !== "Heartbeat") {
+      <gt-settings-section #timeoutSection i18n-title title="Timeout">
+        <span slot="description" i18n
+          >Time in seconds GlitchTip will wait for a response from your app.
+          Defaults to 20 seconds.</span
+        >
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input
+            id="timeout"
+            matInput
+            min="0"
+            max="60"
+            type="number"
+            default="20"
+            autocomplete="off"
+            formControlName="timeout"
+            [attr.aria-labelledby]="timeoutSection.titleId"
+          />
+          @if (formTimeout.errors) {
+            <mat-error>
+              <span i18n>Enter an integer between 1 and 60.</span>
+            </mat-error>
+          }
+        </mat-form-field>
+      </gt-settings-section>
     }
-    <mat-form-field
-      appearance="outline"
-      subscriptSizing="dynamic"
-      data-cy="interval"
-    >
-      <input
-        matInput
-        min="0"
-        type="number"
-        autocomplete="off"
-        formControlName="interval"
-        placeholder="60"
-        required
-        [attr.aria-labelledby]="intervalSection.titleId"
-      />
-      @if (formInterval.errors?.min) {
-        <mat-error i18n>Must be 60 or higher.</mat-error>
-      }
-      @if (formInterval.errors?.max) {
-        <mat-error i18n>Must be less than 32768.</mat-error>
-      }
-      @if (formInterval.errors?.pattern || formInterval.errors?.required) {
-        <mat-error i18n>Enter an integer.</mat-error>
-      }
-    </mat-form-field>
-  </gt-settings-section>
 
-  @if (formMonitorType.value !== "Heartbeat") {
-    <gt-settings-section #timeoutSection i18n-title title="Timeout">
-      <span slot="description" i18n
-        >Time in seconds GlitchTip will wait for a response from your app.
-        Defaults to 20 seconds.</span
-      >
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <input
-          id="timeout"
-          matInput
-          min="0"
-          max="60"
-          type="number"
-          default="20"
-          autocomplete="off"
-          formControlName="timeout"
-          [attr.aria-labelledby]="timeoutSection.titleId"
-        />
-        @if (formTimeout.errors) {
-          <mat-error>
-            <span i18n>Enter an integer between 1 and 60.</span>
-          </mat-error>
-        }
-      </mat-form-field>
-    </gt-settings-section>
-  }
-
-  <gt-form-error [errors]="formError()?.non_field_errors" />
-  <div class="gt-form-actions">
+    <gt-form-error [errors]="formError()?.non_field_errors" />
+    <a slot="footer" mat-button [routerLink]="['..']" i18n>Cancel</a>
     <gt-loading-button
+      slot="footer"
       [buttonStyle]="monitorSettings() ? 'stroked' : 'flat'"
       [loading]="loading() === true"
       [buttonText]="monitorSettings() ? updateMonitorText : createMonitorText"
       data-cy="monitor-submit"
     />
-    <a mat-button [routerLink]="['..']" i18n>Cancel</a>
-  </div>
+  </gt-panel>
 </form>

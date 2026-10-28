@@ -27,6 +27,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { MonitorInput, MonitorType } from "../uptime.interfaces";
 import { intRegex, urlRegex } from "src/app/shared/validators";
 import { SubscriptionService } from "src/app/api/subscriptions/subscription.service";
@@ -74,6 +75,7 @@ const portUrlValidators = [
     ReactiveFormsModule,
     RouterModule,
     LoadingButtonComponent,
+    PanelComponent,
     SettingsSectionComponent,
     FormErrorComponent,
     MatButtonModule,
