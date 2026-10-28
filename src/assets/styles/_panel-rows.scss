@@ -1,4 +1,5 @@
 @use "variables" as vars;
+@use "row-mixins" as rows;
 
 // Rows inside a flush gt-panel, shared by every data panel. Hairlines, no boxes.
 
@@ -7,54 +8,6 @@ $mono: vars.$font-mono, monospace;
 $chev-slot: 32px;
 $label-w: 120px;
 $label-w-narrow: 88px;
-
-// A whole row is one target with a grey state layer.
-@mixin row-button {
-  appearance: none;
-  width: 100%;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  font: var(--mat-sys-body-medium);
-  letter-spacing: var(--mat-sys-body-medium-tracking);
-  color: inherit;
-  text-align: start;
-  background: none;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    background-color: color-mix(
-      in srgb,
-      var(--mat-sys-on-surface) 4%,
-      transparent
-    );
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--mat-sys-on-surface);
-    outline-offset: -2px;
-  }
-
-  &:disabled {
-    cursor: default;
-  }
-}
-
-@mixin inset-hairline($inset) {
-  background-image: linear-gradient(
-    var(--mat-sys-outline-variant),
-    var(--mat-sys-outline-variant)
-  );
-  background-repeat: no-repeat;
-  background-position: right top;
-  background-size: calc(100% - #{$inset}) 1px;
-}
-
-@mixin truncate {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
 
 .gt-mono {
   font-family: $mono;
@@ -66,7 +19,7 @@ $label-w-narrow: 88px;
 }
 
 .gt-truncate {
-  @include truncate;
+  @include rows.truncate;
   min-width: 0;
 }
 
@@ -122,7 +75,7 @@ mat-icon.gt-icon-sm {
 
 // Truncates from the left so the file name survives: "...checkout/pricing.ts".
 .gt-path {
-  @include truncate;
+  @include rows.truncate;
   min-width: 0;
   direction: rtl;
   text-align: left;
@@ -202,7 +155,7 @@ mat-icon.gt-icon-sm {
 
 // A <button aria-expanded> row with a trailing chevron in a 32px slot.
 .gt-expandable-row {
-  @include row-button;
+  @include rows.row-button;
 }
 
 // Key/value rows: label column, value, chevron slot.
@@ -223,7 +176,7 @@ mat-icon.gt-icon-sm {
 }
 
 button.gt-kv__row {
-  @include row-button;
+  @include rows.row-button;
   padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
 }
 
@@ -252,11 +205,11 @@ button.gt-kv__row {
 }
 
 .gt-group + .gt-group {
-  @include inset-hairline(16px);
+  @include rows.inset-hairline(16px);
 }
 
 .gt-kv__group .gt-group + .gt-group {
-  @include inset-hairline(32px);
+  @include rows.inset-hairline(32px);
 }
 
 .gt-group__label {
