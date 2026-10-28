@@ -77,7 +77,7 @@ Conventions for every component:
 
 ### Panels
 
-- Settings and forms use one panel per save unit (see Settings sections). Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
+- Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
 - A panel title that repeats the tab or page it sits in is left out. If the header still has actions, a muted fact leads it in `slot="lead"` (a list's count: "2 alerts", ICU plural with a named placeholder), so an action never sits in an empty strip. If there are no actions either, there is no header.
 - Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
@@ -128,9 +128,10 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 
 - A section description must say something the title and control do not (a consequence, a limit, non-obvious behaviour). Otherwise omit it.
 - One panel per save unit: a section with its own Save, Add or Connect is a `panel` section, its action on the right of the tinted footer. A section that saves on change (toggles, a theme choice) is a panel with no footer. Panels stack 16px apart; fields keep the 560px column.
-- A list (members, projects, environments, emails, keys, tokens, alerts) is its own panel, `flush` while it has rows, with a `flush` `gt-list` inside so only the panel draws a border. The field that adds to it is a separate panel above it, with Add in the footer. A "New X" entry button goes in the list panel's header actions (`slot="header-actions"` on a section, `slot="actions"` on a plain `gt-panel`).
+- A list (members, projects, environments, emails, keys, tokens, alerts) is its own panel, `flush` while it has rows, with a `flush` `gt-list` inside so only the panel draws a border. The field that adds to it is a separate panel above it, with Add in the footer. Header actions go in `slot="header-actions"` on a section, `slot="actions"` on a plain `gt-panel`.
 - The first section in its container sits flush with what is above it. Content starts 16px under a tab bar, from one global `mat-tab-nav-panel` rule; pages do not pad their own panel.
 - The section title is a lone field's only visible label, linked with `aria-labelledby`. A title hidden because it repeats the tab uses `hideTitle`, so the label still reaches screen readers.
+- A settings panel's title sits at the top of its body, not in a separate title bar.
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
 - Save-on-change disables the control while saving, is silent on success, and on failure rolls back and shows `gt-form-error` under the control.
@@ -140,22 +141,15 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
 - In a `gt-form-panel`, field sections are direct children of the panel so the hairlines between them show.
 - Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the bottom of the form panel's body, on create and edit forms alike. A settings section's own error goes in its `error` slot, at the bottom of its body above the footer.
-- An empty list uses `gt-empty-state`.
 - Create forms are titled New X, edit forms Edit X; the back link names where you return to.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
 - An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
-
-### Surfaces
-
-- Page structure (headers, settings sections, forms, empty states) sits directly on the page surface, separated by space or a hairline.
-- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
-- A card with a title bar is not used for a page section; the section's title sits above its container.
-- A form saved with a button stays flat; the button beside its field shows what it saves. A border only groups things that have no button to do it: rows of records, and rows of settings that save on change.
 
 ### Lists
 
 A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, optional muted facts, then the actions at the end. An optional description line sits under the name.
 
+- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
 - A row that opens its record makes the name the link, written `<a gtListRowLink>`. That makes the row navigable: the link's hit area covers the whole row, hovering the row draws the on-surface 8% state layer and underlines the name, keyboard focus rings the row. The link stays the only tab stop; row actions sit above the hit area and keep their own clicks. No separate Edit or View button repeats the link, and no chevron: a chevron means a row expands.
 - A navigable row's meta is text. A control in the row (a copy button, a menu) goes in the actions slot, which sits above the hit area.
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
