@@ -4,10 +4,10 @@
 @use "./assets/styles/theme-colors" as custom-theme;
 @use "./assets/styles/material-overrides";
 @use "./assets/styles/variables" as vars;
-@use "./assets/styles/object-header";
 @use "./assets/styles/font-files";
 @use "./assets/styles/page-header";
 @use "./assets/styles/resets";
+@use "./assets/styles/list-row";
 @use "./scss/auth-forms";
 
 html {
@@ -269,33 +269,6 @@ mat-sidenav-container {
   margin: 0 0 var(--gt-space-3, 12px);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
-}
-
-// Create action above a list inside a record's tab.
-.gt-list-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gt-space-2, 8px);
-  margin-bottom: var(--gt-space-4, 16px);
-}
-
-// Each gt-list-row meta fact is its own span; the separators are drawn here so
-// translators never see them. Global, as the spans belong to the caller.
-gt-list-row [slot="meta"] {
-  display: inline-flex;
-}
-
-gt-list-row [slot="meta"] > * {
-  position: relative;
-  white-space: nowrap;
-}
-
-gt-list-row [slot="meta"] > :not(:first-child) {
-  margin-left: var(--gt-space-4, 16px);
-
-  &::before {
-    @include object-header.separator;
-  }
 }
 
 .full-width {
