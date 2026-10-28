@@ -416,6 +416,15 @@ gt-issue-chart {
 }
 
 .comment-markdown {
+  // Sits under the comment's header row: trim the outer paragraph margins.
+  > :first-child {
+    margin-top: var(--gt-space-1, 4px);
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
   ul {
     list-style: disc outside;
     padding-left: 20px;

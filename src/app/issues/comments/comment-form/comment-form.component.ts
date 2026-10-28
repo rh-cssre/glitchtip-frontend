@@ -17,6 +17,8 @@ import { LoadingButtonComponent } from "../../../shared/loading-button/loading-b
 
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgTemplateOutlet } from "@angular/common";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 import { components } from "src/app/api/api-schema";
 
@@ -33,6 +35,8 @@ type Comment = components["schemas"]["CommentSchema"];
     MatInputModule,
     LoadingButtonComponent,
     MatButtonModule,
+    NgTemplateOutlet,
+    PanelComponent,
   ],
 })
 export class CommentFormComponent implements OnInit {
