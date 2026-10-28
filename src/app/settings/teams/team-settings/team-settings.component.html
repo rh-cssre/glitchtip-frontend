@@ -4,6 +4,7 @@
       #slugSection
       i18n-title
       title="Slug"
+      panel
       [inline]="canWriteTeam()"
     >
       @if (canWriteTeam()) {
@@ -44,7 +45,7 @@
   </form>
 
   @if (canAdminTeam()) {
-    <gt-settings-section i18n-title title="Delete team">
+    <gt-settings-section i18n-title title="Delete team" panel tone="danger">
       <span slot="description" i18n
         >Deletes <strong>#{{ team.slug }}</strong>. Its projects and members
         stay in the organization. This cannot be undone.</span

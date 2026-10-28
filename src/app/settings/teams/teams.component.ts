@@ -7,6 +7,7 @@ import {
   input,
 } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
+import { NgTemplateOutlet } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { NewTeamComponent } from "./new-team/new-team";
@@ -18,7 +19,10 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
@@ -32,8 +36,12 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
     TopAppBar,
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
     EmptyStateComponent,
+    PanelComponent,
+    SettingsSectionComponent,
     FormErrorComponent,
+    NgTemplateOutlet,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

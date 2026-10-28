@@ -1,11 +1,6 @@
 @if (orgSlug(); as orgSlug) {
   @if (canEditProjects()) {
-    <gt-settings-section
-      #addSection
-      i18n-title
-      title="Add project"
-      [inline]="true"
-    >
+    <gt-settings-section #addSection i18n-title title="Add project" panel>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-select
           [formControl]="project"
@@ -39,36 +34,41 @@
   }
   <gt-form-error [errors]="errors().removeProjectFromTeam" />
   @if (projectsOnTeam().length === 0) {
-    <gt-empty-state
-      icon="folder"
-      i18n-title
-      title="No team projects"
-      [message]="noProjectsMessage()"
-    />
+    <gt-panel>
+      <gt-empty-state
+        icon="folder"
+        i18n-title
+        title="No team projects"
+        [message]="noProjectsMessage()"
+      />
+    </gt-panel>
   } @else {
-    <gt-list>
-      @for (project of projectsOnTeam(); track project.id) {
-        <gt-list-row>
-          <a
-            [routerLink]="['/', orgSlug, 'issues']"
-            [queryParams]="{ project: project.id }"
-            >{{ project.name }}</a
-          >
-          @if (project.platform) {
-            <span slot="meta">{{ project.platform }}</span>
-          }
-          @if (canEditProjects()) {
-            <gt-loading-button
-              slot="actions"
-              i18n-buttonText
-              buttonText="Remove"
-              buttonStyle="stroked"
-              [loading]="project.slug === loading().removeProjectFromTeam"
-              (buttonClick)="removeProject(project.slug!, project.name)"
-            />
-          }
-        </gt-list-row>
-      }
-    </gt-list>
+    <gt-panel flush>
+      <gt-list flush>
+        @for (project of projectsOnTeam(); track project.id) {
+          <gt-list-row>
+            <a
+              gtListRowLink
+              [routerLink]="['/', orgSlug, 'issues']"
+              [queryParams]="{ project: project.id }"
+              >{{ project.name }}</a
+            >
+            @if (project.platform) {
+              <span slot="meta">{{ project.platform }}</span>
+            }
+            @if (canEditProjects()) {
+              <gt-loading-button
+                slot="actions"
+                i18n-buttonText
+                buttonText="Remove"
+                buttonStyle="stroked"
+                [loading]="project.slug === loading().removeProjectFromTeam"
+                (buttonClick)="removeProject(project.slug!, project.name)"
+              />
+            }
+          </gt-list-row>
+        }
+      </gt-list>
+    </gt-panel>
   }
 }

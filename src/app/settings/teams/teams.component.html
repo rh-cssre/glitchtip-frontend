@@ -16,95 +16,116 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <p class="page-intro" i18n
-    >Members of a team get email alerts for the team's projects. Access to
-    projects comes from
-    <a routerLink="../members">organization membership</a>.</p
-  >
+  <!-- Page orientation, shown in whichever list panel comes first. -->
+  <ng-template #teamsIntro>
+    <span i18n
+      >Members of a team get email alerts for the team's projects. Access to
+      projects comes from
+      <a routerLink="../members">organization membership</a>.</span
+    >
+  </ng-template>
   <gt-form-error
     [errors]="errors().removeTeamMember || errors().addTeamMember"
   />
   @if (yourTeams()?.length) {
-    <gt-list i18n-label label="Your Teams">
-      @for (yourTeam of yourTeams(); track yourTeam.id) {
-        <gt-list-row>
-          <a [routerLink]="[yourTeam.slug, 'members']">#{{ yourTeam.slug }}</a>
-          <span slot="meta">
-            <span i18n
-              >{yourTeam.memberCount, plural,
-                =1 {1 member}
-                other {{{ yourTeam.memberCount }} members}
-              }</span
+    <gt-settings-section i18n-title title="Your teams" panel flush>
+      <ng-container ngProjectAs="[slot=description]"
+        ><ng-container [ngTemplateOutlet]="teamsIntro"
+      /></ng-container>
+      <gt-list flush>
+        @for (yourTeam of yourTeams(); track yourTeam.id) {
+          <gt-list-row>
+            <a gtListRowLink [routerLink]="[yourTeam.slug, 'members']"
+              >#{{ yourTeam.slug }}</a
             >
-            <span i18n
-              >{projectCount(yourTeam.id), plural,
-                =1 {1 project}
-                other {{{ projectCount(yourTeam.id) }} projects}
-              }</span
-            >
-          </span>
-          @if (canLeaveTeam()) {
-            <gt-loading-button
-              slot="actions"
-              i18n-buttonText
-              buttonText="Leave Team"
-              buttonStyle="stroked"
-              [loading]="loading().removeTeamMember === yourTeam.slug"
-              (buttonClick)="leaveTeam(yourTeam.slug)"
-            />
-          }
-        </gt-list-row>
-      }
-    </gt-list>
+            <span slot="meta">
+              <span i18n
+                >{yourTeam.memberCount, plural,
+                  =1 {1 member}
+                  other {{{ yourTeam.memberCount }} members}
+                }</span
+              >
+              <span i18n
+                >{projectCount(yourTeam.id), plural,
+                  =1 {1 project}
+                  other {{{ projectCount(yourTeam.id) }} projects}
+                }</span
+              >
+            </span>
+            @if (canLeaveTeam()) {
+              <gt-loading-button
+                slot="actions"
+                i18n-buttonText
+                buttonText="Leave team"
+                buttonStyle="stroked"
+                [loading]="loading().removeTeamMember === yourTeam.slug"
+                (buttonClick)="leaveTeam(yourTeam.slug)"
+              />
+            }
+          </gt-list-row>
+        }
+      </gt-list>
+    </gt-settings-section>
   } @else if (otherTeams()?.length) {
-    <gt-empty-state
-      icon="groups"
-      i18n-title
-      title="No teams joined"
-      [message]="noTeamsJoinedMessage()"
-    />
+    <gt-panel>
+      <gt-empty-state
+        icon="groups"
+        i18n-title
+        title="No teams joined"
+        [message]="noTeamsJoinedMessage()"
+      />
+    </gt-panel>
   } @else {
-    <gt-empty-state
-      icon="groups"
-      i18n-title
-      title="No teams"
-      [message]="noTeamsMessage()"
-    />
+    <gt-panel>
+      <gt-empty-state
+        icon="groups"
+        i18n-title
+        title="No teams"
+        [message]="noTeamsMessage()"
+      />
+    </gt-panel>
   }
 
   @if (otherTeams()?.length) {
-    <gt-list i18n-label label="Other Teams">
-      @for (otherTeam of otherTeams(); track otherTeam.id) {
-        <gt-list-row>
-          <a [routerLink]="[otherTeam.slug, 'members']"
-            >#{{ otherTeam.slug }}</a
-          >
-          <span slot="meta">
-            <span i18n
-              >{otherTeam.memberCount, plural,
-                =1 {1 member}
-                other {{{ otherTeam.memberCount }} members}
-              }</span
-            >
-            <span i18n
-              >{projectCount(otherTeam.id), plural,
-                =1 {1 project}
-                other {{{ projectCount(otherTeam.id) }} projects}
-              }</span
-            >
-          </span>
-          @if (canJoinTeam()) {
-            <gt-loading-button
-              slot="actions"
-              i18n-buttonText
-              buttonText="Join Team"
-              buttonStyle="stroked"
-              [loading]="loading().addTeamMember === otherTeam.slug"
-              (buttonClick)="joinTeam(otherTeam.slug)"
-            />
-          }
-        </gt-list-row>
+    <gt-settings-section i18n-title title="Other teams" panel flush>
+      @if (!yourTeams()?.length) {
+        <ng-container ngProjectAs="[slot=description]"
+          ><ng-container [ngTemplateOutlet]="teamsIntro"
+        /></ng-container>
       }
-    </gt-list>
+      <gt-list flush>
+        @for (otherTeam of otherTeams(); track otherTeam.id) {
+          <gt-list-row>
+            <a gtListRowLink [routerLink]="[otherTeam.slug, 'members']"
+              >#{{ otherTeam.slug }}</a
+            >
+            <span slot="meta">
+              <span i18n
+                >{otherTeam.memberCount, plural,
+                  =1 {1 member}
+                  other {{{ otherTeam.memberCount }} members}
+                }</span
+              >
+              <span i18n
+                >{projectCount(otherTeam.id), plural,
+                  =1 {1 project}
+                  other {{{ projectCount(otherTeam.id) }} projects}
+                }</span
+              >
+            </span>
+            @if (canJoinTeam()) {
+              <gt-loading-button
+                slot="actions"
+                i18n-buttonText
+                buttonText="Join team"
+                buttonStyle="stroked"
+                [loading]="loading().addTeamMember === otherTeam.slug"
+                (buttonClick)="joinTeam(otherTeam.slug)"
+              />
+            }
+          </gt-list-row>
+        }
+      </gt-list>
+    </gt-settings-section>
   }
 </section>

@@ -18,9 +18,11 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 @Component({
   selector: "gt-team-projects",
@@ -35,7 +37,9 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
     LoadingButtonComponent,
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
     EmptyStateComponent,
+    PanelComponent,
     FormErrorComponent,
     SettingsSectionComponent,
   ],
