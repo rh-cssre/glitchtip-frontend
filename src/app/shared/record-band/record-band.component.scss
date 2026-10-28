@@ -1,0 +1,58 @@
+@use "controls";
+
+// Full bleed over the page inset; the page body drops its top margin for it.
+:host {
+  --gt-page-header-gap: 0;
+  container: record-band / inline-size;
+  display: flex;
+  flex-direction: column;
+  margin-inline: calc(var(--gt-page-inset) * -1);
+  padding: var(--gt-space-3, 12px) var(--gt-page-inset) 0;
+  background: var(--mat-sys-surface-container);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+// Without tabs, a gap before the content that follows.
+:host:has(.gt-record-band__tabs:empty) {
+  padding-bottom: var(--gt-space-1, 4px);
+  margin-bottom: var(--gt-space-4, 16px);
+}
+
+.gt-record-band__top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gt-space-4, 16px);
+  padding-bottom: var(--gt-space-2, 8px);
+}
+
+.gt-record-band__identity {
+  flex: 1;
+  min-width: 0;
+}
+
+// Key figures in the top right corner, behind a hairline.
+.gt-record-band__stats {
+  display: flex;
+  align-self: stretch;
+  gap: var(--gt-space-5, 24px);
+  padding-inline-start: var(--gt-space-5, 24px);
+  border-inline-start: 1px solid var(--mat-sys-outline-variant);
+
+  // Narrow bands show these as meta facts instead.
+  @include controls.narrow-band {
+    display: none;
+  }
+}
+
+.gt-record-band__summary {
+  padding-block: var(--gt-space-2, 8px);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.gt-record-band__stats,
+.gt-record-band__summary,
+.gt-record-band__tabs {
+  &:empty {
+    display: none;
+  }
+}
