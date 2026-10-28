@@ -1,6 +1,6 @@
 @use "@angular/material" as mat;
 
-// Outlined neutral: on-surface label and state layer, not primary.
+// Neutral outlined button; remove once !832 makes outlined buttons neutral.
 :host {
   @include mat.button-overrides(
     (

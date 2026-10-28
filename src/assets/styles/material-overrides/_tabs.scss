@@ -4,8 +4,9 @@
 @include mat.tabs-density(-1);
 
 // Tighter tab padding on phones so detail-page tabs fit without paginating.
+// No token for tab padding; the element selector outranks Material's own rule.
 @media screen and (max-width: vars.$small - 1) {
-  .mat-mdc-tab-link.mdc-tab {
+  a[mat-tab-link] {
     padding-inline: var(--gt-space-3, 12px);
   }
 }

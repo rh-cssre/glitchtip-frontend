@@ -9,7 +9,7 @@
     <gt-page-header [title]="release.version">
       <span slot="meta">
         @for (project of release.projects; track project.slug) {
-          <!-- Skip a project the version already names (checkout-api@2.4.0) -->
+          <!-- The version may already name the project -->
           @if (!release.version.startsWith(project.slug + "@")) {
             <span
               ><span class="chip">{{ project.slug }}</span></span

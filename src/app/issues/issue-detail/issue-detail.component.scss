@@ -1,3 +1,4 @@
+@use "issue-level";
 @use "variables" as vars;
 
 .issue-404 {
@@ -101,41 +102,21 @@ table.mat-table {
 .level-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 1px 8px 1px 6px;
+  gap: var(--gt-space-1, 4px);
+  padding: 1px var(--gt-space-2, 8px);
   border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 6px;
+  border-radius: var(--mat-sys-corner-extra-small);
   font: var(--mat-sys-label-medium);
   color: var(--mat-sys-on-surface);
 
-  &::before {
+  // The level bar leads the label.
+  &::after {
     content: "";
+    order: -1;
     width: 4px;
     height: 12px;
-    border-radius: 2px;
-    background-color: var(--level-color);
+    border-radius: var(--mat-sys-corner-full);
   }
 
-  &.level--sample {
-    --level-color: var(--gt-level-sample);
-  }
-  &.level--debug {
-    --level-color: var(--gt-level-debug);
-  }
-  &.level--info {
-    --level-color: var(--gt-level-info);
-  }
-  &.level--warning {
-    --level-color: var(--gt-level-warning);
-  }
-  &.level--error {
-    --level-color: var(--gt-level-error);
-  }
-
-  &.level--fatal::before {
-    background: repeating-linear-gradient(
-      var(--gt-level-fatal) 0 2px,
-      transparent 2px 4px
-    );
-  }
+  @include issue-level.accent;
 }
