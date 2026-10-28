@@ -16,7 +16,6 @@ import { MonitorResponseChart } from "../monitor-response-chart/monitor-response
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
@@ -28,11 +27,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { ListComponent } from "src/app/shared/list/list.component";
-import { ListRowComponent } from "src/app/shared/list/list-row.component";
-import { alertName } from "src/app/settings/projects/project-detail/project-alerts/alert-labels";
-import { AlertRecipientsComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-recipients/alert-recipients.component";
-import { AlertSummaryComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-summary/alert-summary.component";
+import { AlertListComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-list/alert-list.component";
 import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
@@ -52,7 +47,6 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     TimeForPipe,
     DecimalPipe,
     MatButtonModule,
-    MatIconModule,
     MonitorChartComponent,
     MatProgressSpinnerModule,
     PageHeaderComponent,
@@ -62,10 +56,7 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     FormErrorComponent,
     TopAppBar,
     BackLinkComponent,
-    ListComponent,
-    ListRowComponent,
-    AlertRecipientsComponent,
-    AlertSummaryComponent,
+    AlertListComponent,
   ],
 })
 export class MonitorDetailComponent
@@ -131,7 +122,6 @@ export class MonitorDetailComponent
   });
   monitorAlerts = this.service.monitorAlerts;
   uptimeAlertCount = this.service.uptimeAlertCount;
-  alertName = alertName;
   alertCountLoading = this.service.alertCountLoading;
   alertsError = this.service.alertsError;
   associatedProjectSlug = this.service.associatedProjectSlug;

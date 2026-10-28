@@ -140,18 +140,20 @@
         }
         @case ("alerts") {
           @if (!monitor.projectName) {
-            <gt-empty-state
-              icon="share_eta"
-              i18n-title
-              title="No associated project"
-              [message]="noProjectMessage()"
-            >
-              @if (canWriteProject()) {
-                <a mat-stroked-button [routerLink]="['./update']" i18n
-                  >Edit monitor</a
-                >
-              }
-            </gt-empty-state>
+            <gt-panel>
+              <gt-empty-state
+                icon="share_eta"
+                i18n-title
+                title="No associated project"
+                [message]="noProjectMessage()"
+              >
+                @if (canWriteProject()) {
+                  <a mat-stroked-button [routerLink]="['./update']" i18n
+                    >Edit monitor</a
+                  >
+                }
+              </gt-empty-state>
+            </gt-panel>
           } @else if (alertsError()) {
             <gt-form-error
               i18n-errors
@@ -162,58 +164,18 @@
               <mat-progress-spinner [diameter]="40" mode="indeterminate" />
             </div>
           } @else if (associatedProjectSlug(); as associatedProjectSlug) {
-            @if (monitorAlerts().length) {
-              <p class="page-intro" i18n
-                >Alerts from <b>{{ monitor.projectName }}</b> that fire when
-                this monitor goes down.</p
-              >
-            }
-            @if (canWriteProject()) {
-              <div class="gt-list-actions">
-                <a
-                  mat-stroked-button
-                  id="create-new-alert"
-                  [routerLink]="[
-                    '../../settings/projects/',
-                    associatedProjectSlug,
-                  ]"
-                  [queryParams]="{ tab: 'alerts', alert: 'new' }"
-                >
-                  <mat-icon>add</mat-icon>
-                  <ng-container i18n>New alert</ng-container>
-                </a>
-              </div>
-            }
-            @if (monitorAlerts().length) {
-              <gt-list>
-                @for (alert of monitorAlerts(); track alert.id) {
-                  <gt-list-row>
-                    @if (canWriteProject()) {
-                      <a
-                        [routerLink]="[
-                          '../../settings/projects/',
-                          associatedProjectSlug,
-                        ]"
-                        [queryParams]="{ tab: 'alerts', alert: alert.id }"
-                        >{{ alertName(alert) }}</a
-                      >
-                    } @else {
-                      <span>{{ alertName(alert) }}</span>
-                    }
-                    <gt-alert-recipients [recipients]="alert.alertRecipients" />
-                    <gt-alert-summary slot="description" [alert]="alert" />
-                  </gt-list-row>
-                }
-              </gt-list>
-            } @else {
-              <gt-empty-state
-                icon="share_eta"
-                i18n-title
-                title="No uptime alerts"
-                i18n-message
-                message="None of this project's alerts fire when this monitor goes down."
-              />
-            }
+            <!-- Alerts are edited on the project's Alerts tab. -->
+            <gt-alert-list
+              [alerts]="monitorAlerts()"
+              [projectName]="monitor.projectName"
+              [canWrite]="canWriteProject()"
+              [link]="['../../settings/projects/', associatedProjectSlug]"
+              [linkParams]="{ tab: 'alerts' }"
+              i18n-emptyTitle
+              emptyTitle="No uptime alerts"
+              i18n-emptyMessage
+              emptyMessage="None of this project's alerts fire when this monitor goes down."
+            />
           }
         }
       }
