@@ -1,11 +1,4 @@
-@use "variables" as vars;
-
 .token-value {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gt-space-1, 4px);
-
-  code {
-    font-family: vars.$font-mono;
-  }
+  display: block;
+  margin-top: var(--gt-space-1, 4px);
 }
