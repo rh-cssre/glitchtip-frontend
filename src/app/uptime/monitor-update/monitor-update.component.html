@@ -27,7 +27,7 @@
           This cannot be undone.</span
         >
         @if (deleteError()) {
-          <gt-form-error [errors]="deleteError()" />
+          <gt-form-error slot="error" [errors]="deleteError()" />
         }
         <gt-loading-button
           slot="actions"
