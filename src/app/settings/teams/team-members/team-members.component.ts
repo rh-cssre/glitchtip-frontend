@@ -15,7 +15,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { UserService } from "src/app/api/user/user.service";
-import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
@@ -74,7 +75,9 @@ export class TeamMembersComponent implements OnInit {
       : $localize`Ask an organization manager or owner to add members to this team.`,
   );
 
-  member = new FormControl<Member | null>(null, Validators.required);
+  member = new FormControl<Member | null>(null);
+  /** Add stays disabled until something is picked. */
+  readonly picked = toSignal(this.member.valueChanges, { initialValue: null });
   orgSlug = "";
   teamSlug = "";
   removeMemberError = signal("");
@@ -105,7 +108,6 @@ export class TeamMembersComponent implements OnInit {
   async addTeamMember() {
     const member = this.member.value;
     if (!member) {
-      this.member.markAsTouched();
       return;
     }
     this.loading.set(true);

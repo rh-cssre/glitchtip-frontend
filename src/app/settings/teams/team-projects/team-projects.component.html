@@ -16,7 +16,6 @@
             <mat-option disabled i18n>No projects</mat-option>
           }
         </mat-select>
-        <mat-error i18n>Choose a project to add.</mat-error>
       </mat-form-field>
       @if (errors().addProjectToTeam) {
         <gt-form-error slot="error" [errors]="errors().addProjectToTeam" />
@@ -27,6 +26,7 @@
         buttonText="Add project"
         buttonStyle="stroked"
         [loading]="loading().addProjectToTeam"
+        [disabled]="!picked()"
         (buttonClick)="addProject()"
         data-cy="add-team-project"
       />

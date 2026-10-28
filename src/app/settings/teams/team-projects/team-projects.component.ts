@@ -7,7 +7,8 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectSettingsService } from "../../projects/project-settings.service";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { MatDialog } from "@angular/material/dialog";
@@ -57,7 +58,9 @@ export class TeamProjectsComponent implements OnInit {
   projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
   loading = this.projectsService.addRemoveLoading;
   errors = this.projectsService.errors;
-  project = new FormControl<string | null>(null, Validators.required);
+  project = new FormControl<string | null>(null);
+  /** Add stays disabled until something is picked. */
+  readonly picked = toSignal(this.project.valueChanges, { initialValue: null });
   // Adding and removing go through project endpoints that require org:write.
   noProjectsMessage = computed(() =>
     this.canEditProjects()
@@ -76,7 +79,6 @@ export class TeamProjectsComponent implements OnInit {
   async addProject() {
     const projectSlug = this.project.value;
     if (!projectSlug) {
-      this.project.markAsTouched();
       return;
     }
     await this.projectsService.addProjectToTeam(

@@ -21,7 +21,6 @@
           <mat-option disabled i18n>No members</mat-option>
         }
       </mat-select>
-      <mat-error i18n>Choose a member to add.</mat-error>
     </mat-form-field>
     @if (addMemberError()) {
       <gt-form-error slot="error" [errors]="addMemberError()" />
@@ -33,6 +32,7 @@
       buttonStyle="stroked"
       [loading]="loading()"
       (buttonClick)="addTeamMember()"
+      [disabled]="!picked()"
       data-cy="add-team-member"
     />
   </gt-settings-section>
