@@ -36,6 +36,7 @@ export class MergedService {
     },
   });
   hashes = computed(() => this.hashesResource.value() || []);
+  loading = computed(() => this.hashesResource.isLoading());
 
   setParams(orgSlug: string, issueID: string) {
     this.orgSlug.set(orgSlug);

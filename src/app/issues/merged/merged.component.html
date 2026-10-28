@@ -1,27 +1,53 @@
-<button
-  mat-stroked-button
-  (click)="unmerge()"
-  [disabled]="!allowUnmerge()"
-  class="unmerge-button"
-  i18n
-  >Unmerge</button
->
-<div class="merged-items-list">
-  @for (hash of hashes(); track hash.id; let i = $index) {
-    <div class="merged-item">
-      <div class="merged-item-checkbox">
-        <mat-checkbox (change)="toggleCheck(hash.id)" [checked]="false" />
-      </div>
-      <div class="merged-item-details">
-        <div>{{ hash.id }}</div>
-        <div>
-          @if (hash.latestEvent?.title) {
-            <b>{{ hash.latestEvent?.title }}</b>
-          } @else {
-            <b i18n>No title found for this merged issue</b>
-          }
-        </div>
-      </div>
-    </div>
-  }
-</div>
+@if (hashes().length > 1) {
+  <gt-panel flush>
+    <span slot="actions" class="merged__count" i18n
+      >{{ selectedCount() }} of {{ hashes().length }} selected</span
+    >
+    <button
+      slot="actions"
+      mat-stroked-button
+      type="button"
+      (click)="unmerge()"
+      [disabled]="!allowUnmerge()"
+      i18n
+      >Unmerge</button
+    >
+    <gt-list flush>
+      @for (hash of hashes(); track hash.id) {
+        <gt-list-row>
+          <mat-checkbox
+            class="merged__check"
+            (change)="toggleCheck(hash.id)"
+            [checked]="false"
+            i18n-aria-label
+            aria-label="Select {{ hash.id }}"
+          />
+          <span class="merged__title">
+            @if (hash.latestEvent?.title) {
+              {{ hash.latestEvent?.title }}
+            } @else {
+              <ng-container i18n
+                >No title found for this merged issue</ng-container
+              >
+            }
+          </span>
+          <span slot="description" class="merged__hash">{{ hash.id }}</span>
+        </gt-list-row>
+      }
+    </gt-list>
+    <span slot="footer-hint" i18n
+      >Unmerging moves the selected hashes and their events to a new issue. Keep
+      at least one hash on this issue.</span
+    >
+  </gt-panel>
+} @else if (!loading()) {
+  <gt-panel>
+    <gt-empty-state
+      icon="breaking_news"
+      i18n-title
+      title="Nothing merged"
+      i18n-message
+      message="Merge similar issues from the issue list. Their hashes show here and can be split off again."
+    />
+  </gt-panel>
+}
