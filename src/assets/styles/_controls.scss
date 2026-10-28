@@ -52,17 +52,22 @@ $wide-panel: 719px;
   }
 }
 
-// M3 state layer on our own interactive surfaces; opacity comes from the theme.
-@mixin state-layer($state: hover) {
+// M3 state layer colour; the value form is for Material tokens such as ripple colours.
+@function state-layer-color($state: hover) {
   @if not list.index((hover, focus, pressed), $state) {
     @error "state-layer: unknown state #{$state}";
   }
-  background-color: color-mix(
+  @return color-mix(
     in srgb,
     var(--mat-sys-on-surface)
       calc(var(--mat-sys-#{$state}-state-layer-opacity) * 100%),
     transparent
   );
+}
+
+// M3 state layer on our own interactive surfaces; opacity comes from the theme.
+@mixin state-layer($state: hover) {
+  background-color: state-layer-color($state);
 }
 
 // Square mat-icon size; put it on a class the component owns.
