@@ -3,11 +3,20 @@
 
 :host {
   display: block;
+  // Lets panel content use container queries on the panel's own width.
+  container: gt-panel / inline-size;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: vars.$shape-radius;
-  background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   overflow: hidden;
+}
+
+:host(.gt-panel--danger) {
+  border-color: color-mix(
+    in srgb,
+    var(--mat-sys-error) 40%,
+    var(--mat-sys-outline-variant)
+  );
 }
 
 .gt-panel__header {
@@ -18,9 +27,11 @@
   box-sizing: border-box;
   padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
   border-bottom: 1px solid var(--mat-sys-outline-variant);
+  // Strips sit one step above the body, which shows the page colour.
+  background: var(--mat-sys-surface-container-high);
 
-  // No title and nothing projected into the actions slot: no header at all.
-  &:not(:has(.gt-panel__title, .gt-panel__actions > *)) {
+  // Nothing to show: no header at all.
+  &:not(:has(.gt-panel__title, .gt-panel__lead > *, .gt-panel__actions > *)) {
     display: none;
   }
 }
@@ -32,6 +43,22 @@
   letter-spacing: var(--mat-sys-title-small-tracking);
   font-weight: 600;
   color: var(--mat-sys-on-surface);
+}
+
+// Leads a titleless header so its actions never sit in an empty strip.
+.gt-panel__lead {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: var(--mat-sys-body-medium);
+  letter-spacing: var(--mat-sys-body-medium-tracking);
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:empty {
+    display: none;
+  }
 }
 
 // Header controls are 32px, like the top app bar.
@@ -66,5 +93,43 @@
 
   &--flush {
     padding: 0;
+  }
+}
+
+.gt-panel__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+  padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-high);
+
+  &:not(:has(.gt-panel__hint > *, .gt-panel__footer-actions > *)) {
+    display: none;
+  }
+}
+
+.gt-panel__hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: var(--mat-sys-body-small);
+  letter-spacing: var(--mat-sys-body-small-tracking);
+  color: var(--mat-sys-on-surface-variant);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.gt-panel__footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  margin-left: auto;
+
+  &:empty {
+    display: none;
   }
 }

@@ -42,7 +42,7 @@ export class ProfilWrapperComponent {
     inject(Router).events.pipe(
       filter((event) => event instanceof NavigationEnd),
       startWith(null),
-      map(() => this.route.firstChild?.snapshot.data),
+      map(() => this.route.firstChild?.snapshot?.data),
     ),
   );
   title = computed(() => this.childData()?.["title"] as string | undefined);
