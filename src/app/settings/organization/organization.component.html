@@ -66,7 +66,10 @@
           of its projects, teams and events. This cannot be undone.</span
         >
         @if (errors().deleteOrganization) {
-          <gt-form-error [errors]="errors().deleteOrganization" />
+          <gt-form-error
+            slot="error"
+            [errors]="errors().deleteOrganization"
+          />
         }
         <gt-loading-button
           slot="actions"
