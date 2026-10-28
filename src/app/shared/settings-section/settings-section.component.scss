@@ -23,8 +23,7 @@
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
 
-  // Projected gt-form-error hosts stay in the DOM with no messages.
-  &:not(:has(> :not(:empty))) {
+  &:empty {
     display: none;
   }
 }
@@ -57,7 +56,8 @@
 .settings-section__error {
   width: 100%;
 
-  &:empty {
+  // Projected gt-form-error hosts stay in the DOM with no messages.
+  &:not(:has(> :not(:empty))) {
     display: none;
   }
 }
