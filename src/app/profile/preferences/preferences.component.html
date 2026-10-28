@@ -2,7 +2,7 @@
   <!-- One form per section, all on the same FormGroup, so Enter saves only
        the section it was pressed in. -->
   <form [formGroup]="form" (ngSubmit)="save('name')">
-    <gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
+    <gt-settings-section #nameSection i18n-title title="Name" panel>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <input
           matInput
@@ -26,7 +26,7 @@
       #timeZoneSection
       i18n-title
       title="Time zone"
-      [inline]="true"
+      panel
     >
       <span slot="description" i18n
         >Your system time zone is {{ currentTimeZone }}</span
@@ -76,7 +76,7 @@
 
   <!-- The theme previews itself, so it saves on click without a button. -->
   <div [formGroup]="form">
-    <gt-settings-section #themeSection i18n-title title="Theme">
+    <gt-settings-section #themeSection i18n-title title="Theme" panel>
       <mat-button-toggle-group
         formControlName="theme"
         [attr.aria-labelledby]="themeSection.titleId"

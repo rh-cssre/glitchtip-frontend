@@ -2,6 +2,8 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTableModule } from "@angular/material/table";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 import { DoDontComponent } from "../docs/do-dont.component";
@@ -14,8 +16,18 @@ interface SpanRow {
 }
 
 const SPAN_ROWS: SpanRow[] = [
-  { op: "db.query", description: "SELECT * FROM orders", count: 412, total: "8.2s" },
-  { op: "http.client", description: "POST /v1/charges", count: 40, total: "5.1s" },
+  {
+    op: "db.query",
+    description: "SELECT * FROM orders",
+    count: 412,
+    total: "8.2s",
+  },
+  {
+    op: "http.client",
+    description: "POST /v1/charges",
+    count: 40,
+    total: "5.1s",
+  },
   { op: "cache.get", description: "cart:session", count: 388, total: "0.4s" },
 ];
 
@@ -26,6 +38,8 @@ const SPAN_ROWS: SpanRow[] = [
     MatButtonModule,
     MatTableModule,
     MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
     PreviewDocComponent,
     DoDontComponent,
   ],
@@ -40,7 +54,8 @@ const SPAN_ROWS: SpanRow[] = [
       }
       .pn-chart__bar {
         flex: 1;
-        border-radius: var(--mat-sys-corner-extra-small) var(--mat-sys-corner-extra-small) 0 0;
+        border-radius: var(--mat-sys-corner-extra-small)
+          var(--mat-sys-corner-extra-small) 0 0;
         background: color-mix(in srgb, var(--mat-sys-primary) 60%, transparent);
       }
       .pn-table {
@@ -59,6 +74,24 @@ const SPAN_ROWS: SpanRow[] = [
       }
       .pn-dd {
         width: 100%;
+      }
+      .pn-stack {
+        display: grid;
+        gap: var(--gt-space-3, 12px);
+      }
+      .pn-title {
+        margin: 0;
+        font: var(--mat-sys-title-medium);
+        font-weight: 600;
+      }
+      .pn-text {
+        margin: 0;
+        font: var(--mat-sys-body-medium);
+        color: var(--mat-sys-on-surface-variant);
+      }
+      .pn-field {
+        width: 100%;
+        max-width: 560px;
       }
     `,
   ],
@@ -121,10 +154,46 @@ const SPAN_ROWS: SpanRow[] = [
       </div>
 
       <div class="preview-section">
+        <div class="preview-section__title"
+          >Settings save unit with a footer</div
+        >
+        <gt-panel>
+          <div class="pn-stack">
+            <h3 class="pn-title">Name</h3>
+            <mat-form-field
+              class="pn-field"
+              appearance="outline"
+              subscriptSizing="dynamic"
+            >
+              <input matInput value="Acme Shop" aria-label="Name" />
+            </mat-form-field>
+          </div>
+          <span slot="footer-hint">Up to 64 characters.</span>
+          <button slot="footer" mat-stroked-button>Save name</button>
+        </gt-panel>
+      </div>
+
+      <div class="preview-section">
+        <div class="preview-section__title">Danger tone</div>
+        <gt-panel tone="danger">
+          <div class="pn-stack">
+            <h3 class="pn-title">Delete organization</h3>
+            <p class="pn-text">
+              Deletes Acme Shop and all of its projects, teams and events. This
+              cannot be undone.
+            </p>
+          </div>
+          <button slot="footer" mat-stroked-button color="warn">
+            Delete organization
+          </button>
+        </gt-panel>
+      </div>
+
+      <div class="preview-section">
         <div class="preview-section__title">Where it belongs</div>
         <preview-do-dont
           doCaption="Use a panel for charts and data blocks."
-          dontCaption="Don't wrap settings sections, forms or lists in one. They sit on the page."
+          dontCaption="Don't wrap a whole settings page in one. Each save unit gets its own panel."
         >
           <gt-panel slot="do" class="pn-dd" title="Response time">
             <div class="pn-chart" aria-hidden="true">
@@ -160,14 +229,16 @@ export class PanelPreview {
     "Give it a short sentence-case title that names the data",
     "Use flush when the body draws its own rows, so the table runs edge to edge",
     "Keep header actions to one or two small controls",
+    "Put a settings panel's Save in the footer, right aligned",
   ];
   readonly donts = [
-    "Wrap settings sections, forms or lists in a panel",
+    "Wrap a whole settings page in one panel; give each save unit its own",
     "Nest a panel inside another panel",
     "Use mat-card for new work; use a panel or no container",
   ];
-  readonly anatomy = `Header (title + actions slot, only when either is set)
-Body (padded, or flush)`;
+  readonly anatomy = `Header (tinted; title or lead, then actions, only when one is set)
+Body (padded, or flush)
+Footer (tinted; hint left, actions right, only when either is set)`;
   readonly api: ApiRow[] = [
     {
       name: "title",
@@ -188,10 +259,35 @@ Body (padded, or flush)`;
       description: "Removes body padding for tables and row lists",
     },
     {
+      name: "tone",
+      type: '"default" | "danger"',
+      default: '"default"',
+      description: "Danger tints the border for a destructive save unit",
+    },
+    {
+      name: '[slot="footer"]',
+      type: "projected",
+      default: "",
+      description: "Footer actions, right aligned on a tinted strip",
+    },
+    {
+      name: '[slot="footer-hint"]',
+      type: "projected",
+      default: "",
+      description: "Short muted note on the left of the footer",
+    },
+    {
       name: '[slot="actions"]',
       type: "projected",
       default: "",
       description: "Header controls, right aligned at 32px",
+    },
+    {
+      name: '[slot="lead"]',
+      type: "projected",
+      default: "",
+      description:
+        "Muted fact that leads a header with no title, such as a list's count (2 alerts), so the actions never sit in an empty strip",
     },
     {
       name: "(default)",

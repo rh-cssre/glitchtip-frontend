@@ -38,3 +38,41 @@
     display: none;
   }
 }
+
+// One line for settings pages; the facts drop under the title when it runs out
+// of room.
+:host(.page-header--compact) {
+  .page-header {
+    gap: var(--gt-space-3, 12px);
+    margin-bottom: var(--gt-space-4, 16px);
+  }
+
+  .page-header__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--mat-sys-corner-small);
+
+    mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+  }
+
+  .page-header__text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px var(--gt-space-3, 12px);
+  }
+
+  .page-header__title {
+    font: var(--mat-sys-title-large);
+    font-weight: 500;
+    letter-spacing: var(--mat-sys-title-large-tracking);
+  }
+
+  .page-header__meta {
+    margin-top: 0;
+  }
+}

@@ -4,7 +4,7 @@
       #connectSection
       i18n-title
       title="Connect an account"
-      [inline]="true"
+      panel
     >
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-select
@@ -37,12 +37,13 @@
   }
   @if (socialApps().length || user.identities.length) {
     <gt-settings-section
-      [class.gt-settings-continued]="socialApps().length"
       i18n-title
       title="Connected accounts"
+      panel
+      [flush]="user.identities.length > 0"
     >
       @if (user.identities.length) {
-        <gt-list>
+        <gt-list flush>
           @for (socialAccount of user.identities; track socialAccount.id) {
             <gt-list-row>
               <gt-auth-svg
