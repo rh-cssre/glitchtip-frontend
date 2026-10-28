@@ -86,3 +86,21 @@ export function handleError(
   }
   return { detail: [{ msg: UNHANDLED_ERROR }] };
 }
+
+/**
+ * One readable line for a failed request: the server's message when it sent
+ * one, otherwise `fallback`, which names what failed.
+ */
+export function apiErrorMessage(
+  error: unknown,
+  response: Response,
+  fallback: string,
+): string {
+  if (!error || typeof error !== "object" || !("detail" in error)) {
+    return fallback;
+  }
+  const msg: unknown = handleError(error, response).detail[0]?.msg;
+  return typeof msg === "string" && msg && msg !== UNHANDLED_ERROR
+    ? msg
+    : fallback;
+}

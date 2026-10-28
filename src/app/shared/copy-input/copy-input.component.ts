@@ -8,6 +8,7 @@ import {
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 /**
  * A read-only input that allows the user to copy it's value
@@ -16,7 +17,13 @@ import { MatInputModule } from "@angular/material/input";
   selector: "gt-copy-input",
   templateUrl: "./copy-input.component.html",
   styleUrls: ["./copy-input.component.scss"],
-  imports: [ClipboardModule, MatIconModule, MatInputModule, MatButtonModule],
+  imports: [
+    ClipboardModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTooltipModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyInputComponent {
