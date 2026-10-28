@@ -7,7 +7,6 @@ import {
   input,
 } from "@angular/core";
 import { TeamsService } from "src/app/api/teams/teams.service";
-import { NgTemplateOutlet } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { NewTeamComponent } from "./new-team/new-team";
@@ -41,7 +40,6 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
     PanelComponent,
     SettingsSectionComponent,
     FormErrorComponent,
-    NgTemplateOutlet,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -69,6 +67,23 @@ export class TeamsComponent {
     return counts;
   });
   errors = this.organizationDetailService.errors;
+  /** Your teams, then the others; a group with no teams is left out. */
+  sections = computed(() =>
+    [
+      {
+        joined: true,
+        title: $localize`Your teams`,
+        teams: this.yourTeams() ?? [],
+        error: this.errors().removeTeamMember,
+      },
+      {
+        joined: false,
+        title: $localize`Other teams`,
+        teams: this.otherTeams() ?? [],
+        error: this.errors().addTeamMember,
+      },
+    ].filter((section) => section.teams.length),
+  );
   loading = this.organizationDetailService.loading;
   canWriteTeam = this.organizationsService.canWriteTeam;
   // Mirrors the backend: open membership lets anyone join or leave; otherwise
@@ -101,7 +116,6 @@ export class TeamsComponent {
       ? $localize`Create a team to choose who gets alerts for each project.`
       : $localize`Ask an organization manager or owner to create one.`,
   );
-
 
   constructor() {
     effect(() => {
