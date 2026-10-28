@@ -12,6 +12,7 @@ import { LoadingButtonComponent } from "../../shared/loading-button/loading-butt
 import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
@@ -37,6 +38,7 @@ type Member = components["schemas"]["OrganizationUserSchema"];
     StatusPillComponent,
     LoadingButtonComponent,
     TopAppBar,
+    PanelComponent,
     ListComponent,
     ListRowComponent,
     ListRowLinkComponent,
