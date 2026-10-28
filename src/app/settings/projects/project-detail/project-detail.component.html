@@ -28,8 +28,9 @@
           queryParamsHandling="merge"
           replaceUrl
           >{{ t.label }}
-          @if (t.id === "dsn" && projectKeys(); as keys) {
-            <span class="tab-count">{{ keys.length }}</span>
+          @let count = tabCounts()[t.id];
+          @if (count !== null && count !== undefined) {
+            <span class="tab-count">{{ count }}</span>
           }
         </a>
       }

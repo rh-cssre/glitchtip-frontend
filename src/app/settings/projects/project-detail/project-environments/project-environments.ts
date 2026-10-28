@@ -27,7 +27,6 @@ import { PanelComponent } from "src/app/shared/panel/panel.component";
     EmptyStateComponent,
     PanelComponent,
   ],
-  providers: [ProjectEnvironmentsService],
 })
 export class ProjectEnvironments implements OnInit {
   showText = $localize`Show`;

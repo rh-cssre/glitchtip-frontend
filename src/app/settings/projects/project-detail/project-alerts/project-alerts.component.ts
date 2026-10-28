@@ -28,7 +28,6 @@ import { AlertListComponent } from "./alert-list/alert-list.component";
     AlertListComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ProjectAlertsService, ProjectEnvironmentsService],
 })
 export class ProjectAlertsComponent implements OnInit {
   #service = inject(ProjectAlertsService);
