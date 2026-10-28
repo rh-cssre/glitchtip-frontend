@@ -11,6 +11,7 @@ import { MatIconModule } from "@angular/material/icon";
 @Component({
   selector: "gt-empty-state",
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { "[attr.title]": "null" },
   imports: [MatIconModule],
   template: `
     <div class="empty-state">

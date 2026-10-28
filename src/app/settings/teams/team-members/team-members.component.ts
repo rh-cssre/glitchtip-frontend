@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  computed,
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
@@ -18,6 +19,7 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatCardModule } from "@angular/material/card";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-team-members",
@@ -33,6 +35,7 @@ import { MatCardModule } from "@angular/material/card";
     MatDividerModule,
     RouterLink,
     LoadingButtonComponent,
+    EmptyStateComponent,
   ],
 })
 export class TeamMembersComponent implements OnInit {
@@ -45,6 +48,11 @@ export class TeamMembersComponent implements OnInit {
   teamMembers = this.teamsService.teamMembers;
   filteredAddTeamMembers = this.organizationsService.filteredAddTeamMembers;
   canModifyTeam = this.teamsService.canModifyTeam;
+  noMembersMessage = computed(() =>
+    this.canModifyTeam()
+      ? $localize`Add organization members to this team so they get alerts for its projects.`
+      : $localize`Ask an organization manager or owner to add members to this team.`,
+  );
 
   member = new FormControl();
   orgSlug = "";
