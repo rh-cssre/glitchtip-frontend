@@ -145,17 +145,11 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
 - An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
 
-### Surfaces
-
-- Page structure (headers, settings sections, forms, empty states) sits directly on the page surface, separated by space or a hairline.
-- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
-- A card with a title bar is not used for a page section; the section's title sits above its container.
-- A form saved with a button stays flat; the button beside its field shows what it saves. A border only groups things that have no button to do it: rows of records, and rows of settings that save on change.
-
 ### Lists
 
 A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, optional muted facts, then the actions at the end. An optional description line sits under the name.
 
+- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
 - A row that opens its record makes the name the link, written `<a gtListRowLink>`. That makes the row navigable: the link's hit area covers the whole row, hovering the row draws the on-surface 8% state layer and underlines the name, keyboard focus rings the row. The link stays the only tab stop; row actions sit above the hit area and keep their own clicks. No separate Edit or View button repeats the link, and no chevron: a chevron means a row expands.
 - A navigable row's meta is text. A control in the row (a copy button, a menu) goes in the actions slot, which sits above the hit area.
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
