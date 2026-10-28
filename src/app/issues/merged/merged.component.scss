@@ -1,5 +1,3 @@
-@use "variables" as vars;
-
 :host {
   display: block;
 }
@@ -23,6 +21,4 @@
 .merged__hash {
   display: block;
   padding-inline-start: 40px;
-  font-family: vars.$font-mono, monospace;
-  font-size: 0.8125rem;
 }
