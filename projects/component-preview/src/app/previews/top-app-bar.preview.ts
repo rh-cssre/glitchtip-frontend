@@ -96,7 +96,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       <gt-top-app-bar>
         <ng-container slot="left">
           <h1 class="gt-bar-title">
-            Issues <span class="tab-count">1,204</span>
+            <span class="gt-bar-title__text">Issues</span>
+            <span class="tab-count">1,204</span>
           </h1>
         </ng-container>
         <ng-container slot="right">
@@ -236,7 +237,7 @@ export class TopAppBarPreview {
   readonly dos = [
     "List pages: page heading in the left slot and one filled New X in the right slot",
     "Record pages: gt-back-link in the left slot, named with the parent page's nav label",
-    "Title a list page with .gt-bar-title (title-medium, the back link size) and put its count in a .tab-count badge, like tab counts",
+    "Title a list page with .gt-bar-title (title-medium, the back link size) and put its count in a .tab-count badge, like tab counts, with the text in .gt-bar-title__text so a long title ellipsizes",
     "Record pages: one extra action is a neutral 32px icon button with a tooltip and aria-label; two or more go in a More actions menu",
     "Show a record's status as an outlined neutral dropdown with the gt-status-pill dot",
     "Link a record to its edit page with an outlined Edit X",
