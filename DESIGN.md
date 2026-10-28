@@ -72,6 +72,7 @@ Conventions for every component:
 - Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
 - A panel title that repeats the tab or page it sits in is left out. If the header still has actions, a muted fact leads it in `slot="lead"` (a list's count: "2 alerts", ICU plural with a named placeholder), so an action never sits in an empty strip. If there are no actions either, there is no header.
 - Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
+- A muted fact about the panel's data (a count, a source: "Breadcrumbs · 28") goes in `subtitle`. The panel draws the middle dot, and the subtitle truncates before the title. Use `hideSubtitleNarrow` when it can go under 480px.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
 - A tab's content sits in panels. An empty state sits centred in an outline panel; an empty panel has no header.
 

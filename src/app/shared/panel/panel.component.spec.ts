@@ -39,4 +39,20 @@ describe("PanelComponent", () => {
     expect(render({}).classList).not.toContain("gt-panel--danger");
     expect(render({ tone: "danger" }).classList).toContain("gt-panel--danger");
   });
+
+  it("shows the subtitle after the title with its full text as a tooltip", () => {
+    const el = render({ title: "Breadcrumbs", subtitle: "28" });
+    const subtitle = el.querySelector(".gt-panel__subtitle")!;
+    expect(subtitle.textContent?.trim()).toBe("28");
+    expect(subtitle.getAttribute("title")).toBe("28");
+    expect(
+      render({ title: "Breadcrumbs" }).querySelector(".gt-panel__subtitle"),
+    ).toBeNull();
+  });
+
+  it("marks hideSubtitleNarrow on the host", () => {
+    expect(render({ hideSubtitleNarrow: true }).classList).toContain(
+      "gt-panel--hide-subtitle-narrow",
+    );
+  });
 });
