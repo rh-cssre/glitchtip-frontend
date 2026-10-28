@@ -8,15 +8,16 @@
   display: flow-root;
 }
 
-.heartbeat-title {
-  font: var(--mat-sys-title-small);
-  margin: 0 0 var(--gt-space-1, 4px);
-}
-
 .heartbeat-description {
+  max-width: var(--gt-measure, 70ch);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
   margin: 0 0 var(--gt-space-3, 12px);
+}
+
+// The endpoint field fills the panel.
+.heartbeat-endpoint {
+  display: block;
 }
 
 .initial-loading {
