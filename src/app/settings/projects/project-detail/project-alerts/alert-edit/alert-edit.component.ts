@@ -24,16 +24,13 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { AlertFormComponent } from "../alert-form/alert-form.component";
-import {
-  AlertConditions,
-  alertName,
-  recipientLabel,
-  resolveRecipientIcon,
-} from "../alert-labels";
+import { AlertConditions, alertName, recipientLabel } from "../alert-labels";
 import { AlertSummaryComponent } from "../alert-summary/alert-summary.component";
 import { NewRecipientComponent } from "../new-recipient/new-recipient.component";
+import { RecipientIconComponent } from "../recipient-icon/recipient-icon.component";
 import {
   NewAlertRecipient,
   ProjectAlertsService,
@@ -67,6 +64,8 @@ type Recipient = AlertRecipient | NewAlertRecipient;
     ListComponent,
     ListRowComponent,
     LoadingButtonComponent,
+    PanelComponent,
+    RecipientIconComponent,
     SettingsSectionComponent,
   ],
 })
@@ -104,7 +103,6 @@ export class AlertEditComponent implements OnInit {
   readonly hasEmail = computed(() =>
     this.recipients().some((r) => r.recipientType === "email"),
   );
-  readonly icon = resolveRecipientIcon;
 
   recipientLabel(recipient: Recipient) {
     return recipientLabel(recipient, this.teams());

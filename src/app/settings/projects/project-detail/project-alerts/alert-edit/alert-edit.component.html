@@ -8,117 +8,115 @@
 />
 <h2 class="title">{{ title() }}</h2>
 
-<gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
-  <mat-form-field appearance="outline" subscriptSizing="dynamic">
-    <input
-      matInput
-      data-cy="alert-name"
-      [formControl]="name"
-      [attr.aria-labelledby]="nameSection.titleId"
-      i18n-placeholder
-      placeholder="Checkout errors"
+<gt-panel class="gt-form-panel">
+  <gt-settings-section #nameSection i18n-title title="Name" [inline]="true">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <input
+        matInput
+        data-cy="alert-name"
+        [formControl]="name"
+        [attr.aria-labelledby]="nameSection.titleId"
+        i18n-placeholder
+        placeholder="Checkout errors"
+      />
+    </mat-form-field>
+  </gt-settings-section>
+
+  <gt-settings-section i18n-title title="When">
+    <span slot="description" i18n
+      >Send this alert when any of these happen.</span
+    >
+    <gt-alert-form
+      [newAlert]="true"
+      [timespan]="alert()?.timespanMinutes ?? 1"
+      [quantity]="alert()?.quantity ?? 1"
+      [uptime]="alert()?.uptime ?? false"
+      [errorAlert]="alert()?.errorAlert ?? true"
+      [environments]="alert()?.environments ?? []"
+      [availableEnvironments]="availableEnvironments()"
+      (alertSubmit)="onConditions($event)"
+      (conditionsChange)="draftConditions.set($event)"
     />
-  </mat-form-field>
-</gt-settings-section>
+  </gt-settings-section>
 
-<gt-settings-section i18n-title title="When">
-  <span slot="description" i18n>Send this alert when any of these happen.</span>
-  <gt-alert-form
-    [newAlert]="true"
-    [timespan]="alert()?.timespanMinutes ?? 1"
-    [quantity]="alert()?.quantity ?? 1"
-    [uptime]="alert()?.uptime ?? false"
-    [errorAlert]="alert()?.errorAlert ?? true"
-    [environments]="alert()?.environments ?? []"
-    [availableEnvironments]="availableEnvironments()"
-    (alertSubmit)="onConditions($event)"
-    (conditionsChange)="draftConditions.set($event)"
-  />
-</gt-settings-section>
-
-<gt-settings-section i18n-title title="Send to">
-  @if (recipients().length) {
-    <gt-list>
-      @for (recipient of recipients(); track $index; let i = $index) {
-        <gt-list-row>
-          <span class="recipient">
+  <gt-settings-section i18n-title title="Send to">
+    @if (recipients().length) {
+      <gt-list>
+        @for (recipient of recipients(); track $index; let i = $index) {
+          <gt-list-row>
+            <span class="recipient">
+              <gt-recipient-icon [type]="recipient.recipientType" />
+              <span
+                class="recipient__label"
+                [matTooltip]="recipient.url ?? ''"
+                [matTooltipDisabled]="!recipient.url"
+                matTooltipClass="tt-wrapping"
+                >{{ recipientLabel(recipient) }}</span
+              >
+            </span>
             @if (recipient.recipientType === "email") {
-              <mat-icon class="recipient__icon" aria-hidden="true"
-                >email</mat-icon
+              <button
+                slot="actions"
+                mat-stroked-button
+                id="delete-recipient"
+                (click)="removeRecipient(i)"
+                i18n
+                >Remove</button
               >
             } @else {
-              <svg class="recipient__icon" aria-hidden="true">
-                <use
-                  [attr.xlink:href]="'#' + icon(recipient.recipientType)"
-                ></use>
-              </svg>
-            }
-            <span
-              class="recipient__label"
-              [matTooltip]="recipient.url ?? ''"
-              [matTooltipDisabled]="!recipient.url"
-              matTooltipClass="tt-wrapping"
-              >{{ recipientLabel(recipient) }}</span
-            >
-          </span>
-          @if (recipient.recipientType === "email") {
-            <button
-              slot="actions"
-              mat-stroked-button
-              id="delete-recipient"
-              (click)="removeRecipient(i)"
-              i18n
-              >Remove</button
-            >
-          } @else {
-            <ng-container slot="actions">
-              <button
-                mat-icon-button
-                class="medium-icon-button"
-                [matMenuTriggerFor]="recipientMenu"
-                [attr.aria-label]="actionsLabel(recipient)"
-              >
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #recipientMenu="matMenu" xPosition="before">
-                @if (canTest(recipient)) {
-                  <button mat-menu-item (click)="testRecipient(recipient)" i18n
-                    >Send test</button
+              <ng-container slot="actions">
+                <button
+                  mat-icon-button
+                  class="medium-icon-button"
+                  [matMenuTriggerFor]="recipientMenu"
+                  [attr.aria-label]="actionsLabel(recipient)"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #recipientMenu="matMenu" xPosition="before">
+                  @if (canTest(recipient)) {
+                    <button
+                      mat-menu-item
+                      (click)="testRecipient(recipient)"
+                      i18n
+                      >Send test</button
+                    >
+                  }
+                  <button mat-menu-item (click)="editRecipient(i)" i18n
+                    >Edit</button
                   >
-                }
-                <button mat-menu-item (click)="editRecipient(i)" i18n
-                  >Edit</button
-                >
-                <button mat-menu-item (click)="removeRecipient(i)" i18n
-                  >Remove</button
-                >
-              </mat-menu>
-            </ng-container>
-          }
-        </gt-list-row>
-      }
-    </gt-list>
-  } @else {
-    <p class="gt-note" i18n
-      >This alert isn't being sent anywhere. Add a recipient to get started.</p
-    >
-  }
-  <button slot="actions" mat-stroked-button (click)="addRecipient()">
-    <mat-icon>add</mat-icon>
-    <ng-container i18n>Add recipient</ng-container>
-  </button>
-</gt-settings-section>
+                  <button mat-menu-item (click)="removeRecipient(i)" i18n
+                    >Remove</button
+                  >
+                </mat-menu>
+              </ng-container>
+            }
+          </gt-list-row>
+        }
+      </gt-list>
+    } @else {
+      <p class="gt-note" i18n
+        >This alert isn't being sent anywhere. Add a recipient to get
+        started.</p
+      >
+    }
+    <button slot="actions" mat-stroked-button (click)="addRecipient()">
+      <mat-icon>add</mat-icon>
+      <ng-container i18n>Add recipient</ng-container>
+    </button>
+  </gt-settings-section>
 
-<p class="summary" data-cy="alert-summary">
-  <gt-alert-summary
-    [alert]="draftConditions()"
-    [recipients]="recipients().length"
-  />
-</p>
-<gt-form-error [errors]="error()" />
-<div class="gt-form-actions">
+  <p class="summary" data-cy="alert-summary">
+    <gt-alert-summary
+      [alert]="draftConditions()"
+      [recipients]="recipients().length"
+    />
+  </p>
+  <gt-form-error [errors]="error()" />
+  <button slot="footer" mat-button (click)="done.emit()" i18n>Cancel</button>
   @if (alert()?.id) {
     <gt-loading-button
+      slot="footer"
       i18n-buttonText
       buttonText="Save alert"
       buttonStyle="stroked"
@@ -128,6 +126,7 @@
     />
   } @else {
     <gt-loading-button
+      slot="footer"
       i18n-buttonText
       buttonText="Create alert"
       [loading]="saving()"
@@ -135,11 +134,10 @@
       data-cy="save-alert"
     />
   }
-  <button mat-button (click)="done.emit()" i18n>Cancel</button>
-</div>
+</gt-panel>
 
 @if (alert()?.id && canDelete()) {
-  <gt-settings-section i18n-title title="Delete alert">
+  <gt-settings-section i18n-title title="Delete alert" panel tone="danger">
     <span slot="description" i18n
       >Deletes <strong>{{ displayName() }}</strong> and stops its notifications.
       This cannot be undone.</span
