@@ -65,6 +65,10 @@ Conventions for every component:
 - Selector prefix `gt-`.
 - Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
 
+### Tables
+
+- **Header row:** one size for every table. Column headers are 32px, in label-medium and `on-surface-variant`, set once in `material-overrides/_table.scss` (`$table-header-height`). The sticky action row above them (`.table-header`) keeps Material's own. Pages do not restyle header cells.
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.
