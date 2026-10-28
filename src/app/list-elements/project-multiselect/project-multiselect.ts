@@ -5,7 +5,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -17,6 +16,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { MatIconModule } from "@angular/material/icon";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 
 @Component({
   selector: "gt-project-multiselect",
@@ -27,6 +27,7 @@ import { MatIconModule } from "@angular/material/icon";
     MatIconModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    SelectGhostDirective,
   ],
   templateUrl: "./project-multiselect.html",
   styleUrl: "./project-multiselect.scss",
@@ -39,7 +40,6 @@ export class ProjectMultiselect {
   activeOrgProjects = this.organizationsService.activeOrganizationProjects;
   projectsForm = new FormControl<string[]>([]);
   projectSearchForm = new FormControl("");
-  isOpen = signal(false);
   projectsFormChanges = toSignal(this.projectsForm.valueChanges);
   projectSearchChanges = toSignal(this.projectSearchForm.valueChanges);
 
