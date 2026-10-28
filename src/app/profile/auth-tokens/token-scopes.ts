@@ -1,22 +1,27 @@
-/** Every scope an auth token can have, in the order the API lists them. */
-export const TOKEN_SCOPES = [
-  "project:read",
-  "project:write",
-  "project:admin",
-  "project:releases",
-  "team:read",
-  "team:write",
-  "team:admin",
-  "event:read",
-  "event:write",
-  "event:admin",
-  "org:read",
-  "org:write",
-  "org:admin",
-  "member:read",
-  "member:write",
-  "member:admin",
-];
+/**
+ * Every token scope in API order. Each name is one message, so translators
+ * can reorder resource and level.
+ */
+const TOKEN_SCOPE_LABELS: Record<string, string> = {
+  "project:read": $localize`Projects: read`,
+  "project:write": $localize`Projects: write`,
+  "project:admin": $localize`Projects: admin`,
+  "project:releases": $localize`Projects: releases`,
+  "team:read": $localize`Teams: read`,
+  "team:write": $localize`Teams: write`,
+  "team:admin": $localize`Teams: admin`,
+  "event:read": $localize`Events: read`,
+  "event:write": $localize`Events: write`,
+  "event:admin": $localize`Events: admin`,
+  "org:read": $localize`Organization: read`,
+  "org:write": $localize`Organization: write`,
+  "org:admin": $localize`Organization: admin`,
+  "member:read": $localize`Members: read`,
+  "member:write": $localize`Members: write`,
+  "member:admin": $localize`Members: admin`,
+};
+
+export const TOKEN_SCOPES = Object.keys(TOKEN_SCOPE_LABELS);
 
 /** The columns of the scope grid. */
 export const TOKEN_SCOPE_LEVELS = [
@@ -39,11 +44,10 @@ export const TOKEN_SCOPE_GROUPS = [
 ].map(({ resource, prefix }) => ({
   resource,
   prefix,
-  cells: TOKEN_SCOPE_LEVELS.map(({ key, name }) => {
-    const index = TOKEN_SCOPES.indexOf(`${prefix}:${key}`);
-    return index === -1
-      ? null
-      : { index, label: $localize`${resource}:resource:, ${name}:level:` };
+  cells: TOKEN_SCOPE_LEVELS.map(({ key }) => {
+    const scope = `${prefix}:${key}`;
+    const index = TOKEN_SCOPES.indexOf(scope);
+    return index === -1 ? null : { index, label: TOKEN_SCOPE_LABELS[scope] };
   }),
 }));
 
