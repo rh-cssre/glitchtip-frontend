@@ -6,33 +6,35 @@
 
 <section class="l-body l-body--full-width mat-elevation-z0">
   @if (release(); as release) {
-    <gt-page-header [title]="release.version">
-      <span slot="meta">
-        @for (project of release.projects; track project.slug) {
-          <!-- The version may already name the project -->
-          @if (!release.version.startsWith(project.slug + "@")) {
-            <span
-              ><span class="chip">{{ project.slug }}</span></span
+    <gt-record-band>
+      <gt-page-header [title]="release.version">
+        <span slot="meta">
+          @for (project of release.projects; track project.slug) {
+            <!-- The version may already name the project -->
+            @if (!release.version.startsWith(project.slug + "@")) {
+              <span
+                ><span class="chip">{{ project.slug }}</span></span
+              >
+            }
+          }
+          @if (paginator()?.count; as count) {
+            <span i18n>{+count, plural,
+              =1 {<b>1</b> file}
+              other {<b>{{ count }}</b> files}
+            }</span>
+          }
+          @if (release.dateReleased) {
+            <span i18n
+              >Released {{ release.dateReleased | date: "mediumDate" }}</span
+            >
+          } @else {
+            <span i18n
+              >Created {{ release.dateCreated | date: "mediumDate" }}</span
             >
           }
-        }
-        @if (paginator()?.count; as count) {
-          <span i18n>{+count, plural,
-            =1 {<b>1</b> file}
-            other {<b>{{ count }}</b> files}
-          }</span>
-        }
-        @if (release.dateReleased) {
-          <span i18n
-            >Released {{ release.dateReleased | date: "mediumDate" }}</span
-          >
-        } @else {
-          <span i18n
-            >Created {{ release.dateCreated | date: "mediumDate" }}</span
-          >
-        }
-      </span>
-    </gt-page-header>
+        </span>
+      </gt-page-header>
+    </gt-record-band>
   }
   <div class="table-container">
     <gt-loading-overlay i18n-label [loading]="loading()" label="Loading release files">

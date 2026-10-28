@@ -1,6 +1,17 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { timedeltaToMS } from "./shared.utils";
 
+/** A duration as a number and a short unit, for figures that set the unit apart. */
+export function durationParts(value: string | number): {
+  value: string;
+  unit: "s" | "ms";
+} {
+  const milliseconds = typeof value === "string" ? timedeltaToMS(value) : value;
+  return milliseconds > 999
+    ? { value: (milliseconds / 1000).toFixed(2), unit: "s" }
+    : { value: String(Math.round(milliseconds)), unit: "ms" };
+}
+
 @Pipe({
   name: "humanizeDuration",
   standalone: true,

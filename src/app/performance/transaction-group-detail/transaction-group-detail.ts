@@ -17,11 +17,15 @@ import { MatSortModule, Sort } from "@angular/material/sort";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
-import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
+import {
+  HumanizeDurationPipe,
+  durationParts,
+} from "../../shared/seconds-or-ms.pipe";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 
 type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
 
@@ -43,6 +47,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
     HumanizeDurationPipe,
     PageHeaderComponent,
     PanelComponent,
+    RecordBandComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [TransactionGroupDetailService],
@@ -58,6 +63,16 @@ export class TransactionGroupDetail implements OnInit {
   initialLoadComplete = this.transactionGroupDetailService.initialLoadComplete;
   transactionGroup = this.transactionGroupDetailService.transactionGroup;
   spansLoading = this.transactionGroupDetailService.spansLoading;
+
+  // Duration figures in the record band set their unit apart.
+  avgFigure = computed(() => {
+    const avg = this.transactionGroup()?.avgDuration;
+    return avg === undefined || avg === null ? null : durationParts(avg);
+  });
+  p95Figure = computed(() => {
+    const p95 = this.transactionGroup()?.p95;
+    return p95 === undefined || p95 === null ? null : durationParts(p95);
+  });
 
   spanColumns = [
     "op",
