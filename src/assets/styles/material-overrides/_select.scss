@@ -25,8 +25,7 @@
     )
   );
 
-  // The host fills the wrapper and stretches the trigger to its height.
-  // The owning component opens the select on wrapper clicks for the padding.
+  // Fills the wrapper; gtSelectGhost opens it on clicks in the padding.
   mat-select {
     display: flex;
     width: 100%;

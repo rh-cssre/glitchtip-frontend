@@ -21,6 +21,7 @@ import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
   selector: "gt-social-auth",
@@ -37,6 +38,7 @@ import { SettingsSectionComponent } from "src/app/shared/settings-section/settin
     ListRowComponent,
     LoadingButtonComponent,
     SettingsSectionComponent,
+    EmptyStateComponent,
   ],
 })
 export class SocialAuthComponent
@@ -52,6 +54,7 @@ export class SocialAuthComponent
   socialApps = this.service.socialApps;
   user = this.service.user;
   disconnectLoadingId = this.service.loadingId;
+  disconnectLabel = (name: string) => $localize`Disconnect ${name}:name:`;
   account = new FormControl<string | null>(null, Validators.required);
   /** The last sign-in method can't go; a password has to exist first. */
   canDisconnect = computed(() => {

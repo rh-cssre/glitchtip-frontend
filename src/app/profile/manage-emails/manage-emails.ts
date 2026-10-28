@@ -17,6 +17,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatDialog } from "@angular/material/dialog";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
@@ -42,6 +43,7 @@ import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.c
     SettingsSectionComponent,
     MatButtonModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

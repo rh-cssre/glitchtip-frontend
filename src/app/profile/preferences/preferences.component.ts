@@ -75,7 +75,7 @@ export class PreferencesComponent implements OnInit {
     ),
   });
   filteredOptions = signal<string[]>([]);
-  saving = signal<"name" | "timeZone" | "theme" | null>(null);
+  saving = signal<{ name?: boolean; timeZone?: boolean }>({});
   themeError = signal<string | null>(null);
   userDetails = this.service.user;
   serverTimeZone = this.settings.serverTimeZone;
@@ -163,7 +163,6 @@ export class PreferencesComponent implements OnInit {
       ...(timezone !== undefined && timezone !== null && { timezone }),
       ...(preferredTheme && { preferredTheme }),
     };
-    this.saving.set(field);
     if (field === "theme") {
       // Save-on-change: lock the toggle, stay quiet on success, roll back on failure.
       this.themeError.set(null);
@@ -182,14 +181,14 @@ export class PreferencesComponent implements OnInit {
         }
       } finally {
         control.enable({ emitEvent: false });
-        this.saving.set(null);
       }
       return;
     }
+    this.saving.update((saving) => ({ ...saving, [field]: true }));
     try {
       await this.service.updateUser(name, options);
     } finally {
-      this.saving.set(null);
+      this.saving.update((saving) => ({ ...saving, [field]: false }));
     }
   }
 }

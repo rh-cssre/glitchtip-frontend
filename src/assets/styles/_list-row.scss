@@ -1,0 +1,43 @@
+// gt-list-row's projected content. Global, as these elements belong to the caller.
+
+gt-list-row .list-row__main a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}
+
+// Fixed attribute such as Owner or Primary; a state is a status pill.
+gt-list-row .list-row__tag {
+  padding: 0 var(--gt-space-2, 8px);
+  border-radius: var(--mat-sys-corner-small);
+  font: var(--mat-sys-label-medium);
+  color: var(--mat-sys-on-surface-variant);
+  background-color: var(--mat-sys-surface-container-high);
+  white-space: nowrap;
+}
+
+// Each meta fact is its own span, so translators never see the separators.
+gt-list-row [slot="meta"] {
+  display: inline-flex;
+}
+
+gt-list-row [slot="meta"] > * {
+  position: relative;
+  white-space: nowrap;
+}
+
+// Same spacing and dot as gt-page-header meta.
+gt-list-row [slot="meta"] > :not(:first-child) {
+  margin-left: var(--gt-space-4, 16px);
+
+  &::before {
+    content: "·";
+    position: absolute;
+    left: -11px;
+    opacity: 0.6;
+  }
+}

@@ -1,12 +1,7 @@
 @use "@angular/material" as mat;
 @use "variables" as vars;
 
-// House look for every field: 14px text and label, our radius.
-// The resting outline is a mid-tone between `outline` and `outline-variant`:
-// softer than `outline`, still at least 3:1 in both themes. 85% keeps 3:1 on
-// the darkest background a field sits on (the side nav org switcher).
-// Height comes from the theme density; hover, focus, error and disabled stay
-// Material's.
+// A softer resting outline that still keeps 3:1 on the darkest field background (side nav).
 @include mat.form-field-overrides(
   (
     container-text-size: var(--mat-sys-body-medium-size),
