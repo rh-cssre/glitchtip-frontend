@@ -1,7 +1,7 @@
 @use "@angular/cdk";
 @use "controls";
 
-// Hairlines between the field sections of a form panel are in styles.scss.
+// Hairlines between the field sections of a form panel are in _settings-section.scss.
 :host {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
