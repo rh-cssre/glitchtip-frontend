@@ -19,6 +19,11 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: `
+    .preview-list-create {
+      margin-bottom: var(--gt-space-4, 16px);
+    }
+  `,
   template: `
     <preview-doc
       title="List"
@@ -80,12 +85,10 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <div class="preview-section__title">
           Inside a record's tab, rows that open their record
         </div>
-        <div class="gt-list-actions">
-          <button mat-stroked-button>
-            <mat-icon>add</mat-icon>
-            New alert
-          </button>
-        </div>
+        <button mat-stroked-button class="preview-list-create">
+          <mat-icon>add</mat-icon>
+          New alert
+        </button>
         <gt-list>
           <gt-list-row>
             <a gtListRowLink href="#" (click)="$event.preventDefault()"
@@ -135,7 +138,7 @@ export class ListPreview {
     "Keep action labels short (Remove, Hide) so the action column lines up",
     "Mark a fixed attribute (Owner, Primary) with .list-row__tag after the name",
     "Say why a blocked action is blocked in the description line",
-    "Put a tab's create action above its list in .gt-list-actions",
+    "Put a tab's create action above its list as an outlined button with the add icon",
   ];
   readonly donts = [
     "Use a menu for a single action; it adds a step for nothing",

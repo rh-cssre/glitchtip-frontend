@@ -240,14 +240,6 @@ mat-sidenav-container {
   color: var(--mat-sys-on-surface-variant);
 }
 
-// Create action above a list inside a record's tab.
-.gt-list-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gt-space-2, 8px);
-  margin-bottom: var(--gt-space-4, 16px);
-}
-
 .full-width {
   width: 100%;
 }
