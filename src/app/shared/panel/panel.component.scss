@@ -3,8 +3,8 @@
 
 :host {
   display: block;
-  // Lets panel content use container queries on the panel's own width.
-  container: gt-panel / inline-size;
+  // Panel content queries the panel's width; gt-bar is for header controls.
+  container: gt-panel gt-bar / inline-size;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: vars.$shape-radius;
   color: var(--mat-sys-on-surface);

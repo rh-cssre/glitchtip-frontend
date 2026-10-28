@@ -13,7 +13,7 @@ describe("GhostSelectComponent", () => {
     const fixture = TestBed.createComponent(GhostSelectComponent);
     fixture.componentRef.setInput("options", OPTIONS);
     fixture.componentRef.setInput("value", "app");
-    fixture.componentRef.setInput("label", "Frames");
+    fixture.componentRef.setInput("ariaLabel", "Frames");
     for (const [key, value] of Object.entries(inputs)) {
       fixture.componentRef.setInput(key, value);
     }
@@ -37,13 +37,14 @@ describe("GhostSelectComponent", () => {
     const fixture = await render();
     fixture.componentRef.setInput("value", "raw");
     fixture.detectChanges();
-    expect(fixture.componentInstance.current()).toBe("Raw");
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector(".gt-select-ghost__long")?.textContent).toBe("Raw");
   });
 
   it("renders the short label only when given", async () => {
     const short = async (inputs: Record<string, unknown>) =>
       ((await render(inputs)).nativeElement as HTMLElement).querySelector(
-        ".gt-ghost-select__short",
+        ".gt-select-ghost__short",
       );
     expect(await short({})).toBeNull();
     expect((await short({ shortLabel: "App" }))?.textContent).toBe("App");

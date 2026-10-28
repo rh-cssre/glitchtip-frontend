@@ -17,3 +17,10 @@
     )
   );
 }
+
+// Short control labels when the bar they sit in (top app bar, panel) is narrow.
+@mixin narrow-bar {
+  @container gt-bar (max-width: 599px) {
+    @content;
+  }
+}

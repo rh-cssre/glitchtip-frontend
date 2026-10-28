@@ -5,6 +5,7 @@ import {
   GhostSelectOption,
 } from "src/app/shared/ghost-select/ghost-select.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
 @Component({
@@ -14,6 +15,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     PanelComponent,
     MatSelectModule,
     PreviewDocComponent,
+    SelectGhostDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
@@ -33,7 +35,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
-      a11y="The label input is the select's accessible name, since the trigger only shows the value. Keyboard and screen reader behaviour come from mat-select."
+      a11y="The ariaLabel input is the select's accessible name, since the trigger only shows the value. Keyboard and screen reader behaviour come from mat-select."
       [api]="api"
       [importCode]="importCode"
       [code]="code"
@@ -43,7 +45,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <gt-panel title="Exception" subtitle="ValueError">
           <gt-ghost-select
             slot="actions"
-            label="Frames"
+            ariaLabel="Frames"
             shortLabel="App"
             [options]="frames"
             [(value)]="frame"
@@ -54,18 +56,12 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
       <div class="preview-section">
         <div class="preview-section__title">With a label in front</div>
-        <span
-          class="gt-select-ghost"
-          [class.gt-select-ghost--open]="open()"
-          (click)="$event.target === $event.currentTarget && category.open()"
-        >
+        <span gtSelectGhost>
           <mat-select
-            #category
             aria-label="Categories"
             [panelWidth]="null"
             hideSingleSelectionIndicator
             [(value)]="categoryValue"
-            (openedChange)="open.set($event)"
           >
             <mat-select-trigger>
               <span class="gt-select-ghost__label">Categories</span>
@@ -89,14 +85,13 @@ export class GhostSelectPreview {
   readonly frame = signal("app");
   readonly categories = ["All", "http", "navigation", "ui.click"];
   readonly categoryValue = signal("All");
-  readonly open = signal(false);
 
   readonly whenToUse = [
     "Switching a panel's view: App frames, Full or Raw; Formatted or Raw",
     "Picking a period or a filter in a bar or panel header",
   ];
   readonly dos = [
-    "Give it an aria-label that names what it switches",
+    "Give it an ariaLabel that names what it switches",
     "Set shortLabel when the panel can get narrow",
     "Put a muted .gt-select-ghost__label in front when the value alone is unclear",
   ];
@@ -116,7 +111,7 @@ export class GhostSelectPreview {
       description: "Selected value, two-way (required)",
     },
     {
-      name: "label",
+      name: "ariaLabel",
       type: "string",
       description: "Accessible name (required)",
     },
@@ -130,14 +125,14 @@ export class GhostSelectPreview {
       name: "shortLabel",
       type: "string",
       default: '""',
-      description: "Trigger text under a 600px container",
+      description: "Trigger text in a bar or panel under 600px",
     },
   ];
   readonly importCode = `import { GhostSelectComponent } from "src/app/shared/ghost-select/ghost-select.component";`;
   readonly code = `<gt-ghost-select
   slot="actions"
-  i18n-label
-  label="Frames"
+  i18n-ariaLabel
+  ariaLabel="Frames"
   [options]="frameOptions"
   [(value)]="frames"
 />`;
