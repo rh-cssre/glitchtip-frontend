@@ -37,8 +37,6 @@ import { ListRowLinkComponent } from "./list-row-link.component";
     }
   `,
   styles: `
-    @use "object-header";
-
     // Positioned, so a row link's hit area can cover the row.
     :host {
       position: relative;
@@ -123,26 +121,6 @@ import { ListRowLinkComponent } from "./list-row-link.component";
 
       &:empty {
         display: none;
-      }
-
-      // Several facts are child spans; the separators are drawn here, as in
-      // gt-page-header, so translators never see them.
-      // Flex drops the template whitespace, so the gap matches the header.
-      ::ng-deep [slot="meta"] {
-        display: inline-flex;
-      }
-
-      ::ng-deep [slot="meta"] > * {
-        position: relative;
-        white-space: nowrap;
-      }
-
-      ::ng-deep [slot="meta"] > :not(:first-child) {
-        margin-left: var(--gt-space-4, 16px);
-
-        &::before {
-          @include object-header.separator;
-        }
       }
     }
 
