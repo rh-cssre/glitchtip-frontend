@@ -113,12 +113,12 @@ export class TeamsService extends StatefulService<TeamsState> {
   setTeamKey(orgSlug: string, teamSlug: string) {
     // Callers run this from effects; untracked keeps them from depending on what it writes.
     untracked(() => {
-      const current = this.teamKey();
-      if (current?.orgSlug !== orgSlug || current?.teamSlug !== teamSlug) {
-        // A failed delete belongs to the team it was tried on.
+      const key = orgSlug && teamSlug ? { orgSlug, teamSlug } : null;
+      // A failed delete belongs to the team it was tried on.
+      if (!sameTeamKey(this.teamKey(), key)) {
         this.setDeleteTeamError("");
       }
-      this.teamKey.set(orgSlug && teamSlug ? { orgSlug, teamSlug } : null);
+      this.teamKey.set(key);
     });
   }
 
@@ -129,6 +129,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   async updateTeamSlug(orgSlug: string, teamSlug: string, newTeamSlug: string) {
+    this.setUpdateTeamSlugError("");
     this.setUpdateTeamSlugLoading(true);
     const { data, error, response } = await client.PUT(
       "/api/0/teams/{organization_id_or_slug}/{team_slug}/",

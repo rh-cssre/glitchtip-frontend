@@ -76,9 +76,8 @@ export class TeamSettingsComponent {
       this.teamSlug(),
       newSlug,
     );
-    // The service keeps the last error after a later success.
     const error = this.errors().updateName;
-    if (error && this.team()?.slug !== newSlug) {
+    if (error) {
       mapFormErrors({ slug: [error] }, this.form);
     }
   }
