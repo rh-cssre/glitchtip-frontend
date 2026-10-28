@@ -111,7 +111,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
               </div>
               <div class="gt-property-list__row">
                 <dt>Browser</dt>
-                <dd>Firefox 131<span class="gt-share">2 of 15</span></dd>
+                <dd>Firefox 131</dd>
               </div>
             </dl>
             <div class="gt-panel-row">
@@ -195,7 +195,7 @@ export class PanelRowsPreview {
     {
       name: ".gt-panel-row",
       type: "class",
-      description: "Plain end row with a hairline; --split spreads its items",
+      description: "Plain end row with a hairline",
     },
     {
       name: ".gt-mono / .gt-muted / .gt-truncate / .gt-break",
@@ -203,10 +203,10 @@ export class PanelRowsPreview {
       description: "Text bits for row content",
     },
     {
-      name: ".gt-path / .gt-lc / .gt-share / .gt-has-tip",
+      name: ".gt-path / .gt-lc / .gt-has-tip",
       type: "class",
       description:
-        "File path truncated from the left, line:col, a muted share, a value with a tooltip",
+        "File path truncated from the left, line:col, a value with a tooltip",
     },
   ];
   readonly code = `<gt-panel flush i18n-title title="Request">
