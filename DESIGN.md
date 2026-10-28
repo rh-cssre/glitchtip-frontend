@@ -40,7 +40,7 @@ Rule: prefer a semantic class where one exists; otherwise apply the matching typ
 ### Running text
 
 - Sentences (page intros, section help) cap their width with `--gt-measure` (70ch). Short centered text uses `--gt-measure-narrow` (44ch). Widths are in characters so they follow font size; field widths are a separate layout choice.
-- A page that needs orientation opens with one `.page-intro` line: muted, capped, no box or icon.
+- Orientation for a page or tab goes in the panel it explains: the description line of its first list or settings panel, never a loose line above it. Keep only what the title and rows do not already say.
 - A link inside a sentence is underlined, in the text color, at normal weight (`.gt-prose a`, `.page-intro a`). Standalone links (row names, nav, table cells) keep the bold global style. Never the primary color: in GlitchTip's theme it reads as a warning.
 
 ### Spacing
