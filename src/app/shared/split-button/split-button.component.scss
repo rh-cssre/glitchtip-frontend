@@ -1,4 +1,5 @@
 @use "@angular/material" as mat;
+@use "controls";
 @use "variables" as vars;
 
 // One outlined shape; neutral, since it acts on the record without changing it.
@@ -42,14 +43,23 @@
   font-size: 18px;
 }
 
-// Narrow: the main part is a 32px icon button with the start corners.
-.gt-split__main-icon {
-  @include mat.icon-button-overrides(
-    (
-      container-shape: vars.$shape-radius 0 0 vars.$shape-radius,
-      icon-color: var(--mat-sys-on-surface),
-    )
-  );
+// Narrow: the label hides by CSS, so focus stays on the same button.
+@include controls.narrow-bar {
+  .gt-split__main {
+    min-width: 30px;
+
+    @include mat.button-overrides(
+      (
+        text-with-icon-horizontal-padding: 6px,
+        text-icon-spacing: 0,
+        text-icon-offset: 0,
+      )
+    );
+  }
+
+  .gt-split__label {
+    display: none;
+  }
 }
 
 .gt-split__caret {
