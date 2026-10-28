@@ -1,20 +1,20 @@
-<header class="page-header">
+<header class="gt-page-header">
   @if (icon()) {
-    <div class="page-header__icon" aria-hidden="true">
+    <div class="gt-page-header__icon" aria-hidden="true">
       <mat-icon>{{ icon() }}</mat-icon>
     </div>
   }
-  <div class="page-header__text">
-    <h1 class="page-header__title section-header-text">
+  <div class="gt-page-header__text">
+    <h1 class="gt-page-header__title section-header-text">
       {{ title() }}
     </h1>
     @if (subtitle(); as subtitle) {
-      <p class="page-header__subtitle" [title]="subtitle">{{ subtitle }}</p>
+      <p class="gt-page-header__subtitle" [title]="subtitle">{{ subtitle }}</p>
     }
-    <div class="page-header__meta">
+    <div class="gt-page-header__meta">
       @if (status(); as status) {
         <gt-status-pill
-          class="page-header__pill"
+          class="gt-page-header__pill"
           [label]="status"
           [color]="statusColor()"
         />
