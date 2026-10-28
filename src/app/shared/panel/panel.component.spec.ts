@@ -30,8 +30,13 @@ describe("PanelComponent", () => {
 
   it("drops body padding when flush", () => {
     const el = render({ flush: true });
-    expect(
-      el.querySelector(".gt-panel__body")!.classList,
-    ).toContain("gt-panel__body--flush");
+    expect(el.querySelector(".gt-panel__body")!.classList).toContain(
+      "gt-panel__body--flush",
+    );
+  });
+
+  it("marks the danger tone on the host", () => {
+    expect(render({}).classList).not.toContain("gt-panel--danger");
+    expect(render({ tone: "danger" }).classList).toContain("gt-panel--danger");
   });
 });
