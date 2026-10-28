@@ -3,9 +3,9 @@ import {
   input,
   ChangeDetectionStrategy,
   computed,
+  DestroyRef,
   effect,
   inject,
-  untracked,
 } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
@@ -58,14 +58,17 @@ export class TeamDetailsComponent {
   }));
 
   constructor() {
-    // Loads the team and its projects for every tab; Members loads its roster.
+    // Keys the team and its projects for every tab; Members loads its roster.
     effect(() => {
       const orgSlug = this.orgSlug();
       const teamSlug = this.teamSlug();
-      untracked(() => {
-        this.teamsService.setTeamKey(orgSlug, teamSlug);
-        this.projectSettingsService.retrieveProjectsOnTeam(orgSlug, teamSlug);
-      });
+      this.teamsService.setTeamKey(orgSlug, teamSlug);
+      this.projectSettingsService.setProjectsOnTeamKey(orgSlug, teamSlug);
+    });
+    // Coming back to the team later loads it fresh.
+    inject(DestroyRef).onDestroy(() => {
+      this.teamsService.setTeamKey("", "");
+      this.projectSettingsService.setProjectsOnTeamKey("", "");
     });
   }
 }

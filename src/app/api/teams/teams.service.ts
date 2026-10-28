@@ -1,4 +1,10 @@
-import { Injectable, computed, inject, signal, untracked } from "@angular/core";
+import {
+  Injectable,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from "@angular/core";
 import { TeamErrors, TeamLoading } from "./teams.interfaces";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
@@ -11,22 +17,22 @@ import { components } from "../api-schema";
 type Team = components["schemas"]["TeamProjectSchema"];
 
 interface TeamsState {
-  errors: TeamErrors;
+  errors: Omit<TeamErrors, "deleteTeam">;
   loading: TeamLoading;
 }
 
 const initialState: TeamsState = {
-  errors: { updateName: "", deleteTeam: "" },
+  errors: { updateName: "" },
   loading: { updateName: false, deleteTeam: false },
 };
 
-interface TeamKey {
+export interface TeamKey {
   orgSlug: string;
   teamSlug: string;
 }
 
 // Setting the same team again must not refetch.
-const sameTeamKey = (a: TeamKey | null, b: TeamKey | null) =>
+export const sameTeamKey = (a: TeamKey | null, b: TeamKey | null) =>
   a?.orgSlug === b?.orgSlug && a?.teamSlug === b?.teamSlug;
 
 @Injectable({
@@ -89,7 +95,15 @@ export class TeamsService extends StatefulService<TeamsState> {
       : this.team()?.memberCount,
   );
   readonly loading = computed(() => this.state().loading);
-  readonly errors = computed(() => this.state().errors);
+  // A failed delete belongs to the team it was tried on.
+  private deleteTeamError = linkedSignal({
+    source: this.teamKey,
+    computation: () => "",
+  });
+  readonly errors = computed<TeamErrors>(() => ({
+    ...this.state().errors,
+    deleteTeam: this.deleteTeamError(),
+  }));
   /**
    * Add/remove others on the team whose members are loaded. Mirrors the
    * backend: Admin+ (team:write) if you're on the team, Manager+ (org:write)
@@ -111,15 +125,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   setTeamKey(orgSlug: string, teamSlug: string) {
-    // Callers run this from effects; untracked keeps them from depending on what it writes.
-    untracked(() => {
-      const key = orgSlug && teamSlug ? { orgSlug, teamSlug } : null;
-      // A failed delete belongs to the team it was tried on.
-      if (!sameTeamKey(this.teamKey(), key)) {
-        this.setDeleteTeamError("");
-      }
-      this.teamKey.set(key);
-    });
+    this.teamKey.set(orgSlug && teamSlug ? { orgSlug, teamSlug } : null);
   }
 
   setTeamMembersKey(orgSlug: string, teamSlug: string) {
@@ -167,7 +173,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   async deleteTeam(orgSlug: string, teamSlug: string) {
-    this.setDeleteTeamError("");
+    this.deleteTeamError.set("");
     this.setDeleteTeamLoading(true);
     const result = await client.DELETE(
       "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
@@ -187,7 +193,7 @@ export class TeamsService extends StatefulService<TeamsState> {
     } else {
       // The schema lists no error body, so the error is typed never.
       const { error } = result as { error?: unknown };
-      this.setDeleteTeamError(
+      this.deleteTeamError.set(
         handleError(error, result.response).detail[0]?.msg ?? "",
       );
     }
@@ -202,11 +208,6 @@ export class TeamsService extends StatefulService<TeamsState> {
         deleteTeam: loading,
       },
     });
-  }
-
-  private setDeleteTeamError(error: string) {
-    const state = this.state();
-    this.setState({ errors: { ...state.errors, deleteTeam: error } });
   }
 
   addTeam(team: Team) {
