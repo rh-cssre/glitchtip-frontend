@@ -18,79 +18,100 @@
 
 <section class="l-body l-body--full-width">
   @if (monitor(); as monitor) {
-    <gt-page-header
-      [title]="monitor.name"
-      [status]="statusLabel()"
-      [statusColor]="statusColor()"
-    >
-      <span slot="meta">
-        @if (monitor.lastChange) {
-          <span class="no-sep">{{ monitor.lastChange | timeFor }}</span>
-        }
-        @if (monitor.url) {
-          <span
-            ><a class="chip" [href]="monitor.url" target="_blank">{{
-              monitor.url
-            }}</a></span
-          >
-        }
-        <span>{{ intervalLabel() }}</span>
-        @if (uptimePercent() !== null) {
-          <span i18n
-            ><b>{{ uptimePercent()! | number: "1.0-1" }}%</b> up over
-            {monitor.checks.length, plural,
-              =1 {the last check}
-              other {the last {{ monitor.checks.length }} checks}
-            }</span
-          >
-        }
-        @if (avgResponseMs() !== null) {
-          <span i18n
-            ><b>{{ avgResponseMs()! | number: "1.0-0" }}ms</b> avg
-            response</span
-          >
-        }
-      </span>
-    </gt-page-header>
-    <gt-monitor-chart
-      class="check-bars"
-      [data]="monitor.checks"
-      [stretch]="true"
-    />
-    <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="monitorPanel">
-      <a
-        mat-tab-link
-        [active]="tab() === 'overview'"
-        [routerLink]="[]"
-        [queryParams]="{ tab: null }"
-        queryParamsHandling="merge"
-        replaceUrl
-        i18n
-        >Overview</a
+    <gt-record-band>
+      <gt-page-header
+        [title]="monitor.name"
+        [status]="statusLabel()"
+        [statusColor]="statusColor()"
       >
-      <a
-        mat-tab-link
-        [active]="tab() === 'checks'"
-        [routerLink]="[]"
-        [queryParams]="{ tab: 'checks' }"
-        queryParamsHandling="merge"
-        replaceUrl
-        i18n
-        >Checks</a
+        <span slot="meta">
+          @if (monitor.lastChange) {
+            <span class="no-sep">{{ monitor.lastChange | timeFor }}</span>
+          }
+          @if (monitor.url) {
+            <span
+              ><a class="chip" [href]="monitor.url" target="_blank">{{
+                monitor.url
+              }}</a></span
+            >
+          }
+          <span>{{ intervalLabel() }}</span>
+          @if (uptimePercent() !== null) {
+            <span class="gt-band-narrow-only" i18n
+              ><b>{{ uptimePercent()! | number: "1.0-1" }}%</b> up over
+              {monitor.checks.length, plural,
+                =1 {the last check}
+                other {the last {{ monitor.checks.length }} checks}
+              }</span
+            >
+          }
+          @if (avgResponseMs() !== null) {
+            <span class="gt-band-narrow-only" i18n
+              ><b>{{ avgResponseMs()! | number: "1.0-0" }}ms</b> avg
+              response</span
+            >
+          }
+        </span>
+      </gt-page-header>
+      @if (uptimePercent() !== null) {
+        <div slot="stats" class="gt-stat">
+          <span class="gt-stat__label" i18n>Uptime</span>
+          <span class="gt-stat__value"
+            >{{ uptimePercent()! | number: "1.0-1"
+            }}<span class="gt-stat__unit">%</span></span
+          >
+        </div>
+      }
+      @if (avgResponseMs() !== null) {
+        <div slot="stats" class="gt-stat">
+          <span class="gt-stat__label" i18n>Avg response</span>
+          <span class="gt-stat__value"
+            >{{ avgResponseMs()! | number: "1.0-0"
+            }}<span class="gt-stat__unit">ms</span></span
+          >
+        </div>
+      }
+      <gt-monitor-chart slot="summary" [data]="monitor.checks" [stretch]="true" />
+      <nav
+        slot="tabs"
+        mat-tab-nav-bar
+        mat-stretch-tabs="false"
+        [tabPanel]="monitorPanel"
       >
-      <a
-        mat-tab-link
-        [active]="tab() === 'alerts'"
-        [routerLink]="[]"
-        [queryParams]="{ tab: 'alerts' }"
-        queryParamsHandling="merge"
-        replaceUrl
-        ><span i18n>Alerts</span>
-        @if (alertCountKnown()) {
-          <span class="tab-count">{{ uptimeAlertCount() }}</span>
-        }
-      </a>
-    </nav>
+        <a
+          mat-tab-link
+          [active]="tab() === 'overview'"
+          [routerLink]="[]"
+          [queryParams]="{ tab: null }"
+          queryParamsHandling="merge"
+          replaceUrl
+          i18n
+          >Overview</a
+        >
+        <a
+          mat-tab-link
+          [active]="tab() === 'checks'"
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'checks' }"
+          queryParamsHandling="merge"
+          replaceUrl
+          i18n
+          >Checks</a
+        >
+        <a
+          mat-tab-link
+          [active]="tab() === 'alerts'"
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'alerts' }"
+          queryParamsHandling="merge"
+          replaceUrl
+          ><span i18n>Alerts</span>
+          @if (alertCountKnown()) {
+            <span class="tab-count">{{ uptimeAlertCount() }}</span>
+          }
+        </a>
+      </nav>
+    </gt-record-band>
     <mat-tab-nav-panel #monitorPanel class="monitor-panel">
       @switch (tab()) {
         @case ("overview") {
