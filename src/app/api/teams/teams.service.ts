@@ -67,7 +67,10 @@ export class TeamsService extends StatefulService<TeamsState> {
       },
     },
   }));
-  readonly team = computed(() => this.teamResource.value() ?? null);
+  // value() throws on a failed load (e.g. an unknown team).
+  readonly team = computed(
+    () => (this.teamResource.hasValue() && this.teamResource.value()) || null,
+  );
 
   private teamMembersKey = signal<TeamKey | null>(null, {
     equal: sameTeamKey,
@@ -86,7 +89,12 @@ export class TeamsService extends StatefulService<TeamsState> {
       },
     }),
   );
-  readonly teamMembers = computed(() => this.teamMembersResource.value() ?? []);
+  readonly teamMembers = computed(
+    () =>
+      (this.teamMembersResource.hasValue() &&
+        this.teamMembersResource.value()) ||
+      [],
+  );
   /** The loaded roster's size when it is this team's, else the team's count. */
   readonly teamMemberCount = computed(() =>
     this.teamMembersResource.hasValue() &&
