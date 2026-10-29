@@ -38,17 +38,29 @@
           <span>{{ intervalLabel() }}</span>
           @if (uptimePercent() !== null) {
             <span class="gt-band-narrow-only" i18n
-              ><b>{{ uptimePercent()! | number: "1.0-1" }}%</b> up over
+              ><b
+                >{{
+                  uptimePercent()! | number: "1.0-1" // i18n(ph="percent")
+                }}%</b
+              >
+              up over
               {monitor.checks.length, plural,
                 =1 {the last check}
-                other {the last {{ monitor.checks.length }} checks}
+                other {
+                  the last {{ monitor.checks.length // i18n(ph="count") }}
+                  checks
+                }
               }</span
             >
           }
           @if (avgResponseMs() !== null) {
             <span class="gt-band-narrow-only" i18n
-              ><b>{{ avgResponseMs()! | number: "1.0-0" }}ms</b> avg
-              response</span
+              ><b
+                >{{
+                  avgResponseMs()! | number: "1.0-0" // i18n(ph="milliseconds")
+                }}ms</b
+              >
+              avg response</span
             >
           }
         </span>
@@ -71,7 +83,7 @@
           >
         </div>
       }
-      <gt-monitor-chart slot="summary" [data]="monitor.checks" [stretch]="true" />
+      <gt-monitor-chart slot="summary" [data]="monitor.checks" stretch />
       <nav
         slot="tabs"
         mat-tab-nav-bar

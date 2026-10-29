@@ -1,4 +1,9 @@
-import { Component, input, ChangeDetectionStrategy } from "@angular/core";
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  input,
+} from "@angular/core";
 import { DownReason } from "../uptime.interfaces";
 import { reasonTextConversions } from "../uptime.utils";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -17,7 +22,7 @@ type MonitorCheck = components["schemas"]["MonitorCheckSchema"];
 export class MonitorChartComponent {
   downText = $localize`Down`;
   readonly data = input<MonitorCheck[]>([]);
-  readonly stretch = input(false);
+  readonly stretch = input(false, { transform: booleanAttribute });
 
   constructor() {}
 
