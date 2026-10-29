@@ -61,7 +61,9 @@ export class IssueStatusUpdateDropdownComponent {
   }
 
   onOptionClick(value: string) {
-    this.optionSelected.emit(value as IssueStatus);
+    if (!this.isActive(value)) {
+      this.optionSelected.emit(value as IssueStatus);
+    }
   }
 
   onResolveInNextRelease() {
