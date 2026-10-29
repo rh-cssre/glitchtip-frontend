@@ -15,7 +15,12 @@
         } @else {
           <span i18n>No platform set</span>
         }
-        <span i18n>Created {{ project.dateCreated | date: "mediumDate" }}</span>
+        <span i18n
+          >Created
+          {{
+            project.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
       </span>
     </gt-page-header>
     <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="settingsPanel">
@@ -41,19 +46,15 @@
           @if (project.isMember === false) {
             <gt-panel class="project-note">
               <p i18n>
-                You can manage {{ project.name }} as an admin of
-                {{ project.organization.name }}. To see its issues, join one of
-                its teams.
+                You can manage {{ project.name // i18n(ph="project") }} as an
+                admin of
+                {{ project.organization.name // i18n(ph="organization") }}. To
+                see its issues, join one of its teams.
               </p>
             </gt-panel>
           }
           <form [formGroup]="nameForm" (ngSubmit)="updateName()">
-            <gt-settings-section
-              #nameSection
-              i18n-title
-              title="Name"
-              panel
-            >
+            <gt-settings-section #nameSection i18n-title title="Name" panel>
               @if (canWriteProject()) {
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                   <input
@@ -197,8 +198,10 @@
               tone="danger"
             >
               <span slot="description" i18n
-                >Deletes <strong>{{ project.name }}</strong> and all of its
-                issues, events and settings. This cannot be undone.</span
+                >Deletes
+                <strong>{{ project.name // i18n(ph="project") }}</strong> and
+                all of its issues, events and settings. This cannot be
+                undone.</span
               >
               @if (deleteError()) {
                 <gt-form-error slot="error" [errors]="deleteError()" />
