@@ -72,11 +72,9 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
                   <span class="gt-kv__v gt-truncate"
                     >Accept, Content-Type, User-Agent</span
                   >
-                  <mat-icon class="gt-chev" aria-hidden="true">{{
-                    headersOpen()
-                      ? "keyboard_arrow_down"
-                      : "keyboard_arrow_right"
-                  }}</mat-icon>
+                  <mat-icon class="gt-chev" aria-hidden="true"
+                    >keyboard_arrow_right</mat-icon
+                  >
                 </button>
                 @if (headersOpen()) {
                   <dl class="gt-property-list gt-property-list--nested">

@@ -6,6 +6,8 @@
 $mono: vars.$font-mono, monospace;
 $mono-size: 0.8125rem;
 $chev-slot: 32px;
+$label-w: 120px;
+$label-w-narrow: 88px;
 
 // A whole row is one target with a grey state layer.
 @mixin row-button {
