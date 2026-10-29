@@ -7,7 +7,10 @@
   <gt-page-header icon="groups" [title]="'#' + teamSlug()" compact>
     @if (team(); as team) {
       <span slot="meta">
-        <span i18n>Created {{ team.dateCreated | date: "mediumDate" }}</span>
+        <span i18n
+          >Created
+          {{ team.dateCreated | date: "mediumDate" // i18n(ph="date") }}</span
+        >
       </span>
     }
   </gt-page-header>

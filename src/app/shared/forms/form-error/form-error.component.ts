@@ -21,7 +21,7 @@ import { MatInputModule } from "@angular/material/input";
   `,
 })
 export class FormErrorComponent {
-  errors = input<string | string[] | null | undefined>();
+  readonly errors = input<string | string[] | null | undefined>();
   messages = computed(() => {
     const errors = this.errors();
     return (Array.isArray(errors) ? errors : [errors]).filter(

@@ -30,25 +30,26 @@ let nextId = 0;
       ><ng-content select="[slot=header-actions]"
     /></ng-template>
 
-    @if (panel()) {
-      <gt-panel [tone]="tone()" [flush]="flush()">
-        <div
-          class="settings-section__panel-body"
-          [class.settings-section__panel-body--padded]="flush()"
+    <ng-template #text>
+      <div class="settings-section__text">
+        <h2
+          class="settings-section__title"
+          [class.cdk-visually-hidden]="hideTitle()"
+          [id]="titleId"
         >
+          {{ title() }}
+        </h2>
+        <div class="settings-section__description gt-prose">
+          <ng-container [ngTemplateOutlet]="description" />
+        </div>
+      </div>
+    </ng-template>
+
+    @if (panel()) {
+      <gt-panel [tone]="tone()" flush>
+        <div class="settings-section__panel-body">
           <div class="settings-section__head">
-            <div class="settings-section__text">
-              <h2
-                class="settings-section__title"
-                [class.cdk-visually-hidden]="hideTitle()"
-                [id]="titleId"
-              >
-                {{ title() }}
-              </h2>
-              <div class="settings-section__description gt-prose">
-                <ng-container [ngTemplateOutlet]="description" />
-              </div>
-            </div>
+            <ng-container [ngTemplateOutlet]="text" />
             <div class="settings-section__head-actions">
               <ng-container [ngTemplateOutlet]="headerActions" />
             </div>
@@ -75,12 +76,7 @@ let nextId = 0;
         /></ng-container>
       </gt-panel>
     } @else {
-      <div class="settings-section__text">
-        <h2 class="settings-section__title" [id]="titleId">{{ title() }}</h2>
-        <div class="settings-section__description gt-prose">
-          <ng-container [ngTemplateOutlet]="description" />
-        </div>
-      </div>
+      <ng-container [ngTemplateOutlet]="text" />
       <div class="settings-section__content">
         <div class="settings-section__body">
           <ng-container [ngTemplateOutlet]="body" />

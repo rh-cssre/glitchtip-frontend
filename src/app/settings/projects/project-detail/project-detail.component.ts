@@ -189,7 +189,6 @@ export class ProjectDetailComponent implements OnInit {
 
   platformCtrl = this.platformForm.get("platform") as FormControl;
   platformCtrlValueChanges = toSignal(this.platformCtrl.valueChanges);
-  platformCtrlInvalid = isCustomErrorState(this.platformCtrl);
 
   constructor() {
     effect(() => {
