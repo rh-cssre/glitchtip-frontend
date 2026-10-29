@@ -16,7 +16,6 @@ import { StatusPillComponent } from "../../status-pill/status-pill.component";
   host: {
     "[attr.title]": "null",
     "[class.gt-page-header--compact]": "compact()",
-    "[class.gt-page-header--inline-subtitle]": "inlineSubtitle()",
   },
 })
 export class PageHeaderComponent {
@@ -27,6 +26,4 @@ export class PageHeaderComponent {
   readonly statusColor = input("var(--mat-sys-outline)");
   /** One line for a settings page; data pages keep the full header. */
   readonly compact = input(false, { transform: booleanAttribute });
-  /** Run the subtitle on after the title, wrapping under it only when it must. */
-  readonly inlineSubtitle = input(false, { transform: booleanAttribute });
 }
