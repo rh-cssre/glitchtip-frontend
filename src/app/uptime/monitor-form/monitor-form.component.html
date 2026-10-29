@@ -313,7 +313,7 @@
     <gt-loading-button
       slot="footer"
       [buttonStyle]="monitorSettings() ? 'stroked' : 'flat'"
-      [loading]="loading() === true"
+      [loading]="loading()"
       [buttonText]="monitorSettings() ? updateMonitorText : createMonitorText"
       data-cy="monitor-submit"
     />

@@ -10,7 +10,7 @@
     <gt-page-header i18n-title title="Edit monitor" />
     <gt-monitor-form
       [monitorSettings]="monitor"
-      [loading]="loading() === true"
+      [loading]="loading()"
       [formError]="error()"
       (formSubmitted)="submit($event)"
     ></gt-monitor-form>
@@ -23,8 +23,8 @@
         tone="danger"
       >
         <span slot="description" i18n
-          >Deletes <strong>{{ monitor.name }}</strong> and its check history.
-          This cannot be undone.</span
+          >Deletes <strong>{{ monitor.name // i18n(ph="monitor") }}</strong> and
+          its check history. This cannot be undone.</span
         >
         @if (deleteError()) {
           <gt-form-error slot="error" [errors]="deleteError()" />

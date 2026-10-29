@@ -95,7 +95,7 @@ export class MonitorFormComponent implements OnInit {
 
   readonly monitorSettings = input<MonitorDetail>();
   readonly formError = input.required<ServerError | null>();
-  readonly loading = input.required<boolean | null>();
+  readonly loading = input.required<boolean>();
 
   readonly formSubmitted = output<MonitorInput>();
 

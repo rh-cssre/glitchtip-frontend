@@ -6,7 +6,7 @@
 <section class="l-body">
   <gt-page-header i18n-title title="New monitor" />
   <gt-monitor-form
-    [loading]="loading() === true"
+    [loading]="loading()"
     [formError]="error()"
     (formSubmitted)="submit($event)"
   ></gt-monitor-form>
