@@ -20,7 +20,7 @@
 </button>
 <mat-menu #menu="matMenu">
   @for (option of options; track option.value) {
-    <button mat-menu-item (click)="onOptionClick(option.value)">
+    <button mat-menu-item (click)="selectStatus(option.value)">
       {{ option.label }}
       <mat-icon [class.invisible]="!isActive(option.value)">done</mat-icon>
     </button>
