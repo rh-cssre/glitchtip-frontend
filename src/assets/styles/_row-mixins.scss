@@ -1,5 +1,11 @@
 // Mixins for rows in flush panels; no CSS output, so components can @use it.
 @use "controls";
+@use "variables" as vars;
+
+// Shared by every row and code block, so columns and text line up.
+$mono: vars.$font-mono, monospace;
+$mono-size: 0.8125rem;
+$chev-slot: 32px;
 
 // A whole row is one target with a grey state layer.
 @mixin row-button {
@@ -20,8 +26,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--mat-sys-on-surface);
-    outline-offset: -2px;
+    @include controls.focus-ring(-2px);
   }
 
   &:disabled {
