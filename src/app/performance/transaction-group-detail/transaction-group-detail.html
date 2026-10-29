@@ -25,6 +25,23 @@
 </section>
 } @if (transactionGroup(); as group) {
 <section class="l-body l-body--full-width">
+  <!-- Key facts: the band's corner when wide, the end of the meta line when narrow -->
+  <ng-template #facts>
+    <span class="gt-band-fact" i18n
+      >{group.count, plural, =1 {<b>1</b> transaction} other {<b>{{
+        group.count | number // i18n(ph="count")
+      }}</b> transactions}}</span
+    >
+    <span class="gt-band-fact" i18n>avg <b>{{ group.avgDuration! | humanizeDuration // i18n(ph="duration") }}</b></span>
+    @if (group.p95 !== null && group.p95 !== undefined) {
+      <span class="gt-band-fact" i18n>p95 <b>{{ group.p95 | humanizeDuration // i18n(ph="duration") }}</b></span>
+    }
+    <span class="gt-band-fact" i18n
+      >{group.errorCount, plural, =1 {<b>1</b> error} other {<b>{{
+        group.errorCount | number // i18n(ph="count")
+      }}</b> errors}}</span
+    >
+  </ng-template>
   <gt-record-band>
     <gt-page-header [title]="group.transaction">
       <span slot="meta">
@@ -33,46 +50,12 @@
         @if (group.method && !group.transaction.startsWith(group.method + " ")) {
           <span><span class="chip">{{ group.method }}</span></span>
         }
-        <span class="gt-band-narrow-only" i18n
-          >{group.count, plural, =1 {<b>1</b> transaction} other {<b>{{
-            group.count | number // i18n(ph="count")
-          }}</b> transactions}}</span
-        >
-        <span class="gt-band-narrow-only" i18n>avg <b>{{ group.avgDuration! | humanizeDuration // i18n(ph="duration") }}</b></span>
-        @if (group.p95 !== null && group.p95 !== undefined) {
-          <span class="gt-band-narrow-only" i18n>p95 <b>{{ group.p95 | humanizeDuration // i18n(ph="duration") }}</b></span>
-        }
-        <span class="gt-band-narrow-only" i18n
-          >{group.errorCount, plural, =1 {<b>1</b> error} other {<b>{{
-            group.errorCount | number // i18n(ph="count")
-          }}</b> errors}}</span
-        >
+        <ng-container [ngTemplateOutlet]="facts" />
       </span>
     </gt-page-header>
-    <div slot="stats" class="gt-stat">
-      <span class="gt-stat__label" i18n>Transactions</span>
-      <span class="gt-stat__value">{{ group.count | number }}</span>
-    </div>
-    @if (avgFigure(); as avg) {
-      <div slot="stats" class="gt-stat">
-        <span class="gt-stat__label" i18n>Avg</span>
-        <span class="gt-stat__value"
-          >{{ avg.value }}<span class="gt-stat__unit">{{ avg.unit }}</span></span
-        >
-      </div>
-    }
-    @if (p95Figure(); as p95) {
-      <div slot="stats" class="gt-stat">
-        <span class="gt-stat__label">p95</span>
-        <span class="gt-stat__value"
-          >{{ p95.value }}<span class="gt-stat__unit">{{ p95.unit }}</span></span
-        >
-      </div>
-    }
-    <div slot="stats" class="gt-stat">
-      <span class="gt-stat__label" i18n>Errors</span>
-      <span class="gt-stat__value">{{ group.errorCount | number }}</span>
-    </div>
+    <span slot="stats" class="gt-band-facts"
+      ><ng-container [ngTemplateOutlet]="facts"
+    /></span>
   </gt-record-band>
 
   <gt-panel i18n-title title="Span breakdown" flush>
