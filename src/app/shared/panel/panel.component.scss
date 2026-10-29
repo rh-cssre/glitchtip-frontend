@@ -80,6 +80,10 @@
   &--flush {
     padding: 0;
   }
+
+  &:empty {
+    display: none;
+  }
 }
 
 .gt-panel__footer {
