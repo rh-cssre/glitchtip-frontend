@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { DecimalPipe, PercentPipe } from "@angular/common";
+import { DecimalPipe, PercentPipe, NgTemplateOutlet } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
@@ -18,10 +18,7 @@ import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-head
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
-import {
-  HumanizeDurationPipe,
-  durationParts,
-} from "../../shared/seconds-or-ms.pipe";
+import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -34,6 +31,7 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
   templateUrl: "./transaction-group-detail.html",
   styleUrls: ["./transaction-group-detail.scss"],
   imports: [
+    NgTemplateOutlet,
     DecimalPipe,
     MatTableModule,
     MatSortModule,
@@ -63,16 +61,6 @@ export class TransactionGroupDetail implements OnInit {
   initialLoadComplete = this.transactionGroupDetailService.initialLoadComplete;
   transactionGroup = this.transactionGroupDetailService.transactionGroup;
   spansLoading = this.transactionGroupDetailService.spansLoading;
-
-  // Duration figures in the record band set their unit apart.
-  avgFigure = computed(() => {
-    const avg = this.transactionGroup()?.avgDuration;
-    return avg === undefined || avg === null ? null : durationParts(avg);
-  });
-  p95Figure = computed(() => {
-    const p95 = this.transactionGroup()?.p95;
-    return p95 === undefined || p95 === null ? null : durationParts(p95);
-  });
 
   spanColumns = [
     "op",

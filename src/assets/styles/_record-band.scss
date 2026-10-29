@@ -1,37 +1,39 @@
 @use "controls";
+@use "object-header";
 @use "@angular/material" as mat;
 
 // Content projected into gt-record-band comes from the page's template, so it is global.
-// Figures hug the band's right edge. A short hairline before each one, only as
-// tall as the figure, marks where one ends and the next begins.
-.gt-stat {
+// Key facts in the band's corner, written like the page header's meta line.
+.gt-band-facts {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding-inline-start: var(--gt-space-5, 24px);
-  border-inline-start: 1px solid var(--mat-sys-outline-variant);
-}
-
-.gt-stat__label {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gt-space-1, 4px) 0;
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
+
+  > * {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  > * + * {
+    margin-left: object-header.$sep-gap;
+  }
+
+  > * + *::before {
+    @include object-header.separator;
+  }
+
+  b {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+  }
 }
 
-// Calm figures: regular weight, one size for number and unit.
-.gt-stat__value {
-  font: var(--mat-sys-title-medium);
-  font-weight: 400;
-  font-variant-numeric: tabular-nums;
-  color: var(--mat-sys-on-surface);
-}
-
-.gt-stat__unit {
-  color: var(--mat-sys-on-surface-variant);
-}
-
-// A meta fact that is also a corner figure shows only when the corner is hidden.
+// Wide bands show the facts in the corner, so the meta line leaves them out.
 @include controls.wide-band {
-  .gt-band-narrow-only {
+  gt-page-header .gt-band-fact {
     display: none;
   }
 }
