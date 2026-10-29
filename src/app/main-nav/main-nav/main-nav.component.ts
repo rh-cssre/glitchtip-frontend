@@ -151,7 +151,7 @@ export class MainNavComponent {
       route: ["/profile", "notifications"],
     },
     {
-      name: $localize`Auth Tokens`,
+      name: $localize`Auth tokens`,
       icon: "vpn_key",
       route: ["/profile", "auth-tokens"],
     },
