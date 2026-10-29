@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { NgTemplateOutlet } from "@angular/common";
 import { MatTabsModule } from "@angular/material/tabs";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
@@ -7,6 +8,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 @Component({
   selector: "preview-record-band",
   imports: [
+    NgTemplateOutlet,
     PageHeaderComponent,
     RecordBandComponent,
     MatTabsModule,
@@ -37,41 +39,36 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Record band"
       status="stable"
-      description="The tinted band a data record page opens with: the page header and key figures on top, an optional summary tier, then the tabs on its bottom edge. It runs full bleed over the page's side padding."
+      description="The tinted band a data record page opens with: the page header and key facts on top, an optional summary tier, then the tabs on its bottom edge. It runs full bleed over the page's side padding."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
       [content]="content"
-      a11y="The band adds no landmarks or headings; the page header's h1 stays the page title. A figure's label comes before its value, so screen readers read the label first."
+      a11y="The band adds no landmarks or headings; the page header's h1 stays the page title. The key facts render once in the reading order: the corner on a wide band, the meta line on a narrow one."
       [api]="api"
       [importCode]="importCode"
       [code]="code"
     >
       <div class="preview-section">
-        <div class="preview-section__title">With figures and tabs</div>
+        <div class="preview-section__title">With key facts and tabs</div>
+        <ng-template #monitorFacts>
+          <span class="gt-band-fact"
+            ><b>99.8%</b> up over the last 120 checks</span
+          >
+          <span class="gt-band-fact"><b>130ms</b> avg response</span>
+        </ng-template>
         <div class="rb-surface">
           <gt-record-band>
             <gt-page-header title="Storefront homepage">
               <span slot="meta">
                 <span><span class="chip">https://example.com/</span></span>
                 <span>every 60s</span>
-                <span class="gt-band-narrow-only"
-                  ><b>99.8%</b> up over the last 120 checks</span
-                >
+                <ng-container [ngTemplateOutlet]="monitorFacts" />
               </span>
             </gt-page-header>
-            <div slot="stats" class="gt-stat">
-              <span class="gt-stat__label">Uptime</span>
-              <span class="gt-stat__value"
-                >99.8<span class="gt-stat__unit">%</span></span
-              >
-            </div>
-            <div slot="stats" class="gt-stat">
-              <span class="gt-stat__label">Avg response</span>
-              <span class="gt-stat__value"
-                >130<span class="gt-stat__unit">ms</span></span
-              >
-            </div>
+            <span slot="stats" class="gt-band-facts"
+              ><ng-container [ngTemplateOutlet]="monitorFacts"
+            /></span>
             <nav
               slot="tabs"
               mat-tab-nav-bar
@@ -91,7 +88,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <div class="preview-section__title">Without tabs</div>
         <p class="preview-section__note">
           Without tabs the band leaves 16px before the content. A record with no
-          key figures leaves the corner out.
+          key facts leaves the corner out.
         </p>
         <div class="rb-surface">
           <gt-record-band>
@@ -109,28 +106,24 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       <div class="preview-section">
         <div class="preview-section__title">Narrow</div>
         <p class="preview-section__note">
-          Under 900px the corner hides and the facts marked gt-band-narrow-only
-          show in the meta line instead.
+          Under 900px the corner hides and the same facts continue the meta
+          line.
         </p>
+        <ng-template #txFacts>
+          <span class="gt-band-fact"><b>40</b> transactions</span>
+          <span class="gt-band-fact">avg <b>991ms</b></span>
+        </ng-template>
         <div class="rb-surface rb-surface--narrow">
           <gt-record-band>
             <gt-page-header title="POST /api/checkout">
               <span slot="meta">
                 <span><span class="chip">http.server</span></span>
-                <span class="gt-band-narrow-only"><b>40</b> transactions</span>
-                <span class="gt-band-narrow-only">avg <b>991ms</b></span>
+                <ng-container [ngTemplateOutlet]="txFacts" />
               </span>
             </gt-page-header>
-            <div slot="stats" class="gt-stat">
-              <span class="gt-stat__label">Transactions</span>
-              <span class="gt-stat__value">40</span>
-            </div>
-            <div slot="stats" class="gt-stat">
-              <span class="gt-stat__label">Avg</span>
-              <span class="gt-stat__value"
-                >991<span class="gt-stat__unit">ms</span></span
-              >
-            </div>
+            <span slot="stats" class="gt-band-facts"
+              ><ng-container [ngTemplateOutlet]="txFacts"
+            /></span>
           </gt-record-band>
           <p class="rb-content">Span breakdown</p>
         </div>
@@ -143,9 +136,8 @@ export class RecordBandPreview {
     "The first element inside .l-body on a data record page (issue, monitor, transaction, release)",
   ];
   readonly dos = [
-    "Put the record's two to four key numbers in the corner, label over value",
-    "Put a unit in .gt-stat__unit: same size as the number, muted",
-    "Mark the meta facts the corner repeats with .gt-band-narrow-only",
+    "Write the record's two to four key facts once, in an ng-template of .gt-band-fact spans",
+    "Render that template at the end of the meta line and in a .gt-band-facts span in the stats slot",
     "Put a summary of the whole record, such as check bars or top tags, in the summary tier",
     "Put the tab bar in the tabs slot, so it sits on the band's bottom edge",
   ];
@@ -155,8 +147,7 @@ export class RecordBandPreview {
     "Wrap several slotted elements in one block; each @if wraps one element so it still projects",
   ];
   readonly content = [
-    "Figure label: one or two words in sentence case (Events, Avg response)",
-    "Figure value: the number only; the unit goes in .gt-stat__unit",
+    "A fact reads like the meta line: the number in <b>, then its noun (12 events, avg 991ms)",
   ];
   readonly api: ApiRow[] = [
     {
@@ -170,7 +161,7 @@ export class RecordBandPreview {
       type: "projected",
       default: "",
       description:
-        "Key figures (.gt-stat) in the top right corner; hidden under 900px",
+        "Key facts (.gt-band-facts) in the top right corner; hidden under 900px, where the meta line shows them",
     },
     {
       name: '[slot="summary"]',
@@ -186,15 +177,17 @@ export class RecordBandPreview {
     },
   ];
   readonly importCode = `import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";`;
-  readonly code = `<gt-record-band>
+  readonly code = `<ng-template #facts>
+  <span class="gt-band-fact"><b>{{ group.count | number }}</b> transactions</span>
+</ng-template>
+<gt-record-band>
   <gt-page-header [title]="group.transaction">
     <span slot="meta">
-      <span class="gt-band-narrow-only"><b>{{ group.count }}</b> transactions</span>
+      <ng-container [ngTemplateOutlet]="facts" />
     </span>
   </gt-page-header>
-  <div slot="stats" class="gt-stat">
-    <span class="gt-stat__label">Transactions</span>
-    <span class="gt-stat__value">{{ group.count | number }}</span>
-  </div>
+  <span slot="stats" class="gt-band-facts"
+    ><ng-container [ngTemplateOutlet]="facts"
+  /></span>
 </gt-record-band>`;
 }
