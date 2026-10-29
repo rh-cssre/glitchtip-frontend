@@ -59,7 +59,7 @@ Rule: use these in new code instead of ad-hoc pixel values. Migrating existing u
 
 ### Radius and elevation
 
-Corner radius is `$shape-radius` (4px). Tags (`.chip`) use `--mat-sys-corner-extra-small`; counts (`.tab-count`) and status pills use `--mat-sys-corner-full`. Elevation uses Material 3 `--mat-sys-level*` shadows.
+Corner radius is `$shape-radius` (4px). Badges (`.chip`) use `--mat-sys-corner-extra-small`; counts (`.tab-count`) and status pills use `--mat-sys-corner-full`. Elevation uses Material 3 `--mat-sys-level*` shadows.
 
 ## Components
 
@@ -79,6 +79,17 @@ Conventions for every component:
 - A muted fact about the panel's data (a count, a source: "Breadcrumbs · 28") goes in `subtitle`. The panel draws the middle dot, and the subtitle truncates before the title. Use `hideSubtitleNarrow` when it can go under 480px.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
 - A tab's content sits in panels. An empty state sits centred in an outline panel; an empty panel has no header.
+
+### Labels
+
+Small labels come in four kinds. Shape says what kind of thing it is; color gives its value.
+
+- **Badge:** a squared grey label for data you could copy or compare: identifiers in mono (`.chip`: an issue id, a URL), fixed attributes (`.list-row__tag`: Owner, Primary).
+- **State:** a rounded grey pill with a colored dot (`gt-status-pill`) for a state that changes: Up, Down, Unresolved, Invite pending. A dot always means a state.
+- **Level:** a rounded grey pill with a colored bar for severity (the issue level tag). A bar always means a level, as on issue list rows. Fatal, the most severe, is the one filled pill.
+- **Count:** a rounded grey pill with a number (`.tab-count`) after a label.
+
+Filters you can click are outlined tag chips (see Tag chips). Every label uses label-medium (12px).
 
 ### Page headers
 

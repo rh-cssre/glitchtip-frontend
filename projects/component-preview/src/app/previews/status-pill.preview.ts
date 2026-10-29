@@ -19,7 +19,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     <preview-doc
       title="Status pill"
       status="stable"
-      description="A record's current state as a short word in a tinted pill: a monitor's Up or Down. The same pill appears wherever that state is shown, in lists and in page headers."
+      description="A record's current state as a short word in a grey pill with a colored dot: a monitor's Up or Down. The same pill appears wherever that state is shown, in lists and in page headers."
       [whenToUse]="whenToUse"
       [dos]="dos"
       [donts]="donts"
@@ -72,7 +72,7 @@ export class StatusPillPreview {
       name: "color",
       type: "string",
       default: '"var(--mat-sys-outline)"',
-      description: "CSS color for the dot and tint; use a role token",
+      description: "CSS color for the dot; use a role token",
     },
   ];
   readonly importCode = `import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";`;
