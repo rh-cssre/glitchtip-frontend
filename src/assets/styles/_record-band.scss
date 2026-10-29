@@ -2,29 +2,30 @@
 @use "@angular/material" as mat;
 
 // Content projected into gt-record-band comes from the page's template, so it is global.
-// Figures hug the band's right edge; the gap between figures keeps each label with its number.
+// Figures hug the band's right edge. A short hairline before each one, only as
+// tall as the figure, marks where one ends and the next begins.
 .gt-stat {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  padding-inline-start: var(--gt-space-5, 24px);
+  border-inline-start: 1px solid var(--mat-sys-outline-variant);
 }
 
 .gt-stat__label {
-  font: var(--mat-sys-label-medium);
+  font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
 }
 
+// Calm figures: regular weight, one size for number and unit.
 .gt-stat__value {
-  font: var(--mat-sys-title-large);
-  font-weight: 500;
+  font: var(--mat-sys-title-medium);
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
   color: var(--mat-sys-on-surface);
 }
 
-// A smaller, muted unit ("1.92 s", "130 ms"), so the number reads first.
 .gt-stat__unit {
-  margin-inline-start: calc(var(--gt-space-1, 4px) / 2);
-  font: var(--mat-sys-title-small);
   color: var(--mat-sys-on-surface-variant);
 }
 
