@@ -13,7 +13,7 @@
 }
 
 // Without tabs, a gap before the content that follows.
-:host:has(.gt-record-band__tabs:empty) {
+:host:not(:has(.gt-record-band__tabs > :not(:empty))) {
   padding-bottom: var(--gt-space-1, 4px);
   margin-bottom: var(--gt-space-4, 16px);
 }
@@ -46,10 +46,12 @@
   border-top: 1px solid var(--mat-sys-outline-variant);
 }
 
+// Hidden when nothing projected into it renders, so a hairline never sits
+// over an empty strip. A projected component's host is never :empty itself.
 .gt-record-band__stats,
 .gt-record-band__summary,
 .gt-record-band__tabs {
-  &:empty {
+  &:not(:has(> :not(:empty))) {
     display: none;
   }
 }
