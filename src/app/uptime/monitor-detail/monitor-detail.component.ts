@@ -23,7 +23,7 @@ import { RecordBandComponent } from "src/app/shared/record-band/record-band.comp
 import { MatTabsModule } from "@angular/material/tabs";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
-import { DecimalPipe } from "@angular/common";
+import { DecimalPipe, NgTemplateOutlet } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { toSignal } from "@angular/core/rxjs-interop";
@@ -41,6 +41,7 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    NgTemplateOutlet,
     RouterModule,
     MonitorChecks,
     CopyInputComponent,
