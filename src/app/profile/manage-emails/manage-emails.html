@@ -52,8 +52,6 @@
           @if (!email.isVerified) {
             <gt-status-pill i18n-label label="Unverified" />
           }
-          <!-- One level of @if: a slotted node only projects from a
-               single-root block. One action is a button; two go in a menu. -->
           @if (email.isPrimary && !email.isVerified) {
             <gt-loading-button
               slot="actions"
