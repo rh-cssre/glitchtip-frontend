@@ -55,7 +55,7 @@ export class IssueStatusUpdateDropdownComponent {
     return value === this.selectedValue();
   }
 
-  onOptionClick(value: IssueStatus) {
+  selectStatus(value: IssueStatus) {
     if (!this.isActive(value)) {
       this.optionSelected.emit(value);
     }
