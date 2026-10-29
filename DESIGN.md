@@ -74,6 +74,7 @@ Conventions for every component:
 - Selector prefix `gt-`.
 - Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `AGENTS.md`).
 - A blocked action shows its reason as visible text. It may be disabled beside that text, or hidden; never a tooltip-only reason.
+- A slotted node (`slot="actions"`) projects only from a block with a single root, so give each slotted control its own `@if`, one element per branch.
 
 ### Panels
 

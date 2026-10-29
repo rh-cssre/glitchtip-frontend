@@ -88,6 +88,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gt-space-3, 12px);
+  padding: var(--gt-space-4, 16px);
 }
 
 // Header actions wrap under the text on a narrow screen.
@@ -121,10 +122,6 @@
 
 .settings-section__title.cdk-visually-hidden + .settings-section__description {
   margin-top: 0;
-}
-
-.settings-section__panel-body--padded {
-  padding: var(--gt-space-4, 16px);
 }
 
 .settings-section__flush-body {
