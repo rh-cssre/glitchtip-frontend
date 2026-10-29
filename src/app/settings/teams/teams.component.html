@@ -55,13 +55,13 @@
                 <span i18n
                   >{team.memberCount, plural,
                     =1 {1 member}
-                    other {{{ team.memberCount }} members}
+                    other {{{ team.memberCount // i18n(ph="count") }} members}
                   }</span
                 >
                 <span i18n
                   >{projectCount(team.id), plural,
                     =1 {1 project}
-                    other {{{ projectCount(team.id) }} projects}
+                    other {{{ projectCount(team.id) // i18n(ph="count") }} projects}
                   }</span
                 >
               </span>
