@@ -92,3 +92,25 @@ $narrow-band: 899px;
   font-size: $size;
   line-height: $size;
 }
+
+// Keyboard focus ring on our own controls and rows; negative offsets keep it
+// inside a full-width row.
+@mixin focus-ring($offset: 2px) {
+  outline: 2px solid var(--mat-sys-on-surface);
+  outline-offset: $offset;
+}
+
+// The middle dot between inline facts, drawn so it never sits in a
+// translated string. Put it on a ::before.
+@mixin middot($gap: var(--gt-space-2, 8px), $before: $gap) {
+  content: "\00B7";
+  margin-inline: $before $gap;
+}
+
+// The colored dot that marks a state (gt-status-pill, the status dropdown).
+@mixin status-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
