@@ -30,12 +30,13 @@
   min-width: 0;
 }
 
-// Key figures in the top right corner; each one draws its own short hairline.
+// Key facts in the top right corner, level with the title.
 .gt-record-band__stats {
-  display: flex;
-  gap: var(--gt-space-5, 24px);
+  flex: none;
+  max-width: 60%;
+  padding-top: var(--gt-space-2, 8px);
 
-  // Narrow bands show these as meta facts instead.
+  // Narrow bands show the same facts at the end of the meta line instead.
   @include controls.narrow-band {
     display: none;
   }
