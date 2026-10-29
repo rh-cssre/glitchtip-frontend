@@ -8,7 +8,12 @@
     <gt-page-header icon="people" [title]="member.email">
       <span slot="meta">
         <b>{{ member.roleName }}</b>
-        <span i18n>Joined {{ member.dateCreated | date: "mediumDate" }}</span>
+        <span i18n
+          >Joined
+          {{
+            member.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
       </span>
     </gt-page-header>
     <mat-card>
