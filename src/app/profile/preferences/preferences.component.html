@@ -78,6 +78,8 @@
   <div [formGroup]="form">
     <gt-settings-section #themeSection i18n-title title="Theme" panel>
       <mat-button-toggle-group
+        class="gt-segmented"
+        hideSingleSelectionIndicator
         formControlName="theme"
         [attr.aria-labelledby]="themeSection.titleId"
       >

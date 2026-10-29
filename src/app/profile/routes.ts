@@ -24,7 +24,7 @@ export default [
         path: "auth-tokens",
         component: AuthTokensComponent,
         data: {
-          title: $localize`Auth Tokens`,
+          title: $localize`Auth tokens`,
           action: {
             link: ["/profile", "auth-tokens", "new"],
             text: $localize`New token`,
@@ -37,7 +37,7 @@ export default [
         data: {
           backLink: {
             link: ["/profile", "auth-tokens"],
-            text: $localize`Auth Tokens`,
+            text: $localize`Auth tokens`,
           },
         },
       },
