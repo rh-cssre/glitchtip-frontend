@@ -11,7 +11,10 @@
           =1 {<b>1</b> member}
           other {<b>{{ memberCount() }}</b> members}
         }</span>
-        <span i18n>Created {{ team.dateCreated | date: "mediumDate" }}</span>
+        <span i18n
+          >Created
+          {{ team.dateCreated | date: "mediumDate" // i18n(ph="date") }}</span
+        >
       </span>
     }
   </gt-page-header>
