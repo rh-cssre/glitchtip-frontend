@@ -16,7 +16,8 @@
       message="It may have been deleted, or it belongs to a project you cannot access."
     >
       <a mat-button [routerLink]="['..']" i18n
-        >View all transaction groups in {{ organization.name }}</a
+        >View all transaction groups in
+        {{ organization.name // i18n(ph="organization") }}</a
       >
     </gt-empty-state>
   </gt-panel>
@@ -34,16 +35,16 @@
         }
         <span class="gt-band-narrow-only" i18n
           >{group.count, plural, =1 {<b>1</b> transaction} other {<b>{{
-            group.count | number
+            group.count | number // i18n(ph="count")
           }}</b> transactions}}</span
         >
-        <span class="gt-band-narrow-only" i18n>avg <b>{{ group.avgDuration! | humanizeDuration }}</b></span>
+        <span class="gt-band-narrow-only" i18n>avg <b>{{ group.avgDuration! | humanizeDuration // i18n(ph="duration") }}</b></span>
         @if (group.p95 !== null && group.p95 !== undefined) {
-          <span class="gt-band-narrow-only" i18n>p95 <b>{{ group.p95 | humanizeDuration }}</b></span>
+          <span class="gt-band-narrow-only" i18n>p95 <b>{{ group.p95 | humanizeDuration // i18n(ph="duration") }}</b></span>
         }
         <span class="gt-band-narrow-only" i18n
           >{group.errorCount, plural, =1 {<b>1</b> error} other {<b>{{
-            group.errorCount | number
+            group.errorCount | number // i18n(ph="count")
           }}</b> errors}}</span
         >
       </span>

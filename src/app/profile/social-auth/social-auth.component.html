@@ -52,7 +52,6 @@
                 [text]="socialAccount.name ?? socialAccount.provider"
               />
               <span slot="meta">{{ socialAccount.email }}</span>
-              <!-- Single-root branches, so the slotted node projects. -->
               @if (canDisconnect()) {
                 <gt-loading-button
                   slot="actions"

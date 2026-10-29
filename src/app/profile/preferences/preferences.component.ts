@@ -80,7 +80,6 @@ export class PreferencesComponent implements OnInit {
   userDetails = this.service.user;
   serverTimeZone = this.settings.serverTimeZone;
 
-  formName = this.form.get("name") as FormControl;
   formTimeZone = this.form.get("timeZone") as FormControl;
 
   constructor() {
