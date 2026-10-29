@@ -36,9 +36,8 @@ let nextId = 0;
           class="settings-section__title"
           [class.cdk-visually-hidden]="hideTitle()"
           [id]="titleId"
+          >{{ title() }}</h2
         >
-          {{ title() }}
-        </h2>
         <div class="settings-section__description gt-prose">
           <ng-container [ngTemplateOutlet]="description" />
         </div>
