@@ -54,7 +54,8 @@ export class TOTPComponent implements OnDestroy {
   protected emailsService = inject(EmailsService);
 
   @ViewChild("canvas", { static: false }) canvas: ElementRef | undefined;
-  private firstStepTitle = viewChild<ElementRef<HTMLElement>>("firstStepTitle");
+  private readonly firstStepTitle =
+    viewChild<ElementRef<HTMLElement>>("firstStepTitle");
   TOTPAuthenticator = this.service.TOTPAuthenticator;
   totp = this.service.totp;
   step = this.service.setupTOTPStage;
