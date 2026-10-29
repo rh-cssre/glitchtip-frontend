@@ -23,6 +23,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthService } from "src/app/auth.service";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 import {
   MatSelect,
   MatSelectChange,
@@ -57,6 +58,7 @@ interface NavItem {
     MatCardModule,
     MobileNavToolbarComponent,
     SupportMenuComponent,
+    SelectGhostDirective,
   ],
 })
 export class MainNavComponent {

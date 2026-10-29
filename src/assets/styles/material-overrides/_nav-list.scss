@@ -5,8 +5,14 @@ mat-nav-list {
   @include mat.list-overrides(
     (
       active-indicator-shape: vars.$shape-radius,
-      list-item-label-text-weight: 500,
+      // Nav text matches the page's body text, not a heading.
+      list-item-label-text-font: var(--mat-sys-body-medium-font),
+      list-item-label-text-size: var(--mat-sys-body-medium-size),
+      list-item-label-text-line-height: var(--mat-sys-body-medium-line-height),
+      list-item-label-text-tracking: var(--mat-sys-body-medium-tracking),
+      list-item-label-text-weight: 400,
+      list-item-leading-icon-size: 20px,
+      list-item-one-line-container-height: 40px,
     )
   );
-  @include mat.list-density(-1)
 }

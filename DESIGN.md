@@ -110,6 +110,10 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
 - The right slot holds actions only, never facts such as the user's email.
 
+### Side navigation
+
+- The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items use the page's body text (14px, regular), 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
+
 ## Accessibility
 
 - Color pairings must meet WCAG contrast; the preview app shows on-color pairings for a quick check.
