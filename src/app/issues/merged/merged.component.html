@@ -1,7 +1,8 @@
 @if (hashes().length > 1) {
   <gt-panel flush>
     <span slot="actions" class="merged__count" i18n
-      >{{ selectedCount() }} of {{ hashes().length }} selected</span
+      >{{ selectedCount() // i18n(ph="selected") }} of
+      {{ hashes().length // i18n(ph="total") }} selected</span
     >
     <button
       slot="actions"
@@ -20,7 +21,7 @@
             (change)="toggleCheck(hash.id)"
             [checked]="false"
             i18n-aria-label
-            aria-label="Select {{ hash.id }}"
+            aria-label="Select {{ hash.id // i18n(ph='hash') }}"
           />
           <span class="merged__title">
             @if (hash.latestEvent?.title) {
