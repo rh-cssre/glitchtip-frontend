@@ -9,18 +9,14 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
     :host {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: var(--gt-space-1, 4px);
       padding: 1px var(--gt-space-2, 8px);
       border-radius: var(--mat-sys-corner-full);
       font: var(--mat-sys-label-medium);
-      font-weight: 600;
+      font-weight: 500;
       white-space: nowrap;
       color: var(--mat-sys-on-surface);
-      background-color: color-mix(
-        in srgb,
-        var(--status-color) 22%,
-        transparent
-      );
+      background-color: var(--mat-sys-surface-container-highest);
     }
     :host::before {
       content: "";
