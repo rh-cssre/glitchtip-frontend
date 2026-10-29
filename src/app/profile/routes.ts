@@ -22,12 +22,12 @@ export default [
       {
         path: "auth-tokens",
         component: AuthTokensComponent,
-        data: { title: $localize`Auth Tokens` },
+        data: { title: $localize`Auth tokens` },
       },
       {
         path: "auth-tokens/new",
         component: NewTokenComponent,
-        data: { title: $localize`Auth Tokens` },
+        data: { title: $localize`Auth tokens` },
       },
       {
         path: "notifications",
