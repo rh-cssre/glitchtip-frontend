@@ -2,6 +2,7 @@
 <gt-settings-section #defaultSection i18n-title title="Project alerts" panel>
   <mat-button-toggle-group
     #defaultGroup="matButtonToggleGroup"
+    class="gt-segmented"
     hideSingleSelectionIndicator
     [value]="subscribeByDefault()"
     [disabled]="!subscribeByDefaultLoaded() || subscribeByDefaultLoading()"
