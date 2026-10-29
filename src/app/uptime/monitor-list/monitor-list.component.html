@@ -49,11 +49,7 @@
             </th>
           </ng-container>
           <ng-container matColumnDef="name">
-            <td
-              mat-cell
-              class="status-color--{{ monitor.isUp }}"
-              *matCellDef="let monitor"
-            >
+            <td mat-cell *matCellDef="let monitor">
               <div class="name-and-url-container">
                 <div (mouseover)="checkIfTooltipIsNecessary($event)">
                   <a

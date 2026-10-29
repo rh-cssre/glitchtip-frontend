@@ -23,7 +23,7 @@ All tokens are CSS custom properties. Read them live; never hardcode a raw value
 - **Material 3 system roles:** `--mat-sys-*` (primary, surface, on-surface, error, outline, and their containers). Defined by `@include mat.theme(...)` in `src/styles.scss`.
 - **Extended app roles:** `--warning-color`, `--info-color`, `--success-color` (each with a `-container` and `on-` pair), plus product accents `--issues-color`, `--uptime-color`, `--logs-color`. Defined at `:root` in `src/styles.scss`.
 - **Theming:** light and dark are driven by `color-scheme` and `prefers-color-scheme`. The brand overrides for `--mat-sys-primary` and `--mat-sys-error` in dark mode are gated on the OS setting.
-- **Monitor status roles:** `--gt-monitor-up`, `--gt-monitor-down`, `--gt-monitor-none`, aliasing the success, error and outline roles. Used for the monitor list border, the status pill and the check bars. Defined at `:root` in `src/styles.scss`.
+- **Monitor status roles:** `--gt-monitor-up`, `--gt-monitor-down`, `--gt-monitor-none`, aliasing the success, error and outline roles. Used for the status pill and the check bars. Defined at `:root` in `src/styles.scss`.
 
 Rule: use a semantic role, not a raw hex. Text on a colored surface uses that surface's `on-` token so contrast holds in both schemes.
 

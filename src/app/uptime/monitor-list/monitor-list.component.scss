@@ -96,20 +96,6 @@ table {
   }
 }
 
-.status-color {
-  &--true {
-    border-left: 3px solid var(--gt-monitor-up);
-  }
-
-  &--false {
-    border-left: 3px solid var(--gt-monitor-down);
-  }
-
-  &-- {
-    border-left: 3px solid var(--gt-monitor-none);
-  }
-}
-
 .monitor-status {
   display: flex;
   flex-direction: column;
