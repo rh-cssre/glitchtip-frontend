@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   Component,
   ChangeDetectionStrategy,
   computed,
@@ -12,9 +13,8 @@ import { MatDividerModule } from "@angular/material/divider";
 import { IssueStatus } from "src/app/issues/interfaces";
 
 interface StatusOption {
-  value: string;
+  value: IssueStatus;
   label: string;
-  disabled?: boolean;
 }
 
 @Component({
@@ -31,42 +31,33 @@ export class IssueStatusUpdateDropdownComponent {
     { value: "ignored", label: $localize`Ignored` },
   ];
 
-  selectedValue = input<string>();
+  readonly selectedValue = input.required<IssueStatus>();
   /** Color of the status dot, matching gt-status-pill. No dot when unset. */
-  statusColor = input<string>();
+  readonly statusColor = input<string>();
+  readonly resolvedInRelease = input(false, { transform: booleanAttribute });
 
-  /** Trigger label reflects the current status (falls back to "Mark As"). */
+  readonly optionSelected = output<IssueStatus>();
+  readonly resolveInNextReleaseSelected = output<void>();
+
   buttonLabel = computed(
-    () =>
-      this.options.find((o) => o.value === this.selectedValue())?.label ??
-      $localize`Mark As`,
+    () => this.options.find((o) => o.value === this.selectedValue())?.label,
   );
-
-  showResolveInNextRelease = input(false);
-  resolvedInRelease = input(false);
-
-  optionSelected = output<IssueStatus>();
-  resolveInNextReleaseSelected = output<void>();
 
   /**
    * Whether a menu option represents the issue's current state. "Resolved" is
    * only active for a plain resolve; when the resolution is tied to a release,
    * the "Resolve in next release" item carries the check instead.
    */
-  isActive(value: string): boolean {
+  isActive(value: IssueStatus): boolean {
     if (value === "resolved") {
       return this.selectedValue() === "resolved" && !this.resolvedInRelease();
     }
     return value === this.selectedValue();
   }
 
-  onOptionClick(value: string) {
+  onOptionClick(value: IssueStatus) {
     if (!this.isActive(value)) {
-      this.optionSelected.emit(value as IssueStatus);
+      this.optionSelected.emit(value);
     }
-  }
-
-  onResolveInNextRelease() {
-    this.resolveInNextReleaseSelected.emit();
   }
 }

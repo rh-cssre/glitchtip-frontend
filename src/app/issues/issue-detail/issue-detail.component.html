@@ -39,7 +39,6 @@
         <gt-issue-status-update-dropdown
           [selectedValue]="issue.status"
           [statusColor]="status().color"
-          [showResolveInNextRelease]="true"
           [resolvedInRelease]="!!resolvedInRelease()"
           (optionSelected)="updateIssueStatus($event)"
           (resolveInNextReleaseSelected)="resolveInNextRelease()"
