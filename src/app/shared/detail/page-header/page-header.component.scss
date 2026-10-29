@@ -9,7 +9,14 @@
 }
 
 .gt-page-header__icon {
-  @include object-header.icon-tile;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
 }
 
 .gt-page-header__text {
@@ -18,7 +25,8 @@
 }
 
 .gt-page-header__title {
-  @include object-header.title;
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .gt-page-header__subtitle {
