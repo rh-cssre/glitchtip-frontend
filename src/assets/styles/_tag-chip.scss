@@ -1,3 +1,4 @@
+@use "controls";
 // A tag: muted key, bold value, optional share, in a hairline pill.
 .gt-tag-chip {
   display: inline-flex;
@@ -23,8 +24,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--mat-sys-on-surface);
-    outline-offset: 2px;
+    @include controls.focus-ring;
   }
 }
 
@@ -63,8 +63,7 @@
   color: var(--mat-sys-on-surface-variant);
 
   &::before {
-    content: "\00B7";
-    margin-inline-end: var(--gt-space-2, 8px);
+    @include controls.middot($before: 0);
   }
 }
 

@@ -66,8 +66,7 @@
   text-overflow: ellipsis;
 
   &::before {
-    content: "\00B7";
-    margin-inline: var(--gt-space-2, 8px);
+    @include controls.middot;
   }
 }
 

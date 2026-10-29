@@ -1,9 +1,9 @@
+@use "controls";
+@use "row-mixins" as rows;
 @use "variables" as vars;
 
 // Code blocks and the Prism token theme. Token colours come from the log
 // palette and keep 4.5:1 on the code background and the crash line.
-
-$mono: vars.$font-mono, monospace;
 
 :root {
   --gt-code-bg: var(--mat-sys-surface-container-high);
@@ -43,8 +43,7 @@ $mono: vars.$font-mono, monospace;
   background: var(--gt-code-bg);
 
   &:focus-visible {
-    outline: 2px solid var(--mat-sys-on-surface);
-    outline-offset: 2px;
+    @include controls.focus-ring;
   }
 }
 
@@ -54,8 +53,8 @@ $mono: vars.$font-mono, monospace;
   box-sizing: border-box;
   padding-block: var(--gt-space-2, 8px);
   padding-inline-end: var(--gt-space-4, 16px);
-  font-family: $mono;
-  font-size: 0.8125rem;
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
   line-height: 20px;
 }
 
@@ -88,14 +87,14 @@ pre:has(> code[class*="language-"]) {
   border-radius: vars.$shape-radius;
   background: var(--gt-code-bg);
   color: var(--gt-code-text);
-  font-family: $mono;
-  font-size: 0.8125rem;
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
   line-height: 20px;
   tab-size: 4;
 }
 
 code[class*="language-"] {
-  font-family: $mono;
+  font-family: rows.$mono;
   color: var(--gt-code-text);
   white-space: pre;
 }

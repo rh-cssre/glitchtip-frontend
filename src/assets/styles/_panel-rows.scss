@@ -5,14 +5,12 @@
 // Rows inside a flush gt-panel, shared by every data panel. Hairlines, no boxes.
 
 $hairline: 1px solid var(--mat-sys-outline-variant);
-$mono: vars.$font-mono, monospace;
-$chev-slot: 32px;
 $label-w: 120px;
 $label-w-narrow: 88px;
 
 .gt-mono {
-  font-family: $mono;
-  font-size: 0.8125rem;
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
 }
 
 .gt-muted {
@@ -47,8 +45,7 @@ $label-w-narrow: 88px;
 
   // Takes focus (tabindex 0) so the tooltip opens from the keyboard.
   &:focus-visible {
-    outline: 2px solid var(--mat-sys-on-surface);
-    outline-offset: 2px;
+    @include controls.focus-ring;
     border-radius: 2px;
   }
 }
@@ -73,8 +70,8 @@ $label-w-narrow: 88px;
 }
 
 .gt-lc {
-  font-family: $mono;
-  font-size: 0.8125rem;
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
   font-variant-numeric: tabular-nums;
   text-align: end;
   white-space: nowrap;
@@ -85,8 +82,8 @@ $label-w-narrow: 88px;
   margin: 0;
   padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
   overflow-x: auto;
-  font-family: $mono;
-  font-size: 0.8125rem;
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
   line-height: 20px;
   white-space: pre;
   color: var(--mat-sys-on-surface);
@@ -133,7 +130,7 @@ $label-w-narrow: 88px;
 .gt-kv__row {
   --gt-label-w: #{$label-w};
   display: grid;
-  grid-template-columns: var(--gt-label-w) minmax(0, 1fr) $chev-slot;
+  grid-template-columns: var(--gt-label-w) minmax(0, 1fr) rows.$chev-slot;
   align-items: center;
   column-gap: var(--gt-space-4, 16px);
   box-sizing: border-box;
@@ -209,8 +206,8 @@ button.gt-kv__row {
 
   dt.gt-mono,
   dd.gt-mono {
-    font-family: $mono;
-    font-size: 0.8125rem;
+    font-family: rows.$mono;
+    font-size: rows.$mono-size;
   }
 
   dd.gt-mono {
