@@ -6,6 +6,8 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
   template: `{{ label() }}`,
   host: { "[style.--status-color]": "color()" },
   styles: `
+    @use "controls";
+
     :host {
       display: inline-flex;
       align-items: center;
@@ -19,10 +21,8 @@ import { ChangeDetectionStrategy, Component, input } from "@angular/core";
       background-color: var(--mat-sys-surface-container-highest);
     }
     :host::before {
+      @include controls.status-dot;
       content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
       background-color: var(--status-color);
     }
   `,
