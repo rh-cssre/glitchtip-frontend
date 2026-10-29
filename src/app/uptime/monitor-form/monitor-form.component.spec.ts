@@ -107,10 +107,10 @@ describe("MonitorFormComponent environment scoping", () => {
     const el: HTMLElement = fixture.nativeElement;
     const name = el.querySelector<HTMLInputElement>("#monitor-name")!;
     const titleId = name.getAttribute("aria-labelledby")!;
-    expect(el.querySelector(`#${titleId}`)?.textContent?.trim()).toBe("Name");
+    expect(el.querySelector(`#${titleId}`)?.textContent).toBe("Name");
     const type = el.querySelector("[data-cy=monitor-type] mat-select")!;
     const typeTitleId = type.getAttribute("aria-labelledby")!.trim();
-    expect(el.querySelector(`#${typeTitleId}`)?.textContent?.trim()).toBe(
+    expect(el.querySelector(`#${typeTitleId}`)?.textContent).toBe(
       "Monitor type",
     );
     expect(
