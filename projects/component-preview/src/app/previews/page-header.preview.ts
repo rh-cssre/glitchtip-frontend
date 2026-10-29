@@ -153,13 +153,6 @@ export class PageHeaderPreview {
       description: "One muted line under the title, clamped to two lines",
     },
     {
-      name: "inlineSubtitle",
-      type: "boolean",
-      default: "false",
-      description:
-        "Subtitle runs on after the title, wrapping under it only when it must",
-    },
-    {
       name: "icon",
       type: "string | null",
       default: "null",
