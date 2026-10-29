@@ -133,7 +133,7 @@ describe("Add and edit alerts", () => {
     cy.contains("gt-list-row a", "Checkout errors").click();
     cy.get("[data-cy=quantity]").should("have.value", "2");
 
-    cy.get("#delete-recipient").click();
+    cy.get("[data-cy=delete-recipient]").click();
     cy.contains("This alert isn't being sent anywhere.");
     cy.contains("Nobody is notified until you add a recipient.");
 

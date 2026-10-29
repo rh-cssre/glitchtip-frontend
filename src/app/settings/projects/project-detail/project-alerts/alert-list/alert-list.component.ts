@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -115,7 +116,7 @@ type ListedAlert = components["schemas"]["ProjectAlertSchema"];
 export class AlertListComponent {
   readonly alerts = input.required<ListedAlert[]>();
   readonly teams = input<string[]>();
-  readonly canWrite = input(false);
+  readonly canWrite = input(false, { transform: booleanAttribute });
   /** Where the alert form lives; rows and New alert add ?alert=. */
   readonly link = input<unknown[]>([]);
   /** Query params kept on every link, such as the project tab. */
