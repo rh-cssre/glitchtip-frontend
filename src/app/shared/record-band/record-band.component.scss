@@ -30,13 +30,10 @@
   min-width: 0;
 }
 
-// Key figures in the top right corner, behind a hairline.
+// Key figures in the top right corner; each one draws its own short hairline.
 .gt-record-band__stats {
   display: flex;
-  align-self: stretch;
   gap: var(--gt-space-5, 24px);
-  padding-inline-start: var(--gt-space-5, 24px);
-  border-inline-start: 1px solid var(--mat-sys-outline-variant);
 
   // Narrow bands show these as meta facts instead.
   @include controls.narrow-band {

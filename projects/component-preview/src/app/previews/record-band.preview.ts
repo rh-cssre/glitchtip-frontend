@@ -144,7 +144,7 @@ export class RecordBandPreview {
   ];
   readonly dos = [
     "Put the record's two to four key numbers in the corner, label over value",
-    "Set a unit apart with .gt-stat__unit, so the number reads first",
+    "Put a unit in .gt-stat__unit: same size as the number, muted",
     "Mark the meta facts the corner repeats with .gt-band-narrow-only",
     "Put a summary of the whole record, such as check bars or top tags, in the summary tier",
     "Put the tab bar in the tabs slot, so it sits on the band's bottom edge",
