@@ -15,7 +15,12 @@
         } @else {
           <span i18n>No platform set</span>
         }
-        <span i18n>Created {{ project.dateCreated | date: "mediumDate" }}</span>
+        <span i18n
+          >Created
+          {{
+            project.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
       </span>
     </gt-page-header>
     <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="settingsPanel">
