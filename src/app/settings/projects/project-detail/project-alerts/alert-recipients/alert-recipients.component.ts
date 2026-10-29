@@ -15,9 +15,9 @@ type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertRecipientsComponent {
-  recipients = input.required<AlertRecipient[]>();
+  readonly recipients = input.required<AlertRecipient[]>();
   /** The project's team slugs, for the email tooltip. */
-  teams = input<string[]>();
+  readonly teams = input<string[]>();
 
   recipientLabel = recipientLabel;
 }
