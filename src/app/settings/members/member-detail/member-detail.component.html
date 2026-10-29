@@ -13,7 +13,12 @@
     >
       <span slot="meta">
         <span>{{ roleName(member.role) ?? member.roleName }}</span>
-        <span i18n>Joined {{ member.dateCreated | date: "mediumDate" }}</span>
+        <span i18n
+          >Joined
+          {{
+            member.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
       </span>
     </gt-page-header>
 
