@@ -55,7 +55,6 @@ export class ChangePasswordComponent
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective;
   user = this.userService.user;
   loading = this.service.loading;
-  passwordResetSuccess = this.service.success;
   formErrors = this.service.formErrors;
   fieldErrors = this.service.fieldErrors;
 
