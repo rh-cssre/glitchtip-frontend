@@ -68,6 +68,7 @@ Conventions for every component:
 ### Tables
 
 - **Header row:** one size for every table. Column headers are 32px, in label-medium and `on-surface-variant`, set once in `material-overrides/_table.scss` (`$table-header-height`). The sticky action row above them (`.table-header`) keeps Material's own. Pages do not restyle header cells.
+- **Narrow screens:** columns drop as the window narrows, but the column header row stays, labeling the columns that remain.
 
 ## Accessibility
 
