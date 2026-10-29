@@ -35,11 +35,7 @@
   align-items: center;
 }
 
-// Same dot as gt-status-pill.
 .status-dot {
-  flex: none;
-  width: 7px;
-  height: 7px;
+  @include controls.status-dot;
   margin-inline-end: var(--gt-space-2, 8px);
-  border-radius: 50%;
 }
