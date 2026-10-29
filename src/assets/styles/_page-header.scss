@@ -21,12 +21,13 @@
     @include object-header.separator;
   }
 
+  // The neutral badge (same as .list-row__tag), in mono for identifiers.
   .chip {
     padding: 1px var(--gt-space-2, 8px);
     border-radius: var(--mat-sys-corner-extra-small);
-    font: var(--mat-sys-label-small);
+    font: var(--mat-sys-label-medium);
     font-family: vars.$font-mono;
-    color: var(--mat-sys-on-surface);
+    color: var(--mat-sys-on-surface-variant);
     background-color: var(--mat-sys-surface-container-highest);
   }
 
