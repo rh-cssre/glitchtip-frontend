@@ -28,6 +28,10 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       .rb-surface--narrow {
         max-width: 480px;
       }
+      .rb-summary {
+        margin: 0;
+        color: var(--mat-sys-on-surface-variant);
+      }
       .rb-content {
         margin: 0;
         padding-bottom: var(--gt-space-4);
@@ -52,9 +56,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       <div class="preview-section">
         <div class="preview-section__title">With key facts and tabs</div>
         <ng-template #monitorFacts>
-          <span class="gt-band-fact"
-            ><b>99.8%</b> up over the last 120 checks</span
-          >
+          <span class="gt-band-fact"><b>99.8%</b> uptime</span>
           <span class="gt-band-fact"><b>130ms</b> avg response</span>
         </ng-template>
         <div class="rb-surface">
@@ -81,6 +83,38 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             </nav>
           </gt-record-band>
           <mat-tab-nav-panel #panel />
+        </div>
+      </div>
+
+      <div class="preview-section">
+        <div class="preview-section__title">Text summary on a strip</div>
+        <p class="preview-section__note">
+          A text summary sits on a darker strip; a graphic one, such as check
+          bars, sits under a hairline.
+        </p>
+        <ng-template #issueFacts>
+          <span class="gt-band-fact"><b>12.3K</b> events</span>
+          <span class="gt-band-fact"><b>59</b> users</span>
+        </ng-template>
+        <div class="rb-surface">
+          <gt-record-band summary="strip">
+            <gt-page-header
+              title="TypeError"
+              subtitle="Cannot read properties of undefined (reading 'price')"
+            >
+              <span slot="meta">
+                <span><span class="chip">STOREFRONT-WEB-1</span></span>
+                <span>last seen 7 days ago</span>
+                <ng-container [ngTemplateOutlet]="issueFacts" />
+              </span>
+            </gt-page-header>
+            <span slot="stats" class="gt-band-facts"
+              ><ng-container [ngTemplateOutlet]="issueFacts"
+            /></span>
+            <p slot="summary" class="rb-summary">
+              environment <b>production</b> · browser <b>Chrome 129</b>
+            </p>
+          </gt-record-band>
         </div>
       </div>
 
@@ -112,6 +146,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <ng-template #txFacts>
           <span class="gt-band-fact"><b>40</b> transactions</span>
           <span class="gt-band-fact">avg <b>991ms</b></span>
+          <span class="gt-band-fact">p95 <b>1.60s</b></span>
         </ng-template>
         <div class="rb-surface rb-surface--narrow">
           <gt-record-band>
@@ -136,9 +171,10 @@ export class RecordBandPreview {
     "The first element inside .l-body on a data record page (issue, monitor, transaction, release)",
   ];
   readonly dos = [
-    "Write the record's two to four key facts once, in an ng-template of .gt-band-fact spans",
+    "Write up to three key facts once, in an ng-template of .gt-band-fact spans; further facts stay in the meta line",
+    "Keep each stat's label to a word or two, with any detail in a tooltip",
     "Render that template at the end of the meta line and in a .gt-band-facts span in the stats slot",
-    "Put a summary of the whole record, such as check bars or top tags, in the summary tier",
+    'Put a summary of the whole record in the summary tier: summary="strip" for text such as top tags, the default hairline for graphics such as check bars',
     "Put the tab bar in the tabs slot, so it sits on the band's bottom edge",
   ];
   readonly donts = [
@@ -147,7 +183,8 @@ export class RecordBandPreview {
     "Wrap several slotted elements in one block; each @if wraps one element so it still projects",
   ];
   readonly content = [
-    "A fact reads like the meta line: the number in <b>, then its noun (12 events, avg 991ms)",
+    "A fact reads like the meta line: the number in <b>, then its noun (12 events, avg 991ms). In the corner the number stands over its label",
+    "Counts use compactNumber (12.3K) and durations shortDuration (815ms, 1.60s)",
   ];
   readonly api: ApiRow[] = [
     {
@@ -167,7 +204,14 @@ export class RecordBandPreview {
       name: '[slot="summary"]',
       type: "projected",
       default: "",
-      description: "Optional summary tier under a hairline",
+      description: "Optional summary tier spanning the band",
+    },
+    {
+      name: "summary",
+      type: '"line" | "strip"',
+      default: '"line"',
+      description:
+        "How the summary tier is set off: a hairline for a graphic, a darker strip for text",
     },
     {
       name: '[slot="tabs"]',
@@ -178,7 +222,8 @@ export class RecordBandPreview {
   ];
   readonly importCode = `import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";`;
   readonly code = `<ng-template #facts>
-  <span class="gt-band-fact"><b>{{ group.count | number }}</b> transactions</span>
+  <span class="gt-band-fact"><b>{{ group.count | compactNumber }}</b> transactions</span>
+  <span class="gt-band-fact">avg <b>{{ group.avgDuration | shortDuration }}</b></span>
 </ng-template>
 <gt-record-band>
   <gt-page-header [title]="group.transaction">

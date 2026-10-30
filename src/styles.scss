@@ -333,6 +333,16 @@ mat-sidenav-container {
   color: var(--mat-sys-outline);
 }
 
+// Separates groups of different kinds of bar controls, see DESIGN.md
+.gt-bar-divider {
+  flex: none;
+  align-self: center;
+  width: 1px;
+  height: 20px;
+  margin-inline: var(--gt-space-2, 8px);
+  background-color: var(--mat-sys-outline-variant);
+}
+
 .medium-icon-button {
   width: 36px !important;
   height: 36px !important;
