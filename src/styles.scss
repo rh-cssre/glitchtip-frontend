@@ -361,7 +361,7 @@ mat-sidenav-container {
 
     @include mat.button-overrides(
       (
-        outlined-with-icon-horizontal-padding: 6px,
+        outlined-horizontal-padding: 6px,
         outlined-icon-spacing: 0,
         outlined-icon-offset: 0,
       )
