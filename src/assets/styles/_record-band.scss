@@ -1,41 +1,39 @@
 @use "controls";
-@use "object-header";
 @use "@angular/material" as mat;
 
 // Content projected into gt-record-band comes from the page's template, so it is global.
-// Key facts in the band's corner, written like the page header's meta line.
+// Key facts in the band's corner: each a number over a short muted label.
 .gt-band-facts {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--gt-space-1, 4px) 0;
+  gap: 0 var(--gt-space-5, 24px);
   font: var(--mat-sys-body-medium);
   color: var(--mat-sys-on-surface-variant);
 
   > * {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     white-space: nowrap;
   }
 
-  > * + * {
-    margin-left: object-header.$sep-gap;
-  }
-
-  > * + *::before {
-    @include object-header.separator;
-  }
-
   b {
-    font: var(--mat-sys-title-medium);
+    order: -1;
+    font: var(--mat-sys-title-large);
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
     color: var(--mat-sys-on-surface);
   }
-}
 
-// In the corner, a hairline sized to the facts sets them apart from the title.
-gt-record-band .gt-band-facts {
-  padding-left: var(--gt-space-4, 16px);
-  border-left: 1px solid var(--mat-sys-outline-variant);
+  // A stat with a tooltip underlines its number, not its label too.
+  .gt-has-tip {
+    text-decoration: none;
+    cursor: help;
+
+    b {
+      text-decoration: underline dotted var(--mat-sys-outline);
+      text-underline-offset: 3px;
+    }
+  }
 }
 
 // Wide bands show the facts in the corner, so the meta line leaves them out.

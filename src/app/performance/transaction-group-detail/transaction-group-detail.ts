@@ -18,7 +18,12 @@ import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-head
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
-import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
+import {
+  HumanizeDurationPipe,
+  ShortDurationPipe,
+} from "../../shared/seconds-or-ms.pipe";
+import { CompactNumberPipe } from "../../shared/compact-number.pipe";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -43,6 +48,9 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
     EmptyStateComponent,
     BackLinkComponent,
     HumanizeDurationPipe,
+    ShortDurationPipe,
+    CompactNumberPipe,
+    MatTooltipModule,
     PageHeaderComponent,
     PanelComponent,
     RecordBandComponent,
