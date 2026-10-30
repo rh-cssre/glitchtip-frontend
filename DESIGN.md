@@ -35,6 +35,12 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 
 Rule: prefer a semantic class where one exists; otherwise apply the matching type token.
 
+### Running text
+
+- Sentences (page intros, section help) cap their width with `--gt-measure` (70ch). Short centered text uses `--gt-measure-narrow` (44ch). Widths are in characters so they follow font size; field widths are a separate layout choice.
+- A page that needs orientation opens with one `.page-intro` line: muted, capped, no box or icon.
+- A link inside a sentence is underlined, in the text color, at normal weight (`.gt-prose a`, `.page-intro a`). Standalone links (row names, nav, table cells) keep the bold global style. Never the primary color: in GlitchTip's theme it reads as a warning.
+
 ### Spacing
 
 8px base grid, exposed as `--gt-space-*`:

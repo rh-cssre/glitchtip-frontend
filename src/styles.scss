@@ -55,6 +55,12 @@ html {
   --log-service-color: light-dark(#047857, #10b981);
 }
 
+// Reading widths for running text, in characters so they follow font size.
+:root {
+  --gt-measure: 70ch;
+  --gt-measure-narrow: 44ch;
+}
+
 .light {
   @include meta.load-css("prismjs/themes/prism.css");
 }
@@ -91,10 +97,31 @@ a:hover {
   text-decoration: underline;
 }
 
+// A link inside a sentence: underlined, in the text color, normal weight.
+// Standalone links (row names, nav) keep the bold global style above.
+%inline-link {
+  color: var(--mat-sys-on-surface);
+  font-weight: inherit;
+  text-decoration: underline;
+}
+
+.gt-prose a,
+.page-intro a {
+  @extend %inline-link;
+}
+
+// One or two sentences of orientation between a page's title and its content.
+.page-intro {
+  max-width: var(--gt-measure);
+  margin: 0 0 var(--gt-space-5, 24px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
 // Used across auth components
 .auth-link {
-  color: var(--mat-sys-primary);
-  text-decoration: underline;
+  @extend %inline-link;
+  font-weight: bold;
 }
 
 // Global rule because link is rendered in markdown
@@ -104,8 +131,7 @@ a:hover {
     margin-bottom: 0;
   }
   a {
-    color: var(--mat-sys-primary);
-    text-decoration: underline;
+    @extend %inline-link;
   }
 }
 
