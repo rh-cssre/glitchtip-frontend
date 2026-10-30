@@ -360,7 +360,7 @@ gt-back-link .mdc-button__label {
 }
 
 // A labelled top bar button that keeps only its icon when the bar is narrow.
-.gt-bar-button {
+.gt-bar-button.mat-mdc-outlined-button {
   @include controls.narrow-bar {
     min-width: 32px;
 
