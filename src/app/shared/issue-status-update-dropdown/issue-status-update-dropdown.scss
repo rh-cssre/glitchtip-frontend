@@ -12,6 +12,17 @@
   );
 }
 
+// Narrow bar: tighter padding, so the back link keeps its label.
+@include controls.narrow-bar {
+  :host {
+    @include mat.button-overrides(
+      (
+        outlined-horizontal-padding: var(--gt-space-3, 12px),
+      )
+    );
+  }
+}
+
 .invisible {
   visibility: hidden;
 }
