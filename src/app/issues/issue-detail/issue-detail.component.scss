@@ -99,35 +99,24 @@ table.mat-table {
   gap: 8px;
 }
 
-.level-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gt-space-1, 4px);
-  padding: 1px var(--gt-space-2, 8px);
-  border-radius: var(--mat-sys-corner-full);
-  font: var(--mat-sys-label-medium);
-  font-weight: 500;
+.level-name {
+  font-weight: 600;
   color: var(--mat-sys-on-surface);
-  background-color: var(--mat-sys-surface-container-highest);
+}
 
-  // A level is a bar, as on issue list rows; a dot is a state.
+// The level is a bar down the header, as on issue list rows.
+.issue-header {
+  position: relative;
+  padding-left: var(--gt-space-4, 16px);
+
   &::after {
     content: "";
-    order: -1;
+    position: absolute;
+    inset-block: 0;
+    left: 0;
     width: 4px;
-    height: 12px;
     border-radius: var(--mat-sys-corner-full);
   }
 
   @include issue-level.accent;
-
-  // Fatal escalates to a filled pill: the app crashed, so it earns the color.
-  &.level--fatal {
-    color: var(--mat-sys-on-error);
-    background-color: var(--gt-level-fatal);
-
-    &::after {
-      display: none;
-    }
-  }
 }

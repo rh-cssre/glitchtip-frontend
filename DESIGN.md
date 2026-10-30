@@ -27,7 +27,7 @@ All tokens are CSS custom properties. Read them live; never hardcode a raw value
 
 Rule: use a semantic role, not a raw hex. Text on a colored surface uses that surface's `on-` token so contrast holds in both schemes.
 
-Colour only for meaning: error, warning, success and status (level pills, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
+Colour only for meaning: error, warning, success and status (level bars, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
 
 ### Typography
 
@@ -82,7 +82,7 @@ Small labels come in four kinds. Shape says what kind of thing it is; color give
 
 - **Badge:** a squared grey label for data you could copy or compare: identifiers in mono (`.chip`: an issue id, a URL), fixed attributes (`.list-row__tag`: Owner, Primary).
 - **State:** a rounded grey pill with a colored dot (`gt-status-pill`) for a state that changes: Up, Down, Unresolved, Invite pending. A dot always means a state.
-- **Level:** a rounded grey pill with a colored bar for severity (the issue level tag). A bar always means a level, as on issue list rows. Fatal, the most severe, is the one filled pill.
+- **Level:** a colored bar, as on issue list rows. On an issue's header the bar runs down the title block and the meta line names the level in plain text. A bar always means a level; fatal is striped.
 - **Count:** a rounded grey pill with a number (`.tab-count`) after a label.
 
 Filters you can click are outlined tag chips (see Tag chips). Every label uses label-medium (12px).
