@@ -37,7 +37,7 @@ interface NavItem {
   exactRoute?: boolean;
 }
 
-const COLLAPSED_KEY = "sidenavCollapsed";
+const COLLAPSED_KEY = "glitchtip-sidenav-collapsed";
 
 @Component({
   selector: "gt-main-nav",
@@ -217,7 +217,7 @@ export class MainNavComponent {
 
   toggleCollapse() {
     this.isCollapsed.update((val) => !val);
-    localStorage.setItem(COLLAPSED_KEY, String(this.isCollapsed()));
+    localStorage.setItem(COLLAPSED_KEY, this.isCollapsed().toString());
     this.dispatchResizeEvent();
   }
 
