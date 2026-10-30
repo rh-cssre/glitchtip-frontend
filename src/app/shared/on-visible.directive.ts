@@ -6,7 +6,7 @@ import {
   output,
 } from "@angular/core";
 
-/** Emits once, when the element comes near the viewport, so off-screen rows load nothing. */
+/** Emits once, when the element comes near the viewport. */
 @Directive({ selector: "[gtOnVisible]" })
 export class OnVisibleDirective {
   readonly gtOnVisible = output<void>();

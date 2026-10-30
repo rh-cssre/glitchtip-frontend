@@ -33,7 +33,6 @@ import { OrganizationsService } from "src/app/api/organizations.service";
 })
 export class ProjectListComponent implements OnInit {
   projectsTitle = $localize`Projects`;
-  /** The cross-organization landing page; it becomes the dashboard. */
   homeTitle = $localize`Home`;
   noProjectsCanCreate = $localize`Add a project to start capturing errors.`;
   noProjectsAskOwner = $localize`Ask an organization owner, manager or admin to create one.`;
@@ -55,7 +54,6 @@ export class ProjectListComponent implements OnInit {
       ),
     })),
   );
-  /** The bar count on the single-org page, like other list pages. */
   activeOrgProjectCount = computed(() => {
     const id = this.activeOrganization()?.id;
     return id === undefined

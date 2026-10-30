@@ -274,7 +274,6 @@ export class ProjectRowsComponent {
     return typeof state === "object" ? state : null;
   }
 
-  /** Loads a row's facts the first time it comes into view. */
   load(project: ProjectRow) {
     const key = this.key(project);
     const trend = this.showTrend();
