@@ -4,6 +4,7 @@
 @use "./assets/styles/theme-colors" as custom-theme;
 @use "./assets/styles/material-overrides";
 @use "./assets/styles/variables" as vars;
+@use "./assets/styles/controls";
 @use "./assets/styles/font-files";
 @use "./assets/styles/page-header";
 @use "./assets/styles/resets";
@@ -359,6 +360,30 @@ mat-sidenav-container {
   height: 20px;
   margin-inline: var(--gt-space-2, 8px);
   background-color: var(--mat-sys-outline-variant);
+}
+
+// Material's label wrapper must shrink too, so the back link text can ellipsize.
+gt-back-link .mdc-button__label {
+  min-width: 0;
+}
+
+// A labelled top bar button that keeps only its icon when the bar is narrow.
+.gt-bar-button.mat-mdc-outlined-button {
+  @include controls.narrow-bar {
+    min-width: 32px;
+
+    @include mat.button-overrides(
+      (
+        outlined-horizontal-padding: 6px,
+        outlined-icon-spacing: 0,
+        outlined-icon-offset: 0,
+      )
+    );
+
+    .gt-bar-button__label {
+      display: none;
+    }
+  }
 }
 
 .medium-icon-button {
