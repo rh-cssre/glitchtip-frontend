@@ -28,7 +28,6 @@ import { BrandCodeCardPreview } from "./previews/brand-code-card.preview";
 import { BrandPageShellPreview } from "./previews/brand-page-shell.preview";
 import { BrandBannerPreview } from "./previews/brand-banner.preview";
 import { BrandMotionPreview } from "./previews/brand-motion.preview";
-import { ProjectCardPreview } from "./previews/project-card.preview";
 import { BannersPreview } from "./previews/banners.preview";
 import { IconsPreview } from "./previews/icons.preview";
 import { SymbolsPreview } from "./previews/symbols.preview";
@@ -156,13 +155,6 @@ export const PREVIEWS: PreviewEntry[] = [
     group: "Components",
     component: StepperPreview,
     status: "stable",
-  },
-  {
-    id: "project-card",
-    label: "Project card",
-    group: "Components",
-    component: ProjectCardPreview,
-    status: "legacy",
   },
   {
     id: "banners",

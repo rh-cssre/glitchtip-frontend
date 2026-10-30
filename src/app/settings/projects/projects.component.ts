@@ -5,11 +5,11 @@ import {
   inject,
   input,
 } from "@angular/core";
-import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
-import { EmptyProjectsComponent } from "../../shared/project-card/empty-projects/empty-projects.component";
+import { ProjectRowsComponent } from "../../shared/project-list/project-rows.component";
+import { PanelComponent } from "../../shared/panel/panel.component";
+import { EmptyStateComponent } from "../../shared/empty-state/empty-state.component";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { DatePipe } from "@angular/common";
 import { SettingsProjectsService } from "./projects.service";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
@@ -20,18 +20,16 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   imports: [
     MatButtonModule,
     RouterLink,
-    EmptyProjectsComponent,
-    ProjectCardComponent,
-    DatePipe,
+    ProjectRowsComponent,
+    PanelComponent,
+    EmptyStateComponent,
     TopAppBar,
   ],
   providers: [SettingsProjectsService],
 })
 export class ProjectsComponent {
-  organizationText = $localize`organization`;
-  dateCreatedText = $localize`date created`;
-  issuesText = $localize`Issues`;
-  settingsText = $localize`Settings`;
+  noProjectsCanCreate = $localize`Create a project to start sending events.`;
+  noProjectsAskOwner = $localize`Ask an organization owner, manager or admin to create one.`;
   private service = inject(SettingsProjectsService);
   private organizationsService = inject(OrganizationsService);
 

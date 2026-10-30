@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideAnimationsAsync(),
     // Router enables previewed components using routerLink (e.g.
-    // project-card) and the shell's ?p= deep links. The single match-all
+    // list rows) and the shell's ?p= deep links. The single match-all
     // route renders nothing; the shell reads the query param itself.
     provideRouter([{ path: "**", children: [] }]),
   ],

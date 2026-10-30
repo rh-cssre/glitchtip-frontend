@@ -1,35 +1,48 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 class="gt-bar-title" i18n>Projects</h1>
+  </ng-container>
+  <ng-container slot="right">
+    @if (activeOrgOnly && canWriteProject() && activeOrganization(); as org) {
+      <a
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/', org.slug, 'settings', 'projects', 'new']"
+        i18n
+        >New project</a
+      >
+    }
+  </ng-container>
+</gt-top-app-bar>
 <section class="l-body">
   @if (
     projects().length === 0 &&
     activeOrganization() === undefined &&
     orgServiceInitialLoad()
   ) {
-    <mat-card>
-      <mat-card-content>
-        <p class="body-text" i18n
-          >In order to use GlitchTip, you'll need to create an organization.</p
-        >
+    <gt-panel>
+      <gt-empty-state
+        icon="corporate_fare"
+        i18n-title
+        title="Create an organization to get started"
+        [headingLevel]="2"
+      >
         <a
           mat-flat-button
           color="primary"
           [routerLink]="['/organizations', 'new']"
           i18n
-          >Create New Organization</a
+          >Create organization</a
         >
-      </mat-card-content>
-    </mat-card>
+      </gt-empty-state>
+    </gt-panel>
   }
   @for (organization of orgsAndProjects(); track organization.id) {
-    @if (
-      !activeOrgOnly ||
-      (activeOrgOnly && organization.id === activeOrganization()?.id)
-    ) {
-      <section class="org-projects-section">
-        <header class="projects-section-header">
-          <h2 class="section-header-text">
-            @if (activeOrgOnly) {<ng-container i18n>Projects</ng-container>} @else {{{ organization.name }}}
-          </h2>
-          @if (!activeOrgOnly || canWriteProject()) {
+    @if (!activeOrgOnly || organization.id === activeOrganization()?.id) {
+      <section class="org-projects">
+        @if (!activeOrgOnly) {
+          <header class="org-projects__header">
+            <h2 class="org-projects__title">{{ organization.name }}</h2>
             <a
               mat-stroked-button
               [routerLink]="[
@@ -39,51 +52,33 @@
                 'projects',
                 'new',
               ]"
-              class="new-project-button"
+              [attr.aria-label]="organization.newProjectLabel"
               i18n
-              >Create new project in {{ organization.name }}
-            </a>
-          }
-        </header>
-        @if (organization.projects.length === 0) {
-          <gt-empty-projects
-            [activeOrgOnly]="activeOrgOnly"
-            [canCreateProject]="!activeOrgOnly || canWriteProject()"
-          ></gt-empty-projects>
+              >New project</a
+            >
+          </header>
         }
-        <div>
-          <div class="project-card-wrapper">
-            @for (project of organization.projects; track project) {
-              <gt-project-card
-                [cardLink]="['/', project.organization.slug, 'issues']"
-                [cardLinkQueryParams]="{ project: project.id }"
-                [title]="project.name"
-                [descriptionList]="[
-                  { key: organizationText, value: project.organization.name },
-                  { key: dateCreatedText, value: (project.dateCreated | date)! },
-                ]"
-                [isMember]="project.isMember"
-                [primaryButton]="{
-                  text: issuesText,
-                  icon: 'warning',
-                  query: { project: project.id },
-                  link: [project.organization.slug, 'issues'],
-                }"
-                [secondaryButton]="{
-                  text: settingsText,
-                  icon: 'settings',
-                  link: [
-                    '/',
-                    project.organization.slug,
-                    'settings',
-                    'projects',
-                    project.slug,
-                  ],
-                }"
-              ></gt-project-card>
-            }
-          </div>
-        </div>
+        @if (organization.projects.length === 0) {
+          <gt-panel>
+            <gt-empty-state
+              icon="dashboard"
+              i18n-title
+              title="No projects yet"
+              [headingLevel]="activeOrgOnly ? 2 : 3"
+              [message]="
+                !activeOrgOnly || canWriteProject()
+                  ? noProjectsCanCreate
+                  : noProjectsAskOwner
+              "
+            />
+          </gt-panel>
+        } @else {
+          <gt-project-rows
+            [projects]="organization.projects"
+            [orgSlug]="organization.slug"
+            [canEdit]="!activeOrgOnly || canWriteProject()"
+          />
+        }
       </section>
     }
   }

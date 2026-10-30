@@ -8,32 +8,30 @@ import {
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
 import { ProjectsService } from "src/app/projects/projects.service";
-import { ProjectCardComponent } from "../project-card/project-card.component";
-import { EmptyProjectsComponent } from "../project-card/empty-projects/empty-projects.component";
+import { ProjectRowsComponent } from "./project-rows.component";
+import { PanelComponent } from "../panel/panel.component";
+import { EmptyStateComponent } from "../empty-state/empty-state.component";
+import { TopAppBar } from "../top-app-bar/top-app-bar";
 import { OrganizationsService } from "src/app/api/organizations.service";
-import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "gt-project-list",
   imports: [
     RouterModule,
     MatButtonModule,
-    DatePipe,
-    MatCardModule,
-    ProjectCardComponent,
-    EmptyProjectsComponent,
+    ProjectRowsComponent,
+    PanelComponent,
+    EmptyStateComponent,
+    TopAppBar,
   ],
   templateUrl: "./project-list.component.html",
   styleUrls: ["./project-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectListComponent implements OnInit {
-  organizationText = $localize`organization`;
-  dateCreatedText = $localize`date created`;
-  issuesText = $localize`Issues`;
-  settingsText = $localize`Settings`;
+  noProjectsCanCreate = $localize`Create a project to start sending events.`;
+  noProjectsAskOwner = $localize`Ask an organization owner, manager or admin to create one.`;
   private organizationsService = inject(OrganizationsService);
   private projectsService = inject(ProjectsService);
 
@@ -46,6 +44,7 @@ export class ProjectListComponent implements OnInit {
   orgsAndProjects = computed(() =>
     this.organizations().map((organization) => ({
       ...organization,
+      newProjectLabel: $localize`Create new project in ${organization.name}:organization:`,
       projects: this.projects().filter(
         (project) => project.organization.id.toString() === organization.id,
       ),
