@@ -18,7 +18,7 @@
   } @else if (projects()?.length === 0) {
     <gt-panel>
       <gt-empty-state
-        icon="dashboard"
+        icon="folder"
         i18n-title
         title="No projects yet"
         [headingLevel]="2"
@@ -30,6 +30,7 @@
       [projects]="projects"
       [orgSlug]="orgSlug()"
       opensSettings
+      [showTrend]="false"
     />
   }
 </section>

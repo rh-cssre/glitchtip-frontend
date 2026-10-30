@@ -1,9 +1,10 @@
 // Type-only: declares the $localize global for the spec program. The runtime
 // polyfill is already loaded by the test builder.
 import type {} from "@angular/localize/init";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
+import { client } from "src/app/shared/api/api";
 import { DAYS, ProjectRowsComponent, toDays } from "./project-rows.component";
 
 /**
@@ -67,11 +68,13 @@ describe("ProjectRowsComponent", () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it("names the platform and teams, and waits for a first event", () => {
-    const text = render({}).textContent ?? "";
-    expect(text).toContain("Django");
-    expect(text).toContain("#platform");
-    expect(text).toContain("waiting for first event");
+  it("names the platform and teams, and marks a project with no events", () => {
+    const el = render({});
+    expect(el.textContent).toContain("Django");
+    expect(el.textContent).toContain("#platform");
+    expect(el.querySelector("gt-status-pill")?.textContent).toContain(
+      "No events yet",
+    );
   });
 
   it("opens a project's issues, or its settings in the settings list", () => {
@@ -86,5 +89,47 @@ describe("ProjectRowsComponent", () => {
     const el = render({ isMember: false });
     expect(el.querySelector("a[gtListRowLink]")).toBeNull();
     expect(el.textContent).toContain("Not a member");
+  });
+
+  describe("in the settings list", () => {
+    afterEach(() => vi.restoreAllMocks());
+
+    async function renderSettings(alertCount: number) {
+      vi.spyOn(client, "GET").mockResolvedValue({
+        data: Array.from({ length: alertCount }, (_, id) => ({ id })),
+        response: new Response(null, { status: 200 }),
+      } as never);
+      TestBed.configureTestingModule({ providers: [provideRouter([])] });
+      const fixture = TestBed.createComponent(ProjectRowsComponent);
+      fixture.componentRef.setInput("orgSlug", "acme");
+      fixture.componentRef.setInput("opensSettings", true);
+      fixture.componentRef.setInput("showTrend", false);
+      fixture.componentRef.setInput("projects", [
+        {
+          id: 7,
+          name: "api",
+          slug: "api",
+          firstEvent: "2026-10-22",
+          isMember: true,
+        },
+      ]);
+      fixture.detectChanges();
+      const text = () => {
+        fixture.detectChanges();
+        return (fixture.nativeElement as HTMLElement).textContent ?? "";
+      };
+      // The row loads after it is seen, so wait for the request to resolve.
+      await vi.waitFor(() => expect(client.GET).toHaveBeenCalled());
+      await new Promise((done) => setTimeout(done));
+      return text();
+    }
+
+    it("shows the alert count once the row loads", async () => {
+      expect(await renderSettings(3)).toContain("3 alerts");
+    });
+
+    it("says nothing about alerts when there are none", async () => {
+      expect(await renderSettings(0)).not.toContain("alert");
+    });
   });
 });

@@ -92,7 +92,7 @@ export class MainNavComponent {
     },
     {
       name: $localize`Projects`,
-      icon: "team_dashboard",
+      icon: "folder",
       route: ["org_slug", "projects"],
     },
     {

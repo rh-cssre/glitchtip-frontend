@@ -13,6 +13,7 @@ import { ProjectRowsComponent } from "./project-rows.component";
 import { PanelComponent } from "../panel/panel.component";
 import { EmptyStateComponent } from "../empty-state/empty-state.component";
 import { TopAppBar } from "../top-app-bar/top-app-bar";
+import { ListTitleComponent } from "src/app/list-elements/list-title/list-title.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
@@ -24,13 +25,17 @@ import { OrganizationsService } from "src/app/api/organizations.service";
     PanelComponent,
     EmptyStateComponent,
     TopAppBar,
+    ListTitleComponent,
   ],
   templateUrl: "./project-list.component.html",
   styleUrls: ["./project-list.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectListComponent implements OnInit {
-  noProjectsCanCreate = $localize`Create a project to start sending events.`;
+  projectsTitle = $localize`Projects`;
+  /** The cross-organization landing page; it becomes the dashboard. */
+  homeTitle = $localize`Home`;
+  noProjectsCanCreate = $localize`Add a project to start capturing errors.`;
   noProjectsAskOwner = $localize`Ask an organization owner, manager or admin to create one.`;
   private organizationsService = inject(OrganizationsService);
   private projectsService = inject(ProjectsService);
@@ -50,6 +55,15 @@ export class ProjectListComponent implements OnInit {
       ),
     })),
   );
+  /** The bar count on the single-org page, like other list pages. */
+  activeOrgProjectCount = computed(() => {
+    const id = this.activeOrganization()?.id;
+    return id === undefined
+      ? undefined
+      : String(
+          this.orgsAndProjects().find((o) => o.id === id)?.projects.length ?? 0,
+        );
+  });
   // Scopes come from one selected org, so only the single-org view is gated.
   canWriteProject = this.organizationsService.canWriteProject;
 

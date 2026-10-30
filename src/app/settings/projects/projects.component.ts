@@ -28,7 +28,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
   providers: [SettingsProjectsService],
 })
 export class ProjectsComponent {
-  noProjectsCanCreate = $localize`Create a project to start sending events.`;
+  noProjectsCanCreate = $localize`Add a project to start capturing errors.`;
   noProjectsAskOwner = $localize`Ask an organization owner, manager or admin to create one.`;
   private service = inject(SettingsProjectsService);
   private organizationsService = inject(OrganizationsService);

@@ -137,7 +137,7 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 - A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
 - When a row's action is blocked, say why in the row's description line; never only in a tooltip.
 - A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon.
-- Projects are listed with `gt-project-rows` everywhere (home, Projects, Settings > Projects): name, then platform, teams and last event; on the right the last 14 days of errors as the issue list's trend bars, and the unresolved count. A project with no events yet says so instead. Phones drop the bars.
+- Projects are listed with `gt-project-rows` everywhere. On Home and Projects a row shows the name, then platform, teams and last event, and on the right the last 14 days of errors (the issue list's trend bars) and the unresolved count; a click opens its issues. Settings > Projects is the setup view: platform, teams, the alert count when there are alerts, and the created date, with no trend; a click opens its settings. A project with no events yet shows a "No events yet" state pill. A row loads its numbers when it scrolls into view, at most four at once, with placeholder bars meanwhile. Projects use the `folder` icon everywhere.
 
 ## Accessibility
 

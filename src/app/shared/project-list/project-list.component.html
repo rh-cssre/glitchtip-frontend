@@ -1,6 +1,9 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <h1 class="gt-bar-title" i18n>Projects</h1>
+    <gt-list-title
+      [title]="activeOrgOnly ? projectsTitle : homeTitle"
+      [searchHits]="activeOrgOnly ? activeOrgProjectCount() : undefined"
+    />
   </ng-container>
   <ng-container slot="right">
     @if (activeOrgOnly && canWriteProject() && activeOrganization(); as org) {
@@ -61,7 +64,7 @@
         @if (organization.projects.length === 0) {
           <gt-panel>
             <gt-empty-state
-              icon="dashboard"
+              icon="folder"
               i18n-title
               title="No projects yet"
               [headingLevel]="activeOrgOnly ? 2 : 3"
