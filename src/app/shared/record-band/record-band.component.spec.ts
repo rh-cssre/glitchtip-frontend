@@ -22,6 +22,14 @@ class FullBandComponent {}
 })
 class IdentityOnlyBandComponent {}
 
+@Component({
+  imports: [RecordBandComponent],
+  template: `<gt-record-band summary="strip"
+    ><h1>TypeError</h1></gt-record-band
+  >`,
+})
+class StripBandComponent {}
+
 describe("RecordBandComponent", () => {
   function render(host: Type<unknown>) {
     const fixture = TestBed.createComponent(host);
@@ -54,5 +62,16 @@ describe("RecordBandComponent", () => {
     );
     expect(boxes.length).toBeGreaterThan(shown.length);
     expect(shown.every((box) => box.contains(heading))).toBe(true);
+  });
+
+  it("sets off a text summary on a strip only when asked", () => {
+    const band = (host: Type<unknown>) =>
+      render(host).querySelector("gt-record-band")!;
+    expect(band(StripBandComponent).classList).toContain(
+      "gt-record-band--strip",
+    );
+    expect(band(IdentityOnlyBandComponent).classList).not.toContain(
+      "gt-record-band--strip",
+    );
   });
 });

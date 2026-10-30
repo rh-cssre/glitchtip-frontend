@@ -20,7 +20,8 @@
 
 .gt-record-band__top {
   display: flex;
-  align-items: flex-start;
+  // A stat's number sits on the title's baseline.
+  align-items: first baseline;
   gap: var(--gt-space-4, 16px);
   padding-bottom: var(--gt-space-2, 8px);
 }
@@ -30,11 +31,10 @@
   min-width: 0;
 }
 
-// Key facts in the top right corner, level with the title.
+// Key facts in the top right corner.
 .gt-record-band__stats {
   flex: none;
   max-width: 60%;
-  padding-top: var(--gt-space-2, 8px);
 
   // Narrow bands show the same facts at the end of the meta line instead.
   @include controls.narrow-band {
@@ -42,9 +42,16 @@
   }
 }
 
+// Full bleed, so its hairline or strip spans the band.
 .gt-record-band__summary {
-  padding-block: var(--gt-space-2, 8px);
+  margin-inline: calc(var(--gt-page-inset) * -1);
+  padding: var(--gt-space-2, 8px) var(--gt-page-inset);
   border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+:host(.gt-record-band--strip) .gt-record-band__summary {
+  border-top: 0;
+  background-color: var(--mat-sys-surface-container-high);
 }
 
 // Hidden when nothing projected into it renders, so a hairline never sits
