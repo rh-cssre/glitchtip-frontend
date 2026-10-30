@@ -12,6 +12,17 @@
         i18n
         >Edit monitor</a
       >
+      <span class="gt-bar-divider" aria-hidden="true"></span>
+      <button
+        mat-icon-button
+        matTooltip="Delete monitor"
+        i18n-matTooltip
+        aria-label="Delete monitor"
+        i18n-aria-label
+        (click)="delete()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     }
   </ng-container>
 </gt-top-app-bar>

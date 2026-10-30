@@ -16,6 +16,10 @@ import { MonitorResponseChart } from "../monitor-response-chart/monitor-response
 import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component";
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
@@ -47,6 +51,8 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     TimeForPipe,
     DecimalPipe,
     MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
     MonitorChartComponent,
     MatProgressSpinnerModule,
     PageHeaderComponent,
@@ -65,6 +71,7 @@ export class MonitorDetailComponent
   uptimeMonitorsText = $localize`Uptime Monitors`;
   protected service: MonitorService;
   private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -169,5 +176,21 @@ export class MonitorDetailComponent
 
   ngOnInit() {
     this.service.retrieveMonitorDetails(this.monitorID());
+  }
+
+  delete() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete monitor?`,
+        message: $localize`Are you sure you want to delete this monitor? You will permanently lose all associated uptime data.`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.service.deleteMonitor();
+      }
+    });
   }
 }
