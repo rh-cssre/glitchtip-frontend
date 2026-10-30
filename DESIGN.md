@@ -27,7 +27,7 @@ All tokens are CSS custom properties. Read them live; never hardcode a raw value
 
 Rule: use a semantic role, not a raw hex. Text on a colored surface uses that surface's `on-` token so contrast holds in both schemes.
 
-Colour only for meaning: error, warning, success and status (level pills, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
+Colour only for meaning: error, warning, success and status (level bars, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
 
 - **Code:** code blocks use the Prism token theme in `src/assets/styles/_code.scss` (`--gt-code-*`) on the strip tint. Token colours come from the per-mode log palette and keep 4.5:1 on the code surface and the crash line in both modes. The crash line is an error tint with a 2px error bar. Markdown code blocks get the same theme.
 
@@ -86,7 +86,7 @@ Small labels come in four kinds. Shape says what kind of thing it is; color give
 
 - **Badge:** a squared grey label for data you could copy or compare: identifiers in mono (`.chip`: an issue id, a URL), fixed attributes (`.list-row__tag`: Owner, Primary).
 - **State:** a rounded grey pill with a colored dot (`gt-status-pill`) for a state that changes: Up, Down, Unresolved, Invite pending. A dot always means a state.
-- **Level:** a rounded grey pill with a colored bar for severity (the issue level tag). A bar always means a level, as on issue list rows. Fatal, the most severe, is the one filled pill.
+- **Level:** a colored bar, as on issue list rows. On an issue's header the bar runs down the title block and the meta line names the level in plain text. A bar always means a level; fatal is striped.
 - **Count:** a rounded grey pill with a number (`.tab-count`) after a label.
 
 Filters you can click are outlined tag chips (see Tag chips). Every label uses label-medium (12px).
@@ -97,7 +97,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - Settings pages for a named object (organization, project, team, member) show an icon tile, using the same icon as that object's item in the nav. Data pages (issue, monitor, transaction, release) and profile pages do not.
 - Those settings pages use `compact`: one line with a 32px tile, the title in title-large and the meta facts inline after it, wrapping under the title on a narrow screen. Data pages keep the full header.
-- Data record pages open with a record band (`gt-record-band`): a tinted band over the page's full width that holds the page header. The record's two to four key facts sit in its top right corner on one line, written like the meta line (`.gt-band-facts`: the number in `<b>`, then its noun, middle dots between). A summary of the whole record (check bars, top tags) goes in the summary tier under a hairline, and the tab bar sits on the band's bottom edge. Write the facts once, as `.gt-band-fact` spans in an `ng-template`, and render it in both the corner and the end of the meta line; under 900px the corner hides and the meta line shows them. Settings records keep the compact header with no band.
+- Data record pages open with a record band (`gt-record-band`): a tinted band over the page's full width that holds the page header. Up to three key facts sit in its top right corner as stats (`.gt-band-facts`): the number in `<b>` over a short muted label, on the title's baseline. Keep a label to a word or two and put any detail in a tooltip, which underlines the number. Shorten counts with `compactNumber` (12.3K) and durations with `shortDuration` (815ms, 1.60s). Further facts stay in the meta line. A summary of the whole record goes in the summary tier: a text summary (top tags) on a darker strip (`summary="strip"`), a graphic one (check bars) under a hairline; both span the band. The tab bar sits on the band's bottom edge. Write the corner facts once, as `.gt-band-fact` spans in an `ng-template`, and render it in both the corner and the end of the meta line; under 900px the corner hides and the meta line shows them. Settings records keep the compact header with no band.
 - A title that needs a second line of its own (an error's message under its type) uses `subtitle`. Facts never go there.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
 - No meta fact repeats the title: no slug chip under the name it comes from, no project chip under a version that already names it. If nothing is left, leave out the meta row.
