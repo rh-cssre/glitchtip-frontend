@@ -37,6 +37,8 @@ interface NavItem {
   exactRoute?: boolean;
 }
 
+const COLLAPSED_KEY = "sidenavCollapsed";
+
 @Component({
   selector: "gt-main-nav",
   templateUrl: "./main-nav.component.html",
@@ -165,7 +167,10 @@ export class MainNavComponent {
 
   visibleOrgMenuItems = this.orgMenuItems;
 
-  isCollapsed = signal(false);
+  // Remembered per browser; the mobile drawer always opens full width.
+  isCollapsed = signal(
+    !this.mainNav.mobileNav() && localStorage.getItem(COLLAPSED_KEY) === "true",
+  );
 
   getRouteWithOrgSlug(route: string[]) {
     return route.map((item) =>
@@ -212,6 +217,7 @@ export class MainNavComponent {
 
   toggleCollapse() {
     this.isCollapsed.update((val) => !val);
+    localStorage.setItem(COLLAPSED_KEY, String(this.isCollapsed()));
     this.dispatchResizeEvent();
   }
 
