@@ -31,6 +31,7 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
 - **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
+- **Weights:** three, each with one job: 400 for text you read, 500 for controls (buttons, tabs, the bar), 600 for headings, titles and links. Plex Sans ships a real file for each, so no weight is synthesized; don't use 700 or `bold`.
 
 Rule: prefer a semantic class where one exists; otherwise apply the matching type token.
 
