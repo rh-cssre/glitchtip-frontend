@@ -8,10 +8,14 @@
       <a
         id="monitor-settings"
         mat-stroked-button
+        class="gt-bar-button"
         [routerLink]="['./update']"
-        i18n
-        >Edit monitor</a
+        aria-label="Edit monitor"
+        i18n-aria-label
       >
+        <mat-icon>edit</mat-icon>
+        <span class="gt-bar-button__label" i18n>Edit monitor</span>
+      </a>
       <span class="gt-bar-divider" aria-hidden="true"></span>
       <button
         mat-icon-button
