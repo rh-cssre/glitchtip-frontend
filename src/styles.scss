@@ -354,6 +354,11 @@ mat-sidenav-container {
   background-color: var(--mat-sys-outline-variant);
 }
 
+// Material's label wrapper must shrink too, so the back link text can ellipsize.
+gt-back-link .mdc-button__label {
+  min-width: 0;
+}
+
 // A labelled top bar button that keeps only its icon when the bar is narrow.
 .gt-bar-button {
   @include controls.narrow-bar {
