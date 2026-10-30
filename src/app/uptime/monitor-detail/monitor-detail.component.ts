@@ -119,6 +119,12 @@ export class MonitorDetailComponent
     if (!checks.length) return null;
     return (checks.filter((c) => c.isUp).length / checks.length) * 100;
   });
+  uptimeTip = computed(() => {
+    const count = this.monitor()?.checks.length ?? 0;
+    return count === 1
+      ? $localize`Over the last check`
+      : $localize`Over the last ${count}:count: checks`;
+  });
   avgResponseMs = computed(() => {
     const times = (this.monitor()?.checks ?? [])
       .map((c) => c.responseTime)

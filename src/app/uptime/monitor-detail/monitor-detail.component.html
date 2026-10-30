@@ -31,17 +31,15 @@
   @if (monitor(); as monitor) {
     <ng-template #facts>
       @if (uptimePercent() !== null) {
-        <span class="gt-band-fact" i18n
+        <span
+          class="gt-band-fact gt-has-tip"
+          tabindex="0"
+          [matTooltip]="uptimeTip()"
+          i18n
           ><b
             >{{ uptimePercent()! | number: "1.0-1" // i18n(ph="percent") }}%</b
           >
-          up over
-          {monitor.checks.length, plural,
-            =1 {the last check}
-            other {
-              the last {{ monitor.checks.length // i18n(ph="count") }} checks
-            }
-          }</span
+          uptime</span
         >
       }
       @if (avgResponseMs() !== null) {
