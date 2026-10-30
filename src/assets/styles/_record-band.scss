@@ -26,9 +26,16 @@
   }
 
   b {
+    font: var(--mat-sys-title-medium);
     font-weight: 600;
     color: var(--mat-sys-on-surface);
   }
+}
+
+// In the corner, a hairline sized to the facts sets them apart from the title.
+gt-record-band .gt-band-facts {
+  padding-left: var(--gt-space-4, 16px);
+  border-left: 1px solid var(--mat-sys-outline-variant);
 }
 
 // Wide bands show the facts in the corner, so the meta line leaves them out.
