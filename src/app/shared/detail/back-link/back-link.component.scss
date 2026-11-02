@@ -1,6 +1,30 @@
+@use "@angular/material" as mat;
 @use "variables" as vars;
 
+// The chevron takes the leading padding, so it sits on the container edge.
+$inset: var(--gt-space-4, 16px);
+
+:host {
+  display: inline-flex;
+  // Gives way to the bar's actions; the text ellipsizes instead of overlapping.
+  min-width: 0;
+
+  a {
+    min-width: 0;
+    max-width: 100%;
+  }
+  @include mat.button-overrides(
+    (
+      text-with-icon-horizontal-padding: $inset,
+      text-icon-offset: calc(-1 * #{$inset}),
+    )
+  );
+}
+
+// Same size as the bar title, so bar text does not change between pages.
 .back-link-text {
+  font: var(--mat-sys-title-medium);
+  letter-spacing: var(--mat-sys-title-medium-tracking);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

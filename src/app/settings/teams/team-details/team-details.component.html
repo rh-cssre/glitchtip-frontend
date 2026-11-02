@@ -1,10 +1,23 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="Back to Teams" />
+    <gt-back-link i18n-backLinkText backLinkText="Teams" />
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <gt-detail-header [title]="'#' + teamSlug()!" />
+  <gt-page-header icon="groups" [title]="'#' + teamSlug()">
+    @if (team(); as team) {
+      <span slot="meta">
+        <span i18n>{memberCount(), plural,
+          =1 {<b>1</b> member}
+          other {<b>{{ memberCount() }}</b> members}
+        }</span>
+        <span i18n
+          >Created
+          {{ team.dateCreated | date: "mediumDate" // i18n(ph="date") }}</span
+        >
+      </span>
+    }
+  </gt-page-header>
   <nav mat-tab-nav-bar mat-stretch-tabs="false" [tabPanel]="tabPanel">
     @for (link of navLinks; track link) {
       <a
@@ -14,6 +27,9 @@
         [active]="rla.isActive"
         #rla="routerLinkActive"
         >{{ link.label }}
+        @if (tabCounts()[link.path] !== undefined) {
+          <span class="tab-count">{{ tabCounts()[link.path] }}</span>
+        }
       </a>
     }
   </nav>

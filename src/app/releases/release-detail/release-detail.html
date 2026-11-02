@@ -1,12 +1,46 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="View all Releases" />
+    <gt-back-link i18n-backLinkText backLinkText="Releases" />
   </ng-container>
 </gt-top-app-bar>
 
 <section class="l-body l-body--full-width mat-elevation-z0">
-  @if (releaseTitle(); as title) {
-    <gt-detail-header [title]="title" />
+  @if (release(); as release) {
+    <gt-record-band>
+      <gt-page-header [title]="release.version">
+        <span slot="meta">
+          @for (project of release.projects; track project.slug) {
+            <!-- The version may already name the project -->
+            @if (!release.version.startsWith(project.slug + "@")) {
+              <span
+                ><span class="chip">{{ project.slug }}</span></span
+              >
+            }
+          }
+          @if (paginator()?.count; as count) {
+            <span i18n>{+count, plural,
+              =1 {<b>1</b> file}
+              other {<b>{{ count // i18n(ph="count") }}</b> files}
+            }</span>
+          }
+          @if (release.dateReleased) {
+            <span i18n
+              >Released
+              {{
+                release.dateReleased | date: "mediumDate" // i18n(ph="date")
+              }}</span
+            >
+          } @else {
+            <span i18n
+              >Created
+              {{
+                release.dateCreated | date: "mediumDate" // i18n(ph="date")
+              }}</span
+            >
+          }
+        </span>
+      </gt-page-header>
+    </gt-record-band>
   }
   <div class="table-container">
     <gt-loading-overlay i18n-label [loading]="loading()" label="Loading release files">

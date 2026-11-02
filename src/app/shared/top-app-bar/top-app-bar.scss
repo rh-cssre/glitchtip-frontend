@@ -1,24 +1,36 @@
+@use "controls";
 @use "src/assets/styles/_variables.scss" as vars;
+
+:host {
+  @include controls.compact-buttons;
+}
 
 .top-app-bar {
   display: flex;
   height: vars.$top-app-bar-height;
   align-items: center;
+  gap: var(--gt-space-4, 16px);
+  padding: 0 var(--gt-space-5, 24px);
   border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  // The page's phone inset (.l-body), so the back chevron lines up with the content.
+  @media screen and (max-width: vars.$small - 1) {
+    padding: 0 15px;
+  }
 }
 
 .left-section,
 .right-section {
   display: flex;
   align-items: center;
-  padding: 0 24px;
   height: 100%;
 }
 
 .left-section {
   flex: 1;
+  min-width: 0;
 }
 
-.right-section:has(*) {
-  border-left: 1px solid var(--mat-sys-outline-variant);
+.right-section {
+  gap: var(--gt-space-2, 8px);
 }

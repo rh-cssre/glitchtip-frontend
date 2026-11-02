@@ -1,12 +1,28 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="Back to Projects" />
+    <gt-back-link i18n-backLinkText backLinkText="Projects" />
   </ng-container>
 </gt-top-app-bar>
 
 @if (activeProject(); as project) {
   <section class="l-body">
-    <gt-detail-header [title]="settingsFor(project.name)" />
+    <gt-page-header icon="folder" [title]="project.name">
+      <span slot="meta">
+        @if (project.platform) {
+          <span
+            ><span class="chip">{{ project.platform }}</span></span
+          >
+        } @else {
+          <span i18n>No platform set</span>
+        }
+        <span i18n
+          >Created
+          {{
+            project.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
+      </span>
+    </gt-page-header>
     @if (project.isMember === false) {
       <mat-card
         ><mat-card-content class="note-padding">
