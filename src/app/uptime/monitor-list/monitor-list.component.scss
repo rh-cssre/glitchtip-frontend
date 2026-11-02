@@ -1,34 +1,33 @@
-@import "variables";
-
-$iconWidth: 56px;
-
-.top-content {
-  display: flex;
-  justify-content: space-between;
-}
+@use "variables" as vars;
 
 table {
   width: 100%;
 }
 
-.wrapper {
+.pagination-container {
   width: 100%;
+  display: flex;
+  justify-content: right;
 }
 
-.name-and-url {
-  width: 500px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+.mat-mdc-cell {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 
-  @media screen and (max-width: $large - 1) {
-    width: 300px;
+.mat-column-name {
+  max-width: 400px;
+
+  @media screen and (max-width: vars.$large - 1) {
+    max-width: 300px;
   }
-  @media screen and (max-width: $medium - 1) {
-    width: 200px;
+  @media screen and (max-width: vars.$medium - 1) {
+    max-width: 200px;
   }
-  @media screen and (max-width: $tablet - 1) {
-    width: 160px;
-  }
+}
+
+.name-and-url-container {
+  width: 100%;
 
   a {
     white-space: nowrap;
@@ -38,52 +37,75 @@ table {
     max-width: fit-content;
   }
 
+  .monitor-link {
+    text-decoration: underline;
+  }
+
   div {
     width: inherit;
 
-    .mat-caption {
+    .caption-text {
       color: inherit;
     }
   }
 }
 
-.chart-container{
-  @media screen and (max-width: $small - 1) {
-    display: none;
-  }
+.project-name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
-  .monitor-chart{
+.mat-column-checkChart {
+  width: 40%;
+  min-width: 300px;
+}
+
+.chart-container {
+  .monitor-chart {
     margin-left: 10px;
   }
 }
 
-.status {
-  @media screen and (max-width: $small - 1) {
+.mat-column-status {
+  width: 150px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  @media screen and (max-width: vars.$small - 1) {
     padding-left: 40px;
   }
 }
 
+.add-monitor-button {
+  @media screen and (max-width: vars.$small - 1) {
+    mat-icon {
+      display: none;
+    }
+  }
+}
+
+.add-monitor-text-short {
+  @media screen and (min-width: vars.$small) {
+    display: none;
+  }
+}
+
+.add-monitor-text-long {
+  @media screen and (max-width: vars.$small - 1) {
+    display: none;
+  }
+}
+
 .status-color {
-  position: relative;
-  &:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
+  &--true {
+    border-left: 3px solid var(--success-color);
   }
 
-  &--true:after {
-    background-color: #54a65a;
+  &--false {
+    border-left: 3px solid var(--mat-sys-error);
   }
 
-  &--false:after {
-    background-color: $amaranth;
-  }
-
-  // For monitors that do not yet have a check
-  &--:after {
-    background-color: gray;
+  &-- {
+    border-left: 3px solid var(--mat-sys-surface-variant);
   }
 }

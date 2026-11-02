@@ -1,0 +1,22 @@
+@use "@angular/material" as mat;
+@use "variables" as vars;
+
+mat-toolbar {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  height: 44px;
+  display: none;
+  cursor: pointer;
+
+  @media (max-width: vars.$tablet - 1) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.active-org {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 5px;
+}

@@ -1,11 +1,11 @@
-@import "variables";
+@use "variables" as vars;
 
 h3 {
   padding-top: 16px;
 }
 
 .formatted-message {
-  font-family: $font-mono;
+  font-family: vars.$font-mono;
   white-space: pre-wrap;
   word-wrap: normal;
   word-break: break-all;

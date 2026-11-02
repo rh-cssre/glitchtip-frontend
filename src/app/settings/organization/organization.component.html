@@ -1,49 +1,73 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 i18n class="section-header-text">General Settings</h1>
+  </ng-container>
+</gt-top-app-bar>
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1">General Settings</h1>
-  </header>
-  <ng-container *ngIf="activeOrganizationDetail$ | async as activeOrg">
+  @if (activeOrganizationDetail(); as activeOrg) {
     <mat-card>
-      <mat-card-title>General</mat-card-title>
+      <mat-card-header>
+        <mat-card-title i18n>General</mat-card-title>
+      </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="updateOrganization()">
-          <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name" [value]="activeOrg.name" />
-            <mat-error *ngIf="updateError">{{ updateError }}</mat-error>
-          </mat-form-field>
-          <gt-loading-button
-            [disabled]="name?.value === activeOrg.name"
-            mat-flat-button
-            color="primary"
-            buttonText="Update Name"
-            id="update-org"
+        @if (canWriteOrg()) {
+          <form [formGroup]="form" (ngSubmit)="updateOrganization()">
+            <mat-form-field appearance="outline">
+              <mat-label i18n>Name</mat-label>
+              <input matInput formControlName="name" [value]="activeOrg.name" />
+            </mat-form-field>
+            <gt-loading-button i18n-buttonText
+              [disabled]="name?.value === activeOrg.name"
+              [loading]="loading().updateOrganization"
+              mat-flat-button
+              color="primary"
+              buttonText="Update Name"
+              id="update-org"
+            >
+            </gt-loading-button>
+          </form>
+          @if (errors().updateOrganization) {
+            <mat-error>{{ errors().updateOrganization }}</mat-error>
+          }
+        } @else {
+          <p class="body-text">
+            <span class="body-text-strong" i18n>Name:</span>
+            {{ activeOrg.name }}
+          </p>
+        }
+      </mat-card-content>
+    </mat-card>
+    @if (canAdminOrg()) {
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title i18n>Delete Organization</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="remove-content">
+          <div>
+            <p i18n>
+              By deleting this organization, you will lose all data including
+              projects and their associated events.
+            </p>
+            @if (errors().deleteOrganization) {
+              <mat-error>{{ errors().deleteOrganization }}</mat-error>
+            }
+          </div>
+          <gt-loading-button i18n-buttonText
+            buttonStyle="stroked"
+            color="warn"
+            data-test
+            buttonText="Delete Organization"
+            buttonStyle="stroked"
+            color="warn"
+            [loading]="loading().deleteOrganization"
+            (buttonClick)="removeOrganization(activeOrg.slug, activeOrg.name)"
+            id="delete-org"
           >
           </gt-loading-button>
-        </form>
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-title>Delete Organization</mat-card-title>
-      <mat-divider></mat-divider>
-      <mat-card-content class="remove-content">
-        <div>
-          <p>
-            By deleting this organization, you will lose all data including
-            projects and their associated events.
-          </p>
-          <mat-error *ngIf="deleteError">{{ deleteError }}</mat-error>
-        </div>
-        <gt-loading-button
-          data-test
-          buttonText="Delete Organization"
-          [loading]="deleteLoading"
-          (click)="removeOrganization(activeOrg.slug, activeOrg.name)"
-          id="delete-org"
-        >
-        </gt-loading-button>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
 </section>

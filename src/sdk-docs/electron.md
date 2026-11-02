@@ -1,26 +1,29 @@
-If you are using `yarn` or `npm` you can add the SDK as a dependency:
+Install the sentry Electron SDK:
 
 ```bash
-# Using yarn
-$ yarn add @sentry/electron
-
-# Using npm
-$ npm install @sentry/electron
+npm install @sentry/electron
 ```
 
-You need to call `init` in your `main` and every `renderer` process you spawn.
-For more details about Electron [click here]({%- link _documentation/platforms/javascript/electron.md -%})
+Initialize the SDK in both your `main` process and every `renderer` process:
 
 ```javascript
 import * as Sentry from "@sentry/electron";
 
-Sentry.init({ dsn: "your DSN here" });
+Sentry.init({
+  dsn: "YOUR_DSN",
+  autoSessionTracking: false, // GlitchTip does not support sessions
+});
 ```
 
-One way to break your Electron application is to call an undefined function:
+Verify your setup:
 
 ```javascript
 myUndefinedFunction();
 ```
 
-You may want to try inserting this into both your `main` and any `renderer` processes to verify the SDK is operational in both.
+Test this in both your `main` and `renderer` processes to verify the SDK is operational in both.
+
+## Tips
+
+- The SDK captures crashes from both the main process and renderer processes.
+- Upload debug symbols with the [GlitchTip CLI](/documentation/cli) for readable native crash stack traces.

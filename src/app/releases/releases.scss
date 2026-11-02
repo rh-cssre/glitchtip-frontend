@@ -1,0 +1,40 @@
+@use "variables" as vars;
+
+$iconWidth: 56px;
+
+table {
+  width: 100%;
+  margin-bottom: 40px;
+
+  // &.fixedLayout {
+  //   table-layout: fixed;
+  // }
+}
+
+.mat-column-version, .mat-column-header-spacing {
+  width: 90%;
+  @media screen and (max-width: vars.$large - 1) {
+    width: 500px;
+  }
+  @media screen and (max-width: vars.$medium - 1) {
+    width: 400px;
+  }
+  @media screen and (max-width: vars.$tablet - 1) {
+    width: 200px;
+  }
+}
+
+.mat-column-created,
+.mat-column-pagination {
+  width: 10%;
+}
+
+.version {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: fit-content;
+}

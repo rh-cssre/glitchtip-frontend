@@ -1,28 +1,29 @@
-Install the `sentry/sentry-laravel` package:
+Install the sentry Laravel SDK:
 
 ```bash
-$ composer require sentry/sentry-laravel
+composer require sentry/sentry-laravel
 ```
 
-Create the SDK configuration file (`config/sentry.php`) with this command:
+Publish the config file:
 
-```sh
-$ php artisan sentry:publish --dsn=your DSN here
+```bash
+php artisan sentry:publish --dsn=YOUR_DSN
 ```
 
-This command adds to your .env file:
+This adds to your `.env` file:
 
-- `SENTRY_LARAVEL_DSN` - The DSN from your GlitchTip project.
-- `SENTRY_TRACES_SAMPLE_RATE` - Between 0.0 and 1.0. 1.0 will send 100% of transactions to GlitchTip. You may wish to set it to a lower number to keep event count and disk space usage lower. Such as 0.2 for a 20% sampling rate.
+- `SENTRY_LARAVEL_DSN` — Your GlitchTip DSN
+- `SENTRY_TRACES_SAMPLE_RATE` — Transaction sampling rate (use `0.01` for 1%)
 
-Additional configuration settings are found in `config/sentry.php`.
-
-You can verify that GlitchTip is capturing errors in your Laravel application by creating a debug route that will throw an exception:
+Verify your setup with a test route:
 
 ```php
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first GlitchTip error!');
+Route::get('/debug-glitchtip', function () {
+    throw new Exception('Test GlitchTip error!');
 });
 ```
 
-Visiting this route will trigger an exception that will be captured by GlitchTip.
+## Tips
+
+- Keep `SENTRY_TRACES_SAMPLE_RATE` low in production. Each HTTP request is a transaction — even 1% gives useful [performance data](/documentation/performance) without excessive storage.
+- Additional configuration is in `config/sentry.php`.

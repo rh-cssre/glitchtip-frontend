@@ -1,17 +1,58 @@
-@import "variables";
+@use "variables" as vars;
 
-.half-width {
-  max-width: 390px;
+:host {
+  display: flex;
+}
+
+mat-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  gt-loading-button {
+    margin-top: auto;
+  }
+}
+
+mat-form-field {
+  margin-bottom: 10px;
+
+  @media screen and (max-width: vars.$small - 1) {
+    margin-bottom: 20px;
+  }
+}
+
+.invalid {
+  color: var(--mat-sys-error);
 }
 
 .first-field {
   margin-top: 24px;
 }
 
-.timezone {
-  margin-bottom: 7px;
+.theme-field {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.invalid {
-  color: $amaranth;
+.theme-label {
+  font: var(--mat-sys-body-small);
+  letter-spacing: var(--mat-sys-body-small-tracking);
+  color: var(--mat-sys-on-surface-variant);
 }

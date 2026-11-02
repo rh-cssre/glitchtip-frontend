@@ -1,5 +1,3 @@
-@import "variables";
-
 .dsn-copied {
-  color: $amaranth;
+  color: var(--mat-sys-primary);
 }

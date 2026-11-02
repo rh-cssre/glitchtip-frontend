@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables" as vars;
 
 mat-card {
   margin-top: 20px;
@@ -19,16 +19,17 @@ mat-card {
   align-items: center;
   padding-top: 8px;
 
-  @media (max-width: $medium - 1) {
+  @media (max-width: vars.$medium - 1) {
     flex-direction: column;
     align-items: flex-start;
+    margin-bottom: 25px;
   }
 
   mat-form-field {
     width: 100%;
     margin-right: 40px;
 
-    @media (max-width: $medium - 1) {
+    @media (max-width: vars.$medium - 1) {
       margin-right: 0;
     }
   }
@@ -36,45 +37,27 @@ mat-card {
 
 .platform-form {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  @media (min-width: $large) {
-    align-items: center;
-
-    .documentation-link {
-      margin-right: 40px;
-    }
-  }
-
-  @media (max-width: $large - 1) {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: 75px 50px;
-    grid-template-areas:
-      "topLeft rightCol"
-      "bottomLeft rightCol";
-    column-gap: 0;
-    row-gap: 20px;
-    padding-top: 15px;
-
-    gt-platform-picker {
-      grid-area: topLeft;
-    }
-
-    .documentation-link {
-      grid-area: bottomLeft;
-    }
-
-    gt-loading-button {
-      grid-area: rightCol;
-      margin-top: 25px;
-    }
-  }
-
-  @media (max-width: $medium - 1) {
-    display: flex;
+  @media (max-width: vars.$medium - 1) {
     flex-direction: column;
     align-items: flex-start;
-    row-gap: 0;
+  }
+}
+
+.docs-and-submit-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding-bottom: var(--mat-sys-body-small-line-height);
+
+  @media (max-width: vars.$medium - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding-bottom: 0;
   }
 }
 
@@ -83,7 +66,7 @@ mat-card {
   justify-content: space-between;
   align-items: center;
 
-  @media (max-width: $tablet - 1) {
+  @media (max-width: vars.$tablet - 1) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -95,6 +78,14 @@ mat-card {
 
 .server-error {
   display: block;
+}
+
+.vertical-card-header {
+  flex-direction: column;
+}
+
+.invalid {
+  color: var(--mat-sys-error);
 }
 
 gt-loading-button ::ng-deep button {

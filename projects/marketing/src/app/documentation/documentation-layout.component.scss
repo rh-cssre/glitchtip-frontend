@@ -1,0 +1,250 @@
+@use "../../../../../src/assets/styles/variables" as vars;
+@use "../styles/hidden-scrollbar" as *;
+
+.docs {
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-docs);
+  min-height: 60vh;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) 0 72px;
+  display: grid;
+  grid-template-columns: 244px minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 60px);
+
+  @media screen and (max-width: vars.$large) {
+    display: block;
+  }
+}
+
+// Sub top-app-bar holding the mobile menu trigger + breadcrumb.
+.docs__subbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  @media screen and (max-width: vars.$large) {
+    position: sticky;
+    top: 64px; // just below the sticky main toolbar
+    z-index: 8;
+    margin: 0 0 20px;
+    padding: 10px 0;
+    background: var(--mat-sys-surface-container-highest);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+.docs__menu-btn {
+  display: none; // desktop: the sidebar is always visible
+
+  @media screen and (max-width: vars.$large) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+}
+
+// Breadcrumb (shared idiom with the blog post). Kept to a single line inside the
+// sub-bar: it scrolls horizontally rather than wrapping on narrow screens.
+.doc-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+  overflow-x: auto;
+  @include hidden-scrollbar;
+
+  a {
+    color: var(--mat-sys-on-surface-variant);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--mat-sys-primary);
+    }
+  }
+
+  .doc-crumbs__sep {
+    opacity: 0.5;
+  }
+
+  .doc-crumbs__current {
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+.docs__sidebar {
+  @media screen and (min-width: vars.$large) {
+    position: sticky;
+    top: 84px;
+    align-self: start;
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    @include hidden-scrollbar;
+  }
+
+  @media screen and (max-width: vars.$large) {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(300px, 84vw);
+    z-index: 30;
+    padding: 20px 8px;
+    background: var(--mat-sys-surface);
+    border-right: 1px solid var(--mat-sys-outline-variant);
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+
+    &.is-open {
+      transform: none;
+    }
+  }
+}
+
+.docs__backdrop {
+  display: none;
+
+  @media screen and (max-width: vars.$large) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+    background: color-mix(in srgb, #000 45%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+
+    &.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+// The docs landing page as a first-class top-level nav item (not a floating
+// heading): a label that carries the same active red-fill pill as the other
+// nav entries, so it's clear it's the docs home / where you are.
+.docs-nav__home {
+  display: block;
+  margin-bottom: 2px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font: var(--mat-sys-label-large);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    background: var(--mat-sys-surface-container-high);
+  }
+
+  &.is-active {
+    background: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+  }
+}
+
+.docs-nav__group {
+  margin-bottom: 4px;
+}
+
+// Hairline between sections, matching the component-preview sidenav, so the
+// groups read as distinct blocks rather than one continuous list.
+.docs-nav mat-divider.docs-nav__divider {
+  border-color: var(--mat-sys-outline-variant);
+  margin: 14px 8px;
+}
+
+.docs-nav__group-title {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 6px 0 2px;
+  padding: 7px 12px;
+  appearance: none;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  font: var(--mat-sys-label-medium);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--mat-sys-on-surface-variant);
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    color: var(--mat-sys-on-surface);
+    background: var(--mat-sys-surface-container-high);
+  }
+}
+
+.docs-nav__group-label {
+  flex: 1 1 auto;
+}
+
+.docs-nav__chevron {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.15s ease;
+
+  &.is-collapsed {
+    transform: rotate(-90deg);
+  }
+}
+
+.docs-nav {
+  a[mat-list-item] {
+    color: var(--mat-sys-on-surface-variant);
+
+    // Selected item matches the product sidenav's active row (main-nav
+    // .active-section): a solid brand-red fill with white text. Material renders
+    // the label in its own .mdc-list-item__primary-text span that ignores `color`
+    // on the anchor, so on-primary is applied there directly.
+    &.is-active {
+      background: var(--mat-sys-primary);
+      font-weight: 600;
+
+      ::ng-deep .mdc-list-item__primary-text {
+        color: var(--mat-sys-on-primary);
+      }
+    }
+  }
+}
+
+.docs-nav__ext {
+  // Material's list-meta typography sets a text font-family directly on this
+  // slot, which would otherwise stop the icon ligature from forming (it renders
+  // as the raw word "open_in_new"). Pin it back to the symbol font; !important
+  // is needed to beat Material's higher-specificity meta rule.
+  font-family: "Material Symbols Outlined" !important;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.docs__main {
+  min-width: 0;
+
+  // Hairline rule separating the nav from the content. Lives on the (tall) main
+  // column so it runs the full content height, not just the short sticky aside.
+  @media screen and (min-width: vars.$large) {
+    border-left: 1px solid var(--mat-sys-outline-variant);
+    padding-left: clamp(28px, 4vw, 60px);
+  }
+}

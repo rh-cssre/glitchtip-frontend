@@ -1,3 +1,5 @@
-<mat-error *ngFor="let non_field_error of error?.non_field_errors">
-  <div>{{ non_field_error }}</div>
-</mat-error>
+@for (msg of errors(); track msg) {
+  <mat-error>
+    <div>{{ msg }}</div>
+  </mat-error>
+}
