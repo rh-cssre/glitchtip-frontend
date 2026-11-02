@@ -1,1 +1,59 @@
-p { margin-top: 16px;}
+@use "variables" as vars;
+
+.dialog-content {
+  font-family: vars.$font-sans-serif;
+  padding: 24px;
+}
+
+.event-info-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.event-info-description {
+  margin: 0 0 20px;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.event-definitions {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event-def {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  dd {
+    margin: 0;
+    padding-left: 28px;
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+}
+
+.dialog-actions {
+  margin-top: 20px;
+}

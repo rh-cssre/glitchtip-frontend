@@ -1,7 +1,6 @@
 import { seedBackend, requestLogin } from "./utils.cy";
-import { environment } from "../../src/environments/environment";
+import { seededUser1, seededUser2 } from "../fixtures/users";
 
-if (environment.loginForm) {
 describe("Change Password", () => {
   beforeEach(() => {
     seedBackend();
@@ -10,7 +9,7 @@ describe("Change Password", () => {
   });
 
   it("should show one primary email address", () => {
-    cy.get("gt-manage-emails").contains("cypresstest@example.com");
+    cy.get("gt-manage-emails").contains(seededUser1.email);
   });
 
   it("should manipulate the email list and do some validation", () => {
@@ -19,32 +18,25 @@ describe("Change Password", () => {
     // Add email
     cy.get("input[formcontrolname=email_address]").type(secondEmail);
     cy.get("#add-email-form").submit();
-    cy.get("gt-manage-emails mat-list").contains(secondEmail);
+    cy.get("gt-manage-emails ul").contains(secondEmail);
 
     // Duplicate email
     cy.get("input[formcontrolname=email_address]").type(secondEmail);
     cy.get("#add-email-form").submit();
     cy.get("gt-manage-emails").contains("is already on the list");
 
-    // Email is not valid because mailgun says so. Comment out if problematic
-    // const invalidEmail = "hello@a.aa";
-    // cy.get("input[formcontrolname=email_address]").clear().type(invalidEmail);
-    // cy.get("#add-email-form").submit();
-    // cy.get("gt-manage-emails").contains("This is not a valid email address");
-
     // Email is associated with another account
-    const emailForOtherAccount = "cypresstest-other@example.com";
     cy.get("input[formcontrolname=email_address]")
       .clear()
-      .type(emailForOtherAccount);
+      .type(seededUser2.email);
     cy.get("#add-email-form").submit();
-    cy.get("gt-manage-emails").contains("is already associated with another");
+    cy.get("gt-manage-emails").contains("already exists");
 
     // Delete email
     const emailToDelete = "cypress-email-to-delete@example.com";
     cy.get("input[formcontrolname=email_address]").clear().type(emailToDelete);
     cy.get("#add-email-form").submit();
-    cy.get("mat-list-item:nth-child(3) .delete-button").click({ force: true });
+    cy.get("li:nth-child(3) [data-cy=delete-button]").click({ force: true });
     cy.get("gt-manage-emails").should("not.contain", emailToDelete);
 
     // TODO Make primary
@@ -52,4 +44,3 @@ describe("Change Password", () => {
     // TODO Verify? Might not be possible or even necessary
   });
 });
-}

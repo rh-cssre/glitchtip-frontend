@@ -1,0 +1,490 @@
+// Layout-only styles for the component-preview shell. The real app theme
+// (Material 3 system variables, typography, fonts) is pulled in by also
+// building `src/styles.scss`, so previewed components look exactly as they
+// do in the app.
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.preview-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "toolbar toolbar"
+    "nav     canvas";
+  height: 100vh;
+}
+
+// Below the $small breakpoint (600px, kept in sync with
+// src/assets/styles/_variables.scss) the sidebar becomes a toggled overlay so
+// the canvas gets the full width; the toolbar shows a menu button.
+@media (max-width: 599px) {
+  .preview-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "toolbar"
+      "canvas";
+  }
+
+  .preview-nav {
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    width: 260px;
+    z-index: 10;
+    transform: translateX(-100%);
+    transition: transform 150ms ease;
+
+    .preview-layout--nav-open & {
+      transform: translateX(0);
+      box-shadow: var(--mat-sys-level3);
+    }
+  }
+
+  .preview-canvas {
+    padding: var(--gt-space-4);
+  }
+
+  .preview-toolbar__title {
+    font: var(--mat-sys-title-medium);
+    font-weight: 600;
+  }
+}
+
+.preview-toolbar__menu {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .preview-toolbar__menu {
+    display: inline-flex;
+  }
+}
+
+// color-scheme on the whole layout flips Material's light-dark() vars for the
+// subtree; this drives the light / dark / system toggle.
+.preview-theme--light {
+  color-scheme: light;
+}
+
+.preview-theme--dark {
+  color-scheme: dark;
+}
+
+.preview-theme--system {
+  color-scheme: light dark;
+}
+
+// Bare mode (?bare=1): hosts a single preview for the example-width iframe.
+// Transparent so the iframe's own background (matched to .doc-example) shows
+// through; padding comes from the example wrapper. No min-height so the body
+// hugs its content and can report an accurate height to the parent frame.
+.preview-bare {
+  color: var(--mat-sys-on-background);
+}
+
+.preview-toolbar {
+  grid-area: toolbar;
+  gap: var(--gt-space-2);
+  // A hairline separates the chrome from the canvas without relying on a
+  // heavy shadow.
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.preview-toolbar__title {
+  font: var(--mat-sys-title-large);
+  font-weight: 600;
+}
+
+// Product | Brand section tabs. Underline treatment so they read as tabs,
+// with the active one carrying the primary accent. A hairline separates them
+// from the title so the switcher reads as its own control group.
+.preview-toolbar__sections {
+  display: flex;
+  gap: var(--gt-space-2);
+  margin-left: var(--gt-space-5);
+  padding-left: var(--gt-space-5);
+  align-self: stretch;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
+    background-color: var(--mat-sys-outline-variant);
+  }
+}
+
+.preview-toolbar__section-tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0 var(--gt-space-3);
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface-variant);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--mat-sys-on-surface);
+    background-color: var(--mat-sys-surface-container-high);
+  }
+
+  &--active {
+    color: var(--mat-sys-on-surface);
+    border-bottom-color: var(--mat-sys-primary);
+    font-weight: 600;
+  }
+}
+
+.preview-nav {
+  grid-area: nav;
+  overflow-y: auto;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  background-color: var(--mat-sys-surface-container-low);
+
+  // Match product sidenav's 10px inset (main-nav.component.scss); smaller top
+  // pad so the first group header sits high.
+  mat-nav-list {
+    padding: var(--gt-space-1) 10px 10px;
+  }
+}
+
+// Sidebar page filter: quick lookup as the guide passes ~30 pages.
+.preview-nav__filter {
+  display: block;
+  width: calc(100% - 20px);
+  margin: var(--gt-space-3) 10px 0;
+  padding: var(--gt-space-2) var(--gt-space-3);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 8px;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-primary);
+    outline-offset: -1px;
+  }
+}
+
+// Accordion header for each nav group: a button so the group can collapse as
+// the guide grows.
+.preview-nav__group-label {
+  appearance: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2);
+  // Symmetric vertical padding so the header sits balanced whether the group
+  // is expanded or collapsed.
+  padding: var(--gt-space-2) var(--gt-space-2);
+  margin: var(--gt-space-1) 0;
+  border-radius: 4px;
+  font: var(--mat-sys-label-medium);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  // Use the semantic secondary-text role rather than opacity on an inherited
+  // color, so the label stays legible in both light and dark schemes.
+  color: var(--mat-sys-on-surface-variant);
+
+  &:hover {
+    color: var(--mat-sys-on-surface);
+    background-color: var(--mat-sys-surface-container-high);
+  }
+}
+
+.preview-nav__group-chevron {
+  margin-left: auto;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  transition: transform 150ms ease;
+
+  &--collapsed {
+    transform: rotate(-90deg);
+  }
+}
+
+// Section divider between nav groups, matching the product's own sidenav
+// (`.nav-section-divider` in main-nav): a hairline spanning the full nav
+// width via the same negative margins that undo the list inset. The extra
+// specificity is required because mat-divider's component styles load after
+// this global sheet and would otherwise zero the margins.
+.preview-nav mat-divider.preview-nav__divider {
+  border-color: var(--mat-sys-outline-variant);
+  margin: var(--gt-space-2) -10px;
+}
+
+.preview-canvas {
+  grid-area: canvas;
+  overflow: auto;
+  padding: var(--gt-space-6);
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-background);
+
+  // Reference pages read as a column, not a full-bleed sheet: cap the line
+  // length of every hosted preview so text and tables stay scannable on wide
+  // screens.
+  > * {
+    display: block;
+    max-width: 1080px;
+  }
+}
+
+// Shared page-header treatment so every page (Foundations and components) has
+// the same type hierarchy: a prominent title, a muted lead, and small notes.
+.preview-page-header {
+  margin-bottom: var(--gt-space-6);
+}
+
+.preview-page-title {
+  font: var(--mat-sys-headline-small);
+  margin: 0 0 var(--gt-space-2);
+}
+
+.preview-lead {
+  font: var(--mat-sys-body-large);
+  color: var(--mat-sys-on-surface-variant);
+  max-width: 68ch;
+  margin: 0 0 var(--gt-space-3);
+}
+
+.preview-note {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  max-width: 68ch;
+  margin: 0;
+}
+
+// A short muted note directly under a section title.
+.preview-section__note {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  max-width: 68ch;
+  margin: 0 0 var(--gt-space-4);
+}
+
+// ---------------------------------------------------------------------------
+// Brand section styles. The marketing site's typography classes, accent
+// tokens and the .fancy display style, mirrored here so the Brand pages can
+// render them without loading marketing's whole global stylesheet (its
+// @font-face paths and body rules would fight the product theme).
+// KEEP IN SYNC with projects/marketing/src/styles.scss and
+// projects/marketing/src/app/styles/_font-files.scss; extracting these into a
+// shared brand-tokens partial is a roadmap ticket (see DESIGN.md).
+:root {
+  --mkt-accent-blue: #4a7fd9;
+  --mkt-accent-yellow: #d9b44a;
+
+  // Brand monospace stack. Mirrors --mkt-font-mono in
+  // projects/marketing/src/styles.scss so the real mkt-code-card (and any other
+  // component that pins it with no fallback) renders in Plex Mono instead of
+  // falling back to the browser serif here. --gt-font-mono aliases it so the
+  // preview's own inline code samples use the brand mono too. Plex Mono is
+  // already loaded via the product @font-face (src/styles.scss).
+  --mkt-font-mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --gt-font-mono: var(--mkt-font-mono);
+
+  // Marketing layout tokens, mirrored so the Brand > Layout page can resolve
+  // them live. KEEP IN SYNC with the :root block in
+  // projects/marketing/src/styles.scss.
+  --mkt-space-1: 4px;
+  --mkt-space-2: 8px;
+  --mkt-space-3: 12px;
+  --mkt-space-4: 16px;
+  --mkt-space-5: 24px;
+  --mkt-space-6: 32px;
+  --mkt-space-7: 48px;
+  --mkt-space-8: 64px;
+  --mkt-space-9: 96px;
+  --mkt-container-wide: 1800px;
+  --mkt-container-docs: 1500px;
+  --mkt-container-home: 1320px;
+  --mkt-container-table: 1280px;
+  --mkt-container-content: 1040px;
+  --mkt-container-reading: 760px;
+  --mkt-container-narrow: 600px;
+  --mkt-gutter: 48px;
+  --mkt-section: clamp(40px, 5vw, 64px);
+
+  // --gt-space-* scale, mirrored so the reference app is self-contained.
+  --gt-space-0: 0;
+  --gt-space-1: 4px;
+  --gt-space-2: 8px;
+  --gt-space-3: 12px;
+  --gt-space-4: 16px;
+  --gt-space-5: 24px;
+  --gt-space-6: 32px;
+  --gt-space-7: 48px;
+}
+
+.marketing-display {
+  font: var(--mat-sys-headline-large);
+  font-size: clamp(2.4rem, 1.1rem + 5vw, 3.75rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.marketing-heading {
+  font: var(--mat-sys-headline-large);
+  font-size: 45px;
+  line-height: 50px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.marketing-subheading {
+  font: var(--mat-sys-headline-medium);
+  font-size: 34px;
+  line-height: 37px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marketing-small-heading {
+  font: var(--mat-sys-headline-small);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marketing-title {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.marketing-title-sm {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.marketing-body {
+  font: var(--mat-sys-body-large);
+  line-height: 1.6;
+  letter-spacing: normal;
+}
+
+.marketing-body-strong {
+  font: var(--mat-sys-body-large);
+  letter-spacing: normal;
+  font-weight: 500;
+}
+
+.marketing-caption {
+  font: var(--mat-sys-body-small);
+  letter-spacing: normal;
+}
+
+.marketing-eyebrow {
+  font-family: var(--mat-sys-body-large-font);
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mat-sys-primary);
+}
+
+.fancy {
+  color: var(--mat-sys-primary);
+  font-style: italic;
+  margin: 0.75em 0 0.5em;
+  padding-right: 0.1em;
+  padding-bottom: 0.05em;
+  display: inline-block;
+}
+
+// The marketing card primitives, mirrored so brand examples render the real ones.
+.mkt-surface {
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large, 16px);
+}
+
+.mkt-card {
+  @extend .mkt-surface;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--mat-sys-primary);
+  }
+}
+
+.mkt-card__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-card:hover .mkt-card__title {
+  color: var(--mat-sys-primary);
+}
+
+.mkt-row__title {
+  transition: color 0.15s ease;
+}
+
+.mkt-row:hover .mkt-row__title {
+  color: var(--mat-sys-primary);
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mkt-space-3);
+}
+
+// Helpers reused by individual previews. Spacing uses the --gt-space-* scale.
+.preview-section {
+  margin-bottom: var(--gt-space-6);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Narrow demo column for single-field components (inputs, list items) so they
+// render at a realistic width instead of stretching across the canvas.
+.preview-narrow {
+  max-width: 520px;
+}
+
+.preview-section__title {
+  font: var(--mat-sys-title-medium);
+  margin-bottom: var(--gt-space-3);
+}
+
+.preview-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gt-space-4);
+  align-items: center;
+}
+
+// Do/Don't two-column pair, shared by the brand Foundations pages.
+.dodont-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--gt-space-5);
+}

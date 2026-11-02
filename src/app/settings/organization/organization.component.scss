@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables" as vars;
 
 mat-card {
   margin-bottom: 36px;
@@ -13,7 +13,7 @@ mat-card {
     justify-content: space-between;
     align-items: center;
 
-    @media (max-width: $tablet - 1) {
+    @media (max-width: vars.$tablet - 1) {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -30,7 +30,7 @@ mat-card {
   justify-content: space-between;
   align-items: center;
 
-  @media (max-width: $tablet - 1) {
+  @media (max-width: vars.$tablet - 1) {
     flex-direction: column;
     align-items: flex-start;
   }

@@ -1,0 +1,27 @@
+<button
+  mat-stroked-button
+  (click)="unmerge()"
+  [disabled]="!allowUnmerge()"
+  class="unmerge-button"
+  i18n
+  >Unmerge</button
+>
+<div class="merged-items-list">
+  @for (hash of hashes(); track hash.id; let i = $index) {
+    <div class="merged-item">
+      <div class="merged-item-checkbox">
+        <mat-checkbox (change)="toggleCheck(hash.id)" [checked]="false" />
+      </div>
+      <div class="merged-item-details">
+        <div>{{ hash.id }}</div>
+        <div>
+          @if (hash.latestEvent?.title) {
+            <b>{{ hash.latestEvent?.title }}</b>
+          } @else {
+            <b i18n>No title found for this merged issue</b>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

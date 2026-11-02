@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables" as vars;
 
 .empty-state-card {
   display: flex;
@@ -6,10 +6,14 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  h6 {
+    margin: 0;
+  }
 }
 
 .project-card {
-  @media screen and (max-width: $tablet - 1) {
+  @media screen and (max-width: vars.$tablet - 1) {
     display: none;
   }
 }

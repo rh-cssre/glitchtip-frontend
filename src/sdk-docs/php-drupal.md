@@ -1,33 +1,33 @@
-[Raven module](https://www.drupal.org/project/raven) provides integration with
-GlitchTip for Drupal projects.
-
-## Installation
-
-Add the `drupal/raven` module to your project:
+Install the [Raven module](https://www.drupal.org/project/raven) for Drupal:
 
 ```bash
-composer require drupal/raven
+composer require drupal/raven sentry/sdk:^4.0
+```
+
+Enable the module:
+
+```bash
+drush en raven
 ```
 
 ## Configuration
 
-Configure your GlitchTip DSN and which events you want to send to GlitchTip in
-the "Sentry" section of the logging and errors configuration page at
-`admin/config/development/logging`.
+Configure your GlitchTip DSN in the Drupal admin UI at `admin/config/development/logging` under the "Sentry" section.
 
-You also have the option of setting environment variables for SENTRY_DSN,
-SENTRY_ENVIRONMENT and SENTRY_RELEASE, which override their corresponding
-configs if set.
+You can also set environment variables:
 
-You can use the commandline to verify that GlitchTip is capturing errors for
-your project:
+- `SENTRY_DSN` — Your GlitchTip DSN
+- `SENTRY_ENVIRONMENT` — Environment name (e.g., `production`)
+- `SENTRY_RELEASE` — Your application version
+
+## Testing
+
+Verify the integration:
 
 ```bash
-drush raven:captureMessage 'Mic check'
+drush raven:captureMessage "Test GlitchTip error"
 ```
 
-## Support
+## Tips
 
-Please read the README included with Raven module, and file bug reports,
-feature requests or support requests at the
-[Raven project page](https://www.drupal.org/project/raven).
+- See the Raven module README for advanced configuration options including breadcrumbs and JavaScript error tracking.

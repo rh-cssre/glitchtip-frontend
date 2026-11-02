@@ -14,6 +14,7 @@ export const IssueEventList: Event[] = [
       { value: "CPython 3.8.0", key: "runtime" },
       { value: "CPython", key: "runtime.name" },
       { value: "340bbf5db4d1", key: "server_name" },
+      { value: "https://example.com", key: "url" },
     ],
     projectID: "1851390",
     dateCreated: "2020-01-09T14:25:31Z",

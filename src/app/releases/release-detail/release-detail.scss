@@ -1,0 +1,23 @@
+table {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.pagination-buttons-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.name {
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.releases-list-link {
+  margin: 0 0 20px;
+}

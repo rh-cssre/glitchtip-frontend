@@ -46,19 +46,9 @@
         <source>Your Tokens</source>
       </segment>
     </unit>
-    <unit id="5612078901304454283">
-      <segment>
-        <source>Once you create a token, it will show up here.</source>
-      </segment>
-    </unit>
     <unit id="4587452935087847438">
       <segment>
         <source>Releases</source>
-      </segment>
-    </unit>
-    <unit id="2251615247560743164">
-      <segment>
-        <source>There are no releases for this organization.</source>
       </segment>
     </unit>
     <unit id="6326759550347037576">
@@ -79,11 +69,6 @@
     <unit id="4406952910598958793">
       <segment>
         <source>To continue, you must either log in to your existing account, or create a new one.</source>
-      </segment>
-    </unit>
-    <unit id="3961541970784414950">
-      <segment>
-        <source>There was an error connecting to your social authentication provider.</source>
       </segment>
     </unit>
     <unit id="1095247315180807956">
@@ -121,19 +106,9 @@
         <source>To enable user reports, take a look at `showReportDialog` in the JS SDK.</source>
       </segment>
     </unit>
-    <unit id="6722197117273372334">
-      <segment>
-        <source>Reopen</source>
-      </segment>
-    </unit>
     <unit id="2454050363478003966">
       <segment>
         <source>Login</source>
-      </segment>
-    </unit>
-    <unit id="2481283412904907364">
-      <segment>
-        <source>Support GlitchTip</source>
       </segment>
     </unit>
     <unit id="2907070106267329067">
@@ -166,11 +141,6 @@
         <source>Your password is required to log in</source>
       </segment>
     </unit>
-    <unit id="6312371663219634282">
-      <segment>
-        <source>Mark as resolved</source>
-      </segment>
-    </unit>
     <unit id="4053112335752964687">
       <segment>
         <source>Add Project</source>
@@ -194,11 +164,6 @@
     <unit id="4086606389696938932">
       <segment>
         <source>Account</source>
-      </segment>
-    </unit>
-    <unit id="4539315091720234670">
-      <segment>
-        <source>Multi-factor Authentication</source>
       </segment>
     </unit>
     <unit id="4736017430891007987">
@@ -226,9 +191,9 @@
         <source>or</source>
       </segment>
     </unit>
-    <unit id="315190807015121967">
+    <unit id="2152994175880724805">
       <segment>
-        <source>Code must be of length 6 or 16</source>
+        <source>Code must be of length 6, 8, or 16</source>
       </segment>
     </unit>
     <unit id="6972105223770675605">
@@ -236,9 +201,9 @@
         <source>Reset Password</source>
       </segment>
     </unit>
-    <unit id="1240739868347418586">
+    <unit id="4679371106199891013">
       <segment>
-        <source>Ignore</source>
+        <source>Ignored</source>
       </segment>
     </unit>
     <unit id="7045123878111147511">
@@ -286,9 +251,9 @@
         <source>Your password should be at least 8 characters long</source>
       </segment>
     </unit>
-    <unit id="6745305564776759454">
+    <unit id="2935794773842380882">
       <segment>
-        <source> Registration has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization. </source>
+        <source>Organization creation has been disabled on this instance of GlitchTip. Contact an administrator to be invited into an existing organization.</source>
       </segment>
     </unit>
     <unit id="3301086086650990787">
@@ -304,11 +269,6 @@
     <unit id="8520023152129279437">
       <segment>
         <source>Log In</source>
-      </segment>
-    </unit>
-    <unit id="3517932573606350122">
-      <segment>
-        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | humanizeDuration: true }}"/> </source>
       </segment>
     </unit>
     <unit id="4426319772533875265">
@@ -332,6 +292,9 @@
       </segment>
     </unit>
     <unit id="5573486145935722913">
+      <notes>
+        <note category="description">Uptime check reports up</note>
+      </notes>
       <segment>
         <source>Up</source>
       </segment>
@@ -381,11 +344,6 @@
         <source>Send an email to team members on this project.</source>
       </segment>
     </unit>
-    <unit id="1339421090554377874">
-      <segment>
-        <source>You don&apos;t have any alerts set up. Click &quot;Create New Alert&quot; on the top right of this card to get started.</source>
-      </segment>
-    </unit>
     <unit id="5534317372657539313">
       <segment>
         <source>Create New Alert</source>
@@ -404,11 +362,6 @@
     <unit id="7903124738511795245">
       <segment>
         <source>This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started.</source>
-      </segment>
-    </unit>
-    <unit id="8525090520605150470">
-      <segment>
-        <source>Once you have the app running, proceed to the next step.</source>
       </segment>
     </unit>
     <unit id="8597728355047941352">
@@ -441,39 +394,14 @@
         <source>Get Started</source>
       </segment>
     </unit>
-    <unit id="2876784140114247021">
-      <segment>
-        <source>or your favorite TOTP app on your mobile device</source>
-      </segment>
-    </unit>
-    <unit id="3099741642167775297">
-      <segment>
-        <source>Download</source>
-      </segment>
-    </unit>
-    <unit id="7822329547663295003">
-      <segment>
-        <source>Make your account more secure by requiring a time-based one time password (TOTP) code after you log in.</source>
-      </segment>
-    </unit>
     <unit id="3885497195825665706">
       <segment>
         <source>Next</source>
       </segment>
     </unit>
-    <unit id="3971398713275316255">
+    <unit id="3677937541764740600">
       <segment>
-        <source>Enable TOTP</source>
-      </segment>
-    </unit>
-    <unit id="4071496549933477149">
-      <segment>
-        <source>6-digit Code</source>
-      </segment>
-    </unit>
-    <unit id="2726971803372813135">
-      <segment>
-        <source>Scan the QR Code in your authenticator app or enter the code below:</source>
+        <source>6-digit code</source>
       </segment>
     </unit>
     <unit id="5995673810894749629">
@@ -481,29 +409,9 @@
         <source>Code must be 6 digits</source>
       </segment>
     </unit>
-    <unit id="641978626769494466">
-      <segment>
-        <source>TOTP authentication</source>
-      </segment>
-    </unit>
     <unit id="7156742322731584028">
       <segment>
         <source>Disable TOTP</source>
-      </segment>
-    </unit>
-    <unit id="7830120603266316643">
-      <segment>
-        <source>TOTP authentication is currently enabled on your account.</source>
-      </segment>
-    </unit>
-    <unit id="291649817233009176">
-      <segment>
-        <source>Enter a six-digit password generated by your authenticator app and submit this form to enable TOTP authentication:</source>
-      </segment>
-    </unit>
-    <unit id="1114702394872457328">
-      <segment>
-        <source>so you can keep track of errors</source>
       </segment>
     </unit>
     <unit id="520980174761118864">
@@ -511,59 +419,14 @@
         <source>Log in with <ph id="0" equiv="INTERPOLATION" disp="{{ socialApp.name }}"/></source>
       </segment>
     </unit>
-    <unit id="2303592265389969112">
-      <segment>
-        <source>then create an account for or log into the account that this invite link was intended for</source>
-      </segment>
-    </unit>
-    <unit id="5113632876676621367">
-      <segment>
-        <source>log out</source>
-      </segment>
-    </unit>
-    <unit id="6058250631075928277">
-      <segment>
-        <source>You have been invited to join</source>
-      </segment>
-    </unit>
-    <unit id="6609789944031289762">
-      <segment>
-        <source>The account you&apos;re logged into is already a part of this organization. You might want to</source>
-      </segment>
-    </unit>
-    <unit id="5715233980836936433">
-      <segment>
-        <source>Donate <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://liberapay.com/GlitchTip/donate&quot; &gt;" dispEnd="&lt;/a&gt;"> via Liberapay </pc></source>
-      </segment>
-    </unit>
-    <unit id="3509639242131814864">
-      <segment>
-        <source> Purchase support: <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:sales@glitchtip.com?subject=Purchase support inquiry&quot; &gt;" dispEnd="&lt;/a &gt;">sales@glitchtip.com</pc></source>
-      </segment>
-    </unit>
-    <unit id="5349000458605027240">
-      <segment>
-        <source> Switch to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; rel=&quot;noopener&quot; href=&quot;https://app.glitchtip.com/register?utm_medium=website&amp;utm_source=glitchtip&amp;utm_campaign=selfhost_nagware&quot; &gt;" dispEnd="&lt;/a &gt;">Hosted GlitchTip</pc></source>
-      </segment>
-    </unit>
-    <unit id="1002135012519641907">
-      <segment>
-        <source>You have multiple projects selected. Select a single project to learn more about why there&apos;s nothing here.</source>
-      </segment>
-    </unit>
     <unit id="100331146953492785">
       <segment>
-        <source>Connect your <ph id="0" equiv="INTERPOLATION" disp="{{ activeProjectPlatformName$ | async }}"/> project to GlitchTip</source>
+        <source>Connect your <ph id="0" equiv="INTERPOLATION" disp="{{ activeProjectPlatformName() }}"/> project to GlitchTip</source>
       </segment>
     </unit>
-    <unit id="1120098013104989112">
+    <unit id="177080935354192505">
       <segment>
-        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;/&apos;, &apos;settings&apos;, activeOrganizationSlug$ | async, &apos;projects&apos;, activeProjectSlug$ | async ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started.</source>
-      </segment>
-    </unit>
-    <unit id="1223506099460240555">
-      <segment>
-        <source>There was an error processing your request</source>
+        <source>If you go to this project&apos;s <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a data-cy=&quot;platform-settings-link&quot; [routerLink]=&quot;[ &apos;/&apos;, activeOrganizationSlug(), &apos;settings&apos;, &apos;projects&apos;, projectSlug, ]&quot; &gt;" dispEnd="&lt;/a &gt;"> settings page</pc>, you can pick a platform. If you do, you&apos;ll get more specific instructions about how to get started. </source>
       </segment>
     </unit>
     <unit id="1308044504532512434">
@@ -586,19 +449,14 @@
         <source>Edit Preferences</source>
       </segment>
     </unit>
-    <unit id="6960036943669975538">
+    <unit id="2959157372543624146">
       <segment>
-        <source>Create new project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
+        <source>Create new project in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/> </source>
       </segment>
     </unit>
     <unit id="3647474424920112919">
       <segment>
         <source>Connect your project to GlitchTip</source>
-      </segment>
-    </unit>
-    <unit id="365917971431677426">
-      <segment>
-        <source>Enter a project name</source>
       </segment>
     </unit>
     <unit id="3821671973040323145">
@@ -616,31 +474,6 @@
         <source>Note</source>
       </segment>
     </unit>
-    <unit id="44869671307620538">
-      <segment>
-        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Releases:</pc> Each megabyte of file storage is counted as an event</source>
-      </segment>
-    </unit>
-    <unit id="4605329245463156030">
-      <segment>
-        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Performance:</pc> Each time your app sends GlitchTip a transaction report for a tracked activity on your app</source>
-      </segment>
-    </unit>
-    <unit id="5010578757780115993">
-      <segment>
-        <source>Settings for <ph id="0" equiv="INTERPOLATION" disp="{{ project.name }}"/></source>
-      </segment>
-    </unit>
-    <unit id="5183247000083361116">
-      <segment>
-        <source>Out of the projects you have selected, you are not a part of that project&apos;s team for at least one of them.</source>
-      </segment>
-    </unit>
-    <unit id="5448343062628656309">
-      <segment>
-        <source>No events match your filters.</source>
-      </segment>
-    </unit>
     <unit id="5621052107213107389">
       <segment>
         <source>Update Project</source>
@@ -649,11 +482,6 @@
     <unit id="5729418620241283277">
       <segment>
         <source>Events</source>
-      </segment>
-    </unit>
-    <unit id="5874780279351956748">
-      <segment>
-        <source>What&apos;s this all about?</source>
       </segment>
     </unit>
     <unit id="5923980840626905087">
@@ -666,21 +494,6 @@
         <source>Delete Project</source>
       </segment>
     </unit>
-    <unit id="6401078118236139749">
-      <segment>
-        <source>Most instructions will have a spot that says &quot;your DSN here&quot;. Copy the DSN and paste it into that spot.</source>
-      </segment>
-    </unit>
-    <unit id="6410378746872498039">
-      <segment>
-        <source>There were errors while processing your request</source>
-      </segment>
-    </unit>
-    <unit id="6481795403650848876">
-      <segment>
-        <source>This page is showing instructions on how to connect GlitchTip to your project based on the platform you specified.</source>
-      </segment>
-    </unit>
     <unit id="6699311255070036397">
       <segment>
         <source>Edit whether or not you want to receive notifications for this project</source>
@@ -688,7 +501,7 @@
     </unit>
     <unit id="6940348790913679018">
       <segment>
-        <source>To add a project to this organization, press the &quot;Create New Project&quot; button.</source>
+        <source>To add a project to this organization, press the &quot;Create New Project&quot; button.</source>
       </segment>
     </unit>
     <unit id="7033296732013526864">
@@ -701,64 +514,9 @@
         <source>By deleting your project, you will lose all associated data. This cannot be undone.</source>
       </segment>
     </unit>
-    <unit id="7350070325817798539">
-      <segment>
-        <source><pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Issues:</pc> Each occurrence of an event reported to GlitchTip</source>
-      </segment>
-    </unit>
     <unit id="7819314041543176992">
       <segment>
         <source>Close</source>
-      </segment>
-    </unit>
-    <unit id="79938863716203390">
-      <segment>
-        <source>To add a project to this organization, press the &quot;Add Project&quot; button.</source>
-      </segment>
-    </unit>
-    <unit id="8251107285080064288">
-      <segment>
-        <source>Try changing your search parameters to get something to show here.</source>
-      </segment>
-    </unit>
-    <unit id="8267592046747299006">
-      <segment>
-        <source>You can&apos;t see issues for this project because you&apos;re not on the team.</source>
-      </segment>
-    </unit>
-    <unit id="848861324662209850">
-      <segment>
-        <source>Events are the unit of measure for tracking GlitchTip usage. An organization&apos;s maximum number of events per month is determined by its subscription type. Events are used to measure four GlitchTip features:</source>
-      </segment>
-    </unit>
-    <unit id="105639553198587677">
-      <segment>
-        <source>Uptime events:</source>
-      </segment>
-    </unit>
-    <unit id="1098433909560821849">
-      <segment>
-        <source>Start date for this plan: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.start_date | date }}"/></source>
-      </segment>
-    </unit>
-    <unit id="1109945939275542736">
-      <segment>
-        <source>This organization has an active subscription to GlitchTip. Thank you!</source>
-      </segment>
-    </unit>
-    <unit id="1219619838898772490">
-      <segment>
-        <source>Plan cost: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.plan.amount | currency }}"/></source>
-      </segment>
-    </unit>
-    <unit id="1432670211434533721">
-      <segment>
-        <source>Subscription Options</source>
-      </segment>
-    </unit>
-    <unit id="1676493260360867666">
-      <segment>
-        <source>If you would like to purchase a subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="."><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
       </segment>
     </unit>
     <unit id="1678548018195726594">
@@ -776,11 +534,6 @@
         <source>Enter a valid slug to create a team</source>
       </segment>
     </unit>
-    <unit id="1935221132513179654">
-      <segment>
-        <source>Error tracking</source>
-      </segment>
-    </unit>
     <unit id="2115863840021276098">
       <segment>
         <source>Now that you have an organization and a subscription, create a project.</source>
@@ -791,39 +544,14 @@
         <source>Create a New Team</source>
       </segment>
     </unit>
-    <unit id="2174410207450829295">
-      <segment>
-        <source>This organization does not have an active subscription to GlitchTip.</source>
-      </segment>
-    </unit>
     <unit id="2314099574053878289">
       <segment>
         <source>Enter a team name</source>
       </segment>
     </unit>
-    <unit id="2333988009900140990">
-      <segment>
-        <source>Performance events:</source>
-      </segment>
-    </unit>
-    <unit id="2336062695979702768">
-      <segment>
-        <source>Unlimited projects</source>
-      </segment>
-    </unit>
-    <unit id="2432384855929218388">
-      <segment>
-        <source>Send invoice</source>
-      </segment>
-    </unit>
     <unit id="2501480779300161804">
       <segment>
         <source>By deleting your team, you will lose all associated data. This cannot be undone.</source>
-      </segment>
-    </unit>
-    <unit id="2506462652585445837">
-      <segment>
-        <source>You have selected the free plan. Please consider making a monthly <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://liberapay.com/GlitchTip/donate&quot; target=&quot;_blank&quot; &gt;" dispEnd="&lt;/a &gt;">donation</pc> to help keep open source development sustainable. Thank you for choosing GlitchTip!</source>
       </segment>
     </unit>
     <unit id="2832668001279440249">
@@ -863,17 +591,7 @@
     </unit>
     <unit id="4894116049835995028">
       <segment>
-        <source>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd=".&lt;/p &gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
-      </segment>
-    </unit>
-    <unit id="4996538950129944353">
-      <segment>
-        <source>Issue events:</source>
-      </segment>
-    </unit>
-    <unit id="5028777105388019087">
-      <segment>
-        <source>Details</source>
+        <source>Questions about subscriptions? Need assistance, or a bigger plan? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>.</source>
       </segment>
     </unit>
     <unit id="5105557512709552795">
@@ -891,44 +609,14 @@
         <source>This team doesn&apos;t have any members</source>
       </segment>
     </unit>
-    <unit id="5618100320383468888">
-      <segment>
-        <source>Billing period: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.current_period_start | date }}"/> to <ph id="1" equiv="INTERPOLATION_1" disp="{{ subscription.current_period_end | date }}"/></source>
-      </segment>
-    </unit>
     <unit id="5799782740550832490">
       <segment>
         <source>This organization does not have an active subscription to GlitchTip. Pick a plan to get started.</source>
       </segment>
     </unit>
-    <unit id="5875130684997376720">
+    <unit id="7486830422791899026">
       <segment>
-        <source>Billing</source>
-      </segment>
-    </unit>
-    <unit id="6095052631454715389">
-      <segment>
-        <source>Manage Subscription</source>
-      </segment>
-    </unit>
-    <unit id="6147245107718647120">
-      <segment>
-        <source>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&gt;"><ph id="1" equiv="INTERPOLATION" disp="}}"/></pc>.</source>
-      </segment>
-    </unit>
-    <unit id="6168919365016053724">
-      <segment>
-        <source>File storage:</source>
-      </segment>
-    </unit>
-    <unit id="6204819636508367774">
-      <segment>
-        <source>Unlimited team members</source>
-      </segment>
-    </unit>
-    <unit id="6234831298944462737">
-      <segment>
-        <source>Back to Teams</source>
+        <source>If you have questions about your subscription, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>. </source>
       </segment>
     </unit>
     <unit id="6240182255609880044">
@@ -941,19 +629,9 @@
         <source>To create a new team, press the &quot;Create Team&quot; button in the upper right.</source>
       </segment>
     </unit>
-    <unit id="7229999489442894650">
-      <segment>
-        <source>Total <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[]&quot; (click)=&quot;openEventInfoDialog()&quot; &gt;" dispEnd="&lt;/a &gt;">events</pc> used in billing period: <ph id="1" equiv="INTERPOLATION" disp="{{ count.total }}"/></source>
-      </segment>
-    </unit>
     <unit id="7478140689790892603">
       <segment>
         <source>Teams are for managing issue notifications and workflow. View permissions are handled through <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a routerLink=&quot;../members&quot;&gt;" dispEnd="&lt;/a&gt;"> organization membership.</pc></source>
-      </segment>
-    </unit>
-    <unit id="810888510148304696">
-      <segment>
-        <source>Automatic</source>
       </segment>
     </unit>
     <unit id="8120474743695089696">
@@ -961,19 +639,4039 @@
         <source>This organization has a subscription to GlitchTip, but the payment is past due.</source>
       </segment>
     </unit>
-    <unit id="2405706490874342359">
+    <unit id="5279770905523465379">
       <segment>
-        <source> If you ever lose access to your codes, you can recover your account with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">backup codes</pc>. </source>
-      </segment>
-    </unit>
-    <unit id="3893164255729997778">
-      <segment>
-        <source> Select a valid time zone </source>
+        <source>Select a valid time zone</source>
       </segment>
     </unit>
     <unit id="8951128623878467862">
       <segment>
         <source>Preferences</source>
+      </segment>
+    </unit>
+    <unit id="4185629687342786413">
+      <segment>
+        <source>The account you&apos;re logged into is already a part of this organization. You might want to <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a (click)=&quot;logout()&quot; href=&quot;javascript:void(0)&quot;&gt;" dispEnd="&lt;/a&gt;">log out</pc>, then create an account for or log into the account that this invite link was intended for.</source>
+      </segment>
+    </unit>
+    <unit id="8433883189750412090">
+      <segment>
+        <source>You have been invited to join<pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"> <ph id="1" equiv="INTERPOLATION" disp="{{ acceptInfo.orgUser.organization.name }}"/> </pc> so you can keep track of errors.</source>
+      </segment>
+    </unit>
+    <unit id="1581886603273423006">
+      <segment>
+        <source>Account Owner</source>
+      </segment>
+    </unit>
+    <unit id="1740276691614535252">
+      <segment>
+        <source>Gains admin access on all teams as well as the ability to add and remove members.</source>
+      </segment>
+    </unit>
+    <unit id="1922838090212936091">
+      <segment>
+        <source>Admin privileges on any teams of which user is a member. They can create new teams and projects, as well as delete teams and projects they are already members of. Additionally, they can manage memberships of teams that they are members of.</source>
+      </segment>
+    </unit>
+    <unit id="2267387778265004491">
+      <segment>
+        <source>Organization Account Ownership</source>
+      </segment>
+    </unit>
+    <unit id="231679111972850796">
+      <segment>
+        <source>Added</source>
+      </segment>
+    </unit>
+    <unit id="3444805486131364421">
+      <segment>
+        <source>Scopes:</source>
+      </segment>
+    </unit>
+    <unit id="3916787140877704867">
+      <segment>
+        <source>Team(s)</source>
+      </segment>
+    </unit>
+    <unit id="4145496584631696119">
+      <segment>
+        <source>Role</source>
+      </segment>
+    </unit>
+    <unit id="4729000058409517470">
+      <segment>
+        <source>Unrestricted access to the organization, its data, and its settings. Can add, modify, and delete projects and members.</source>
+      </segment>
+    </unit>
+    <unit id="4768749765465246664">
+      <segment>
+        <source>Email</source>
+      </segment>
+    </unit>
+    <unit id="5909691734964157223">
+      <segment>
+        <source> This member is the organization account owner and has access to the organization&apos;s GlitchTip subscription settings. </source>
+      </segment>
+    </unit>
+    <unit id="6146979090477797496">
+      <segment>
+        <source> The account owner has access to the organization&apos;s GlitchTip subscription settings. If you are the current account owner or have an owner role, you may transfer ownership to this member. </source>
+      </segment>
+    </unit>
+    <unit id="6895800612787584413">
+      <segment>
+        <source>Members can view and act on events, as well as view most other data within the organization.</source>
+      </segment>
+    </unit>
+    <unit id="6921336596257236722">
+      <segment>
+        <source>New version available. Load New Version?</source>
+      </segment>
+    </unit>
+    <unit id="9208909205064884220">
+      <segment>
+        <source>This user isn&apos;t on any teams.</source>
+      </segment>
+    </unit>
+    <unit id="1312433286376470649">
+      <segment>
+        <source>Site URL</source>
+      </segment>
+    </unit>
+    <unit id="1398754421418372278">
+      <segment>
+        <source>Monitor Name</source>
+      </segment>
+    </unit>
+    <unit id="1418979860895365047">
+      <segment>
+        <source> GlitchTip will &quot;ping&quot; the specified URL using an HTTP HEAD request with no payload. </source>
+      </segment>
+    </unit>
+    <unit id="6910864712437104509">
+      <segment>
+        <source>Uptime email notifications are sent to the team assigned to the associated project.</source>
+      </segment>
+    </unit>
+    <unit id="3255939212816298806">
+      <segment>
+        <source>Enter a status code number </source>
+      </segment>
+    </unit>
+    <unit id="3335933778689867657">
+      <segment>
+        <source>Expected Status</source>
+      </segment>
+    </unit>
+    <unit id="3724940541438351467">
+      <segment>
+        <source>Time in seconds GlitchTip will wait for a response from your app. Defaults to 20 seconds.</source>
+      </segment>
+    </unit>
+    <unit id="3802089991568977129">
+      <segment>
+        <source>Interval (seconds)</source>
+      </segment>
+    </unit>
+    <unit id="2168400886938239735">
+      <segment>
+        <source>Enter an integer.</source>
+      </segment>
+    </unit>
+    <unit id="8658719885168030493">
+      <segment>
+        <source>Must be 60 or higher.</source>
+      </segment>
+    </unit>
+    <unit id="4970236371480835408">
+      <segment>
+        <source> GlitchTip will send an HTTP POST request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+      </segment>
+    </unit>
+    <unit id="5049957255900483968">
+      <segment>
+        <source>Enter an integer between 1 and 60.</source>
+      </segment>
+    </unit>
+    <unit id="5956316725115867558">
+      <segment>
+        <source>Timeout</source>
+      </segment>
+    </unit>
+    <unit id="7307117116794596244">
+      <segment>
+        <source>Monitor type</source>
+      </segment>
+    </unit>
+    <unit id="7679156164610222177">
+      <segment>
+        <source> GlitchTip will send an HTTP GET request to the specified URL. If the expected response is not received, the site will be marked as Down. </source>
+      </segment>
+    </unit>
+    <unit id="8098214202153793679">
+      <segment>
+        <source> The quantity needs to be greater than or equal to 100. </source>
+      </segment>
+    </unit>
+    <unit id="8190727095346221313">
+      <segment>
+        <source>Associated Project</source>
+      </segment>
+    </unit>
+    <unit id="2118666744161927873">
+      <segment>
+        <source>GlitchTip will await requests from your site to ensure it is active. If it doesn&apos;t receive the request, the site will be marked as Down.</source>
+      </segment>
+    </unit>
+    <unit id="1107238992361664159">
+      <segment>
+        <source>Enter a valid URL with protocol (ex. https://example.com)</source>
+      </segment>
+    </unit>
+    <unit id="1221596867309460035">
+      <segment>
+        <source>New Password</source>
+      </segment>
+    </unit>
+    <unit id="1846542227840529109">
+      <segment>
+        <source>Current Password</source>
+      </segment>
+    </unit>
+    <unit id="2118438278570914652">
+      <segment>
+        <source>Expected Response Body</source>
+      </segment>
+    </unit>
+    <unit id="2172491100431008170">
+      <segment>
+        <source>Your passwords don&apos;t match</source>
+      </segment>
+    </unit>
+    <unit id="3221948488301825969">
+      <segment>
+        <source>Issue not found</source>
+      </segment>
+    </unit>
+    <unit id="3811407979880504315">
+      <segment>
+        <source>System Info</source>
+      </segment>
+    </unit>
+    <unit id="4052010728262248283">
+      <segment>
+        <source>Backend configuration</source>
+      </segment>
+    </unit>
+    <unit id="4841998368096526659">
+      <segment>
+        <source>View all issues in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/></source>
+      </segment>
+    </unit>
+    <unit id="4895326106573044490">
+      <segment>
+        <source>Documentation</source>
+      </segment>
+    </unit>
+    <unit id="5478056060243048045">
+      <segment>
+        <source>This may be because the URL is pointing to an issue that doesn&apos;t exist or was deleted.</source>
+      </segment>
+    </unit>
+    <unit id="7276967761111129879">
+      <segment>
+        <source>URL may not be more than <ph id="0" equiv="INTERPOLATION" disp="{{ formUrl.errors.maxlength.requiredLength }}"/> characters</source>
+      </segment>
+    </unit>
+    <unit id="6164834099500157112">
+      <segment>
+        <source>Unable to log in with provided credentials.</source>
+      </segment>
+    </unit>
+    <unit id="6306074632981769484">
+      <segment>
+        <source>It&apos;s also possible that this issue was reported to a project that you are not able to access.</source>
+      </segment>
+    </unit>
+    <unit id="6582573664846559511">
+      <segment>
+        <source>Change Password</source>
+      </segment>
+    </unit>
+    <unit id="6796247291544680076">
+      <segment>
+        <source>Type in your new password</source>
+      </segment>
+    </unit>
+    <unit id="7135122203377475337">
+      <segment>
+        <source>Use only letters, numbers, underscores and/or hyphens</source>
+      </segment>
+    </unit>
+    <unit id="7994060186123483149">
+      <segment>
+        <source>Your new password has been saved.</source>
+      </segment>
+    </unit>
+    <unit id="7464216857382824881">
+      <segment>
+        <source>GlitchTip will check to make sure the port at the specified URL is accessible.</source>
+      </segment>
+    </unit>
+    <unit id="830996102207481987">
+      <segment>
+        <source>If string isn&apos;t found in response body, the monitor will report as down</source>
+      </segment>
+    </unit>
+    <unit id="8316175416734096923">
+      <segment>
+        <source> Uptime check interval: <ph id="0" equiv="INTERPOLATION" disp="{{ monitor.interval | number }}"/> seconds </source>
+      </segment>
+    </unit>
+    <unit id="8483269670688589838">
+      <segment>
+        <source>Your current is required to change your password</source>
+      </segment>
+    </unit>
+    <unit id="8797007391593964199">
+      <segment>
+        <source>Enter a host name and port (ex. example.com:80)</source>
+      </segment>
+    </unit>
+    <unit id="8916408973006340984">
+      <segment>
+        <source>GlitchTip <ph id="0" equiv="INTERPOLATION" disp="{{ version() }}"/></source>
+      </segment>
+    </unit>
+    <unit id="911145468998987410">
+      <segment>
+        <source>Confirm New Password</source>
+      </segment>
+    </unit>
+    <unit id="960665565485640516">
+      <segment>
+        <source>Something went wrong</source>
+      </segment>
+    </unit>
+    <unit id="1017066204420437090">
+      <segment>
+        <source>Set New Password</source>
+      </segment>
+    </unit>
+    <unit id="1431416938026210429">
+      <segment>
+        <source>Password</source>
+      </segment>
+    </unit>
+    <unit id="1538995058317034003">
+      <segment>
+        <source>Device activation was unsuccessful.</source>
+      </segment>
+    </unit>
+    <unit id="187187500641108332">
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ backupCode?.errors?.serverError }}"/>
+        </source>
+      </segment>
+    </unit>
+    <unit id="305233477996347721">
+      <segment>
+        <source>Code must be 8 digits</source>
+      </segment>
+    </unit>
+    <unit id="3099741642167775297">
+      <segment>
+        <source>Download</source>
+      </segment>
+    </unit>
+    <unit id="3677197196283475273">
+      <segment>
+        <source>You have successfully disconnected your social auth account</source>
+      </segment>
+    </unit>
+    <unit id="3782563238994348625">
+      <segment>
+        <source>Confirm password</source>
+      </segment>
+    </unit>
+    <unit id="4323470180912194028">
+      <segment>
+        <source>Copy</source>
+      </segment>
+    </unit>
+    <unit id="6359908116364527838">
+      <segment>
+        <source>Project Alerts</source>
+      </segment>
+    </unit>
+    <unit id="6373761293150491680">
+      <segment>
+        <source>Return to initial login page</source>
+      </segment>
+    </unit>
+    <unit id="6430072333383968514">
+      <segment>
+        <source>Regenerate codes</source>
+      </segment>
+    </unit>
+    <unit id="7308123627289097296">
+      <segment>
+        <source>Unknown problem using Social Authentication</source>
+      </segment>
+    </unit>
+    <unit id="7704379049286251361">
+      <segment>
+        <source>Your current password is incorrect.</source>
+      </segment>
+    </unit>
+    <unit id="8434191191397593923">
+      <segment>
+        <source>Your account has no password set up.</source>
+      </segment>
+    </unit>
+    <unit id="8489391551429309663">
+      <segment>
+        <source>Your security key has been registered.</source>
+      </segment>
+    </unit>
+    <unit id="9053544882734151327">
+      <segment>
+        <source>Provide a name for your device to complete registration.</source>
+      </segment>
+    </unit>
+    <unit id="2045774391739296209">
+      <segment>
+        <source>Timespan</source>
+      </segment>
+    </unit>
+    <unit id="2582356557395842562">
+      <segment>
+        <source>Enter an integer greater than 0.</source>
+      </segment>
+    </unit>
+    <unit id="3084686770297988088">
+      <segment>
+        <source>Return to login</source>
+      </segment>
+    </unit>
+    <unit id="5966633327405012171">
+      <segment>
+        <source> If an <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span i18n-matTooltip class=&quot;tooltip&quot; matTooltip=&quot;An event is every occurrence of the same error (aka: issue) in your application.&quot; &gt;" dispEnd="&lt;/span &gt;">event</pc> happens</source>
+      </segment>
+    </unit>
+    <unit id="8222747160094057941">
+      <segment>
+        <source>If you have an account with GlitchTip, an email has been sent to the email address you provided.</source>
+      </segment>
+    </unit>
+    <unit id="1232610167578746045">
+      <segment>
+        <source>Unable to connect to @sentry/wizard</source>
+      </segment>
+    </unit>
+    <unit id="1277316148999198227">
+      <segment>
+        <source>Unmerge</source>
+      </segment>
+    </unit>
+    <unit id="1417995330725483974">
+      <segment>
+        <source>The name of your organization has been updated to <ph id="0" equiv="PH" disp="data.name"/></source>
+      </segment>
+    </unit>
+    <unit id="1554838717931748985">
+      <segment>
+        <source>Merged</source>
+      </segment>
+    </unit>
+    <unit id="1655069838040430737">
+      <segment>
+        <source>Event Details</source>
+      </segment>
+    </unit>
+    <unit id="168526128992551302">
+      <segment>
+        <source>You have been added to <ph id="0" equiv="PH" disp="data.orgUser.organization.name"/>.</source>
+      </segment>
+    </unit>
+    <unit id="1874370182429640371">
+      <segment>
+        <source> There was an error. Try again later. </source>
+      </segment>
+    </unit>
+    <unit id="2047102130540283011">
+      <segment>
+        <source> This e-mail confirmation link expired or is invalid. Please issue a new e-mail confirmation request. </source>
+      </segment>
+    </unit>
+    <unit id="2110065830957672842">
+      <segment>
+        <source>Are you sure you want to remove <ph id="0" equiv="PH" disp="name"/>? You will permanently lose all projects and teams associated with it.</source>
+      </segment>
+    </unit>
+    <unit id="21729799810425671">
+      <segment>
+        <source>No title found for this merged issue</source>
+      </segment>
+    </unit>
+    <unit id="2323166636157815284">
+      <segment>
+        <source>Successfully removed <ph id="0" equiv="PH" disp="member.email"/> from organization</source>
+      </segment>
+    </unit>
+    <unit id="2347464874722958215">
+      <segment>
+        <source>There was an error when attempting to load issues.</source>
+      </segment>
+    </unit>
+    <unit id="2420295336574381180">
+      <segment>
+        <source>Confirming email…</source>
+      </segment>
+    </unit>
+    <unit id="2499193577100705366">
+      <segment>
+        <source>You have left <ph id="0" equiv="PH" disp="data.slug"/></source>
+      </segment>
+    </unit>
+    <unit id="2764329308967524576">
+      <segment>
+        <source>Error, unable to update issue</source>
+      </segment>
+    </unit>
+    <unit id="2815134129784182138">
+      <segment>
+        <source>Something went wrong. Try reloading the page.</source>
+      </segment>
+    </unit>
+    <unit id="3206542606001340679">
+      <segment>
+        <source>Merge</source>
+      </segment>
+    </unit>
+    <unit id="3333500469510040036">
+      <segment>
+        <source>Are you sure you want to delete this authentication token?</source>
+      </segment>
+    </unit>
+    <unit id="339150322539484059">
+      <segment>
+        <source>Finalizing your login</source>
+      </segment>
+    </unit>
+    <unit id="344300948538394896">
+      <segment>
+        <source>Your email address has been confirmed.</source>
+      </segment>
+    </unit>
+    <unit id="3685661039544326124">
+      <segment>
+        <source><ph id="0" equiv="PH" disp="email"/> has been removed from your account.</source>
+      </segment>
+    </unit>
+    <unit id="3807699453257291879">
+      <segment>
+        <source>Comments</source>
+      </segment>
+    </unit>
+    <unit id="3869317699802216328">
+      <segment>
+        <source>Unable to unmerge selected hashes.</source>
+      </segment>
+    </unit>
+    <unit id="3944070578105872601">
+      <segment>
+        <source>There was an error. Please try again.</source>
+      </segment>
+    </unit>
+    <unit id="3976301030203826563">
+      <segment>
+        <source>You lack permission to create a new project</source>
+      </segment>
+    </unit>
+    <unit id="4000360891880872696">
+      <segment>
+        <source>You joined <ph id="0" equiv="PH" disp="data.slug"/></source>
+      </segment>
+    </unit>
+    <unit id="3719900259406896451">
+      <segment>
+        <source>Delete auth token?</source>
+      </segment>
+    </unit>
+    <unit id="45527735672619032">
+      <segment>
+        <source>Successfully transferred organization account ownership to <ph id="0" equiv="PH" disp="data.email"/>.</source>
+      </segment>
+    </unit>
+    <unit id="4814285799071780083">
+      <segment>
+        <source>Remove</source>
+      </segment>
+    </unit>
+    <unit id="4935617373107665748">
+      <segment>
+        <source><ph id="0" equiv="PH" disp="member.email"/> has been added to #<ph id="1" equiv="PH_1" disp="team.slug"/></source>
+      </segment>
+    </unit>
+    <unit id="525202038336328287">
+      <segment>
+        <source>Issue <ph id="0" equiv="PH" disp="id"/> has been deleted.</source>
+      </segment>
+    </unit>
+    <unit id="5521710262088082373">
+      <segment>
+        <source>Successfully connected to @sentry/wizard.</source>
+      </segment>
+    </unit>
+    <unit id="5963361173550459881">
+      <segment>
+        <source> There was an error deleting your token, please try again. </source>
+      </segment>
+    </unit>
+    <unit id="5974237347502898380">
+      <segment>
+        <source>Email invites have been sent to the addresses you provided.</source>
+      </segment>
+    </unit>
+    <unit id="6193408969997737484">
+      <segment>
+        <source>There was an error loading your alerts. Try refreshing the page.</source>
+      </segment>
+    </unit>
+    <unit id="6270991639782521904">
+      <segment>
+        <source>There was an error deleting this comment. Please try again.</source>
+      </segment>
+    </unit>
+    <unit id="627180059350047308">
+      <segment>
+        <source>Error attempting to remove <ph id="0" equiv="PH" disp="member.email"/> from organization</source>
+      </segment>
+    </unit>
+    <unit id="2397648527617893137">
+      <segment>
+        <source>Merge issues?</source>
+      </segment>
+    </unit>
+    <unit id="6566431624195050143">
+      <segment>
+        <source>Only users with a role of manager or above can update organizations.</source>
+      </segment>
+    </unit>
+    <unit id="6776045478354313726">
+      <segment>
+        <source>Successfully updated <ph id="0" equiv="PH" disp="data.email"/>&apos;s role to <ph id="1" equiv="PH_1" disp="data.roleName"/></source>
+      </segment>
+    </unit>
+    <unit id="689538422335046890">
+      <segment>
+        <source>User Reports</source>
+      </segment>
+    </unit>
+    <unit id="7022070615528435141">
+      <segment>
+        <source>Delete</source>
+      </segment>
+    </unit>
+    <unit id="712588482447231923">
+      <segment>
+        <source>Your team slug has been changed to #<ph id="0" equiv="PH" disp="data.slug"/></source>
+      </segment>
+    </unit>
+    <unit id="7131676118619088880">
+      <segment>
+        <source>Only users with a role of manager or above can delete organizations.</source>
+      </segment>
+    </unit>
+    <unit id="7167798427319552621">
+      <segment>
+        <source>There was an error retrieving your uptime monitors.</source>
+      </segment>
+    </unit>
+    <unit id="7233514443257462364">
+      <segment>
+        <source>There was a problem. Try again later.</source>
+      </segment>
+    </unit>
+    <unit id="751755198881789855">
+      <segment>
+        <source>Must be less than 32768.</source>
+      </segment>
+    </unit>
+    <unit id="7589121772315788199">
+      <segment>
+        <source>The name of your project has been updated to <ph id="0" equiv="PH" disp="resp.name"/></source>
+      </segment>
+    </unit>
+    <unit id="7753116604377136747">
+      <segment>
+        <source>An email invite has been sent to</source>
+      </segment>
+    </unit>
+    <unit id="781140390035637726">
+      <segment>
+        <source>Connecting to @sentry/wizard…</source>
+      </segment>
+    </unit>
+    <unit id="7823379790822798031">
+      <segment>
+        <source>Too many invitations attempted. Not all invitations were sent. Please try again later</source>
+      </segment>
+    </unit>
+    <unit id="7828159368784233084">
+      <segment>
+        <source>Unmerged seleced hashes.</source>
+      </segment>
+    </unit>
+    <unit id="7831613273502162805">
+      <segment>
+        <source>Too many invitations attempted. Please try again later.</source>
+      </segment>
+    </unit>
+    <unit id="806152040251876311">
+      <segment>
+        <source>Success: Your recipient has been deleted</source>
+      </segment>
+    </unit>
+    <unit id="8396934914861741559">
+      <segment>
+        <source> This invitation link expired or is invalid. Please issue a new invitation request. </source>
+      </segment>
+    </unit>
+    <unit id="8455768552389044425">
+      <segment>
+        <source>You do not have permission to create a team</source>
+      </segment>
+    </unit>
+    <unit id="855933412451231239">
+      <segment>
+        <source>Comments </source>
+      </segment>
+    </unit>
+    <unit id="5791228471722946494">
+      <segment>
+        <source>Your project has been successfully deleted</source>
+      </segment>
+    </unit>
+    <unit id="8781927759674212057">
+      <segment>
+        <source><ph id="0" equiv="PH" disp="memberEmail"/> has been removed from #<ph id="1" equiv="PH_1" disp="team.slug"/></source>
+      </segment>
+    </unit>
+    <unit id="8848756484835270621">
+      <segment>
+        <source> There was an error, probably because you tried to join an organization that you&apos;re already a part of. </source>
+      </segment>
+    </unit>
+    <unit id="762381061558270136">
+      <segment>
+        <source>Remove organization?</source>
+      </segment>
+    </unit>
+    <unit id="8983558994144621668">
+      <segment>
+        <source><ph id="0" equiv="PH" disp="email"/> is now your primary email address.</source>
+      </segment>
+    </unit>
+    <unit id="9058835702501543425">
+      <segment>
+        <source>This action will merge your selected issues into a single issue.</source>
+      </segment>
+    </unit>
+    <unit id="917481646578897614">
+      <segment>
+        <source><ph id="0" equiv="PH" disp="data.name"/> has been created</source>
+      </segment>
+    </unit>
+    <unit id="1002165214775409029">
+      <segment>
+        <source>Mobile</source>
+      </segment>
+    </unit>
+    <unit id="1002685503248432712">
+      <segment>
+        <source>Add a project to start capturing errors.</source>
+      </segment>
+    </unit>
+    <unit id="1009468913199651665">
+      <segment>
+        <source>Assign a team</source>
+      </segment>
+    </unit>
+    <unit id="1009948558077383451">
+      <segment>
+        <source>Your email is required to sign up</source>
+      </segment>
+    </unit>
+    <unit id="1014900852249024343">
+      <segment>
+        <source> Get started </source>
+      </segment>
+    </unit>
+    <unit id="1034283477665811570">
+      <segment>
+        <source> About <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Get in touch and we&apos;ll help you find a fit. </source>
+      </segment>
+    </unit>
+    <unit id="1035785958839441268">
+      <segment>
+        <source> Raw </source>
+      </segment>
+    </unit>
+    <unit id="1037046564399991133">
+      <segment>
+        <source>Device name</source>
+      </segment>
+    </unit>
+    <unit id="1037498870363328063">
+      <segment>
+        <source>Loading user reports</source>
+      </segment>
+    </unit>
+    <unit id="1048062155041806765">
+      <segment>
+        <source> On-demand billing is switched on, but it is not running. You are not being charged for it. Please contact support. </source>
+      </segment>
+    </unit>
+    <unit id="105096633192249909">
+      <segment>
+        <source>Test failed: <ph id="0" equiv="message" disp="result.message"/></source>
+      </segment>
+    </unit>
+    <unit id="1054182833797503465">
+      <segment>
+        <source>Back to auth tokens</source>
+      </segment>
+    </unit>
+    <unit id="106540908567590802">
+      <segment>
+        <source>On-demand billing is not available on this server right now, so the spend cap cannot be changed.</source>
+      </segment>
+    </unit>
+    <unit id="1100140275003658560">
+      <segment>
+        <source>Least Frequent</source>
+      </segment>
+    </unit>
+    <unit id="1116423295236729375">
+      <segment>
+        <source>, seen <pc id="0" equivStart="START_TAG_TIME" equivEnd="CLOSE_TAG_TIME" type="other" dispStart="&lt;time [dateTime]=&quot;element.lastSeen&quot; [title]=&quot;element.lastSeen | date: &apos;medium&apos;&quot; &gt;" dispEnd="&lt;/time&gt;"> <ph id="1" equiv="INTERPOLATION" disp="{{ element.lastSeen | daysAgo }}"/> </pc></source>
+      </segment>
+    </unit>
+    <unit id="1118130066931623006">
+      <segment>
+        <source> By creating an account, you agree to our <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a class=&quot;auth-link&quot; href=&quot;https://glitchtip.com/legal/tos&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; &gt;" dispEnd="&lt;/a &gt;">Terms of Service</pc> and <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a class=&quot;auth-link&quot; href=&quot;https://glitchtip.com/legal/privacy&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; &gt;" dispEnd="&lt;/a &gt;">Privacy Policy</pc>. </source>
+      </segment>
+    </unit>
+    <unit id="115447290058892677">
+      <segment>
+        <source>Account ownership must be transferred.</source>
+      </segment>
+    </unit>
+    <unit id="1157630416437993334">
+      <segment>
+        <source>Body</source>
+      </segment>
+    </unit>
+    <unit id="1167917882186432421">
+      <segment>
+        <source>Label must be 255 characters or less</source>
+      </segment>
+    </unit>
+    <unit id="1173743626401426314">
+      <segment>
+        <source>Delete team?</source>
+      </segment>
+    </unit>
+    <unit id="1174497041946926926">
+      <segment>
+        <source> for details, or ask an organization owner to turn on on-demand billing or change your plan and keep collecting events.</source>
+      </segment>
+    </unit>
+    <unit id="1182482422836666206">
+      <segment>
+        <source>Backup code</source>
+      </segment>
+    </unit>
+    <unit id="1190219267773780159">
+      <segment>
+        <source>Add a monitor to get alerted when a site or service goes down.</source>
+      </segment>
+    </unit>
+    <unit id="1197151927004451959">
+      <segment>
+        <source>Your current plan does not support on-demand billing, so the spend cap cannot be changed.</source>
+      </segment>
+    </unit>
+    <unit id="1206469004229143307">
+      <segment>
+        <source> For your account&apos;s security, you need a verified email address before you can set up multi-factor authentication. We use it to recover your account if you ever lose access. </source>
+      </segment>
+    </unit>
+    <unit id="1214368793285560058">
+      <segment>
+        <source>Search logs</source>
+      </segment>
+    </unit>
+    <unit id="1219103917591133799">
+      <segment>
+        <source>Organization creation</source>
+      </segment>
+    </unit>
+    <unit id="125656762365468399">
+      <segment>
+        <source>Add a team to this project</source>
+      </segment>
+    </unit>
+    <unit id="1256743391468083911">
+      <segment>
+        <source> About <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped. Turn on on-demand billing to keep collecting events. </source>
+      </segment>
+    </unit>
+    <unit id="1259270873004577425">
+      <segment>
+        <source>Multiple emails delimited by commas.</source>
+      </segment>
+    </unit>
+    <unit id="1259421956660976189">
+      <segment>
+        <source>Add Account</source>
+      </segment>
+    </unit>
+    <unit id="1260372745423228473">
+      <segment>
+        <source>Set the kind of access you want this token to have to your app.</source>
+      </segment>
+    </unit>
+    <unit id="1263977447326017976">
+      <segment>
+        <source>Loading monitor checks</source>
+      </segment>
+    </unit>
+    <unit id="127037155895787578">
+      <segment>
+        <source>Transaction groups</source>
+      </segment>
+    </unit>
+    <unit id="1283895920974679461">
+      <segment>
+        <source>Operation</source>
+      </segment>
+    </unit>
+    <unit id="1293820901842765850">
+      <segment>
+        <source>Supports Slack, Mattermost, Rocket.Chat, and more</source>
+      </segment>
+    </unit>
+    <unit id="1302589354774989773">
+      <segment>
+        <source> A verification link was sent to <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ email }}"/></pc>. </source>
+      </segment>
+    </unit>
+    <unit id="1312167747630425287">
+      <segment>
+        <source>Number of Events</source>
+      </segment>
+    </unit>
+    <unit id="1327968019414699725">
+      <segment>
+        <source>Select an alert type to get started.</source>
+      </segment>
+    </unit>
+    <unit id="1347241542439262355">
+      <segment>
+        <source>General settings</source>
+      </segment>
+    </unit>
+    <unit id="1409236630147612478">
+      <segment>
+        <source> Save these codes somewhere safe. Each one lets you sign in once if you lose your phone. </source>
+      </segment>
+    </unit>
+    <unit id="1419972956021326558">
+      <segment>
+        <source>You&apos;ve outgrown this plan</source>
+      </segment>
+    </unit>
+    <unit id="1420343270177022915">
+      <segment>
+        <source>No event data available for this period.</source>
+      </segment>
+    </unit>
+    <unit id="1466910410488617155">
+      <segment>
+        <source>Default Notifications</source>
+      </segment>
+    </unit>
+    <unit id="14674649579778080">
+      <segment>
+        <source>Heartbeat URL endpoint</source>
+      </segment>
+    </unit>
+    <unit id="1480856902951863661">
+      <segment>
+        <source>Projected</source>
+      </segment>
+    </unit>
+    <unit id="1481645236299803925">
+      <segment>
+        <source> Change Password </source>
+      </segment>
+    </unit>
+    <unit id="148576619605838509">
+      <segment>
+        <source> Not all browsers support security keys. Therefore, we require that you set up a TOTP authenticator app first. That way you&apos;ll always be able to sign in - even when you&apos;re using an unsupported browser. </source>
+      </segment>
+    </unit>
+    <unit id="1500099262662584579">
+      <segment>
+        <source>Time range:</source>
+      </segment>
+    </unit>
+    <unit id="1519954996184640001">
+      <segment>
+        <source>Error</source>
+      </segment>
+    </unit>
+    <unit id="1520811785931570955">
+      <segment>
+        <source> Support open source error tracking and avoid event loss as you scale. </source>
+      </segment>
+    </unit>
+    <unit id="1532927315362442004">
+      <segment>
+        <source>Issue will be resolved as of release <ph id="0" equiv="PH" disp="resolvedInRelease"/>.</source>
+      </segment>
+    </unit>
+    <unit id="1536087519743707362">
+      <segment>
+        <source>Dismiss</source>
+      </segment>
+    </unit>
+    <unit id="1540281436321485610">
+      <segment>
+        <source>Manager</source>
+      </segment>
+    </unit>
+    <unit id="1616102757855967475">
+      <segment>
+        <source>All</source>
+      </segment>
+    </unit>
+    <unit id="1629119505046572784">
+      <segment>
+        <source>Organization creation is currently disabled</source>
+      </segment>
+    </unit>
+    <unit id="1662170432588987648">
+      <segment>
+        <source>Last 30 Days</source>
+      </segment>
+    </unit>
+    <unit id="1665408336289253972">
+      <segment>
+        <source>date created</source>
+      </segment>
+    </unit>
+    <unit id="1675381835782655174">
+      <segment>
+        <source>Get priority support for your GlitchTip deployment</source>
+      </segment>
+    </unit>
+    <unit id="1682865728929986233">
+      <segment>
+        <source>Leave organization</source>
+      </segment>
+    </unit>
+    <unit id="1686212905795661329">
+      <segment>
+        <source> Please enter a valid email address. </source>
+      </segment>
+    </unit>
+    <unit id="1711594638667505824">
+      <segment>
+        <source>No span data available yet</source>
+      </segment>
+    </unit>
+    <unit id="1721731140760414858">
+      <segment>
+        <source>GlitchTip version</source>
+      </segment>
+    </unit>
+    <unit id="1771362405253425568">
+      <segment>
+        <source>Alerts limited to environments will only fire for monitors in one of those environments.</source>
+      </segment>
+    </unit>
+    <unit id="1771560009028882798">
+      <segment>
+        <source>All environments</source>
+      </segment>
+    </unit>
+    <unit id="178373744477393495">
+      <segment>
+        <source><ph id="0" equiv="distance" disp="distance"/> old</source>
+      </segment>
+    </unit>
+    <unit id="1785712520492077820">
+      <segment>
+        <source> On-demand billing is switched on, but your current plan does not support it, so no new on-demand usage is charged. </source>
+      </segment>
+    </unit>
+    <unit id="1792027532696134167">
+      <segment>
+        <source> Compare Plans </source>
+      </segment>
+    </unit>
+    <unit id="1814721909646440919">
+      <segment>
+        <source>Manage Billing</source>
+      </segment>
+    </unit>
+    <unit id="1823065218030349729">
+      <segment>
+        <source> On-demand billing is off and is not available right now. </source>
+      </segment>
+    </unit>
+    <unit id="1842816697294215403">
+      <segment>
+        <source>Delete Alert For <ph id="0" equiv="url" disp="url ?? &quot;&quot;"/></source>
+      </segment>
+    </unit>
+    <unit id="1852327910193425166">
+      <segment>
+        <source>Create a New Uptime Monitor</source>
+      </segment>
+    </unit>
+    <unit id="1866402162869099992">
+      <segment>
+        <source> On track to reach your cap before the cycle ends. </source>
+      </segment>
+    </unit>
+    <unit id="1868960829276031899">
+      <segment>
+        <source>Microsoft Teams Workflows webhook URL</source>
+      </segment>
+    </unit>
+    <unit id="1871336547835393592">
+      <segment>
+        <source>There are no files associated with this release.</source>
+      </segment>
+    </unit>
+    <unit id="1926241086002311543">
+      <segment>
+        <source> About <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Get in touch to change your plan and restore full coverage. </source>
+      </segment>
+    </unit>
+    <unit id="1929039531311944328">
+      <segment>
+        <source>Uptime</source>
+      </segment>
+    </unit>
+    <unit id="1941477924301007516">
+      <segment>
+        <source><ph id="0" equiv="seconds" disp="seconds"/> seconds</source>
+      </segment>
+    </unit>
+    <unit id="1987589372843569754">
+      <segment>
+        <source> Lost your codes? Generate a new set. This invalidates the old one, so save the new codes somewhere safe. </source>
+      </segment>
+    </unit>
+    <unit id="2009211661624553956">
+      <segment>
+        <source> to change your plan. Your current plan cannot be billed for on-demand usage, so raising your spend cap will not change this. </source>
+      </segment>
+    </unit>
+    <unit id="2032719064430979056">
+      <segment>
+        <source>Select a valid platform</source>
+      </segment>
+    </unit>
+    <unit id="203328093718583608">
+      <segment>
+        <source>What counts as an event?</source>
+      </segment>
+    </unit>
+    <unit id="2044535834632996695">
+      <segment>
+        <source>Add monitor</source>
+      </segment>
+    </unit>
+    <unit id="2065682730934100869">
+      <segment>
+        <source> This may be because the URL is pointing to a transaction group that doesn&apos;t exist or was deleted. </source>
+      </segment>
+    </unit>
+    <unit id="2091295268977103253">
+      <segment>
+        <source>Raw</source>
+      </segment>
+    </unit>
+    <unit id="2091819265387325352">
+      <segment>
+        <source>Response Time (ms)</source>
+      </segment>
+    </unit>
+    <unit id="209311197037296058">
+      <segment>
+        <source> About <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped. Ask an organization owner to turn on on-demand billing to keep collecting events. </source>
+      </segment>
+    </unit>
+    <unit id="2093702966497728784">
+      <segment>
+        <source>Create Organization<pc id="0" equivStart="START_TAG_MAT_ICON" equivEnd="CLOSE_TAG_MAT_ICON" type="other" dispStart="&lt;mat-icon iconPositionEnd&gt;" dispEnd="&lt;/mat-icon&gt;">add</pc></source>
+      </segment>
+    </unit>
+    <unit id="209404482976515615">
+      <segment>
+        <source>Loading monitors</source>
+      </segment>
+    </unit>
+    <unit id="2124226966549313545">
+      <segment>
+        <source> Questions? Contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>. </source>
+      </segment>
+    </unit>
+    <unit id="2135539490504334624">
+      <segment>
+        <source>Bot Email</source>
+      </segment>
+    </unit>
+    <unit id="2143992992922814172">
+      <segment>
+        <source> Everything from <ph id="0" equiv="INTERPOLATION" disp="{{ products[i - 1].name }}"/> + </source>
+      </segment>
+    </unit>
+    <unit id="2148628696773013650">
+      <segment>
+        <source> This may be because the URL is pointing to an event that doesn&apos;t exist or was deleted. </source>
+      </segment>
+    </unit>
+    <unit id="2157305803066930300">
+      <segment>
+        <source> Select at least one condition: event frequency or uptime. </source>
+      </segment>
+    </unit>
+    <unit id="216948825199814808">
+      <segment>
+        <source>Success: Your alert has been deleted</source>
+      </segment>
+    </unit>
+    <unit id="21722028680342187">
+      <segment>
+        <source>Configuration options</source>
+      </segment>
+    </unit>
+    <unit id="217694042940919672">
+      <segment>
+        <source>No projects yet</source>
+      </segment>
+    </unit>
+    <unit id="2180291763949669799">
+      <segment>
+        <source>Enable</source>
+      </segment>
+    </unit>
+    <unit id="2185826118019934285">
+      <segment>
+        <source>Add Member(s)</source>
+      </segment>
+    </unit>
+    <unit id="2187242386126902388">
+      <segment>
+        <source>Bot API key</source>
+      </segment>
+    </unit>
+    <unit id="2188854519574316630">
+      <segment>
+        <source>Server</source>
+      </segment>
+    </unit>
+    <unit id="2199435626024839696">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ datapoint.reason ? convertReasonText(datapoint.reason) : downText }}"/> at <ph id="1" equiv="INTERPOLATION_1" disp="{{ datapoint.startCheck | date: &apos;short&apos; }}"/></source>
+      </segment>
+    </unit>
+    <unit id="2201619545923413533">
+      <segment>
+        <source>Recipient Type</source>
+      </segment>
+    </unit>
+    <unit id="2213303907290585549">
+      <segment>
+        <source>Copied. You can also connect your agent directly via MCP to pull this event, its related logs, and traces live instead of pasting.</source>
+      </segment>
+    </unit>
+    <unit id="2214043942921449831">
+      <segment>
+        <source>Email(s)</source>
+      </segment>
+    </unit>
+    <unit id="2215374638124405279">
+      <segment>
+        <source>Send Reset Password Email</source>
+      </segment>
+    </unit>
+    <unit id="2218082343053095278">
+      <segment>
+        <source>Service</source>
+      </segment>
+    </unit>
+    <unit id="2219171205167811845">
+      <segment>
+        <source>Enter one of the codes to confirm you have saved them:</source>
+      </segment>
+    </unit>
+    <unit id="2226398817163924527">
+      <segment>
+        <source>Loading logs</source>
+      </segment>
+    </unit>
+    <unit id="2245547895687248049">
+      <segment>
+        <source>Send test notification</source>
+      </segment>
+    </unit>
+    <unit id="2262136709365886805">
+      <segment>
+        <source>Name (A-Z)</source>
+      </segment>
+    </unit>
+    <unit id="2273088133016853024">
+      <segment>
+        <source>Leave</source>
+      </segment>
+    </unit>
+    <unit id="2281481329213880659">
+      <segment>
+        <source>Update Monitor</source>
+      </segment>
+    </unit>
+    <unit id="2288101943814243419">
+      <segment>
+        <source>Basics</source>
+      </segment>
+    </unit>
+    <unit id="2288513108450439427">
+      <segment>
+        <source>Support</source>
+      </segment>
+    </unit>
+    <unit id="2330577642930707695">
+      <segment>
+        <source> Cancel </source>
+      </segment>
+    </unit>
+    <unit id="2356238621860719183">
+      <segment>
+        <source>Submit Comment</source>
+      </segment>
+    </unit>
+    <unit id="2369742814572661392">
+      <segment>
+        <source>Loading…</source>
+      </segment>
+    </unit>
+    <unit id="2387128922474445063">
+      <segment>
+        <source>No logs yet</source>
+      </segment>
+    </unit>
+    <unit id="2398354803539761750">
+      <segment>
+        <source> Create a <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">Generic bot</pc> in your Zulip organization settings under &quot;Bots&quot;. Copy the bot&apos;s email and API key below. </source>
+      </segment>
+    </unit>
+    <unit id="2424384363013905805">
+      <segment>
+        <source>CSP Report</source>
+      </segment>
+    </unit>
+    <unit id="2489114267038713519">
+      <segment>
+        <source>Create Project</source>
+      </segment>
+    </unit>
+    <unit id="2529401809177776105">
+      <segment>
+        <source> Choose a monitor type </source>
+      </segment>
+    </unit>
+    <unit id="2536395904704647193">
+      <segment>
+        <source>Only events and uptime monitors in these environments trigger this alert.</source>
+      </segment>
+    </unit>
+    <unit id="2559496713819894682">
+      <segment>
+        <source>Try adjusting your search, or clear your filters to see everything.</source>
+      </segment>
+    </unit>
+    <unit id="2559630426089556979">
+      <segment>
+        <source>Invite a member to join this organization via their email address.</source>
+      </segment>
+    </unit>
+    <unit id="2577580671804304014">
+      <segment>
+        <source>Exception</source>
+      </segment>
+    </unit>
+    <unit id="2580324909354352143">
+      <segment>
+        <source>Are you sure you&apos;d like to leave this organization?</source>
+      </segment>
+    </unit>
+    <unit id="2585562101345211903">
+      <segment>
+        <source> About <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Ask an organization owner to turn on on-demand billing or change your plan to keep collecting events. </source>
+      </segment>
+    </unit>
+    <unit id="261762168050899190">
+      <segment>
+        <source> Clear filter </source>
+      </segment>
+    </unit>
+    <unit id="2629601911923442777">
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ model.name | date: &quot;short&quot; }}"/><ph id="1" equiv="LINE_BREAK" type="fmt" disp="&lt;br /&gt;"/> <ph id="2" equiv="INTERPOLATION_1" disp="{{ model.value }}"/>ms </source>
+      </segment>
+    </unit>
+    <unit id="2635686913986558539">
+      <segment>
+        <source>Limit to environments (optional)</source>
+      </segment>
+    </unit>
+    <unit id="264516374370637359">
+      <segment>
+        <source>Delete monitor?</source>
+      </segment>
+    </unit>
+    <unit id="264966490651557909">
+      <segment>
+        <source>Are you sure you want to delete this team?</source>
+      </segment>
+    </unit>
+    <unit id="2662644497259948010">
+      <segment>
+        <source>Comment</source>
+      </segment>
+    </unit>
+    <unit id="2668441742974539331">
+      <segment>
+        <source>Incidents</source>
+      </segment>
+    </unit>
+    <unit id="2669293632677878810">
+      <segment>
+        <source>Resolved in</source>
+      </segment>
+    </unit>
+    <unit id="2681991107727126286">
+      <segment>
+        <source>AI-Assisted Debugging</source>
+      </segment>
+    </unit>
+    <unit id="2692367557802670495">
+      <segment>
+        <source> It&apos;s also possible that this transaction group was reported to a project that you are not able to access. </source>
+      </segment>
+    </unit>
+    <unit id="2724055831234181057">
+      <segment>
+        <source>Version</source>
+      </segment>
+    </unit>
+    <unit id="2737721078026311574">
+      <segment>
+        <source>Search message body...</source>
+      </segment>
+    </unit>
+    <unit id="2744811510684419754">
+      <segment>
+        <source>Loading issues</source>
+      </segment>
+    </unit>
+    <unit id="2750181135987640730">
+      <segment>
+        <source>Invite Resent</source>
+      </segment>
+    </unit>
+    <unit id="2802205481805661386">
+      <segment>
+        <source> There is no project associated with this monitor, so no notifications will be sent for monitor events. Visit the <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[&apos;./update&apos;]&quot;&gt;" dispEnd="&lt;/a&gt;">monitor settings</pc> page to associate this monitor with a project. </source>
+      </segment>
+    </unit>
+    <unit id="282624574787482024">
+      <segment>
+        <source>{VAR_PLURAL, plural, =0 {events} =1 {1 event} other {<ph id="0" equiv="INTERPOLATION"/> events}}</source>
+      </segment>
+    </unit>
+    <unit id="2849436559874800914">
+      <segment>
+        <source>GlitchTip can ingest <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://glitchtip.com/documentation/logs&quot; &gt;" dispEnd="&lt;/a &gt;">application logs</pc> via OpenTelemetry. See the logs documentation for setup.</source>
+      </segment>
+    </unit>
+    <unit id="2861306361489095884">
+      <segment>
+        <source>Slug</source>
+      </segment>
+    </unit>
+    <unit id="2900853374514555156">
+      <segment>
+        <source> You&apos;ve reached your spend cap, and about <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Raise your cap below to keep collecting events, or get in touch and we&apos;ll help you find a fit. </source>
+      </segment>
+    </unit>
+    <unit id="2907733796351584017">
+      <segment>
+        <source> Register </source>
+      </segment>
+    </unit>
+    <unit id="2930207646035431824">
+      <segment>
+        <source>Filter by category</source>
+      </segment>
+    </unit>
+    <unit id="2936485393439559280">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ numberOfSelectedIssues() }}"/> issues on this page selected.</source>
+      </segment>
+    </unit>
+    <unit id="2949150997160654358">
+      <segment>
+        <source>Last 30 days</source>
+      </segment>
+    </unit>
+    <unit id="29705931015876576">
+      <segment>
+        <source>Could not delete account. Delete or transfer ownership of all organizations you are the owner of before deleting your user account.</source>
+      </segment>
+    </unit>
+    <unit id="2973061628865967914">
+      <segment>
+        <source>Backup codes</source>
+      </segment>
+    </unit>
+    <unit id="2974118934038476769">
+      <segment>
+        <source>Unresolved</source>
+      </segment>
+    </unit>
+    <unit id="2981846476247225504">
+      <segment>
+        <source>Redirected from Stripe</source>
+      </segment>
+    </unit>
+    <unit id="29832309535656200">
+      <segment>
+        <source>System</source>
+      </segment>
+    </unit>
+    <unit id="2987558872497978322">
+      <segment>
+        <source> Spend cap reached, so about <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped. Ask an organization owner to raise the cap to keep collecting events. </source>
+      </segment>
+    </unit>
+    <unit id="3008762316154356763">
+      <segment>
+        <source> Account Owner </source>
+      </segment>
+    </unit>
+    <unit id="3029887440722063094">
+      <segment>
+        <source>End time</source>
+      </segment>
+    </unit>
+    <unit id="3036634612947518242">
+      <segment>
+        <source>API key is required</source>
+      </segment>
+    </unit>
+    <unit id="3039940756451018621">
+      <segment>
+        <source>Token</source>
+      </segment>
+    </unit>
+    <unit id="3060645524033772534">
+      <segment>
+        <source>Edit recipient</source>
+      </segment>
+    </unit>
+    <unit id="3066529007110893482">
+      <segment>
+        <source>Server timezone</source>
+      </segment>
+    </unit>
+    <unit id="3070615158467898055">
+      <segment>
+        <source> View all transaction groups in <ph id="0" equiv="INTERPOLATION" disp="{{ organization.name }}"/> </source>
+      </segment>
+    </unit>
+    <unit id="3076687427621376223">
+      <segment>
+        <source>Organization</source>
+      </segment>
+    </unit>
+    <unit id="3080818324137567015">
+      <segment>
+        <source>GlitchTip Alerts</source>
+      </segment>
+    </unit>
+    <unit id="3084730458735853713">
+      <segment>
+        <source>for <ph id="0" equiv="duration" disp="formattedString"/></source>
+      </segment>
+    </unit>
+    <unit id="3097235776376579989">
+      <segment>
+        <source> for details, or ask an organization owner to raise the spend cap or change your plan and keep collecting events.</source>
+      </segment>
+    </unit>
+    <unit id="3097284290343622068">
+      <segment>
+        <source>Span data will appear here once child spans are recorded for this transaction group.</source>
+      </segment>
+    </unit>
+    <unit id="3097725565524951500">
+      <segment>
+        <source>Contribute Code</source>
+      </segment>
+    </unit>
+    <unit id="3113844851981371723">
+      <segment>
+        <source>System info</source>
+      </segment>
+    </unit>
+    <unit id="314315645942131479">
+      <segment>
+        <source>Info</source>
+      </segment>
+    </unit>
+    <unit id="3154215924252206494">
+      <segment>
+        <source>Releases appear here once you send release data with your events.</source>
+      </segment>
+    </unit>
+    <unit id="3204725360923694745">
+      <segment>
+        <source>Time Zone</source>
+      </segment>
+    </unit>
+    <unit id="3207604937156175649">
+      <segment>
+        <source>Add Team</source>
+      </segment>
+    </unit>
+    <unit id="3208062810604819243">
+      <segment>
+        <source>Try adjusting or clearing your filters.</source>
+      </segment>
+    </unit>
+    <unit id="3219768698802611146">
+      <segment>
+        <source>No test was sent</source>
+      </segment>
+    </unit>
+    <unit id="3232264192332205443">
+      <segment>
+        <source>Slowest</source>
+      </segment>
+    </unit>
+    <unit id="3241357959735682038">
+      <segment>
+        <source>Confirm Password</source>
+      </segment>
+    </unit>
+    <unit id="3249513483374643425">
+      <segment>
+        <source>Add</source>
+      </segment>
+    </unit>
+    <unit id="326607852595106445">
+      <segment>
+        <source>Mark ignored</source>
+      </segment>
+    </unit>
+    <unit id="3272820784736358258">
+      <segment>
+        <source>Whole words by default. Add * for a prefix match. Anything after the first plain word becomes part of the text search, so put filters first.</source>
+      </segment>
+    </unit>
+    <unit id="3280100287525996002">
+      <segment>
+        <source>A password is required to sign up</source>
+      </segment>
+    </unit>
+    <unit id="3285184083870027983">
+      <segment>
+        <source>GlitchTip includes an <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://glitchtip.com/documentation/mcp&quot; &gt;" dispEnd="&lt;/a &gt;">MCP server</pc> that lets AI assistants investigate errors, analyze performance, and query logs.</source>
+      </segment>
+    </unit>
+    <unit id="3302458363931158751">
+      <segment>
+        <source> Full </source>
+      </segment>
+    </unit>
+    <unit id="3304088671620535703">
+      <segment>
+        <source>Select all <ph id="0" equiv="INTERPOLATION" disp="{{ hits }}"/> issues that match this query</source>
+      </segment>
+    </unit>
+    <unit id="3304972143698843178">
+      <segment>
+        <source>Event</source>
+      </segment>
+    </unit>
+    <unit id="3305090198100406214">
+      <segment>
+        <source>Enter a valid Zulip server URL</source>
+      </segment>
+    </unit>
+    <unit id="3314565567094789342">
+      <segment>
+        <source>Alert <ph id="0" equiv="INTERPOLATION" disp="{{ i + 1 }}"/></source>
+      </segment>
+    </unit>
+    <unit id="33149636091572968">
+      <segment>
+        <source>Load more</source>
+      </segment>
+    </unit>
+    <unit id="3318523364772817208">
+      <segment>
+        <source>Most SDKs support these options:</source>
+      </segment>
+    </unit>
+    <unit id="3321701098745254954">
+      <segment>
+        <source> This email address is already on the list. </source>
+      </segment>
+    </unit>
+    <unit id="3335368438049125287">
+      <segment>
+        <source> Invite Pending </source>
+      </segment>
+    </unit>
+    <unit id="3339635399692804137">
+      <segment>
+        <source>To view issues for this project, add yourself to the corresponding team.</source>
+      </segment>
+    </unit>
+    <unit id="3354075169197003187">
+      <segment>
+        <source> Name may not be more than <ph id="0" equiv="INTERPOLATION" disp="{{ formName.errors?.maxlength.requiredLength }}"/> characters </source>
+      </segment>
+    </unit>
+    <unit id="335503691377648256">
+      <segment>
+        <source><ph id="0" equiv="ICU" disp="{projectFormQuantity.value, plural, =1 {time} other {times}}" subFlows="5008579417033317628"/> in</source>
+      </segment>
+    </unit>
+    <unit id="3365827921329858639">
+      <segment>
+        <source>Messages in a channel are grouped by topic</source>
+      </segment>
+    </unit>
+    <unit id="3375481157395019697">
+      <segment>
+        <source> Priority email and live chat support direct from the engineers who build GlitchTip. </source>
+      </segment>
+    </unit>
+    <unit id="3385004691905994600">
+      <segment>
+        <source>Enter a cap between <ph id="0" equiv="INTERPOLATION" disp="{{ minCapDollars | currency }}"/> and <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxCapDollars() | currency }}"/>.</source>
+      </segment>
+    </unit>
+    <unit id="3394127703705208683">
+      <segment>
+        <source>To start using GlitchTip, you need to:</source>
+      </segment>
+    </unit>
+    <unit id="3402118464419877935">
+      <segment>
+        <source>Additional Data</source>
+      </segment>
+    </unit>
+    <unit id="3414723056792696723">
+      <segment>
+        <source> Other - <ph id="0" equiv="INTERPOLATION" disp="{{ tag.other }}"/>% </source>
+      </segment>
+    </unit>
+    <unit id="3420959458547734912">
+      <segment>
+        <source>% Time</source>
+      </segment>
+    </unit>
+    <unit id="3422890808980876594">
+      <segment>
+        <source>Debug</source>
+      </segment>
+    </unit>
+    <unit id="3435329166582535162">
+      <segment>
+        <source>Delete issues?</source>
+      </segment>
+    </unit>
+    <unit id="345359488993880932">
+      <segment>
+        <source>Delete account?</source>
+      </segment>
+    </unit>
+    <unit id="3486318045815416322">
+      <segment>
+        <source>Mark resolved</source>
+      </segment>
+    </unit>
+    <unit id="3500458863157551898">
+      <segment>
+        <source>Off</source>
+      </segment>
+    </unit>
+    <unit id="3512487748216221583">
+      <segment>
+        <source>By operation</source>
+      </segment>
+    </unit>
+    <unit id="3514149438333724015">
+      <segment>
+        <source>Setup key</source>
+      </segment>
+    </unit>
+    <unit id="353965083777629357">
+      <segment>
+        <source>Authenticator app</source>
+      </segment>
+    </unit>
+    <unit id="3541923058828207879">
+      <segment>
+        <source>Back to members</source>
+      </segment>
+    </unit>
+    <unit id="3578239557119794125">
+      <segment>
+        <source>See <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://glitchtip.com/documentation/install&quot; target=&quot;_blank&quot; &gt;" dispEnd="&lt;/a &gt;">GlitchTip installation and configuration docs</pc>. </source>
+      </segment>
+    </unit>
+    <unit id="3617897902871519294">
+      <segment>
+        <source>Each occurrence of an error or exception reported to GlitchTip</source>
+      </segment>
+    </unit>
+    <unit id="3620188369327429839">
+      <segment>
+        <source> Save </source>
+      </segment>
+    </unit>
+    <unit id="363444543494399295">
+      <segment>
+        <source>Recipients:</source>
+      </segment>
+    </unit>
+    <unit id="36348256224695936">
+      <segment>
+        <source>(most recent call</source>
+      </segment>
+    </unit>
+    <unit id="3650236615036812295">
+      <segment>
+        <source>An authenticator app is protecting your account.</source>
+      </segment>
+    </unit>
+    <unit id="365917971431677426">
+      <segment>
+        <source>Enter a project name</source>
+      </segment>
+    </unit>
+    <unit id="3665489443596053824">
+      <segment>
+        <source>Delete project?</source>
+      </segment>
+    </unit>
+    <unit id="3701263529457744501">
+      <segment>
+        <source>Update Platform</source>
+      </segment>
+    </unit>
+    <unit id="3706806273134795070">
+      <segment>
+        <source>Show All <ph id="0" equiv="INTERPOLATION" disp="{{ breadcrumbs?.values?.length }}"/> Breadcrumbs</source>
+      </segment>
+    </unit>
+    <unit id="3712758505200425308">
+      <segment>
+        <source>Visible</source>
+      </segment>
+    </unit>
+    <unit id="3715596725146409911">
+      <segment>
+        <source>Owner</source>
+      </segment>
+    </unit>
+    <unit id="3722122307545866745">
+      <segment>
+        <source>within <ph id="0" equiv="INTERPOLATION" disp="{{ cleanPackagePath(frame.package, frame.platform) }}"/></source>
+      </segment>
+    </unit>
+    <unit id="372253476753871793">
+      <segment>
+        <source> Verify your email address before setting up two-factor authentication. </source>
+      </segment>
+    </unit>
+    <unit id="3724068243287682962">
+      <segment>
+        <source>Team</source>
+      </segment>
+    </unit>
+    <unit id="3733215288982610673">
+      <segment>
+        <source>Level</source>
+      </segment>
+    </unit>
+    <unit id="3735103420734835435">
+      <segment>
+        <source>Set up MCP</source>
+      </segment>
+    </unit>
+    <unit id="3739272079599444270">
+      <segment>
+        <source> Spend cap reached. New events will be dropped until an organization owner raises the cap. </source>
+      </segment>
+    </unit>
+    <unit id="3740522640490050218">
+      <segment>
+        <source> Your current plan does not support on-demand billing, so it is not adding any headroom and about <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped. Raising the spend cap will not change that. </source>
+      </segment>
+    </unit>
+    <unit id="3745183617500344843">
+      <segment>
+        <source>How are events counted?</source>
+      </segment>
+    </unit>
+    <unit id="3745223847280240225">
+      <segment>
+        <source>Annual</source>
+      </segment>
+    </unit>
+    <unit id="3746183499642587543">
+      <segment>
+        <source>Your DSN is pre-filled in the setup instructions. Copy it here if you need it for additional environments or tools. The Security Endpoint is used for browser Content Security Policy (CSP) reporting.</source>
+      </segment>
+    </unit>
+    <unit id="3756990424428532451">
+      <segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">auto_session_tracking</pc>: set to <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">false</pc>. GlitchTip does not support session tracking.</source>
+      </segment>
+    </unit>
+    <unit id="3770761673682962465">
+      <segment>
+        <source>Start time</source>
+      </segment>
+    </unit>
+    <unit id="3786809661134536914">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;body-text-strong&quot;&gt;" dispEnd="&lt;/span&gt;">or</pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="3797570084942068182">
+      <segment>
+        <source>Select</source>
+      </segment>
+    </unit>
+    <unit id="3808550909625305765">
+      <segment>
+        <source>Each log entry counts as 1/10 of an event — 10 log entries equal 1 event</source>
+      </segment>
+    </unit>
+    <unit id="3837964546717128784">
+      <segment>
+        <source> We&apos;ve paused event collection for this organization, so new events are being rejected. Please get in touch and we&apos;ll sort it out with you. </source>
+      </segment>
+    </unit>
+    <unit id="3856193213296741054">
+      <segment>
+        <source>Last Seen</source>
+      </segment>
+    </unit>
+    <unit id="3861559140187372291">
+      <segment>
+        <source>Previous 30 Days</source>
+      </segment>
+    </unit>
+    <unit id="3867517862135491572">
+      <segment>
+        <source>Each megabyte of file storage is counted as an event</source>
+      </segment>
+    </unit>
+    <unit id="388172323153025983">
+      <segment>
+        <source> Enter a valid email</source>
+      </segment>
+    </unit>
+    <unit id="3892161059518616136">
+      <segment>
+        <source>Dark</source>
+      </segment>
+    </unit>
+    <unit id="3894950702316166331">
+      <segment>
+        <source>Loading...</source>
+      </segment>
+    </unit>
+    <unit id="3897348120591552265">
+      <segment>
+        <source>Manage</source>
+      </segment>
+    </unit>
+    <unit id="390002042741869662">
+      <segment>
+        <source> On-demand billing is switched on but is not running, so about <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped. You are not being charged for it, and raising the spend cap will not help. Please contact support. </source>
+      </segment>
+    </unit>
+    <unit id="3915096473617799560">
+      <segment>
+        <source> On-demand billing is off. Your current plan does not support it. </source>
+      </segment>
+    </unit>
+    <unit id="3935445601531613483">
+      <segment>
+        <source>organization</source>
+      </segment>
+    </unit>
+    <unit id="3971100408152984961">
+      <segment>
+        <source> Next </source>
+      </segment>
+    </unit>
+    <unit id="4002141153394023384">
+      <segment>
+        <source>Monthly spend cap (not in effect)</source>
+      </segment>
+    </unit>
+    <unit id="400576290335781665">
+      <segment>
+        <source>View all transaction groups</source>
+      </segment>
+    </unit>
+    <unit id="4021752662928002901">
+      <segment>
+        <source>Update</source>
+      </segment>
+    </unit>
+    <unit id="4029649057038200865">
+      <segment>
+        <source>Search syntax</source>
+      </segment>
+    </unit>
+    <unit id="4032763770452115138">
+      <segment>
+        <source>Set trend charts period</source>
+      </segment>
+    </unit>
+    <unit id="4052546330076196016">
+      <segment>
+        <source> You&apos;re at <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ usagePercent() }}"/>%</pc> of your event limit. Upgrade before throttling kicks in and support open source error tracking. </source>
+      </segment>
+    </unit>
+    <unit id="4061011900657241463">
+      <segment>
+        <source>Are you sure you want to remove this notification?</source>
+      </segment>
+    </unit>
+    <unit id="4069266448571743025">
+      <segment>
+        <source>raw csp report data</source>
+      </segment>
+    </unit>
+    <unit id="407181208257535080">
+      <segment>
+        <source> Issue </source>
+      </segment>
+    </unit>
+    <unit id="4077520913910941990">
+      <segment>
+        <source>Label</source>
+      </segment>
+    </unit>
+    <unit id="4090842231818610126">
+      <segment>
+        <source> Teams are for managing issue notifications and workflow. </source>
+      </segment>
+    </unit>
+    <unit id="4097479593197024186">
+      <segment>
+        <source>Resets <ph id="0" equiv="INTERPOLATION" disp="{{ reset | date }}"/></source>
+      </segment>
+    </unit>
+    <unit id="4106331621788126718">
+      <segment>
+        <source>last</source>
+      </segment>
+    </unit>
+    <unit id="413061101210031501">
+      <segment>
+        <source>Are you sure you want to delete this project?</source>
+      </segment>
+    </unit>
+    <unit id="413116577994876478">
+      <segment>
+        <source>Light</source>
+      </segment>
+    </unit>
+    <unit id="4133831347302787235">
+      <segment>
+        <source> GlitchTip was unable to find a subscription for your account. If you just signed up for a subscription on our payment platform, please contact us at <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;mailto:{{ billingEmail }}&quot;&gt;" dispEnd="&lt;/a &gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ billingEmail }}"/></pc>. </source>
+      </segment>
+    </unit>
+    <unit id="4143980839813043576">
+      <segment>
+        <source>GlitchTip instance name</source>
+      </segment>
+    </unit>
+    <unit id="4157071276755070841">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;caption-text&quot;&gt;" dispEnd="&lt;/span&gt;">Avg Duration</pc>
+          <pc id="1" equivStart="START_TAG_SPAN_1" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;body-text-strong&quot;&gt;" dispEnd="&lt;/span&gt;">
+            <ph id="2" equiv="INTERPOLATION" disp="{{ group.avgDuration! | humanizeDuration }}"/>
+          </pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="4158049716505128655">
+      <segment>
+        <source>There was an error deleting your account. Please try again.</source>
+      </segment>
+    </unit>
+    <unit id="4166065492158510722">
+      <segment>
+        <source>No matching issues</source>
+      </segment>
+    </unit>
+    <unit id="4167058869457255799">
+      <segment>
+        <source>You&apos;re not on the team for at least one of the selected projects. Ask an organization admin to add you.</source>
+      </segment>
+    </unit>
+    <unit id="4170389841039402473">
+      <segment>
+        <source> Our legal terms are changing. The new <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://glitchtip.com/legal/tos&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; &gt;" dispEnd="&lt;/a &gt;">Terms of Service</pc>, <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://glitchtip.com/legal/privacy&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; &gt;" dispEnd="&lt;/a &gt;">Privacy Policy</pc>, and <pc id="2" equivStart="START_LINK_2" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://glitchtip.com/legal/data-processing-agreement&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; &gt;" dispEnd="&lt;/a &gt;">DPA</pc> take effect for your account on November 21, 2026. </source>
+      </segment>
+    </unit>
+    <unit id="4178492713372346153">
+      <segment>
+        <source>Lowest Priority</source>
+      </segment>
+    </unit>
+    <unit id="4185886669386916621">
+      <segment>
+        <source> I&apos;ve verified — refresh </source>
+      </segment>
+    </unit>
+    <unit id="4201099783002228618">
+      <segment>
+        <source>Mark unresolved</source>
+      </segment>
+    </unit>
+    <unit id="4212919343775303870">
+      <segment>
+        <source>Total time</source>
+      </segment>
+    </unit>
+    <unit id="4244938793593193832">
+      <segment>
+        <source> Configure your project to send a POST request with no content to the following URL at your specified interval. If GlitchTip does not receive this request within the interval, your site status will be marked as down. </source>
+      </segment>
+    </unit>
+    <unit id="4252211469562145168">
+      <segment>
+        <source> About <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped while a recent change takes effect. </source>
+      </segment>
+    </unit>
+    <unit id="4260801227613473914">
+      <segment>
+        <source> Adjust cap </source>
+      </segment>
+    </unit>
+    <unit id="4263554968897566334">
+      <segment>
+        <source> Your events are being rejected. Get in touch to change your plan and resume event tracking. </source>
+      </segment>
+    </unit>
+    <unit id="4282614425667205791">
+      <segment>
+        <source> You&apos;re at your event limit on our largest plan, and about <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Turn on on-demand billing below to keep collecting events, or get in touch and we&apos;ll help you find a fit. </source>
+      </segment>
+    </unit>
+    <unit id="4286313840809916278">
+      <segment>
+        <source>Join Team</source>
+      </segment>
+    </unit>
+    <unit id="4295547764764047619">
+      <segment>
+        <source>No monitor checks were found.</source>
+      </segment>
+    </unit>
+    <unit id="4319441956121197474">
+      <segment>
+        <source>Save Changes</source>
+      </segment>
+    </unit>
+    <unit id="432834967329800065">
+      <segment>
+        <source>General Settings</source>
+      </segment>
+    </unit>
+    <unit id="4365749064038199351">
+      <segment>
+        <source> Turn on on-demand billing </source>
+      </segment>
+    </unit>
+    <unit id="4388712199830758321">
+      <segment>
+        <source>Resend verification email</source>
+      </segment>
+    </unit>
+    <unit id="4391289919356861627">
+      <segment>
+        <source>Apply</source>
+      </segment>
+    </unit>
+    <unit id="4393746074650749799">
+      <segment>
+        <source>full data</source>
+      </segment>
+    </unit>
+    <unit id="4417619564210882782">
+      <segment>
+        <source>Connect a social login to sign in with it.</source>
+      </segment>
+    </unit>
+    <unit id="4418983244366202082">
+      <segment>
+        <source>File storage: <ph id="0" equiv="INTERPOLATION" disp="{{ breakdown.fileSizeMb }}"/> MB</source>
+      </segment>
+    </unit>
+    <unit id="4426024771404048707">
+      <segment>
+        <source>Delete <ph id="0" equiv="name" disp="name"/></source>
+      </segment>
+    </unit>
+    <unit id="4435324863259316135">
+      <segment>
+        <source>Back to Projects</source>
+      </segment>
+    </unit>
+    <unit id="4487118624061086799">
+      <segment>
+        <source>500: Internal server error. Please refresh the page and try again.</source>
+      </segment>
+    </unit>
+    <unit id="4496572774093976020">
+      <segment>
+        <source>Not enough data</source>
+      </segment>
+    </unit>
+    <unit id="4515896405663972409">
+      <segment>
+        <source>Preferences have been updated</source>
+      </segment>
+    </unit>
+    <unit id="4541933733847147426">
+      <segment>
+        <source>Are you sure you want to delete this monitor? You will permanently lose all associated uptime data.</source>
+      </segment>
+    </unit>
+    <unit id="4545186191685636796">
+      <segment>
+        <source>No uptime monitors</source>
+      </segment>
+    </unit>
+    <unit id="4575362171226950330">
+      <segment>
+        <source> Your cap is below the usage already counted towards your bill this cycle. Lowering the cap stops new on-demand charges, but usage already counted will still be on your invoice. The estimate above is your on-demand charge for this cycle. </source>
+      </segment>
+    </unit>
+    <unit id="457992668303888747">
+      <segment>
+        <source>Support chat couldn&apos;t load. Email <ph id="0" equiv="PH" disp="email"/>.</source>
+      </segment>
+    </unit>
+    <unit id="4580988005648117665">
+      <segment>
+        <source>Search</source>
+      </segment>
+    </unit>
+    <unit id="4588245440707810961">
+      <segment>
+        <source>Settings for <ph id="0" equiv="project" disp="project"/></source>
+      </segment>
+    </unit>
+    <unit id="4589895308492128274">
+      <segment>
+        <source> for details. A recent plan or cap change is taking effect. </source>
+      </segment>
+    </unit>
+    <unit id="4603043302897985198">
+      <segment>
+        <source> This monitor is associated with the <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ monitor.projectName }}"/></pc> project. There <ph id="2" equiv="ICU" disp="{uptimeAlertCount(), plural, =1 {is 1 uptime alert} other {are {{ uptimeAlertCount() }} uptime alerts}}" subFlows="1561221854942158918"/> set up for this project. Visit the <pc id="3" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;../../settings/projects/&apos;, associatedProjectSlug, ]&quot; &gt;" dispEnd="&lt;/a &gt;">project settings</pc> page to change your alerts. </source>
+      </segment>
+    </unit>
+    <unit id="4605882393434832327">
+      <segment>
+        <source> By deleting this organization, you will lose all data including projects and their associated events. </source>
+      </segment>
+    </unit>
+    <unit id="4609559423253296542">
+      <segment>
+        <source>Create a team</source>
+      </segment>
+    </unit>
+    <unit id="4616844989366628">
+      <segment>
+        <source> An email will be sent to the members of this project.<ph id="0" equiv="LINE_BREAK" type="fmt" disp="&lt;br /&gt;"/> Select &quot;Add Recipient&quot; to continue. </source>
+      </segment>
+    </unit>
+    <unit id="4626870041082080988">
+      <segment>
+        <source> This alert isn&apos;t being sent anywhere. Select &quot;Add An Alert Recipient&quot; below to get started. </source>
+      </segment>
+    </unit>
+    <unit id="4627127395476649714">
+      <segment>
+        <source>Pick a valid time</source>
+      </segment>
+    </unit>
+    <unit id="4634699267447815966">
+      <segment>
+        <source> You&apos;re charged for events above your plan limit, up to a monthly cap you can change anytime. <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ reportedOwedDollars() | currency }}"/></pc> of on-demand usage has already been counted towards your bill this cycle, more than your <pc id="2" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="3" equiv="INTERPOLATION_1" disp="{{ capInputDollars() | currency }}"/> cap</pc>. That amount will still be on your invoice, and until you raise the cap or the cycle resets, nothing more is charged and events past your plan limit stay throttled. </source>
+      </segment>
+    </unit>
+    <unit id="465664631077016099">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;price-amount&quot;&gt;" dispEnd="&lt;/span&gt;">Free</pc>
+          <pc id="1" equivStart="START_TAG_SPAN_1" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;price-detail&quot;&gt;" dispEnd="&lt;/span&gt;">($0)</pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="4659537058158752460">
+      <segment>
+        <source>Add a second step at login with an authenticator app.</source>
+      </segment>
+    </unit>
+    <unit id="4664874365831932842">
+      <segment>
+        <source>Enable <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://glitchtip.com/documentation/performance&quot; &gt;" dispEnd="&lt;/a &gt;">performance monitoring</pc> by setting <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">traces_sample_rate</pc>. Sample your transactions to keep data volume manageable — most teams find 1–10% sufficient.</source>
+      </segment>
+    </unit>
+    <unit id="4665276546078291236">
+      <segment>
+        <source>Structured</source>
+      </segment>
+    </unit>
+    <unit id="4674318460512567698">
+      <segment>
+        <source>This Month</source>
+      </segment>
+    </unit>
+    <unit id="4679538206503704419">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;">Full Access</pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="4714004045286975302">
+      <segment>
+        <source>Status code</source>
+      </segment>
+    </unit>
+    <unit id="4756014564250067539">
+      <segment>
+        <source>Resolve in next release</source>
+      </segment>
+    </unit>
+    <unit id="4761957245336071240">
+      <segment>
+        <source>Create Monitor</source>
+      </segment>
+    </unit>
+    <unit id="4762525426208239051">
+      <segment>
+        <source>Scopes</source>
+      </segment>
+    </unit>
+    <unit id="4773225740896583514">
+      <segment>
+        <source>Upgrade to <ph id="0" equiv="INTERPOLATION" disp="{{ nextPlanLabel() }}"/> events/mo</source>
+      </segment>
+    </unit>
+    <unit id="4776048193435822947">
+      <segment>
+        <source>MFA</source>
+      </segment>
+    </unit>
+    <unit id="4792629798844357610">
+      <segment>
+        <source> to upgrade and keep collecting events.</source>
+      </segment>
+    </unit>
+    <unit id="4799332776881397185">
+      <segment>
+        <source>Update Comment</source>
+      </segment>
+    </unit>
+    <unit id="4802437878460003316">
+      <segment>
+        <source>No matching logs</source>
+      </segment>
+    </unit>
+    <unit id="4804785061014590286">
+      <segment>
+        <source>Logs</source>
+      </segment>
+    </unit>
+    <unit id="4813239392166088334">
+      <segment>
+        <source>Are you sure you want to delete this comment?</source>
+      </segment>
+    </unit>
+    <unit id="4816216590591222133">
+      <segment>
+        <source>Enabled</source>
+      </segment>
+    </unit>
+    <unit id="4843655808825563283">
+      <segment>
+        <source>Security Endpoint</source>
+      </segment>
+    </unit>
+    <unit id="4865153778652456586">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;caption-text&quot;&gt;" dispEnd="&lt;/span&gt;">Method</pc>
+          <pc id="1" equivStart="START_TAG_SPAN_1" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;body-text-strong&quot;&gt;" dispEnd="&lt;/span&gt;">
+            <ph id="2" equiv="INTERPOLATION" disp="{{ group.method }}"/>
+          </pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="4873149362496451858">
+      <segment>
+        <source>Last 7 days</source>
+      </segment>
+    </unit>
+    <unit id="4879517228803151475">
+      <segment>
+        <source>Email Address</source>
+      </segment>
+    </unit>
+    <unit id="4901518005136131548">
+      <segment>
+        <source>Enter at least one email</source>
+      </segment>
+    </unit>
+    <unit id="4902817035128594900">
+      <segment>
+        <source>Description</source>
+      </segment>
+    </unit>
+    <unit id="491451322889220316">
+      <segment>
+        <source>Loading release files</source>
+      </segment>
+    </unit>
+    <unit id="4917224105891953067">
+      <segment>
+        <source>Email recipients are tested via the alert itself</source>
+      </segment>
+    </unit>
+    <unit id="4921417678631898927">
+      <segment>
+        <source>Delete comment?</source>
+      </segment>
+    </unit>
+    <unit id="4948440289765392916">
+      <segment>
+        <source>Authenticator setup QR code</source>
+      </segment>
+    </unit>
+    <unit id="4948744459319367893">
+      <segment>
+        <source>Register Security Key</source>
+      </segment>
+    </unit>
+    <unit id="4997826423619542924">
+      <segment>
+        <source> The primary platform for this project. Used for documentation. </source>
+      </segment>
+    </unit>
+    <unit id="5002739040932856262">
+      <segment>
+        <source>Fatal</source>
+      </segment>
+    </unit>
+    <unit id="5008579417033317628">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {time} other {times}}</source>
+      </segment>
+    </unit>
+    <unit id="501903640172656596">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; [href]=&quot; &apos;/organizations/&apos; + orgSlug() + &apos;/issues/&apos; + event.groupID + &apos;/events/&apos; + $safeNavigationMigration(event?.id) + &apos;/json/&apos; &quot; &gt;" dispEnd="&lt;/a &gt;">raw JSON</pc>
+          <pc id="1" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;action-separator&quot; aria-hidden=&quot;true&quot;&gt;" dispEnd="&lt;/span&gt;">·</pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="5035487597527491900">
+      <segment>
+        <source>Select an associated project to scope this monitor to one of its environments.</source>
+      </segment>
+    </unit>
+    <unit id="5039333631217808070">
+      <segment>
+        <source> Registration is currently unavailable. Contact your server administrator. </source>
+      </segment>
+    </unit>
+    <unit id="5041354590769758251">
+      <segment>
+        <source>Admin</source>
+      </segment>
+    </unit>
+    <unit id="5044576521773126838">
+      <segment>
+        <source>Self-Hosted</source>
+      </segment>
+    </unit>
+    <unit id="5084757846026616483">
+      <segment>
+        <source>The bot&apos;s API key, shown when the bot is created</source>
+      </segment>
+    </unit>
+    <unit id="5097410080658371920">
+      <segment>
+        <source>Update Preferences</source>
+      </segment>
+    </unit>
+    <unit id="510225673022156846">
+      <segment>
+        <source>Resend confirmation</source>
+      </segment>
+    </unit>
+    <unit id="5103788378973384072">
+      <segment>
+        <source>Desktop</source>
+      </segment>
+    </unit>
+    <unit id="5116080714558828759">
+      <segment>
+        <source>Give your token a name, so you can easily identify it.</source>
+      </segment>
+    </unit>
+    <unit id="5131472756655110143">
+      <segment>
+        <source>Span breakdown</source>
+      </segment>
+    </unit>
+    <unit id="5144966841571402100">
+      <segment>
+        <source>The platform you selected doesn&apos;t have specific setup instructions yet. Many sentry-compatible SDKs are available as open-source packages — search for a sentry SDK for your language or framework on your package manager.</source>
+      </segment>
+    </unit>
+    <unit id="5148439736793042731">
+      <segment>
+        <source> copy for AI </source>
+      </segment>
+    </unit>
+    <unit id="5168224160973980905">
+      <segment>
+        <source>Add Email Address</source>
+      </segment>
+    </unit>
+    <unit id="5206959576487617077">
+      <segment>
+        <source>Install an authenticator app</source>
+      </segment>
+    </unit>
+    <unit id="5216008151185819578">
+      <segment>
+        <source>Turn on on-demand billing?</source>
+      </segment>
+    </unit>
+    <unit id="5233534213779202035">
+      <segment>
+        <source>This will use approximately <ph id="0" equiv="INTERPOLATION" disp="{{ intervalPerMonth | number: &quot;1.0-0&quot; }}"/> <pc id="1" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[]&quot; (click)=&quot;openEventInfoDialog()&quot;&gt;" dispEnd="&lt;/a&gt;">events</pc> per month, exceeding the <ph id="2" equiv="INTERPOLATION_1" disp="{{ totalEventsAllowed | number: &quot;1.0-0&quot; }}"/> events your organization&apos;s subscription allows for.</source>
+      </segment>
+    </unit>
+    <unit id="5254377412613509729">
+      <segment>
+        <source>Don&apos;t lose events!</source>
+      </segment>
+    </unit>
+    <unit id="5268699304743131665">
+      <segment>
+        <source>Remove notification?</source>
+      </segment>
+    </unit>
+    <unit id="5273032674861258152">
+      <segment>
+        <source>Feishu custom bot webhook URL (https://open.feishu.cn/open-apis/bot/v2/hook/...)</source>
+      </segment>
+    </unit>
+    <unit id="5301451406229114785">
+      <segment>
+        <source>Last Month</source>
+      </segment>
+    </unit>
+    <unit id="5312920202255242319">
+      <segment>
+        <source>Remove member</source>
+      </segment>
+    </unit>
+    <unit id="5314138898559452100">
+      <segment>
+        <source> Primary </source>
+      </segment>
+    </unit>
+    <unit id="532760154730713972">
+      <segment>
+        <source> Enter comment text. </source>
+      </segment>
+    </unit>
+    <unit id="5370838177584249385">
+      <segment>
+        <source>Resolved</source>
+      </segment>
+    </unit>
+    <unit id="5376287016044032856">
+      <segment>
+        <source>No access</source>
+      </segment>
+    </unit>
+    <unit id="5377494958922638201">
+      <segment>
+        <source> Add your license key in Django admin once subscribed. </source>
+      </segment>
+    </unit>
+    <unit id="5387848024685492875">
+      <segment>
+        <source>View all Releases</source>
+      </segment>
+    </unit>
+    <unit id="5397872675147465130">
+      <segment>
+        <source>On-demand billing needs attention</source>
+      </segment>
+    </unit>
+    <unit id="5406245883698992618">
+      <segment>
+        <source>Pick a time</source>
+      </segment>
+    </unit>
+    <unit id="5423991647761194551">
+      <segment>
+        <source>Newest</source>
+      </segment>
+    </unit>
+    <unit id="5434840485236467165">
+      <segment>
+        <source>Create a label for your auth token</source>
+      </segment>
+    </unit>
+    <unit id="5445645543721190926">
+      <segment>
+        <source>Scan the QR code with your app, or enter the key by hand.</source>
+      </segment>
+    </unit>
+    <unit id="5452964567933451288">
+      <segment>
+        <source>Up at <ph id="0" equiv="INTERPOLATION" disp="{{ datapoint.startCheck | date: &apos;short&apos; }}"/></source>
+      </segment>
+    </unit>
+    <unit id="5462361983940693567">
+      <segment>
+        <source>Channel</source>
+      </segment>
+    </unit>
+    <unit id="5467352678489644349">
+      <segment>
+        <source>Test recipient</source>
+      </segment>
+    </unit>
+    <unit id="5495676136158732653">
+      <segment>
+        <source>Time range</source>
+      </segment>
+    </unit>
+    <unit id="5504009211874075446">
+      <segment>
+        <source> There were errors while processing your request </source>
+      </segment>
+    </unit>
+    <unit id="5527977519316114214">
+      <segment>
+        <source>Create a New Project</source>
+      </segment>
+    </unit>
+    <unit id="5557936965735860825">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span i18n-matTooltip class=&quot;tooltip&quot; matTooltip=&quot;Send an email to team members on this project.&quot; matTooltipClass=&quot;tt-wrapping&quot; &gt;" dispEnd="&lt;/span&gt;">Send an email to team members on this project. </pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="5581711712041838743">
+      <segment>
+        <source>Copy key to clipboard</source>
+      </segment>
+    </unit>
+    <unit id="5589145458945303023">
+      <segment>
+        <source>No transactions</source>
+      </segment>
+    </unit>
+    <unit id="5615185955636860545">
+      <segment>
+        <source>Success: Your recipient has been updated</source>
+      </segment>
+    </unit>
+    <unit id="5633083782376260608">
+      <segment>
+        <source>Create an alert to get notified when this project has new issues.</source>
+      </segment>
+    </unit>
+    <unit id="5636312106761697772">
+      <segment>
+        <source>Predicted End of Month</source>
+      </segment>
+    </unit>
+    <unit id="5636764407212225116">
+      <segment>
+        <source>Delete Alert <ph id="0" equiv="number" disp="n"/></source>
+      </segment>
+    </unit>
+    <unit id="5649499879754160121">
+      <segment>
+        <source>Name must be 64 characters or less</source>
+      </segment>
+    </unit>
+    <unit id="5653699239734075539">
+      <segment>
+        <source>Save your backup codes</source>
+      </segment>
+    </unit>
+    <unit id="5696506580783597529">
+      <segment>
+        <source>Most Frequent</source>
+      </segment>
+    </unit>
+    <unit id="5701618810648052610">
+      <segment>
+        <source>Title</source>
+      </segment>
+    </unit>
+    <unit id="5738316044190537396">
+      <segment>
+        <source>Issue #</source>
+      </segment>
+    </unit>
+    <unit id="5768343853895020811">
+      <segment>
+        <source>Usage: Last 30 Days</source>
+      </segment>
+    </unit>
+    <unit id="5769292297914455214">
+      <segment>
+        <source>Disabled</source>
+      </segment>
+    </unit>
+    <unit id="5775443604282913568">
+      <segment>
+        <source>All issues for <ph id="0" equiv="project" disp="project"/></source>
+      </segment>
+    </unit>
+    <unit id="5802517735561227285">
+      <segment>
+        <source>Zulip: <ph id="0" equiv="INTERPOLATION" disp="{{ recipient.url }}"/></source>
+      </segment>
+    </unit>
+    <unit id="5819125010421830334">
+      <segment>
+        <source> Contact us </source>
+      </segment>
+    </unit>
+    <unit id="5842305303142677924">
+      <segment>
+        <source>User registration</source>
+      </segment>
+    </unit>
+    <unit id="5844212965736113574">
+      <segment>
+        <source>Oldest</source>
+      </segment>
+    </unit>
+    <unit id="5855712980171403039">
+      <segment>
+        <source>Browser</source>
+      </segment>
+    </unit>
+    <unit id="5885452247889934944">
+      <segment>
+        <source>Topic</source>
+      </segment>
+    </unit>
+    <unit id="5891459482875358861">
+      <segment>
+        <source>Set up a hardware device as a second factor to sign in.</source>
+      </segment>
+    </unit>
+    <unit id="5910947217931634219">
+      <segment>
+        <source>Warn</source>
+      </segment>
+    </unit>
+    <unit id="5916134442795352001">
+      <segment>
+        <source>Initialize the SDK early in your application&apos;s startup.</source>
+      </segment>
+    </unit>
+    <unit id="5926658517548210439">
+      <segment>
+        <source> Add Member to Organization </source>
+      </segment>
+    </unit>
+    <unit id="5939430732238938397">
+      <segment>
+        <source> for details. Your current plan cannot be billed for on-demand usage, so raising your spend cap will not change this. </source>
+      </segment>
+    </unit>
+    <unit id="5939888207002128512">
+      <segment>
+        <source>Transaction group not found</source>
+      </segment>
+    </unit>
+    <unit id="5944666342346398830">
+      <segment>
+        <source>Let us handle hosting, updates, and backups for you.</source>
+      </segment>
+    </unit>
+    <unit id="5945359866777111462">
+      <segment>
+        <source> Report </source>
+      </segment>
+    </unit>
+    <unit id="5957088263227854656">
+      <segment>
+        <source>Security keys</source>
+      </segment>
+    </unit>
+    <unit id="596137046478261006">
+      <segment>
+        <source>Loading transaction groups</source>
+      </segment>
+    </unit>
+    <unit id="5977844493953232241">
+      <segment>
+        <source> There was an error processing your request </source>
+      </segment>
+    </unit>
+    <unit id="5981381846274463587">
+      <segment>
+        <source>Average Duration</source>
+      </segment>
+    </unit>
+    <unit id="5986789075000344504">
+      <segment>
+        <source>On-demand billing</source>
+      </segment>
+    </unit>
+    <unit id="6026579876287900884">
+      <segment>
+        <source>raw data</source>
+      </segment>
+    </unit>
+    <unit id="6027882252867875379">
+      <segment>
+        <source> for details.</source>
+      </segment>
+    </unit>
+    <unit id="6037692836891993429">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;caption-text&quot;&gt;" dispEnd="&lt;/span&gt;">Operation</pc>
+          <pc id="1" equivStart="START_TAG_SPAN_1" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;body-text-strong&quot;&gt;" dispEnd="&lt;/span&gt;">
+            <ph id="2" equiv="INTERPOLATION" disp="{{ group.op }}"/>
+          </pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="6083399226303311703">
+      <segment>
+        <source>Delete Organization</source>
+      </segment>
+    </unit>
+    <unit id="6095052631454715389">
+      <segment>
+        <source>Manage Subscription</source>
+      </segment>
+    </unit>
+    <unit id="6098697217743311893">
+      <segment>
+        <source>Channel is required</source>
+      </segment>
+    </unit>
+    <unit id="6099995138616604139">
+      <segment>
+        <source>Billing Cycle: <ph id="0" equiv="INTERPOLATION" disp="{{ subscription.subscriptionCycleStart ?? subscription.currentPeriodStart | date }}"/> to <ph id="1" equiv="INTERPOLATION_1" disp="{{ subscription.subscriptionCycleEnd ?? subscription.currentPeriodEnd | date }}"/> <pc id="2" equivStart="START_BLOCK_IF" equivEnd="CLOSE_BLOCK_IF" type="other" dispStart="@if (daysRemaining() !== null) {" dispEnd="}"> (<ph id="3" equiv="INTERPOLATION_2" disp="{{ daysRemaining() }}"/> <ph id="4" equiv="INTERPOLATION_3" disp="{{ daysRemaining() === 1 ? &quot;day&quot; : &quot;days&quot; }}"/> remaining) </pc></source>
+      </segment>
+    </unit>
+    <unit id="6135551083632800789">
+      <segment>
+        <source>Release files for </source>
+      </segment>
+    </unit>
+    <unit id="6178565847852899075">
+      <segment>
+        <source>Endpoint URL</source>
+      </segment>
+    </unit>
+    <unit id="6192930354402829130">
+      <segment>
+        <source>Any tag works, e.g. environment:production or release:v1.2.0. One value per key.</source>
+      </segment>
+    </unit>
+    <unit id="6215186523080321">
+      <segment>
+        <source>Headers</source>
+      </segment>
+    </unit>
+    <unit id="6234831298944462737">
+      <segment>
+        <source>Back to Teams</source>
+      </segment>
+    </unit>
+    <unit id="6234985323744540610">
+      <segment>
+        <source>Date range</source>
+      </segment>
+    </unit>
+    <unit id="6236390993609688799">
+      <segment>
+        <source>Are you sure you want to delete <ph id="0" equiv="PH" disp="count"/> issue(s)? You will permanently lose these issues and all associated events.</source>
+      </segment>
+    </unit>
+    <unit id="6251233207987462868">
+      <segment>
+        <source>This will use approximately <ph id="0" equiv="INTERPOLATION" disp="{{ intervalPerMonth | number: &quot;1.0-0&quot; }}"/> <pc id="1" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[]&quot; (click)=&quot;openEventInfoDialog()&quot;&gt;" dispEnd="&lt;/a&gt;">events</pc> per month out of the <ph id="2" equiv="INTERPOLATION_1" disp="{{ totalEventsAllowed | number: &quot;1.0-0&quot; }}"/> events your organization&apos;s subscription allows for.</source>
+      </segment>
+    </unit>
+    <unit id="6252070156626006029">
+      <segment>
+        <source>None</source>
+      </segment>
+    </unit>
+    <unit id="6266469192756738485">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ element.type }}"/> report</source>
+      </segment>
+    </unit>
+    <unit id="6286501917375397305">
+      <segment>
+        <source>Mark As</source>
+      </segment>
+    </unit>
+    <unit id="6287909774398170318">
+      <segment>
+        <source>Zulip Server URL</source>
+      </segment>
+    </unit>
+    <unit id="6289232145462433421">
+      <segment>
+        <source>Request Body View</source>
+      </segment>
+    </unit>
+    <unit id="6292286448154259248">
+      <segment>
+        <source>Last 14 days</source>
+      </segment>
+    </unit>
+    <unit id="6297950127540572260">
+      <segment>
+        <source>Member</source>
+      </segment>
+    </unit>
+    <unit id="6308528508694842109">
+      <segment>
+        <source> Enter a monitor name </source>
+      </segment>
+    </unit>
+    <unit id="6329070940389557822">
+      <segment>
+        <source>Events are the unit of measure for tracking GlitchTip usage. Your plan&apos;s monthly limit is shared across all features.</source>
+      </segment>
+    </unit>
+    <unit id="6358319911147143451">
+      <segment>
+        <source> Spend cap reached, so about <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate() }}"/>% of new events are being dropped. Raise the cap to keep collecting events. </source>
+      </segment>
+    </unit>
+    <unit id="6360600151505327572">
+      <segment>
+        <source>Last used</source>
+      </segment>
+    </unit>
+    <unit id="6408782743242722551">
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ reportedOwedDollars() | currency }}"/> of on-demand usage has already been counted towards your bill this cycle and will still be on your invoice. No further on-demand usage is being charged. </source>
+      </segment>
+    </unit>
+    <unit id="6409383856975229343">
+      <segment>
+        <source>Each health check counts as 1/10 of an event — 10 checks equal 1 event, whether polled by GlitchTip or pushed from your app</source>
+      </segment>
+    </unit>
+    <unit id="6409746709109864687">
+      <segment>
+        <source>Uptime details for <ph id="0" equiv="monitor" disp="monitor"/></source>
+      </segment>
+    </unit>
+    <unit id="6419559875078961819">
+      <segment>
+        <source>Fastest</source>
+      </segment>
+    </unit>
+    <unit id="6425467213960794982">
+      <segment>
+        <source>All projects</source>
+      </segment>
+    </unit>
+    <unit id="6439365426343089851">
+      <segment>
+        <source>General</source>
+      </segment>
+    </unit>
+    <unit id="6475969597256383239">
+      <segment>
+        <source>Email Addresses</source>
+      </segment>
+    </unit>
+    <unit id="6477814403397758627">
+      <segment>
+        <source> About <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Upgrade to keep collecting events, or turn on on-demand billing below. </source>
+      </segment>
+    </unit>
+    <unit id="6487820965681624268">
+      <segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">release</pc>: your application version (e.g., <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">&quot;1.0.0&quot;</pc>). Helps track which releases introduce errors.</source>
+      </segment>
+    </unit>
+    <unit id="6490277855542937392">
+      <segment>
+        <source>Avg</source>
+      </segment>
+    </unit>
+    <unit id="6506988080895445646">
+      <segment>
+        <source>You have successfully deleted #<ph id="0" equiv="teamSlug" disp="teamSlug"/></source>
+      </segment>
+    </unit>
+    <unit id="6517404532077193911">
+      <segment>
+        <source>Select at least one scope</source>
+      </segment>
+    </unit>
+    <unit id="6522129131388866369">
+      <segment>
+        <source> If you initialize an open-source Sentry SDK with an environment, it will tag events with that environment and GlitchTip will keep a record of them. The environments persist even if the event that reported it is deleted, which is why hiding is an option. </source>
+      </segment>
+    </unit>
+    <unit id="6524067569228558279">
+      <segment>
+        <source>Leave Team</source>
+      </segment>
+    </unit>
+    <unit id="655046618668721877">
+      <segment>
+        <source>this cycle (estimate)</source>
+      </segment>
+    </unit>
+    <unit id="6556140613153986106">
+      <segment>
+        <source>Event Breakdown</source>
+      </segment>
+    </unit>
+    <unit id="6559246822757089203">
+      <segment>
+        <source>Clear filters</source>
+      </segment>
+    </unit>
+    <unit id="6565187216832294594">
+      <segment>
+        <source>Load new version?</source>
+      </segment>
+    </unit>
+    <unit id="6623196464003506422">
+      <segment>
+        <source>Add Recipient</source>
+      </segment>
+    </unit>
+    <unit id="662936269308455040">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;caption-text&quot;&gt;" dispEnd="&lt;/span&gt;">Transaction Count</pc>
+          <pc id="1" equivStart="START_TAG_SPAN_1" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span class=&quot;body-text-strong&quot;&gt;" dispEnd="&lt;/span&gt;">
+            <ph id="2" equiv="INTERPOLATION" disp="{{ group.count }}"/>
+          </pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="6637293344403222779">
+      <segment>
+        <source>Remove recipient?</source>
+      </segment>
+    </unit>
+    <unit id="6652394106594262390">
+      <segment>
+        <source>Scan and verify</source>
+      </segment>
+    </unit>
+    <unit id="6666549148890240362">
+      <segment>
+        <source>All Environments</source>
+      </segment>
+    </unit>
+    <unit id="6687274602224610983">
+      <segment>
+        <source> Your events are being rejected. Upgrade to resume event tracking. </source>
+      </segment>
+    </unit>
+    <unit id="6695596791363034441">
+      <segment>
+        <source>By span</source>
+      </segment>
+    </unit>
+    <unit id="6737001230921582501">
+      <segment>
+        <source>Install the sentry SDK for your platform into your project.</source>
+      </segment>
+    </unit>
+    <unit id="6739776056259621342">
+      <segment>
+        <source>Monthly spend cap</source>
+      </segment>
+    </unit>
+    <unit id="6744269899456780063">
+      <segment>
+        <source>Make primary</source>
+      </segment>
+    </unit>
+    <unit id="6753799837235923045">
+      <segment>
+        <source>/ <ph id="0" equiv="INTERPOLATION" disp="{{ activePrice.interval === &quot;year&quot; ? &quot;year&quot; : &quot;month&quot; }}"/></source>
+      </segment>
+    </unit>
+    <unit id="6762504134540024018">
+      <segment>
+        <source>Quantity</source>
+      </segment>
+    </unit>
+    <unit id="6762743264882388498">
+      <segment>
+        <source>Monthly</source>
+      </segment>
+    </unit>
+    <unit id="6771264285759676728">
+      <segment>
+        <source>Remove Alert <ph id="0" equiv="number" disp="n"/></source>
+      </segment>
+    </unit>
+    <unit id="678063613946250439">
+      <segment>
+        <source>Are you sure you want to remove this recipient?</source>
+      </segment>
+    </unit>
+    <unit id="678589061657776031">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {1 Transaction} other {<ph id="0" equiv="INTERPOLATION"/> Transactions}}</source>
+      </segment>
+    </unit>
+    <unit id="6793423169871086690">
+      <segment>
+        <source>Hide Projects</source>
+      </segment>
+    </unit>
+    <unit id="6794398718047270044">
+      <segment>
+        <source>No connected accounts</source>
+      </segment>
+    </unit>
+    <unit id="679502950068478075">
+      <segment>
+        <source>Use the <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a target=&quot;_blank&quot; href=&quot;https://glitchtip.com/documentation/cli&quot; &gt;" dispEnd="&lt;/a &gt;">GlitchTip CLI</pc> to upload source maps and debug symbols for readable stack traces in production.</source>
+      </segment>
+    </unit>
+    <unit id="6796632791086515660">
+      <segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">environment</pc>: the running environment name (e.g., <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">&quot;production&quot;</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">&quot;staging&quot;</pc>).</source>
+      </segment>
+    </unit>
+    <unit id="6807167074316039062">
+      <segment>
+        <source> Only organization owners can change on-demand billing. </source>
+      </segment>
+    </unit>
+    <unit id="6835811099795223678">
+      <segment>
+        <source>full csp report data</source>
+      </segment>
+    </unit>
+    <unit id="6837724342954729520">
+      <segment>
+        <source>Each transaction report for a tracked activity on your app</source>
+      </segment>
+    </unit>
+    <unit id="6839441563723086895">
+      <segment>
+        <source>Query String</source>
+      </segment>
+    </unit>
+    <unit id="6845549858773411205">
+      <segment>
+        <source>Get a support plan</source>
+      </segment>
+    </unit>
+    <unit id="6859680602069910119">
+      <segment>
+        <source>Copied for AI</source>
+      </segment>
+    </unit>
+    <unit id="6881563184236594776">
+      <segment>
+        <source>Toggle on-demand billing</source>
+      </segment>
+    </unit>
+    <unit id="6881977230026007502">
+      <segment>
+        <source>Project (A-Z)</source>
+      </segment>
+    </unit>
+    <unit id="6897988037897344822">
+      <segment>
+        <source>If they do not already have an account, they will first be asked to create one.</source>
+      </segment>
+    </unit>
+    <unit id="6917659899238781671">
+      <segment>
+        <source>Test notification sent successfully</source>
+      </segment>
+    </unit>
+    <unit id="6924440309066833860">
+      <segment>
+        <source>Highest Priority</source>
+      </segment>
+    </unit>
+    <unit id="6935451648422904638">
+      <segment>
+        <source>An event is every occurrence of the same error (aka: issue) in your application.</source>
+      </segment>
+    </unit>
+    <unit id="696165417453751380">
+      <segment>
+        <source>Set up new device</source>
+      </segment>
+    </unit>
+    <unit id="6970095445233536269">
+      <segment>
+        <source>Breadcrumbs</source>
+      </segment>
+    </unit>
+    <unit id="7003790776240394114">
+      <segment>
+        <source>Filename</source>
+      </segment>
+    </unit>
+    <unit id="7012761344880530102">
+      <segment>
+        <source>Event collection is paused</source>
+      </segment>
+    </unit>
+    <unit id="7031745737737181852">
+      <segment>
+        <source>Add Alert Recipient</source>
+      </segment>
+    </unit>
+    <unit id="7079029906993509129">
+      <segment>
+        <source>Trend</source>
+      </segment>
+    </unit>
+    <unit id="7103588127254721505">
+      <segment>
+        <source>Theme</source>
+      </segment>
+    </unit>
+    <unit id="7120781274846803553">
+      <segment>
+        <source>Date Created</source>
+      </segment>
+    </unit>
+    <unit id="7136018875175606726">
+      <segment>
+        <source>in</source>
+      </segment>
+    </unit>
+    <unit id="7165913391990223528">
+      <segment>
+        <source>Chat with support</source>
+      </segment>
+    </unit>
+    <unit id="7175145836216322796">
+      <segment>
+        <source>Create a token to use the GlitchTip API.</source>
+      </segment>
+    </unit>
+    <unit id="718317616403991404">
+      <segment>
+        <source>Resend Invite</source>
+      </segment>
+    </unit>
+    <unit id="7188521810884384359">
+      <segment>
+        <source>Search syntax help</source>
+      </segment>
+    </unit>
+    <unit id="7188735926936378864">
+      <segment>
+        <source> Keep collecting events past your plan limit and pay only for the overflow, up to a monthly cap you set. At the cap, throttling resumes, so no further on-demand usage is charged. </source>
+      </segment>
+    </unit>
+    <unit id="7216818923768556093">
+      <segment>
+        <source>Help build GlitchTip on GitLab</source>
+      </segment>
+    </unit>
+    <unit id="7232799748981248792">
+      <segment>
+        <source>All checks</source>
+      </segment>
+    </unit>
+    <unit id="7273336248682509272">
+      <segment>
+        <source> Manage email addresses </source>
+      </segment>
+    </unit>
+    <unit id="7301620538128979310">
+      <segment>
+        <source>All times</source>
+      </segment>
+    </unit>
+    <unit id="734906184673613487">
+      <segment>
+        <source>No alerts</source>
+      </segment>
+    </unit>
+    <unit id="736024269261330437">
+      <segment>
+        <source> You&apos;ve reached your spend cap, and about <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Ask an organization owner to raise the spend cap or change your plan to keep collecting events. </source>
+      </segment>
+    </unit>
+    <unit id="7370230567811224225">
+      <segment>
+        <source>Optional setup</source>
+      </segment>
+    </unit>
+    <unit id="7374671888521665415">
+      <segment>
+        <source>Create organization</source>
+      </segment>
+    </unit>
+    <unit id="7375243393535212946">
+      <segment>
+        <source>Popular</source>
+      </segment>
+    </unit>
+    <unit id="740943340133062329">
+      <segment>
+        <source> Spend cap reached. New events will be dropped until you raise the cap. </source>
+      </segment>
+    </unit>
+    <unit id="7435061610486266714">
+      <segment>
+        <source> Events </source>
+      </segment>
+    </unit>
+    <unit id="744244165374460871">
+      <segment>
+        <source>Source Maps &amp; Debug Symbols</source>
+      </segment>
+    </unit>
+    <unit id="7466516352172806111">
+      <segment>
+        <source>Environments</source>
+      </segment>
+    </unit>
+    <unit id="7473676707373218484">
+      <segment>
+        <source>Older</source>
+      </segment>
+    </unit>
+    <unit id="7505192479854511779">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {1 event} other {<ph id="0" equiv="INTERPOLATION"/> events}}</source>
+      </segment>
+    </unit>
+    <unit id="7511836755624233294">
+      <segment>
+        <source> On-demand billing is switched on but is not running, and about <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. You are not being charged for it. Please get in touch and we&apos;ll sort it out with you. </source>
+      </segment>
+    </unit>
+    <unit id="7547858369571452204">
+      <segment>
+        <source>Found in the bot&apos;s settings under &quot;Bots&quot;</source>
+      </segment>
+    </unit>
+    <unit id="7610964918163314775">
+      <segment>
+        <source>You&apos;re not on this project&apos;s team. Ask an organization admin to add you.</source>
+      </segment>
+    </unit>
+    <unit id="7612440083886953496">
+      <segment>
+        <source>Update Member</source>
+      </segment>
+    </unit>
+    <unit id="7619773636555096367">
+      <segment>
+        <source>Get started with GlitchTip</source>
+      </segment>
+    </unit>
+    <unit id="7619777566974442327">
+      <segment>
+        <source>Success: Your alert has been updated</source>
+      </segment>
+    </unit>
+    <unit id="7630657062625682111">
+      <segment>
+        <source> to upgrade. Your current plan cannot be billed for on-demand usage, so raising your spend cap will not change this. </source>
+      </segment>
+    </unit>
+    <unit id="7693734104003104079">
+      <segment>
+        <source>Edit Alert Recipient</source>
+      </segment>
+    </unit>
+    <unit id="769455690878897016">
+      <segment>
+        <source> You&apos;re only charged for events above your plan limit, up to a <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ capInputDollars() | currency }}"/> monthly cap</pc> you can change anytime. If you&apos;re already over your plan limit this cycle, those events are billed too, up to your cap. Once the cap is reached, no further on-demand usage is charged. </source>
+      </segment>
+    </unit>
+    <unit id="7699622144571229146">
+      <segment>
+        <source>Sort by</source>
+      </segment>
+    </unit>
+    <unit id="7744292213705278878">
+      <segment>
+        <source>User Profile</source>
+      </segment>
+    </unit>
+    <unit id="7758726334480915397">
+      <segment>
+        <source>View all uptime monitors</source>
+      </segment>
+    </unit>
+    <unit id="7777236975974969865">
+      <segment>
+        <source>Social Auth Accounts</source>
+      </segment>
+    </unit>
+    <unit id="7787181108395830509">
+      <segment>
+        <source>Event not found</source>
+      </segment>
+    </unit>
+    <unit id="7796789454513080982">
+      <segment>
+        <source>Two-factor authentication will be turned off for your account.</source>
+      </segment>
+    </unit>
+    <unit id="7796896248780270295">
+      <segment>
+        <source> About <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Upgrade to restore full coverage. </source>
+      </segment>
+    </unit>
+    <unit id="7813064084237500702">
+      <segment>
+        <source>All <ph id="0" equiv="INTERPOLATION" disp="{{ paginator()?.hits }}"/> issues are currently selected.</source>
+      </segment>
+    </unit>
+    <unit id="7818840609640140503">
+      <segment>
+        <source>ntfy.sh topic URL or self-hosted endpoint</source>
+      </segment>
+    </unit>
+    <unit id="784766187028158077">
+      <segment>
+        <source>first</source>
+      </segment>
+    </unit>
+    <unit id="7850408651157666146">
+      <segment>
+        <source>Are you sure you want to delete this issue? You will permanently lose this issue and all associated events.</source>
+      </segment>
+    </unit>
+    <unit id="7860300411982404040">
+      <segment>
+        <source> to turn on on-demand billing or change your plan and keep collecting events.</source>
+      </segment>
+    </unit>
+    <unit id="7869196447743949096">
+      <segment>
+        <source>Trace</source>
+      </segment>
+    </unit>
+    <unit id="7886570921510760899">
+      <segment>
+        <source>Tags</source>
+      </segment>
+    </unit>
+    <unit id="7890820056892966789">
+      <segment>
+        <source>A confirmation email has been sent to <ph id="0" equiv="PH" disp="email"/>.</source>
+      </segment>
+    </unit>
+    <unit id="7891490867363843855">
+      <segment>
+        <source> This monitor is associated with the <pc id="0" equivStart="START_BOLD_TEXT" equivEnd="CLOSE_BOLD_TEXT" type="fmt" dispStart="&lt;b&gt;" dispEnd="&lt;/b&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ monitor.projectName }}"/></pc> project. This project has no uptime alerts configured, so no notifications will be sent for monitor events. Visit the <pc id="2" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a [routerLink]=&quot;[ &apos;../../settings/projects/&apos;, associatedProjectSlug, ]&quot; &gt;" dispEnd="&lt;/a &gt;">project settings</pc> page to configure alerts. </source>
+      </segment>
+    </unit>
+    <unit id="7951009620799507577">
+      <segment>
+        <source>Configure it with your <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">DSN</pc> (Data Source Name) so it knows where to send events. Your DSN is shown on this page, and can also be found in your project&apos;s settings.</source>
+      </segment>
+    </unit>
+    <unit id="799254361008065064">
+      <segment>
+        <source>Error, unable to delete issues</source>
+      </segment>
+    </unit>
+    <unit id="7997497639597459089">
+      <segment>
+        <source> Undo </source>
+      </segment>
+    </unit>
+    <unit id="8015170681432023270">
+      <segment>
+        <source>at line <ph id="0" equiv="INTERPOLATION" disp="{{ frame.lineNo }}"/></source>
+      </segment>
+    </unit>
+    <unit id="8016006443159143828">
+      <segment>
+        <source>An uptime monitor checks a URL on a schedule and triggers when the site stops responding.</source>
+      </segment>
+    </unit>
+    <unit id="8025264537885486349">
+      <segment>
+        <source>Failed to send test notification</source>
+      </segment>
+    </unit>
+    <unit id="8029994383060138640">
+      <segment>
+        <source>of cap</source>
+      </segment>
+    </unit>
+    <unit id="8033508513197634301">
+      <segment>
+        <source>No releases</source>
+      </segment>
+    </unit>
+    <unit id="8043281408144413530">
+      <segment>
+        <source>Configure your SDK to start capturing logs.</source>
+      </segment>
+    </unit>
+    <unit id="8066608938393600549">
+      <segment>
+        <source>Message</source>
+      </segment>
+    </unit>
+    <unit id="8135601959842552749">
+      <segment>
+        <source>Your Zulip organization URL</source>
+      </segment>
+    </unit>
+    <unit id="8150927731388569232">
+      <segment>
+        <source> Disable </source>
+      </segment>
+    </unit>
+    <unit id="8152807564169066325">
+      <segment>
+        <source>Transfer Ownership</source>
+      </segment>
+    </unit>
+    <unit id="815548590681541036">
+      <segment>
+        <source>Bot email is required</source>
+      </segment>
+    </unit>
+    <unit id="8177873832400820695">
+      <segment>
+        <source>Count</source>
+      </segment>
+    </unit>
+    <unit id="82086681255948735">
+      <segment>
+        <source><pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">traces_sample_rate</pc>: sample rate for performance transactions (<pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">0.0</pc> to <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">1.0</pc>). Use a low value like <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">0.01</pc> (1%) in production to save disk space.</source>
+      </segment>
+    </unit>
+    <unit id="8220401600729523421">
+      <segment>
+        <source>Backup codes copied to clipboard.</source>
+      </segment>
+    </unit>
+    <unit id="8222944238757802324">
+      <segment>
+        <source> Create organization </source>
+      </segment>
+    </unit>
+    <unit id="8248908745082706548">
+      <segment>
+        <source>Custom range</source>
+      </segment>
+    </unit>
+    <unit id="8255480206255973865">
+      <segment>
+        <source>Your system time zone is <ph id="0" equiv="INTERPOLATION" disp="{{ currentTimeZone }}"/></source>
+      </segment>
+    </unit>
+    <unit id="8271264900906777016">
+      <segment>
+        <source>Are you sure you want to delete your user account? You will permanently lose access to all organizations, projects, and teams associated with it.</source>
+      </segment>
+    </unit>
+    <unit id="8299215096475112763">
+      <segment>
+        <source>First Seen</source>
+      </segment>
+    </unit>
+    <unit id="8314700931837210100">
+      <segment>
+        <source>Newer</source>
+      </segment>
+    </unit>
+    <unit id="8325766446982949829">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {is 1 uptime alert} other {are <ph id="0" equiv="INTERPOLATION"/> uptime alerts}}</source>
+      </segment>
+    </unit>
+    <unit id="8384428628181609310">
+      <segment>
+        <source>Down First</source>
+      </segment>
+    </unit>
+    <unit id="8393494693907472546">
+      <segment>
+        <source>Support open source development on Liberapay</source>
+      </segment>
+    </unit>
+    <unit id="8422789716566341696">
+      <segment>
+        <source>Finalize Login</source>
+      </segment>
+    </unit>
+    <unit id="8424845532412516589">
+      <segment>
+        <source>Your DSN tells your SDK how to send events to your GlitchTip project. The Security Endpoint is used for browser Content Security Policy (CSP) reporting.</source>
+      </segment>
+    </unit>
+    <unit id="8435281898584959676">
+      <segment>
+        <source>Create a new team for this project</source>
+      </segment>
+    </unit>
+    <unit id="8453133049989433527">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a mat-flat-button color=&quot;primary&quot; [routerLink]=&quot;[&apos;new&apos;]&quot; [disabled]=&quot;!accessMemberWrite()&quot; &gt;" dispEnd="&lt;/a &gt;">Invite Member</pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="8461609631969932886">
+      <segment>
+        <source>Hide</source>
+      </segment>
+    </unit>
+    <unit id="8461842260159597706">
+      <segment>
+        <source>Show</source>
+      </segment>
+    </unit>
+    <unit id="84794025138950643">
+      <segment>
+        <source>Open Support Chat</source>
+      </segment>
+    </unit>
+    <unit id="8497528947328199741">
+      <segment>
+        <source>Time</source>
+      </segment>
+    </unit>
+    <unit id="8499812568313163264">
+      <segment>
+        <source>Monitor has been deleted.</source>
+      </segment>
+    </unit>
+    <unit id="850544545559918850">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {1 Member} other {<ph id="0" equiv="INTERPOLATION"/> Members}}</source>
+      </segment>
+    </unit>
+    <unit id="8517109745758603034">
+      <segment>
+        <source>API Key</source>
+      </segment>
+    </unit>
+    <unit id="8582782147430932081">
+      <segment>
+        <source>Webhook URL</source>
+      </segment>
+    </unit>
+    <unit id="858351361293679688">
+      <segment>
+        <source>No tokens</source>
+      </segment>
+    </unit>
+    <unit id="8585474066646620696">
+      <segment>
+        <source>Default <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span &gt;" dispEnd="&lt;/span &gt;">(<ph id="1" equiv="INTERPOLATION" disp="{{ (subscribeByDefault()) === true ? onText : offText }}"/>)</pc></source>
+      </segment>
+    </unit>
+    <unit id="8605967835704545279">
+      <segment>
+        <source> Other </source>
+      </segment>
+    </unit>
+    <unit id="8621472262044489748">
+      <segment>
+        <source>View monitor details</source>
+      </segment>
+    </unit>
+    <unit id="8626615484230609084">
+      <segment>
+        <source><ph id="0" equiv="ICU" disp="{projectFormTimespan.value, plural, =1 {minute} other {minutes}}" subFlows="9191257308058195560"/>, send an alert.</source>
+      </segment>
+    </unit>
+    <unit id="8641756572097863677">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span i18n-matTooltip class=&quot;tooltip&quot; matTooltip=&quot;Zulip: {{ recipient.url }}&quot; matTooltipClass=&quot;tt-wrapping&quot; &gt;" dispEnd="&lt;/span&gt;">Zulip: <ph id="1" equiv="INTERPOLATION" disp="{{ recipient.channel || recipient.url }}"/> </pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="8648986371331516485">
+      <segment>
+        <source>Predicted end of month: ~<ph id="0" equiv="INTERPOLATION" disp="{{ predictedTotal() | number: &quot;1.0-0&quot; }}"/></source>
+      </segment>
+    </unit>
+    <unit id="8663501901903627397">
+      <segment>
+        <source> for details. On-demand billing is switched on but is not running, so raising your spend cap will not help. Please contact support. </source>
+      </segment>
+    </unit>
+    <unit id="8675226376965769343">
+      <segment>
+        <source>Issue resolved. No release was found to tie it to.</source>
+      </segment>
+    </unit>
+    <unit id="8693083713920193137">
+      <segment>
+        <source> To add a security key to your account, plug it in, click the button below and follow the prompt from your browser. </source>
+      </segment>
+    </unit>
+    <unit id="8695095837095693007">
+      <segment>
+        <source>If an <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span i18n-matTooltip class=&quot;tooltip&quot; matTooltip=&quot;An uptime monitor checks a URL on a schedule and triggers when the site stops responding.&quot; &gt;" dispEnd="&lt;/span &gt;">uptime monitor</pc> detects downtime.</source>
+      </segment>
+    </unit>
+    <unit id="8723088463093015914">
+      <segment>
+        <source> Unverified </source>
+      </segment>
+    </unit>
+    <unit id="8741674114304193554">
+      <segment>
+        <source>Send me project alerts</source>
+      </segment>
+    </unit>
+    <unit id="8751977620930715509">
+      <segment>
+        <source>Update Name</source>
+      </segment>
+    </unit>
+    <unit id="8752850584799350495">
+      <segment>
+        <source> to raise your spend cap or change your plan and keep collecting events.</source>
+      </segment>
+    </unit>
+    <unit id="8774959065709845802">
+      <segment>
+        <source>Expected body</source>
+      </segment>
+    </unit>
+    <unit id="8783352021501063415">
+      <segment>
+        <source>Start free with <ph id="0" equiv="INTERPOLATION" disp="{{ freeEventLabel() }}"/> events/month, or go paid to scale up and support open source error tracking with priority support.</source>
+      </segment>
+    </unit>
+    <unit id="8783745595002444567">
+      <segment>
+        <source>The channel to post alerts to</source>
+      </segment>
+    </unit>
+    <unit id="8819356210354103101">
+      <segment>
+        <source>Verify your email to continue</source>
+      </segment>
+    </unit>
+    <unit id="8827952159513823132">
+      <segment>
+        <source> About <ph id="0" equiv="INTERPOLATION" disp="{{ throttleRate }}"/>% of your new events are being dropped. </source>
+      </segment>
+    </unit>
+    <unit id="883341321910713030">
+      <segment>
+        <source>Performance Monitoring</source>
+      </segment>
+    </unit>
+    <unit id="8838254186564675838">
+      <segment>
+        <source>Try GlitchTip Cloud</source>
+      </segment>
+    </unit>
+    <unit id="8846842076713252373">
+      <segment>
+        <source>Copy JSON to clipboard</source>
+      </segment>
+    </unit>
+    <unit id="8852819672524659401">
+      <segment>
+        <source>Sponsor on Liberapay</source>
+      </segment>
+    </unit>
+    <unit id="886307740162055983">
+      <segment>
+        <source>Success! Your new alert has been added.</source>
+      </segment>
+    </unit>
+    <unit id="8896527314268590280">
+      <segment>
+        <source>Markdown supported</source>
+      </segment>
+    </unit>
+    <unit id="8906199686828527073">
+      <segment>
+        <source>Add a team</source>
+      </segment>
+    </unit>
+    <unit id="8913401436752573259">
+      <segment>
+        <source>No Teams</source>
+      </segment>
+    </unit>
+    <unit id="8945198047207390803">
+      <segment>
+        <source>Delete issue?</source>
+      </segment>
+    </unit>
+    <unit id="8949368183634013537">
+      <segment>
+        <source>No projects found</source>
+      </segment>
+    </unit>
+    <unit id="895272273359299117">
+      <segment>
+        <source>Remove email address</source>
+      </segment>
+    </unit>
+    <unit id="8965085627650180482">
+      <segment>
+        <source>Edit By Project</source>
+      </segment>
+    </unit>
+    <unit id="8990769651805334695">
+      <segment>
+        <source>On</source>
+      </segment>
+    </unit>
+    <unit id="89970906091089947">
+      <segment>
+        <source>Donate</source>
+      </segment>
+    </unit>
+    <unit id="899808260138944600">
+      <segment>
+        <source>Error attempting to update preferences</source>
+      </segment>
+    </unit>
+    <unit id="9008002243574450871">
+      <segment>
+        <source> Manage your subscription </source>
+      </segment>
+    </unit>
+    <unit id="9008104769462456988">
+      <segment>
+        <source>Over limit</source>
+      </segment>
+    </unit>
+    <unit id="9041121735013388349">
+      <segment>
+        <source>No environment</source>
+      </segment>
+    </unit>
+    <unit id="90506265415127351">
+      <segment>
+        <source>Get Priority Support</source>
+      </segment>
+    </unit>
+    <unit id="9065847027741764093">
+      <segment>
+        <source>Filter platforms</source>
+      </segment>
+    </unit>
+    <unit id="9097450677105109097">
+      <segment>
+        <source> This is the default setting for project alerts. You can change the setting per project below. </source>
+      </segment>
+    </unit>
+    <unit id="9110048041619766424">
+      <segment>
+        <source> Use <pc id="0" equivStart="START_LINK" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://authy.com/download/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; &gt;" dispEnd="&lt;/a &gt;">Authy</pc>, <pc id="1" equivStart="START_LINK_1" equivEnd="CLOSE_LINK" type="link" dispStart="&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; &gt;" dispEnd="&lt;/a &gt;">Google Authenticator</pc>, or any TOTP app on your phone. </source>
+      </segment>
+    </unit>
+    <unit id="9110363267178274426">
+      <segment>
+        <source>Report a bug</source>
+      </segment>
+    </unit>
+    <unit id="9131913350495870905">
+      <segment>
+        <source>Load</source>
+      </segment>
+    </unit>
+    <unit id="9140746073528136226">
+      <segment>
+        <source> Alert when any of these: </source>
+      </segment>
+    </unit>
+    <unit id="9146510295912883664">
+      <segment>
+        <source>Your password has been changed.</source>
+      </segment>
+    </unit>
+    <unit id="9172017117456370362">
+      <segment>
+        <source>Are you sure you want to remove <ph id="0" equiv="PH" disp="member.email"/> from this organization?</source>
+      </segment>
+    </unit>
+    <unit id="9178360613965745088">
+      <segment>
+        <source>Last hour</source>
+      </segment>
+    </unit>
+    <unit id="9180110319941008393">
+      <segment>
+        <source>Environment</source>
+      </segment>
+    </unit>
+    <unit id="9186529157286281693">
+      <segment>
+        <source>Last 24 hours</source>
+      </segment>
+    </unit>
+    <unit id="9187855490716817910">
+      <segment>
+        <source>Disable</source>
+      </segment>
+    </unit>
+    <unit id="9188245856763101265">
+      <segment>
+        <source>All services</source>
+      </segment>
+    </unit>
+    <unit id="9188868345776929450">
+      <segment>
+        <source>Organization Members</source>
+      </segment>
+    </unit>
+    <unit id="918986430725137551">
+      <segment>
+        <source>Create Token</source>
+      </segment>
+    </unit>
+    <unit id="9191257308058195560">
+      <segment>
+        <source>{VAR_PLURAL, plural, =1 {minute} other {minutes}}</source>
+      </segment>
+    </unit>
+    <unit id="9200128029436327726">
+      <segment>
+        <source>Only existing GlitchTip users may be invited.</source>
+      </segment>
+    </unit>
+    <unit id="9206334208746012915">
+      <segment>
+        <source>Tokens combine with a space (AND). There is no OR.</source>
+      </segment>
+    </unit>
+    <unit id="92735816928764242">
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_SPAN" equivEnd="CLOSE_TAG_SPAN" type="other" dispStart="&lt;span&gt;" dispEnd="&lt;/span&gt;">Enter an integer greater than 0.</pc>
+        </source>
+      </segment>
+    </unit>
+    <unit id="929931417515884982">
+      <segment>
+        <source>Loading releases</source>
+      </segment>
+    </unit>
+    <unit id="937698653877657021">
+      <segment>
+        <source> to change your plan and keep collecting events.</source>
+      </segment>
+    </unit>
+    <unit id="953535088200530364">
+      <segment>
+        <source>Performance data appears here once your app sends transactions.</source>
+      </segment>
+    </unit>
+    <unit id="962765493084218985">
+      <segment>
+        <source>Platform</source>
+      </segment>
+    </unit>
+    <unit id="967524872396885653">
+      <segment>
+        <source>Text (must come last)</source>
+      </segment>
+    </unit>
+    <unit id="989437331610411608">
+      <segment>
+        <source> About <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;"><ph id="1" equiv="INTERPOLATION" disp="{{ eventThrottleRate() }}"/>%</pc> of your incoming events are being dropped. Turn on on-demand billing below to keep collecting events, or get in touch to change your plan. </source>
+      </segment>
+    </unit>
+    <unit id="996392855508119363">
+      <segment>
+        <source>Hidden</source>
       </segment>
     </unit>
   </file>
