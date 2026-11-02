@@ -1,0 +1,38 @@
+@use "object-header";
+@use "variables" as vars;
+
+// Projected gt-page-header facts come from the page's template, so they are global.
+.gt-page-header__meta {
+  [slot="meta"] {
+    display: contents;
+  }
+
+  [slot="meta"] > * {
+    position: relative;
+    margin-left: object-header.$sep-gap;
+  }
+
+  [slot="meta"] > .no-sep {
+    margin-left: calc(#{object-header.$sep-gap} / 2);
+  }
+
+  [slot="meta"] > :not(:first-child)::before,
+  .gt-page-header__pill + [slot="meta"] > :first-child:not(.no-sep)::before {
+    @include object-header.separator;
+  }
+
+  // The neutral badge (same as .list-row__tag), in mono for identifiers.
+  .chip {
+    padding: 1px var(--gt-space-2, 8px);
+    border-radius: var(--mat-sys-corner-extra-small);
+    font: var(--mat-sys-label-medium);
+    font-family: vars.$font-mono;
+    color: var(--mat-sys-on-surface-variant);
+    background-color: var(--mat-sys-surface-container-highest);
+  }
+
+  b {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+  }
+}

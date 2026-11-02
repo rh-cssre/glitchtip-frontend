@@ -9,6 +9,10 @@ import { ConfirmDialogPreview } from "./previews/confirm-dialog.preview";
 import { ButtonsPreview } from "./previews/buttons.preview";
 import { TopAppBarPreview } from "./previews/top-app-bar.preview";
 import { DetailPagePreview } from "./previews/detail-page.preview";
+import { PageHeaderPreview } from "./previews/page-header.preview";
+import { RecordBandPreview } from "./previews/record-band.preview";
+import { StatusPillPreview } from "./previews/status-pill.preview";
+import { PanelPreview } from "./previews/panel.preview";
 import { PermissionGatingPreview } from "./previews/permission-gating.preview";
 import { BrandTypographyPreview } from "./previews/brand-typography.preview";
 import { BrandColorsPreview } from "./previews/brand-colors.preview";
@@ -207,6 +211,34 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Empty state",
     group: "Components",
     component: EmptyStatePreview,
+    status: "stable",
+  },
+  {
+    id: "page-header",
+    label: "Page header",
+    group: "Components",
+    component: PageHeaderPreview,
+    status: "stable",
+  },
+  {
+    id: "record-band",
+    label: "Record band",
+    group: "Components",
+    component: RecordBandPreview,
+    status: "stable",
+  },
+  {
+    id: "status-pill",
+    label: "Status pill",
+    group: "Components",
+    component: StatusPillPreview,
+    status: "stable",
+  },
+  {
+    id: "panel",
+    label: "Panel",
+    group: "Components",
+    component: PanelPreview,
     status: "stable",
   },
   {

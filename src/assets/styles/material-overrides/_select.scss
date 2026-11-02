@@ -1,0 +1,54 @@
+@use "@angular/material" as mat;
+@use "controls";
+@use "variables" as vars;
+
+// Ghost select for bar filters: a mat-select with no form field, in our own
+// wrapper. States match Material text buttons: a state layer, no ring.
+.gt-select-ghost {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 32px;
+  padding-inline: var(--gt-space-2, 8px);
+  border-radius: vars.$shape-radius;
+  cursor: pointer;
+
+  @include mat.select-overrides(
+    (
+      trigger-text-size: var(--mat-sys-label-large-size),
+      trigger-text-line-height: var(--mat-sys-label-large-line-height),
+      trigger-text-tracking: var(--mat-sys-label-large-tracking),
+      trigger-text-weight: var(--mat-sys-label-large-weight),
+      enabled-trigger-text-color: var(--mat-sys-on-surface),
+      placeholder-text-color: var(--mat-sys-on-surface),
+      enabled-arrow-color: var(--mat-sys-on-surface-variant),
+      focused-arrow-color: var(--mat-sys-on-surface-variant),
+    )
+  );
+
+  // Fills the wrapper; gtSelectGhost opens it on clicks in the padding.
+  mat-select {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover {
+    @include controls.state-layer(hover);
+  }
+
+  &:has(mat-select:focus-visible),
+  &.gt-select-ghost--open {
+    @include controls.state-layer(focus);
+  }
+
+  // Forced colors drop the state layer; outline like Material text buttons.
+  @media (forced-colors: active) {
+    outline: solid 1px;
+
+    &:has(mat-select:focus-visible),
+    &.gt-select-ghost--open {
+      outline-width: 2px;
+    }
+  }
+}

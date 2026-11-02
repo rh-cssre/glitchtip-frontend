@@ -1,12 +1,11 @@
-<mat-form-field
-  appearance="outline"
-  subscriptSizing="dynamic"
-  class="project-multiselect-formfield"
->
+<span gtSelectGhost>
   <mat-select
     [formControl]="projectsForm"
     i18n-placeholder
     placeholder="All projects"
+    i18n-aria-label
+    aria-label="Projects"
+    panelWidth="280px"
     multiple
     (closed)="onSubmit()"
   >
@@ -40,4 +39,4 @@
     <mat-option [value]="project.id"> {{ project.name }} </mat-option>
     }
   </mat-select>
-</mat-form-field>
+</span>

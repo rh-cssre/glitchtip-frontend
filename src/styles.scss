@@ -4,8 +4,11 @@
 @use "./assets/styles/theme-colors" as custom-theme;
 @use "./assets/styles/material-overrides";
 @use "./assets/styles/variables" as vars;
+@use "./assets/styles/controls";
 @use "./assets/styles/font-files";
+@use "./assets/styles/page-header";
 @use "./assets/styles/resets";
+@use "./assets/styles/record-band";
 @use "./assets/styles/list-row";
 @use "./scss/auth-forms";
 
@@ -56,6 +59,12 @@ html {
   --log-service-color: light-dark(#047857, #10b981);
 }
 
+// Reading widths for running text, in characters so they follow font size.
+:root {
+  --gt-measure: 70ch;
+  --gt-measure-narrow: 44ch;
+}
+
 .light {
   @include meta.load-css("prismjs/themes/prism.css");
 }
@@ -78,24 +87,41 @@ html {
   }
 }
 
-mat-card-content {
-  font-family: vars.$font-sans-serif;
-}
-
 a {
   color: var(--mat-sys-on-background);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 a:hover {
   text-decoration: underline;
 }
 
+// A link inside a sentence: underlined, in the text color, normal weight.
+// Standalone links (row names, nav) keep the bold global style above.
+%inline-link {
+  color: var(--mat-sys-on-surface);
+  font-weight: inherit;
+  text-decoration: underline;
+}
+
+.gt-prose a,
+.page-intro a {
+  @extend %inline-link;
+}
+
+// One or two sentences of orientation between a page's title and its content.
+.page-intro {
+  max-width: var(--gt-measure);
+  margin: 0 0 var(--gt-space-5, 24px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
 // Used across auth components
 .auth-link {
-  color: var(--mat-sys-primary);
-  text-decoration: underline;
+  @extend %inline-link;
+  font-weight: bold;
 }
 
 // Global rule because link is rendered in markdown
@@ -105,8 +131,7 @@ a:hover {
     margin-bottom: 0;
   }
   a {
-    color: var(--mat-sys-primary);
-    text-decoration: underline;
+    @extend %inline-link;
   }
 }
 
@@ -132,6 +157,14 @@ markdown ol {
 body {
   background-color: var(--mat-sys-background);
   color: var(--mat-sys-on-background);
+  font-family: vars.$font-sans-serif;
+}
+
+// The chart library draws axis and legend labels as bare SVG text, which
+// defaults to serif and black. Put them on the app font and a muted role.
+.ng-charts text {
+  font-family: vars.$font-sans-serif;
+  fill: var(--mat-sys-on-surface-variant);
 }
 
 .flex-common {
@@ -184,10 +217,12 @@ mat-sidenav-container {
   text-decoration: underline;
 }
 
+// --gt-page-inset is the body's side padding; full-bleed bars read it.
 .l-body {
+  --gt-page-inset: 24px;
   max-width: 1100px;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: var(--gt-page-inset);
+  padding-right: var(--gt-page-inset);
   margin-top: 15px;
   margin-bottom: 16px;
   margin-left: auto;
@@ -212,8 +247,7 @@ mat-sidenav-container {
   }
 
   @media screen and (max-width: vars.$small - 1) {
-    padding-left: 15px;
-    padding-right: 15px;
+    --gt-page-inset: 15px;
   }
 }
 
@@ -356,6 +390,40 @@ mat-sidenav-container {
   color: var(--mat-sys-outline);
 }
 
+// Separates groups of different kinds of bar controls, see DESIGN.md
+.gt-bar-divider {
+  flex: none;
+  align-self: center;
+  width: 1px;
+  height: 20px;
+  margin-inline: var(--gt-space-2, 8px);
+  background-color: var(--mat-sys-outline-variant);
+}
+
+// Material's label wrapper must shrink too, so the back link text can ellipsize.
+gt-back-link .mdc-button__label {
+  min-width: 0;
+}
+
+// A labelled top bar button that keeps only its icon when the bar is narrow.
+.gt-bar-button.mat-mdc-outlined-button {
+  @include controls.narrow-bar {
+    min-width: 32px;
+
+    @include mat.button-overrides(
+      (
+        outlined-horizontal-padding: 6px,
+        outlined-icon-spacing: 0,
+        outlined-icon-offset: 0,
+      )
+    );
+
+    .gt-bar-button__label {
+      display: none;
+    }
+  }
+}
+
 .medium-icon-button {
   width: 36px !important;
   height: 36px !important;
@@ -422,13 +490,6 @@ gt-issue-chart {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .ng-charts {
-    text {
-      fill: var(--mat-sys-on-background) !important;
-    }
-  }
-}
 // Overrides for ngx-mat-select-search
 .project-multiselect__search-field.mdc-list-item--disabled {
   mat-checkbox {
@@ -506,4 +567,16 @@ gt-pagination-buttons {
   .mat-button-toggle-label-content {
     line-height: 38px !important;
   }
+}
+
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-left: var(--gt-space-2, 8px);
+  padding: 0 var(--gt-space-2, 8px);
+  border-radius: var(--mat-sys-corner-full);
+  font: var(--mat-sys-label-medium);
+  background-color: var(--mat-sys-surface-container-highest);
+  color: var(--mat-sys-on-surface-variant);
 }

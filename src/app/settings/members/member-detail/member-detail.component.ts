@@ -23,7 +23,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MemberDetailService } from "src/app/settings/members/member-detail/member-detail.service";
 import { MemberRole } from "src/app/api/organizations/organizations.interface";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { OrganizationsService } from "src/app/api/organizations.service";
@@ -47,7 +47,7 @@ import { OrganizationsService } from "src/app/api/organizations.service";
     BackLinkComponent,
     LoadingButtonComponent,
     MatListModule,
-    DetailHeaderComponent,
+    PageHeaderComponent,
   ],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
