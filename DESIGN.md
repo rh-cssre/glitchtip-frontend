@@ -32,6 +32,7 @@ Colour only for meaning: error, warning, success and status (level pills, status
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
 - **Semantic classes** (in `src/assets/styles/_font-files.scss`): `.section-header-text` (page titles), `.section-header-text-light` (issue titles), `.body-text`, `.body-text-strong`, `.caption-text`. These are responsive.
+- **In-page subheading:** `.gt-subheading` (title-small, 600, on-surface, in `src/styles.scss`) for a heading inside a page section, such as a `gt-list` label. `.gt-subheading__description` is the muted line under it.
 - **Fonts:** IBM Plex Sans (UI), IBM Plex Mono (code), Material Symbols (icons), all self-hosted as woff2.
 - **Weights:** three, each with one job: 400 for text you read, 500 for controls (buttons, tabs, the bar), 600 for headings, titles and links. Plex Sans ships a real file for each, so no weight is synthesized; don't use 700 or `bold`.
 
@@ -81,6 +82,21 @@ Conventions for every component:
 - Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
 - A tab's content sits in panels. An empty state sits centred in an outline panel; an empty panel has no header.
+
+### Lists
+
+A collection of records with a name and a few actions is a `gt-list` of `gt-list-row`s: the name, optional muted facts, then the actions at the end. An optional description line sits under the name.
+
+- A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
+- A row that opens its record makes the name the link, written `<a gtListRowLink>`. That makes the row navigable: the link's hit area covers the whole row, hovering the row draws the on-surface 8% state layer and underlines the name, keyboard focus rings the row. The link stays the only tab stop; row actions sit above the hit area and keep their own clicks. No separate Edit or View button repeats the link, and no chevron: a chevron means a row expands.
+- A navigable row's meta is text. A control in the row (a copy button, a menu) goes in the actions slot, which sits above the hit area.
+- One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
+- Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
+- Rows with several columns to compare or sort are a table instead.
+- Several meta facts each get their own span inside `[slot="meta"]`; the row draws the separators, as `gt-page-header` does. Never type a separator into a translated string.
+- A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
+- When a row's action is blocked, say why in the row's description line; never only in a tooltip.
+- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon.
 
 ### Labels
 
