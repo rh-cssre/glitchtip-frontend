@@ -1,12 +1,17 @@
+@use "controls";
 @use "variables" as vars;
 
-// Ensure that layout stays aligned between this component
-// and top-app-bar, on which it is based
+// Keep layout aligned with gt-top-app-bar, on which this is based.
+:host {
+  @include controls.compact-buttons;
+}
 
 .list-app-bar-primary-content {
   display: flex;
   height: vars.$top-app-bar-height;
-  align-content: center;
+  align-items: center;
+  gap: var(--gt-space-4, 16px);
+  padding: 0 var(--gt-space-5, 24px);
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
@@ -14,16 +19,16 @@
 .right-section {
   display: flex;
   align-items: center;
-  padding: 0 24px;
   height: 100%;
 }
 
 .left-section {
   flex: 1;
+  min-width: 0;
 }
 
-.right-section:has(*) {
-  border-left: 1px solid var(--mat-sys-outline-variant);
+.right-section {
+  gap: var(--gt-space-5, 24px);
 }
 
 .list-app-bar-expanded-content {
@@ -35,21 +40,14 @@
 }
 
 .project-multiselect-container {
-  padding: 0 10px 0 0;
   display: flex;
-  gap: 10px;
+  gap: var(--gt-space-1, 4px);
   align-items: center;
 }
 
-@media screen and (min-width: vars.$medium) {
-  .time-range-select-container {
-    padding: 0 0 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    border-left: 1px solid var(--mat-sys-outline-variant);
-  }
+.time-range-select-container {
+  display: flex;
+  align-items: center;
 }
 
 @media screen and (min-width: vars.$small) {
@@ -57,42 +55,31 @@
     .list-app-bar-expanded-content {
       display: flex;
       align-items: center;
-      height: 80px;
-      padding: 0 24px;
+      gap: var(--gt-space-4, 16px);
+      padding: var(--gt-space-2, 8px) var(--gt-space-5, 24px);
     }
 
     .project-multiselect-container {
       flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
       justify-content: flex-start;
     }
 
     .time-range-select-container {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      height: 100%;
       flex: 1;
+      justify-content: flex-end;
     }
   }
 }
 
 @media screen and (max-width: vars.$small - 1) {
-  // Slightly inconsistent with top-app-bar because
-  // vertical space is at a premium
-  .list-app-bar-primary-content {
-    height: 60px;
-  }
-
-  .project-multiselect-container {
-    padding: 0 15px;
-    margin: 10px 0;
+  .list-app-bar-expanded-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gt-space-2, 8px);
+    padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
   }
 
   .time-range-select-container {
-    padding: 0 15px;
-    margin-bottom: 10px;
+    display: block;
   }
 }

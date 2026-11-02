@@ -10,8 +10,6 @@ import {
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatOptionSelectionChange } from "@angular/material/core";
-import { MatInputModule } from "@angular/material/input";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSelectModule, MatSelectChange } from "@angular/material/select";
 import {
@@ -19,18 +17,14 @@ import {
   CustomTimeRangeOutput,
 } from "./custom-timerange-form/custom-time-range-form";
 import { DateRange } from "@angular/material/datepicker";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 
 const NO_FILTER_TEXT = $localize`All times`;
 
 @Component({
   standalone: true,
   selector: "gt-time-range-select",
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule
-],
+  imports: [ReactiveFormsModule, MatSelectModule, SelectGhostDirective],
   templateUrl: "./time-range-select.html",
   styleUrl: "./time-range-select.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,

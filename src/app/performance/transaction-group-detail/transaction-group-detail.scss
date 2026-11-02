@@ -1,45 +1,8 @@
 @use "variables" as vars;
 
-.transaction-group-404 h1 {
-  text-align: left;
-}
-
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stats-card {
-  flex-shrink: 1;
-  min-width: 0;
-}
-
-.stats-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 6px;
-}
-
-.stat-divider {
-  width: 1px;
-  height: 20px;
-  background-color: var(--mat-sys-outline-variant);
-}
-
-.span-breakdown-title {
-  margin: 0 0 20px;
+// The table runs edge to edge; the summary above it keeps the panel padding.
+.span-breakdown-intro {
+  padding: var(--gt-space-4, 16px) var(--gt-space-4, 16px) 0;
 }
 
 .span-breakdown-empty {
@@ -158,7 +121,7 @@
     background: linear-gradient(
       to right,
       transparent,
-      var(--mat-sys-surface-container-high)
+      var(--mat-sys-surface)
     );
     display: none;
 

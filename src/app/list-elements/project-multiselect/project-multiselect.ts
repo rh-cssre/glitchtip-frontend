@@ -9,15 +9,14 @@ import {
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { FormControl } from "@angular/forms";
 import { MatBadge } from "@angular/material/badge";
 import { MatSelectModule } from "@angular/material/select";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { MatIconModule } from "@angular/material/icon";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 
 @Component({
   selector: "gt-project-multiselect",
@@ -26,10 +25,9 @@ import { MatIconModule } from "@angular/material/icon";
     MatBadge,
     MatButtonModule,
     MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    SelectGhostDirective,
   ],
   templateUrl: "./project-multiselect.html",
   styleUrl: "./project-multiselect.scss",

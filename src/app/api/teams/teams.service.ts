@@ -25,6 +25,10 @@ interface TeamKey {
   teamSlug: string;
 }
 
+// Setting the same team again must not refetch.
+const sameTeamKey = (a: TeamKey | null, b: TeamKey | null) =>
+  a?.orgSlug === b?.orgSlug && a?.teamSlug === b?.teamSlug;
+
 @Injectable({
   providedIn: "root",
 })
@@ -45,7 +49,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }));
   readonly teams = computed(() => this.teamsResource.value() ?? null);
 
-  private teamKey = signal<TeamKey | null>(null);
+  private teamKey = signal<TeamKey | null>(null, { equal: sameTeamKey });
   teamResource = apiResource(this.teamKey, ({ orgSlug, teamSlug }) => ({
     url: "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
     options: {
@@ -59,7 +63,9 @@ export class TeamsService extends StatefulService<TeamsState> {
   }));
   readonly team = computed(() => this.teamResource.value() ?? null);
 
-  private teamMembersKey = signal<TeamKey | null>(null);
+  private teamMembersKey = signal<TeamKey | null>(null, {
+    equal: sameTeamKey,
+  });
   teamMembersResource = apiResource(
     this.teamMembersKey,
     ({ orgSlug, teamSlug }) => ({
@@ -75,6 +81,13 @@ export class TeamsService extends StatefulService<TeamsState> {
     }),
   );
   readonly teamMembers = computed(() => this.teamMembersResource.value() ?? []);
+  /** The loaded roster's size when it is this team's, else the team's count. */
+  readonly teamMemberCount = computed(() =>
+    this.teamMembersResource.hasValue() &&
+    sameTeamKey(this.teamMembersKey(), this.teamKey())
+      ? this.teamMembers().length
+      : this.team()?.memberCount,
+  );
   readonly loading = computed(() => this.state().loading);
   readonly errors = computed(() => this.state().errors);
   /**

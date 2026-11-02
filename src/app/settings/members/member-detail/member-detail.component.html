@@ -1,11 +1,21 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="Back to members" />
+    <gt-back-link i18n-backLinkText backLinkText="Members" />
   </ng-container>
 </gt-top-app-bar>
 @if (member(); as member) {
   <section class="l-body">
-    <gt-detail-header [title]="member.email" />
+    <gt-page-header icon="people" [title]="member.email">
+      <span slot="meta">
+        <b>{{ member.roleName }}</b>
+        <span i18n
+          >Joined
+          {{
+            member.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
+      </span>
+    </gt-page-header>
     <mat-card>
       <mat-card-header>
         <mat-card-title i18n il8n>Basics</mat-card-title>
@@ -21,7 +31,7 @@
           <div>@switch (member.role) { @case ("owner") {<ng-container i18n>Owner</ng-container>} @case ("manager") {<ng-container i18n>Manager</ng-container>} @case ("admin") {<ng-container i18n>Admin</ng-container>} @case ("member") {<ng-container i18n>Member</ng-container>} @default {{{ member.roleName }}} }</div>
         </div>
         <div class="column">
-          <div class="body-text-strong" i18n>Added</div>
+          <div class="body-text-strong" i18n>Joined</div>
           <div>{{ member.dateCreated | date }}</div>
         </div>
         @if (member.isOwner) {

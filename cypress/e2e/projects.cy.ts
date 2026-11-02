@@ -86,7 +86,7 @@ describe("Edit and Delete a project", () => {
     cy.get("[data-cy='project-name-error-required']");
     cy.get("input[formcontrolname=name]").type("New Project Name");
     cy.get("#update-project-name").click();
-    cy.contains("Settings for New Project Name");
+    cy.get("h1").should("contain", "New Project Name");
     // delete from db
     cy.get("#delete-project").click();
     cy.get("[data-cy='dialog-confirm']").click();
