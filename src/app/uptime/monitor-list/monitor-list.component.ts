@@ -32,6 +32,7 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagination-buttons";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
@@ -54,6 +55,7 @@ import { OrganizationsService } from "src/app/api/organizations.service";
     PaginationButtons,
     LoadingOverlayComponent,
     EmptyStateComponent,
+    StatusPillComponent,
   ],
   providers: [MonitorListService],
 })

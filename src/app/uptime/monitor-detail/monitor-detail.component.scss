@@ -1,46 +1,25 @@
-mat-card {
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  mat-card-content {
-    padding-top: 16px;
-
-    div {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-
-      button {
-        margin-top: 10px;
-        width: fit-content;
-      }
-    }
-  }
+.monitor-panel {
+  display: block;
+  padding-top: var(--gt-space-4, 16px);
 }
 
-.interval {
-  margin: 5px 0;
+// The chart floats its container; flow-root keeps its height in the panel.
+.response-chart {
+  display: flow-root;
 }
 
-.reduced-padding {
-  padding-top: 4px !important;
+.heartbeat-title {
+  font: var(--mat-sys-title-small);
+  margin: 0 0 var(--gt-space-1, 4px);
+}
+
+.heartbeat-description {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 var(--gt-space-3, 12px);
 }
 
 mat-progress-spinner {
   margin-left: auto;
   margin-right: auto;
-}
-
-.url-display {
-  a {
-    display: inline-block;
-    text-overflow: wrap;
-    overflow-wrap: break-word;
-  }
-}
-
-.top-bar-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
