@@ -304,8 +304,9 @@ export class ProjectRowsComponent {
 }
 
 export const DAYS = 14;
-const localDay = (d: Date) =>
-  new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+// Calendar steps, not 24h ones: a daylight saving day is 23 or 25 hours long.
+const localDay = (d: Date, offset = 0) =>
+  new Date(d.getFullYear(), d.getMonth(), d.getDate() + offset).getTime();
 
 interface StatsV2 {
   intervals: string[];
@@ -315,7 +316,7 @@ interface StatsV2 {
 async function loadTrend(org: string, project: number): Promise<RowFacts> {
   const path = { organization_id_or_slug: org };
   const end = new Date();
-  const start = new Date(localDay(end) - (DAYS - 1) * 864e5);
+  const start = trendStart(end);
   const [stats, unresolved, latest] = await Promise.all([
     // Hourly, summed per day here: the daily interval only counts each day's first hour.
     client.GET("/api/0/organizations/{organization_id_or_slug}/stats_v2/", {
@@ -363,6 +364,11 @@ async function loadAlertCount(org: string, slug: string): Promise<RowFacts> {
   return { alerts: data?.length ?? 0 };
 }
 
+/** Local midnight that starts the window ending today. */
+export function trendStart(end: Date) {
+  return new Date(localDay(end, 1 - DAYS));
+}
+
 /** One bar per local day; missing hours count as zero. */
 export function toDays(
   stats: StatsV2 | undefined,
@@ -370,7 +376,7 @@ export function toDays(
 ): FormattedStatsDataPoint[] {
   const totals = new Map<number, number>();
   for (let i = 0; i < DAYS; i++) {
-    totals.set(localDay(new Date(+start + i * 864e5)), 0);
+    totals.set(localDay(start, i), 0);
   }
   const series = stats?.groups[0]?.series["sum(quantity)"] ?? [];
   stats?.intervals.forEach((at, i) => {

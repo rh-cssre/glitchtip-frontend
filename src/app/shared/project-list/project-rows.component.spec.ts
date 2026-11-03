@@ -1,11 +1,24 @@
 // Type-only: declares the $localize global for the spec program. The runtime
 // polyfill is already loaded by the test builder.
 import type {} from "@angular/localize/init";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { TestBed } from "@angular/core/testing";
 import { provideRouter } from "@angular/router";
 import { client } from "src/app/shared/api/api";
-import { DAYS, ProjectRowsComponent, toDays } from "./project-rows.component";
+import {
+  DAYS,
+  ProjectRowsComponent,
+  toDays,
+  trendStart,
+} from "./project-rows.component";
 
 /**
  * stats_v2 is read hourly and summed per day here, because its daily interval
@@ -43,6 +56,48 @@ describe("toDays", () => {
       start,
     );
     expect(days.reduce((sum, d) => sum + d.value, 0)).toBe(0);
+  });
+
+  describe("across a daylight saving change", () => {
+    const tz = process.env["TZ"];
+    beforeAll(() => (process.env["TZ"] = "America/New_York"));
+    afterAll(() => {
+      if (tz === undefined) delete process.env["TZ"];
+      else process.env["TZ"] = tz;
+    });
+
+    const dates = (days: { timestamp: number }[]) =>
+      days.map((d) => new Date(d.timestamp).toDateString());
+    const calendar = (y: number, m: number, from: number) =>
+      Array.from({ length: DAYS }, (_, i) =>
+        new Date(y, m, from + i).toDateString(),
+      );
+
+    it("runs in a zone with daylight saving", () => {
+      expect(new Date(2027, 0, 1).getTimezoneOffset()).not.toBe(
+        new Date(2027, 6, 1).getTimezoneOffset(),
+      );
+    });
+
+    it("keeps every calendar day when the clocks go forward", () => {
+      const start = trendStart(new Date(2027, 2, 20, 12));
+      expect(start).toEqual(new Date(2027, 2, 7));
+      const days = toDays(
+        {
+          intervals: [new Date(2027, 2, 14, 12).toISOString()],
+          groups: [{ series: { "sum(quantity)": [4] } }],
+        },
+        start,
+      );
+      expect(dates(days)).toEqual(calendar(2027, 2, 7));
+      expect(days[7].value).toBe(4);
+    });
+
+    it("keeps every calendar day when the clocks go back", () => {
+      const start = trendStart(new Date(2026, 10, 3, 12));
+      expect(start).toEqual(new Date(2026, 9, 21));
+      expect(dates(toDays(undefined, start))).toEqual(calendar(2026, 9, 21));
+    });
   });
 });
 
