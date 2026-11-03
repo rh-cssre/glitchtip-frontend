@@ -48,6 +48,7 @@
             buttonText="Save name"
             buttonStyle="stroked"
             [loading]="loading().updateOrganization"
+            [disabled]="form.controls.name.value === activeOrg.name"
             id="update-org"
           />
         }
