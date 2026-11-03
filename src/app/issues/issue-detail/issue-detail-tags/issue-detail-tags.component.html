@@ -1,40 +1,38 @@
-@if (tags()?.length) {
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <h3 i18n class="body-text-strong">Tags</h3>
-      @for (tag of tags(); track tag.key) {
-        <p class="top-value caption-text">
-          <span class="key">{{ tag.key }}</span>
-          <span>
-            {{ tag.topValues[0].value }}: {{ tag.topValues[0].percentRounded }}%
-          </span>
-        </p>
-        <div>
-          <div class="bars">
-            @for (topValue of tag.topValues; track topValue.name) {
-              <span
-                class="bar"
-                [ngStyle]="{
-                  'width.%': topValue.percentRounded,
-                }"
-                matTooltip="
-            {{ topValue.value }} - {{ topValue.percentRounded }}%
-          "
-                matTooltipPosition="left"
-              ></span>
-            }
-            <span i18n-matTooltip
-              class="bar"
-              [ngStyle]="{
-                'width.%': tag.other,
-              }"
-              matTooltip="
-          Other - {{ tag.other }}%
-        "
-              matTooltipPosition="left"
-            ></span> </div
-        ></div>
-      }
-    </mat-card-content>
-  </mat-card>
+@if (rankedTags(); as tags) {
+  @if (tags.length) {
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <h3 i18n class="body-text-strong">Tags</h3>
+        <ul class="tag-rows">
+          @for (tag of tags; track tag.key) {
+            @let top = tag.topValues[0];
+            <li>
+              <a
+                class="tag-row"
+                [class.tag-row--single]="tag.uniqueValues <= 1"
+                [routerLink]="['/', orgSlug(), 'issues']"
+                [queryParams]="tagQuery(tag.key, top.value)"
+              >
+                <span class="tag-row__head">
+                  <span class="tag-row__key">{{ tag.key }}</span>
+                  <span class="tag-row__value">{{ top.value }}</span>
+                  @if (tag.uniqueValues > 1) {
+                    <span class="tag-row__pct">{{ top.percentRounded }}%</span>
+                  }
+                </span>
+                @if (tag.uniqueValues > 1) {
+                  <span class="tag-row__track" aria-hidden="true">
+                    <span
+                      class="tag-row__fill"
+                      [style.width.%]="top.percentRounded"
+                    ></span>
+                  </span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  }
 }

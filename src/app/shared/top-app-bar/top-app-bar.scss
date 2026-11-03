@@ -6,6 +6,7 @@
 }
 
 .top-app-bar {
+  container: gt-bar / inline-size;
   display: flex;
   height: vars.$top-app-bar-height;
   align-items: center;

@@ -1,5 +1,10 @@
 @use "object-header";
 
+// Block, so padding a page adds to the host (the issue level bar) indents the header.
+:host {
+  display: block;
+}
+
 .gt-page-header {
   display: flex;
   align-items: center;
@@ -27,6 +32,17 @@
 .gt-page-header__title {
   margin: 0;
   overflow-wrap: anywhere;
+}
+
+.gt-page-header__subtitle {
+  display: -webkit-box;
+  margin: var(--gt-space-1, 4px) 0 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font: var(--mat-sys-body-large);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .gt-page-header__meta {

@@ -22,12 +22,15 @@ All tokens are CSS custom properties. Read them live; never hardcode a raw value
 
 - **Material 3 system roles:** `--mat-sys-*` (primary, surface, on-surface, error, outline, and their containers). Defined by `@include mat.theme(...)` in `src/styles.scss`.
 - **Extended app roles:** `--warning-color`, `--info-color`, `--success-color` (each with a `-container` and `on-` pair), plus product accents `--issues-color`, `--uptime-color`, `--logs-color`. Defined at `:root` in `src/styles.scss`.
+- **Issue level roles:** `--gt-level-sample`, `-debug`, `-info`, `-warning`, `-error`, `-fatal`, aliasing the roles above. Painted by the `issue-level` accent mixin (fatal is striped), with each surface keeping its own bar geometry. Defined at `:root` in `src/styles.scss`.
 - **Theming:** light and dark are driven by `color-scheme` and `prefers-color-scheme`. The brand overrides for `--mat-sys-primary` and `--mat-sys-error` in dark mode are gated on the OS setting.
 - **Monitor status roles:** `--gt-monitor-up`, `--gt-monitor-down`, `--gt-monitor-none`, aliasing the success, error and outline roles. Used for the status pill and the check bars. Defined at `:root` in `src/styles.scss`.
 
 Rule: use a semantic role, not a raw hex. Text on a colored surface uses that surface's `on-` token so contrast holds in both schemes.
 
-Colour only for meaning: error, warning, success and status (level pills, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
+Colour only for meaning: error, warning, success and status (level bars, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
+
+- **Code:** code blocks use the Prism token theme in `src/assets/styles/_code.scss` (`--gt-code-*`) on the strip tint. Token colours come from the per-mode log palette and keep 4.5:1 on the code surface and the crash line in both modes. The crash line is an error tint with a 2px error bar. Markdown code blocks get the same theme.
 
 ### Typography
 
@@ -47,7 +50,7 @@ Rule: prefer a semantic class where one exists; otherwise apply the matching typ
 
 ### Spacing
 
-8px base grid, exposed as `--gt-space-*`:
+A 4px unit (`--gt-space-unit`) on an 8px rhythm, exposed as `--gt-space-*` and defined in `src/styles.scss`:
 
 | Token | Value |
 | --- | --- |
@@ -82,7 +85,8 @@ Conventions for every component:
 
 - Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
 - A panel title that repeats the tab or page it sits in is left out. If the header still has actions, a muted fact leads it in `slot="lead"` (a list's count: "2 alerts", ICU plural with a named placeholder), so an action never sits in an empty strip. If there are no actions either, there is no header.
-- Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
+- Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows, with the row classes in `_panel-rows.scss` (`.gt-kv`, `.gt-property-list`, `.gt-raw`, `.gt-panel-row`): hairlines between rows, no boxes, and an expandable row is a whole-row button with `aria-expanded`, whose static right chevron (`.gt-chev`) turns down while it is open. No `mat-card` for new work.
+- A muted fact about the panel's data (a count, a source: "Breadcrumbs · 28") goes in `subtitle`. The panel draws the middle dot, and the subtitle truncates before the title. Use `hideSubtitleNarrow` when it can go under 480px.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
 - A tab's content sits in panels. An empty state sits centred in an outline panel; an empty panel has no header.
 
@@ -107,7 +111,7 @@ Small labels come in four kinds. Shape says what kind of thing it is; color give
 
 - **Badge:** a squared grey label for data you could copy or compare: identifiers in mono (`.chip`: an issue id, a URL), fixed attributes (`.list-row__tag`: Owner, Primary).
 - **State:** a rounded grey pill with a colored dot (`gt-status-pill`) for a state that changes: Up, Down, Unresolved, Invite pending. A dot always means a state.
-- **Level:** a rounded grey pill with a colored bar for severity (the issue level tag). A bar always means a level, as on issue list rows. Fatal, the most severe, is the one filled pill.
+- **Level:** a colored bar, as on issue list rows. On an issue's header the bar runs down the title block and the meta line names the level in plain text. A bar always means a level; fatal is striped.
 - **Count:** a rounded grey pill with a number (`.tab-count`) after a label.
 
 Filters you can click are outlined tag chips (see Tag chips). Every label uses label-medium (12px).
@@ -119,6 +123,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Settings pages for a named object (organization, project, team, member) show an icon tile, using the same icon as that object's item in the nav. Data pages (issue, monitor, transaction, release) and profile pages do not.
 - Those settings pages use `compact`: one line with a 32px tile, the title in title-large and the meta facts inline after it, wrapping under the title on a narrow screen. Data pages keep the full header.
 - Data record pages open with a record band (`gt-record-band`): a tinted band over the page's full width that holds the page header. Up to three key facts sit in its top right corner as stats (`.gt-band-facts`): the number in `<b>` over a short muted label, on the title's baseline. An `outline-variant` hairline sits between stats so the numbers stay evenly spaced when labels differ in length; it is the one place lines split items of the same kind. Keep a label to a word or two and put any detail in a tooltip, which underlines the number. Shorten counts with `compactNumber` (12.3K) and durations with `shortDuration` (815ms, 1.60s). Further facts stay in the meta line. A summary of the whole record goes in the summary tier: a text summary (top tags) on a darker strip (`summary="strip"`), a graphic one (check bars) under a hairline; both span the band. The tab bar sits on the band's bottom edge. Write the corner facts once, as `.gt-band-fact` spans in an `ng-template`, and render it in both the corner and the end of the meta line; under 900px the corner hides and the meta line shows them. Settings records keep the compact header with no band.
+- A title that needs a second line of its own (an error's message under its type) uses `subtitle`. Facts never go there.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
 - No meta fact repeats the title: no slug chip under the name it comes from, no project chip under a version that already names it. If nothing is left, leave out the meta row.
 - A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
@@ -134,7 +139,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - The top app bar is 52px. Every control in it is 32px: compact buttons (`controls.compact-buttons` from `_controls.scss`, also used by panel headers) and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
 - `_controls.scss` also holds the other shared control helpers; use them instead of raw values: `state-layer(hover|focus|pressed)` for hover and focus fills on our own controls (M3 opacity tokens), `icon-size($size)` for a mat-icon on a class the component owns, `focus-ring($offset)` for keyboard focus, `middot($gap)` for the dot between inline facts, `status-dot` for the dot that marks a state, and the named container widths `$narrow-bar`, `$narrow-panel`, `$wide-panel`, `$narrow-band` with their mixins `narrow-bar`, `narrow-panel`, `below-wide-panel`, `wide-panel`, `narrow-band` and `wide-band`.
-- Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (`state-layer(hover)`, then `state-layer(focus)` on focus and while open), with no focus ring and no primary colour. Wrap the select in a span with the `gtSelectGhost` directive: it adds the class, tracks the open state and opens the select on clicks in the padding. Give each one an `aria-label` and a fixed width; long names truncate.
+- Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (`state-layer(hover)`, then `state-layer(focus)` on focus and while open), with no focus ring and no primary colour. Wrap the select in a span with the `gtSelectGhost` directive: it adds the class, tracks the open state and opens the select on clicks in the padding. Give each one an `aria-label` and a fixed width; long names truncate. When the value alone would not say what it filters, put a muted label in front (`.gt-select-ghost__label`: "Categories  All"). `gt-ghost-select` wraps the pattern for view switches.
 - Bar text is one size on every page: the bar title (`.gt-bar-title`) and the back link both use title-medium (16px), so moving from a list to a record only adds the chevron. Big titles live in the page body (`gt-page-header`). A count after the bar title is a `.tab-count` badge, the same one tabs use, centred on the text; the title text then sits in `.gt-bar-title__text` so a long title ellipsizes and the count stays whole. No bare `h1` styling in a bar.
 - The bar draws only its bottom border. Controls of one kind are separated by gap spacing. Between two groups of different kinds (filters | actions, state | destructive) put a `.gt-bar-divider`: 1px wide, 20px tall, `outline-variant`, centred, with 8px on each side. Never between two controls of the same kind, never at the bar edges, never with only one group.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
@@ -142,7 +147,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - List pages put one filled "New X" in the right slot.
 - Record pages have no filled button in the bar. Primary is for at most one main create or confirm action per page. A record with an edit page links to it with an outlined "Edit X".
 - A record's status control in the bar is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`, never a filled primary button.
-- Outline tells you what a control does: an action (it changes the record, like status, Edit, Delete, or it does something with the record, like Copy for AI) is an outlined button; a control that only changes what you see (filters, time range, App frames/Raw, frame order, categories) is a ghost select with no outline.
+- Outline tells you what a control does: an action (it changes the record, like status, Edit, Delete, or it does something with the record, like Copy for AI) is an outlined button; a control that only changes what you see (filters, time range, App frames/Raw, frame order, categories) is a ghost select with no outline. An action with extra options is a split button (`gt-split-button`): one outlined shape, main part and caret separated by a hairline. In a bar under 600px it drops its label and keeps its icon, the same way a ghost select switches to its `shortLabel`; a bar opts in with `container: gt-bar / inline-size` (the top app bar and `gt-panel` do).
 - One extra action in a record bar is a neutral 32px icon button with a tooltip and an `aria-label` ("Delete issue"). Two or more extra actions go in a "More actions" menu.
 - Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one deletes from the bar, as its icon button or a "More actions" item, with the same confirm.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
@@ -178,6 +183,10 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - Create forms are titled New X, edit forms Edit X; the back link names where you return to.
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
 - An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
+
+### Tag chips
+
+- Tags always render as tag chips (`.gt-tag-chip` in `.gt-tag-chips`): key muted, value bold, in a hairline pill with no shadow. A share ("93%", "2 of 15") sits inside the chip, muted, after a middle dot. `.gt-tag-chip--compact` (24px, label-medium) is the size for a summary line.
 
 ## Accessibility
 
