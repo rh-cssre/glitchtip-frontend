@@ -184,6 +184,10 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
 - An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
 
+### Side navigation
+
+- The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items are controls, so they use label-large (14px, 500) like the organization switcher, 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
+
 ### Tag chips
 
 - Tags always render as tag chips (`.gt-tag-chip` in `.gt-tag-chips`): key muted, value bold, in a hairline pill with no shadow. A share ("93%", "2 of 15") sits inside the chip, muted, after a middle dot. `.gt-tag-chip--compact` (24px, label-medium) is the size for a summary line.

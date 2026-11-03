@@ -23,6 +23,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthService } from "src/app/auth.service";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { SelectGhostDirective } from "src/app/shared/select-ghost.directive";
 import {
   MatSelect,
   MatSelectChange,
@@ -59,6 +60,7 @@ const COLLAPSED_KEY = "glitchtip-sidenav-collapsed";
     MatCardModule,
     MobileNavToolbarComponent,
     SupportMenuComponent,
+    SelectGhostDirective,
   ],
 })
 export class MainNavComponent {
@@ -151,7 +153,7 @@ export class MainNavComponent {
       route: ["/profile", "notifications"],
     },
     {
-      name: $localize`Auth Tokens`,
+      name: $localize`Auth tokens`,
       icon: "vpn_key",
       route: ["/profile", "auth-tokens"],
     },

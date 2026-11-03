@@ -11,7 +11,12 @@ mat-sidenav-container {
 }
 
 mat-nav-list {
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  // A little air between rows, so hover and active pills never touch.
+  gap: var(--gt-space-1, 4px);
+  // No top padding, so the switcher sits as far from the first divider as items do.
+  padding: 0 10px 10px;
 
   button[mat-list-item] {
     border: none;
@@ -106,6 +111,11 @@ mat-sidenav {
 }
 
 .logo-toolbar {
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: transparent,
+    )
+  );
   height: fit-content;
   padding-top: 16px;
   justify-content: space-between;
@@ -125,8 +135,13 @@ mat-sidenav {
 
 .org-create-button-container,
 .org-dropdown-container {
+  box-sizing: border-box;
   width: 100%;
-  padding: 25px 15px 0 15px;
+  padding: var(--gt-space-4, 16px) var(--gt-space-2, 8px) var(--gt-space-1, 4px);
+}
+
+.org-select {
+  width: 100%;
 }
 
 .org-create-button {
