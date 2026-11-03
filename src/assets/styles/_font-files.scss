@@ -22,6 +22,15 @@
   font-style: normal;
 }
 
+// Real semibold, so 600 headings are not synthesized from Medium.
+@font-face {
+  font-family: vars.$font-sans-serif;
+  src: url("#{ vars.$font-path}/plex-sans/woff2/IBMPlexSans-SemiBold-Latin1.woff2")
+    format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+
 @font-face {
   font-family: vars.$font-sans-serif;
   src:
@@ -85,11 +94,11 @@
 .section-header-text {
   font: var(--mat-sys-headline-small);
   letter-spacing: var(--mat-sys-headline-small-tracking);
-  font-weight: 700;
+  font-weight: 600;
 
   @media screen and (max-width: vars.$medium - 1) {
     font: var(--mat-sys-title-large);
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: var(--mat-sys-title-large-tracking);
   }
 }

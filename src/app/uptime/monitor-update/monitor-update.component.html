@@ -1,6 +1,8 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="View monitor details" />
+    @if (monitor(); as monitor) {
+      <gt-back-link [backLinkText]="monitor.name" />
+    }
   </ng-container>
 
   <ng-container slot="right">
@@ -8,6 +10,8 @@
       mat-icon-button
       class="medium-icon-button"
       id="delete-monitor"
+      aria-label="Delete monitor"
+      i18n-aria-label
       (click)="delete()"
     >
       <mat-icon>delete</mat-icon>
