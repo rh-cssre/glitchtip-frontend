@@ -78,6 +78,15 @@ export const COLOR_TOKENS: TokenGroup[] = [
     ],
   },
   {
+    group: "Monitor status",
+    note: "Uptime monitor and check accents, aliasing the success, error and outline roles.",
+    tokens: [
+      { name: "--gt-monitor-up", label: "Up" },
+      { name: "--gt-monitor-down", label: "Down" },
+      { name: "--gt-monitor-none", label: "No data" },
+    ],
+  },
+  {
     group: "Extended (app-specific)",
     note: "Custom roles layered on top of Material 3, defined at :root in src/styles.scss.",
     tokens: [

@@ -49,6 +49,7 @@ import { ToastsPreview } from "./previews/toasts.preview";
 import { DialogsPreview } from "./previews/dialogs.preview";
 import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
 import { EmptyStatePreview } from "./previews/empty-state.preview";
+import { ListPreview } from "./previews/list.preview";
 import { GhostSelectPreview } from "./previews/ghost-select.preview";
 import { SplitButtonPreview } from "./previews/split-button.preview";
 import { TagChipPreview } from "./previews/tag-chip.preview";
@@ -243,6 +244,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "Panel",
     group: "Components",
     component: PanelPreview,
+    status: "stable",
+  },
+  {
+    id: "list",
+    label: "List",
+    group: "Components",
+    component: ListPreview,
     status: "stable",
   },
   {

@@ -11,73 +11,69 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        {{ activeOrganizationDetail()?.name }}
-      </mat-card-title>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <div class="list">
-        @for (member of members(); track member) {
-          <div class="list--item">
-            <div class="email-and-badge">
-              <a class="email" mat-line [routerLink]="[member.id]"
-                >{{ member.email }}
-              </a>
-              @if (member.isOwner) {
-                <mat-chip i18n
-                  class="caption-text"
-                  color="primary"
-                  highlighted="true"
-                >
-                  Account Owner
-                </mat-chip>
-              }
-              @if (member.pending) {
-                <mat-chip i18n class="caption-text" color="primary">
-                  Invite Pending
-                </mat-chip>
-              }
-            </div>
-            <div class="reinvite-and-role">
-              @if (member.pending) {
-                <div class="reinvite">
-                  @if (!member.loadingResendInvite && canWriteMember()) {
-                    <gt-loading-button
-                      class="resend-invite"
-                      [loading]="member.loadingResendInvite"
-                      [buttonText]="
-                        member.sentResendInvite
-                          ? inviteResentText
-                          : resendInviteText
-                      "
-                      [disabled]="member.sentResendInvite"
-                      (buttonClick)="resendInvite(member)"
-                      buttonStyle="stroked"
-                    >
-                    </gt-loading-button>
-                  }
-                </div>
-              }
-              <div class="role">@switch (member.role) { @case ("owner") {<ng-container i18n>Owner</ng-container>} @case ("manager") {<ng-container i18n>Manager</ng-container>} @case ("admin") {<ng-container i18n>Admin</ng-container>} @case ("member") {<ng-container i18n>Member</ng-container>} @default {{{ member.roleName }}} }</div>
-            </div>
-            @if (member.isMe || canAdminMember()) {
-              <gt-loading-button
-                i18n-matTooltip
-                class="remove-button"
-                matTooltip="Account ownership must be transferred."
-                [matTooltipDisabled]="!member.isOwner"
-                [disabled]="member.isOwner"
-                (buttonClick)="removeMember(member)"
-                [buttonText]="member.isMe ? leaveText : removeText"
-                buttonStyle="stroked"
-              ></gt-loading-button>
-            }
-          </div>
+  <gt-list>
+    @for (member of members(); track member) {
+      <gt-list-row>
+        <a [routerLink]="[member.id]">{{ member.email }}</a>
+        @if (member.isOwner) {
+          <span class="list-row__tag" i18n>Account owner</span>
         }
-      </div>
-    </mat-card-content>
-  </mat-card>
+        @if (member.pending) {
+          <mat-chip class="caption-text" color="primary" i18n
+            >Invite pending</mat-chip
+          >
+        }
+        @if (
+          member.isOwner &&
+          !member.pending &&
+          (member.isMe || canAdminMember())
+        ) {
+          <span slot="description" i18n
+            >Account ownership must be transferred.</span
+          >
+        }
+        <span slot="meta">{{ roleName(member.role) ?? member.roleName }}</span>
+        @if (member.pending && canWriteMember()) {
+          <ng-container slot="actions">
+            <button
+              mat-icon-button
+              class="medium-icon-button"
+              [matMenuTriggerFor]="memberMenu"
+              [attr.aria-label]="actionsForLabel(member.email)"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #memberMenu="matMenu" xPosition="before">
+              <button
+                mat-menu-item
+                [disabled]="
+                  member.sentResendInvite || member.loadingResendInvite
+                "
+                (click)="resendInvite(member)"
+              >
+                @if (member.sentResendInvite) {
+                  <ng-container i18n>Invite resent</ng-container>
+                } @else {
+                  <ng-container i18n>Resend invite</ng-container>
+                }
+              </button>
+              @if (canAdminMember()) {
+                <button mat-menu-item (click)="removeMember(member)" i18n
+                  >Remove</button
+                >
+              }
+            </mat-menu>
+          </ng-container>
+        } @else if (!member.pending && (member.isMe || canAdminMember())) {
+          <gt-loading-button
+            slot="actions"
+            [disabled]="member.isOwner"
+            (buttonClick)="removeMember(member)"
+            [buttonText]="member.isMe ? leaveText : removeText"
+            buttonStyle="stroked"
+          />
+        }
+      </gt-list-row>
+    }
+  </gt-list>
 </section>
