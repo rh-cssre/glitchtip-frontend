@@ -126,6 +126,10 @@ export class IssuesPage implements OnInit, OnDestroy {
   isLargeScreen = signal(true);
   displayedColumns = signal(this.allColumns);
   private lastClickedIssueId = signal<string | null>(null);
+  // The trend chart has a fixed width, so it needs room beyond the sidebar.
+  private readonly roomForTrend = toSignal(
+    this.breakPointObserver.observe("(min-width: 1080px)"),
+  );
   breakPointSignal = toSignal(
     this.breakPointObserver.observe([
       Breakpoints.Medium,
@@ -296,7 +300,11 @@ export class IssuesPage implements OnInit, OnDestroy {
     effect(() => {
       const breakPointResult = this.breakPointSignal();
       if (breakPointResult?.matches) {
-        this.displayedColumns.set(this.mediumScreenColumns);
+        this.displayedColumns.set(
+          this.roomForTrend()?.matches
+            ? this.allColumns
+            : this.mediumScreenColumns,
+        );
         if (breakPointResult.breakpoints[Breakpoints.XSmall]) {
           this.displayedColumns.set(this.xSmallScreenColumns);
         }

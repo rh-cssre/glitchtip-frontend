@@ -25,18 +25,21 @@
   ) {
     <gt-panel>
       <gt-empty-state
-        icon="corporate_fare"
+        icon="account_tree"
         i18n-title
-        title="Create an organization to get started"
+        title="No organization yet"
+        i18n-message
+        message="Create an organization to add projects and track errors."
         [headingLevel]="2"
       >
         <a
           mat-flat-button
           color="primary"
           [routerLink]="['/organizations', 'new']"
-          i18n
-          >Create organization</a
         >
+          <mat-icon>add</mat-icon>
+          <span i18n>Create organization</span>
+        </a>
       </gt-empty-state>
     </gt-panel>
   }

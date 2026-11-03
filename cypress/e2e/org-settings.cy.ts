@@ -23,7 +23,7 @@ describe("Organization Settings", () => {
       cy.contains("successfully deleted");
       cy.url().should("eq", "http://localhost:4200/");
       cy.wait("@getProjectsRequest").then(({ response }) =>
-        cy.contains("Create an organization to get started"),
+        cy.contains("No organization yet"),
       );
     },
   );

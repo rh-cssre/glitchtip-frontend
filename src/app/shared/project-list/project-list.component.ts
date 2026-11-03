@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectRowsComponent } from "./project-rows.component";
 import { PanelComponent } from "../panel/panel.component";
@@ -24,6 +25,7 @@ import { OrganizationsService } from "src/app/api/organizations.service";
     ProjectRowsComponent,
     PanelComponent,
     EmptyStateComponent,
+    MatIconModule,
     TopAppBar,
     ListTitleComponent,
   ],
