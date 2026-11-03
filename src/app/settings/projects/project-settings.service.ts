@@ -104,6 +104,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
     if (data) {
       this.snackBar.open(`${data.slug} has been added to #${teamSlug}`);
       this.setAddProjectToTeam(data);
+      this.organizationsService.refreshActiveOrganization();
     }
     if (error) {
       this.setAddProjectToTeamError(
@@ -134,6 +135,7 @@ export class ProjectSettingsService extends StatefulService<ProjectSettingsState
     if (data) {
       this.snackBar.open(`${data.slug} has been removed from #${teamSlug}`);
       this.setRemoveProjectFromTeam(data);
+      this.organizationsService.refreshActiveOrganization();
     }
     if (error) {
       this.setRemoveProjectFromTeamLoadingError(

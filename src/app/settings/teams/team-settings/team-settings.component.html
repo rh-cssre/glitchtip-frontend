@@ -32,6 +32,7 @@
           buttonText="Save slug"
           buttonStyle="stroked"
           [loading]="loading().updateName"
+          [disabled]="slug?.value === team.slug"
           id="update-team-slug"
         />
       }
