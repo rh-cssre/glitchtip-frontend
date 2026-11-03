@@ -50,6 +50,11 @@ html {
   --uptime-color: #8a2387;
   --logs-color: #2196f3;
 
+  // Monitor status roles
+  --gt-monitor-up: var(--success-color);
+  --gt-monitor-down: var(--mat-sys-error);
+  --gt-monitor-none: var(--mat-sys-outline);
+
   // Log severity palette: AA-compliant per mode (darker on light, bright on dark)
   --log-error-color: light-dark(#c62828, #ef4444);
   --log-warn-color: light-dark(#a16207, #f59e0b);

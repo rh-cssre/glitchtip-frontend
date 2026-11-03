@@ -66,7 +66,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
           <gt-page-header
             title="Storefront homepage"
             status="Up"
-            statusColor="var(--success-color)"
+            statusColor="var(--gt-monitor-up)"
           >
             <span slot="meta">
               <span class="no-sep">for 2 hours</span>

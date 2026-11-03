@@ -14,11 +14,11 @@ div {
   }
 
   .up-check {
-    background-color: var(--success-color);
+    background-color: var(--gt-monitor-up);
   }
 
   .down-check {
-    background-color: var(--mat-sys-error);
+    background-color: var(--gt-monitor-down);
   }
 
   .no-check {
