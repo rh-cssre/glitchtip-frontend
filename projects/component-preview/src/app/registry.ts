@@ -254,6 +254,13 @@ export const PREVIEWS: PreviewEntry[] = [
     status: "stable",
   },
   {
+    id: "list",
+    label: "List",
+    group: "Components",
+    component: ListPreview,
+    status: "stable",
+  },
+  {
     id: "panel-rows",
     label: "Panel rows",
     group: "Components",

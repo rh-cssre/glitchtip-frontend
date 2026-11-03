@@ -66,7 +66,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
           <gt-page-header
             title="Storefront homepage"
             status="Up"
-            statusColor="var(--success-color)"
+            statusColor="var(--gt-monitor-up)"
           >
             <span slot="meta">
               <span class="no-sep">for 2 hours</span>
@@ -125,6 +125,7 @@ export class PageHeaderPreview {
     "Use subtitle for a second line that belongs to the title, such as an error's message",
     "Add class no-sep to a fact that continues the pill, such as for 2 hours",
     "Put tabs directly below when the record has facets, with counts in .tab-count",
+    "Place at most one status strip, such as the monitor check bars, between the header and the tabs",
     "Show a tab count once it is known, including 0; leave ?tab= off the default tab",
     "Keep the back link and page actions in the top app bar",
   ];

@@ -16,6 +16,12 @@
     white-space: nowrap;
   }
 
+  // Hairlines keep the numbers evenly spaced when label lengths differ.
+  > * + * {
+    border-inline-start: 1px solid var(--mat-sys-outline-variant);
+    padding-inline-start: var(--gt-space-5, 24px);
+  }
+
   b {
     order: -1;
     font: var(--mat-sys-title-large);
