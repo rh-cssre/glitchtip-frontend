@@ -78,6 +78,15 @@ export const COLOR_TOKENS: TokenGroup[] = [
     ],
   },
   {
+    group: "Monitor status",
+    note: "Uptime monitor and check accents, aliasing the success, error and outline roles.",
+    tokens: [
+      { name: "--gt-monitor-up", label: "Up" },
+      { name: "--gt-monitor-down", label: "Down" },
+      { name: "--gt-monitor-none", label: "No data" },
+    ],
+  },
+  {
     group: "Extended (app-specific)",
     note: "Custom roles layered on top of Material 3, defined at :root in src/styles.scss.",
     tokens: [
@@ -139,6 +148,7 @@ export const TYPE_TOKENS: TokenDef[] = [
  */
 export const CUSTOM_TYPE_CLASSES: { className: string; usage: string }[] = [
   { className: "section-header-text", usage: "Page titles" },
+  { className: "gt-bar-title", usage: "Top app bar titles" },
   { className: "section-header-text-light", usage: "Issue titles (lighter weight)" },
   { className: "body-text", usage: "Longer text blocks" },
   { className: "body-text-strong", usage: "Emphasized body text" },

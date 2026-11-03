@@ -4,20 +4,24 @@
     activeOrganization() === undefined &&
     orgServiceInitialLoad()
   ) {
-    <mat-card>
-      <mat-card-content>
-        <p class="body-text" i18n
-          >In order to use GlitchTip, you'll need to create an organization.</p
-        >
-        <a
-          mat-flat-button
-          color="primary"
-          [routerLink]="['/organizations', 'new']"
-          i18n
-          >Create New Organization</a
-        >
-      </mat-card-content>
-    </mat-card>
+    <gt-empty-state
+      class="no-org-empty-state"
+      icon="account_tree"
+      i18n-title
+      title="No organization yet"
+      i18n-message
+      message="Create an organization to add projects and track errors."
+      [headingLevel]="1"
+    >
+      <a
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/organizations', 'new']"
+      >
+        <mat-icon>add</mat-icon>
+        <span i18n>Create organization</span>
+      </a>
+    </gt-empty-state>
   }
   @for (organization of orgsAndProjects(); track organization.id) {
     @if (

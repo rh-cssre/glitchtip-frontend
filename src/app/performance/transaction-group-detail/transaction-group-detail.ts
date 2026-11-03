@@ -8,18 +8,26 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { PercentPipe } from "@angular/common";
+import { DecimalPipe, PercentPipe, NgTemplateOutlet } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { MatCardModule } from "@angular/material/card";
 import { MatTableModule } from "@angular/material/table";
 import { MatSortModule, Sort } from "@angular/material/sort";
 
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { TransactionGroupDetailService } from "./transaction-group-detail-state";
-import { HumanizeDurationPipe } from "../../shared/seconds-or-ms.pipe";
+import {
+  HumanizeDurationPipe,
+  ShortDurationPipe,
+} from "../../shared/seconds-or-ms.pipe";
+import { CompactNumberPipe } from "../../shared/compact-number.pipe";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
 
@@ -28,16 +36,24 @@ type SpanSortKey = "totalTime" | "avgDuration" | "p95Duration" | "count";
   templateUrl: "./transaction-group-detail.html",
   styleUrls: ["./transaction-group-detail.scss"],
   imports: [
-    MatCardModule,
+    NgTemplateOutlet,
+    DecimalPipe,
     MatTableModule,
     MatSortModule,
     RouterLink,
+    MatButtonModule,
     MatIconModule,
     PercentPipe,
     TopAppBar,
+    EmptyStateComponent,
     BackLinkComponent,
     HumanizeDurationPipe,
-    DetailHeaderComponent,
+    ShortDurationPipe,
+    CompactNumberPipe,
+    MatTooltipModule,
+    PageHeaderComponent,
+    PanelComponent,
+    RecordBandComponent,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [TransactionGroupDetailService],

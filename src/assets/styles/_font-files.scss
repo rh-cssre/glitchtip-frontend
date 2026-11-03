@@ -22,6 +22,15 @@
   font-style: normal;
 }
 
+// Real semibold, so 600 headings are not synthesized from Medium.
+@font-face {
+  font-family: vars.$font-sans-serif;
+  src: url("#{ vars.$font-path}/plex-sans/woff2/IBMPlexSans-SemiBold-Latin1.woff2")
+    format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+
 @font-face {
   font-family: vars.$font-sans-serif;
   src:
@@ -85,13 +94,40 @@
 .section-header-text {
   font: var(--mat-sys-headline-small);
   letter-spacing: var(--mat-sys-headline-small-tracking);
-  font-weight: 700;
+  font-weight: 600;
 
   @media screen and (max-width: vars.$medium - 1) {
     font: var(--mat-sys-title-large);
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: var(--mat-sys-title-large-tracking);
   }
+}
+
+// The title in a top app bar or list app bar, the back link's size.
+.gt-bar-title {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  font: var(--mat-sys-title-medium);
+  letter-spacing: var(--mat-sys-title-medium-tracking);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--mat-sys-on-surface);
+
+  // With a count, __text ellipsizes so the count keeps its size.
+  &:has(> .tab-count) {
+    display: flex;
+    align-items: center;
+  }
+
+  > .tab-count {
+    flex-shrink: 0;
+  }
+}
+
+.gt-bar-title__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .section-header-text-light {
@@ -128,5 +164,5 @@
 
 .caption-text {
   font: var(--mat-sys-body-small);
-  letter-spacing: var(--mat-sys-body-large-small);
+  letter-spacing: var(--mat-sys-body-small-tracking);
 }
