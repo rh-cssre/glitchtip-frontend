@@ -13,6 +13,7 @@ import { PageHeaderPreview } from "./previews/page-header.preview";
 import { RecordBandPreview } from "./previews/record-band.preview";
 import { StatusPillPreview } from "./previews/status-pill.preview";
 import { PanelPreview } from "./previews/panel.preview";
+import { PanelRowsPreview } from "./previews/panel-rows.preview";
 import { PermissionGatingPreview } from "./previews/permission-gating.preview";
 import { BrandTypographyPreview } from "./previews/brand-typography.preview";
 import { BrandColorsPreview } from "./previews/brand-colors.preview";
@@ -49,6 +50,10 @@ import { DialogsPreview } from "./previews/dialogs.preview";
 import { LoadingOverlayPreview } from "./previews/loading-overlay.preview";
 import { EmptyStatePreview } from "./previews/empty-state.preview";
 import { ListPreview } from "./previews/list.preview";
+import { GhostSelectPreview } from "./previews/ghost-select.preview";
+import { SplitButtonPreview } from "./previews/split-button.preview";
+import { TagChipPreview } from "./previews/tag-chip.preview";
+import { CodePreview } from "./previews/code.preview";
 
 /**
  * Component lifecycle status, following the practice of published design
@@ -246,6 +251,41 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "List",
     group: "Components",
     component: ListPreview,
+    status: "stable",
+  },
+  {
+    id: "panel-rows",
+    label: "Panel rows",
+    group: "Components",
+    component: PanelRowsPreview,
+    status: "stable",
+  },
+  {
+    id: "ghost-select",
+    label: "Ghost select",
+    group: "Components",
+    component: GhostSelectPreview,
+    status: "stable",
+  },
+  {
+    id: "split-button",
+    label: "Split button",
+    group: "Components",
+    component: SplitButtonPreview,
+    status: "stable",
+  },
+  {
+    id: "tag-chip",
+    label: "Tag chip",
+    group: "Components",
+    component: TagChipPreview,
+    status: "stable",
+  },
+  {
+    id: "code",
+    label: "Code",
+    group: "Components",
+    component: CodePreview,
     status: "stable",
   },
   {

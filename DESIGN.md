@@ -30,6 +30,8 @@ Rule: use a semantic role, not a raw hex. Text on a colored surface uses that su
 
 Colour only for meaning: error, warning, success and status (level bars, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
 
+- **Code:** code blocks use the Prism token theme in `src/assets/styles/_code.scss` (`--gt-code-*`) on the strip tint. Token colours come from the per-mode log palette and keep 4.5:1 on the code surface and the crash line in both modes. The crash line is an error tint with a 2px error bar. Markdown code blocks get the same theme.
+
 ### Typography
 
 - **Material 3 type tokens:** `--mat-sys-headline-small`, `-title-large/medium/small`, `-body-large/medium/small`, `-label-large/medium`. Apply as `font: var(--token)`.
@@ -81,7 +83,8 @@ Conventions for every component:
 
 - Only the page header, tabs and section bars sit loose on the page; everything else (descriptions, copy fields, lists, empty states) is in a panel.
 - A panel title that repeats the tab or page it sits in is left out. If the header still has actions, a muted fact leads it in `slot="lead"` (a list's count: "2 alerts", ICU plural with a named placeholder), so an action never sits in an empty strip. If there are no actions either, there is no header.
-- Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows. No `mat-card` for new work.
+- Charts and data blocks (stack traces, breadcrumbs, request data, code, a record's table of spans) sit in a `gt-panel`. Use `flush` when the body draws its own rows, with the row classes in `_panel-rows.scss` (`.gt-kv`, `.gt-property-list`, `.gt-raw`, `.gt-panel-row`): hairlines between rows, no boxes, and an expandable row is a whole-row button with `aria-expanded`, whose static right chevron (`.gt-chev`) turns down while it is open. No `mat-card` for new work.
+- A muted fact about the panel's data (a count, a source: "Breadcrumbs · 28") goes in `subtitle`. The panel draws the middle dot, and the subtitle truncates before the title. Use `hideSubtitleNarrow` when it can go under 480px.
 - A box's body uses the page colour (`surface-container-low`) with a hairline. Its header and footer strips are tinted one step up, in `surface-container-high`; a data table's column header row (`.table-header`) uses the same tint. A danger panel adds a red-tinted outline. There are no other panel variants.
 - A tab's content sits in panels. An empty state sits centred in an outline panel; an empty panel has no header.
 
@@ -134,7 +137,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - The top app bar is 52px. Every control in it is 32px: compact buttons (`controls.compact-buttons` from `_controls.scss`, also used by panel headers) and ghost select filters. Visual customisation of Material goes through its overrides/density mixins in `material-overrides/`, never internal classes or `::ng-deep`.
 - `_controls.scss` also holds the other shared control helpers; use them instead of raw values: `state-layer(hover|focus|pressed)` for hover and focus fills on our own controls (M3 opacity tokens), `icon-size($size)` for a mat-icon on a class the component owns, `focus-ring($offset)` for keyboard focus, `middot($gap)` for the dot between inline facts, `status-dot` for the dot that marks a state, and the named container widths `$narrow-bar`, `$narrow-panel`, `$wide-panel`, `$narrow-band` with their mixins `narrow-bar`, `narrow-panel`, `below-wide-panel`, `wide-panel`, `narrow-band` and `wide-band`.
-- Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (`state-layer(hover)`, then `state-layer(focus)` on focus and while open), with no focus ring and no primary colour. Wrap the select in a span with the `gtSelectGhost` directive: it adds the class, tracks the open state and opens the select on clicks in the padding. Give each one an `aria-label` and a fixed width; long names truncate.
+- Bar filters are ghost selects (`.gt-select-ghost`): a `mat-select` with no form field, so the bar shows only text and a chevron, with no field outline. Hover, keyboard focus and open use the same grey state layer as text buttons (`state-layer(hover)`, then `state-layer(focus)` on focus and while open), with no focus ring and no primary colour. Wrap the select in a span with the `gtSelectGhost` directive: it adds the class, tracks the open state and opens the select on clicks in the padding. Give each one an `aria-label` and a fixed width; long names truncate. When the value alone would not say what it filters, put a muted label in front (`.gt-select-ghost__label`: "Categories  All"). `gt-ghost-select` wraps the pattern for view switches.
 - Bar text is one size on every page: the bar title (`.gt-bar-title`) and the back link both use title-medium (16px), so moving from a list to a record only adds the chevron. Big titles live in the page body (`gt-page-header`). A count after the bar title is a `.tab-count` badge, the same one tabs use, centred on the text; the title text then sits in `.gt-bar-title__text` so a long title ellipsizes and the count stays whole. No bare `h1` styling in a bar.
 - The bar draws only its bottom border. Controls of one kind are separated by gap spacing. Between two groups of different kinds (filters | actions, state | destructive) put a `.gt-bar-divider`: 1px wide, 20px tall, `outline-variant`, centred, with 8px on each side. Never between two controls of the same kind, never at the bar edges, never with only one group.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
@@ -142,7 +145,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - List pages put one filled "New X" in the right slot.
 - Record pages have no filled button in the bar. Primary is for at most one main create or confirm action per page. A record with an edit page links to it with an outlined "Edit X".
 - A record's status control in the bar is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`, never a filled primary button.
-- Outline tells you what a control does: an action (it changes the record, like status, Edit, Delete, or it does something with the record, like Copy for AI) is an outlined button; a control that only changes what you see (filters, time range, App frames/Raw, frame order, categories) is a ghost select with no outline.
+- Outline tells you what a control does: an action (it changes the record, like status, Edit, Delete, or it does something with the record, like Copy for AI) is an outlined button; a control that only changes what you see (filters, time range, App frames/Raw, frame order, categories) is a ghost select with no outline. An action with extra options is a split button (`gt-split-button`): one outlined shape, main part and caret separated by a hairline. In a bar under 600px it drops its label and keeps its icon, the same way a ghost select switches to its `shortLabel`; a bar opts in with `container: gt-bar / inline-size` (the top app bar and `gt-panel` do).
 - One extra action in a record bar is a neutral 32px icon button with a tooltip and an `aria-label` ("Delete issue"). Two or more extra actions go in a "More actions" menu.
 - Delete lives in one place. A record with a settings or edit page deletes from that page's last section (outlined warn button, then a confirm that names the object). A record without one deletes from the bar, as its icon button or a "More actions" item, with the same confirm.
 - Verbs: "New X" opens a create form and is its title, "Create X" submits it, "Add X" attaches something that already exists, "Invite" sends an email.
@@ -152,6 +155,10 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 - **Header row:** one size for every table. Column headers are 32px, in label-medium and `on-surface-variant`, set once in `material-overrides/_table.scss` (`$table-header-height`). The sticky action row above them (`.table-header`) keeps Material's own. Pages do not restyle header cells.
 - **Narrow screens:** columns drop as the window narrows, but the column header row stays, labeling the columns that remain.
+
+### Tag chips
+
+- Tags always render as tag chips (`.gt-tag-chip` in `.gt-tag-chips`): key muted, value bold, in a hairline pill with no shadow. A share ("93%", "2 of 15") sits inside the chip, muted, after a middle dot. `.gt-tag-chip--compact` (24px, label-medium) is the size for a summary line.
 
 ## Accessibility
 
