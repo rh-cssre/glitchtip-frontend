@@ -156,6 +156,10 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - **Header row:** one size for every table. Column headers are 32px, in label-medium and `on-surface-variant`, set once in `material-overrides/_table.scss` (`$table-header-height`). The sticky action row above them (`.table-header`) keeps Material's own. Pages do not restyle header cells.
 - **Narrow screens:** columns drop as the window narrows, but the column header row stays, labeling the columns that remain.
 
+### Side navigation
+
+- The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items are controls, so they use label-large (14px, 500) like the organization switcher, 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
+
 ### Tag chips
 
 - Tags always render as tag chips (`.gt-tag-chip` in `.gt-tag-chips`): key muted, value bold, in a hairline pill with no shadow. A share ("93%", "2 of 15") sits inside the chip, muted, after a middle dot. `.gt-tag-chip--compact` (24px, label-medium) is the size for a summary line.
