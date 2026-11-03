@@ -13,29 +13,25 @@
             sortedEnvironment of sortedEnvironments;
             track sortedEnvironment.heading
           ) {
-            <h2>{{ sortedEnvironment.heading }}</h2>
-            <mat-list>
+            <gt-list [label]="sortedEnvironment.heading">
               @for (
                 environment of sortedEnvironment.environments;
                 track environment.id
               ) {
-                <mat-list-item>
-                  <div class="environment-list-item">
-                    <span class="body-text">
-                      {{ environment.name }}
-                    </span>
-                    @if (canWriteProject()) {
-                      <gt-loading-button
-                        (buttonClick)="toggleHidden(environment)"
-                        [loading]="environment.id === toggleHiddenloading()"
-                        [buttonText]="environment.isHidden ? showText : hideText"
-                        buttonStyle="stroked"
-                      ></gt-loading-button>
-                    }
-                  </div>
-                </mat-list-item>
+                <gt-list-row>
+                  {{ environment.name }}
+                  @if (canWriteProject()) {
+                    <gt-loading-button
+                      slot="actions"
+                      (buttonClick)="toggleHidden(environment)"
+                      [loading]="environment.id === toggleHiddenloading()"
+                      [buttonText]="environment.isHidden ? showText : hideText"
+                      buttonStyle="stroked"
+                    />
+                  }
+                </gt-list-row>
               }
-            </mat-list>
+            </gt-list>
           }
         } @else {
           <p i18n class="body-text">
