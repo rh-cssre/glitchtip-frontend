@@ -156,10 +156,11 @@ export const CUSTOM_TYPE_CLASSES: { className: string; usage: string }[] = [
 ];
 
 /**
- * The additive spacing scale (8px base grid) defined at :root in
+ * The additive spacing scale (multiples of a 4px unit) defined at :root in
  * `src/styles.scss`. Migrating existing ad-hoc px usage onto these is roadmap.
  */
 export const SPACE_TOKENS: TokenDef[] = [
+  { name: "--gt-space-unit" },
   { name: "--gt-space-0" },
   { name: "--gt-space-1" },
   { name: "--gt-space-2" },

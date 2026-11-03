@@ -47,7 +47,7 @@ Rule: prefer a semantic class where one exists; otherwise apply the matching typ
 
 ### Spacing
 
-8px base grid, exposed as `--gt-space-*`:
+A 4px unit (`--gt-space-unit`) on an 8px rhythm, exposed as `--gt-space-*` and defined in `src/styles.scss`:
 
 | Token | Value |
 | --- | --- |
