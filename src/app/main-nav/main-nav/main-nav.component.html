@@ -2,7 +2,6 @@
   @if (isLoggedIn()) {
     <mat-sidenav
       #sidenav
-      class="mat-elevation-z4"
       [disableClose]="!mobileNav()"
       [opened]="navOpen()"
       (closed)="closeSideNav()"
@@ -51,47 +50,49 @@
           >
         </div>
       } @else {
-        <mat-form-field
-          appearance="outline"
-          subscriptSizing="dynamic"
-          class="org-dropdown-container"
-        >
-          <mat-select
-            #orgSelect
-            data-cy="orgSelect"
-            [value]="activeOrganizationSlug()"
-            formControlName="orgSelectControl"
-            (selectionChange)="onOrgSelectChange($event, orgSelect)"
-            hideSingleSelectionIndicator
-            canSelectNullableOptions
-          >
-            @for (
-              organization of organizations();
-              track organization.id;
-              let last = $last
-            ) {
-              <mat-option [value]="organization.slug">
-                {{ organization.name }}
-              </mat-option>
-              @if (last) {
-                <mat-divider class="dropdown-divider"></mat-divider>
+        <div class="org-dropdown-container">
+          <span gtSelectGhost class="org-select">
+            <mat-select
+              #orgSelect
+              data-cy="orgSelect"
+              i18n-aria-label
+              aria-label="Organization"
+              [value]="activeOrganizationSlug()"
+              formControlName="orgSelectControl"
+              (selectionChange)="onOrgSelectChange($event, orgSelect)"
+              hideSingleSelectionIndicator
+              canSelectNullableOptions
+            >
+              @for (
+                organization of organizations();
+                track organization.id;
+                let last = $last
+              ) {
+                <mat-option [value]="organization.slug">
+                  {{ organization.name }}
+                </mat-option>
+                @if (last) {
+                  <mat-divider class="dropdown-divider"></mat-divider>
+                }
               }
-            }
-            @if (canCreateOrg()) {
-              <mat-option data-cy="createNewLink" i18n
-                >Create organization</mat-option
-              >
-            } @else {
-              <mat-option i18n i18n-matTooltip
-                disabled
-                matTooltip="Organization creation is currently disabled"
-                matTooltipPosition="below"
-              >
-                Create organization
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+              @if (canCreateOrg()) {
+                <mat-option data-cy="createNewLink" i18n
+                  >Create organization</mat-option
+                >
+              } @else {
+                <mat-option
+                  i18n
+                  i18n-matTooltip
+                  disabled
+                  matTooltip="Organization creation is currently disabled"
+                  matTooltipPosition="below"
+                >
+                  Create organization
+                </mat-option>
+              }
+            </mat-select>
+          </span>
+        </div>
       }
       <mat-nav-list>
         <mat-divider class="nav-section-divider"></mat-divider>

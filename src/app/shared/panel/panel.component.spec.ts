@@ -74,4 +74,28 @@ describe("PanelComponent", () => {
     expect(el.querySelector('[role="heading"]')).toBeNull();
     expect(el.textContent).toContain("3 environments");
   });
+
+  it("shows the subtitle after the title with its full text as a tooltip", () => {
+    const el = render({ title: "Breadcrumbs", subtitle: "28" });
+    const subtitle = el.querySelector(".gt-panel__subtitle")!;
+    expect(subtitle.textContent?.trim()).toBe("28");
+    expect(subtitle.getAttribute("title")).toBe("28");
+    expect(
+      render({ title: "Breadcrumbs" }).querySelector(".gt-panel__subtitle"),
+    ).toBeNull();
+  });
+
+  it("keeps the subtitle out of the heading and the region name", () => {
+    const el = render({ title: "Breadcrumbs", subtitle: "28" });
+    const heading = el.querySelector('[role="heading"]')!;
+    expect(heading.textContent).toBe("Breadcrumbs");
+    expect(heading.querySelector(".gt-panel__subtitle")).toBeNull();
+    expect(el.getAttribute("aria-labelledby")).toBe(heading.id);
+  });
+
+  it("marks hideSubtitleNarrow on the host", () => {
+    expect(render({ hideSubtitleNarrow: true }).classList).toContain(
+      "gt-panel--hide-subtitle-narrow",
+    );
+  });
 });

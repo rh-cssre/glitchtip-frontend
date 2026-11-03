@@ -31,9 +31,17 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       <div class="preview-section">
         <div class="preview-section__title">Monitor states</div>
         <div class="sp-row">
-          <gt-status-pill label="Up" color="var(--success-color)" />
-          <gt-status-pill label="Down" color="var(--mat-sys-error)" />
-          <gt-status-pill label="No data" />
+          <gt-status-pill label="Up" color="var(--gt-monitor-up)" />
+          <gt-status-pill label="Down" color="var(--gt-monitor-down)" />
+          <gt-status-pill label="No data" color="var(--gt-monitor-none)" />
+        </div>
+      </div>
+      <div class="preview-section">
+        <div class="preview-section__title">Issue states</div>
+        <div class="sp-row">
+          <gt-status-pill label="Unresolved" color="var(--info-color)" />
+          <gt-status-pill label="Resolved" color="var(--success-color)" />
+          <gt-status-pill label="Ignored" />
         </div>
       </div>
     </preview-doc>
@@ -45,8 +53,9 @@ export class StatusPillPreview {
   ];
   readonly dos = [
     "Use the same pill and color for a state in lists and in headers",
-    "Pass a role token as the color so it follows the theme",
+    "Pass the state's role token, such as --gt-monitor-down, so it follows the theme",
     "Show one status pill per record",
+    "Keep severity out of the pill; an issue's level is its own tag",
   ];
   readonly donts = [
     "Make it clickable; use a button or a filter chip for actions",
@@ -67,5 +76,5 @@ export class StatusPillPreview {
     },
   ];
   readonly importCode = `import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";`;
-  readonly code = `<gt-status-pill label="Down" color="var(--mat-sys-error)" />`;
+  readonly code = `<gt-status-pill label="Down" color="var(--gt-monitor-down)" />`;
 }

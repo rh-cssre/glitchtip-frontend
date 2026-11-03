@@ -87,8 +87,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   `,
 })
 export class DetailPagePreview {
-  // The product's own mobile mechanism (see monitor-detail): swap content
-  // below the $small breakpoint. Fires for real inside the Mobile viewport.
+  // Swap the text action for an icon button below the $small breakpoint.
+  // Fires for real inside the Mobile viewport.
   private readonly breakpoints = inject(BreakpointObserver);
   readonly isMobile = toSignal(
     this.breakpoints

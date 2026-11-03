@@ -22,9 +22,9 @@ interface ResolvedElevation {
 
 /**
  * Spacing, radius and elevation reference. The spacing scale is the additive
- * `--gt-space-*` token set (8px base grid). Elevation tokens are probed and
- * any that resolve empty are hidden, so the page stays honest about what the
- * theme actually defines.
+ * `--gt-space-*` token set, built on a 4px unit. Elevation tokens are probed
+ * and any that resolve empty are hidden, so the page stays honest about what
+ * the theme actually defines.
  */
 @Component({
   selector: "preview-foundations-spacing",
@@ -134,14 +134,15 @@ interface ResolvedElevation {
     <div class="preview-section">
       <div class="preview-section__title">Spacing scale</div>
       <p class="preview-section__note">
-        8px base grid, exposed as <code>--gt-space-*</code> tokens. Prefer these
-        over ad-hoc pixel values in new code.
+        Multiples of a 4px unit (<code>--gt-space-unit</code>), exposed as
+        <code>--gt-space-*</code> tokens. Prefer these over ad-hoc pixel values
+        in new code.
       </p>
       @for (s of spaces(); track s.name) {
         <div class="fs-space-row">
           <span class="fs-space-name">{{ s.name }}</span>
-          <span class="fs-space-bar" [style.width]="s.value || '0px'"></span>
-          <span class="fs-space-value">{{ s.value || "0" }}</span>
+          <span class="fs-space-bar" [style.width]="s.value"></span>
+          <span class="fs-space-value">{{ s.value }}</span>
         </div>
       }
     </div>
@@ -280,7 +281,7 @@ export class FoundationsSpacingPreview {
       this.spaces.set(
         SPACE_TOKENS.map((t) => ({
           name: t.name,
-          value: resolveCssVar(t.name, el),
+          value: this.measureSpace(t.name, el),
         })),
       );
 
@@ -295,5 +296,15 @@ export class FoundationsSpacingPreview {
         })).filter((e) => e.value.length > 0),
       );
     });
+  }
+
+  // The declared value is calc() text, so measure a probe to get real px.
+  private measureSpace(name: string, el: Element): string {
+    const probe = el.ownerDocument.createElement("span");
+    probe.style.cssText = `position:absolute;visibility:hidden;width:var(${name});`;
+    el.appendChild(probe);
+    const width = probe.getBoundingClientRect().width;
+    el.removeChild(probe);
+    return `${Math.round(width * 100) / 100}px`;
   }
 }

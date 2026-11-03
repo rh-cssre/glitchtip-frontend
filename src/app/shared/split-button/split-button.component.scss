@@ -1,0 +1,80 @@
+@use "sass:math";
+@use "@angular/material" as mat;
+@use "controls";
+@use "variables" as vars;
+
+$height: 32px;
+$border: 1px;
+// Both buttons sit inside the outline.
+$inner-height: $height - 2 * $border;
+$icon-size: 18px;
+// Icon-only main button is square.
+$icon-only-padding: math.div($inner-height - $icon-size, 2);
+
+// One outlined shape; neutral, since it acts on the record without changing it.
+:host {
+  display: inline-flex;
+  flex: none;
+  align-items: stretch;
+  height: $height;
+  box-sizing: border-box;
+  border: $border solid var(--mat-sys-outline);
+  border-radius: vars.$shape-radius;
+
+  @include mat.button-overrides(
+    (
+      text-container-height: $inner-height,
+      text-horizontal-padding: var(--gt-space-3, 12px),
+      text-with-icon-horizontal-padding: var(--gt-space-3, 12px),
+      text-label-text-color: var(--mat-sys-on-surface),
+      text-state-layer-color: var(--mat-sys-on-surface),
+      text-ripple-color: controls.state-layer-color(pressed),
+      text-container-shape: vars.$shape-radius 0 0 vars.$shape-radius,
+      text-icon-spacing: var(--gt-space-2, 8px),
+    )
+  );
+  @include mat.icon-button-overrides(
+    (
+      state-layer-size: $inner-height,
+      icon-color: var(--mat-sys-on-surface-variant),
+      state-layer-color: var(--mat-sys-on-surface),
+    )
+  );
+}
+
+.gt-split__icon {
+  @include controls.icon-size($icon-size);
+}
+
+// Narrow: the label hides by CSS, so focus stays on the same button.
+@include controls.narrow-bar {
+  .gt-split__main {
+    min-width: $inner-height;
+
+    @include mat.button-overrides(
+      (
+        text-with-icon-horizontal-padding: $icon-only-padding,
+        text-icon-spacing: 0,
+        text-icon-offset: 0,
+      )
+    );
+  }
+
+  .gt-split__label {
+    display: none;
+  }
+}
+
+.gt-split__caret {
+  @include mat.icon-button-overrides(
+    (
+      container-shape: 0 vars.$shape-radius vars.$shape-radius 0,
+    )
+  );
+}
+
+.gt-split__sep {
+  flex: none;
+  width: $border;
+  background-color: var(--mat-sys-outline);
+}

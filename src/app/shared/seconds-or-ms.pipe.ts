@@ -24,3 +24,16 @@ export class HumanizeDurationPipe implements PipeTransform {
     }
   }
 }
+
+/** A duration as one short figure for a stat: "815ms", "1.60s". */
+@Pipe({ name: "shortDuration" })
+export class ShortDurationPipe implements PipeTransform {
+  transform(value: string | number): string {
+    try {
+      const ms = typeof value === "string" ? timedeltaToMS(value) : value;
+      return ms >= 999.5 ? `${(ms / 1000).toFixed(2)}s` : `${Math.round(ms)}ms`;
+    } catch {
+      return "";
+    }
+  }
+}
