@@ -29,9 +29,8 @@
   <gt-top-app-bar>
     <ng-container slot="left">
       <gt-back-link
-        [backLinkText]="
-          isMobile() ? issuesText : allIssuesFor(issue.project.name)
-        "
+        i18n-backLinkText
+        backLinkText="Issues"
         [backLinkParams]="generateBackLink(issue.project.id)"
       />
     </ng-container>
@@ -39,14 +38,18 @@
       <div class="top-bar-actions">
         <gt-issue-status-update-dropdown
           [selectedValue]="issue.status"
-          [showResolveInNextRelease]="true"
+          [statusColor]="status().color"
           [resolvedInRelease]="!!resolvedInRelease()"
           (optionSelected)="updateIssueStatus($event)"
           (resolveInNextReleaseSelected)="resolveInNextRelease()"
         />
+        <span class="gt-bar-divider" aria-hidden="true"></span>
         <button
           mat-icon-button
-          class="medium-icon-button"
+          matTooltip="Delete issue"
+          i18n-matTooltip
+          aria-label="Delete issue"
+          i18n-aria-label
           (click)="deleteIssue()"
         >
           <mat-icon>delete</mat-icon>
@@ -55,13 +58,47 @@
     </ng-container>
   </gt-top-app-bar>
   <section class="l-body l-body--full-width">
-    <div class="issue-header-wrapper">
-      <div class="status-indicator" [class]="'level--' + issue.level">
-        <mat-icon>{{ statusIcon() }}</mat-icon>
-      </div>
-
-      <gt-detail-header [title]="issueTitle()!" [subtitle]="issueSubtitle()" />
-    </div>
+    <gt-page-header
+      class="issue-header level--{{ issue.level }}"
+      [title]="issueTitle()[0]"
+      [subtitle]="issueSubtitle()"
+      [status]="status().label"
+      [statusColor]="status().color"
+    >
+      <span slot="meta">
+        <span class="no-sep">
+          <span class="level-name">{{ issue.level | titlecase }}</span>
+        </span>
+        <span
+          ><span class="chip">{{ issue.shortId }}</span></span
+        >
+        @if (issueTitle()[1]; as culprit) {
+          <span
+            ><span class="chip">{{ culprit }}</span></span
+          >
+        }
+        <span i18n>{+issue.count, plural,
+          =1 {<b>1</b> event}
+          other {<b>{{ +issue.count | number }}</b> events}
+        }</span>
+        <span [title]="issue.firstSeen | date: 'long'" i18n
+          >First seen {{ issue.firstSeen | daysAgo }}</span
+        >
+        <span [title]="issue.lastSeen | date: 'long'" i18n
+          >Last seen {{ issue.lastSeen | daysAgo }}</span
+        >
+        @if (issue.firstRelease?.shortVersion; as release) {
+          <span i18n
+            >First release <span class="chip">{{ release }}</span></span
+          >
+        }
+        @if (resolvedInRelease(); as release) {
+          <span i18n
+            >Resolved in <span class="chip">{{ release }}</span></span
+          >
+        }
+      </span>
+    </gt-page-header>
 
     <div class="row">
       <mat-card class="event-detail-card left">

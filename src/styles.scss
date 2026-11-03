@@ -62,6 +62,14 @@ html {
   --log-debug-color: light-dark(#6d28d9, #a78bfa);
   --log-trace-color: light-dark(#4b5563, #9ca3af);
   --log-service-color: light-dark(#047857, #10b981);
+
+  // Issue level roles
+  --gt-level-sample: var(--mat-sys-outline);
+  --gt-level-debug: var(--mat-sys-outline-variant);
+  --gt-level-info: var(--info-color);
+  --gt-level-warning: var(--warning-color);
+  --gt-level-error: var(--mat-sys-error);
+  --gt-level-fatal: var(--mat-sys-error);
 }
 
 // Spacing scale

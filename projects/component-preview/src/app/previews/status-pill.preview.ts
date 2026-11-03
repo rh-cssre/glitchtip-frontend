@@ -36,6 +36,14 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
           <gt-status-pill label="No data" color="var(--gt-monitor-none)" />
         </div>
       </div>
+      <div class="preview-section">
+        <div class="preview-section__title">Issue states</div>
+        <div class="sp-row">
+          <gt-status-pill label="Unresolved" color="var(--info-color)" />
+          <gt-status-pill label="Resolved" color="var(--success-color)" />
+          <gt-status-pill label="Ignored" />
+        </div>
+      </div>
     </preview-doc>
   `,
 })
@@ -47,6 +55,7 @@ export class StatusPillPreview {
     "Use the same pill and color for a state in lists and in headers",
     "Pass the state's role token, such as --gt-monitor-down, so it follows the theme",
     "Show one status pill per record",
+    "Keep severity out of the pill; an issue's level is its own tag",
   ];
   readonly donts = [
     "Make it clickable; use a button or a filter chip for actions",

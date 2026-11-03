@@ -22,12 +22,13 @@ All tokens are CSS custom properties. Read them live; never hardcode a raw value
 
 - **Material 3 system roles:** `--mat-sys-*` (primary, surface, on-surface, error, outline, and their containers). Defined by `@include mat.theme(...)` in `src/styles.scss`.
 - **Extended app roles:** `--warning-color`, `--info-color`, `--success-color` (each with a `-container` and `on-` pair), plus product accents `--issues-color`, `--uptime-color`, `--logs-color`. Defined at `:root` in `src/styles.scss`.
+- **Issue level roles:** `--gt-level-sample`, `-debug`, `-info`, `-warning`, `-error`, `-fatal`, aliasing the roles above. Painted by the `issue-level` accent mixin (fatal is striped), with each surface keeping its own bar geometry. Defined at `:root` in `src/styles.scss`.
 - **Theming:** light and dark are driven by `color-scheme` and `prefers-color-scheme`. The brand overrides for `--mat-sys-primary` and `--mat-sys-error` in dark mode are gated on the OS setting.
 - **Monitor status roles:** `--gt-monitor-up`, `--gt-monitor-down`, `--gt-monitor-none`, aliasing the success, error and outline roles. Used for the status pill and the check bars. Defined at `:root` in `src/styles.scss`.
 
 Rule: use a semantic role, not a raw hex. Text on a colored surface uses that surface's `on-` token so contrast holds in both schemes.
 
-Colour only for meaning: error, warning, success and status (level pills, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
+Colour only for meaning: error, warning, success and status (level bars, status dots, the root cause bar, an unhandled pill). Bars, charts of counts and everything else stay neutral; key values get weight (600, on-surface), not colour.
 
 ### Typography
 
@@ -105,7 +106,7 @@ Small labels come in four kinds. Shape says what kind of thing it is; color give
 
 - **Badge:** a squared grey label for data you could copy or compare: identifiers in mono (`.chip`: an issue id, a URL), fixed attributes (`.list-row__tag`: Owner, Primary).
 - **State:** a rounded grey pill with a colored dot (`gt-status-pill`) for a state that changes: Up, Down, Unresolved, Invite pending. A dot always means a state.
-- **Level:** a rounded grey pill with a colored bar for severity (the issue level tag). A bar always means a level, as on issue list rows. Fatal, the most severe, is the one filled pill.
+- **Level:** a colored bar, as on issue list rows. On an issue's header the bar runs down the title block and the meta line names the level in plain text. A bar always means a level; fatal is striped.
 - **Count:** a rounded grey pill with a number (`.tab-count`) after a label.
 
 Filters you can click are outlined tag chips (see Tag chips). Every label uses label-medium (12px).
@@ -117,6 +118,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - Settings pages for a named object (organization, project, team, member) show an icon tile, using the same icon as that object's item in the nav. Data pages (issue, monitor, transaction, release) and profile pages do not.
 - Those settings pages use `compact`: one line with a 32px tile, the title in title-large and the meta facts inline after it, wrapping under the title on a narrow screen. Data pages keep the full header.
 - Data record pages open with a record band (`gt-record-band`): a tinted band over the page's full width that holds the page header. Up to three key facts sit in its top right corner as stats (`.gt-band-facts`): the number in `<b>` over a short muted label, on the title's baseline. An `outline-variant` hairline sits between stats so the numbers stay evenly spaced when labels differ in length; it is the one place lines split items of the same kind. Keep a label to a word or two and put any detail in a tooltip, which underlines the number. Shorten counts with `compactNumber` (12.3K) and durations with `shortDuration` (815ms, 1.60s). Further facts stay in the meta line. A summary of the whole record goes in the summary tier: a text summary (top tags) on a darker strip (`summary="strip"`), a graphic one (check bars) under a hairline; both span the band. The tab bar sits on the band's bottom edge. Write the corner facts once, as `.gt-band-fact` spans in an `ng-template`, and render it in both the corner and the end of the meta line; under 900px the corner hides and the meta line shows them. Settings records keep the compact header with no band.
+- A title that needs a second line of its own (an error's message under its type) uses `subtitle`. Facts never go there.
 - The meta line lists facts in order of importance. Numbers go in `<b>`, identifiers in a `.chip`. The component adds the separators.
 - No meta fact repeats the title: no slug chip under the name it comes from, no project chip under a version that already names it. If nothing is left, leave out the meta row.
 - A record with a state (a monitor's Up or Down) shows it with `gt-status-pill`, first in the meta line. The same pill shows that state in lists too.
