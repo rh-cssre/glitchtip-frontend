@@ -153,7 +153,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 
 ### Side navigation
 
-- The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items use the page's body text (14px, regular), 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
+- The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items are controls, so they use label-large (14px, 500) like the organization switcher, 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
 
 ## Accessibility
 

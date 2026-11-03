@@ -15,7 +15,8 @@ mat-nav-list {
   flex-direction: column;
   // A little air between rows, so hover and active pills never touch.
   gap: var(--gt-space-1, 4px);
-  padding: 10px;
+  // No top padding, so the switcher sits as far from the first divider as items do.
+  padding: 0 10px 10px;
 
   button[mat-list-item] {
     border: none;
