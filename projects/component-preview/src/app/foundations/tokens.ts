@@ -104,6 +104,18 @@ export const COLOR_TOKENS: TokenGroup[] = [
       { name: "--logs-color", label: "Logs" },
     ],
   },
+  {
+    group: "Issue levels",
+    note: "Level accents for issue bars, aliasing the roles above. Paint them with the issue-level accent mixin; fatal is drawn striped.",
+    tokens: [
+      { name: "--gt-level-sample", label: "Sample" },
+      { name: "--gt-level-debug", label: "Debug" },
+      { name: "--gt-level-info", label: "Info" },
+      { name: "--gt-level-warning", label: "Warning" },
+      { name: "--gt-level-error", label: "Error" },
+      { name: "--gt-level-fatal", label: "Fatal" },
+    ],
+  },
 ];
 
 /**
@@ -156,10 +168,11 @@ export const CUSTOM_TYPE_CLASSES: { className: string; usage: string }[] = [
 ];
 
 /**
- * The additive spacing scale (8px base grid) defined at :root in
+ * The additive spacing scale (multiples of a 4px unit) defined at :root in
  * `src/styles.scss`. Migrating existing ad-hoc px usage onto these is roadmap.
  */
 export const SPACE_TOKENS: TokenDef[] = [
+  { name: "--gt-space-unit" },
   { name: "--gt-space-0" },
   { name: "--gt-space-1" },
   { name: "--gt-space-2" },

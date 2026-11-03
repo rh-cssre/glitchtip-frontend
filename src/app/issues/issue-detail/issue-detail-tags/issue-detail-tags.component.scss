@@ -1,49 +1,76 @@
 mat-card {
   margin-top: 24px;
-  padding-bottom: 32px;
 }
 
-.key {
-  font-weight: 700;
+.tag-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.bars {
-  height: 16px;
+// Each row filters the issue list by its top value.
+.tag-row {
+  display: block;
+  margin-inline: calc(-1 * var(--gt-space-2, 8px));
+  padding: var(--gt-space-2, 8px);
+  border-radius: var(--mat-sys-corner-extra-small);
+  font: var(--mat-sys-body-small);
+  font-weight: 400;
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--mat-sys-surface-container-high);
+
+    .tag-row__value {
+      text-decoration: underline;
+    }
+  }
+}
+
+.tag-row__head {
   display: flex;
-  justify-content: flex-start;
+  align-items: baseline;
+  gap: var(--gt-space-2, 8px);
 }
 
-.top-value {
-  display: flex;
-  justify-content: space-between;
-
-  &:not(:first-child) {
-    margin-top: 24px;
-  }
-
-  &:not(:last-child) {
-    margin-bottom: 8px;
-  }
-
-  span:last-child {
-    max-width: 190px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: right;
-  }
+.tag-row__key {
+  flex: 0 0 auto;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.bar {
-  background: var(--mat-sys-outline-variant);
-  box-shadow: none;
-  transition: all 0.5s;
+.tag-row__value {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  &:not(:last-child) {
-    border-right: 1px solid var(--mat-sys-surface);
-  }
+.tag-row__pct {
+  flex: 0 0 auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
 
-  &:hover {
-    background: var(--mat-sys-primary);
-    box-shadow: var(--mat-sys-shadow-2);
-  }
+.tag-row__track {
+  display: block;
+  height: 3px;
+  margin-top: var(--gt-space-1, 4px);
+  border-radius: 2px;
+  background-color: var(--mat-sys-surface-container-highest);
+  overflow: hidden;
+}
+
+.tag-row__fill {
+  display: block;
+  height: 100%;
+  background-color: var(--mat-sys-on-surface-variant);
+}
+
+.tag-row--single .tag-row__value {
+  color: var(--mat-sys-on-surface-variant);
 }

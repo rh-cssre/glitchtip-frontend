@@ -10,6 +10,9 @@
 @use "./assets/styles/resets";
 @use "./assets/styles/record-band";
 @use "./assets/styles/list-row";
+@use "./assets/styles/panel-rows";
+@use "./assets/styles/tag-chip";
+@use "./assets/styles/code";
 @use "./scss/auth-forms";
 
 html {
@@ -62,6 +65,27 @@ html {
   --log-debug-color: light-dark(#6d28d9, #a78bfa);
   --log-trace-color: light-dark(#4b5563, #9ca3af);
   --log-service-color: light-dark(#047857, #10b981);
+
+  // Issue level roles
+  --gt-level-sample: var(--mat-sys-outline);
+  --gt-level-debug: var(--mat-sys-outline-variant);
+  --gt-level-info: var(--info-color);
+  --gt-level-warning: var(--warning-color);
+  --gt-level-error: var(--mat-sys-error);
+  --gt-level-fatal: var(--mat-sys-error);
+}
+
+// Spacing scale
+:root {
+  --gt-space-unit: 4px;
+  --gt-space-0: 0;
+  --gt-space-1: var(--gt-space-unit);
+  --gt-space-2: calc(var(--gt-space-unit) * 2);
+  --gt-space-3: calc(var(--gt-space-unit) * 3);
+  --gt-space-4: calc(var(--gt-space-unit) * 4);
+  --gt-space-5: calc(var(--gt-space-unit) * 6);
+  --gt-space-6: calc(var(--gt-space-unit) * 8);
+  --gt-space-7: calc(var(--gt-space-unit) * 12);
 }
 
 // Reading widths for running text, in characters so they follow font size.
@@ -70,26 +94,13 @@ html {
   --gt-measure-narrow: 44ch;
 }
 
-.light {
-  @include meta.load-css("prismjs/themes/prism.css");
-}
-
-.dark {
-  @include meta.load-css("prismjs/themes/prism-tomorrow.css");
-}
-
+// Colours come from _code.scss; gtPrism blocks still use these two plugins.
 .light,
 .dark {
   @include meta.load-css("prismjs/plugins/line-numbers/prism-line-numbers.css");
   @include meta.load-css(
     "prismjs/plugins/line-highlight/prism-line-highlight.css"
   );
-
-  pre[class*="language-"] {
-    border-radius: vars.$shape-radius;
-    border: none;
-    box-shadow: none;
-  }
 }
 
 a {
