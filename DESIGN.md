@@ -123,6 +123,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - A fact that continues the pill ("for 2 hours") gets class `no-sep`, so no separator is drawn before it.
 - When the record has facets, tabs sit directly below the header, with counts in `.tab-count`. The tab bar is the only line under a header; the header draws no divider.
 - Tab counts only on tabs whose content is a growing list where the number informs (alerts, members, projects, environments); a tab holding a single thing (the project DSN/key) has no count.
+- A record may show one status strip between the header and its tabs (the monitor check bars). Nothing else goes there.
 - Tabs drawn by one component use a `?tab=` query param. Tabs that are separate routed components use child routes. The default tab has no `?tab=`, and tab clicks replace history. Counts show once known, including 0.
 - The back link and page actions live in the top app bar, never in the header.
 - The title is the record's own name, not a sentence about it ("checkout-api", not "Settings for checkout-api"). Titles have one style; an identifier title (an email, a version) is not set in mono.
