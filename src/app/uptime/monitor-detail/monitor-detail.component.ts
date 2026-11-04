@@ -26,12 +26,14 @@ import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-head
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { DecimalPipe, NgTemplateOutlet } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { AlertListComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-list/alert-list.component";
 import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
@@ -61,8 +63,10 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     RecordBandComponent,
     EmptyStateComponent,
     MatTabsModule,
+    FormErrorComponent,
     TopAppBar,
     BackLinkComponent,
+    AlertListComponent,
   ],
 })
 export class MonitorDetailComponent
@@ -134,8 +138,10 @@ export class MonitorDetailComponent
     if (!times.length) return null;
     return times.reduce((sum, t) => sum + t, 0) / times.length;
   });
+  monitorAlerts = this.service.monitorAlerts;
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertCountLoading = this.service.alertCountLoading;
+  alertsError = this.service.alertsError;
   associatedProjectSlug = this.service.associatedProjectSlug;
   // Hide the count until the project's alerts load, so it never flashes 0.
   alertCountKnown = computed(

@@ -8,6 +8,11 @@ import { OrganizationsService } from "../api/organizations.service";
 import { StatefulService } from "../shared/stateful-service/signal-state.service";
 import { client } from "../shared/api/api";
 import { components } from "../api/api-schema";
+import { apiResource } from "../shared/api/api-resource-factory";
+import {
+  alertsForMonitor,
+  monitorEnvironmentName,
+} from "./monitor-detail/monitor-alerts";
 
 type MonitorCheckSchema = components["schemas"]["MonitorCheckSchema"];
 interface MonitorCheck extends MonitorCheckSchema {
@@ -62,40 +67,77 @@ export class MonitorService extends StatefulService<MonitorState> {
       return data;
     },
   });
-  monitorUptimeAlertsResource = resource({
-    params: () => ({
-      organizationSlug: this.activeOrganizationSlug(),
-      projectSlug: this.associatedProjectSlug(),
+  monitorUptimeAlertsResource = apiResource(
+    computed(() => {
+      const orgSlug = this.activeOrganizationSlug();
+      const projectSlug = this.associatedProjectSlug();
+      return orgSlug && projectSlug ? { orgSlug, projectSlug } : null;
     }),
-    loader: async ({ params }) => {
-      if (!params.organizationSlug || !params.projectSlug) {
-        return undefined;
-      }
-      const { data } = await client.GET(
-        "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
-        {
-          params: {
-            path: {
-              ...this.organizationsService.orgPath(params.organizationSlug),
-              project_slug: params.projectSlug,
-            },
+    (params) => ({
+      url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
+      options: {
+        params: {
+          path: {
+            ...this.organizationsService.orgPath(params.orgSlug),
+            project_slug: params.projectSlug,
           },
+          query: { limit: 200 },
         },
-      );
-      return data;
-    },
-  });
+      },
+    }),
+  );
+  // Hidden environments still trigger alerts, so look up all of them.
+  #environmentsResource = apiResource.fetchAll(
+    computed(() =>
+      typeof this.activeMonitor()?.environmentID === "number"
+        ? this.activeOrganizationSlug()
+        : null,
+    ),
+    (orgSlug) => ({
+      url: "/api/0/organizations/{organization_id_or_slug}/environments/",
+      options: {
+        params: {
+          path: this.organizationsService.orgPath(orgSlug),
+          query: { visibility: "all" },
+        },
+      },
+    }),
+  );
 
   editLoading = computed(() => this.state().editLoading);
   createLoading = computed(() => this.state().createLoading);
   deleteLoading = computed(() => this.state().deleteLoading);
   deleteError = computed(() => this.state().deleteError);
   error = computed(() => this.state().error);
-  uptimeAlertCount = computed(
-    () => this.monitorUptimeAlertsResource.value()?.length || 0,
+  monitorEnvironment = computed(() =>
+    monitorEnvironmentName(
+      this.activeMonitor()?.environmentID,
+      this.#environmentsResource.hasValue()
+        ? this.#environmentsResource.value()
+        : undefined,
+    ),
   );
-  alertCountLoading = computed(() =>
-    this.monitorUptimeAlertsResource.isLoading(),
+  /** Project alerts that notify when this monitor goes down. */
+  monitorAlerts = computed(() => {
+    const alerts = this.monitorUptimeAlertsResource.hasValue()
+      ? this.monitorUptimeAlertsResource.value()
+      : undefined;
+    const environment = this.monitorEnvironment();
+    if (!alerts || environment === undefined) return [];
+    return alertsForMonitor(alerts, environment);
+  });
+  uptimeAlertCount = computed(() => this.monitorAlerts().length);
+  alertsError = computed(
+    () =>
+      !!this.monitorUptimeAlertsResource.error() ||
+      (this.monitorEnvironment() === undefined &&
+        !!this.#environmentsResource.error()),
+  );
+  alertCountLoading = computed(
+    () =>
+      !this.alertsError() &&
+      (this.monitorUptimeAlertsResource.isLoading() ||
+        this.monitorEnvironment() === undefined),
   );
   activeMonitor = computed(() => this.monitorResource.value());
 
