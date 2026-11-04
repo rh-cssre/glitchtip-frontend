@@ -5,40 +5,32 @@
   <ng-container slot="right">
     @if (canWriteProject()) {
       <a mat-flat-button [routerLink]="['new']" color="primary" i18n
-        >Create New Project</a
+        >New project</a
       >
     }
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <div>
-    @if (hasError()) {
-      @for (error of errors(); track $index) {
-        <p>{{ error.msg || error }}</p>
-      }
-    } @else if (projects()?.length === 0) {
-      <gt-empty-projects
-        [activeOrgOnly]="true"
-        [canCreateProject]="canWriteProject()"
-      ></gt-empty-projects>
+  @if (hasError()) {
+    @for (error of errors(); track $index) {
+      <p>{{ error.msg || error }}</p>
     }
-  </div>
-  <div class="project-card-wrapper">
-    @for (project of projects(); track project) {
-      <gt-project-card
-        [cardLink]="project.slug!"
-        [title]="project.name"
-        [descriptionList]="[
-          { key: organizationText, value: activeOrganization()?.name || '' },
-          { key: dateCreatedText, value: (project.dateCreated | date)! },
-        ]"
-        [isMember]="project.isMember"
-        [secondaryButton]="{
-          link: project.slug!,
-          icon: 'settings',
-          text: settingsText,
-        }"
-      ></gt-project-card>
-    }
-  </div>
+  } @else if (projects()?.length === 0) {
+    <gt-panel>
+      <gt-empty-state
+        icon="folder"
+        i18n-title
+        title="No projects yet"
+        [headingLevel]="2"
+        [message]="canWriteProject() ? noProjectsCanCreate : noProjectsAskOwner"
+      />
+    </gt-panel>
+  } @else if (projects(); as projects) {
+    <gt-project-rows
+      [projects]="projects"
+      [orgSlug]="orgSlug()"
+      opensSettings
+      [showTrend]="false"
+    />
+  }
 </section>

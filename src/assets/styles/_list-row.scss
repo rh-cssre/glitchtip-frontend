@@ -25,13 +25,15 @@ gt-list-row [slot="meta"] {
   display: inline-flex;
 }
 
-gt-list-row [slot="meta"] > * {
+gt-list-row [slot="meta"] > *,
+gt-list-row .list-row__facts > * {
   position: relative;
   white-space: nowrap;
 }
 
-// Same spacing and dot as gt-page-header meta.
-gt-list-row [slot="meta"] > :not(:first-child) {
+// Same spacing and dot as gt-page-header meta, in the meta slot or a description of facts.
+gt-list-row [slot="meta"] > :not(:first-child),
+gt-list-row .list-row__facts > :not(:first-child) {
   margin-left: var(--gt-space-4, 16px);
 
   &::before {
