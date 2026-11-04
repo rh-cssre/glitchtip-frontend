@@ -9,9 +9,20 @@ import {
 import { MergedService } from "./merged.service";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatButton } from "@angular/material/button";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 
 @Component({
-  imports: [MatCheckbox, MatButton],
+  imports: [
+    MatCheckbox,
+    MatButton,
+    PanelComponent,
+    ListComponent,
+    ListRowComponent,
+    EmptyStateComponent,
+  ],
   templateUrl: "./merged.component.html",
   styleUrl: "./merged.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +33,9 @@ export class MergedComponent implements OnInit {
   orgSlug = input.required<string>({ alias: "org-slug" });
   service = inject(MergedService);
   hashes = this.service.hashes;
+  loading = this.service.loading;
+  failed = this.service.failed;
+  selectedCount = computed(() => this.service.selectedHashes().length);
 
   allowUnmerge = computed(() => {
     const selectedHashes = this.service.selectedHashes().length;

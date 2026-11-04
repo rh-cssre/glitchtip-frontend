@@ -9,10 +9,14 @@ import { DatePipe } from "@angular/common";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { MatDividerModule } from "@angular/material/divider";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { UserReportsService } from "./user-reports-state";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { DaysAgoPipe } from "src/app/shared/days-ago.pipe";
 
 @Component({
   selector: "gt-user-reports-issue",
@@ -21,12 +25,16 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
-    MatDividerModule,
     MatButtonModule,
     RouterLink,
     MatIconModule,
+    MatTooltipModule,
     LoadingOverlayComponent,
     EmptyStateComponent,
+    PanelComponent,
+    ListComponent,
+    ListRowComponent,
+    DaysAgoPipe,
   ],
   providers: [UserReportsService],
 })

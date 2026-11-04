@@ -191,14 +191,7 @@ body {
   flex-wrap: wrap;
 }
 
-.project-card-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax((290px), 1fr));
-  grid-gap: 24px;
-}
-
-header.page-header,
-header.projects-section-header {
+header.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -504,6 +497,15 @@ gt-issue-chart {
 }
 
 .comment-markdown {
+  // Sits under the comment's header row: trim the outer paragraph margins.
+  > :first-child {
+    margin-top: var(--gt-space-1, 4px);
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
   ul {
     list-style: disc outside;
     padding-left: 20px;

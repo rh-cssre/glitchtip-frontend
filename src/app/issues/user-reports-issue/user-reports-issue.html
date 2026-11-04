@@ -1,49 +1,68 @@
 @if (errorReports()) {
-  <p class="mat-body-1"> {{ errorReports() }} </p>
-}
-@if (reports().length === 0 && loading() === false) {
-  <gt-empty-state
-    icon="breaking_news"
-    i18n-title
-    title="No user reports"
-    i18n-message
-    message="Call showReportDialog in the JavaScript SDK to collect feedback from users."
-  />
+  <p class="reports-error">{{ errorReports() }}</p>
 }
 
-<gt-loading-overlay i18n-label [loading]="loading()" label="Loading user reports">
-  <div class="reports">
-    @for (report of reports(); track report) {
-      <div class="report">
-        <p class="name">{{ report.name }} ({{ report.email }})</p>
-        <p class="date">{{ report.dateCreated | date: "medium" }}</p>
-        <p>{{ report.comments }}</p>
-      </div>
-      <mat-divider></mat-divider>
-    }
-  </div>
-
-  @if (paginator(); as paginator) {
-    <!-- Loading shown by the top progress bar; keep prev/next stable during reload. -->
-    <div class="nav-arrows">
-      <a
-        [routerLink]="[]"
-        [queryParams]="paginator.previousPageParams || {}"
-        queryParamsHandling="merge"
-        mat-button
-        [disabled]="paginator.hasPreviousPage === false"
-      >
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </a>
-      <a
-        [routerLink]="[]"
-        [queryParams]="paginator.nextPageParams || {}"
-        queryParamsHandling="merge"
-        mat-button
-        [disabled]="paginator.hasNextPage === false"
-      >
-        <mat-icon>keyboard_arrow_right</mat-icon>
-      </a>
-    </div>
+<gt-loading-overlay
+  i18n-label
+  [loading]="loading()"
+  label="Loading user reports"
+>
+  @if (reports().length) {
+    <gt-panel flush>
+      <gt-list flush>
+        @for (report of reports(); track report.id) {
+          <gt-list-row>
+            <span>{{ report.name }}</span>
+            <span class="report__email">{{ report.email }}</span>
+            <span
+              slot="meta"
+              class="gt-has-tip"
+              tabindex="0"
+              [matTooltip]="report.dateCreated | date: 'medium'"
+              >{{ report.dateCreated | daysAgo }}</span
+            >
+            <p slot="description" class="report__text">{{ report.comments }}</p>
+          </gt-list-row>
+        }
+      </gt-list>
+      @if (paginator(); as paginator) {
+        @if (paginator.hasPreviousPage || paginator.hasNextPage) {
+          <a
+            slot="footer"
+            mat-icon-button
+            [routerLink]="[]"
+            [queryParams]="paginator.previousPageParams || {}"
+            queryParamsHandling="merge"
+            [disabled]="paginator.hasPreviousPage === false"
+            i18n-aria-label
+            aria-label="Previous page"
+          >
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </a>
+          <a
+            slot="footer"
+            mat-icon-button
+            [routerLink]="[]"
+            [queryParams]="paginator.nextPageParams || {}"
+            queryParamsHandling="merge"
+            [disabled]="paginator.hasNextPage === false"
+            i18n-aria-label
+            aria-label="Next page"
+          >
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </a>
+        }
+      }
+    </gt-panel>
+  } @else if (loading() === false && !errorReports()) {
+    <gt-panel>
+      <gt-empty-state
+        icon="breaking_news"
+        i18n-title
+        title="No user reports"
+        i18n-message
+        message="Call showReportDialog in the JavaScript SDK to collect feedback from users."
+      />
+    </gt-panel>
   }
 </gt-loading-overlay>
