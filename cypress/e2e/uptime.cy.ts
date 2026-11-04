@@ -15,8 +15,9 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("seeded-monitor").click();
     cy.wait(1000);
-    cy.contains(`Uptime details for ${seededMonitorName}`);
-    cy.contains("This project has no uptime alerts configured");
+    cy.get("h1").should("contain", seededMonitorName);
+    cy.contains("[mat-tab-link]", "Alerts").click();
+    cy.contains("No uptime alerts");
     cy.get("#monitor-settings").click();
     cy.get("#monitor-name")
       .should("have.value", seededMonitorName)
@@ -32,6 +33,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.contains(seededMonitorName).click();
     cy.get("#monitor-settings").click();
     cy.get("#delete-monitor").click();
+    cy.contains(`Delete ${seededMonitorName}?`);
     cy.contains("Its check history is deleted too.");
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Monitor has been deleted.");
@@ -74,7 +76,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .click();
     cy.get("[data-cy=interval] input").clear().type("605");
     cy.get("[data-cy=monitor-submit]").click();
-    cy.contains("Uptime details for second-monitor");
+    cy.get("h1").should("contain", "second-monitor");
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("second-monitor");
   });

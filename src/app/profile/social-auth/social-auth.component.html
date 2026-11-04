@@ -1,77 +1,95 @@
-@if (socialApps().length || user().identities.length) {
-  @if (user(); as user) {
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title i18n>Social Auth Accounts</mat-card-title>
-        @if (socialApps().length) {
-          @if (socialApps(); as socialApps) {
-            <mat-form-field appearance="outline">
-              <mat-label i18n>Add Account</mat-label>
-              <mat-select
-                (selectionChange)="addAccount()"
-                [formControl]="account"
-              >
-                @for (socialApp of socialApps; track socialApp) {
-                  <mat-option [value]="socialApp">
-                    <gt-auth-svg
-                      source="dropdown"
-                      [provider]="socialApp.provider"
-                      [text]="socialApp.name"
-                    ></gt-auth-svg>
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+@if (user(); as user) {
+  @if (socialApps().length) {
+    <gt-settings-section
+      #connectSection
+      i18n-title
+      title="Connect an account"
+      panel
+    >
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-select
+          [formControl]="account"
+          i18n-placeholder
+          placeholder="Choose a provider"
+          [aria-labelledby]="connectSection.titleId"
+        >
+          @for (socialApp of socialApps(); track socialApp) {
+            <mat-option [value]="socialApp.provider">
+              <gt-auth-svg
+                source="dropdown"
+                [provider]="socialApp.provider"
+                [text]="socialApp.name"
+              ></gt-auth-svg>
+            </mat-option>
           }
-        }
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        @if (user.identities!.length === 0) {
-          <gt-empty-state
-            icon="account_circle"
-            i18n-title
-            title="No connected accounts"
-            i18n-message
-            message="Connect a social login to sign in with it."
-          />
-        } @else {
-          <div class="socialaccount-list-wrapper">
-            @for (
-              socialAccount of user.identities;
-              track socialAccount;
-              let lastItem = $last
-            ) {
-              <div class="socialaccount-wrapper">
-                <button
-                  mat-stroked-button
-                  (click)="
+        </mat-select>
+        <mat-error i18n>Choose a provider to connect.</mat-error>
+      </mat-form-field>
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Connect"
+        buttonStyle="stroked"
+        (buttonClick)="addAccount()"
+        data-cy="connect-account"
+      />
+    </gt-settings-section>
+  }
+  @if (socialApps().length || user.identities.length) {
+    <gt-settings-section
+      i18n-title
+      title="Connected accounts"
+      panel
+      [flush]="user.identities.length > 0"
+    >
+      @if (user.identities.length) {
+        <gt-list flush>
+          @for (socialAccount of user.identities; track socialAccount.id) {
+            <gt-list-row>
+              <gt-auth-svg
+                source="dropdown"
+                [provider]="socialAccount.provider"
+                [text]="socialAccount.name ?? socialAccount.provider"
+              />
+              <span slot="meta">{{ socialAccount.email }}</span>
+              @if (canDisconnect()) {
+                <gt-loading-button
+                  slot="actions"
+                  i18n-buttonText
+                  buttonText="Disconnect"
+                  buttonStyle="stroked"
+                  [ariaLabel]="
+                    disconnectLabel(
+                      socialAccount.name ?? socialAccount.provider
+                    )
+                  "
+                  [loading]="disconnectLoadingId() === socialAccount.id"
+                  (buttonClick)="
                     disconnect(
                       socialAccount.id!,
                       socialAccount.provider,
-                      socialAccount.uid
+                      socialAccount.uid,
+                      socialAccount.name ?? socialAccount.provider
                     )
                   "
-                  [disabled]="disconnectLoadingId() === socialAccount.id"
+                />
+              } @else {
+                <span slot="description" i18n
+                  >Set a password to disconnect</span
                 >
-                  <gt-auth-svg
-                    [loading]="disconnectLoadingId() === socialAccount.id"
-                    source="disconnect"
-                    text="Disconnect {{ socialAccount.name }}"
-                    [provider]="socialAccount.provider"
-                  ></gt-auth-svg>
-                </button>
-                <div class="email">
-                  {{ socialAccount.email }}
-                </div>
-              </div>
-              @if (!lastItem) {
-                <mat-divider></mat-divider>
               }
-            }
-          </div>
-        }
-      </mat-card-content>
-    </mat-card>
+            </gt-list-row>
+          }
+        </gt-list>
+      } @else {
+        <gt-empty-state
+          icon="account_circle"
+          i18n-title
+          title="No connected accounts"
+          i18n-message
+          message="Connect a social login to sign in with it."
+        />
+      }
+    </gt-settings-section>
   }
 }

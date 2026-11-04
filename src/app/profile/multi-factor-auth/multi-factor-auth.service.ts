@@ -20,7 +20,18 @@ import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { APIState } from "src/app/shared/shared.interfaces";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 
+/** The server action a loading button shows progress for. */
+export type MFAAction =
+  | "regenCodes"
+  | "enableTOTP"
+  | "turnOffTOTP"
+  | "verifyCode"
+  | "addKey"
+  | "registerKey"
+  | "removeKey";
+
 export interface MFAState extends APIState {
+  pendingAction: MFAAction | null;
   setupTOTPStage: number;
   recoveryCodes: string[];
   regenCodes: boolean;
@@ -32,11 +43,13 @@ export interface MFAState extends APIState {
     totpUrl: string;
   } | null;
   webAuthnStage: number;
+  webAuthnError: string | null;
   credential: RegistrationPublicKeyCredential | null;
 }
 
 const initialState: MFAState = {
   loading: false,
+  pendingAction: null,
   setupTOTPStage: 1,
   recoveryCodes: [],
   regenCodes: false,
@@ -45,6 +58,7 @@ const initialState: MFAState = {
   copiedCodes: false,
   totp: null,
   webAuthnStage: 1,
+  webAuthnError: null,
   credential: null,
 };
 
@@ -64,6 +78,9 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
       !this.#authenticatorsResource.isLoading(),
   );
   loading = computed(() => this.state().loading);
+  pendingAction = computed(() =>
+    this.state().loading ? this.state().pendingAction : null,
+  );
   setupTOTPStage = computed(() => this.state().setupTOTPStage);
   error = computed(() => this.state().error);
   formErrors = computed(() =>
@@ -89,6 +106,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   codes = computed(() => this.state().recoveryCodes);
   regenCodes = computed(() => this.state().regenCodes);
   webAuthnState = computed(() => this.state().webAuthnStage);
+  webAuthnError = computed(() => this.state().webAuthnError);
 
   constructor() {
     super(initialState);
@@ -114,7 +132,11 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async regenerateRecoveryCodes() {
-    this.setState({ loading: true, regenCodes: false });
+    this.setState({
+      loading: true,
+      pendingAction: "regenCodes",
+      regenCodes: false,
+    });
     const { data } = await client.POST(
       "/_allauth/browser/v1/account/authenticators/recovery-codes",
     );
@@ -124,6 +146,8 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
         regenCodes: true,
         recoveryCodes: (data as any).data.unused_codes,
       });
+    } else {
+      this.setState({ loading: false });
     }
   }
 
@@ -146,7 +170,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async activateTOTP(code: string) {
-    this.setState({ loading: true });
+    this.setState({ loading: true, pendingAction: "enableTOTP", errors: [] });
     const { data, error, response } = await client.POST(
       "/_allauth/browser/v1/account/authenticators/totp",
       {
@@ -169,14 +193,14 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async deactivateTOTP() {
-    this.setState({ loading: true });
+    this.setState({ loading: true, pendingAction: "turnOffTOTP" });
     await client.DELETE("/_allauth/browser/v1/account/authenticators/totp");
     this.setState({ loading: false });
     this.#authenticatorsResource.reload();
   }
 
   async setRecoveryCodes(code: string) {
-    this.setState({ loading: true });
+    this.setState({ loading: true, pendingAction: "verifyCode" });
     const { error, response } = await client.POST(
       "/api/0/generate-recovery-codes/",
       { body: { code } },
@@ -190,6 +214,7 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
       this.getTOTPStatus();
     } else {
       const errors = handleAllAuthErrorResponse(error, response);
+      this.setState({ loading: false });
       if (errors.length) {
         this.setState({ error: errors[0].message });
       }
@@ -197,19 +222,30 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async getWebauthn() {
-    this.setState({ loading: true, errors: [] });
+    this.setState({
+      loading: true,
+      pendingAction: "addKey",
+      errors: [],
+      webAuthnError: null,
+    });
     const { data, error } = await client.GET(
       "/_allauth/browser/v1/account/authenticators/webauthn",
     );
     if (data) {
-      const credential = await create(
-        parseCreationOptionsFromJSON(data.data.creation_options as any),
-      );
-      this.setState({ webAuthnStage: 2, loading: false, credential });
+      try {
+        const credential = await create(
+          parseCreationOptionsFromJSON(data.data.creation_options as any),
+        );
+        this.setState({ webAuthnStage: 2, loading: false, credential });
+      } catch {
+        // The browser prompt was cancelled or timed out.
+        this.setState({ loading: false });
+      }
     } else {
       console.warn(error);
       this.setState({
-        error: $localize`Device activation was unsuccessful.`,
+        loading: false,
+        webAuthnError: $localize`Device activation was unsuccessful.`,
         webAuthnStage: 1,
       });
     }
@@ -218,7 +254,11 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   async addWebAuthn(name: string) {
     const credential: any = this.state().credential;
     if (credential) {
-      this.setState({ loading: true, errors: [] });
+      this.setState({
+        loading: true,
+        pendingAction: "registerKey",
+        errors: [],
+      });
       await client.POST(
         "/_allauth/browser/v1/account/authenticators/webauthn",
         {
@@ -234,11 +274,12 @@ export class MultiFactorAuthService extends StatefulService<MFAState> {
   }
 
   async deleteWebAuthn(id: number) {
-    this.setState({ loading: true, errors: [] });
+    this.setState({ loading: true, pendingAction: "removeKey", errors: [] });
     await client.DELETE(
       "/_allauth/browser/v1/account/authenticators/webauthn",
       { body: { authenticators: [id] } },
     );
+    this.setState({ loading: false });
     this.#authenticatorsResource.reload();
   }
 }

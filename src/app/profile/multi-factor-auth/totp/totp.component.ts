@@ -7,6 +7,7 @@ import {
   inject,
   effect,
   computed,
+  viewChild,
 } from "@angular/core";
 import {
   FormControl,
@@ -20,14 +21,14 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
 import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.component";
 import { BackupCodesComponent } from "./backup-codes/backup-codes.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 
 @Component({
   selector: "gt-totp",
@@ -35,8 +36,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
   styleUrls: ["./totp.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
+    SettingsSectionComponent,
     MatButtonModule,
     MatStepperModule,
     MatDialogModule,
@@ -45,6 +45,7 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
     FormErrorComponent,
     MatFormFieldModule,
     MatInputModule,
+    LoadingButtonComponent,
   ],
 })
 export class TOTPComponent implements OnDestroy {
@@ -53,12 +54,18 @@ export class TOTPComponent implements OnDestroy {
   protected emailsService = inject(EmailsService);
 
   @ViewChild("canvas", { static: false }) canvas: ElementRef | undefined;
+  private readonly firstStepTitle =
+    viewChild<ElementRef<HTMLElement>>("firstStepTitle");
   TOTPAuthenticator = this.service.TOTPAuthenticator;
   totp = this.service.totp;
   step = this.service.setupTOTPStage;
   // Setup stage 2/3/4 maps to stepper step 0/1/2.
-  stepperIndex = computed(() => Math.max(0, this.step() - 2));
+  // Capped at the last step: the stage moves past it for a moment after the
+  // app is enabled, before the page switches to the enabled view.
+  stepperIndex = computed(() => Math.min(2, Math.max(0, this.step() - 2)));
   formErrors = this.service.formErrors;
+  loading = this.service.loading;
+  pendingAction = this.service.pendingAction;
   codeForm = new FormGroup({
     code: new FormControl("", [
       Validators.required,
@@ -68,15 +75,15 @@ export class TOTPComponent implements OnDestroy {
   });
 
   constructor() {
-    const service = this.service;
-
-    effect(() => mapFormErrors(service.fieldErrors(), this.codeForm));
     effect(() => {
       const totp = this.totp();
       if (totp) {
         this.generateQRCode(totp.totpUrl);
       }
     });
+    // Set up's button goes away as the stepper appears. Later steps need
+    // nothing: the stepper focuses the new step's header itself.
+    effect(() => this.firstStepTitle()?.nativeElement.focus());
   }
 
   get code() {
@@ -91,12 +98,11 @@ export class TOTPComponent implements OnDestroy {
     this.service.incrementTOTPStage();
   }
 
-  enableTOTP() {
-    if (this.codeForm.valid) {
-      const code = this.code;
-      if (code?.value) {
-        this.service.activateTOTP(code.value);
-      }
+  async enableTOTP() {
+    const code = this.code?.value;
+    if (this.codeForm.valid && code) {
+      await this.service.activateTOTP(code);
+      mapFormErrors(this.service.fieldErrors(), this.codeForm);
     }
   }
 
@@ -104,9 +110,9 @@ export class TOTPComponent implements OnDestroy {
     this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: $localize`Disable TOTP`,
-          message: $localize`Two-factor authentication will be turned off for your account.`,
-          confirmText: $localize`Disable`,
+          title: $localize`Turn off the authenticator app?`,
+          message: $localize`Signing in will no longer ask for a code from it.`,
+          confirmText: $localize`Turn off`,
         },
       })
       .afterClosed()

@@ -66,12 +66,30 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
           <gt-page-header
             title="Storefront homepage"
             status="Up"
-            statusColor="var(--success-color)"
+            statusColor="var(--gt-monitor-up)"
           >
             <span slot="meta">
               <span class="no-sep">for 2 hours</span>
               <span><span class="chip">https://example.com/</span></span>
               <span>every 60s</span>
+            </span>
+          </gt-page-header>
+        </div>
+      </div>
+
+      <div class="preview-section">
+        <div class="preview-section__title">Data page with a subtitle</div>
+        <div class="ph-surface">
+          <gt-page-header
+            title="TypeError"
+            subtitle="Cannot read properties of undefined (reading 'id')"
+            status="Unresolved"
+            statusColor="var(--info-color)"
+          >
+            <span slot="meta">
+              <span><span class="chip">STOREFRONT-1F</span></span>
+              <span><b>1,204</b> events</span>
+              <span>Last seen 2 minutes ago</span>
             </span>
           </gt-page-header>
         </div>
@@ -104,14 +122,17 @@ export class PageHeaderPreview {
     "Use the same icon as the object's item in the nav",
     "Write the meta as short facts: numbers in <b>, identifiers in a .chip",
     "Show a record's state with status, rendered as the Status pill, first in the meta line",
+    "Use subtitle for a second line that belongs to the title, such as an error's message",
     "Add class no-sep to a fact that continues the pill, such as for 2 hours",
     "Put tabs directly below when the record has facets, with counts in .tab-count",
+    "Place at most one status strip, such as the monitor check bars, between the header and the tabs",
     "Show a tab count once it is known, including 0; leave ?tab= off the default tab",
     "Keep the back link and page actions in the top app bar",
   ];
   readonly donts = [
     "Add a divider under the header; the tab bar is the only line",
     "Put buttons in the header",
+    "Use subtitle for facts; those go in the meta line",
     "Repeat the page type in the title (Settings for project)",
     "Repeat the title in the meta, such as a slug chip under the name (Acme Shop, acme-shop)",
   ];
@@ -125,6 +146,12 @@ export class PageHeaderPreview {
       type: "string",
       default: "",
       description: "The record's name (required)",
+    },
+    {
+      name: "subtitle",
+      type: "string | null",
+      default: "null",
+      description: "One muted line under the title, clamped to two lines",
     },
     {
       name: "icon",

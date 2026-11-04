@@ -87,8 +87,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   `,
 })
 export class DetailPagePreview {
-  // The product's own mobile mechanism (see monitor-detail): swap content
-  // below the $small breakpoint. Fires for real inside the Mobile viewport.
+  // Swap the text action for an icon button below the $small breakpoint.
+  // Fires for real inside the Mobile viewport.
   private readonly breakpoints = inject(BreakpointObserver);
   readonly isMobile = toSignal(
     this.breakpoints
@@ -125,7 +125,8 @@ export class DetailPagePreview {
   <... content />
 </section>`;
   readonly api: ApiRow[] = [
-    { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label; navigates to the parent route (..)" },
+    { name: "gt-back-link link", type: "string | unknown[]", default: `[".."]`, description: "Where the link goes; the parent route by default" },
+    { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label: the parent page's nav label, or the record's name" },
     { name: "gt-back-link backLinkParams", type: "object", default: "{}", description: "Query params preserved on the way back" },
     { name: "gt-detail-header title", type: "string | [string, string | null]", default: `""`, description: "Legacy: use gt-page-header for new pages. Record title, optionally with a muted suffix" },
     { name: "gt-detail-header subtitle", type: "string | null", default: "", description: "Secondary line under the title" },
