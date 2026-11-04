@@ -1,5 +1,10 @@
 @use "variables" as vars;
 
+.no-org-empty-state {
+  display: block;
+  margin-top: var(--gt-space-7, 48px);
+}
+
 .org-projects-section {
   margin-bottom: 70px;
 }

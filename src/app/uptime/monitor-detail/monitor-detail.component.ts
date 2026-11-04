@@ -6,14 +6,10 @@ import {
   computed,
   input,
   booleanAttribute,
-  signal,
-  effect,
 } from "@angular/core";
 import { MonitorState, MonitorService } from "../monitor.service";
-import { RouterModule } from "@angular/router";
+import { ActivatedRoute, RouterModule } from "@angular/router";
 import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
 import { MonitorChecks } from "../monitor-checks/monitor-checks";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MonitorResponseChart } from "../monitor-response-chart/monitor-response-chart";
@@ -21,16 +17,21 @@ import { MonitorChartComponent } from "../monitor-chart/monitor-chart.component"
 import { TimeForPipe } from "src/app/shared/days-ago.pipe";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
-import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
-import { DecimalPipe } from "@angular/common";
-import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
-import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
+import { MatTabsModule } from "@angular/material/tabs";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { DecimalPipe, NgTemplateOutlet } from "@angular/common";
+import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
   return value === undefined ? true : booleanAttribute(value);
@@ -42,6 +43,7 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
   styleUrls: ["./monitor-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    NgTemplateOutlet,
     RouterModule,
     MonitorChecks,
     CopyInputComponent,
@@ -49,12 +51,15 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     TimeForPipe,
     DecimalPipe,
     MatButtonModule,
-    MonitorChartComponent,
-    MatCardModule,
-    MatDividerModule,
-    MatProgressSpinnerModule,
     MatIconModule,
-    DetailHeaderComponent,
+    MatTooltipModule,
+    MonitorChartComponent,
+    MatProgressSpinnerModule,
+    PageHeaderComponent,
+    PanelComponent,
+    RecordBandComponent,
+    EmptyStateComponent,
+    MatTabsModule,
     TopAppBar,
     BackLinkComponent,
   ],
@@ -64,12 +69,9 @@ export class MonitorDetailComponent
   implements OnInit
 {
   uptimeMonitorsText = $localize`Uptime Monitors`;
-  viewAllMonitorsText = $localize`View all uptime monitors`;
-  uptimeDetailsFor = (monitor: string) => $localize`Uptime details for ${monitor}:monitor:`;
   protected service: MonitorService;
-  private breakpointObserver = inject(BreakpointObserver);
-  private dialog = inject(MatDialog);
   private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -77,14 +79,73 @@ export class MonitorDetailComponent
   cursor = input<string | undefined>();
 
   monitor = this.service.activeMonitor;
+  readonly tab = toSignal(
+    inject(ActivatedRoute).queryParamMap.pipe(
+      map((params): "overview" | "checks" | "alerts" => {
+        const tab = params.get("tab");
+        if (tab === "overview" || tab === "checks" || tab === "alerts") {
+          return tab;
+        }
+        return params.has("cursor") || params.has("isChange")
+          ? "checks"
+          : "overview";
+      }),
+    ),
+    { initialValue: "overview" },
+  );
+
+  statusLabel = computed(() => {
+    const isUp = this.monitor()?.isUp;
+    if (isUp === true) return $localize`Up`;
+    if (isUp === false) return $localize`Down`;
+    return $localize`No data`;
+  });
+  statusColor = computed(() => {
+    const isUp = this.monitor()?.isUp;
+    if (isUp === true) return "var(--gt-monitor-up, var(--success-color))";
+    if (isUp === false) return "var(--gt-monitor-down, var(--mat-sys-error))";
+    return "var(--gt-monitor-none, var(--mat-sys-outline))";
+  });
+  intervalLabel = computed(() => {
+    const seconds = this.monitor()?.interval ?? 0;
+    if (seconds < 120) return $localize`every ${seconds}:count:s`;
+    if (seconds < 7200) {
+      return $localize`every ${Math.round(seconds / 60)}:count: min`;
+    }
+    return $localize`every ${Math.round(seconds / 3600)}:count: h`;
+  });
+  uptimePercent = computed(() => {
+    const checks = this.monitor()?.checks ?? [];
+    if (!checks.length) return null;
+    return (checks.filter((c) => c.isUp).length / checks.length) * 100;
+  });
+  uptimeTip = computed(() => {
+    const count = this.monitor()?.checks.length ?? 0;
+    return count === 1
+      ? $localize`Over the last check`
+      : $localize`Over the last ${count}:count: checks`;
+  });
+  avgResponseMs = computed(() => {
+    const times = (this.monitor()?.checks ?? [])
+      .map((c) => c.responseTime)
+      .filter((t): t is number => typeof t === "number");
+    if (!times.length) return null;
+    return times.reduce((sum, t) => sum + t, 0) / times.length;
+  });
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertCountLoading = this.service.alertCountLoading;
   associatedProjectSlug = this.service.associatedProjectSlug;
+  // Hide the count until the project's alerts load, so it never flashes 0.
+  alertCountKnown = computed(
+    () =>
+      !this.alertCountLoading() &&
+      (!this.monitor()?.projectName || !!this.associatedProjectSlug()),
+  );
   canWriteProject = this.organizationsService.canWriteProject;
-
-  isMobile = signal(false);
-  private smallBreakpointSignal = toSignal(
-    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]),
+  noProjectMessage = computed(() =>
+    this.canWriteProject()
+      ? $localize`Associate a project with this monitor to get alerts.`
+      : $localize`This monitor has no associated project, so it sends no alerts.`,
   );
 
   activeMonitorRecentChecksSeries =
@@ -113,20 +174,10 @@ export class MonitorDetailComponent
     };
   });
 
-
   constructor() {
     const service = inject(MonitorService);
     super(service);
     this.service = service;
-
-    effect(() => {
-      const breakpointResult = this.smallBreakpointSignal();
-      if (breakpointResult?.matches) {
-        this.isMobile.set(true);
-      } else {
-        this.isMobile.set(false);
-      }
-    });
   }
 
   ngOnInit() {

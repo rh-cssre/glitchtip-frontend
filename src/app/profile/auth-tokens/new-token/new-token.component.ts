@@ -1,11 +1,13 @@
 import {
   Component,
   OnInit,
+  Signal,
   ViewChild,
-  effect,
   inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 import {
   FormGroup,
   FormControl,
@@ -19,13 +21,19 @@ import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatIconModule } from "@angular/material/icon";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import {
+  TOKEN_SCOPES,
+  TOKEN_SCOPE_GROUPS,
+  TOKEN_SCOPE_LEVELS,
+} from "../token-scopes";
 
 @Component({
   selector: "gt-new-token",
@@ -33,11 +41,12 @@ import { mapFormErrors } from "src/app/shared/forms/form.utils";
   styleUrls: ["./new-token.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
+    PageHeaderComponent,
+    FormErrorComponent,
+    SettingsSectionComponent,
+    PanelComponent,
     MatButtonModule,
     RouterLink,
-    MatIconModule,
-    MatDividerModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -58,24 +67,11 @@ export class NewTokenComponent
   createErrorForm = this.service.createErrorForm;
 
   form: FormGroup;
-  scopeOptions: string[] = [
-    "project:read",
-    "project:write",
-    "project:admin",
-    "project:releases",
-    "team:read",
-    "team:write",
-    "team:admin",
-    "event:read",
-    "event:write",
-    "event:admin",
-    "org:read",
-    "org:write",
-    "org:admin",
-    "member:read",
-    "member:write",
-    "member:admin",
-  ];
+  scopeOptions = TOKEN_SCOPES;
+  scopeGroups = TOKEN_SCOPE_GROUPS;
+  scopeLevels = TOKEN_SCOPE_LEVELS;
+  /** Rebuilt when the scopes' status changes, not on every check. */
+  scopesErrors: Signal<string[]>;
 
   get scopes() {
     return this.form.controls.scopes as FormArray;
@@ -102,7 +98,18 @@ export class NewTokenComponent
     /* Set scopeOptions to scopes FormArray **/
     this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
 
-    effect(() => mapFormErrors(service.createErrorFields(), this.form));
+    this.scopesErrors = toSignal(
+      this.scopes.statusChanges.pipe(
+        map(() => {
+          const errors = this.scopes.errors;
+          return [
+            errors?.selectOne ? $localize`Select at least one scope` : null,
+            errors?.serverError as string | undefined,
+          ].filter((error): error is string => !!error);
+        }),
+      ),
+      { initialValue: [] },
+    );
   }
 
   ngOnInit(): void {
@@ -127,6 +134,8 @@ export class NewTokenComponent
   }
 
   validateScopes() {
+    // Drops a stale server error, which would otherwise block resubmitting.
+    this.scopes.updateValueAndValidity();
     /* Check to see if at least one scope is selected before submitting **/
     const valueSelected = this.scopes.value.find(
       (value: boolean) => value === true,
@@ -138,7 +147,7 @@ export class NewTokenComponent
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.validateScopes();
 
     if (this.form.valid) {
@@ -148,7 +157,8 @@ export class NewTokenComponent
           checked ? this.scopeOptions[index] : null,
         )
         .filter((selected: string) => selected !== null);
-      this.service.createAuthToken(label, selectedScopes);
+      await this.service.createAuthToken(label, selectedScopes);
+      mapFormErrors(this.service.createErrorFields(), this.form);
     }
   }
 }

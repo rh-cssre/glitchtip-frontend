@@ -1,4 +1,5 @@
 @use "variables" as vars;
+@use "issue-level";
 @use "@angular/material" as mat;
 
 $iconWidth: 56px;
@@ -127,30 +128,7 @@ table {
     width: 3px;
   }
 
-  &--sample:after {
-    background-color: var(--mat-sys-outline);
-  }
-  &--debug:after {
-    background-color: var(--mat-sys-outline-variant);
-  }
-  &--info:after {
-    background-color: var(--info-color);
-  }
-  &--warning:after {
-    background-color: var(--warning-color);
-  }
-  &--error:after {
-    background-color: var(--mat-sys-error);
-  }
-  &--fatal:after {
-    background-image: repeating-linear-gradient(
-      -60deg,
-      var(--mat-sys-error),
-      var(--mat-sys-error) 5px,
-      var(--mat-sys-surface) 5px,
-      var(--mat-sys-surface) 10px
-    );
-  }
+  @include issue-level.accent;
 }
 
 .stats-cell-content {

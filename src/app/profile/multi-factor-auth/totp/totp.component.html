@@ -1,112 +1,124 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title i18n>Authenticator app</mat-card-title>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    @if (TOTPAuthenticator()) {
-      <p i18n>An authenticator app is protecting your account.</p>
-      <button mat-stroked-button color="warn" (click)="deactivateTOTP()" i18n>
-        Disable
-      </button>
-      <gt-backup-codes></gt-backup-codes>
-    } @else if (emailsService.isVerified() === false) {
-      <p i18n>
-        Verify your email address before setting up two-factor authentication.
-      </p>
-    } @else if (step() === 1) {
-      <p i18n>Add a second step at login with an authenticator app.</p>
-      <button mat-flat-button color="primary" (click)="incrementStep()" i18n>
-        Get started
-      </button>
-    } @else {
-      <mat-stepper
-        class="totp-stepper"
-        orientation="vertical"
-        [selectedIndex]="stepperIndex()"
-      >
-        <mat-step>
-          <ng-template matStepLabel i18n
-            >Install an authenticator app</ng-template
+<gt-settings-section i18n-title title="Authenticator app" panel>
+  @if (!TOTPAuthenticator() && emailsService.isVerified() === false) {
+    <span slot="description" i18n
+      >Verify your email address before setting up two-factor
+      authentication.</span
+    >
+  } @else if (!TOTPAuthenticator()) {
+    <span slot="description" i18n
+      >Add a second step at sign-in: a code from an app on your phone.</span
+    >
+  }
+  @if (
+    !TOTPAuthenticator() && emailsService.isVerified() !== false && step() > 1
+  ) {
+    <mat-stepper
+      class="totp-stepper"
+      orientation="vertical"
+      [selectedIndex]="stepperIndex()"
+    >
+      <mat-step>
+        <ng-template matStepLabel>
+          <span #firstStepTitle tabindex="-1" i18n
+            >Install an authenticator app</span
           >
-          <p i18n>
-            Use
-            <a
-              href="https://authy.com/download/"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Authy</a
-            >,
-            <a
-              href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Google Authenticator</a
-            >, or any TOTP app on your phone.
-          </p>
-          <button
-            mat-flat-button
-            color="primary"
-            (click)="incrementStep()"
-            i18n
-          >
-            Next
-          </button>
-        </mat-step>
+        </ng-template>
+        <p i18n>
+          Use
+          <a
+            href="https://authy.com/download/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Authy</a
+          >,
+          <a
+            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Google Authenticator</a
+          >, or any TOTP app on your phone.
+        </p>
+        <button mat-stroked-button (click)="incrementStep()" i18n>
+          Next
+        </button>
+      </mat-step>
 
-        <mat-step>
-          <ng-template matStepLabel i18n>Save your backup codes</ng-template>
-          <gt-backup-codes></gt-backup-codes>
-        </mat-step>
+      <mat-step>
+        <ng-template matStepLabel i18n>Save your backup codes</ng-template>
+        <gt-backup-codes></gt-backup-codes>
+      </mat-step>
 
-        <mat-step>
-          <ng-template matStepLabel i18n>Scan and verify</ng-template>
-          <p i18n>Scan the QR code with your app, or enter the key by hand.</p>
-          <div class="totp-scan">
-            <canvas
-              #canvas
-              aria-label="Authenticator setup QR code"
-              i18n-aria-label
-            ></canvas>
-            @if (totp()?.secret; as secret) {
-              <p class="totp-key">
-                <span class="totp-key__label" i18n>Setup key</span>
-                <span class="totp-string">{{ secret }}</span>
-              </p>
+      <mat-step>
+        <ng-template matStepLabel i18n>Scan and verify</ng-template>
+        <p i18n>Scan the QR code with your app, or enter the key by hand.</p>
+        <div class="totp-scan">
+          <canvas
+            #canvas
+            aria-label="Authenticator setup QR code"
+            i18n-aria-label
+          ></canvas>
+          @if (totp()?.secret; as secret) {
+            <p class="totp-key">
+              <span class="totp-key__label" i18n>Setup key</span>
+              <span class="totp-string">{{ secret }}</span>
+            </p>
+          }
+        </div>
+        <form [formGroup]="codeForm" (ngSubmit)="enableTOTP()">
+          <mat-form-field appearance="outline">
+            <mat-label i18n>6-digit code</mat-label>
+            <input
+              matInput
+              formControlName="code"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              pattern="\d*"
+              maxlength="6"
+            />
+            @if (code?.invalid) {
+              <mat-error>
+                @if (code?.errors?.required) {
+                  <span i18n>Required</span>
+                }
+                @if (code?.errors?.minlength || code?.errors?.maxlength) {
+                  <span i18n>Code must be 6 digits</span>
+                }
+                @if (code?.errors?.serverError) {
+                  <span>{{ code?.errors?.serverError }}</span>
+                }
+              </mat-error>
             }
-          </div>
-          <form [formGroup]="codeForm" (ngSubmit)="enableTOTP()">
-            <gt-form-error [errors]="formErrors()"></gt-form-error>
-            <mat-form-field appearance="outline">
-              <mat-label i18n>6-digit code</mat-label>
-              <input
-                matInput
-                formControlName="code"
-                inputmode="numeric"
-                autocomplete="one-time-code"
-                pattern="\d*"
-                maxlength="6"
-              />
-              @if (code?.invalid) {
-                <mat-error>
-                  @if (code?.errors?.required) {
-                    <span i18n>Required</span>
-                  }
-                  @if (code?.errors?.minlength || code?.errors?.maxlength) {
-                    <span i18n>Code must be 6 digits</span>
-                  }
-                  @if (code?.errors?.serverError) {
-                    <span>{{ code?.errors?.serverError }}</span>
-                  }
-                </mat-error>
-              }
-            </mat-form-field>
-            <button id="submit" mat-flat-button color="primary" i18n
-              >Enable</button
-            >
-          </form>
-        </mat-step>
-      </mat-stepper>
-    }
-  </mat-card-content>
-</mat-card>
+          </mat-form-field>
+          <gt-loading-button
+            id="submit"
+            i18n-buttonText
+            buttonText="Enable"
+            buttonStyle="stroked"
+            [loading]="pendingAction() === 'enableTOTP'"
+            [disabled]="loading()"
+          />
+        </form>
+      </mat-step>
+    </mat-stepper>
+  }
+  <!-- One level of @if, so the slotted button projects. -->
+  @if (TOTPAuthenticator()) {
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Turn off"
+      buttonStyle="stroked"
+      [loading]="pendingAction() === 'turnOffTOTP'"
+      [disabled]="loading()"
+      (buttonClick)="deactivateTOTP()"
+    />
+  } @else if (emailsService.isVerified() !== false && step() === 1) {
+    <button slot="actions" mat-stroked-button (click)="incrementStep()" i18n
+      >Set up</button
+    >
+  }
+  <gt-form-error slot="error" [errors]="formErrors()" />
+</gt-settings-section>
+@if (TOTPAuthenticator()) {
+  <gt-backup-codes />
+}

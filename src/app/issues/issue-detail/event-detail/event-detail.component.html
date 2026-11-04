@@ -72,29 +72,28 @@
     @if (event?.tags && event.tags.length > 0) {
       <section class="tags">
         <h2 i18n>Tags</h2>
-        <ul class="pseudo-chip-list">
+        <ul class="tag-pills">
           @for (tag of event.tags; track tag.key) {
-            <li class="pseudo-chip">
+            <li class="tag-pill">
               <a
                 [routerLink]="['/', orgSlug(), 'issues']"
                 [queryParams]="generateQuery(tag)"
                 queryParamsHandling="merge"
-                class="pseudo-chip-link"
+                class="tag-pill__link"
               >
-                <span class="pseudo-chip-key">{{ tag.key }}</span>
-                <span class="pseudo-chip-value">
-                  {{ tag.value }}
-                </span>
+                <span class="tag-pill__key">{{ tag.key }}</span>
+                <span class="tag-pill__value">{{ tag.value }}</span>
               </a>
               @if (isValidUrl(tag.value)) {
-                <span class="pseudo-chip-divider"></span>
                 <a
                   [href]="tag.value"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="pseudo-chip-external-link"
+                  class="tag-pill__external"
+                  i18n-aria-label
+                  aria-label="Open {{ tag.key }} in a new tab"
                 >
-                  <mat-icon color="primary">open_in_new</mat-icon>
+                  <mat-icon>open_in_new</mat-icon>
                 </a>
               }
             </li>

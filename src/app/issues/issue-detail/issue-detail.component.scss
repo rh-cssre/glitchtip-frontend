@@ -1,3 +1,4 @@
+@use "issue-level";
 @use "variables" as vars;
 
 .issue-404 {
@@ -92,58 +93,30 @@ table.mat-table {
   text-overflow: initial;
 }
 
-.issue-header-wrapper {
-  display: flex;
-
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
 .top-bar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.status-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative; 
+.level-name {
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
 
-  mat-icon {
-    color: var(--mat-sys-outline);
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-    margin: 8px;
-  }
-
+// The level is a bar down the header, as on issue list rows.
+.issue-header {
+  position: relative;
+  padding-left: var(--gt-space-4, 16px);
 
   &::after {
     content: "";
     position: absolute;
-    top: 4px;
-    bottom: 4px;
-    right: 0;
+    inset-block: 0;
+    left: 0;
     width: 4px;
-    border-radius: 4px; 
+    border-radius: var(--mat-sys-corner-full);
   }
 
-  &.level--sample::after   { background-color: var(--mat-sys-outline); }
-  &.level--debug::after    { background-color: var(--mat-sys-outline-variant); }
-  &.level--info::after     { background-color: var(--info-color); }
-  &.level--warning::after  { background-color: var(--warning-color); }
-  &.level--error::after    { background-color: var(--mat-sys-error); }
-
-
-  &.level--fatal::after {
-    background: repeating-linear-gradient(
-      -60deg,
-      var(--mat-sys-error),
-      var(--mat-sys-error) 5px,
-      var(--mat-sys-surface) 5px,
-      var(--mat-sys-surface) 10px
-    );
-  }
+  @include issue-level.accent;
 }

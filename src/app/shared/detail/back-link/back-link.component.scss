@@ -6,6 +6,13 @@ $inset: var(--gt-space-4, 16px);
 
 :host {
   display: inline-flex;
+  // Gives way to the bar's actions; the text ellipsizes instead of overlapping.
+  min-width: 0;
+
+  a {
+    min-width: 0;
+    max-width: 100%;
+  }
   @include mat.button-overrides(
     (
       text-with-icon-horizontal-padding: $inset,
