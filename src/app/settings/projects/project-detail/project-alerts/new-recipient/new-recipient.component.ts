@@ -16,7 +16,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { RecipientType } from "src/app/api/projects/project-alerts/project-alerts.interface";
-import { resolveRecipientIcon } from "../project-alerts.component";
+import { resolveRecipientIcon } from "../alert-labels";
 import { urlRegex } from "src/app/shared/validators";
 import { MatButtonModule } from "@angular/material/button";
 import { LoadingButtonComponent } from "../../../../../shared/loading-button/loading-button.component";

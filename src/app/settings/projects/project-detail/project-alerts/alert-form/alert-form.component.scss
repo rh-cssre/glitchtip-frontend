@@ -1,27 +1,26 @@
 @use "@angular/material" as mat;
-@use "variables" as vars;
+
+:host {
+  display: block;
+  // Matches the checkbox labels, so the condition reads as one sentence.
+  font: var(--mat-sys-body-medium);
+}
 
 form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-bottom: 8px;
-
-  .mat-form-field {
-    width: 88px;
-  }
-  gt-loading-button {
-    margin-bottom: 8px;
-  }
-}
-
-// Label above the trigger conditions.
-.alert-form__group-label {
-  margin: 0 0 8px;
 }
 
 .trigger {
   width: 100%;
+}
+
+// Lines up with the checkbox label text, not the box.
+.trigger__hint {
+  margin: var(--gt-space-1, 4px) 0 0 32px;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 // The event condition is an inline sentence (checkbox label, two number fields,
@@ -45,8 +44,9 @@ form {
   cursor: help;
 }
 
-mat-form-field {
-  width: 120px;
+// :host keeps these widths when the form sits in a parent that stretches fields.
+:host mat-form-field {
+  width: 80px;
 
   &::ng-deep .mat-mdc-form-field-error-wrapper {
     padding: 0;
@@ -59,42 +59,24 @@ mat-form-field {
   }
 }
 
-// Both conditions are independent triggers (enable either or both); equal 24px
-// spacing keeps them level rather than primary/secondary. 24px = --gt-space-5.
+// Both conditions are independent triggers (enable either or both); the gap
+// matches the one between the event line and its hint, keeping them level.
 .uptime-option {
-  margin-top: 24px;
+  margin-top: var(--gt-space-3, 12px);
 }
 
-// Environment scope narrows both conditions, so it sits at their level rather
-// than nested under one of them. The mat-form-field width above is sized for
-// the Quantity and Timespan number inputs; a select of environment names needs
-// far more room.
+// A subheading of When, not a third condition: it narrows both.
 .environment-scope {
   width: 100%;
-  margin-top: 24px;
+  margin-top: var(--gt-space-5, 24px);
 
-  mat-form-field {
+  :host & mat-form-field {
     width: 320px;
     max-width: 100%;
   }
 }
 
-.error {
-  color: var(--mat-sys-error);
-  text-align: center;
-  margin-top: -15px;
-  margin-bottom: 5px;
-
-  @media screen and (max-width: vars.$medium - 1) {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-}
-
-// Action row: a hairline sets it off from the conditions above.
-.update {
-  width: 100%;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--mat-sys-outline-variant);
+// Tighter than a form-level error: it belongs to the line above.
+:host .trigger__error {
+  margin: var(--gt-space-2, 8px) 0 0;
 }

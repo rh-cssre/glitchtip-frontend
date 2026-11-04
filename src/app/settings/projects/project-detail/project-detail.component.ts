@@ -49,6 +49,8 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { mapFormErrors } from "src/app/shared/forms/form.utils";
 import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { ProjectAlertsService } from "./project-alerts/project-alerts.service";
+import { ProjectEnvironmentsService } from "./project-environments/project-environments.service";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 function autocompleteStringValidator(
@@ -98,8 +100,11 @@ class CustomErrorStateMatcher implements ErrorStateMatcher {
     FormErrorComponent,
     PanelComponent,
   ],
+  // The tab services live here, so the tab counts and the tabs share one load.
   providers: [
     ProjectDetailService,
+    ProjectAlertsService,
+    ProjectEnvironmentsService,
     { provide: ErrorStateMatcher, useClass: CustomErrorStateMatcher },
   ],
 })
@@ -113,6 +118,13 @@ export class ProjectDetailComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective: FormGroupDirective | undefined;
 
   projectKeys = this.#service.projectKeys;
+  #alertsService = inject(ProjectAlertsService);
+  #environmentsService = inject(ProjectEnvironmentsService);
+  /** Undefined until loaded, and on a load error. DSN holds one thing: none. */
+  readonly tabCounts = computed<Record<string, number | undefined>>(() => ({
+    environments: this.#environmentsService.environments()?.length,
+    alerts: this.#alertsService.projectAlerts()?.length,
+  }));
   activeProject = this.#service.project;
 
   orgSlug = input.required<string>({ alias: "org-slug" });
@@ -191,6 +203,10 @@ export class ProjectDetailComponent implements OnInit {
   platformCtrlValueChanges = toSignal(this.platformCtrl.valueChanges);
 
   constructor() {
+    effect(() => {
+      this.#alertsService.setParams(this.orgSlug(), this.projectSlug());
+      this.#environmentsService.setParams(this.orgSlug(), this.projectSlug());
+    });
     effect(() => {
       const project = this.activeProject();
       if (project) {
