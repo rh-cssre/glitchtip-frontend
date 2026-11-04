@@ -6,18 +6,19 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
 import { MonitorService, MonitorState } from "../monitor.service";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
 
 @Component({
   selector: "gt-monitor-update",
@@ -25,13 +26,13 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatIconModule,
     MonitorFormComponent,
+    PageHeaderComponent,
     BackLinkComponent,
     TopAppBar,
+    SettingsSectionComponent,
+    LoadingButtonComponent,
+    FormErrorComponent,
   ],
 })
 export class MonitorUpdateComponent
@@ -47,6 +48,8 @@ export class MonitorUpdateComponent
   loading = this.service.editLoading;
   error = this.service.error;
   deleteLoading = this.service.deleteLoading;
+  deleteError = this.service.deleteError;
+  canWriteProject = inject(OrganizationsService).canWriteProject;
 
   constructor() {
     const service = inject(MonitorService);

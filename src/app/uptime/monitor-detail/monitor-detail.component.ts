@@ -19,6 +19,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
@@ -72,6 +73,7 @@ export class MonitorDetailComponent
   protected service: MonitorService;
   private organizationsService = inject(OrganizationsService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -195,7 +197,9 @@ export class MonitorDetailComponent
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.service.deleteMonitor();
+        this.service.deleteMonitor().then((deleted) => {
+          if (!deleted) this.snackBar.open(this.service.deleteError());
+        });
       }
     });
   }
