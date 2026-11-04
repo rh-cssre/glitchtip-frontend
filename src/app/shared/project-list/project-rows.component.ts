@@ -2,9 +2,11 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  inject,
   input,
   signal,
 } from "@angular/core";
+import { OrganizationsService } from "src/app/api/organizations.service";
 import { DatePipe, DecimalPipe } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
@@ -265,6 +267,7 @@ export class ProjectRowsComponent {
   protected readonly rows = signal(new Map<string, RowState>());
   // At most four projects load at once, so a long list cannot flood the API.
   private readonly queue = limitConcurrency(4);
+  private readonly orgs = inject(OrganizationsService);
 
   key(project: ProjectRow) {
     return `${this.orgSlug()}/${project.id}`;
@@ -279,11 +282,11 @@ export class ProjectRowsComponent {
     const trend = this.showTrend();
     if (this.rows().has(key) || (trend && !project.firstEvent)) return;
     this.set(key, "loading");
-    const org = this.orgSlug();
+    const path = this.orgs.orgPath(this.orgSlug());
     this.queue(() =>
       trend
-        ? loadTrend(org, +project.id)
-        : loadAlertCount(org, project.slug ?? ""),
+        ? loadTrend(path, +project.id)
+        : loadAlertCount(path, project.slug ?? ""),
     ).then(
       (facts) => this.set(key, facts),
       () => this.set(key, "failed"),
@@ -313,8 +316,9 @@ interface StatsV2 {
   groups: { series: Record<string, (number | null)[]> }[];
 }
 
-async function loadTrend(org: string, project: number): Promise<RowFacts> {
-  const path = { organization_id_or_slug: org };
+type OrgPath = { organization_id_or_slug: string };
+
+async function loadTrend(path: OrgPath, project: number): Promise<RowFacts> {
   const end = new Date();
   const start = trendStart(end);
   const [stats, unresolved, latest] = await Promise.all([
@@ -355,10 +359,10 @@ async function loadTrend(org: string, project: number): Promise<RowFacts> {
   };
 }
 
-async function loadAlertCount(org: string, slug: string): Promise<RowFacts> {
+async function loadAlertCount(path: OrgPath, slug: string): Promise<RowFacts> {
   const { data, response } = await client.GET(
     "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
-    { params: { path: { organization_id_or_slug: org, project_slug: slug } } },
+    { params: { path: { ...path, project_slug: slug } } },
   );
   if (!response.ok) throw new Error("project alerts failed to load");
   return { alerts: data?.length ?? 0 };
