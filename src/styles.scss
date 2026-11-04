@@ -4,11 +4,15 @@
 @use "./assets/styles/theme-colors" as custom-theme;
 @use "./assets/styles/material-overrides";
 @use "./assets/styles/variables" as vars;
+@use "./assets/styles/controls";
 @use "./assets/styles/font-files";
 @use "./assets/styles/page-header";
 @use "./assets/styles/resets";
-@use "./assets/styles/list-row";
 @use "./assets/styles/record-band";
+@use "./assets/styles/list-row";
+@use "./assets/styles/panel-rows";
+@use "./assets/styles/tag-chip";
+@use "./assets/styles/code";
 @use "./scss/auth-forms";
 @use "./assets/styles/settings-section";
 
@@ -50,6 +54,11 @@ html {
   --uptime-color: #8a2387;
   --logs-color: #2196f3;
 
+  // Monitor status roles
+  --gt-monitor-up: var(--success-color);
+  --gt-monitor-down: var(--mat-sys-error);
+  --gt-monitor-none: var(--mat-sys-outline);
+
   // Log severity palette: AA-compliant per mode (darker on light, bright on dark)
   --log-error-color: light-dark(#c62828, #ef4444);
   --log-warn-color: light-dark(#a16207, #f59e0b);
@@ -57,6 +66,27 @@ html {
   --log-debug-color: light-dark(#6d28d9, #a78bfa);
   --log-trace-color: light-dark(#4b5563, #9ca3af);
   --log-service-color: light-dark(#047857, #10b981);
+
+  // Issue level roles
+  --gt-level-sample: var(--mat-sys-outline);
+  --gt-level-debug: var(--mat-sys-outline-variant);
+  --gt-level-info: var(--info-color);
+  --gt-level-warning: var(--warning-color);
+  --gt-level-error: var(--mat-sys-error);
+  --gt-level-fatal: var(--mat-sys-error);
+}
+
+// Spacing scale
+:root {
+  --gt-space-unit: 4px;
+  --gt-space-0: 0;
+  --gt-space-1: var(--gt-space-unit);
+  --gt-space-2: calc(var(--gt-space-unit) * 2);
+  --gt-space-3: calc(var(--gt-space-unit) * 3);
+  --gt-space-4: calc(var(--gt-space-unit) * 4);
+  --gt-space-5: calc(var(--gt-space-unit) * 6);
+  --gt-space-6: calc(var(--gt-space-unit) * 8);
+  --gt-space-7: calc(var(--gt-space-unit) * 12);
 }
 
 // Reading widths for running text, in characters so they follow font size.
@@ -65,32 +95,19 @@ html {
   --gt-measure-narrow: 44ch;
 }
 
-.light {
-  @include meta.load-css("prismjs/themes/prism.css");
-}
-
-.dark {
-  @include meta.load-css("prismjs/themes/prism-tomorrow.css");
-}
-
+// Colours come from _code.scss; gtPrism blocks still use these two plugins.
 .light,
 .dark {
   @include meta.load-css("prismjs/plugins/line-numbers/prism-line-numbers.css");
   @include meta.load-css(
     "prismjs/plugins/line-highlight/prism-line-highlight.css"
   );
-
-  pre[class*="language-"] {
-    border-radius: vars.$shape-radius;
-    border: none;
-    box-shadow: none;
-  }
 }
 
 a {
   color: var(--mat-sys-on-background);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 a:hover {
@@ -420,6 +437,40 @@ mat-tab-nav-panel:not(mat-card-content > *) {
 
 .search-help__samples-sep {
   color: var(--mat-sys-outline);
+}
+
+// Separates groups of different kinds of bar controls, see DESIGN.md
+.gt-bar-divider {
+  flex: none;
+  align-self: center;
+  width: 1px;
+  height: 20px;
+  margin-inline: var(--gt-space-2, 8px);
+  background-color: var(--mat-sys-outline-variant);
+}
+
+// Material's label wrapper must shrink too, so the back link text can ellipsize.
+gt-back-link .mdc-button__label {
+  min-width: 0;
+}
+
+// A labelled top bar button that keeps only its icon when the bar is narrow.
+.gt-bar-button.mat-mdc-outlined-button {
+  @include controls.narrow-bar {
+    min-width: 32px;
+
+    @include mat.button-overrides(
+      (
+        outlined-horizontal-padding: 6px,
+        outlined-icon-spacing: 0,
+        outlined-icon-offset: 0,
+      )
+    );
+
+    .gt-bar-button__label {
+      display: none;
+    }
+  }
 }
 
 .medium-icon-button {

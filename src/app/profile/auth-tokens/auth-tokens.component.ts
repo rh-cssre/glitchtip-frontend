@@ -7,15 +7,15 @@ import {
 } from "@angular/core";
 import { AuthTokensService, AuthTokensState } from "./auth-tokens.service";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
-import { CopyInputComponent } from "../../shared/copy-input/copy-input.component";
 import { MatDialog } from "@angular/material/dialog";
-import { MatDividerModule } from "@angular/material/divider";
-import { RouterLink } from "@angular/router";
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { CopyInputComponent } from "src/app/shared/copy-input/copy-input.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { scopesLabel } from "./token-scopes";
 
 @Component({
   selector: "gt-auth-tokens",
@@ -23,13 +23,12 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   styleUrls: ["./auth-tokens.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
-    MatButtonModule,
-    RouterLink,
-    MatDividerModule,
-    CopyInputComponent,
     LoadingButtonComponent,
+    CopyInputComponent,
     EmptyStateComponent,
+    ListComponent,
+    ListRowComponent,
+    SettingsSectionComponent,
   ],
 })
 export class AuthTokensComponent
@@ -38,6 +37,8 @@ export class AuthTokensComponent
 {
   protected service: AuthTokensService;
   dialog = inject(MatDialog);
+  scopesLabel = scopesLabel;
+  deleteLabel = (label: string) => $localize`Delete ${label}:label:`;
 
   authTokens = computed(() =>
     this.service.apiTokens()?.map((token) => {
@@ -60,11 +61,11 @@ export class AuthTokensComponent
     this.service.apiTokensResource.reload();
   }
 
-  deleteAuthToken(id: number) {
+  deleteAuthToken(id: number, label: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: $localize`Delete auth token?`,
-        message: $localize`Are you sure you want to delete this authentication token?`,
+        title: $localize`Delete ${label}:label:?`,
+        message: $localize`Anything using this token loses access to the API. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });
