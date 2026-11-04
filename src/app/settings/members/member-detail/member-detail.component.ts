@@ -12,52 +12,52 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { MatListModule } from "@angular/material/list";
 import { MatRadioModule } from "@angular/material/radio";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatChipsModule } from "@angular/material/chips";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
+import { MatDialog } from "@angular/material/dialog";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { MemberDetailService } from "src/app/settings/members/member-detail/member-detail.service";
 import { MemberRole } from "src/app/api/organizations/organizations.interface";
+import { MEMBER_ROLES, roleDescription, roleName } from "../member-roles";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
-import { OrganizationsService } from "src/app/api/organizations.service";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   templateUrl: "./member-detail.component.html",
-  styleUrls: ["./member-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
-    MatButtonModule,
     RouterLink,
-    MatIconModule,
-    MatCardModule,
-    MatDividerModule,
-    MatChipsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
+    FormErrorComponent,
     MatRadioModule,
     TopAppBar,
     BackLinkComponent,
+    EmptyStateComponent,
     LoadingButtonComponent,
-    MatListModule,
+    ListComponent,
+    ListRowComponent,
+    ListRowLinkComponent,
     PageHeaderComponent,
+    SettingsSectionComponent,
   ],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   private memberDetailService = inject(MemberDetailService);
   private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
 
   member = this.memberDetailService.member;
   memberTeams = this.memberDetailService.memberTeams;
-  availableRoles = this.memberDetailService.availableRoles;
   updateMemberError = this.memberDetailService.updateMemberRoleError;
   updateMemberLoading = this.memberDetailService.updateMemberRoleLoading;
   transferOrgOwnershipError =
@@ -73,18 +73,50 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     role: new FormControl<MemberRole | null>(null),
   });
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
-  canWriteMember = this.organizationsService.canWriteMember;
-  canAdminOrg = this.organizationsService.canAdminOrg;
 
-  selectedRoleScopes = computed(() => {
-    const availableRoles = this.availableRoles();
-    if (availableRoles) {
-      return availableRoles
-        .find((roleDetails) => roleDetails.id === this.formRole.value)
-        ?.scopes.join(", ");
-    }
-    return;
+  /** The backend refuses granting a role above your own; only owners outrank managers. */
+  readonly roles = computed(() =>
+    this.organizationsService.canAdminOrg()
+      ? MEMBER_ROLES
+      : MEMBER_ROLES.filter((role) => role !== "owner"),
+  );
+  readonly invitePendingText = $localize`Invite pending`;
+  /** An owner is never pending, so one status slot holds either. */
+  readonly headerStatus = computed(() => {
+    const member = this.member();
+    if (member?.pending) return this.invitePendingText;
+    return member?.isOwner ? $localize`Account owner` : null;
   });
+
+  /** Changing roles needs member:write (managers and owners); an owner's, the owner role. */
+  canEditRole = computed(
+    () =>
+      this.organizationsService.canWriteMember() &&
+      (this.member()?.role !== "owner" ||
+        this.organizationsService.canAdminOrg()),
+  );
+  /** A manager may manage members, but not this one. */
+  ownerOnly = computed(
+    () =>
+      this.organizationsService.canWriteMember() &&
+      !this.organizationsService.canAdminOrg(),
+  );
+  /**
+   * The backend allows a transfer only for owners (member:admin plus being the
+   * account owner or having the owner role), so org:admin is the signal.
+   */
+  canTransfer = computed(() => {
+    const member = this.member();
+    return (
+      this.organizationsService.canAdminOrg() &&
+      !!member &&
+      !member.isOwner &&
+      !member.pending
+    );
+  });
+
+  roleName = roleName;
+  roleDescription = roleDescription;
 
   constructor() {
     effect(() => {
@@ -124,7 +156,18 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  transferOrgOwnership() {
-    this.memberDetailService.transferOrgOwnership();
+  transferOrgOwnership(email: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Transfer ownership to ${email}:email:?`,
+          message: $localize`They will hold the organization's subscription. Nobody's role changes.`,
+          confirmText: $localize`Transfer`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) this.memberDetailService.transferOrgOwnership();
+      });
   }
 }

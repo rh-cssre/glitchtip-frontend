@@ -196,6 +196,9 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
         return await this.inviteOrganizationMember(orgSlug, email, teams, role);
       }),
     );
+    if (results.some((result) => result.data)) {
+      this.organizationMembersResource.reload();
+    }
 
     if (results.every((result) => result.data)) {
       this.snackBar.open(

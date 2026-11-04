@@ -1,10 +1,8 @@
 import { Injectable, computed, inject } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import {
-  MemberRole,
-  MemberRoleDetail,
-} from "../../../api/organizations/organizations.interface";
+import { MemberRole } from "../../../api/organizations/organizations.interface";
 import { OrganizationsService } from "../../../api/organizations.service";
+import { OrganizationDetailService } from "../../../api/organizations/organization-detail.service";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { client, handleError } from "src/app/shared/api/api";
 import { components } from "src/app/api/api-schema";
@@ -15,7 +13,6 @@ type MemberDetail = components["schemas"]["OrganizationUserDetailSchema"];
 interface MemberDetailState {
   member: Member | null;
   memberTeams: string[] | null;
-  availableRoles: MemberRoleDetail[] | null;
   updateMemberRoleError: string;
   updateMemberRoleLoading: boolean;
   transferOrgOwnershipError: string;
@@ -25,7 +22,6 @@ interface MemberDetailState {
 const initialState: MemberDetailState = {
   member: null,
   memberTeams: null,
-  availableRoles: null,
   updateMemberRoleError: "",
   updateMemberRoleLoading: false,
   transferOrgOwnershipError: "",
@@ -35,11 +31,11 @@ const initialState: MemberDetailState = {
 @Injectable({ providedIn: "root" })
 export class MemberDetailService extends StatefulService<MemberDetailState> {
   private organizationsService = inject(OrganizationsService);
+  private organizationDetailService = inject(OrganizationDetailService);
   private snackBar = inject(MatSnackBar);
 
   readonly member = computed(() => this.state().member);
   readonly memberTeams = computed(() => this.state().memberTeams);
-  readonly availableRoles = computed(() => this.state().availableRoles);
   readonly updateMemberRoleError = computed(
     () => this.state().updateMemberRoleError,
   );
@@ -83,6 +79,7 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
       );
       if (data) {
         this.setUpdateMemberRole(data);
+        this.organizationDetailService.organizationMembersResource.reload();
         this.snackBar.open(
           $localize`Successfully updated ${data.email}'s role to ${data.roleName}`,
         );
@@ -114,6 +111,8 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
         },
       );
       if (data) {
+        // Both the new and the old owner's rows change.
+        this.organizationDetailService.organizationMembersResource.reload();
         this.snackBar.open(
           $localize`Successfully transferred organization account ownership to ${data.email}.`,
         );
@@ -178,7 +177,6 @@ export class MemberDetailService extends StatefulService<MemberDetailState> {
     this.setState({
       member,
       memberTeams: member.teams,
-      availableRoles: (member as any).roles,
     });
   }
 }

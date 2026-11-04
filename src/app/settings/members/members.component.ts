@@ -9,11 +9,13 @@ import { RouterLink } from "@angular/router";
 import { OrganizationDetailService } from "src/app/api/organizations/organization-detail.service";
 import { MembersService } from "src/app/settings/members/members.service";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
-import { MatChipsModule } from "@angular/material/chips";
+import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { MatButtonModule } from "@angular/material/button";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { components } from "src/app/api/api-schema";
@@ -27,24 +29,26 @@ type Member = components["schemas"]["OrganizationUserSchema"];
 @Component({
   selector: "gt-members",
   templateUrl: "./members.component.html",
-  styleUrls: ["./members.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatButtonModule,
     RouterLink,
     MatMenuModule,
     MatIconModule,
-    MatChipsModule,
+    StatusPillComponent,
     LoadingButtonComponent,
     TopAppBar,
+    PanelComponent,
     ListComponent,
     ListRowComponent,
+    ListRowLinkComponent,
   ],
   providers: [MembersService],
 })
 export class MembersComponent {
   leaveText = $localize`Leave`;
   removeText = $localize`Remove`;
+  invitePendingText = $localize`Invite pending`;
   actionsForLabel = (email: string) => $localize`Actions for ${email}:email:`;
   private organizationsService = inject(OrganizationsService);
   private organizationDetailService = inject(OrganizationDetailService);
@@ -56,12 +60,18 @@ export class MembersComponent {
   members = this.membersService.members;
   canWriteMember = this.organizationsService.canWriteMember;
   canAdminMember = this.organizationsService.canAdminMember;
+  /** Only owners outrank managers, so only they can act on an owner. */
+  canManageOwners = this.organizationsService.canAdminOrg;
   roleName = roleName;
 
   constructor() {
     effect(() => {
       this.organizationDetailService.setMembersOrgSlug(this.orgSlug());
     });
+  }
+
+  canManage(member: { role?: string | null }) {
+    return member.role !== "owner" || this.canManageOwners();
   }
 
   resendInvite(member: Member) {
