@@ -1,18 +1,13 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  input,
-  OnInit,
-} from "@angular/core";
+import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
 import { ProjectEnvironmentsService } from "./project-environments.service";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { LoadingButtonComponent } from "../../../../shared/loading-button/loading-button.component";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-project-environments",
@@ -20,31 +15,25 @@ import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.comp
   styleUrls: ["./project-environments.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
+    SettingsSectionComponent,
     ListComponent,
     ListRowComponent,
     LoadingButtonComponent,
     EmptyStateComponent,
+    PanelComponent,
+    FormErrorComponent,
   ],
-  providers: [ProjectEnvironmentsService],
 })
-export class ProjectEnvironments implements OnInit {
+export class ProjectEnvironments {
   showText = $localize`Show`;
   hideText = $localize`Hide`;
   private service = inject(ProjectEnvironmentsService);
   private organizationsService = inject(OrganizationsService);
-  orgSlug = input.required<string>();
-  projectSlug = input.required<string>();
-
   initialLoad = this.service.initialLoad;
+  loadError = this.service.loadError;
   toggleHiddenloading = this.service.toggleHiddenLoading;
   sortedEnvironments = this.service.sortedEnvironments;
   canWriteProject = this.organizationsService.canWriteProject;
-
-  ngOnInit(): void {
-    this.service.setParams(this.orgSlug(), this.projectSlug());
-  }
 
   toggleHidden(environment: any) {
     this.service.updateEnvironment({

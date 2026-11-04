@@ -1,0 +1,129 @@
+@use "@angular/cdk";
+@use "controls";
+
+// Hairlines between the field sections of a form panel are in _settings-section.scss.
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gt-space-3, 12px);
+  margin: 0;
+  padding: var(--gt-space-5, 24px) 0;
+}
+
+.settings-section__title {
+  margin: 0;
+  font: var(--mat-sys-title-medium);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.settings-section__description {
+  max-width: var(--gt-measure, 70ch);
+  margin-top: var(--gt-space-1, 4px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.settings-section__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gt-space-3, 12px);
+
+  &:not(:has(> * > *)) {
+    display: none;
+  }
+}
+
+.settings-section__body {
+  width: 100%;
+  max-width: 560px;
+
+  // Lists and empty states span the body so they centre; the cap is for fields.
+  &:has(gt-empty-state, gt-list) {
+    max-width: none;
+  }
+
+  &:empty {
+    display: none;
+  }
+}
+
+.settings-section__error {
+  width: 100%;
+
+  // Projected gt-form-error hosts stay in the DOM with no messages.
+  &:not(:has(> :not(:empty))) {
+    display: none;
+  }
+}
+
+.settings-section__error--padded {
+  padding: var(--gt-space-4, 16px);
+}
+
+.settings-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+
+  &:empty {
+    display: none;
+  }
+}
+
+// Panels stack 16px apart; the margins collapse across wrapping forms.
+:host(.gt-settings-panel) {
+  display: block;
+  padding: 0;
+  margin-bottom: var(--gt-space-4, 16px);
+}
+
+.settings-section__panel-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gt-space-3, 12px);
+  padding: var(--gt-space-4, 16px);
+}
+
+// Header actions wrap under the text on a narrow screen.
+.settings-section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gt-space-3, 12px);
+}
+
+.settings-section__head > .settings-section__text {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.settings-section__head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+
+  @include controls.compact-buttons;
+
+  &:empty {
+    display: none;
+  }
+}
+
+// CDK loads this class only with some components, so the hidden title brings it.
+@include cdk.a11y-visually-hidden();
+
+.settings-section__title.cdk-visually-hidden + .settings-section__description {
+  margin-top: 0;
+}
+
+.settings-section__flush-body {
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}

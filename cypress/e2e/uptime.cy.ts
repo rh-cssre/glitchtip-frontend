@@ -23,7 +23,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .should("have.value", seededMonitorName)
       .clear()
       .type("new name");
-    cy.get("button").contains("Update Monitor").click();
+    cy.get("button").contains("Save monitor").click();
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("new name");
   });
@@ -34,6 +34,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.get("#monitor-settings").click();
     cy.get("#delete-monitor").click();
     cy.contains(`Delete ${seededMonitorName}?`);
+    cy.contains("Its check history is deleted too.");
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Monitor has been deleted.");
     cy.visit(`/${seededOrg.slug}/uptime-monitors`);
@@ -48,7 +49,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .contains("GET")
       .click();
     cy.get("[data-cy=site-url]").type("invalid url");
-    cy.get("[data-cy=interval]").clear().type("86400");
+    cy.get("[data-cy=interval] input").clear().type("86400");
     cy.get("[data-cy=monitor-submit]").click();
     cy.get("[data-cy=expected-status]").clear();
     cy.contains("Enter a monitor name");
@@ -73,7 +74,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .get("mat-option")
       .contains("Heartbeat")
       .click();
-    cy.get("[data-cy=interval]").clear().type("605");
+    cy.get("[data-cy=interval] input").clear().type("605");
     cy.get("[data-cy=monitor-submit]").click();
     cy.get("h1").should("contain", "second-monitor");
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);

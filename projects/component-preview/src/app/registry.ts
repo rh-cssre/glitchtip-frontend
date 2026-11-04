@@ -12,6 +12,7 @@ import { DetailPagePreview } from "./previews/detail-page.preview";
 import { PageHeaderPreview } from "./previews/page-header.preview";
 import { RecordBandPreview } from "./previews/record-band.preview";
 import { StatusPillPreview } from "./previews/status-pill.preview";
+import { SettingsSectionPreview } from "./previews/settings-section.preview";
 import { PanelPreview } from "./previews/panel.preview";
 import { PanelRowsPreview } from "./previews/panel-rows.preview";
 import { PermissionGatingPreview } from "./previews/permission-gating.preview";
@@ -232,10 +233,10 @@ export const PREVIEWS: PreviewEntry[] = [
     status: "stable",
   },
   {
-    id: "panel",
-    label: "Panel",
+    id: "settings-section",
+    label: "Settings section",
     group: "Components",
-    component: PanelPreview,
+    component: SettingsSectionPreview,
     status: "stable",
   },
   {
@@ -243,6 +244,13 @@ export const PREVIEWS: PreviewEntry[] = [
     label: "List",
     group: "Components",
     component: ListPreview,
+    status: "stable",
+  },
+  {
+    id: "panel",
+    label: "Panel",
+    group: "Components",
+    component: PanelPreview,
     status: "stable",
   },
   {

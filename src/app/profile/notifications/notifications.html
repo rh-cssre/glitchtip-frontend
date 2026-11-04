@@ -1,136 +1,90 @@
-<section class="l-body">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title i18n>Notifications</mat-card-title>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <div class="default-settings">
-        <div class="default-alerts">
-          <p i18n class="body-text-strong">Send me project alerts</p>
-          <p i18n class="body-text">
-            This is the default setting for project alerts. You can change the
-            setting per project below.
-          </p>
-        </div>
-        <div class="button-group">
-          <div class="button-and-loading">
-            @if ((subscribeByDefaultLoading()) === true) {
-              <mat-spinner diameter="24"></mat-spinner>
-            }
-            <mat-button-toggle-group i18n-aria-label
-              name="defaultNotifications"
-              aria-label="Default Notifications"
+<!-- Both choices save on click, like the theme: no Save buttons. -->
+<gt-settings-section #defaultSection i18n-title title="Project alerts" panel>
+  <mat-button-toggle-group
+    #defaultGroup="matButtonToggleGroup"
+    class="gt-segmented"
+    hideSingleSelectionIndicator
+    [value]="subscribeByDefault()"
+    [disabled]="!subscribeByDefaultLoaded() || subscribeByDefaultLoading()"
+    [attr.aria-labelledby]="defaultSection.titleId"
+    (change)="toggleDefaultNotifications(defaultGroup, $event.value)"
+  >
+    <mat-button-toggle [value]="true" i18n>On</mat-button-toggle>
+    <mat-button-toggle [value]="false" i18n>Off</mat-button-toggle>
+  </mat-button-toggle-group>
+  <gt-form-error slot="error" [errors]="subscribeByDefaultError()" />
+</gt-settings-section>
+
+@if (groupedProjects(); as grouped) {
+  @for (projects of grouped | keyvalue; track projects.key) {
+    <gt-settings-section
+      [title]="projects.value[0].organization.name"
+      panel
+      flush
+    >
+      <gt-list flush>
+        @for (project of projects.value; track project.id) {
+          <gt-list-row>
+            <a
+              gtListRowLink
+              [routerLink]="[
+                '/',
+                project.organization.slug,
+                'settings',
+                'projects',
+                project.slug,
+              ]"
+              >{{ project.name }}</a
             >
-              <mat-button-toggle i18n
-                value="onDefault"
-                (change)="toggleDefaultNotifications(true)"
-                [class.underline]="(subscribeByDefault()) === true"
-                [checked]="(subscribeByDefault()) === true"
-                >On</mat-button-toggle
+            @if (projectAlertsError()?.id === project.id) {
+              <gt-form-error
+                slot="description"
+                [errors]="projectAlertsError()?.error"
+              />
+            }
+            <mat-button-toggle-group
+              #projectGroup="matButtonToggleGroup"
+              slot="actions"
+              hideSingleSelectionIndicator
+              [value]="project.alertStatus"
+              [disabled]="
+                !subscribeByDefaultLoaded() ||
+                projectAlertLoading() === project.id
+              "
+              [attr.aria-label]="notificationsForLabel(project.name)"
+              (change)="
+                setProject(
+                  projectGroup,
+                  project.id,
+                  project.alertStatus,
+                  $event.value
+                )
+              "
+            >
+              <mat-button-toggle [value]="-1" i18n
+                >Default
+                <span
+                  >({{
+                    subscribeByDefault() ? onText : offText // i18n(ph="default")
+                  }})</span
+                ></mat-button-toggle
               >
-              <mat-button-toggle i18n
-                value="offDefault"
-                (change)="toggleDefaultNotifications(false)"
-                [class.underline]="(subscribeByDefault()) === false"
-                [checked]="(subscribeByDefault()) === false"
-                >Off</mat-button-toggle
-              >
+              <mat-button-toggle [value]="1" i18n>On</mat-button-toggle>
+              <mat-button-toggle [value]="0" i18n>Off</mat-button-toggle>
             </mat-button-toggle-group>
-          </div>
-          @if (subscribeByDefaultError(); as error) {
-            <mat-error class="caption-text">{{ error }}</mat-error>
-          }
-        </div>
-      </div>
-      @if ((projectViewExpanded()) === false) {
-        <button
-          mat-stroked-button
-          class="expand-button"
-          (click)="toggleProjectView()"
-        >
-          <span i18n>Edit By Project</span><mat-icon>keyboard_arrow_down</mat-icon>
-        </button>
-      }
-
-      @if (projectViewExpanded()) {
-        @for (projects of groupedProjects() | keyvalue; track projects) {
-          <div>
-            <div class="org-name mat-h3 body-text-strong">
-              {{ projects.value[0].organization.name }}
-            </div>
-            <div class="border">
-              @for (project of projects.value; track project; let i = $index) {
-                <div class="project-list-item">
-                  <div class="project">
-                    <a
-                      [routerLink]="[
-                        '/',
-                        project.organization.slug,
-                        'settings',
-                        'projects',
-                        project.slug,
-                      ]"
-                      >{{ project.name }}</a
-                    >
-                  </div>
-                  <div class="button-group">
-                    <div class="button-and-loading">
-                      @if ((projectAlertLoading()) === project.id) {
-                        <mat-spinner diameter="24"></mat-spinner>
-                      }
-                      <mat-button-toggle-group
-                        aria-label="`Notifications for ${project}`"
-                      >
-                        <mat-button-toggle i18n
-                          (change)="updateUserAlertSettings(project.id, 1)"
-                          [class.underline]="project.alertStatus === 1"
-                          [checked]="project.alertStatus === 1"
-                          >On</mat-button-toggle
-                        >
-                        <mat-button-toggle i18n
-                          (change)="updateUserAlertSettings(project.id, 0)"
-                          [class.underline]="project.alertStatus === 0"
-                          [checked]="project.alertStatus === 0"
-                          >Off</mat-button-toggle
-                        >
-                        <mat-button-toggle i18n
-                          (change)="updateUserAlertSettings(project.id, -1)"
-                          [class.underline]="project.alertStatus === -1"
-                          [checked]="project.alertStatus === -1"
-                          >Default
-                          <span
-                            >({{
-                              (subscribeByDefault()) === true
-                                ? onText
-                                : offText
-                            }})</span
-                          ></mat-button-toggle
-                        >
-                      </mat-button-toggle-group>
-                    </div>
-                    @if ((projectAlertsError())?.id === project.id) {
-                      <mat-error class="caption-text">{{
-                        (projectAlertsError())?.error
-                      }}</mat-error>
-                    }
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
+          </gt-list-row>
         }
-      }
-
-      @if ((projectViewExpanded()) === true) {
-        <button
-          mat-stroked-button
-          class="expand-button"
-          (click)="toggleProjectView()"
-        >
-          <span i18n>Hide Projects</span><mat-icon>keyboard_arrow_up</mat-icon>
-        </button>
-      }
-    </mat-card-content>
-  </mat-card>
-</section>
+      </gt-list>
+    </gt-settings-section>
+  } @empty {
+    <gt-settings-section i18n-title title="By project" panel>
+      <gt-empty-state
+        icon="notifications"
+        i18n-title
+        title="No projects"
+        i18n-message
+        message="You aren't on any projects yet."
+      />
+    </gt-settings-section>
+  }
+}

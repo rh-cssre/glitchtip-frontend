@@ -5,7 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MonitorFormComponent } from "../monitor-form/monitor-form.component";
 import { MonitorInput } from "../uptime.interfaces";
 import { MonitorService } from "../monitor.service";
-import { DetailHeaderComponent } from "src/app/shared/detail/header/header.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 
@@ -18,13 +18,12 @@ import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
     MonitorFormComponent,
     MatButtonModule,
     MatIconModule,
-    DetailHeaderComponent,
+    PageHeaderComponent,
     TopAppBar,
     BackLinkComponent,
   ],
 })
 export class NewMonitorComponent {
-  createMonitorTitle = $localize`Create a New Uptime Monitor`;
   private monitorService = inject(MonitorService);
 
   error = this.monitorService.error;

@@ -1,5 +1,3 @@
-@for (msg of errors(); track msg) {
-  <mat-error>
-    <div>{{ msg }}</div>
-  </mat-error>
+@for (msg of messages(); track msg) {
+  <mat-error>{{ msg }}</mat-error>
 }

@@ -66,12 +66,13 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
     <div class="preview-section">
       <div class="preview-section__title">Capitalization</div>
       <p class="preview-section__note">
-        Labels are Title Case, sentences are sentence case.
+        Sentence case for every label, title and button.
       </p>
       <ul class="vt-list">
-        <li>Title Case for labels: buttons, page and section titles, field labels, menu items, table headers. New Monitor, Add Project, Monitor Name.</li>
-        <li>Sentence case for full sentences: helper text, error and empty-state messages, tooltips. "Enter a valid email address."</li>
-        <li>Proper nouns and product names keep their own capitals.</li>
+        <li>Sentence case for labels: buttons, page and section titles, field labels, menu items, table headers. New monitor, Add project, Monitor name.</li>
+        <li>Sentence case for full sentences too: helper text, error and empty-state messages, tooltips. "Enter a valid email address."</li>
+        <li>Proper nouns and product names keep their own capitals: GlitchTip, Slack, DSN.</li>
+        <li>Existing Title Case strings in the product wait for the relabel sweep; write new strings in sentence case.</li>
       </ul>
     </div>
 
@@ -99,7 +100,7 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
     <div class="preview-section">
       <div class="preview-section__title">Buttons and labels</div>
       <ul class="vt-list">
-        <li>Verb first, then the object: Add Monitor, Delete Project. See Buttons &amp; actions.</li>
+        <li>Verb first, then the object: Add monitor, Delete project. See Buttons &amp; actions.</li>
         <li>A bare verb is fine only when the object is obvious right beside it.</li>
         <li>Match a confirm button to its action: Delete, not Yes or OK.</li>
       </ul>

@@ -206,7 +206,7 @@ export class ButtonsPreview {
     "Invent per-page icon-button sizes",
   ];
   readonly content = [
-    "Use a verb, and name the object when it adds clarity: Add Monitor, not just Add",
+    "Use a verb, and name the object when it adds clarity: Add monitor, not just Add",
     "A bare verb is fine only when the object is obvious from right beside it",
     "Match a confirm button to its action: Delete, not Confirm or Yes",
     "Keep it short: a verb, or a verb plus its object",

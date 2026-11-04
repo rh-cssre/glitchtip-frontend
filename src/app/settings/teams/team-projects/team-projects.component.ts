@@ -7,49 +7,63 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { OrganizationsService } from "src/app/api/organizations.service";
 import { ProjectSettingsService } from "../../projects/project-settings.service";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
-import { MatDividerModule } from "@angular/material/divider";
 import { MatOptionModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatCardModule } from "@angular/material/card";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 @Component({
   selector: "gt-team-projects",
   templateUrl: "./team-projects.component.html",
-  styleUrls: ["./team-projects.component.scss"],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
     ReactiveFormsModule,
     MatOptionModule,
-    MatDividerModule,
     RouterLink,
     LoadingButtonComponent,
+    ListComponent,
+    ListRowComponent,
+    ListRowLinkComponent,
     EmptyStateComponent,
+    PanelComponent,
+    FormErrorComponent,
+    SettingsSectionComponent,
   ],
 })
 export class TeamProjectsComponent implements OnInit {
   private projectsService = inject(ProjectSettingsService);
-  private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
   teamSlug = input.required<string>({ alias: "team-slug" });
   orgSlug = input.required<string>({ alias: "org-slug" });
 
+  // Only managers and owners can change a team's projects.
+  canEditProjects = inject(OrganizationsService).canWriteOrg;
   projectsOnTeam = this.projectsService.projectsOnTeam;
+  projectsOnTeamCount = this.projectsService.projectsOnTeamCount;
   projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
   loading = this.projectsService.addRemoveLoading;
   errors = this.projectsService.errors;
-  project = new FormControl();
+  project = new FormControl<string | null>(null);
+  /** Add stays disabled until something is picked. */
+  readonly picked = toSignal(this.project.valueChanges, { initialValue: null });
   // Adding and removing go through project endpoints that require org:write.
-  canWriteOrg = this.organizationsService.canWriteOrg;
   noProjectsMessage = computed(() =>
-    this.canWriteOrg()
+    this.canEditProjects()
       ? $localize`Add a project so this team's members get its alerts.`
       : $localize`Ask an organization manager or owner to add projects to this team.`,
   );
@@ -62,20 +76,39 @@ export class TeamProjectsComponent implements OnInit {
     );
   }
 
-  addProject() {
+  async addProject() {
     const projectSlug = this.project.value;
-    this.projectsService.addProjectToTeam(
+    if (!projectSlug) {
+      return;
+    }
+    await this.projectsService.addProjectToTeam(
       this.orgSlug(),
       this.teamSlug(),
       projectSlug,
     );
+    if (!this.projectsNotOnTeam().some((p) => p.slug === projectSlug)) {
+      this.project.reset();
+    }
   }
 
-  removeProject(projectSlug: string) {
-    this.projectsService.removeProjectFromTeam(
-      this.orgSlug(),
-      this.teamSlug(),
-      projectSlug,
-    );
+  removeProject(projectSlug: string, projectName: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Remove ${projectName}:project: from #${this.teamSlug()}:team:?`,
+          message: $localize`This team's members will stop getting its email alerts.`,
+          confirmText: $localize`Remove`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.projectsService.removeProjectFromTeam(
+            this.orgSlug(),
+            this.teamSlug(),
+            projectSlug,
+          );
+        }
+      });
   }
 }

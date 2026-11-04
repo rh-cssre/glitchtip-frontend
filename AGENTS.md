@@ -8,7 +8,8 @@
 
 - **Permission gating:** gate every write/delete control on a named gate from `OrganizationsService` (`canWriteProject`, `canAdminOrg`, …), never an inline scope list. The backend enforces access regardless; gating keeps users from clicking actions that will 403.
   - **Missing permission → hide** with `@if (canXxx())`. If that empties a card, hide the card or render its data read-only.
-  - **Transient state → `[disabled]`** (pristine form, in-flight request), never for permission.
+  - **Transient state → `[disabled]`** (in-flight request, missing prerequisite), never for permission.
+  - **A blocked action shows its reason as visible text**, with the control disabled beside it or hidden; never a tooltip-only reason.
   - **Write and admin are different scopes.** Deletes usually need the admin gate; check the endpoint's `@org_scoped` scopes in the backend.
   - **Re-word copy that points at a hidden control** ("press Create Team") so it doesn't render when the control is gated away.
   - **Multi-org views can't use these gates**: they derive from the one selected organization.

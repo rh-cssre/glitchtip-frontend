@@ -1,27 +1,34 @@
 @if (TOTPAuthenticator()) {
-  <div>
-    <p class="mat-h2"><strong i18n>Backup codes</strong></p>
-    <p class="mat-h4" i18n>
-      Lost your codes? Generate a new set. This invalidates the old one, so save
-      the new codes somewhere safe.
-    </p>
-    <button
-      mat-stroked-button
-      (click)="startRegenCodes()"
-      [disabled]="regenCodes()"
-      i18n
-      >Regenerate codes</button
+  <gt-settings-section i18n-title title="Backup codes" panel>
+    <span slot="description" i18n
+      >Each code signs you in once if you lose your phone. A new set replaces
+      the old one, so save it somewhere safe.</span
     >
-  </div>
-}
-@if (regenCodes() || TOTPAuthenticator() === undefined) {
-  <div>
-    @if (TOTPAuthenticator() === undefined) {
-      <p i18n>
-        Save these codes somewhere safe. Each one lets you sign in once if you
-        lose your phone.
-      </p>
+    @if (regenCodes()) {
+      <div class="button-group">
+        <button mat-stroked-button (click)="downloadCodes()" i18n
+          >Download</button
+        >
+        <button mat-stroked-button (click)="copyCodes()" i18n>Copy</button>
+      </div>
     }
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Generate new codes"
+      buttonStyle="stroked"
+      [loading]="pendingAction() === 'regenCodes'"
+      [disabled]="loading() || regenCodes()"
+      (buttonClick)="startRegenCodes()"
+    />
+  </gt-settings-section>
+} @else if (TOTPAuthenticator() === undefined) {
+  <!-- The save-your-codes step of the authenticator setup. -->
+  <div>
+    <p i18n>
+      Save these codes somewhere safe. Each one lets you sign in once if you
+      lose your phone.
+    </p>
     <div class="button-group">
       <button mat-stroked-button (click)="downloadCodes()" i18n
         >Download</button
@@ -52,14 +59,14 @@
               </mat-error>
             }
           </mat-form-field>
-          <button
-            mat-flat-button
-            color="primary"
-            (click)="verifyBackupCode()"
-            [disabled]="!copiedCodes()"
-            i18n
-            >Next</button
-          >
+          <gt-loading-button
+            i18n-buttonText
+            buttonText="Next"
+            buttonStyle="stroked"
+            [loading]="pendingAction() === 'verifyCode'"
+            [disabled]="loading() || !copiedCodes()"
+            (buttonClick)="verifyBackupCode()"
+          />
         </form>
       </ng-container>
     }

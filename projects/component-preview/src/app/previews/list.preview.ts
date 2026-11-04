@@ -5,6 +5,8 @@ import { MatMenuModule } from "@angular/material/menu";
 import { ListComponent } from "src/app/shared/list/list.component";
 import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { StatusPillComponent } from "src/app/shared/status-pill/status-pill.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
 @Component({
@@ -13,17 +15,14 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     ListComponent,
     ListRowComponent,
     ListRowLinkComponent,
+    PanelComponent,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    StatusPillComponent,
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: `
-    .preview-list-create {
-      margin-bottom: var(--gt-space-4, 16px);
-    }
-  `,
   template: `
     <preview-doc
       title="List"
@@ -62,6 +61,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <gt-list>
           <gt-list-row>
             new.hire&#64;acme.com
+            <gt-status-pill label="Invite pending" />
             <span slot="meta">Member</span>
             <ng-container slot="actions">
               <button
@@ -99,28 +99,31 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <div class="preview-section__title">
           Inside a record's tab, rows that open their record
         </div>
-        <button mat-stroked-button class="preview-list-create">
-          <mat-icon>add</mat-icon>
-          New alert
-        </button>
-        <gt-list>
-          <gt-list-row>
-            <a gtListRowLink href="#" (click)="$event.preventDefault()"
-              >Error spike</a
-            >
-            <span slot="description"
-              >Alerts when an issue gets 10 events in 1 minute.</span
-            >
-          </gt-list-row>
-          <gt-list-row>
-            <a gtListRowLink href="#" (click)="$event.preventDefault()"
-              >Checkout down</a
-            >
-            <span slot="description"
-              >Alerts when an uptime monitor goes down.</span
-            >
-          </gt-list-row>
-        </gt-list>
+        <gt-panel flush>
+          <span slot="lead">2 alerts</span>
+          <button slot="actions" mat-stroked-button>
+            <mat-icon>add</mat-icon>
+            New alert
+          </button>
+          <gt-list flush>
+            <gt-list-row>
+              <a gtListRowLink href="#" (click)="$event.preventDefault()"
+                >Error spike</a
+              >
+              <span slot="description"
+                >Alerts when an issue gets 10 events in 1 minute.</span
+              >
+            </gt-list-row>
+            <gt-list-row>
+              <a gtListRowLink href="#" (click)="$event.preventDefault()"
+                >Checkout down</a
+              >
+              <span slot="description"
+                >Alerts when an uptime monitor goes down.</span
+              >
+            </gt-list-row>
+          </gt-list>
+        </gt-panel>
       </div>
 
       <div class="preview-section">
@@ -150,10 +153,11 @@ export class ListPreview {
     "Put two or more actions in a menu at the end of the row",
     "Keep row actions neutral; the confirm dialog carries the warning for a destructive one",
     "Keep action labels short (Remove, Hide) so the action column lines up",
+    "Show a row's state (Invite pending) with gt-status-pill after the name",
     "Mark a fixed attribute (Owner, Primary) with .list-row__tag after the name",
     "Say why a blocked action is blocked in the description line",
     "Give each meta fact its own span and let the row draw the separators",
-    "Put a tab's create action above its list as an outlined button with the add icon",
+    "Put a tab's create action in the list panel's header, led by the count in slot=\"lead\"",
   ];
   readonly donts = [
     "Use a menu for a single action; it adds a step for nothing",
@@ -182,7 +186,7 @@ export class ListPreview {
       name: "gt-list-row content",
       type: "projected",
       default: "",
-      description: "The record's name, plus any tags",
+      description: "The record's name, plus any status pill or tags",
     },
     {
       name: ".list-row__tag",

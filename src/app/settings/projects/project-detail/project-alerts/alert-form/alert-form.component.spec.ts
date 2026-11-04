@@ -20,7 +20,6 @@ describe("AlertFormComponent environments", () => {
   });
 
   function setInputs(environments: string[], available: string[]) {
-    fixture.componentRef.setInput("canWrite", true);
     fixture.componentRef.setInput("timespan", 10);
     fixture.componentRef.setInput("quantity", 2);
     fixture.componentRef.setInput("environments", environments);
@@ -43,7 +42,6 @@ describe("AlertFormComponent environments", () => {
     expect(component.projectFormUptime.value).toBe(true);
     expect(component.projectFormEnvironments.value).toEqual([]);
     expect(component.environmentOptions()).toEqual([]);
-    expect(component.environmentsUnchanged()).toBe(true);
   });
 
   it("offers the project's environments as options", () => {
@@ -77,17 +75,6 @@ describe("AlertFormComponent environments", () => {
     expect(emitted).toEqual(["staging"]);
   });
 
-  it("reports environments as unchanged regardless of selection order", () => {
-    setInputs(["production", "staging"], ["production", "staging"]);
-    expect(component.environmentsUnchanged()).toBe(true);
-
-    component.projectFormEnvironments.setValue(["staging", "production"]);
-    expect(component.environmentsUnchanged()).toBe(true);
-
-    component.projectFormEnvironments.setValue(["staging"]);
-    expect(component.environmentsUnchanged()).toBe(false);
-  });
-
   it("renders the environments select wired to the form control", () => {
     // Class-only tests stay green on a broken template; assert real render + wiring.
     setInputs(["production"], ["production", "staging"]);
@@ -107,16 +94,6 @@ describe("AlertFormComponent environments", () => {
     expect(
       fixture.debugElement.query(By.css('[data-cy="environments"]')),
     ).toBeTruthy();
-  });
-
-  it("renders a read-only summary instead of the form without write access", () => {
-    setInputs(["production"], ["production", "staging"]);
-    fixture.componentRef.setInput("canWrite", false);
-    fixture.detectChanges();
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.querySelector("form")).toBeNull();
-    expect(el.textContent).toContain("If an event happens 2 times in 10");
-    expect(el.textContent).toContain("Only in these environments: production");
   });
 
   it("hides the environments field when the project has none", () => {

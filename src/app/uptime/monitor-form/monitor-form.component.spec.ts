@@ -5,6 +5,7 @@ import type {} from "@angular/localize/init";
 import { beforeEach, describe, it, expect, vi } from "vitest";
 import { signal } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { provideRouter } from "@angular/router";
 import { MonitorFormComponent } from "./monitor-form.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { EnvironmentsService } from "src/app/api/environments.service";
@@ -68,6 +69,7 @@ describe("MonitorFormComponent environment scoping", () => {
     await TestBed.configureTestingModule({
       imports: [MonitorFormComponent],
       providers: [
+        provideRouter([]),
         {
           provide: OrganizationsService,
           useValue: {
@@ -100,6 +102,21 @@ describe("MonitorFormComponent environment scoping", () => {
     await fixture.whenStable();
     fixture.detectChanges();
   }
+
+  it("labels each field with its section title", () => {
+    const el: HTMLElement = fixture.nativeElement;
+    const name = el.querySelector<HTMLInputElement>("#monitor-name")!;
+    const titleId = name.getAttribute("aria-labelledby")!;
+    expect(el.querySelector(`#${titleId}`)?.textContent).toBe("Name");
+    const type = el.querySelector("[data-cy=monitor-type] mat-select")!;
+    const typeTitleId = type.getAttribute("aria-labelledby")!.trim();
+    expect(el.querySelector(`#${typeTitleId}`)?.textContent).toBe(
+      "Monitor type",
+    );
+    expect(
+      el.querySelector("[data-cy=monitor-submit]")?.textContent?.trim(),
+    ).toBe("Create monitor");
+  });
 
   it("disables the environment field until a project is chosen", () => {
     expect(component.environmentDisabled()).toBe(true);

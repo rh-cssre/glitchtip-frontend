@@ -1,19 +1,20 @@
-mat-card {
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  mat-card-content {
-    padding-top: 16px;
-  }
+:host {
+  display: block;
 }
 
-mat-card-title {
-  margin-bottom: 8px;
+// Buttons inside the setup steps; the section's own action lines up by itself.
+.totp-stepper :is(button, gt-loading-button) {
+  margin-top: var(--gt-space-2, 8px);
+  margin-right: var(--gt-space-2, 8px);
 }
 
-button {
-  margin-top: 8px;
-  margin-right: 8px;
+.totp-stepper gt-loading-button {
+  display: inline-block;
+}
+
+// The stepper sits on the page, not on a card.
+.totp-stepper {
+  background: transparent;
 }
 
 // Progress rail only; the setup stage drives navigation, not clicks.

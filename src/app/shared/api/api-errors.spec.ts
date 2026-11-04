@@ -1,16 +1,12 @@
-import { describe, it, expect, vi } from "vitest";
-
-// api-errors.ts reaches constants.ts, whose strings go through Angular's $localize.
-// That global only exists in a built app, so stand it in before the imports
-// hoist rather than adding a setup file the other specs do not need.
-vi.hoisted(() => {
-  (globalThis as Record<string, unknown>)["$localize"] = (
-    parts: TemplateStringsArray,
-  ) => parts.join("");
-});
+// Type-only: declares the $localize global for the spec program. The runtime
+// polyfill is already loaded by the test builder; replacing it here would leak
+// into every spec that shares this worker.
+import type {} from "@angular/localize/init";
+import { describe, it, expect } from "vitest";
 
 import {
   ApiError,
+  apiErrorMessage,
   getNinjaErrorResponse,
   handleError,
   isNinjaErrorResponse,
@@ -137,5 +133,26 @@ describe("getNinjaErrorResponse", () => {
   it("returns undefined for anything else", () => {
     expect(getNinjaErrorResponse(new Error("boom"))).toBeUndefined();
     expect(getNinjaErrorResponse(undefined)).toBeUndefined();
+  });
+});
+
+describe("apiErrorMessage", () => {
+  const fallback = "Could not add the project.";
+
+  it("shows the server's detail", () => {
+    expect(
+      apiErrorMessage({ detail: "Project not found" }, res(403), fallback),
+    ).toBe("Project not found");
+  });
+
+  it("falls back when the body has no detail", () => {
+    expect(apiErrorMessage({}, res(400), fallback)).toBe(fallback);
+    expect(apiErrorMessage(undefined, res(400), fallback)).toBe(fallback);
+  });
+
+  it("falls back instead of a generic message", () => {
+    expect(apiErrorMessage({ detail: "nope" }, res(418), fallback)).toBe(
+      fallback,
+    );
   });
 });

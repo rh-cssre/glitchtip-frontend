@@ -101,7 +101,7 @@ describe("Edit and Delete a project", () => {
 
   it("should remove the project and redirect to projects page", () => {
     cy.get("#delete-project").click();
-    cy.contains("Are you sure you want to delete this project?");
+    cy.contains("All of its issues, events and settings will be deleted.");
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Your project has been successfully deleted");
     cy.url().should(
@@ -115,22 +115,29 @@ describe("Add and edit alerts", () => {
   beforeEach(() => {
     seedBackend(true);
     requestLogin();
-    cy.visit(`/${seededOrg.slug}/settings/projects/${seededProject1.slug}`);
+    cy.visit(
+      `/${seededOrg.slug}/settings/projects/${seededProject1.slug}?tab=alerts`,
+    );
   });
 
   it("should add a project alert, remove email recipient, add email recipient back", () => {
     cy.get("#create-new-alert").click();
+    cy.get("[data-cy=alert-name]").type("Checkout errors");
     cy.get("[data-cy=quantity]").clear().type("2");
-    cy.get("button").contains("Submit").click();
-    cy.contains("Remove Alert 1");
+    cy.get("[data-cy=alert-summary]").should(
+      "contain",
+      "Alerts when an issue gets 2 events in 1 minute.",
+    );
+    cy.get("[data-cy=save-alert]").click();
+    cy.contains("Alert created");
+    cy.contains("gt-list-row a", "Checkout errors").click();
     cy.get("[data-cy=quantity]").should("have.value", "2");
 
-    cy.get("#delete-recipient").click();
-    cy.contains("Are you sure you want to remove this recipient?");
-    cy.get("[data-cy='dialog-confirm']").click();
+    cy.get("[data-cy=delete-recipient]").click();
     cy.contains("This alert isn't being sent anywhere.");
+    cy.contains("Nobody is notified until you add a recipient.");
 
-    cy.get("button").contains("Add An Alert Recipient").click();
+    cy.get("button").contains("Add recipient").click();
     cy.get("[data-cy=recipient-type]")
       .click()
       .get("mat-select")
@@ -138,24 +145,29 @@ describe("Add and edit alerts", () => {
       .contains("Email")
       .click();
     cy.get("button").contains("Add Recipient").click();
-    cy.contains("Send an email to team members on this project.");
+    cy.contains(".recipient__label", "Email");
+    cy.get("[data-cy=save-alert]").click();
+    cy.contains("Alert saved");
   });
 
   it("should add an alert for uptime notifications, then update it to work for error notifications", () => {
     cy.get("#create-new-alert").click();
     cy.get("[data-cy=error-check]").click();
+    cy.get("[data-cy=save-alert]").click();
     cy.contains("Select at least one condition: event frequency or uptime.");
     cy.get("[data-cy=uptime-check]").click();
-    cy.get("button").contains("Submit").click();
-    cy.contains("Success! Your new alert has been added.");
+    cy.get("[data-cy=save-alert]").click();
+    cy.contains("Alert created");
 
+    cy.contains("gt-list-row a", "Uptime alert").click();
     cy.get("[data-cy=error-check]").find("input").should("not.be.checked");
     cy.get("[data-cy=uptime-check]").find("input").should("be.checked");
 
     cy.get("[data-cy=error-check]").click();
-    cy.get("[data-cy=update-button]").contains("Update").click();
-    cy.contains("Success: Your alert has been updated");
+    cy.get("[data-cy=save-alert]").click();
+    cy.contains("Alert saved");
 
+    cy.contains("gt-list-row a", "Event and uptime alert").click();
     cy.get("[data-cy=error-check]").find("input").should("be.checked");
     cy.get("[data-cy=uptime-check]").find("input").should("be.checked");
   });

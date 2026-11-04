@@ -1,93 +1,10 @@
-@use "variables" as vars;
-
-mat-card {
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  mat-card-content {
-    padding-top: 16px;
-  }
-
-  .note-padding {
-    padding-top: 0;
-  }
-}
-
-.project-form {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 8px;
-
-  @media (max-width: vars.$medium - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 25px;
-  }
-
-  mat-form-field {
-    width: 100%;
-    margin-right: 40px;
-
-    @media (max-width: vars.$medium - 1) {
-      margin-right: 0;
-    }
-  }
-}
-
-.platform-form {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media (max-width: vars.$medium - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.docs-and-submit-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  padding-bottom: var(--mat-sys-body-small-line-height);
-
-  @media (max-width: vars.$medium - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-    padding-bottom: 0;
-  }
-}
-
-.remove-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media (max-width: vars.$tablet - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+// Panels stack 16px apart.
+.project-note {
+  margin-bottom: var(--gt-space-4, 16px);
 
   p {
-    padding-right: 16px;
+    margin: 0;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
   }
-}
-
-.server-error {
-  display: block;
-}
-
-.vertical-card-header {
-  flex-direction: column;
-}
-
-.invalid {
-  color: var(--mat-sys-error);
-}
-
-gt-loading-button ::ng-deep button {
-  width: 140px;
 }

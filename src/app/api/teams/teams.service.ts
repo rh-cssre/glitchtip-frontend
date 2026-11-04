@@ -1,32 +1,38 @@
-import { Injectable, computed, inject, signal } from "@angular/core";
+import {
+  Injectable,
+  computed,
+  inject,
+  linkedSignal,
+  signal,
+} from "@angular/core";
 import { TeamErrors, TeamLoading } from "./teams.interfaces";
 import { UserService } from "../user/user.service";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { OrganizationsService } from "../organizations.service";
-import { client, handleError } from "../../shared/api/api";
+import { apiErrorMessage, client, handleError } from "../../shared/api/api";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
 import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { components } from "../api-schema";
 type Team = components["schemas"]["TeamProjectSchema"];
 
 interface TeamsState {
-  errors: TeamErrors;
+  errors: Omit<TeamErrors, "deleteTeam">;
   loading: TeamLoading;
 }
 
 const initialState: TeamsState = {
-  errors: { updateName: "", deleteTeam: "" },
+  errors: { updateName: "" },
   loading: { updateName: false, deleteTeam: false },
 };
 
-interface TeamKey {
+export interface TeamKey {
   orgSlug: string;
   teamSlug: string;
 }
 
 // Setting the same team again must not refetch.
-const sameTeamKey = (a: TeamKey | null, b: TeamKey | null) =>
+export const sameTeamKey = (a: TeamKey | null, b: TeamKey | null) =>
   a?.orgSlug === b?.orgSlug && a?.teamSlug === b?.teamSlug;
 
 @Injectable({
@@ -61,7 +67,10 @@ export class TeamsService extends StatefulService<TeamsState> {
       },
     },
   }));
-  readonly team = computed(() => this.teamResource.value() ?? null);
+  // value() throws on a failed load (e.g. an unknown team).
+  readonly team = computed(
+    () => (this.teamResource.hasValue() && this.teamResource.value()) || null,
+  );
 
   private teamMembersKey = signal<TeamKey | null>(null, {
     equal: sameTeamKey,
@@ -80,7 +89,12 @@ export class TeamsService extends StatefulService<TeamsState> {
       },
     }),
   );
-  readonly teamMembers = computed(() => this.teamMembersResource.value() ?? []);
+  readonly teamMembers = computed(
+    () =>
+      (this.teamMembersResource.hasValue() &&
+        this.teamMembersResource.value()) ||
+      [],
+  );
   /** The loaded roster's size when it is this team's, else the team's count. */
   readonly teamMemberCount = computed(() =>
     this.teamMembersResource.hasValue() &&
@@ -89,7 +103,15 @@ export class TeamsService extends StatefulService<TeamsState> {
       : this.team()?.memberCount,
   );
   readonly loading = computed(() => this.state().loading);
-  readonly errors = computed(() => this.state().errors);
+  // A failed delete belongs to the team it was tried on.
+  private deleteTeamError = linkedSignal({
+    source: this.teamKey,
+    computation: () => "",
+  });
+  readonly errors = computed<TeamErrors>(() => ({
+    ...this.state().errors,
+    deleteTeam: this.deleteTeamError(),
+  }));
   /**
    * Add/remove others on the team whose members are loaded. Mirrors the
    * backend: Admin+ (team:write) if you're on the team, Manager+ (org:write)
@@ -121,6 +143,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   async updateTeamSlug(orgSlug: string, teamSlug: string, newTeamSlug: string) {
+    this.setUpdateTeamSlugError("");
     this.setUpdateTeamSlugLoading(true);
     const { data, error, response } = await client.PUT(
       "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
@@ -158,6 +181,7 @@ export class TeamsService extends StatefulService<TeamsState> {
   }
 
   async deleteTeam(orgSlug: string, teamSlug: string) {
+    this.deleteTeamError.set("");
     this.setDeleteTeamLoading(true);
     const result = await client.DELETE(
       "/api/0/teams/{organization_id_or_slug}/{team_slug}/",
@@ -171,11 +195,19 @@ export class TeamsService extends StatefulService<TeamsState> {
       },
     );
     this.setDeleteTeamLoading(false);
-    if (result.error) {
-      // this.setDeleteTeamError(result.response);
-    } else {
+    if (result.response.ok) {
       this.snackBar.open($localize`You have successfully deleted #${teamSlug}:teamSlug:`);
       this.router.navigate([orgSlug, "settings", "teams"]);
+    } else {
+      // The schema lists no error body, so the error is typed never.
+      const { error } = result as { error?: unknown };
+      this.deleteTeamError.set(
+        apiErrorMessage(
+          error,
+          result.response,
+          $localize`Could not delete the team.`,
+        ),
+      );
     }
     return result;
   }

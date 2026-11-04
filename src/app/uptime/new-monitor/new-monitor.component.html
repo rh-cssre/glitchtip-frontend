@@ -1,12 +1,12 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    <gt-back-link i18n-backLinkText backLinkText="View all uptime monitors" />
+    <gt-back-link i18n-backLinkText backLinkText="Uptime Monitors" />
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <gt-detail-header [title]="[createMonitorTitle, null]" />
+  <gt-page-header i18n-title title="New monitor" />
   <gt-monitor-form
-    [loading]="loading() === true"
+    [loading]="loading()"
     [formError]="error()"
     (formSubmitted)="submit($event)"
   ></gt-monitor-form>

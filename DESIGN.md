@@ -45,7 +45,7 @@ Rule: prefer a semantic class where one exists; otherwise apply the matching typ
 ### Running text
 
 - Sentences (page intros, section help) cap their width with `--gt-measure` (70ch). Short centered text uses `--gt-measure-narrow` (44ch). Widths are in characters so they follow font size; field widths are a separate layout choice.
-- A page that needs orientation opens with one `.page-intro` line: muted, capped, no box or icon.
+- Orientation for a page or tab goes in the panel it explains: the description line of its first list or settings panel, never a loose line above it. Keep only what the title and rows do not already say.
 - A link inside a sentence is underlined, in the text color, at normal weight (`.gt-prose a`, `.page-intro a`). Standalone links (row names, nav, table cells) keep the bold global style. Never the primary color: in GlitchTip's theme it reads as a warning.
 
 ### Spacing
@@ -77,7 +77,9 @@ Conventions for every component:
 
 - Standalone, `ChangeDetectionStrategy.OnPush`, signal inputs and outputs.
 - Selector prefix `gt-`.
-- Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `CLAUDE.md`).
+- Build write and delete controls behind the relevant permission signal (see the permission-gating convention in `AGENTS.md`).
+- A blocked action shows its reason as visible text. It may be disabled beside that text, or hidden; never a tooltip-only reason.
+- A slotted node (`slot="actions"`) projects only from a block with a single root, so give each slotted control its own `@if`, one element per branch.
 
 ### Panels
 
@@ -95,6 +97,7 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 - A collection of records (a table, a `gt-list`, a code block) sits in a bordered container, with a line between rows.
 - A row that opens its record makes the name the link, written `<a gtListRowLink>`. That makes the row navigable: the link's hit area covers the whole row, hovering the row draws the on-surface 8% state layer and underlines the name, keyboard focus rings the row. The link stays the only tab stop; row actions sit above the hit area and keep their own clicks. No separate Edit or View button repeats the link, and no chevron: a chevron means a row expands.
 - A navigable row's meta is text. A control in the row (a copy button, a menu) goes in the actions slot, which sits above the hit area.
+- A copy button attached to a value is part of that value, not a row action.
 - One action on a row is a visible outlined button. Two or more go in a menu at the end of the row.
 - Row actions stay neutral, destructive ones included; the confirm dialog carries the warning.
 - Rows with several columns to compare or sort are a table instead.
@@ -102,7 +105,7 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 - A description line of facts (a project's platform and teams) gets `.list-row__facts`, so the row draws the same separators there.
 - A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
 - When a row's action is blocked, say why in the row's description line; never only in a tooltip.
-- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon.
+- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it in the list panel's header actions as an outlined button with the add icon, led by the list's count. While the list is empty, the panel has no header and the button is the empty state's action.
 - Projects are listed with `gt-project-rows` everywhere. On Home and Projects a row shows the name, then platform, teams and last event, and on the right the last 14 days of errors (the issue list's trend bars) and the unresolved count; a click opens its issues. Settings > Projects is the setup view: platform, teams, the alert count when there are alerts, and the created date, with no trend; a click opens its settings. A project with no events yet shows a "No events yet" state pill. A row loads its numbers when it scrolls into view, at most four at once, with placeholder bars meanwhile. Projects use the `folder` icon everywhere.
 
 ### Labels
@@ -144,7 +147,7 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - The bar draws only its bottom border. Controls of one kind are separated by gap spacing. Between two groups of different kinds (filters | actions, state | destructive) put a `.gt-bar-divider`: 1px wide, 20px tall, `outline-variant`, centred, with 8px on each side. Never between two controls of the same kind, never at the bar edges, never with only one group.
 - `$top-app-bar-height` in `src/assets/styles/_variables.scss` is the only place that sets the bar height; the top app bar, the list app bar and the full-height layout read it. No per-page height overrides. If a control does not fit, apply a Material density mixin in the bar's own stylesheet.
 - The back link is `gt-back-link`, in the bar and in tab sub-views alike: a text link with a chevron, naming the parent page with that page's nav label ("Projects", "Uptime Monitors"). An edit form goes back to its record and shows the record's name. Use one label at every width; never "Back to" or "View all". The component pulls itself left by the button's leading inset (12px), so its chevron sits on the container edge wherever it is placed; don't add a local margin to compensate.
-- List pages put one filled "New X" in the right slot.
+- List pages put one filled "New X" in the right slot. Profile pages set it as an `action` (link and text) in their route data; the profile wrapper renders it.
 - Record pages have no filled button in the bar. Primary is for at most one main create or confirm action per page. A record with an edit page links to it with an outlined "Edit X".
 - A record's status control in the bar is an outlined neutral dropdown that shows the same coloured dot as `gt-status-pill`, never a filled primary button.
 - Outline tells you what a control does: an action (it changes the record, like status, Edit, Delete, or it does something with the record, like Copy for AI) is an outlined button; a control that only changes what you see (filters, time range, App frames/Raw, frame order, categories) is a ghost select with no outline. An action with extra options is a split button (`gt-split-button`): one outlined shape, main part and caret separated by a hairline. In a bar under 600px it drops its label and keeps its icon, the same way a ghost select switches to its `shortLabel`; a bar opts in with `container: gt-bar / inline-size` (the top app bar and `gt-panel` do).
@@ -158,9 +161,41 @@ Every record detail page opens with `gt-page-header`: the record's name, then on
 - **Header row:** one size for every table. Column headers are 32px, in label-medium and `on-surface-variant`, set once in `material-overrides/_table.scss` (`$table-header-height`). The sticky action row above them (`.table-header`) keeps Material's own. Pages do not restyle header cells.
 - **Narrow screens:** columns drop as the window narrows, but the column header row stays, labeling the columns that remain.
 
+### Forms
+
+- Every field gets the house look globally from `material-overrides/_form-field.scss`: outline appearance, 14px text and label, 4px radius, the theme's comfortable height. The resting outline is a mid-tone mix of `outline` and `outline-variant` that stays at 3:1 or more against the page; hover, focus and error keep Material's colors. Filters in the top app bar are ghost selects, not fields (see Top app bar).
+
+### Settings sections
+
+Every setting on a settings page is a `gt-settings-section`: a title, an optional line of help, then the control and its actions.
+
+- A section description must say something the title and control do not (a consequence, a limit, non-obvious behaviour). Otherwise omit it.
+- One panel per save unit: a section with its own Save, Add or Connect is a `panel` section, its action on the right of the tinted footer. A section that saves on change (toggles, a theme choice) is a panel with no footer. Panels stack 16px apart; fields keep the 560px column.
+- A list (members, projects, environments, emails, keys, tokens, alerts) is its own panel, `flush` while it has rows, with a `flush` `gt-list` inside so only the panel draws a border. The field that adds to it is a separate panel above it, with Add in the footer. Header actions go in `slot="header-actions"` on a section, `slot="actions"` on a plain `gt-panel`.
+- The first section in its container sits flush with what is above it. Content starts 16px under a tab bar, from one global `mat-tab-nav-panel` rule; pages do not pad their own panel.
+- The section title is a lone field's only visible label, linked with `aria-labelledby`. A title hidden because it repeats the tab uses `hideTitle`, so the label still reaches screen readers.
+- A settings panel's title sits at the top of its body, not in a separate title bar.
+- Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight. An Add whose only input is a pick from a list (a member, a project) stays disabled until something is picked.
+- A choice that shows its effect at once (the theme) saves on change, with no Save.
+- Save-on-change disables the control while saving, is silent on success, and on failure rolls back and shows `gt-form-error` under the control.
+- A destructive action is the last section, a `tone="danger"` panel with an outlined warn button in its footer and a confirm dialog that names the object and says it cannot be undone.
+- A delete section's description names the object in bold: "Deletes **checkout-api** and all of its issues, events and settings. This cannot be undone." The `<strong>` stays inside the i18n message.
+- A failed delete shows `gt-form-error` inside its delete section, not a toast.
+- Someone who cannot edit a setting sees its value as plain text, without the control. A read-only value in a slot sits in an element (a `<span>`), not as bare text.
+- In a `gt-form-panel`, field sections are direct children of the panel so the hairlines between them show.
+- Field errors from the server are mapped onto their controls with `mapFormErrors` in the submit handler, after the request returns. Never map them from an `effect()`. Errors that belong to no field go in `gt-form-error` at the bottom of the form panel's body, on create and edit forms alike. A settings section's own error goes in its `error` slot, at the bottom of its body above the footer.
+- A radio group in a section lines up with the section text. Short single-word choices (roles) sit in a `.gt-radio-row` that wraps; longer labels stack in a `.gt-radio-column`. What the chosen option means goes under the group in a `.gt-field-hint`.
+- Create forms are titled New X, edit forms Edit X; the back link names where you return to.
+- A create form ("New project", "New token") has its back link in the top app bar and a `gt-page-header` titled with the action. A form with one submit is one save unit: one `gt-panel class="gt-form-panel"` holding a section per field (hairlines between them) and `gt-form-error`, with a text Cancel and a filled "Create X" on the right of its footer.
+- An edit form takes the create form's shape, with an outlined "Save X" in the footer, then "Delete X" as a danger panel below it.
+
 ### Side navigation
 
 - The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items are controls, so they use label-large (14px, 500) like the organization switcher, 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
+
+### Sub-views in a tab
+
+- A view opened by a query param inside a tab (an alert's edit form) starts with a `gt-back-link` named after the tab ("Alerts"), the same component the top app bar uses. The page's top app bar belongs to the parent record.
 
 ### Tag chips
 
@@ -200,7 +235,7 @@ Required on every component page: description, example, When to use, Do, Don't, 
 
 **Foundation and reference pages** (colors, spacing, typography, icons, symbols) do not use `preview-doc`. They document tokens or assets, not usage, so they use a page header, a one-line lead, and the reference content, and they read values live from the theme wherever possible so they cannot drift. They carry no When to use or Do/Don't.
 
-Voice: plain and human. A verb-first instruction beats a description of one. No em or en dashes. Only essential, helpful information.
+Voice: plain and human. A verb-first instruction beats a description of one. No em or en dashes. Only essential, helpful information. Sentence case for every label, title and button; proper nouns keep their capitals.
 
 Icons: a preview example may only use a Material Symbol that is in the app's self-hosted subset (the list on the Material symbols page); any other name renders as broken ligature text, not a glyph.
 
@@ -236,7 +271,7 @@ Until it is published, run it locally with `npm run preview` (port 4300, require
 
 Direction for the system beyond the current guide, roughly in order:
 
-1. **Audit tickets.** Work through the tracked backlog: standardize submit buttons on gt-loading-button, promote gt-empty-state, fix the deprecated gt-form-error input, then the medium/low items.
+1. **Audit tickets.** Work through the tracked backlog: standardize submit buttons on gt-loading-button, then the medium/low items.
 2. **API-table sync check.** The properties tables in the guide are hand-written; add a small check (script or agent step) that diffs each component's `input()`/`output()` signatures against its documented `api` rows so the docs cannot silently drift.
 3. **Visual regression.** Screenshot the guide's pages in CI (Playwright) and diff on merge requests, so token or component changes show up as reviewable image diffs.
 4. **Brand tokens partial.** The Brand section is live in the guide (Product | Brand toolbar tabs): marketing shares the product's Material theme and adds display typography (`.marketing-heading` scale), the `.fancy` italic accent, and two accent tokens (`--mkt-accent-blue/yellow`). Those brand styles are currently mirrored into the preview's stylesheet; extract them into a shared partial that both marketing and the preview import so there is a single source.

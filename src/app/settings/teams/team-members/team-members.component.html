@@ -1,62 +1,84 @@
-<mat-card>
-  <mat-card-header class="card-header">
-    <mat-card-title i18n>Members</mat-card-title>
-    @if (canModifyTeam()) {
-      <mat-form-field appearance="outline" data-cy="team-member-select">
-        <mat-label i18n>Add Member</mat-label>
-        <mat-select (selectionChange)="addTeamMember()" [formControl]="member">
-          @if (filteredAddTeamMembers().length) {
-            @for (orgMember of filteredAddTeamMembers(); track orgMember) {
-              <mat-option [value]="orgMember">
-                {{ orgMember.email }}
-              </mat-option>
-            }
-          } @else {
-            <mat-option disabled i18n>No members</mat-option>
+@if (canModifyTeam()) {
+  <gt-settings-section #addSection i18n-title title="Add member" panel>
+    <mat-form-field
+      appearance="outline"
+      subscriptSizing="dynamic"
+      data-cy="team-member-select"
+    >
+      <mat-select
+        [formControl]="member"
+        i18n-placeholder
+        placeholder="Choose a member"
+        [aria-labelledby]="addSection.titleId"
+      >
+        @if (filteredAddTeamMembers().length) {
+          @for (orgMember of filteredAddTeamMembers(); track orgMember) {
+            <mat-option [value]="orgMember">
+              {{ orgMember.email }}
+            </mat-option>
           }
-        </mat-select>
-        @if (addMemberError) {
-          <mat-error>{{ addMemberError }}</mat-error>
+        } @else {
+          <mat-option disabled i18n>No members</mat-option>
         }
-      </mat-form-field>
+      </mat-select>
+    </mat-form-field>
+    @if (addMemberError()) {
+      <gt-form-error slot="error" [errors]="addMemberError()" />
     }
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    @if (teamMembers().length === 0) {
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Add member"
+      buttonStyle="stroked"
+      [loading]="loading()"
+      (buttonClick)="addTeamMember()"
+      [disabled]="!picked()"
+      data-cy="add-team-member"
+    />
+  </gt-settings-section>
+}
+@if (membersLoaded()) {
+  @if (teamMembers().length === 0) {
+    <gt-panel>
       <gt-empty-state
         icon="people"
         i18n-title
         title="No team members"
         [message]="noMembersMessage()"
       />
-    } @else {
-      <ul data-test-list class="member-list">
-        @if (removeMemberError) {
-          <mat-error class="center-text">{{ removeMemberError }}</mat-error>
-        }
-        @for (teamMember of teamMembers(); track teamMember) {
-          <li class="member-list-item">
+    </gt-panel>
+  } @else {
+    <gt-panel flush>
+      <gt-list data-test-list flush>
+        @for (teamMember of teamMembers(); track teamMember.id) {
+          <gt-list-row>
             <a
-              mat-line
+              gtListRowLink
               [routerLink]="['../', 'members', teamMember.id]"
               [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
               >{{ teamMember.email }}</a
             >
+            <span slot="meta">{{
+              roleName(teamMember.role) ?? teamMember.roleName
+            }}</span>
             @if (canModifyTeam()) {
-              <gt-loading-button i18n-buttonText
-                buttonText="Remove"
+              <gt-loading-button
+                slot="actions"
+                [buttonText]="isMe(teamMember.email) ? leaveText : removeText"
                 buttonStyle="stroked"
                 [loading]="selectedTeamMember?.toString() === teamMember.id"
                 (buttonClick)="
-                  removeTeamMember(teamMember.id, teamMember.email)
+                  confirmRemoveTeamMember(teamMember.id, teamMember.email)
                 "
-                id="remove-team-member"
-              ></gt-loading-button>
+                data-cy="remove-team-member"
+              />
             }
-          </li>
+          </gt-list-row>
         }
-      </ul>
-    }
-  </mat-card-content>
-</mat-card>
+      </gt-list>
+      @if (removeMemberError()) {
+        <gt-form-error slot="footer-hint" [errors]="removeMemberError()" />
+      }
+    </gt-panel>
+  }
+}

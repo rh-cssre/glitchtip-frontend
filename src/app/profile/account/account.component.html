@@ -1,38 +1,30 @@
-<gt-preferences></gt-preferences>
-<gt-change-password></gt-change-password>
-<gt-social-auth class="full-span"></gt-social-auth>
-<gt-manage-emails class="full-span"></gt-manage-emails>
+<gt-preferences />
+<gt-change-password />
+<gt-manage-emails />
+<gt-social-auth />
 
-<mat-card class="full-span">
-  <mat-card-header>
-    <mat-card-title i18n>Delete User Account</mat-card-title>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content class="remove-content">
-    <div>
-      <p i18n
-        >By deleting your user account, you will permanently lose all data,
-        including access to organization projects and their associated
-        events.</p
-      >
-      <p i18n
-        >Make sure to delete or transfer ownership of any organizations before
-        deleting your account. Owners of paid organization subscriptions are not
-        able to delete their account.</p
-      >
-      @if (userDeleteError(); as error) {
-        <mat-error>{{ error }}</mat-error>
-      }
-    </div>
-    <gt-loading-button i18n-buttonText
-      data-test
-      buttonText="Delete User Account"
-      buttonStyle="stroked"
-      color="warn"
-      [loading]="userDeleteLoading() === true"
-      (buttonClick)="deleteUser()"
-      id="delete-user"
-    >
-    </gt-loading-button>
-  </mat-card-content>
-</mat-card>
+<gt-settings-section
+  i18n-title
+  title="Delete account"
+  panel
+  tone="danger"
+>
+  <span slot="description" i18n
+    >You lose access to every organization you belong to. Transfer or delete the
+    organizations you own first; owners of a paid subscription can't delete
+    their account.</span
+  >
+  @if (userDeleteError(); as error) {
+    <gt-form-error slot="error" [errors]="error" />
+  }
+  <gt-loading-button
+    slot="actions"
+    i18n-buttonText
+    buttonText="Delete account"
+    buttonStyle="stroked"
+    color="warn"
+    [loading]="userDeleteLoading()"
+    (buttonClick)="deleteUser()"
+    id="delete-user"
+  />
+</gt-settings-section>

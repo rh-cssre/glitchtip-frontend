@@ -14,6 +14,7 @@
 @use "./assets/styles/tag-chip";
 @use "./assets/styles/code";
 @use "./scss/auth-forms";
+@use "./assets/styles/settings-section";
 
 html {
   color-scheme: light dark;
@@ -318,6 +319,38 @@ mat-sidenav-container {
 .input-icon-button {
   @extend .small-icon-button;
   margin-right: 8px;
+}
+
+// Content starts 16px under a tab bar; a tab panel inside a card has its padding.
+mat-tab-nav-panel:not(mat-card-content > *) {
+  display: block;
+  padding-top: var(--gt-space-4, 16px);
+}
+
+// Material pads the 20px radio icon out to its state layer; pull that back
+// so the circles line up with the section text at any density.
+.gt-radio-column,
+.gt-radio-row {
+  display: flex;
+  margin-inline-start: calc((20px - var(--mat-radio-state-layer-size)) / 2);
+}
+
+.gt-radio-column {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.gt-radio-row {
+  flex-wrap: wrap;
+  column-gap: var(--gt-space-4, 16px);
+}
+
+// What the current value means, under its control.
+.gt-field-hint {
+  max-width: var(--gt-measure);
+  margin: var(--gt-space-2, 8px) 0 0;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 // Search-syntax help popover (rendered in the CDK overlay; styles must be global).

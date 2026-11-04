@@ -12,7 +12,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
       .ph-surface {
         padding: var(--gt-space-4) var(--gt-space-5) var(--gt-space-2);
         border: 1px solid var(--mat-sys-outline-variant);
-        border-radius: 8px;
+        border-radius: var(--mat-sys-corner-extra-small);
         background: var(--mat-sys-surface);
       }
       .ph-surface + .ph-surface {
