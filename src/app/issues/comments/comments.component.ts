@@ -12,12 +12,15 @@ import { UserService } from "src/app/api/user/user.service";
 import { MarkdownComponent, provideMarkdown } from "ngx-markdown";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { MatDividerModule } from "@angular/material/divider";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { CommentFormComponent } from "./comment-form/comment-form.component";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import { DaysAgoPipe } from "src/app/shared/days-ago.pipe";
 
 @Component({
   selector: "gt-comments",
@@ -26,11 +29,14 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
   imports: [
     MatProgressSpinnerModule,
     CommentFormComponent,
-    MatDividerModule,
+    MatTooltipModule,
     MatButtonModule,
     MatIconModule,
     MarkdownComponent,
     DatePipe,
+    EmptyStateComponent,
+    PanelComponent,
+    DaysAgoPipe,
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   providers: [CommentsService, provideMarkdown()],

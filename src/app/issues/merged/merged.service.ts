@@ -31,11 +31,15 @@ export class MergedService {
         this.snackbar.open(
           $localize`Something went wrong. Try reloading the page.`,
         );
+        // null, not undefined: a failed load must not read as "nothing merged".
+        return null;
       }
       return data;
     },
   });
   hashes = computed(() => this.hashesResource.value() || []);
+  loading = computed(() => this.hashesResource.isLoading());
+  failed = computed(() => this.hashesResource.value() === null);
 
   setParams(orgSlug: string, issueID: string) {
     this.orgSlug.set(orgSlug);

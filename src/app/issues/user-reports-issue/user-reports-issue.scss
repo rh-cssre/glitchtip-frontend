@@ -1,27 +1,22 @@
-.reports {
-  div {
-    padding: 8px 0;
-
-    &:first-of-type {
-      padding-top: 0;
-    }
-
-    &:last-of-type ~ mat-divider {
-      display: none;
-    }
-  }
+:host {
+  display: block;
 }
 
-.name {
-  margin-bottom: 0;
+.reports-error {
+  margin: 0 0 var(--gt-space-4, 16px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-error);
 }
 
-.date {
-  font-size: 0.8em;
-  margin: 0 0 1em;
+.report__email {
+  font-weight: 400;
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.nav-arrows {
-  display: flex;
-  justify-content: flex-end;
+// The report is the content: full text colour, wraps in full.
+.report__text {
+  margin: 0;
+  color: var(--mat-sys-on-surface);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }

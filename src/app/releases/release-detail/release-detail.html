@@ -107,9 +107,13 @@
                 loading() === false &&
                 !fileListErrors()?.length
               ) {
-                <div class="body-text-strong" i18n
-                  >There are no files associated with this release.</div
-                >
+                <gt-empty-state
+                  icon="rocket_launch"
+                  i18n-title
+                  title="No release files"
+                  i18n-message
+                  message="Upload source maps or other artifacts for this release to see them here."
+                />
               }
             </div>
           </td>
