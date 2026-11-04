@@ -45,7 +45,7 @@ Rule: prefer a semantic class where one exists; otherwise apply the matching typ
 ### Running text
 
 - Sentences (page intros, section help) cap their width with `--gt-measure` (70ch). Short centered text uses `--gt-measure-narrow` (44ch). Widths are in characters so they follow font size; field widths are a separate layout choice.
-- A page that needs orientation opens with one `.page-intro` line: muted, capped, no box or icon.
+- Orientation for a page or tab goes in the panel it explains: the description line of its first list or settings panel, never a loose line above it. Keep only what the title and rows do not already say.
 - A link inside a sentence is underlined, in the text color, at normal weight (`.gt-prose a`, `.page-intro a`). Standalone links (row names, nav, table cells) keep the bold global style. Never the primary color: in GlitchTip's theme it reads as a warning.
 
 ### Spacing
@@ -173,7 +173,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - The first section in its container sits flush with what is above it. Content starts 16px under a tab bar, from one global `mat-tab-nav-panel` rule; pages do not pad their own panel.
 - The section title is a lone field's only visible label, linked with `aria-labelledby`. A title hidden because it repeats the tab uses `hideTitle`, so the label still reaches screen readers.
 - A settings panel's title sits at the top of its body, not in a separate title bar.
-- Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
+- Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight. An Add whose only input is a pick from a list (a member, a project) stays disabled until something is picked.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
 - Save-on-change disables the control while saving, is silent on success, and on failure rolls back and shows `gt-form-error` under the control.
 - A destructive action is the last section, a `tone="danger"` panel with an outlined warn button in its footer and a confirm dialog that names the object and says it cannot be undone.

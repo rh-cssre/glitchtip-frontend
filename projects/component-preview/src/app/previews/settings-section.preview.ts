@@ -3,6 +3,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
 import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
@@ -14,6 +16,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
     MatFormFieldModule,
     MatInputModule,
     MatButtonToggleModule,
+    ListComponent,
+    ListRowComponent,
     PreviewDocComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +39,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
         <div class="preview-section__title">A settings page</div>
         <p class="preview-section__note">
           One panel per save unit: a Save in the footer, a choice that saves on
-          change with no footer, then the danger panel last.
+          change with no footer, a list panel with its add panel above it, then
+          the danger panel last.
         </p>
         <div>
           <gt-settings-section #name title="Name" panel>
@@ -58,6 +63,24 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
               <mat-button-toggle value="dark">Dark</mat-button-toggle>
               <mat-button-toggle value="system">System</mat-button-toggle>
             </mat-button-toggle-group>
+          </gt-settings-section>
+          <gt-settings-section #addEmail title="Add email address" panel>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input matInput [attr.aria-labelledby]="addEmail.titleId" />
+            </mat-form-field>
+            <button slot="actions" mat-stroked-button>Add email</button>
+          </gt-settings-section>
+          <gt-settings-section title="Email addresses" panel flush>
+            <gt-list flush>
+              <gt-list-row>
+                <span>maya&#64;acme.example.com</span>
+                <span class="list-row__tag">Primary</span>
+              </gt-list-row>
+              <gt-list-row>
+                <span>maya.chen&#64;acme.example.com</span>
+                <button slot="actions" mat-stroked-button>Remove</button>
+              </gt-list-row>
+            </gt-list>
           </gt-settings-section>
           <gt-settings-section title="Delete project" panel tone="danger">
             <span slot="description"

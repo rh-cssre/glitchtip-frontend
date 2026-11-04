@@ -10,7 +10,7 @@ import { TeamsService } from "../teams/teams.service";
 import { Team } from "../teams/teams.interfaces";
 import { OrganizationsService } from "../organizations.service";
 import { ProjectsService } from "../../projects/projects.service";
-import { client, handleError } from "../../shared/api/api";
+import { apiErrorMessage, client, handleError } from "../../shared/api/api";
 import { apiResource } from "../../shared/api/api-resource-factory";
 import { components } from "../api-schema";
 import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
@@ -308,8 +308,9 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     return result;
   }
 
+  /** Resolves to the team, or to a readable error when adding fails. */
   async addTeamMember(member: Member, orgSlug: string, teamSlug: string) {
-    const { data } = await client.POST(
+    const { data, error, response } = await client.POST(
       "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
@@ -325,14 +326,21 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     if (data) {
       this.teamsService.teamMembersResource.reload();
       this.organizationMembersResource.reload();
-      return data;
+      return { team: data };
     }
-    return;
+    return {
+      error: apiErrorMessage(
+        error,
+        response,
+        $localize`Could not add the member.`,
+      ),
+    };
   }
 
+  /** Resolves to the team, or to a readable error when removing fails. */
   async removeTeamMember(memberId: number, teamSlug: string) {
     const orgSlug = this.organizationsService.activeOrganizationSlug();
-    const { data } = await client.DELETE(
+    const { data, error, response } = await client.DELETE(
       "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_slug}/",
       {
         params: {
@@ -346,8 +354,15 @@ export class OrganizationDetailService extends StatefulService<OrganizationsStat
     );
     if (data) {
       this.teamsService.removeMember(memberId);
+      return { team: data };
     }
-    return data;
+    return {
+      error: apiErrorMessage(
+        error,
+        response,
+        $localize`Could not remove the member.`,
+      ),
+    };
   }
 
   async leaveTeam(teamSlug: string) {

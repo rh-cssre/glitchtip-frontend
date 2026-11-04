@@ -4,13 +4,9 @@
   </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
-  <gt-page-header icon="groups" [title]="'#' + teamSlug()">
+  <gt-page-header icon="groups" [title]="'#' + teamSlug()" compact>
     @if (team(); as team) {
       <span slot="meta">
-        <span i18n>{memberCount(), plural,
-          =1 {<b>1</b> member}
-          other {<b>{{ memberCount() }}</b> members}
-        }</span>
         <span i18n
           >Created
           {{ team.dateCreated | date: "mediumDate" // i18n(ph="date") }}</span
@@ -27,8 +23,9 @@
         [active]="rla.isActive"
         #rla="routerLinkActive"
         >{{ link.label }}
-        @if (tabCounts()[link.path] !== undefined) {
-          <span class="tab-count">{{ tabCounts()[link.path] }}</span>
+        @let count = tabCounts()[link.path];
+        @if (count !== null && count !== undefined) {
+          <span class="tab-count">{{ count }}</span>
         }
       </a>
     }
