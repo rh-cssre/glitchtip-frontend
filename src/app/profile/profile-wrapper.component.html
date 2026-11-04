@@ -1,9 +1,16 @@
 <gt-top-app-bar>
   <ng-container slot="left">
-    @if (title()) {
+    @if (backLink(); as backLink) {
+      <gt-back-link [link]="backLink.link" [backLinkText]="backLink.text" />
+    } @else if (title()) {
       <h1 class="gt-bar-title">{{ title() }}</h1>
     }
   </ng-container>
+  @if (action(); as action) {
+    <ng-container slot="right">
+      <a mat-flat-button [routerLink]="action.link">{{ action.text }}</a>
+    </ng-container>
+  }
 </gt-top-app-bar>
 <section class="l-body">
   <router-outlet></router-outlet>
