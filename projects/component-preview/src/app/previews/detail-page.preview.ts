@@ -125,9 +125,10 @@ export class DetailPagePreview {
   <... content />
 </section>`;
   readonly api: ApiRow[] = [
-    { name: "gt-back-link link", type: "string | unknown[]", default: `[".."]`, description: "Where the link goes; the parent route by default" },
     { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label: the parent page's nav label, or the record's name" },
-    { name: "gt-back-link backLinkParams", type: "object", default: "{}", description: "Query params preserved on the way back" },
+    { name: "gt-back-link link", type: "string | unknown[]", default: `[".."]`, description: "Where the link goes; [] stays on the page, for a sub-view in a tab" },
+    { name: "gt-back-link backLinkParams", type: "object", default: "{}", description: "Query params on the way back; null removes one" },
+    { name: "gt-back-link paramsHandling", type: "QueryParamsHandling | null", default: "null", description: "\"merge\" keeps the other query params" },
     { name: "gt-detail-header title", type: "string | [string, string | null]", default: `""`, description: "Legacy: use gt-page-header for new pages. Record title, optionally with a muted suffix" },
     { name: "gt-detail-header subtitle", type: "string | null", default: "", description: "Secondary line under the title" },
     { name: "gt-detail-header ng-content", type: "content projection", default: "", description: "Optional action row inside the header" },

@@ -1,6 +1,8 @@
 import {
   Component,
+  DestroyRef,
   OnInit,
+  inject,
   computed,
   input,
   output,
@@ -17,10 +19,11 @@ import {
   ValidationErrors,
   ReactiveFormsModule,
 } from "@angular/forms";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ErrorStateMatcher } from "@angular/material/core";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
 import { intRegex } from "src/app/shared/validators";
-import { LoadingButtonComponent } from "../../../../../shared/loading-button/loading-button.component";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -59,11 +62,10 @@ export const selectionRequiredValidator: ValidatorFn = (
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    LoadingButtonComponent,
+    FormErrorComponent,
   ],
 })
 export class AlertFormComponent implements OnInit {
-  readonly loading = input<boolean | null>(false);
   readonly timespan = input<number | null>(1);
   readonly quantity = input<number | null>(1);
   readonly uptime = input<boolean | null>(false);
@@ -82,13 +84,17 @@ export class AlertFormComponent implements OnInit {
     environments: string[];
   }>();
   readonly newAlert = input<boolean | undefined>(false);
-  /** Read-only summary when false; fails closed, so every caller passes it. */
-  readonly canWrite = input(false);
-
-
+  /** The conditions after each edit, valid or not, for live summaries. */
+  readonly conditionsChange = output<{
+    timespanMinutes: number | null;
+    quantity: number | null;
+    uptime: boolean;
+    environments: string[];
+  }>();
+  readonly #destroyRef = inject(DestroyRef);
 
   intervalValidators = [
-    Validators.min(0),
+    Validators.min(1),
     Validators.pattern(intRegex),
     Validators.required,
   ];
@@ -143,9 +149,11 @@ export class AlertFormComponent implements OnInit {
   ngOnInit(): void {
     const timespan = this.timespan();
     const quantity = this.quantity();
+    // Unchecked event conditions still show numbers (greyed out), so checking
+    // the box starts from something sensible.
     this.projectAlertForm.setValue({
-      timespanMinutes: timespan ? timespan.toString() : null,
-      quantity: quantity ? quantity.toString() : null,
+      timespanMinutes: (timespan || 1).toString(),
+      quantity: (quantity || 1).toString(),
       environments: [...(this.environments() ?? [])],
       optionsGroup: {
         uptime: this.uptime() as any,
@@ -155,53 +163,51 @@ export class AlertFormComponent implements OnInit {
 
     if (this.errorAlert()) {
       this.initializeIntervalValidation();
+    } else {
+      this.projectFormQuantity.disable();
+      this.projectFormTimespan.disable();
     }
+
+    // Changes only: the parent seeds its copy from the same inputs, and emitting
+    // during init would update its template mid-check.
+    this.projectAlertForm.valueChanges
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => this.emitConditions());
+  }
+
+  private emitConditions() {
+    const events = !!this.projectFormErrorAlert.value;
+    this.conditionsChange.emit({
+      quantity: events ? Number(this.projectFormQuantity.value) || null : null,
+      timespanMinutes: events
+        ? Number(this.projectFormTimespan.value) || null
+        : null,
+      uptime: !!this.projectFormUptime.value,
+      environments: this.projectFormEnvironments.value ?? [],
+    });
   }
 
   toggleErrorAlerts(): void {
     this.projectFormErrorAlert.setValue(!this.projectFormErrorAlert.value);
 
+    // Disabled fields keep their numbers but drop out of validation.
     if (!this.projectFormErrorAlert.value) {
-      this.projectFormQuantity.clearValidators();
-      this.projectFormQuantity.setValue("");
-      this.projectFormTimespan.clearValidators();
-      this.projectFormTimespan.setValue("");
+      this.projectFormQuantity.disable();
+      this.projectFormTimespan.disable();
     } else {
       this.initializeIntervalValidation();
-      this.projectFormQuantity.setValue(1);
-      this.projectFormTimespan.setValue(1);
+      this.projectFormQuantity.enable();
+      this.projectFormTimespan.enable();
+      if (!this.projectFormQuantity.value) this.projectFormQuantity.setValue(1);
+      if (!this.projectFormTimespan.value) this.projectFormTimespan.setValue(1);
     }
 
     this.projectAlertForm.updateValueAndValidity();
   }
 
-  toggleFromInput(): void {
-    if (!this.projectFormErrorAlert.value) {
-      this.projectFormErrorAlert.setValue(true);
-      this.initializeIntervalValidation();
-      this.projectFormQuantity.setValue(1);
-      this.projectFormTimespan.setValue(1);
-      this.projectFormTimespan.updateValueAndValidity();
-    }
-  }
-
-  toggleUptime(): void {
-    this.projectFormUptime.setValue(!this.projectFormUptime.value);
-  }
-
   initializeIntervalValidation(): void {
     this.projectFormQuantity.setValidators(this.intervalValidators);
     this.projectFormTimespan.setValidators(this.intervalValidators);
-  }
-
-  /** Arrays compare by reference, so the Update button needs a value check */
-  environmentsUnchanged(): boolean {
-    const selected: string[] = this.projectFormEnvironments.value ?? [];
-    const original = this.environments() ?? [];
-    return (
-      selected.length === original.length &&
-      selected.every((environment) => original.includes(environment))
-    );
   }
 
   onSubmit(): void {

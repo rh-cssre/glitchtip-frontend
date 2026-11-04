@@ -23,7 +23,7 @@ describe("List, add, update and delete uptime Monitors", () => {
       .should("have.value", seededMonitorName)
       .clear()
       .type("new name");
-    cy.get("button").contains("Update Monitor").click();
+    cy.get("button").contains("Save monitor").click();
     cy.visit(`/${seededOrg.slug}/uptime-monitors/`);
     cy.contains("new name");
   });
@@ -34,6 +34,7 @@ describe("List, add, update and delete uptime Monitors", () => {
     cy.get("#monitor-settings").click();
     cy.get("#delete-monitor").click();
     cy.contains(`Delete ${seededMonitorName}?`);
+    cy.contains("Its check history is deleted too.");
     cy.get("[data-cy='dialog-confirm']").click();
     cy.contains("Monitor has been deleted.");
     cy.visit(`/${seededOrg.slug}/uptime-monitors`);
