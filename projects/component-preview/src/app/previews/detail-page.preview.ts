@@ -87,8 +87,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
   `,
 })
 export class DetailPagePreview {
-  // The product's own mobile mechanism (see monitor-detail): swap content
-  // below the $small breakpoint. Fires for real inside the Mobile viewport.
+  // Swap the text action for an icon button below the $small breakpoint.
+  // Fires for real inside the Mobile viewport.
   private readonly breakpoints = inject(BreakpointObserver);
   readonly isMobile = toSignal(
     this.breakpoints
@@ -125,7 +125,7 @@ export class DetailPagePreview {
   <... content />
 </section>`;
   readonly api: ApiRow[] = [
-    { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label: the parent page's nav label" },
+    { name: "gt-back-link backLinkText", type: "string", default: `""`, description: "Link label: the parent page's nav label, or the record's name" },
     { name: "gt-back-link link", type: "string | unknown[]", default: `[".."]`, description: "Where the link goes; [] stays on the page, for a sub-view in a tab" },
     { name: "gt-back-link backLinkParams", type: "object", default: "{}", description: "Query params on the way back; null removes one" },
     { name: "gt-back-link paramsHandling", type: "QueryParamsHandling | null", default: "null", description: "\"merge\" keeps the other query params" },

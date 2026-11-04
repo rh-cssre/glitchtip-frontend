@@ -13,11 +13,10 @@ import {
   FormControl,
   ReactiveFormsModule,
 } from "@angular/forms";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { PasswordService, PasswordState } from "./password.service";
 import { UserService } from "src/app/api/user/user.service";
@@ -33,8 +32,6 @@ import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.
   styleUrls: ["./change-password.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -42,6 +39,7 @@ import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.
     LoadingButtonComponent,
     MatIconModule,
     FormErrorComponent,
+    SettingsSectionComponent,
   ],
 })
 export class ChangePasswordComponent
@@ -49,13 +47,14 @@ export class ChangePasswordComponent
   implements OnInit
 {
   protected service: PasswordService;
+  changeText = $localize`Change password`;
+  setText = $localize`Set password`;
   private snackBar = inject(MatSnackBar);
   private userService = inject(UserService);
 
   @ViewChild(FormGroupDirective) formDirective?: FormGroupDirective;
   user = this.userService.user;
   loading = this.service.loading;
-  passwordResetSuccess = this.service.success;
   formErrors = this.service.formErrors;
   fieldErrors = this.service.fieldErrors;
 

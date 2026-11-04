@@ -88,6 +88,7 @@
                   buttonText="Save name"
                   buttonStyle="stroked"
                   [loading]="updateNameLoading()"
+                  [disabled]="name?.value === project.name"
                   id="update-project-name"
                 />
               }
@@ -174,6 +175,7 @@
                   buttonText="Save platform"
                   buttonStyle="stroked"
                   [loading]="updatePlatformLoading()"
+                  [disabled]="platformCtrl.value === project.platform"
                   id="update-project-platform"
                 />
               }

@@ -17,6 +17,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { MultiFactorAuthService } from "../../multi-factor-auth.service";
 import { FormErrorComponent } from "../../../../shared/forms/form-error/form-error.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { LoadingButtonComponent } from "src/app/shared/loading-button/loading-button.component";
 
 @Component({
   selector: "gt-backup-codes",
@@ -24,11 +26,13 @@ import { FormErrorComponent } from "../../../../shared/forms/form-error/form-err
   styleUrls: ["./backup-codes.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SettingsSectionComponent,
     MatButtonModule,
     ReactiveFormsModule,
     FormErrorComponent,
     MatFormFieldModule,
     MatInputModule,
+    LoadingButtonComponent,
   ],
 })
 export class BackupCodesComponent {
@@ -39,6 +43,8 @@ export class BackupCodesComponent {
   error = this.service.error;
   copiedCodes = this.service.copiedCodes;
   regenCodes = this.service.regenCodes;
+  loading = this.service.loading;
+  pendingAction = this.service.pendingAction;
   backupCodeForm = new FormGroup({
     backupCode: new FormControl("", [
       Validators.required,
