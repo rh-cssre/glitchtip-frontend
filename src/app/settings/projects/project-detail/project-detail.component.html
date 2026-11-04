@@ -32,8 +32,11 @@
           [queryParams]="{ tab: t.id === 'general' ? null : t.id }"
           queryParamsHandling="merge"
           replaceUrl
-          >{{ t.label }}</a
-        >
+          >{{ t.label }}
+          @if (tabCounts()[t.id] !== undefined) {
+            <span class="tab-count">{{ tabCounts()[t.id] }}</span>
+          }
+        </a>
       }
     </nav>
 
@@ -252,16 +255,10 @@
           }
         }
         @case ("environments") {
-          <gt-project-environments
-            [orgSlug]="orgSlug()"
-            [projectSlug]="projectSlug()"
-          />
+          <gt-project-environments />
         }
         @case ("alerts") {
-          <gt-project-alerts
-            [orgSlug]="orgSlug()"
-            [projectSlug]="projectSlug()"
-          />
+          <gt-project-alerts />
         }
       }
     </mat-tab-nav-panel>

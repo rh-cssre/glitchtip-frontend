@@ -16,6 +16,7 @@ import { PaginationButtons } from "src/app/list-elements/pagination-buttons/pagi
 import { stringAttribute } from "src/app/shared/shared.utils";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { LoadingOverlayComponent } from "src/app/shared/loading-overlay/loading-overlay.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 
 @Component({
@@ -31,6 +32,7 @@ import { RecordBandComponent } from "src/app/shared/record-band/record-band.comp
     PaginationButtons,
     TopAppBar,
     LoadingOverlayComponent,
+    EmptyStateComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ReleaseDetailService],

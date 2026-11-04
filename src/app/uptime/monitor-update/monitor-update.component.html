@@ -4,27 +4,42 @@
       <gt-back-link [backLinkText]="monitor.name" />
     }
   </ng-container>
-
-  <ng-container slot="right">
-    <button
-      mat-icon-button
-      class="medium-icon-button"
-      id="delete-monitor"
-      aria-label="Delete monitor"
-      i18n-aria-label
-      (click)="delete()"
-    >
-      <mat-icon>delete</mat-icon>
-    </button>
-  </ng-container>
 </gt-top-app-bar>
 <section class="l-body">
   @if (monitor(); as monitor) {
+    <gt-page-header i18n-title title="Edit monitor" />
     <gt-monitor-form
       [monitorSettings]="monitor"
-      [loading]="loading() === true"
+      [loading]="loading()"
       [formError]="error()"
       (formSubmitted)="submit($event)"
     ></gt-monitor-form>
+
+    @if (canWriteProject()) {
+      <gt-settings-section
+        i18n-title
+        title="Delete monitor"
+        panel
+        tone="danger"
+      >
+        <span slot="description" i18n
+          >Deletes <strong>{{ monitor.name // i18n(ph="monitor") }}</strong> and
+          its check history. This cannot be undone.</span
+        >
+        @if (deleteError()) {
+          <gt-form-error slot="error" [errors]="deleteError()" />
+        }
+        <gt-loading-button
+          slot="actions"
+          i18n-buttonText
+          buttonText="Delete monitor"
+          buttonStyle="stroked"
+          color="warn"
+          [loading]="deleteLoading()"
+          (buttonClick)="delete()"
+          id="delete-monitor"
+        />
+      </gt-settings-section>
+    }
   }
 </section>

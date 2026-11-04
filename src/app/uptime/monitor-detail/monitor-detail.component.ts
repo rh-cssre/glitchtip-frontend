@@ -19,18 +19,21 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
 import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
 import { PanelComponent } from "src/app/shared/panel/panel.component";
 import { RecordBandComponent } from "src/app/shared/record-band/record-band.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
 import { DecimalPipe, NgTemplateOutlet } from "@angular/common";
 import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
 import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { OrganizationsService } from "src/app/api/organizations.service";
+import { AlertListComponent } from "src/app/settings/projects/project-detail/project-alerts/alert-list/alert-list.component";
 import { map } from "rxjs";
 
 function booleanDefaultTrueAttribute(value: unknown): boolean {
@@ -60,8 +63,10 @@ function booleanDefaultTrueAttribute(value: unknown): boolean {
     RecordBandComponent,
     EmptyStateComponent,
     MatTabsModule,
+    FormErrorComponent,
     TopAppBar,
     BackLinkComponent,
+    AlertListComponent,
   ],
 })
 export class MonitorDetailComponent
@@ -72,6 +77,7 @@ export class MonitorDetailComponent
   protected service: MonitorService;
   private organizationsService = inject(OrganizationsService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   orgSlug = input.required<string>({ alias: "org-slug" });
   monitorID = input.required<number>({ alias: "monitor-id" });
@@ -132,8 +138,10 @@ export class MonitorDetailComponent
     if (!times.length) return null;
     return times.reduce((sum, t) => sum + t, 0) / times.length;
   });
+  monitorAlerts = this.service.monitorAlerts;
   uptimeAlertCount = this.service.uptimeAlertCount;
   alertCountLoading = this.service.alertCountLoading;
+  alertsError = this.service.alertsError;
   associatedProjectSlug = this.service.associatedProjectSlug;
   // Hide the count until the project's alerts load, so it never flashes 0.
   alertCountKnown = computed(
@@ -195,7 +203,9 @@ export class MonitorDetailComponent
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.service.deleteMonitor();
+        this.service.deleteMonitor().then((deleted) => {
+          if (!deleted) this.snackBar.open(this.service.deleteError());
+        });
       }
     });
   }

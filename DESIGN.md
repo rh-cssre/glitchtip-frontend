@@ -104,7 +104,7 @@ A collection of records with a name and a few actions is a `gt-list` of `gt-list
 - Several meta facts each get their own span inside `[slot="meta"]`; the row draws the separators, as `gt-page-header` does. Never type a separator into a translated string.
 - A row's state (Invite pending, Unverified) is a status pill after the name. A fixed attribute (Owner, Primary) is a neutral `.list-row__tag`, which is not interactive.
 - When a row's action is blocked, say why in the row's description line; never only in a tooltip.
-- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it above the list as an outlined button with the add icon.
+- A list page's create action is one filled "New <thing>" button in the top app bar. A list inside a record's tab puts it in the list panel's header actions as an outlined button with the add icon, led by the list's count. While the list is empty, the panel has no header and the button is the empty state's action.
 
 ### Labels
 
@@ -190,6 +190,10 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 ### Side navigation
 
 - The side nav sits on the page surface with one hairline on its right edge, with no tint or shadow. Items are controls, so they use label-large (14px, 500) like the organization switcher, 40px rows 4px apart and 20px icons, and the active item keeps the brand red fill. The organization switcher is a ghost select, like the bar filters.
+
+### Sub-views in a tab
+
+- A view opened by a query param inside a tab (an alert's edit form) starts with a `gt-back-link` named after the tab ("Alerts"), the same component the top app bar uses. The page's top app bar belongs to the parent record.
 
 ### Tag chips
 
