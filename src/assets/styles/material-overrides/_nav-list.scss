@@ -5,8 +5,14 @@ mat-nav-list {
   @include mat.list-overrides(
     (
       active-indicator-shape: vars.$shape-radius,
-      list-item-label-text-weight: 500,
+      // Nav items are controls, so they use the label type like the org switcher.
+      list-item-label-text-font: var(--mat-sys-label-large-font),
+      list-item-label-text-size: var(--mat-sys-label-large-size),
+      list-item-label-text-line-height: var(--mat-sys-label-large-line-height),
+      list-item-label-text-tracking: var(--mat-sys-label-large-tracking),
+      list-item-label-text-weight: var(--mat-sys-label-large-weight),
+      list-item-leading-icon-size: 20px,
+      list-item-one-line-container-height: 40px,
     )
   );
-  @include mat.list-density(-1)
 }

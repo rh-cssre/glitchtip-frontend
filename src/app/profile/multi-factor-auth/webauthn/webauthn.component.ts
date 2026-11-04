@@ -1,23 +1,30 @@
-import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  LOCALE_ID,
+  inject,
+  signal,
+} from "@angular/core";
+import { formatDate } from "@angular/common";
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { MatIconModule } from "@angular/material/icon";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
-import { FormErrorComponent } from "../../../shared/forms/form-error/form-error.component";
 import { EmailsService } from "src/app/api/emails/emails.service";
 import { MultiFactorAuthService } from "../multi-factor-auth.service";
-import { checkForOverflow } from "src/app/shared/shared.utils";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-webauthn",
@@ -25,33 +32,32 @@ import { checkForOverflow } from "src/app/shared/shared.utils";
   styleUrls: ["./webauthn.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
-    FormErrorComponent,
     LoadingButtonComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatIconModule,
+    ListComponent,
+    ListRowComponent,
+    SettingsSectionComponent,
+    EmptyStateComponent,
+    FormErrorComponent,
   ],
 })
 export class WebAuthnComponent {
-  deleteKeyLabel = (name: string) => $localize`Delete ${name}:name:`;
+  deleteKeyLabel = (name: string) => $localize`Remove ${name}:name:`;
   private service = inject(MultiFactorAuthService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  private locale = inject(LOCALE_ID);
   protected emailsService = inject(EmailsService);
 
   stage = this.service.webAuthnState;
   hasTOTP = this.service.TOTPAuthenticator;
-  error: string | null = null;
   authenticators = this.service.webAuthnAuthenticators;
-  tooltipDisabled = false;
-  // TOTPKey$ = this.service.TOTPKey$;
-  // FIDO2Keys$ = this.service.FIDO2Keys$;
-  // setupFIDO2Stage$ = this.service.setupFIDO2Stage$;
-  // error$ = this.service.serverError$;
+  error = this.service.webAuthnError;
+  loading = this.service.loading;
+  pendingAction = this.service.pendingAction;
+  removingId = signal<number | null>(null);
   form = new FormGroup({
     name: new FormControl("", [Validators.required]),
   });
@@ -68,18 +74,28 @@ export class WebAuthnComponent {
       this.snackBar.open($localize`Your security key has been registered.`);
     }
   }
-  deleteWebAuthn(id: number) {
-    this.service.deleteWebAuthn(id);
+  deleteWebAuthn(id: number, name: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Remove ${name}:name:?`,
+          message: $localize`You will no longer sign in with this key.`,
+          confirmText: $localize`Remove`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.removingId.set(id);
+          this.service.deleteWebAuthn(id);
+        }
+      });
   }
-  formatDate(lastUsed?: number) {
-    if (lastUsed) {
-      const date = new Date(lastUsed * 1000);
-      return date.toLocaleDateString();
-    } else {
-      return "Not yet used";
-    }
-  }
-  checkIfTooltipIsNecessary($event: Event) {
-    this.tooltipDisabled = checkForOverflow($event);
+
+  lastUsedLabel(lastUsed?: number) {
+    if (!lastUsed) return $localize`Not used yet`;
+    // Same format as other dates in settings ("Oct 25, 2026").
+    const date = formatDate(lastUsed * 1000, "mediumDate", this.locale);
+    return $localize`Last used ${date}:date:`;
   }
 }

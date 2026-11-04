@@ -11,8 +11,6 @@ import { apiResource } from "src/app/shared/api/api-resource-factory";
 import { client, handleError } from "src/app/shared/api/api";
 
 interface NotificationsState {
-  projectViewExpanded: boolean;
-  subscribeByDefault: boolean;
   subscribeByDefaultLoading: boolean;
   subscribeByDefaultError: string;
   projectAlertLoading: number | null;
@@ -20,8 +18,6 @@ interface NotificationsState {
 }
 
 const initialState: NotificationsState = {
-  projectViewExpanded: false,
-  subscribeByDefault: true,
   subscribeByDefaultLoading: false,
   subscribeByDefaultError: "",
   projectAlertLoading: null,
@@ -43,8 +39,8 @@ export class NotificationsService extends StatefulService<NotificationsState> {
   readonly subscribeByDefault = computed(
     () => this.#notificationsResource.value()?.subscribeByDefault || false,
   );
-  readonly projectViewExpanded = computed(
-    () => this.state().projectViewExpanded,
+  readonly subscribeByDefaultLoaded = computed(
+    () => this.#notificationsResource.value() !== undefined,
   );
   readonly subscribeByDefaultLoading = computed(
     () => this.state().subscribeByDefaultLoading,
@@ -59,7 +55,8 @@ export class NotificationsService extends StatefulService<NotificationsState> {
   userAlertSettings = computed(() => {
     const projectAlerts = this.#alertsList.value();
     const projects = this.projectsService.projects();
-    if (projectAlerts && projects) {
+    // projects() is [] until it loads; waiting avoids flashing the empty state.
+    if (projectAlerts && this.projectsService.initialLoadComplete()) {
       const projectsWithAlerts = projects.map((project) => {
         const matchingId = Object.keys(projectAlerts).find(
           (element) => element === project.id,
@@ -81,7 +78,7 @@ export class NotificationsService extends StatefulService<NotificationsState> {
         return r;
       }, {});
     }
-    return [];
+    return;
   });
 
   constructor() {
@@ -92,7 +89,10 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     this.projectsService.retrieveProjects();
   }
 
-  async alertsUpdate(projectId: number, status: NotificationStatus) {
+  async alertsUpdate(
+    projectId: number,
+    status: NotificationStatus,
+  ): Promise<boolean> {
     const body: ProjectAlerts = {
       [projectId]: status,
     };
@@ -110,15 +110,18 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     );
     this.#alertsList.reload();
     this.setProjectAlertLoading(null);
-    if (response.status !== 204) {
-      const errors = handleError(error, response);
-      if (errors.detail.length) {
-        this.setProjectAlertError(errors.detail[0].msg, projectId);
-      }
+    if (response.status === 204) {
+      this.setState({ ...this.state(), projectAlertError: null });
+      return true;
     }
+    const errors = handleError(error, response);
+    if (errors.detail.length) {
+      this.setProjectAlertError(errors.detail[0].msg, projectId);
+    }
+    return false;
   }
 
-  async notificationsUpdate(subscribe: boolean) {
+  async notificationsUpdate(subscribe: boolean): Promise<boolean> {
     const body = { subscribeByDefault: subscribe };
     this.setSubscribeByDefaultLoading(true);
     const { data, error, response } = await client.PUT(
@@ -134,32 +137,16 @@ export class NotificationsService extends StatefulService<NotificationsState> {
     );
     this.setSubscribeByDefaultLoading(false);
     if (data) {
-      this.setSubscribeByDefault(data.subscribeByDefault);
-    } else {
-      const errors = handleError(error, response);
-      if (errors.detail.length) {
-        this.setSubscribeByDefaultError(errors.detail[0].msg);
-      }
+      // The default is read from this resource, so update it, not state.
+      this.#notificationsResource.set(data);
+      this.setSubscribeByDefaultError("");
+      return true;
     }
-  }
-
-  toggleProjectView() {
-    this.setToggleProjectView();
-  }
-
-  private setSubscribeByDefault(subscribe: boolean) {
-    this.setState({
-      ...this.state(),
-      subscribeByDefault: subscribe,
-    });
-  }
-
-  private setToggleProjectView() {
-    const projectViewExpanded = this.state().projectViewExpanded;
-    this.setState({
-      ...this.state(),
-      projectViewExpanded: !projectViewExpanded,
-    });
+    const errors = handleError(error, response);
+    if (errors.detail.length) {
+      this.setSubscribeByDefaultError(errors.detail[0].msg);
+    }
+    return false;
   }
 
   private setSubscribeByDefaultError(error: string) {

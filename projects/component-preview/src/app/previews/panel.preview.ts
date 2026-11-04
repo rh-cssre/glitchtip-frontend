@@ -122,6 +122,19 @@ const SPAN_ROWS: SpanRow[] = [
       </div>
 
       <div class="preview-section">
+        <div class="preview-section__title">Subtitle</div>
+        <gt-panel
+          title="Request"
+          subtitle="POST /api/checkout/confirm"
+          hideSubtitleNarrow
+        >
+          <p class="pn-text">
+            The subtitle truncates before the title and drops under 480px.
+          </p>
+        </gt-panel>
+      </div>
+
+      <div class="preview-section">
         <div class="preview-section__title">Flush table</div>
         <gt-panel title="Span breakdown" flush>
           <table mat-table class="pn-table" [dataSource]="rows">
@@ -227,6 +240,7 @@ export class PanelPreview {
   ];
   readonly dos = [
     "Give it a short sentence-case title that names the data",
+    "Put a muted fact about the data (a count, a source) in subtitle, never in the title",
     "Use flush when the body draws its own rows, so the table runs edge to edge",
     "Keep header actions to one or two small controls",
     "Put a settings panel's Save in the footer, right aligned",
@@ -234,6 +248,7 @@ export class PanelPreview {
   readonly donts = [
     "Wrap a whole settings page in one panel; give each save unit its own",
     "Nest a panel inside another panel",
+    "Type a middle dot into the subtitle; the panel draws it",
     "Use mat-card for new work; use a panel or no container",
   ];
   readonly anatomy = `Header (tinted; title or lead, then actions, only when one is set)
@@ -245,6 +260,19 @@ Footer (tinted; hint left, actions right, only when either is set)`;
       type: "string",
       default: '""',
       description: "Header title; also names the panel as a region",
+    },
+    {
+      name: "subtitle",
+      type: "string | null",
+      default: '""',
+      description:
+        "Muted fact after the title, such as a count or a source; the panel draws the middle dot and shows the full text on hover",
+    },
+    {
+      name: "hideSubtitleNarrow",
+      type: "boolean",
+      default: "false",
+      description: "Drops the subtitle when the panel is narrower than 480px",
     },
     {
       name: "headingLevel",

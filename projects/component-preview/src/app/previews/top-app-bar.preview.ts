@@ -145,8 +145,8 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
 
       <div class="tab-demo-gap"></div>
 
-      <!-- Record without an edit page: an outlined neutral status dropdown
-           with the status dot, then its one extra action as an icon button. -->
+      <!-- Record without an edit page: status dropdown, divider, then its one
+           extra action as an icon button. -->
       <gt-top-app-bar>
         <ng-container slot="left">
           <gt-back-link backLinkText="Issues" />
@@ -162,6 +162,7 @@ import { ApiRow, PreviewDocComponent } from "../docs/preview-doc.component";
             <button mat-menu-item>Unresolved</button>
             <button mat-menu-item>Ignored</button>
           </mat-menu>
+          <span class="gt-bar-divider" aria-hidden="true"></span>
           <button
             mat-icon-button
             aria-label="Delete issue"
@@ -220,12 +221,14 @@ export class TopAppBarPreview {
     "Show a record's status as an outlined neutral dropdown with the gt-status-pill dot",
     "Link a record to its edit page with an outlined Edit X",
     "Put Delete on the record's settings or edit page; without one, delete from the bar with the same confirm",
+    "Put a .gt-bar-divider between two groups of different kinds: status | delete, filters | New X",
     "Make bar filters ghost selects: a mat-select in a gtSelectGhost span, with an aria-label and a fixed width",
     "On mobile, collapse text actions to icon buttons (toggle the example to Mobile)",
   ];
   readonly donts = [
     "Put a filled button in a record page's bar, or make a status control filled primary",
     "Put a one-item More actions menu in the bar; show that action as an icon button",
+    "Put a .gt-bar-divider between two controls of the same kind, at the bar edge, or in a bar with one group",
     "Write Back to or View all in the back link, or swap its label on mobile",
     "Override the bar height per page; change $top-app-bar-height or use a density mixin",
     "Wrap bar filters in an outlined mat-form-field; the outline competes with the page heading",

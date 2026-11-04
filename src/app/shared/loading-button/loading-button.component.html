@@ -5,6 +5,7 @@
     mat-flat-button
     [color]="color()"
     [disabled]="loading() || disabled()"
+    [attr.aria-label]="ariaLabel() || null"
   >
     @if (loading()) {
       <mat-spinner diameter="18"></mat-spinner>
@@ -20,6 +21,7 @@
     mat-button
     [color]="color()"
     [disabled]="loading() || disabled()"
+    [attr.aria-label]="ariaLabel() || null"
   >
     @if (loading()) {
       <mat-spinner diameter="18"></mat-spinner>
@@ -34,6 +36,7 @@
     mat-stroked-button
     [color]="color()"
     [disabled]="loading() || disabled()"
+    [attr.aria-label]="ariaLabel() || null"
   >
     @if (loading()) {
       <mat-spinner diameter="18"></mat-spinner>

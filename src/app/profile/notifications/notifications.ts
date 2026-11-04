@@ -7,39 +7,44 @@ import {
 import { NotificationsService } from "./notifications-state";
 import { NotificationStatus } from "./notifications.interface";
 import { RouterLink } from "@angular/router";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import {
+  MatButtonToggleGroup,
+  MatButtonToggleModule,
+} from "@angular/material/button-toggle";
 import { KeyValuePipe } from "@angular/common";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   templateUrl: "./notifications.html",
   styleUrls: ["./notifications.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatCardModule,
-    MatDividerModule,
-    MatProgressSpinnerModule,
     MatButtonToggleModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatIconModule,
     RouterLink,
     KeyValuePipe,
+    ListComponent,
+    ListRowComponent,
+    ListRowLinkComponent,
+    EmptyStateComponent,
+    SettingsSectionComponent,
+    FormErrorComponent,
   ],
   providers: [NotificationsService],
 })
 export class Notifications implements OnInit {
+  notificationsForLabel = (project: string) =>
+    $localize`Alerts for ${project}:project:`;
   onText = $localize`On`;
   offText = $localize`Off`;
   private notificationsService = inject(NotificationsService);
 
   subscribeByDefault = this.notificationsService.subscribeByDefault;
-  projectViewExpanded = this.notificationsService.projectViewExpanded;
+  subscribeByDefaultLoaded = this.notificationsService.subscribeByDefaultLoaded;
   subscribeByDefaultLoading =
     this.notificationsService.subscribeByDefaultLoading;
   subscribeByDefaultError = this.notificationsService.subscribeByDefaultError;
@@ -51,15 +56,25 @@ export class Notifications implements OnInit {
     this.notificationsService.subscribeToEndpoints();
   }
 
-  toggleDefaultNotifications(subscribe: boolean) {
-    this.notificationsService.notificationsUpdate(subscribe);
+  async toggleDefaultNotifications(
+    group: MatButtonToggleGroup,
+    subscribe: boolean,
+  ) {
+    if (!(await this.notificationsService.notificationsUpdate(subscribe))) {
+      // The bound value never changed, so the group keeps the failed choice.
+      group.value = this.subscribeByDefault();
+    }
   }
 
-  toggleProjectView() {
-    this.notificationsService.toggleProjectView();
-  }
-
-  updateUserAlertSettings(projectId: number, status: NotificationStatus) {
-    this.notificationsService.alertsUpdate(projectId, status);
+  /** Saves -1 (follow the default), 1 (on) or 0 (off). */
+  async setProject(
+    group: MatButtonToggleGroup,
+    projectId: number,
+    savedStatus: NotificationStatus,
+    status: NotificationStatus,
+  ) {
+    if (!(await this.notificationsService.alertsUpdate(projectId, status))) {
+      group.value = savedStatus;
+    }
   }
 }

@@ -1,105 +1,91 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title i18n>Register Security Key</mat-card-title>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    <p i18n>Set up a hardware device as a second factor to sign in.</p>
-    @if (stage() === 1) {
-      @if (hasTOTP()) {
-        <p i18n>
-          To add a security key to your account, plug it in, click the button
-          below and follow the prompt from your browser.
-        </p>
-      } @else {
-        <p i18n>
-          Not all browsers support security keys. Therefore, we require that you
-          set up a TOTP authenticator app first. That way you'll always be able
-          to sign in - even when you're using an unsupported browser.
-        </p>
+@if (stage() === 2) {
+  <form [formGroup]="form" (ngSubmit)="registerWebAuthn()">
+    <gt-settings-section #nameSection i18n-title title="Name this key" panel>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input
+          matInput
+          formControlName="name"
+          [attr.aria-labelledby]="nameSection.titleId"
+        />
+        @if (name?.invalid) {
+          <mat-error>
+            @if (name?.errors?.required) {
+              <span i18n>Required</span>
+            }
+          </mat-error>
+        }
+      </mat-form-field>
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Register key"
+        buttonStyle="stroked"
+        [loading]="pendingAction() === 'registerKey'"
+        [disabled]="loading()"
+      />
+    </gt-settings-section>
+  </form>
+}
+
+<gt-settings-section
+  i18n-title
+  title="Security keys"
+  panel
+  [flush]="authenticators().length > 0"
+>
+  @if (!hasTOTP()) {
+    <span slot="description" i18n
+      >Set up the authenticator app first. Not every browser supports security
+      keys, so the app keeps you able to sign in.</span
+    >
+  } @else if (emailsService.isVerified() === false) {
+    <span slot="description" i18n
+      >Verify your email address before setting up two-factor
+      authentication.</span
+    >
+  }
+  @if (authenticators().length) {
+    <gt-list flush>
+      @for (key of authenticators(); track key.id) {
+        <gt-list-row>
+          <span>{{ key.name }}</span>
+          <span slot="meta">{{ lastUsedLabel(key.last_used_at) }}</span>
+          <gt-loading-button
+            slot="actions"
+            i18n-buttonText
+            buttonText="Remove"
+            buttonStyle="stroked"
+            [ariaLabel]="deleteKeyLabel(key.name)"
+            [loading]="
+              pendingAction() === 'removeKey' && removingId() === key.id
+            "
+            [disabled]="loading()"
+            (buttonClick)="deleteWebAuthn(key.id, key.name)"
+          />
+        </gt-list-row>
       }
-      @if (error) {
-        <div class="activation-error">
-          <gt-form-error [errors]="error ? [error] : []"></gt-form-error>
-        </div>
-      }
-      <span i18n-matTooltip
-        matTooltip="Verify your email to continue"
-        [matTooltipDisabled]="emailsService.isVerified() !== false"
-      >
-        <gt-loading-button i18n-buttonText
-          buttonText="Set up new device"
-          [loading]="false"
-          (buttonClick)="activateWebAuthn()"
-          [disabled]="
-            hasTOTP() === undefined || emailsService.isVerified() === false
-          "
-          buttonStyle="flat"
-        ></gt-loading-button>
-      </span>
-    }
-    @if (stage() === 2) {
-      <p i18n>Provide a name for your device to complete registration.</p>
-      <form [formGroup]="form">
-        <mat-form-field appearance="outline">
-          <mat-label i18n i18an>Device name</mat-label>
-          <input matInput formControlName="name" />
-          @if (name?.invalid) {
-            <mat-error>
-              @if (name?.errors?.required) {
-                <span i18n>Required</span>
-              }
-            </mat-error>
-          }
-        </mat-form-field>
-        <button i18n
-          class="register-button"
-          mat-flat-button
-          color="primary"
-          (click)="registerWebAuthn()"
-        >
-          Register
-        </button>
-      </form>
-    }
-    @if (authenticators().length > 0) {
-      <p i18n class="body-text-strong">Security keys</p>
-      <div class="negative-margin">
-        <div class="body-text-strong">
-          <div class="key_headings">
-            <div i18n>Name</div>
-            <div i18n>Last used</div>
-          </div>
-        </div>
-      </div>
-      @for (key of authenticators(); track key) {
-        <div class="key_row">
-          <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
-            <span
-              [matTooltip]="key.name"
-              matTooltipPosition="above"
-              [matTooltipDisabled]="tooltipDisabled"
-              >{{ key.name }}</span
-            >
-          </div>
-          <div (mouseover)="checkIfTooltipIsNecessary($event)" class="cell">
-            <span
-              [matTooltip]="formatDate(key.last_used_at)"
-              matTooltipPosition="above"
-              [matTooltipDisabled]="tooltipDisabled"
-              >{{ formatDate(key.last_used_at) }}</span
-            >
-          </div>
-          <button
-            class="trash"
-            mat-icon-button
-            [attr.aria-label]="deleteKeyLabel(key.name)"
-            (click)="deleteWebAuthn(key.id)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      }
-    }
-  </mat-card-content>
-</mat-card>
+    </gt-list>
+  } @else {
+    <gt-empty-state
+      icon="security"
+      i18n-title
+      title="No security keys"
+      i18n-message
+      message="Set up a hardware device as a second factor to sign in."
+    />
+  }
+  <gt-form-error slot="error" [errors]="error()" />
+  @if (stage() !== 2) {
+    <gt-loading-button
+      slot="header-actions"
+      i18n-buttonText
+      buttonText="Add security key"
+      buttonStyle="stroked"
+      [loading]="pendingAction() === 'addKey'"
+      [disabled]="
+        loading() || !hasTOTP() || emailsService.isVerified() === false
+      "
+      (buttonClick)="activateWebAuthn()"
+    />
+  }
+</gt-settings-section>
