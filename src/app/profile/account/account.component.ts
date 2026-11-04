@@ -5,9 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { UserService } from "src/app/api/user/user.service";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
 import { ManageEmails } from "../manage-emails/manage-emails";
 import { SocialAuthComponent } from "../social-auth/social-auth.component";
@@ -16,6 +14,7 @@ import { PreferencesComponent } from "../preferences/preferences.component";
 import { AuthService } from "src/app/auth.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
 
 @Component({
   selector: "gt-account",
@@ -27,10 +26,9 @@ import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-di
     ChangePasswordComponent,
     SocialAuthComponent,
     ManageEmails,
-    MatCardModule,
-    MatDividerModule,
-    MatFormFieldModule,
+    FormErrorComponent,
     LoadingButtonComponent,
+    SettingsSectionComponent,
   ],
 })
 export class AccountComponent implements OnDestroy {
@@ -45,7 +43,7 @@ export class AccountComponent implements OnDestroy {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: $localize`Delete account?`,
-        message: $localize`Are you sure you want to delete your user account? You will permanently lose access to all organizations, projects, and teams associated with it.`,
+        message: $localize`You lose access to every organization you belong to. This cannot be undone.`,
         confirmText: $localize`Delete`,
       },
     });

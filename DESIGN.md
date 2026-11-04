@@ -174,6 +174,7 @@ Every setting on a settings page is a `gt-settings-section`: a title, an optiona
 - A settings panel's title sits at the top of its body, not in a separate title bar.
 - Each section saves on its own, with an outlined Save that names what it saves ("Save name"). Settings pages have no filled button. Save stays enabled; it is disabled only while its request is in flight.
 - A choice that shows its effect at once (the theme) saves on change, with no Save.
+- Save-on-change disables the control while saving, is silent on success, and on failure rolls back and shows `gt-form-error` under the control.
 - A destructive action is the last section, a `tone="danger"` panel with an outlined warn button in its footer and a confirm dialog that names the object and says it cannot be undone.
 - A delete section's description names the object in bold: "Deletes **checkout-api** and all of its issues, events and settings. This cannot be undone." The `<strong>` stays inside the i18n message.
 - A failed delete shows `gt-form-error` inside its delete section, not a toast.

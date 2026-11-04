@@ -12,15 +12,38 @@ export default [
   {
     path: "",
     component: ProfilWrapperComponent,
+    // Each page's title shows in the top bar; same strings as the nav items.
     children: [
-      { path: "", component: AccountComponent },
-      { path: "auth-tokens", component: AuthTokensComponent },
-      { path: "auth-tokens/new", component: NewTokenComponent },
-
-      { path: "", component: AccountComponent },
-      { path: "notifications", component: Notifications },
-      { path: "multi-factor-auth", component: MultiFactorAuthComponent },
-      { path: "wizard/:hash", component: Wizard },
+      {
+        path: "",
+        component: AccountComponent,
+        data: { title: $localize`Account` },
+      },
+      {
+        path: "auth-tokens",
+        component: AuthTokensComponent,
+        data: { title: $localize`Auth tokens` },
+      },
+      {
+        path: "auth-tokens/new",
+        component: NewTokenComponent,
+        data: { title: $localize`Auth tokens` },
+      },
+      {
+        path: "notifications",
+        component: Notifications,
+        data: { title: $localize`Notifications` },
+      },
+      {
+        path: "multi-factor-auth",
+        component: MultiFactorAuthComponent,
+        data: { title: $localize`MFA` },
+      },
+      {
+        path: "wizard/:hash",
+        component: Wizard,
+        data: { title: $localize`Setup wizard` },
+      },
     ],
   },
   {
