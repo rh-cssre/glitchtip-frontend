@@ -34,7 +34,12 @@
           <span slot="meta">{{
             roleName(member.role) ?? member.roleName
           }}</span>
-          @if (member.pending && canWriteMember()) {
+          @if (member.role === "owner" && !member.isOwner && !canManageOwners()) {
+            <span slot="description" i18n
+              >Only owners can manage another owner.</span
+            >
+          }
+          @if (member.pending && canWriteMember() && canManage(member)) {
             <ng-container slot="actions">
               <button
                 mat-icon-button
@@ -65,7 +70,10 @@
                 }
               </mat-menu>
             </ng-container>
-          } @else if (!member.pending && (member.isMe || canAdminMember())) {
+          } @else if (
+            !member.pending &&
+            (member.isMe || (canAdminMember() && canManage(member)))
+          ) {
             <gt-loading-button
               slot="actions"
               [disabled]="member.isOwner"

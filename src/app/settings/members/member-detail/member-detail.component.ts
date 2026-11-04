@@ -74,7 +74,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   });
   formRole = this.form.get("role") as FormControl<MemberRole | null>;
 
-  readonly roles = MEMBER_ROLES;
+  /** The backend refuses granting a role above your own; only owners outrank managers. */
+  readonly roles = computed(() =>
+    this.organizationsService.canAdminOrg()
+      ? MEMBER_ROLES
+      : MEMBER_ROLES.filter((role) => role !== "owner"),
+  );
   readonly invitePendingText = $localize`Invite pending`;
   /** An owner is never pending, so one status slot holds either. */
   readonly headerStatus = computed(() => {
@@ -83,8 +88,19 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     return member?.isOwner ? $localize`Account owner` : null;
   });
 
-  /** Changing roles needs member:write (managers and owners). */
-  canEditRole = this.organizationsService.canWriteMember;
+  /** Changing roles needs member:write (managers and owners); an owner's, the owner role. */
+  canEditRole = computed(
+    () =>
+      this.organizationsService.canWriteMember() &&
+      (this.member()?.role !== "owner" ||
+        this.organizationsService.canAdminOrg()),
+  );
+  /** A manager may manage members, but not this one. */
+  ownerOnly = computed(
+    () =>
+      this.organizationsService.canWriteMember() &&
+      !this.organizationsService.canAdminOrg(),
+  );
   /**
    * The backend allows a transfer only for owners (member:admin plus being the
    * account owner or having the owner role), so org:admin is the signal.

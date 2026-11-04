@@ -31,7 +31,7 @@
             [attr.aria-labelledby]="roleSection.titleId"
             aria-describedby="role-description"
           >
-            @for (role of roles; track role) {
+            @for (role of roles(); track role) {
               <mat-radio-button [value]="role">{{
                 roleName(role)
               }}</mat-radio-button>
@@ -45,6 +45,11 @@
         <p id="role-description" class="gt-field-hint" aria-live="polite">
           {{ roleDescription(canEditRole() ? formRole.value : member.role) }}
         </p>
+        @if (ownerOnly()) {
+          <p class="gt-field-hint" i18n>
+            Only owners can grant the Owner role or change an owner's role.
+          </p>
+        }
         @if (updateMemberError(); as error) {
           <gt-form-error slot="error" [errors]="error" />
         }

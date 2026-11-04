@@ -60,12 +60,18 @@ export class MembersComponent {
   members = this.membersService.members;
   canWriteMember = this.organizationsService.canWriteMember;
   canAdminMember = this.organizationsService.canAdminMember;
+  /** Only owners outrank managers, so only they can act on an owner. */
+  canManageOwners = this.organizationsService.canAdminOrg;
   roleName = roleName;
 
   constructor() {
     effect(() => {
       this.organizationDetailService.setMembersOrgSlug(this.orgSlug());
     });
+  }
+
+  canManage(member: { role?: string | null }) {
+    return member.role !== "owner" || this.canManageOwners();
   }
 
   resendInvite(member: Member) {
