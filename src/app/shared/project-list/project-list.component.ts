@@ -8,10 +8,11 @@ import {
 } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 import { ProjectsService } from "src/app/projects/projects.service";
 import { ProjectCardComponent } from "../project-card/project-card.component";
 import { EmptyProjectsComponent } from "../project-card/empty-projects/empty-projects.component";
+import { EmptyStateComponent } from "../empty-state/empty-state.component";
 import { OrganizationsService } from "src/app/api/organizations.service";
 import { DatePipe } from "@angular/common";
 
@@ -21,9 +22,10 @@ import { DatePipe } from "@angular/common";
     RouterModule,
     MatButtonModule,
     DatePipe,
-    MatCardModule,
+    MatIconModule,
     ProjectCardComponent,
     EmptyProjectsComponent,
+    EmptyStateComponent,
   ],
   templateUrl: "./project-list.component.html",
   styleUrls: ["./project-list.component.scss"],

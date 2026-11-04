@@ -93,9 +93,23 @@
                 <div class="body-text-strong">{{ error.msg || error }}</div>
               }
             } @else if (initialLoadComplete() === true && loading() === false) {
-              <div i18n class="body-text-strong"
-                >No monitor checks were found.</div
-              >
+              @if (isChange()) {
+                <gt-empty-state
+                  icon="share_eta"
+                  i18n-title
+                  title="No incidents"
+                  i18n-message
+                  message="Changes between up and down appear here."
+                />
+              } @else {
+                <gt-empty-state
+                  icon="share_eta"
+                  i18n-title
+                  title="No checks yet"
+                  i18n-message
+                  message="Checks appear here after the monitor's first run."
+                />
+              }
             }
           </div>
         </td>
