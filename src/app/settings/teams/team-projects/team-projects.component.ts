@@ -1,77 +1,114 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { UntypedFormControl } from "@angular/forms";
-import { combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
-import { TeamsService } from "src/app/api/teams/teams.service";
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectSettingsService } from "../../projects/project-settings.service";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatOptionModule } from "@angular/material/core";
+import { MatSelectModule } from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
 
 @Component({
   selector: "gt-team-projects",
   templateUrl: "./team-projects.component.html",
-  styleUrls: ["./team-projects.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+    RouterLink,
+    LoadingButtonComponent,
+    ListComponent,
+    ListRowComponent,
+    ListRowLinkComponent,
+    EmptyStateComponent,
+    PanelComponent,
+    FormErrorComponent,
+    SettingsSectionComponent,
+  ],
 })
 export class TeamProjectsComponent implements OnInit {
-  userTeamRole$ = this.teamsService.userTeamRole$;
-  projectsOnTeam$ = this.projectsService.projectsOnTeam$;
-  projectsNotOnTeam$ = this.projectsService.projectsNotOnTeam$;
-  loading$ = this.projectsService.addRemoveLoading$;
-  errors$ = this.projectsService.errors$;
-  project = new UntypedFormControl();
-  teamSlug$ = this.route.paramMap.pipe(
-    map((params) => params.get("team-slug"))
-  );
-  orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
+  private projectsService = inject(ProjectSettingsService);
+  private dialog = inject(MatDialog);
+  teamSlug = input.required<string>({ alias: "team-slug" });
+  orgSlug = input.required<string>({ alias: "org-slug" });
 
-  constructor(
-    private projectsService: ProjectSettingsService,
-    private teamsService: TeamsService,
-    private route: ActivatedRoute
-  ) {}
+  // Only managers and owners can change a team's projects.
+  canEditProjects = inject(OrganizationsService).canWriteOrg;
+  projectsOnTeam = this.projectsService.projectsOnTeam;
+  projectsOnTeamCount = this.projectsService.projectsOnTeamCount;
+  projectsNotOnTeam = this.projectsService.projectsNotOnTeam;
+  loading = this.projectsService.addRemoveLoading;
+  errors = this.projectsService.errors;
+  project = new FormControl<string | null>(null);
+  /** Add stays disabled until something is picked. */
+  readonly picked = toSignal(this.project.valueChanges, { initialValue: null });
+  // Adding and removing go through project endpoints that require org:write.
+  noProjectsMessage = computed(() =>
+    this.canEditProjects()
+      ? $localize`Add a project so this team's members get its alerts.`
+      : $localize`Ask an organization manager or owner to add projects to this team.`,
+  );
 
   ngOnInit(): void {
-    combineLatest([this.orgSlug$, this.teamSlug$])
-      .pipe(
-        map(([orgSlug, teamSlug]) => {
-          if (orgSlug && teamSlug) {
-            this.projectsService.retrieveProjectsOnTeam(orgSlug, teamSlug);
-            this.projectsService.retrieveProjectsNotOnTeam(orgSlug, teamSlug);
-          }
-        })
-      )
-      .subscribe();
+    this.projectsService.setParams(this.orgSlug(), this.teamSlug());
+    this.projectsService.retrieveProjectsNotOnTeam(
+      this.orgSlug(),
+      this.teamSlug(),
+    );
   }
 
-  addProject() {
+  async addProject() {
     const projectSlug = this.project.value;
-    combineLatest([this.orgSlug$, this.teamSlug$])
-      .pipe(
-        map(([orgSlug, teamSlug]) => {
-          if (orgSlug && teamSlug) {
-            this.projectsService.addProjectToTeam(
-              orgSlug,
-              teamSlug,
-              projectSlug
-            );
-          }
-        })
-      )
-      .toPromise();
+    if (!projectSlug) {
+      return;
+    }
+    await this.projectsService.addProjectToTeam(
+      this.orgSlug(),
+      this.teamSlug(),
+      projectSlug,
+    );
+    if (!this.projectsNotOnTeam().some((p) => p.slug === projectSlug)) {
+      this.project.reset();
+    }
   }
 
-  removeProject(projectSlug: string) {
-    combineLatest([this.orgSlug$, this.teamSlug$])
-      .pipe(
-        map(([orgSlug, teamSlug]) => {
-          if (orgSlug && teamSlug) {
-            this.projectsService.removeProjectFromTeam(
-              orgSlug,
-              teamSlug,
-              projectSlug
-            );
-          }
-        })
-      )
-      .subscribe(() => this.project.reset());
+  removeProject(projectSlug: string, projectName: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Remove ${projectName}:project: from #${this.teamSlug()}:team:?`,
+          message: $localize`This team's members will stop getting its email alerts.`,
+          confirmText: $localize`Remove`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.projectsService.removeProjectFromTeam(
+            this.orgSlug(),
+            this.teamSlug(),
+            projectSlug,
+          );
+        }
+      });
   }
 }

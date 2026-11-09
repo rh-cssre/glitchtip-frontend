@@ -1,0 +1,107 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" id="add-email-form">
+  <gt-settings-section #addSection i18n-title title="Add email address" panel>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <input
+        matInput
+        type="email"
+        formControlName="email_address"
+        [attr.aria-labelledby]="addSection.titleId"
+      />
+      <mat-error>
+        @if (email_address?.errors?.required || email_address?.errors?.email) {
+          <span i18n>Enter a valid email address.</span>
+        }
+        @if (email_address?.errors?.matchesExistingValidator) {
+          <span i18n>This email address is already on the list.</span>
+        }
+        @if (email_address?.errors?.serverError) {
+          <span>{{ email_address?.errors?.serverError }}</span>
+        }
+      </mat-error>
+    </mat-form-field>
+    @if (addEmailError()) {
+      <gt-form-error slot="error" [errors]="addEmailError()" />
+    }
+    <gt-loading-button
+      slot="actions"
+      i18n-buttonText
+      buttonText="Add email"
+      buttonStyle="stroked"
+      [loading]="!!loadingStates().add"
+    />
+  </gt-settings-section>
+</form>
+
+<gt-settings-section
+  i18n-title
+  title="Email addresses"
+  panel
+  [flush]="emailAddresses().length > 0"
+>
+  <span slot="description" i18n
+    >Account email and alerts go to your primary address.</span
+  >
+  @if (emailAddresses().length) {
+    <gt-list flush>
+      @for (email of emailAddresses(); track email.email) {
+        <gt-list-row data-cy="email-row">
+          <span>{{ email.email }}</span>
+          @if (email.isPrimary) {
+            <span class="list-row__tag" i18n>Primary</span>
+          }
+          @if (!email.isVerified) {
+            <gt-status-pill i18n-label label="Unverified" />
+          }
+          @if (email.isPrimary && !email.isVerified) {
+            <gt-loading-button
+              slot="actions"
+              i18n-buttonText
+              buttonText="Resend confirmation"
+              buttonStyle="stroked"
+              [loading]="loadingStates().resendConfirmation === email.email"
+              (buttonClick)="resendConfirmation(email.email)"
+            />
+          } @else if (!email.isPrimary) {
+            <ng-container slot="actions">
+              <button
+                mat-icon-button
+                class="medium-icon-button"
+                data-cy="email-actions"
+                [matMenuTriggerFor]="emailMenu"
+                [disabled]="isBusy(email.email)"
+                [attr.aria-label]="actionsForLabel(email.email)"
+              >
+                @if (isBusy(email.email)) {
+                  <mat-spinner diameter="18" />
+                } @else {
+                  <mat-icon>more_vert</mat-icon>
+                }
+              </button>
+              <mat-menu #emailMenu="matMenu" xPosition="before">
+                @if (email.isVerified) {
+                  <button mat-menu-item (click)="makePrimary(email.email)" i18n
+                    >Make primary</button
+                  >
+                } @else {
+                  <button
+                    mat-menu-item
+                    (click)="resendConfirmation(email.email)"
+                    i18n
+                    >Resend confirmation</button
+                  >
+                }
+                <button
+                  mat-menu-item
+                  data-cy="delete-button"
+                  (click)="deleteEmail(email.email)"
+                  i18n
+                  >Remove</button
+                >
+              </mat-menu>
+            </ng-container>
+          }
+        </gt-list-row>
+      }
+    </gt-list>
+  }
+</gt-settings-section>

@@ -1,4 +1,5 @@
-<section class="l-body" *ngIf="initialLoad$ | async">
-  <gt-totp></gt-totp>
-  <gt-fido2></gt-fido2>
-</section>
+@if (initialLoadComplete()) {
+  <gt-verify-email-banner />
+  <gt-totp />
+  <gt-webauthn />
+}

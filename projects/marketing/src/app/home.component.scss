@@ -1,0 +1,222 @@
+@use "../../../../src/assets/styles/variables" as vars;
+@use "./styles/grid-texture" as *;
+
+// Screenshots bleed outward by design; `clip` (unlike `hidden`) swallows the
+// overflow without creating a scroll container.
+:host {
+  display: block;
+  overflow-x: clip;
+}
+
+.hero-images-container {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  overflow: visible;
+
+  @media screen and (max-width: vars.$large) {
+    flex-direction: column;
+    position: relative;
+  }
+}
+
+.hero-content-left {
+  width: 45%;
+  flex-shrink: 0;
+  position: relative;
+
+  @media screen and (max-width: vars.$large) {
+    width: 100%;
+  }
+}
+
+.hero {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  position: relative;
+
+  @media screen and (max-width: vars.$small) {
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+  .content {
+    max-width: 550px;
+    margin: 0;
+
+    // Roomier rhythm: a clear gap after the headline and before the CTA.
+    > p,
+    > .cta-row {
+      margin-top: 1.5rem;
+    }
+  }
+
+  // Hero-only headline size; the shared .marketing-heading is untouched.
+  .marketing-heading {
+    font-size: clamp(1.9rem, 1.05rem + 4.2vw, 3.6rem);
+    line-height: 1.08;
+    margin-bottom: 0.35em;
+    overflow-wrap: break-word;
+  }
+
+  .marketing-body {
+    font-size: 1.25em;
+    line-height: 1.6em;
+  }
+}
+
+.bot-hero-image {
+  position: relative;
+  display: block;
+  margin-top: 2rem;
+  padding: 0;
+  z-index: 1;
+
+  @media screen and (max-width: vars.$large) {
+    z-index: 2;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  @media screen and (min-width: vars.$large) {
+    margin-right: -20%;
+  }
+
+  img {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+.hero-screenshot {
+  width: 95%;
+  flex-shrink: 0;
+  margin-right: -40%;
+  perspective: 1200px;
+
+  @media screen and (max-width: vars.$large) {
+    display: none;
+  }
+
+  picture {
+    display: block;
+    transform: rotateY(-15deg) rotateX(3deg);
+    border-radius: var(--mat-sys-corner-large, 16px);
+    filter: drop-shadow(0 22px 42px rgba(120, 74, 60, 0.32));
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--mat-sys-corner-large, 16px);
+    border: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+.centered-block {
+  text-align: center;
+  // Fill the home body column; the global .centered-block cap is narrower.
+  width: 100%;
+}
+
+// Centers and caps the shared home body column; every section lines up on it.
+.home-sections {
+  // ~2.5% gutters on desktop, but never less than a 24px gutter on phones.
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-home);
+  margin: 0 auto;
+}
+
+// Newsletter signup card (composes the global .mkt-surface card primitive).
+.newsletter {
+  position: relative;
+  margin: 8px auto 0;
+  padding: clamp(28px, 4vw, 48px);
+  @include card-clip;
+  // Filled-cell accents on the corners/edges, clear of the centred copy + form.
+  @include grid-texture(
+    $cells:
+      (1 1 $cell-red-soft) (2 0 $cell-grey-soft) (0 3 $cell-grey)
+      (1 5 $cell-grey-soft) (0 6 $cell-red-soft) (33 0 $cell-grey-soft)
+      (34 1 $cell-red-soft) (35 2 $cell-grey) (34 4 $cell-grey-soft)
+      (35 5 $cell-red-soft)
+  );
+
+  .marketing-heading {
+    margin-top: 0;
+    color: var(--mat-sys-primary);
+  }
+}
+
+.newsletter-sub {
+  max-width: 44ch;
+  margin: 8px auto 26px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.subscribe-wrapper {
+  display: flex;
+  gap: 0 20px;
+  max-width: 500px;
+  margin: 0 auto;
+
+  @media screen and (max-width: vars.$small) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .mc-field-group {
+    flex: 1;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .clear:last-child {
+    align-self: flex-start;
+    margin-top: 9px;
+
+    @media screen and (max-width: vars.$small) {
+      align-self: stretch;
+      margin-top: 0;
+    }
+  }
+}
+
+.squiggle {
+  // `text-decoration: wavy` can't animate, so the wave is an inline-SVG
+  // background drifting one wavelength on a loop; reduced-motion pins it.
+  font-size: inherit;
+  padding-bottom: 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='6' viewBox='0 0 24 6'><path d='M0 3 Q6 0 12 3 T24 3' fill='none' stroke='%23b3261e' stroke-width='2' stroke-linecap='round'/></svg>");
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 24px 6px;
+  animation: squiggle-drift 1.8s linear infinite;
+}
+
+@keyframes squiggle-drift {
+  to {
+    background-position: 24px 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .squiggle {
+    animation: none;
+  }
+}
+
+.main-promo-section {
+  // Top spacing comes from the shared .divider rhythm.
+  padding-bottom: 40px;
+}

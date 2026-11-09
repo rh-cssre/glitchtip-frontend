@@ -1,0 +1,24 @@
+@use "variables" as vars;
+
+.custom-range-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gt-select-ghost {
+  width: 160px;
+
+  // Custom ranges show two dates.
+  &.wide {
+    width: 280px;
+  }
+
+  @media screen and (max-width: vars.$small - 1) {
+    &,
+    &.wide {
+      width: 100%;
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { EventDetail } from "../../../interfaces";
 export const pageNotFound: EventDetail = {
   eventID: "121da0ea18894a6e9eafe7d7027fec4b",
   id: "121da0ea18894a6e9eafe7d7027fec4b",
-  issue: 13,
+  groupID: "13",
   user: null,
   contexts: {
     trace: {

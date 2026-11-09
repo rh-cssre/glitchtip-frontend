@@ -1,0 +1,22 @@
+.error {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.description {
+  margin-bottom: 0;
+}
+
+mat-form-field {
+  margin-bottom: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+mat-dialog-actions {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  justify-content: space-between;
+}

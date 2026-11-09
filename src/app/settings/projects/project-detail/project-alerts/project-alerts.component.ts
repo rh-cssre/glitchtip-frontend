@@ -1,111 +1,65 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import {
-  AlertRecipient,
-  ProjectAlert,
-} from "src/app/api/projects/project-alerts/project-alerts.interface";
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { ProjectEnvironmentsService } from "../project-environments/project-environments.service";
+import { AlertEditComponent } from "./alert-edit/alert-edit.component";
 import { ProjectAlertsService } from "./project-alerts.service";
-import { MatDialog } from "@angular/material/dialog";
-import { NewRecipientComponent } from "./new-recipient/new-recipient.component";
-import { AlertFormComponent } from "./alert-form/alert-form.component";
-import { distinctUntilChanged } from "rxjs";
+import { AlertListComponent } from "./alert-list/alert-list.component";
 
+/** The Alerts tab: a list of alerts, or one alert's edit view (?alert=id|new). */
 @Component({
   selector: "gt-project-alerts",
   templateUrl: "./project-alerts.component.html",
   styleUrls: ["./project-alerts.component.scss"],
+  imports: [
+    MatProgressSpinnerModule,
+    FormErrorComponent,
+    AlertEditComponent,
+    AlertListComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectAlertsComponent implements OnInit, OnDestroy {
-  @ViewChild("newAlert") newAlertRef?: AlertFormComponent;
-  projectAlerts$ = this.alertsService.projectAlerts$;
-  newProjectAlertRecipients$ = this.alertsService.newProjectAlertRecipients$;
-  initialLoad$ = this.alertsService.initialLoad$;
-  initialLoadError$ = this.alertsService.initialLoadError$;
-  removeAlertLoading$ = this.alertsService.removeAlertLoading$;
-  removeAlertError$ = this.alertsService.removeAlertError$;
-  updatePropertiesLoading$ = this.alertsService.updatePropertiesLoading$;
-  updatePropertiesError$ = this.alertsService.updatePropertiesError$;
-  deleteRecipientLoading$ = this.alertsService.deleteRecipientLoading$;
-  deleteRecipientError$ = this.alertsService.deleteRecipientError$;
-  newAlertOpen$ = this.alertsService.newAlertOpen$;
-  recipientDialogOpen$ = this.alertsService.recipientDialogOpen$;
-  newAlertLoading$ = this.alertsService.newAlertLoading$;
-  newAlertError$ = this.alertsService.newAlertError$;
+export class ProjectAlertsComponent {
+  #service = inject(ProjectAlertsService);
+  #environmentsService = inject(ProjectEnvironmentsService);
+  #router = inject(Router);
+  #queryParams = toSignal(inject(ActivatedRoute).queryParamMap);
 
-  constructor(
-    private alertsService: ProjectAlertsService,
-    public dialog: MatDialog
-  ) {}
+  projectAlerts = this.#service.projectAlerts;
+  initialLoad = this.#service.initialLoad;
+  initialLoadError = this.#service.initialLoadError;
+  #orgs = inject(OrganizationsService);
+  canWriteProject = this.#orgs.canWriteProject;
+  canAdminProject = this.#orgs.canAdminProject;
+  availableEnvironments = this.#environmentsService.visibleEnvironments;
+  projectTeams = this.#service.projectTeams;
+  emptyMessage = computed(() =>
+    this.canWriteProject()
+      ? $localize`Create an alert to get notified when this project has new issues.`
+      : $localize`This project has no alerts yet.`,
+  );
 
-  ngOnInit(): void {
-    this.alertsService.listProjectAlerts();
+  /** The alert being edited, from the URL; only for people who can edit. */
+  editing = computed(() => {
+    const param = this.#queryParams()?.get("alert");
+    if (!param || !this.canWriteProject()) return null;
+    if (param === "new") return { alert: null };
+    const alert = this.projectAlerts()?.find((a) => String(a.id) === param);
+    return alert ? { alert } : null;
+  });
 
-    this.recipientDialogOpen$
-      .pipe(distinctUntilChanged())
-      .subscribe((resp) => resp && this.dialog.open(NewRecipientComponent));
-  }
-
-  ngOnDestroy() {
-    this.alertsService.clearState();
-  }
-
-  openNewAlert() {
-    this.alertsService.openNewAlert();
-  }
-
-  removeNewAlertRecipient(url: string) {
-    this.alertsService.removeNewAlertRecipient(url);
-  }
-
-  openUpdateRecipientDialog(alert: ProjectAlert) {
-    this.alertsService.openUpdateRecipientDialog(alert);
-  }
-
-  openCreateRecipientDialog() {
-    this.alertsService.openCreateRecipientDialog();
-  }
-
-  closeNewAlert() {
-    this.alertsService.closeNewAlert();
-  }
-
-  removeAlert(pk: number) {
-    if (window.confirm("Are you sure you want to remove this notification?")) {
-      this.alertsService.deleteProjectAlert(pk);
-    }
-  }
-
-  updateProperties(
-    event: {
-      timespan_minutes: number;
-      quantity: number;
-      uptime: boolean;
-    },
-    alert: ProjectAlert
-  ): void {
-    if (alert.pk) {
-      this.alertsService.updateAlertProperties(
-        event.timespan_minutes,
-        event.quantity,
-        event.uptime,
-        alert.pk,
-        alert.alertRecipients
-      );
-    }
-  }
-
-  removeAlertRecipient(recipient: AlertRecipient, alert: ProjectAlert) {
-    this.alertsService.deleteAlertRecipient(recipient, alert);
-  }
-
-  newAlertProperties(event: {
-    timespan_minutes: number;
-    quantity: number;
-    uptime: boolean;
-  }) {
-    this.alertsService.createNewAlert(event);
-  }
-
-  submitCreateAlert() {
-    this.newAlertRef?.onSubmit();
+  closeEdit() {
+    this.#router.navigate([], {
+      queryParams: { alert: null },
+      queryParamsHandling: "merge",
+    });
   }
 }

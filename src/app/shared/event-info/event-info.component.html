@@ -1,32 +1,51 @@
-<div class="mat-typography">
-  <h2 *ngIf="dialog" i18n>Events</h2>
-  <p i18n
-    >Events are the unit of measure for tracking GlitchTip usage. An
-    organization's maximum number of events per month is determined by its
-    subscription type. Events are used to measure four GlitchTip features:</p
+<div [class.dialog-content]="dialog">
+  <h2 class="event-info-title" i18n>What counts as an event?</h2>
+  <p class="event-info-description" i18n
+    >Events are the unit of measure for tracking GlitchTip usage. Your
+    plan's monthly limit is shared across all features.</p
   >
-  <ul>
-    <li i18n
-      ><b>Issues:</b> Each occurrence of an event reported to GlitchTip</li
-    >
-    <li i18nb
-      ><b>Uptime:</b> Whenever GlitchTip checks the status of your app or your
-      app sends a request to GlitchTip to report its own status</li
-    >
-    <li i18n
-      ><b>Performance:</b> Each time your app sends GlitchTip a transaction
-      report for a tracked activity on your app</li
-    >
-    <li i18n
-      ><b>Releases:</b> Each megabyte of file storage is counted as an event</li
-    >
-  </ul>
-  <button
-    *ngIf="dialog"
-    mat-flat-button
-    color="primary"
-    (click)="closeDialog()"
-    i18n
-    >Close</button
-  >
+  <dl class="event-definitions">
+    <div class="event-def">
+      <dt>
+        <mat-icon color="primary">breaking_news</mat-icon>
+        <span i18n>Issues</span>
+      </dt>
+      <dd i18n>Each occurrence of an error or exception reported to GlitchTip</dd>
+    </div>
+    <div class="event-def">
+      <dt>
+        <mat-icon color="primary">share_eta</mat-icon>
+        <span i18n>Uptime</span>
+      </dt>
+      <dd i18n>Each health check counts as 1/10 of an event &mdash; 10 checks equal 1 event, whether polled by GlitchTip or pushed from your app</dd>
+    </div>
+    <div class="event-def">
+      <dt>
+        <mat-icon color="primary">avg_pace</mat-icon>
+        <span i18n>Performance</span>
+      </dt>
+      <dd i18n>Each transaction report for a tracked activity on your app</dd>
+    </div>
+    <div class="event-def">
+      <dt>
+        <mat-icon color="primary">text_snippet</mat-icon>
+        <span i18n>Logs</span>
+      </dt>
+      <dd i18n>Each log entry counts as 1/10 of an event &mdash; 10 log entries equal 1 event</dd>
+    </div>
+    <div class="event-def">
+      <dt>
+        <mat-icon color="primary">rocket_launch</mat-icon>
+        <span i18n>Releases</span>
+      </dt>
+      <dd i18n>Each megabyte of file storage is counted as an event</dd>
+    </div>
+  </dl>
+  @if (dialog) {
+    <div class="dialog-actions">
+      <button mat-button (click)="closeDialog()" i18n
+        >Close</button
+      >
+    </div>
+  }
 </div>

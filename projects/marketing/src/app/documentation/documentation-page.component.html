@@ -1,0 +1,46 @@
+<div class="doc-page">
+  <article class="doc-page__body markdown-container mat-typography">
+    <markdown [src]="src()" (ready)="onMarkdownReady()"></markdown>
+
+    <nav class="mkt-pager" aria-label="Documentation pages">
+      @if (prevDoc(); as prev) {
+        <a
+          class="mkt-pager__link is-prev"
+          [routerLink]="['/documentation', prev.slug]"
+        >
+          <span class="mkt-pager__dir">&#8592; Previous</span>
+          <span class="mkt-pager__title">{{ prev.title }}</span>
+        </a>
+      } @else {
+        <span></span>
+      }
+      @if (nextDoc(); as next) {
+        <a
+          class="mkt-pager__link is-next"
+          [routerLink]="['/documentation', next.slug]"
+        >
+          <span class="mkt-pager__dir">Next &#8594;</span>
+          <span class="mkt-pager__title">{{ next.title }}</span>
+        </a>
+      }
+    </nav>
+  </article>
+
+  @if (toc().length) {
+    <aside class="doc-toc">
+      <p class="doc-toc__title">On this page</p>
+      <ul>
+        @for (item of toc(); track item.id) {
+          <li [class.is-sub]="item.depth === 3">
+            <a
+              [href]="'/documentation/' + pageSlug() + '#' + item.id"
+              [class.is-active]="activeId() === item.id"
+              (click)="onTocClick($event, item.id)"
+              >{{ item.text }}</a
+            >
+          </li>
+        }
+      </ul>
+    </aside>
+  }
+</div>

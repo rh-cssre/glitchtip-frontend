@@ -1,25 +1,16 @@
-@import "variables";
-
-.org-projects-section {
-  margin-bottom: 70px;
+.org-projects + .org-projects {
+  margin-top: var(--gt-space-6, 32px);
 }
 
-.page-header {
-  flex-wrap: wrap;
-
-  @media screen and (max-width: $small - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  h2 {
-    margin-right: 16px;
-    margin-bottom: 10px;
-  }
+.org-projects__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gt-space-4, 16px);
+  margin-bottom: var(--gt-space-3, 12px);
 }
 
-.new-project-button {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.org-projects__title {
+  margin: 0;
+  font: var(--mat-sys-title-medium);
 }

@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.section-header {
+  max-width: 46ch;
+  margin: 0 auto;
+  text-align: center;
+}
+
+// Type comes from the global .marketing-eyebrow token; only the spacing below
+// the eyebrow is contextual to this header.
+.marketing-eyebrow {
+  margin: 0 0 var(--mkt-space-3);
+}
+
+h2 {
+  margin: 0;
+}
+
+.subtitle {
+  margin: 14px auto 0;
+  color: var(--mat-sys-on-surface-variant);
+}

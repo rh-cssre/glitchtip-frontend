@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  padding-bottom: var(--gt-space-7, 48px);
+}
+
+// Bottom margin only: a shorthand would cancel gt-back-link's own offset.
+.back {
+  display: block;
+  margin-bottom: var(--gt-space-2, 8px);
+}
+
+.title {
+  margin: 0 0 var(--gt-space-4, 16px);
+  font: var(--mat-sys-title-large);
+  font-weight: 600;
+}
+
+.recipient {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  min-width: 0;
+  font-weight: 400;
+}
+
+.recipient__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// Full-width hairline like a section's; the text keeps the reading measure.
+.summary {
+  margin: var(--gt-space-4, 16px) 0 0;
+  padding-top: var(--gt-space-4, 16px);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface);
+
+  gt-alert-summary {
+    display: block;
+    max-width: var(--gt-measure, 70ch);
+  }
+}

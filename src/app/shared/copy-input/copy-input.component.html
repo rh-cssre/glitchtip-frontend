@@ -1,21 +1,32 @@
-<mat-form-field class="full-width">
+<mat-form-field
+  class="full-width"
+  appearance="outline"
+  subscriptSizing="dynamic"
+>
+  @if (!labelledBy()) {
+    <mat-label>{{ placeholder() }}</mat-label>
+  }
   <input
     class="background"
     readonly
     matInput
-    [placeholder]="placeholder"
-    [value]="value"
+    [value]="value()"
+    [attr.aria-labelledby]="labelledBy()"
     data-test-dsn
   />
   <button
+    i18n-matTooltip
+    i18n-aria-label
     mat-icon-button
-    [cdkCopyToClipboard]="value"
-    (cdkCopyToClipboardCopied)="copied()"
+    class="input-icon-button"
+    [cdkCopyToClipboard]="value()"
+    (cdkCopyToClipboardCopied)="copy()"
     matTooltip="Copy key to clipboard"
+    aria-label="Copy key to clipboard"
     matSuffix
   >
-    <mat-icon [class.dsn-copied]="copied$ | async">
-      {{ (copied$ | async) ? "check_circle" : "file_copy" }}
+    <mat-icon [class.dsn-copied]="copied()">
+      {{ copied() ? "check_circle" : "file_copy" }}
     </mat-icon>
   </button>
 </mat-form-field>

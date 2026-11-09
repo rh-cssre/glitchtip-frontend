@@ -1,0 +1,166 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <gt-back-link i18n-backLinkText backLinkText="Performance" />
+  </ng-container>
+</gt-top-app-bar>
+@if ((initialLoadComplete()) && (transactionGroup()) === null) {
+<section class="l-body l-body--full-width">
+  @if (organization(); as organization) {
+  <gt-panel>
+    <gt-empty-state
+      icon="search"
+      [headingLevel]="1"
+      i18n-title
+      title="Transaction group not found"
+      i18n-message
+      message="It may have been deleted, or it belongs to a project you cannot access."
+    >
+      <a mat-button [routerLink]="['..']" i18n
+        >View all transaction groups in
+        {{ organization.name // i18n(ph="organization") }}</a
+      >
+    </gt-empty-state>
+  </gt-panel>
+  }
+</section>
+} @if (transactionGroup(); as group) {
+<section class="l-body l-body--full-width">
+  <!-- Key facts: the band's corner when wide, the end of the meta line when narrow -->
+  <ng-template #facts>
+    @let compacted = group.count >= 1000;
+    <span
+      class="gt-band-fact"
+      [class.gt-has-tip]="compacted"
+      [attr.tabindex]="compacted ? 0 : null"
+      [matTooltip]="compacted ? (group.count | number) : ''"
+      i18n
+      >{group.count, plural, =1 {<b>1</b> transaction} other {<b>{{
+        group.count | compactNumber // i18n(ph="count")
+      }}</b> transactions}}</span
+    >
+    <span class="gt-band-fact" i18n>avg <b>{{ group.avgDuration! | shortDuration // i18n(ph="duration") }}</b></span>
+    @if (group.p95 !== null && group.p95 !== undefined) {
+      <span class="gt-band-fact" i18n>p95 <b>{{ group.p95 | shortDuration // i18n(ph="duration") }}</b></span>
+    }
+  </ng-template>
+  <gt-record-band>
+    <gt-page-header [title]="group.transaction">
+      <span slot="meta">
+        <span><span class="chip">{{ group.op }}</span></span>
+        <!-- The name may already start with the method -->
+        @if (group.method && !group.transaction.startsWith(group.method + " ")) {
+          <span><span class="chip">{{ group.method }}</span></span>
+        }
+        <ng-container [ngTemplateOutlet]="facts" />
+        <!-- The corner holds three stats at most; the rest stay in the meta line -->
+        <span i18n
+          >{group.errorCount, plural, =1 {<b>1</b> error} other {<b>{{
+            group.errorCount | number // i18n(ph="count")
+          }}</b> errors}}</span
+        >
+      </span>
+    </gt-page-header>
+    <span slot="stats" class="gt-band-facts"
+      ><ng-container [ngTemplateOutlet]="facts"
+    /></span>
+  </gt-record-band>
+
+  <gt-panel i18n-title title="Span breakdown" flush>
+    @if (sortedSpans(); as spans) {
+      @if (spans.length === 0) {
+        <gt-empty-state
+          icon="avg_pace"
+          i18n-title
+          title="No span data"
+          i18n-message
+          message="Spans appear here once child spans are recorded for this transaction group."
+        />
+      } @else {
+        <div class="span-breakdown-intro">
+          <!-- By operation -->
+          <p i18n class="section-label">By operation</p>
+          <div class="op-summary">
+            @for (seg of opSummary(); track seg.op) {
+              <button
+                class="op-summary__item"
+                [class.op-summary__item--selected]="selectedOp() === seg.op"
+                [class.op-summary__item--other]="seg.isOther"
+                (click)="toggleOpFilter(seg.op, seg.isOther)"
+              >
+                <span class="op-summary__name">{{ seg.op }}</span>
+                <span class="op-summary__pct">{{ seg.pct | percent:'1.0-0' }}</span>
+                <span class="op-summary__time">{{ seg.totalTime | humanizeDuration }}</span>
+              </button>
+            }
+            @if (selectedOp()) {
+              <button i18n class="op-summary__clear" (click)="selectedOp.set(null)">
+                Clear filter
+              </button>
+            }
+          </div>
+
+          <!-- By span -->
+          <p i18n class="section-label">By span</p>
+        </div>
+        <div class="table-scroll-container">
+          <div class="table-scroll-wrapper">
+            <table
+              mat-table
+              matSort
+              matSortActive="totalTime"
+              matSortDirection="desc"
+              matSortDisableClear
+              (matSortChange)="onSortChange($event)"
+              [dataSource]="filteredSpans() ?? []"
+              class="span-breakdown-table"
+            >
+              <ng-container matColumnDef="op">
+                <th i18n mat-header-cell *matHeaderCellDef>Operation</th>
+                <td mat-cell *matCellDef="let row" class="op-cell">{{ row.op }}</td>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <th i18n mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let row" class="span-description">
+                  {{ row.description || "(none)" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="count">
+                <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Count</th>
+                <td mat-cell *matCellDef="let row" class="num">{{ row.count }}</td>
+              </ng-container>
+              <ng-container matColumnDef="avgDuration">
+                <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Avg</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ row.avgDuration | humanizeDuration }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="p95Duration">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="num">p95</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ row.p95Duration | humanizeDuration }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="totalTime">
+                <th i18n mat-header-cell *matHeaderCellDef mat-sort-header class="num">Total time</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ row.totalTime | humanizeDuration }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="pctTime">
+                <th i18n mat-header-cell *matHeaderCellDef class="num">% Time</th>
+                <td mat-cell *matCellDef="let row" class="num">
+                  {{ pctOfTotal(row.totalTime) | percent:'1.1-1' }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="spanColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: spanColumns"></tr>
+            </table>
+          </div>
+        </div>
+      }
+    } @else if (spansLoading()) {
+      <p i18n class="body-text span-breakdown-empty">Loading…</p>
+    }
+  </gt-panel>
+</section>
+}

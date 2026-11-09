@@ -1,0 +1,19 @@
+/* Isolated component-preview app — replaces Storybook. Extends the root
+   tsconfig so previews can import real app components via `src/app/...`. */
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/component-preview",
+    "types": ["node"]
+  },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.d.ts"],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
+}

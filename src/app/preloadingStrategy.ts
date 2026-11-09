@@ -19,13 +19,13 @@ export class CustomPreloadingStrategy implements PreloadingStrategy {
 /** Guess if user would prefer to preload based on network/device */
 export function shouldPreload(route: Route): boolean {
   if (route.data && route.data.preload) {
-    const conn = navigator.connection;
+    const conn = (navigator as any).connection;
     if (conn) {
       if ((conn as any).saveData) {
         return false;
       }
 
-      if ("effectiveType" in navigator.connection) {
+      if ("effectiveType" in (navigator as any).connection) {
         if (["slow-2g", "2g", "3g"].includes((conn as any).effectiveType)) {
           return false;
         }

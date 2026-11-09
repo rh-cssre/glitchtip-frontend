@@ -1,102 +1,10 @@
-@import "variables";
-
-mat-card {
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  mat-card-content {
-    padding-top: 16px;
-  }
-
-  .note-padding {
-    padding-top: 0;
-  }
-}
-
-.project-form {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 8px;
-
-  @media (max-width: $medium - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  mat-form-field {
-    width: 100%;
-    margin-right: 40px;
-
-    @media (max-width: $medium - 1) {
-      margin-right: 0;
-    }
-  }
-}
-
-.platform-form {
-  display: flex;
-
-  @media (min-width: $large) {
-    align-items: center;
-
-    .documentation-link {
-      margin-right: 40px;
-    }
-  }
-
-  @media (max-width: $large - 1) {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: 75px 50px;
-    grid-template-areas:
-      "topLeft rightCol"
-      "bottomLeft rightCol";
-    column-gap: 0;
-    row-gap: 20px;
-    padding-top: 15px;
-
-    gt-platform-picker {
-      grid-area: topLeft;
-    }
-
-    .documentation-link {
-      grid-area: bottomLeft;
-    }
-
-    gt-loading-button {
-      grid-area: rightCol;
-      margin-top: 25px;
-    }
-  }
-
-  @media (max-width: $medium - 1) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: 0;
-  }
-}
-
-.remove-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media (max-width: $tablet - 1) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+// Panels stack 16px apart.
+.project-note {
+  margin-bottom: var(--gt-space-4, 16px);
 
   p {
-    padding-right: 16px;
+    margin: 0;
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
   }
-}
-
-.server-error {
-  display: block;
-}
-
-gt-loading-button ::ng-deep button {
-  width: 140px;
 }

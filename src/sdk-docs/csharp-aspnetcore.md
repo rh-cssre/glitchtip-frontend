@@ -1,38 +1,38 @@
-Install the **NuGet** package:
-
-Package Manager:
-
-```shell
-Install-Package Sentry.AspNetCore
-```
-
-.NET Core CLI:
+Install the sentry ASP.NET Core SDK:
 
 ```shell
 dotnet add package Sentry.AspNetCore
 ```
 
-Add the SDK to `Program.cs` through the `WebHostBuilder`:
-
-ASP.NET Core 2.x:
+Add the SDK to your `Program.cs`:
 
 ```csharp
-public static IWebHost BuildWebHost(string[] args) =>
-    WebHost.CreateDefaultBuilder(args)
-        // Add the following line:
-        .UseSentry("your DSN here")
+var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseSentry(options =>
+{
+    options.Dsn = "YOUR_DSN";
+    options.TracesSampleRate = 0.01; // 1% of transactions
+});
+
+var app = builder.Build();
+
+app.MapGet("/", () => "Hello World!");
+
+app.Run();
 ```
 
-ASP.NET Core 3.0:
+The SDK automatically captures unhandled exceptions in controllers and middleware.
+
+Verify your setup:
 
 ```csharp
-public static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(webBuilder =>
-        {
-            // Add the following line:
-            webBuilder.UseSentry("your DSN here")
-        });
+app.MapGet("/debug-glitchtip", () =>
+{
+    throw new Exception("Test GlitchTip error!");
+});
 ```
 
-See the [provided examples in the `dotnet` SDK repository](https://github.com/getsentry/sentry-dotnet/tree/master/samples) for examples to send your first event to GlitchTip.
+## Tips
+
+- Set `TracesSampleRate` to a low value in production. Each HTTP request is a transaction — even 1% gives useful [performance data](/documentation/performance).

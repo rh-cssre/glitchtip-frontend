@@ -1,0 +1,156 @@
+@use "controls";
+@use "variables" as vars;
+
+:host {
+  display: block;
+  // Panel content queries the panel's width; gt-bar is for header controls.
+  container: gt-panel gt-bar / inline-size;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: vars.$shape-radius;
+  color: var(--mat-sys-on-surface);
+  overflow: hidden;
+}
+
+:host(.gt-panel--danger) {
+  border-color: color-mix(
+    in srgb,
+    var(--mat-sys-error) 40%,
+    var(--mat-sys-outline-variant)
+  );
+}
+
+.gt-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-3, 12px);
+  min-height: var(--gt-space-7, 48px);
+  box-sizing: border-box;
+  padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  // Strips sit one step above the body, which shows the page colour.
+  background: var(--mat-sys-surface-container-high);
+
+  // Nothing to show: no header at all.
+  &:not(:has(.gt-panel__title, .gt-panel__lead > *, .gt-panel__actions > *)) {
+    display: none;
+  }
+}
+
+.gt-panel__title {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  min-width: 0;
+  font: var(--mat-sys-title-small);
+  letter-spacing: var(--mat-sys-title-small-tracking);
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+// The title does not shrink, so the subtitle truncates first.
+.gt-panel__title-text {
+  flex: none;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gt-panel__subtitle {
+  min-width: 0;
+  overflow: hidden;
+  font: var(--mat-sys-body-medium);
+  letter-spacing: var(--mat-sys-body-medium-tracking);
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &::before {
+    @include controls.middot;
+  }
+}
+
+@include controls.narrow-panel {
+  :host(.gt-panel--hide-subtitle-narrow) .gt-panel__subtitle {
+    display: none;
+  }
+}
+
+// Leads a titleless header so its actions never sit in an empty strip.
+.gt-panel__lead {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: var(--mat-sys-body-medium);
+  letter-spacing: var(--mat-sys-body-medium-tracking);
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.gt-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  margin-left: auto;
+
+  @include controls.compact-buttons;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.gt-panel__body {
+  padding: var(--gt-space-4, 16px);
+
+  &--flush {
+    padding: 0;
+  }
+
+  &:empty {
+    display: none;
+  }
+}
+
+.gt-panel__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+  padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-high);
+
+  &:not(:has(.gt-panel__hint > *, .gt-panel__footer-actions > *)) {
+    display: none;
+  }
+}
+
+.gt-panel__hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: var(--mat-sys-body-small);
+  letter-spacing: var(--mat-sys-body-small-tracking);
+  color: var(--mat-sys-on-surface-variant);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.gt-panel__footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+  margin-left: auto;
+
+  &:empty {
+    display: none;
+  }
+}

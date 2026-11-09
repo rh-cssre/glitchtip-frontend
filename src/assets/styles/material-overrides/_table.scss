@@ -1,0 +1,25 @@
+@use "@angular/material" as mat;
+@use "variables" as vars;
+
+@include mat.table-overrides(
+  (
+    background-color: transparent,
+  )
+);
+
+// One column header style for every table: compact, label-medium, muted.
+// Set on the row so it wins over table-density; the sticky action row above
+// the headers (.table-header) keeps Material's own.
+tr[mat-header-row]:not(.table-header) {
+  @include mat.table-overrides(
+    (
+      header-container-height: vars.$table-header-height,
+      header-headline-color: var(--mat-sys-on-surface-variant),
+      header-headline-font: var(--mat-sys-label-medium-font),
+      header-headline-line-height: var(--mat-sys-label-medium-line-height),
+      header-headline-size: var(--mat-sys-label-medium-size),
+      header-headline-tracking: var(--mat-sys-label-medium-tracking),
+      header-headline-weight: var(--mat-sys-label-medium-weight),
+    )
+  );
+}

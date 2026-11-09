@@ -1,35 +1,56 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+
+:host {
+  display: block;
+  // Matches the checkbox labels, so the condition reads as one sentence.
+  font: var(--mat-sys-body-medium);
+}
 
 form {
-  padding-bottom: 8px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: flex-start;
-  .mat-form-field {
-    width: 88px;
-  }
-  gt-loading-button {
-    margin-bottom: 8px;
-  }
+}
+
+.trigger {
+  width: 100%;
+}
+
+// Lines up with the checkbox label text, not the box.
+.trigger__hint {
+  margin: var(--gt-space-1, 4px) 0 0 32px;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// The event condition is an inline sentence (checkbox label, two number fields,
+// text); center everything vertically and use column-gap for the field spacing.
+.trigger__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 8px;
 }
 
 // Move to global styles if we decide to implement in other places in app
 .tooltip {
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: mat.get-color-from-palette(mat.$gray-palette, 500);
+  text-decoration-color: mat.m2-get-color-from-palette(
+    mat.$m2-gray-palette,
+    500
+  );
   cursor: help;
 }
 
-.mat-form-field {
-  margin-left: 12px;
-  margin-right: 12px;
-}
+// :host keeps these widths when the form sits in a parent that stretches fields.
+:host mat-form-field {
+  width: 80px;
 
-.mat-form-field ::ng-deep .mat-form-field-subscript-wrapper {
-  width: 150px;
+  &::ng-deep .mat-mdc-form-field-error-wrapper {
+    padding: 0;
+  }
 }
 
 .underline {
@@ -38,30 +59,24 @@ form {
   }
 }
 
-.mat-checkbox {
-  span {
-    margin-top: 10px;
-  }
-}
-
+// Both conditions are independent triggers (enable either or both); the gap
+// matches the one between the event line and its hint, keeping them level.
 .uptime-option {
-  margin-top: 12px;
+  margin-top: var(--gt-space-3, 12px);
 }
 
-.error {
-  color: #f44336;
-  text-align: center;
-  margin-top: -15px;
-  margin-bottom: 5px;
+// A subheading of When, not a third condition: it narrows both.
+.environment-scope {
+  width: 100%;
+  margin-top: var(--gt-space-5, 24px);
 
-  @media screen and (max-width: $medium - 1) {
-    margin-top: 5px;
-    margin-bottom: 5px;
+  :host & mat-form-field {
+    width: 320px;
+    max-width: 100%;
   }
 }
 
-.update {
-  @media screen and (max-width: $large - 1) {
-    margin-top: 10px;
-  }
+// Tighter than a form-level error: it belongs to the line above.
+:host .trigger__error {
+  margin: var(--gt-space-2, 8px) 0 0;
 }

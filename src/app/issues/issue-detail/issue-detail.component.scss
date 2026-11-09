@@ -1,35 +1,13 @@
-@import "variables";
+@use "issue-level";
+@use "variables" as vars;
 
-.mat-h1 {
-  padding-right: 20px;
-}
-
-.issue-404 h1 {
-  text-align: left;
-}
-
-header {
-  margin: -16px 0 5px;
-
-  @media screen and (max-width: $tablet - 1) {
-    margin-bottom: 20px;
+.issue-404 {
+  h1 {
+    text-align: left;
   }
 
-  .header-group {
-    display: flex;
-    justify-content: space-between;
-
-    @media screen and (max-width: $tablet - 1) {
-      flex-direction: column;
-    }
-  }
-
-  .button-row button {
-    margin-right: 8px;
-  }
-
-  gt-issue-detail-title {
-    margin-right: 20px;
+  p {
+    margin: 16px 0;
   }
 }
 
@@ -56,7 +34,12 @@ dl {
 .event-detail-card {
   margin-right: 16px;
 
-  @media screen and (max-width: $medium - 1) {
+  .tab-nav-container {
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  @media screen and (max-width: vars.$medium - 1) {
     margin-right: 0;
   }
 
@@ -79,7 +62,7 @@ mat-grid-list {
   align-items: flex-start;
   margin-bottom: 30px;
 
-  @media screen and (max-width: $medium - 1) {
+  @media screen and (max-width: vars.$medium - 1) {
     flex-direction: column-reverse;
   }
 
@@ -87,7 +70,7 @@ mat-grid-list {
     flex: 75%;
     overflow: hidden;
 
-    @media screen and (max-width: $medium - 1) {
+    @media screen and (max-width: vars.$medium - 1) {
       width: 100%;
     }
   }
@@ -95,7 +78,7 @@ mat-grid-list {
   .right {
     flex: 25%;
 
-    @media screen and (max-width: $medium - 1) {
+    @media screen and (max-width: vars.$medium - 1) {
       width: 100%;
       margin-bottom: 30px;
     }
@@ -106,10 +89,34 @@ table.mat-table {
   background: none;
 }
 
-.project-issues-link {
-  margin: 0 0 20px;
-}
-
 .report-badge > span {
   text-overflow: initial;
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.level-name {
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+// The level is a bar down the header, as on issue list rows.
+.issue-header {
+  position: relative;
+  padding-left: var(--gt-space-4, 16px);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 4px;
+    border-radius: var(--mat-sys-corner-full);
+  }
+
+  @include issue-level.accent;
 }

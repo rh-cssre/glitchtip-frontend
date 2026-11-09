@@ -1,0 +1,34 @@
+mat-card {
+  text-align: center;
+}
+
+.summary-title {
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--mat-sys-primary);
+  line-height: 1.2;
+}
+
+.summary-subtitle {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.over-limit-text {
+  color: var(--mat-sys-error);
+}
+
+mat-progress-bar {
+  border-radius: 4px;
+}

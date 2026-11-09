@@ -3,7 +3,7 @@ import { EventDetail } from "src/app/issues/interfaces";
 export const emptyStacktrace: EventDetail = {
   eventID: "64b48dd6880446b882cb0da3949d6563",
   id: "64b48dd6880446b882cb0da3949d6563",
-  issue: 106,
+  groupID: "106",
   context: null,
   contexts: {
     os: { name: "Ubuntu" },

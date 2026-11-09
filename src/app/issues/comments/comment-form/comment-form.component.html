@@ -1,0 +1,54 @@
+<form
+  [formGroup]="commentForm"
+  #formDirective="ngForm"
+  (ngSubmit)="submitComment(formDirective)"
+>
+  <ng-template #field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label
+        >@if (comment()) {
+          <ng-container i18n>Update Comment</ng-container>
+        } @else {
+          <ng-container i18n>Comment</ng-container>
+        }</mat-label
+      >
+      <textarea matInput formControlName="text" required></textarea>
+      @if (comment()) {
+        <mat-hint i18n>Markdown supported</mat-hint>
+      }
+      @if (commentFormText.errors?.required) {
+        <mat-error i18n> Enter comment text. </mat-error>
+      }
+    </mat-form-field>
+  </ng-template>
+
+  @if (comment()) {
+    <!-- Editing in place inside the comment list: no box in the box. -->
+    <ng-container *ngTemplateOutlet="field" />
+    <div class="edit-actions">
+      <button
+        i18n
+        (click)="emitCancelUpdate()"
+        mat-button
+        type="button"
+        >Cancel</button
+      >
+      <gt-loading-button
+        [disabled]="disableSubmissions()"
+        [loading]="loading()"
+        [buttonText]="updateCommentText"
+      />
+    </div>
+  } @else {
+    <gt-panel>
+      <ng-container *ngTemplateOutlet="field" />
+      <span slot="footer-hint" i18n>Markdown supported</span>
+      <gt-loading-button
+        slot="footer"
+        [disabled]="disableSubmissions()"
+        [loading]="loading()"
+        [buttonText]="submitCommentText"
+      />
+    </gt-panel>
+  }
+</form>
